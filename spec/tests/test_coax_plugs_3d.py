@@ -135,7 +135,7 @@ def test_the_seat_carries_a_depth(seated, ref):
 
 # The only coax ports the library draws turned are SMB: the MX80's MIC-3D-8DS3-E3
 # places its upper row (port-0-0, -2, ... -14) at rotate 180. Seated in MIC 1/0.
-ROTATED = ("juniper/mx80", "base", "front", {"mic-1-0": "juniper/mic-3d-8ds3-e3@1"},
+ROTATED = ("juniper/mx80", "base", "front", {"mic-1-0": "juniper/mic-3d-8ds3-e3@2"},
            "mic-1-0/module/port-0-0", "generic/smb-plug@1")
 
 

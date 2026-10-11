@@ -296,6 +296,13 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # the INTERFACE is - the registry marks it `cover: true` - not by name.
         if (connectors.get(c.get("mates")) or {}).get("cover"):
             continue
+        # NOR IS A MOUNT POINT (#934). eaton/g4-mounting-button@1 mates
+        # `pdu-button`, the keyhole a rack PDU hangs on, which the registry
+        # holds as a mounting interface. Left out by what the PART is - its
+        # contract is `class: mount` - and no fibre runs through a keyhole; its
+        # tests are spec/tests/test_pdu_model.py.
+        if c.get("class") == "mount":
+            continue
         # NOR ARE THE TERMINAL PLUGS (#789). generic/terminal-508-2-plug@1,
         # terminal-508-5-plug@1 and terminal-508-6-plug@1 mate the three
         # pluggable terminal header interfaces, which the registry holds so a

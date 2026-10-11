@@ -1,0 +1,53 @@
+format: 1
+kind: component
+name: g4-mounting-button
+version: 1.1.0
+class: mount
+mates: pdu-button
+profile: power
+description: >-
+  The factory-fitted shoulder-style mounting button on the back of an Eaton Rack PDU
+  G4 - an aluminium flange and head on an M4 screw that hooks into a keyhole in the
+  rack frame and holds the PDU by friction, without tools.
+size: {w: 25.4, h: 25.4}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the rear view of 9001-22301 draws the button as a flange 25.4 across, a
+    head 15.0 across and a 4.3 screw, centred on the PDU's width (the 1.02 [26.00]
+    dimension).
+  relief: >-
+    drawing - the end and side views of 9001-22301 draw the flange 3.3 thick and the
+    whole button standing 9.4 off the back.
+  how-it-mounts: >-
+    datasheet - G4 installation and setup guide P-164001156 rev 3, sections 2.11 to
+    2.11.3: factory-installed shoulder-style buttons for keyhole slots of 11.5 to 12.5
+    mm in 1.5 to 2 mm material (Eaton enclosures) or 14 mm in 3 mm material (Tripp Lite
+    racks), pushed down to a friction fit. The accessory kit adds two reversible flush
+    buttons, which are not drawn.
+  finish: photo - EVMI2130X-MOUNTING-BUTTON_DT5, bright machined aluminium.
+  mates: >-
+    `pdu-button` (spec/schemas/connectors.yaml), the mounting interface a keyhole
+    slot in a bracket or a cabinet channel presents (docs/pdu-model-design.md
+    section 6.2). The button is the mount point and seats at its `mate`, on its
+    axis: the head is what enters the keyhole, centred in the flange.
+elements:
+  head: {at: [5.2, 5.2], size: [15.0, 15.0], class: mount}
+relief:
+  features:
+    - node: flange
+      cyl: 3.3
+      color: '#b7bcc1'
+      confidence: drawing
+      source: 9001-22301 end view, the flange 3.3 thick against the back.
+    - node: head
+      cyl: 6.1
+      lift: 3.3
+      color: '#cfd3d7'
+      confidence: drawing
+      source: >-
+        9001-22301 end view, the button's far face 9.4 off the back; the waist
+        between flange and head is not built.
+connection-points:
+  mate: {at: [12.7, 12.7], direction: front}
+skins: [default]

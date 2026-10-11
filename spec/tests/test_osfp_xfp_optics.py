@@ -490,6 +490,9 @@ def test_every_cage_of_the_family_offers_exactly_the_new_optics(device_cages, co
                 if s["interface"] == family and s["kind"] == "cage"]
     # 128 XFP cages on cards until #261 removed the MX960 vertical twins with eight of
     # them: dpc-r-4xge-xfp-v (4), dpce-2xge-xfp-v960 (2) and dpce-20ge-2xge-v960 (2)
+    # #261 part 2 retired the vertical MIC twins and the MICs' previous majors but
+    # kept them (`superseded-by`, #448); this walk counts them: 127 measured, of
+    # which 113 are on live contracts.
     floor = {"osfp": (416, 4), "xfp": (4, 120)}[family]
     assert len(on_devices) >= floor[0] and len(on_cards) >= floor[1], (len(on_devices), len(on_cards))
     for c in on_devices + on_cards:
@@ -515,7 +518,7 @@ def test_no_other_family_offers_them_and_the_pool_is_the_family(device_cages, co
 AIS = "edgecore/ais800-32o"       # port-1 over port-2, both rotate 0 - the same way up (#799)
 MX80 = "juniper/mx80"
 MX960 = "juniper/mx960"           # fpc6 seats the horizontal card turned 90 by its bay (#261)
-CARD = "juniper/dpc-r-4xge-xfp@2"
+CARD = "juniper/dpc-r-4xge-xfp@3"
 # the turn a cage inherits from its card's bay: on the MX960 the quarter turn is
 # the card's, and its XFP cages are drawn upright inside it
 CARD_TURN = {MX960: 90}

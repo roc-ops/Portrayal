@@ -711,8 +711,8 @@ ETHERNET_XFP = {
     "juniper/dpc-r-4xge-xfp": 4,
     "juniper/dpce-2xge-xfp": 2,
     "juniper/dpce-20ge-2xge": 2,
-    "juniper/mic-3d-2xge-xfp": 2, "juniper/mic-3d-2xge-xfp-v": 2,
-    "juniper/mic-3d-4xge-xfp": 4, "juniper/mic-3d-4xge-xfp-v": 4,
+    "juniper/mic-3d-2xge-xfp": 2,
+    "juniper/mic-3d-4xge-xfp": 4,
 }
 
 

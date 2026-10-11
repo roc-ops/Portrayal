@@ -175,8 +175,8 @@ def test_L43_a_rack_face_part_is_its_ears():
     them - there is no body between the folds to draw instead - so a 483 mm
     front on one is the part, not a device modelled wearing its flanges."""
     views = {"front": {"size": {"w": 483.0, "h": 44.0}}}
-    assert _l43({"chassis": {"width": 483.0, "ru": 1}, "views": views})
-    assert not _l43({"chassis": {"width": 483.0, "ru": 1, "mount": "rack-face"}, "views": views})
+    assert _l43({"chassis": {"width": 440.0, "ru": 1}, "views": views})
+    assert not _l43({"chassis": {"width": 440.0, "ru": 1, "mount": "rack-face"}, "views": views})
 
 
 # --- rack furniture is exported though it has nothing to plug in ----------------

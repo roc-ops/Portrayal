@@ -17,6 +17,13 @@ commands; this page is the method. When a figure or a lint warning behaves
 oddly, [modelling-pitfalls.md](modelling-pitfalls.md) probably already explains
 why.
 
+Each lesson here is written as a rule and the check that holds it. Where a
+measured table or a named example appears, it is there for one of two reasons.
+A table of measurements keeps its sources, because a number nobody can trace
+is a number nobody can use. An example marked *Illustration* is a case where
+the bare rule would read as over-caution; you do not need to know the device
+to follow the rule above it.
+
 ## Before you draw anything: sort the sources
 
 Each kind of source may answer only certain questions. Mixing their roles is the
@@ -88,11 +95,11 @@ with each figure beside its caption, page and section. Use it rather than
 Two habits that keep the extraction honest:
 
 - **Save every picture first and classify second.** A filter that drops
-  pictures by size is shaped like the last vendor you looked at. The first one
-  written here dropped every Cisco datasheet faceplate, too short for a figure
-  and too wide for a banner, and each datasheet then returned zero figures,
-  which reads exactly like "this vendor published no pictures". Keep the rejects
-  on disk and look at a sample of what you dropped.
+  pictures by size is shaped like the last vendor you looked at. A 1RU
+  faceplate is too short for a figure and too wide for a banner, so a size
+  filter drops it, and a datasheet that then returns zero figures reads exactly
+  like "this vendor published no pictures". Keep the rejects on disk and look
+  at a sample of what you dropped.
 - **A negative answer is only as good as the extraction's coverage.** Count
   `^Figure \d+:` in the document's text and compare it with what you captured.
   "No figure for this part" means something very different at 62 of 62 than at
@@ -106,28 +113,35 @@ rack-elevation size in someone's network diagram, and they are simplified in
 ways that look complete. Get a product photograph or a vendor render and check
 the stencil against it before you place anything.
 
-The Smartoptics DCP-404 was first built from its stencil and came out
-confidently wrong: one vent feature drawn of seven, a single status lamp far
-right where the unit has two lower left, traffic lamps under the cages where the
-unit has them beside the Tx/Rx captions, the port block 16 mm off because the
-stencil dropped the vent column that pushes it right, and a face height of 41
-against a real 44, so every y was six percent short. Nothing there is visible
-without the photograph. The model rendered plausibly and passed every gate.
+A stencil drops repeated features (one vent drawn of several), moves lamps to
+where they read well, and rounds the outline, and each omission shifts
+whatever sat beside it. None of that is visible without the photograph: a model
+built from a stencil alone renders plausibly and passes every gate.
 
-What the stencil was still good for: it agreed with the photograph on the
-brand, model and hazard marks to a millimetre, and its connection points showed
-that the four client cages abut, which is the difference between composing
-ganged cages and composing single cages that overlap. Use it as a second opinion
-and as the source of connection points; never as the only thing you looked at.
+What a stencil is good for: marks it shares with the photograph (brand, model,
+hazard symbols) confirm its scale, and its connection points show whether
+adjacent cages abut, which is the difference between composing ganged cages
+and composing single cages that overlap. Use it as a second opinion and as the
+source of connection points; never as the only thing you looked at.
 
-Find the datasheet's dimensions first; they settle the stencil's scale. Check
-the axis labels rather than trusting them: the DCP-404 datasheet reads "Size
-(WxDxH) 44 x 205 x 270mm", which is transposed.
+Find the datasheet dimensions first; they settle the scale of the stencil.
+Check the axis labels rather than trusting them: a size row can be transposed,
+and the rack-unit height says which of the three numbers is the height.
+
+*Illustration.* The Smartoptics DCP-404 was first built from its stencil. It
+came out with one vent feature of seven, a single status lamp far right where
+the unit has two lower left, traffic lamps under the cages where the unit has
+them beside the Tx/Rx captions, the port block 16 mm off because the stencil
+dropped the vent column that pushes it right, and a face height of 41 against a
+real 44, so every y was six percent short. The stencil still agreed with the
+photograph on the brand, model and hazard marks to a millimetre. The datasheet
+for the same unit reads "Size (WxDxH) 44 x 205 x 270mm", which is transposed.
 
 ### A figure's own aspect tells you whether to trust it
 
 Before taking any fraction off a drawing, measure the drawing against something
 you already know, usually the part's own outline against its contract size.
+These three were measured, and each keeps its source:
 
     Casa BDM      figure aspect 12.54   real 11.34      10% out
     Casa PEM      isolated part drawings                10% out
@@ -170,10 +184,12 @@ repeated feature's measured width slides in one direction across the frame, you
 are measuring the projection. Switch to a badge, a legend, a lamp, a screw head,
 and corroborate in a second image.
 
-**Measure the repeating features twice, from two different images.** The
-MX304's fans were modelled unevenly spaced because edge detection assigned fan
-1's edges to its grille internals; the DC-variant rear photograph was sitting
-unused in the same folder and gave the even layout immediately.
+**Measure the repeating features twice, from two different images.** Edge
+detection can take the internals of a feature for its outline (the bars of a
+grille for the edge of the fan), and a row that is evenly spaced then measures
+uneven. A second image of the same face, such as the photograph of another
+power variant, shows the even layout at once. Check that every image you
+staged for a face has been opened before you accept an odd spacing.
 
 **A figure in the right document can be a picture of the wrong product.** Where
 a vendor ships near-twin models, its documents get illustrated with whichever
@@ -188,7 +204,7 @@ you took from which.
 **Implausibility is a failed check, not a finding.** If a measurement produces
 a layout no real device has (staggered fans, an off-centre lone port, a slot
 pitch that changes halfway) re-measure before you write the provenance
-sentence. The MX304's asymmetry survived every gate because the provenance
+sentence. An uneven fan row has survived every gate here because the provenance
 asserted it confidently. A confident sentence is what makes an error permanent.
 
 ### Before you write "no document states this", run two searches
@@ -200,11 +216,11 @@ later by somebody searching differently, and every one had a well-written
 paragraph of provenance explaining a silence that was not there.
 
 - **Search every document for the field name, not the part number.** Searching
-  for `A9K-RSP-4G` finds release notes. Searching for `Power consumption` finds
-  that card's own data sheet, with the dimensions, depth and weight a component
-  had been carrying as "not stated anywhere". Do the same for `Physical
-  dimensions` and for any wattage figure; the answer is usually in a document
-  about a different part.
+  for a card by its part number finds release notes. Searching for `Power
+  consumption` finds the data sheet for that card, with the dimensions, depth
+  and weight a component had been carrying as "not stated anywhere". Do the
+  same for `Physical dimensions` and for any wattage figure; the answer is
+  usually in a document about a different part.
 - **Check whether an older revision carries a table the current one dropped.**
   Vendors delete content between revisions. One line-card installation guide
   replaced its entire per-part dimensions table with a sentence pointing at a
@@ -239,8 +255,8 @@ Establish `chassis.width/height/depth` and each view's `size`.
   the ear fold lines, and ears are never drawn on the face, neither bolt-on
   ones nor integral flanges; the renderer adds a generic pair from
   `chassis.ears` (see the step after this stage). A 19-inch / 482 mm figure includes them; so does a spec table
-  that calls the chassis 19 inches, which is how the MX204 came to be modelled
-  wearing its flanges and passed every gate. Measure between the folds, record
+  that calls the chassis 19 inches, and a body modelled wearing its flanges
+  passes every other gate. Measure between the folds, record
   the ear extent in provenance, and subtract it before laying anything out.
   Lint L43 warns when a front or rear face lands between 480 and 487 mm.
   A `mount: rack-face` part is the exception: it is a pair of ears and what
@@ -273,8 +289,9 @@ Establish `chassis.width/height/depth` and each view's `size`.
 - Panel decor (vents, grooves, bezels) goes in `panel.decor`. It is what the
   metal *is*, never what is *installed on* it. If a rectangle has an identity a
   person could put a part number to (a cover, a door, a filler, a blank), it is
-  a component in a bay, not paint. The MX80's rear cover was a bare white decor
-  rectangle nobody could identify because it appeared in no component list.
+  a component in a bay, not paint. A rear cover drawn as a bare white decor
+  rectangle is a box nobody can identify, because it appears in no component
+  list.
 - A vent says it is one: `pattern: vent`, or `vent: <mm>` on a plain rect
   (the sheet's thickness, 1 if nothing states it). A dark rectangle with
   neither is a plate, whatever its colour. The declaration is what the lint
@@ -382,6 +399,19 @@ panel:
   measured pitch, not one rectangle.
 - Standard openings come from the registry; `conforms:` on the component you
   will place there tells you the size. Do not eyeball an SFP aperture.
+- The pitch of a ganged block is a lookup too. Read the entry in
+  `spec/schemas/standards.yaml` before measuring a pitch off an image, and use
+  the image only to count and to anchor the block. The entry says it in one of
+  three ways:
+  - An explicit `pitch` is read with its `pitch-kind`. `target` is the value
+    to use (`qsfp-ganged`, 19.0). `floor` is a minimum to clear, not a value
+    to place at (for example `xfp`, `cfp2`, `mpo-adapter` and
+    `keystone-opening`); the pitch itself still comes from the device.
+  - With no `pitch` key, read the notes of the entry. `sfp-ganged` abuts at
+    its `w` of 14.25. `rj45-ganged` has a `w` of 12.7 and states its pitch,
+    13.97, in its notes.
+  - Stacked rows read `row-pitch` where the entry has one (`sfp-ganged`,
+    15.0).
 - Positions come from the mechanical drawing. If you only have a guide figure,
   derive pitch and count from it and anchor to a datasheet dimension.
 - Name a cutout after the thing that goes in it. That identity is what ties the
@@ -389,8 +419,8 @@ panel:
 
 A cutout is a promise that something is there. If you punch one and neither
 place a part in it nor draw anything inside it, the render shows a dark empty
-hole; the MX960 rear had four rocker-switch cutouts with nothing in them.
-Either seat something, draw the thing as decor, or do not punch the hole. L39
+hole, as four rocker-switch cutouts with nothing in them once did on a rear
+face. Either seat something, draw the thing as decor, or do not punch the hole. L39
 reports openings nothing fills, checks that no two overlap, that each matches
 the standard its occupant conforms to, and that no legend is printed on one. It
 says nothing about a panel that declares no cutouts at all.
@@ -529,16 +559,24 @@ Now populate. Reuse before building.
     into the plate, such as teeth behind a window or in a recess, is a sunk
     facet: give it a negative `lift` (its root that far below the plate) and
     declare the recess around it as a `pocket` at least that deep (L117).
-7. **Cable-management accessories are not drawn**: cord-retainer bails, tie
-   anchors, straps. They are not panel facts. Note them in provenance instead.
+7. **Cable management that is part of the product is declared, and drawn
+   where it is a part**: a lacer panel and its rings, a tray, a slack spool, a
+   bend-radius bracket. A ring declares where cables pass (`guide:` on its
+   contract, with its opening's `depth`, `sill` and `aperture.at`), a floor
+   declares where they lie (`tray:` on the part's contract, or `trays:` on
+   the view), and the tie slots cut in a plate are drawn as the plate they
+   are cut in and declared as the tray's `ties`. **Accessories added in the
+   field are not drawn**: loose ties, hook-and-loop straps, cord-retainer
+   bails. They are not panel facts. Note them in provenance instead.
+   (docs/cable-lay-design.md section 6.)
 8. **A row of indicators and buttons sharing one baseline on the real device is
    modelled on one centreline.** A schematic's few-millimetre scatter is
    noise. Record the deviation if you align them, and the drawing's scatter if
    you do not; on some devices the stagger is real.
 9. **Every bay gets a `default:`, or it renders as a hole.** A chassis whose
    bays name no occupant draws as an empty frame: nothing in it is clickable
-   or addressable, and the 3D viewer finds nothing to extrude. All eight ASR
-   9000 chassis sat like that, 121 bays, while 104 components existed and were
+   or addressable, and the 3D viewer finds nothing to extrude. One chassis
+   family sat like that across 121 bays, while 104 components existed and were
    never seated. Seat a cover where the vendor makes one and the real part
    where it does not; an empty slot in a shipped router has a blank filler in
    it, and power, fabric and fan bays are never empty in a working chassis. If
@@ -546,8 +584,9 @@ Now populate. Reuse before building.
    missing component, not a missing decision: leave the default off and record
    the sentence that says the filler is required.
 9a. **An open-frame chassis says so on the face: `open-frame: true`.** A
-    mid-plane chassis whose slots are two guide rails and nothing between them -
-    the CommScope CH3000 - is seen straight through wherever a slot is empty.
+    mid-plane chassis whose slots are two guide rails and nothing between them
+    is seen straight through wherever a slot is empty (the CommScope CH3000 is
+    the worked example in the library).
     Left to itself, every empty bay compiles to a pocket as deep as its deepest
     occupant, walls, floor and back, and the chassis reads in 3D as a row of
     closed tubes. Declare `open-frame` on each face whose slots open into the
@@ -634,11 +673,18 @@ a DCIM holds after import, so changing one is a major bump. A white box that
 runs other vendors' systems has no block; each NOS vendor's listing names its
 ports.
 
-A line card says the same thing on a part. The FELT-B numbers its 18 cages'
-ports 1 to 36, with a CSFP taking both of a cage's pair and an SFP only the odd
-one, so each cage part carries `interfaces: [port-1, port-2]` and the module
-type exports 36 ports. On a component, the ids must not be another part's,
-element's or bay's id. L105 checks both.
+The same rules also name a device's power outlets by their printed labels. A
+placement id cannot spell `A1`, so a rack PDU maps each outlet to the label
+printed beside it - `{physical: 'outlet-a{n}', name: 'A{n}', range: '1-7'}` -
+and the power outlet exports under that name. An outlet no rule names keeps its
+placement id. The Eaton EVMI2130X is the worked example in the library.
+
+A line card says the same thing on a part: a cage part that presents two
+interfaces carries `interfaces: [port-1, port-2]`, and the module type exports
+every one of them. On a component, the ids must not be another part's,
+element's or bay's id. L105 checks both. The worked example in the library is
+the FELT-B, which numbers the ports of its 18 cages 1 to 36: a CSFP takes both
+ports of a cage and an SFP only the odd one, and the module type exports 36.
 
 ### Power figures
 
@@ -653,11 +699,14 @@ L28 is an error on the old `watts` and on device-level spellings used on a
 module. Numbers, not strings.
 
 Vendors publish per-card power in the install or reference guide's
-specifications appendix, not the datasheet. Cisco's ASR 9000 table gives one
-figure per card per ambient (the RSP-440 is 285 W at 25 C, 350 at 40, 370 at
-55) and `power-draw-max-w` takes the highest. Note how large the spread can be
-before deciding a low figure is safe: the ASR 9912 fan tray is 290 W at 25 C and
-1800 W at 55.
+specifications appendix, not the datasheet. Such a table often gives one figure
+per card per ambient, and `power-draw-max-w` takes the highest. Find the
+ambient before deciding a low figure is safe, because the spread can be most of
+the figure.
+
+*Illustration, kept with its source because the numbers are the point.* The
+Cisco ASR 9000 table gives the RSP-440 as 285 W at 25 C, 350 at 40 and 370 at
+55. The ASR 9912 fan tray in the same table is 290 W at 25 C and 1800 W at 55.
 
 If no document you hold states it, write nothing and leave L27 standing. That
 warning is the record that the figure is missing, and while it stands the
@@ -670,8 +719,8 @@ Capture what a figure measures, not just its value. Three questions every time:
 provenance that the vendor did not qualify it), **which scope** (card alone or
 with its paired module, bare or configured chassis, at what ambient; use
 `power-envelope` on a device), and **which side of the meter** (a number under
-"Power Consumption" is not automatically consumption: the C100G datasheet
-prints 4000 W there, and the install guide shows it is the AC input to
+"Power Consumption" is not automatically consumption: one chassis datasheet
+prints 4000 W there, and its install guide shows that to be the AC input to
 provision for a 3600 W load).
 
 When two documents give different numbers, work down this list and stop at the
@@ -752,10 +801,10 @@ cairosvg out.svg -o mine.png --output-width <panel_px>    # same px/mm
 Rendering to the reference's scale is what makes the comparison work: the same
 feature lands in the same place in both images. When something looks off, crop
 that feature alone at four or five times from both and confirm before claiming
-it. This is how the AGR400's RJ45s were caught: four of six jacks were upside
-down, because a stacked ganged jack mirrors its rows and the component draws one
-orientation. Nothing in the manifest was wrong and nothing would ever have
-linted.
+it. This is the check that catches a part drawn the wrong way up: on one
+faceplate four of six RJ45 jacks were upside down, because a stacked ganged
+jack mirrors its rows and the component draws one orientation. Nothing in the
+manifest was wrong and nothing would ever have linted.
 
 Do this for every face the vendor photographed, not just the front. The rear is
 where the fans, the inlets, the ground stud and the airflow tags live. If a

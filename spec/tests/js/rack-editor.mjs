@@ -71,7 +71,7 @@ test('replaceRack is one step with its summary', () => {
 test('a system command is refused unless the system sends it', () => {
   const {ed, evs} = fresh();
   assert.deepEqual(ed.apply([P(10), {op: 'lengths.routed', routeCtx: {}}], {origin: 'agent'}),
-                   {error: "lengths.routed is the page's own command.", index: 1});
+                   {error: "lengths.routed is a system command, sent only by the caller with origin 'system'.", index: 1});
   assert.deepEqual([ed.rack().items.length, evs.length], [0, 0]);
   assert.equal(ed.apply({op: 'lengths.routed', routeCtx: {}}, {origin: 'system'}).noop, true);
 });
@@ -88,4 +88,21 @@ test('a listener that throws neither undoes the edit nor stops the others', () =
   assert.equal(res.step, true);
   assert.equal(ed.rack().items.length, 1);
   assert.deepEqual([evs.length, later, errors.length], [1, ['apply'], 1]);
+});
+
+test('a per-call ctx reaches the commands for apply and preview, and is not kept', async () => {
+  const {COMMANDS} = await import('../../../kit/rack/commands.js');
+  const seen = [];
+  COMMANDS['test.spy'] = {run: (rack, _a, ctx) => { seen.push(ctx); return {rack: {...rack, name: `${rack.name}+`}, summary: 'Spied.', findings: []}; },
+                          args: {type: 'object', additionalProperties: false, properties: {rack: {type: 'string'}}}};
+  try {
+    const {ed} = fresh();
+    const slotsOf = () => null;
+    ed.apply({op: 'test.spy'}, {origin: 'agent', ctx: {slotsOf}});
+    ed.preview({op: 'test.spy'}, {ctx: {slotsOf, extra: 1}});
+    ed.apply({op: 'test.spy'});
+    ed.preview({op: 'test.spy'});
+    assert.deepEqual(seen.map(c => [typeof c.chassisOf, typeof c.slotsOf, c.extra ?? null]),
+      [['function', 'function', null], ['function', 'function', 1], ['function', 'undefined', null], ['function', 'undefined', null]]);
+  } finally { delete COMMANDS['test.spy']; }
 });

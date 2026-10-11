@@ -1,21 +1,92 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://portrayal.dev/schemas/v1/component.schema.json",
- "title": "Portrayal component/module contract (v1)",
+ "title": "Portrayal component/module/kit contract (v1)",
  "type": "object",
  "required": [
   "format",
   "kind",
   "name",
-  "version",
-  "class",
-  "size"
+  "version"
  ],
  "additionalProperties": false,
  "dependentRequired": {
   "interface-at": [
    "interface"
   ]
+ },
+ "$comment": "A KIT IS THE THIRD KIND (roc-ops/Portrayal#905, docs/rack-mounting-design.md section 4): a rail, bracket or slide kit, a set of ordinary components a device names from `chassis.kits` and never places. It has no `class` and no `size` - its parts carry both - and admits only the kit keys. A component or a module still requires `class` and `size` and takes none of the kit keys.",
+ "if": {
+  "required": [
+   "kind"
+  ],
+  "properties": {
+   "kind": {
+    "const": "kit"
+   }
+  }
+ },
+ "then": {
+  "required": [
+   "motion",
+   "parts",
+   "configurations"
+  ],
+  "propertyNames": {
+   "enum": [
+    "format",
+    "kind",
+    "name",
+    "version",
+    "description",
+    "provenance",
+    "unplaced",
+    "superseded-by",
+    "motion",
+    "travel",
+    "install",
+    "parts",
+    "configurations",
+    "accessories"
+   ]
+  },
+  "properties": {
+   "parts": {
+    "minItems": 1,
+    "items": {
+     "required": [
+      "count"
+     ],
+     "propertyNames": {
+      "enum": [
+       "ref",
+       "id",
+       "count"
+      ]
+     }
+    }
+   }
+  }
+ },
+ "else": {
+  "required": [
+   "class",
+   "size"
+  ],
+  "properties": {
+   "motion": false,
+   "travel": false,
+   "install": false,
+   "configurations": false,
+   "accessories": false,
+   "parts": {
+    "items": {
+     "properties": {
+      "count": false
+     }
+    }
+   }
+  }
  },
  "properties": {
   "format": {
@@ -24,8 +95,10 @@
   "kind": {
    "enum": [
     "component",
-    "module"
-   ]
+    "module",
+    "kit"
+   ],
+   "description": "`component` is placed; `module` seats in a bay and can be swapped; `kit` is a rack-mounting kit a device names from `chassis.kits` (no `class`, no `size`, only the kit keys)."
   },
   "name": {
    "$ref": "#/$defs/segment"
@@ -45,14 +118,14 @@
   },
   "class": {
    "$ref": "#/$defs/segment",
-   "description": "WHAT KIND OF PART THIS IS, from a closed vocabulary that lives in spec/schemas/power-roles.yaml - not repeated here as an enum, because the same list in two files drifts and only one of them would be the one lint reads. Every class sits in exactly one power role there, and L51 refuses a class that sits in none: that is how a class invented today gets its power question asked today rather than by a totalling tool falling over months later. The vocabulary is deliberately small and synonyms are merged rather than admitted - `cooling` became `fan`, `fastener` became `screw`, `panel` became `display` and `connector` became `inlet` in #173, because each pair was one kind of part split by who happened to model it."
+   "description": "WHAT KIND OF PART THIS IS, from a closed vocabulary kept in the power-roles vocabulary rather than repeated here as an enum, so that schema and lint read one list. Every class sits in exactly one power role there, and L51 reports a class that sits in none, so a new class has its power question asked when it is added. The vocabulary is small, and synonyms are merged rather than admitted."
   },
   "profile": {
    "$ref": "#/$defs/segment"
   },
   "conforms": {
    "$ref": "#/$defs/segment",
-   "description": "standards-registry key; size is lint-enforced against schemas/standards.yaml"
+   "description": "standards-registry key; lint holds `size` to the registry's entry"
   },
   "interface": {
    "$ref": "#/$defs/segment",
@@ -60,7 +133,7 @@
   },
   "default": {
    "type": "string",
-   "description": "what this component's OWN presented slot ships holding - a ref its accept list contains (L114). Requires the component to be a slot (an `interface` in spec/schemas/pluggables.yaml or connectors.yaml). A composer's `parts:` entry `default:` overrides it; a configuration's `occupants:` overrides both."
+   "description": "what this component's OWN presented slot ships holding - a ref its accept list contains (L114). Requires the component to be a slot (an `interface` in the pluggables or connectors vocabulary). A composer's `parts:` entry `default:` overrides it; a configuration's `occupants:` overrides both."
   },
   "interface-at": {
    "$ref": "#/$defs/segment",
@@ -73,7 +146,7 @@
   "optical": {
    "type": "object",
    "additionalProperties": false,
-   "description": "THE GLASS. A connector states `positions` - how many fibre positions it presents, 2 for an LC duplex, 12 for an MPO-12 - and states nothing else. A module that CONTAINS fibre states `paths` between `<part-id>.<n>` endpoints, and `unused` for any position no path reaches. See docs/optical-paths-design.md: the reason to model strands rather than a port-to-port table is that a table cannot express a tap, a splice, a conversion or a mesh, which are two thirds of the FS FHD catalogue.",
+   "description": "THE GLASS. A connector states `positions` - how many fibre positions it presents, 2 for an LC duplex, 12 for an MPO-12 - and states nothing else. A module that CONTAINS fibre states `paths` between `<part-id>.<n>` endpoints, and `unused` for any position no path reaches. A path runs `from` one endpoint `to` one, splits `to` a ratio list, or joins a `combine` list `to` one. Strands are modelled rather than a port-to-port table because a table cannot express a tap, a splice, a conversion or a mesh.",
    "properties": {
     "positions": {
      "type": "integer",
@@ -94,19 +167,19 @@
     },
     "rear-kind": {
      "enum": ["splice"],
-     "description": "WHAT THE BACK OF THIS MODULE IS, when it is not a connector. A splice cassette's trunk fibres are fusion-spliced to its pigtails, so there is nothing on the rear face to draw and no adapter to compose - `splice` is a real rear-port type upstream, shipping in the devicetype-library's ADC PPP-SC-SM. Omitted on every module whose rear carries an adapter, which is all of them so far. L87 checks that a module claiming one has a rear face to claim it about."
+     "description": "WHAT THE BACK OF THIS MODULE IS, when it is not a connector. A splice cassette's trunk fibres are fusion-spliced to its pigtails, so there is nothing on the rear face to draw and no adapter to compose - `splice` is a real rear-port type upstream, shipping in the devicetype-library's ADC PPP-SC-SM. Omitted on a module whose rear carries an adapter. L87 checks that a module claiming one has a rear face to claim it about."
     },
     "front-order": {
      "type": "array",
      "minItems": 1,
      "items": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*(\\.[1-9][0-9]*)?$"},
-     "description": "AN ENTRY IS A PART ID, OR ONE POSITION OF A PART (`lc07.2`). Named bare, a part's positions are numbered 1 upward. Where they are not - a duplex adapter turned over in the lower row of a belly-to-belly holder, whose bore 1 is then the one a reader counting along the row meets second - the part is spelled out position by position in the order they are numbered, `lc07.2, lc07.1`: all of its positions, once each, together (L78). THE VENDOR'S OWN SEQUENCE, because a silkscreen is a fact about the printing and placement cannot supply it. For one row, left to right by `at.x` is a safe reading - the position on the face IS the numbering, and every single-row module in this library is projected that way with nothing stated here. A face with more than one row of fibre parts is a different question: whether the vendor numbers row then row, or column then column, and which row comes first, is a fact about the silkscreen, not a fact `at.x` and `at.y` can be sorted into - guessing a rule from the one multi-row sample this library happens to hold is exactly how the 12.90-vs-13.2 pitch confusion started. Required only where geometry genuinely cannot answer (L88): list every fibre-bearing part id in the order the vendor numbers it, and the projection numbers front ports in that order instead of sorting on position. Say in `provenance.optical` where the order was read, the same way `polarity` and `polish` name their source."
+     "description": "AN ENTRY IS A PART ID, OR ONE POSITION OF A PART (`lc07.2`). Named bare, a part's positions are numbered 1 upward. Where they are not - a duplex adapter turned over in the lower row of a belly-to-belly holder, whose bore 1 is then the one a reader counting along the row meets second - the part is spelled out position by position in the order they are numbered, `lc07.2, lc07.1`: all of its positions, once each, together (L78). THE VENDOR'S OWN SEQUENCE, because a silkscreen is a fact about the printing and placement cannot supply it. For one row, left to right by `at.x` is a safe reading - the position on the face IS the numbering, and every single-row module in this library is projected that way with nothing stated here. A face with more than one row of fibre parts is a different question: whether the vendor numbers row then row, or column then column, and which row comes first, is a fact about the silkscreen, not a fact `at.x` and `at.y` can be sorted into, and not one to guess from another module. Required only where geometry genuinely cannot answer (L88): list every fibre-bearing part id in the order the vendor numbers it, and the projection numbers front ports in that order instead of sorting on position. Say in `provenance.optical` where the order was read, the same way `polarity` and `polish` name their source."
     },
     "trunk": {
      "type": "array",
      "minItems": 1,
      "items": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*(\\.[1-9][0-9]*)?$"},
-     "description": "WHICH POSITIONS ARE THIS MODULE'S COMMON, NETWORK-SIDE END, on a module whose connectors are all on one face. Same item grammar as `front-order`: a bare part id means every position of that part, `dcm.2` means one. The DCIM projection puts these positions on rear ports - one rear port per trunk part, named `<PART>-1`, its positions the part's trunk positions in position order - exactly as it puts a rear-face connector there (optical-paths-design.md C3). A rear face is the trunk by construction, so a module whose rear face carries fibre does not state this (L129). A path-bearing module states one or the other (L131), and every leg runs between the front and the trunk (L130). THE CONTRACT STATES IT because neither a part id (`common`, `split`) nor a path's direction can: a cassette's paths run from the front and a coupler's from the trunk (roc-ops/Portrayal#246)."
+     "description": "WHICH POSITIONS ARE THIS MODULE'S COMMON, NETWORK-SIDE END, on a module whose connectors are all on one face. Same item grammar as `front-order`: a bare part id means every position of that part, `dcm.2` means one. The DCIM projection puts these positions on rear ports - one rear port per trunk part, named `<PART>-1`, its positions the part's trunk positions in position order - exactly as it puts a rear-face connector there. A rear face is the trunk by construction, so a module whose rear face carries fibre does not state this (L129). A path-bearing module states one or the other (L131), and every leg runs between the front and the trunk (L130). THE CONTRACT STATES IT because neither a part id (`common`, `split`) nor a path's direction can: a cassette's paths run from the front and a coupler's from the trunk."
     },
     "paths": {
      "type": "array",
@@ -114,9 +187,25 @@
      "items": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["from", "to"],
+      "required": ["to"],
+      "oneOf": [{"required": ["from"]}, {"required": ["combine"]}],
       "properties": {
        "from": {"$ref": "#/$defs/optical-endpoint"},
+       "combine": {
+        "type": "array",
+        "minItems": 2,
+        "description": "A COMBINE: SEVERAL SOURCES LANDING ON ONE DESTINATION, the opposite of a split, written in place of `from`. `to` is then one endpoint. Each source says how it joins: a `band` (a wavelength combine, the add side of a filter - every source but at most one carries one, and no two the same) or a `ratio` (a power combine, a coupler run backwards - every source carries one and they sum to 100). The two do not mix, no source is named twice, and the path carries no `band` of its own (L171). DECLARED RATHER THAN INFERRED: two plain paths into one position are still an error (L79), because a bore takes one ferrule and only a stated combine says the glass joins behind it. A path records the way the light travels and nothing downstream depends on it; each source is one leg and one row of the fibre map, exactly as each destination of a split is.",
+        "items": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": ["at"],
+         "properties": {
+          "at": {"$ref": "#/$defs/optical-endpoint"},
+          "ratio": {"type": "number", "exclusiveMinimum": 0, "maximum": 100, "description": "this source's share of a power combine; every source states one and they sum to 100"},
+          "band": {"$ref": "#/$defs/optical-band"}
+         }
+        }
+       },
        "to": {
         "oneOf": [
          {"$ref": "#/$defs/optical-endpoint"},
@@ -134,18 +223,12 @@
           }
          }
         ],
-        "description": "one endpoint, or a list of endpoints with ratios summing to 100 - which is what a tap or a coupler is"
+        "description": "one endpoint, or a list of endpoints with ratios summing to 100 - which is what a tap or a coupler is. One endpoint only on a path that states `combine`."
        },
        "media": {"$ref": "#/$defs/segment"},
        "band": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["centre-nm"],
-        "description": "this path carries only this band; absent means it carries whatever is left. An add/drop filter is two paths off one endpoint, one banded and one not.",
-        "properties": {
-         "centre-nm": {"type": "number", "exclusiveMinimum": 0},
-         "width-nm": {"type": "number", "exclusiveMinimum": 0}
-        }
+        "$ref": "#/$defs/optical-band",
+        "description": "this path carries only this band; absent means it carries whatever is left. The drop side of an add/drop filter is two paths off one endpoint, one banded and one not; its add side is a `combine`, whose sources carry the band."
        }
       }
      }
@@ -172,7 +255,7 @@
     },
     "color": {
      "type": "string",
-     "description": "side color where no art exists"
+     "description": "side colour where no art exists"
     },
     "travel": {
      "type": "number",
@@ -182,7 +265,7 @@
     "boxes": {
      "type": "array",
      "minItems": 1,
-     "description": "A BODY THAT IS NOT ONE BOX. A riser is a bracket plate with a thin PCB standing behind it and connectors on the PCB's inboard face; a card is a bracket and a PCB slab beside it. One box the size of the face hid the interior, and a box cut to the plate left the PCB behind when the riser was ejected. Each entry is a box in the face's own frame: `at`/`size` in mm from the face's top-left, `from` mm behind the face plane where the box starts (0: at the plane), `depth` how far it runs on from there. A box may stand outside the face rect - the riser's PCB is at the bay's outer edge and reaches below the bracket to the board. When `boxes` is given the single box is not drawn, `footprint` is ignored, and an EMPTY bay leaves no dark hole: what is behind an unseated riser is the chassis interior. `depth` on the body remains the reach, for the pull distance.",
+     "description": "A BODY THAT IS NOT ONE BOX. A riser is a bracket plate with a thin PCB standing behind it and connectors on the PCB's inboard face; a card is a bracket and a PCB slab beside it. One box the size of the face would hide the interior, and a box cut to the plate would leave the PCB behind when the riser is ejected. Each entry is a box in the face's own frame: `at`/`size` in mm from the face's top-left, `from` mm behind the face plane where the box starts (0: at the plane), `depth` how far it runs on from there. A box may stand outside the face rect - the riser's PCB is at the bay's outer edge and reaches below the bracket to the board. When `boxes` is given the single box is not drawn, `footprint` is ignored, and an EMPTY bay leaves no dark hole: what is behind an unseated riser is the chassis interior. `depth` on the body remains the reach, for the pull distance.",
      "items": {
       "type": "object",
       "additionalProperties": false,
@@ -225,7 +308,7 @@
          "cylinder",
          "ring"
         ],
-        "description": "WHAT THE PIECE IS, when it is not a box. `cylinder` is a solid round and `ring` a round wall `wall` mm thick - a fibre storage ring in a splice tray, a spool, a post. The piece is fitted into the same `at`/`size`/`from`/`depth` envelope a box would fill, standing on `axis`. Absent means `box`, as every piece was before this key. In a bay that turns, mirrors or tilts its occupant a round piece is built as its box."
+        "description": "WHAT THE PIECE IS, when it is not a box. `cylinder` is a solid round and `ring` a round wall `wall` mm thick - a fibre storage ring in a splice tray, a spool, a post. The piece is fitted into the same `at`/`size`/`from`/`depth` envelope a box would fill, standing on `axis`. Absent means `box`. In a bay that turns, mirrors or tilts its occupant a round piece is built as its box."
        },
        "axis": {
         "enum": [
@@ -294,11 +377,11 @@
   "relief": {
    "type": "object",
    "additionalProperties": false,
-   "description": "3D interior model: cavity wall color, cavity shape node and cross-section, and per-node features",
+   "description": "3D interior model: cavity wall colour, cavity shape node and cross-section, and per-node features",
    "properties": {
     "wall": {
      "type": "string",
-     "description": "cavity wall color (CSS)"
+     "description": "cavity wall colour (CSS)"
     },
     "walls": {
      "type": "string",
@@ -390,11 +473,11 @@
        "dia": {
         "type": "number",
         "exclusiveMinimum": 0,
-        "description": "tube diameter for `uhandle`, when the node's short axis is not it. A handle's node has to be the WHOLE of its 2D art, because the face texture hides exactly the node that carries the relief attribute and the geometry takes over from there - so on a part that draws its handle as a wide loop, the node's short axis is the loop's height rather than the tube. Without this the choice was between a 22 mm tube and a flat handle left painted on the face underneath the real one"
+        "description": "tube diameter for `uhandle`, when the node's short axis is not it. A handle's node has to be the WHOLE of its 2D art, because the face texture hides exactly the node that carries the relief attribute and the geometry takes over from there - so on a part that draws its handle as a wide loop, the node's short axis is the loop's height rather than the tube. Without this the choice is between a tube as thick as the loop and a flat handle left painted on the face underneath the real one"
        },
        "lift": {
         "type": "number",
-        "description": "standoff: the feature starts this many mm off the face (floating handle bars, stacked washers). Greater than 0, except on a feature that declares `facet`, where a negative lift sinks the facet's root edge that far below the plate, into a `pocket` at least that deep (L117; docs/tilted-facets-design.md, Recessed facets)."
+        "description": "standoff: the feature starts this many mm off the face (floating handle bars, stacked washers). Greater than 0, except on a feature that declares `facet`, where a negative lift sinks the facet's root edge that far below the plate, into a `pocket` at least that deep (L117)."
        },
        "knurl": {
         "type": "boolean",
@@ -412,7 +495,7 @@
        },
        "color": {
         "type": "string",
-        "description": "side/body color (CSS)"
+        "description": "side/body colour (CSS)"
        },
        "hole-color": {
         "type": "string",
@@ -420,7 +503,7 @@
        },
        "shape": {
         "type": "boolean",
-        "description": "extrude the node's own OUTLINE rather than its bounding box. `out` builds a box, which is right for a lamp or a boss and wrong for anything with a contour: the rear handle's face was its real art and its sides were the bbox, so a curved moulding read as three cardboard boxes stood on end. Opt-in rather than inferred, because the box is cheaper and is the right answer for most protrusions, and guessing would silently reshape every one in the library. Companion to `round` on a cavity, which shape-punches from the node's art the same way. BESIDE `profile` / `profile-y` it cuts the sloped surface to the outline too, and drops its walls along the outline rather than the box: the MaiaEdge PBC-2000's centre pane is 15 proud with ends that ARE its windows' ends, and a box ran into the windows. Holes in the outline ARE cut - the same bezel is one sloped plate with two octagonal windows through it - and their walls take `hole-color`."
+        "description": "extrude the node's own OUTLINE rather than its bounding box. `out` builds a box, which is right for a lamp or a boss and wrong for anything with a contour: a curved moulding built from its bounding box reads as boxes stood on end. Opt-in rather than inferred, because the box is cheaper and is the right answer for most protrusions, and guessing would silently reshape every one in the library. Companion to `round` on a cavity, which shape-punches from the node's art the same way. BESIDE `profile` / `profile-y` it cuts the sloped surface to the outline too, and drops its walls along the outline rather than the box: the MaiaEdge PBC-2000's centre pane is 15 proud with ends that ARE its windows' ends, and a box would run into the windows. Holes in the outline ARE cut - the same bezel is one sloped plate with two octagonal windows through it - and their walls take `hole-color`."
        },
        "profile": {
         "type": "array",
@@ -451,7 +534,7 @@
        "pocket": {
         "type": "number",
         "exclusiveMinimum": 0,
-        "description": "mm this node is sunk INTO an otherwise solid face - a window cut through a drive carrier, a button pressed into it. Distinct from `sink`, which measures from a cavity floor and so needs the part to be a hole already: a carrier is solid except where it is pocketed, and had no way to say so. The floor is the node's own art, so what is drawn behind a window is what shows down it."
+        "description": "mm this node is sunk INTO an otherwise solid face - a window cut through a drive carrier, a button pressed into it. Distinct from `sink`, which measures from a cavity floor and so needs the part to be a hole already: a carrier is solid except where it is pocketed. The floor is the node's own art, so what is drawn behind a window is what shows down it."
        },
        "facet": {
         "type": "object",
@@ -463,7 +546,7 @@
          "facing": {"enum": ["up", "down", "left", "right"],
                     "description": "which way the facet looks. `up`: the upper edge (the root) sits on the plate and the lower edge stands proud, so ports on it look upward; `down` the reverse; `left`: the left-hand edge is the root and the right-hand edge stands proud, so ports on it look left; `right` the reverse"}
         },
-        "description": "THIS NODE IS A SURFACE ANGLED OFF THE PANEL, and composed parts may sit `on` it. The node's own art and its `elements` rectangle are its FOOTPRINT AS SEEN FROM THE FRONT - what you measure off a front figure. The proud edge stands off by projected extent x tan(deg); the renderer derives the wedge, so a feature with `facet` declares no `out`, `profile` or `profile-y` (L117). The Nokia 7360 ISAM FX NT cards carry their SMA jacks and QSFP28 cages in a housing angled about 30 degrees up, and the NT I/O cards put every cage on a 45 degree sawtooth - drawn face-on, both were wrong in 2D and in 3D. docs/tilted-facets-design.md."
+        "description": "THIS NODE IS A SURFACE ANGLED OFF THE PANEL, and composed parts may sit `on` it. The node's own art and its `elements` rectangle are its FOOTPRINT AS SEEN FROM THE FRONT - what you measure off a front figure. The proud edge stands off by projected extent x tan(deg); the renderer derives the wedge, so a feature with `facet` declares no `out`, `profile` or `profile-y` (L117). The Nokia 7360 ISAM FX NT cards carry their SMA jacks and QSFP28 cages in a housing angled about 30 degrees up, and the NT I/O cards put every cage on a 45 degree sawtooth."
        }
       }
      }
@@ -476,7 +559,7 @@
   "unplaced": {
    "type": "string",
    "minLength": 40,
-   "description": "WHY NOTHING SEATS THIS PART. A component nothing references is either work in progress or dead weight, and from the outside the two look identical. Saying which, here, is what lets L89 fail on the next one instead of on all of them. The sentence is for a reader who has just found the part and is deciding whether to use it, extend it or delete it: say what would seat it and what is missing, and name the issue if the work is tracked. Not a waiver and not a silence - a part that IS seated must not carry this."
+   "description": "WHY NOTHING SEATS THIS PART. A component nothing references is either work in progress or dead weight, and from the outside the two look identical. Saying which, here, is what lets L89 fail on an unreferenced part that carries no `unplaced`. The sentence is for a reader who has just found the part and is deciding whether to use it, extend it or delete it: say what would seat it and what is missing, and name the issue if the work is tracked. Not a waiver and not a silence - a part that IS seated must not carry this."
   },
   "superseded-by": {
    "type": "string",
@@ -517,7 +600,7 @@
    "properties": {
     "inlet": {
      "enum": ["c14", "c20", "dc-terminal", "other", "none"],
-     "description": "WHERE POWER ENTERS THIS MODULE, when no inlet part is composed. The strong form is a composed part - std/c14-inlet and its siblings carry a panel cutout, a standard and a size - and a module that draws one needs nothing here. Half the PSU catalogue draws none: a DC supply's entry is a screw-terminal block, the library has one DC terminal component against two IEC ones, so the studs were drawn as elements in the skin and the connector was named only in prose. The element's own name is a spelling convention (`terminal-block`, `terminals`, `dc-input`) and reading it would be the `port-` prefix defect again, so the module says it once, here, from a closed list. `none` is a CLAIM and not a blank: it says the CHASSIS carries the inlet, which is true of the MX960, whose four C20 receptacles sit on a strip above the supplies. `other` is for a real inlet upstream has no type for - an HVDC connector - and NOT for one nobody has identified: a supply whose guide says 'a C-type appliance inlet' is some IEC 60320 receptacle, so it stays unanswered and L95 counts it rather than claiming `other`, which would be a wrong answer dressed as a modest one. L95 asks every `class: psu` component for one of these or a part."
+     "description": "WHERE POWER ENTERS THIS MODULE, when no inlet part is composed. The strong form is a composed part - std/c14-inlet and its siblings carry a panel cutout, a standard and a size - and a module that draws one needs nothing here. A module whose inlet is drawn as elements of its skin - a DC supply's screw-terminal block, say - says it once, here, from a closed list, because an element's name (`terminal-block`, `terminals`, `dc-input`) is only a spelling convention and is not read. `none` is a CLAIM and not a blank: it says the CHASSIS carries the inlet, which is true of the MX960, whose four C20 receptacles sit on a strip above the supplies. `other` is for a real inlet upstream has no type for - an HVDC connector - and NOT for one nobody has identified: a supply whose guide says 'a C-type appliance inlet' is some IEC 60320 receptacle, so it stays unanswered and L95 counts it rather than claiming `other`, which would be a wrong answer dressed as a modest one. L95 asks every `class: psu` component for one of these or a part."
     },
     "power-draw-typical-w": {
      "$ref": "#/$defs/watts",
@@ -536,14 +619,14 @@
      "description": "continuous output this module is rated to PROVIDE - a PSU or a power-entry module. Deliberately not `power-output-max-w`: draw has a distribution and supply has a rating, and a symmetric name would advertise a `power-output-typical-w` that means nothing"
     },
     "power-absent": {
-     "description": "WHY this part states no wattage, when the answer is settled rather than pending. Absent means the question is still open, which is what L27's standing warning is for - so writing this key is a claim, and L52 makes it carry provenance saying what was searched. `not-published`: the vendor does not state it in any document held; the part draws power and the figure is genuinely missing, so a chassis total containing it is a floor. `not-applicable`: a wattage does not belong on this part. Two reasons so far. A power tray or entry module only CARRIES current, so its rating bounds what may pass through rather than describing an output, and deriving watts means multiplying two figures across an input range. Or the part is one half of a pair the vendor measures together: Casa's rear I/O modules have no figure of their own because every Casa number is scoped to the front card WITH its I/O module, and that partner already carries it under `power-draw-scope: module-with-paired-io`. Or the contract is a GENERIC - a shape that stands in for many real parts rather than being one - and the figure belongs on the placement that knows which part is actually fitted: a 40GBASE-SR4 is about 1.5 W and a 400G ZR about 20 W and they are the same drawing, so a number on the drawing would be a fiction dressed as a fact. All three reasons share the consequence that distinguishes this value from `not-published` - a chassis total is COMPLETE without a number here, rather than a floor. For the generic case the completeness is conditional on the consumer sourcing the figure from the placement, which is the same division of labour L18 draws for `media`. The distinction is data and not prose because the two mean opposite things to something adding up a chassis: `not-published` is a hole in the total, `not-applicable` is not",
+     "description": "WHY this part states no wattage, when the answer is settled rather than pending. Absent means the question is still open, which is what L27's standing warning is for - so writing this key is a claim, and L52 makes it carry provenance saying what was searched. `not-published`: the vendor does not state it in any document held; the part draws power and the figure is genuinely missing, so a chassis total containing it is a floor. `not-applicable`: a wattage does not belong on this part, for one of three reasons. A power tray or entry module only CARRIES current, so its rating bounds what may pass through rather than describing an output, and deriving watts means multiplying two figures across an input range. Or the part is one half of a pair the vendor measures together: Casa's rear I/O modules have no figure of their own because every Casa number is scoped to the front card WITH its I/O module, and that partner already carries it under `power-draw-scope: module-with-paired-io`. Or the contract is a GENERIC - a shape that stands in for many real parts rather than being one - and the figure belongs on the placement that knows which part is actually fitted: a 40GBASE-SR4 is about 1.5 W and a 400G ZR about 20 W and they are the same drawing, so a number on the drawing would be a fiction dressed as a fact. All three reasons share the consequence that distinguishes this value from `not-published` - a chassis total is COMPLETE without a number here, rather than a floor. For the generic case the completeness is conditional on the consumer sourcing the figure from the placement, which is the same division of labour L18 draws for `media`. The distinction is data and not prose because the two mean opposite things to something adding up a chassis: `not-published` is a hole in the total, `not-applicable` is not",
      "enum": [
       "not-published",
       "not-applicable"
      ]
     },
     "power-draw-scope": {
-     "description": "WHAT the power-draw-* figures on this contract cover. Absent means `module` - this module and nothing else - so every figure written before this key existed keeps meaning exactly what it meant. `module-with-paired-io` is for a vendor who measures the pair and publishes no bare figure: Casa heads its C100G table 'Maximum consumption WITH I/O module' and gives the same US16x8 200 W or 220 W depending on which rear module it sits behind, so a bare-card figure may not exist to be divided out. The scope is DATA and not a provenance sentence because it changes the arithmetic: a consumer summing a chassis must not add the rear partner of a card already scoped to include it, and a consumer asking what one card draws must be able to see that the answer contains another card. A prose note is true, well written, and invisible to both of them",
+     "description": "WHAT the power-draw-* figures on this contract cover. Absent means `module` - this module and nothing else. `module-with-paired-io` is for a vendor who measures the pair and publishes no bare figure: Casa heads its C100G table 'Maximum consumption WITH I/O module' and gives the same US16x8 200 W or 220 W depending on which rear module it sits behind, so a bare-card figure may not exist to be divided out. The scope is DATA and not a provenance sentence because it changes the arithmetic: a consumer summing a chassis must not add the rear partner of a card already scoped to include it, and a consumer asking what one card draws must be able to see that the answer contains another card. A prose note is true, well written, and invisible to both of them",
      "enum": [
       "module",
       "module-with-paired-io"
@@ -554,7 +637,7 @@
   },
   "stack-exceptions": {
    "type": "array",
-   "description": "A BELLY-TO-BELLY CAGE STACK THAT IS NOT DRAWN THE LIBRARY'S WAY, and why. Lint L108 holds every stacked SFP/QSFP/QSFP-DD cage pair to one convention - a row pair upper rotate 0 over lower rotate 180, a column pair (cages turned on their side) left 270 beside right 90, so both bails face outward - and this is the one place a device, its layout.yaml, or a component contract says a pair is otherwise. Each entry names the pair (or several pairs that share one reason) by id and carries the reading that overturns the convention. The pairing is spec/tools/portrayal/stacks.py; OSFP stacks are not checked. See docs/pluggables-3d-design.md, the stacked-cage decisions.",
+   "description": "A BELLY-TO-BELLY CAGE STACK THAT IS NOT DRAWN THE LIBRARY'S WAY, and why. Lint L108 holds every stacked SFP/QSFP/QSFP-DD cage pair to one convention - a row pair upper rotate 0 over lower rotate 180, a column pair (cages turned on their side) left 270 beside right 90, so both bails face outward - and this is the one place a device, its layout.yaml, or a component contract says a pair is otherwise. Each entry names the pair (or several pairs that share one reason) by id and carries the reading that overturns the convention. OSFP stacks are not checked.",
    "items": {
     "type": "object",
     "additionalProperties": false,
@@ -689,7 +772,7 @@
   },
   "groups": {
    "type": "object",
-   "description": "THE PORT GROUPS OF THIS COMPONENT, declared once, in the same shape as a device's `groups:` (term, role, index-origin, mixed, attrs, states, description; `$defs/group` is kept identical to device.schema.json's group item and a test holds the two equal). A part joins one with `group:`. Names are LOCAL to the component: `mgmt` on a routing engine and `mgmt` on the chassis it seats in are different groups, and a device never overrides a card's. When the card is drawn inside a device - at any depth, a device bay's module or a module in a nested bay - every grouped part carries exactly what a device placement in that group carries (`data-group`, `data-group-role`, the group's attrs and description; the part's own attrs win), and a cage in the group publishes the same map as its `occupant-attrs`. Lint L17, L22, L23 and L37 read these as they read a device's, as warnings",
+   "description": "THE PORT GROUPS OF THIS COMPONENT, declared once, in the same shape as a device's `groups:` (term, role, index-origin, mixed, attrs, states, description; held equal to it by a test). A part joins one with `group:`. Names are LOCAL to the component: `mgmt` on a routing engine and `mgmt` on the chassis it seats in are different groups, and a device never overrides a card's. When the card is drawn inside a device - at any depth, a device bay's module or a module in a nested bay - every grouped part carries exactly what a device placement in that group carries (`data-group`, `data-group-role`, the group's attrs and description; the part's own attrs win), and a cage in the group publishes the same map as its `occupant-attrs`. Lint L17, L22, L23 and L37 read these as they read a device's, as warnings",
    "propertyNames": {
     "$ref": "#/$defs/segment"
    },
@@ -699,13 +782,12 @@
   },
   "parts": {
    "type": "array",
-   "description": "sub-components composed into this component (compile-time flattened); e.g. a std/ cutout core inside a bezel",
+   "description": "sub-components composed into this component (compile-time flattened); e.g. a std/ cutout core inside a bezel. On a `kind: kit` the kit's parts list instead: `{ref, id, count}`, no `at`, each ref a component that is not a kit (L155).",
    "items": {
     "type": "object",
     "required": [
      "ref",
-     "id",
-     "at"
+     "id"
     ],
     "additionalProperties": false,
     "properties": {
@@ -735,7 +817,7 @@
       },
       "minItems": 2,
       "uniqueItems": true,
-      "description": "THE INTERFACES THIS PART PRESENTS, when it is more than one and is not itself an interface - the component twin of a device placement's `interfaces:`. A Compact SFP (CSFP) module fits a standard SFP cage and carries two independent BiDi fibre connections, each its own interface; a line card whose cages number two ports each (cage n = ports 2n-1 and 2n) has both whether or not a module is seated, and cards here ship unpopulated, so the two belong to the HOST CAGE and are declared on it: `interfaces: [port-1, port-2]`. The DCIM export (build_module) then emits one interface per id, typed from the cage, and none for the part. Not breakout: breakout is a MODE a port is configured into. Ids must be unique in the component and not name a part, element or bay, and only a port presents interfaces. Lint L105. roc-ops/Portrayal#443"
+      "description": "THE INTERFACES THIS PART PRESENTS, when it is more than one and is not itself an interface - the component twin of a device placement's `interfaces:`. A Compact SFP (CSFP) module fits a standard SFP cage and carries two independent BiDi fibre connections, each its own interface; a line card whose cages number two ports each (cage n = ports 2n-1 and 2n) has both whether or not a module is seated, and cards here ship unpopulated, so the two belong to the HOST CAGE and are declared on it: `interfaces: [port-1, port-2]`. The DCIM export then emits one interface per id, typed from the cage, and none for the part. Not breakout: breakout is a MODE a port is configured into. Ids must be unique in the component and not name a part, element or bay, and only a port presents interfaces. Lint L105 checks them."
      },
      "group": {
       "$ref": "#/$defs/segment",
@@ -756,11 +838,11 @@
      },
      "default": {
       "type": "string",
-      "description": "what this slot SHIPS HOLDING - a component ref its accept list contains (L114), or \"\" for nothing. The product's shipped state, like a bay's blank: drawn in every configuration unless that configuration's `occupants:` keys this slot. Overrides the placed component's own top-level `default:` and nothing inside it (docs/pluggables-caps-design.md, The shipped default)."
+      "description": "what this slot SHIPS HOLDING - a component ref its accept list contains (L114), or \"\" for nothing. The product's shipped state, like a bay's blank: drawn in every configuration unless that configuration's `occupants:` keys this slot. Overrides the placed component's own top-level `default:` and nothing inside it."
      },
      "states": {
       "type": "object",
-      "description": "what this part's lamps MEAN here, as {element-id: states}. A component declares what a lamp IS - a 2 mm round lamp, a jack with two indicators - and can only guess what it signifies; the thing composing it knows. The same override device placements already take, one level down, so a card can compose a generic jack and attach its own indicator table rather than redrawing the lamps over the ones it composed. Addresses one element at a time, because a jack's two lamps routinely do NOT share a vocabulary.",
+      "description": "what this part's lamps MEAN here, as {element-id: states}. A component declares what a lamp IS - a 2 mm round lamp, a jack with two indicators - and can only guess what it signifies; the thing composing it knows. The same override device placements take, one level down, so a card can compose a generic jack and attach its own indicator table rather than redrawing the lamps over the ones it composed. Addresses one element at a time, because a jack's two lamps routinely do NOT share a vocabulary.",
       "additionalProperties": {
        "type": "array",
        "minItems": 1
@@ -769,6 +851,162 @@
      "on": {
       "$ref": "#/$defs/segment",
       "description": "the relief feature (its `node`) on THIS contract that declares a `facet`, which this part sits on. `at` stays the part's front-view top-left and `size` its TRUE size; the renderer foreshortens it by cos(deg) along the facet's axis, and the 3D viewer builds its cavity along the slope. An occupant seated in it inherits the tilt. L117 checks the facet exists and the projected part lies within it."
+     },
+     "count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "A KIT PART ONLY (`kind: kit`): how many of this part the kit ships, 2 for a pair of rails. A kit part is `{ref, id, count}` and nothing else - it is a line of the kit's parts list, not a placement, so it has no `at`. A composed part of a component or module never states it."
+     }
+    },
+    "if": {
+     "required": [
+      "count"
+     ]
+    },
+    "then": {
+     "propertyNames": {
+      "enum": [
+       "ref",
+       "id",
+       "count"
+      ]
+     }
+    },
+    "else": {
+     "required": [
+      "at"
+     ]
+    }
+   }
+  },
+  "motion": {
+   "enum": [
+    "fixed",
+    "telescoping",
+    "sliding",
+    "shelf"
+   ],
+   "description": "A KIT ONLY: how the kit holds the device once installed. `fixed` is static rails, ears or a rear support; `telescoping` sets its depth at install and nothing moves after; `sliding` moves out for service; `shelf` is one the device stands on."
+  },
+  "travel": {
+   "oneOf": [
+    {
+     "type": "number",
+     "exclusiveMinimum": 0
+    },
+    {
+     "const": "full"
+    }
+   ],
+   "description": "A KIT ONLY, and only with `motion: sliding` (L158): how far the device slides out, in mm, or `full` when the source says only that it extends fully."
+  },
+  "install": {
+   "enum": [
+    "drop-in",
+    "stab-in",
+    "both"
+   ],
+   "description": "A KIT ONLY: how the device goes onto the rails - lowered onto them (`drop-in`), pushed in along them (`stab-in`), or either."
+  },
+  "configurations": {
+   "type": "array",
+   "minItems": 1,
+   "description": "A KIT ONLY: one entry per way the kit can be assembled. A slide has one; a kit of brackets and extensions has one per rack-depth band. A device's `chassis.kits[].depth.config` names one of these by `id`.",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "racks",
+     "parts",
+     "depth"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "$ref": "#/$defs/segment",
+      "description": "unique within the kit (L156)"
+     },
+     "racks": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+       "enum": [
+        "4-post",
+        "2-post",
+        "2-post-centre"
+       ]
+      },
+      "description": "the rack types this configuration fits: a four-post rack or cabinet, a two-post frame, or a two-post frame mounted at its centre"
+     },
+     "parts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+       "$ref": "#/$defs/segment"
+      },
+      "description": "the parts this configuration uses, each the `id` of one of the kit's own `parts` (L156)"
+     },
+     "depth": {
+      "$ref": "#/$defs/kit-depth"
+     },
+     "preset": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "a factory setting the kit ships at, in mm of rack depth (the COR550 rail's 630)"
+     },
+     "tolerance": {
+      "type": "number",
+      "minimum": 0,
+      "description": "a tolerance the source states on the depth, in mm, as the `x` of `±x`"
+     },
+     "rail-depth": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "the depth of the rail itself in this configuration, in mm from the front face of the front flange, with no accessory fitted"
+     }
+    }
+   }
+  },
+  "accessories": {
+   "type": "array",
+   "description": "A KIT ONLY: what can be fitted to the kit. Each `ref` resolves to a component that is not a kit (L159).",
+   "items": {
+    "type": "object",
+    "required": [
+     "kind",
+     "ref"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "kind": {
+      "enum": [
+       "cma",
+       "srb"
+      ],
+      "description": "`cma` is a cable management arm, `srb` a strain-relief bar"
+     },
+     "ref": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$"
+     },
+     "rail-depth": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "the depth of the rail with this accessory fitted, in mm, measured as the configuration's `rail-depth` is"
+     },
+     "sides": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+       "enum": [
+        "left",
+        "right"
+       ]
+      },
+      "description": "the sides of the rack, seen from the front, the accessory can be fitted on"
      }
     }
    }
@@ -800,7 +1038,7 @@
      },
      "on": {
       "$ref": "#/$defs/segment",
-      "description": "the `relief.features[]` node this point sits on. A part seated at this point stands off by that feature's `out` - ABSOLUTE from this part's own face, so a feature's `lift` does not add to it. Read on the point the `interface` is presented at (`interface-at`, default `mate`), where it sets how far a part seated there stands off, and on a `cable` point, where it sets the depth the cable leaves from (render.py writes it as `data-cp-on` for the viewer's cable points); lint L106 requires the node to exist and to carry an `out`."
+      "description": "the `relief.features[]` node this point sits on. A part seated at this point stands off by that feature's `out` - ABSOLUTE from this part's own face, so a feature's `lift` does not add to it. Read on the point the `interface` is presented at (`interface-at`, default `mate`), where it sets how far a part seated there stands off, and on a `cable` point, where it sets the depth the cable leaves from (the drawing carries it as `data-cp-on` for the viewer's cable points); lint L106 requires the node to exist and to carry an `out`."
      },
      "turns": {
       "type": "array",
@@ -810,12 +1048,12 @@
        "type": "integer",
        "enum": [0, 90, 180, 270]
       },
-      "description": "THE TURNS AN OCCUPANT MAY BE SEATED AT HERE, relative to the seat, narrowing the list the presented interface allows (`turns:` on its entry in spec/schemas/connectors.yaml; an interface naming none allows 0 alone). Read on the presented point - the one `interface-at` names, default `mate` - by manifest.allowed_turns, which takes the two lists' intersection. A barrier block's terminal screw says `[0]`: the barriers fix the pole, where the same interface on a ground stud turns freely. Lint L147 holds the list to a subset of the interface's (#829)."
+      "description": "THE TURNS AN OCCUPANT MAY BE SEATED AT HERE, relative to the seat, narrowing the list the presented interface allows (`turns:` on its entry in the connectors vocabulary; an interface naming none allows 0 alone). Read on the presented point - the one `interface-at` names, default `mate` - and intersected with the interface's list. A barrier block's terminal screw says `[0]`: the barriers fix the pole, where the same interface on a ground stud turns freely. Lint L147 fails on a list that is not a subset of the interface's."
      },
      "seat-out": {
       "type": "number",
       "minimum": 0,
-      "description": "mm a part seated at this point stands off, ABSOLUTE from this part's own face, where no drawn feature has its rear at that plane. A coax jack presents at the plane a mated plug's coupling front sits on - the jack's front face less the mated engagement the standard gives - which lies partway along a plain collar, barrel or thread. Read only on the presented point - the one `interface-at` names, default `mate` - by manifest._seat_out, and mutually exclusive with `on:`: lint L106 refuses a point with both, a value that is not a number at or above 0, and a `seat-out` on any other point (a `cable` point reads `on:` but never `seat-out`). State the source figures and the arithmetic in the contract's provenance."
+      "description": "mm a part seated at this point stands off, ABSOLUTE from this part's own face, where no drawn feature has its rear at that plane. A coax jack presents at the plane a mated plug's coupling front sits on - the jack's front face less the mated engagement the standard gives - which lies partway along a plain collar, barrel or thread. Read only on the presented point - the one `interface-at` names, default `mate` - and mutually exclusive with `on:`: lint L106 refuses a point with both, a value that is not a number at or above 0, and a `seat-out` on any other point (a `cable` point reads `on:` but never `seat-out`). State the source figures and the arithmetic in the contract's provenance."
      }
     }
    },
@@ -854,7 +1092,7 @@
   "head": {
    "type": "object",
    "additionalProperties": false,
-   "description": "the box a pluggable occupies OUTSIDE its cage - the section the MSAs call the enlarged section outside the cage. `at` is the top-left of its front outline in face coordinates (may be negative), `size.d` its length outside the cage. Checked by L121 against the registry entry the part `conforms:` to. docs/pluggables-heads-design.md",
+   "description": "the box a pluggable occupies OUTSIDE its cage - the section the MSAs call the enlarged section outside the cage. `at` is the top-left of its front outline in face coordinates (may be negative), `size.d` its length outside the cage. Checked by L121 against the registry entry the part `conforms:` to.",
    "required": ["at", "size"],
    "properties": {
     "at": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
@@ -894,7 +1132,7 @@
      "options": {"type": "array", "items": {"type": ["string", "number"]}, "description": "the values a choice offers"},
      "pattern": {"type": "string", "description": "a regex a text value must match"},
      "unit": {"type": "string", "description": "printed after a number, or the unit a text value is understood in"},
-     "drawn-by-absence": {"type": "array", "minItems": 1, "items": {"type": ["string", "number"]}, "description": "for a position field with SHOW nodes (docs/switch-positions-design.md): the options drawn by showing none of them - a breaker that is simply on, with no flag. Lint L148 asks every other option to show at least one node"},
+     "drawn-by-absence": {"type": "array", "minItems": 1, "items": {"type": ["string", "number"]}, "description": "for a position field with SHOW nodes: the options drawn by showing none of them - a breaker that is simply on, with no flag. Lint L148 asks every other option to show at least one node"},
      "description": {"type": "string"}
     }
    }
@@ -903,7 +1141,7 @@
    "type": "object",
    "additionalProperties": false,
    "required": ["ref"],
-   "description": "SUGAR FOR `faces.plan`, kept because 11 components and one device still use it - see `spec/tools/portrayal/faces.py` for why that count matters. THIS PART SEEN FROM ABOVE, as another component. A riser's face is its bracket plate; from above it is a thin PCB with connectors, which is a different drawing at a different size, so it is its own part - dell/riser-card-14g@1 for the full-height risers. A device bay that seats this part says where the plan lands in its top view (`plan:` on the bay). Do not declare this and `faces.plan` together - L82 reports it.",
+   "description": "SUGAR FOR `faces.plan`, still legal. THIS PART SEEN FROM ABOVE, as another component. A riser's face is its bracket plate; from above it is a thin PCB with connectors, which is a different drawing at a different size, so it is its own part - dell/riser-card-14g@1 for the full-height risers. A device bay that seats this part says where the plan lands in its top view (`plan:` on the bay). Do not declare this and `faces.plan` together - L82 reports it.",
    "properties": {
     "ref": {
      "type": "string",
@@ -913,7 +1151,7 @@
   },
   "bays": {
    "type": "object",
-   "description": "MODULES THAT THEMSELVES HOST BAYS - a PCIe riser, a SIP carrying SPAs. Was `additionalProperties: true` and described as unused while 51 bays across 25 components already relied on it, so a malformed one validated and was found, if at all, by a tree that read wrong. Same shape as a device's bay minus the fields that only mean something on a face: no `group` or `rel-pos`, because a nested bay numbers within its carrier, and no `only-in`, because a configuration varies a chassis and not a card. Lint L48 checks that a skin actually draws each one.",
+   "description": "MODULES THAT THEMSELVES HOST BAYS - a PCIe riser, a SIP carrying SPAs. Same shape as a device's bay minus the fields that only mean something on a face: no `group` or `rel-pos`, because a nested bay numbers within its carrier, and no `only-in`, because a configuration varies a chassis and not a card. Lint L48 checks that a skin actually draws each one.",
    "propertyNames": {
     "$ref": "#/$defs/segment"
    },
@@ -940,7 +1178,7 @@
        "type": "string"
       },
       "minItems": 1,
-      "description": "component refs this bay takes. Required, as on a device: a bay that names nothing offers nothing, and the four SPA bays on a9k-sip-700-8g sat empty for exactly that reason while its 4 GB twin listed 22 cards in each"
+      "description": "component refs this bay takes. Required, as on a device: a bay that names nothing offers nothing"
      },
      "default": {
       "type": [
@@ -980,7 +1218,7 @@
      },
      "rotate": {
       "type": "number",
-      "description": "degrees to rotate the OCCUPANT where it sits - the carrier's own plate, windows and printing do not move. The device-side bay has had this since it was written and a component bay did not, so a riser at the far end of a chassis could not say that its cards face the other way. Prefer this over `mirror` for anything with relief: a reflection puts a bracket's raised tab on the inside of the box, where a half-turn keeps it facing out at the viewer, which is what the metal does."
+      "description": "degrees to rotate the OCCUPANT where it sits - the carrier's own plate, windows and printing do not move. The same key a device bay offers, so a riser at the far end of a chassis can say that its cards face the other way. Prefer this over `mirror` for anything with relief: a reflection puts a bracket's raised tab on the inside of the box, where a half-turn keeps it facing out at the viewer, which is what the metal does."
      }
     }
    }
@@ -993,7 +1231,7 @@
     "run"
    ],
    "additionalProperties": false,
-   "description": "SOMETHING CABLES RUN THROUGH, declared on the part so that every placement of it inherits it (docs/cable-managers-design.md, decision 8). `ring` is a loop - a D-ring, a lacing bar's hook - with the opening a bundle passes through and the direction it passes. Nothing consumes it yet: it compiles to `data-guide`, `data-guide-run` and `data-guide-aperture` on every instance of the part, so that cable routing has something to read, and the DCIM exports ignore it. L138 holds the opening inside the part.",
+   "description": "SOMETHING CABLES RUN THROUGH, declared on the part so that every placement of it inherits it. `ring` is a loop - a D-ring, a lacing bar's hook - with the opening a bundle passes through and the direction it passes. It compiles to `data-guide`, `data-guide-run` and `data-guide-aperture` on every instance of the part, and to `data-guide-depth`, `data-guide-sill`, `data-guide-aperture-at`, `data-guide-wall`, `data-guide-height` and `data-guide-slit` where those are stated, so that cable routing has something to read; the DCIM exports ignore it. L138 holds the opening inside the part.",
    "properties": {
     "kind": {
      "enum": [
@@ -1016,6 +1254,10 @@
       "h": {
        "type": "number",
        "exclusiveMinimum": 0
+      },
+      "at": {
+       "$ref": "#/$defs/xy",
+       "description": "millimetres, where the opening is on the drawing the part is placed on, in the part's own frame: the corner with the least x and y. Along the run the opening spans `depth` from there and across it `w`; where the run is `z` it spans `w` by `h` on the face. With `sill` this places the opening in all three axes."
       }
      }
     },
@@ -1026,8 +1268,42 @@
       "z"
      ],
      "description": "the direction cables pass through it, in the frame of the face the part is drawn on: `x` across the drawing, `y` down it, `z` out of the face"
+    },
+    "depth": {
+     "type": "number",
+     "exclusiveMinimum": 0,
+     "description": "millimetres along `run`, the thickness of the band a cable passes through: where it enters the ring and where it leaves are this far apart. Without it a router takes an estimate."
+    },
+    "sill": {
+     "type": "number",
+     "minimum": 0,
+     "description": "millimetres out of the face, from the base the part stands on (the floor it is seated on, or the face it is fixed to) to the near inside edge of the opening: where a cable through an upright ring comes to rest. For a ring whose run lies in the face, `x` or `y`. L138 holds `sill` plus `aperture.h` inside how far the part stands out of the face."
+    },
+    "wall": {
+     "type": "number",
+     "exclusiveMinimum": 0,
+     "description": "millimetres, how thick each leg of the loop is beside the opening, across the run in the plane of the loop: the near leg ends where the opening begins (`aperture.at`) and the far leg starts where it ends, each this thick. For a ring whose run lies in the face, `x` or `y`. With `height`, `sill`, `depth` and `aperture.at` it makes the loop solid to a router: its legs, the bar over the opening and the seat under it, so a cable passes the ring only through its opening. L138 holds both legs inside the part."
+    },
+    "height": {
+     "type": "number",
+     "exclusiveMinimum": 0,
+     "description": "millimetres out of the face, from the base the part stands on to the top of the loop, the outside of its bar: the bar over the opening is `height` less `sill` and `aperture.h` thick. For a ring whose run lies in the face. L138 holds it above the opening and inside how far the part stands out of the face."
+    },
+    "slit": {
+     "type": "array",
+     "items": {
+      "type": "number",
+      "minimum": 0
+     },
+     "minItems": 2,
+     "maxItems": 2,
+     "description": "millimetres out of the face, from the base the part stands on, `[from, to]`: the gap in the far leg of an open loop (the leg past the opening's far edge, away from `aperture.at`), where a cable is pressed in by flexing the loop. It is a way of putting a cable into the ring, not a way through it: a router leaves the gap open in the solid loop and never routes a cable along it. Needs `wall` and `height`; L138 holds it inside the leg."
     }
    }
+  },
+  "tray": {
+   "$ref": "#/$defs/tray",
+   "description": "A FLOOR CABLES LIE ON, declared on the part so that every placement of it inherits it: a lacer's tray, a drawer's floor. A route names it by the placement's id, as it names a ring. It compiles to an unpainted `data-class=\"tray\"` rect per floor rectangle and a `data-class=\"tie\"` rect per tie slot, under the instance, and the DCIM exports ignore it. L170 holds every floor inside the part and every tie slot inside a floor."
   },
   "presents": {
    "enum": [
@@ -1063,7 +1339,7 @@
       "indicator",
       "furniture"
      ],
-     "description": "what this block is FOR - the one thing the drawing cannot work out for itself. A PSU bay, a fan bay and a line-card bay are all data-class `bay`, the same hole with a module in it, so anything ranking the tree by class cannot tell which of them is why the box exists and which two keep it alive. Only the group knows. `traffic` is the work the device is bought to do - line-card slots and the ports that carry user traffic. `fabric` is the cell or chassis interconnect of a distributed chassis - the ports on a DDC or VDR line-card box that lead to its fabric boxes, and every port on the fabric box itself. PORTS ONLY: it is not a customer port, which is `traffic`, and it is not a fabric CARD, which is a control-plane board in `service` below; an exporter still lists these ports as interfaces, because they are cabled like any other. It is its own bucket so that a filter on `traffic` means the ports a customer plugs into, and so that one on `fabric` finds the interconnect on every such box, whatever the vendor called the bank. `management` is how you reach and discipline it - the OOB jack, the console, the craft port, the timing and sync interfaces; a separate bucket rather than part of traffic because on five devices the management block is written FIRST in the manifest, so leaving it in with the traffic ports still opened the tree with a console socket. `service` is what keeps it running - PSUs, fans, filters, power shelves, AND THE CONTROL-PLANE CARDS: routing engines, route processors, supervisors, fabric and switch-control boards. They are named here because leaving them unnamed let the convention drift both ways - nine devices had routing engines in `service` and two in `management`, and the ASR 9912 and 9922 had their ROUTE PROCESSORS in `traffic`, which made the first base configuration built for a 9922 empty both of them. An RE is not `management`: that bucket is jacks and ports, the things you plug into, not the cards behind them. `indicator` is what you read - LEDs, displays. `furniture` is what you neither connect to nor read - ears, rivets, labels, grounding points, doors. Ordering WITHIN a role stays document order, which already reads correctly; this only says which bucket the block falls in. Lint L37"
+     "description": "what this block is FOR - the one thing the drawing cannot work out for itself. A PSU bay, a fan bay and a line-card bay are all data-class `bay`, the same hole with a module in it, so anything ranking the tree by class cannot tell which of them is why the box exists and which two keep it alive. Only the group knows. `traffic` is the work the device is bought to do - line-card slots and the ports that carry user traffic. `fabric` is the cell or chassis interconnect of a distributed chassis - the ports on a DDC or VDR line-card box that lead to its fabric boxes, and every port on the fabric box itself. PORTS ONLY: it is not a customer port, which is `traffic`, and it is not a fabric CARD, which is a control-plane board in `service` below; an exporter still lists these ports as interfaces, because they are cabled like any other. It is its own bucket so that a filter on `traffic` means the ports a customer plugs into, and so that one on `fabric` finds the interconnect on every such box, whatever the vendor called the bank. `management` is how you reach and discipline it - the OOB jack, the console, the craft port, the timing and sync interfaces; a bucket of its own, so that a tree ordered by role never puts a console socket among the traffic ports. `service` is what keeps it running - PSUs, fans, filters, power shelves, AND THE CONTROL-PLANE CARDS: routing engines, route processors, supervisors, fabric and switch-control boards. A control-plane card is not `traffic`, which a base configuration empties, and an RE is not `management`: that bucket is jacks and ports, the things you plug into, not the cards behind them. `indicator` is what you read - LEDs, displays. `furniture` is what you neither connect to nor read - ears, rivets, labels, grounding points, doors. Ordering WITHIN a role stays document order, which already reads correctly; this only says which bucket the block falls in. Lint L37 checks it."
     },
     "physical-context": {
      "type": "string",
@@ -1124,7 +1400,7 @@
   "watts": {
    "type": "number",
    "exclusiveMinimum": 0,
-   "description": "watts, as a number. `watts: '650'` was a string, and that is not cosmetic: '650' + '400' is '650400' in more than one language a consumer might use, and max('650', '1600') is '650' in all of them"
+   "description": "watts, as a number, never a string: '650' + '400' is '650400' in more than one language a consumer might use, and max('650', '1600') is '650' in all of them"
   },
   "state": {
    "oneOf": [
@@ -1174,7 +1450,7 @@
           "rate": {
            "type": "number",
            "exclusiveMinimum": 0,
-           "description": "blink frequency in hertz, for `blinking` and `alternating`. Omitted means once a second, which is what every state written before this property existed meant by `blinking`."
+           "description": "blink frequency in hertz, for `blinking` and `alternating`. Omitted means once a second."
           },
           "phases": {
            "type": "array",
@@ -1202,7 +1478,7 @@
       },
       "color": {
        "type": "string",
-       "description": "LED color for this state, emitted as scoped CSS"
+       "description": "LED colour for this state, emitted as scoped CSS"
       },
       "lights": {
        "type": "array",
@@ -1220,10 +1496,142 @@
    "type": "string",
    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
   },
+  "optical-band": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": ["centre-nm"],
+   "description": "a wavelength band: its centre, and its width where the source states one",
+   "properties": {
+    "centre-nm": {"type": "number", "exclusiveMinimum": 0},
+    "width-nm": {"type": "number", "exclusiveMinimum": 0}
+   }
+  },
   "optical-endpoint": {
    "type": "string",
    "pattern": "^(?:[a-z0-9-]+:)?[a-z0-9-]+\\.[1-9][0-9]*$",
    "description": "`<part-id>.<n>`, or `<face>:<part-id>.<n>` - a composed part's id and a 1-based fibre position within it. The optional face prefix names a key of this component's `faces:`, so a module's paths can reach a part drawn on its rear: a cassette's rear MTP is a part of the rear face component, not of the cassette's own `parts:`. Unprefixed means this face."
+  },
+  "tray": {
+   "type": "object",
+   "required": [
+    "floor",
+    "height",
+    "run"
+   ],
+   "additionalProperties": false,
+   "description": "a floor cables lie on, in the frame of the drawing it is declared on",
+   "properties": {
+    "floor": {
+     "type": "array",
+     "minItems": 1,
+     "description": "where a cable can lie: one or more rectangles on the drawing the tray is declared on (the top view, for a tray seen from above), so a tray of a strip and two arms lists each",
+     "items": {
+      "type": "object",
+      "required": [
+       "at",
+       "size"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "at": {
+        "$ref": "#/$defs/xy"
+       },
+       "size": {
+        "$ref": "#/$defs/xy"
+       }
+      }
+     }
+    },
+    "height": {
+     "type": "number",
+     "minimum": 0,
+     "description": "millimetres, the top of the floor above the bottom of the device's envelope: the third axis, which the drawing of the floor does not show. A cable resting on the tray lies with its centre this high plus its own radius."
+    },
+    "lip": {
+     "type": "number",
+     "minimum": 0,
+     "description": "millimetres an edge of the floor stands up above it; 0 is a plain edge. A channel with walls states their height. It bounds how much the tray holds."
+    },
+    "run": {
+     "enum": [
+      "x",
+      "y"
+     ],
+     "description": "the direction cables lie along the floor, across (`x`) or down (`y`) the drawing"
+    },
+    "ties": {
+     "type": "array",
+     "description": "the tie slots cut in the floor, each a rectangle in the same frame as `floor` and inside one of its rectangles: where a strap passes through to hold a cable to the floor, never an opening a cable passes through, whatever its size. A tray that states none holds cables on its upward face only.",
+     "items": {
+      "type": "object",
+      "required": [
+       "at",
+       "size"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "at": {
+        "$ref": "#/$defs/xy"
+       },
+       "size": {
+        "$ref": "#/$defs/xy"
+       }
+      }
+     }
+    },
+    "slack": {
+     "type": "object",
+     "required": [
+      "kind"
+     ],
+     "additionalProperties": false,
+     "description": "how the tray holds a cable's spare length. `area`: coiled on the floor, less what stands on it. `spool`: wound round a drum of `diameter` millimetres centred at `at`, in the frame of `floor`.",
+     "properties": {
+      "kind": {
+       "enum": [
+        "area",
+        "spool"
+       ]
+      },
+      "at": {
+       "$ref": "#/$defs/xy"
+      },
+      "diameter": {
+       "type": "number",
+       "exclusiveMinimum": 0
+      }
+     },
+     "if": {
+      "properties": {
+       "kind": {
+        "const": "spool"
+       }
+      }
+     },
+     "then": {
+      "required": [
+       "at",
+       "diameter"
+      ]
+     },
+     "else": {
+      "not": {
+       "anyOf": [
+        {
+         "required": [
+          "at"
+         ]
+        },
+        {
+         "required": [
+          "diameter"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   }
   },
   "xy": {
    "type": "array",
@@ -1258,7 +1666,7 @@
   },
   "provenance": {
    "type": "object",
-   "description": "WHERE EACH FIGURE CAME FROM, keyed by the figure it explains. THE KEY IS A FIELD NAME, NOT A HEADLINE FOR THE NOTE. That distinction is the whole difference between a block a rule can ask questions of and one it can only read: the library reached 579 distinct keys across 584 contracts, 495 of them used fewer than five times and some of them whole sentences, and the cost was that L52 had to be loosened to accept `any power-named key` after convicting eighteen contracts that had done the work, while nothing could ask about `size` at all. The core keys are `size` for the face dimensions (L92), `depth` for the third axis, `power` for a wattage (L52) and `relief` for a raised or recessed magnitude (L35, L36). An axis or a figure that needs its own note takes a key that STARTS with the core one - `size-width`, `power-output` - so it still answers the question the core key is asked. A finding that explains something no figure holds is welcome under a name of its own; it is an addition to the core keys, never a substitute for one.",
+   "description": "WHERE EACH FIGURE CAME FROM, keyed by the figure it explains. THE KEY IS A FIELD NAME, NOT A HEADLINE FOR THE NOTE, which is what lets a rule ask a question of the block rather than only read it. The core keys are `size` for the face dimensions (L92), `depth` for the third axis, `power` for a wattage (L52) and `relief` for a raised or recessed magnitude (L35, L36). An axis or a figure that needs its own note takes a key that STARTS with the core one - `size-width`, `power-output` - so it still answers the question the core key is asked. A finding that explains something no figure holds is welcome under a name of its own; it is an addition to the core keys, never a substitute for one.",
    "additionalProperties": {
     "type": "string",
     "description": "the source, in the words this library uses: datasheet, drawing, measured, photo-measured, registry, borrowed (naming the part the figure came from), estimated, known-wrong"
@@ -1275,7 +1683,41 @@
     "estimated",
     "known-wrong"
    ],
-   "description": "where a NUMBER came from. One vocabulary for the library, shared by relief features and by size-confidence: measured (off this part's own hardware), photo-measured, drawing (off this part's own artwork or a vendor figure of it), datasheet, registry (from standards.yaml), borrowed (another Portrayal part's MEASURED figure for the same class of hardware, reused because nobody publishes one for this part - an estimate, but not a free one, and `source` must name the part), estimated (a plausible figure with no source), and `known-wrong`. KNOWN-WRONG IS THE TERMINAL STATE AND IT IS NOT A CONFIDENCE LEVEL: it says the value is not merely unmeasured but IMPOSSIBLE - contradicted by something checkable - and is being carried only because removing it would break the model and no sourced replacement exists. A value that cannot be true must not sit in the same bucket as one nobody has measured. `source` must say what rules it out. Note the enum omits standards.yaml's `verified`, which answers a different question - whether a CUTOUT matches its governing standard."
+   "description": "where a NUMBER came from. One vocabulary for the library, shared by relief features and by size-confidence: measured (off this part's own hardware), photo-measured, drawing (off this part's own artwork or a vendor figure of it), datasheet, registry (from the standards registry), borrowed (another Portrayal part's MEASURED figure for the same class of hardware, reused because nobody publishes one for this part - an estimate, but not a free one, and `source` must name the part), estimated (a plausible figure with no source), and `known-wrong`. KNOWN-WRONG IS THE TERMINAL STATE AND IT IS NOT A CONFIDENCE LEVEL: it says the value is not merely unmeasured but IMPOSSIBLE - contradicted by something checkable - and is being carried only because removing it would break the model and no sourced replacement exists. A value that cannot be true must not sit in the same bucket as one nobody has measured. `source` must say what rules it out. Note the enum omits the standards registry's `verified`, which answers a different question - whether a CUTOUT matches its governing standard."
+  },
+  "kit-range": {
+   "type": "array",
+   "items": {
+    "type": "number",
+    "minimum": 0
+   },
+   "minItems": 2,
+   "maxItems": 2,
+   "description": "`[min, max]` in mm, min below max (L157). Inches in the source are converted; the figures as printed stay in provenance."
+  },
+  "kit-depth": {
+   "description": "THE RACK DEPTH A KIT CONFIGURATION FITS, front flange to rear flange, in mm: one `[min, max]`, or one range per hole type when the source gives them separately (`square`, `round`, `threaded`). A device's `chassis.kits[].depth.range` overrides it with the same shape.",
+   "oneOf": [
+    {
+     "$ref": "#/$defs/kit-range"
+    },
+    {
+     "type": "object",
+     "minProperties": 1,
+     "additionalProperties": false,
+     "properties": {
+      "square": {
+       "$ref": "#/$defs/kit-range"
+      },
+      "round": {
+       "$ref": "#/$defs/kit-range"
+      },
+      "threaded": {
+       "$ref": "#/$defs/kit-range"
+      }
+     }
+    }
+   ]
   }
  }
 }

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: terminal-508-5-plug
-version: 1.0.0
+version: 1.0.1
 class: port
 mates: terminal-508-5
 conforms: terminal-508-5-plug
@@ -53,14 +53,14 @@ provenance:
     `terminal-508-5` is the five-position mating face on a 5.08 mm pitch,
     which a flanged or a plain header presents and a flanged or a plain plug
     mates. This part is the flanged plug because the one five-position header
-    the library places, common/terminal-header-508-5f@1, is flanged, and its
+    the library places, common/terminal-header-508-5f@2, is flanged, and its
     data sheet lists flanged plugs as its mates. Seated in a plain
     five-position header, its two flange screws would have nothing to turn
     into; a plain five-position plug is a different part that mates the same
     interface and is not drawn yet.
   orientation: >-
     DRAWN IN THE UNROTATED CONVENTION OF THE HEADER,
-    common/terminal-header-508-5f@1: THE BOARD SIDE OF THE HEADER DOWN, so the
+    common/terminal-header-508-5f@2: THE BOARD SIDE OF THE HEADER DOWN, so the
     clamp-screw tower rises above the header, and pole 1 at the left. The
     header is drawn the same either way up and states no board side; the
     vendor's video of the AurCore AIS4001P shows the scalloped, board side of
@@ -70,7 +70,7 @@ provenance:
     rotated header.
   poles: >-
     NUMBERED 1 TO 5 FROM THE LEFT of the unrotated header, as this view sees
-    it. common/terminal-header-508-5f@1 names its own contacts `cell-1` to
+    it. common/terminal-header-508-5f@2 names its own contacts `cell-1` to
     `cell-5` and `pin-1` to `pin-5` from the left, and `wire-1` to `wire-5`
     are over them in that order. The pole NAMES are the device's: they are
     printed on the panel beside the header, differ by device, and are not on
@@ -86,7 +86,7 @@ provenance:
     2,5/16-STF-5,08 data sheet (order no. 1778124), the dimensional drawing of
     the MSTB 2,5/..-STF range, p.7), so 18.2 - 10 = 8.2 of it is inside the
     header, of a nose the same drawing dimensions 8.3. THE HEADER AS MODELLED
-    DISAGREES. common/terminal-header-508-5f@1 builds its housing 2.5 proud of
+    DISAGREES. common/terminal-header-508-5f@2 builds its housing 2.5 proud of
     the face it is on with a well floor at 0.8, so it models a well 1.7 deep,
     both figures estimates by its own relief; the nose that enters a real
     header is 8.2 of an 8.3 nose, 6.5 more than the modelled well holds.
@@ -96,7 +96,7 @@ provenance:
     FIGURES TO REVISIT, and no figure below moves when they are.
   frame: >-
     THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame
-    generic/usb-a-plug@1 documents. common/terminal-header-508-5f@1 presents
+    generic/usb-a-plug@1 documents. common/terminal-header-508-5f@2 presents
     at the mouth of its housing, so 0 here is that mouth. The 8.2 of nose
     inside the header is not built.
   axis: >-
@@ -111,6 +111,10 @@ provenance:
     opening a wire enters reads 10.6 below the top of the plug, and the flange
     screw 11.3; the screw is drawn on the axis so that it lands on the
     threaded insert as the header draws it.
+    THE HEADER NOW AGREES (#873): its own `mate` is at 4.3, the middle of the 8.6
+    it is drawn at since common/terminal-header-508-2@3 and
+    common/terminal-header-508-5f@2; the 12.1 header before them put it at 6.05,
+    1.75 off this axis.
   body: >-
     drawing - the body is built as ONE box 26.01 by 15 standing 10 in front of
     the header (provenance.seated-depth). The drawing's side view steps the
@@ -156,7 +160,7 @@ provenance:
     PER POLE IS NOT EXPRESSIBLE in this part: a field per pole would be 5
     fields here and more on a longer plug.
   body-colour: >-
-    a FIELD. The default is the green common/terminal-header-508-5f@1 draws
+    a FIELD. The default is the green common/terminal-header-508-5f@2 draws
     its housing in, #4fb548. Phoenix Contact MSTB 2,5/16-STF-5,08 is green;
     the same plug is made in other colours.
   behaviour: >-

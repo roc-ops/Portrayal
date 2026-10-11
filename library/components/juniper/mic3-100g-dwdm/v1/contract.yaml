@@ -1,12 +1,17 @@
 format: 1
 kind: module
 name: mic3-100g-dwdm
-version: 1.1.1
+version: 1.1.2
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper 100G DWDM OTN MIC3 with CFP2-ACO (one port). MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
+unplaced: >-
+  SUPERSEDED by juniper/mic3-100g-dwdm@2, the MIC plate re-measured at 168.8 x 29.2 and the
+  carriers re-laid to match (#261, part 2). This major is kept and deprecated rather than
+  deleted, so a manifest that pins it still resolves (#448); nothing in this library seats it.
+superseded-by: juniper/mic3-100g-dwdm@2
 attrs:
   model: MIC3-100G-DWDM
   power-draw-max-w: 91

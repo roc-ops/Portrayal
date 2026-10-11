@@ -73,7 +73,13 @@ breaker in one position can be said in words and not as a relation.
    position a circuit runs through, and is carried into the outlet's description and the
    bay's.
 4. **`feed_leg` is not written** for a two-feed DC panel.
-5. **An outlet is named by its placement id**, as every exported port is: `output-a1`.
+5. **An outlet is named as its device's `interfaces:` rules name it, else by its
+   placement id**, as every exported port is: `output-a1`. The rules name power
+   outlets as they name interfaces, so an outlet a rule names takes its printed
+   label (the Eaton EVMI2130X's `outlet-a1` exports as `A1`); an outlet no rule
+   names keeps its placement id. A NOS listing that states its own
+   `interfaces` does not apply these rules, so its export keeps every outlet's
+   placement id.
 6. **Outlets are a table row per part, as power ports are.** A part exports outlets
    because `PART_OUTLET` lists it, not because of its class.
 7. **A connectorized output is `other`, labelled.** The 300CB08-C and -SC outputs are
@@ -104,6 +110,13 @@ views:
 - **`fed-by`** names a placement on this device whose part exports a power port.
 - **`through`** names the bay that the circuit runs through: its breaker or fuse
   position. It is optional; a panel with fixed, unprotected outputs has none.
+
+Where `through` names a FIXED breaker placement rather than a bay (#934, a rack
+PDU's branch breaker), the outlet description names that breaker as the unit prints
+it, `Through breaker A`, and not by its placement id: the first of the placement's
+`attrs.label` and `attrs.section` (the Eaton G4 tile letter) that is set, the id only
+when neither is (owner decision, 2026-10-09; `dcim_export.breaker_name`). A bay
+position keeps `Through breaker position <id>`, since a bay prints nothing of its own.
 
 Both are bare ids resolved over the whole device, because both cross a face: the output
 is on the rear and the position it runs through is on the front. A `for:` cannot say
@@ -157,12 +170,15 @@ each row's `power_port` tokenised as its name is.
 
 - **L132, `fed-by` resolves.** It names a placement on this device whose part is in
   `PART_POWER`, and stands on a part in `PART_OUTLET`. An error.
-- **L133, `through` resolves.** It names a bay on this device. An error.
+- **L133, `through` resolves.** It names a bay on this device, or, since #934, a
+  placement of a part of class `breaker` fixed to the unit (a rack PDU's branch
+  breaker, [pdu-model-design.md](pdu-model-design.md) section 5.3). An error.
 - **L134, a part in `PART_OUTLET` is fed.** Every placement of one states `fed-by`. A
   warning below `verified` and an error at it: an outlet with no feed is importable, and
   is the incomplete model this work exists to end.
 - **L135, one position, one circuit.** Two placements do not name the same `through`. A
-  warning, because a panel that parallels two outputs behind one breaker is possible.
+  warning, because a panel that parallels two outputs behind one breaker is possible. It
+  reads bays only: a fixed PDU breaker feeds many outlets by design (#934).
 
 ## 8. Device locks
 
@@ -196,7 +212,8 @@ outlet's feed and is a major. The three panels went to 1.1.0.
 
 - **AC.** A rack PDU's C13 and C19 outlets have types in both targets and would use the
   same table. Whether a three-phase PDU states `feed_leg` per outlet is a question for
-  the first one modelled.
+  the first one modelled. [pdu-model-design.md](pdu-model-design.md) (#934) proposes
+  the answer: only for an outlet wired line to neutral on a wye input.
 - **An alarm contact.** The panel's Form C alarm relays have no port type in either
   target. They stay in `NOT_A_DCIM_PORT`.
 - **Ratings.** An outlet template in either target carries a type and no current rating.

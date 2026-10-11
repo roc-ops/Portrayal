@@ -270,7 +270,8 @@ consumer outside the checkout; it is derived, so it cannot drift.
 
 ### 6. Open the pull request
 
-One device per pull request. The
+One device per pull request. Run [preflight](#preflight-before-you-ask-for-review)
+first. The
 [template](.github/PULL_REQUEST_TEMPLATE.md) asks for the sources, the
 maturity you claim, the matched-scale comparison sentence, the gates you ran,
 and the merge danger. A reviewer reads that before the diff.
@@ -338,6 +339,51 @@ those files is fixed in the source it came from.
 
 How the maintainer merges, and why it is a script, is in
 [`docs/maintainers.md`](docs/maintainers.md).
+
+## Preflight, before you ask for review
+
+Most second review rounds are sent back for something mechanical: exports not
+regenerated, a new skip reason the allow-list does not carry, a local path in a
+committed file. One command checks those against your diff in seconds, without
+a build or the suite:
+
+```sh
+python3 spec/tools/portrayal/preflight.py              # against origin/main
+python3 spec/tools/portrayal/preflight.py --base <ref> --json   # for an agent
+```
+
+It compares the working tree, untracked files included, with the merge base and
+prints PASS or FAIL per check, with the command that fixes each failure. It
+exits non-zero if any check fails. The last check, `prose`, is advice: it
+prints PASS or WARN, and a WARN does not change the exit status.
+
+| Check | Fails when |
+|---|---|
+| `exports` | the DCIM exports regenerated from your tree differ from `library/exports/`, or a regenerated export is not committed |
+| `skips` | a `pytest.skip`, `skipif` or `importorskip` you added gives a reason [`spec/allowed-skips.txt`](spec/allowed-skips.txt) does not allow. The only other reasons accepted are, word for word, the few that name what CI always provides: `node not installed`, `npm not installed`, and `<output> not built` where `<output>` is `library/dist`, `library/exports`, `dist` or an index build.sh writes (`devices.json`, `components.json` and the rest), optionally followed by `- run ./build.sh` or `./publish.sh` and then `: <value>`. A runtime value as the subject (`f"{part} not built"`) is not accepted, because on CI it is a part name |
+| `private` | a line you added has a machine path, a private address or a personal email: the patterns of `test_no_internal_hosts.py` |
+| `changelog` | `library/`, `spec/` or `kit/` changed with no `changelog.d/` fragment, or a fragment is malformed |
+| `devicelock` | `devicelock.py` has findings, or a lock you re-recorded no longer matches the bump against the lock on the base |
+| `lint` | lint on the devices you touched and every device that seats a component you touched, plus the library-wide rules a `--device` run skips (L89 when what reaches a component major can have changed), has an error or a warning `library/lint-baseline.json` does not carry |
+| `kit` | `kit/` changed and `npm test` fails, or a `spec/tests/*_js.py` test that names a changed kit module fails |
+| `prose` | never. It warns when a `device.yaml` or `contract.yaml` you changed has a sentence of more than 25 words that the merge base does not have, in a `description` (device, configuration or component) or a string under `attrs` |
+
+**New prose follows Simplified Technical English.** A `description` and the
+strings under `attrs` are copied into the DCIM exports, where someone who never
+saw the drawing reads them. Write new and changed text in the manner of
+ASD-STE100: one topic to a sentence, the active voice, and no sentence over 25
+words. The `prose` check counts only the last of those. A sentence the base
+already holds, word for word, is not reported, so nobody is asked to rewrite
+the text that was there first. Words quoted from a vendor stay verbatim and
+are not counted (L107 already limits a quotation to 25 words). Gap notes and
+`provenance` are not read. The count is approximate. An abbreviation such as
+"e.g." can end a sentence early, a block of lines with no full stops reads as
+one sentence, and a renamed component reports again the text it copied.
+
+A change lint cannot scope to devices (a schema, a listing, a lab, lint
+itself) gets the full lint, which takes about a minute longer. Preflight is
+not a gate and does not replace the steps below: CI still builds, publishes and
+runs the suite.
 
 ## The gates
 

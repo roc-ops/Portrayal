@@ -7,24 +7,32 @@ about it while the package is at 0.x.
 | Number | Where it appears | What it versions |
 |---|---|---|
 | `format` | every device manifest, component contract, listing and lab (`format: 1`) | the **file format** a manifest is written in |
-| schema `v1` | the schema `$id`s and titles in `spec/schemas/` (device, component, listing and lab; the marked-up drawing; and the rack file) | for the manifest schemas, the same thing, named: schema v1 *is* format 1. `marks.schema.json` is v1 of the marked-up drawing, whose own key is `v` (1). `rack.schema.json` is also published under `/v1/`, as its first publication label, but describes rack file `version` 2; a later rack schema is published under the next unused label, never under its rack version number (below) |
-| package | `version` in `pyproject.toml` (0.1.0) | the **tools**: the linter, the compiler, the indexers and the exporter |
+| schema `v1` | the schema `$id`s and titles in `spec/schemas/` (device, component, listing and lab; the marked-up drawing; and the rack file) | for the manifest schemas, the same thing, named: schema v1 *is* format 1. `marks.schema.json` is v1 of the marked-up drawing, whose own key is `v` (1). `rack.schema.json` was first published under `/v1/`, describing rack file `version` 2; it now describes `version` 3 and is published under `/v2/`, the next unused label, never under its rack version number (below) |
+| package | `version` in `pyproject.toml` (0.2.0) | the **tools**: the linter, the compiler, the indexers and the exporter |
 | rack catalogue `format` | `rack.json` (`format: 1`) | the **catalogue** a rack tool reads in one fetch; its own number, apart from the manifests' `format` |
-| rack file `version` | the Rack Builder's file (`format: "portrayal-rack"`, `version: 2`) | the **rack file** a user saves; `parseDoc` migrates an older one on load |
-| `contract` | `devices.json` (`contract: 2` at 0.1.0) | the **published build** a consumer reads from `library/dist/`; `CHANGELOG.md` records each one |
+| rack file `version` | the Rack Builder's file (`format: "portrayal-rack"`, `version: 3`) | the **rack file** a user saves; `parseDoc` migrates an older one on load |
+| `contract` | `devices.json` (`contract: 2` at 0.1.0 and at 0.2.0) | the **published build** a consumer reads from `library/dist/`; `CHANGELOG.md` records each one |
 
-The schemas are published at `https://portrayal.dev/schemas/v1/`, one file
-per schema (`device.schema.json`, `component.schema.json`,
-`listing.schema.json`, `lab.schema.json`, `rack.schema.json`), and that URL is each schema's `$id`, so an editor or a
-validator that follows the `$id` finds the schema it names. `rack.schema.json` describes
-the Rack Builder's own file (`format: "portrayal-rack"`, its own `version`, now 2), not a
-manifest, so it is published under `/schemas/v1/` as a schema of this repository but does
-not carry format 1. The `/v1/` is its publication label; the rack file's own `version`
-(2 today) is migrated on load by `parseDoc`, so a later rack version is published under the next
-unused label (`/schemas/v2/` if no manifest format has taken it, else the label after) rather than overwriting
-`/v1/`; the label is never a rack version number, and a label once published is not reused. A new format number
-is published beside the old one under its own label (`/schemas/v2/`); a
-published label is never reused for a different format.
+Each schema's `$id` is a URL under `https://portrayal.dev/schemas/`, one file
+per schema: `device.schema.json`, `component.schema.json`,
+`listing.schema.json`, `lab.schema.json` and `marks.schema.json` under `/v1/`,
+and `rack.schema.json` under `/v2/`. A schema is served at its `$id` once the
+site has published it, so an editor or a validator that follows the `$id`
+finds the schema it names. The device, component, listing and rack schemas
+are served there. The lab and marks schemas are new in 0.2.0 and are served
+from the site publish that follows the 0.2.0 tag; until then their `$id`s do
+not resolve. `rack.schema.json` describes
+the Rack Builder's own file (`format: "portrayal-rack"`, its own `version`, now 3), not a
+manifest, so it is published as a schema of this repository but does not carry
+format 1. Its label is a publication label only; the rack file's own `version` is
+migrated on load by `parseDoc`, so each rack version is published under the next
+unused label rather than overwriting the one before: version 2 under `/v1/`, which
+stays as published, and version 3 (#921) under `/schemas/v2/rack.schema.json`,
+since no manifest format had taken `/v2/`. The label is never a rack version
+number, and a label once published is not reused. A new manifest format number is
+published beside the old one under the next label no schema has taken (`/schemas/v3/`
+now that the rack file holds `/v2/`); a published label is never reused for a
+different format.
 
 Each device and component also carries its own semantic version and lock, which
 records what changed in *that hardware's drawing*. That is a separate system,
@@ -67,7 +75,7 @@ out. Everything in it is read from the SVG it sits beside; nothing is added.
   "view": "front", "config": "ac", "configs": ["ac"],
   "viewBox": [0.0, 0.0, 438.4, 44.0],
   "source-sha256": "…", "components": {"std/sfp-ganged@1": "1.1.1"},
-  "generator": {"tool": "portrayal-render", "version": "0.1.0"},
+  "generator": {"tool": "portrayal-render", "version": "0.2.0"},
   "elements": [
     {"path": "chassis", "parent": null, "id": "chassis-faceplate", "class": "chassis",
      "box": {"x": 0.0, "y": 0.0, "w": 438.4, "h": 44.0}},
@@ -171,9 +179,14 @@ placement keeps every key its lab wrote, and carries six more:
   it, whether the lab placed it `on` that device or by `ru`; otherwise `null`.
 - `unit`: which of the host's rack units, from 1 at the host's bottom; `null`
   without a host.
-- `side`: `left` or `right`, seen from the front, for a `rack-side` part (the
-  upright it stands beside) and for a `rack-face` part narrower than the rack
-  opening that states one (the rail it bolts to); otherwise `null`.
+- `side`: for a `rack-side` part, the attachment point it stands at, as the
+  lab wrote it: `left` or `right` on a two-post frame, or `left-front`,
+  `left-rear`, `right-front` or `right-rear` on a four-post one (#934). For a
+  `rack-face` part narrower than the rack opening that states one, the rail it
+  bolts to, `left` or `right`, seen from the front. Otherwise `null`. The four
+  four-post names are new with #934 and did not raise `contract`: a reader
+  that knows only `left` and `right` can read the side of the rack as the
+  word before the hyphen.
 
 They are new fields and did not raise `contract`, which is still 2. A reader that knows none of
 them still finds `ru`, and draws a rack-face part as an ordinary device on its
@@ -181,6 +194,394 @@ rack unit; one that knows `mount` but not `rack-side` or `side` draws a
 rack-side part across its 45 units, which is wrong and visible, as the
 rack-face case was. A lab that fails its schema or a check (lint L139 to L142,
 L153, L154) is not written, and the build stops.
+
+## Rack PDUs
+
+A rack PDU (#934, [`pdu-model-design.md`](pdu-model-design.md)) adds keys in
+five places. None raised `contract`, which is still 2: each is new, and a
+reader that does not know it finds every field it read before.
+
+- **`pdu-class`**, at the top of `<device>.configs.json` and on each entry of
+  `devices.json`: one of `basic`, `switched`, `metered-input`,
+  `switched-metered-input`, `metered-branch`, `switched-metered-branch`,
+  `metered-outlet` and `managed`, or `null` where the device is no PDU. It is
+  DERIVED from `attrs.management.metering-scope` (`none`, `input`, `branch`,
+  `outlet`) and `outlet-switching` (a boolean), and never stated. The names
+  and the two keys are published for filtering, so renaming one is a format
+  change.
+- **`configs[].mount-points`** in `<device>.configs.json`: each mount point a
+  configuration draws, `{"mates": "pdu-button", "at": 72.0}`, ascending by
+  `at`, which is millimetres from the bottom of its view to the point's
+  `mate`. A mount point is a placement of a `class: mount` part that declares
+  `mates`. The pitch is the difference of two `at`s and is stated nowhere
+  else. Always a list; `[]` on a device with none.
+- **`attrs.power`** gains `input-plug` (now a `PART_POWER` slug, which on the
+  one device that wrote it was prose), `input-cord`, `input-phase`,
+  `input-wiring`, `input-voltage-v`, `input-current-a`, `plug-rating-a` and
+  `capacity-kw`; attrs are flattened to `data-*` on every drawing, so these
+  names are held as attribute names too.
+- **The DCIM export** writes the input rating on the input power port's
+  `description` and in the comments, with the derived class; an outlet's
+  description names the breaker it runs `through` and its `lines`
+  (`Through breaker A, lines L1-L2`); and `feed_leg` is written only for a
+  line-to-neutral outlet on a three-phase wye input (L1 `A`, L2 `B`, L3 `C`).
+  A DCIM that imported a leg holds it.
+- **A fixed breaker is named as the unit prints it** (owner decision,
+  2026-10-09): the description reads `Through breaker <name>`, where the name
+  is the first of the breaker placement's `attrs.label` and `attrs.section`
+  (the letter on the Eaton G4 section tile) that is set, and the placement id
+  only when neither is (`dcim_export.breaker_name`). A field's contract default
+  is never read: an unset letter is unstated. The name is part of an imported
+  description, so changing the rule moves every PDU's outlets.
+
+- **Outlet state in the drawing and the kit** (the kit half, section 3.2 of
+  the note). An element a lamp is bound to by `for:` - where the lamp and the
+  element both declare `data-states`, a switched outlet - carries
+  `data-lamped="true"`; the base stylesheet dims a power outlet
+  (`data-class='inlet'`) that declares `off`, is `state-off` and is not
+  `data-lamped`. In the kit a state set on such an element's path is applied
+  to its bound lamps too (`@portrayal/kit/states` `boundLamps` and
+  `expandStates`, in `marks.js` apply, the Explorer chips and the 3D scene),
+  and `off` is a state that can be lit, not only the absence of one: the
+  Explorer's `off` chip sets `state-off` on an outlet and on an element that
+  declares a colour for `off`, and clears anything else. The attribute name
+  and that meaning of `off` are held as format: a saved state set as `off`
+  reads differently after the change.
+
+The placement key `lines`, and `through` naming a fixed breaker placement, are
+manifest keys: stating either is a minor version of the device, and changing
+one a major. `pdu-button` is a mounting interface in
+`spec/schemas/connectors.yaml`; a slot that presents it and the fit check are
+#939's and #935's.
+
+## The kits file
+
+`kits.json` is every rail, bracket and slide kit in the library: each
+component contract with `kind: kit`, the kind added beside `component` and
+`module` in #905. A kit is a set of ordinary components that a device names
+from `chassis.kits` and never places, so it is never an entry of
+`components.json`, and `components_index.py` writes it here instead, on every
+build. While the library holds no kit the file is `{"kits": []}`.
+
+```json
+{"kits": [{"ref": "acme/slide@1", "ns": "acme", "name": "slide", "major": "v1",
+  "version": "1.0.0", "kind": "kit", "description": "...",
+  "motion": "sliding", "travel": "full", "install": "drop-in",
+  "parts": [{"ref": "acme/inner@1", "id": "inner", "count": 2}],
+  "configurations": [{"id": "four-post", "racks": ["4-post"], "parts": ["inner"],
+                      "depth": {"square": [631, 868]}, "rail-depth": 714}],
+  "accessories": [{"kind": "cma", "ref": "acme/cma@1", "rail-depth": 845}],
+  "superseded-by": null, "provenance": {"depth": "..."}}]}
+```
+
+Rows are sorted by `ref`, and every row carries every key above. A key the
+contract leaves out is `null` (`travel`, `install`, `superseded-by`), an empty
+string (`description`), an empty list (`accessories`) or an empty object
+(`provenance`). `parts`,
+`configurations` and `accessories` are as the contract writes them; the
+component schema describes each key. A part is a ref, not geometry: the
+geometry of a kit's parts is read from `components.json` by their refs.
+
+The file is new, and did not raise `contract`, which is still 2. Removing or
+renaming a key, or changing what one means, is a `contract` change; adding a
+key is not.
+
+### Ears and kits on a device
+
+A device manifest names its kits under `chassis.kits` and says where its ears
+can put the faceplate under `chassis.ears` (#906). Both keys are optional and
+both are additive to format 1: `chassis.ears` was the string `behind` (#865),
+which stays valid with its meaning unchanged, and it may now also be an
+object.
+
+```yaml
+chassis:
+  ears:
+    behind: true            # optional; the same statement as the bare string
+    h: 43.5                 # optional; mm the ears span, when not the chassis height
+    y: 0.15                 # optional; mm from the bottom of the chassis to the ears
+    color: "#1b1e21"        # optional; the ears' colour, when they are not silver
+    positions:
+      - {name: flush, at: 0, default: true}
+      - {name: mid, at: 228, racks: [2-post], part: {kit: acme/slide@1, part: mid}}
+  kits:
+    - {ref: acme/slide@1, supply: in-box,
+       depth: {config: four-post, range: {square: [685, 868]}}}
+```
+
+- A position's `name` is one of `flush`, `recessed`, `mid`, `rear` and
+  `proud`, and is required. `label` is the vendor's word for it. `at` is
+  millimetres from the front of the faceplate back to the plane the ears bolt
+  to, positive when the ears are behind the faceplate, and is written only
+  when a source gives it. At most one position is `default` (L160). `racks`
+  takes the words a kit configuration's `racks` takes. `part` names a kit the
+  device lists and the `id` of one of that kit's parts (L162).
+- A kit entry's `ref` is a `kind: kit` (L161), listed once. `supply` is
+  `in-box` or `optional`, and `variant: reversed` marks a reverse-mount kit.
+  `depth` replaces the `depth` of one configuration of the kit for this device:
+  `config` names the configuration and `range` has the shape that
+  configuration's `depth` has (L163).
+- Both keys are for a `rack` device only (L125). A kit is never placed,
+  composed or seated in a bay (L5, L10).
+
+In the device lock both keys are chassis surface, so stating either is a
+patch, and a listed kit, its parts and its accessories join the `composed`
+digest, so a kit edited in place asks each device that lists it for a patch.
+Those are the refs `<device>.configs.json` reads to resolve each kit, below.
+`h`, `y` and `color` stay surface now that the generic ear (below) is drawn from them:
+that ear is drawn only when asked for and never in a published face, an
+elements file or an export, so changing either moves nothing a consumer
+caches a coordinate from. If the ears ever join the default build, `h` and `y`
+become geometry, and moving them is itself a major for each device that
+states them.
+
+### The generic ear
+
+A `rack` device that places no ears of its own has a generic L-bracket ear
+(#909): a flange each side reaching from the body out to the 482.6 mm rack
+face, with a slot over each rail hole, and a 30 mm leg back along the body.
+It is `chassis.ears.h` tall, its bottom `chassis.ears.y` above the chassis's
+(the chassis's full height from `y`, and 0, where they are absent), and its
+flange's back face is on the plane the default position's `at` names (0, flush,
+where there is none). It is silver (`#c8cacc`, `SILVER` in ears.py, `EAR.SILVER`
+in relief.js) unless `chassis.ears.color` states another, because most network
+gear has bare or plated steel ears even when its faceplate is black; the plan
+carries the colour as `color`. The library still draws devices without their ears, so
+the default build is unchanged:
+
+- `render.py --with ears` draws it on all six faces, as the groups `ear-left`
+  and `ear-right` (`data-class="ear"`, `data-generic="ear"`), the ids and the
+  tag `common/rack-ear@1` is drawn under; the viewBox grows round it and the
+  root carries `data-face-w` and `data-face-h`, as for any part beyond its face.
+- The kit's viewer builds it when a host asks: `createViewer(el, {ears: true})`
+  or `viewer.setEars(true)`; `viewer.ears()` returns the plan drawn, or `null`.
+  relief.js `genericEars(chassis, faceW)` makes the plan from configs.json.
+- A page draws it over a published face in 2D with the kit's `ears2d.js`
+  (`drawEars`, `clearEars`): the shapes, ids and colours `render.py --with
+  ears` writes, in a `<g data-overlay="ears" pointer-events="none">` that is no
+  part (no `data-path`), with the viewBox grown the same way. The Explorer
+  offers it as a toggle, off by default.
+
+A device gets none when it is not a `rack` device, states `ears: behind`, has
+a front as wide as the rack face (its ears are in the drawing), or still places
+`common/rack-ear@1` or anything under `optional: ears`. That last check is
+2D only: those ears are never in a published face, so the 3D scene, which is
+built from the published faces, gives such a device the generic pair. L164
+warns when `y + h` is above the chassis, and L165 when two positions have the
+same `name` and `label`.
+
+### Ears and kits in configs.json
+
+`<device>.configs.json` carries both under `chassis`, absent where the device
+states neither (#907):
+
+```json
+{"chassis": {"...": "...",
+  "ears": {"h": 43.5, "y": 0.15, "positions": [
+    {"name": "flush", "at": 0.0, "default": true},
+    {"name": "mid", "at": 228.0, "racks": ["2-post"],
+     "part": {"kit": "acme/slide@1", "part": "mid"}}]},
+  "kits": [{"ref": "acme/slide@1", "supply": "in-box", "variant": null,
+    "depth": {"config": "four-post", "range": {"square": [685, 868]}},
+    "version": "1.0.0", "description": "...",
+    "motion": "sliding", "travel": "full", "install": "drop-in",
+    "configurations": [{"id": "four-post", "racks": ["4-post"],
+                        "parts": ["inner"], "depth": {"square": [685, 868]}}],
+    "parts": [{"ref": "acme/inner@1", "id": "inner", "count": 2, "version": "1.0.0",
+               "class": "bracket", "size": {"w": 20, "h": 40}, "body": null}],
+    "accessories": [{"kind": "cma", "ref": "acme/cma@1", "version": "1.0.0",
+                     "class": "bracket", "size": {"w": 30, "h": 40}, "body": null}]}]}}
+```
+
+- **`ears` is an object, always.** The bare string `ears: behind` is
+  published as `{"behind": true}`; an object is published with the keys it
+  states (`behind`, `h`, `y`, `color`, `positions`) and no others, so a reader
+  asks `ears.behind === true` and reads `ears.positions || []`. `color` is the
+  string the manifest writes, and absent means silver. `h`, `y` and each
+  position's `at` are floats. A position keeps every key the manifest writes.
+  From #865 to #907 the bare string was published as the string, on main
+  only; no release carried it, though the site once vendored a build that
+  did. The one device that states it,
+  `fs/uscmh-sfdabsb2u`, now publishes the object.
+- **Each listed kit is resolved inline**, in the order the device lists them.
+  A row carries every key above: the device's `ref`, `supply`, `variant` and
+  `depth` override (`null` where absent), then the kit's `version`,
+  `description`, `motion`, `travel`, `install` (`null` where the kit leaves
+  them out; `description` is an empty string where the kit has none),
+  `configurations`, `parts` and `accessories`. A part keeps `ref`,
+  `id` and `count`, and an accessory every key the kit writes; each gains its
+  contract's `version`, `class`, `size` and `body` (`null` where absent).
+- **The override is applied.** A `depth` override replaces the `depth` of the
+  configuration it names, so `configurations` are what this device can do; the
+  row's `depth` says that one was overridden. The kit's own figures are in
+  `kits.json`.
+
+Neither raised `contract`, which is still 2: `kits` is a new key, and `ears`
+changed shape before any release published it, with nothing in the kit
+reading it. From the next release both are under `contract` like every other
+key.
+
+## The rack file: parts beside the rack and on one rail
+
+Two keys were added to rack file `version` 2 in #926, and neither raised it:
+
+- **`zeroU` entries.** The record every rack has always carried, which the
+  schema called reserved, now holds the parts that stand beside the rack:
+  `{id, ref, cfg, label, at, offsetMm, between?}`. `at` is an attachment point
+  of the frame, `offsetMm` the part's bottom above the bottom of the rails (a
+  whole number of U as the kit writes it), and `between: true` a part that
+  serves the next rack too. `parseDoc` keeps the record as written, and gives
+  an entry with no id, or a repeated one, an id of its own.
+- **`side` on an item**: `left` or `right`, the rail a part narrower than the
+  rack opening is on. `parseDoc` keeps it; a reader that drops it puts the
+  part across both rails, which is visible and is what it was before.
+
+The schema describes the new keys and does not constrain them, so every file
+that validated before still validates: an entry of `zeroU` is an object, as it
+always had to be, and the kit places only the entries it can read
+(`id`, `ref` and `at` as non-empty strings) and keeps the others as written.
+Constraining their types, so that a validator refuses `at: 5`, would reject a
+file that validates today, and so would be a format change.
+
+The version stayed 2 because both keys are optional and an older reader of
+version 2 reads the rest of the rack whole: it keeps `zeroU` as written and
+draws nothing beside the rack, and it drops `side`, so its next save puts a
+bracket back across both rails. The 1 to 2 bump made an older page refuse a
+file rather than draw a manager as a device over its host. Here it was decided
+(2026-10-08) to accept the older reader's loss, because no `@portrayal/kit`
+release older than these keys was ever published: the one reader that existed,
+portrayal-site's, already kept both.
+
+## The rack file: bundles, version 3
+
+Cable bundles (#921, [`cable-bundles-design.md`](cable-bundles-design.md))
+raised the rack file to `version` 3, and its schema is published under
+`/schemas/v2/` (above). A rack gains an optional `bundles` array, each bundle
+`{id, number, label, members: [{cable, a?, b?}], route, straps?}`, described
+by `$defs` `bundle`, `member` and `strapSpacing`; `member.a`, `member.b` and
+`bundle.route` are `$defs/waypoint`. A rack that was never given a bundle has
+no `bundles` key and saves as it was.
+
+- **Migration.** 2 to 3 is the identity, as 1 to 2 was: every version-2 file is
+  a valid version-3 file. `parseDoc` migrates whatever it opens and `serialize`
+  writes 3, so a page with this kit saves every document it opens as version 3.
+- **An older reader refuses a version-3 file.** Every page and kit from before
+  #921 reads up to version 2, so it refuses the file with its "this page reads
+  up to version 2" sentence rather than opening it. That is the point of the
+  bump: an older `parseDoc` rebuilds a rack from the keys it names, so it
+  would drop `bundles` and erase them on its next save, and an older page
+  would edit a member's route alone. The refusal also protects `side` (#926),
+  which a version-2 page drops. This is a one-way door: there is no way back
+  to version 2 for a file a newer page has saved, and the `/v2/` label is
+  never reused.
+- **The repairs** are `parseDoc`'s, so every reader gets the same rack. The
+  shapes are repaired silently, as a cable's are: a bundle with no usable id
+  or a repeated one gets a fresh id, a member that is not `{cable}` and a peel
+  point that is no waypoint are dropped, and a number that is not a whole
+  number from 1 is renumbered. The references are repaired with a note: a
+  bundle whose id another thing in the rack has, a member naming no cable, a
+  cable in two bundles and a number used twice are each repaired, and
+  `parseDoc(input, {notes})` says so, one sentence per repair naming its
+  rack. No note is kept in the file.
+
+## The cable types file
+
+`cable-types.json` names the cable types a rack tool can lay: each one's
+media, a typical outside diameter and its minimum bend radius, every figure
+with its source. `cable_types_index.py` writes it from
+`spec/schemas/cable-types.yaml` and refuses a table that fails its checks, so
+the build stops. It is new at `contract: 2` and did not raise it.
+
+```json
+{"format": 1, "version": "1.0.0", "generated-from": "spec/schemas/cable-types.yaml",
+ "sources": {"foa-tia568": {"title": "...", "url": "https://..."}},
+ "types": {"cat6a": {"id": "cat6a", "label": "Cat 6A U/UTP", "media": "cat6a",
+   "family": "copper", "shield": "U/UTP", "od_mm": 7.5, "od_sources": ["portrayal-estimate"],
+   "min_bend_radius": {
+     "installed": {"xOD": 4, "basis": "standard", "sources": ["elliott-min-bend"]},
+     "loaded": {"xOD": 8, "basis": "standard", "sources": ["elliott-min-bend"]}}}}}
+```
+
+`format` is 1 and versions the shape: a removed or renamed key raises it, a
+new key does not. `version` versions the table's contents, so a changed
+figure is deliberate: a corrected value or a new type is a minor, a removed
+type or a changed id is a major.
+
+Each type, keyed by its `id`, always carries:
+
+- `id`, `label`, and `media`: the Rack Builder cable media it is a kind of.
+  The bare ids `os2`, `om3`, `om4`, `om5`, `cat6`, `cat6a`, `dac` and `aoc` are
+  those media values themselves, so a rack cable's media names its type. A
+  refinement (`cat6a-ftp`, `os2-g657a2`, `dac-26awg`) has its own id and
+  names the media it refines. `power` is the media of the power cords, which
+  no Rack Builder media names yet.
+- `family`: `fiber`, `copper`, `dac`, `aoc` or `power`.
+- `od_mm` and `od_sources`: a typical outside diameter, a sketch and not a
+  measurement of any one cable.
+- `min_bend_radius`: `{installed, loaded}`. Installed is the radius once the
+  cable is in place and unloaded, which a route or a bundle is checked
+  against; loaded is the radius while it is pulled, and is data only. Each is
+  `{mm}`, a fixed radius, or `{xOD}`, a multiple of `od_mm`, with `basis`
+  (`standard` or `convention`), `sources` (keys of `sources`), and optionally
+  `note` and `unverified: true`, which marks a placeholder. `loaded` is `null`
+  where no source gives one; `installed` is always present.
+
+A type may also carry `fiber` (`mode`, `grade`, `core_um`, and for a named
+class `class` and its own `min_bend`), `shield` or `awg`. A `power` type
+always carries `conductor`, the cord it is made of (`H05VV-F 3G1.0`), so the
+same connector pair on another cord (a North American SJT) is a type of its
+own. A fibre type's installed radius is the cord's cable rule;
+`fiber.min_bend` is the fibre class's macrobend test radius, kept as data
+for a consumer that knows the cord allows the tighter figure.
+
+The kit's `rack/cable-types.js` reads it: `radiusMm(type)` turns a radius into
+millimetres, `bendLookup(types)` gives a cable's installed radius from its
+`type` when the table has that type, else from its `media`, and `loadCableTypes(dist)` fetches the file and
+refuses any `format` but 1.
+
+## The lint rules file
+
+`lint-rules.json` is the linter's rule table, for a page that lists the rules.
+`lint.py --list-rules --json` writes it from the same table as
+`docs/lint-rules.md`, so the two always list the same codes. It is new at
+`contract: 2` and did not raise it.
+
+```json
+{"format": 1,
+ "severities": ["error", "warning", "at-verified", "mixed", "mixed-at-verified"],
+ "rules": [{"code": "L53", "scope": "device", "rule": "...", "why": "...", "fix": "...",
+            "severity": "at-verified",
+            "fails": false, "warns": true, "fails-at-verified": true}],
+ "retired": [{"code": "L..", "note": "..."}]}
+```
+
+`format` is 1 and versions the shape: a removed or renamed key raises it, a
+new key does not. `rules` is in code order. `severity` is one of the tokens
+in `severities`:
+
+- `error`: every finding fails the lint.
+- `warning`: every finding warns, and the lint passes.
+- `at-verified`: a finding warns on a device still being drawn and fails on a
+  device that claims `maturity: verified`.
+- `mixed`: some findings fail and others only warn; the finding's own
+  message, in the lint run, says which.
+- `mixed-at-verified`: some findings always fail, and others warn until the
+  device claims `maturity: verified`.
+
+The token describes the rule, not each finding. A rule is `at-verified` when
+any of its warnings becomes an error at `verified`, and it may raise other
+findings that stay warnings there: L37's group with no members is one. A
+consumer that needs a finding's own severity reads it from the lint run, not
+from this file.
+
+The three booleans say the same thing for a reader that only filters:
+`fails` when some finding fails the lint at any maturity, `warns` when some
+finding only warns, and `fails-at-verified` when a warning becomes an error
+on a device that claims `maturity: verified`. `retired` lists codes whose
+rule is gone; a code is never reissued. A new token is a new key's worth of
+change and does not raise `format`; a token renamed or removed does. A consumer should
+treat a token it does not know as it would an unknown key: show the rule
+and its booleans, and not fail on it.
 
 ## The rack catalogue
 
@@ -194,19 +595,89 @@ configuration's front, rear and top views.
 ```
 
 `format` is 1. Each device, keyed by `name`, always carries `manufacturer`,
-`model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default` and `configs`
-(the names of its configurations). Four keys appear only when the device has
-them:
+`model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default`, `configs`
+(the names of its configurations) and `kind`. Six keys appear only when the
+device has them:
 
 - `mount`: the device's `chassis.mount`, present only when it is not `rack`.
 - `shell`: `chassis.shell`, `sheet` for a body that is a sheet and not a box.
 - `capacity`: `{"count", "basis"}`, the cable capacity the vendor states.
 - `guides` and `passes`: per view (`top`, `front`, `rear`), the sorted ids a
   cable route can pass through on the default configuration's drawing.
+- `solids`: what a cable may not pass through, where that is not the
+  device's envelope (docs/cable-lay-design.md section 1.1): a list of
+  `{"part", "box": {"x", "y", "z", "w", "h", "d"}, "holes"?}`, in mm, x from
+  the device's left as seen from its front, y up from its bottom, z back from
+  its front. Each hole is `{"via", "box", "size": [w, h]}`, a declared
+  pass-through that cuts that box. Derived from the same faces
+  (`rack_solids.py`), never stated in a manifest. A device without it is its
+  envelope, `w` by `h` by `d`, unless it is a sheet part or a zero-U part that
+  carries a lane, which is then open. A sheet part's `solids` include the
+  loop of each ring on its plan whose contract says what of it is solid
+  (docs/cable-lay-design.md section 3.3): up to five boxes a ring, `part`
+  `ring/<id>/<name>` with `<id>` the placement's id and `<name>` one of
+  `rear-leg`, `front-leg`, `left-leg`, `right-leg`, `hook`, `bar` and `seat`.
+  A reader that routes cables meets these with the cable's tube, not its
+  centre line.
+- `trays`: the floors a cable lies on (docs/cable-lay-design.md section 2.1),
+  read from the default configuration's plan, a list of `{"id", "top",
+  "thickness", "lip", "run", "floor", "ties"?, "slack"?, "rings"?}` in the
+  frame of `solids`. `id` is the placement's id (or the view's tray id),
+  which a route names as it names a ring. `top` is the height of the floor's
+  surface above the device's bottom and `thickness` its plate's, so the
+  underside is `top - thickness`; `run` is `x` (across the device) or `z`
+  (front to back); `lip` is in mm. `floor` and `ties` are boxes through the
+  plate, `{"x", "y", "z", "w", "h", "d"}`, a tie slot being where a strap
+  passes and never an opening. `slack` is `{"kind": "area"}` or `{"kind":
+  "spool", "x", "z", "diameter"}`. `rings` are the rings standing on the
+  floor whose contracts place their openings, `{"via", "run", "box"}`, the
+  box the clear opening, so a cable resting in one lies on its bottom.
+  Derived from the compiled plan (`rack_solids.trays`), never restated.
 
 `ru` is `chassis.ru` when stated (0 included, for a zero-U part), else the
 height over 44.45 mm, at least 1. Removing or renaming a key, or changing what
 one means, is a contract change and raises `format`; adding a key is not.
+
+`kind` is an advisory word for what the device is, for searching a catalogue,
+read from the manifest's `profile` and the vendor's own words. Today its words
+are `switch`, `router`, `network device`, `server`, `pdu`, `patch panel`,
+`optical`, `cable manager`, and `device` when the profile says no more. The key
+is part of the format; its vocabulary is not. A word may be added, split or
+refined, and a device may move from one word to another, without a format
+change, so a reader should not treat the list above as closed.
+
+`devices.json` gained `profile`, the manifest's device class. It mirrors the
+profiles in `spec/schemas/profiles.yaml` and follows that file. It is a new
+field, so `contract` stays 2: a reader that does not know it still finds every
+field it read before.
+
+### What a compiled face says about rings and trays
+
+rack.json is derived from these attributes of the compiled faces, and a page
+that routes cables may read them itself, so they are part of the format too:
+
+- A ring, on every instance of a part whose contract declares `guide:`:
+  `data-guide` (`ring`), `data-guide-run`, `data-guide-aperture` (`"w h"`),
+  and, where the contract states them, `data-guide-depth` (mm along the run),
+  `data-guide-sill` (mm from the base it stands on to the opening's lowest
+  inside edge) and `data-guide-aperture-at` (`"x y"`, the opening's corner in
+  the part's frame); and `data-guide-wall` (mm, each leg's thickness beside
+  the opening), `data-guide-height` (mm from the base to the top of the loop)
+  and `data-guide-slit` (`"from to"`, mm from the base, the gap in the far
+  leg), from which rack.json derives the ring's solids.
+- A tray (docs/cable-lay-design.md section 2.1): one unpainted `<rect
+  data-class="tray">` per floor rectangle and one `<rect data-class="tie">`
+  per tie slot, each naming its tray by `data-tray` (the placement's id, or
+  the view tray's). A part's tray is under its instance, in the part's
+  frame; a view's `trays` are under a root `<g data-class="trays">`. A floor
+  rect carries `data-tray-height`, `data-tray-lip`, `data-tray-run` and,
+  where stated, `data-tray-slack` (`area`, or `spool x y diameter`). The
+  rects carry no id, `data-path`, `data-ref` or `data-z-*`: they are not
+  elements, the elements file does not list them, and nothing is built of
+  them in 3D. Only the plan (`top`) carries them.
+
+Renaming one, or changing what it means, is a format change as a rack.json
+key is; adding one is not.
 
 ## What else a consumer holds
 
@@ -221,7 +692,8 @@ major is deprecated for at least one release before it is removed. The
 deprecation is the `superseded-by:` key the schema already has, on the
 retired major's contract, naming the ref that replaces it. L89 telling a
 superseded major that still ships from a dead one is pending
-(roc-ops/Portrayal#448).
+(roc-ops/Portrayal#448). The whole mechanism is required before 1.0: the
+marker, a stated support window, and the L89 distinction.
 DESIGN §9 has the reasoning.
 
 **A lint code.** A device manifest waives a rule by its code (`lint.waive`),

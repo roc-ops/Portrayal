@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx2008
-version: 0.3.2
+version: 2.0.1
 maturity: modelled
 manufacturer: Juniper
 model: MX2008
@@ -27,8 +27,9 @@ provenance:
       face and the body is drawn at 440 mm. Ears NOT MODELLED by convention
   front:
     note: >-
-      photo - the studio front photograph at ~1.39 px/mm: craft at y 48, the short upper cage (RCB
-      0, SFB 0-7, RCB 1) at y 143 over ~170 mm, the double label strip, ten MPC slots at y 352
+      photo - the studio front photograph at 1.264 px/mm: craft at y 48, the short upper cage (RCB
+      0, SFB 0-7, RCB 1) at y 109-291 on the 1.264 px/mm scale, ten 43.18 mm slots over the line-card
+      slots (#902; it was at y 143 over ~170 mm), the double label strip, ten MPC slots at y 352
       over ~425 mm, the LC strip, the cable-manager panel and the intake grille. The photographed
       unit carries MX2000-LC-BLANK covers in every slot, so the MPC catalogue rides on the MX2000
       gap
@@ -58,6 +59,19 @@ provenance:
       near-blank by evidence - rail bands estimated; axis conventions per viewer3d.js as the
       siblings
 
+  lc-slots:
+    confidence: datasheet
+    note: >-
+      each LC slot is the line-card adapter's face, 43.18 x 449.8 (1.7 x 17.71 in, the guide's ADC row),
+      on its own width as pitch: ten slots, 431.8 mm, centred on the chassis at x 4.1 (#261). Four
+      readings put the pitch there: the MX2010 front gives 41.36 px between slots against a 379.5 px MPC
+      plate, 43.3 mm on the card's 396.0; the MX2008 front, isotropic at 1.264 px/mm once its flanges are
+      taken as the 19 in, gives 54.7 px, 43.3 mm; the MX2020 front gives 31.9 px at 0.744 px/mm, 43.4 mm.
+      Until #261 the slots were an estimated 41.0 x 425.0 on a 41.0 pitch, which no adapter fits. The
+      native MX2K cards and the blank keep their estimated 41 x 425 and are centred in the wider slot.
+      Down: the slot is centred on the photograph's LC cage, 331.5 to 791.9 mm (476 to 1058 px at 1.264
+      px/mm from the chassis top at 57 px): y 336.8. The band above it, which carries the RCB/SFB and LC
+      legends, closes up to 313.0 to 336.8, and the band below to 788.0 to 806.0.
 attrs:
   power:
     power-typical-w: 1520
@@ -85,13 +99,27 @@ gaps:
   - what: mpc-catalogue
     scope: [fpcs]
     reason: needs-photo
-    wanted: as the MX2000 siblings - the photographed unit carries
-      blanks in every LC slot.
+    wanted: a photograph of a populated LC slot on this chassis - the
+      photographed front carries blanks in every LC slot. Since roc-ops/Portrayal#261 the
+      MX240-form MPCs seat through the adapter card
+      (juniper/mx2000-lc-adapter@1), as on the MX2010.
+  - what: upper-cage-height
+    scope: [res, sfbs]
+    reason: sources-disagree
+    note: >-
+      The MX2008 front photograph (1.264 px/mm, isotropic) puts the upper cage at chassis y 109-291,
+      182 mm, and the RCB and SFB bays are drawn at that height. The hardware guide's Table 98 gives
+      the MX2008 RCB as 16.225 in (41.21 cm) high and the MX2008 SFB2 as 16.23 in, the MX2010's board
+      heights, with both rows' kilogram figures blank; a 412 mm board cannot stand in the
+      photographed cage (#902).
+    wanted: an MX2008 drawing or a corrected physical table that dimensions the RCB and SFB2 faces.
   - what: rcb-face-detail
     scope: [res]
     reason: needs-photo
     wanted: a close photograph of the MX2008 RCB faceplate - the jack
-      stack is summarised from a ~1.4 px/mm image.
+      stack is summarised from a ~1.4 px/mm image. At 2.0.0 the RCB took
+      the 1.7 in slot width (#902) and its two jack columns moved 6.9 mm
+      left to stay centred; their positions were not re-read.
   - what: fan-trays-and-pdms
     reason: needs-photo
     wanted: the two fan trays and two PDMs as FRU bays - drawn as the
@@ -139,94 +167,94 @@ views:
     panel:
       decor:
         - {at: [0.0, 0.0], size: [440.0, 48.0], fill: '#4a4f55'}
-        - {at: [0.0, 316.0], size: [440.0, 36.0], fill: '#4a4f55'}
-        - {at: [0.0, 780.0], size: [440.0, 24.0], fill: '#4a4f55'}
+        - {at: [0.0, 313.0], size: [440.0, 23.8], fill: '#4a4f55'}
+        - {at: [0.0, 788.0], size: [440.0, 18.0], fill: '#4a4f55'}
         - {at: [8.0, 806.0], size: [424.0, 145.0], fill: '#8a8f95'}
         - {at: [14.0, 957.0], size: [412.0, 100.0], pattern: holes, fill: '#26292d'}
     silkscreen:
-      - {at: [32.5, 331.0], text: RCB 0, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: rcb0}
-      - {at: [80.0, 331.0], text: '0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb0}
-      - {at: [120.0, 331.0], text: '1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb1}
-      - {at: [160.0, 331.0], text: '2', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb2}
-      - {at: [200.0, 331.0], text: '3', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb3}
-      - {at: [240.0, 331.0], text: '4', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb4}
-      - {at: [280.0, 331.0], text: '5', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb5}
-      - {at: [320.0, 331.0], text: '6', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb6}
-      - {at: [360.0, 331.0], text: '7', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb7}
-      - {at: [407.5, 331.0], text: RCB 1, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: rcb1}
-      - {at: [14.0, 348.0], text: LC, font-size: 2.4, anchor: middle, fill: '#e8eaec', for: chassis}
-      - {at: [35.5, 348.0], text: '0', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc0}
-      - {at: [76.5, 348.0], text: '1', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc1}
-      - {at: [117.5, 348.0], text: '2', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc2}
-      - {at: [158.5, 348.0], text: '3', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc3}
-      - {at: [199.5, 348.0], text: '4', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc4}
-      - {at: [240.5, 348.0], text: '5', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc5}
-      - {at: [281.5, 348.0], text: '6', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc6}
-      - {at: [322.5, 348.0], text: '7', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc7}
-      - {at: [363.5, 348.0], text: '8', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc8}
-      - {at: [404.5, 348.0], text: '9', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc9}
+      - {at: [25.69, 322.0], text: RCB 0, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: rcb0}
+      - {at: [68.87, 322.0], text: '0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb0}
+      - {at: [112.05, 322.0], text: '1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb1}
+      - {at: [155.23, 322.0], text: '2', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb2}
+      - {at: [198.41, 322.0], text: '3', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb3}
+      - {at: [241.59, 322.0], text: '4', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb4}
+      - {at: [284.77, 322.0], text: '5', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb5}
+      - {at: [327.95, 322.0], text: '6', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb6}
+      - {at: [371.13, 322.0], text: '7', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb7}
+      - {at: [414.31, 322.0], text: RCB 1, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: rcb1}
+      - {at: [14.0, 334.0], text: LC, font-size: 2.4, anchor: middle, fill: '#e8eaec', for: chassis}
+      - {at: [25.69, 334.0], text: '0', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc0}
+      - {at: [68.87, 334.0], text: '1', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc1}
+      - {at: [112.05, 334.0], text: '2', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc2}
+      - {at: [155.23, 334.0], text: '3', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc3}
+      - {at: [198.41, 334.0], text: '4', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc4}
+      - {at: [241.59, 334.0], text: '5', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc5}
+      - {at: [284.77, 334.0], text: '6', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc6}
+      - {at: [327.95, 334.0], text: '7', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc7}
+      - {at: [371.13, 334.0], text: '8', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc8}
+      - {at: [414.31, 334.0], text: '9', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc9}
     components:
       bays:
         - {id: craft, at: [0.0, 0.0], size: {w: 440.0, h: 95.0},
            accepts: [juniper/mx2000-craft@1], default: juniper/mx2000-craft@1,
            for: chassis, group: craft, rel-pos: 0}
-        - {id: rcb0, at: [3.0, 143.0], size: {w: 57.0, h: 170.0},
-           accepts: [juniper/mx2008-rcb-v@1], default: juniper/mx2008-rcb-v@1, group: res, rel-pos: 0}
-        - {id: sfb0, at: [60.0, 143.0], size: {w: 40.0, h: 170.0},
-           accepts: [juniper/mx2008-sfb-v@1],
-           default: juniper/mx2008-sfb-v@1, group: sfbs, rel-pos: 0}
-        - {id: sfb1, at: [100.0, 143.0], size: {w: 40.0, h: 170.0},
-           accepts: [juniper/mx2008-sfb-v@1],
-           default: juniper/mx2008-sfb-v@1, group: sfbs, rel-pos: 1}
-        - {id: sfb2, at: [140.0, 143.0], size: {w: 40.0, h: 170.0},
-           accepts: [juniper/mx2008-sfb-v@1],
-           default: juniper/mx2008-sfb-v@1, group: sfbs, rel-pos: 2}
-        - {id: sfb3, at: [180.0, 143.0], size: {w: 40.0, h: 170.0},
-           accepts: [juniper/mx2008-sfb-v@1],
-           default: juniper/mx2008-sfb-v@1, group: sfbs, rel-pos: 3}
-        - {id: sfb4, at: [220.0, 143.0], size: {w: 40.0, h: 170.0},
-           accepts: [juniper/mx2008-sfb-v@1],
-           default: juniper/mx2008-sfb-v@1, group: sfbs, rel-pos: 4}
-        - {id: sfb5, at: [260.0, 143.0], size: {w: 40.0, h: 170.0},
-           accepts: [juniper/mx2008-sfb-v@1],
-           default: juniper/mx2008-sfb-v@1, group: sfbs, rel-pos: 5}
-        - {id: sfb6, at: [300.0, 143.0], size: {w: 40.0, h: 170.0},
-           accepts: [juniper/mx2008-sfb-v@1],
-           default: juniper/mx2008-sfb-v@1, group: sfbs, rel-pos: 6}
-        - {id: sfb7, at: [340.0, 143.0], size: {w: 40.0, h: 170.0},
-           accepts: [juniper/mx2008-sfb-v@1],
-           default: juniper/mx2008-sfb-v@1, group: sfbs, rel-pos: 7}
-        - {id: rcb1, at: [380.0, 143.0], size: {w: 57.0, h: 170.0},
-           accepts: [juniper/mx2008-rcb-v@1], default: juniper/mx2008-rcb-v@1, group: res, rel-pos: 1}
-        - {id: fpc0, at: [15.0, 352.0], size: {w: 41.0, h: 425.0},
-           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+        - {id: rcb0, at: [4.10, 109.0], size: {w: 43.18, h: 182.0},
+           accepts: [juniper/mx2008-rcb-v@2], default: juniper/mx2008-rcb-v@2, group: res, rel-pos: 0}
+        - {id: sfb0, at: [47.28, 109.0], size: {w: 43.18, h: 182.0},
+           accepts: [juniper/mx2008-sfb-v@2],
+           default: juniper/mx2008-sfb-v@2, group: sfbs, rel-pos: 0}
+        - {id: sfb1, at: [90.46, 109.0], size: {w: 43.18, h: 182.0},
+           accepts: [juniper/mx2008-sfb-v@2],
+           default: juniper/mx2008-sfb-v@2, group: sfbs, rel-pos: 1}
+        - {id: sfb2, at: [133.64, 109.0], size: {w: 43.18, h: 182.0},
+           accepts: [juniper/mx2008-sfb-v@2],
+           default: juniper/mx2008-sfb-v@2, group: sfbs, rel-pos: 2}
+        - {id: sfb3, at: [176.82, 109.0], size: {w: 43.18, h: 182.0},
+           accepts: [juniper/mx2008-sfb-v@2],
+           default: juniper/mx2008-sfb-v@2, group: sfbs, rel-pos: 3}
+        - {id: sfb4, at: [220.00, 109.0], size: {w: 43.18, h: 182.0},
+           accepts: [juniper/mx2008-sfb-v@2],
+           default: juniper/mx2008-sfb-v@2, group: sfbs, rel-pos: 4}
+        - {id: sfb5, at: [263.18, 109.0], size: {w: 43.18, h: 182.0},
+           accepts: [juniper/mx2008-sfb-v@2],
+           default: juniper/mx2008-sfb-v@2, group: sfbs, rel-pos: 5}
+        - {id: sfb6, at: [306.36, 109.0], size: {w: 43.18, h: 182.0},
+           accepts: [juniper/mx2008-sfb-v@2],
+           default: juniper/mx2008-sfb-v@2, group: sfbs, rel-pos: 6}
+        - {id: sfb7, at: [349.54, 109.0], size: {w: 43.18, h: 182.0},
+           accepts: [juniper/mx2008-sfb-v@2],
+           default: juniper/mx2008-sfb-v@2, group: sfbs, rel-pos: 7}
+        - {id: rcb1, at: [392.72, 109.0], size: {w: 43.18, h: 182.0},
+           accepts: [juniper/mx2008-rcb-v@2], default: juniper/mx2008-rcb-v@2, group: res, rel-pos: 1}
+        - {id: fpc0, at: [4.10, 336.8], size: {w: 43.18, h: 449.8},
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 0}
-        - {id: fpc1, at: [56.0, 352.0], size: {w: 41.0, h: 425.0},
-           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+        - {id: fpc1, at: [47.28, 336.8], size: {w: 43.18, h: 449.8},
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 1}
-        - {id: fpc2, at: [97.0, 352.0], size: {w: 41.0, h: 425.0},
-           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+        - {id: fpc2, at: [90.46, 336.8], size: {w: 43.18, h: 449.8},
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 2}
-        - {id: fpc3, at: [138.0, 352.0], size: {w: 41.0, h: 425.0},
-           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+        - {id: fpc3, at: [133.64, 336.8], size: {w: 43.18, h: 449.8},
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 3}
-        - {id: fpc4, at: [179.0, 352.0], size: {w: 41.0, h: 425.0},
-           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+        - {id: fpc4, at: [176.82, 336.8], size: {w: 43.18, h: 449.8},
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 4}
-        - {id: fpc5, at: [220.0, 352.0], size: {w: 41.0, h: 425.0},
-           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+        - {id: fpc5, at: [220.00, 336.8], size: {w: 43.18, h: 449.8},
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 5}
-        - {id: fpc6, at: [261.0, 352.0], size: {w: 41.0, h: 425.0},
-           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+        - {id: fpc6, at: [263.18, 336.8], size: {w: 43.18, h: 449.8},
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 6}
-        - {id: fpc7, at: [302.0, 352.0], size: {w: 41.0, h: 425.0},
-           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+        - {id: fpc7, at: [306.36, 336.8], size: {w: 43.18, h: 449.8},
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 7}
-        - {id: fpc8, at: [343.0, 352.0], size: {w: 41.0, h: 425.0},
-           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+        - {id: fpc8, at: [349.54, 336.8], size: {w: 43.18, h: 449.8},
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 8}
-        - {id: fpc9, at: [384.0, 352.0], size: {w: 41.0, h: 425.0},
-           accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+        - {id: fpc9, at: [392.72, 336.8], size: {w: 43.18, h: 449.8},
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 9}
   rear:
     size:

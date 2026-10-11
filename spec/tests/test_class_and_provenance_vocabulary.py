@@ -106,7 +106,7 @@ def test_the_four_mx_craft_interfaces_share_a_class(contracts):
     like."""
     got = {r: contracts[r].get("class") for r in
            ("juniper/mx240-craft@1", "juniper/mx480-craft@1",
-            "juniper/mx2000-craft@1", "juniper/mx960-craft@1")}
+            "juniper/mx2000-craft@1", "juniper/mx960-craft@2")}
     assert set(got.values()) == {"display"}, got
 
 

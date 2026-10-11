@@ -1,0 +1,108 @@
+format: 1
+kind: module
+name: webcardlx
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: power
+description: >-
+  The Eaton Tripp Lite series WEBCARDLX network card as a 1U Tripp Lite PDU
+  carries it, behind its own black faceplate: a 10/100 Ethernet port with its
+  link and speed lamps, a recessed reset button under it, a micro-USB console
+  port, a USB-A port for EnviroSense2 sensors and a status lamp. The faceplate
+  is a plate with a screw tab at its lower left and its upper right.
+size: {w: 85.8, h: 29.1}
+size-confidence: {w: photo-measured, h: photo-measured}
+provenance:
+  method: >-
+    photo-measured - PDUMH20NET_DT01 (the 3000 px Eaton master, a near
+    straight-on front of the PDU) at 5.676 px per mm, the PDU's 444 mm width
+    across the 2520 px it spans. The face reads about 251 px high against the
+    spec sheet's 44.4 mm, 5.65 px per mm, so the two axes agree within half a
+    percent at the middle; the photograph is not quite orthographic, though - the
+    face tapers from 252 px high at its left end to 248 at its right and bows by
+    about 1 mm at mid-length. The card sits near the right end, where that bow is
+    about half a millimetre. Every figure below was read off a 2.2x enlargement
+    with a millimetre grid laid on it; with soft edges and the bow, they are good
+    to about 0.5 mm.
+  size: >-
+    photo-measured - the plate's outline runs from 289.6 to 375.4 across the
+    PDU face and from 4.4 to 33.5 down it: a main plate 298.7 to 366.0 across
+    and the full height, a tab 9.1 wide at its lower left (from 23.0 down) and
+    one 9.4 wide at its upper right (to 12.8 down), each holding a Phillips
+    screw. `size` is that envelope, tabs included.
+  identity: >-
+    datasheet - the PDUMH20NET spec sheet: "Pre-installed WEBCARDLX with the
+    latest version of PowerAlert Device Manager firmware (PADM20)"; the WEBCARDLX
+    owner's manual (22-01-369 93358E rev E) says the card installs in a
+    compatible UPS or PDU and ships with "several faceplates". So it is a card
+    in a slot, and the plate drawn is the faceplate this PDU's photograph shows.
+  ports: >-
+    datasheet and photo - the WEBCARDLX manual, Features: A the Ethernet port, B
+    the micro-USB port (a terminal at 115.2 kbps over the 73156A cable), C the
+    USB-A port for EnviroSense2 modules (E2MT, E2MTDO, E2MTDI, E2MTHDI; "do not
+    connect a keyboard or mouse"), D the reset button, "accessible through a
+    small hole under the RJ45 network port", and E the status lamp. DT01 shows
+    them in that order left to right: the RJ45 with its latch down, the reset
+    hole under it, the micro-USB printed CONSOLE, the USB-A standing on end with
+    its tongue to the left, and a bar lamp under it printed STATUS. The manual's
+    Features figure draws the same arrangement. The PDU owner's manual
+    (933687 rev A) draws an older plate (USB, STATUS, CONFIG, RESET, RJ45) that
+    the photograph does not show; the photograph is followed.
+  positions: >-
+    photo-measured, in the plate's own frame (from its upper left): the RJ45's
+    metal shield 23.9 to 43.1 across and 7.6 to 22.0 down, the jack centred in
+    it at (33.5, 14.8); the reset hole at (32.7, 23.8); the micro-USB's shell
+    centred at (50.4, 20.6); the USB-A's shell 6.8 by 14.8 centred at
+    (62.3, 13.8); the status bar lamp centred at (62.1, 23.8); CONSOLE and
+    STATUS centred at 49.7 and 62.0, on a baseline 27.5 down, about 1.9 high;
+    the screws centred at (4.4, 23.8) and (82.0, 3.6), 4.4 across.
+  lamps: >-
+    datasheet and photo - the WEBCARDLX manual's LED table: A1, Ethernet link and
+    activity, green, flashing with traffic; A2, network speed, yellow, on steady
+    at 100 Mbps and off at 10; E, the card's status, green steady in normal
+    operation, a single flash at power-up, green and orange alternating about
+    once a second while software updates and about twice a second while factory
+    defaults restore. DT01 shows the green lens at the RJ45's lower left and the
+    yellow at its lower right, as the manual's figure labels A1 and A2, so A1
+    is led-a and A2 led-b of the unrotated common/rj45-eth@1.
+  status-lamp: >-
+    photo-measured - a bar 2.4 by 1.1 in DT01, which is common/led-rect-sm@1's
+    2.3 by 1.1 lamp, so that part is used.
+  colour: >-
+    photo-measured - the plate's median in DT01 is #212020 (3876 px) against the
+    PDU face's #1d1d1b; the white legends read #fefefe.
+  depth: >-
+    NOT STATED. No held source dimensions the card behind its plate, so `size`
+    carries no `d` and the viewer gives the slot its default depth.
+  dcim: >-
+    the module type exports the Ethernet port as a management-only 100base-tx
+    interface and CONSOLE, the micro-USB, as a `usb-micro-b` console port (its
+    `role: console`). The USB-A sensor port is not a console and no module-type
+    field holds it, so it exports nothing.
+  power: >-
+    no held source states the card's own draw; L27 stands as the record.
+groups:
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: 'the card''s service connections - the 10/100 Ethernet port, the micro-USB console and the USB-A sensor port'}
+  status-leds: {term: LED, role: indicator, index-origin: 1}
+  buttons: {term: Button, role: service, index-origin: 1}
+elements: {}
+parts:
+  - id: lan
+    ref: common/rj45-eth@1
+    at: [25.6, 8.2]
+    group: mgmt
+    attrs: {media: rj45, speed: 100m, role: mgmt}
+    states:
+      led-a: ['off', {name: activity, behavior: blinking, color: '#22c55e'}]
+      led-b: ['off', {name: speed-100m, color: '#facc15'}]
+  - {id: reset, ref: common/reset-button@1, at: [30.7, 21.8], group: buttons}
+  - {id: console, ref: std/micro-usb@1, at: [46.65, 19.22], group: mgmt, attrs: {role: console}}
+  - {id: usb, ref: std/usb-a@1, skin: usb2, at: [56.3, 11.55], rotate: 270, group: mgmt}
+  - id: status
+    ref: common/led-rect-sm@1
+    at: [60.7, 23.0]
+    group: status-leds
+    states:
+      lamp: ['off', {name: 'on', color: '#22c55e'}, {name: alternating, behavior: blinking, color: '#f97316'}]
+skins: [default]

@@ -68,6 +68,24 @@ def test_the_bay_says_which_output_it_protects():
     assert bays["breaker-a1"]["description"] == "Accepts: breaker-1ru"
 
 
+def test_a_long_bay_description_does_not_cut_the_protects_clause():
+    """#857: an `Accepts:` list near the limit used to leave fit_items no room
+    for an item, and the clause - Nautobot's only record of the link - was cut.
+    It now leads, and what the bay accepts is shortened after it."""
+    bay = {"position": "breaker-a2", "description": "Accepts: " + ", ".join(
+        f"acme/breaker-{n:02d}a-long" for n in range(8))}
+    assert 190 <= len(bay["description"]) <= 200
+    outlets = {"output-a2": {"id": "output-a2", "ref": OUT, "through": "breaker-a2"}}
+    dx.outlet_rows(outlets, {}, [bay], "test panel")
+    got = bay["description"]
+    assert got.startswith("Protects output-a2; Accepts: acme/breaker-00a-long"), got
+    assert len(got) <= dx.LIMIT
+    # a short one keeps the order it always had
+    short = {"position": "breaker-a2", "description": "Accepts: breaker-1ru"}
+    dx.outlet_rows(outlets, {}, [short], "test panel")
+    assert short["description"] == "Accepts: breaker-1ru; protects output-a2"
+
+
 def test_a_bay_with_no_accepts_sentence_still_says_it():
     dev = panel(**FED)
     for b in dev["views"]["front"]["components"]["bays"]:
@@ -102,9 +120,35 @@ def test_every_outlet_type_is_one_both_targets_list():
     new type joins OUTLET_TYPES - and this set - only with both SHAs cited."""
     assert dx.PART_OUTLET
     assert set(dx.PART_OUTLET.values()) <= dx.OUTLET_TYPES
-    assert dx.OUTLET_TYPES == {"dc-terminal", "other"}
+    # iec-60320-c13 and eaton-c39: NetBox choices.py at 2b3f4b48, Nautobot at
+    # c77e4255 (the Eaton EVMI2130X, the first rack PDU).
+    # iec-60320-c19 and nema-5-20r: NetBox choices.py at 64ce9e2d, Nautobot at
+    # 3edb1fca (#933, std/c19-outlet and std/nema-5-20r).
+    assert dx.OUTLET_TYPES == {"dc-terminal", "other", "iec-60320-c13", "eaton-c39",
+                               "iec-60320-c19", "nema-5-20r"}
+    # the C13 is the standard's face, a std/ part; the C39 is Eaton's own
+    assert dx.PART_OUTLET["std/c13-outlet"] == "iec-60320-c13"
+    assert dx.PART_OUTLET["eaton/c39-outlet"] == "eaton-c39"
     assert all(dx.PART_OUTLET.get(r) == "other" for r in dx.OUTLET_LABEL), \
         "OUTLET_LABEL labels an outlet that is not `other`"
+
+
+def test_a_rule_names_an_outlet_by_its_printed_label():
+    """A device's own `interfaces:` rules rename a power outlet as they rename an
+    interface (the Eaton EVMI2130X's outlet-a1 is A1); an outlet no rule names
+    keeps its placement id."""
+    outlets = {"outlet-a1": {"ref": "std/c13-outlet@1", "fed-by": "input"},
+               "outlet-a2": {"ref": "eaton/c39-outlet@1", "fed-by": "input"}}
+    powers = {"input": {"name": "input", "type": "nema-l21-30p"}}
+    names = dx.listing_names({"interfaces": [
+        {"physical": "outlet-a{n}", "name": "A{n}", "range": "1-1"}]})
+    rows = dx.outlet_rows(outlets, powers, [], "test PDU", names)
+    assert [r["name"] for r in rows] == ["A1", "outlet-a2"]
+    assert [r["type"] for r in rows] == ["iec-60320-c13", "eaton-c39"]
+    assert all(r["power_port"] == "input" for r in rows)
+    # with no rules at all, every outlet keeps its id
+    assert [r["name"] for r in dx.outlet_rows(outlets, powers, [], "test PDU")] == \
+        ["outlet-a1", "outlet-a2"]
 
 
 @pytest.mark.parametrize("target", dx.TARGETS)

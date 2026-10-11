@@ -1,0 +1,49 @@
+format: 1
+kind: module
+name: ms-mic-16g
+version: 2.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper Multiservices MIC (MS-MIC-16G) - a services MIC with no network ports. MIC form: the MIC's own 168.8 x 29.2 plate, photo-measured (#261).
+attrs:
+  model: MS-MIC-16G
+  power-draw-max-w: 60
+provenance:
+  size: >-
+    photo-measured - the MIC plate, 168.8 x 29.2, from the MX104 and MX80 front photographs as
+    size-notes says: plates 520, 521 and 520.5 px at 3.090 px/mm on the MX104 (body 1350.5 px over 437.0
+    mm; the ganged-SFP pitch reads 44.0 to 44.2 px, 3.091), 521.8 and 522.5 px at 3.088 on the MX80
+    (ganged-SFP pitch 44.0 px; 1374 px between the ear wings over 445.0 mm agrees); heights 90 to 90.75
+    px.
+  power: >-
+    guide FRU power table (Component | Model Number | Maximum Power Requirement), MX chassis
+    guides: '| Multiservices MIC | MS-MIC-16G | 60W |'. Same figure in the MX240 and MX480
+    guides.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+  layout: >-
+    estimated - RE-ENVELOPED, NOT REDRAWN, at 2.0.0 (#261): every part and printed mark of the 1.x art
+    moved by (+0.4, +1.1) onto the measured plate (centring the old art where its width allows);
+    positions along the plate stay as 1.x had them. What 1.x said of them: registry + layout - the face
+    is the slot geometry of its chassis family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate drawing. No faceplate figure was
+    usable for this model
+states:
+- ok
+- fail
+- absent
+size:
+  w: 168.8
+  h: 29.2
+size-confidence: {w: photo-measured, h: photo-measured}
+size-notes: >-
+  w and h are the MIC's own plate, photo-measured (#261). Square-on front photographs of the MX104 and
+  the MX80 put four plates at 168.3 to 169.2 by 29.1 to 29.3 mm, each photograph scaled two
+  independent ways - across its chassis body and on the SFF-8433 ganged-SFP pitch of 14.25 mm, which
+  agree to 0.1% - and the MX2010 photograph's ratio of MIC to MPC plate (162.5 to 379.5 px) agrees.
+  The guides' MIC rows (6.25 x 6.8 x 1.25 in, the axes assigned differently in different books) do not
+  dimension the face and are not used. Until 2.0.0 this was the 168 x 27 'window', an estimate read
+  off the carrier.

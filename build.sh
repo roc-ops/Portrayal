@@ -103,6 +103,14 @@ done
 python3 spec/tools/portrayal/components_catalogue.py --library library \
   --out library/components/CATALOGUE.md &
 pids+=("$!")
+# THE CABLE TYPES, from spec/schemas/cable-types.yaml: no library walk at all,
+# so it runs beside the others and reads nothing they write.
+python3 spec/tools/portrayal/cable_types_index.py --schemas spec/schemas --out "$OUT" &
+pids+=("$!")
+# THE LINT RULES, from lint.py's own rule table: code, scope, rule, why, fix
+# and severity, for the site's rule page. No library walk either.
+python3 spec/tools/portrayal/lint.py --list-rules --json > "$OUT/lint-rules.json" &
+pids+=("$!")
 for pid in "${pids[@]}"; do wait "$pid"; done
 # THE RACK CATALOGUE reads devices.json and the compiled faces, so it runs
 # after both exist: rack.json, which the kit's rack/catalog.js loads.

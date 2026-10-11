@@ -277,6 +277,24 @@ def test_a_trunk_position_declared_unused_is_l129_but_a_bare_part_may_hold_one()
     assert run(L.lint_component_optical_trunk, doc, "L129") == []
 
 
+def test_one_position_of_a_front_mpo_as_the_trunk_is_l129():
+    """#857: the export shrinks an MPO front port to the positions the trunk
+    leaves, and the fibre map keeps the leg's original front_position, so
+    `trunk: [mpo.1]` wrote an 11-position port with a leg at position 12."""
+    doc = module([{"from": f"mpo.{i}", "to": "mpo.1"} for i in range(2, 13)],
+                 parts=[{"ref": "common/mpo-adapter@2", "id": "mpo"}])
+    doc["optical"]["trunk"] = ["mpo.1"]
+    hits = run(L.lint_component_optical_trunk, doc, "L129")
+    assert len(hits) == 1 and "mpo.1" in hits[0] and "front connector" in hits[0], hits
+    # the whole connector is a trunk the export can write
+    doc["optical"]["trunk"] = ["mpo"]
+    assert run(L.lint_component_optical_trunk, doc, "L129") == []
+    # and one position of a duplex adapter - the PPMs' shape - is still fine
+    duplex = module([{"from": "common.1", "to": "split.1"}])
+    duplex["optical"]["trunk"] = ["common.1"]
+    assert run(L.lint_component_optical_trunk, duplex, "L129") == []
+
+
 def test_a_trunk_naming_no_connector_or_no_position_is_l78():
     doc = module([{"from": "common.1", "to": "split.1"}])
     doc["optical"]["trunk"] = ["ghost", "common.3"]
@@ -295,5 +313,229 @@ def test_every_path_bearing_ppm_states_its_trunk_and_lints_clean():
         doc = yaml.safe_load(f.read_text())
         assert doc["optical"].get("trunk"), n
         for rule in (L.lint_component_optical_trunk, L.lint_component_optical_endpoints,
-                     L.lint_component_optical_conflicts, L.lint_component_optical_coverage):
+                     L.lint_component_optical_conflicts, L.lint_component_optical_coverage,
+                     L.lint_component_optical_combine):
             assert run(rule, doc) == [], (n, rule.__name__)
+
+
+# --- combine: L171, and what L78, L79, L80 and L130 make of one ---------------
+
+def add_drop(combine, to="line.1", **extra):
+    """The add side of a filter on `three`'s face, trunk on Line."""
+    path = {"combine": combine, "to": to}
+    path.update(extra)
+    return three([{"from": "line.2", "to": "osc.1", "band": BAND},
+                  {"from": "line.2", "to": "edfa.1"},
+                  path], trunk=["line"])
+
+
+GOOD = [{"at": "osc.2", "band": BAND}, {"at": "edfa.2"}]
+
+OPTICAL_RULES = ("lint_component_optical_endpoints", "lint_component_optical_conflicts",
+                 "lint_component_optical_coverage", "lint_component_optical_trunk",
+                 "lint_component_optical_combine")
+
+
+def test_a_wavelength_combine_is_quiet_on_every_optical_rule():
+    """The real shape: two inputs onto Line Tx, one banded, one carrying the
+    rest. Every position of the three adapters is reached, so L80 is in it."""
+    doc = add_drop(GOOD)
+    for name in OPTICAL_RULES:
+        assert run(getattr(L, name), doc) == [], name
+
+
+def test_a_power_combine_with_ratios_summing_to_100_is_quiet():
+    doc = add_drop([{"at": "osc.2", "ratio": 50}, {"at": "edfa.2", "ratio": 50}])
+    assert run(L.lint_component_optical_combine, doc) == []
+    assert run(L.lint_component_optical_conflicts, doc) == []
+
+
+def test_two_plain_paths_into_one_position_are_still_a_collision():
+    """The undeclared spelling of the same glass. `combine` is an escape hatch
+    only for the path that states it."""
+    doc = three([{"from": "osc.2", "to": "line.1"},
+                 {"from": "edfa.2", "to": "line.1"}], trunk=["line"])
+    hits = run(L.lint_component_optical_conflicts, doc, "L79")
+    assert len(hits) == 1 and "line.1" in hits[0] and "combine" in hits[0], hits
+
+
+def test_a_second_path_into_a_combines_destination_is_a_collision():
+    doc = add_drop(GOOD)
+    doc["optical"]["paths"].append({"from": "osc.1", "to": "line.1"})
+    hits = run(L.lint_component_optical_conflicts, doc, "L79")
+    assert any("line.1 is the destination of two paths" in h for h in hits), hits
+
+
+def test_a_combine_source_that_starts_another_path_is_caught():
+    doc = add_drop(GOOD)
+    doc["optical"]["paths"].append({"from": "osc.2", "to": "edfa.1"})
+    hits = run(L.lint_component_optical_conflicts, doc, "L79")
+    assert any("osc.2 is the source of two paths" in h for h in hits), hits
+
+
+def test_a_combine_source_past_the_connectors_capacity_is_l78():
+    """The combine list must not be a hole the endpoint check walks past."""
+    doc = add_drop([{"at": "osc.9", "band": BAND}, {"at": "edfa.2"}])
+    hits = run(L.lint_component_optical_endpoints, doc, "L78")
+    assert len(hits) == 1 and "osc.9" in hits[0], hits
+
+
+def test_a_position_only_a_combine_reaches_is_not_unreached():
+    """L80 reads a combine's sources as reached - drop the combine and the
+    three positions it wires are reported."""
+    doc = add_drop(GOOD)
+    assert run(L.lint_component_optical_coverage, doc, "L80") == []
+    doc["optical"]["paths"].pop()
+    hits = run(L.lint_component_optical_coverage, doc, "L80")
+    assert {h.split("] ")[1].split(" ")[0] for h in hits} == {"osc.2", "edfa.2", "line.1"}, hits
+
+
+def test_a_combine_leg_that_stays_on_the_front_is_l130():
+    """A role that contradicts the path set: the destination is a branch, so
+    no leg crosses to the trunk and none has a row in the fibre map."""
+    doc = add_drop([{"at": "osc.2", "band": BAND}, {"at": "line.1"}], to="edfa.2")
+    hits = run(L.lint_component_optical_trunk, doc, "L130")
+    assert len(hits) == 1 and "osc.2 -> edfa.2" in hits[0], hits
+
+
+def test_a_combine_with_no_trunk_is_l131():
+    doc = add_drop(GOOD)
+    del doc["optical"]["trunk"]
+    assert len(run(L.lint_component_optical_trunk, doc, "L131")) == 1
+
+
+def test_two_unbanded_combine_sources_do_not_say_how_they_join():
+    hits = run(L.lint_component_optical_combine,
+               add_drop([{"at": "osc.2"}, {"at": "edfa.2"}]), "L171")
+    assert len(hits) == 1 and "neither" in hits[0], hits
+
+
+def test_two_combine_sources_on_one_band_are_caught():
+    hits = run(L.lint_component_optical_combine,
+               add_drop([{"at": "osc.2", "band": BAND},
+                         {"at": "edfa.2", "band": dict(BAND)}]), "L171")
+    assert len(hits) == 1 and "same" in hits[0], hits
+
+
+def test_combine_ratios_must_sum_to_100():
+    hits = run(L.lint_component_optical_combine,
+               add_drop([{"at": "osc.2", "ratio": 70}, {"at": "edfa.2", "ratio": 40}]),
+               "L171")
+    assert len(hits) == 1 and "110" in hits[0], hits
+
+
+def test_a_power_combine_states_every_share():
+    hits = run(L.lint_component_optical_combine,
+               add_drop([{"at": "osc.2", "ratio": 50}, {"at": "edfa.2"}]), "L171")
+    assert len(hits) == 1 and "1 of its 2" in hits[0], hits
+
+
+def test_a_combine_does_not_mix_ratio_and_band():
+    hits = run(L.lint_component_optical_combine,
+               add_drop([{"at": "osc.2", "band": BAND},
+                         {"at": "edfa.2", "ratio": 100}]), "L171")
+    assert len(hits) == 1 and "mixes" in hits[0], hits
+
+
+def test_a_combine_has_one_destination():
+    doc = add_drop(GOOD, to=[{"at": "line.1", "ratio": 50}, {"at": "line.2", "ratio": 50}])
+    doc["optical"]["paths"] = doc["optical"]["paths"][2:]
+    hits = run(L.lint_component_optical_combine, doc, "L171")
+    assert len(hits) == 1 and "one destination" in hits[0], hits
+    # and no other optical rule falls over on the shape
+    for name in OPTICAL_RULES:
+        run(getattr(L, name), doc)
+
+
+def test_a_combine_carries_no_path_level_band():
+    hits = run(L.lint_component_optical_combine, add_drop(GOOD, band=BAND), "L171")
+    assert len(hits) == 1 and "path-level" in hits[0], hits
+
+
+def test_a_combine_names_a_source_once():
+    hits = run(L.lint_component_optical_combine,
+               add_drop([{"at": "osc.2", "band": BAND}, {"at": "osc.2"}]), "L171")
+    assert len(hits) == 1 and "twice" in hits[0], hits
+
+
+def test_from_beside_combine_is_caught():
+    doc = add_drop(GOOD)
+    doc["optical"]["paths"][2]["from"] = "osc.1"
+    hits = run(L.lint_component_optical_combine, doc, "L171")
+    assert len(hits) == 1 and "both" in hits[0], hits
+
+
+def test_the_schema_takes_a_combine_and_refuses_the_malformed_ones():
+    import json
+    from jsonschema import Draft202012Validator
+    schema = json.loads((ROOT / "spec/schemas/component.schema.json").read_text())
+    paths = dict(schema["properties"]["optical"]["properties"]["paths"])
+    paths["$defs"] = schema["$defs"]
+    v = Draft202012Validator(paths)
+    ok = lambda p: not list(v.iter_errors([p]))
+    assert ok({"combine": GOOD, "to": "line.1"})
+    assert ok({"from": "line.2", "to": "osc.1", "band": BAND})          # unchanged
+    assert ok({"from": "a.1", "to": [{"at": "b.1", "ratio": 50}, {"at": "b.2", "ratio": 50}]})
+    assert not ok({"combine": GOOD, "from": "osc.1", "to": "line.1"})   # both
+    assert not ok({"to": "line.1"})                                     # neither
+    assert not ok({"combine": [{"at": "osc.2"}], "to": "line.1"})       # one source
+    assert not ok({"combine": ["osc.2", "edfa.2"], "to": "line.1"})     # bare strings
+    assert not ok({"combine": [{"at": "osc.2", "share": 1}, {"at": "edfa.2"}], "to": "line.1"})
+
+
+def test_both_add_drop_filters_state_their_add_direction_as_a_combine():
+    """The two parts that used to write a combine from the wrong end. Read
+    from the parsed contract, so a folded string cannot hide it."""
+    import yaml
+    for n, branches in (("ppm-ad1-1510", {"osc.2", "edfa.2"}),
+                        ("ppm-ad1-1625", {"otdr.2", "ext.2"})):
+        doc = yaml.safe_load((ROOT / f"library/components/smartoptics/{n}/v2/"
+                              "contract.yaml").read_text())
+        combines = [p for p in doc["optical"]["paths"] if "combine" in p]
+        assert len(combines) == 1, n
+        assert combines[0]["to"] == "line.1", n
+        assert {s["at"] for s in combines[0]["combine"]} == branches, n
+        assert sum(1 for s in combines[0]["combine"] if s.get("band")) == 1, n
+        assert run(L.lint_component_optical_combine, doc) == [], n
+
+
+def _drop_reusing_a_combine_source(combine_first):
+    """Banded drop legs off `line.2`, and a combine that also names `line.2`
+    as a source. L79's band exception would pass the drop legs on their own."""
+    drop = [{"from": "line.2", "to": "osc.1", "band": BAND},
+            {"from": "line.2", "to": "edfa.1"}]
+    join = [{"combine": [{"at": "line.2", "band": {"centre-nm": 1625}}, {"at": "osc.2"}],
+             "to": "edfa.2"}]
+    return three(join + drop if combine_first else drop + join, trunk=["line"])
+
+
+def test_banded_legs_do_not_excuse_reusing_a_combine_source_written_after_them():
+    hits = run(L.lint_component_optical_conflicts,
+               _drop_reusing_a_combine_source(combine_first=False), "L79")
+    assert hits and all("line.2 is the source of two paths" in h for h in hits), hits
+
+
+def test_banded_legs_do_not_excuse_reusing_a_combine_source_written_before_them():
+    """The same glass with the combine first. The finding must not depend on
+    the order the paths are written in."""
+    hits = run(L.lint_component_optical_conflicts,
+               _drop_reusing_a_combine_source(combine_first=True), "L79")
+    assert hits and all("line.2 is the source of two paths" in h for h in hits), hits
+
+
+def test_l171_is_reachable_from_a_real_lint_run(tmp_path):
+    """The rule fires from the command line, not only when a test calls it:
+    a rule left out of the per-component loop is dead code with green tests."""
+    import subprocess
+    d = tmp_path / "components" / "t" / "joiner" / "v1"
+    d.mkdir(parents=True)
+    (d / "contract.yaml").write_text(
+        "format: 1\nkind: module\nname: joiner\nversion: 1.0.0\n"
+        "class: filter\nsize: {w: 40, h: 20}\n"
+        "optical:\n  media: os2\n  trunk: [b]\n  paths:\n"
+        "    - combine: [{at: a.1}, {at: a.2}]\n      to: b.1\n")
+    out = subprocess.run(
+        [sys.executable, str(ROOT / "spec/tools/portrayal/lint.py"),
+         "--schemas", str(ROOT / "spec/schemas"), "--library", str(tmp_path)],
+        capture_output=True, text=True).stdout
+    assert "[L171]" in out and "neither" in out, out

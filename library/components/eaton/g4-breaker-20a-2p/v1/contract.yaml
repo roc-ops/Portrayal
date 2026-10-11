@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: g4-breaker-20a-2p
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The branch breaker at the head of an Eaton Rack PDU G4 outlet section - a 20 A
+  two-pole rocker in a round recess on a raised plate held by three screws, with
+  the section's letter on a tile in the section's colour. Fixed to the PDU, not a
+  plug-in part.
+size: {w: 48, h: 60}
+size-confidence: {w: drawing, h: drawing}
+attrs: {rating-a: 20, poles: 2}
+provenance:
+  method: >-
+    drawing - Eaton drawing 9001-22301 (EVMI2130X, first issue 18-Aug-2023, D size,
+    scale 0.400) is vector, so the outlets were read from its path geometry at
+    1.133858 pt/mm rather than off a raster; the 1730, 1555.8, 72.00 and 55.80
+    dimensions on the same sheet all land within 0.02 mm at that scale. The drawing
+    lies the PDU down, cord end left; this part is drawn as the PDU stands, cord end
+    down, so the drawing's length runs up the part and its width across it.
+  size: >-
+    drawing - the plate on 9001-22301 is 60.0 along the PDU by 48.0 across (x 131.0
+    to 191.0, y 2.0 to 50.0 for section A, in drawing mm) with R2.2 corners. Its
+    screws are centred 8.9 and 51.1 along and 14.5 and 33.4 across, the rocker's
+    recess 15.2 across at 24.5 along and 33.4 across, and the tile 24.9 by 15.0 with a
+    round end towards the rocker.
+  rating: >-
+    drawing - 9001-22301 CIRCUIT BREAKERS: (3) 20A 2-POLE LISTED; the one-line
+    diagram on the same sheet puts each across two lines (A on L1-L2, B on L2-L3, C on
+    L3-L1).
+  rocker: >-
+    photo - EVMI2130X-BREAKER-ON_DT5 and -BREAKER-OFF_DT5: a black rocker printed ON
+    and a bar on one end and OFF and a circle on the other, with 20 beside it. The
+    printing is not drawn; it is under 1.5 mm and the drawing does not carry it.
+  colour: >-
+    photo-measured - the tile is the section's colour, a FIELD (`section-color`) as on
+    eaton/g4-outlet-labels@1, and its letter is a field (`section`).
+  relief: >-
+    drawing - the side view of 9001-22301 draws the plate standing 7.5 proud of the
+    face, and the rocker's boss to 12.9. Only the plate is built; the boss is not.
+fields:
+  section-color: {label: Section colour, type: text, default: '#f4d440'}
+  section: {label: Section letter, type: text, default: A}
+elements:
+  rocker: {at: [30.6, 29.5], size: [5.6, 12.0], class: breaker, states: ['on', 'off']}
+relief:
+  features:
+    - node: plate
+      out: 7.5
+      confidence: drawing
+      source: >-
+        9001-22301 side view: the plate's top edge is 7.54 off the front face at the
+        drawing's 1.133858 pt/mm.
+skins: [default]

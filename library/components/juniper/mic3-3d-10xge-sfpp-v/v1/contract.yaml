@@ -1,12 +1,18 @@
 format: 1
 kind: module
 name: mic3-3d-10xge-sfpp-v
-version: 1.2.0
+version: 1.2.1
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper 10GbE MIC3 with SFP+ (10 ports, one PIC). Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
+unplaced: >-
+  SUPERSEDED by juniper/mic3-3d-10xge-sfpp@2: the MX2000 carriers that took this rotated twin
+  are retired in favour of the horizontal MPC seated in juniper/mx2000-lc-adapter@1, which
+  takes the horizontal MIC (#261, part 2). Kept and deprecated rather than deleted, so a
+  manifest that pins it still resolves (#448); nothing in this library seats it.
+superseded-by: juniper/mic3-3d-10xge-sfpp@2
 attrs:
   model: MIC3-3D-10XGE-SFPP
   power-draw-max-w: 29.8

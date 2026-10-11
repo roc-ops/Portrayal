@@ -1,0 +1,71 @@
+format: 1
+kind: component
+name: nema-l5-20p-plug
+version: 1.0.0
+class: inlet
+conforms: nema-l5-20p-plug
+profile: power
+description: >-
+  A NEMA L5-20P locking plug (20 A 125 V, two pole, three wire, grounding),
+  face on: the grip, the face and its three curved blades, the earth blade
+  with its bent tab. The input plug at the end of a 120 V PDU's cord.
+size: {w: 52.8, h: 52.8}
+size-confidence: {w: borrowed, h: borrowed}
+attrs: {plug: nema-l5-20p, rating-a: 20, rating-v: 125}
+unplaced: >-
+  No device in the library places it yet. The Eaton (Tripp Lite) PDUMH20NET's fixed 12 ft
+  input cord ends in one, and it is the first PDU that will draw it (#933).
+provenance:
+  size: >-
+    borrowed - generic/nema-l6-20p-plug@1, whose figures are Leviton
+    CATSTD-02321-00X-D01 rev 1's (the grip 2.08 in [52.8 mm], the face 1.84
+    in [46.8 mm]). No dimensioned L5-20P drawing was found: Leviton's 2311
+    drawing is not at the address its siblings use, and Hubbell's is behind a
+    refusal (HTTP 403). The 20 A twist-lock plugs of one maker share a body,
+    and the two configurations differ only in where the blades sit, so the
+    L6-20P body stands for this one. Registry `nema-l5-20p-plug` restates it.
+  blades: >-
+    ESTIMATED from a schematic. Bryant 70520NP "Electrical schematic, plug,
+    locking, 125V/20A, 2P, 3-wire, NEMA L5-20"
+    (https://cdn.automationdirect.com/static/drawings/70520NP.pdf) draws the
+    configuration undimensioned. Its blades were located by angle about the
+    face centre on a 300 dpi render: W from -130 to -92 degrees, X from 115
+    to 166, and the earth G from -36 to 26 with its tab. Bryant's L6-20
+    schematic, 70620NP, read the same way, lands on Leviton's 1:1 L6-20P
+    drawing turned -36.5 degrees, with each blade's span within 1 degree.
+    Turned by the same -36.5, the L5-20 blades are W from -167 to -129 and X
+    from 78 to 130. The earth blade is the L6-20P's, which the two schematics
+    draw alike. The radii, 10.35 to 11.88, are Leviton's: the schematic's
+    blades are drawn thicker than the metal.
+  blade-length: >-
+    borrowed - generic/nema-l6-20p-plug@1, 18.6 and 22.5 (Leviton
+    CATSTD-02321-00X-D01 rev 1 side view).
+  no-depth: >-
+    NO `size.d`, as on every generic plug: the body behind the face is not
+    built.
+  dcim: >-
+    PART_POWER maps it to `nema-l5-20p`. A device draws either its cord or
+    its plug, not both.
+elements:
+  face: {at: [0, 0], size: [52.8, 52.8], class: inlet}
+relief:
+  features:
+    - node: blade-w
+      out: 18.6
+      shape: true
+      color: '#b08d57'
+      confidence: estimated
+      source: the L6-20P's figure, 0.73 in [18.6 mm] on Leviton CATSTD-02321-00X-D01 rev 1, taken for the L5-20P, which no held drawing dimensions
+    - node: blade-x
+      out: 18.6
+      shape: true
+      color: '#b08d57'
+      confidence: estimated
+      source: the L6-20P's figure, 0.73 in [18.6 mm] on Leviton CATSTD-02321-00X-D01 rev 1, taken for the L5-20P, which no held drawing dimensions
+    - node: blade-g
+      out: 22.5
+      shape: true
+      color: '#b08d57'
+      confidence: estimated
+      source: the L6-20P's figure, 0.89 in [22.5 mm] on Leviton CATSTD-02321-00X-D01 rev 1, taken for the L5-20P, which no held drawing dimensions
+skins: [default]

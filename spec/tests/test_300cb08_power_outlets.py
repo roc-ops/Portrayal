@@ -52,7 +52,10 @@ def check(doc, name):
     fname, kind, label = PANELS[name]
     outlets = doc["power-outlets"]
     assert outlets == want(kind, label)
-    assert [p["name"] for p in doc["power-ports"]] == ["input-a", "input-b"]
+    # ONE dc-terminal PER FEED (#822): an earlier head exported one per pole,
+    # four in all, and only the committed file held the fix
+    assert [(p["name"], p["type"]) for p in doc["power-ports"]] == \
+        [("input-a", "dc-terminal"), ("input-b", "dc-terminal")]
     assert sum(o["power_port"] == "input-a" for o in outlets) == 8
     assert sum(o["power_port"] == "input-b" for o in outlets) == 8
     bays = {b["position"]: b for b in doc["module-bays"]}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx80
-version: 2.0.3
+version: 4.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX80
@@ -35,8 +35,10 @@ provenance:
       and is not modelled - see gaps
   scale:
     note: >-
-      photo - per-axis anchoring of the front photograph (body between the ear wings anchored to
-      445 mm; rows to 88.9). Positions are single-pass readings approximate to ~2 mm
+      photo - the front photograph at 3.088 px/mm, isotropic: 1374 px between the ear wings (62 to
+      1436) over the 445.0 mm frame, cross-checked on the 20x1GE MIC's ganged-SFP pitch (44.0 px),
+      the chassis top at y px 9.5 (mic-bays, fixed-panel; #261, #901). Until 4.0.0 this note
+      described per-axis anchoring with rows fitted to 88.9
   front:
     note: >-
       photo - MIC row y 7-41.5 with slots at x 25.0 and 193.4 (the reference unit carries the
@@ -44,7 +46,26 @@ provenance:
       RE panel from 162.6 to 406 carrying CONSOLE over AUX (x 190), ETHERNET over USB (x 213), EXT
       CLK A over B (x 232), the SYS OK / RE lamps and ONLINE/OFFLINE button at its left, and the
       four fixed XFP cages at centres 261.6-349.7 with LINK lamps, silkscreened 0-3 over 0/MIC 0;
-      the MX80 badge at 355; the fan-tray door at 407-445
+      the MX80 badge at 355; the fan-tray door at 407-445. SUPERSEDED for the fixed panel by fixed-panel
+      below (#901)
+  fixed-panel:
+    confidence: photo-measured
+    note: >-
+      the MX80 front photograph on the frame mic-bays states (#901): x = (px - 62) / 3.088 between
+      the ear wings, 445.0 mm; y = (py - 9.5) / 3.088 from the chassis top. The four fixed XFP cages
+      (optics seated in the photograph, read on their duplex bodies) centre at x 267.3, 298.6, 330.1,
+      361.1 - a 31.3 mm pitch - at y 71.4; each LINK lamp sits right of its cage at 282.7, 314.0,
+      345.0, 376.3 (y 72.5 read, drawn level with the cage centre at 71.4), with LINK printed over it and the port digit over the cage. CONSOLE over
+      AUX centre at x 195.7 (y 56.8, 71.0); ETHERNET over the horizontal USB at 219.2 (60.5) and 219.6
+      (72.7); EXT CLK A over B at 241.4 (54.8, 71.0). The SYS OK and RE lamps at x 172.3 and 177.9,
+      y 64.9, the ONLINE/OFFLINE button at (170.2, 73.3); the blue panel's left and top edges at x
+      159.6 and y 40.6. Until 4.0.0 the cages sat on a 29.4 pitch (xe-1 7.6 mm left of the
+      photograph) at y 67.0, and the jacks 5-17 mm left of theirs.
+      SEEN AND NOT DRAWN, for follow-ups: two more lamps above SYS OK and RE (y 57.6), a second
+      button right of ONLINE/OFFLINE (179.9, 73.3), and a fan tray running x 380.5-441.4 where the
+      model's fan-tray bay is 38 wide at 407 - its width is the juniper/mx80-fan-tray contract's. The USB jack is
+      horizontal, as the photograph shows it and as std/usb-a draws it unturned, 12.0 x 4.5 under
+      ETHERNET; until 4.0.0 it was placed at rotate 90, upright
   rear:
     note: >-
       photo - a blank cover plate over the upper-left aperture labelled MPC 0 / MIC 1, the CLK and
@@ -98,6 +119,17 @@ provenance:
       midpoint the photograph placed, (394.75, 19.75), one stud above the other, so the host is placed at
       `rotate: 90` and a lug's wire leaves downward, and their cutouts with them.
 
+  mic-bays:
+    confidence: photo-measured
+    note: >-
+      the two MIC bays are the MIC plate, 168.8 x 29.2 (#261), placed off the front photograph at 3.088
+      px/mm - the ganged-SFP pitch of the 20x1GE MIC, 44.0 px, which also gives 445.0 mm for the 1374 px
+      between the ear wings (62 to 1436 px), the frame this device is drawn in. The plates run 150.7 to
+      672.5 and 674.5 to 1197.0 px (x 28.7 and 198.3, a 169.6 pitch, which leaves 0.8 mm between 168.8 plates; the 2 px
+      gap in the photograph reads 0.6, its plates reading 169.0
+      wide there, within a pixel of 168.8) and 29.5 to 120.0
+      px down from a chassis top at 9.5 px (y 6.5). Until 3.0.0 they were 168 x 27 at x 25.0 and 193.4, y
+      11. The fixed panel was re-measured on the same frame at 4.0.0 (fixed-panel).
 attrs:
   physical:
     weight-note: Table 31 gives 30 lb (13.6 kg) for the modular chassis with fan
@@ -122,6 +154,13 @@ chassis:
   ru: 2
   color: '#2b2f36'
 gaps:
+  - what: fixed-panel-extras
+    reason: needs-photo
+    wanted: a close photograph of the RE panel and fan tray - the front
+      photograph shows two lamps above SYS OK and RE and a second button
+      right of ONLINE/OFFLINE, none identified, and a fan tray x 380.5-441.4
+      where the fan-tray contract is 38 wide at 407. The rest of the fixed
+      panel was re-placed at 4.0.0 (provenance.fixed-panel, #901).
   - what: ethernet-port-speed
     scope: [ethernet]
     reason: sources-disagree
@@ -219,60 +258,60 @@ views:
       h: 88.9
     panel:
       decor:
-        - {at: [157.0, 43.0], size: [249.0, 45.9], rx: 0.0, fill: '#232a45'}
+        - {at: [159.6, 40.6], size: [246.4, 48.3], rx: 0.0, fill: '#232a45'}
       cutouts:
-        - {id: xe-0, at: [251.85, 62.15], size: [19.5, 9.7]}
-        - {id: xe-1, at: [281.25, 62.15], size: [19.5, 9.7]}
-        - {id: xe-2, at: [310.55, 62.15], size: [19.5, 9.7]}
-        - {id: xe-3, at: [339.95, 62.15], size: [19.5, 9.7]}
-        - {id: console, at: [182.1, 47.9], size: [15.8, 13.2]}
-        - {id: aux, at: [182.1, 66.9], size: [15.8, 13.2]}
-        - {id: ethernet, at: [205.1, 47.9], size: [15.8, 13.2]}
-        - {id: usb, at: [210.75, 64.5], size: [4.5, 12.0]}
-        - {id: clk-a, at: [224.1, 47.9], size: [15.8, 13.2]}
-        - {id: clk-b, at: [224.1, 66.9], size: [15.8, 13.2]}
-        - {id: led-sys-ok, at: [167.0, 63.0], size: [2.2, 2.2], shape: circle}
-        - {id: led-re, at: [173.5, 63.0], size: [2.2, 2.2], shape: circle}
-        - {id: btn-online, at: [166.5, 75.5], size: [3.4, 3.4], shape: circle}
-        - {id: led-link-0, at: [274, 66], size: [2, 2], shape: rect}
-        - {id: led-link-1, at: [303.4, 66], size: [2, 2], shape: rect}
-        - {id: led-link-2, at: [332.7, 66], size: [2, 2], shape: rect}
-        - {id: led-link-3, at: [362.1, 66], size: [2, 2], shape: rect}
+        - {id: xe-0, at: [257.55, 66.55], size: [19.5, 9.7]}
+        - {id: xe-1, at: [288.85, 66.55], size: [19.5, 9.7]}
+        - {id: xe-2, at: [320.35, 66.55], size: [19.5, 9.7]}
+        - {id: xe-3, at: [351.35, 66.55], size: [19.5, 9.7]}
+        - {id: console, at: [187.8, 50.2], size: [15.8, 13.2]}
+        - {id: aux, at: [187.8, 64.4], size: [15.8, 13.2]}
+        - {id: ethernet, at: [211.3, 53.9], size: [15.8, 13.2]}
+        - {id: usb, at: [213.6, 70.45], size: [12.0, 4.5]}
+        - {id: clk-a, at: [233.5, 48.2], size: [15.8, 13.2]}
+        - {id: clk-b, at: [233.5, 64.4], size: [15.8, 13.2]}
+        - {id: led-sys-ok, at: [171.2, 63.8], size: [2.2, 2.2], shape: circle}
+        - {id: led-re, at: [176.8, 63.8], size: [2.2, 2.2], shape: circle}
+        - {id: btn-online, at: [168.5, 71.6], size: [3.4, 3.4], shape: circle}
+        - {id: led-link-0, at: [281.7, 70.4], size: [2, 2], shape: rect}
+        - {id: led-link-1, at: [313.0, 70.4], size: [2, 2], shape: rect}
+        - {id: led-link-2, at: [344.0, 70.4], size: [2, 2], shape: rect}
+        - {id: led-link-3, at: [375.3, 70.4], size: [2, 2], shape: rect}
     silkscreen:
       - {at: [96.5, 5.6], text: 1/MIC 0, font-size: 2.2, anchor: middle, fill: '#e8eaec', for: mic-1-0}
       - {at: [264.5, 5.6], text: 1/MIC 1, font-size: 2.2, anchor: middle, fill: '#e8eaec', for: mic-1-1}
-      - {at: [6.5, 60.0], text: PS 0, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: ps0}
-      - {at: [163.5, 58.5], text: PS 1, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: ps1}
-      - {at: [168, 68], text: SYS OK, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: led-sys-ok}
-      - {at: [174.5, 68], text: RE, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: led-re}
-      - {at: [166.5, 81.5], text: ONLINE, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: btn-online}
-      - {at: [166.5, 83.6], text: OFFLINE, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: btn-online}
-      - {at: [190.0, 45.6], text: CONSOLE, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: console}
-      - {at: [190.0, 84.5], text: AUX, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: aux}
-      - {at: [213.0, 45.6], text: ETHERNET, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: ethernet}
-      - {at: [213.0, 84.5], text: USB, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: usb}
-      - {at: [232.0, 45.6], text: A, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: clk-a}
-      - {at: [240.5, 51.5], text: EXT CLK, font-size: 1.6, anchor: start, fill: '#e8eaec', for: [clk-a, clk-b]}
-      - {at: [232.0, 84.5], text: B, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: clk-b}
-      - {at: [261.6, 59.8], text: '0', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-0}
-      - {at: [291.0, 59.8], text: '1', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-1}
-      - {at: [320.3, 59.8], text: '2', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-2}
-      - {at: [349.7, 59.8], text: '3', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-3}
-      - {at: [305.65, 84.5], text: 0/MIC 0, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: [xe-0, xe-1, xe-2, xe-3]}
-      - {at: [381.0, 56.0], text: MX80, font-size: 5.0, anchor: middle, fill: '#f0f1f2', for: chassis}
+      - {at: [8.4, 54.2], text: PS 0, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: ps0}
+      - {at: [163.0, 54.0], text: PS 1, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: ps1}
+      - {at: [166.5, 62.2], text: SYS OK, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: led-sys-ok}
+      - {at: [180.4, 62.2], text: RE, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: led-re}
+      - {at: [170.5, 78.5], text: ONLINE, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: btn-online}
+      - {at: [170.5, 80.9], text: OFFLINE, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: btn-online}
+      - {at: [195.7, 47.4], text: CONSOLE, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: console}
+      - {at: [195.7, 79.5], text: AUX, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: aux}
+      - {at: [219.2, 51.4], text: ETHERNET, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: ethernet}
+      - {at: [219.6, 79.5], text: USB, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: usb}
+      - {at: [241.4, 45.2], text: A, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: clk-a}
+      - {at: [254.9, 49.6], text: EXT CLK, font-size: 1.6, anchor: start, fill: '#e8eaec', for: [clk-a, clk-b]}
+      - {at: [241.4, 79.5], text: B, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: clk-b}
+      - {at: [267.3, 64.3], text: '0', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-0}
+      - {at: [298.6, 64.3], text: '1', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-1}
+      - {at: [330.1, 64.3], text: '2', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-2}
+      - {at: [361.1, 64.3], text: '3', font-size: 1.8, anchor: middle, fill: '#e8eaec', for: xe-3}
+      - {at: [316.7, 81.6], text: 0/MIC 0, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: [xe-0, xe-1, xe-2, xe-3]}
+      - {at: [343.3, 54.6], text: MX80, font-size: 9.0, anchor: middle, fill: '#f0f1f2', for: chassis}
       - {at: [396.0, 47.0], text: FAN, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: fan-tray}
-      - {at: [277.4, 67.37], text: LINK, font-size: 1.2, anchor: start, fill: '#e8eaec', for: xe-0}
-      - {at: [306.8, 67.37], text: LINK, font-size: 1.2, anchor: start, fill: '#e8eaec', for: xe-1}
-      - {at: [336.1, 67.37], text: LINK, font-size: 1.2, anchor: start, fill: '#e8eaec', for: xe-2}
-      - {at: [365.5, 67.37], text: LINK, font-size: 1.2, anchor: start, fill: '#e8eaec', for: xe-3}
+      - {at: [282.7, 69.0], text: LINK, font-size: 1.2, anchor: middle, fill: '#e8eaec', for: xe-0}
+      - {at: [314.0, 69.0], text: LINK, font-size: 1.2, anchor: middle, fill: '#e8eaec', for: xe-1}
+      - {at: [345.0, 69.0], text: LINK, font-size: 1.2, anchor: middle, fill: '#e8eaec', for: xe-2}
+      - {at: [376.3, 69.0], text: LINK, font-size: 1.2, anchor: middle, fill: '#e8eaec', for: xe-3}
     components:
       bays:
-        - {id: mic-1-0, at: [25.0, 11.0], size: {w: 168.0, h: 27.0},
-           accepts: [juniper/mic-3d-16che1-t1-ce@1, juniper/mic-3d-1oc192-xfp@1, juniper/mic-3d-20ge-sfp@1, juniper/mic-3d-2xge-xfp@1, juniper/mic-3d-4choc3-1oc12@1, juniper/mic-3d-4choc3-2choc12@1, juniper/mic-3d-4oc3oc12-1oc48@1, juniper/mic-3d-8choc3-4choc12@1, juniper/mic-3d-8ds3-e3@1, juniper/mic-3d-8oc3-2oc12-atm@1, juniper/mic-3d-8oc3oc12-4oc48@1, juniper/mic-macsec-20ge@1, juniper/ms-mic-16g@1, juniper/mx-mic-blank@1],
-           default: juniper/mic-3d-20ge-sfp@1, group: mics, rel-pos: 0}
-        - {id: mic-1-1, at: [193.4, 11.0], size: {w: 168.0, h: 27.0},
-           accepts: [juniper/mic-3d-16che1-t1-ce@1, juniper/mic-3d-1oc192-xfp@1, juniper/mic-3d-20ge-sfp@1, juniper/mic-3d-2xge-xfp@1, juniper/mic-3d-4choc3-1oc12@1, juniper/mic-3d-4choc3-2choc12@1, juniper/mic-3d-4oc3oc12-1oc48@1, juniper/mic-3d-8choc3-4choc12@1, juniper/mic-3d-8ds3-e3@1, juniper/mic-3d-8oc3-2oc12-atm@1, juniper/mic-3d-8oc3oc12-4oc48@1, juniper/mic-macsec-20ge@1, juniper/ms-mic-16g@1, juniper/mx-mic-blank@1],
-           default: juniper/mic-3d-2xge-xfp@1, group: mics, rel-pos: 1}
+        - {id: mic-1-0, at: [28.7, 6.5], size: {w: 168.8, h: 29.2},
+           accepts: [juniper/mic-3d-16che1-t1-ce@2, juniper/mic-3d-1oc192-xfp@2, juniper/mic-3d-20ge-sfp@2, juniper/mic-3d-2xge-xfp@2, juniper/mic-3d-4choc3-1oc12@2, juniper/mic-3d-4choc3-2choc12@2, juniper/mic-3d-4oc3oc12-1oc48@2, juniper/mic-3d-8choc3-4choc12@2, juniper/mic-3d-8ds3-e3@2, juniper/mic-3d-8oc3-2oc12-atm@2, juniper/mic-3d-8oc3oc12-4oc48@2, juniper/mic-macsec-20ge@2, juniper/ms-mic-16g@2, juniper/mx-mic-blank@2],
+           default: juniper/mic-3d-20ge-sfp@2, group: mics, rel-pos: 0}
+        - {id: mic-1-1, at: [198.3, 6.5], size: {w: 168.8, h: 29.2},
+           accepts: [juniper/mic-3d-16che1-t1-ce@2, juniper/mic-3d-1oc192-xfp@2, juniper/mic-3d-20ge-sfp@2, juniper/mic-3d-2xge-xfp@2, juniper/mic-3d-4choc3-1oc12@2, juniper/mic-3d-4choc3-2choc12@2, juniper/mic-3d-4oc3oc12-1oc48@2, juniper/mic-3d-8choc3-4choc12@2, juniper/mic-3d-8ds3-e3@2, juniper/mic-3d-8oc3-2oc12-atm@2, juniper/mic-3d-8oc3oc12-4oc48@2, juniper/mic-macsec-20ge@2, juniper/ms-mic-16g@2, juniper/mx-mic-blank@2],
+           default: juniper/mic-3d-2xge-xfp@2, group: mics, rel-pos: 1}
         - {id: ps0, at: [14.7, 44.0], size: {w: 72.0, h: 44.0},
            accepts: [juniper/mx80-psu-ac@1], default: juniper/mx80-psu-ac@1,
            group: psus, rel-pos: 0}
@@ -283,35 +322,35 @@ views:
            accepts: [juniper/mx80-fan-tray@1], default: juniper/mx80-fan-tray@1,
            group: cooling, rel-pos: 0}
       placements:
-        - {id: xe-0, ref: std/xfp@1, at: [251.85, 62.15], group: xe, rel-pos: 0}
-        - {id: xe-1, ref: std/xfp@1, at: [281.25, 62.15], group: xe, rel-pos: 1}
-        - {id: xe-2, ref: std/xfp@1, at: [310.55, 62.15], group: xe, rel-pos: 2}
-        - {id: xe-3, ref: std/xfp@1, at: [339.95, 62.15], group: xe, rel-pos: 3}
-        - {id: led-link-0, ref: common/led-dot@1, at: [274.0, 66.0], for: xe-0, group: xe-leds, rel-pos: 0}
-        - {id: led-link-1, ref: common/led-dot@1, at: [303.4, 66.0], for: xe-1, group: xe-leds, rel-pos: 1}
-        - {id: led-link-2, ref: common/led-dot@1, at: [332.7, 66.0], for: xe-2, group: xe-leds, rel-pos: 2}
-        - {id: led-link-3, ref: common/led-dot@1, at: [362.1, 66.0], for: xe-3, group: xe-leds, rel-pos: 3}
-        - {id: console, ref: std/rj45@2, at: [182.1, 47.9], rotate: 180, group: mgmt, rel-pos: 0,
+        - {id: xe-0, ref: std/xfp@1, at: [257.55, 66.55], group: xe, rel-pos: 0}
+        - {id: xe-1, ref: std/xfp@1, at: [288.85, 66.55], group: xe, rel-pos: 1}
+        - {id: xe-2, ref: std/xfp@1, at: [320.35, 66.55], group: xe, rel-pos: 2}
+        - {id: xe-3, ref: std/xfp@1, at: [351.35, 66.55], group: xe, rel-pos: 3}
+        - {id: led-link-0, ref: common/led-dot@1, at: [281.7, 70.4], for: xe-0, group: xe-leds, rel-pos: 0}
+        - {id: led-link-1, ref: common/led-dot@1, at: [313.0, 70.4], for: xe-1, group: xe-leds, rel-pos: 1}
+        - {id: led-link-2, ref: common/led-dot@1, at: [344.0, 70.4], for: xe-2, group: xe-leds, rel-pos: 2}
+        - {id: led-link-3, ref: common/led-dot@1, at: [375.3, 70.4], for: xe-3, group: xe-leds, rel-pos: 3}
+        - {id: console, ref: std/rj45@2, at: [187.8, 50.2], rotate: 180, group: mgmt, rel-pos: 0,
            attrs: {media: rj45-serial, role: console, function: serial console}}
-        - {id: aux, ref: std/rj45@2, at: [182.1, 66.9], group: mgmt, rel-pos: 1,
+        - {id: aux, ref: std/rj45@2, at: [187.8, 64.4], group: mgmt, rel-pos: 1,
            attrs: {media: rj45-serial, role: aux, function: auxiliary console}}
-        - {id: ethernet, ref: common/rj45-eth@1, at: [205.1, 47.9], rotate: 180, group: mgmt, rel-pos: 2,
+        - {id: ethernet, ref: common/rj45-eth@1, at: [211.3, 53.9], rotate: 180, group: mgmt, rel-pos: 2,
            attrs: {function: out-of-band management}}
-        - {id: usb, ref: std/usb-a@1, at: [207.0, 68.25], rotate: 90, group: mgmt, rel-pos: 3,
+        - {id: usb, ref: std/usb-a@1, at: [213.6, 70.45], group: mgmt, rel-pos: 3,
            attrs: {function: USB service port}}
-        - {id: clk-a, ref: std/rj45@2, at: [224.1, 47.9], rotate: 180, group: mgmt, rel-pos: 4,
+        - {id: clk-a, ref: std/rj45@2, at: [233.5, 48.2], rotate: 180, group: mgmt, rel-pos: 4,
            attrs: {media: rj48, function: external clock A}}
-        - {id: clk-b, ref: std/rj45@2, at: [224.1, 66.9], group: mgmt, rel-pos: 5,
+        - {id: clk-b, ref: std/rj45@2, at: [233.5, 64.4], group: mgmt, rel-pos: 5,
            attrs: {media: rj48, function: external clock B}}
-        - {id: led-sys-ok, ref: common/led-dot@1, at: [167.0, 63.0], for: chassis,
+        - {id: led-sys-ok, ref: common/led-dot@1, at: [171.3, 63.9], for: chassis,
            group: status-leds, rel-pos: 0,
            states: ['off', {name: ok, color: '#22c55e'}],
            description: SYS OK - green when the system is up}
-        - {id: led-re, ref: common/led-dot@1, at: [173.5, 63.0], for: chassis,
+        - {id: led-re, ref: common/led-dot@1, at: [176.9, 63.9], for: chassis,
            group: status-leds, rel-pos: 1,
            states: ['off', {name: ok, color: '#22c55e'}, {name: fail, color: '#ef4444'}],
            description: RE status lamp}
-        - {id: btn-online, ref: common/reset-button@1, at: [166.5, 75.5], for: chassis,
+        - {id: btn-online, ref: common/reset-button@1, at: [168.5, 71.6], for: chassis,
            group: mgmt, rel-pos: 6, attrs: {function: online/offline}}
   rear:
     size:
@@ -395,8 +434,8 @@ configurations:
       the question most people ask first and the one `default` used to answer with
       whatever the drawing happened to be populated with.
     bays:
-      mic-1-0: juniper/mx-mic-blank@1
-      mic-1-1: juniper/mx-mic-blank@1
+      mic-1-0: juniper/mx-mic-blank@2
+      mic-1-1: juniper/mx-mic-blank@2
   mx80:
     kind: model
     description: Full-capacity MX80 - both MIC slots active, 80 Gbps class.

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-300gm
-version: 1.6.1
+version: 1.7.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -28,6 +28,22 @@ attrs:
   nebs: 'Designed to NEBS level 3 requirements'
   power-draw-max-w: 160
 provenance:
+  led-states: >-
+    datasheet - C100G Hardware Installation Guide (rev 07/08/2022) Table 1-2 and Table 6-1,
+    Front-installed module LEDs, and the C40G guide (rev 07/07/2022) Table 1-2, for the SMM, QAM
+    and UPS/DQM modules: STATUS Green (module running normally) or Black/off (no power); ACTIVE
+    Green (processing traffic) or Black/off (redundant standby); ALARM Black (no alarm) or Red
+    (full alarm condition, a critical component has failed). Declared as `off`, `ok`, `active`
+    and `alarm`; the green is the lamp green the photographs show (#39b54a) and the red is not
+    measured. Every lamp is drawn OFF: the skin used to paint STATUS and ACTIVE lit, from the
+    photograph, and no state could change them. No Casa document gives a blink for these three,
+    so none is declared. PORT LAMPS - the same table's GigE/10GigE/10/100 rows: Link status
+    Green (link up) or Black (down); Activity Green blinking (transmitting or receiving) or
+    Black. Which of a port's two lamps is link and which activity is not stated in any document
+    held, so each lamp admits both, `link` and `activity` (blinking), as the eNMC jacks do; no
+    blink rate is published. MANAGEMENT JACK - the 10/100 Fast Ethernet row of the same table
+    gives link and activity in green, so the placement colours common/rj45-eth@1's two lamps
+    green (led-a link, led-b activity blinking, the part's own split).
   identity: 'the maintainer and roc-ops/Portrayal#28 - the SMM 300GM is the SMM 300G fitted with a
     newer packet processor after the original went end-of-life at the manufacturer.
     Physically identical - same cages, same layout, same power - and the only visible
@@ -108,8 +124,8 @@ provenance:
     and the standard figure is used
   port-lamps: photo-measured - each optical port carries one lamp ABOVE and one
     BELOW its legend, in a column to the right of the cages, which is why the cages
-    sit left of the plate centre at 12.6 rather than centred. No document held here
-    gives their colour vocabulary, so no states are declared
+    sit left of the plate centre at 12.6 rather than centred. The colours and meanings
+    are in the C100G guide Table 1-2, which led-states cites
   power-draw-max-w: 'datasheet - both SMM300G data sheets agree on ''Power Consumption:
     160W'', and Table A-7 of the C100G install guide agrees a third time with ''SMM
     power consumption 160W''. Three sources, one figure. The transceivers are extra
@@ -173,33 +189,33 @@ provenance:
     No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
     estimate written eleven times, not eleven readings that agreed.'
 elements:
-  status: {at: [4.8, 298.7], size: [3.0, 3.0], class: led}
-  active: {at: [4.8, 307.2], size: [3.0, 3.0], class: led}
-  alarm: {at: [4.8, 315.7], size: [3.0, 3.0], class: led}
-  p0-led-a: {at: [20.8, 71.8], size: [1.4, 1.4], class: led}
-  p0-led-b: {at: [20.8, 78.8], size: [1.4, 1.4], class: led}
-  p1-led-a: {at: [20.8, 86.05], size: [1.4, 1.4], class: led}
-  p1-led-b: {at: [20.8, 93.05], size: [1.4, 1.4], class: led}
-  p2-led-a: {at: [20.8, 100.3], size: [1.4, 1.4], class: led}
-  p2-led-b: {at: [20.8, 107.3], size: [1.4, 1.4], class: led}
-  p3-led-a: {at: [20.8, 114.55], size: [1.4, 1.4], class: led}
-  p3-led-b: {at: [20.8, 121.55], size: [1.4, 1.4], class: led}
-  p4-led-a: {at: [20.8, 128.8], size: [1.4, 1.4], class: led}
-  p4-led-b: {at: [20.8, 135.8], size: [1.4, 1.4], class: led}
-  p5-led-a: {at: [20.8, 143.05], size: [1.4, 1.4], class: led}
-  p5-led-b: {at: [20.8, 150.05], size: [1.4, 1.4], class: led}
-  p6-led-a: {at: [20.8, 160.2], size: [1.4, 1.4], class: led}
-  p6-led-b: {at: [20.8, 167.2], size: [1.4, 1.4], class: led}
-  p7-led-a: {at: [20.8, 174.45], size: [1.4, 1.4], class: led}
-  p7-led-b: {at: [20.8, 181.45], size: [1.4, 1.4], class: led}
-  p8-led-a: {at: [20.8, 188.7], size: [1.4, 1.4], class: led}
-  p8-led-b: {at: [20.8, 195.7], size: [1.4, 1.4], class: led}
-  p9-led-a: {at: [20.8, 202.95], size: [1.4, 1.4], class: led}
-  p9-led-b: {at: [20.8, 209.95], size: [1.4, 1.4], class: led}
-  p10-led-a: {at: [20.8, 223.6], size: [1.4, 1.4], class: led}
-  p10-led-b: {at: [20.8, 230.6], size: [1.4, 1.4], class: led}
-  p11-led-a: {at: [20.8, 242.6], size: [1.4, 1.4], class: led}
-  p11-led-b: {at: [20.8, 249.6], size: [1.4, 1.4], class: led}
+  status: {at: [4.8, 298.7], size: [3.0, 3.0], class: led, states: ['off', {name: ok, color: '#39b54a'}]}
+  active: {at: [4.8, 307.2], size: [3.0, 3.0], class: led, states: ['off', {name: active, color: '#39b54a'}]}
+  alarm: {at: [4.8, 315.7], size: [3.0, 3.0], class: led, states: ['off', {name: alarm, color: '#ef4444'}]}
+  p0-led-a: {at: [20.8, 71.8], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p0-led-b: {at: [20.8, 78.8], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p1-led-a: {at: [20.8, 86.05], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p1-led-b: {at: [20.8, 93.05], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p2-led-a: {at: [20.8, 100.3], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p2-led-b: {at: [20.8, 107.3], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p3-led-a: {at: [20.8, 114.55], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p3-led-b: {at: [20.8, 121.55], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p4-led-a: {at: [20.8, 128.8], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p4-led-b: {at: [20.8, 135.8], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p5-led-a: {at: [20.8, 143.05], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p5-led-b: {at: [20.8, 150.05], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p6-led-a: {at: [20.8, 160.2], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p6-led-b: {at: [20.8, 167.2], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p7-led-a: {at: [20.8, 174.45], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p7-led-b: {at: [20.8, 181.45], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p8-led-a: {at: [20.8, 188.7], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p8-led-b: {at: [20.8, 195.7], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p9-led-a: {at: [20.8, 202.95], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p9-led-b: {at: [20.8, 209.95], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p10-led-a: {at: [20.8, 223.6], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p10-led-b: {at: [20.8, 230.6], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p11-led-a: {at: [20.8, 242.6], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  p11-led-b: {at: [20.8, 249.6], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
 relief:
   wall: '#4a4f55'
   features:
@@ -252,6 +268,7 @@ parts:
   - {ref: std/sfp-ganged@1, id: xg9, at: [5.475, 201.95], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
   - {ref: std/qsfp-ganged@1, id: cg0, at: [3.35, 223.01], rotate: 90, attrs: {media: qsfp28, speed: 100g}}
   - {ref: std/qsfp-ganged@1, id: cg1, at: [3.35, 242.01], rotate: 90, attrs: {media: qsfp28, speed: 100g}}
-  - {ref: common/rj45-eth@1, id: mgmt, at: [7.33, 260.7], rotate: 90}
+  - {ref: common/rj45-eth@1, id: mgmt, at: [7.33, 260.7], rotate: 90,
+     states: {led-a: ['off', {name: link, color: '#39b54a'}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: std/rj45@2, id: console, at: [7.33, 279.6], rotate: 90}
 skins: [default]

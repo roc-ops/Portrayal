@@ -1,0 +1,73 @@
+format: 1
+kind: module
+name: mx2008-rcb-v
+version: 2.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX2008 Routing and Control Board (RCB) - the integrated
+  RE-plus-control-board FRU, one at each end of the short upper cage.
+  Management and console jacks run down the face in two RJ45 pairs
+  with the routing-engine lamps at the top.
+attrs:
+  model: MX2008 RCB
+  power-draw-max-w: 120
+provenance:
+  speed: 'guide - MX2008 hardware guide, RJ-45 pinout section: the port labeled MGMT is an autosensing
+    10/100/1000-Mbps Ethernet RJ-45 receptacle. Carried as 1g for both management jacks'
+  media: 'the RJ-45 jacks are typed by what runs through them rather than by the housing: console
+    and auxiliary ports are rj45-serial (RS-232), a time-of-day port is rj45-tod and a BITS
+    port is rj48, the media the library devices already use for the same jacks'
+  size: >-
+    guide + photo (#902). Width: the MX2008 hardware guide's Table 98 gives the MX2008 Routing Control
+    Board (MX2008 RCB) and the MX2008 SFB2 each as 1.7 in (4.31 cm) wide, the line-card adapter's width, and the MX2008 front photograph (1.264 px/mm,
+    isotropic) puts the ten upper-cage slots - CB-RE 0, SFB 0-7, CB-RE 1, as its label strip prints them -
+    one over each line-card slot, so the RCB is as wide as the SFB: 43.18. Height: the photograph's upper
+    cage runs chassis y 109-291, 182 mm. THE GUIDE DISAGREES: its own MX2008 RCB row reads 16.225 in
+    (41.21 cm) high and its SFB2 row 16.23 in, the MX2010's heights, both with their kilogram figures blank - a row carried over from the larger
+    chassis - and a 412 mm board cannot stand in a 182 mm cage, so the photograph's height is used. Until
+    2.0.0 this was 57 x 170. Everything on the face moved -6.91 mm across to stay centred; nothing moved down.
+  power: >-
+    guide FRU power table, MX2008 hardware guide, Routing Control Board block: '| RCB ... |
+    REMX2008-X8-64G ... | 100 W(Typical) 120 Wat 55 C 100 Wat 40 C 95 Wat 25 C |'. The row
+    is MANGLED BY THE PDF TABLE CONVERSION - it has merged the RCB with the 16x10GE MPC
+    beneath it, so both part numbers share one cell - but the figures can only be the RCB's:
+    MPC-3D-16XGE-SFPP is separately and repeatedly documented at 440 W, so a 120 W maximum
+    cannot be its. Corroborated by the guide's base-system budget, which states 'the power
+    consumed by RCBs and SFBs is 100 W each' and checks its own arithmetic at '2 RCBs and 8
+    SFBs is 1 KW' - 100 W being the typical figure in the FRU row. THE INFERENCE, STATED:
+    this contract's model field reads 'MX2008 RCB' and the guide's figure is keyed to
+    REMX2008-X8-64G. A REMX2008-X8-128G exists in the corpus and no separate figure is
+    published for it, so if this contract is meant to be the 128 GB board the number is
+    unconfirmed rather than wrong.
+  face: 'photo - two RJ45 pairs and a lower jack pair resolve; per-jack
+    legends are below the photograph resolution - see the device gaps'
+states:
+- ok
+- fail
+- absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the Routing Engine management cluster - the out-of-band Ethernet jack, the RJ-45
+      serial ports and the USB service port. One job (reaching and disciplining the box),
+      several media
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the BITS external clock jack
+parts:
+- {ref: common/rj45-eth@1, id: mgmt0, group: mgmt, at: [1.19, 40.4], rotate: 90, attrs: {speed: 1g, media: rj45, function: management 0}}
+- {ref: common/rj45-eth@1, id: mgmt1, group: mgmt, at: [21.19, 40.4], rotate: 90, attrs: {speed: 1g, media: rj45, function: management 1}}
+- {ref: std/rj45@2, id: console, group: mgmt, at: [1.19, 62.4], rotate: 90, attrs: {media: rj45-serial, function: serial console}}
+- {ref: std/rj45@2, id: aux, group: mgmt, at: [21.19, 62.4], rotate: 90, attrs: {media: rj45-serial, function: auxiliary console}}
+- {ref: std/rj45@2, id: bits, group: timing, at: [1.19, 100.4], rotate: 90, attrs: {media: rj48, function: BITS timing}}
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [23.34, 102.75], attrs: {function: USB service port}}
+size:
+  w: 43.18
+  h: 182
+size-confidence: {w: datasheet, h: photo-measured}

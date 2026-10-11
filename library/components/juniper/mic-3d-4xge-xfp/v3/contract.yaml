@@ -1,0 +1,77 @@
+format: 1
+kind: module
+name: mic-3d-4xge-xfp
+version: 3.0.1
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper 4-port 10GbE MIC with XFP (one PIC of four). MIC form: the MIC's own 168.8 x 29.2 plate, photo-measured (#261).
+  RETIRED in favour of juniper/mic-3d-4xge-xfp@4, whose port ids follow the module reference's
+  pic/port numbering and which carries the four LINK lamps (#887); juniper/mpc2e-3d@3 still accepts
+  this major so a configuration that seats it keeps resolving.
+superseded-by: juniper/mic-3d-4xge-xfp@4
+attrs:
+  xfp-10g: 4
+  model: MIC-3D-4XGE-XFP
+  power-draw-max-w: 37
+provenance:
+  ethernet-rate: >-
+    the Ethernet rate, from the MX Series Interface Module Reference, which files
+    MIC-3D-4XGE-XFP under 10-Gigabit Ethernet MICs with XFP. The XFP cage cannot say: it
+    takes a 10GbE optic and an OC-192 one, and the framing is what differs. The export
+    already typed it 10gbase-x-xfp by default; this makes that a statement. Nothing new was
+    measured.
+  size: >-
+    photo-measured - the MIC plate, 168.8 x 29.2, from the MX104 and MX80 front photographs as
+    size-notes says: plates 520, 521 and 520.5 px at 3.090 px/mm on the MX104 (body 1350.5 px over 437.0
+    mm; the ganged-SFP pitch reads 44.0 to 44.2 px, 3.091), 521.8 and 522.5 px at 3.088 on the MX80
+    (ganged-SFP pitch 44.0 px; 1374 px between the ear wings over 445.0 mm agrees); heights 90 to 90.75
+    px.
+  layout: >-
+    photo-measured - photo-measured off the MX2010 front photograph (#261), which seats three of this
+    card - LC0 MIC0, LC0 MIC1 and LC6 MIC0 - turned with the card, OK/FAIL at the top, so the lamp end
+    is the left. XFP mouth centres from each MIC's seam (y 781, 944 px): 31.0, 63.5, 96.5, 129.0 px on a
+    163 px MIC; 30.5, 63.5, 95.5, 128.5 on a 162 px one; 30.5, 63.5, 96.5, 129.0. On the 168.8 plate
+    that is 32.1/65.8/99.9/133.6, 31.8/66.2/99.5/133.9 and 31.6/65.8/99.9/133.6, drawn at the mean 31.8,
+    65.9, 99.8, 133.7 (pitch 34.0, spread +/-0.3). THE CONTROL in the same photograph is the 2-port
+    card, which reads 45.55 and 91.7 there against 45.3 and 91.8 on the MX104 at 3.09 px/mm, so the
+    method and the turn hold. Across, the cage centre is 18.3 below the plate top, the 2-port card's on
+    the MX104; Figure 31 puts this card's 3.8 below mid-height and the MX2010 2.6 +/-1, which agree.
+    FIGURE 31 IS SET ASIDE: read on this plate (1412 px = 168.8 mm) it gives 34.6, 69.9, 104.3, 139.1,
+    the error growing along the row - the figure is about 3% stretched - and 2.x had read it on a 19.5
+    mm bezel instead (centres 37.3 to 135.4 in the old window, pitch 32.7). The 'TWO PROOFS' 2.x offered
+    for that scale, the guides' 6.25 in MIC width among them, do not measure the face.
+  power: >-
+    guide FRU power table, MX chassis guides: '| 10-Gigabit Ethernet MIC with XFP | 2-Port:
+    MIC-3D-2XGE-XFP 4-Port: MIC-3D-4XGE-XFP | 2-Port:29W 4-Port:37W |'. Read by matching the
+    row's own N-Port label rather than by position, because one row carries both cards and
+    both figures; the alignment self-checks, 2-port 29 W against 4-port 37 W. NO AMBIENT IS
+    STATED for this row - unlike most of the tables around it, which give a 25/40/55 C
+    ladder - so none is recorded rather than invented.
+  numbering: >-
+    photo-measured - the legends are printed as the photographs show them on this family: a vertical
+    'PORT [n/m]p' left of each cage, read off the MX104 photograph's 2-port card ('PORT [0/2]0', 'PORT
+    [1/3]0') and Figure 31's 4-port numbering ([0/2]0, [0/2]1, [1/3]0, [1/3]1); a LINK lamp right of
+    each cage; the model name vertical at the left end and the OK/FAIL lamp beside it, as photographed.
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/xfp@1, id: port-0-0, at: [22.05, 13.50], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-0-1, at: [56.15, 13.50], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-0-2, at: [90.05, 13.50], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-0-3, at: [123.95, 13.50], attrs: {media: xfp}}
+size:
+  w: 168.8
+  h: 29.2
+size-confidence: {w: photo-measured, h: photo-measured}
+size-notes: >-
+  w and h are the MIC's own plate, photo-measured (#261). Square-on front photographs of the MX104 and
+  the MX80 put four plates at 168.3 to 169.2 by 29.1 to 29.3 mm, each photograph scaled two
+  independent ways - across its chassis body and on the SFF-8433 ganged-SFP pitch of 14.25 mm, which
+  agree to 0.1% - and the MX2010 photograph's ratio of MIC to MPC plate (162.5 to 379.5 px) agrees.
+  The guides' MIC rows (6.25 x 6.8 x 1.25 in, the axes assigned differently in different books) do not
+  dimension the face and are not used. Until 2.0.0 this was the 168 x 27 'window', an estimate read
+  off the carrier.

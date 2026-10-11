@@ -1,0 +1,40 @@
+format: 1
+kind: module
+name: mx2000-sfb-v
+version: 2.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX2000 Switch Fabric Board (SFB/SFB2/SFB3) - eight stand in
+  the centre of the upper cage between the two CB-REs. The faceplate is
+  a full-height air grille with an OK/FAIL lamp; the online/offline
+  buttons print on the chassis beside each slot.
+attrs:
+  model: MX2000-SFB-S
+  power-draw-max-w: 220
+provenance:
+  size: >-
+    guide + photo (#902). The MX2010 and MX2020 hardware guides' physical-specification tables give the
+    SFB, the SFB2 and both CB-REs (RE-MX2000-1800X4-S, REMX2K-X8-64G) as 1.7 in (4.31 cm) wide and 16.225
+    in (41.21 cm) high: 43.18 x 412.1. The MX2010 front photograph (about 0.96 px/mm) puts the ten
+    upper-cage slots on the line-card pitch, every SFB's left rail (x px 120, 162, 204, 246, 288, 328, 370,
+    412) over a line-card gap (122, 162, 204, 244, 286, 328, 368, 410), so a CB-RE is as wide as an SFB;
+    its upper cage reads 0.893 of the line-card cage's height against the guides' 0.916, which at that
+    resolution does not overrule a vendor dimension. Until 2.0.0 this was 40 x 405, read off that photograph
+    at ~3 mm. Everything on the face moved +1.59 mm across to stay centred; nothing moved down.
+  power: >-
+    guide FRU power table (Component | Model Number | Maximum Power Requirement), MX chassis
+    guides: '| SFB-slots 0 through 7 | MX2000-SFB-S | 220W*8=1760W |'. The row states the
+    per-SFB figure and its own multiplication, and 220x8=1760 is the check. A DIFFERENT row
+    in the MX2020 guide puts 7360 W and 5662 W beside this part number; those are SYSTEM
+    power with droop sharing across power zones, not this board, and taking the first
+    wattage on a line would have written one of them here.
+states:
+- ok
+- fail
+- absent
+size:
+  w: 43.18
+  h: 412.1
+size-confidence: {w: datasheet, h: datasheet}

@@ -64,9 +64,10 @@ def test_a_reserved_code_leaves_reserved_when_its_rule_lands():
     assert not landed, f"in RULES and still RESERVED - delete the reservation: {landed}"
 
 
-def test_every_entry_has_scope_rule_and_fix():
+def test_every_entry_has_scope_rule_fix_why_and_severity():
     for code, entry in lint.RULES.items():
-        assert len(entry) == 3 and all(isinstance(x, str) and x.strip() for x in entry), code
+        assert len(entry) == 5 and all(isinstance(x, str) and x.strip() for x in entry), code
+        assert entry[4] in lint.SEVERITIES, code
 
 
 def test_docs_page_matches_the_generator():
@@ -254,6 +255,24 @@ ISSUED = {
     "L152": "device",
     "L153": "lab",
     "L154": "lab",
+    "L155": "kit",
+    "L156": "kit",
+    "L157": "kit",
+    "L158": "kit",
+    "L159": "kit",
+    "L160": "device",
+    "L161": "device",
+    "L162": "device",
+    "L163": "device",
+    "L164": "device",
+    "L165": "device",
+    "L166": "device",
+    "L167": "device",
+    "L168": "device",
+    "L169": "device",
+    "L170": "component, device",
+    "L171": "component",
+    "L172": "component, device",
 }
 
 

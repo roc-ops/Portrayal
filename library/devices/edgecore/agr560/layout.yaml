@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr560
-version: 2.0.10
+version: 3.0.1
 maturity: modelled
 manufacturer: Edgecore
 model: AS9947-36XKB
@@ -255,6 +255,25 @@ provenance:
       table says "-48 - -60 VDC, 50 A max. per PSU" and the datasheet "-40 - -60 VDC". Both
       are recorded; the datasheet's wider figure is used because it is the document that
       also states the wattage.
+  ground-pair:
+    confidence: photo-measured
+    note: >-
+      TWO HOLES ON ONE PLATE, ONE ABOVE THE OTHER, AND ONE EARTH SYMBOL ABOVE THEM (#830). The
+      grounding point (guide callout 11, 'grounding points' in its grounding steps) is a plate
+      at the far left of the rear with two holes one above the other; the guide kit is one
+      grounding lug, 2 screws and 2 washers. Read on the rear photograph (photos 3-AGR560-B,
+      960 x 700, body x 1 to 958 and y 253 to 445 px, 2.18 and 2.22 px/mm) the holes centre at
+      x 17 px and y 341.5 and 377.0 px: x 7.3, y 39.9 and 55.9, 35.5 px or 16.0 to 16.3 apart.
+      Drawn at x 7.3, y 39.85 and 55.95, 16.1 apart. The two screws are both
+      common/ground-screw@1, the nominal unsized screw without an earth symbol, and the symbol
+      the chassis prints is silkscreen where it prints it. THE SYMBOL is a circled IEC earth
+      printed ABOVE the plate, about 15 above the upper hole: its ring centres at (17.4,
+      308.1) px on the photograph, (7.6, 25.0), and at (35.7, 794.7) px on the datasheet rear
+      elevation (fig-0006, body x 10 to 1520 and y 708 to 1011 px, 3.43 and 3.48 px/mm), (7.5,
+      24.9), 5.2 to 5.5 across. Drawn at (7.5, 24.9), ring radius 2.6. NO SIZE IS CLAIMED: the
+      guide does not size the screws, so no pair host is placed. Formerly one
+      common/ground-lug@1, ground, on the upper hole only, at (6.9, 39.8), with its own symbol
+      6.5 above it.
 attrs:
   environmental:
     operating-temp: '0 to 45 C (32 to 113 F)'
@@ -313,6 +332,15 @@ attrs:
 chassis: {width: 440.0, height: 87.0, depth: 649.2, ru: 2, weight-kg: 20.5, color: '#3c3c3f',
   airflow: front-to-back}
 gaps:
+- what: ground-pair-pitch
+  scope: [ground-1, ground-2]
+  reason: vendor-silent
+  note: >-
+    The grounding plate carries two screws for one lug, but no held document dimensions
+    them: the rear photograph reads the two holes 16.0 to 16.3 apart, and the guide kit is one grounding lug and 2 screws, unsized. A two-hole lug lands on a
+    pair host built at a lug pattern and a screw size, so both screws stay nominal and
+    unsized, at the reading, until a source gives the size and the spacing.
+  wanted: the grounding screw size and hole spacing, or the part number of the kit lug
 - what: dc-connector-identity
   scope: [rear]
   reason: needs-drawing
@@ -997,6 +1025,7 @@ views:
       - {id: rear-plate, at: [0, 0], size: [440.0, 87.0], fill: '#4b4c50'}
       - {id: psu-column, at: [14.2, 3.3], size: [75.5, 82.4], fill: '#3c3d41'}
     silkscreen:
+    - {id: ground-mark, at: [7.50, 24.90], path: 'M 0 -2.6 A 2.6 2.6 0 1 0 0.01 -2.6 Z M 0 -1.69 V 0.26 M -1.82 0.26 H 1.82 M -1.17 0.91 H 1.17 M -0.65 1.56 H 0.65', stroke-width: 0.3, fill: '#d8dcdf', for: [ground-1, ground-2]}
     - {id: psu-legend-up, at: [4.80, 5.90], mark: arrow-up, size: 1.8, fill: '#e8ecef', for: psu-0}
     - {id: psu-legend-0, at: [6.60, 6.60], text: 'PSU0', font-size: 2.4, anchor: start, fill: '#e8ecef', for: psu-0}
     - {id: psu-legend-down, at: [4.80, 9.90], mark: arrow-down, size: 1.8, fill: '#e8ecef', for: psu-1}
@@ -1020,7 +1049,8 @@ views:
       - {id: fan-3, at: [351.63, 4.6], size: {w: 81.6, h: 81.2}, group: fans, rel-pos: 3,
          accepts: [edgecore/fan-2u-1x1sn@1], default: edgecore/fan-2u-1x1sn@1}
       placements:
-      - {ref: common/ground-lug@1, id: ground, at: [3.40, 30.00], group: grounding, rel-pos: 1}
+      - {ref: common/ground-screw@1, id: ground-1, at: [4.50, 37.05], group: grounding, rel-pos: 1}
+      - {ref: common/ground-screw@1, id: ground-2, at: [4.50, 53.15], group: grounding, rel-pos: 2}
       - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
       - {ref: common/rack-ear@1, id: rear-ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
 

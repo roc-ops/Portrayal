@@ -25,14 +25,15 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
-         setNodeStates, nodeStates, setNodeFields, restyleText,
+         setNodeStates, nodeStates, clearLampBindings, lampBindings, setNodeFields, restyleText,
          setNodeLampColors, nodeLampColors, markHex,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes, pieceMesh, pieceArt, fruFor,
          nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces, sheetShell,
-         faceFrame, ventWellWalls } from './relief.js';
+         faceFrame, ventWellWalls, genericEars, EAR } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { bevelledArrays } from './bevel.js';
+import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver } from './dist.js';
 import { createLamps } from './lamps.js';
 
@@ -88,6 +89,10 @@ export function createViewer(container, opts = {}) {
   // how a mark is drawn when it does not say (#664): 'plate', the selection's
   // translucent plate and outline, or 'ring', 2D marks.js's pair of rings
   const MARK_STYLE = opts.markStyle === 'ring' ? 'ring' : 'plate';
+  // GENERIC RACK EARS (#909), off unless the host asks: the library draws a
+  // device without its ears, and so does this scene by default. `setEars`
+  // turns them on and off without a rebuild.
+  let EARS = !!opts.ears;
 
   let DEV = null, CFG = null, disposed = false;
   // Runtime bay swaps, bay id -> ref (or null for an emptied bay). The 3D scene
@@ -371,6 +376,7 @@ export function createViewer(container, opts = {}) {
   // THREE, the renderer and the fetch cache are still shared, which is right.
   const SCOPE = createReliefScope();
   let box = null, reliefGroup = null, gen = 0;
+  let earGroup = null, earPlan = null;   // the generic ears, when they are on
   const faceGroups = {};        // view -> the group buildFaceRelief filled
   // view -> [w, h] of the face's DRAWING, which is not always the plane's. The
   // R740xd's front is the 482.6 mm rack face over a 434 mm body; relief is laid
@@ -530,7 +536,10 @@ export function createViewer(container, opts = {}) {
     await applyBayOverrides(cfg);
     // the states go in BEFORE anything is extracted, so the faces and the relief
     // are cut from a document that already carries them; a rebuild that dropped
-    // them would put out every lamp the user had lit
+    // them would put out every lamp the user had lit. The lamp bindings (#934)
+    // are read afresh off the faces this build parses: another configuration
+    // can bind other lamps.
+    clearLampBindings(SCOPE);
     setNodeStates(STATES, SCOPE);
     // and what is off stays off, for the same reason and at the same moment: the
     // faces and the relief are both cut from a document that already knows
@@ -854,8 +863,56 @@ export function createViewer(container, opts = {}) {
     reliefGroup = new THREE.Group();
     meshes.forEach(m => reliefGroup.add(m));
     scene.add(reliefGroup);
+    buildEars();
     await syncLamps(null);
   }
+
+  // THE GENERIC EARS (#909): an L-bracket each side, the plan relief.js
+  // `genericEars` makes from configs.json - the same plan spec/tools/portrayal/
+  // ears.py draws in 2D. Each piece is a closed box, so no face is one-sided,
+  // and none is a pick target: an ear is not a part a reader selects. A group
+  // of its own on the scene, apart from the chassis box and the relief, so
+  // turning the ears on or off touches nothing else and a GLB taken while they
+  // are on carries them.
+  function buildEars() {
+    if (earGroup) { scene.remove(earGroup); disposeTree(earGroup); earGroup = null; }
+    earPlan = (!COMP && EARS && devIndex)
+      ? genericEars(devIndex.chassis, (FACE_MM.front || [])[0]) : null;
+    if (!earPlan) return 0;
+    const p = earPlan, half = p.w / 2, y0 = -H / 2 + p.y, front = D / 2;
+    // silver unless the device states otherwise (the plan's `color`)
+    const metal = new THREE.MeshLambertMaterial({color: p.color || EAR.SILVER});
+    const hole = new THREE.MeshLambertMaterial({color: EAR.HOLE});
+    earGroup = new THREE.Group();
+    earGroup.name = 'generic-ears';
+    const piece = (name, mat, w, h, d, x, y, z) => {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+      m.position.set(x, y, z);
+      m.name = name;
+      m.raycast = () => {};
+      earGroup.add(m);
+    };
+    // depth back from the faceplate's front -> z
+    const legBack = Math.max(p.at, 0) + p.leg;
+    for (const [side, sx] of [['ear-left', -1], ['ear-right', 1]]) {
+      // the flange: its back face on the plane `at` names, t proud of it
+      piece(`${side}--flange`, metal, p.flange, p.h, p.t,
+            sx * (half + p.flange / 2), y0 + p.h / 2, front - p.at + p.t / 2);
+      // the leg, on the body's side, from the flange back LEG onto the body
+      piece(`${side}--leg`, metal, p.t, p.h, legBack - p.at,
+            sx * (half + p.t / 2), y0 + p.h / 2, front - (p.at + legBack) / 2);
+      // the slots: dark through the flange, a fifth of a mm out of each face
+      p.slots.forEach((cy, i) =>
+        piece(`${side}--slot-${i + 1}`, hole, p.slot[0], p.slot[1], p.t + 0.4,
+              sx * (half + p.slot_x), y0 + cy, front - p.at + p.t / 2));
+    }
+    scene.add(earGroup);
+    return earGroup.children.length;
+  }
+  const setEars = on => serialise(async () => {
+    EARS = !!on;
+    return box ? buildEars() : 0;
+  });
 
   // hit-testing: hidden inline SVGs give us component boxes in mm via getBBox/CTM
   // SIX FACES, NOT TWO. Indexing only the front and rear meant a part on the
@@ -1537,9 +1594,16 @@ export function createViewer(container, opts = {}) {
     const next = {};
     for (const [k, v] of map instanceof Map ? map : Object.entries(map || {}))
       if (v) next[k] = String(v);
+    // AN OUTLET'S LAMP CHANGES WITH IT (#934): the change is measured on the
+    // expanded maps, so a lamp bound to a switched outlet is a changed path
+    // and the relief piece that holds it - which does not contain the
+    // outlet's path - is repainted too. STATES itself stays as the host gave
+    // it; relief.js expands it again wherever it is applied.
+    const binds = lampBindings(SCOPE);
+    const was = expandStates(STATES, binds), now = expandStates(next, binds);
     const changed = new Set();
-    for (const k of new Set([...Object.keys(STATES), ...Object.keys(next)]))
-      if (STATES[k] !== next[k]) changed.add(k);
+    for (const k of new Set([...Object.keys(was), ...Object.keys(now)]))
+      if (was[k] !== now[k]) changed.add(k);
     STATES = next;
     if (!changed.size || !box) return 0;
     setNodeStates(STATES, SCOPE);
@@ -1633,6 +1697,9 @@ export function createViewer(container, opts = {}) {
     states: () => ({...STATES}),
     setPulled,
     pulled: () => new Set(PULLED),
+    // the generic rack ears (#909): on or off, and the plan drawn (null when
+    // they are off or the device gets none - see relief.js genericEars)
+    setEars, ears: () => (earPlan ? JSON.parse(JSON.stringify(earPlan)) : null),
     // what a host needs to rebuild the chrome this module gave up
     frus, toggleFru, download, exportData, exportName,
     // every path select() can find, for a host without its own tree

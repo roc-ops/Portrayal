@@ -54,6 +54,7 @@ import yaml
 from portrayal.artifacts import Dist, face_file
 
 from portrayal.manifest import view_parts, alias_names, config_airflow
+from portrayal import manifest as _manifest
 from portrayal import optical_ports
 
 # Portrayal media/speed -> DCIM interface type. Every value here is valid in
@@ -129,7 +130,14 @@ IFACE_TYPE = {
     # 10 Mb/s jack takes that, the type whose label covers it.
     ("rj45", "10m"): "100base-tx",
 }
-AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front"}
+# `top-to-bottom` is the same word in NetBox's DeviceAirflowChoices
+# (netbox-community/netbox netbox/dcim/choices.py at f96b3039, AIRFLOW_TOP_TO_BOTTOM)
+# and in the device-type library's airflow enum (schema/generated_schema.json at
+# 7438a8e6). Nautobot's device type has no airflow field at all (nautobot/nautobot
+# at 58ee6186), so there the key is carried for the library and set nothing, as
+# front-to-rear always has been.
+AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front",
+           "top-to-bottom": "top-to-bottom"}
 
 # A module's ports are its `parts`. Mapped by component ref, because a cage's
 # ref says what the cage IS while the speed it runs at is a property of the card
@@ -440,8 +448,20 @@ def cage_type(ref, attrs):
     return PART_IFACE.get(ref)
 
 
-PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45",
-                "std/usb-a": "usb-a"}
+PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45"}
+
+# A USB JACK IS A CONSOLE ONLY WHEN THE PLACEMENT SAYS SO, on a card as on a
+# chassis. `std/usb-a` used to sit in PART_CONSOLE above, so route_part filed
+# every USB-A part on a card as a `usb-a` console port without reading its role:
+# the ASR 9000 RSP and RP storage ports, the Juniper RE service ports and the
+# Dell rear I/O board's USB all exported as consoles. And a card had no
+# micro-USB or USB-C console path at all, so the CommScope CH3000 modules'
+# micro-USB craft consoles exported nothing. A device placement has asked
+# device_console_row since #384; route_part now asks the same function for
+# these refs, so the two paths cannot disagree about what a USB console is:
+# a USB-A or USB-C jack needs `role: console` exactly, and a micro-USB one is a
+# console when its id, role or function says `console` (DB9_CONSOLE).
+USB_CONSOLE_REFS = {"std/usb-a", "std/usb-c", "std/micro-usb"}
 
 # The RJ45 family (sweep_rj45.py / docs/rj45-family-design.md), keyed
 # by the FULL ref including @major because a version bump inside this family
@@ -595,6 +615,39 @@ PART_POWER = {
     # netbox-community/netbox (netbox/dcim/choices.py at 9bcfd739) or nautobot/nautobot
     # (at f9cdca3d). A clip is not a screw terminal, so it is `other`, as the barrel is.
     "common/orv3-busbar-connector": "other",
+    # A RACK PDU'S FIXED INPUT CORD. The Eaton G4 EVMI2130X has no inlet: its feed
+    # is a 10 ft cord ending in a NEMA L21-30P twist-lock plug, and the part that
+    # stands for it is the cord leaving the end cap. `nema-l21-30p` is a
+    # PowerPortTypeChoices value in both targets (netbox-community/netbox
+    # netbox/dcim/choices.py at 2b3f4b48, TYPE_NEMA_L2130P; nautobot/nautobot
+    # nautobot/dcim/choices.py at c77e4255, the same).
+    "eaton/g4-cord-l21-30p": "nema-l21-30p",
+    # AN FS FAN PANEL'S OR FAN TRAY'S FIXED CORD, ending in a US NEMA 5-15P plug,
+    # for the same reason as the Eaton cord: the part stands for the cord leaving
+    # the back. `nema-5-15p` is TYPE_NEMA_515P in both targets
+    # (netbox-community/netbox netbox/dcim/choices.py at 84e19368;
+    # nautobot/nautobot nautobot/dcim/choices.py at c77e4255).
+    "fs/fan-cord-5-15p": "nema-5-15p",
+    # The EVMA8365X's fixed cord ends in a CS8365C: `cs8365c`, TYPE_CS8365C in both
+    # targets at the commits the generic plugs below cite.
+    "eaton/g4-cord-cs8365c": "cs8365c",
+    # The Tripp Lite series PDUMH20NET's fixed 12 ft cord ends in a NEMA L5-20P:
+    # `nema-l5-20p`, TYPE_NEMA_L520P in both targets at the commits the generic
+    # plugs below cite.
+    "eaton/tripplite-cord-l5-20p": "nema-l5-20p",
+    # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
+    # fixed cord, for a device that draws its plug rather than its cord. A device
+    # draws one or the other, never both, or one input exports as two ports. Every
+    # value is a PowerPortTypeChoices value in both targets: netbox-community/netbox
+    # netbox/dcim/choices.py at 64ce9e2d (TYPE_NEMA_L620P 'nema-l6-20p', TYPE_NEMA_L520P
+    # 'nema-l5-20p', TYPE_NEMA_520P 'nema-5-20p', TYPE_CS8365C 'cs8365c') and
+    # nautobot/nautobot nautobot/dcim/choices.py at 3edb1fca (the same four). The C14
+    # and C20 cord ends have no row, as the C13 and C19 ones have none: a jumper's
+    # end is not a port of the device it is drawn on.
+    "generic/nema-l6-20p-plug": "nema-l6-20p",
+    "generic/nema-l5-20p-plug": "nema-l5-20p",
+    "generic/nema-5-20p-plug": "nema-5-20p",
+    "generic/cs8365c-plug": "cs8365c",
 }
 
 # WHERE A DEVICE HANDS POWER ON: a power OUTLET, the other half of PART_POWER
@@ -611,7 +664,19 @@ PART_POWER = {
 # shared list, and the test holding PART_OUTLET to it is not decoration: Nautobot's
 # component import form turns an unknown type into `other` without a word, so
 # a typo here would import as a different, valid-looking answer.
-OUTLET_TYPES = frozenset({"dc-terminal", "other"})
+#
+# AND THE AC OUTLETS OF A RACK PDU (the Eaton G4 EVMI2130X, the first PDU here).
+# `iec-60320-c13` and `eaton-c39` are PowerOutletTypeChoices values in both:
+# netbox-community/netbox netbox/dcim/choices.py at 2b3f4b48 (TYPE_IEC_C13, and
+# TYPE_EATON_C39 'eaton-c39' labelled "Eaton C39") and nautobot/nautobot
+# nautobot/dcim/choices.py at c77e4255 (the same two).
+#
+# AND THE GENERIC OUTLETS (#933). `iec-60320-c19` and `nema-5-20r` are
+# PowerOutletTypeChoices values in both: netbox-community/netbox
+# netbox/dcim/choices.py at 64ce9e2d (TYPE_IEC_C19, TYPE_NEMA_520R) and
+# nautobot/nautobot nautobot/dcim/choices.py at 3edb1fca (the same two).
+OUTLET_TYPES = frozenset({"dc-terminal", "other", "iec-60320-c13", "eaton-c39",
+                          "iec-60320-c19", "nema-5-20r"})
 PART_OUTLET = {
     # ONE OUTPUT CIRCUIT OF A BREAKER PANEL, a BATT screw over an RTN screw: the
     # two poles of one circuit, so one outlet, as one feed is one power port.
@@ -622,6 +687,16 @@ PART_OUTLET = {
     # connector as its label - OTHER_LABEL's treatment of an interface whose
     # form factor upstream does not name.
     "amphenol-ns/output-p40": "other",
+    # A RACK PDU'S OUTLETS. An IEC C13 is upstream's `iec-60320-c13`, and it is a
+    # std/ part: its face is the standard's, whoever moulds it. Eaton's C39 takes
+    # a C14 or a C20 plug and is no IEC sheet - it is Eaton's own, and both targets
+    # name it, so it is `eaton-c39` rather than `other`.
+    "std/c13-outlet": "iec-60320-c13",
+    "eaton/c39-outlet": "eaton-c39",
+    # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
+    # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
+    "std/c19-outlet": "iec-60320-c19",
+    "std/nema-5-20r": "nema-5-20r",
 }
 # The label an `other` outlet carries, so it says what to plug into it.
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
@@ -784,7 +859,8 @@ PART_RF = {
     # `common/rj45-ganged-eth` composes `std/rj45-ganged`, which PART_CONSOLE
     # calls a console, and inheriting that would file every Ethernet jack in the
     # library as a console port - #27 and #29, for a third time. `common/usb-a`
-    # composes a console and is a storage port. `casa/c40g-ac-inlet-panel`
+    # composed what was then a console row and is a storage port (a USB jack is
+    # now a console only when its placement says so). `casa/c40g-ac-inlet-panel`
     # composes FOUR inlets and would inherit one.
     "common/smb-jack": ("other", "SMB"),
     "common/sma-jack": ("other", "SMA"),
@@ -839,13 +915,13 @@ NOT_A_DCIM_PORT = {
     # --- USB: real ports, no device-type field to put them in ----------------
     # A DCIM device type has console ports, power ports and interfaces. A USB
     # data port is none of those unless it is a console, which std/usb-a is on
-    # the 26 placements PART_CONSOLE catches. The rest are storage, maintenance
+    # the placements device_console_row catches. The rest are storage, maintenance
     # and iDRAC Direct, and there is nowhere honest to put them.
     # `std/micro-usb` WAS HERE, as "USB maintenance port (iDRAC Direct); not a
     # console". That was true of the two Dell servers and false of 31 devices
     # whose micro-USB jack is labelled Console; #384 gave those a console-port
     # path (device_console_row), and iDRAC Direct moved to MGMT_NOT_A_DCIM_PORT.
-    "common/usb-a": "USB storage/maintenance port; not a console - std/usb-a's console placements type via PART_CONSOLE",
+    "common/usb-a": "USB storage/maintenance port; not a console - std/usb-a's console placements type via device_console_row",
     "common/usb-a-bezel": "the same USB storage/maintenance port as common/usb-a, in a taller panel bezel; split out of that name's @3 in #264 and it needs its own entry because this register keys on the NAME, not the major",
     # `std/usb-c` WAS HERE, as the GL-8xEP's USB-C power input. It was stale: the
     # DS6000, DS6001 and AS7326-56X have exported a USB-C console all along, and
@@ -927,7 +1003,7 @@ NOT_A_DCIM_PORT = {
 # know about, so the test refuses an exemption for them outright: a management
 # jack, an SFP management port or a console that does not export is a defect,
 # never an entry. What is left is USB storage and service ports, which no
-# device-type field holds - PART_CONSOLE and device_console_row take a USB jack
+# device-type field holds - device_console_row takes a USB jack, on a card too,
 # only when the device says it is a console, and that is the existing line,
 # drawn in NOT_A_DCIM_PORT's USB block before this register - and three jacks
 # whose job is not one a DCIM has a type for.
@@ -1313,6 +1389,14 @@ def route_part(part, attrs, defaulted=None):
         return "power", {"name": pid or "Inlet", "type": PART_POWER[ref]}
     if ref in PART_CONSOLE:
         return "console", {"name": pid or "Console", "type": PART_CONSOLE[ref]}
+    if ref in USB_CONSOLE_REFS:
+        # device_console_row decides; the card keeps its own part id as the
+        # name, as every other row here does. A USB jack it turns away is a
+        # storage or service port, which no module-type field holds either.
+        con = device_console_row(part, part.get("attrs") or {})
+        if con:
+            return "console", {"name": pid or con["name"], "type": con["type"]}
+        return None, None
     if ref in PART_RF:
         t, connector = PART_RF[ref]
         # The type says what the signal is; the label keeps the connector,
@@ -1476,6 +1560,26 @@ def comments_for(dev, cfg_name, cfg):
     reach = overhang_prose((dev.get("chassis") or {}).get("overhang"))
     if reach:
         lines += [reach, ""]
+    # WHERE THE EARS PUT THE FACE, AND WHAT RAILS HOLD IT (#907): neither schema
+    # has a field for a mounting position or a rail kit, and a rack plan read
+    # from the record is wrong without them - a box mid-mounted on a 2-post
+    # frame stands well forward of where a flush one would.
+    for prose in (ears_prose((dev.get("chassis") or {}).get("ears")),
+                  kits_prose((dev.get("chassis") or {}).get("kits"))):
+        if prose:
+            lines += [prose, ""]
+    # A RACK PDU'S CAPABILITY AND INPUT RATING (#934): a device type has no
+    # capability field and no input rating in either target, so the derived
+    # class, the two facts it is derived from and the rating go where a reader
+    # of the record sees them (docs/pdu-model-design.md sections 2.3 and 4.3).
+    klass = _manifest.pdu_class(dev)
+    if klass:
+        mgmt = (dev.get("attrs") or {}).get("management") or {}
+        lines += [f"PDU class: {klass} (metering-scope {mgmt['metering-scope']}, "
+                  f"outlet-switching {str(mgmt['outlet-switching']).lower()}).", ""]
+    rating = _manifest.input_rating(dev)
+    if rating:
+        lines += [f"Input rating: {rating}.", ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):
@@ -1488,7 +1592,9 @@ def comments_for(dev, cfg_name, cfg):
     for section, vals in (dev.get("attrs") or {}).items():
         flat = flatten(vals)
         for k, v in flat.items():
-            if isinstance(v, (str, int, float)) and str(v).strip():
+            if isinstance(v, bool):
+                facts.append(f"- {section}.{k}: {str(v).lower()}")
+            elif isinstance(v, (str, int, float)) and str(v).strip():
                 facts.append(f"- {section}.{k}: {v}")
     if facts:
         lines.append("Facts carried in the model that this schema has no field for:")
@@ -1649,6 +1755,72 @@ def overhang_prose(overhang):
             f"{where}.")
 
 
+def _mm(v):
+    return f"{float(v):g} mm"
+
+
+def ears_prose(ears):
+    """`chassis.ears` as one paragraph, or None where the device states none
+    (#907). Either spelling: the bare string `behind` (#865) says the same as
+    the object's `behind: true` (#906)."""
+    if not ears:
+        return None
+    if isinstance(ears, str):
+        ears = {"behind": ears == "behind"}
+    out = []
+    if ears.get("behind") is True:
+        out.append("The ear flanges fold back behind the body, so the face stands in "
+                   "front of the rack posts.")
+    if ears.get("h") is not None or ears.get("y") is not None:
+        span = f"The ears are {_mm(ears['h'])} tall" if ears.get("h") is not None \
+            else "The ears"
+        if ears.get("y") is not None:
+            span += f", {_mm(ears['y'])} above the bottom of the chassis"
+        out.append(span + ".")
+    words = []
+    for pos in ears.get("positions") or []:
+        pos = pos or {}
+        bits = []
+        if pos.get("label"):
+            bits.append(f"\"{pos['label']}\"")
+        if pos.get("at") is not None:
+            at = float(pos["at"])
+            bits.append("ears level with the face" if at == 0 else
+                        f"ears {_mm(abs(at))} {'behind' if at > 0 else 'in front of'} "
+                        "the face")
+        if pos.get("racks"):
+            bits.append(", ".join(pos["racks"]) + " only")
+        part = pos.get("part")
+        if isinstance(part, dict):
+            bits.append(f"with part {part.get('part')} of {part.get('kit')}")
+        if pos.get("default") is True:
+            bits.append("as shipped")
+        words.append(str(pos.get("name")) + (f" ({'; '.join(bits)})" if bits else ""))
+    if words:
+        out.append("Rack mounting positions: " + ", ".join(words) + ".")
+    return " ".join(out) or None
+
+
+SUPPLY_PROSE = {"in-box": "in the box", "optional": "sold separately"}
+
+
+def kits_prose(kits):
+    """`chassis.kits` as one sentence, or None where the device lists none
+    (#907). Names each kit by its library ref, with how it is supplied; the
+    kit itself, resolved, is in the device's configs.json."""
+    words = []
+    for kit in kits or []:
+        if not isinstance(kit, dict) or not kit.get("ref"):
+            continue
+        bits = [SUPPLY_PROSE.get(kit.get("supply"), str(kit.get("supply")))]
+        if kit.get("variant") == "reversed":
+            bits.append("for reverse mounting")
+        words.append(f"{kit['ref']} ({', '.join(bits)})")
+    if not words:
+        return None
+    return "Rail kits: " + "; ".join(words) + "."
+
+
 def worth_a_file(doc, dev):
     """Whether a built device type says enough to be written.
 
@@ -1772,7 +1944,9 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     # under NX-OS whoever sells it. These RENAME and decide nothing: which
     # placement is an interface is still the hardware document's own rule below,
     # and an id no rule names keeps its faceplate id. A listing's names win, as
-    # they always have - its document is about that NOS and not this one.
+    # they always have - its document is about that NOS and not this one. The
+    # same rules name the device's POWER OUTLETS by their printed labels (a rack
+    # PDU's outlet-a1 is A1, outlet_rows); an outlet no rule names keeps its id.
     own = listing_names(dev) if names is None and dev.get("interfaces") else {}
 
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
@@ -1964,7 +2138,17 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
         out["power-ports"] = [powers[k] for k in sorted(powers)]
     if outlets:
         out["power-outlets"] = outlet_rows(outlets, powers, bays,
-                                           f"{dev['manufacturer']} {model}")
+                                           f"{dev['manufacturer']} {model}", own,
+                                           dev=dev)
+        # THE INPUT RATING ON THE INPUT IT RATES (#934). Neither target has an
+        # input rating on a device type: a power port template carries a type
+        # and draws, and amperes, volts and phase are fields of a power FEED,
+        # an instance. So the rating is a sentence on each power port an outlet
+        # is fed by, which NetBox keeps (docs/pdu-model-design.md section 4.3).
+        rating = _manifest.input_rating(dev)
+        if rating:
+            for fed in {o.get("fed-by") for o in outlets.values()} & set(powers):
+                powers[fed]["description"] = fit(rating)
     if bays:
         out["module-bays"] = sorted(bays, key=bay_order)
 
@@ -2015,13 +2199,46 @@ def bay_order(b):
     return (b["name"].split()[0], _num(b["position"].rsplit("-", 1)[-1]))
 
 
-def outlet_rows(outlets, powers, bays, who):
+# THE FIELDS THAT CARRY A FIXED BREAKER'S PRINTED NAME, in the order they are
+# read off its placement's `attrs` (where a placement sets its part's fields).
+# `label` is a name printed beside the breaker; `section` is the letter on the
+# Eaton G4 breaker's section tile (eaton/g4-breaker-20a-2p@1), which is the
+# breaker's name on the unit and in the vendor's one-line diagram.
+BREAKER_NAME_FIELDS = ("label", "section")
+
+
+def breaker_name(pid, placement):
+    """How an outlet description names the fixed breaker it runs `through`.
+
+    THE NAME PRINTED ON THE UNIT, NOT THE PLACEMENT ID (owner decision,
+    2026-10-09): a reader of a DCIM outlet looks for "breaker A" on the PDU,
+    and an id such as `breaker-a` is the library's spelling, not the
+    vendor's. The first of BREAKER_NAME_FIELDS the placement sets in its
+    `attrs` gives "breaker <value>"; a breaker that sets none falls back to
+    its placement id, as before. A field's contract DEFAULT is never read:
+    an unset letter is not the default letter, it is unstated.
+    """
+    attrs = (placement or {}).get("attrs") or {}
+    for key in BREAKER_NAME_FIELDS:
+        val = attrs.get(key)
+        if isinstance(val, (str, int)) and not isinstance(val, bool) and str(val).strip():
+            return f"breaker {str(val).strip()}"
+    return pid
+
+
+def outlet_rows(outlets, powers, bays, who, names=None, dev=None):
     """A device type's `power-outlets`, from its PART_OUTLET placements (#806).
 
     `outlets` is placement id -> placement, `powers` the device type's power
     ports keyed the same way, and `bays` its built bay rows, whose descriptions
     gain the outlets each one protects. Rows are named by placement id, as
-    every exported port is, and in natural order.
+    every exported port is, and in natural order - UNLESS THE DEVICE'S OWN
+    `interfaces:` NAMES THE OUTLET. `names` is that map (listing_names over the
+    device document), and it renames an outlet exactly as it renames an
+    interface: a rack PDU's outlets are known by the labels printed beside them
+    (the Eaton EVMI2130X's A1 to C42), which an id cannot spell. An outlet no
+    rule names keeps its placement id. Rows stay in the natural order of the
+    placement ids, whatever they are named; neither target reads the order.
 
     `power_port` IS WHAT BOTH TARGETS IMPORT. NetBox's
     PowerOutletTemplateImportForm (netbox/dcim/forms/object_import.py at
@@ -2037,23 +2254,36 @@ def outlet_rows(outlets, powers, bays, who):
     and fails there is the outcome NotExpressible exists to prevent. An outlet
     with no `fed-by` is written without one - importable, and L134 counts it.
 
-    `feed_leg` IS NOT WRITTEN. It is a phase of a three-phase supply (A, B, C
-    in both targets); a DC panel's side A and side B are two feeds, not two
-    legs of one, and would collide with it by spelling alone.
+    `feed_leg` IS WRITTEN EXACTLY WHEN THE INPUT IS THREE-PHASE WYE AND THE
+    OUTLET IS WIRED LINE TO NEUTRAL (#934, docs/pdu-model-design.md section
+    5.2), and it is that line: L1 is A, L2 B, L3 C (manifest.feed_leg, reading
+    `dev`'s `attrs.power` and the outlet's `lines`). Nothing else writes one: a
+    line-to-line outlet sits on two legs, a single-phase PDU is on whatever leg
+    its plug is, and a DC panel's side A and side B are two feeds, not two legs
+    of one, and would collide with it by spelling alone.
+
+    `lines` ARE THE OUTLET'S OWN, OR ITS BREAKER'S (manifest.outlet_lines): a
+    fixed breaker that `through` names states them once for every outlet it
+    protects. Where any resolve, the description names them.
 
     THE POSITION IS A SENTENCE, TWICE. Neither target relates an outlet to a
     module bay, so `through` is written on the outlet's description - which
     NetBox keeps and Nautobot's outlet import form drops - and appended to the
     bay's description, which Nautobot's module-bay import keeps. A bay's
     description is a sentence about the drawing to `dcim_significant`, so the
-    collision check is not moved by it.
+    collision check is not moved by it. A `through` that names a FIXED
+    BREAKER rather than a bay (#934) is a sentence on the outlet alone - there
+    is no bay row to append it to - naming the breaker AS IT IS PRINTED
+    (breaker_name): "Through breaker A", not "Through breaker-a".
     """
     rows = []
     protects = {}
+    placed = _manifest.device_placements(dev) if dev else {}
+    positions = {b["position"] for b in bays}
     for pid in sorted(outlets, key=_natural):
         p = outlets[pid]
         ref = p["ref"].split("@")[0]
-        row = {"name": pid, "type": PART_OUTLET[ref]}
+        row = {"name": (names or {}).get(pid, (pid, None))[0], "type": PART_OUTLET[ref]}
         if ref in OUTLET_LABEL:
             row["label"] = OUTLET_LABEL[ref]
         fed = p.get("fed-by")
@@ -2065,16 +2295,38 @@ def outlet_rows(outlets, powers, bays, who):
                     f"nothing (lint L132)")
             row["power_port"] = powers[fed]["name"]
         via = p.get("through")
-        if via is not None:
-            row["description"] = fit(f"Through breaker position {via}")
+        lines = _manifest.outlet_lines(p, placed) if dev else None
+        said = []
+        if via is not None and via in placed and via not in positions:
+            said.append(f"Through {breaker_name(via, placed[via])}")   # fixed (#934)
+        elif via is not None:
+            said.append(f"Through breaker position {via}")
             protects.setdefault(via, []).append(pid)
+        if lines:
+            said.append(("lines " if said else "Lines ") + "-".join(lines))
+        if said:
+            row["description"] = fit(", ".join(said))
+        leg = _manifest.feed_leg(dev, lines) if dev else None
+        if leg:
+            row["feed_leg"] = leg
         rows.append(row)
     for bay in bays:
         held = protects.get(bay["position"])
         if held:
             said = bay.get("description")
-            bay["description"] = fit_items(
-                (f"{said}; protects " if said else "Protects "), held)
+            whole = f"{said}; protects {', '.join(held)}" if said else None
+            if whole is None or len(whole) <= LIMIT:
+                bay["description"] = fit_items(
+                    (f"{said}; protects " if said else "Protects "), held)
+            else:
+                # THE CLAUSE COMES FIRST WHEN BOTH DO NOT FIT (#857). It is the
+                # only place Nautobot keeps the breaker-to-outlet link - its
+                # outlet import drops the outlet's own description - and a long
+                # `Accepts:` list as the prefix left fit_items no room for any
+                # item, so the whole string was cut and the clause with it.
+                head = fit_items("Protects ", held)
+                room = LIMIT - len(head) - len("; ")
+                bay["description"] = head + (f"; {fit(said, room)}" if room > len(MORE) else "")
     return rows
 
 
@@ -2294,7 +2546,7 @@ def tokenize_module(doc):
     return doc
 
 
-def nested_bays_for(doc, target, withheld=()):
+def nested_bays_for(doc, target, withheld=(), through=()):
     """A written MODULE document's own bays as ONE DCIM takes them. Asked of
     module types only: a device type's `module-bays` are the chassis' own, are
     positioned by their id in both DCIMs, and never pass through here.
@@ -2338,6 +2590,12 @@ def nested_bays_for(doc, target, withheld=()):
     type's comments say which and why: what closes it is position templating
     on Nautobot's bay template, nautobot/nautobot#5823, open upstream.
 
+    EXCEPT A CARRIER'S ONLY BAY (#917). `through` is the bay ids given with a
+    blank position instead (`pass_through_bays`): Nautobot skips a blank
+    position when it names ports, so the MX2000 adapter's `mpc` takes the very
+    MPC an MX960 slot takes, and that MPC's `{module}/x` renders as the slot
+    the adapter sits in, `fpc3/x`. NetBox keeps `fpc3/mpc/x`; the comments say so.
+
     IT NEEDS NETBOX 4.5.7. Position templating on a bay arrived in 4.5.6
     (release note #20467) and the single token's leaf rule in 4.5.7 (#20474).
     Before that the install FORMS refuse a card whose token count is not the
@@ -2364,8 +2622,13 @@ def nested_bays_for(doc, target, withheld=()):
         out["module-bays"] = [{**b, "name": module_scoped(b["name"]),
                                "position": module_scoped(b["position"])} for b in bays]
     elif target == "nautobot":
-        withheld = set(withheld)
-        kept = [dict(b) for b in bays if b["position"] not in withheld]
+        withheld, through = set(withheld), set(through)
+        if withheld & through:
+            raise ValueError(f"{doc.get('model')}: bay(s) {sorted(withheld & through)} "
+                             "both withheld and passed through")
+        kept = [{**b, "position": ""} if b["position"] in through else dict(b)
+                for b in bays if b["position"] not in withheld]
+        passed = [b["name"] for b in bays if b["position"] in through]
         gone = [b["position"] for b in bays if b["position"] in withheld]
         if kept:
             out["module-bays"] = kept
@@ -2377,6 +2640,13 @@ def nested_bays_for(doc, target, withheld=()):
                        "that module's port names cannot carry this bay's parent, and "
                        "Nautobot copies a bay's position as written (position "
                        "templating is nautobot/nautobot#5823).")
+        if passed:
+            _note(out, f"Given to Nautobot with a blank position: module bay(s) "
+                       f"{', '.join(passed)}. It accepts modules that also seat directly "
+                       "in a chassis bay, and Nautobot skips a blank position when it "
+                       "names ports, so a module here is named by the bay this one sits "
+                       f"in: <slot>/x, where NetBox, which templates a bay's position, "
+                       f"says <slot>/{passed[0]}/x.")
     else:
         raise ValueError(f"no rule for a nested bay on target {target!r}")
     return out
@@ -2848,45 +3118,94 @@ def module_key(dist, contract):
     return (man, str((contract.get("attrs") or {}).get("model") or contract["name"]))
 
 
-def seating_depths(dist):
-    """{(manufacturer, model): {depth, ...}} - how deep in a bay tree each
-    module model is seated anywhere in the library (#765).
-
-    Depth 1 is a bay on a device: every view, every configuration, because a
-    module type is one document whichever chassis it is ordered for. Depth
-    d + 1 is a bay on a module seated at d. Computed to a fixpoint over keys
-    rather than refs, so a twin that no device names still passes its parent's
-    depth to what it seats. A model no bay accepts has no entry.
-    """
-    def key_of(ref):
-        c = dist.component_by_ref(ref)
-        return module_key(dist, c) if c and c.get("kind") == "module" else None
-
-    depths = {}
+def _chassis_seated(dist):
+    """The module keys a device bay accepts: every view, every configuration."""
+    seated = set()
     for d in dist.devices:
         dev = dist.manifest(d["name"])
         for view in (dev.get("views") or {}).values():
             for b in view_parts(view)["bays"]:
                 for ref in b.get("accepts") or []:
-                    k = key_of(ref)
-                    if k:
-                        depths.setdefault(k, set()).add(1)
+                    c = dist.component_by_ref(ref)
+                    if c and c.get("kind") == "module":
+                        seated.add(module_key(dist, c))
+    return seated
 
-    carriers = []                                # (key, [accepted keys])
+
+def pass_through_bays(dist):
+    """{(manufacturer, model): {bay id}} - the bays Nautobot is given with a
+    BLANK position (#917), so that what seats in one is named by the bay its
+    carrier sits in.
+
+    A carrier qualifies when its bay is its ONLY bay and accepts a model that
+    also seats directly in a chassis bay - the MX2000 line-card adapter, whose
+    `mpc` takes the MX240/MX480/MX960 cards. Such a bay is otherwise withheld
+    (`nested_bays_for`): the card's ports say `{module}/x`, and a position of
+    `mpc` would name every adapter's card `mpc/x`. Nautobot's
+    render_name_template SKIPS a blank position and fills `{module}` with the
+    next one up (nautobot/nautobot nautobot/dcim/models/device_components.py:
+    149-191 at v3.2.6, 3dc554b4), and ModuleBayTemplate.position is
+    `blank=True` (device_component_templates.py:542 at the same commit). So a
+    card in the adapter in `fpc3` names its port `fpc3/x`, which is unique
+    because the carrier has no second bay to share `fpc3` with. NetBox, which
+    templates the position, still says `fpc3/mpc/x`.
+
+    A carrier with ports of its own would share that prefix with its occupant;
+    `export_modules` refuses one rather than writing two `fpc3/x`.
+    """
+    direct = _chassis_seated(dist)
+    out = {}
     for c in dist.modules():
         bays = c.get("bays")
-        if not isinstance(bays, dict):
+        if not isinstance(bays, dict) or len(bays) != 1 or c.get("superseded-by"):
             continue
-        under = [key_of(ref) for b in bays.values() for ref in (b or {}).get("accepts") or []]
-        carriers.append((module_key(dist, c), [k for k in under if k]))
+        (bid, b), = bays.items()
+        if any((rc := dist.component_by_ref(r)) and rc.get("kind") == "module"
+               and module_key(dist, rc) in direct
+               for r in (b or {}).get("accepts") or []):
+            out.setdefault(module_key(dist, c), set()).add(bid)
+    return out
+
+
+def seating_depths(dist):
+    """{(manufacturer, model): {depth, ...}} - how deep in a bay tree each
+    module model is seated anywhere in the library (#765), counted the way
+    Nautobot counts it: by the positions it renders.
+
+    Depth 1 is a bay on a device: every view, every configuration, because a
+    module type is one document whichever chassis it is ordered for. Depth
+    d + 1 is a bay on a module seated at d - except a pass-through bay
+    (`pass_through_bays`), whose blank position Nautobot skips, so what seats
+    there is at its carrier's depth. Computed to a fixpoint over keys rather
+    than refs, so a twin that no device names still passes its parent's depth
+    to what it seats. A model no bay accepts has no entry.
+    """
+    def key_of(ref):
+        c = dist.component_by_ref(ref)
+        return module_key(dist, c) if c and c.get("kind") == "module" else None
+
+    depths = {k: {1} for k in _chassis_seated(dist)}
+    through = pass_through_bays(dist)
+
+    carriers = []                                # (key, [(accepted key, step)])
+    for c in dist.modules():
+        bays = c.get("bays")
+        # A retired major seats nothing: it is not exported (export_modules),
+        # so the depths its bays would pass on describe no document.
+        if not isinstance(bays, dict) or c.get("superseded-by"):
+            continue
+        key = module_key(dist, c)
+        under = [(key_of(ref), 0 if bid in through.get(key, ()) else 1)
+                 for bid, b in bays.items() for ref in (b or {}).get("accepts") or []]
+        carriers.append((key, [(k, s) for k, s in under if k]))
 
     # A bay tree is finite and acyclic in any library that renders; the bound
     # stops a cycle from looping rather than deciding anything.
     for _ in range(16):
         grew = False
         for parent, kids in carriers:
-            for k in kids:
-                new = {d + 1 for d in depths.get(parent, ())} - depths.get(k, set())
+            for k, step in kids:
+                new = {d + step for d in depths.get(parent, ())} - depths.get(k, set())
                 if new:
                     depths.setdefault(k, set()).update(new)
                     grew = True
@@ -2930,7 +3249,16 @@ def export_modules(dist, root, images=None):
     # what the namespace-to-manufacturer join needs and what a checkout used to
     # be opened for.
     built = []                                   # (man, doc, contract)
+    retired = 0
     for contract in sorted(dist.modules(), key=lambda c: (c.get("ns") or "", c.get("name") or "")):
+        # A RETIRED MAJOR IS NOT AN ORDERABLE TYPE. `superseded-by` keeps a
+        # major in the library so a manifest pinning it still resolves (#448),
+        # and says a consumer offering parts must not offer it. Its model is
+        # its successor's model, so exporting it too made the two collide on
+        # one file, and `sorted()` let the OLD document win where they differ.
+        if contract.get("superseded-by"):
+            retired += 1
+            continue
         man = dist.manufacturer_of(contract.get("ns"))
         if not man:
             skipped += 1
@@ -2946,6 +3274,7 @@ def export_modules(dist, root, images=None):
     # port names of what seats in them. NetBox's output does not read it.
     depths = seating_depths(dist)
     multi = {k for k, ds in depths.items() if len(ds) > 1}
+    through_all = pass_through_bays(dist)
 
     wrote = 0
     collisions = []                              # ((man, model), ref, kind)
@@ -2995,10 +3324,17 @@ def export_modules(dist, root, images=None):
         name, ver, ns = contract.get("name"), contract.get("major"), contract.get("ns")
         # A BAY NAUTOBOT CANNOT BE GIVEN: one accepting a model that is also
         # seated directly in a chassis bay, read from every author's contract.
+        # A PASS-THROUGH BAY is given instead, with a blank position (#917).
+        through = through_all.get((man, model)) or set()
+        if through and any(doc.get(k) for k in MODULE_PORT_KEYS):
+            raise SystemExit(f"{man} {model}: bay(s) {', '.join(sorted(through))} pass "
+                             "through to Nautobot with a blank position, so the carrier's "
+                             "own ports would share its occupant's names (pass_through_bays)")
         withheld = {bid for c in authors for bid, b in (c.get("bays") or {}).items()
-                    if any(dist.component_by_ref(r)
-                           and module_key(dist, dist.component_by_ref(r)) in multi
-                           for r in (b or {}).get("accepts") or [])}
+                    if bid not in through
+                    and any(dist.component_by_ref(r)
+                            and module_key(dist, dist.component_by_ref(r)) in multi
+                            for r in (b or {}).get("accepts") or [])}
         seated = depths.get((man, model)) or set()
         depth = next(iter(seated)) if len(seated) == 1 else None
         for target in TARGETS:
@@ -3007,7 +3343,8 @@ def export_modules(dist, root, images=None):
             # Cisco ships part numbers with slashes in them - A9K-16T/8-B - and
             # a slash is a path separator, not a character. The model keeps the
             # real name; only the filename is sanitised.
-            written = for_target(nested_bays_for(doc, target, withheld), target, fibre_map)
+            written = for_target(nested_bays_for(doc, target, withheld, through),
+                                 target, fibre_map)
             if target == "nautobot":
                 written = seat_names(written, depth)
             (d / (model.replace("/", "-") + ".yaml")).write_text(
@@ -3034,7 +3371,8 @@ def export_modules(dist, root, images=None):
               f"{len(doc.get('power-ports', []))} power ports)")
 
     print(f"module types: {wrote} written from {len(built)} contract(s), "
-          f"{skipped} skipped for having no manufacturer")
+          f"{skipped} skipped for having no manufacturer, {retired} retired "
+          f"(`superseded-by`) and not exported")
     # NAMED, NOT COUNTED. A number here would be the instrument that failed in
     # #183: it cannot tell one part quietly vanishing from forty twins
     # collapsing the way they are meant to.

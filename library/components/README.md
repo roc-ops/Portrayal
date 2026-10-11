@@ -104,11 +104,35 @@ the measurement that decision was made on.
 
 The bump rules, from DESIGN.md: **art is a patch** (a skin redrawn, a colour, a
 label), **additive is a minor** (a new element, a new state, a new skin),
-**geometry or ids are a major** (the size changed, an element moved or was
-renamed), because a device that placed the part may now be wrong. A major bump
+**geometry or ids are a major** (the size changed, an element something
+addresses moved or was renamed), because a device that placed the part may now be wrong. A major bump
 is a new `v<N+1>/` directory, and **the old major is deleted once nothing
 references it** - that is what pays for the level, and L89 fails on a dead major
-left behind an `unplaced:` sentence. What keeps a retired major alive is
+left behind an `unplaced:` sentence. While the package is at 0.x that removal
+needs nothing more, and every removal is listed in `CHANGELOG.md` with the ref
+that replaces it, for a manifest outside this repository that pins the old
+major. From 1.0 a retired major is deprecated before it is removed. That
+mechanism is required before 1.0 is cut: `superseded-by:`, a support window,
+and L89 telling a deprecated major from a dead one (`spec/DESIGN.md` §9,
+roc-ops/Portrayal#448).
+
+Moving decoration that nothing addresses, inside an unchanged part outline, is
+a minor bump. The precedent is `fs/d-ring-snap-in@1` 1.3.0: `leg-front` and
+`hook`, which nothing outside the contract names, moved 1 mm and narrowed to
+5.8, as `leg-rear` did. The part kept its 32.3 x 43.6 size, and the new keys
+were additive.
+
+A skin redrawn, in its outline or its interior, inside an unchanged `size` and
+with no element moved, renamed or added, is art and takes a patch. The
+precedents are `std/c20-inlet` 1.3.1, whose recess and blades were redrawn
+inside an unchanged opening, with ids, size and connection point unchanged (an
+interior redraw), and `fs/dinrail2u-side@1` and `fs/dinrail4u-side@1` 1.0.1,
+whose top and bottom edges were lowered between their ends (#971, an outline
+change). The minor above is for elements the contract lists that changed
+place; here the contract's elements stay as they were and only the drawing
+differs.
+
+What keeps a retired major alive is
 something still naming it: a gap arguing from its figure, say. `common/psu-550w@1`
 was kept for exactly that - the PBC-2000's `psu-module-width` gap argued from its
 84.0 mm against the 73.5 mm of `@2` - and was deleted the day a square-on
@@ -178,6 +202,13 @@ The rest earns its place:
   to the component. When the card is drawn in a device, every grouped part
   carries `data-group`, `data-group-role` and the group's attrs, as a device
   placement does. Lint L17, L22, L23 and L37 check them, as warnings.
+- `guide` for a ring a cable passes through (its opening, the direction it
+  runs and, where the drawing places it, the opening's `depth` along the run,
+  its `sill` above the base and its corner `aperture.at`), and `tray` for a
+  floor a cable lies on: its floor rectangles, the `height` of its top above
+  the bottom of the envelope, its `lip`, its `run`, the tie slots cut in it
+  (`ties`) and how it holds slack. Both travel with every placement of the
+  part; L138 and L170 hold them inside it. See `docs/cable-lay-design.md`.
 - `facet` on a relief feature, and `on` on a part, for connectors on a
   surface angled off the panel. See
   `docs/tilted-facets-design.md`.
@@ -356,7 +387,10 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   frames, and L71 checks them.
 - No raster images, no editor metadata, no external references. A skin is
   geometry and fills. Vendor logos are not reproduced; contracts reserve a
-  `logo-zone` element instead.
+  `logo-zone` element instead, drawn in the skin as an empty
+  `<rect id="logo-zone" fill="none"/>` over the box the mark covers. A device
+  reserves the same box as a region `logo-zone` with `at` and `size`. Nothing
+  named for a logo paints (L172); a product name in plain text is fine.
 
 
 ## Adding an optic

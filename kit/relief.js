@@ -11,6 +11,7 @@
 // same code that has been running in the device viewer.
 
 import { paintFields, unpaintFields } from './fields.js';
+import { boundLamps, expandStates } from './states.js';
 
 let THREE, renderer, PXMM, FRU_PATHS;
 
@@ -148,6 +149,52 @@ export function openFrameFaces(texts) {
 // newer build, draws as the solid box it always was - wrong, and visible.
 export function sheetShell(chassis) {
   return !!chassis && chassis.shell === 'sheet';
+}
+
+// A GENERIC L-BRACKET RACK EAR (#909), the plan spec/tools/portrayal/ears.py
+// draws in 2D, from what configs.json says of the chassis: its width, height,
+// mount and `ears` (`h`, `y`, `behind`, the default position's `at`). `faceW`
+// is the width the front DRAWING declares, which is how an ear-wide face is
+// known here - the R740xd's 482.6 mm front has its ears in it already. Null
+// where the device gets none: not a `rack` device, a sheet body, ears stated
+// `behind`, a face as wide as the rack, or a flange too narrow to draw.
+// The numbers are ears.py's, and spec/tests/test_generic_ears.py holds the two
+// to the same plan for the same chassis, colour included. ears2d.js draws this plan over a
+// published face in 2D, as render.py `--with ears` would have drawn it.
+//
+// ONE THING THIS CANNOT SEE: whether a device places `common/rack-ear@1`.
+// Those ears are drawn only under the `ears` include tag, which no published
+// face is built with, so the 3D scene never holds them and a generic pair here
+// is the device's only pair.
+export const EAR = {RACK_FACE: 482.6, HOLE_SPAN: 465.1, U: 44.45, HOLES_IN_U: [6.35, 38.1],
+                    THICKNESS: 2.0, LEG: 30.0, MIN_FLANGE: 3.0, SLOT: [8.0, 5.0], EAR_WIDE: 480.0,
+                    SILVER: '#c8cacc', EDGE: '#171a1d', HOLE: '#0d0f11',
+                    // common/rack-ear@1's flange colour, the default before
+                    // the ear went silver; kept for a host that read it
+                    FILL: '#2b2f33'};
+const r4 = v => Math.round(v * 1e4) / 1e4;
+export function genericEars(chassis, faceW) {
+  if (!chassis || (chassis.mount || 'rack') !== 'rack' || chassis.shell) return null;
+  const ears = chassis.ears && typeof chassis.ears === 'object' ? chassis.ears
+             : chassis.ears === 'behind' ? {behind: true} : {};
+  if (ears.behind === true) return null;
+  const w = Number(faceW || chassis.w), hBody = Number(chassis.h);
+  if (!w || !hBody || w >= EAR.EAR_WIDE) return null;
+  const flange = r4((EAR.RACK_FACE - w) / 2);
+  if (flange < EAR.MIN_FLANGE) return null;
+  const y = ears.y != null ? Number(ears.y) : 0;
+  const h = ears.h != null ? Number(ears.h) : hBody - y;
+  const def = (ears.positions || []).find(p => p && p.default === true && p.at != null);
+  const units = Math.max(1, Math.round(h / EAR.U)), unit = h / units;
+  const slots = [];
+  for (let i = 0; i < units; i++)
+    for (const hole of EAR.HOLES_IN_U) slots.push(r4(i * unit + hole * unit / EAR.U));
+  const sw = Math.min(EAR.SLOT[0], flange - 1);
+  const slotX = Math.min(Math.max(EAR.HOLE_SPAN / 2 - w / 2, sw / 2 + 0.5), flange - sw / 2 - 0.5);
+  return {w, h_body: hBody, d: Number(chassis.d) || 0, flange, h, y, at: def ? Number(def.at) : 0,
+          t: EAR.THICKNESS, leg: EAR.LEG, slots, slot_x: r4(slotX), slot: [r4(sw), EAR.SLOT[1]],
+          // silver unless the device states its ears' colour (ears.py SILVER)
+          color: ears.color != null ? String(ears.color) : EAR.SILVER};
 }
 
 // WHERE A PROUD FEATURE STARTS: the summed lift of what it stands in, so a
@@ -1379,7 +1426,7 @@ const SVG_CACHE = new Map();
 // Passing no scope uses the default one, which is what every existing caller
 // does and what this module did before - so nothing had to change to keep working.
 export function createReliefScope(deps = {}) {
-  return {overrides: new Map(), states: new Map(), pulled: new Set(),
+  return {overrides: new Map(), states: new Map(), pulled: new Set(), lampBinds: new Map(),
           pxmm: deps.PXMM, fruPaths: deps.FRU_PATHS};
 }
 const DEFAULT_SCOPE = createReliefScope();
@@ -1455,6 +1502,34 @@ export function setNodeStates(map, scope) {
 }
 export function clearNodeStates(scope) { _sc(scope).states.clear(); }
 
+// AN OUTLET'S STATE REACHES ITS LAMP IN 3D TOO (#934). The registry keys by
+// path, and a lamp placed beside an outlet with `for:` is at a path of its own,
+// so a state set on the outlet would light nothing. The rule is states.js's
+// (boundLamps, expandStates), shared with the 2D drawing, and it runs here at
+// the one place the registry meets a document. The bindings are read off each
+// whole face as it is parsed - a relief piece cut from it holds the lamp and not
+// the outlet, so it could not find them itself - and kept per scope until the
+// next build clears them (a configuration change can bind different lamps).
+/** Note the lamp bindings a parsed document states, for the expansion. */
+export function noteLampBindings(root, scope) {
+  const sc = _sc(scope);
+  const binds = sc.lampBinds || (sc.lampBinds = new Map());
+  for (const [path, lamps] of boundLamps(root)) {
+    if (!binds.has(path)) binds.set(path, new Set());
+    for (const l of lamps) binds.get(path).add(l.getAttribute('data-path'));
+  }
+  return binds;
+}
+/** Forget every binding noted (a build starts over). */
+export function clearLampBindings(scope) { _sc(scope).lampBinds = new Map(); }
+/** The bindings noted so far: outlet path -> Set of lamp paths. */
+export function lampBindings(scope) { return new Map(_sc(scope).lampBinds || []); }
+/** The registry with every bound lamp given its outlet's classes, as a Map. */
+export function expandedNodeStates(scope) {
+  const sc = _sc(scope);
+  return new Map(Object.entries(expandStates(sc.states, sc.lampBinds)));
+}
+
 // WHAT A VIEWER HAS WRITTEN ON A PART. A field is a node the part declares
 // (`fields` in its contract, carried in components.json) and its skin is wired
 // to: a `data-from` node's text, a `data-fill-from` node's fill, a
@@ -1504,9 +1579,11 @@ export function nodeStates(scope) { return new Map(_sc(scope).states); }
 // rule is marks.js's HEX_RE, repeated (and held equal by a test) so relief
 // does not import the 2D marks module.
 //
-// OFF STAYS OFF, as in 2D (`mark.state !== 'off'`): a lamp whose registered
-// state is `state-off` keeps its drawing, so a custom colour never lights a
-// lamp that is out.
+// OFF STAYS OFF, as in 2D (marks.js apply): a lamp whose state is `state-off`
+// - registered on it, or reaching it from the outlet it is bound to (#934) -
+// keeps its drawing, so a custom colour never lights a lamp that is out. Still
+// right with a declared off colour: a custom colour is for a lamp nobody
+// documented, and a declared red off is a documented one.
 export const LAMP_HEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
 
 // A MARK'S COLOUR FOR A MATERIAL (#667). A 3D mark takes the same hex a lamp
@@ -1558,7 +1635,9 @@ export function applyNodeLampColors(root, scope) {
   }
   const st = _sc(scope).lampColors;
   if (!st || !st.size) return root;
-  const states = _sc(scope).states;
+  // the EXPANDED states, so a lamp whose outlet is off is off (#934), as
+  // marks.js reads it in 2D
+  const states = expandedNodeStates(scope);
   for (const [path, colour] of st) {
     if (/(^|\s)state-off(\s|$)/.test(states.get(path) || '')) continue;
     for (const el of root.querySelectorAll(`[data-path="${CSS.escape(path)}"]`)) {
@@ -1637,7 +1716,8 @@ export function applyNodeStates(root, scope) {
   if (!root) return root;
   for (const el of root.querySelectorAll('[data-path][class]'))
     for (const c of [...el.classList]) if (c.startsWith('state-')) el.classList.remove(c);
-  for (const [path, cls] of _sc(scope).states)
+  noteLampBindings(root, scope);
+  for (const [path, cls] of expandedNodeStates(scope))
     for (const el of root.querySelectorAll(`[data-path="${CSS.escape(path)}"]`))
       el.classList.add(...cls.split(/\s+/).filter(Boolean));
   return root;

@@ -140,7 +140,7 @@ def test_the_hcl_names_the_issue_asked_about_resolve():
     # to a second device, and L111 then demands `shared: true` on both, which
     # is when this line changes.
     for name, want in [("AS9817-64O", "ais800-64o"), ("DCS560", "ais800-64o"),
-                       ("AS9716-32D", "dcs510"), ("CSR440", "csr440"),
+                       ("DCS510", "dcs510"), ("CSR440", "csr440"),
                        ("DCS203", "as7326-56x")]:
         assert by.get(name.casefold()) == [want], name
     # A DRIVENETS NAME IS DRIVENETS' LISTING NOW, not an alias on the metal
@@ -176,3 +176,49 @@ def test_devicelock_does_not_rehash_a_device_without_aliases():
     with_alias = dict(base, aliases=[{"name": "Y", "kind": "vendor"}])
     assert devicelock.buckets(with_alias)["surface"] != devicelock.buckets(base)["surface"]
     assert devicelock.buckets(with_alias)["names"] == devicelock.buckets(base)["names"]
+
+
+# ------------------------------------------------- the model is the number ---
+
+def marketing_in_model(docs):
+    """#916: the devices that file their catalogue name as `model`.
+
+    The convention, which the picker's `<marketing name> -- <model>` reads: an
+    Edgecore box is `model: AS7326-56X` with `DCS203` as a `kind: marketing`
+    alias. A device whose `model` IS its portfolio series while it also carries
+    a `kind: vendor` number has them the other way round - it shows `DCS500 --
+    DCS500` and cannot be found by the number printed on its label.
+    """
+    out = []
+    for path, d in docs:
+        series = str((d.get("portfolio") or {}).get("series") or "")
+        vendor = [a for a in d.get("aliases") or [] if a.get("kind") == "vendor"]
+        if series and str(d.get("model") or "").casefold() == series.casefold() and vendor:
+            out.append(str(path))
+    return out
+
+
+def test_a_series_name_in_model_beside_a_vendor_number_is_found():
+    reversed_ = dict(dev("DCS500", {"name": "AS7816-64X", "kind": "vendor"}),
+                     portfolio={"series": "DCS500"})
+    right = dict(dev("AS7816-64X", {"name": "DCS500", "kind": "marketing"}),
+                 portfolio={"series": "DCS500"})
+    # a box whose catalogue name is its only name is not reversed (AMX3200)
+    only = dict(dev("AMX3200"), portfolio={"series": "AMX3200"})
+    assert marketing_in_model([("a", reversed_), ("b", right), ("c", only)]) == ["a"]
+
+
+def test_no_device_files_its_marketing_name_as_model():
+    docs = _all_devices()
+    edgecore = [d for _, d in docs if d.get("manufacturer") == "Edgecore"]
+    assert len(edgecore) >= 35, "the Edgecore line went missing"
+    assert marketing_in_model(docs) == []
+    # THE FOUR #916 TURNED ROUND, each with its catalogue name as marketing
+    by = {d["name"]: d for _, d in docs if d.get("manufacturer") == "Edgecore"}
+    for slug, model, marketing in [("dcs500", "AS7816-64X", "DCS500"),
+                                   ("dcs510", "AS9716-32D", "DCS510"),
+                                   ("cor550", "AS7926-40XKFB", "COR550"),
+                                   ("cor580", "AS9926-24D", "COR580")]:
+        assert by[slug]["model"] == model
+        assert {"name": marketing, "kind": "marketing"} in [
+            {k: a[k] for k in ("name", "kind")} for a in by[slug]["aliases"]]

@@ -3,6 +3,19 @@
 # (B3, docs/pluggables-caps-design.md): it accepts every part whose `mates:`
 # names the interface - dust caps and plugs alike. No ladder: a connector
 # either intermates or it does not.
+#
+# AN ENTRY is {standard, note, spans, cover}, every key optional:
+#   standard  the standards.yaml entry that holds the interface's figures
+#   note      what the interface is, for a reader
+#   spans     {interface, count}: this connector fills `count` slots of
+#             `interface` at once (a duplex over two bores; see lc-duplex)
+#   cover     true for an entry that is NOT a connector but a COVER MOUNT: the
+#             place on a part where a cover that ships on it and comes off is
+#             fixed (a breaker's touch guard). It seats as a connector slot
+#             does - one slot, one occupant, a default - and states no
+#             `standard`, because no published interface governs it.
+#             Whether cover mounts belong here or in a registry of their own
+#             is open (#822); there is one today, breaker-1ru-guard.
 format: 1
 interfaces:
   lc: {standard: lc-duplex-receptacle, note: one LC bore}
@@ -31,6 +44,9 @@ interfaces:
   # that mates each is a generic plug; the far end of the cord is not a part.
   iec-c14: {standard: c14-inlet, note: 'IEC 60320-1 C14 appliance inlet; generic/c13-plug@1 mates it. A C15 or C17 connector is a different interface'}
   iec-c20: {standard: c20-inlet, note: 'IEC 60320-1 C20 appliance inlet; generic/c19-plug@1 mates it. A C21 connector is a different interface'}
+  iec-c13: {standard: c13-outlet, note: 'IEC 60320 C13 outlet (a PDU socket); generic/c14-plug@1 mates it'}
+  # The PDU side (#933): an outlet is a slot for the plug end of a jumper.
+  iec-c19: {standard: c19-outlet, note: 'IEC 60320-3 sheet J C19 outlet, a PDU socket; generic/c20-plug@1 mates it. Eaton C39 also takes a C20 and is its own part'}
   saf-d-grid: {standard: saf-d-grid, note: 'Anderson Power Products Saf-D-Grid receptacle (drawing 115171S1 rev 12; no IEC standard governs it); it sits in a C14 cutout but a C13 does not mate it'}
   # USB receptacles (#786, docs/connectors-usb-design.md). The cable plug that
   # mates each is a generic plug; the far end of the cable is not a part. An
@@ -58,7 +74,7 @@ interfaces:
   # and a plug mates with or without them, so there is one five-position key
   # and no `f`.
   terminal-508-2: {standard: terminal-508-2-header, note: 'two-position plain pluggable header on a 5.08 mm pitch (Phoenix Contact MSTBA 2,5/..-G-5,08 and equivalents); generic/terminal-508-2-plug@1 mates it'}
-  terminal-508-5: {standard: terminal-508-5-header, note: 'the five-position mating face of a pluggable header on a 5.08 mm pitch (Phoenix Contact MSTB 2,5 and equivalents), which a flanged or a plain header presents and a flanged or a plain plug mates; generic/terminal-508-5-plug@1, the screw-flange plug, mates it, because the one header placed (common/terminal-header-508-5f@1) is flanged'}
+  terminal-508-5: {standard: terminal-508-5-header, note: 'the five-position mating face of a pluggable header on a 5.08 mm pitch (Phoenix Contact MSTB 2,5 and equivalents), which a flanged or a plain header presents and a flanged or a plain plug mates; generic/terminal-508-5-plug@1, the screw-flange plug, mates it, because the one header placed (common/terminal-header-508-5f@2) is flanged'}
   terminal-508-6: {standard: terminal-508-6-header, note: 'six-position plain pluggable header on a 5.08 mm pitch (Phoenix Contact MSTBA 2,5/ 6-G-5,08 and equivalents); generic/terminal-508-6-plug@1 mates it'}
   # The DC barrel jack (#789, docs/connectors-dc-terminal-design.md). ONE
   # INTERFACE, BY RULING: see the note.
@@ -101,4 +117,9 @@ interfaces:
   # (docs/connectors-dc-terminal-design.md section 14). A vendor connector:
   # no standard is held for it, so the entry cites none.
   p40: {note: 'the two-pole latching output connector of the Amphenol Network Solutions connectorized power panels, the Amphenol PRM series with 4 mm RADSOK contacts, BATT over RTN. amphenol-ns/output-p40@1 presents it and amphenol-ns/p40-plug@1 mates it. A vendor connector: no standard is held for it'}
+  # The rack PDU mounting interface (#934, docs/pdu-model-design.md section
+  # 6.2). NOT A CONNECTOR - A MOUNT: the slot is the keyhole in a bracket or a
+  # cabinet channel, which presents it, and the button on the PDU's back is
+  # the part that mates it. No standard governs it, so the entry cites none.
+  pdu-button: {note: 'NOT A CONNECTOR - A MOUNT. The shoulder-style mounting button on the back of a zero-U rack PDU and the keyhole slot that takes it: a keyhole in a bracket or a cabinet zero-U channel presents it, eaton/g4-mounting-button@1 mates it. The Eaton Rack PDU G4 installation and setup guide P-164001156 rev 3, section 2.11, sizes the slot: 11.5 to 12.5 mm in 1.5 to 2 mm sheet (Eaton enclosures), or 14 mm in 3 mm sheet (Tripp Lite racks). No standard governs it'}
   breaker-1ru-guard: {cover: true, note: 'NOT A CONNECTOR - A COVER MOUNT. The face of a 1RU plug-in breaker, where its touch guard screws on; amphenol-ns/touch-guard-1ru@1 mates it. Registered here because a cover that ships on a part and comes off is the same mechanism as a dust cap in a port: one slot, one occupant, a default'}

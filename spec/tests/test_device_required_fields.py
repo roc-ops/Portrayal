@@ -127,10 +127,13 @@ def test_maturity_still_asks_for_one_too(devices):
     assert before["surface"] != after["surface"]
 
 
-def test_the_version_field_says_where_its_rules_live():
+def test_the_version_field_states_its_bump_rules():
     """The issue's fourth bullet: `version` ranged 0.2.7 to 3.0.5 with the bump
     policy written in DESIGN.md and CONTRIBUTING and nowhere the field itself
-    could point at."""
+    could point at. The description now states the rules itself rather than
+    citing those files (#951): the lock that decides the bump, the three bump
+    sizes, and the lint that fails."""
     schema = json.loads((ROOT / "spec/schemas/device.schema.json").read_text())
     desc = schema["properties"]["version"].get("description", "")
-    assert "device.lock.json" in desc and "DESIGN.md" in desc, desc[:120]
+    for word in ("device.lock.json", "patch", "minor", "major", "L53"):
+        assert word in desc, f"{word!r} missing from: {desc[:120]}"

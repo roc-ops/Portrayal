@@ -14,8 +14,8 @@ nothing in them.
 
 | part | class | where it is placed |
 |---|---|---|
-| `common/terminal-header-508-5f@1` | inlet | the power input of 10 AurCore AIS switches |
-| `common/terminal-header-508-2@2` | port | the relay output of the same 10 |
+| `common/terminal-header-508-5f@2` | inlet | the power input of 10 AurCore AIS switches |
+| `common/terminal-header-508-2@3` | port | the relay output of the same 10 |
 | `common/dc-terminal-header-6@1` | inlet | two on the rear of the ReadyLinks GL-12xB-240D |
 
 None stated an interface or a connection point, and there was no plug.
@@ -28,7 +28,7 @@ None stated an interface or a connection point, and there was no plug.
    contact are the same interface when they are the same header.
 2. **A flange is not part of the interface.** `terminal-508-5` is the five-position
    mating face, which a flanged or a plain header presents and a flanged or a plain plug
-   mates. The header part keeps its name, `common/terminal-header-508-5f@1`. The plug is
+   mates. The header part keeps its name, `common/terminal-header-508-5f`. The plug is
    the screw-flange form, because the one five-position header placed is flanged and its
    data sheet lists flanged plugs as its mates; the plug says so in its description and
    provenance, because the interface does not. A plain five-position plug is a different
@@ -72,7 +72,7 @@ Every header is placed directly on a chassis face, so each is a slot in the devi
 | | the same, pp.1-2 | clamp screw M3; conductor 0.2 to 2.5 mm2, AWG 24 to 12; nominal 2.5 mm2; stripping length 7 |
 | flanged plug | Phoenix Contact MSTB 2,5/16-STF-5,08 (1778124) data sheet, p.7, the drawing of the MSTB 2,5/..-STF range | body a + 5.69 wide, a flange 4.7 each end, 15 high, 18.2 long, nose 8.3, flange screw 5.08 outside the end pole |
 | plain header, with a plug seated | Phoenix Contact MSTBA 2,5/ 6-G-5,08 (1757284) data sheet, p.5 | header a + 7.08 wide, 8.6 high, 12 long; 22 from the back of the header to the back of a seated plug; plug 15 high, underside level with the header's |
-| flanged header | Phoenix Contact MSTB 2,5/ 5-GF-5,08 (1776537) data sheet, Sep 27, 2023, p.3 and pp.16-25 | 35.56 wide, 12.1 high, 12 long; seventeen mating plugs, all flanged; MSTB 2,5/ 5-STF-5,08 (1778014) on p.18 |
+| flanged header | Phoenix Contact MSTB 2,5/ 5-GF-5,08 (1776537) data sheet, Sep 27, 2023, p.3 and pp.16-25 | 35.56 wide, 12.1 high (8.6 installed, drawn), 12 long; seventeen mating plugs, all flanged; MSTB 2,5/ 5-STF-5,08 (1778014) on p.18 |
 | wire | Waskoenig+Walter H07V-K data sheet, status 05.10.2026, p.2 | outside diameter approximately 3 for 1.5 mm2 (the default) and 4 for 2.5 mm2 (the largest the plug takes) |
 
 The plug and header drawings are rasters embedded at about 130 to 155 ppi and were read at
@@ -93,8 +93,8 @@ the plug drawing dimensions 8.3.
 
 | header | presents at | models | the drawing gives | mismatch |
 |---|---|---|---|---|
-| `common/terminal-header-508-5f@1` | the mouth of its housing, 2.5 proud (estimated) | a well 1.7 deep (2.5 less a floor at 0.8, both estimated) | 8.2 of nose inside | 6.5 too shallow |
-| `common/terminal-header-508-2@2` | the same | the same | 8.2 | 6.5 too shallow |
+| `common/terminal-header-508-5f@2` | the mouth of its housing, 2.5 proud (estimated) | a well 1.7 deep (2.5 less a floor at 0.8, both estimated) | 8.2 of nose inside | 6.5 too shallow |
+| `common/terminal-header-508-2@3` | the same | the same | 8.2 | 6.5 too shallow |
 | `common/dc-terminal-header-6@1` | its own face, the panel plane | nothing: drawn flat, no depth, the mouth 0.3 behind the panel on the vendor's model | 8.2 | no cavity modelled |
 
 No plug figure is taken from a modelled depth. Each plug starts on the face its header
@@ -153,8 +153,11 @@ is read again when one changes. No header's geometry is changed.
   question. The two-position header's width and its turn on the AurCore top face were
   settled afterwards, in its second major (#804): 12.16 wide, the Phoenix Contact MSTBA
   2,5/ 2-G-5,08 (1757242) width, where the first major was photo-measured at 10.16, and
-  placed turned 90. Both AurCore headers are still drawn 12.1 high, the data sheets' `h`,
-  which counts the 3.5 solder pin below the board; the installed height is 8.6 (#873).
+  placed turned 90. Their height was settled in the next majors (#873),
+  `common/terminal-header-508-2@3` and `common/terminal-header-508-5f@2`: 8.6, the
+  installed height, where the data sheets' `h` of 12.1 counts the 3.5 solder pin below
+  the board. The ten AurCore placements moved 1.75 so each header's centre stayed put, and
+  a header's `mate` (4.3, the middle of its 8.6) now sits on the plugs' axis.
 - Plugs with angled wire entry, spring-clamp plugs and cable housings.
 - Devices ship bare. A plug is in a slot's accept list because it mates the slot's
   interface; nothing seats one by default.
@@ -672,6 +675,7 @@ offers the ring lug alone.
 | `juniper/mx-ground-stud-pair-5-8@1` | `juniper/mx-ground-stud@1` twice | `stud-pair-5-8` |
 | `juniper/mx-ground-stud-pair-3-4@1` | `juniper/mx-ground-stud@1` twice | `stud-pair-3-4` |
 | `common/ground-stud-pair-5-8-m6@1` | `common/ground-screw-m6@1` twice | `stud-pair-5-8` |
+| `common/ground-stud-pair-5-8-m4@1` | `common/ground-screw-m4@1` twice | `stud-pair-5-8` |
 | `common/ground-stud-pair-5-8-1-4@1` | `common/ground-screw-1-4@1` twice | `stud-pair-5-8` |
 | `common/ground-stud-pair-3-4-1-4@1` | `common/ground-screw-1-4@1` twice | `stud-pair-3-4` |
 | `common/ground-stud-pair-1-1-4@1` | `common/ground-screw-1-4@1` twice | `stud-pair-1` |
@@ -679,8 +683,21 @@ offers the ring lug alone.
 **The sized screws (#830, part 1).** `common/ground-lug@1` stays the library's nominal
 ground screw, unsized, as the owner ruled. `common/ground-screw-m6@1` (ISO 7045 pan head,
 12.0 across, 4.6 high) and `common/ground-screw-1-4@1` (ASME B18.6.3 pan head, 12.50
-across, 3.66 high) are drawn at a stated size and used only inside a pair host. An M4 and
-an M5 screw are not added: no pair with a sourced pitch takes one yet.
+across, 3.66 high) are drawn at a stated size and used only inside a pair host.
+`common/ground-screw-m4@1` (ISO 7045, 8.0 across, 3.1 high) joined them with the UfiSpace
+pairs: eight chassis fix their accessory lug with two M4 screws, and seven of their guides
+draw the holes on a flank figure - three distinct drawings, one of them shared byte for byte
+by four guides and another by two - that reads 15.6 to 15.9 apart, so each landing is one
+`common/ground-stud-pair-5-8-m4@1`. An M5 screw is still not added: the one device stating
+M5 for a two-hole plate, the Edgecore DCS500, reads 17.2 between its screws, which is no
+lug pattern, so its screws stay single placements.
+
+**One earth symbol per landing.** `common/ground-lug@1` draws an earth symbol above its
+stud, so a two-screw plate drawn as two of them printed two where the chassis prints one.
+`common/ground-screw@1` is the same stud, washer and cap without the symbol, presenting
+`terminal-stud` at the same 4.7: an unsized landing places `common/ground-lug@1` on the
+screw the printed symbol sits by and `common/ground-screw@1` on the other (the Edgecore
+AGR560, DCS500, EPS112 and EPS203).
 
 **The lugs.** `generic/two-hole-lug-5-8@1` (Panduit LCD6-10A-L, #6 AWG),
 `generic/two-hole-lug-3-4@1` (LCC10-14BW-L, #10 AWG) and `generic/two-hole-lug-1@1`
@@ -825,5 +842,8 @@ right side out.
   and gains its mate point and nothing else.
 - 2026-10-07: the two-position AurCore header is 12.16 wide and placed turned 90, as the
   five-position one beside it is; its height is left for #873 (#804).
+- 2026-10-10: both AurCore headers are drawn 8.6 high, the installed height, not the
+  data sheets' 12.1, which counts the solder pin; both now claim their registry entries
+  (#873).
 - 2026-10-07: one P40 plug, `amphenol-ns/p40-plug@1`, drawn from the wire side with a stub
   per pole; it seats 22.3 in front of the receptacle's shroud, an estimate.

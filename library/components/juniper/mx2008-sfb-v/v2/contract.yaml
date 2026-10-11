@@ -1,0 +1,42 @@
+format: 1
+kind: module
+name: mx2008-sfb-v
+version: 2.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX2008 Switch Fabric Board - eight stand between the two RCBs
+  in the short upper cage, 7+1 redundant. A short air-grille faceplate
+  with an OK/FAIL lamp.
+attrs:
+  model: MX2008 SFB
+  power-draw-max-w: 110
+provenance:
+  size: >-
+    guide + photo (#902). Width: the MX2008 hardware guide's Table 98 gives the MX2008 SFB2 as 1.7 in
+    (4.31 cm) wide, the line-card adapter's width, and the MX2008 front photograph (1.264 px/mm,
+    isotropic) puts the ten upper-cage slots - CB-RE 0, SFB 0-7, CB-RE 1, as its label strip prints them -
+    one over each line-card slot, so the RCB is as wide as the SFB: 43.18. Height: the photograph's upper
+    cage runs chassis y 109-291, 182 mm. THE GUIDE'S SFB2 ROW DISAGREES: it reads 16.23 in (41.21 cm)
+    high, the MX2010's SFB height, with its kilogram figures blank - a row carried over from the larger
+    chassis - and a 412 mm board cannot stand in a 182 mm cage, so the photograph's height is used. Until
+    2.0.0 this was 40 x 170. Everything on the face moved +1.59 mm across to stay centred; nothing moved down.
+  power: >-
+    guide FRU power table, MX2008 hardware guide: '| MX2008 SFB2 | MX2008-SFB2 | 100
+    W(Typical) 110 Wat 55 C |'. Corroborated in the same guide by a power-budget row that
+    states the per-board figure with its own arithmetic, 'SFB-slots 0 through 7 | MX2008-SFB2
+    | 100W*8=800W'. THE INFERENCE, STATED: this contract's model field reads 'MX2008 SFB'
+    while the figure belongs to the MX2008-SFB2. Every document in the corpus knows exactly
+    one MX2008 fabric board and it is the SFB2 - `MX2008-SFB2` appears ten times and no
+    other MX2008 SFB part number appears at all - and this contract describes eight boards
+    standing 7+1 between the two RCBs, which is the configuration the guide's own power row
+    describes. The model field is the thing that is loose here, not the number.
+states:
+- ok
+- fail
+- absent
+size:
+  w: 43.18
+  h: 182
+size-confidence: {w: datasheet, h: photo-measured}

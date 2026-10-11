@@ -156,8 +156,8 @@ def _l43(doc):
 
 def test_L43_stands_down_when_the_ears_are_behind():
     views = {"front": {"size": {"w": 482.6, "h": 88.81}}}
-    assert _l43({"chassis": {"width": 482.6, "ru": 2}, "views": views})
-    assert not _l43({"chassis": {"width": 482.6, "ru": 2, "ears": "behind"}, "views": views})
+    assert _l43({"chassis": {"width": 440.0, "ru": 2}, "views": views})
+    assert not _l43({"chassis": {"width": 440.0, "ru": 2, "ears": "behind"}, "views": views})
 
 
 # --- the export and the lock -------------------------------------------------
@@ -245,6 +245,6 @@ def test_configs_json_carries_the_two_keys(built):
     ringed = json.loads((built / "cmh-6dr1u.configs.json").read_text())["chassis"]
     assert ringed["overhang"] == {"left": 43.0, "right": 43.0}
     duct = json.loads((built / "uscmh-sfdabsb2u.configs.json").read_text())["chassis"]
-    assert duct["ears"] == "behind" and "overhang" not in duct
+    assert duct["ears"] == {"behind": True} and "overhang" not in duct
     plain = json.loads((built / "cmh-5dr1u.configs.json").read_text())["chassis"]
     assert "overhang" not in plain and "ears" not in plain

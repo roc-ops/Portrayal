@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rocker-switch
-version: 1.1.0
+version: 1.2.0
 class: button
 profile: networking
 description: >-
@@ -32,8 +32,16 @@ provenance:
     switch's own surface, which falls about 1.8 over 12 across the rocker (2.7 over
     its 17.5). The skin draws OFF; nothing held says how a chassis ships, so OFF is a
     judgement.
+  rocker-color: >-
+    A FIELD, since 1.2.0: the colour of the rocker's moulding, for a switch that is not
+    the drawn dark grey - the FS FANP3U3F's is red. Empty, the rocker is drawn as it
+    always was. A value tints both tipped surfaces, over their shading, so the raised
+    end still reads lighter; the I and O marks are drawn above it. The two surfaces'
+    relief states no colour of its own, so their 3D sides take the painted art's and
+    follow the field (lint L73).
 fields:
   state: {label: State, type: choice, options: ['off', 'on'], default: 'off'}
+  rocker-color: {label: Rocker colour, type: text, default: ''}
 elements:
   rocker: {at: [1.75, 1.75], size: [17.5, 11.5], class: button}
 relief:
@@ -48,7 +56,6 @@ relief:
     - node: rocker-off
       out: 4.9
       profile: [[0, 4.9], [17.5, 2.2]]
-      color: '#26292d'
       confidence: drawing
       source: >-
         the GL-12xB GLB switch: its raised end 4.9 behind the rear panel plane, and its
@@ -56,7 +63,6 @@ relief:
     - node: rocker-on
       out: 4.9
       profile: [[0, 2.2], [17.5, 4.9]]
-      color: '#26292d'
       confidence: drawing
       source: >-
         rocker-off, tipped the other way

@@ -241,7 +241,28 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # common/qsfp-transceiver@1 composes. Each @1 carries `superseded-by`.
     kept = {"generic/qsfp-lc": [1, 2], "generic/qsfp-dd-lc": [1, 2],
             "common/qsfp-pull-tab": [1, 2]}
+    # DEPRECATED, NOT DELETED (#261 part 2, #448): the Juniper MICs and MPC
+    # carriers that the measured 168.8 x 29.2 MIC plate re-majored. The owner
+    # ruled that the retired majors stay so an outside manifest pinning one still
+    # resolves; each older major carries `superseded-by` and nothing seats it.
+    for name in ("mic-3d-10ge-sfp-e", "mic-3d-16che1-t1-ce", "mic-3d-1oc192-xfp",
+                 "mic-3d-20ge-sfp", "mic-3d-2xge-xfp", "mic-3d-40ge-tx",
+                 "mic-3d-4choc3-1oc12", "mic-3d-4choc3-2choc12", "mic-3d-4oc3oc12-1oc48",
+                 "mic-3d-8choc3-4choc12", "mic-3d-8ds3-e3", "mic-3d-8oc3-2oc12-atm",
+                 "mic-3d-8oc3oc12-4oc48", "mic-macsec-20ge", "mic3-100g-dwdm",
+                 "mic3-3d-10xge-sfpp", "mic3-3d-1x100ge-cfp", "mic3-3d-1x100ge-cxp",
+                 "mic3-3d-2x40ge-qsfpp", "ms-mic-16g", "mx-mic-blank"):
+        kept[f"juniper/{name}"] = [1, 2]
+    for name in ("mic-3d-4xge-xfp", "mpc1e-3d", "mpc2e-3d", "mpc3e-3d"):
+        kept[f"juniper/{name}"] = [2, 3]
+    # #887 re-majored the 4-port XFP MIC again for its pic/port ids; @3 stays
+    # because juniper/mpc2e-3d@3 still accepts it beside @4.
+    kept["juniper/mic-3d-4xge-xfp"] = [2, 3, 4]
     assert multi == kept, multi
+    for name, majors in kept.items():
+        if name.startswith("juniper/"):
+            old = LIB / "components" / name / f"v{majors[0]}" / "contract.yaml"
+            assert (lint.load_yaml(old) or {}).get("superseded-by") == f"{name}@{majors[1]}", old
     # psu-550w USED TO BE HERE, the one retired major kept on purpose: the
     # PBC-2000's `psu-module-width` gap argued from @1's 84.0 mm against the
     # 73.5 of the @2 that device placed. A square-on photograph of the PBC-2000's

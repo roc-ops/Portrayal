@@ -625,6 +625,10 @@ NEW = set(OPTICS)
 # how many cages of each family the library's cards carry today, as a floor
 # #261 removed the MX960 vertical twins: mpc4e-3d-2cge-8xge-v960 took two CFP cages
 # with it and mpc5e-100g10g-v960 two CFP2, and the MX960 now seats the horizontal cards.
+# #261 part 2 retired the MX2000 vertical card twins, the vertical MIC twins and
+# the MICs' and carriers' previous majors, but kept them (`superseded-by`, #448),
+# and this walk counts every contract, retired or not: 7 / 15 / 4 / 7 measured.
+# Live contracts alone carry 3 / 11 / 4 / 5.
 ON_CARDS = {"cfp": 6, "cfp2": 14, "cfp4": 4, "cxp": 6}
 
 
@@ -680,12 +684,12 @@ LCP, LCC = "generic/lc-plug@2", "common/lc-dust-cap@1"
 BAYS = {
     MX480: {"dpc5": "juniper/mpc4e-3d-2cge-8xge@2", "dpc2": "juniper/mpc4e-3d-2cge-8xge@2",
             "dpc3": "juniper/mpc5e-100g10g@2",
-            "dpc4": "juniper/mpc3e-3d@2", "dpc4/mic0": "juniper/mic3-3d-1x100ge-cxp@1"},
+            "dpc4": "juniper/mpc3e-3d@3", "dpc4/mic0": "juniper/mic3-3d-1x100ge-cxp@2"},
     # the MX960 seats the SAME horizontal cards, turned 90 by the bay (#261): a
     # cage on them is drawn at rotate 0 and takes its quarter turn from its card
     MX960: {"fpc2": "juniper/mpc4e-3d-2cge-8xge@2", "fpc5": "juniper/mpc4e-3d-2cge-8xge@2",
             "fpc3": "juniper/mpc5e-100g10g@2",
-            "fpc4": "juniper/mpc3e-3d@2", "fpc4/mic0": "juniper/mic3-3d-1x100ge-cxp@1"},
+            "fpc4": "juniper/mpc3e-3d@3", "fpc4/mic0": "juniper/mic3-3d-1x100ge-cxp@2"},
     SR1E: {"mda-1-1": "nokia/me2-100gb-cfp4@1"},
     # the one turned CFP4 cage in the library, on the tilted face of an NT card
     NFXS: {"nt-b": "nokia/fant-g-ba@1"},

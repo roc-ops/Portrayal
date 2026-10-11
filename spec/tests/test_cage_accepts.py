@@ -150,7 +150,7 @@ def test_an_osfp_cage_accepts_exactly_the_osfp_generics(tmp_path):
     assert cage["accepts"] == ["generic/osfp-lc@1", "generic/osfp-mpo16@1"]
 
 
-CFP2_CARD = LIB / "components/juniper/mic3-100g-dwdm/v1/contract.yaml"
+CFP2_CARD = LIB / "components/juniper/mic3-100g-dwdm/v2/contract.yaml"
 
 
 def test_a_cfp2_cage_on_a_card_accepts_exactly_the_cfp2_generics():
@@ -630,7 +630,7 @@ def test_the_lift_census():
     `manifest.presented_interface` derives from the contract chain.
 
     AND SO DOES A PLUGGABLE TERMINAL HEADER THAT STANDS PROUD OF ITS FACE
-    (#789). common/terminal-header-508-5f@1 and common/terminal-header-508-2@2
+    (#789). common/terminal-header-508-5f@2 and common/terminal-header-508-2@3
     build their housing 2.5 proud and present at its mouth - their `mate`
     sits `on: body` - so a plug seated there starts where the housing ends.
     The slot's lift is that housing's `out`, again the figure

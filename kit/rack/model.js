@@ -6,14 +6,24 @@
 // edit here returns a new object - the page autosaves whatever it last
 // committed, and a shared, mutated rack is how a save would catch half an edit.
 
+import {RU} from './rails.js';
+
 export const FORMAT = 'portrayal-rack';
-export const VERSION = 2;
+// Zero-U parts and `side` (#926) did not raise it: both are optional keys a
+// version-2 reader keeps (`zeroU` as written) or drops (`side`), and no reader
+// older than this kit was ever published. Bundles (#921) did: a version-2
+// reader would drop `bundles`, a rack key, and erase them on its next save.
+export const VERSION = 3;
 export const THREADS = ['12-24', '10-32', 'M6'];
 // MIGRATIONS[n - 1] takes a version-n document to version n + 1.
 //   1 -> 2: rack-face managers (`on`, `unit` on an item). Nothing in a
 //   version-1 file changes; the bump is so an older page refuses a file
 //   holding a manager instead of drawing it as a 1U device over its host.
-export const MIGRATIONS = [d => ({...d, version: 2})];
+//   2 -> 3: cable bundles (`bundles` on a rack). Nothing in a version-2 file
+//   changes; the bump is so an older page refuses a file holding bundles
+//   instead of opening it, dropping them and erasing them on its next save
+//   (docs/cable-bundles-design.md section 2.3).
+export const MIGRATIONS = [d => ({...d, version: 2}), d => ({...d, version: 3})];
 
 const RAIL_DEPTH = 740;        // mm between front and rear rails: a common 4-post
 const USABLE_BEYOND = 260;     // mm a four-post allows past its rear rail by default
@@ -69,7 +79,22 @@ export function nextRackName(names) {
 // cable-rules.js, which imports this file: the two ends are read here.)
 const endItems = cables => (Array.isArray(cables) ? cables : [])
   .flatMap(c => [c?.a?.item, c?.b?.item]).filter(id => id != null && id !== '').map(id => ({id: String(id)}));
-export const itemIdsInUse = rack => [...rack.items, ...endItems(rack.cables)];
+// A BUNDLE'S TRUNK AND PEEL POINTS name items too (#921): a removed manager's
+// id is not handed to the next device while a trunk still names it, so it can
+// never resolve to something placed later.
+const plainObj = v => !!v && typeof v === 'object' && !Array.isArray(v);
+const bundleList = bundles => (Array.isArray(bundles) ? bundles : []).filter(plainObj);
+const bundleItems = bundles => bundleList(bundles).flatMap(b => [
+  ...(Array.isArray(b.route) ? b.route : []),
+  ...(Array.isArray(b.members) ? b.members : []).flatMap(m => (plainObj(m) ? [m.a, m.b] : []))])
+  .filter(w => plainObj(w) && typeof w.item === 'string' && w.item).map(w => ({id: w.item}));
+export const itemIdsInUse = rack => [...rack.items, ...endItems(rack.cables), ...bundleItems(rack.bundles)];
+// A CABLE ID IS NEVER REUSED WHILE A BUNDLE NAMES IT: ids come one past the
+// highest, so a removed c9 could be handed to the next cable, and a bundle
+// still naming c9 would pick it up.
+const memberCables = bundles => bundleList(bundles).flatMap(b => (Array.isArray(b.members) ? b.members : []))
+  .filter(m => plainObj(m) && typeof m.cable === 'string' && m.cable).map(m => ({id: m.cable}));
+export const cableIdsInUse = rack => [...(rack.cables || []), ...memberCables(rack.bundles)];
 
 // A RACK-FACE MANAGER'S HOST: `on` names the item it bolts over and
 // `unit` which of that item's units, from 1 at its bottom. Both or neither;
@@ -77,14 +102,40 @@ export const itemIdsInUse = rack => [...rack.items, ...endItems(rack.cables)];
 const hostOf = ({on, unit}) => (typeof on === 'string' && on && Number.isInteger(unit) && unit >= 1
   ? {on, unit} : {});
 export const detached = ({on, unit, ...rest}) => rest;
+// ONE RAIL (#926): `side: left | right` on a narrow rack-face part (a finger
+// bracket narrower than the 450 mm opening) says which rail it is on, seen
+// from its face. Without it the part is across both. fit.js railOf says
+// whether the catalogue agrees the part is narrow; the file keeps what it has.
+export const SIDES = ['left', 'right'];
+const sideOf = side => (SIDES.includes(side) ? {side} : {});
 
 export function withItem(rack, {ref, cfg, ru, face = 'front', turned = false, label = ref,
-                                swaps = {}, fields = {}, on, unit}) {
+                                swaps = {}, fields = {}, on, unit, side}) {
   const item = {id: nextId(itemIdsInUse(rack), 'i'), ref, cfg, label, ru,
                 face: face === 'rear' ? 'rear' : 'front', turned: !!turned,
-                swaps: {...swaps}, fields: structuredClone(fields), ...hostOf({on, unit})};
+                swaps: {...swaps}, fields: structuredClone(fields), ...hostOf({on, unit}), ...sideOf(side)};
   return {rack: {...rack, items: [...rack.items, item]}, item};
 }
+
+// ZERO-U PARTS (#926): what stands beside the rack and takes no rack unit (a
+// vertical cable manager today, a zero-U PDU next) lives in `rack.zeroU`,
+// never in `items`, as
+//   {id: 'z1', ref, cfg, label, at, offsetMm, between?}
+// `at` is an attachment point of the frame (fit.js attachPoints: left or right
+// on a two-post, left-front ... right-rear on a four-post), and also names the
+// cable lane beside that upright. `offsetMm` is its bottom, in mm above the
+// bottom of the rails; the kit always writes a whole number of U. `between:
+// true` says it stands between this rack and the next one, serving both; a
+// document holds one rack, so it is drawn and exported beside this one.
+// An entry of any other shape is kept as written and left alone: zeroUOf is
+// what the kit places, moves, draws and exports.
+const plainObject = v => !!v && typeof v === 'object' && !Array.isArray(v);
+export const zeroUOf = rack => (Array.isArray(rack?.zeroU) ? rack.zeroU : []).filter(z => plainObject(z)
+  && typeof z.id === 'string' && z.id && typeof z.ref === 'string' && z.ref && typeof z.at === 'string' && z.at);
+export const zeroUById = (rack, id) => zeroUOf(rack).find(z => z.id === id) ?? null;
+// A part's bottom U and its offset, each from the other: U1 is offset 0.
+export const zeroUOffset = ru => Math.round((ru - 1) * RU * 100) / 100;
+export const zeroUBottom = z => Math.max(1, Math.round((Number(z?.offsetMm) || 0) / RU) + 1);
 
 export const updateItem = (rack, id, patch) =>
   ({...rack, items: rack.items.map(i => (i.id === id ? {...i, ...patch} : i))});
@@ -131,7 +182,22 @@ function readItem(i, n) {
   return {id: String(i.id ?? ''), ref: i.ref, cfg: String(i.cfg ?? ''), label: String(i.label ?? i.ref),
           ru: i.ru, face: i.face === 'rear' ? 'rear' : 'front', turned: !!i.turned,
           swaps: {...(i.swaps || {})}, fields: structuredClone(i.fields || {}),
-          ...hostOf({on: i.on == null ? undefined : String(i.on), unit: i.unit})};
+          ...hostOf({on: i.on == null ? undefined : String(i.on), unit: i.unit}), ...sideOf(i.side)};
+}
+
+// The zero-U record as written, with an id given to each object entry that
+// has none, or one an earlier entry took (as items are repaired), past every
+// id the record declares. Anything else is kept as it is.
+function readZeroU(list) {
+  const taken = list.filter(z => plainObject(z) && typeof z.id === 'string' && z.id).map(z => ({id: z.id}));
+  const seen = new Set();
+  return list.map(raw => {
+    const z = structuredClone(raw);
+    if (!plainObject(z)) return z;
+    if (typeof z.id !== 'string' || !z.id || seen.has(z.id)) z.id = nextId([...taken, ...[...seen].map(id => ({id}))], 'z');
+    seen.add(z.id);
+    return z;
+  });
 }
 
 // Every item needs an id unique within its rack: a missing one (an older
@@ -141,8 +207,8 @@ function readItem(i, n) {
 // past every id an item in the file declares and every id a cable end names
 // (`cables`, as written) - so a repair never takes a later item's id, and
 // never picks up a cable that was not this item's.
-function readItems(list, cables) {
-  const taken = [...list.map(i => ({id: String(i?.id ?? '')})), ...endItems(cables)];
+function readItems(list, cables, bundles) {
+  const taken = [...list.map(i => ({id: String(i?.id ?? '')})), ...endItems(cables), ...bundleItems(bundles)];
   const items = [];
   const seen = new Set();
   list.forEach((i, n) => {
@@ -161,7 +227,7 @@ function readItems(list, cables) {
 export const isWaypoint = w => w && typeof w === 'object' && !Array.isArray(w) && (
   (typeof w.item === 'string' && w.item && typeof w.via === 'string' && w.via) ||
   (typeof w.lane === 'string' && w.lane && Number.isInteger(w.ru)));
-const readRoute = r => {
+export const readRoute = r => {
   const list = Array.isArray(r) ? r : [];
   const kept = list.filter(isWaypoint).map(w => ('lane' in w ? {lane: w.lane, ru: w.ru} : {item: w.item, via: w.via}));
   return kept.length === list.length ? {route: kept} : {route: kept, routeAsWritten: structuredClone(list)};
@@ -199,8 +265,10 @@ const lengthValue = v => {
   const n = typeof v === 'number' ? v : typeof v === 'string' && /^\d+(\.\d+)?$/.test(v) ? Number(v) : 0;
   return Number.isFinite(n) && n > 0 ? n : 0;
 };
-export function readCables(list) {
-  const declared = list.map(c => ({id: String(c?.id ?? '')}));
+// `bundles`, as written: a repaired cable's fresh id is past every id a bundle
+// member names, so it cannot pick up another cable's membership.
+export function readCables(list, bundles = []) {
+  const declared = [...list.map(c => ({id: String(c?.id ?? '')})), ...memberCables(bundles)];
   const out = [];
   const seen = new Set();
   for (const raw of list) {
@@ -244,29 +312,160 @@ export function readCables(list) {
 // READ A FILE, OR REFUSE IT WITH A SENTENCE. A newer file than this page knows
 // is refused whole: reading the parts it understands and dropping the rest
 // would hand back a rack that looks complete and is not.
-export function parseDoc(input) {
+// `notes`, when given, is an array each repair settleBundles makes is pushed
+// onto, one sentence each, naming its rack. None is kept in the document.
+export function parseDoc(input, {notes} = {}) {
   let d = typeof input === 'string' ? JSON.parse(input) : input;
   if (!d || d.format !== FORMAT) throw new Error('This is not a Portrayal rack file.');
   if (!Number.isInteger(d.version) || d.version < 1) throw new Error('This rack file has no valid version.');
   if (d.version > VERSION)
-    throw new Error(`This rack file is version ${d.version}; this page reads up to version ${VERSION}. Reload to get the newer page.`);
+    throw new Error(`This rack file is version ${d.version}; this reader supports up to version ${VERSION}.`);
   for (let v = d.version; v < VERSION; v++) d = MIGRATIONS[v - 1](d);
   if (!Array.isArray(d.racks) || !d.racks.length) throw new Error('This rack file holds no rack.');
   return {
     format: FORMAT, version: VERSION,
     id: typeof d.id === 'string' && d.id ? d.id : `doc-${token()}`,
-    racks: d.racks.map((r, k) => ({
-      id: String(r.id ?? `r${k + 1}`), name: String(r.name ?? 'Rack'),
-      frame: normalizeFrame(r.frame),
-      items: readItems(r.items || [], r.cables),
-      zeroU: Array.isArray(r.zeroU) ? structuredClone(r.zeroU) : [],
-      cables: readCables(Array.isArray(r.cables) ? r.cables : []),
-      // Optional, and only when the file has it (dcimOf): no version bump, since a
-      // page that does not know the field reads the rack whole and loses two names.
-      ...(r.dcim && typeof r.dcim === 'object' && !Array.isArray(r.dcim)
-        ? {dcim: {...structuredClone(r.dcim), ...Object.fromEntries(Object.entries(dcimOf(r)).filter(([k]) => k in r.dcim))}} : {}),
-    })),
+    racks: d.racks.map((r, k) => {
+      const bundles = Array.isArray(r.bundles) ? r.bundles : null;
+      const items = readItems(r.items || [], r.cables, bundles);
+      const zeroU = readZeroU(Array.isArray(r.zeroU) ? r.zeroU : []);
+      const cables = readCables(Array.isArray(r.cables) ? r.cables : [], bundles ?? []);
+      const rack = {
+        id: String(r.id ?? `r${k + 1}`), name: String(r.name ?? 'Rack'),
+        frame: normalizeFrame(r.frame), items, zeroU, cables,
+        // Optional, and only when the file has it (dcimOf): no version bump, since a
+        // page that does not know the field reads the rack whole and loses two names.
+        ...(r.dcim && typeof r.dcim === 'object' && !Array.isArray(r.dcim)
+          ? {dcim: {...structuredClone(r.dcim), ...Object.fromEntries(Object.entries(dcimOf(r)).filter(([k]) => k in r.dcim))}} : {}),
+        // Optional too (#921), and only when the file has it: a rack that was
+        // never given a bundle saves as it was.
+        ...(bundles ? {bundles: readBundles(bundles, [...items, ...cables, ...zeroU.filter(plainObj)])} : {}),
+      };
+      // The references are checked here, so a reader that only parses gets
+      // the same consistent rack as the editor.
+      const s = settleBundles(rack);
+      if (Array.isArray(notes)) notes.push(...s.notes.map(t => `${rack.name}: ${t}`));
+      return s.rack;
+    }),
   };
+}
+
+// ── bundles (#921, docs/cable-bundles-design.md) ─────────────────────────
+// A rack's optional `bundles`, each
+//   {id, number, label, members: [{cable, a?, b?}], route: [waypoint], straps?}
+// Membership lives on the bundle and only there: a cable carries no `bundle`
+// key, so the two can never disagree. bundles.js has the rules; the record and
+// its repairs are here, because parseDoc runs them and they need no catalogue.
+export const bundlesOf = rack => (Array.isArray(rack?.bundles) ? rack.bundles : []);
+export const bundleName = b => (b.label ? b.label : `Bundle ${b.number}`);
+export const STRAP_UNITS = ['in', 'mm'];
+export const isStrapSpacing = e => plainObj(e) && typeof e.value === 'number' && Number.isFinite(e.value)
+  && e.value > 0 && STRAP_UNITS.includes(e.unit);
+// A FRESH BUNDLE ID is past every id in the rack - the items', the cables', the
+// parts' beside it and the bundles' - so a new bundle never takes an id
+// another thing has, and an id names one thing.
+export const freshBundleId = list => nextId(list.map(x => ({id: String(x.id)})), 'b');
+const rackIds = rack => [...rack.items, ...(rack.cables || []), ...(Array.isArray(rack.zeroU) ? rack.zeroU : []).filter(plainObj)];
+export const bundleIdFor = rack => freshBundleId([...rackIds(rack), ...bundlesOf(rack)]);
+
+// THE SHAPES, as for cables: an entry that is not an object is no bundle; one
+// with no usable id or a repeated one gets a fresh id; a member that is not
+// {cable: <string>} is dropped; a number that is not a whole number from 1
+// goes past the highest in use; the trunk is read as a cable's route is, so an
+// unreadable entry keeps the trunk as written in `routeAsWritten`. A `straps`
+// that is not {every: null} or {every: {value above 0, unit in or mm}} says
+// nothing the default does not, and is dropped. Unknown fields are kept.
+function readBundles(list, others) {
+  const objs = list.filter(plainObj);
+  const declared = objs.filter(b => typeof b.id === 'string' && b.id).map(b => ({id: b.id}));
+  const whole = n => Number.isInteger(n) && n >= 1;
+  let top = Math.max(0, ...objs.map(b => b.number).filter(whole));
+  const seen = new Set(), out = [];
+  for (const raw of objs) {
+    const {straps, routeAsWritten: incoming, ...b} = structuredClone(raw);
+    let id = typeof b.id === 'string' && b.id ? b.id : '';
+    if (!id || seen.has(id)) id = freshBundleId([...others, ...declared, ...out]);
+    seen.add(id);
+    // A peel point that is no waypoint is dropped: the member then rides to
+    // that end, as it does past a stale one.
+    const members = (Array.isArray(b.members) ? b.members : []).filter(m => plainObj(m) && typeof m.cable === 'string' && m.cable)
+      .map(m => { const out = {...m}; for (const k of ['a', 'b']) if (k in out && !isWaypoint(out[k])) delete out[k];
+        else if (k in out) out[k] = 'lane' in out[k] ? {lane: out[k].lane, ru: out[k].ru} : {item: out[k].item, via: out[k].via};
+        return out; });
+    const r = readRoute(b.route);
+    // A trunk kept as written stays kept while its readable waypoints are
+    // still the trunk, as a cable's route does, so a save and a reload keep it.
+    const asWritten = r.routeAsWritten
+      ?? (Array.isArray(incoming) && routesEqual(readableFromRouteAsWritten(incoming), r.route) ? incoming : null);
+    const strapsOk = plainObj(straps) && (straps.every === null || isStrapSpacing(straps.every));
+    out.push({...b, id, number: whole(b.number) ? b.number : ++top, label: String(b.label ?? ''), members, route: r.route,
+              ...(asWritten ? {routeAsWritten: asWritten} : {}), ...(strapsOk ? {straps} : {})});
+  }
+  return out;
+}
+
+// THE ONE WAY A CABLE LEAVES ITS BUNDLE when the cable leaves the rack: every
+// edit that drops cables (cable-rules.js withoutCable, withoutCablesOf, and
+// bundles.js withoutCables, which also says so) takes them out of their
+// bundles here, so a bundle never names a cable that is gone and a later cable
+// handed its id never picks up its membership.
+export function withoutMembers(rack, ids) {
+  if (!Array.isArray(rack.bundles)) return rack;
+  const gone = new Set(ids);
+  let changed = false;
+  const bundles = rack.bundles.map(b => {
+    if (!b.members.some(m => gone.has(m.cable))) return b;
+    changed = true;
+    return {...b, members: b.members.filter(m => !gone.has(m.cable))};
+  });
+  return changed ? {...rack, bundles} : rack;
+}
+
+// THE REFERENCES. Pure and idempotent; it reads only the rack's own items,
+// cables, parts and bundles, so it needs no catalogue. Each repair gives a
+// sentence, and a second run finds nothing to repair:
+// - a bundle whose id is also an item's, a cable's or a part's gets a fresh one;
+// - a member naming no cable is dropped, and a cable named twice in one bundle
+//   is kept once;
+// - a cable named by two bundles stays in the first;
+// - a number used twice stays with the first, and the second is renumbered.
+// Nothing else is dropped, and a bundle left with no members is kept.
+export function settleBundles(rack) {
+  if (!Array.isArray(rack?.bundles)) return {rack, notes: []};
+  const notes = [];
+  const others = rackIds(rack), otherIds = new Set(others.map(x => String(x.id)));
+  const cableIds = new Set((rack.cables || []).map(c => c.id));
+  const owner = new Map(), numbers = new Map(), out = [];
+  let top = Math.max(0, ...rack.bundles.map(b => b.number).filter(Number.isInteger));
+  let changed = false;
+  for (const b0 of rack.bundles) {
+    let b = b0;
+    if (otherIds.has(b.id)) {
+      const id = freshBundleId([...others, ...rack.bundles, ...out]);
+      notes.push(`${b.id} is also the id of a device, a part or a cable, so ${bundleName(b)} is now ${id}.`);
+      b = {...b, id};
+    }
+    const kept = [], here = new Set();
+    for (const m of b.members) {
+      if (!cableIds.has(m.cable)) notes.push(`${bundleName(b)} named ${m.cable}, which is not a cable in the rack, so it was taken out.`);
+      else if (here.has(m.cable)) notes.push(`${bundleName(b)} named ${m.cable} twice; it is kept once.`);
+      else if (owner.has(m.cable)) {
+        const first = bundleName(owner.get(m.cable));
+        notes.push(`${m.cable} is in ${first} and ${bundleName(b)}, so it stays in ${first}.`);
+      } else { here.add(m.cable); kept.push(m); }
+    }
+    if (kept.length !== b.members.length) b = {...b, members: kept};
+    if (numbers.has(b.number)) {
+      const n = b.number;
+      b = {...b, number: ++top};
+      notes.push(`${numbers.get(n).id} and ${b.id} were both Bundle ${n}, so ${b.id} is now Bundle ${b.number}.`);
+    }
+    numbers.set(b.number, b);
+    for (const m of b.members) owner.set(m.cable, b);
+    if (b !== b0) changed = true;
+    out.push(b);
+  }
+  return {rack: changed ? {...rack, bundles: out} : rack, notes};
 }
 
 export const serialize = doc => JSON.stringify(doc, null, 2);

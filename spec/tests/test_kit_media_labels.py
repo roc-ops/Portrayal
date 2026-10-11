@@ -128,8 +128,8 @@ def test_each_dsub_plug_medium_is_its_cores_and_has_its_label():
 # placement id. Neither key was in the table; the fallback read
 # TERMINAL-BLOCK and DC-TERMINAL.
 TERMINAL_PLUGS = {
-    "generic/terminal-508-2-plug@1": ("common/terminal-header-508-2@2", "terminal-block"),
-    "generic/terminal-508-5-plug@1": ("common/terminal-header-508-5f@1", "dc-terminal"),
+    "generic/terminal-508-2-plug@1": ("common/terminal-header-508-2@3", "terminal-block"),
+    "generic/terminal-508-5-plug@1": ("common/terminal-header-508-5f@2", "dc-terminal"),
     "generic/terminal-508-6-plug@1": ("common/dc-terminal-header-6@1", "dc-terminal"),
 }
 

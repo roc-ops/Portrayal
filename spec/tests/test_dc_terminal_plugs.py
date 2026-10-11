@@ -1,7 +1,7 @@
 """Pluggable 5.08 mm terminal headers are connector slots, and the screw-clamp
 plugs that seat in them (#789, docs/connectors-dc-terminal-design.md).
 
-The three headers (common/terminal-header-508-2@2, common/terminal-header-508-5f@1
+The three headers (common/terminal-header-508-2@3, common/terminal-header-508-5f@2
 and common/dc-terminal-header-6@1) each present an interface
 spec/schemas/connectors.yaml lists, so every one of them is a slot;
 generic/terminal-508-2-plug@1, generic/terminal-508-5-plug@1 and
@@ -57,8 +57,8 @@ P6 = "generic/terminal-508-6-plug@1"
 
 # interface -> (the header that presents it, the plug that mates it, positions)
 PAIRS = {
-    "terminal-508-2": ("common/terminal-header-508-2@2", P2, 2),
-    "terminal-508-5": ("common/terminal-header-508-5f@1", P5F, 5),
+    "terminal-508-2": ("common/terminal-header-508-2@3", P2, 2),
+    "terminal-508-5": ("common/terminal-header-508-5f@2", P5F, 5),
     "terminal-508-6": ("common/dc-terminal-header-6@1", P6, 6),
 }
 HEADER_OF = {plug: hdr for hdr, plug, _n in PAIRS.values()}
@@ -72,23 +72,25 @@ FLANGED = {P5F}
 # The two AurCore headers build a housing 2.5 proud and present at its mouth;
 # the ReadyLinks header is drawn flat.
 PRESENTS = {
-    "common/terminal-header-508-2@2": 2.5,
-    "common/terminal-header-508-5f@1": 2.5,
+    "common/terminal-header-508-2@3": 2.5,
+    "common/terminal-header-508-5f@2": 2.5,
     "common/dc-terminal-header-6@1": 0.0,
 }
 # What each header was before this work, and still is: size, class, attrs and
 # elements. Giving it an interface changed none of them. The two-position header
 # is the exception the next major made: @2 is 12.16 wide, the Phoenix Contact
 # MSTBA 2,5/ 2-G-5,08 (1757242) width, where @1 was photo-measured at 10.16 (#804).
+# And both AurCore headers took one more (#873): 8.6 high, the installed height,
+# where the data sheets' 12.1 counts the 3.5 solder pin under the board.
 UNCHANGED = {
-    "common/terminal-header-508-2@2": (
-        {"w": 12.16, "h": 12.1}, "port",
+    "common/terminal-header-508-2@3": (
+        {"w": 12.16, "h": 8.6}, "port",
         {"media": "terminal-block", "positions": 2, "pitch-mm": 5.08},
-        {"body": {"at": [0.0, 0.0], "size": [12.16, 12.1], "class": "connector"}}),
-    "common/terminal-header-508-5f@1": (
-        {"w": 35.56, "h": 12.1, "d": 12.0}, "inlet",
+        {"body": {"at": [0.0, 0.0], "size": [12.16, 8.6], "class": "connector"}}),
+    "common/terminal-header-508-5f@2": (
+        {"w": 35.56, "h": 8.6, "d": 12.0}, "inlet",
         {"media": "dc-terminal", "positions": 5, "pitch-mm": 5.08},
-        {"body": {"at": [0.0, 0.0], "size": [35.56, 12.1], "class": "connector"}}),
+        {"body": {"at": [0.0, 0.0], "size": [35.56, 8.6], "class": "connector"}}),
     "common/dc-terminal-header-6@1": (
         {"w": 32.4, "h": 11.1}, "inlet", {"media": "dc-terminal"},
         {"body": {"at": [0.0, 2.5], "size": [32.4, 8.6], "class": "connector"}}),
@@ -165,7 +167,7 @@ def test_a_flange_is_not_part_of_the_interface():
     note = reg["terminal-508-5"]["note"]
     assert "a flanged or a plain header presents" in note
     assert "a flanged or a plain plug mates" in note
-    assert _contract("common/terminal-header-508-5f@1")["interface"] == "terminal-508-5"
+    assert _contract("common/terminal-header-508-5f@2")["interface"] == "terminal-508-5"
     plug = _contract(P5F)
     assert "SCREW-FLANGE" in plug["description"]
     assert " ".join(plug["provenance"]["flanged"].split()).startswith("THE SCREW-FLANGE PLUG")
@@ -196,7 +198,29 @@ def test_a_header_gained_its_interface_and_kept_its_drawing(hdr):
     assert c["attrs"] == attrs
     assert c["elements"] == elements
     assert c["version"].split(".")[0] == hdr.rsplit("@", 1)[1]
-    assert "conforms" not in c and "mates" not in c
+    assert c.get("conforms") == CONFORMS.get(hdr) and "mates" not in c
+
+
+# THE TWO AURCORE HEADERS CLAIM THEIR REGISTRY ENTRIES since they are drawn at the
+# installed height (#873); the ReadyLinks header was measured, and claims none.
+CONFORMS = {
+    "common/terminal-header-508-2@3": "terminal-508-2-header",
+    "common/terminal-header-508-5f@2": "terminal-508-5-header",
+}
+
+
+@pytest.mark.parametrize("hdr", sorted(CONFORMS))
+def test_a_header_is_its_installed_height_and_its_mate_is_on_the_plug_axis(hdr):
+    """#873: the face is the mating face, board edge to housing top, so its
+    height is the 8.6 the Phoenix Contact data sheets call the installed height
+    and not their [h] of 12.1, which counts the 3.5 solder pin. The plugs put
+    their axis 4.3 above their underside, the middle of an 8.6 header whose
+    underside is level with theirs; the header's mate is that same middle."""
+    c = _contract(hdr)
+    entry = std()[CONFORMS[hdr]]
+    assert c["size"]["h"] == entry["h"] == 8.6
+    assert c["size"]["w"] == entry["w"]
+    assert c["connection-points"]["mate"]["at"][1] == pytest.approx(8.6 / 2)
 
 
 @pytest.mark.parametrize("hdr", sorted(UNCHANGED))
@@ -249,8 +273,8 @@ def test_every_header_a_device_places_is_counted():
                 if p.get("ref") in placed:
                     placed[p["ref"]] += 1
     assert all(n > 0 for n in placed.values()), placed
-    assert placed["common/terminal-header-508-5f@1"] >= 10, placed
-    assert placed["common/terminal-header-508-2@2"] >= 10, placed
+    assert placed["common/terminal-header-508-5f@2"] >= 10, placed
+    assert placed["common/terminal-header-508-2@3"] >= 10, placed
     assert placed["common/dc-terminal-header-6@1"] >= 2, placed
     composed = []
     for f in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
@@ -319,7 +343,7 @@ def test_its_fields_are_the_wire_and_the_body(ref):
 
 
 def test_the_default_body_is_the_green_the_headers_are_drawn_in():
-    for hdr in ("common/terminal-header-508-2@2", "common/terminal-header-508-5f@1"):
+    for hdr in ("common/terminal-header-508-2@3", "common/terminal-header-508-5f@2"):
         assert skin(hdr)["body"].get("fill") == GREEN
 
 

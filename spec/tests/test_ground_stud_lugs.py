@@ -44,7 +44,7 @@ SVG = "{http://www.w3.org/2000/svg}"
 IFACE, LUG = "terminal-stud", "generic/ring-lug@1"
 # the sized ground screws (#830) a pair host composes; test_two_hole_lugs.py
 # holds them and the pair hosts.
-SIZED_SCREWS = ("common/ground-screw-m6@1", "common/ground-screw-1-4@1",
+SIZED_SCREWS = ("common/ground-screw-m6@1", "common/ground-screw-m4@1", "common/ground-screw-1-4@1",
                 "common/ground-screw-10-32@1")
 # the 10-32 studs of the SR-1 DC terminal block, two per pole host (#828)
 SR1_STUD = "nokia/sr-1-dc-stud@1"
@@ -58,6 +58,11 @@ SINGLE = {
         axis=(3.5, 9.8), on="screw-cap", top=4.7, size={"w": 7.0, "h": 14.0},
         elements={"stud": [0.7, 7.0], "symbol": [1.5, 1.0]},
         solids={"stud": (0.0, 3.2), "washer": (3.2, 3.7), "screw-cap": (3.7, 4.7)}),
+    # #830: common/ground-lug@1's stud alone, without its earth symbol
+    "common/ground-screw@1": dict(
+        axis=(2.8, 2.8), on="screw-cap", top=4.7, size={"w": 5.6, "h": 5.6},
+        elements={"stud": [0, 0]},
+        solids={"stud": (0.0, 3.2), "washer": (3.2, 3.7), "screw-cap": (3.7, 4.7)}),
     "common/ground-stud@1": dict(
         axis=(4.05, 4.05), on="stud", top=6.0, size={"w": 8.1, "h": 8.1},
         elements={"nut": [0.0, 0.5]},
@@ -70,7 +75,8 @@ SINGLE = {
 CASA, CASA_STUD = "casa/c40g-ground-studs@1", "casa/shelf-ground-stud@1"
 # the pair hosts a device places straight on a face (#828); test_two_hole_lugs.py
 # and test_grounding_devices.py hold them, and only their `stud-size` is read here
-PAIR_HOSTS = ("common/ground-stud-pair-5-8-m6@1", "common/ground-stud-pair-5-8-1-4@1",
+PAIR_HOSTS = ("common/ground-stud-pair-5-8-m6@1", "common/ground-stud-pair-5-8-m4@1",
+              "common/ground-stud-pair-5-8-1-4@1",
               "common/ground-stud-pair-3-4-1-4@1", "common/ground-stud-pair-1-1-4@1")
 # the three studs of the Casa terminal: seat id -> stud axis in the terminal's frame
 CASA_SEATS = {"stud-tr": (21.45, 6.15), "stud-bl": (6.15, 21.45), "stud-br": (21.45, 21.45)}
@@ -88,7 +94,7 @@ OLD_NUT_TR = "25.35,6.15 23.4,9.53 19.5,9.53 17.55,6.15 19.5,2.77 23.4,2.77"
 OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 15.3)}
 
 # The census, counted off the library by walking every device view and every
-# component's `parts:`: part -> (placements, devices). 59 placements on 39
+# component's `parts:`: part -> (placements, devices). 49 placements on 31
 # devices. On main (796eb08) the same walk read 145 on 61; the grounding batch
 # (#828, #830) moved 86 single studs into pair hosts, which compose a sized
 # screw or the MX stud twice and which test_two_hole_lugs.py and
@@ -99,8 +105,16 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 #                                       each), the Nokia FX-16 (2), FX-8 and FX-4
 #   juniper/mx-ground-stud@1  10 -> 0   the MX80, MX104, MX150, MX240 and MX480
 # and 22 devices with them, every one of whose ground studs was in a pair.
+# #830 then moved common/ground-lug@1 55 -> 35 on 35 -> 23 devices: fifteen
+# placements on eight UfiSpace chassis (M3000-14XC, S9500-22XST, S9501-28SMT,
+# S9502-16SMT, S9510-28DC, S9510-30XC, S9511-20CT, S9601-104BC) became one
+# common/ground-stud-pair-5-8-m4@1 each, and where one stud had stood for two
+# holes (Edgecore DCS500 twice, EPS112, EPS203, AGR560) both screws are the
+# symbol-less common/ground-screw@1, ten placements on four devices, with the
+# printed earth mark drawn as silkscreen.
 CENSUS = {
-    "common/ground-lug@1": (55, 35),
+    "common/ground-lug@1": (35, 23),
+    "common/ground-screw@1": (10, 4),
     "common/ground-stud@1": (3, 3),
     CASA: (1, 1),
 }
@@ -124,6 +138,7 @@ MX_PAIR_HOSTS = ("juniper/mx-ground-stud-pair-5-8@1", "juniper/mx-ground-stud-pa
                  "juniper/mx204-ground-plate@2", "juniper/mx304-ground-plate@2")
 
 UFI2 = {"ground-1": "M4", "ground-2": "M4"}
+UFI_PAIR = {"ground-screws": "M4"}
 # device -> {placement: the size its own documents state}. Every other
 # placement of the four parts states none.
 # THE ELEVEN AMPHENOL PANELS STATE THE SAME SIZE FROM THE SAME DOCUMENT. The
@@ -149,26 +164,26 @@ STUD_SIZE = {
     "casa/c40g": {"ground-studs-rear": "M6"},
     "edgecore/agr110": {"ground-right": "M5"},
     "edgecore/agr130": {"ground-right": "M5"},
-    "edgecore/dcs500": {"ground-0": "M5", "ground-1": "M5"},
+    "edgecore/dcs500": {f"ground-{i}{b}": "M5" for i in (0, 1) for b in ("", "b")},
     "edgecore/ais800-64d": {"ground-screws": "M6"},
     "edgecore/ais800-64o": {"ground-screws": "M6"},
     "nokia/nfxs-d-ba": {"ground-left": "1/4 in", "ground-right": "1/4 in"},
     "nokia/nfxs-e-bb": {"ground": "1/4 in"},
     "nokia/nfxs-f-bb": {"ground": "1/4 in"},
     "nokia/lmfs-f": {"ground-studs": "M6"},
-    "ufispace/m3000-14xc": UFI2,
-    "ufispace/s9500-22xst": UFI2,
+    "ufispace/m3000-14xc": UFI_PAIR,
+    "ufispace/s9500-22xst": UFI_PAIR,
     "ufispace/s9500-30xs": {"ground-lug": "M4"},
     "ufispace/s9501-18smt": {f"ground-{i}": "M4" for i in (1, 2, 3, 4)},
-    "ufispace/s9501-28smt": UFI2,
-    "ufispace/s9502-16smt": UFI2,
-    "ufispace/s9510-28dc": UFI2,
-    "ufispace/s9510-30xc": UFI2,
-    "ufispace/s9511-20ct": UFI2,
+    "ufispace/s9501-28smt": UFI_PAIR,
+    "ufispace/s9502-16smt": UFI_PAIR,
+    "ufispace/s9510-28dc": UFI_PAIR,
+    "ufispace/s9510-30xc": UFI_PAIR,
+    "ufispace/s9511-20ct": UFI_PAIR,
     "ufispace/s9600-102xc": UFI2,
     "ufispace/s9600-28dx": {"ground-1": "M4"},
     "ufispace/s9601-102xc": UFI2,
-    "ufispace/s9601-104bc": {"ground-1": "M4"},
+    "ufispace/s9601-104bc": UFI_PAIR,
 }
 
 # One real device per case: (configuration, view, the part, the slots a lug
@@ -182,9 +197,9 @@ BUILT = {
     # a pair, one stud above the other, both seated
     "ufispace/s9600-102xc": ("dc", "rear", "common/ground-lug@1", ["ground-1", "ground-2"]),
     # a pair side by side, both seated
-    "ufispace/s9500-22xst": ("dc", "right", "common/ground-lug@1", ["ground-1", "ground-2"]),
+    "ufispace/s9501-18smt": ("dc", "right", "common/ground-lug@1", ["ground-1", "ground-2"]),
     # a placement turned 90
-    "edgecore/dcs500": ("base", "rear", "common/ground-lug@1", ["ground-1"]),
+    "edgecore/dcs500": ("base", "rear", "common/ground-screw@1", ["ground-1"]),
 }
 # THE SEATS ASKED FOR AT THE SEAT'S OWN DIRECTION, `turn: 0` (#829). Every
 # other seat in BUILT states no turn and takes the default the build computes
@@ -379,8 +394,8 @@ def test_the_census_of_ground_stud_placements(placed):
     got = {ref: (n, len(devs)) for ref, (n, devs) in counts.items()}
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
-    assert sum(n for n, _ in got.values()) == 59
-    assert len({where for where, _, _ in placed}) == 39
+    assert sum(n for n, _ in got.values()) == 49
+    assert len({where for where, _, _ in placed}) == 31
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -422,7 +437,7 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         assert c["mate"] == pytest.approx(want, abs=EPS)
         seen += 1
     # every placement of the census but the Casa terminal's one
-    assert seen == 58
+    assert seen == 48
 
 
 def test_the_only_turned_placements_are_turned_90(placed):
@@ -461,17 +476,20 @@ def test_the_casa_terminal_publishes_exactly_its_three_studs_as_slots(comps, slo
 # --- 3. stud-size ------------------------------------------------------------------
 
 def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed):
-    """70 placements on 34 devices state a size for a single stud or a common
+    """65 placements on 34 devices state a size for a single stud or a common
     pair host (STUD_SIZE), and the seven MX pairs and plates state theirs on
     the pair placement (PAIRED). The 80 on 39 this read before counted the
-    five MX chassis' ten single studs, which are one pair placement each now."""
+    five MX chassis' ten single studs, which are one pair placement each now;
+    the 70 after that counted two M4 studs on each of seven UfiSpace chassis
+    and one on the S9601-104BC, one M4 pair host each since #830, beside the
+    two DCS500 screws #830 added."""
     got = {}
     for device, view, p in [*placed, *placements_of(PAIR_HOSTS)]:
         size = (p.get("attrs") or {}).get("stud-size")
         if size is not None:
             got.setdefault(device, {})[p["id"]] = size
     assert got == STUD_SIZE
-    assert sum(len(v) for v in got.values()) == 70 and len(got) == 34
+    assert sum(len(v) for v in got.values()) == 65 and len(got) == 34
     mx = {}
     for device, view, p in placements_of(MX_PAIR_HOSTS):
         mx.setdefault(device, {})[p["id"]] = (p.get("attrs") or {}).get("stud-size")
@@ -808,18 +826,19 @@ def test_two_lugs_on_a_pair_drawn_one_above_the_other_overlap(built):
 
 
 def test_two_lugs_on_a_pair_drawn_side_by_side_do_not_overlap(built):
-    """The other pairs are drawn side by side. The S9500-22XST's two holes
-    are 11 apart and a lug is 5.5 wide, so two one-hole lugs lie beside each
-    other with 5.5 between them, both wires leaving downward."""
-    device = "ufispace/s9500-22xst"
+    """Other pairs are drawn side by side. The S9501-18SMT's two holes at
+    Location-1 are 15.8 apart and a lug is 5.5 wide, so two one-hole lugs lie
+    beside each other with 10.3 between them, both wires leaving downward.
+    (This case was the S9500-22XST's until #830 made its holes one M4 pair host.)"""
+    device = "ufispace/s9501-18smt"
     one = _lug(built, device, "ground-1")
     two = _lug(built, device, "ground-2")
     parents = one[1]
     (ax, ay), (bx, by) = (device_point(parents, h, (3.5, 9.8)) for h in (one[2], two[2]))
-    assert ay == pytest.approx(by) and bx - ax == pytest.approx(11.0)
+    assert ay == pytest.approx(by) and bx - ax == pytest.approx(15.8)
     a, b = _lug_box(parents, one[3]), _lug_box(parents, two[3])
     assert not _overlap(a, b)
-    assert b[0] - a[2] == pytest.approx(11.0 - 5.5)
+    assert b[0] - a[2] == pytest.approx(15.8 - 5.5)
 
 
 @EACH_BUILT

@@ -9,6 +9,13 @@ TWO index files come out of here, not one:
                            demo page load, so it carries nothing else.
   components-detail.json   `provenance` and `relief` per ref, in full. Nothing
                            is dropped; it is one deliberate fetch away.
+
+and a third beside them, for the contracts that are not parts at all:
+
+  kits.json                every `kind: kit` (#905) - a rail, bracket or slide
+                           kit, which no device places and which has nothing to
+                           compile - as the contract states it. A kit is never
+                           an entry of components.json.
 """
 import argparse
 import json
@@ -168,15 +175,19 @@ def fibre_ends(data, load_ref):
     explorer can show for it. Dropping this shape read as `optical.ends: {}`
     on a real, DCIM-exported part - wrong, not merely incomplete.
 
-    A LIST `from` IS NOT A SHAPE THIS SCHEMA HAS: `optical.endpoints` reads
-    `path["from"]` as a single string unconditionally, and L79 (`lint.py`)
-    checks a path's source the same way - a fan-IN combiner has no syntax
-    here, so one is treated as an unresolved endpoint and skipped, the same
-    as any other value `split_endpoint` cannot parse.
+    A COMBINE IS THE SAME FAN SEEN FROM ITS OTHER END: `optical.endpoints`
+    answers its destination first and its sources after, so the destination
+    reaches every source and each source reaches the destination, exactly as
+    a split's source and legs do. A list `from` is still not a shape this
+    schema has, and is skipped like any other value `split_endpoint` cannot
+    parse.
     """
     ends = {}
     for p in data["optical"]["paths"]:
-        if not isinstance(p.get("from"), str) or not p.get("to"):
+        if optical.is_combine(p):
+            if not isinstance(p.get("to"), str):
+                continue
+        elif not isinstance(p.get("from"), str) or not p.get("to"):
             continue
         eps = [ep for ep, _ratio in optical.endpoints(p)]
         if len(eps) < 2 or not all(isinstance(ep, str) for ep in eps):
@@ -257,10 +268,37 @@ def seated_in_bays(roots):
     for f in libwalk.iter_devices(roots) + libwalk.iter_components(roots):
         doc = load_yaml(f) or {}
         walk(doc)
-        for cfg in (doc.get("configurations") or {}).values():
+        # A DEVICE'S CONFIGURATIONS ARE A MAPPING BY NAME; a kit's are a list
+        # of assemblies (#905), and seat nothing in a bay.
+        cfgs = doc.get("configurations")
+        for cfg in (cfgs.values() if isinstance(cfgs, dict) else ()):
             found.update(r for r in ((cfg or {}).get("bays") or {}).values()
                          if isinstance(r, str))
     return found
+
+
+def kit_entry(ref, ns, major, data):
+    """One row of kits.json: the kit as its contract states it, keyed the way
+    a components.json entry is (`ns`, `name`, `major`) plus its `ref`.
+
+    EVERY KEY ON EVERY ROW, null or empty where the contract says nothing, so a
+    consumer reads one shape. The parts stay refs; a device's configs.json is
+    where a kit is resolved inline with the geometry of its parts (#907).
+    """
+    return {
+        "ref": ref, "ns": ns, "name": data["name"], "major": major,
+        "version": data["version"], "kind": "kit",
+        "description": data.get("description", ""),
+        "motion": data.get("motion"),
+        "travel": data.get("travel"),
+        "install": data.get("install"),
+        "parts": [{k: p[k] for k in ("ref", "id", "count") if k in p}
+                  for p in data.get("parts") or []],
+        "configurations": data.get("configurations") or [],
+        "accessories": data.get("accessories") or [],
+        "superseded-by": data.get("superseded-by"),
+        "provenance": data.get("provenance") or {},
+    }
 
 
 def main():
@@ -279,6 +317,7 @@ def main():
     candidates = _pluggable_candidates(args.library)
     load_ref = lambda ref: libwalk.load_contract(ref, args.library)  # noqa: E731
     index = []
+    kits = []
     faces_named = named_as_faces(args.library)
     in_bays = seated_in_bays(args.library)
     seats = seat_counts(args.library)
@@ -289,6 +328,13 @@ def main():
             ns = cf.parents[2].name
             major = cf.parent.name
             ref = f"{ns}/{data['name']}@{major[1:]}"
+            # A KIT IS NOT A PART A DEVICE PLACES (#905), so it is not an entry
+            # here: it has no size, no skin and nothing to compile, and the
+            # `seats` and class counts below would count it as one. It goes to
+            # kits.json instead.
+            if data.get("kind") == "kit":
+                kits.append(kit_entry(ref, ns, major, data))
+                continue
             entry = {
                 "ns": ns, "name": data["name"], "major": major,
                 "version": data["version"], "kind": data.get("kind"),
@@ -300,6 +346,11 @@ def main():
                 # `None` on every part and could only fall back to `class`, which
                 # is exactly the fallback the field exists to replace.
                 "behaviour": data.get("behaviour"),
+                # RETIRED, IN FAVOUR OF THIS REF (the schema's `superseded-by`).
+                # A retired major is kept so a manifest pinning it resolves, and
+                # a consumer offering parts must not offer it: the DCIM module
+                # export reads this to leave it out.
+                "superseded-by": data.get("superseded-by"),
                 # HOW MANY DEVICES SEAT THIS MAJOR, the number CATALOGUE.md
                 # shows in its `devices` column and counted by the same
                 # function (components_catalogue.seat_counts): a placement or
@@ -586,8 +637,12 @@ def main():
          "known-wrong": sorted(known_wrong)}, indent=1, sort_keys=True))
     (out / "components-detail.json").write_text(json.dumps(
         {"components": detail}, indent=1, sort_keys=True))
+    # WRITTEN EVERY BUILD, EMPTY OR NOT, so a consumer can fetch it without
+    # first asking whether the library holds a kit yet.
+    (out / "kits.json").write_text(json.dumps(
+        {"kits": sorted(kits, key=lambda k: k["ref"])}, indent=1, sort_keys=True))
     print(f"compiled {len(index)} components -> {out}/components.json"
-          f" (+ components-detail.json)")
+          f" (+ components-detail.json, {len(kits)} kit(s) -> kits.json)")
 
 
 if __name__ == "__main__":

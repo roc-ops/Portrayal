@@ -27,7 +27,9 @@ Read this one when you review, not while you build:
 
 `.claude/skills/*/SKILL.md` are written for Claude Code, but they are plain
 Markdown instructions and you can follow them by hand.
-`portrayal-model-device` points at the documents above.
+`portrayal-model-device` points at the documents above, lists the gates in
+order, and says how a lesson is written: as a rule with its check, not as
+the story of the device that taught it.
 `portrayal-vendor-intake` stages a vendor's datasheets and guides and converts
 the PDFs with docling. It assumes the conversion runs on a separate machine
 with a GPU; running docling locally works too, only more slowly.
@@ -44,7 +46,15 @@ itself.
 python3 spec/tools/portrayal/devicelock.py --library library   # the version bump a change needs
 ./publish.sh --no-images                                       # the build plus the DCIM exports
 python3 -m pytest spec/tests -q -n auto                        # after a build; it reads library/dist
+python3 spec/tools/portrayal/preflight.py --json               # seconds, no build; before asking for review
 ```
+
+Preflight checks the diff against `origin/main` for what review rounds keep
+finding: stale exports, an unallowed skip reason, private paths, a missing
+changelog fragment, lock and lint findings, and `kit` tests. Every FAIL line
+names the command that fixes it. A WARN line is advice and does not fail: the
+`prose` check warns on a new or changed sentence over 25 words in a
+description or an `attrs` string. CONTRIBUTING.md has the table.
 
 Run them from the checkout you changed. `build.sh` and `publish.sh` make the
 tools import this checkout's `portrayal`. When you call a tool directly, put

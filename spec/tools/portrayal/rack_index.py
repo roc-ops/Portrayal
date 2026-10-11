@@ -3,8 +3,10 @@
 
 What a rack tool needs of every device without opening it: its rack units,
 depth, how it mounts, whether its body is sheet, the cable capacity its vendor
-states, and the ids a cable route can pass through on each view of its default
-configuration. The kit's rack/catalog.js reads it through `dist`, so a rack is
+states, the ids a cable route can pass through on each view of its default
+configuration, where a device is not simply its envelope, the `solids` a
+cable may not pass through (rack_solids.py, docs/cable-lay-design.md section
+1.1), and the `trays` a cable lies on (section 2.1). The kit's rack/catalog.js reads it through `dist`, so a rack is
 checked against the same numbers wherever it is built.
 
 Run by build.sh after the compiled faces and the indexes it reads exist.
@@ -13,8 +15,11 @@ Run by build.sh after the compiled faces and the indexes it reads exist.
 """
 import argparse
 import json
+import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+from portrayal import rack_solids
 
 RU = 44.45
 FORMAT = 1
@@ -43,6 +48,38 @@ def marked(path):
         elif e.get("data-guide") or (e.get("data-group") == "guides" and e.get("data-ref")):
             guides.add(i)
     return sorted(guides), sorted(passes)
+
+
+# WHAT A DEVICE IS, in a plain word an agent can search for: "patch panel",
+# "switch". devices.json's `capability` is how far a device is modelled, not
+# what it is, and a portfolio has no category; the manifest's `profile` (the
+# class spec/schemas/profiles.yaml judges it by) is, and devices.json carries
+# it. `networking` is split by the vendor's own words for the device - its
+# portfolio, else its description - and `optical` by whether the box is
+# passive. A profile this does not know, or none, is "device".
+ROUTER = re.compile(r"\brout(?:er|ers|ing)\b", re.I)
+SWITCH = re.compile(r"\bswitch(?:es)?\b", re.I)
+
+
+def kind_of(d, chassis):
+    profile = d.get("profile")
+    if profile == "server":
+        return "server"
+    if profile == "power":
+        return "pdu"
+    if profile == "passive":
+        return "cable manager"
+    if profile == "optical":
+        return "patch panel" if chassis.get("airflow") == "passive" else "optical"
+    if profile == "networking":
+        p = d.get("portfolio") or {}
+        for text in (" ".join(str(p.get(k) or "") for k in ("family", "line", "series")), d.get("description") or ""):
+            if ROUTER.search(text):
+                return "router"
+            if SWITCH.search(text):
+                return "switch"
+        return "network device"
+    return "device"
 
 
 def face_file(idx, name, config, view):
@@ -78,6 +115,7 @@ def build(dist):
             "h": h, "w": c.get("w"), "d": c.get("d"), "airflow": c.get("airflow"),
             "default": idx.get("default"),
             "configs": [x["name"] for x in idx.get("configs", [])],
+            "kind": kind_of(d, c),
         }
         # only what a device has, so the file barely grows
         if c.get("mount") and c["mount"] != "rack":
@@ -93,6 +131,22 @@ def build(dist):
                 entry.setdefault("guides", {})[view] = g
             if ps:
                 entry.setdefault("passes", {})[view] = ps
+        # what a cable may not pass through, where that is not the envelope:
+        # derived from the same faces, never stated (cable-lay-design 1.1).
+        # A zero-U part with a pathway carries a lane (the kit's zero-u.js
+        # carriesLane), so only its walls and back are solid.
+        faces = rack_solids.read_faces({v: dist / face_file(idx, d["name"], idx.get("default"), v)
+                                        for v in ("top", "front", "rear")})
+        lane = c.get("mount") == "rack-side" and bool(entry.get("guides"))
+        solid = rack_solids.solids(faces, c, lane=lane)
+        if solid:
+            entry["solids"] = solid
+        # the floors a cable lies on, from the same plan (cable-lay-design
+        # section 2.1): a route names a tray by its id, and the kit rests a
+        # cable on it (section 3)
+        tray = rack_solids.trays(faces, c)
+        if tray:
+            entry["trays"] = tray
         out[d["name"]] = entry
     return {"format": FORMAT,
             "generated-from": "devices.json and <name>.configs.json, by rack_index.py",

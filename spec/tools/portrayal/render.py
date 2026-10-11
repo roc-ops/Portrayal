@@ -39,12 +39,13 @@ from portrayal.manifest import (presented_point, back_hosts, back_parts, key_on_
                       occupant_spec, nested_key_host, slot_default, drawn_refs,
                       spanned_slots, spanning_axis, summed_rotate, presented_turn,
                       allowed_turns, text_extent, alias_names, config_airflow,
-                      config_power, device_options)
+                      config_power, device_options, pdu_class)
 from portrayal import capability
+from portrayal import ears as ears_mod
 from portrayal import bevel as _bevel
 from portrayal import elements as elements_mod
 from portrayal import facets as _facets
-TOOL_VERSION = "0.1.0"
+TOOL_VERSION = "0.2.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
 # from here rather than each growing a flag that is always given the same value.
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
@@ -63,6 +64,12 @@ STATE_CSS = """
     .state-fail  { --led-color: #ef4444; }
     .state-locate { --led-color: #3b82f6; }
     .state-absent { opacity: 0.35; }
+    /* A SWITCHED OUTLET WITH NO LAMP is dimmed when it is off, as absent is but
+       less (docs/pdu-model-design.md section 3.2): every switched PDU in the
+       library has a lamp per outlet, and this is the fallback so the first one
+       without does not invent a lamp. An outlet a lamp is bound to by `for:`
+       carries data-lamped (mark_lamped) and is never dimmed: its lamp says it. */
+    [data-class='inlet'][data-states~='off'].state-off:not([data-lamped]) { opacity: 0.55; }
     /* A state is a colour AND a behaviour. Solid and blinking of the same colour
        are different facts on real hardware: on the S9510-28DC a solid green PWR
        is "system power good" and a blinking green PWR is "power good but BMC
@@ -85,6 +92,43 @@ STATE_CSS = """
     [data-class='region'].portrayal-highlight { stroke: #f59e0b; stroke-width: 0.7; filter: none; }
     .state-fail[data-class='psu'], .state-fail[data-class='fan'] { filter: drop-shadow(0 0 1.4px #ef4444); }
 """
+
+
+_STATE_TOKEN = re.compile(r"^[a-z0-9-]+$")
+
+
+def _declares_states(node):
+    """True when the node carries a state vocabulary kit/states.js statesOfEl
+    would read: a list of tokens, not prose."""
+    toks = (node.get("data-states") or "").split()
+    return bool(toks) and all(_STATE_TOKEN.match(t) for t in toks)
+
+
+def mark_lamped(svg):
+    """`data-lamped="true"` on every element a lamp is bound to (#934).
+
+    The binding is kit/states.js boundLamps's, stated again here so the
+    stylesheet can see it: an element whose `data-path` a lamp's bare
+    `data-for` names, where the lamp declares a state vocabulary AND so does the
+    element - a switched outlet. A seated plug and silkscreen carry `data-for`
+    and declare no states, and a port declares none of its own, so neither
+    marks anything. STATE_CSS dims an outlet that is `off` only when it is not
+    marked: an outlet with a lamp is never dimmed, its lamp says it. A
+    cross-view target (a leading slash) names another drawing, and the first
+    element carrying a path answers for it, as states.js pathIndex does.
+    """
+    by_path = {}
+    for node in svg.iter():
+        p = node.get("data-path")
+        if p and p not in by_path:
+            by_path[p] = node
+    for lamp in svg.iter():
+        if not lamp.get("data-for") or not lamp.get("data-path") or not _declares_states(lamp):
+            continue
+        for t in lamp.get("data-for").split():
+            src = by_path.get(t)
+            if src is not None and src is not lamp and _declares_states(src):
+                src.set("data-lamped", "true")
 
 
 def data_for(value):
@@ -1754,9 +1798,10 @@ def _inherited_fields(lib, contract, merged, part):
     the default the composed part declares for the same field.
 
     The second half is what lets a host choose a default colour for a part it
-    composes without pinning it. generic/qsfp-mpo@1 defaults `latch-color` to
-    beige and composes common/qsfp-pull-tab@2, whose own default is grey: with
-    no value set the tab has to wear the host default, and a `parts:` entry
+    composes without pinning it. Take a host that defaults `latch-color` to beige
+    (generic/qsfp-mpo@1 did, until #773) and composes common/qsfp-pull-tab@2,
+    whose own default is grey: with no value set the tab has to wear the host
+    default, and a `parts:` entry
     `attrs` would do that only by overriding every wrapper. A default equal to
     the composed part's is not handed down, so nothing that agreed before
     carries a new attribute."""
@@ -1874,6 +1919,28 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         g.set("data-guide-run", _guide["run"])
         g.set("data-guide-aperture",
               f"{_guide['aperture']['w']:g} {_guide['aperture']['h']:g}")
+        # WHERE THE OPENING IS, when the contract says (docs/cable-lay-design.md
+        # section 2.2): how thick its band is along the run, how far its near
+        # inside edge stands out of the base, and its corner on the drawing.
+        # What a cable through it rests on; absent, a router estimates.
+        if _guide.get("depth") is not None:
+            g.set("data-guide-depth", f"{_guide['depth']:g}")
+        if _guide.get("sill") is not None:
+            g.set("data-guide-sill", f"{_guide['sill']:g}")
+        if (_guide.get("aperture") or {}).get("at") is not None:
+            ax, ay = _guide["aperture"]["at"]
+            g.set("data-guide-aperture-at", f"{ax:g} {ay:g}")
+        # WHAT OF THE LOOP IS SOLID (#968): the legs' wall beside the
+        # opening, the loop's height over its base, and the slit an open
+        # loop takes a cable in by. rack.json derives the loop's solids from
+        # them, so a route passes the ring only through its opening.
+        if _guide.get("wall") is not None:
+            g.set("data-guide-wall", f"{_guide['wall']:g}")
+        if _guide.get("height") is not None:
+            g.set("data-guide-height", f"{_guide['height']:g}")
+        if _guide.get("slit") is not None:
+            s0, s1 = _guide["slit"]
+            g.set("data-guide-slit", f"{s0:g} {s1:g}")
     # A cavity is a hole you look INTO - a port aperture, a cage. A MODULE is a
     # solid body that fills its bay, and its depth says how far it reaches into
     # the chassis, not that the face has an N-mm hole in it. Emitting data-depth
@@ -2450,7 +2517,44 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         # marker must stay invisible to every relief query (see above).
         if cp.get("on"):
             mk.set("data-cp-on", f"{inst_id}--{cp['on']}")
+    # A TRAY TRAVELS WITH THE PART, as a ring does (docs/cable-lay-design.md
+    # section 2.1): one unpainted rect per floor rectangle and per tie slot, in
+    # this part's own frame under the instance, so the group's transform places
+    # them. Inert like the connection-point markers above and for the same
+    # reasons - no id, no data-path, no data-ref, no data-z-* - so the 3D
+    # build, the elements file and the face tree never see them, and emitted
+    # last for the same reason too. rack_index.py reads them into rack.json.
+    if contract.get("tray"):
+        tray_marks(g, contract["tray"], inst_id)
     return g, contract
+
+
+def tray_marks(parent, tray, tray_id):
+    """The unpainted rects a tray compiles to, appended to `parent`: one
+    `data-class="tray"` rect per floor rectangle, carrying the tray's height,
+    lip, run and slack, and one `data-class="tie"` rect per tie slot, each
+    naming its tray by `data-tray`."""
+    def rect(cls, r):
+        e = ET.SubElement(parent, f"{{{SVG_NS}}}rect")
+        e.set("data-class", cls)
+        e.set("data-tray", tray_id)
+        (x, y), (w, h) = r["at"], r["size"]
+        e.set("x", f"{x:g}"); e.set("y", f"{y:g}")
+        e.set("width", f"{w:g}"); e.set("height", f"{h:g}")
+        e.set("fill", "none"); e.set("stroke", "none")
+        e.set("pointer-events", "none")
+        return e
+    for r in tray.get("floor") or []:
+        e = rect("tray", r)
+        e.set("data-tray-height", f"{tray['height']:g}")
+        e.set("data-tray-lip", f"{tray.get('lip', 0):g}")
+        e.set("data-tray-run", tray["run"])
+        slack = tray.get("slack")
+        if slack:
+            e.set("data-tray-slack", slack["kind"] if slack["kind"] != "spool" else
+                  f"spool {slack['at'][0]:g} {slack['at'][1]:g} {slack['diameter']:g}")
+    for r in tray.get("ties") or []:
+        rect("tie", r)
 
 
 def text_el(x, y, s, size=2.2, anchor="middle", fill="#c7ccd1"):
@@ -2523,6 +2627,42 @@ def _shift_heights(node, by):
                 for t, o in (pair.split(":") for pair in node.get(k).split(","))))
 
 
+def _generic_ears(svg, plan, view_name, w, h):
+    """Draw the generic ear's outlines on one face (ears.py), and yield each
+    box drawn so the caller can grow the viewBox round it. One group per ear,
+    `ear-left` and `ear-right`, the ids `common/rack-ear@1` is placed under, so
+    a reader addressing a device's ears finds them by the same path either way.
+    """
+    if not plan:
+        return
+    groups = {}
+    for side, kind, x, y, bw, bh in ears_mod.rects(plan, view_name, w, h):
+        g = groups.get(side)
+        if g is None:
+            g = groups[side] = ET.SubElement(svg, f"{{{SVG_NS}}}g")
+            g.set("id", side)
+            g.set("data-path", side)
+            g.set("data-class", "ear")
+            g.set("data-behaviour", "mounts")
+            g.set("data-generic", "ear")
+            g.set("data-description", "generic L-bracket rack ear, sized from "
+                  "chassis.ears or the chassis height (#909)")
+        if kind == "slot":
+            el = ET.SubElement(g, f"{{{SVG_NS}}}path")
+            el.set("d", _slot_path(x, y, bw, bh))
+            el.set("fill", ears_mod.HOLE)
+        else:
+            el = ET.SubElement(g, f"{{{SVG_NS}}}rect")
+            for k, v in (("x", x), ("y", y), ("width", bw), ("height", bh)):
+                el.set(k, f"{round(v, 4):g}")
+            el.set("fill", plan["color"])
+            el.set("stroke", ears_mod.EDGE)
+            el.set("stroke-width", "0.4")
+        el.set("id", f"{side}--{kind}" if kind != "slot"
+               else f"{side}--slot-{sum(1 for c in g if c.tag.endswith('path'))}")
+        yield x, y, x + bw, y + bh
+
+
 def render_view(device, view_name, view, lib, include=(), config_name="default", config=None,
                 silkscreen=True):
     config = config or {}
@@ -2566,8 +2706,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # sections existed - re-filing a key between sections must not change a
     # single byte of a compiled drawing. attrs.flatten is shared with the search
     # index and the exporters so they cannot disagree about what the bag holds.
+    # A BOOLEAN IS SPELLED AS JSON SPELLS IT, `true` or `false`: the first
+    # device-level boolean (#934's `outlet-switching`) would otherwise reach a
+    # browser as Python's `False`.
     for ak, av in attrs_mod.flatten(device.get("attrs")).items():
-        svg.set(f"data-{ak}", str(av))
+        svg.set(f"data-{ak}", str(av).lower() if isinstance(av, bool) else str(av))
     airflow = config_airflow(device, config)
     if airflow:
         svg.set("data-airflow", airflow)
@@ -3186,6 +3329,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         r.set("width", f"{gw:g}"); r.set("height", f"{gh:g}")
         r.set("fill", "none"); r.set("stroke", "none")
         r.set("pointer-events", "none")
+
+    # TRAYS declared on the view (docs/cable-lay-design.md section 2.1): the
+    # floors cables lie on along this face, unpainted like a duct guide. A
+    # tray a part carries is compiled under its instance (tray_marks above).
+    if parts.get("trays"):
+        tg = ET.SubElement(svg, f"{{{SVG_NS}}}g")
+        tg.set("data-class", "trays")
+        for t in parts["trays"]:
+            tray_marks(tg, t, t["id"])
 
     # CUTOUTS. The panel is punched before anything is printed on it or put into
     # it, so the holes paint first. A hole with nothing in it shows the dark inside
@@ -4208,6 +4360,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                              key=lambda kv: tuple(str(x) for x in kv[0]))))
         style.text = STATE_CSS + extra + "\n"
 
+    mark_lamped(svg)
+
     # A component's own <g id="silkscreen"> is printed on ITS faceplate, so it
     # travels with the part and is never occluded by it - unlike chassis silkscreen,
     # which the part covers. Both come out together under --without silkscreen, which
@@ -4241,6 +4395,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                               or n.get("data-class") == "silkscreen"
                               or n.tag == f"{{{SVG_NS}}}text")]:
                 parent.remove(node)
+
+    # A GENERIC RACK EAR, ONLY WHEN ASKED FOR (#909). `--with ears` has always
+    # drawn the ears a device places under that tag (`common/rack-ear@1`); a
+    # rack device that places none gets an L-bracket sized from `chassis.ears`
+    # - its height and offset, the chassis height where it states none - and
+    # reaching out to the 482.6 mm rack face. ears.py says which devices get
+    # one and what it is; the default build draws no ears, as before.
+    if "ears" in include:
+        for x0, y0, x1, y1 in _generic_ears(svg, ears_mod.plan(device), view_name, w, h):
+            extents[0] = min(extents[0], x0); extents[1] = min(extents[1], y0)
+            extents[2] = max(extents[2], x1); extents[3] = max(extents[3], y1)
 
     # WHERE CABLES CAN CROSS THIS FACE (docs/cable-managers-design.md section
     # 5). A declaration, not a picture: the brush or the open hole is drawn by
@@ -4315,7 +4480,10 @@ def _inputs(device, device_yaml, lib):
     files = {Path(device_yaml), Path(__file__),
              Path(__file__).with_name("manifest.py"),
              Path(__file__).with_name("elements.py")}
-    seen, queue = set(), list(component_refs(device))
+    # THE KITS IT LISTS, with their parts and accessories: configs.json
+    # resolves each inline (#907), so a kit edited in place rebuilds the device
+    # that lists it, as devicelock's `composed` asks it for a patch.
+    seen, queue = set(), list(component_refs(device)) + _listed_kit_refs(device)
     while queue:
         ref = queue.pop()
         if ref in seen:
@@ -4329,9 +4497,146 @@ def _inputs(device, device_yaml, lib):
             files.add(Path(skins).parent / "contract.yaml")
             files.update(Path(skins).glob("*.svg"))
         # a part's ref, every default it ships holding and every face it
-        # names (drawn_refs) - a redrawn rear must rebuild its device
+        # names (drawn_refs) - a redrawn rear must rebuild its device; a
+        # kit's accessories beside its parts
         queue.extend(drawn_refs(contract))
+        if contract.get("kind") == "kit":
+            queue.extend(a["ref"] for a in contract.get("accessories") or []
+                         if isinstance(a, dict) and a.get("ref"))
     return {f for f in files if f.exists()}
+
+
+def _listed_kit_refs(device):
+    """The refs of the kits a device lists under `chassis.kits` (#906)."""
+    return [k["ref"] for k in ((device.get("chassis") or {}).get("kits") or [])
+            if isinstance(k, dict) and k.get("ref")]
+
+
+# --- ears and kits in configs.json (#907) -------------------------------------
+#
+# docs/rack-mounting-design.md section 9: the site's Rack Builder reads where a
+# device's ears can put its faceplate, and which kits hold it, from
+# configs.json alone. docs/format-stability.md records the shape.
+
+
+def published_ears(ears):
+    """`chassis.ears` as configs.json publishes it: an object, always.
+
+    THE BARE STRING IS THE OBJECT'S `behind`. #865 wrote `ears: behind` and #906
+    added the object beside it; a reader that had to branch on the type to ask
+    one question would branch on it for ever, so the string is published as
+    `{behind: true}` and the object as the keys it states - `behind`, `h`, `y`,
+    `color`, `positions` - and no more. Lengths are floats, as `overhang`'s are; a
+    position keeps every key it writes (`name`, `label`, `at`, `default`,
+    `racks`, `part`)."""
+    if isinstance(ears, str):
+        return {"behind": ears == "behind"}
+    out = {}
+    if "behind" in ears:
+        out["behind"] = ears["behind"] is True
+    for key in ("h", "y"):
+        if ears.get(key) is not None:
+            out[key] = float(ears[key])
+    if ears.get("color") is not None:
+        out["color"] = str(ears["color"])
+    if "positions" in ears:
+        out["positions"] = []
+        for pos in ears.get("positions") or []:
+            pos = copy.deepcopy(pos or {})
+            if pos.get("at") is not None:
+                pos["at"] = float(pos["at"])
+            out["positions"].append(pos)
+    return out
+
+
+def mount_points(device, cfg_name, cfg, lib):
+    """`configs[].mount-points` (#934, docs/pdu-model-design.md section 6.2):
+    each mount point one configuration draws, as `{mates, at}`, `at` ascending.
+
+    A MOUNT POINT is a placement of a `class: mount` part that declares `mates`
+    - a button that seats in a slot presenting that interface, `pdu-button` on
+    a zero-U PDU. `at` is millimetres from the bottom of the view it is placed
+    on to its `mate` point, which is how a PDU's pitch is read: the EVMI2130X's
+    two buttons stand at 72.0 and 1627.8, the 1555.8 the drawing dimensions.
+    THE PITCH IS DERIVED, NEVER STATED: a second statement of a number the
+    drawing already holds is a number that can disagree with it.
+
+    Read over the views this configuration draws (resolve_views) and the
+    placements it has (`only-in`), so a configuration that drops a button
+    publishes one point fewer. A device with none publishes an empty list."""
+    out = []
+    for _face, (_name, view) in resolve_views(device, cfg).items():
+        h = ((view or {}).get("size") or {}).get("h")
+        if h is None:
+            continue
+        for p in view_parts(view)["placements"]:
+            if p.get("only-in") and cfg_name not in p["only-in"]:
+                continue
+            contract, _ = lib.resolve(p["ref"])
+            mate = ((contract.get("connection-points") or {}).get("mate") or {}).get("at")
+            if contract.get("class") != "mount" or not contract.get("mates") or not mate:
+                continue
+            size = contract.get("size") or {}
+            at = seat_point(p["at"], {"w": size.get("w", 0), "h": size.get("h", 0)},
+                            p.get("rotate", 0), mate)
+            out.append({"mates": contract["mates"], "at": round(float(h) - at[1], 2)})
+    return sorted(out, key=lambda m: (m["at"], m["mates"]))
+
+
+def _published_part(ref, lib):
+    """What configs.json says of a kit's part or accessory beyond its ref: the
+    version it was resolved at, its class and its geometry - `size` and `body`
+    as its contract writes them, null where it writes none."""
+    contract, _ = lib.resolve(ref)
+    return {"version": contract.get("version"), "class": contract.get("class"),
+            "size": contract.get("size"), "body": contract.get("body")}
+
+
+def published_kits(kits, lib):
+    """`chassis.kits`, each kit resolved inline, in the order the device lists
+    them (#907).
+
+    ONE FILE FOR THE SITE. A row is the device's own entry - `ref`, `supply`,
+    `variant` and the `depth` override as written, null where absent - and the
+    kit as its contract states it: `version`, `description`, `motion`, `travel`,
+    `install`, `configurations` and the `parts` and `accessories`, each part
+    and accessory with its geometry beside its ref.
+
+    THE OVERRIDE IS APPLIED. A device's `depth: {config, range}` replaces the
+    `depth` of the configuration it names (#906, L163), so `configurations`
+    here are what this device can do; the row's `depth` still says that one was
+    overridden. The kit's own figure stays in kits.json.
+
+    THE SAME REFS AS THE LOCK. Every ref read here - the kit, its parts and its
+    accessories - is one devicelock's `composed` follows from `chassis.kits`,
+    so a kit edited in place asks each device that lists it for a patch, and a
+    test holds the two together."""
+    out = []
+    for kit in kits:
+        ref = kit["ref"]
+        contract, _ = lib.resolve(ref)
+        over = kit.get("depth")
+        configurations = []
+        for c in contract.get("configurations") or []:
+            c = copy.deepcopy(c)
+            if over and c.get("id") == over.get("config"):
+                c["depth"] = copy.deepcopy(over["range"])
+            configurations.append(c)
+        out.append({
+            "ref": ref, "supply": kit.get("supply"), "variant": kit.get("variant"),
+            "depth": copy.deepcopy(over),
+            "version": contract.get("version"),
+            "description": contract.get("description", ""),
+            "motion": contract.get("motion"), "travel": contract.get("travel"),
+            "install": contract.get("install"),
+            "configurations": configurations,
+            "parts": [{**{k: p[k] for k in ("ref", "id", "count") if k in p},
+                       **_published_part(p["ref"], lib)}
+                      for p in contract.get("parts") or []],
+            "accessories": [{**copy.deepcopy(a), **_published_part(a["ref"], lib)}
+                            for a in contract.get("accessories") or []],
+        })
+    return out
 
 
 def source_bytes(device):
@@ -4413,8 +4718,13 @@ def _pluggable_families():
 
 @functools.lru_cache(maxsize=1)
 def _connector_registry():
-    """interface -> {standard, note, spans}, from spec/schemas/connectors.yaml,
-    or {} if the checkout is broken.
+    """interface -> {standard, note, spans, cover}, from
+    spec/schemas/connectors.yaml, or {} if the checkout is broken.
+
+    Most entries are connectors. One with `cover: true` is a COVER MOUNT
+    instead - where a cover that ships on a part and comes off is fixed, a
+    breaker's touch guard - and is seated the same way, with no `standard`
+    (#822; the file's header lists the keys).
 
     Cached because the seating path asks for it once per drawn instance now
     (`_seat_nested_occupants`), and the file is a fact of the checkout.
@@ -5299,6 +5609,10 @@ def main():
                  # the canonical one and is never repeated here.
                  "aliases": alias_names(device),
                  "capability": cap["capability"], "gaps": cap["gaps"],
+                 # A RACK PDU'S CLASS (#934), derived from `attrs.management`
+                 # `metering-scope` and `outlet-switching` (manifest.pdu_class),
+                 # never stated; null where the device states neither.
+                 "pdu-class": pdu_class(device),
                  # FACES ONLY. A view carrying `face:` is a VARIANT - the
                  # 12 x 3.5in front is drawn when a configuration redirects the
                  # front to it, never on its own - and listing it here offered
@@ -5338,7 +5652,14 @@ def main():
                              **({"overhang": {"left": float(ch["overhang"].get("left", 0)),
                                               "right": float(ch["overhang"].get("right", 0))}}
                                 if ch.get("overhang") else {}),
-                             **({"ears": ch["ears"]} if ch.get("ears") else {})},
+                             # where the ears put the faceplate, ALWAYS an
+                             # object (#907): a bare `behind` is
+                             # {behind: true}; absent where unstated (#865)
+                             **({"ears": published_ears(ch["ears"])} if ch.get("ears") else {}),
+                             # each rail kit the device lists, resolved inline
+                             # so the site reads one file (#907)
+                             **({"kits": published_kits(ch["kits"], lib)}
+                                if ch.get("kits") else {})},
                  # WHAT THE DEVICE CAN BE BOUGHT WITH - the union over its
                  # orderable and base builds of `configs[].power` and
                  # `configs[].airflow`. The filter an HCL runs ("DC, back-to-
@@ -5369,7 +5690,7 @@ def main():
                               # configurations - nothing is invented for it.
                               "kind": c.get("kind"),
                               # WHICH WAY THIS BUILD BREATHES - front-to-back,
-                              # back-to-front, side or passive, the library's
+                              # back-to-front, side, passive or top-to-bottom, the library's
                               # own words - resolved exactly as the drawing's
                               # `data-airflow` is (config_airflow: the
                               # configuration's value, else the chassis's), so
@@ -5414,7 +5735,12 @@ def main():
                               # configuration that draws it identically, so the
                               # file is looked up here, never built from the
                               # configuration's name (#665).
-                              "files": files.get(n, {})}
+                              "files": files.get(n, {}),
+                              # WHERE THIS BUILD HANGS (#934): each mount point
+                              # it draws, `{mates, at}` with `at` in mm from
+                              # the bottom of its view, derived from the button
+                              # placements; `[]` on a device with none
+                              "mount-points": mount_points(device, n, c, lib)}
                              for n, c in sorted(configs.items())],
                  # what each bay will take, so a viewer can offer the swap rather
                  # than guessing from component class

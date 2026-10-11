@@ -61,6 +61,30 @@ def test_L132_fed_by_on_a_part_that_is_not_an_outlet():
     assert len(errs) == 1 and "exports no power outlet" in errs[0]
 
 
+def _dual_feed(output_only_in=None):
+    """input-b exists only in `dual-feed`; output-b1, fed by it, is in every
+    configuration unless `output_only_in` scopes it."""
+    keys = {"fed-by": "input-b"}
+    if output_only_in:
+        keys["only-in"] = output_only_in
+    doc = panel(**{"output-a1": {"fed-by": "input-a"}, "output-b1": keys})
+    doc["views"]["rear"]["components"]["placements"].append(
+        {"id": "input-b", "ref": FEED, "at": [200, 0], "only-in": ["dual-feed"]})
+    doc["configurations"] = {"single-feed": {}, "dual-feed": {}}
+    return doc
+
+
+def test_L132_a_feed_one_configuration_lacks_is_refused_there():
+    """#857: the export resolves `fed-by` per configuration, so lint must too."""
+    errs, _ = findings(_dual_feed(), "L132")
+    assert len(errs) == 1, errs
+    assert "rear/output-b1" in errs[0] and "'single-feed'" in errs[0]
+
+
+def test_L132_an_output_scoped_with_its_feed_is_clean():
+    assert findings(_dual_feed(["dual-feed"]), "L132") == ([], [])
+
+
 def test_L133_through_names_no_bay():
     for via in ("breaker-a9", "input-a"):     # nothing, and a placement that is not a bay
         errs, _ = findings(panel(**{"output-a1": {"fed-by": "input-a", "through": via}}),

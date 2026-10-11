@@ -1,0 +1,678 @@
+format: 1
+kind: device
+name: pdumv20hvnetlx
+version: 0.1.1
+maturity: modelled
+manufacturer: Eaton
+model: PDUMV20HVNETLX
+description: >-
+  Eaton Tripp Lite series switched PDU, 0U: a 1776 mm black metal strip that
+  hangs on two toolless mounting buttons beside a rack and hands a single-phase
+  208/230 V feed (a C20 inlet on the face, with a detachable 10 ft cord ending
+  in a NEMA L6-20P, 16 A, 3.68 kW) on to 24 individually switched outlets - 20
+  IEC C13 and 4 IEC C19 - in two separately breakered load banks of twelve, each
+  with a lamp. Between the banks, a two-digit load meter and the built-in LX
+  Platform network interface (a 10/100 Ethernet port, an RJ45 console port, a
+  USB-A port for environmental sensors, a reset button and a status lamp).
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE VENDOR'S VECTOR DRAWING. The Tripp Lite submittal drawing
+      for the PDUMV20HVNETLX (17-08-067, 2018, page 2) draws a front, a side and
+      a rear view and details A to E, with dimensions in mm and inches. Its views
+      are paths, so every position was read off the PDF's geometry with PyMuPDF
+      at 2400 dpi: 0.32252 pt per mm, the 1776.44 overall between the centres of
+      the two end lines (85.34 and 658.28 pt). The checks on that scale are the
+      drawing's own: the bank dimensions 502.44, 215.56 and 502.44, measured
+      between the screw rows their extension lines run through, land at 502.7,
+      215.9 and 502.4; the two buttons at 134.0 and 1690.6 against 134.01 and
+      1556 apart; and the C20 inlet's pins 12.98 and 8.19 apart against the 13
+      and 8 of the standard, which checks the across axis too. The drawing's
+      line weight is about 1.3 mm at this scale, so outlines are read at their
+      stroke centres. The 3000 px Eaton masters (PDUMV20HVNETLX_DT01, a straight
+      front of the whole strip, and the DT02 meter, DT03 interface, DT04 rear,
+      DT05 C13 and DT06 C19 close-ups) are the second reading, for colour, the
+      lamps and the printing. DT01 is soft (it carries the strip in 2519 px), so
+      it is used for what is printed where and not for dimensions.
+  mount:
+    confidence: drawing
+    note: >-
+      `rack-side`, the library's way to say a part stands vertically beside an
+      upright, with the two toolless buttons on its back (the drawing's rear view
+      and DETAIL A; the owner's manual 933666 rev B, step 1-1: insert the buttons
+      into the rack's button-mount slots and slide the PDU down). `ru: 40` is the
+      height it runs, 1776.44 / 44.45 = 39.96; no source sells it by rack units.
+      The removable mounting brackets the drawing shows fitted at the back (DETAIL
+      D, for racks without button slots, manual step 1-2), the removable cord
+      retention bracket on the front (DETAIL C, 35.56 slot pitch, manual step
+      1-3) and the PDUMVROTATEBRKT 90 degree rotation brackets (for outlets
+      facing the rack's rear) are accessories in the box and are not drawn; the
+      drawing's front view draws a button on a rotation bracket beside the strip,
+      which is that accessory. Which side, and front or rear, is a lab
+      placement's to say.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 17-08-067: 1776.44 [69.94] long and 56 [2.20] wide (front view),
+      the body 44 [1.73] deep (side view), 82.10 [3.23] over the cord retention
+      bracket on the front and 60.75 [2.39] over the C20 inlet and its cord
+      bracket at the bottom. The spec sheet and page 1 of the drawing give 70 x
+      2.19 x 2.65 in (1778 x 56 x 67); the 1778 is the 70 in rounded, and the 67
+      matches no dimension on page 2. The likeliest sum is the 60.75 (the inlet's
+      front to the body's back, side view) plus about 7 of mounting button
+      standing off the back (DETAIL B; its 17.67 is the head's diameter, not
+      its stand-off), about 67.8 against the 67.3 of 2.65 in; it is recorded as
+      a conflict in gaps, and the body stays the dimensioned 44.
+      Weight 3.86 kg (8.5 lb), spec sheet; the drawing's page 1 says 3.9 kg.
+      Colour: the face reads #2f2f2f in DT01, the side about #4d4c47 under the
+      studio light; drawn #2e2f31.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view of 17-08-067, read in mm from the top end and from
+      the face's left edge. Top to bottom: bank 1, from the screw row at 9.5 to the
+      one at 512.2 (the 502.44 dimension); the meter zone (215.56) to the screw
+      row at 728; bank 2 (502.44) to 1230.6; and 545.95 of plain face to the bottom
+      end, with the C20 inlet at its foot. Each bank starts with two C19s, each in its
+      own bezel 34.4 by 42.5 (portrait, earth to the left, centred 34.15 across at 39.63 and 83.72 into
+      the bank) with a lamp to the left of each at 11.6, and then ten C13s
+      (chamfered end down) each in its own bezel 35.2 by 28.4, centred 34.62
+      across, the first at 170.44 and then every 35.616, each with its lamp above
+      it at 41.83 across. Bank 2 is bank 1 moved down 718.4 (C19 at 758.00 and
+      802.04, first C13 box top at 873.80). The meter is eaton/tripplite-load-meter@1
+      at 533.6; the LX interface below it: a reset hole at (22.15, 578.65), the
+      status lamp at (32.53, 578.65), and in a row centred at 593.76 the USB-A
+      (portrait, at 7.92), the CONFIG RJ45 (22.20) and the LAN RJ45 (42.11). The
+      C20 inlet is portrait with its earth pin to the left, centred (28.2,
+      1743.7), in a flange 27.9 by 36.3, with a screw above and below it for the
+      removable cord bracket (see input). Hex and round fasteners as drawn, all
+      drawn round.
+  outlet-pitch:
+    confidence: drawing
+    note: >-
+      drawing - NOT DIMENSIONED, MEASURED FROM THE PATHS. The ten C13 box tops of
+      bank 1 stand at 155.34, 190.87, 226.59 ... 475.88, a pitch of 35.616, and
+      bank 2's the same; the removable cord retention bracket's slots are
+      dimensioned 35.56 [1.40] apart on the side view, one per C13, which agrees
+      within 0.06. The two C19s stand 44.09 apart.
+  banks:
+    confidence: datasheet
+    note: >-
+      datasheet and drawing - the spec sheet: "20 C13 and 4 C19 outlets split
+      into 2 separately breakered load banks"; the drawing dimensions the two
+      outlet runs 502.44 each and the meter zone between them 215.56; the owner's
+      manual (Features, Digital Load Meter) names them Bank 1 and Bank 2. Bank 1
+      is outlets 1 to 12 at the top, bank 2 outlets 13 to 24, each two C19s then
+      ten C13s, as DT01 numbers them. Which bank is which is read off the
+      numbering, not stated: no held source says that bank 1 is the top one.
+  breakers:
+    confidence: datasheet
+    note: >-
+      datasheet - two breakers, one per bank (spec sheet, above; the owner's
+      manual's Features: "Models with multiple outlet banks have a circuit breaker
+      for each bank"). THEIR POSITIONS ARE NOT DRAWN, so they are not placed and
+      the outlets state no `through` (gaps: breaker-positions). Searched: the
+      submittal drawing's three views and five details, the owner's manual's 50
+      figures as converted (its one breaker figure is a generic rocker with four
+      screws in the Features section, for "select models"), the spec sheet and the
+      SKU page, and the nine Eaton photographs. Page 1 of the drawing names the
+      face's features A to O in callouts and none of them is a breaker. The four
+      features on each side are vent grilles, not breakers (sides): page 1's
+      isometric draws them slotted, with two screws each where the manual's
+      breaker rocker has four.
+  sides:
+    confidence: drawing
+    note: >-
+      drawing - the side view of 17-08-067 (third angle, the standing PDU's
+      right; x = 0 is the front) draws four rounded features filled black,
+      11.9 to 34.2 behind the face and centred on the depth, at 12.8 to 53.8,
+      546.5 to 613.1, 1245.2 to 1311.9 and 1546.2 to 1612.6 down the side, each
+      with a screw at each end. THEY ARE LOUVRED VENT GRILLES: page 1's isometric
+      (around page coordinates 190-230, 415-445 and 375-420, 280-320) draws each
+      as two fields of fine slots running along the length, a divider across the
+      middle and a Phillips screw at each end, and DT08 shows two of them on the
+      up-facing side about 188 and 489 from the bottom end, which are the fourth
+      and third. Each is drawn as a frame (a backing rect, since a vent field
+      paints only its slots) and two `slots` fields declared `vent: 1.0`, about
+      1.6 apart (the slot pitch is not dimensioned; page 1 resolves the fields,
+      not a count). The side also carries seven small screws 5.4 behind the face at 14.3, 202.9, 514.8, 826.6,
+      1138.5, 1450.3 and 1762.2, a pitch of about 312; a screw at each end 13.4
+      behind the face. The drawing's depth axis reads 42.6 for the dimensioned
+      44, so depths are scaled to the 44. The left side is drawn as the right
+      mirrored front to back, which DT01 supports for the grilles at 547, 1245
+      and 1546 (it sees the left side edge-on); the grilles' colour, #6f7173, is
+      DT01's reading on the left side, and it is the frames' fill: a `slots`
+      field paints its slots over the frame and takes no fill of its own. The
+      left side also prints an EATON wordmark, upside down as DT08 shows that
+      side face-up (reading top to bottom on the standing PDU), about 864 to 930
+      from the top end and centred on the depth. DT08 is in perspective, so it
+      is read against the outlets beside it rather than the strip's whole
+      length: anchored on the centres of outlets 1 and 13 (43.6 and 762.0 down,
+      0.763 mm a pixel between them) it spans about 862 to 925; DT01's side
+      band, at 1.416 px/mm, gives 865 to 930. It is a `logo-zone` region on the
+      left view and is not drawn.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear view of 17-08-067 and DETAIL A: two toolless mounting
+      buttons on the width's centre line, 134.01 [5.28] from the top end and 1556
+      [61.26] apart (86.43 [3.40] from the bottom end). The removable mounting
+      brackets the view draws fitted are not drawn (mount); their screws are
+      drawn as the threaded holes they leave, at 284.5 and 310.4 (the 285.18
+      dimension) and at 1542.4 and 1567.8 (208.60 from the bottom). A small hole
+      at 1750.6, 14.9 right of the centre line as the rear view draws it.
+  lamps:
+    confidence: datasheet
+    note: >-
+      datasheet, drawing and photo - the owner's manual (933666 rev B, Features):
+      "On switched models, each outlet LED illuminates when the associated outlet
+      is ready to distribute live AC power"; the spec sheet: "24 power
+      availability LEDs confirm power off/on status for each built-in outlet".
+      The drawing draws each as a circle, left of each C19 and above each C13;
+      DT01 shows them unlit, a grey window beside each printed numeral. Each is
+      eaton/tripplite-led@1, placed with `for:` naming its outlet so a state set
+      on the outlet reaches its lamp (docs/pdu-model-design.md section 3.2); the
+      `outlet-leds` group declares `on` lit and `off` unlit, as the manual says,
+      and NO COLOUR, because no held source states one (gaps: outlet-lamp-colour).
+      With no state set a lamp draws unlit.
+  labels:
+    confidence: photo-measured
+    note: >-
+      photo - DT01 prints each outlet's number, 1 to 24 from the top, reading
+      bottom to top (rotate 270): beside and left of the lamp for a C19 (about 4.5
+      from the left edge), and left of the lamp above a C13 (about 34.4 across).
+      Positions are DT01's at about 1.39 px per mm against the drawing's slot
+      positions in the same outlets; the numeral's height, about 3.6, is
+      estimated from the blurred glyphs. The drawing prints no legends. The
+      face's EATON wordmark, reading bottom to top, stands about 19 to 33 across
+      and 677 to 724 down on DT01 (the side band left of the face excluded); it
+      is the front view's `logo-zone` and is not drawn.
+  interface:
+    confidence: photo-measured
+    note: >-
+      photo and datasheet - DT03 shows the LX interface turned a quarter turn
+      anticlockwise from the standing PDU; turned back, the USB-A port has its
+      trident below it, CONFIG is printed below the console jack and the network
+      symbol below the LAN jack, RESET above the reset hole, and LINK and STATUS
+      beside the LAN jack's left and right lamps. The owner's manual (Features,
+      Network Interface) names A the Ethernet port with lamps A1 (green, link and
+      activity, flashing) and A2 (yellow, on steady at 100 Mbps), B the RJ45
+      configuration port (an RJ45 to DB9 cable, part 73-1243, 115.2 kbps), C the
+      USB-A port for EnviroSense2 modules, D the reset button and E the status
+      LED (green steady in normal operation, green and orange alternating while
+      firmware updates or defaults restore). DT03 shows A1 green on the left and
+      A2 yellow on the right, as the manual's figure labels them. The spec sheet's
+      "Network Link/Activity LED (Yellow), Network Speed LED (Green)" swaps the
+      colours against both and is not followed. The LAN jack is
+      common/rj45-eth@1 turned 180 (keyway up, as DT03 shows it), so its led-b is
+      A1 and its led-a A2.
+  meter:
+    confidence: drawing
+    note: >-
+      drawing and photo - eaton/tripplite-load-meter@1, its outline 48.2 by 30.3
+      at (3.9, 533.6), read off the front view; the spec sheet: a digital ammeter
+      that "reports load level on each bank and total PDU output" and turns 180
+      degrees for reading either way up.
+  relief:
+    confidence: drawing
+    note: >-
+      drawing - the outlets are wells, 18 (C13) and 20 (C19) deep from their own
+      contracts, inside the 44 mm body; the bezels around them are drawn flat,
+      because a raised box over the outlets would bury their wells. The C20 inlet
+      and its cord bracket stand forward of the face in the side view (the 60.75
+      over them against the 44 body, so about 16.75), which is not built (gaps:
+      inlet-standoff).
+  dcim:
+    confidence: datasheet
+    note: >-
+      the input is one C20 inlet power port (`iec-60320-c20`) and each outlet a
+      power outlet fed by it, `iec-60320-c13` or `iec-60320-c19` (both types in
+      NetBox and Nautobot, dcim/choices.py). THE OUTLETS ARE NAMED AS THE UNIT
+      PRINTS THEM, 1 to 24 (the owner's decision, 2026-10-08): the `interfaces:`
+      rule maps each `outlet-<n>` to its printed numeral. No outlet runs
+      `through` a breaker, because the breakers are not placed (breakers), so the
+      outlet descriptions name none; the breaker name as printed waits on the
+      breakers' positions. NO feed_leg IS WRITTEN: a single-phase PDU is on
+      whatever leg its plug is on (docs/pdu-model-design.md section 5.2). The LAN
+      jack exports as the management interface and CONFIG as an RJ45 console
+      port; the USB-A port is a sensor port and, like other USB data ports, no
+      device-type field holds it.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet and drawing - a C20 inlet on the face (drawing, C20 INLET; spec
+      sheet "C20 inlet accepts included L6-20P input cable"), so `input-plug` is
+      the slug the inlet exports, `iec-60320-c20`, and `input-cord: detachable`.
+      The cord in the box is a 10 ft (3.05 m) NEMA L6-20P to C19 cord (spec
+      sheet, Package Includes); it is not part of the PDU and is not drawn. The bracket
+      that secures the cord in the inlet (the drawing's DETAIL C; the manual's
+      step 2-1, "use the included bracket C") ships loose, and DT01 shows the
+      inlet without it, only the two screws it fastens to; it is a
+      cable-management accessory and is not drawn (docs/modelling-a-device.md,
+      stage 4, item 7). The clip outline the drawing's front view draws at the
+      inlet is that bracket.
+      208/230 V single phase (rated 200-240 V on the drawing's page 1), 16 A
+      continuous (agency de-rated); the L6-20P is a 20 A plug. `input-voltage-v`
+      is 230, the voltage the 3.68 kW is stated at; at 208 V the spec sheet
+      gives 3.33 kW.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - the spec sheet sells it as a switched PDU with individually
+      controllable outlets, and its digital ammeter "reports load level on each
+      bank and total PDU output"; the LX interface reports the same remotely. So
+      the finest level metered is the bank, `metering-scope: branch`, and
+      `outlet-switching: true`, the published class `switched-metered-branch`
+      (docs/pdu-model-design.md section 2.2; the owner's decision, 2026-10-09).
+      Every outlet declares `[on, off]` on its own placement, not on the group,
+      so the outlets stay slots a cord end can be seated in.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      searched 2026-10-09 (web, "PDUMV20HVNETLX discontinued OR end of life OR
+      replacement"): the hits are for the 8-outlet PDUMV20HVNET2LX, discontinued
+      11/17/2023, not this SKU. tripplite.eaton.com/support/PDUMV20HVNETLX
+      redirects to the live Eaton SKU page, and the spec sheet staged 2026-10-08
+      is copyright 2026. Nothing announces an end of life.
+attrs:
+  physical:
+    length-mm: 1776.44
+    weight-kg: 3.86
+    construction: metal
+  power:
+    input-ac: 208/230 V single-phase (200-240 V), 16 A continuous (agency de-rated), 50/60 Hz
+    input-plug: iec-60320-c20
+    input-cord: detachable
+    input-phase: single
+    input-voltage-v: 230
+    input-current-a: 16
+    plug-rating-a: 20
+    capacity-kw: 3.68
+    capacity-scope: >-
+      the load the PDU can hand on, 3.68 kW at 230 V and 3.33 kW at 208 V, 16 A
+      in all (spec sheet); it is not what the PDU draws itself, which no document
+      held states
+    output-voltage: 208/230 V
+    output-rating: 16 A total; 16 A per C19; 12 A (10 A CE) per C13
+    breakers: two, one per load bank; rating and position not stated
+    frequency: 50/60 Hz
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F)
+    storage-temp: -30 to 60 C (-22 to 140 F)
+    humidity: 5 to 95 % non-condensing
+    altitude: 0 to 3000 m (0 to 10000 ft)
+  management:
+    metering-scope: branch
+    outlet-switching: true
+    metering: load current in amps, total and per bank, on the digital ammeter and over the network
+    network-interface: built-in LX Platform interface (pre-installed WEBCARDLX, PowerAlert Device Manager PADM20), 10/100 Mbps
+    protocols: HTTP, HTTPS, SMTP, SNMPv1, SNMPv2, SNMPv3, telnet, SSH, FTP, DHCP, NTP
+  compliance:
+    certifications: EN 55022; EN 55024; CAN/CSA-C22.2 No. 60950-1 (Canada); IEC 60950-1; NOM (Mexico); UL 60950-1
+    product-compliance: RoHS; FCC Part 15 Class A (USA); Trade Agreements Act (TAA)
+  lifecycle:
+    eol: none-announced
+chassis: {width: 56, height: 1776.44, depth: 44, ru: 40, mount: rack-side, color: '#2e2f31', airflow: passive, weight-kg: 3.86}
+gaps:
+- what: breaker-positions
+  scope: [front, left, right]
+  reason: needs-drawing
+  note: >-
+    the spec sheet gives two separately breakered load banks and the owner's
+    manual a breaker per bank, but no held source shows where the breakers are
+    (searched: the submittal drawing's views and details, the owner's manual's
+    figures, the spec sheet, the SKU page and the nine photographs). So no
+    breaker is placed, no outlet states `through`, and the DCIM breaker name as
+    printed cannot be written. Page 1's callouts A to O name no breaker, and the
+    four features on each side are vent grilles (provenance.sides), not
+    breakers.
+  wanted: a photograph of the PDU's sides, or Tripp Lite's word on where the two bank breakers are and how they are marked.
+- what: outlet-lamp-colour
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the owner's manual says each outlet LED illuminates when its outlet is live
+    and names no colour; the spec sheet says the same; every photograph shows the
+    lamps unlit. The `on` state is declared with no colour, so the kit paints its
+    default lit colour.
+  wanted: a photograph of a powered PDUMV20HVNETLX, or the LX Platform guide's lamp table.
+- what: depth-67
+  scope: [left, right, top, bottom]
+  reason: sources-disagree
+  note: >-
+    the spec sheet and the drawing's page 1 give the depth as 2.65 in (67 mm);
+    the drawing's page 2 dimensions the body 44 [1.73], 60.75 [2.39] over the C20
+    inlet and its cord bracket and 82.10 [3.23] over the cord retention bracket.
+    The likeliest reading of the 67 is the 60.75 plus about 7 of mounting button
+    off the back (DETAIL B), about 67.8; no source says so. The body is modelled
+    44, the dimensioned figure.
+  wanted: the figure the 67 measures, from Tripp Lite.
+- what: inlet-standoff
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the side view draws the C20 inlet and its cord bracket about 16.75 forward of
+    the face (60.75 over them against the 44 body); no view dimensions the
+    inlet's own housing, so the inlet is built as a well in the face and its
+    housing and clip are drawn flat.
+  wanted: a dimensioned section through the inlet, or a measured unit.
+- what: button-shaft
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the buttons are said to mate `pdu-button` by mechanism (manual step 1-1);
+    the drawing dimensions the head (17.67) but not the shaft that sits in the
+    slot's narrow end, so the fit against a 14 mm keyhole in 3 mm sheet is not
+    checked by dimension.
+  wanted: the button's shaft diameter and length.
+- what: front-boss
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the drawing draws a round boss about 10 across at (8.95, 1768.1), bottom left
+    of the face below the inlet, and DT01 shows a light disc there; nothing held
+    names it (a ground point is likely, but the manual says nothing of one). It is
+    drawn as decor.
+  wanted: the part's name from Tripp Lite, or a close-up.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s 24 outlets, numbered 1 to 24 from the top as printed - in each bank two C19s then ten C13s; each switchable, each bank a region'}
+  outlet-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: 'one lamp per outlet, lit while the outlet is ready to distribute live AC power (owner''s manual 933666 rev B); its colour is not stated'
+    states: ['on', 'off']
+  meter: {term: Display, role: indicator, index-origin: 1}
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: 'the LX Platform interface: the 10/100 Ethernet port, the RJ45 configuration (console) port and the USB-A port for EnviroSense2 sensors'}
+  status-leds: {term: LED, role: indicator, index-origin: 1}
+  buttons: {term: Button, role: service, index-origin: 1}
+  marks: {term: Mark, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 56, h: 1776.44}
+    panel:
+      decor:
+      - {id: c19-moulding-1, at: [17.0, 17.95], size: [34.4, 42.65], rx: 1.2, fill: '#262729', kind: outlet-moulding}
+      - {id: c19-moulding-2, at: [17.0, 62.7], size: [34.4, 42.45], rx: 1.2, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-1, at: [17.0, 155.9], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-2, at: [17.0, 191.52], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-3, at: [17.0, 227.13], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-4, at: [17.0, 262.75], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-5, at: [17.0, 298.36], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-6, at: [17.0, 333.98], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-7, at: [17.0, 369.6], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-8, at: [17.0, 405.21], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-9, at: [17.0, 440.83], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-10, at: [17.0, 476.44], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c19-moulding-3, at: [17.0, 736.35], size: [34.4, 42.65], rx: 1.2, fill: '#262729', kind: outlet-moulding}
+      - {id: c19-moulding-4, at: [17.0, 781.1], size: [34.4, 42.45], rx: 1.2, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-11, at: [17.0, 874.3], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-12, at: [17.0, 909.92], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-13, at: [17.0, 945.53], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-14, at: [17.0, 981.15], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-15, at: [17.0, 1016.76], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-16, at: [17.0, 1052.38], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-17, at: [17.0, 1088.0], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-18, at: [17.0, 1123.61], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-19, at: [17.0, 1159.23], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: c13-moulding-20, at: [17.0, 1194.84], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: screw-1, at: [7.4, 7.03], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-2, at: [43.98, 7.03], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-3, at: [9.0, 59.07], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-4, at: [43.46, 130.79], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-5, at: [26.2, 327.2], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-6, at: [26.2, 469.4], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-7, at: [7.42, 509.7], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-8, at: [43.88, 509.8], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-9, at: [8.8, 521.55], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-10, at: [7.08, 576.97], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-11, at: [43.78, 576.97], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-12, at: [25.41, 611.39], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-13, at: [7.08, 710.82], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-14, at: [43.78, 710.82], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-15, at: [7.4, 725.43], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-16, at: [43.98, 725.43], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-17, at: [9.0, 777.47], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-18, at: [43.46, 849.19], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-19, at: [26.2, 1045.6], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-20, at: [26.2, 1187.8], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-21, at: [7.42, 1228.1], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-22, at: [43.88, 1228.2], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-23, at: [41.5, 1258.51], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-24, at: [8.52, 1304.59], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-25, at: [42.1, 1304.59], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-26, at: [25.17, 1478.39], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-27, at: [8.52, 1579.09], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-28, at: [42.1, 1579.09], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-29, at: [25.17, 1697.82], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: inlet-flange, at: [14.3, 1725.3], size: [27.9, 36.3], rx: 2.0, fill: '#1d1e20', kind: inlet-flange}
+      - {id: inlet-bracket-screw-1, at: [26.1, 1716.6], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: inlet-bracket-screw-2, at: [26.1, 1765.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: boss, at: [3.85, 1763.0], size: [10.2, 10.2], rx: 5.1, fill: '#8a8d90', kind: boss}
+    silkscreen:
+      - {at: [6.3, 39.63], text: '1', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-1}
+      - {at: [6.3, 83.72], text: '2', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-2}
+      - {at: [36.2, 151.72], text: '3', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-3}
+      - {at: [36.2, 187.34], text: '4', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-4}
+      - {at: [36.2, 222.95], text: '5', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-5}
+      - {at: [36.2, 258.57], text: '6', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-6}
+      - {at: [36.2, 294.18], text: '7', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-7}
+      - {at: [36.2, 329.8], text: '8', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-8}
+      - {at: [36.2, 365.42], text: '9', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-9}
+      - {at: [36.2, 401.03], text: '10', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-10}
+      - {at: [36.2, 436.65], text: '11', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-11}
+      - {at: [36.2, 472.26], text: '12', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-12}
+      - {at: [6.3, 758.03], text: '13', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-13}
+      - {at: [6.3, 802.12], text: '14', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-14}
+      - {at: [36.2, 870.12], text: '15', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-15}
+      - {at: [36.2, 905.74], text: '16', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-16}
+      - {at: [36.2, 941.35], text: '17', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-17}
+      - {at: [36.2, 976.97], text: '18', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-18}
+      - {at: [36.2, 1012.58], text: '19', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-19}
+      - {at: [36.2, 1048.2], text: '20', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-20}
+      - {at: [36.2, 1083.82], text: '21', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-21}
+      - {at: [36.2, 1119.43], text: '22', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-22}
+      - {at: [36.2, 1155.05], text: '23', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-23}
+      - {at: [36.2, 1190.66], text: '24', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-24}
+      - {at: [23.01, 609.0], text: CONFIG, font-size: 2.6, anchor: middle, rotate: 270, for: config}
+      - {at: [33.0, 588.4], text: LINK, font-size: 2.2, anchor: middle, rotate: 270, for: lan}
+      - {at: [52.0, 588.7], text: STATUS, font-size: 2.2, anchor: middle, rotate: 270, for: lan}
+      - {at: [22.83, 571.6], text: RESET, font-size: 2.2, anchor: middle, rotate: 270, for: reset}
+      - {at: [37.4, 605.4], path: 'M 2.8 0 H 5.8 V 3.0 H 2.8 Z M 2.8 5.6 H 5.8 V 8.6 H 2.8 Z M 0 2.8 H 2.0 V 5.8 H 0 Z M 2.0 4.3 H 2.4 V 1.5 H 2.8 M 2.4 4.3 V 7.1 H 2.8', stroke-width: 0.3, for: lan}
+    components:
+      placements:
+        - {id: outlet-1, ref: std/c19-outlet@1, at: [16.35, 25.78], rotate: 270, group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/c19-outlet@1, at: [16.35, 69.87], rotate: 270, group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [19.42, 159.44], rotate: 180, group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [19.42, 195.06], rotate: 180, group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [19.42, 230.67], rotate: 180, group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [19.42, 266.29], rotate: 180, group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [19.42, 301.9], rotate: 180, group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [19.42, 337.52], rotate: 180, group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-9, ref: std/c13-outlet@1, at: [19.42, 373.14], rotate: 180, group: outlets, rel-pos: 9, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-10, ref: std/c13-outlet@1, at: [19.42, 408.75], rotate: 180, group: outlets, rel-pos: 10, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-11, ref: std/c13-outlet@1, at: [19.42, 444.37], rotate: 180, group: outlets, rel-pos: 11, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-12, ref: std/c13-outlet@1, at: [19.42, 479.98], rotate: 180, group: outlets, rel-pos: 12, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-13, ref: std/c19-outlet@1, at: [16.35, 744.18], rotate: 270, group: outlets, rel-pos: 13, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-14, ref: std/c19-outlet@1, at: [16.35, 788.27], rotate: 270, group: outlets, rel-pos: 14, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-15, ref: std/c13-outlet@1, at: [19.42, 877.84], rotate: 180, group: outlets, rel-pos: 15, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-16, ref: std/c13-outlet@1, at: [19.42, 913.46], rotate: 180, group: outlets, rel-pos: 16, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-17, ref: std/c13-outlet@1, at: [19.42, 949.07], rotate: 180, group: outlets, rel-pos: 17, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-18, ref: std/c13-outlet@1, at: [19.42, 984.69], rotate: 180, group: outlets, rel-pos: 18, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-19, ref: std/c13-outlet@1, at: [19.42, 1020.3], rotate: 180, group: outlets, rel-pos: 19, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-20, ref: std/c13-outlet@1, at: [19.42, 1055.92], rotate: 180, group: outlets, rel-pos: 20, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-21, ref: std/c13-outlet@1, at: [19.42, 1091.54], rotate: 180, group: outlets, rel-pos: 21, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-22, ref: std/c13-outlet@1, at: [19.42, 1127.15], rotate: 180, group: outlets, rel-pos: 22, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-23, ref: std/c13-outlet@1, at: [19.42, 1162.77], rotate: 180, group: outlets, rel-pos: 23, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-24, ref: std/c13-outlet@1, at: [19.42, 1198.38], rotate: 180, group: outlets, rel-pos: 24, fed-by: input, states: ['on', 'off']}
+        - {id: led-1, ref: eaton/tripplite-led@1, at: [8.6, 36.63], group: outlet-leds, rel-pos: 1, for: outlet-1}
+        - {id: led-2, ref: eaton/tripplite-led@1, at: [8.6, 80.72], group: outlet-leds, rel-pos: 2, for: outlet-2}
+        - {id: led-3, ref: eaton/tripplite-led@1, at: [38.83, 148.72], group: outlet-leds, rel-pos: 3, for: outlet-3}
+        - {id: led-4, ref: eaton/tripplite-led@1, at: [38.83, 184.34], group: outlet-leds, rel-pos: 4, for: outlet-4}
+        - {id: led-5, ref: eaton/tripplite-led@1, at: [38.83, 219.95], group: outlet-leds, rel-pos: 5, for: outlet-5}
+        - {id: led-6, ref: eaton/tripplite-led@1, at: [38.83, 255.57], group: outlet-leds, rel-pos: 6, for: outlet-6}
+        - {id: led-7, ref: eaton/tripplite-led@1, at: [38.83, 291.18], group: outlet-leds, rel-pos: 7, for: outlet-7}
+        - {id: led-8, ref: eaton/tripplite-led@1, at: [38.83, 326.8], group: outlet-leds, rel-pos: 8, for: outlet-8}
+        - {id: led-9, ref: eaton/tripplite-led@1, at: [38.83, 362.42], group: outlet-leds, rel-pos: 9, for: outlet-9}
+        - {id: led-10, ref: eaton/tripplite-led@1, at: [38.83, 398.03], group: outlet-leds, rel-pos: 10, for: outlet-10}
+        - {id: led-11, ref: eaton/tripplite-led@1, at: [38.83, 433.65], group: outlet-leds, rel-pos: 11, for: outlet-11}
+        - {id: led-12, ref: eaton/tripplite-led@1, at: [38.83, 469.26], group: outlet-leds, rel-pos: 12, for: outlet-12}
+        - {id: led-13, ref: eaton/tripplite-led@1, at: [8.6, 755.03], group: outlet-leds, rel-pos: 13, for: outlet-13}
+        - {id: led-14, ref: eaton/tripplite-led@1, at: [8.6, 799.12], group: outlet-leds, rel-pos: 14, for: outlet-14}
+        - {id: led-15, ref: eaton/tripplite-led@1, at: [38.83, 867.12], group: outlet-leds, rel-pos: 15, for: outlet-15}
+        - {id: led-16, ref: eaton/tripplite-led@1, at: [38.83, 902.74], group: outlet-leds, rel-pos: 16, for: outlet-16}
+        - {id: led-17, ref: eaton/tripplite-led@1, at: [38.83, 938.35], group: outlet-leds, rel-pos: 17, for: outlet-17}
+        - {id: led-18, ref: eaton/tripplite-led@1, at: [38.83, 973.97], group: outlet-leds, rel-pos: 18, for: outlet-18}
+        - {id: led-19, ref: eaton/tripplite-led@1, at: [38.83, 1009.58], group: outlet-leds, rel-pos: 19, for: outlet-19}
+        - {id: led-20, ref: eaton/tripplite-led@1, at: [38.83, 1045.2], group: outlet-leds, rel-pos: 20, for: outlet-20}
+        - {id: led-21, ref: eaton/tripplite-led@1, at: [38.83, 1080.82], group: outlet-leds, rel-pos: 21, for: outlet-21}
+        - {id: led-22, ref: eaton/tripplite-led@1, at: [38.83, 1116.43], group: outlet-leds, rel-pos: 22, for: outlet-22}
+        - {id: led-23, ref: eaton/tripplite-led@1, at: [38.83, 1152.05], group: outlet-leds, rel-pos: 23, for: outlet-23}
+        - {id: led-24, ref: eaton/tripplite-led@1, at: [38.83, 1187.66], group: outlet-leds, rel-pos: 24, for: outlet-24}
+        - {id: meter, ref: eaton/tripplite-load-meter@1, at: [3.9, 533.6], group: meter, rel-pos: 1, for: chassis}
+        - {id: reset, ref: common/reset-button@1, at: [20.15, 576.65], group: buttons, rel-pos: 1, for: lan}
+        - id: status-led
+          ref: eaton/tripplite-led@1
+          at: [29.53, 575.65]
+          group: status-leds
+          rel-pos: 1
+          for: chassis
+          description: 'the LX Platform interface status lamp (E): green steady in normal operation, a single flash at power-up, green and orange alternating while firmware updates (about once a second) or defaults restore (about twice a second)'
+          states: ['off', {name: 'on', color: '#22c55e'}, {name: alternating, behavior: blinking, color: '#f97316'}]
+        - {id: usb, ref: std/usb-a@1, skin: usb2, at: [1.92, 591.79], rotate: 270, group: mgmt, rel-pos: 3, description: 'USB-A for EnviroSense2 environmental modules (E2MT, E2MTDO, E2MTDI, E2MTHDI); not for a keyboard or mouse'}
+        - {id: usb-mark, ref: common/usb-symbol@1, at: [4.72, 603.5], rotate: 270, for: usb, group: marks, rel-pos: 1}
+        - {id: config, ref: std/rj45@2, at: [14.3, 587.16], rotate: 180, group: mgmt, rel-pos: 2, attrs: {role: console, media: rj45-serial}, description: 'CONFIG, the RJ45 configuration port: a terminal on the included RJ45 to DB9 cable (73-1243) at 115.2 kbps, 8N1'}
+        - id: lan
+          ref: common/rj45-eth@1
+          at: [34.21, 587.16]
+          rotate: 180
+          group: mgmt
+          rel-pos: 1
+          attrs: {media: rj45, speed: 100m, role: mgmt}
+          description: 'the LX Platform 10/100 Ethernet port'
+          states:
+            led-a: ['off', {name: speed-100m, color: '#facc15'}]
+            led-b: ['off', {name: activity, behavior: blinking, color: '#22c55e'}]
+        - {id: input, ref: std/c20-inlet@1, at: [12.0, 1731.5], rotate: 270, group: power-input, rel-pos: 1, description: 'the C20 power inlet; the detachable 10 ft NEMA L6-20P cord in the box plugs into it'}
+    regions:
+      - {id: bank-1, label: 'Load bank 1 - outlets 1 to 12 (two C19, ten C13), on its own breaker', members: [outlet-1, outlet-2, outlet-3, outlet-4, outlet-5, outlet-6, outlet-7, outlet-8, outlet-9, outlet-10, outlet-11, outlet-12, led-1, led-2, led-3, led-4, led-5, led-6, led-7, led-8, led-9, led-10, led-11, led-12]}
+      - {id: logo-zone, at: [19.0, 677.0], size: {w: 13.0, h: 47.0}, label: 'EATON wordmark (DT01), reading bottom to top; not drawn'}
+      - {id: bank-2, label: 'Load bank 2 - outlets 13 to 24 (two C19, ten C13), on its own breaker', members: [outlet-13, outlet-14, outlet-15, outlet-16, outlet-17, outlet-18, outlet-19, outlet-20, outlet-21, outlet-22, outlet-23, outlet-24, led-13, led-14, led-15, led-16, led-17, led-18, led-19, led-20, led-21, led-22, led-23, led-24]}
+  rear:
+    size: {w: 56, h: 1776.44}
+    panel:
+      decor:
+      - {id: bracket-hole-1, at: [26.5, 283.0], size: [3.0, 3.0], rx: 1.5, fill: '#141516', kind: hole}
+      - {id: bracket-hole-2, at: [26.5, 308.9], size: [3.0, 3.0], rx: 1.5, fill: '#141516', kind: hole}
+      - {id: bracket-hole-3, at: [26.5, 1540.9], size: [3.0, 3.0], rx: 1.5, fill: '#141516', kind: hole}
+      - {id: bracket-hole-4, at: [26.5, 1566.3], size: [3.0, 3.0], rx: 1.5, fill: '#141516', kind: hole}
+      - {id: hole-bottom, at: [41.4, 1749.1], size: [3.0, 3.0], rx: 1.5, fill: '#141516', kind: hole}
+    components:
+      placements:
+        - {id: button-1, ref: eaton/tripplite-mounting-button@1, at: [15.65, 121.66], group: mounting, rel-pos: 1}
+        - {id: button-2, ref: eaton/tripplite-mounting-button@1, at: [15.65, 1677.66], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 56, h: 44}
+    empty: >-
+      no source draws the top end: the submittal drawing has front, side and rear
+      views and no end view, the owner's manual's figures show the PDU face-on, and
+      none of the nine Eaton photographs looks at the end.
+  bottom:
+    size: {w: 56, h: 44}
+    empty: >-
+      no source draws the bottom end: the submittal drawing has no end view (the C20
+      inlet is on the face, not the end, as its front and side views show), and none
+      of the nine Eaton photographs looks at the end.
+  right:
+    size: {w: 44, h: 1776.44}
+    panel:
+      decor:
+      - {id: vent-1-frame, at: [11.9, 18.3], size: [22.3, 30.0], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-1-1, at: [12.9, 19.5], size: [20.3, 13.2], pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [12.87, 15.83], vent: 1.0}
+      - {id: vent-1-2, at: [12.9, 33.9], size: [20.3, 13.2], pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [12.87, 30.23], vent: 1.0}
+      - {id: vent-1-screw-1, at: [20.85, 13.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-1-screw-2, at: [20.85, 48.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-2-frame, at: [11.9, 552.0], size: [22.3, 55.6], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-2-1, at: [12.9, 553.2], size: [20.3, 26.0], pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [12.87, 545.98], vent: 1.0}
+      - {id: vent-2-2, at: [12.9, 580.4], size: [20.3, 26.0], pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [12.87, 573.18], vent: 1.0}
+      - {id: vent-2-screw-1, at: [20.85, 547.2], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-2-screw-2, at: [20.85, 608.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-3-frame, at: [11.9, 1250.7], size: [22.3, 55.7], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-3-1, at: [12.9, 1251.9], size: [20.3, 26.05], pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [12.87, 1244.66], vent: 1.0}
+      - {id: vent-3-2, at: [12.9, 1279.15], size: [20.3, 26.05], pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [12.87, 1271.91], vent: 1.0}
+      - {id: vent-3-screw-1, at: [20.85, 1245.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-3-screw-2, at: [20.85, 1306.8], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-4-frame, at: [11.9, 1551.7], size: [22.3, 55.4], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-4-1, at: [12.9, 1552.9], size: [20.3, 25.9], pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [12.87, 1545.71], vent: 1.0}
+      - {id: vent-4-2, at: [12.9, 1580.0], size: [20.3, 25.9], pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [12.87, 1572.81], vent: 1.0}
+      - {id: vent-4-screw-1, at: [20.85, 1546.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-4-screw-2, at: [20.85, 1607.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-1, at: [3.2, 12.1], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-2, at: [3.2, 200.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-3, at: [3.2, 512.6], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-4, at: [3.2, 824.4], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-5, at: [3.2, 1136.3], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-6, at: [3.2, 1448.1], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-7, at: [3.2, 1760.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: end-screw-1, at: [11.2, 4.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: end-screw-2, at: [11.2, 1767.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+  left:
+    size: {w: 44, h: 1776.44}
+    panel:
+      decor:
+      - {id: vent-1-frame, at: [9.8, 18.3], size: [22.3, 30.0], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-1-1, at: [10.8, 19.5], size: [20.3, 13.2], pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [10.77, 15.83], vent: 1.0}
+      - {id: vent-1-2, at: [10.8, 33.9], size: [20.3, 13.2], pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [10.77, 30.23], vent: 1.0}
+      - {id: vent-1-screw-1, at: [18.75, 13.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-1-screw-2, at: [18.75, 48.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-2-frame, at: [9.8, 552.0], size: [22.3, 55.6], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-2-1, at: [10.8, 553.2], size: [20.3, 26.0], pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [10.77, 545.98], vent: 1.0}
+      - {id: vent-2-2, at: [10.8, 580.4], size: [20.3, 26.0], pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [10.77, 573.18], vent: 1.0}
+      - {id: vent-2-screw-1, at: [18.75, 547.2], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-2-screw-2, at: [18.75, 608.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-3-frame, at: [9.8, 1250.7], size: [22.3, 55.7], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-3-1, at: [10.8, 1251.9], size: [20.3, 26.05], pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [10.77, 1244.66], vent: 1.0}
+      - {id: vent-3-2, at: [10.8, 1279.15], size: [20.3, 26.05], pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [10.77, 1271.91], vent: 1.0}
+      - {id: vent-3-screw-1, at: [18.75, 1245.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-3-screw-2, at: [18.75, 1306.8], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-4-frame, at: [9.8, 1551.7], size: [22.3, 55.4], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-4-1, at: [10.8, 1552.9], size: [20.3, 25.9], pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [10.77, 1545.71], vent: 1.0}
+      - {id: vent-4-2, at: [10.8, 1580.0], size: [20.3, 25.9], pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [10.77, 1572.81], vent: 1.0}
+      - {id: vent-4-screw-1, at: [18.75, 1546.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-4-screw-2, at: [18.75, 1607.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-1, at: [36.4, 12.1], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-2, at: [36.4, 200.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-3, at: [36.4, 512.6], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-4, at: [36.4, 824.4], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-5, at: [36.4, 1136.3], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-6, at: [36.4, 1448.1], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-7, at: [36.4, 1760.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: end-screw-1, at: [28.4, 4.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: end-screw-2, at: [28.4, 1767.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+    regions:
+      - {id: logo-zone, at: [15.5, 864.0], size: {w: 13.0, h: 66.0}, label: 'EATON wordmark (DT08), reading top to bottom; not drawn'}
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-24'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships, with the LX Platform interface built in. The
+      detachable L6-20P cord, the rack-mounting brackets, the cord retention
+      bracket, the PDUMVROTATEBRKT brackets and the plug-lock inserts are in the box
+      and are not drawn.
+    part-numbers:
+      PDUMV20HVNETLX: {}
+datasheet:
+  title: 'Tripp Lite PDUMV20HVNETLX spec sheet (3.7kW Single-Phase Switched PDU - LX Interface)'
+  url: https://assets.tripplite.com/product-pdfs/en/pdumv20hvnetlx.pdf
+  sha256: 10dea14f606507ca63a90d3cab3bf702695f79c713d4ce6ebfc18301776af258
+references:
+  - {title: 'Tripp Lite PDUMV20HVNETLX submittal drawing, 17-08-067', url: 'https://assets.tripplite.com/submittal-drawing/pdumv20hvnetlx-submittal-drawing-en.pdf', sha256: fa8ddc08542f8ff934ca06673ef0119f2354a2626aa7cbf5ceea7435eb6574e0}
+  - {title: 'Tripp Lite owner''s manual, Monitored and Switched Rack PDUs, 21-03-416 933666 rev B', url: 'https://assets.tripplite.com/owners-manual/21-03-416-933666_revb.pdf', sha256: 119e6207acf0acffa2bc96848ea4765bbe12382a04635f4de421de31ad1efda2}
+  - {title: 'Eaton PDUMV20HVNETLX SKU specifications (skuPage.PDUMV20HVNETLX.pdf)', url: 'https://www.eaton.com/us/en-us/skuPage.PDUMV20HVNETLX.pdf', sha256: 6b88b0f78934fdf2313554d6e20d505600234f1b59ed25cdc7147cb655e8c5e9}

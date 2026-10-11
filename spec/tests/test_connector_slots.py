@@ -48,6 +48,9 @@ def test_the_connector_registry_is_not_vacuous():
     # f-type/sma/smb/mcx: the existing coax jacks, made slots (#650)
     # bnc/din-1-0-2-3: the two new coax jacks, std/bnc@1 and std/din-1-0-2-3@1 (#650)
     # iec-c14/iec-c20/saf-d-grid: the AC inlets, made slots for their cord ends (#785)
+    # iec-c13: the C13 outlet of a rack PDU, std/c13-outlet@1 (the Eaton EVMI2130X);
+    # generic/c14-plug@1 is the cord end that mates it
+    # iec-c19: the C19 outlet of a PDU, a slot for a C20 jumper end (#933)
     # usb-a/micro-usb-b/usb-c: the USB receptacles, made slots for their cable plugs (#786)
     # db9/hd15/da15/db25: the D-sub and VGA connectors, made slots for their hooded plugs (#787)
     # terminal-508-2/-5/-6: the pluggable 5.08 mm terminal headers, made slots for their
@@ -66,16 +69,19 @@ def test_the_connector_registry_is_not_vacuous():
     # standard (docs/connectors-dc-terminal-design.md section 14)
     # stud-pair-5-8/-3-4/-1: a pair of studs one two-hole lug lands across, each
     # spanning two terminal-stud seats, the pitch in the key (#828)
+    # pdu-button: NOT A CONNECTOR - the rack PDU mounting interface (#934). A keyhole
+    # in a bracket or a channel presents it and eaton/g4-mounting-button@1 mates it;
+    # nothing presents it yet, so it is in the registry and in no slot below
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
-                         "iec-c14", "iec-c20", "saf-d-grid",
+                         "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
                          "usb-a", "micro-usb-b", "usb-c",
                          "db9", "hd15", "da15", "db25",
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",
                          "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
                          "mrj21", "vhdci", "rj11",
-                         "breaker-1ru-guard", "p40"}
+                         "breaker-1ru-guard", "p40", "pdu-button"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -87,7 +93,7 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
     assert len(entries) > 0, "measured no connector slot at all"
     assert all(c["interface"] in {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                                    "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
-                                   "iec-c14", "iec-c20", "saf-d-grid",
+                                   "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
                                    "usb-a", "micro-usb-b", "usb-c",
                                    "db9", "hd15", "da15", "db25",
                                    "terminal-508-2", "terminal-508-5", "terminal-508-6",

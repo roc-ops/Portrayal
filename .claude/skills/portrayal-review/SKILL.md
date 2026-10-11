@@ -28,6 +28,20 @@ git log origin/main..HEAD --oneline
 Stop here if the ref does not resolve or the diff is empty. A review of nothing
 reads as a clean review.
 
+**Preflight comes before review.** Whoever built the change runs it before
+asking for one, and the reviewer runs it again first thing:
+
+```sh
+python3 spec/tools/portrayal/preflight.py --base origin/main   # --json for an agent
+```
+
+It checks, in seconds, what sends a change back for a second round: stale
+exports, a skip reason the allow-list does not carry, a private path or
+address, a missing changelog fragment, devicelock findings, new lint warnings
+on what the diff touches, and `kit` tests. If any line says FAIL, fix that
+first (it prints the command); a review of a branch that fails preflight finds
+things a tool would have found.
+
 ## 2. Find the sources
 
 - The issue the commits or the pull request name, read with `gh issue view`.

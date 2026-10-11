@@ -226,7 +226,15 @@ def _placement_attrs(doc):
 #                     description, so a DCIM that imported the type holds them:
 #                     changing or dropping one re-files an imported outlet's
 #                     feed (major); stating one where there was none is the
-#                     export gaining a fact and losing nothing (minor).
+#                     export gaining a fact and losing nothing (minor). Since
+#                     #934 `through` may name a fixed breaker placement too.
+#   `lines`           (placement) the conductors a breaker, or an outlet with
+#                     no breaker, is wired across (#934). The export writes
+#                     them on each outlet's description and decides `feed_leg`
+#                     from them, so they are addressing as `through` is:
+#                     stating them is a minor, changing or dropping a major.
+#                     Kept in the order written, not sorted as a set: the
+#                     description spells them in that order.
 # SURFACE - what a reader sees and nothing computes a coordinate or an address
 # from. Patch.
 #   `states`, `description`  what a lamp's colours mean, and the vendor's words
@@ -249,7 +257,8 @@ BAY_HASHED = {"id", "at", "size", "rotate", "mirror", "default", "accepts",
               "group"}
 PLACEMENT_GEOMETRY = {"inset", "lift", "in", "under", "only-in", "optional",
                       "interfaces", "opening", "floor", "plan", "rear"}
-PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface", "fed-by", "through"}
+PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface", "fed-by", "through",
+                        "lines"}
 PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
                      "frames", "positions"}
 
@@ -418,6 +427,12 @@ def _children(contract):
     still one a configuration can draw there.
     """
     refs = list(manifest.drawn_refs(contract))
+    # A KIT'S ACCESSORIES ARE PART OF WHAT IT IS (#906): the arm and the bar
+    # are resolved inline with the kit's parts in configs.json (#907), so an
+    # arm redrawn under a kit reaches the devices that list it. `drawn_refs`
+    # already reads a kit's `parts`, which are `{ref, id, count}`.
+    if contract.get("kind") == "kit":
+        refs += [(a or {}).get("ref") for a in contract.get("accessories") or []]
     for bay in (contract.get("bays") or {}).values():
         bay = bay or {}
         refs += [bay.get("default")] + list(bay.get("accepts") or [])
@@ -443,8 +458,20 @@ def _composed(doc, versions):
     rears' MPO openings were redrawn under fs/fhd-1ufce and its lock reported
     nothing. The face list comes from `manifest.drawn_refs`, which reads both
     spellings of `plan` and every direction in `faces.DIRECTIONS`.
+
+    A LISTED KIT IS FOLLOWED TOO, though nothing places it (#906). Its parts
+    draw nothing on the faceplate, but configs.json resolves each kit a device
+    lists inline - motion, configurations, depth ranges and the geometry of its
+    parts (#907) - so a kit edited in place changes what this device publishes,
+    exactly as a redrawn jack does. A shared rail edited under a dozen chassis
+    asks each of them for a patch, and `composed-refs` names the kit that
+    moved. Left out, the lock would close on the kit's author remembering to
+    bump it, which is the gap #405 closed for parts.
     """
     seen, todo = {}, []
+    for kit in ((doc.get("chassis") or {}).get("kits") or []):
+        if isinstance(kit, dict) and kit.get("ref"):
+            todo.append(kit["ref"])
     for view in (doc.get("views") or {}).values():
         for kind in ("bays", "placements"):
             for item in (((view or {}).get("components") or {}).get(kind) or []):
@@ -498,8 +525,25 @@ CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell"}
 # `overhang` IS A STATEMENT, like `mount`: it says how far parts already placed
 # reach past the rack face, and those parts carry their own geometry. Declaring
 # the reach a device already had moves nothing (#865).
+# `ears` AS AN OBJECT IS STILL A STATEMENT (#906): its named positions say
+# where the device can be mounted in a rack, and nothing on the faceplate
+# drawing moves. `kits` names the rail kits the device takes, which are library
+# objects with versions of their own; listing one moves nothing either. Stating
+# either is a patch. What a listed kit CONTAINS is hashed in `composed`, as a
+# part a device places is - see `_composed`.
+# `ears.h`, `ears.y` AND `ears.color` STAY SURFACE NOW THAT AN EAR IS DRAWN
+# FROM THEM (#909; `color` from the owner's silver default, 2026-10-09).
+# The generic L-bracket ear is sized from them, but it is drawn only when asked
+# for - `render.py --with ears`, the viewer's `ears` option - and never in a
+# published face, an elements file or a DCIM export, so changing either moves
+# nothing a consumer caches a coordinate from; configs.json publishes the two
+# numbers themselves, which is a statement like `overhang`. So a patch. (A
+# placed `common/rack-ear@1` is different: it is a placement, hashed in `shape`
+# like any other, so moving one is a major.) IF THE EARS EVER JOIN
+# THE DEFAULT BUILD, `h` and `y` become geometry and move into `shape`, and
+# that change is itself a major for every device that states them.
 CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mount", "thickness",
-                   "full-depth", "ears", "overhang"}
+                   "full-depth", "ears", "overhang", "kits"}
 
 
 def _shape_digest(doc, placed, drop=()):
@@ -635,6 +679,12 @@ def buckets(doc, versions=None):
             **({"guides": guides} if (guides := {v: (w or {}).get("guides")
                                                   for v, w in (doc.get("views") or {}).items()
                                                   if (w or {}).get("guides")}) else {}),
+            # A TRAY IS THE SAME KIND OF CLAIM, a floor cables lie on, read by
+            # whatever routes them (docs/cable-lay-design.md section 2.1).
+            # Conditional for the same reason: no device is rehashed for it.
+            **({"trays": trays} if (trays := {v: (w or {}).get("trays")
+                                               for v, w in (doc.get("views") or {}).items()
+                                               if (w or {}).get("trays")}) else {}),
             **({"placement-skins": skins} if skins else {}),
             # CONDITIONAL, ONE KEY AT A TIME, FOR THE REASON `placement-skins`
             # IS. Written unconditionally, `airflow: None` is still a new key in
@@ -699,8 +749,8 @@ def entry(doc, versions=None):
 
 
 def _addressing_bump(old, new):
-    """What `for`, `rel-pos`, a bay's `interface` and an outlet's `fed-by` and
-    `through` demand: major when a value a placement stated changes or goes,
+    """What `for`, `rel-pos`, a bay's `interface`, an outlet's `fed-by` and
+    `through` and a breaker's `lines` demand: major when a value a placement stated changes or goes,
     minor when any of them but `rel-pos` is stated where there was none.
 
     STATING A `rel-pos` WHERE THERE WAS NONE ASKS FOR NOTHING, which is the
@@ -720,7 +770,7 @@ def _addressing_bump(old, new):
         if any(now.get(key) != value for key, value in was.items()
                if key in still_here):
             return "major"              # rebound, renumbered or unstated
-    for field in ("for", "interface", "fed-by", "through"):
+    for field in ("for", "interface", "fed-by", "through", "lines"):
         if set(now_all.get(field) or {}) - set(was_all.get(field) or {}):
             return "minor"              # bound, opened or fed where it was not
     return None
@@ -1171,7 +1221,7 @@ def check(library: pathlib.Path):
                             "plan, rear)")
             if _addressing_bump(was, now) is not None:
                 what.append("placement addressing (for, rel-pos, interface, "
-                            "fed-by, through)")
+                            "fed-by, through, lines)")
             if "placement-surface" in was and \
                     was["placement-surface"] != now["placement-surface"]:
                 what.append("placement surface (states, description, "

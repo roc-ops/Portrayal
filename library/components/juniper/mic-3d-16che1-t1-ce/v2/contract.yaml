@@ -1,0 +1,79 @@
+format: 1
+kind: module
+name: mic-3d-16che1-t1-ce
+version: 2.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper channelized E1/T1 circuit-emulation MIC - sixteen RJ48 jacks in two rows. MIC form: the MIC's own 168.8 x 29.2 plate, photo-measured (#261).
+attrs:
+  model: MIC-3D-16CHE1-T1-CE
+  power-draw-max-w: 29.08
+  model-variants: MIC-3D-16CHE1-T1-CE-H
+provenance:
+  port-jacks-are-bare: >-
+    THE PORT JACKS ARE BARE. port-0-0..15 are RJ48 receptacles carrying channelized E1/T1,
+    not Ethernet, so they take the RJ45 family's bare cell rather than its lamped one
+    (docs/rj45-family-design.md decision 3: the lamped member is for what carries Ethernet).
+    The module reference tables no per-port link or activity lamp for this MIC, and this
+    contract draws none: a lamped jack here would assert two indicators the hardware is not
+    documented to have.
+  size: >-
+    photo-measured - the MIC plate, 168.8 x 29.2, from the MX104 and MX80 front photographs as
+    size-notes says: plates 520, 521 and 520.5 px at 3.090 px/mm on the MX104 (body 1350.5 px over 437.0
+    mm; the ganged-SFP pitch reads 44.0 to 44.2 px, 3.091), 521.8 and 522.5 px at 3.088 on the MX80
+    (ganged-SFP pitch 44.0 px; 1374 px between the ear wings over 445.0 mm agrees); heights 90 to 90.75
+    px.
+  power: >-
+    guide FRU power table, MX chassis guides: '29.08 Wat 131 F (55 C) 27.84 Wat 40 C 26.55 Wat 77 F (25 C)'. The max at 55 C is
+    carried, because the worst rated case is what a chassis budget needs.
+    Read off the row, with the part number alone in its own cell - the looser
+    extraction that preceded this put the MPC7E's number on the MPC6E and took a
+    25 C figure for a max, so a row only counts here when nothing else in it
+    could be the subject.
+    The note this replaces said the module reference does not carry it. True of
+    the book it named; the chassis guides do.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+  layout: >-
+    estimated - RE-ENVELOPED, NOT REDRAWN, at 2.0.0 (#261): every part and printed mark of the 1.x art
+    moved by (+0.4, +1.1) onto the measured plate (centring the old art where its width allows);
+    positions along the plate stay as 1.x had them. What 1.x said of them: registry + layout - the face
+    is the slot geometry of its chassis family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate drawing. No faceplate figure was
+    usable for this model
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/rj45-ganged@2, id: port-0-0, at: [16.40, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-1, at: [16.40, 16.90], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-2, at: [29.10, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-3, at: [29.10, 16.90], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-4, at: [41.80, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-5, at: [41.80, 16.90], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-6, at: [54.50, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-7, at: [54.50, 16.90], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-8, at: [67.20, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-9, at: [67.20, 16.90], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-10, at: [79.90, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-11, at: [79.90, 16.90], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-12, at: [92.60, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-13, at: [92.60, 16.90], attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-14, at: [105.30, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-15, at: [105.30, 16.90], attrs: {media: rj45}}
+size:
+  w: 168.8
+  h: 29.2
+size-confidence: {w: photo-measured, h: photo-measured}
+size-notes: >-
+  w and h are the MIC's own plate, photo-measured (#261). Square-on front photographs of the MX104 and
+  the MX80 put four plates at 168.3 to 169.2 by 29.1 to 29.3 mm, each photograph scaled two
+  independent ways - across its chassis body and on the SFF-8433 ganged-SFP pitch of 14.25 mm, which
+  agree to 0.1% - and the MX2010 photograph's ratio of MIC to MPC plate (162.5 to 379.5 px) agrees.
+  The guides' MIC rows (6.25 x 6.8 x 1.25 in, the axes assigned differently in different books) do not
+  dimension the face and are not used. Until 2.0.0 this was the 168 x 27 'window', an estimate read
+  off the carrier.
