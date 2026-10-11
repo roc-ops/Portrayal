@@ -1,7 +1,8 @@
 # Adjustable positions: a part that slides, its range, and where it is set
 
-Status: decided 2026-10-10, nothing built. Issue #950. The design is settled,
-and the build follows section 11 after the 0.2.0 release. Each section gives a
+Status: decided 2026-10-10. Steps 1 to 4 of section 11 are built, on a fixture
+device; steps 5 to 8 are not, and no library device states an adjustment yet.
+Issue #950. Section 15 says what the build fixed where this note left it open. Each section gives a
 decision and its reason. The nine questions the note first left open were
 decided as it recommended, and are listed in section 13. Section 14 lists the
 costs accepted, and section 10 the one-way doors the build steps open. This
@@ -491,7 +492,8 @@ on a rail, so nothing saved changes.
 
 ### Lint
 
-Codes are given when the rules are built. Each rule and its reason:
+The rules are L173 to L183, in the order below: rule 1 is L173 and rule 11 is
+L183. Each rule and its reason:
 
 1. **An adjustment is well formed.** `min < max`; the default is in the range;
    each stop is in the range; with no range there are two stops or more and the
@@ -536,8 +538,8 @@ Codes are given when the rules are built. Each rule and its reason:
     `din-rail-setback-mm` is the default, and `-min-mm` and `-max-mm` are the
     ends of the range. *The attrs are how the range reaches the DCIM export
     comments, and two statements of one number drift apart.* The rule is
-    written for any device, not for one maker. How it pairs an attr with an
-    adjustment is fixed when the rule is built.
+    written for any device, not for one maker. It pairs an attr with an
+    adjustment by the name of the attr, and adds no key (section 15).
 
 The rule #971 adds as a test (the panel meets both brackets) holds at every
 position without change: a moved panel keeps its width.
@@ -622,7 +624,8 @@ number.
 ## 11. Build plan
 
 Each step is one change with its gate. Steps 2 to 4 are proved on a fixture
-device in the tests, so no library device changes before step 5.
+device in the tests, so no library device changes before step 5. Steps 1 to 4
+are built (section 15).
 
 1. **Schema, lint and lock.** The keys, their descriptions, the rules of
    section 9, the lock buckets. Nothing is drawn differently.
@@ -752,3 +755,125 @@ These three were weighed and accepted with the design, decided 2026-10-10.
    them together, and only for the case it can see. A second device that
    reuses the panel at another default cannot: the component would need its
    depth from the device.
+
+## 15. What steps 1 to 4 built
+
+Steps 1 to 4 are built on a fixture device, `fixture/slider`, in
+`spec/tests/fixtures/adjustments`. This section records what the build fixed
+where the sections above left a choice to it, and what it left for step 5.
+
+### The lint codes
+
+| code | rule of section 9 |
+|---|---|
+| L173 | 1, an adjustment is well formed |
+| L174 | 2, the carrier |
+| L175 | 3, membership resolves |
+| L176 | 4, what stands on a member moves with it |
+| L177 | 5, the default is the position drawn |
+| L178 | 6, a member stays inside the device |
+| L179 | 7, no new collision |
+| L180 | 8, the id is free on the carrier group |
+| L181 | 9, a position a configuration sets |
+| L182 | 10, `provenance.<id>` exists |
+| L183 | 11, an attr that restates an adjustment equals it |
+
+Each is an error. What a rule reads beyond its sentence in section 9:
+
+- **L173** also refuses a stop named with a number (`'100': 100`): a reader who
+  types it cannot say whether it means the name or the millimetres.
+- **L174** refuses a carrier that is `optional` as it refuses one that is
+  `only-in`, for the same reason: some build has no part at that path.
+- **L175** also refuses a member on a view that is not one of the six faces
+  (or a variant that names one with `face:`), because the build cannot say
+  which way it moves there.
+- **L176** reads `in:` and `mate-to` on placements and bays, and the `in:` of a
+  bay's `plan`. The projection of a member bay has no entry of its own to
+  state `moves-with` on, so the build marks it and lint has nothing to ask.
+- **L178** asks three things: the box of each member lies inside its view at
+  both ends; the floor of a member well stays inside the device; and the range
+  ends inside the device along its axis.
+- **L179** runs L13 again on each view at each end and at each stop, and
+  reports only what L13 does not already say at the default. For a pair one of
+  which is `under` or `in` the other, and only one of which moves, it asks
+  that they still overlap.
+- **L180** reads the names from the text of `render.py`: every `data-<name>`
+  it spells. It also refuses the name of a field or an attr of the carrier.
+
+### Rule 11: how an attr is paired with an adjustment
+
+**By the name of the attr. No key is added.** An attr restates an adjustment
+when its name is the id of the adjustment, with any words before it, followed
+by `-mm` (the default), `-min-mm` or `-max-mm` (the ends of the range). The id
+ends the name as whole words. So `rail-setback` is restated by
+`rail-setback-mm` and by `din-rail-setback-max-mm`, and by no key that does
+not end in the id. An adjustment with stops and no range has no end: its
+default is still compared, and an attr that restates an end is refused. An
+attr is never required.
+
+A wrong pairing is loud. A key that measures something else and happens to end
+in the id gets an error that names both, and the fix is to rename one of them.
+
+| alternative | why not |
+|---|---|
+| a key on the adjustment that names the attrs (`restated-by: {default, min, max}`) | it is exact, and it is a schema key beyond this design, a fourth statement to keep true, and a rule that says nothing where the key is forgotten |
+| the attr is named exactly `<id>-mm` | the DINRAIL attrs are `din-rail-setback-mm` and the adjustment is `rail-setback` (section 3, Names), so the first users would not pair |
+| pair by value: an attr that holds the same number | two unlike quantities share a number, and a pairing by value cannot report a disagreement, which is the whole rule |
+
+### The build
+
+- **A configuration that sets a position is drawn from a copy of the manifest**
+  whose members stand at that position, so the elements file and everything
+  else read from `at` agree with the drawing. The digest a face carries is
+  still that of the manifest as written.
+- **`at` and `configs[].positions` are numbers**, in mm. The field value a
+  reader keeps is the string of section 4.
+- **The elements file**: `moves-with` and `moves-by` (`[dx, dy, dz]`) on a
+  member's row and on every row drawn inside a member, so a reader moves each
+  hit box by its own row.
+- **A part seated on a member is marked as a member**, whether a configuration
+  seated it or a `mate-to` did; so is the `plan` or `rear` projection of a
+  member bay. A projection is flat and takes no depth.
+- **A member is never inside another member**, and never inside a group that
+  is turned or scaled. Nothing the build draws today is. If either ever is,
+  the build stops and does not publish a drawing that moves wrongly.
+
+### The kit
+
+`kit/fields.js` holds the rule once, for the 2D drawing and for the documents
+the 3D scene is built from:
+
+- `adjustmentAccepts(adjustment, value, who)` answers `{ok: true, value}` with
+  the one spelling, or `{ok: false, reason}` with the sentence of section 4.
+  The device in the sentence is the `model` the face names. With a range and
+  no stops the third sentence ends at "a number in mm."
+- `adjustmentRows(adjustments, current, who)` takes the fields map a host
+  already holds, `{path: {key: value}}`, and finds each position at the path
+  of its carrier.
+- `adjustmentsOf(root)` reads `data-adjustments` off a face, and
+  `paintAdjustments(root, fields)` moves every member under it. The two are
+  exported because the shell and the 3D documents share them. They are two
+  names more than section 7 lists.
+- `setFields` in `kit/shell.js` returns `{refused: [{path, key, value,
+  reason}]}`. It returned nothing before.
+- A moved node remembers what it was built with on itself, as
+  `data-portrayal-adjust-*`, and a move back to the built position removes
+  them. A face at its built position is the bytes the build wrote.
+- `kit/viewer3d.js` learns which path and key is a position from
+  `configs.json`, rebuilds the scene when it changes, and picks a moved part
+  where it stands.
+
+### Left for step 5
+
+- **The Explorer has no control yet.** A position is set with `setFields` or a
+  `fields=` link.
+- **An occupant swapped into a member cage at runtime is not moved.**
+  `kit/swap.js` seats it from `cages[]` in `configs.json`, which is the default
+  configuration at its built position, and does not mark it. An occupant the
+  build seated is marked and moves. No library device has a cage that slides.
+- **Flat decor on a face that shows the motion as depth.** By section 6 a
+  member that is not a well takes the motion as `data-z-lift`. Decor drawn flat
+  on the rear view of a device whose adjustment is `axis: z` would stand off
+  the rear face by the distance moved. Whether such decor is a member is a
+  modelling question for the first device.
+- **`rack.json` and the rack core** read the default position (steps 6 to 8).

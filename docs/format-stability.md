@@ -115,6 +115,7 @@ also draws is that part's row. Each row may carry:
 | `inner` | `data-inner` | `true` for a port inside another port's housing |
 | `connection-points` | `data-cp`, `data-cp-at`, `data-cp-dir`, `data-cp-on` on the part's markers | `{name: {at, face, dir?, on?}}`: `at` as written, in the part's own frame; `face`, the same point in the face's frame |
 | `seat` | the path | the bay or cage this row's part is seated in, innermost first; absent on the chassis's own rows |
+| `moves-with`, `moves-by` | `data-moves-with`, `data-moves-by` on the row's element, or on the nearest element it sits inside | the adjustment that moves this row's box, and `[dx, dy, dz]`: the mm it moves for each mm of position (see [A part that slides](#a-part-that-slides)); absent on a row nothing moves |
 | `parent` | the tree | the key of the row this one lists under, or `null` |
 | `box` | the geometry | `{x, y, w, h}` in the face's millimetres, or `null` |
 
@@ -678,6 +679,71 @@ that routes cables may read them itself, so they are part of the format too:
 
 Renaming one, or changing what it means, is a format change as a rack.json
 key is; adding one is not.
+
+## A part that slides
+
+A device may declare a part that slides: a rail panel bolted through slots in
+its side brackets, a support on a row of tapped holes.
+[`adjustable-positions-design.md`](adjustable-positions-design.md) is the
+design. The format gains two optional keys, so `format` stays 1, and the build
+gains the fields below, so `contract` is not raised. A device that declares no
+adjustment gains no key and no attribute: its build is byte for byte what it
+was.
+
+**In a manifest.** A top-level `adjustments:` map, the key being the id of the
+adjustment, each entry with `label`, `carrier`, `axis` (`x`, `y` or `z`),
+`range` (`[min, max]`) or `stops` (`{name: mm}`) or both, `default` and
+`datum`. A placement, a bay and a decor entry may say `moves-with: <id>`.
+
+**What a value means.** A position is a number in millimetres: the coordinate
+of the `datum` along the `axis`, in the frame of the device. `x` runs from the
+left of the device as seen from its front, `y` up from its bottom and `z` back
+from its front. It is absolute, not an offset from the default. Both ends of a
+`range` are positions. With `stops` and no `range`, only the stop values are.
+
+**Where a value is held.** As a field, at the path of the `carrier`, under the
+id of the adjustment. A configuration sets one with
+`component-attrs: {<carrier>: {<id>: <value>}}`, the kit with
+`setFields(<carrier>, {<id>: <value>})`, and a link with
+`fields=<carrier>~<id>~<value>`. The value kept is a string with one spelling:
+the number rounded to 0.1 mm, in decimal, with no exponent, no sign and no
+trailing `.0` (`120`, `271.2`). A stop name is accepted as input and is never
+what is kept.
+
+**In a compiled face**, of a device that declares any:
+
+| where | attribute | value |
+|---|---|---|
+| the root `<svg>` | `data-adjustments` | the map as JSON, keys sorted: for each id its `axis`, `carrier`, `range`, `default`, `stops`, `label` and `datum` as the manifest states them, and `at`, the position this file was built at |
+| each member (the group of a placement or a bay, a decor shape) | `data-moves-with` | the id of the adjustment |
+| the same node | `data-moves-by` | `dx dy dz`: the mm the node moves for each mm of position. `dx` and `dy` are in the frame of the face, and `dz` is the change in its depth behind that face |
+| the carrier | `data-<id>` | the position, only where the configuration set one |
+
+A reader moves a member by `(value - at)` times its `data-moves-by`. For
+`dz`, a member that carries `data-depth` (a well) changes that depth; any
+other member changes its `data-z-lift`, the sign reversed, and each
+`data-z-out` and profile height inside it by the same amount. A part seated on
+a member, and the `plan` or `rear` projection of a member bay, are marked as
+members by the build. A member is never drawn inside another member, so a
+reader that moves every marked node moves each part once.
+
+A configuration that sets a position is built moved: its members are drawn
+where that value puts them, and `at` says the value. A face that cannot show
+the motion (a slide along the depth of that face) is drawn the same at every
+position, and still carries `data-adjustments`.
+
+**In `<device>.configs.json`**, of a device that declares any: `adjustments`
+at the top, the same map with no `at`, and `positions` on each entry of
+`configs`: `{<id>: <mm>}` for each position that configuration sets, `{}` for
+one that sets none.
+
+**In the elements file**, a row that moves carries `moves-with` and
+`moves-by`, as the table above lists them.
+
+Renaming one of these keys or attributes, or changing what a value means (the
+unit, the frame, the datum, the sign of an axis), is a breaking change: every
+saved link and every saved rack that holds a position would move with no edit
+to it.
 
 ## What else a consumer holds
 

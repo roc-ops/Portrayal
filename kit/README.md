@@ -75,7 +75,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `share.js` | GLB and USDZ export |
 | `gif.js` | GIF capture |
 | `swap.js` | swapping a component into a bay, or an occupant into a slot at the turn it takes there (`seatTurn`); the `swap=` and `turn=` location strings (`encodeSwaps`, `decodeSwaps`, `encodeTurns`, `decodeTurns`) |
-| `fields.js` | writing a field on a part at runtime - its text and its colour, the build's rule, for 2D and 3D alike; and what a form of a part's fields needs: its rows (`fieldRows`), whether a value is one the field takes (`fieldAccepts`), and the `fields=` location string (`encodeFields`, `decodeFields`) |
+| `fields.js` | writing a field on a part at runtime - its text and its colour, the build's rule, for 2D and 3D alike; and what a form of a part's fields needs: its rows (`fieldRows`), whether a value is one the field takes (`fieldAccepts`), and the `fields=` location string (`encodeFields`, `decodeFields`); and a part that slides: whether a value is a position (`adjustmentAccepts`), the rows of its control (`adjustmentRows`), what a face declares (`adjustmentsOf`) and the move itself (`paintAdjustments`); see [A part that slides](#a-part-that-slides) |
 | `devsel.js` | device selection and filtering - hardware by its maker, and each NOS vendor's listings under that vendor (`listings.json`, #709) |
 | `nosnames.js` | what the chosen listing's NOS calls each port (`swp7`, `Ethernet24`, `ge100-0/0/7`), expanded by the same grammar as the DCIM export (#712) |
 | `optical.js` | where a fibre goes: an optical module's front number and far end for a path, read from `components.json` |
@@ -86,6 +86,57 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `ears2d.js` | generic rack ears over a published face in 2D (`drawEars`, `clearEars`), from the plan the 3D viewer builds (`earPlan`); see [Rack ears](#rack-ears) |
 
 Plain ES modules. No bundler, no build step.
+
+## A part that slides
+
+New in 0.19.0. A device may declare a part that slides (a rail panel on
+slotted brackets), and the compiled drawing says what moves: the root of every
+face carries `data-adjustments`, and each member node `data-moves-with` and
+`data-moves-by`. [`docs/format-stability.md`](../docs/format-stability.md) has
+the fields, and
+[`docs/adjustable-positions-design.md`](../docs/adjustable-positions-design.md)
+the design. No library device declares one yet, and the Explorer has no
+control for it yet: a position is set with `setFields` or a `fields=` link.
+
+**A position is a field.** It is held at the path of the adjustment's carrier,
+under the adjustment's id, in the same map every other field is in:
+
+```js
+shell.setFields('rail-panel', {'rail-setback': '271.2'});   // a number in mm
+shell.setFields('rail-panel', {'rail-setback': 'rear'});    // or the name of a stop
+// ?fields=rail-panel~rail-setback~271.2
+```
+
+Every member on every face moves. What is kept is one spelling: a string, the
+number rounded to 0.1 mm, with no exponent and no trailing `.0`. A stop name
+is input, and the number is what is kept. A value that is not a position is
+not applied: the drawing stays as it was, the sentence is logged, and
+`setFields` returns it:
+
+```js
+shell.setFields('rail-panel', {'rail-setback': '300'});
+// {refused: [{path: 'rail-panel', key: 'rail-setback', value: '300',
+//   reason: 'rail-setback on DINRAIL2U takes 51.2 to 271.2 mm. 300 is outside it.'}]}
+```
+
+`setFields` returned nothing before 0.19.0; it now returns `{refused: []}` for
+every call. `resetField(path, key)` and `setFields(path, null)` put the
+members back where the drawing was built. `applyFields` takes a `fields=`
+entry for a position, which no component declares, and ignores one that is not
+a position.
+
+| `fields.js` | |
+|---|---|
+| `adjustmentsOf(root)` | the adjustments a face declares, `{id: {axis, carrier, range, default, stops, label, datum, at, id, on}}`, or `{}`. `at` is the position the file was built at, and `on` the model the face names |
+| `adjustmentAccepts(adjustment, value, who)` | `{ok: true, value}` with the one spelling to keep, or `{ok: false, reason}` with a sentence. `who` (`{id, on}`) names the adjustment and the device where the adjustment does not carry them |
+| `adjustmentRows(adjustments, current, who)` | the rows of a control, in id order. `adjustments` is what `adjustmentsOf` answers, or `adjustments` from a device's `configs.json`; `current` is the fields map, `{path: {key: value}}`. A row has `id`, `label`, `carrier`, `axis`, `datum`, `unit`, `type` (`range` or `stops`), `min`, `max`, `stops` (`[{name, value}]` in order of position), `default`, `built`, `value` and `stop`, positions as strings |
+| `paintAdjustments(root, fields)` | moves every member under `root` to the position `fields` holds, and back as built when it holds none. Answers `{id: position}` |
+
+**In 3D** the position is in the same map: `viewer.setFields(map)` rebuilds
+the scene when a position changes, as it does for a switch position. A well is
+built at the depth the position gives, and what stands in it on that floor.
+`relief.js` exports `applyNodeAdjustments(root, scope)`, the same move applied
+from a viewer's field registry before a face is measured.
 
 ## Racks
 
