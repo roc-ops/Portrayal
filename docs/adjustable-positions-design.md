@@ -23,7 +23,8 @@ Builds on fields ([`library/components/README.md`](../library/components/README.
 and the setback of [rack-products-design.md](rack-products-design.md) (sections
 7 and 8, #935), on the solid bodies of
 [cable-lay-design.md](cable-lay-design.md) (section 1, #949), on the rack
-mounting work (#904 to #909: ear positions and rail kits) and on
+mounting work ([rack-mounting-design.md](rack-mounting-design.md), #904 to
+#909: ear positions and rail kits) and on
 [format-stability.md](format-stability.md).
 
 The goal: a device can say that a part slides, how far, and where it is drawn;
@@ -141,13 +142,16 @@ The default position of the device is a number in a component.
 
 ### 1.5 What the rack mounting work already says about depth
 
+The note is [rack-mounting-design.md](rack-mounting-design.md).
+
 - **Ear positions** (`chassis.ears.positions`, #906): named places the ears can
   put the faceplate, with `at` in mm only when a source gives it. They move the
   WHOLE device against the rails.
 - **Rail kits** (`kind: kit`): `motion` is `fixed`, `telescoping`, `sliding` or
   `shelf`. A configuration states the rack `depth` it fits, front flange to rear
-  flange. A device can override one range (`chassis.kits[].depth`). The depth of
-  a telescoping kit is set by the rack, at install.
+  flange. A device can override the depth of one configuration
+  (`chassis.kits[].depth`). The depth of a telescoping kit is set by the rack,
+  at install.
 - **Fit belongs to the reader of the rack**, decided 2026-10-08. The library
   computes nothing about racks.
 - **`setback`** on a rack item (rack products note, section 8, proposed for rack
@@ -468,6 +472,8 @@ the default.
   Until it has, an item not at its default gets a note, as optic colours do.
 
 ### 8.4 With the rack mounting keys
+
+The keys are those of [rack-mounting-design.md](rack-mounting-design.md).
 
 Three numbers place a DIN rail in a rack, and each is said once:
 

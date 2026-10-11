@@ -63,11 +63,29 @@ list of things to do.
 - **Physically implausible is a failed check, not a finding.** Staggered fans,
   a jack upside down, a module wider than its bay: find the second image and
   measure both before accepting it.
-- **What is never drawn stays undrawn:** rack ears, cable furniture, a vendor
-  logo. The exception is a part that IS one: a `rack-face` part is its ears,
-  and a cable manager modelled as its own device is drawn
+- **What is never drawn stays undrawn:** rack ears on the face (a generic
+  pair is drawn from `chassis.ears` only when a viewer asks for it), cable
+  furniture, a vendor logo. The exception is a part that IS one: a `rack-face`
+  part is its ears, a plate as wide as the rack has its ears built into its
+  face, and a cable manager modelled as its own device is drawn
   ([cable-managers-design.md](cable-managers-design.md)). A logo gets a
   reserved `logo-zone`; a product name in plain text is fine.
+- **The default ear position is the one in the figure.** Open the
+  rack-mounting figure of the installation guide and check that the position
+  marked `default` is the one the ears ship in, and that each other position
+  is one the guide names. An `at` with no figure or drawing behind it is a
+  guess written as a measurement; the position keeps its name and loses the
+  number. A new device places no `common/rack-ear@1`.
+- **A kit range comes from the newest source.** Find every source that gives
+  the range of a kit (the rail guide, a sizing matrix, the technical guide of
+  each chassis) and check the contract carries the newest. Its provenance
+  names the older source that disagreed and says it lost, so the next reader
+  does not reopen it. A device-level `depth` override is held to the same
+  rule. A range checked against one source only is reported as checked
+  against that source.
+- **A kit that exists is referenced, not copied.** A new `kind: kit` whose
+  parts and ranges match one in the library is the same kit under another
+  name. Every kit SKU in the accessory table is listed under `chassis.kits`.
 - **A thing at component scale is a component.** A cover, door or filler drawn
   as bare decor is an unexplained box in the tree.
 - **A cutout is not left empty,** and a lamp that has states draws with the

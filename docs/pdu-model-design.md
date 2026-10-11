@@ -4,8 +4,8 @@ Status: decided 2026-10-08, not yet built. Issue #934. Extends
 [power-outlets-design.md](power-outlets-design.md) (#806), which made a power
 outlet an export, and builds on
 [vertical-cable-managers-design.md](vertical-cable-managers-design.md) section 8
-(#926, zero-U parts in the kit), the rack mounting note of #904 (ears and
-kits) and the AC connectors of #933. The decisions are listed with their dates
+(#926, zero-U parts in the kit), the rack mounting note of #904
+([rack-mounting-design.md](rack-mounting-design.md), ears and kits) and the AC connectors of #933. The decisions are listed with their dates
 in section 11.
 
 The first rack PDU, the Eaton EVMI2130X, is built. It answered several of the

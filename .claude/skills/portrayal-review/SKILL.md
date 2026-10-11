@@ -75,6 +75,14 @@ only at the YAML. Render what changed and view every face and module zoomed:
 ./build.sh --device <model>
 ```
 
+For a device that states `chassis.ears` or `chassis.kits`, or a new
+`kind: kit`, the sources pass also does two checks the standards name. It puts
+the `default` ear position beside the rack-mounting figure of the
+installation guide. And it reads the range of each kit in every source that
+gives one, confirms the contract carries the newest, and confirms provenance
+names the source that lost. A kit range checked against one source only is
+reported as checked against that source.
+
 Keep each report short. Do not merge or rerank the two: a change that follows
 every standard and models the wrong thing fails one pass and passes the other,
 and a single ranked list hides that.
