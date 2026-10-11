@@ -45,7 +45,7 @@ from portrayal import ears as ears_mod
 from portrayal import bevel as _bevel
 from portrayal import elements as elements_mod
 from portrayal import facets as _facets
-TOOL_VERSION = "0.1.0"
+TOOL_VERSION = "0.2.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
 # from here rather than each growing a flag that is always given the same value.
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"

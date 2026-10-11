@@ -141,3 +141,18 @@ entries by hand where the order matters. Then rename `## Unreleased` to the
 version and open a new empty `## Unreleased` above it, in the same pull
 request. The npm release above does not read the changelog and does not need
 this step.
+
+**The strings that move at a release.** Four places name the version, and the
+release pull request moves them together:
+
+- `version` in `pyproject.toml`;
+- `TOOL_VERSION` in `spec/tools/portrayal/render.py`. It is stamped into the
+  metadata of every compiled face and into the `generator` of each elements
+  file, so the next npm release run after it moves updates every device
+  package;
+- the mentions of the current release in `docs/format-stability.md`: the
+  package row, the `contract` row and the `generator` example;
+- the `CHANGELOG.md` heading.
+
+`kit/package.json` is the version of `@portrayal/kit` and does not move with
+them. A schema's `$id` moves only when the format does.

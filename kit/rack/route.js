@@ -465,7 +465,7 @@ export const STOCK_M = [0.5, 1, 1.5, 2, 3, 5, 7, 10, 15, 20, 30];
 // The kit does not know what a port holds: an LC cord into an optic's
 // receptacle enters it as it would an adapter's, and an AOC's head enters
 // the cage; an SFP head (47.5 inside, SFF-8432) is taken at the QSFP figure.
-export const END_ALLOWANCE = {os2: 0.0131, om3: 0.0131, om4: 0.0131, om5: 0.0131,
+export const END_ALLOWANCE_BY_MEDIA = {os2: 0.0131, om3: 0.0131, om4: 0.0131, om5: 0.0131,
   cat6: 0.0345, cat6a: 0.0345, dac: 0.025, aoc: 0.0524};
 const UNSET_ALLOWANCE = 0.0345;
 // TEMPORARY, until #949 step 4 (explicit tray slack) is built: a dressing
@@ -473,14 +473,15 @@ const UNSET_ALLOWANCE = 0.0345;
 // a measured figure and has no maker's source: it is there by decision
 // (2026-10-10, #962), so that a routed cord is not bought with nothing to
 // dress it by while no tray can hold its slack. It is kept out of
-// END_ALLOWANCE so that the table stays what the sources say; step 4 removes
-// this constant and its one use in endAllowance, and nothing else.
+// END_ALLOWANCE_BY_MEDIA so that the table stays what the sources say; step
+// 4 removes this constant and its one use in endAllowance, and nothing else.
 const DRESSING_ALLOWANCE = 0.1;
 // What a routed length adds at each end of a cable: its media's figure from
 // the table (the copper cord's for a cable with no media, or none the table
 // knows) and, for now, the dressing allowance.
-export const endAllowance = cable => ((typeof cable?.media === 'string' && Object.hasOwn(END_ALLOWANCE, cable.media))
-  ? END_ALLOWANCE[cable.media] : UNSET_ALLOWANCE) + DRESSING_ALLOWANCE;
+export const endAllowance = cable => ((typeof cable?.media === 'string'
+  && Object.hasOwn(END_ALLOWANCE_BY_MEDIA, cable.media))
+  ? END_ALLOWANCE_BY_MEDIA[cable.media] : UNSET_ALLOWANCE) + DRESSING_ALLOWANCE;
 export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m / 5) * 5;
 
 // THE PATH A CABLE TAKES, in rack coordinates (mm): its a port, every

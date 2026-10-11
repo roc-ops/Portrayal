@@ -384,7 +384,8 @@ is there by the decision of 2026-10-10. It is one named constant in
 exported, so that the table stays what the sources say; step 4 removes the
 constant and its one use, and every routed length drops by 0.2 m again.
 
-`END_ALLOWANCE` in `rack/route.js` is the table, in metres an end.
+`END_ALLOWANCE_BY_MEDIA` in `rack/route.js` is the table, in metres an end
+(named so from kit 0.18.0, so that it cannot be taken for what a length adds).
 `endAllowance(cable)` is what a length adds at an end, the cable's figure
 from the table and the dressing allowance; `routePath` returns it as
 `allowance`, and `pathLength` adds it at each end (a path built by hand
@@ -1879,7 +1880,7 @@ published file or a saved rack file uses it.
 | routed lengths changing on saved racks: detours, the plug's reach (1.5), cables resting at the floor and at the ring sill, ring passes from approach points and solid rings and zero-U parts met by the tube (3.3), room for the bends (3.4), the end allowance by media (1.6), positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
 | the lane moving outboard of a zero-U part that stands in the gutter and carries no lane (a zero-U PDU), and routed lengths changing beside one | kit (`laneXAt`), drawings | every route on that lane is longer, and a saved length moves on the next measure; a drawing that places lanes itself must follow |
 | the reach point (`at: 'reach'` with `end`) in `routePath`, `ctx.plugReachOf` and `PLUG_REACH` (the helpers that compute them stay internal), with the plug outside the face in the path (1.5) | kit API | a page passes `plugReachOf` and reads the points by these names; moving the plug into the allowance later would change every length again |
-| the end allowance by media, `END_ALLOWANCE` (the table: the plug inside the port and the maker's short tolerance, never slack), `endAllowance(cable)` and the path's `allowance` (what a length adds an end: the table's figure and, until #949 step 4, the temporary dressing allowance of 0.1 m, which is not exported) (1.6); `END_ALLOWANCE_M` is gone | kit API | a page reads the table by these names, and every routed length and stock size depends on the figures; removing the dressing allowance shortens every routed length by 0.2 m |
+| the end allowance by media, `END_ALLOWANCE_BY_MEDIA` (the table: the plug inside the port and the maker's short tolerance, never slack), `endAllowance(cable)` and the path's `allowance` (what a length adds an end: the table's figure and, until #949 step 4, the temporary dressing allowance of 0.1 m, which is not exported) (1.6); `END_ALLOWANCE_M` is gone | kit API | a page reads the table by these names, and every routed length and stock size depends on the figures; removing the dressing allowance shortens every routed length by 0.2 m |
 | `crosses-body` (with `part` and, for a held-face stack, `face`), `unheld` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
 | the public subpath `@portrayal/kit/rack/solids` (`solidsOf`, `legCrossings`, `detour` with its `room`, `CLEAR`) | kit package exports | a consumer imports it by that path and those names; a rename or removal is a breaking kit release |
 | `cable.slack`, `cable.slack.clear`, `cable.lay` (with `face`), and `roll` on `patch` | kit commands, offered to agents | agent sessions and saved prompts call them by name |

@@ -8,15 +8,20 @@ about it while the package is at 0.x.
 |---|---|---|
 | `format` | every device manifest, component contract, listing and lab (`format: 1`) | the **file format** a manifest is written in |
 | schema `v1` | the schema `$id`s and titles in `spec/schemas/` (device, component, listing and lab; the marked-up drawing; and the rack file) | for the manifest schemas, the same thing, named: schema v1 *is* format 1. `marks.schema.json` is v1 of the marked-up drawing, whose own key is `v` (1). `rack.schema.json` was first published under `/v1/`, describing rack file `version` 2; it now describes `version` 3 and is published under `/v2/`, the next unused label, never under its rack version number (below) |
-| package | `version` in `pyproject.toml` (0.1.0) | the **tools**: the linter, the compiler, the indexers and the exporter |
+| package | `version` in `pyproject.toml` (0.2.0) | the **tools**: the linter, the compiler, the indexers and the exporter |
 | rack catalogue `format` | `rack.json` (`format: 1`) | the **catalogue** a rack tool reads in one fetch; its own number, apart from the manifests' `format` |
 | rack file `version` | the Rack Builder's file (`format: "portrayal-rack"`, `version: 3`) | the **rack file** a user saves; `parseDoc` migrates an older one on load |
-| `contract` | `devices.json` (`contract: 2` at 0.1.0) | the **published build** a consumer reads from `library/dist/`; `CHANGELOG.md` records each one |
+| `contract` | `devices.json` (`contract: 2` at 0.1.0 and at 0.2.0) | the **published build** a consumer reads from `library/dist/`; `CHANGELOG.md` records each one |
 
-The schemas are published at `https://portrayal.dev/schemas/v1/`, one file
-per schema (`device.schema.json`, `component.schema.json`,
-`listing.schema.json`, `lab.schema.json`, `rack.schema.json`), and that URL is each schema's `$id`, so an editor or a
-validator that follows the `$id` finds the schema it names. `rack.schema.json` describes
+Each schema's `$id` is a URL under `https://portrayal.dev/schemas/`, one file
+per schema: `device.schema.json`, `component.schema.json`,
+`listing.schema.json`, `lab.schema.json` and `marks.schema.json` under `/v1/`,
+and `rack.schema.json` under `/v2/`. A schema is served at its `$id` once the
+site has published it, so an editor or a validator that follows the `$id`
+finds the schema it names. The device, component, listing and rack schemas
+are served there. The lab and marks schemas are new in 0.2.0 and are served
+from the site publish that follows the 0.2.0 tag; until then their `$id`s do
+not resolve. `rack.schema.json` describes
 the Rack Builder's own file (`format: "portrayal-rack"`, its own `version`, now 3), not a
 manifest, so it is published as a schema of this repository but does not carry
 format 1. Its label is a publication label only; the rack file's own `version` is
@@ -70,7 +75,7 @@ out. Everything in it is read from the SVG it sits beside; nothing is added.
   "view": "front", "config": "ac", "configs": ["ac"],
   "viewBox": [0.0, 0.0, 438.4, 44.0],
   "source-sha256": "…", "components": {"std/sfp-ganged@1": "1.1.1"},
-  "generator": {"tool": "portrayal-render", "version": "0.1.0"},
+  "generator": {"tool": "portrayal-render", "version": "0.2.0"},
   "elements": [
     {"path": "chassis", "parent": null, "id": "chassis-faceplate", "class": "chassis",
      "box": {"x": 0.0, "y": 0.0, "w": 438.4, "h": 44.0}},
