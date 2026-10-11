@@ -25,7 +25,8 @@ import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides,
          builtTurns, turnOverrides, acceptTurns, decodeTurns, seatTurn, turnable,
          slotOptions, slotResolver } from './swap.js';
 import { jdist, faceFile, distResolver } from './dist.js';
-import { paintFields, unpaintFields, fieldRows, fieldAccepts, decodeFields, drawnField } from './fields.js';
+import { paintFields, unpaintFields, fieldRows, fieldAccepts, decodeFields, drawnField,
+         adjustmentsOf, adjustmentAccepts, paintAdjustments } from './fields.js';
 import { fibreOf, farPath, fibreLabel, connectorLabel, moduleOf } from './optical.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -2017,7 +2018,31 @@ export function createShell(opts = {}) {
   // that predates the colour rule). The rule is fields.js's,
   // shared with the 3D side; the host mirrors the same map into the 3D viewer's
   // setFields.
+  //
+  // A POSITION IS A FIELD TOO (docs/adjustable-positions-design.md section 4):
+  // `setFields('rail-panel', {'rail-setback': 'rear'})`. It is held at the path
+  // of the adjustment's carrier under the adjustment's id, it is not a field of
+  // any component, and every member the drawing marks moves with it on every
+  // face. What is kept is the one spelling `adjustmentAccepts` answers - a stop
+  // name is input, the number is kept - and a value that is not a position is
+  // not applied: the drawing stays as it was, the sentence is logged, and it
+  // comes back in `refused`. Answers `{refused: [{path, key, value, reason}]}`.
   function setFields(path, vals) {
+    const refused = [];
+    const mine = vals ? Object.values(adjustments()).filter(a => a.carrier === path) : [];
+    if (mine.length) {
+      vals = {...vals};
+      for (const a of mine) {
+        const v = vals[a.id];
+        if (!Object.hasOwn(vals, a.id) || v == null || v === '') continue;   // empty: as built
+        const got = adjustmentAccepts(a, v);
+        if (got.ok) { vals[a.id] = got.value; continue; }
+        delete vals[a.id];
+        refused.push({path, key: a.id, value: v, reason: got.reason});
+        console.warn(`[portrayal] ${got.reason}`);
+      }
+      if (!Object.keys(vals).length) return {refused};
+    }
     if (vals) rememberBuilt(path, vals);
     if (!vals) delete state.cfgFields[path];
     else state.cfgFields[path] = {...(state.cfgFields[path] || {}), ...vals};
@@ -2034,8 +2059,24 @@ export function createShell(opts = {}) {
               for (const n of el.querySelectorAll(`[data-path="${CSS.escape(inner)}"]`))
                 paintFields(n, iv);
         }
+    moveAdjusted();
     emit('fields', {path, fields: state.cfgFields[path] || null, all: state.cfgFields});
     emit('change');
+    return {refused};
+  }
+  // THE ADJUSTMENTS OF THE DEVICE ON SCREEN, read off a face: every face of a
+  // device that declares any carries the same map (fields.js adjustmentsOf).
+  function adjustments() {
+    for (const d of faceDocs()) {
+      const a = adjustmentsOf(d);
+      if (Object.keys(a).length) return a;
+    }
+    return {};
+  }
+  // Every member on every face held, where the fields say it stands. A face
+  // with no adjustment, and a position nobody set, are left exactly as built.
+  function moveAdjusted() {
+    for (const d of faceDocs()) paintAdjustments(d, state.cfgFields);
   }
   function fieldsOf(ref) { return compByRef(ref)?.fields || {}; }
 
@@ -2091,6 +2132,7 @@ export function createShell(opts = {}) {
         paintFields(el, {[key]: built});
     delete mine[key];
     if (!Object.keys(mine).length) delete state.cfgFields[path];
+    moveAdjusted();          // a position that was reset stands where it was built
     emit('fields', {path, fields: state.cfgFields[path] || null, all: state.cfgFields});
     emit('change');
   }
@@ -2103,6 +2145,8 @@ export function createShell(opts = {}) {
         for (const el of d.querySelectorAll(
             `[data-path="${CSS.escape(path)}"],[data-projection][data-of="${CSS.escape(path)}"]`))
           paintFields(el, vals);
+    // and its members stand where the session put them
+    moveAdjusted();
   }
   // A PART THAT HAS BEEN SWAPPED OUT TAKES ITS FIELDS WITH IT: a rating set on
   // one breaker says nothing about the fuse holder that replaced it.
@@ -2123,9 +2167,21 @@ export function createShell(opts = {}) {
       let decl = {};
       try { if (el) decl = fieldsOf(el.dataset.ref.split(':')[0]); } catch (err) { /* not ns/name@major */ }
       const ok = {};
-      for (const [k, v] of Object.entries(vals))
+      // A POSITION IS DECLARED BY THE DEVICE, not by a component: the second
+      // source every reader of `fields` asks. An entry that is not a position
+      // is ignored like any other, and its sentence is logged.
+      const mine = Object.values(adjustments()).filter(a => a.carrier === path);
+      for (const [k, v] of Object.entries(vals)) {
+        const a = mine.find(m => m.id === k);
+        if (a) {
+          const got = adjustmentAccepts(a, v);
+          if (got.ok) ok[k] = got.value;
+          else { ignored.push(`${path}~${k}`); console.warn(`[portrayal] ${got.reason}`); }
+          continue;
+        }
         // an OWN key: `decl.constructor` is a function on any object, declared or not
         if (Object.hasOwn(decl, k) && fieldAccepts(decl[k], v)) ok[k] = v; else ignored.push(`${path}~${k}`);
+      }
       if (Object.keys(ok).length) setFields(path, ok);
     }
     return {ignored};

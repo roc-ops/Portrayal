@@ -92,12 +92,14 @@ export function install(routes) {
   globalThis.localStorage = {getItem: () => null, setItem() {}};
   globalThis.CSS = {escape: s => String(s)};
   // a drawing's text is its name, or JSON {src, parts: [{path, ref}]} for one
-  // that draws parts
+  // that draws parts. `attrs` on the drawing or on a part are written as they
+  // are, for what a face carries beyond a path and a ref (shell-adjustments.mjs)
   globalThis.DOMParser = class {
     parseFromString(txt) {
       const d = txt.startsWith('{') ? JSON.parse(txt) : {src: txt, parts: []};
-      const svg = new El('svg', {'data-src': d.src});
-      for (const {path, ref} of d.parts) svg.appendChild(new El('g', {'data-path': path, 'data-ref': ref}));
+      const svg = new El('svg', {'data-src': d.src, ...(d.attrs || {})});
+      for (const {path, ref, attrs} of d.parts)
+        svg.appendChild(attrs ? new El('g', attrs) : new El('g', {'data-path': path, 'data-ref': ref}));
       return {documentElement: svg};
     }
   };

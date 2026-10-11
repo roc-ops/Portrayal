@@ -262,6 +262,219 @@ export function fieldAccepts(field, value) {
   return true;
 }
 
+// ------------------------------------------------------- adjustable positions
+// A PART THAT SLIDES (docs/adjustable-positions-design.md). A device declares
+// it once, and the compiled drawing carries the declaration on the root of
+// every face as `data-adjustments`: for each id its `axis`, `carrier`, `range`,
+// `default`, `stops`, `label`, `datum`, and `at`, the position the file was
+// built at. Each member node says `data-moves-with="<id>"` and
+// `data-moves-by="dx dy dz"`: the mm it moves for each mm of position, `dx` and
+// `dy` in the frame of its face and `dz` its depth behind that face.
+//
+// THE VALUE IS A FIELD, held at the path of the carrier under the id of the
+// adjustment: `{'rail-panel': {'rail-setback': '271.2'}}`, the map every field
+// reader already holds. It is not a component field, so a reader that tests a
+// value against a component declaration asks here as well.
+
+// What a typed number may look like: digits and one point. No sign and no
+// exponent, as adjustments.py reads it, so the build and the kit refuse the
+// same text. Not \s, for the reason R_FROM_NUMBER gives.
+const POSITION_NUMBER = /^[ \t\n\r]*(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)[ \t\n\r]*$/;
+// 0.1 mm, rounded half up: adjustments.py round01, the same arithmetic
+const round01 = x => Math.floor(Number(x) * 10 + 0.5) / 10;
+// THE ONE SPELLING OF A POSITION: `120` and `271.2`, never `120.0` or `271.20`
+const spell = x => round01(x).toFixed(1).replace(/\.0$/, '');
+const stopsByValue = a => Object.entries(a?.stops || {})
+  .map(([name, value]) => ({name, value: Number(value)}))
+  .sort((p, q) => p.value - q.value || (p.name < q.name ? -1 : p.name > q.name ? 1 : 0));
+// attribute text, tolerant of one that is not JSON
+const parsed = text => { try { const v = JSON.parse(text); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; } };
+
+/**
+ * The adjustments a drawing declares: `{id: {axis, carrier, range, default,
+ * stops, label, datum, at, id, on}}`, or `{}`. `root` is a face's `<svg>` or
+ * anything that holds one. Each entry also carries its own `id` and, as `on`,
+ * the model the face names, so `adjustmentAccepts` can say the whole sentence.
+ */
+export function adjustmentsOf(root) {
+  const svg = root?.hasAttribute?.('data-adjustments') ? root
+    : root?.querySelector?.('[data-adjustments]');
+  if (!svg) return {};
+  const on = svg.querySelector?.('[data-path="chassis"]')?.getAttribute?.('data-model') || '';
+  const out = {};
+  for (const [id, a] of Object.entries(parsed(svg.getAttribute('data-adjustments'))))
+    if (a && typeof a === 'object') out[id] = {...a, id, on};
+  return out;
+}
+
+/**
+ * Is `value` a position of this adjustment? Answers `{ok: true, value}` with
+ * the ONE spelling to keep (a string: the number rounded to 0.1 mm, in
+ * decimal, with no exponent, no sign and no trailing `.0`), or `{ok: false,
+ * reason}` with a sentence saying what the adjustment takes.
+ *
+ * A stop name is input only: it answers with the number behind it. With a
+ * `range` any number from min to max is a position, both ends included; with
+ * stops and no range only the stop values are. `who` names the adjustment
+ * (`id`) and the device (`on`) for the sentence, where the adjustment itself
+ * does not carry them.
+ */
+export function adjustmentAccepts(adjustment, value, who = {}) {
+  const a = adjustment && typeof adjustment === 'object' ? adjustment : {};
+  const id = who.id ?? a.id ?? 'the position';
+  const on = who.on ?? a.on ?? '';
+  const name = on ? `${id} on ${on}` : String(id);
+  const named = stopsByValue(a);
+  const text = value == null || typeof value === 'boolean' ? '' : String(value).trim();
+  let n = null;
+  if (Object.hasOwn(a.stops || {}, text)) n = Number(a.stops[text]);
+  else if (POSITION_NUMBER.test(text)) n = Number(text);
+  if (Array.isArray(a.range) && a.range.length === 2) {
+    if (n === null || !Number.isFinite(n)) {
+      const tail = named.length ? `, or one of: ${named.map(s => s.name).join(', ')}` : '';
+      return {ok: false, reason: `${name} takes a number in mm${tail}.`};
+    }
+    const r = round01(n);
+    if (r < round01(a.range[0]) || r > round01(a.range[1]))
+      return {ok: false, reason: `${name} takes ${spell(a.range[0])} to ${spell(a.range[1])} mm. `
+                                 + `${spell(n)} is outside it.`};
+    return {ok: true, value: spell(n)};
+  }
+  if (n !== null && Number.isFinite(n) && named.some(s => round01(s.value) === round01(n)))
+    return {ok: true, value: spell(n)};
+  return {ok: false, reason: `${name} takes one of: `
+                             + named.map(s => `${s.name} (${spell(s.value)})`).join(', ') + '.'};
+}
+
+/**
+ * The rows of a position control: one per adjustment, in id order.
+ * `adjustments` is what `adjustmentsOf` answers, or the `adjustments` of a
+ * device's configs.json; `current` is the fields map a host holds,
+ * `{path: {key: value}}`, in which a position sits at the path of its carrier
+ * under its id. A row shows the position held when it is one the adjustment
+ * takes, else the position the drawing was built at (`at`), else the default.
+ * Positions are strings in the one spelling; `stops` is in order of position,
+ * and `stop` names the stop the row stands at, or is ''.
+ */
+export function adjustmentRows(adjustments, current = {}, who = {}) {
+  return Object.keys(adjustments || {}).sort().map(id => {
+    const a = adjustments[id] || {};
+    const built = spell(a.at ?? a.default ?? 0);
+    const held = current?.[a.carrier]?.[id];
+    const got = held == null || held === '' ? null : adjustmentAccepts(a, held, {id, ...who});
+    const value = got?.ok ? got.value : built;
+    const stops = stopsByValue(a).map(s => ({name: s.name, value: spell(s.value)}));
+    const ranged = Array.isArray(a.range) && a.range.length === 2;
+    return {
+      id, value, built,
+      default: spell(a.default ?? 0),
+      label: a.label || id,
+      carrier: a.carrier || '',
+      axis: a.axis || '',
+      datum: a.datum || '',
+      unit: 'mm',
+      type: ranged ? 'range' : 'stops',
+      min: ranged ? spell(a.range[0]) : '',
+      max: ranged ? spell(a.range[1]) : '',
+      stops,
+      stop: stops.find(s => s.value === value)?.name || '',
+    };
+  });
+}
+
+const ADJUST = {transform: 'data-portrayal-adjust-transform', depth: 'data-portrayal-adjust-depth',
+                lift: 'data-portrayal-adjust-lift', out: 'data-portrayal-adjust-out',
+                profile: 'data-portrayal-adjust-profile', profileY: 'data-portrayal-adjust-profile-y'};
+// a millimetre as the drawing writes one: to 0.1 um, never -0
+const mm = x => { const r = Math.round(x * 1e4) / 1e4; return String(r === 0 ? 0 : r); };
+/** `attr` of `node` as it was built, kept under `stash` the first time. */
+function builtAttr(node, attr, stash) {
+  if (!node.hasAttribute(stash)) node.setAttribute(stash, node.getAttribute(attr) ?? '');
+  return node.getAttribute(stash);
+}
+/** Write `value`, or put `attr` back as built and forget the stash. */
+function moveAttr(node, attr, stash, value) {
+  const built = builtAttr(node, attr, stash);
+  if (value === null) {
+    if (built === '') node.removeAttribute(attr); else node.setAttribute(attr, built);
+    node.removeAttribute(stash);
+  } else node.setAttribute(attr, value);
+  return built;
+}
+// a profile is `t:height,t:height`: every height moves, as render.py's
+// _shift_heights moves them
+const shiftProfile = (text, by) => text.split(',').map(pair => {
+  const [t, o] = pair.split(':');
+  return `${t}:${mm(Number(o) + by)}`;
+}).join(',');
+
+/** Move one member `delta` mm of position from where it was built. */
+function moveMember(node, delta) {
+  const by = String(node.getAttribute('data-moves-by') || '').trim().split(/\s+/).map(Number);
+  const [dx, dy, dz] = [by[0] || 0, by[1] || 0, by[2] || 0];
+  // IN THE PLANE OF THE FACE: an offset in front of the transform the node
+  // was built with, in the frame of the face
+  const x = dx * delta, y = dy * delta;
+  const base = builtAttr(node, 'transform', ADJUST.transform);
+  moveAttr(node, 'transform', ADJUST.transform,
+           x || y ? `translate(${mm(x)} ${mm(y)})${base ? ' ' + base : ''}` : null);
+  // ALONG THE DEPTH OF THE FACE (section 6). A projection is flat and has none.
+  if (!dz || node.hasAttribute('data-projection')) return;
+  const z = dz * delta;
+  if (node.hasAttribute('data-depth') || node.hasAttribute(ADJUST.depth)) {
+    // a well: its floor is its depth
+    const built = Number(builtAttr(node, 'data-depth', ADJUST.depth));
+    moveAttr(node, 'data-depth', ADJUST.depth, z ? mm(built + z) : null);
+    return;
+  }
+  // anything else stands a lift off its face, the sign reversed, and its
+  // absolute heights go with it, as they do for a part sunk in a well
+  const lift = Number(builtAttr(node, 'data-z-lift', ADJUST.lift) || 0);
+  moveAttr(node, 'data-z-lift', ADJUST.lift, z ? mm(lift - z) : null);
+  const inside = [node, ...node.querySelectorAll(
+    `[data-z-out],[data-z-profile],[data-z-profile-y],[${ADJUST.out}],[${ADJUST.profile}],[${ADJUST.profileY}]`)];
+  for (const n of inside) {
+    if (n.hasAttribute('data-z-out') || n.hasAttribute(ADJUST.out)) {
+      const out = Number(builtAttr(n, 'data-z-out', ADJUST.out));
+      moveAttr(n, 'data-z-out', ADJUST.out, z ? mm(out - z) : null);
+    }
+    for (const [attr, stash] of [['data-z-profile', ADJUST.profile], ['data-z-profile-y', ADJUST.profileY]])
+      if (n.hasAttribute(attr) || n.hasAttribute(stash)) {
+        const prof = builtAttr(n, attr, stash);
+        moveAttr(n, attr, stash, z && prof ? shiftProfile(prof, -z) : null);
+      }
+  }
+}
+
+/**
+ * Move every member of every adjustment under `root` to the position `fields`
+ * holds for it: the value at the path of its carrier, under its id. `root` is
+ * a face's `<svg>` or anything that holds one; `fields` is `{path: {key:
+ * value}}`, as a plain object or a Map. An adjustment with no value, or with
+ * one it does not take, stands where the drawing was built (`at`), exactly as
+ * built: the first move remembers each attribute it changes on the node
+ * itself, and a move back to the built position puts them back and forgets.
+ * The same rule in 2D and in 3D, where the depth it writes is what is built.
+ * Answers `{id: position}` for what it drew, as numbers.
+ */
+export function paintAdjustments(root, fields) {
+  const svg = root?.hasAttribute?.('data-adjustments') ? root
+    : root?.querySelector?.('[data-adjustments]');
+  const drew = {};
+  if (!svg) return drew;
+  const at = path => (fields instanceof Map ? fields.get(path) : fields?.[path]) || {};
+  for (const [id, a] of Object.entries(adjustmentsOf(svg))) {
+    const held = at(a.carrier)[id];
+    const got = held == null || held === '' ? null : adjustmentAccepts(a, held);
+    const built = Number(a.at ?? a.default ?? 0);
+    const value = got?.ok ? Number(got.value) : built;
+    drew[id] = value;
+    for (const n of svg.querySelectorAll(`[data-moves-with="${esc(id)}"]`))
+      moveMember(n, value - built);
+  }
+  return drew;
+}
+
 // `path~key~value`, comma-separated, each of the three pieces escaped on its own
 // - the shape `swap=` has (swap.js encodeSwaps), with one more piece. Sorted, so
 // one state is one string.
