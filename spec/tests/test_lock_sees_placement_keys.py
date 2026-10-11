@@ -61,7 +61,11 @@ def _properties(kind):
     return set(comps[kind]["items"]["properties"])
 
 
-SORTED = (dl.PLACEMENT_GEOMETRY, dl.PLACEMENT_ADDRESSING, dl.PLACEMENT_SURFACE)
+# `moves-with` is the fourth kind (docs/adjustable-positions-design.md section
+# 9): recorded with its adjustment, where a member added is a minor and a member
+# dropped a major. test_lock_sees_adjustments.py holds those bumps.
+SORTED = (dl.PLACEMENT_GEOMETRY, dl.PLACEMENT_ADDRESSING, dl.PLACEMENT_SURFACE,
+          dl.PLACEMENT_MEMBERSHIP)
 
 
 def test_the_sets_are_exhaustive_over_the_schema():

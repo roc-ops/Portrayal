@@ -1,0 +1,126 @@
+format: 1
+kind: device
+name: slider
+version: 1.0.0
+maturity: draft
+manufacturer: Fixture
+model: SLIDER
+description: >-
+  Test fixture: an open frame 120 wide, 40 high and 200 deep whose panel slides along its depth.
+  The panel carries a rail, and a stud on each side holds it to a fixed side plate through a slot.
+profile: passive
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      a test fixture for adjustable positions; every number is chosen for the tests.
+  panel-setback:
+    confidence: estimated
+    note: >-
+      a test fixture: the front face of the panel stands 20 to 180 behind the front of the frame
+      and is drawn at 60. The ends are where the stud meets the ends of the slot in the side plate.
+attrs:
+  physical:
+    slide-panel-setback-mm: 60
+    slide-panel-setback-min-mm: 20
+    slide-panel-setback-max-mm: 180
+chassis:
+  width: 120.0
+  height: 40.0
+  depth: 200.0
+  ru: 1
+  shell: sheet
+  thickness: 1.5
+  color: '#1b1d20'
+groups:
+  frame:
+    term: Bracket
+    role: furniture
+    index-origin: 1
+    description: the sliding panel and the two side plates
+  rails:
+    term: Rail
+    role: furniture
+    index-origin: 1
+    description: the rail the panel carries
+  studs:
+    term: Stud
+    role: furniture
+    index-origin: 1
+    description: the studs that hold the panel to the side plates
+adjustments:
+  panel-setback:
+    label: Panel setback
+    carrier: panel
+    axis: z
+    range: [20.0, 180.0]
+    default: 60.0
+    stops: {front: 20.0, middle: 100.0, rear: 180.0}
+    datum: the front face of the panel, behind the front of the frame
+views:
+  front:
+    size: {w: 120.0, h: 40.0}
+    components:
+      placements:
+      - {ref: fixture/slide-well@1, id: panel, at: [10.0, 0.0], group: frame, rel-pos: 1, moves-with: panel-setback}
+      - {ref: fixture/slide-rail@1, id: rail, at: [20.0, 15.0], group: rails, rel-pos: 1, in: panel,
+        moves-with: panel-setback}
+  rear:
+    size: {w: 120.0, h: 40.0}
+    panel:
+      decor:
+      - {id: panel-back, at: [10.0, 0.0], size: [100.0, 40.0], fill: '#15171a', kind: slide-panel}
+  top:
+    size: {w: 120.0, h: 200.0}
+    panel:
+      decor:
+      - {id: side-left, at: [0.0, 0.0], size: [1.5, 200.0], fill: '#3a3f45', kind: side-plate}
+      - {id: side-right, at: [118.5, 0.0], size: [1.5, 200.0], fill: '#3a3f45', kind: side-plate}
+      - {id: panel, at: [10.0, 138.5], size: [100.0, 1.5], fill: '#2a2d31', kind: slide-panel, moves-with: panel-setback}
+      - {id: rail, at: [20.0, 140.0], size: [80.0, 7.5], fill: '#b9bdc2', kind: slide-rail, moves-with: panel-setback}
+  bottom:
+    size: {w: 120.0, h: 200.0}
+    panel:
+      decor:
+      - {id: side-left, at: [118.5, 0.0], size: [1.5, 200.0], fill: '#3a3f45', kind: side-plate}
+      - {id: side-right, at: [0.0, 0.0], size: [1.5, 200.0], fill: '#3a3f45', kind: side-plate}
+      - {id: panel, at: [10.0, 138.5], size: [100.0, 1.5], fill: '#2a2d31', kind: slide-panel, moves-with: panel-setback}
+      - {id: rail, at: [20.0, 140.0], size: [80.0, 7.5], fill: '#b9bdc2', kind: slide-rail, moves-with: panel-setback}
+  left:
+    size: {w: 200.0, h: 40.0}
+    panel:
+      decor:
+      - {id: flange, at: [128.0, 4.0], size: [12.0, 32.0], fill: '#15171a', kind: panel-flange, moves-with: panel-setback}
+    components:
+      placements:
+      - {ref: fixture/slide-side@1, id: side-left, at: [0.0, 0.0], group: frame, rel-pos: 2, under: [stud]}
+      - {ref: fixture/slide-stud@1, id: stud, at: [131.0, 17.0], group: studs, rel-pos: 1, lift: 1.5,
+        moves-with: panel-setback}
+  right:
+    size: {w: 200.0, h: 40.0}
+    panel:
+      decor:
+      - {id: flange, at: [60.0, 4.0], size: [12.0, 32.0], fill: '#15171a', kind: panel-flange, moves-with: panel-setback}
+    components:
+      placements:
+      - {ref: fixture/slide-side@1, id: side-right, at: [0.0, 0.0], group: frame, rel-pos: 3, under: [stud]}
+      - {ref: fixture/slide-stud@1, id: stud, at: [63.0, 17.0], group: studs, rel-pos: 2, lift: 1.5,
+        moves-with: panel-setback}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The frame with its panel at the default position, 60 behind the front.
+  forward:
+    kind: example
+    description: >-
+      The same frame with its panel at the front stop, 20 behind the front.
+    component-attrs:
+      panel: {panel-setback: front}
+  back:
+    kind: example
+    description: >-
+      The same frame with its panel at the rear end of its travel, 180 behind the front.
+    component-attrs:
+      panel: {panel-setback: '180'}

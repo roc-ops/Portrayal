@@ -273,6 +273,17 @@ ISSUED = {
     "L170": "component, device",
     "L171": "component",
     "L172": "component, device",
+    "L173": "device",
+    "L174": "device",
+    "L175": "device",
+    "L176": "device",
+    "L177": "device",
+    "L178": "device",
+    "L179": "device",
+    "L180": "device",
+    "L181": "device",
+    "L182": "device",
+    "L183": "device",
 }
 
 

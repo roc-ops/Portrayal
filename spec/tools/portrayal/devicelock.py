@@ -29,6 +29,7 @@ import sys
 
 import yaml
 
+from portrayal import adjustments as _adjust
 from portrayal import manifest
 from portrayal import libwalk
 # The AGGREGATE's name, written into dist. A device's own lock is
@@ -261,6 +262,27 @@ PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface", "fed-by", "through",
                         "lines"}
 PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
                      "frames", "positions"}
+# MEMBERSHIP - which adjustment a placed thing slides with
+# (docs/adjustable-positions-design.md section 9). It is in none of the three
+# digests above, because none of them has its bumps: a member ADDED to an
+# adjustment is a minor and a member DROPPED, or moved to another adjustment,
+# is a major, and a digest cannot tell the two apart. `_adjustments` records
+# the members of each adjustment by name, and `_adjustments_bump` reads that.
+#   `moves-with`      (placement, bay; decor too, see `_decor`)
+PLACEMENT_MEMBERSHIP = {"moves-with"}
+
+# EVERY TOP-LEVEL KEY OF A DEVICE, SORTED BY WHETHER THE LOCK READS IT. The
+# guard the placement keys have, one level up: `adjustments` arrived as a new
+# top-level key, and nothing would have failed had it been hashed nowhere.
+# test_lock_sees_adjustments.py holds the two sets to the schema, so whoever
+# adds a top-level key has to say here which it is.
+TOP_LEVEL_READ = {"version", "maturity", "aliases", "description", "profile", "lint",
+                  "stack-exceptions", "provenance", "attrs", "chassis", "configurations",
+                  "groups", "adjustments", "views", "portfolio", "interfaces", "gaps"}
+# Not read today. `format`, `kind` and `name` say what the file is and where it
+# lives; the rest are recorded here as unread, not as decided.
+TOP_LEVEL_UNREAD = {"format", "kind", "name", "manufacturer", "model", "part-numbers",
+                    "datasheet", "references"}
 
 
 # KEYS THAT NAME A SET, which the schema lets an author spell as one id or a
@@ -297,6 +319,41 @@ def _placement_keys(doc, keys):
                 if said:
                     out[f"{vname}/{kind}/{item.get('id')}"] = said
     return out
+
+
+def _decor(doc):
+    """Each view's decor as `surface` hashes it: whole, less `moves-with`.
+
+    Decor is surface, a patch. Which adjustment a decor entry slides with is
+    not: it is recorded with the adjustment (`_adjustments`), where adding a
+    member is a minor and dropping one a major. A view whose decor states no
+    `moves-with` is handed back as written, so no device is rehashed.
+    """
+    out = {}
+    for vname, view in (doc.get("views") or {}).items():
+        decor = ((view or {}).get("panel") or {}).get("decor")
+        if isinstance(decor, list) and any(
+                isinstance(d, dict) and "moves-with" in d for d in decor):
+            decor = [{k: v for k, v in d.items() if k != "moves-with"}
+                     if isinstance(d, dict) else d for d in decor]
+        out[vname] = decor
+    return out
+
+
+def _adjustments(doc):
+    """Each adjustment as the lock records it: what a saved rack or a link
+    depends on (`axis`, `carrier`, `default`, `range`, `stops`) and the set of
+    its members, `<view>/<kind>/<id>` for placements, bays and decor alike.
+    `label` and `datum` are words a reader sees and are hashed in `surface`.
+    """
+    members = _adjust.members(doc)
+    out = {}
+    for aid, adj in _adjust.declared(doc).items():
+        adj = adj or {}
+        out[aid] = {**{k: adj[k] for k in ("axis", "carrier", "default", "range", "stops")
+                       if adj.get(k) is not None},
+                    "members": members.get(aid, [])}
+    return _stable(out)
 
 
 def _by_field(per_placement):
@@ -653,8 +710,15 @@ def buckets(doc, versions=None):
             "groups": doc.get("groups"),
             "silkscreen": {v: (w or {}).get("silkscreen")
                            for v, w in (doc.get("views") or {}).items()},
-            "decor": {v: ((w or {}).get("panel") or {}).get("decor")
-                      for v, w in (doc.get("views") or {}).items()},
+            "decor": _decor(doc),
+            # THE WORDS OF AN ADJUSTMENT, its `label` and its `datum`: what a
+            # control shows and what the number measures. The rest of an
+            # adjustment is recorded in the entry, where its bumps are read
+            # (`_adjustments_bump`). Conditional, so a device that declares
+            # none is not rehashed for the key.
+            **({"adjustments": {aid: {k: (adj or {}).get(k) for k in ("label", "datum")}
+                                for aid, adj in _adjust.declared(doc).items()}}
+               if _adjust.declared(doc) else {}),
             "regions": {v: (w or {}).get("regions")
                         for v, w in (doc.get("views") or {}).items()},
             # WHERE CABLES CAN CROSS A FACE (docs/cable-managers-design.md
@@ -741,6 +805,11 @@ def entry(doc, versions=None):
         e["interface-names"] = {
             phys: name for phys, (name, _b)
             in sorted(dcim_export.listing_names(doc).items())}
+    # EACH ADJUSTMENT WITH ITS MEMBERS, recorded and not only hashed, because
+    # a member added is a minor and a member dropped a major. Only where a
+    # device declares any, so no other lock learns a key.
+    if _adjust.declared(doc):
+        e["adjustments"] = _adjustments(doc)
     e.update(buckets(doc, versions))
     out = _Entry(e)
     placed = _placements(doc)
@@ -794,12 +863,59 @@ def _placement_keys_bump(old, new):
     return need
 
 
+def _adjustments_bump(old, new):
+    """What a change to `adjustments` or to a `moves-with` demands
+    (docs/adjustable-positions-design.md section 9).
+
+    MAJOR when a saved rack or a link could hold a value this would move or
+    refuse, or a caller a name it would refuse: an id renamed or removed; the
+    carrier, the axis or the default changed; a range made narrower or taken
+    away; a stop removed, renamed or moved; a member dropped, or moved to
+    another adjustment. MINOR when everything held before still stands: an
+    adjustment stated where there was none, a wider range, a stop added, a
+    member added. `label` and `datum` are in `surface`, a patch.
+
+    An old lock with no `adjustments` key is a device that declared none: the
+    key is recorded from the first lock written with one.
+    """
+    was_all = old.get("adjustments") or {}
+    now_all = new.get("adjustments") or {}
+    if not was_all and not now_all:
+        return None
+    need = None
+    for aid, was in was_all.items():
+        now = now_all.get(aid)
+        if now is None:
+            return "major"              # removed, or renamed
+        if any(was.get(k) != now.get(k) for k in ("axis", "carrier", "default")):
+            return "major"
+        wr, nr = was.get("range"), now.get("range")
+        if wr and (not nr or nr[0] > wr[0] or nr[1] < wr[1]):
+            return "major"              # a position kept before is refused now
+        if wr != nr:
+            need = "minor"              # wider, or a range where there were stops
+        ws, ns = was.get("stops") or {}, now.get("stops") or {}
+        if any(ns.get(name) != v for name, v in ws.items()):
+            return "major"              # a stop removed, renamed or moved
+        if set(ns) - set(ws):
+            need = "minor"
+        wm, nm = set(was.get("members") or []), set(now.get("members") or [])
+        if wm - nm:
+            return "major"              # a member dropped, or moved elsewhere
+        if nm - wm:
+            need = "minor"
+    if set(now_all) - set(was_all):
+        need = "minor"                  # an adjustment stated
+    return need
+
+
 def required_bump(old, new):
-    """The smallest bump this change is allowed to take - the larger of what
-    the buckets demand and what the placement keys demand."""
+    """The smallest bump this change is allowed to take - the largest of what
+    the buckets, the placement keys and the adjustments demand."""
     if old is None:
         return None
-    need = [b for b in (_bucket_bump(old, new), _placement_keys_bump(old, new))
+    need = [b for b in (_bucket_bump(old, new), _placement_keys_bump(old, new),
+                        _adjustments_bump(old, new))
             if b]
     return max(need, key=RANK.get) if need else None
 

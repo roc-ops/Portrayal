@@ -856,6 +856,94 @@
     }
    }
   },
+  "adjustments": {
+   "type": "object",
+   "description": "the parts of this device that SLIDE, each declared once: a rail panel bolted through slots in its side brackets, a rear support on a row of tapped holes. The key is the id of the adjustment. It is the name a member uses in `moves-with`, and the field key the chosen position is held under, at the path of the `carrier`. One adjustment is one straight slide along one axis; a turn, and a part that changes length, are not adjustments. The views draw the `default` position. A reader sets another position as a field (`component-attrs` on a configuration, `setFields` in the kit, `fields=` in a link), and every member moves by the same distance.",
+   "minProperties": 1,
+   "propertyNames": {
+    "$ref": "#/$defs/segment"
+   },
+   "additionalProperties": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "label",
+     "carrier",
+     "axis",
+     "default",
+     "datum"
+    ],
+    "anyOf": [
+     {
+      "required": [
+       "range"
+      ]
+     },
+     {
+      "required": [
+       "stops"
+      ]
+     }
+    ],
+    "properties": {
+     "label": {
+      "type": "string",
+      "minLength": 1,
+      "description": "the words a control shows for this adjustment, as a person says it: `Rail setback`"
+     },
+     "carrier": {
+      "$ref": "#/$defs/segment",
+      "description": "the id of ONE placement that moves with this adjustment. The chosen position is held as a field at the path of this placement, under the id of the adjustment, so the carrier is a placed component that every configuration has: it states `moves-with`, and it is neither `only-in` nor `optional`."
+     },
+     "axis": {
+      "enum": [
+       "x",
+       "y",
+       "z"
+      ],
+      "description": "the direction of the slide, in the frame of the device: `x` runs from the left of the device as seen from its front, `y` up from its bottom, `z` back from its front. The build works out which way each view shows it."
+     },
+     "range": {
+      "type": "array",
+      "prefixItems": [
+       {
+        "type": "number",
+        "minimum": 0
+       },
+       {
+        "type": "number",
+        "minimum": 0
+       }
+      ],
+      "items": false,
+      "minItems": 2,
+      "description": "`[min, max]` in mm: the two ends of the travel, both included. Each is the coordinate of the `datum` along the `axis`, in the frame of the device, so it is an absolute position and not an offset from the default. Left out for a part that has only `stops`."
+     },
+     "default": {
+      "type": "number",
+      "minimum": 0,
+      "description": "the position the views draw, in mm: the coordinate of the `datum` along the `axis`"
+     },
+     "stops": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+       "$ref": "#/$defs/segment"
+      },
+      "additionalProperties": {
+       "type": "number",
+       "minimum": 0
+      },
+      "description": "named positions: a name, then its position in mm (`{front: 51.2, middle: 161.2, rear: 271.2}`). With a `range` a stop names one position in it. With no `range` the stops are the only positions the part takes, as on a row of tapped holes. A stop name is what a reader types; the position kept is always the number."
+     },
+     "datum": {
+      "type": "string",
+      "minLength": 1,
+      "description": "which point of the part the numbers measure, in words: `the front face of the rail panel, behind the ear plane`. One joint has several points a number could mean (a panel face, a screw centre, the end of a slot), and a range with no datum is a range of one of them that a reader cannot tell from the others."
+     }
+    }
+   }
+  },
   "groups": {
    "type": "object",
    "description": "every `group:` used in any view, declared once: the vendor's word for one of them (term), where numbering starts, and shared attrs. Lint L17 rejects an undeclared group",
@@ -1097,7 +1185,16 @@
            ],
            "default": "rect",
            "description": "outline of the painted patch. `rect` (with optional `rx`) is the default; `d-sub` is the D-subminiature outline of TE 114-40010 Figure 3 and `slot` a stadium. THE SAME VOCABULARY A CUTOUT'S `shape` TAKES, because paint printed around a connector takes the connector's shape - a patch behind a D-sub is not a rectangle. `circle` is accepted for symmetry and still draws as a rect; decor has `rx`."
+          },
+          "moves-with": {
+           "$ref": "#/$defs/segment",
+           "description": "the id of the `adjustments` entry this decor slides with. It moves by the same distance as every other member of that adjustment. A decor entry that states this states an `id` too, because the lock records each member by its id."
           }
+         },
+         "dependentRequired": {
+          "moves-with": [
+           "id"
+          ]
          }
         }
        },
@@ -1487,6 +1584,10 @@
           "interface": {
            "$ref": "#/$defs/segment",
            "description": "THE INTERFACE THIS SLOT PRESENTS, for an opening whose occupants are not a list anyone published. `accepts` is the vendor's compatibility matrix transcribed - it works because a switch's card catalogue is closed and printed, and the module reference's support tables ARE those lists. An open form factor has no table to transcribe: anyone may build a PCIe card, so a list is unbounded, and one written anyway asserts something the vendor never said. Such a bay names the interface instead and carries no list. Occupants declare the same key via `mates`, exactly as they do for a cage. Deliberately not an enum - a new interface is a new key, not a schema change. Electrical detail (a generation, a lane width) belongs in `attrs`, NOT here: a gen3 card seats in a gen4 slot and an x8 card in an x16, so matching on an exact key would refuse hardware that fits."
+          },
+          "moves-with": {
+           "$ref": "#/$defs/segment",
+           "description": "the id of the `adjustments` entry this bay slides with. The module seated in a member bay moves with it, and so does its `plan` or `rear` projection on another view."
           }
          },
          "anyOf": [
@@ -1701,6 +1802,10 @@
            "type": "number",
            "exclusiveMinimum": 0,
            "description": "mm this INSTANCE sits proud of the panel face - the mirror of `inset`, and used when the part is bolted not to the sheet metal but to something already standing off it. Every protrusion the instance declares is raised by this much, so the part needs no second copy with fattened numbers - which is what `inset` avoids in the other direction. The same key as `lift` on `relief.features`, on composed `parts:` and on `panel.decor`."
+          },
+          "moves-with": {
+           "$ref": "#/$defs/segment",
+           "description": "the id of the `adjustments` entry this placement slides with. Everything that names one adjustment moves together, by the same distance. A part that stands `in:` a member, or is mated to one, is a member of the same adjustment."
           }
          },
          "oneOf": [

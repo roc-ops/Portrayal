@@ -24,6 +24,7 @@ from pathlib import Path
 
 import yaml
 
+from portrayal import adjustments as _adjust
 from portrayal import attrsections as attrs_mod
 from portrayal import bevel as bevel_mod
 from portrayal import facets
@@ -616,6 +617,39 @@ RULES = {
              ERROR),
     "L172": ("component, device", "whatever is named for a logo is a reserved place and paints nothing: a contract element, a skin node or a device region whose id has the word `logo` in it is `logo-zone` (or `logo-zone-<n>`), the skin node is an empty `rect` with `fill=\"none\"` and no stroke, the region states `at` and `size`, and no decor, cutout, silkscreen mark, bay or placement of a device carries the word (error)", "reserve the box the mark covers: an element `logo-zone` with an empty `<rect id=\"logo-zone\" fill=\"none\"/>` in the skin of a part, a region `logo-zone` with `at` and `size` on a device, and delete the drawn mark or the box that stood for it",
              "A vendor mark is never reproduced, and a filled box standing where one sits reads as a blank plate on the face; the reserved place is what lets a reader ask what is there without the drawing answering with artwork.",
+             ERROR),
+    "L173": ("device",     "an adjustment is well formed: its `range` runs from a smaller number to a larger one and holds the `default` and every stop; with no `range` it has two stops or more and the `default` is one of them; no two stops share a position, and no stop is named with a number", "correct the range, the default or the stop the message names; give a part on a row of holes one stop for each hole",
+             "A default outside its own range draws a position the part cannot take, and two stops at one position, or a stop named with a number, leave a reader unable to say which position a value means.",
+             ERROR),
+    "L174": ("device",     "the `carrier` of an adjustment is a placement of the device that says `moves-with` the adjustment and is neither `only-in` nor `optional`", "name a placed part that every configuration has and that moves with the adjustment; a motion made only of decor is modelled as a part",
+             "The chosen position is held at the path of the carrier, and a path that some build has no part at is one no reader can find.",
+             ERROR),
+    "L175": ("device",     "membership resolves: each `moves-with` names an adjustment of the device, on a view that is one of the six faces, and each adjustment has at least one member", "correct the id, or declare the adjustment under `adjustments:`; add `moves-with` to each part that slides",
+             "A mistyped id leaves a part behind when the others move, and the drawing looks correct until the position changes.",
+             ERROR),
+    "L176": ("device",     "what stands on a member moves with it: a placement or a bay `in:` a member, a placement mated to a member, and a bay whose plan is `in:` a member state the same `moves-with`", "add `moves-with` with the same id to the part the message names",
+             "A reader of the drawing moves only what is marked, so a part left on a floor that went back would hang in the air.",
+             ERROR),
+    "L177": ("device",     "the `default` of an adjustment is the position drawn, where that can be told: for `axis: z` with a carrier that is a well on the front view, the depth of the well is the default", "state as `default` the depth the carrier is drawn at, or draw the carrier at the default",
+             "A control starts at the default, so a default the drawing does not show moves every member the first time the control is touched.",
+             ERROR),
+    "L178": ("device",     "a member stays inside the device at both ends of the travel: its box lies inside its view, the floor of a member well stays inside the device, and the range ends inside the device along its axis", "shorten the range to the travel the part has, or correct the position or the size of the member the message names",
+             "Fit judges a device by its envelope, so a part that can be set outside it would reach into the space of a neighbour with no finding.",
+             ERROR),
+    "L179": ("device",     "no new collision at either end of the travel or at a stop: with the members moved, no member lands on a part that is not one, and a pair one of which is `under` or `in` the other still overlaps", "shorten the range, move the part that is in the way, or make it a member if it slides too",
+             "A part pushed through its neighbour is a wrong drawing that the default position hides.",
+             ERROR),
+    "L180": ("device",     "the id of an adjustment is free on its carrier: it is not a field or an attr of the carrier, and it is not a name the build writes on a drawing as `data-<name>`", "rename the adjustment",
+             "The position is written on the carrier as `data-<id>`, so an id such as `depth` would overwrite the depth the part is built from.",
+             ERROR),
+    "L181": ("device",     "a position a configuration sets is one the adjustment takes: a number in its range, or the name of a stop", "set a number inside the range or a stop the adjustment declares; quote the value, as every `component-attrs` value is text",
+             "The build draws a configuration at the position it sets, so a value outside the travel would draw a position the hardware does not have.",
+             ERROR),
+    "L182": ("device",     "each adjustment has a `provenance` entry under its own id", "add `provenance.<id>` with a confidence and a note that gives the source of each end of the range and of the default",
+             "A range with no source is a guess that reads as a fact.",
+             ERROR),
+    "L183": ("device",     "an attr that restates an adjustment equals it: an attr whose name is the id of the adjustment, with any words before it, followed by `-mm` holds the default, and one followed by `-min-mm` or `-max-mm` holds that end of the range; an adjustment with stops and no range has no end to restate", "correct the attr or the adjustment so that the two agree, or rename an attr that measures something else",
+             "The attrs are how a range reaches the DCIM export comments, and two statements of one number drift apart.",
              ERROR),
 }
 
@@ -7711,7 +7745,7 @@ TOP_LEVEL_ORDER = (
     # `lint:` sits with `provenance:` rather than at the end, because it is the
     # same kind of statement: this is what we know and how we know it, and this
     # is the rule we have argued with and why.
-    "lint", "provenance", "attrs", "chassis", "gaps", "groups", "views",
+    "lint", "provenance", "attrs", "chassis", "gaps", "groups", "adjustments", "views",
     "interfaces", "configurations", "datasheet", "references",
 )
 
@@ -8708,6 +8742,305 @@ def _inside(pt, poly, tol=0.05):
             return False
         sign = s
     return True
+
+
+_BUILD_DATA_NAMES = []
+
+
+def build_data_names():
+    """Every `data-<name>` the build writes or reads by name, read from
+    render.py itself and never copied: an adjustment's id is written on its
+    carrier as `data-<id>`, and must not be one of these (L180)."""
+    if not _BUILD_DATA_NAMES:
+        src = Path(__file__).with_name("render.py").read_text()
+        _BUILD_DATA_NAMES.extend(sorted(set(
+            re.findall(r'"data-([a-z0-9]+(?:-[a-z0-9]+)*)"', src))))
+    return set(_BUILD_DATA_NAMES)
+
+
+def _is_well(contract):
+    """The aperture rule, as render.py's well_floor applies it: a part that is
+    neither a module nor mounted (unless it says `relief.cavity`) and has a
+    `size.d` is drawn as a recess that deep."""
+    c = contract or {}
+    if not (c.get("size") or {}).get("d") or c.get("kind") == "module":
+        return False
+    return c.get("behaviour") != "mounts" or bool((c.get("relief") or {}).get("cavity"))
+
+
+def _adjustment_box(kind, item, lib_roots):
+    """Where a member sits on its view, as (x0, y0, x1, y1), or None."""
+    if kind != "decor":
+        return _footprint(item, lib_roots)
+    at, sz = item.get("at"), item.get("size")
+    if not (isinstance(at, (list, tuple)) and isinstance(sz, (list, tuple))
+            and len(at) >= 2 and len(sz) >= 2):
+        return None
+    return (at[0], at[1], at[0] + sz[0], at[1] + sz[1])
+
+
+def _adjustment_ends(adj):
+    """The positions at the two ends of the travel, and every position worth
+    testing (the ends and each stop), in mm."""
+    stops = sorted(float(v) for v in (adj.get("stops") or {}).values())
+    rng = adj.get("range")
+    ends = [float(rng[0]), float(rng[1])] if rng else ([stops[0], stops[-1]] if stops else [])
+    return ends, sorted(set(ends + stops))
+
+
+def lint_device_adjustments(path, data, lib_roots):
+    """L173 to L183: a sliding part is declared so that every reader can move it.
+
+    docs/adjustable-positions-design.md section 9. A device declares a part
+    that slides in `adjustments:`, and each placement, bay and decor entry that
+    slides with it says `moves-with`. The kit moves what the drawing marks and
+    works nothing out, so each of these rules holds something the kit would
+    otherwise have to guess: that the value is a position (L173, L181), that
+    its path names a part (L174), that no part is left behind (L175, L176),
+    that the control starts where the drawing is (L177), that a part stays in
+    the device and off its neighbours (L178, L179), that the value overwrites
+    nothing (L180), that the range has a source (L182), and that a second
+    statement of the range agrees with the first (L183).
+    """
+    adjs = _adjust.declared(data)
+    views = data.get("views") or {}
+    every = [(vname, view or {}, kind, item)
+             for vname, view in views.items()
+             for kind, item in _adjust._items(view)]
+    stated = [(vname, view, kind, item) for vname, view, kind, item in every
+              if item.get("moves-with") is not None]
+    if not adjs and not stated:
+        return
+    chassis = data.get("chassis") or {}
+    on = data.get("model")
+
+    # L175: membership resolves
+    for vname, view, kind, item in stated:
+        aid = item["moves-with"]
+        where = f"{vname}/{kind}/{item.get('id')}"
+        if aid not in adjs:
+            err(path, "L175", f"{where}: `moves-with: {aid}` names no adjustment of this device"
+                              + (f"; it declares {', '.join(sorted(adjs))}" if adjs else
+                                 "; it declares none under `adjustments:`"))
+        elif _adjust.moves_by(adjs[aid].get("axis"), _adjust.face_of(vname, view)) is None:
+            err(path, "L175", f"{where}: moves with {aid}, on a view that is not one of the six "
+                              f"faces, so the build cannot say which way it moves there")
+    by_adj = {}
+    for vname, view, kind, item in stated:
+        by_adj.setdefault(item["moves-with"], []).append((vname, view, kind, item))
+    for aid in adjs:
+        if aid not in by_adj:
+            err(path, "L175", f"adjustments/{aid}: nothing says `moves-with: {aid}`, so the "
+                              "adjustment moves no part")
+
+    for aid, adj in adjs.items():
+        where = f"adjustments/{aid}"
+        rng, stops = adj.get("range"), adj.get("stops") or {}
+        default = adj.get("default")
+
+        # L173: the adjustment is well formed
+        if rng and not rng[0] < rng[1]:
+            err(path, "L173", f"{where}: range [{rng[0]:g}, {rng[1]:g}] does not run from a "
+                              "smaller number to a larger one")
+        elif rng:
+            if not rng[0] <= default <= rng[1]:
+                err(path, "L173", f"{where}: default {default:g} is outside the range "
+                                  f"{rng[0]:g} to {rng[1]:g}")
+            for name, v in stops.items():
+                if not rng[0] <= v <= rng[1]:
+                    err(path, "L173", f"{where}: stop {name!r} at {v:g} is outside the range "
+                                      f"{rng[0]:g} to {rng[1]:g}")
+        else:
+            if len(stops) < 2:
+                err(path, "L173", f"{where}: with no `range` the stops are the only positions, "
+                                  f"and {len(stops)} is not a choice")
+            if not any(_adjust.round01(v) == _adjust.round01(default) for v in stops.values()):
+                err(path, "L173", f"{where}: default {default:g} is not one of the stops, and "
+                                  "with no `range` only a stop is a position")
+        seen = {}
+        for name, v in stops.items():
+            if _adjust._NUMBER.match(str(name)):
+                err(path, "L173", f"{where}: stop {name!r} is named with a number, so a reader "
+                                  "who types it cannot say whether it means the name or the mm")
+            other = seen.setdefault(_adjust.round01(v), name)
+            if other != name:
+                err(path, "L173", f"{where}: stops {other!r} and {name!r} are both at {v:g}")
+
+        # L174: the carrier is a member placement that every configuration has
+        carrier = adj.get("carrier")
+        carriers = [(vname, view, item) for vname, view, kind, item in every
+                    if kind == "placements" and item.get("id") == carrier]
+        if not carriers:
+            err(path, "L174", f"{where}: carrier {carrier!r} is no placement in any view, so the "
+                              "position has no path to be held at")
+        for vname, _view, item in carriers:
+            at = f"{where}: carrier {vname}/{carrier}"
+            if item.get("moves-with") != aid:
+                err(path, "L174", f"{at} does not say `moves-with: {aid}`")
+            for key in ("only-in", "optional"):
+                if item.get(key):
+                    err(path, "L174", f"{at} is `{key}`, so some build has no part at the path "
+                                      "that holds the position")
+
+        # L180: the id is free on the carrier group
+        taken = {}
+        if aid in build_data_names():
+            taken["the build"] = f"data-{aid}"
+        for vname, _view, item in carriers:
+            c = _contract(str(item.get("ref") or ""), lib_roots)
+            if aid in (c.get("fields") or {}):
+                taken[f"{item.get('ref')}"] = f"its field `{aid}`"
+            grp = (data.get("groups") or {}).get(item.get("group")) or {}
+            for src, bag in ((str(item.get("ref")), c.get("attrs")),
+                             (f"{vname}/{carrier}", item.get("attrs")),
+                             (f"group {item.get('group')}", grp.get("attrs"))):
+                if aid in (bag or {}):
+                    taken[src] = f"its attr `{aid}`"
+        for src, what in sorted(taken.items()):
+            err(path, "L180", f"{where}: the position is written on the carrier as `data-{aid}`, "
+                              f"and {src} already writes {what} there")
+
+        # L182: the range has a source
+        if aid not in (data.get("provenance") or {}):
+            err(path, "L182", f"{where}: no `provenance.{aid}` says where each end of the range "
+                              "and the default were read")
+
+        # L181: a position a configuration sets is one the adjustment takes
+        for cname, cfg in (data.get("configurations") or {}).items():
+            raw = (((cfg or {}).get("component-attrs") or {}).get(carrier) or {}).get(aid)
+            if raw is None:
+                continue
+            ok, answer = _adjust.accepts(adj, raw, aid, on)
+            if not ok:
+                err(path, "L181", f"configuration {cname}: {carrier}/{aid} = {raw!r} is not a "
+                                  f"position. {answer}")
+
+        # L183: an attr that restates the adjustment equals it
+        flat = attrs_mod.flatten(data.get("attrs"))
+        for key, what in sorted(_adjust.restating_attrs(aid, flat).items()):
+            if what == "default":
+                want = default
+            elif rng:
+                want = rng[0] if what == "min" else rng[1]
+            else:
+                err(path, "L183", f"attrs {key}: restates the {what} of {aid}, which has stops "
+                                  "and no `range`, so it has no end to restate")
+                continue
+            try:
+                got = float(flat[key])
+            except (TypeError, ValueError):
+                err(path, "L183", f"attrs {key}: restates the {what} of {aid} and is not a "
+                                  f"number: {flat[key]!r}")
+                continue
+            if isinstance(flat[key], bool) or _adjust.round01(got) != _adjust.round01(want):
+                err(path, "L183", f"attrs {key}: is {flat[key]!r}, and the {what} of {aid} is "
+                                  f"{want:g}")
+
+        if aid not in by_adj or (rng and not rng[0] < rng[1]):
+            continue
+        mine = by_adj[aid]
+        ends, tested = _adjustment_ends(adj)
+
+        # L176: what stands on a member moves with it
+        for vname, view, kind, item in every:
+            if kind == "decor":
+                continue
+            ids = {q.get("id") for v2, _w, k2, q in mine if v2 == vname and k2 != "decor"}
+            for key in ("in", "mate-to"):
+                host = item.get(key)
+                if host in ids and item.get("moves-with") != aid:
+                    err(path, "L176", f"{vname}/{kind}/{item.get('id')}: is `{key}: {host}`, "
+                                      f"which moves with {aid}, and does not say "
+                                      f"`moves-with: {aid}` itself")
+            plan = item.get("plan") if kind == "bays" else None
+            if plan and plan.get("in"):
+                there = {q.get("id") for v2, _w, k2, q in mine
+                         if v2 == plan.get("view") and k2 != "decor"}
+                if plan["in"] in there and item.get("moves-with") != aid:
+                    err(path, "L176", f"{vname}/{kind}/{item.get('id')}: its plan on "
+                                      f"{plan.get('view')} is `in: {plan['in']}`, which moves "
+                                      f"with {aid}, and the bay does not say `moves-with: {aid}`")
+
+        # L177: the default is the position drawn, where that can be told
+        if adj.get("axis") == "z":
+            for vname, view, item in carriers:
+                if _adjust.face_of(vname, view) != "front":
+                    continue
+                c = _contract(str(item.get("ref") or ""), lib_roots)
+                d = float((c.get("size") or {}).get("d") or 0)
+                if _is_well(c) and abs(d - float(default)) > 0.05:
+                    err(path, "L177", f"{where}: default {default:g} is not the position drawn: "
+                                      f"the carrier {vname}/{carrier} is a well {d:g} deep")
+
+        # L178: a member stays inside the device at both ends
+        extent = chassis.get(_adjust.EXTENT.get(adj.get("axis"), ""))
+        if rng and extent is not None and rng[1] > float(extent) + 0.05:
+            err(path, "L178", f"{where}: the range ends at {rng[1]:g}, beyond the "
+                              f"{float(extent):g} mm the device has along {adj.get('axis')}")
+        for vname, view, kind, item in mine:
+            by = _adjust.moves_by(adj.get("axis"), _adjust.face_of(vname, view))
+            box = _adjustment_box(kind, item, lib_roots)
+            if by is None:
+                continue
+            vs = view.get("size") or {}
+            vw = float(vs.get("w") or chassis.get("width") or 0)
+            vh = float(vs.get("h") or chassis.get("height") or 0)
+            label = f"{vname}/{kind}/{item.get('id')}"
+            for pos in ends:
+                delta = pos - float(default)
+                if box and (by[0] or by[1]):
+                    x0, y0 = box[0] + by[0] * delta, box[1] + by[1] * delta
+                    x1, y1 = box[2] + by[0] * delta, box[3] + by[1] * delta
+                    if x0 < -0.05 or y0 < -0.05 or x1 > vw + 0.05 or y1 > vh + 0.05:
+                        err(path, "L178", f"{label}: at {aid} = {_adjust.spell(pos)} it lies at "
+                                          f"({x0:g},{y0:g})-({x1:g},{y1:g}), outside the "
+                                          f"{vw:g} x {vh:g} view")
+                if by[2] and kind == "placements" and extent is not None:
+                    c = _contract(str(item.get("ref") or ""), lib_roots)
+                    if _is_well(c):
+                        deep = float(c["size"]["d"]) + by[2] * delta
+                        if deep < -0.05 or deep > float(extent) + 0.05:
+                            err(path, "L178", f"{label}: at {aid} = {_adjust.spell(pos)} its "
+                                              f"floor is {deep:g} behind the face, outside the "
+                                              f"{float(extent):g} mm the device has")
+
+        # L179: no new collision at either end, or at a stop
+        def overlaps(view_name, view):
+            with collecting() as found:
+                lint_device_overlap(path, view_name, view, lib_roots)
+            return {m.split("] ", 1)[-1] for m in found.errors if "[L13]" in m}
+
+        for vname in sorted({v for v, _w, _k, _q in mine}):
+            base_view = views[vname] or {}
+            before = overlaps(vname, base_view)
+            vp = view_parts(base_view)
+            stack = []                      # (lower, upper) pairs one of which moves
+            member_ids = {q.get("id") for v2, _w, k2, q in mine if v2 == vname and k2 != "decor"}
+            for q in (*vp["placements"], *vp["bays"]):
+                overs = list(targets(q.get("under"))) + ([q["in"]] if q.get("in") else [])
+                for o in overs:
+                    lo, hi = (o, q["id"]) if q.get("in") == o else (q["id"], o)
+                    if (lo in member_ids) != (hi in member_ids):
+                        stack.append((lo, hi))
+            for pos in tested:
+                delta = pos - float(default)
+                if not delta:
+                    continue
+                after_view = (_adjust.moved(data, {aid: delta}).get("views") or {})[vname] or {}
+                for msg in sorted(overlaps(vname, after_view) - before):
+                    err(path, "L179", f"at {aid} = {_adjust.spell(pos)}, {msg}")
+                ap = view_parts(after_view)
+                was = {q["id"]: _footprint(q, lib_roots) for q in (*vp["placements"], *vp["bays"])}
+                now = {q["id"]: _footprint(q, lib_roots) for q in (*ap["placements"], *ap["bays"])}
+
+                def over(boxes, a, b):
+                    a, b = boxes.get(a), boxes.get(b)
+                    return bool(a and b and min(a[2], b[2]) - max(a[0], b[0]) > 0.05
+                                and min(a[3], b[3]) - max(a[1], b[1]) > 0.05)
+                for lo, hi in stack:
+                    if over(was, lo, hi) and not over(now, lo, hi):
+                        err(path, "L179", f"at {aid} = {_adjust.spell(pos)}, {vname}: {hi} no "
+                                          f"longer lies over {lo}, which it is drawn over")
 
 
 def lint_device_bevel(path, data, lib_roots):
@@ -11985,6 +12318,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_cable_od(path, data)
     lint_device_guides(path, data)
     lint_device_trays(path, data, lib_roots)
+    lint_device_adjustments(path, data, lib_roots)
     # Every id each view offers, indexed by view name. A `for:` may name a target
     # in ANOTHER view of the same device (`rear/psu-0`), so the check below cannot
     # be answered from the view it is standing in.
