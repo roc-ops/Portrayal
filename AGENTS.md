@@ -15,6 +15,9 @@ documentation that a person follows the same way.
   including the lock check that has to run before `--update`.
 - [`library/components/README.md`](library/components/README.md): namespaces,
   naming, and what a component contract and its skin must contain.
+- [`docs/rack-mounting-design.md`](docs/rack-mounting-design.md): for a rack
+  device, its ear positions, the rail kits it lists and the `kind: kit`
+  contract a kit is written as.
 - [`docs/listing-a-nos.md`](docs/listing-a-nos.md): listing a box under a NOS
   vendor (ArcOS, OcNOS, DNOS, SONiC) without copying the hardware.
 

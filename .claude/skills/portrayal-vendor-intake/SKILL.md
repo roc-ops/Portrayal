@@ -1,6 +1,6 @@
 ---
 name: portrayal-vendor-intake
-description: Use when preparing a new vendor or product line for Portrayal modelling - finding and staging datasheets, hardware guides, module references and photographs, then converting the PDFs with docling. Ends where portrayal-model-device begins, with a verified, converted corpus.
+description: Use when preparing a new vendor or product line for Portrayal modelling - finding and staging datasheets, hardware guides, module references, rail and mounting-kit guides and photographs, then converting the PDFs with docling. Ends where portrayal-model-device begins, with a verified, converted corpus.
 ---
 
 # Preparing a vendor intake for Portrayal
@@ -65,6 +65,36 @@ is the finding.
 | **EOL doc archives** | vendors consolidate retired-product docs into zips; the only source for the oldest hardware | 0-1 zip |
 | **the component maker's own datasheet** | when the field-replaceable part is bought in (a breaker, a fuse holder, a connector), the box vendor publishes a part number and nothing else; the outline drawing, terminal dimensions and sometimes a STEP model are on the maker's site | 1-3 per part family |
 | **the vendor's cross-reference sheet** | a one-page "which breaker fits which panel" chart is this kind of line's compatibility matrix, and it is what reveals there are two part families, not one | 0-1 |
+| **rail or mounting-kit installation guide** (one per kit) | the kit itself: its parts, how it assembles, its rack-depth range per hole type, rack types (4-post, 2-post, centre mount), travel for a slide, a factory preset | 1-5 |
+| **rail sizing matrix** | which kit fits which chassis, and the depth range per chassis group; a matrix often gives one rail a different minimum on different chassis, which is a device-level override | 0-1 |
+| **accessory table** (in the datasheet, ordering guide or HIG) | the kit SKUs, whether each ships in the box or is sold separately, normal or reversed mounting, and the cable management arm and strain-relief bar | 1 per family |
+| **rack-mounting figures** (in the HIG) | the named ear positions (flush, recessed, mid-mount) and the one the box ships in; the reviewer checks the default against this figure | 1-4 per HIG |
+
+**The four mounting sources are staged with the rest, each as a rule with
+its check.** `chassis.ears` and `chassis.kits` are written right after the
+panel (docs/rack-mounting-design.md), and they are read from these four.
+
+- **A rail or mounting-kit guide is staged for every kit the accessory table
+  names,** even when the faceplate is all you came for: it is a separate
+  download, and one not fetched at intake is not fetched later. Check: every
+  kit SKU in the accessory table has a guide in the corpus, or a named miss
+  in COVERAGE.md.
+- **Every edition of a rail document is staged, with its date.** Ranges
+  change between editions, and review holds a kit to the newest source and
+  names the one that lost. Check: `SOURCES.md` gives a date or a revision
+  for each, and two editions of one document are both there.
+- **A sizing matrix is staged whenever the line has one.** It is what gives
+  one rail a different range on another chassis, which becomes an override on
+  the device. Check: the matrix is in the corpus, or COVERAGE.md says the
+  vendor publishes none and where you looked.
+- **A rail document is a document.** It is converted with the rest and passes
+  the same proof of conversion. Check: its range table reads correctly in the
+  converted text, beside the page it came from.
+- **A guide shared across a line is staged once.** Check: COVERAGE.md lists it
+  against every model it covers, under the rail guide column.
+- **The rack-mounting figures are found before modelling starts.** They name
+  the ear positions and show the one the box ships in. Check: the page of
+  each figure is noted against its model, or the miss is.
 
 ## Finding them: probe, don't browse
 
@@ -145,7 +175,7 @@ Probe craft, learned the hard way:
 
 The intake's most important output after the corpus itself is **`COVERAGE.md`**:
 the expected-artefact grid — every enumerated model crossed with every
-artefact kind (guide, module reference, datasheet, photos) — with each cell
+artefact kind (guide, module reference, datasheet, photos, rail guide) — with each cell
 marked found / missing / not-applicable. Three rules make it honest:
 
 - **A probe miss is a claim about your URL patterns, not about the world.**

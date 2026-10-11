@@ -35,7 +35,9 @@ grep -rl 'conforms: qsfp28' library/components              # the contracts them
 ```
 
 A QSFP28 cage, an SFP+ cage, an RJ45 jack, a C14 inlet, a status lamp, a USB
-port, a grounding lug, a rack ear: all of these exist. A new part is warranted
+port, a grounding lug: all of these exist. Rack ears are not placed on a new
+device: a generic pair is drawn from `chassis.ears` when a viewer asks for
+it. A new part is warranted
 when the shape is different, not when the vendor is. A 650 W supply in a new
 chassis is usually a placement of an existing PSU contract, or a new contract
 in the vendor's namespace that `parts:` an existing one for its inlet and lamp.
@@ -148,7 +150,7 @@ is the shape to copy:
 
 ```yaml
 format: 1
-kind: component              # `component` is placed; `module` seats in a bay and can be swapped
+kind: component              # `component` is placed; `module` seats in a bay and can be swapped; `kit` is a rail kit
 name: qsfp28
 version: 1.4.0
 class: port                  # port, psu, fan, line-card, blank, led, ground, filter, ... (#173 will enumerate)
@@ -172,7 +174,10 @@ connection-points:
 skins: [default]
 ```
 
-Required keys are `format`, `kind`, `name`, `version`, `class`, `size`.
+Required keys are `format`, `kind`, `name`, `version`, `class`, `size`. A
+`kind: kit` is the exception: it has no `class` and no `size`, and requires
+`motion`, `parts` and `configurations` in their place
+([Rail kits](#rail-kits)).
 
 `class` comes from a closed vocabulary, and it lives in
 [`spec/schemas/power-roles.yaml`](../../spec/schemas/power-roles.yaml) rather
@@ -246,6 +251,88 @@ The rest earns its place:
 
 The schema, `spec/schemas/component.schema.json`, is the full reference; every
 key carries a description.
+
+## Rail kits
+
+A rail kit, a bracket kit or a slide is a `kind: kit` contract: a set of
+ordinary components that a device names from `chassis.kits` and never
+places. It lives under the vendor namespace like any other contract
+(`library/components/<vendor>/<kit>/v<major>/contract.yaml`) and takes the
+same versions and devicelock. The design, and the sources it was drawn from,
+are in [docs/rack-mounting-design.md](../../docs/rack-mounting-design.md).
+
+The library holds no kit yet. This is an example of the shape, under the
+made-up namespace `acme`:
+
+```yaml
+format: 1
+kind: kit
+name: slide
+version: 1.0.0
+description: Example sliding rails
+motion: sliding                  # fixed | telescoping | sliding | shelf
+travel: full                     # mm, or `full`; only on a sliding kit
+install: drop-in                 # drop-in | stab-in | both
+parts:                           # ordinary components, never another kit
+  - {ref: acme/slide-inner@1, id: inner, count: 2}
+  - {ref: acme/slide-outer@1, id: outer, count: 2}
+configurations:
+  - id: four-post
+    racks: [4-post]              # 4-post | 2-post | 2-post-centre
+    parts: [inner, outer]        # ids from `parts` above
+    depth:                       # rack depth, front flange to rear flange, mm
+      square: [631, 868]         # one [min, max], or one per hole type
+      round: [617, 861]
+      threaded: [631, 883]
+    rail-depth: 714              # the rail itself, with no accessory fitted
+accessories:
+  - {kind: cma, ref: acme/cma@1, rail-depth: 845, sides: [left, right]}
+  - {kind: srb, ref: acme/srb@1}
+provenance:
+  depth: the newest source, and the older one that disagreed and lost
+```
+
+- A kit requires `format`, `kind`, `name`, `version`, `motion`, `parts` and
+  `configurations`. It may add `description`, `provenance`, `travel`,
+  `install`, `accessories`, `unplaced` and `superseded-by`, and admits no
+  other key. So it has no `class`, no `size`, no `skins` and no skin file.
+  Its parts carry those, so a part can hold placements (an earth stud on a
+  bracket) and can be drawn.
+- `motion` is `fixed` (static rails, ears, a rear support), `telescoping`
+  (depth set at install, nothing moves after), `sliding` (moves out for
+  service) or `shelf` (the device stands on it). `travel` is in millimetres,
+  or `full` when the source says only that, and only a `sliding` kit has it
+  (L158).
+- A kit part is `{ref, id, count}` and nothing else: it is a line of a parts
+  list, not a placement, so it has no `at`. `count` is an integer of at least
+  1, 2 for a pair of rails. Each `ref` is a component that is not a kit, and
+  the ids are distinct (L155).
+- A kit has one entry in `configurations` for each way it can be assembled: a
+  slide has one, a kit of brackets and extensions has one per rack-depth
+  band. Each needs `id`, `racks`, `parts` and `depth`. The ids are distinct
+  and `parts` lists only ids of the kit parts (L156). Every range has min
+  below max (L157). `preset` records a factory setting, `tolerance` the `x`
+  of a stated `±x`, and `rail-depth` the depth of the rail with no accessory.
+- `accessories` are a `cma` (cable management arm) or an `srb` (strain-relief
+  bar). Each has a `ref` to a component that is not a kit (L159), and may
+  state the `rail-depth` with it fitted and the `sides` it fits.
+- A kit is never placed in a view, seated in a bay or composed under `parts:`
+  of a component (L5, L10). A kit no device lists says why in `unplaced`, as
+  any contract does (L89), and the successor of a kit is a kit (L101).
+- Inches are converted to millimetres; the figures as printed stay in
+  provenance. When two sources disagree on a range, the newest wins and
+  provenance names the one that lost. Screw sizes, torque, load ratings and the
+  racks a vendor tested stay in provenance too.
+- A device that needs another range from a shared kit overrides one
+  configuration on its reference, `depth: {config, range}`, and does not copy
+  the kit. `range` has the shape of the `depth` it replaces (L163).
+
+Kits are left out of `components.json` and published in their own
+`kits.json`, with their parts as refs. A device that lists a kit publishes it
+resolved, with the geometry of its parts, in `<device>.configs.json`. The
+catalogue lists kits in a table of their own, "Rail kits", once there is one.
+A kit edited in place asks each device that lists it for a patch, as an
+edited part does.
 
 ## Skins
 
