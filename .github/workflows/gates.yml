@@ -21,6 +21,20 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
+  # THE MERGE QUEUE'S RUN, AND IT IS THE FULL ONE (#1054). "Up to date with main"
+  # is required, the suite takes 12 to 14 minutes, and #1048 passed four times
+  # and was on its fifth because other pull requests merged in between: every
+  # merge made every waiting head stale. A queue tests each pull request once,
+  # on top of main and the entries ahead of it, then merges it. `lint` and
+  # `build` are the required checks, and a queue entry that never gets them
+  # waits for ever, so this event must report both. Nothing below needs an edit
+  # for that, and the reason is worth keeping: the event has no
+  # `pull_request`, so `github.event.pull_request.draft` is empty and
+  # `!...draft` is true. `merge_group` is neither `push` nor a draft, which is
+  # exactly the pull-request-that-is-ready case, so `dist`, `tests` and `build`
+  # run. A queue entry is never a draft; do not add a test that makes it one.
+  merge_group:
+    types: [checks_requested]
   # A FULL RUN ON MAIN, ON REQUEST. A push to main runs lint only (see `build`
   # below); this is the button for the day somebody wants the whole thing.
   workflow_dispatch:
@@ -58,6 +72,13 @@ permissions:
 # as passing: the pull request was mergeable on lint (#867). Keyed by draft, the
 # ready run always finishes and lands a real `build`; a later push to the ready
 # pull request still cancels it, as before.
+#
+# A QUEUE ENTRY CANCELS NOTHING AND IS CANCELLED BY NOTHING (#1054). On
+# `merge_group` the ref is `gh-readonly-queue/main/pr-<n>-<sha>`, one per entry,
+# and `draft` is false, so no two entries share a group. Entries therefore run
+# side by side; `cancel-in-progress` never fires between them. (When an entry
+# ahead fails, GitHub removes the entries behind it and creates new ones on new
+# refs - the old runs are abandoned by the queue, not by this group.)
 concurrency:
   group: gates-${{ github.workflow }}-${{ github.ref }}-${{ github.event.pull_request.draft == true }}
   cancel-in-progress: true
@@ -133,6 +154,10 @@ jobs:
   # main the very tree that was just built and tested - so the build on the
   # push re-ran twenty minutes of work on a known answer. Lint still runs on the
   # push (a minute), and `workflow_dispatch` runs everything on request.
+  #
+  # A `merge_group` RUN IS NOT A PUSH, so it builds and tests. It has to: the
+  # queue's merge commit is a tree nobody has built, which is the whole point of
+  # the queue, and the push to main afterwards is then the known answer.
   dist:
     if: github.event_name != 'push' && !github.event.pull_request.draft
     runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
