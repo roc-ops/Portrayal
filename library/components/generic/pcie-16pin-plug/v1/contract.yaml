@@ -1,0 +1,133 @@
+format: 1
+kind: component
+name: pcie-16pin-plug
+version: 1.0.0
+class: port
+mates: [pcie-12vhpwr, pcie-12v-2x6]
+conforms: pcie-16pin-plug
+profile: server
+description: >-
+  The 16-pin GPU power cable housing (12 power and 4 sense contacts, 3.00 pitch)
+  seen from the cable end. A short straight stub of wire bundle follows it, its
+  diameter the cable-od field. The same housing serves 12VHPWR and 12V-2x6
+  cables. It seats in a `pcie-12vhpwr` or `pcie-12v-2x6` header at its mate point.
+size: {w: 20.85, h: 11.7}
+size-confidence: {w: drawing, h: estimated}
+attrs: {media: pcie-16pin, connector: pcie-16pin, pins: 16, pins-power: 12, pins-sense: 4}
+fields:
+  cable-od: {label: Wire bundle diameter, type: number, unit: mm, default: 10.0}
+  jacket-color: {label: Sleeve colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing for the width, estimated for the height - registry `pcie-16pin-plug`.
+    Molex customer drawing 2191140001-SD rev A (2024-03-11), "PCIE CEM 5 12V2X6
+    RECEPTACLE HOUSING", part 2191140161: 20.85 across the front and 14.00 deep.
+    The 11.7 height is read between 11.70, dimensioned on the depth's axis, and
+    the end view's 11.63. The housing is marked "H++".
+  no-depth: >-
+    drawing - NO `size.d`, as on generic/c13-plug@1; the depth is carried by the
+    relief.
+  seated-depth: >-
+    estimated - the 14.00 housing enters the header's modelled 9.0 cavity
+    (estimated, in std/12vhpwr-header@1), so 5.0 of it stands in front of the
+    header's face and the stub starts there.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: 30
+    straight, from the end of the housing. The 10.0 bundle diameter is an
+    estimate: twelve 16 AWG and four 28 AWG wires (Amphenol GS-12-1706, as Mouser
+    quotes it) in a sleeve. The drawing prints no bundle.
+  contacts: >-
+    drawing - NOT DRAWN: the sockets are on the front face, inside the header.
+    Twelve power sockets at 3.00 pitch and four sense sockets at 2.00 pitch,
+    Molex 2191140001-SD.
+  one-plug: >-
+    datasheet - Wikipedia "12VHPWR": 12V-2x6 changed the board and supply
+    sockets, and "the cables and their plugs remained unchanged"; Corsair says
+    existing cables work in the new connector. Secondary sources; PCI-SIG's CEM
+    5.1 is not held.
+  form-3d: >-
+    estimated - the 5.0 of housing that stands outside the header is a tube with
+    its sixteen cells cut through, open at the header's mouth where the modelled
+    nose begins, closed by a 2.5 rear wall. The cells are 2.4 square (power) and
+    1.6 square (sense) at the drawing's pitches, so their size is proportional.
+    A latch arm 10.85 wide and 1.4 thick stands over the top wall from 0.5 to
+    5.0, with a hook at the mating end; its size is a guess and it sits outside
+    the 11.7 outline. Sixteen wires leave the rear wall for 6.0 (twelve 1.8 power
+    wires, yellow over black, and four 1.1 sense wires, all colours estimated),
+    then a 2.0 comb gathers them and the stub carries on to the same 30 from the
+    housing as before. No two faces share a plane where they overlap: the rear
+    wall is drawn 0.05 inside the housing's outline and ends 0.05 short of its rear
+    face, the latch arm ends 0.1 short of it, and each wire and the stub start 0.1
+    inside the piece they leave and end inside the one they enter, the stub's far
+    end unchanged at 35.0 from the face, and the hook stands 0.05 inside the arm's
+    start and sides.
+relief:
+  features:
+    - node: body
+      out: 5.0
+      shape: true
+      color: '#3a3e44'
+      confidence: estimated
+      source: Molex 2191140001-SD rev A, the 14.00 housing less the 9.0 the header is modelled
+    - node: back
+      out: 4.95
+      lift: 2.5
+      shape: true
+      color: '#26282c'
+      confidence: estimated
+      source: a 2.5 rear wall is a guess; the drawing does not section the housing
+    - node: latch-arm
+      out: 4.9
+      lift: 0.5
+      color: '#2c3036'
+      confidence: estimated
+      source: the latch's size is a guess; the drawing marks no latch dimension
+    - node: latch-hook
+      out: 2.5
+      lift: 0.55
+      color: '#3a3e43'
+      confidence: estimated
+      source: the latch's hook is a guess; the drawing marks no latch dimension
+    - &wire
+      node: wire-1
+      lift: 4.9
+      cyl: 6.2
+      confidence: estimated
+      source: a short stub of each wire; the length is the modeller's, not a source's
+    - {<<: *wire, node: wire-2}
+    - {<<: *wire, node: wire-3}
+    - {<<: *wire, node: wire-4}
+    - {<<: *wire, node: wire-5}
+    - {<<: *wire, node: wire-6}
+    - {<<: *wire, node: wire-7}
+    - {<<: *wire, node: wire-8}
+    - {<<: *wire, node: wire-9}
+    - {<<: *wire, node: wire-10}
+    - {<<: *wire, node: wire-11}
+    - {<<: *wire, node: wire-12}
+    - &sense-wire
+      node: sense-wire-1
+      lift: 4.9
+      cyl: 6.2
+      confidence: estimated
+      source: a short stub of each sense wire; the length is the modeller's, not a source's
+    - {<<: *sense-wire, node: sense-wire-2}
+    - {<<: *sense-wire, node: sense-wire-3}
+    - {<<: *sense-wire, node: sense-wire-4}
+    - node: comb
+      out: 13.0
+      lift: 11.0
+      shape: true
+      color: '#2a2c30'
+      confidence: estimated
+      source: a 2.0 comb that gathers the wires; a guess
+    - node: stub
+      lift: 12.9
+      cyl: 22.1
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5, 30 from the housing, less the wires and comb
+connection-points:
+  mate: {at: [10.425, 5.85], direction: front}
+  cable: {at: [10.425, 5.85], direction: front, 'on': stub}
+skins: [default]

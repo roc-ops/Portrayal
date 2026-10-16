@@ -135,4 +135,16 @@ interfaces:
   # cabinet channel, which presents it, and the button on the PDU's back is
   # the part that mates it. No standard governs it, so the entry cites none.
   pdu-button: {note: 'NOT A CONNECTOR - A MOUNT. The shoulder-style mounting button on the back of a zero-U rack PDU and the keyhole slot that takes it: a keyhole in a bracket or a cabinet zero-U channel presents it, eaton/g4-mounting-button@1 mates it. The Eaton Rack PDU G4 installation and setup guide P-164001156 rev 3, section 2.11, sizes the slot: 11.5 to 12.5 mm in 1.5 to 2 mm sheet (Eaton enclosures), or 14 mm in 3 mm sheet (Tripp Lite racks). No standard governs it'}
+  # GPU power connectors and the NVLink bridge (P-0028, docs/connectors-gpu-design.md).
+  # THE KEY NAMES THE BOARD CONNECTOR, as `iec-c14` names the inlet. The two 8-pin
+  # connectors are two interfaces over one housing size, because Molex lists the
+  # PCIe housing's polarisation as its own, so an EPS12V plug does not enter a PCIe
+  # header and a PCIe plug does not enter an EPS12V one. The 12VHPWR and 12V-2x6
+  # headers are two interfaces too (12V-2x6 recesses its sense contacts), but the
+  # one 16-pin plug mates both, so its `mates` names both.
+  eps12v-8pin: {standard: mini-fit-8-header, note: 'the 8-pin CPU / EPS12V power connector (ATX12V), a Molex Mini-Fit Jr. 2 x 4 on 4.20 pitch with four 12 V and four ground contacts; the A100 takes it as "CPU 8-pin" (NVIDIA PB-10577 fig 6 and 7). generic/eps12v-8pin-plug@1 mates it. A PCIe 8-pin plug is a different interface'}
+  pcie-8pin: {standard: mini-fit-8-header, note: 'the PCIe 8-pin (6+2) auxiliary power connector, the same 2 x 4 housing size with PCIe polarisation, three 12 V and five ground contacts (NVIDIA PB-10577 fig 7). generic/pcie-8pin-plug@1 mates it. The 6-pin PCIe connector is not registered'}
+  pcie-12vhpwr: {standard: pcie-16pin-header, note: 'the 16-pin 12VHPWR connector of PCIe CEM 5.0 and ATX 3.0: twelve 12 V and ground power contacts on 3.00 pitch and four sense contacts; marked "H+". generic/pcie-16pin-plug@1 mates it'}
+  pcie-12v-2x6: {standard: pcie-16pin-header, note: 'the 12V-2x6 revision of the 16-pin connector (PCIe CEM 5.1, ATX 3.1): the same housing as 12VHPWR with the sense contacts recessed further; marked "H++". The cable plug is unchanged, so generic/pcie-16pin-plug@1 mates it'}
+  nvlink-a100-pcie: {standard: nvlink-a100-pcie-connector, note: 'the NVLink bridge connector on the top edge of an A100 PCIe card (three per card); nvidia/nvlink-bridge-a100-2slot@1, NVIDIA 900-53651-0000-000, mates it at both ends. Other cards that take a bridge (A30, A40, H100 PCIe, H100 NVL, H200 NVL) have their own bridge part numbers and are not this interface until a source says the connectors intermate'}
   breaker-1ru-guard: {cover: true, note: 'NOT A CONNECTOR - A COVER MOUNT. The face of a 1RU plug-in breaker, where its touch guard screws on; amphenol-ns/touch-guard-1ru@1 mates it. Registered here because a cover that ships on a part and comes off is the same mechanism as a dust cap in a port: one slot, one occupant, a default'}

@@ -644,7 +644,10 @@ Now populate. Reuse before building.
 10. **A carrier is a module with bays of its own.** A modular line card holding
     adapters has those bays in its component contract, with `accepts` and a
     `default` exactly as a chassis bay does. Check an occupant is actually
-    seatable before listing it; one that spans two bays has no representation.
+    seatable before listing it. An occupant two slots wide, such as a
+    dual-slot PCIe card, says `slot-width: 2`, and only a bay whose `span`
+    names the bay it covers accepts it ([pcie-two-slot-bays-design.md](
+    pcie-two-slot-bays-design.md)). A device bay cannot span yet.
 11. **Read the guide's LED section for count and arrangement, and expect them
     to differ per port family.** On one router the QSFP-DD ports carry a
     stacked pair outside each block, the QSFP28 ports four above each column,

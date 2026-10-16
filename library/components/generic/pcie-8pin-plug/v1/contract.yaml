@@ -1,0 +1,115 @@
+format: 1
+kind: component
+name: pcie-8pin-plug
+version: 1.0.0
+class: port
+mates: pcie-8pin
+conforms: mini-fit-8-plug
+profile: server
+description: >-
+  The PCIe 8-pin (6+2) cable plug on its cord, seen from the cable end. It is the
+  2 x 4 housing and a short straight stub of wire bundle whose diameter is the
+  cable-od field. It seats in a `pcie-8pin` header at its own mate point. An
+  EPS12V header does not take it.
+size: {w: 12.6, h: 18.0}
+size-confidence: {w: drawing, h: estimated}
+size-notes: the 12.6 is printed on NVIDIA's adapter drawing; the 18.0 is four pitches and a wall, not printed
+attrs: {media: pcie-8pin, connector: pcie-8pin, pins: 8, pins-12v: 3, pins-ground: 5}
+fields:
+  cable-od: {label: Wire bundle diameter, type: number, unit: mm, default: 9.0}
+  jacket-color: {label: Sleeve colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `mini-fit-8-plug`. NVIDIA A100 80GB PCIe product brief
+    PB-10577-001 v03 figure 7, the adapter's P2 and P3 "PCI-E 2*4 (FEMALE)"
+    housings: 12.6 across the face, 21.1 along it, a 20.1 body and a 9.9 nose.
+    THE 18.0 IS ESTIMATED: figure 7 prints 21.1 for the long side, four 4.20
+    pitches with a wall come to 18.0, and a distributor lists the family's
+    39-01-2085 at 18. The 3.1 between the two is not reconciled.
+  no-depth: >-
+    estimated - NO `size.d`, as on generic/c13-plug@1; the depth is carried by the
+    relief.
+  seated-depth: >-
+    drawing - the 9.9 nose enters the header's modelled 9.9 cavity, so the 20.1
+    body stands in front of the header's face. Figure 7 prints both figures and
+    not which part of the housing each is; the 9.9 is read as the nose.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: 30
+    straight, from the end of the body. The 9.0 bundle diameter is an estimate;
+    the figure shows 18 AWG wires in a sleeve and prints no diameter.
+  contacts: >-
+    datasheet - NOT DRAWN: the sockets are on the front face, inside the header.
+    Three 12 V and five ground, NVIDIA PB-10577 figure 7. The 6+2 plug's split (a
+    6-pin and a 2-pin that clip together) is not drawn.
+  form-3d: >-
+    estimated - the housing is a tube of the 20.1 body, its eight cells cut through
+    and open at the mating face (the header's mouth, where the modelled nose
+    begins), closed by a 2.5 rear wall. The cells repeat the header's 3.4 x 3.0 on
+    the 4.20 pitch; the plug's own cell size is not dimensioned. A latch arm 6.0
+    wide and 1.4 thick stands over the top wall from 2.0 to 19.1, with a hook at
+    the mating end; its size is a guess and it sits outside the 18.0 outline. Eight
+    2.2 wires leave the rear wall for 6.0, then a 2.0 comb gathers them and the
+    stub carries on to the same 30 from the body as before. Wire colours are
+    estimated: yellow on three right-hand cells, black on the other five, for the
+    3 + 5 split. No two faces share a plane where they overlap: the rear wall is
+    drawn 0.05 inside the housing's outline and ends 0.05 short of its rear face,
+    and each wire and the stub start 0.1 inside the piece they leave and end inside
+    the one they enter, the stub's far end unchanged at 50.1 from the face, and
+    the hook stands 0.05 inside the arm's start and sides.
+relief:
+  features:
+    - node: body
+      out: 20.1
+      shape: true
+      color: '#3a3e44'
+      confidence: drawing
+      source: NVIDIA PB-10577 figure 7, the 20.1 body of the PCI-E 2*4 plug
+    - node: back
+      out: 20.05
+      lift: 17.6
+      shape: true
+      color: '#26282c'
+      confidence: estimated
+      source: a 2.5 rear wall is a guess; no source dimensions it
+    - node: latch-arm
+      out: 19.1
+      lift: 2.0
+      color: '#2c3036'
+      confidence: estimated
+      source: the latch's size is a guess; Molex's catalogue draws no dimension
+    - node: latch-hook
+      out: 5.0
+      lift: 2.05
+      color: '#3a3e43'
+      confidence: estimated
+      source: the latch's hook is a guess; Molex's catalogue draws no dimension
+    - &wire
+      node: wire-1
+      lift: 20.0
+      cyl: 6.2
+      confidence: estimated
+      source: a short stub of each wire; the length is the modeller's, not a source's
+    - {<<: *wire, node: wire-2}
+    - {<<: *wire, node: wire-3}
+    - {<<: *wire, node: wire-4}
+    - {<<: *wire, node: wire-5}
+    - {<<: *wire, node: wire-6}
+    - {<<: *wire, node: wire-7}
+    - {<<: *wire, node: wire-8}
+    - node: comb
+      out: 28.1
+      lift: 26.1
+      shape: true
+      color: '#2a2c30'
+      confidence: estimated
+      source: a 2.0 comb that gathers the wires; a guess
+    - node: stub
+      lift: 28.0
+      cyl: 22.1
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5, 30 from the body, less the wires and comb
+connection-points:
+  mate: {at: [6.3, 9.0], direction: front}
+  cable: {at: [6.3, 9.0], direction: front, 'on': stub}
+skins: [default]

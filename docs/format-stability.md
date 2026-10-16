@@ -157,6 +157,7 @@ also draws is that part's row. Each row may carry:
 | `states` | `data-states` | list: the lamp vocabulary |
 | `for` | `data-for` | list: the owners, local paths or device-absolute `/<view>/<path>` |
 | `inner` | `data-inner` | `true` for a port inside another port's housing |
+| `covered-by` | `data-covered-by` | on a bay a card wider than one slot covers: the path of the bay the card is seated in ([pcie-two-slot-bays-design.md](pcie-two-slot-bays-design.md)) |
 | `connection-points` | `data-cp`, `data-cp-at`, `data-cp-dir`, `data-cp-on` on the part's markers | `{name: {at, face, dir?, on?}}`: `at` as written, in the part's own frame; `face`, the same point in the face's frame |
 | `seat` | the path | the bay or cage this row's part is seated in, innermost first; absent on the chassis's own rows |
 | `moves-with`, `moves-by` | `data-moves-with`, `data-moves-by` on the row's element, or on the nearest element it sits inside | the adjustment that moves this row's box, and `[dx, dy, dz]`: the mm it moves for each mm of position (see [A part that slides](#a-part-that-slides)); absent on a row nothing moves |

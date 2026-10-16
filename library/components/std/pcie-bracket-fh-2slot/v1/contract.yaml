@@ -1,0 +1,124 @@
+format: 1
+kind: component
+name: pcie-bracket-fh-2slot
+version: 1.0.0
+class: bracket
+conforms: pcie-bracket-fh-2slot
+slot-width: 2
+description: >-
+  Two-slot (full height) PCI Express add-in card I/O bracket. The faceplate of
+  a dual-slot card, two slot pitches across, with two retention tabs and an I/O
+  and venting window in each slot
+size: {w: 120.07, h: 41.91}
+size-confidence: {w: registry, h: registry}
+size-notes: PCIe CEM 5.0 figure 11-13, both figures printed
+attrs:
+  material: '0.86 mm (20 GA) low carbon steel, zinc plated'
+  slots: 2
+  slot-pitch: 20.32
+  body-width: 38.74
+  tab-width: 10.20
+provenance:
+  size: >-
+    standard - PCI Express Card Electromechanical Specification Revision 5.0,
+    June 2021, figure 11-13 "Detailed Two-Slot I/O Bracket Design" on page 181.
+    120.07 long overall, 38.74 body and 41.91 overall across, 0.86 (20 GA)
+    low carbon steel, zinc plated, +/-0.254 unless stated.
+  outline: >-
+    measured - the figure is vector artwork, so the outline was read off the
+    page's own path coordinates rather than off pixels. The 120.07 extension
+    lines fix the scale along the bracket (1.8775 pt per mm) and the 0 and
+    38.74 ordinates fix it across (1.904 pt per mm); the two differ by 1.4
+    percent, which is the drawing's and not the part's, so every printed
+    dimension is used as printed and only what the figure does not print is
+    read at those scales. Read that way the tab ordinates land on the printed
+    4.11, 14.30, 24.43 and 34.62 to 0.15 or better.
+  slot-width: >-
+    TWO, AND THAT IS WHAT THIS PART IS FOR. A dual-slot card (figure 11-11)
+    takes its own slot and covers the next, and a bay seats this part only
+    where its `span` names the slot it covers
+    (docs/pcie-two-slot-bays-design.md). Figure 11-13 is the default bracket
+    for a two-slot card that has no outline of its own; a card whose bracket
+    has been photographed draws that instead, because a real GPU bracket need
+    not be this one - the first one measured was about 36 across the body
+    with 9.8 tabs.
+  the-tabs: >-
+    TWO OF THE SINGLE BRACKET'S TAB, ON THE SLOT PITCH. The figure prints the
+    tabs at 4.11 to 14.30 and 24.43 to 34.62 from its zero datum, the bottom edge
+    here, away from the PCB: 10.20
+    wide each and 20.32 apart, std/pcie-bracket-fh@2's tab twice. They run
+    7.14 from the tip (120.07 - 112.93), against the single bracket's 7.27,
+    and each is reached by a 45 degree chamfer of 4.12 from the body edge;
+    between them the edge runs at the tabs' root, 11.26 from the tip, from
+    18.42 to 20.31 across. The tip corners are R1.91, as on the single
+    bracket; the figure draws them and does not dimension them.
+  the-keyed-top: >-
+    THE SAME KEY AS THE SINGLE BRACKET, ON THE SAME SIDE. The figure prints
+    38.74 for the body and 41.91 overall, so the flange end steps out by 3.17
+    on the top edge, and 2.54 on the bottom edge steps in, as on
+    std/pcie-bracket-fh@2. The top step is flat for the printed 2.57 from the
+    flange and comes down at 45 degrees; the bottom step starts 5.33 from the
+    flange's outer face (measured 113.40 to 115.71 along). Drawn with the tip
+    at the left, the figure's own orientation puts the key at the top, which
+    is std/pcie-bracket-fh@2's handedness seen from outside the chassis, so no
+    turn or reflection was needed to bring it into that frame.
+  why-41.91: >-
+    41.91 IS 20.32 + 21.59: one slot pitch plus a single bracket's overall
+    width. So seated in its bay with the key at the top, this bracket ends
+    exactly where a single bracket seated in the next slot would, and its
+    second tab lands where that bracket's tab would: 27.61 to 37.80 below the
+    top of the pair, against 20.32 + 7.28 to 20.32 + 17.48.
+  the-ear-recesses: >-
+    THE TOP EDGE HAS TWO RECESSES, 4.00 deep, from 19.00 to 30.03 and from
+    104.27 to the key, with R1.2 corners where they meet the full edge. Read
+    off the outline; the figure does not dimension them. They sit at the two
+    ends of the window and on the PCB side, where the card's tapped ears fold
+    back to the board, which is also what the single bracket's provenance says
+    an ear leaves in one long edge. The small relief arcs the figure draws in
+    each recess floor, about 0.4 across, are below what a face view resolves
+    and are left off.
+  the-windows: >-
+    measured - note 4: "CROSS HATCH AREA INDICATES I/O CONNECTOR/THERMAL
+    VENTING WINDOW", and "the size and number of any holes in the bracket
+    follow proper EMI and thermal design guidelines" in the text. So the two
+    windows are an AREA a card may open, not a punched hole every card has.
+    Each is 12.06 across, 3.18 in from its long edge (the printed 3.18, and
+    the single bracket's inset), 20.32 apart, and 81.93 long from 25.38 to
+    107.31 off the tip. The upper hatch runs a little past the edge where it
+    passes under the ear recesses; the window is kept 0.5 inside the metal
+    there rather than drawn through the plate.
+  the-bottom-edge-line: >-
+    the figure draws a line 1.71 inside the bottom edge from 9.72 to
+    114.70 along. Nothing dimensions it and the side view does not explain
+    it, so it is drawn as a line and not raised.
+  orientation: >-
+    as std/pcie-bracket-fh@2: drawn long-axis horizontal with the retention
+    tips at the left, as a 2U rear presents it, and seen from outside the
+    chassis.
+elements:
+  window-1:
+    at: [25.38, 6.35]
+    size: [81.93, 12.06]
+    class: cutout
+    description: >-
+      the I/O and venting window of the first slot, the one the card's PCB
+      sits in
+  window-2:
+    at: [25.38, 26.67]
+    size: [81.93, 12.06]
+    class: cutout
+    description: >-
+      the I/O and venting window of the slot the card covers
+relief:
+  wall: '#8a9199'
+  features:
+  - node: flange-fold
+    out: 9.4
+    color: '#9aa1a8'
+    confidence: drawing
+    source: >-
+      the fold at the flange end. Figure 11-13's side view dimensions the
+      flange by 3.18, 5.08, 7.24 and 11.43 from a datum this reading did not
+      settle, so the 9.40 run is std/pcie-bracket-fh@2's, from figure 11-5,
+      and it comes toward the viewer for the reason that part gives.
+skins: [default]

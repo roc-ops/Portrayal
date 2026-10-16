@@ -37,6 +37,7 @@ from portrayal.manifest import (presented_point, back_hosts, back_parts, key_on_
                       presented_interface, forwarded_part, seat_point, _turn,
                       load_yaml, resolve_views, slot_key_prefix,
                       seated_ref, occupants_under, occupant_local_id,
+                      slot_width, span_box, span_seats, span_clashes,
                       occupant_spec, nested_key_host, slot_default, drawn_refs,
                       spanned_slots, spanning_axis, summed_rotate, presented_turn,
                       allowed_turns, text_extent, alias_names, config_airflow,
@@ -2333,7 +2334,46 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     #
     # The skin already draws the opening (a <rect id="bay-0">), so this does not
     # add a second one; it makes the existing rect addressable and seats over it.
-    for bay_id, bay in sorted((contract.get("bays") or {}).items()):
+    #
+    # A CARD WIDER THAN ONE SLOT covers the siblings its bay's `span` names
+    # (docs/pcie-two-slot-bays-design.md). Decided for the whole carrier before
+    # anything is drawn: a covered bay must hold nothing, and the card is drawn
+    # in the box its bays make together rather than in its own bay's.
+    carrier_bays = contract.get("bays") or {}
+
+    def bay_key(bid):
+        return f"{path}/{bid}".replace("/module/", "/") if path else bid
+
+    def contract_of(r):
+        try:
+            return lib.resolve(r)[0]
+        except (FileNotFoundError, ValueError, KeyError):
+            return None
+
+    spans = (span_seats(carrier_bays, seated, bay_key, contract_of)
+             if depth < MAX_BAY_DEPTH else {})
+    for bid, (sref, covers) in spans.items():
+        for cid in covers or []:
+            if cid not in carrier_bays or cid == bid:
+                raise ValueError(
+                    f"bays/{bay_key(bid)}: {sref} covers {cid!r}, which is not "
+                    f"another bay of {ref} - `span` names sibling bays only")
+    for bid, sref, cid, held in span_clashes(carrier_bays, seated, bay_key,
+                                             contract_of):
+        width = slot_width(contract_of(sref))
+        if cid is None:
+            raise ValueError(
+                f"bays/{bay_key(bid)}: {sref} is {width} slots wide, and bay "
+                f"{bid} of {ref} names fewer than {width - 1} bays in `span` "
+                "for it to cover - seat it in a bay that spans")
+        raise ValueError(
+            f"bays/{bay_key(bid)}: {sref} is {width} slots wide and covers "
+            f"{bay_key(cid)}, which holds {held}. A covered bay holds nothing: "
+            f"empty it ({bay_key(cid)}: \"\") to seat the card")
+    covered_by = {cid: bid for bid, (_r, covers) in spans.items()
+                  for cid in covers or []}
+    bay_groups = {}
+    for bay_id, bay in sorted(carrier_bays.items()):
         if not isinstance(bay, dict) or not bay.get("at"):
             continue
         want = f"{inst_id}--{bay_id}"
@@ -2394,6 +2434,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             parent_of.remove(opening)
             opening.set("id", f"{want}--opening")
             bay_g.append(opening)
+            bay_groups[bay_id] = bay_g
+            if bay_id in covered_by:
+                bay_g.set("data-covered-by", f"{path}/{covered_by[bay_id]}"
+                          if path else covered_by[bay_id])
         else:
             # L48 reports a bay whose id names nothing in the skin; without an
             # anchor there is no place in the drawing to put the group, so the
@@ -2412,6 +2456,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         refuse_bay_module_default(lib, occupant, f"{path}/{bay_id}")
         bw, bh = bay_size(bay)
         b_at = bay["at"]
+        if spans.get(bay_id, (None, None))[1]:
+            b_at, (bw, bh) = span_box(bay, carrier_bays, spans[bay_id][1])
         if bay.get("rotate") in (90, 270):
             d = (bw - bh) / 2.0
             b_at = [b_at[0] + d, b_at[1] - d]
@@ -2462,6 +2508,22 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             behind_at += 1
         else:
             g.append(sub)
+    # THE CARD PAINTS OVER THE OPENINGS IT COVERS. A covered bay keeps its group
+    # and its opening, empty and `data-covered-by` its card, so the tree still
+    # lists it; the spanning bay's group moves after the last one it covers, or
+    # a later sibling's opening would paint over the card's lower half.
+    for bid, (_r, covers) in spans.items():
+        mine = bay_groups.get(bid)
+        last = [bay_groups[c] for c in covers or [] if c in bay_groups]
+        if mine is None or not last:
+            continue
+        for holder in g.iter():
+            kids = list(holder)
+            if mine in kids and all(c in kids for c in last):
+                holder.remove(mine)
+                kids = list(holder)
+                holder.insert(max(kids.index(c) for c in last) + 1, mine)
+                break
     # AN OPTIC IN A CAGE ON A SEATED CARD (#484, R2). A configuration's
     # `occupants:` keys such a cage by the MODULE-LESS path - `front-6/xg0` -
     # the convention its nested `bays:` keys already use (bay_path above), and

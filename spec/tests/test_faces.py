@@ -257,10 +257,11 @@ def test_the_index_carries_a_parts_other_faces():
     # 125 since the Fibrain XCU10's drawer and the four SC adapter holders,
     # each of which declares its rear face;
     # 141 since its ten LC holders and six multimode SC ones, each with a rear;
-    # 142 since the FHD RJ45 module's punch-down rear.
+    # 142 since the FHD RJ45 module's punch-down rear;
+    # 143 since nvidia/a100-pcie-80gb@1 declares its far end as a rear face.
     with_faces = [e for e in entries if e.get("faces")]
-    assert len(with_faces) == 142, \
-        f"expected exactly 142 of {len(entries)} entries to carry a faces " \
+    assert len(with_faces) == 143, \
+        f"expected exactly 143 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 

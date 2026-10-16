@@ -86,7 +86,11 @@ def test_the_connector_registry_is_not_vacuous():
                          "dc-barrel", "terminal-stud",
                          "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
                          "mrj21", "vhdci", "rj11",
-                         "breaker-1ru-guard", "p40", "pdu-button"}
+                         "breaker-1ru-guard", "p40", "pdu-button",
+                         # GPU power and NVLink (P-0028): presented by parts no
+                         # device places yet, so none is a slot below
+                         "eps12v-8pin", "pcie-8pin", "pcie-12vhpwr", "pcie-12v-2x6",
+                         "nvlink-a100-pcie"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}

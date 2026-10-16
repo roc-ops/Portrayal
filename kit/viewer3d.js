@@ -29,7 +29,8 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          applyNodeAdjustments,
          setNodeLampColors, nodeLampColors, markHex,
          setPulled as setReliefPulled, pulledPaths,
-         buildFaceRelief, bodyBoxes, pieceMesh, pieceArt, fruFor,
+         buildFaceRelief, bodyBoxes, pieceMesh, pieceArt, pieceFitted, shownOptions,
+         applyNodeFields, fruFor,
          nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces, sheetShell,
          faceFrame, ventWellWalls, genericEars, EAR } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
@@ -715,7 +716,17 @@ export function createViewer(container, opts = {}) {
                        H / 2 - (pl.at[1] + pl.size[1] / 2), D / 2 - 0.6);
       const bodyBox = new THREE.Group();
       const pieceTex = new Map();   // one texture per drawing, for this build
+      // A FITTED PIECE FOLLOWS THE DRAWING (relief.js pieceFitted): the part's
+      // own face, with what the host has written on it, says which of its
+      // options it shows. The part alone is keyed by its own path, its name.
+      let shown = {};
+      if (COMP_ENTRY.body.boxes.some(b => b.when)) {
+        const doc = new DOMParser().parseFromString(
+          await svgSource(distAt(COMP_ENTRY.files[cfg]), SCOPE), 'image/svg+xml');
+        shown = shownOptions(applyNodeFields(doc.documentElement, SCOPE));
+      }
       for (const b of bodyBoxes(COMP_ENTRY.body, W, H)) {
+        if (!pieceFitted(b, shown[COMP_ENTRY.name])) continue;
         const m = pieceMesh(b, b.w, b.h, b.z1 - b.z0,
                             await pieceArt(COMP_ENTRY.body, b, distAt, SCOPE, pieceTex));
         m.position.set(b.x + b.w / 2 - W / 2, H / 2 - (b.y + b.h / 2),

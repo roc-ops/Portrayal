@@ -225,7 +225,11 @@ def test_the_terminal_header_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
     assert _terminal_header_interfaces() == {"terminal-508-2", "terminal-508-5",
-                                             "terminal-508-6", "dc-barrel"}
+                                             "terminal-508-6", "dc-barrel",
+                                             # the GPU power headers (P-0028) state
+                                             # `input: dc` as the barrel jack does
+                                             "eps12v-8pin", "pcie-8pin",
+                                             "pcie-12vhpwr", "pcie-12v-2x6"}
 
 
 def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
@@ -339,6 +343,12 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # runs through one - and their census is
         # spec/tests/test_small_connector_plugs.py.
         if any(m in copper_multipair for m in ms):
+            continue
+        # NOR IS THE NVLINK BRIDGE (P-0028). nvidia/nvlink-bridge-a100-2slot@1
+        # mates `nvlink-a100-pcie`, the bridge connector on an A100 card's top
+        # edge. Left out by what it IS - its `attrs.media` is `nvlink`, a copper
+        # card-to-card link - and its tests are spec/tests/test_gpu_power_nvlink.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "nvlink":
             continue
         if any(m in connectors for m in ms) and c.get("class") != "cap":
             ns = f.parents[2].name

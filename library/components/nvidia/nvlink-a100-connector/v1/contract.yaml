@@ -1,0 +1,78 @@
+format: 1
+kind: component
+name: nvlink-a100-connector
+version: 1.0.0
+class: inlet
+profile: server
+conforms: nvlink-a100-pcie-connector
+interface: nvlink-a100-pcie
+description: >-
+  One NVLink bridge connector on the top edge of an A100 PCIe card, seen from
+  above with its long side along the card. The card has three, each shipped under
+  a removable cap. It presents `nvlink-a100-pcie`, which the two-slot bridge
+  nvidia/nvlink-bridge-a100-2slot@1 mates at both of its ends.
+size: {w: 6.6, h: 49.5, d: 2.5}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+size-notes: read off a public product render; NVIDIA's keep-out figure carries no dimensions
+unplaced: the A100 PCIe card composes it; that card is not modelled to (docs/connectors-gpu-design.md section 7)
+attrs:
+  role: nvlink
+  media: nvlink
+  input: none
+  lanes-per-card: 96
+  lane-rate-gbps: 50
+provenance:
+  size: >-
+    estimated - registry `nvlink-a100-pcie-connector`. NVIDIA A100 80GB PCIe
+    product brief PB-10577-001 v03 figure 5 (NVLink Connector Placement - Top
+    View) is a keep-out drawing with no printed dimensions. The 6.6 across and
+    49.5 along are measured on PNY's public top-edge render of the card at about
+    2.6 px/mm, scaled on the 267.70 card length, in the A100 pilot. That render is
+    not a drawing of known aspect, so both are estimated.
+  depth: >-
+    estimated - 2.5 is the brief's clearance above the north edge, "should meet
+    or exceed 2.5 mm": the room the bridge has, an upper bound on its stand-off,
+    not a measurement of the connector.
+  positions: >-
+    estimated - the three connectors start 13.5, 70.7 and 126.1 behind the
+    bracket's outer face (PNY render, same scale). That belongs to the card's
+    contract, not to this part.
+  lanes: >-
+    datasheet - PB-10577 table 5: three bridges, 96 Rx and Tx lanes in all, 50
+    Gbps a lane each way, 600 GB/s with one adjacent card. The brief says all
+    three bridges must be fitted, so the three connectors are one link set.
+  caps: >-
+    datasheet - PB-10577: "NVLink bridge interfaces of the A100 80GB PCIe card
+    include removable caps". The cap is not drawn and is not a part here.
+  slot-3d: >-
+    estimated - the well is 5.0 x 47.9 inside a 0.8 rim that stands 1.0 proud of
+    the face, and 2.5 deep. The rim's height is a guess; the well's depth is
+    `depth` above. Two contact rows stand on the floor, 1.2 tall, each a
+    continuous blade drawn 0.9 wide at 2.2 centres. The real contacts are
+    individual pads and their count is not published, so the rows are schematic
+    and nothing here should be counted.
+elements:
+  opening: {at: [0.0, 0.0], size: [6.6, 49.5], class: cutout}
+relief:
+  wall: '#2c3036'
+  cavity: inlet-face
+  features:
+    - node: rim
+      out: 1.0
+      shape: true
+      color: '#2c3036'
+      confidence: estimated
+      source: no source holds the rim's height; 1.0 is a guess at a housing standing round the slot
+    - node: contact-a
+      top: 1.2
+      color: '#b9bfc6'
+      confidence: estimated
+      source: two contact rows, as this part's 2D skin has always drawn them; their height is a guess
+    - node: contact-b
+      top: 1.2
+      color: '#b9bfc6'
+      confidence: estimated
+      source: two contact rows, as this part's 2D skin has always drawn them; their height is a guess
+connection-points:
+  mate: {at: [3.3, 24.75], direction: front}
+skins: [default]

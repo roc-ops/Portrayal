@@ -877,6 +877,91 @@ def seated_ref(cfg_bays, bay_path, bay):
     return (cfg_bays or {}).get(bay_path, (bay or {}).get("default"))
 
 
+# A CARD WIDER THAN ONE SLOT (docs/pcie-two-slot-bays-design.md). The card says
+# how many slots it takes (`slot-width`), the bay says which siblings it can
+# cover (`span`), and the build, lint and the kit's swap.js all read the pair
+# through these, so the three cannot come to disagree about what a card covers
+# or where it is drawn.
+
+def slot_width(contract):
+    """How many slots a part takes in a bay: its `slot-width`, else 1 (R1)."""
+    try:
+        return max(1, int((contract or {}).get("slot-width") or 1))
+    except (TypeError, ValueError):
+        return 1
+
+
+def span_covers(bay, width):
+    """The sibling bay ids a part `width` slots wide covers when it is seated
+    in `bay`: the first `width - 1` of the bay's `span` (R1). [] for a part
+    one slot wide; None when the bay names too few, and the part cannot seat
+    there at all (R2, "no neighbour")."""
+    if width <= 1:
+        return []
+    span = [s for s in (bay or {}).get("span") or [] if isinstance(s, str)]
+    return span[:width - 1] if len(span) >= width - 1 else None
+
+
+def _box(bay):
+    sz = bay.get("size")
+    w, h = (sz["w"], sz["h"]) if isinstance(sz, dict) else (sz[0], sz[1])
+    return float(bay["at"][0]), float(bay["at"][1]), float(w), float(h)
+
+
+def span_box(bay, bays, covers):
+    """(at, (w, h)): the bounding box of `bay` and the sibling bays `covers`
+    names in `bays`, the carrier's map (R3). A card wider than one slot is
+    drawn in this box, and in no other: on a CEM riser it is 120.02 x 41.91,
+    figure 11-13's bracket. With nothing covered it is the bay's own box."""
+    boxes = [_box(bay)] + [_box(bays[c]) for c in covers]
+    x0 = min(b[0] for b in boxes)
+    y0 = min(b[1] for b in boxes)
+    x1 = max(b[0] + b[2] for b in boxes)
+    y1 = max(b[1] + b[3] for b in boxes)
+    r = lambda v: round(v, 4)
+    return [r(x0), r(y0)], (r(x1 - x0), r(y1 - y0))
+
+
+def span_seats(bays, cfg_bays, key_of, resolve):
+    """{bay id: (ref, the sibling ids it covers)} for every bay of one carrier
+    whose occupant is wider than one slot, once `cfg_bays` and the bays'
+    defaults resolve. `key_of(bay_id)` is the configuration key for a sibling,
+    `resolve(ref)` its contract or None. A bay whose `span` is too short for
+    its occupant maps to None for the covered ids - the caller refuses it."""
+    out = {}
+    for bid, bay in (bays or {}).items():
+        if not isinstance(bay, dict):
+            continue
+        ref = seated_ref(cfg_bays, key_of(bid), bay)
+        if not ref:
+            continue
+        try:
+            width = slot_width(resolve(ref))
+        except (FileNotFoundError, ValueError, KeyError):
+            continue                    # a bad ref is reported where it is drawn
+        if width > 1:
+            out[bid] = (ref, span_covers(bay, width))
+    return out
+
+
+def span_clashes(bays, cfg_bays, key_of, resolve):
+    """[(bay id, ref, covered id, what the covered bay holds)] - every two-slot
+    seat whose covered bay is not empty once the configuration and the
+    defaults resolve (R2, "the neighbour holds something"), and every one
+    whose bay names too few siblings, with a covered id of None. The build
+    raises on the first, and L186 reports each."""
+    out = []
+    for bid, (ref, covers) in sorted(span_seats(bays, cfg_bays, key_of, resolve).items()):
+        if covers is None:
+            out.append((bid, ref, None, None))
+            continue
+        for cid in covers:
+            held = seated_ref(cfg_bays, key_of(cid), bays.get(cid))
+            if held:
+                out.append((bid, ref, cid, held))
+    return out
+
+
 def slot_default(part, contract):
     """The ref a slot ships holding, or None - the shipped default (B3,
     docs/pluggables-caps-design.md, "The shipped default").

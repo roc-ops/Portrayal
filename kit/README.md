@@ -676,6 +676,28 @@ cable's notes; `layNotes(rack, { bends, covers })` gives the same as one line
 a cable, for a file with no row for one. Corners at one point, to a tenth of
 a millimetre, are one finding.
 
+**Also in 0.50.0: a body piece carries a side drawing, and a fitted piece follows its field.**
+A piece in `body.boxes` that `shows: [left|right|top|bottom]` is painted on that side with the patch
+of the part's own `body-<side>.svg` it lies under (`pieceArtCrop` in `relief.js` gives the frames;
+`components.json` publishes each drawing under `body.drawings` with its viewBox origin as `at`).
+A piece with `when: {field: [options]}` is built only while the part's drawing shows a node for one
+of those options (`pieceFitted`, `shownOptions`), so `setFields` on the part's path fits or removes
+it, and the scene is rebuilt as for any field that shows a node. `svgCanvas` takes an optional
+density, `pxmm`. A page that does neither changes nothing. `kit/component.html` opens one component
+in the 3D viewer with camera presets and its choice fields.
+
+**New in 0.50.0: a card two slots wide** (docs/pcie-two-slot-bays-design.md). components.json gives a
+part wider than one slot `slot-width` and a nested bay the siblings it can cover, `span`. A card
+`n` slots wide seats only in a bay whose `span` names `n - 1` bays, and only while each of them holds
+nothing; it is drawn in the box those bays make together (`spanBox`, which `bayTransform` now uses),
+and the bay it covers is marked `data-covered-by` its bay on the face (`markSpan`). `spanWhy(path,
+ref, {holds, comp})` gives the sentence a refusal says, and `coveredBy` the card's bay. `acceptSwaps`
+refuses both claims on one pair and returns `why`, by key; the rack's `fit` says which bay to empty;
+`slotTree` lists `covers` on the card's bay and `covered-by` on the covered one; and the explorer's
+inspector disables a covered bay's select and a two-slot option over a full bay. **A rack file does
+not change**: a two-slot card is a swap in its bay and `""` in the bay it covers, so an older kit
+reads it, centres the card on its own bay and does not refuse a fill of the covered one.
+
 **New in 0.49.0: the kit reads a list of dist roots, so an overlay library sits on top of Portrayal's own.**
 `loadSlots([publicDist, overlayDist], refs)`, `loadCatalog([...])`, and `dist: [...]` for `createShell`
 and `createViewer` take a list where they took one root (`kit/dist.js` `layeredDist` and `readIndex`);

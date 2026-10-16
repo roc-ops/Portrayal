@@ -1,0 +1,115 @@
+format: 1
+kind: component
+name: 12vhpwr-header
+version: 1.0.0
+class: inlet
+profile: server
+conforms: pcie-16pin-header
+interface: pcie-12vhpwr
+description: >-
+  The 16-pin 12VHPWR GPU power connector of PCIe CEM 5.0 and ATX 3.0 on a board,
+  seen end on from the cable side. It has twelve power contacts on a 3.00 pitch
+  and four sense contacts below them. It presents `pcie-12vhpwr`, which
+  generic/pcie-16pin-plug@1 mates. A CEM 5.1 card uses std/12v-2x6-header@1.
+size: {w: 20.85, h: 11.7, d: 9.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+size-notes: the opening is taken as the plug's own outline; no header drawing was readable
+unplaced: a GPU card composes it; the 16-pin cards are not modelled to (docs/connectors-gpu-design.md section 7)
+attrs:
+  media: pcie-12vhpwr
+  input: dc
+  pins: 16
+  pins-power: 12
+  pins-sense: 4
+  pitch-mm: 3.0
+  power-rated-w: 600
+provenance:
+  size: >-
+    estimated - registry `pcie-16pin-header`. The opening is the cable housing's
+    outline, 20.85 x 11.7 (the height is read between two figures on the
+    drawing), from Molex customer drawing 2191140001-SD rev A (2024-03-11),
+    which is the plug that enters it. The header's own shroud is
+    not dimensioned in anything held. The Amphenol Minitek Pwr CEM-5
+    specification GS-12-1706 and Molex's header pages could not be downloaded.
+  depth: >-
+    estimated - 9.0 is a guess at the shroud's depth, bounded above by the
+    plug's 14.00.
+  contacts: >-
+    drawing - Molex 2191140001-SD: 12 power cells in two rows of six, 3.00 pitch
+    both ways (15.00 across the outer six), 4 sense cells on a 2.00 pitch (6.00
+    across the outer four). The header's contacts are taken at the plug's centres.
+  variant: >-
+    datasheet - Wikipedia "12VHPWR": 12VHPWR is marked "H+", the CEM 5.0
+    connector with twelve power and four sense contacts, 600 W. 12V-2x6 (CEM 5.1,
+    ECN 6.0) changed only the board and supply sockets. A secondary source;
+    PCI-SIG's specification is not held.
+  power: >-
+    datasheet - 600 W at 12 V. Amphenol GS-12-1706, as Mouser quotes it, rates a
+    power contact 9.5 A with all twelve energised and a signal contact 1 A.
+  cells-3d: >-
+    estimated - `inlet-face` is the sixteen cells as sixteen subpaths, so in 3D
+    each is its own recess to the full 9.0, walled in its own shape, with the
+    housing top solid between them. The twelve power cells are 2.4 square on the
+    3.00 pitch, the four sense cells 1.6 square on the 2.00 pitch, centred on the
+    contacts the drawing places. The cell sizes are proportional, not dimensioned:
+    the Molex drawing is of the cable housing and gives the pitches only. The face
+    is a raster whose cell openings are punched at 4 px/mm and land up to a pixel
+    off the walls, so a `plate` skin 0.05 proud of it, with each cell cut 0.03
+    smaller than the cell, covers the walls' top edges and no sliver of the dark
+    behind shows.
+  pins-3d: >-
+    estimated - a 0.8 square contact stands in each power cell and each sense
+    cell, its tip 2.4 behind the housing's face (6.6 above the cavity floor).
+    No contact length is held.
+  latch: >-
+    estimated - the header's latch ramp, built as a 1.0 wide wedge on the outside
+    of the top wall, 6.8 long along the mating axis, standing 0.3 out of the wall
+    at the mouth and 1.4 at the far end, so it slopes along the axis a plug comes
+    in on. The node is the wedge seen end on, above the 11.7 outline, and its
+    `lift` of -6.8 starts it behind the face. Its length, width and height are
+    guesses; none is dimensioned anywhere held.
+elements:
+  opening: {at: [0.0, 0.0], size: [20.85, 11.7], class: cutout}
+relief:
+  wall: '#2c3036'
+  cavity: inlet-face
+  features:
+    - node: plate
+      out: 0.05
+      shape: true
+      color: '#23262b'
+      confidence: estimated
+      source: >-
+        not a part of the connector: a 0.05 skin over the housing's face that closes
+        the seam between the raster face and the exact cell walls (`cells-3d`)
+    - node: latch
+      lift: -6.8
+      out: 0.05
+      profile-y: [[0, -6.8], [1.1, 0.05], [1.4, 0.05]]
+      color: '#2c3036'
+      confidence: estimated
+      source: the cable housing's top wall in Molex 2191140001-SD; the ramp and its 1.4 height are a guess
+    - &pin
+      node: pin-1
+      top: 6.6
+      color: '#b9bfc6'
+      confidence: estimated
+      source: a contact tip 2.4 behind the housing face in a 9.0 cavity; no contact length is held
+    - {<<: *pin, node: pin-2}
+    - {<<: *pin, node: pin-3}
+    - {<<: *pin, node: pin-4}
+    - {<<: *pin, node: pin-5}
+    - {<<: *pin, node: pin-6}
+    - {<<: *pin, node: pin-7}
+    - {<<: *pin, node: pin-8}
+    - {<<: *pin, node: pin-9}
+    - {<<: *pin, node: pin-10}
+    - {<<: *pin, node: pin-11}
+    - {<<: *pin, node: pin-12}
+    - {<<: *pin, node: sense-1}
+    - {<<: *pin, node: sense-2}
+    - {<<: *pin, node: sense-3}
+    - {<<: *pin, node: sense-4}
+connection-points:
+  mate: {at: [10.425, 5.85], direction: front}
+skins: [default]

@@ -194,7 +194,7 @@ relief:
     - {node: return-1, facet: {deg: 45, facing: down}, lift: -12}
 ```
 
-The schema keeps `lift > 0` for every other feature. Only a feature that declares `facet` may carry `lift <= 0`.
+The schema keeps `lift > 0` for every other feature. Only a feature that declares `facet` may carry `lift <= 0`, and one that declares `profile` or `profile-y`, where a negative lift starts a wedge behind the face (a header's latch ramp, docs/connectors-gpu-design.md).
 
 ### Rendering (render.py)
 
@@ -224,7 +224,7 @@ The v1 checks are unchanged:
 
 ### Testing
 
-- **Schema:** a facet with a negative lift validates; a non-facet feature with a negative lift does not.
+- **Schema:** a facet with a negative lift validates; a feature with neither `facet` nor a profile and a negative lift does not.
 - **Lint:** a sunk facet inside a deep-enough pocket is clean; outside any pocket is an error; in a pocket too shallow is an error.
 - **Render:** a component with a pocket and a sunk facet emits negative profile heights, and its part's projected box is unchanged from the proud case.
 - **Kit, under node:**

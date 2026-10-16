@@ -1,0 +1,124 @@
+format: 1
+kind: component
+name: 12v-2x6-header
+version: 1.0.0
+class: inlet
+profile: server
+conforms: pcie-16pin-header
+interface: pcie-12v-2x6
+description: >-
+  The 16-pin 12V-2x6 GPU power connector of PCIe CEM 5.1 and ATX 3.1 on a board.
+  It is the 12VHPWR housing with the sense contacts recessed further, so they
+  touch only when the power contacts are home. It presents `pcie-12v-2x6`, which
+  generic/pcie-16pin-plug@1 mates.
+size: {w: 20.85, h: 11.7, d: 9.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+size-notes: the opening is taken as the plug's own outline; no header drawing was readable
+unplaced: a GPU card composes it; the 16-pin cards are not modelled to (docs/connectors-gpu-design.md section 7)
+attrs:
+  media: pcie-12v-2x6
+  input: dc
+  pins: 16
+  pins-power: 12
+  pins-sense: 4
+  pitch-mm: 3.0
+  power-rated-w: 600
+provenance:
+  size: >-
+    estimated - registry `pcie-16pin-header`, the same figures as
+    std/12vhpwr-header@1: the cable housing's outline from Molex customer drawing
+    2191140001-SD rev A (2024-03-11), whose housing is marked "H++", the 12V-2x6
+    mark. The header's own shroud is not dimensioned in anything held.
+  depth: >-
+    estimated - 9.0 is a guess at the shroud's depth, bounded above by the
+    plug's 14.00.
+  sense-recess: >-
+    estimated - NOT DRAWN. The sources disagree on how much shorter the sense
+    contacts are: Corsair says 1.5 mm, Hardware Busters 4 mm to 2.75 mm, another
+    guide 0.1 mm, and Tom's Hardware says PCI-SIG made the tip-to-edge spacing
+    1.7 mm. The contact point at 3 mm is unchanged. The skin draws the sense
+    contacts smaller to say they differ, and the 3D form builds them 1.5 shorter
+    than the power contacts (Corsair's reading, one of the four, so low
+    confidence).
+  contacts: >-
+    drawing - Molex 2191140001-SD: twelve power cells on a 3.00 pitch, four
+    sense cells on a 2.00 pitch; the same centres as std/12vhpwr-header@1.
+  power: >-
+    datasheet - 600 W at 12 V (PCIe CEM 5.1 as Wikipedia, "12VHPWR", reports it).
+    Molex's 12V-2x6 page says up to 675 W at 9.5 A a contact; not stored, since it
+    is a different measure from the standard's.
+  cells-3d: >-
+    estimated - `inlet-face` is the sixteen cells as sixteen subpaths, so in 3D
+    each is its own recess to the full 9.0, walled in its own shape, with the
+    housing top solid between them. The twelve power cells are 2.4 square on the
+    3.00 pitch, the four sense cells 1.6 square on the 2.00 pitch, centred on the
+    contacts the drawing places. The cell sizes are proportional, not dimensioned:
+    the Molex drawing is of the cable housing and gives the pitches only. The face
+    is a raster whose cell openings are punched at 4 px/mm and land up to a pixel
+    off the walls, so a `plate` skin 0.05 proud of it, with each cell cut 0.03
+    smaller than the cell, covers the walls' top edges and no sliver of the dark
+    behind shows.
+  pins-3d: >-
+    estimated - a 0.8 square power contact stands in each power cell, its tip 2.4
+    behind the housing's face (6.6 above the cavity floor); the 0.6 square sense
+    contacts are 1.5 shorter (5.1), the recess of `sense-recess` above. No contact
+    length is held.
+  latch: >-
+    estimated - the header's latch ramp, built as a 1.0 wide wedge on the outside
+    of the top wall, 6.8 long along the mating axis, standing 0.3 out of the wall
+    at the mouth and 1.4 at the far end, so it slopes along the axis a plug comes
+    in on. The node is the wedge seen end on, above the 11.7 outline, and its
+    `lift` of -6.8 starts it behind the face. Its length, width and height are
+    guesses; none is dimensioned anywhere held.
+elements:
+  opening: {at: [0.0, 0.0], size: [20.85, 11.7], class: cutout}
+relief:
+  wall: '#2c3036'
+  cavity: inlet-face
+  features:
+    - node: plate
+      out: 0.05
+      shape: true
+      color: '#23262b'
+      confidence: estimated
+      source: >-
+        not a part of the connector: a 0.05 skin over the housing's face that closes
+        the seam between the raster face and the exact cell walls (`cells-3d`)
+    - node: latch
+      lift: -6.8
+      out: 0.05
+      profile-y: [[0, -6.8], [1.1, 0.05], [1.4, 0.05]]
+      color: '#2c3036'
+      confidence: estimated
+      source: the cable housing's top wall in Molex 2191140001-SD; the ramp and its 1.4 height are a guess
+    - &pin
+      node: pin-1
+      top: 6.6
+      color: '#b9bfc6'
+      confidence: estimated
+      source: a contact tip 2.4 behind the housing face in a 9.0 cavity; no contact length is held
+    - {<<: *pin, node: pin-2}
+    - {<<: *pin, node: pin-3}
+    - {<<: *pin, node: pin-4}
+    - {<<: *pin, node: pin-5}
+    - {<<: *pin, node: pin-6}
+    - {<<: *pin, node: pin-7}
+    - {<<: *pin, node: pin-8}
+    - {<<: *pin, node: pin-9}
+    - {<<: *pin, node: pin-10}
+    - {<<: *pin, node: pin-11}
+    - {<<: *pin, node: pin-12}
+    - &sense
+      node: sense-1
+      top: 5.1
+      color: '#b9bfc6'
+      confidence: estimated
+      source: >-
+        1.5 shorter than a power contact (Corsair's reading of the 12V-2x6 sense
+        recess, one of four that disagree)
+    - {<<: *sense, node: sense-2}
+    - {<<: *sense, node: sense-3}
+    - {<<: *sense, node: sense-4}
+connection-points:
+  mate: {at: [10.425, 5.85], direction: front}
+skins: [default]

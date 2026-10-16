@@ -6,7 +6,7 @@
 // cannot disagree. Pure: `slots` and `compByRef` are what `loadSlots` in `catalog.js`
 // returns, handed in by the caller.
 
-import {slotResolver, builtBays, builtOccupants, underCarrier} from '../swap.js';
+import {slotResolver, builtBays, builtOccupants, underCarrier, coveredBy, spanCovers, slotWidth} from '../swap.js';
 
 const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
 
@@ -77,13 +77,24 @@ export function resolverFor(env, swaps) {
 // Every bay and cage, the device's own and those on what its bays hold, in
 // order, each with what it holds now. A cage's own bores (an adapter's two
 // fibres) are not listed: a path reaches them all the same.
+//
+// A CARD WIDER THAN ONE SLOT (docs/pcie-two-slot-bays-design.md, R4): its bay
+// lists the bays it `covers`, and each of those `covered-by` its bay. A reader
+// that knows neither key sees one bay full and the next empty, which is true.
 export function slotTree(env, swaps) {
   const bays = [], cages = [];
   const seen = new Set();
+  const R = resolverFor(env, swaps);
+  const span = {holds: p => holdsAt(env, swaps, p, R.entryAt(p)), comp: ref => partOf(env.compByRef, ref)};
   const addBay = (path, view, b) => {
     const holds = holdsAt(env, swaps, path, b);
-    bays.push({path, view, group: b.group ?? null, holds, default: b.default ?? null, accepts: b.accepts || []});
+    const node = {path, view, group: b.group ?? null, holds, default: b.default ?? null, accepts: b.accepts || []};
     const c = partOf(env.compByRef, holds);
+    const covers = path.includes('/module/') ? spanCovers(b, slotWidth(c)) : [];
+    if (covers?.length) node.covers = covers.map(id => `${path.slice(0, path.lastIndexOf('/'))}/${id}`);
+    const by = coveredBy(path, span);
+    if (by) node['covered-by'] = by;
+    bays.push(node);
     if (!c || seen.has(path)) return;
     seen.add(path);
     for (const [id, nb] of Object.entries(c.bays || {})) addBay(`${path}/module/${id}`, view, nb);

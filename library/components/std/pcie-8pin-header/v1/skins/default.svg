@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="12.6mm" height="18mm" viewBox="0 0 12.6 18">
+  <!-- aperture: the housing's mouth, 12.6 x 18.0 (NVIDIA PB-10577 fig 7; the 18.0 is estimated) -->
+  <rect id="opening" x="0" y="0" width="12.6" height="18" rx="0.6" fill="#23262b"/>
+  <!-- plate: the housing's mouth again, as a skin 0.05 proud of the face with each
+       cell cut through 0.03 smaller than the cell. The face is a raster whose
+       cell openings are punched at 4 px/mm and land up to a pixel off the cell
+       walls, which are exact; this plate is exact too, and it overhangs the walls'
+       top edges so that no sliver of the dark behind shows between a wall and
+       the face. The cavity below paints the cell over it, so the drawing is the same. -->
+  <path id="plate" fill="#23262b" fill-rule="evenodd"
+        d="M 0.6 0 H 12 A 0.6 0.6 0 0 1 12.6 0.6 V 17.4 A 0.6 0.6 0 0 1 12 18 H 0.6 A 0.6 0.6 0 0 1 0 17.4 V 0.6 A 0.6 0.6 0 0 1 0.6 0 Z M 2.53 1.23 L 5.87 1.23 L 5.87 4.17 L 2.53 4.17 Z M 6.73 1.23 L 10.07 1.23 L 10.07 4.17 L 6.73 4.17 Z M 2.53 5.43 L 5.87 5.43 L 5.87 8.37 L 2.53 8.37 Z M 6.73 5.43 L 10.07 5.43 L 10.07 8.37 L 6.73 8.37 Z M 2.53 9.63 L 5.87 9.63 L 5.87 12.57 L 2.53 12.57 Z M 6.73 9.63 L 10.07 9.63 L 10.07 12.57 L 6.73 12.57 Z M 2.53 13.83 L 5.87 13.83 L 5.87 16.77 L 2.53 16.77 Z M 6.73 13.83 L 10.07 13.83 L 10.07 15.588 L 8.888 16.77 L 6.73 16.77 Z"/>
+  <!-- cavity: eight cells, each its own opening, as eight subpaths. Cell 4 (bottom
+       right in figure 7) is chamfered, schematic. -->
+  <path id="inlet-face" fill="#08090a"
+        d="M 2.5 1.2 H 5.9 V 4.2 H 2.5 Z M 6.7 1.2 H 10.1 V 4.2 H 6.7 Z M 2.5 5.4 H 5.9 V 8.4 H 2.5 Z M 6.7 5.4 H 10.1 V 8.4 H 6.7 Z M 2.5 9.6 H 5.9 V 12.6 H 2.5 Z M 6.7 9.6 H 10.1 V 12.6 H 6.7 Z M 2.5 13.8 H 5.9 V 16.8 H 2.5 Z M 6.7 13.8 H 10.1 V 15.6 L 8.9 16.8 H 6.7 Z"/>
+  <!-- the latch ramp on the outside of the housing's left long side wall, seen end
+       on: 1.4 out from the wall and 1.8 along it. It is 8.0 long and slopes back
+       along the mating axis (the contract's relief), so from the front it is the
+       rectangle of its highest end. It stands outside the drawn outline. -->
+  <rect id="latch" x="-1.4" y="8.1" width="1.4" height="1.8" fill="#2c3036" stroke="#3a3e43" stroke-width="0.1"/>
+  <!-- a contact pin standing in each cell -->
+  <g fill="#b9bfc6">
+    <rect id="pin-1" x="3.4" y="1.9" width="1.6" height="1.6" rx="0.2"/>
+    <rect id="pin-2" x="7.6" y="1.9" width="1.6" height="1.6" rx="0.2"/>
+    <rect id="pin-3" x="3.4" y="6.1" width="1.6" height="1.6" rx="0.2"/>
+    <rect id="pin-4" x="7.6" y="6.1" width="1.6" height="1.6" rx="0.2"/>
+    <rect id="pin-5" x="3.4" y="10.3" width="1.6" height="1.6" rx="0.2"/>
+    <rect id="pin-6" x="7.6" y="10.3" width="1.6" height="1.6" rx="0.2"/>
+    <rect id="pin-7" x="3.4" y="14.5" width="1.6" height="1.6" rx="0.2"/>
+    <rect id="pin-8" x="7.6" y="14.5" width="1.6" height="1.6" rx="0.2"/>
+  </g>
+</svg>

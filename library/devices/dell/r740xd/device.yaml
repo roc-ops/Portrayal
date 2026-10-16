@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 27.0.2
+version: 28.0.0
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R740xd
@@ -179,6 +179,21 @@ chassis:
 # so yet. Recorded as a gap rather than left for the next person to rediscover
 # from a bay number that does not add up.
 gaps:
+  - what: two-slot-card-support-not-read
+    scope: [sff24-rc4-1a2a3a-two-slot]
+    reason: vendor-silent
+    note: >-
+      RISER 1A'S SLOT 1 SPANS SLOT 2 BY GEOMETRY ALONE. A figure 11-13 bracket
+      fits across the two openings Dell punches, and slot 2 has no connector
+      to lose, so dell/riser-1a-14g@2 lets a two-slot card seat there and the
+      example configuration draws one. Which two-slot cards Dell qualifies in
+      this chassis, in which riser, at what power and with what cooling, was
+      not read: the technical guide this file cites lists slot widths and
+      lengths, and was not searched for GPU support.
+    wanted: >-
+      Dell's GPU support statement for the R740xd - the riser, the slots, and
+      the cards and power it qualifies - which would say whether this span is
+      offered, and whether riser 2 and 3 have one too
   - what: riser-divider-plate-face-detail-unknown
     scope: [rear]
     reason: needs-photo
@@ -1229,7 +1244,7 @@ views:
            default: dell/riser-2a-14g@2,
            group: risers, rel-pos: 2, only-in: [lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
                      lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc3-1a2a,
-                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc4-1a2a3a-two-slot, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
                      sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         # A 12 mm DISAGREEMENT WAS REPORTED AGAINST THE CAD HERE AND IT WAS
         # NOT REAL. It came from the rear handle's upper 'window', read off a
@@ -1270,7 +1285,7 @@ views:
            accepts: [dell/riser-3a-14g@2, dell/riser-3b-14g@2],
            default: dell/riser-3a-14g@2,
            group: risers, rel-pos: 3, only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c,
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc4-1a2a3a-two-slot,
                      sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b,
                      sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         - {id: ndc, at: [139.6, 66.4], size: {w: 90.3, h: 14.5},
@@ -1452,7 +1467,7 @@ views:
         - {ref: dell/pcie-slot-strip-r3-14g@1, id: slot-strip-r3,
            at: [416.375, 4.0], group: furniture, rel-pos: 23,
            only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c,
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc4-1a2a3a-two-slot,
                      sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b,
                      sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         # THE TAB THE LEFT THUMBSCREW IS BOLTED TO, drawn after the bays
@@ -1516,14 +1531,14 @@ views:
            at: [267.32, 1.81], group: furniture, rel-pos: 24,
            only-in: [lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a,
                      lff12-rc9-1a2d3a, lff12-rc15-1a2e3b, lff12-rc16-1d2e3b,
-                     lff12-rc17-1a2f3b, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a,
+                     lff12-rc17-1a2f3b, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc4-1a2a3a-two-slot, sff24-rc5-1b2a3a,
                      sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b, sff24-rc16-1d2e3b,
                      sff24-rc17-1a2f3b]}
         - {ref: dell/riser-divider-plate-14g@1, id: riser-3-divider-plate,
            at: [297.10, 1.81], group: furniture, rel-pos: 25,
            only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
                      lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc4-1a2a3a-two-slot, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
                      sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         - {ref: dell/rear-bay-screw-tab-14g@1, id: rear-bay-screw-tab,
            at: [144.26, 3.09], group: furniture, rel-pos: 20}
@@ -1940,7 +1955,7 @@ views:
                      lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
                      sff24-rc0-noriser, sff24-rc1-1b2b, sff24-rc15-1a2e3b,
                      sff24-rc16-1d2e3b, sff24-rc17-1a2f3b, sff24-rc2-1b2c, sff24-rc3-1a2a,
-                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc4-1a2a3a-two-slot, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
                      sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c]}
         # THE MID-DRIVE TRAY, on the nine configurations that have one. It is
         # UNDER THE LID, so it is placed before the cover and the cover draws
@@ -2358,6 +2373,19 @@ configurations:
       riser-3: dell/riser-3a-14g@2
       riser-2/slot-4: nvidia/mcx623106-fh@1
       riser-2/slot-6: nvidia/mcx623106-lp@1
+  sff24-rc4-1a2a3a-two-slot:
+    kind: example
+    skins: {db9: teal}
+    description: >-
+      Riser configuration 4 with a two-slot card's bracket (PCIe CEM figure
+      11-13) seated in riser 1A's slot 1. It covers slot 2, the opening with no
+      connector, emptied of its filler for the card.
+    bays:
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2a-14g@2
+      riser-3: dell/riser-3a-14g@2
+      riser-1/slot-1: std/pcie-bracket-fh-2slot@1
+      riser-1/slot-2: ""
   sff24-rc5-1b2a3a:
     kind: orderable
     default: true

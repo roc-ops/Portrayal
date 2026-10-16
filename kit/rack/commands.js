@@ -27,7 +27,7 @@ import {portIdsOf, zeroUEnds, zeroUEndsText, seatedEndReason} from './ports.js';
 import {validate, same} from './validate.js';
 import {withRoutedLengths, pathwaysOf, waypointLanesOf, resolveRoute, pathwaysAt, zeroUPathways, pathwayId} from './route.js';
 import {slotsFor, slotEnv, resolverFor, holdsAt, partName, partOf} from './slots.js';
-import {acceptSwaps, underCarrier} from '../swap.js';
+import {acceptSwaps, underCarrier, spanWhy} from '../swap.js';
 import {followSwaps, keptSwaps, unknownTexts, rewriteRack, rewroteText, pairText} from '../redirects.js';
 import {fieldAccepts} from '../fields.js';
 
@@ -282,8 +282,19 @@ function fit(rack, {id, path, ref: given}, ctx) {
     if (!target) return {error: `${path} is not a bay or cage on ${it.label}. It has: ${slotList(env, R, path)}.`};
     isCage = !!target.isCage;
     view = target.view ?? null;
-    if (ref && ref !== 'default' && acceptSwaps(next, env).ignored.includes(path))
-      return {error: `${path} cannot take ${ref} while the slot it shares a seat with holds something.`};
+    if (ref && ref !== 'default') {
+      const {ignored, why} = acceptSwaps(next, env);
+      // a two-slot card over a full bay, or a part into a covered one, says
+      // which bay to empty (docs/pcie-two-slot-bays-design.md, R4)
+      if (why?.[path]) return {error: why[path]};
+      if (ignored.includes(path))
+        return {error: `${path} cannot take ${ref} while the slot it shares a seat with holds something.`};
+    } else if (ref === 'default') {
+      // putting back a default can put a filler under a two-slot card
+      const said = spanWhy(path, holdsAt(env, next, path, target),
+        {holds: p => holdsAt(env, next, p, R.entryAt(p)), comp: r => partOf(ctx.compByRef, r)});
+      if (said) return {error: said};
+    }
     holds = holdsAt(env, next, path, target);
   } else {
     next = Object.fromEntries(Object.entries(flat).filter(([k]) => k === path || !underCarrier(k, path)));

@@ -48,6 +48,54 @@ DIRECTIONS = ("plan", "rear")
 # better than silently counting it twice.
 OPTICAL_FACES = ("rear",)
 
+# THE SIDES OF A BODY, AS THE PART DRAWS THEM ITSELF. Not directions: a side is
+# not another part but the outside of this one's body, a drawing in its own
+# `skins/body-<side>.svg` - a card's printed top edge, its ribbed shroud. A
+# body piece that `shows` a side carries the patch of that drawing it lies
+# under. Each is seen from outside, in a frame the one-box body has always
+# read it in (kit/viewer3d.js bodyBoxMesh), and its viewBox says which patch of
+# the side it covers (`side_patch`). `rear` is not here: a piece's back shows
+# the part's `faces.rear`, which is a part of its own.
+BODY_SIDES = ("left", "right", "top", "bottom")
+
+
+def side_viewbox(path):
+    """(x, y, w, h) of a side drawing's viewBox, or None when the file is
+    missing, unparseable or has no four-number viewBox."""
+    import xml.etree.ElementTree as ET
+    try:
+        vb = (ET.parse(path).getroot().get("viewBox") or "").replace(",", " ").split()
+        x, y, w, h = (float(v) for v in vb)
+    except (OSError, ET.ParseError, ValueError):
+        return None
+    return (x, y, w, h) if w > 0 and h > 0 else None
+
+
+def side_patch(box, side, face_w, depth):
+    """The rectangle (x0, y0, x1, y1) a body box's `side` covers in that side's
+    drawing, in the drawing's own mm. `box` is a contract box (`at`, `size`,
+    `from`, `depth`); `face_w` is the part's `size.w` and `depth` its
+    `body.depth`. The frames, each seen from outside:
+
+        right   across: mm behind the face plane      down: the face's y
+        left    across: depth less mm behind the face  down: the face's y
+        top     across: the face's x                  down: depth less mm behind
+        bottom  across: face width less the face's x  down: depth less mm behind
+
+    kit/relief.js pieceArtCrop crops by the same rule."""
+    x, y = (float(v) for v in box["at"])
+    w, h = (float(v) for v in box["size"])
+    z0 = float(box.get("from") or 0)
+    z1 = z0 + float(box["depth"])
+    if side == "right":
+        return (z0, y, z1, y + h)
+    if side == "left":
+        return (depth - z1, y, depth - z0, y + h)
+    if side == "top":
+        return (x, depth - z1, x + w, depth - z0)
+    return (face_w - x - w, depth - z1, face_w - x, depth - z0)
+
+
 # `plan` is the only direction with a legacy spelling, because it is the only
 # one that existed before `faces`. A new direction added here gets no fallback
 # and needs none.

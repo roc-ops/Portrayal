@@ -425,18 +425,32 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   `setFields`) applies the same rule, and clearing a value restores the drawn
   colour.
 - `body-left.svg`, `body-right.svg`, `body-top.svg`, `body-bottom.svg`,
-  `body-rear.svg` are optional side views for parts that have a 3D body. NOTHING
-  READS THEM TODAY: `relief.js` extrudes a box from the face skin and `data-z-*`,
-  and whether these should texture that box is decided in
-  docs/pluggables-3d-design.md. Do not add them to a new part.
+  `body-rear.svg` are the outside of a part's 3D body, seen from each side.
+  A part with one body box (no `body.boxes`) has them painted on its sides,
+  each the size of that side. A part in pieces paints them only on the pieces
+  that `shows` them (below), and there each drawing's viewBox says which
+  patch of that side it covers.
 - A part that rides inside another - a holder in a drawer's slot, a card in a
   riser's - is built in 3D only from the pieces its `body.boxes` lists, each a
-  plain colour. Two keys on a piece say more: `shape: cylinder` or `ring`
-  (with `axis`, and `wall` for a ring) for something round, and
+  plain colour. Three keys on a piece say more: `shape: cylinder` or `ring`
+  (with `axis`, and `wall` for a ring) for something round;
   `shows: [plan]` or `[rear]`, which paints a box piece's top or back with
-  the patch of the part's own `faces.plan` or `faces.rear` drawing it covers.
-  That is a flat image, not relief; the schema's `body.boxes` entry gives the
-  frames, and L71 checks them.
+  the patch of the part's own `faces.plan` or `faces.rear` drawing it covers;
+  and `shows: [left]`, `[right]`, `[top]` or `[bottom]`, which paints that
+  side with the patch of the part's own `body-<side>.svg` it lies under -
+  printing on a GPU's top edge, its shroud's ribs - so the printing is
+  drawn once and is not a hundred boxes. That is a flat image, not relief;
+  the schema's `body.boxes` entry gives the frames, and L71 checks them.
+  A side drawing follows the face's rules: text in a `silkscreen` group
+  (L38) and a maker's mark reserved as `logo-zone` (L172).
+- A piece a buyer chooses - an extender bolted to a card's far end - says
+  `when: {extender: [straight]}` and stands only while the part's drawing
+  shows a node for that option of its `extender` choice field. Every skin
+  carries one `data-show-from` node per option a piece lists, empty when the
+  face itself does not change (L148). A configuration sets the field like any
+  other (`bay-attrs`), and a viewer's `setFields` rebuilds the piece. Such a
+  piece may reach past `size.d`, which is the part as it ships.
+  `nvidia/a100-pcie-80gb@1` is the example of both.
 - No raster images, no editor metadata, no external references. A skin is
   geometry and fills. Vendor logos are not reproduced; contracts reserve a
   `logo-zone` element instead, drawn in the skin as an empty

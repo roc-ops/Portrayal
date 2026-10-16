@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: a100-eps12v-standin
+version: 1.0.0
+class: inlet
+profile: server
+description: >-
+  The CPU 8-pin power connector on the A100 80GB PCIe card's east end, seen end
+  on: a black two-by-four housing with a latch ramp. A STAND-IN
+  for `std/eps12v-header@1`, which PR #1076 adds with the `eps12v-8pin`
+  interface. It presents no interface until that lands, so nothing mates it yet.
+size: {w: 18.40, h: 10.90, d: 17.80}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+unplaced: >-
+  Only the A100's tail face (nvidia/a100-pcie-80gb-tail@1) composes it, and the
+  card is itself unplaced: no bay in the library spans two slots.
+attrs:
+  media: eps12v
+  input: dc
+  pins: 8
+  interface-pending: eps12v-8pin
+provenance:
+  size: >-
+    photo-measured - IT Creations' photograph of the card's east end (575TK_5)
+    at matched scale: the end face is 97.9 across (28.41 to 126.31 from the
+    bracket's tip, PB-10577 figure 3) and measures about 1068 px of the
+    3630 px photograph between its edges at the connector's height, which is
+    about 10.9 px/mm. The housing is about 203 px
+    wide, 18.6 mm, and the 18.40 here is that within the reading's error. Its height is read down
+    the end face at the 4.2 mm cell pitch of two rows, about 10.9 mm, and
+    is good to about 1 mm: the photograph is taken from above and the
+    vertical scale is not known as the horizontal one is.
+  depth: >-
+    estimated - the housing runs 17.8 behind the end plate's face, the
+    A100 80GB brief's figure 6 proportions at its end view. No figure gives
+    the housing's depth.
+  colour: >-
+    photo-measured - the housing is BLACK on this card (575TK_5). These
+    connectors are usually white and sometimes black; the photographed card's is
+    black, and this one is drawn so.
+  interface: >-
+    PENDING - the brief calls it a "CPU 8-pin" connector on the card's east
+    edge (PB-10577 table 1 and figure 6). The library registers no interface for
+    it on this branch. PR #1076 adds `eps12v-8pin` and `std/eps12v-header@1`;
+    a later change replaces this part with that one, keeping the id `aux-power`
+    where the tail face composes it.
+elements:
+  opening: {at: [0.0, 0.0], size: [18.40, 10.90], class: bezel}
+relief:
+  wall: '#141517'
+  cavity: inlet-face
+connection-points:
+  mate: {at: [9.20, 5.45], direction: front}
+skins: [default]

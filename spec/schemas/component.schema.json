@@ -348,10 +348,29 @@
         "items": {
          "enum": [
           "plan",
-          "rear"
+          "rear",
+          "left",
+          "right",
+          "top",
+          "bottom"
          ]
         },
-        "description": "THE PART'S OWN DRAWINGS THIS PIECE CARRIES. `plan` paints the piece's top with the patch of the part's `faces.plan` it stands under; `rear` paints its back with the patch of `faces.rear` behind it. So a tray riding in a drawer shows its splice holders from above, and the back of an adapter block shows its ports, although a body piece is otherwise a plain colour. Both drawings run right to left against the face (a plan is drawn face-at-the-top, a rear as seen from behind), the plan's y is mm behind the face plane, and the rear's is the face's own. A flat image, not relief. Boxes only, and only drawings the part declares (L71). In a bay that turns, mirrors or tilts its occupant the piece is built plain, because its top is then not the part's top."
+        "description": "THE PART'S OWN DRAWINGS THIS PIECE CARRIES. `plan` paints the piece's top with the patch of the part's `faces.plan` it stands under; `rear` paints its back with the patch of `faces.rear` behind it. So a tray riding in a drawer shows its splice holders from above, and the back of an adapter block shows its ports, although a body piece is otherwise a plain colour. Both drawings run right to left against the face (a plan is drawn face-at-the-top, a rear as seen from behind), the plan's y is mm behind the face plane, and the rear's is the face's own. `left`, `right`, `top` and `bottom` paint that side of the piece with the patch of the part's own `skins/body-<side>.svg` it lies under: the printing on a GPU's top edge, the ribs of its shroud. Each side drawing is that side of the whole body seen from outside, in mm, and its viewBox names the patch it covers: across a `right` runs mm behind the face plane and down it the face's y; a `left` is the same with the depth measured from `body.depth`; across a `top` runs the face's x and down it `body.depth` less mm behind the face; a `bottom` is a `top` with x measured from `size.w`. A flat image, not relief. Boxes only, only drawings the part has, every patch inside its drawing's viewBox, and not `plan` and `top` on one piece (L71). In a bay that turns, mirrors or tilts its occupant the piece is built plain, because its top is then not the part's top."
+       },
+       "when": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": {
+         "type": "array",
+         "minItems": 1,
+         "items": {
+          "type": [
+           "string",
+           "number"
+          ]
+         }
+        },
+        "description": "A FITTED OPTION: the piece stands only while the part's choice field holds one of the options listed, `{extender: [straight]}` - an extender bolted to a card's far end, which the buyer chooses. The value is read from the part's drawing, the one place a field's value is settled at build time and at runtime: each option listed has a `data-show-from` node in every skin (empty, when the face itself does not change), and the piece stands while that node is shown. A piece fitted by an option may reach past `size.d` and `body.depth`, which are the part as it ships bare; nothing checks such a piece against a bay. L148 checks the field, the options and the nodes."
        }
       }
      }
@@ -430,8 +449,10 @@
        "node"
       ],
       "if": {
-       "required": [
-        "facet"
+       "anyOf": [
+        {"required": ["facet"]},
+        {"required": ["profile"]},
+        {"required": ["profile-y"]}
        ]
       },
       "else": {
@@ -495,7 +516,7 @@
        },
        "lift": {
         "type": "number",
-        "description": "standoff: the feature starts this many mm off the face (floating handle bars, stacked washers). Greater than 0, except on a feature that declares `facet`, where a negative lift sinks the facet's root edge that far below the plate, into a `pocket` at least that deep (L117)."
+        "description": "standoff: the feature starts this many mm off the face (floating handle bars, stacked washers). Greater than 0, except on a feature that declares `facet`, where a negative lift sinks the facet's root edge that far below the plate, into a `pocket` at least that deep (L117), and on one that declares `profile` or `profile-y`, where a negative lift starts the wedge that far BEHIND the face, so a ramp on a housing's side wall can slope back along the mating axis (a header's latch ramp: `lift` -8, `profile` running from -8 at its outer edge up to the face at its inner one). The node then stands outside the part's drawn outline, as a latch arm does."
        },
        "knurl": {
         "type": "boolean",
@@ -1387,9 +1408,22 @@
      "rotate": {
       "type": "number",
       "description": "degrees to rotate the OCCUPANT where it sits - the carrier's own plate, windows and printing do not move. The same key a device bay offers, so a riser at the far end of a chassis can say that its cards face the other way. Prefer this over `mirror` for anything with relief: a reflection puts a bracket's raised tab on the inside of the box, where a half-turn keeps it facing out at the viewer, which is what the metal does."
+     },
+     "span": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/segment"},
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "THE SIBLING BAYS A CARD WIDER THAN ONE SLOT COVERS when it is seated here, in order along the card's component side (the bay's own +y, turned by its `rotate`). A card `slot-width: n` wide takes the first n - 1 of them, and each must hold nothing, after defaults resolve: a configuration that seats a two-slot card in `slot-1` also empties `slot-2`. Ids in this same `bays:` map only, so a card never spans two risers. Absent means a card seated here is one slot wide. L185 holds the geometry, L186 the exclusion."
      }
     }
    }
+  },
+  "slot-width": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 4,
+   "description": "HOW MANY ADJACENT SLOTS THIS PART TAKES when it is seated in a bay: 2 for a dual-slot PCIe card (CEM figure 11-11), whose cooler covers the opening beside its own. Absent means 1. A bay seats it only if its `span` names enough siblings, and those siblings hold nothing while it is there."
   },
   "guide": {
    "type": "object",

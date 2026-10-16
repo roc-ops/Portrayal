@@ -40,7 +40,7 @@ SVG_NS = "http://www.w3.org/2000/svg"
 _FIELDS = (("id", "id"), ("class", "data-class"), ("ref", "data-ref"),
            ("media", "data-media"), ("speed", "data-speed"),
            ("group", "data-group"), ("group-role", "data-group-role"),
-           ("rel-pos", "data-rel-pos"))
+           ("rel-pos", "data-rel-pos"), ("covered-by", "data-covered-by"))
 _LISTS = (("states", "data-states"), ("for", "data-for"))
 
 # Subtrees that paint nothing where they stand: their shapes are referenced

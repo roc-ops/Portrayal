@@ -125,6 +125,12 @@ def test_fields_are_the_svgs_own():
                  "box": {"x": 0.0, "y": 0.0, "w": 1.0, "h": 1.0}}
 
 
+def test_a_covered_bay_says_which_bay_covers_it():
+    """docs/pcie-two-slot-bays-design.md, R4: a bay a two-slot card covers."""
+    r = rows(doc('<g data-path="r/module/slot-2" data-class="bay" '
+                 'data-covered-by="r/module/slot-1"><rect width="1" height="1"/></g>'))
+    assert r["r/module/slot-2"]["covered-by"] == "r/module/slot-1"
+
 def test_connection_points_land_on_the_face():
     r = rows(doc('<g data-path="p" transform="translate(10,20) rotate(90)">'
                  '<rect width="4" height="2"/>'

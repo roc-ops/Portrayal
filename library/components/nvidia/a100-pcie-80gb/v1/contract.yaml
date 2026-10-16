@@ -1,0 +1,563 @@
+format: 1
+kind: module
+name: a100-pcie-80gb
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA A100 80GB PCIe GPU, a passive dual-slot full-height full-length card.
+  The bracket face carries one vent window and no ports. Three NVLink bridge
+  connectors sit on the top edge. The far end is open and shows the heat sink's
+  fins edge-on. It has one black CPU 8-pin power connector by the top edge and
+  two bosses for an extender. NVIDIA's straight or long offset extender can be
+  fitted to the far end; the `extender` field chooses it.
+unplaced: >-
+  Nothing in the library seats a card two slots wide. Every riser bay is one
+  slot, 120.02 x 21.59 on the 20.32 pitch, and a bay has no way to span its
+  neighbour. A dual-slot bay, or a span across two bays, would seat it.
+size: {w: 120.02, h: 41.91, d: 268.60}
+size-confidence: {w: registry, h: registry, d: drawing}
+attrs:
+  model: 'A100 80GB PCIe'
+  part-numbers: '900-21001-0020-000, 900-21001-0020-100'
+  board-sku: 'P1001 SKU 230, NVPN 699-21001-0230-xxx'
+  role: gpu
+  form-factor: 'Full-height, full-length (FHFL) 10.5 in, dual-slot'
+  slots: 2
+  pcie-connector: x16
+  pcie-generation: 4
+  pcie-height: full
+  power-draw-max-w: 300
+  power-input: 'host PCIe slot and one CPU 8-pin auxiliary connector'
+  memory: '80 GB HBM2e, 5120-bit, up to 1.94 TB/s'
+  cooling: passive
+  airflow: 'bidirectional; the heat sink takes system airflow either way along the card'
+  nvlink: 'three bridge connectors on the top edge; 600 GB/s with one adjacent A100 80GB'
+  weight-kg: 1.17
+  eol: announced
+  eol-announcement: 'https://onestopsystems.com/blogs/eol-notices/nvidia-hgx-a100-4-gpu-80gb-nvidia-pcie-a100-80gb-cowos-hbm2-and-nvidia-tesla-t4-passive-gpu-2560-cores'
+fields:
+  extender:
+    label: Extender
+    type: choice
+    options: [none, straight, long-offset]
+    default: none
+    drawn-by-absence: [none]
+    description: >-
+      The bracket at the card's far end that a server's card guide holds. The
+      straight one (NVPN 682-00007-5555-001) makes the card 312 mm long. The
+      long offset one (NVPN 682-00007-5555-000) makes it 339 mm.
+faces:
+  rear: {ref: nvidia/a100-pcie-80gb-tail@1}
+provenance:
+  sources: >-
+    NVIDIA A100 80GB PCIe Product Brief PB-10577-001_v03, March 2022, fetched
+    from https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/PB-10577-001_v02.pdf
+    (the URL says v02, the document inside is v03; PNY mirrors it at
+    https://pnypartners.com/wp-content/uploads/ampere-a100-80gb-datasheet-update-us-partner-1344850-r1.pdf).
+    Tables 1, 2, 4 and 5, figure 3 (card dimensions), figure 5 (NVLink keep-out),
+    figure 6 (CPU 8-pin connector, an end view) and the NVLink and power text.
+    The A100 datasheet, https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/nvidia-a100-datasheet-nvidia-us-2188504-web.pdf.
+    The A100 40GB brief PB-10137, https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/A100-PCIE-Prduct-Brief.pdf,
+    is the same shape and is not used for any number here (see `size-length`).
+    NVIDIA's brief forbids reproducing its figures, so its facts are
+    transcribed and none of its figures is copied.
+  reference-bracket-photo: >-
+    reference - https://www.itcreations.com/images/products/large/575TK_1.jpg,
+    IT Creations' listing for the Dell 575TK, which is this card (its label
+    photo, 575TK_8.jpg, reads 699-21001-0230-601, the brief's SKU 230). It
+    shows the bracket face straight on, about 3630 x 2723 px. Licence not
+    stated; facts read from it, picture not used.
+  reference-card-photos: >-
+    reference - IT Creations 575TK_4.jpg to 575TK_8.jpg (3/4, east end, top
+    edge, broad side, backplate) and PNY's product images under
+    https://d2vfia6k6wrouk.cloudfront.net/productimages/edd51eab-59dc-42d5-a57d-ad7100b737d8/images/
+    (a100pcie_fr.png broad side, a100pcie_top.png top edge, a100-pcie-3qtr.png).
+    Licence not stated; facts read from them, pictures not used.
+  size: >-
+    registry - w is the full-height bracket's 120.02 (std/pcie-bracket-fh@2,
+    PCIe CEM 5.0 figure 11-5). h is two slots: the single bracket's 21.59 plus
+    one 20.32 slot pitch, 41.91. That is the envelope two adjacent slots give a
+    card, not a measurement of this bracket; the drawn plate sits inside it
+    (see `face-outline`).
+  depth: >-
+    drawing - PB-10577 figure 3: product length 268.60 with the I/O bracket,
+    267.70 without. The card ends 268.60 behind the bracket's outer face.
+  size-length: >-
+    THE 80GB AND 40GB DRAWINGS DIFFER. PB-10577 figure 3 (80GB) prints 267.70
+    without the bracket and 268.60 with it, the key datum 59.05 from the
+    bracket, 111.15 card height and 104.86 to the bracket's flange end. PB-10137
+    figure 3 (40GB) prints 266.7 +/-1.4 overall and the CEM datum 57.15 from
+    the bracket. Every length here is the 80GB drawing's.
+  face-outline: >-
+    photo-measured - the bracket photograph above, mapped into this frame with
+    the two retention tabs as the ruler: their centres are 403.5 px apart,
+    which is the 20.32 slot pitch, so 19.86 px/mm. At that scale the plate
+    measures 119.8 long against the standard's 120.02, so the face is near
+    orthographic along its length. The first tab's centre is put at y 12.38,
+    where std/pcie-bracket-fh@2 puts its own, so the board lands where a
+    single-slot card's does. Read that way the plate runs y 4.1 to 40.0 (5.1
+    for the first 20 mm from the tip), 36 across, against 38.74 for two
+    CEM single-slot bodies on one pitch; the tabs are 9.8 wide against CEM's
+    10.20; and the tip has a V notch between the tabs, apex 11.5 from the tip.
+    The photograph is 0.6 degree off square and in slight perspective, so each
+    reading is good to about half a millimetre.
+  face-keyed-flange: >-
+    estimated - the flange end is seen edge-on in the photograph as a strip
+    from y 0.3 to 39.7, about 3.7 past the plate on the board side, the way a
+    single bracket's keyed top steps out on that side. It is drawn as a band
+    0.8 wide at the flange end. The fold's 9.40 is CEM's (figure 11-5),
+    not measured on this bracket.
+  face-grille: >-
+    photo-measured - a raised frame held by four Torx screws covers one vent
+    window. Frame x 29.8 to 117.6, y 9.9 to 39.3, corners about R2. Screw
+    centres at x 32.5 and 114.6, y 13.0 and 35.8, heads about 4.3 across. The
+    window runs x 31.2 to 115.8, y 11.8 to 37.6, with its corners cut round
+    each screw boss, about R3.5 from the screw centre. Behind it the heat-sink
+    fins show as lines across the window on a 5.0 pitch, the first at x 36.25,
+    sixteen in all. Readings on the far half are corrected for the
+    photograph's 0.6 degree turn.
+  face-markings: >-
+    photo-measured - the bracket carries no lamp, no label, no printing and
+    no connector. The control is the fins and the Torx recesses, which
+    resolve in the same photograph at the same scale.
+  thickness: >-
+    estimated - nothing held states the card's thickness. Two figures measure
+    it at about 38.7: PB-10577 figure 6, the end view, scaled by the 126.31 from
+    the bracket tip to the card's top edge (PCIe CEM 5.0: 104.86 + 15.16 +
+    6.29), gives 196 px at 5.06 px/mm; and PNY's top-edge render, scaled by
+    the 267.70 card length, gives 99 px at 2.555 px/mm. Neither is a drawing
+    at known aspect (PNY's broad-side render is 5 percent out between its two
+    axes), so the 3D body is bounded by what is stated instead. The back face is
+    2.67 behind the board's rear surface, the brief's backside clearance for
+    the NVLink bridges. The front face stops at the plate's far edge, y 40.0.
+    That gives 38.2. This is the CEM dual-slot envelope that
+    common/pcie-card-fh@2 already cites, not a source we found for this card.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-fh@2 is: the photograph has the tip
+    at the right and the backplate side at the bottom, so it is turned a
+    half-turn into this frame. The board, and the bracket's keyed side, are at
+    the top (small y).
+  body: >-
+    the board, its edge and the pads follow PCIe CEM 5.0 (figures 6-5 and 11-3,
+    as nvidia/mcx755106-fh@1 has them) at PB-10577 figure 3's lengths. Figure 3
+    puts the card's lower edge 13.25 above the finger datum W, with a notch
+    3.55 REF deep and 19.50 REF long whose near end is 59.05 + 81.88 = 140.93
+    behind the bracket. The notch's 2 x 120 degree sides are drawn square. W
+    is at x 15.16 (120.02 - 104.86) and the top edge at 126.31 (W + 111.15).
+    The finger tab runs from the key less 12.15 to the key plus 81.88, the
+    length figure 3 draws, which is longer than the x16 pad run. Near the
+    bracket the board steps down toward W for about 18 mm; that step is not a
+    box. The board's colour is estimated from the photographs.
+  body-lower-edge: >-
+    photo-measured, as a check of figure 3 - IT Creations 575TK_7 is the
+    broad side straight on, at 9.30 px/mm down the 111.15 and 9.33 along the
+    268.60, so near orthographic. It puts the lower edge 12.3 to 13.5 above W
+    and the notch top 16.7 above it, between 145 and 160 behind the bracket,
+    which is figure 3. PNY's broad-side render puts the edge about 8.7 above
+    W, and that render is 5 percent out between its axes; it is not used for
+    the outline.
+  body-shroud: >-
+    estimated - the heat-sink shroud is champagne on the broad side. A black
+    cover runs the top edge on the board's side of the card, about the third
+    of the thickness nearest the board: PNY's top render gives 32 of 98 px
+    black. The black backplate covers the rear of the board (IT Creations
+    575TK_8). The shroud follows the board's outline, notch included. The
+    cover and the backplate are each three boxes, split at the notch as the
+    board is, from the board's lower edge to its top edge, the card's length
+    deep.
+  body-nvlink: >-
+    photo-measured - three NVLink bridge connectors on the top edge, each
+    under a removable cap (PB-10577: "NVLink bridge interfaces ... include
+    removable caps"). On PNY's top render at 2.555 px/mm they are 49.5 long,
+    starting 13.5, 70.7 and 126.1 behind the bracket's face, and 6.6 wide
+    from 2.2 to 8.8 across the card. Figure 5 is the keep-out and has no
+    dimensions. The caps are drawn 0.5 proud of the top edge, which is
+    estimated. The library has no NVLink interface, so the connectors are
+    boxes and nothing can mate a bridge to them.
+  body-power-connector: >-
+    photo-measured - PB-10577: "a CPU 8-pin power connector on the east edge of the
+    board" (datasheet; the fact is one connector). Its place is IT Creations'
+    575TK_5, the card's east end, at matched scale: the end face's 97.9 across is
+    about 1068 px of the 3630 px photograph, 10.9 px/mm, and the housing is about
+    203 px wide, 18.6 mm (18.4 is drawn, within the error), from
+    105.6 to 124.0 on the card's x, 2.3 from the top edge, with its top flush with
+    the cover's. The photograph is from above, so its height, 10.85 (y 3.5 to
+    14.35), is read at the 4.2 mm cell pitch and is good to about 1 mm; it ends
+    0.05 short of the cover-east ceiling (y 14.4) so the two faces are not
+    coplanar, which shimmered under the connector in 3D; the
+    brief's figure 6 had given 9.9. The housing is BLACK on this card (the
+    photograph); they are usually white and sometimes black. It is eight dark
+    cells in two rows of four in a housing standing 0.2 proud of the end plate, the
+    cells 0.4 (the step is estimated, see body-end).
+    THE PORT is `aux-power` on the tail face (`faces.rear`, nvidia/a100-pcie-80gb-
+    tail@1), a STAND-IN, nvidia/a100-eps12v-standin@1, which presents no
+    interface. PR #1076 adds `eps12v-8pin`; a later change swaps the stand-in for
+    `std/eps12v-header@1` once it merges. The boxes below are its 3D body.
+  body-end: >-
+    estimated - the black end plate (backplate, board and cover) stops 0.4 short
+    of the shroud's lip and the connector housing stands 0.2 proud of it, so the
+    housing and the mount bosses are not buried in the plate's own boxes. The
+    photograph does not show the step.
+  body-tail-fins: >-
+    photo-measured - the shroud is open at its far end, and 575TK_5 shows the heat
+    sink's fins edge-on behind it. 18 fins at a pitch of 5.0 (about 55 px at 10.9
+    px/mm, 5.0 to 5.1): THE TAIL VIEW SHOWS OTHERWISE THAN THE 2.194 OF `body-ribs`, which is
+    the shroud's outer rib pitch; the fins agree with the 5.0 of the 16 fins seen
+    through the bracket's window (`face-grille`). The first is at x 31.25 on that
+    window's grid. A fin is 0.8 thick and the wall round the opening 2.1 (both
+    estimated); the fins are drawn 40 mm deep, on a dark floor, because the
+    photograph does not show how far they run in.
+  body-extender-mount: >-
+    estimated - the two bosses the extenders' thumbscrews fasten to, at the
+    card's x 35.3 and 64.1 and y 8.4: the screws in 575TK_5 are about 28.7 apart
+    at matched scale (313 px at 10.9 px/mm), centred on the flange's width. 4.0 across, 0.4 proud of the end
+    plate, in zinc. NVIDIA's brief names the extenders and their lengths, not the
+    screws. With no extender they show; with one the flange sits on them and its
+    two knurled thumbscrew heads (7 across, from the photograph) stand on its
+    outer face.
+  power: >-
+    datasheet - PB-10577 table 1: total board power 300 W default, 300 W
+    maximum, 150 W minimum. The brief gives no ambient for it. The
+    programmable power cap goes down to the 150 W minimum.
+  weight: >-
+    datasheet - PB-10577 table 1: board 1170 g, excluding the bracket,
+    extenders and bridges. The bracket with screws is 20 g, each NVLink bridge
+    20.5 g, the long offset extender 48 g and the straight extender 32 g.
+  memory: >-
+    datasheet - PB-10577 table 2: HBM2e, 80 GB, 5120-bit, 1512 MHz, up to
+    1.94 TB/s.
+  pcie: >-
+    datasheet - PB-10577 table 1: PCI Express 4.0 x16, lane and polarity
+    reversal supported.
+  part-numbers: >-
+    datasheet - PB-10577 "Root of Trust": 900-21001-XXXX-0XX with the CEC1712
+    secondary root of trust, 900-21001-XXXX-1XX without. 900-21001-0020-000
+    is the order code resellers list; the -100 variant is listed without the
+    CEC1712. Table 1 gives the board SKU and NVPN.
+  nvlink: >-
+    datasheet - PB-10577 table 5 and the NVLink text: three bridges, 96 lanes
+    at 50 Gbps per direction, 600 GB/s with one adjacent A100 80GB. Each 2-slot
+    bridge is NVIDIA part 900-53651-0000-000. All three are needed.
+  extenders: >-
+    datasheet - PB-10577 "Extenders": a long offset extender (NVPN
+    682-00007-5555-000, card plus extender 339 mm, 48 g) and a straight
+    extender (NVPN 682-00007-5555-001, 312 mm, 32 g) bolt to the east edge.
+    Figure 8 draws both. The `extender` field fits either, or none (the
+    default); the pieces are `when` boxes. IT Creations' photographs show a
+    card with the straight one fitted.
+  body-extender-straight: >-
+    photo-measured - IT Creations 575TK_7, the broad side straight on at 9.29
+    px/mm across and 9.33 along, shows the straight extender fitted. Its far
+    edge is put at 312, the brief's card-plus-extender length. Read off the
+    photo, it is 304. The extender lies at the board's depth, about 34 behind
+    the shroud face the scale was taken on, so perspective pulls it toward the
+    photo's centre. 575TK_7 puts the finger tab about 4 mm out the same way.
+    Corrected by that factor (0.958), the photo gives 311. The plate has three
+    slots 6.2 wide between four bars 4.5 wide, from the card's lower edge to
+    x 71.05. The upright is 15 wide (14.7 measured) and is measured
+    from x 28.41 to 123.3 and drawn to 103.41 (see below). The fillet between the plate and the upright is drawn as one step.
+    The plate's 1.2 thickness, its place across the card (y 9.6 to 10.8, the
+    cover band, as 575TK_6 and 575TK_5 show it) are estimated. THE UPRIGHT IS
+    FLAT, 1.2 THICK LIKE THE PLATE: 575TK_5 shows its strip as a thin sheet
+    across the far end, not a channel, so it no longer stands 8.4 tall and
+    hides the power connector from behind (it did, as first drawn). Its place
+    across the card (y 9.6 to 10.8) is estimated; run to 123.3 it would cross
+    the connector's lower row seen from straight behind, which the photograph,
+    taken from above, does not show. THE UPRIGHT ENDS AT x 103.41, 2.2 short of
+    the connector (x 105.6), estimated: 575TK_5 shows the extender fitted with
+    the 8-pin fully clear, and the strip's measured run to 123.3 would cut the
+    lower row to a slit from behind. The long offset extender's is the same.
+    Its height was never measured; the broad side's photograph cannot show it. The flange
+    that bolts to the card's end is estimated from 575TK_5.
+  body-extender-long-offset: >-
+    estimated - no photograph of the long offset extender was found. PB-10577
+    figure 8 draws it beside the straight one: the same slotted plate and
+    mounting, a longer reach, and a broader upright that curves away from the
+    plate. Its far edge is the brief's 339. Its plate and upright are the
+    straight one's, moved out to that length, so the upright is drawn flat. The offset its name refers to is not dimensioned anywhere held,
+    so the upright stays in the plate's plane.
+  body-top-edge: >-
+    photo-measured - the printing on the top edge, from IT Creations 575TK_6,
+    the top edge straight on at 9.83 px/mm (267.7 shroud length over 2632 px;
+    the black band and the champagne band come out 11.9 and 25.6 across,
+    against the contract's 12.6 and 25.6). "A100" is 1.8 tall, 2.9 to 8.6 behind the
+    bracket. "NVLINK" is 1.8 tall and centred under each cap. The photo shows
+    it under the first and third caps; glare hides the second, and PNY's
+    top render shows all three. The NVIDIA mark is not drawn: L172 reserves
+    its box as `logo-zone`, 230.5 to 239.5 behind the bracket. The word
+    "NVIDIA" beside it is plain text, 3.2 tall, 240.7 to 261.6. Every glyph is
+    drawn in-house in Arial, not traced. The caps in the drawing are the
+    contract's nvlink boxes. The photo puts them about 1.3 nearer the bracket
+    than PNY's render does, which is within this reading.
+  body-ribs: >-
+    photo-measured - the shroud's top edge is ribbed along its whole length.
+    On 575TK_6 at 9.83 px/mm, 124 grooves run on a 21.58 px pitch, which is
+    2.195. That is 122 ribs on the 267.7 shroud; the drawing uses 267.7 / 122,
+    2.194. The lower edge is ribbed too: 575TK_4 shows it and 575TK_7 shows
+    its scalloped outline. Its pitch is not measured and is taken as the top
+    edge's. The broad side is not ribbed.
+  body-broad-side: >-
+    estimated - 575TK_7 shows the broad side as a fine-grained matte finish,
+    a little lighter toward the lower edge (#8e8573 near the top edge, #a39988
+    near the lower edge, in that photo's light). It is drawn as faint streaks
+    along the card on that gradient. The grain is not measured.
+  body-bracket-foot: >-
+    photo-measured - below the card the bracket is the plate's two retention
+    tabs, and behind it a dark standoff. 575TK_7 shows the standoff 7.6 tall
+    from the card's lower edge and 2.4 along the card. Corrected for
+    perspective as the extender is, it sits 1.2 to 3.6 behind the bracket's
+    face. Its place across the card is estimated, at the board. The tabs are
+    the face outline's (skins/default.svg), 0.9 thick, which is estimated. A
+    flat plate seen from the side is still a line; the photo's wider foot is
+    the plate seen at an angle.
+  lifecycle: >-
+    One Stop Systems' end-of-life notice dated 24 January 2024 lists the
+    NVIDIA PCIe A100 80GB: final order 26 April 2024, final ship from factory
+    31 December 2024. It is an integrator's notice passing on NVIDIA's, and
+    NVIDIA publishes no GPU end-of-life list. PNY lists the card under legacy
+    data-center GPUs.
+body:
+  depth: 268.60
+  # the plate slab's sides are the bracket's metal; every box has its own colour
+  color: '#9aa1a8'
+  # The slab is the plate between the tip's chamfers and the flange band.
+  plate: {at: [9.80, 4.10], size: [109.40, 35.90]}
+  # x along the bracket from its tip, y across it from the keyed edge,
+  # `from` back from the bracket's outer face.
+  # THE SIDES CARRY THE PART'S OWN DRAWINGS (`shows`): skins/body-right.svg is
+  # the top edge (the printing, the caps, the ribs), body-left.svg the
+  # shroud's ribbed lower edge and body-bottom.svg its broad side.
+  boxes:
+  - {id: board, at: [28.41, 4.44], size: [97.90, 1.57], from: 0.90, depth: 140.03,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-10577 fig 3: lower edge W + 13.25, top edge W + 111.15, to the notch at 140.93; CEM 5.0: 1.57 board, 1.27 inside the bracket keyed edge'}
+  - {id: board-notch, at: [31.96, 4.44], size: [94.35, 1.57], from: 140.93, depth: 19.50,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-10577 fig 3: the notch, 3.55 REF deep and 19.50 REF long, 59.05 + 81.88 behind the bracket'}
+  - {id: board-east, at: [28.41, 4.44], size: [97.90, 1.57], from: 160.43, depth: 107.77,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-10577 fig 3: lower edge W + 13.25 again east of the notch, to the 268.60 end less the 0.4 step (provenance body-end)'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [13.25, 1.57], from: 46.90, depth: 11.20,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-10577 fig 3: key datum 59.05 behind the bracket, tab 13.25 deep; CEM 5.0 fig 6-5: 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [13.25, 1.57], from: 60.00, depth: 80.93,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-10577 fig 3: the tab runs 81.88 REF past the key datum'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: backplate, at: [28.41, 1.77], size: [97.90, 2.67], from: 0.90, depth: 140.03,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'PB-10577: backside clearance 2.67 from the rear PCB surface; IT Creations 575TK_8 shows a black plate over the rear'}
+  - {id: backplate-notch, at: [31.96, 1.77], size: [94.35, 2.67], from: 140.93, depth: 19.50,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the backplate, inside the PB-10577 fig 3 notch'}
+  - {id: backplate-east, at: [28.41, 1.77], size: [97.90, 2.67], from: 160.43, depth: 107.77,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the backplate, east of the notch'}
+  - {id: cover, at: [28.41, 6.01], size: [97.90, 8.39], from: 0.90, depth: 140.03,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'PNY top render: the black band is 32 of the card''s 98 px, on the board side'}
+  - {id: cover-notch, at: [31.96, 6.01], size: [94.35, 8.39], from: 140.93, depth: 19.50,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the cover, inside the PB-10577 fig 3 notch'}
+  - {id: cover-east, at: [28.41, 6.01], size: [97.90, 8.39], from: 160.43, depth: 107.77,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the cover, east of the notch'}
+  - {id: shroud, at: [28.41, 14.40], size: [97.90, 25.60], from: 0.90, depth: 140.03,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'thickness bounded at 38.2 (see provenance thickness); outline as the board; champagne finish from the photographs; the sides are provenance body-ribs and body-broad-side'}
+  - {id: shroud-notch, at: [31.96, 14.40], size: [94.35, 25.60], from: 140.93, depth: 19.50,
+     color: '#b8a68c', confidence: drawing, shows: [right, left, bottom],
+     source: 'PB-10577 fig 3 notch; IT Creations 575TK_7 shows it in the shroud outline at 145..160'}
+  - {id: shroud-east, at: [28.41, 14.40], size: [97.90, 25.60], from: 160.43, depth: 67.97,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'as the shroud, east of the notch, to where the open end begins at 228.40'}
+  # THE OPEN END (provenance body-tail-fins): a rim round an opening, with the
+  # fin stack edge-on inside it, on a dark floor.
+  - {id: shroud-end-floor, at: [30.51, 14.40], size: [93.70, 23.50], from: 228.40, depth: 0.20,
+     color: '#07080a', confidence: estimated,
+     source: 'the dark floor the open end looks onto; 575TK_5 shows the gaps between fins dark'}
+  - {id: shroud-end-skin, at: [28.41, 37.90], size: [97.90, 2.10], from: 228.40, depth: 40.20,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'the broad side''s wall round the opening; 2.1 thick is estimated from 575TK_5'}
+  - {id: shroud-end-low, at: [28.41, 14.40], size: [2.10, 23.50], from: 228.40, depth: 40.20,
+     color: '#b8a68c', confidence: estimated, shows: [left],
+     source: 'the lower edge''s wall round the opening; 2.1 thick is estimated'}
+  - {id: shroud-end-top, at: [124.21, 14.40], size: [2.10, 23.50], from: 228.40, depth: 40.20,
+     color: '#b8a68c', confidence: estimated, shows: [right],
+     source: 'the top edge''s wall round the opening; 2.1 thick is estimated'}
+  - {id: fin-01, at: [30.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured,
+     source: 'IT Creations 575TK_5 at matched scale: 18 fins edge-on on a 5.0 pitch; the first at x 31.25, the face window''s grid; 0.8 thick and 40 deep are estimated'}
+  - {id: fin-02, at: [35.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 36.25'}
+  - {id: fin-03, at: [40.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 41.25'}
+  - {id: fin-04, at: [45.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 46.25'}
+  - {id: fin-05, at: [50.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 51.25'}
+  - {id: fin-06, at: [55.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 56.25'}
+  - {id: fin-07, at: [60.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 61.25'}
+  - {id: fin-08, at: [65.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 66.25'}
+  - {id: fin-09, at: [70.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 71.25'}
+  - {id: fin-10, at: [75.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 76.25'}
+  - {id: fin-11, at: [80.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 81.25'}
+  - {id: fin-12, at: [85.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 86.25'}
+  - {id: fin-13, at: [90.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 91.25'}
+  - {id: fin-14, at: [95.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 96.25'}
+  - {id: fin-15, at: [100.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 101.25'}
+  - {id: fin-16, at: [105.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 106.25'}
+  - {id: fin-17, at: [110.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 111.25'}
+  - {id: fin-18, at: [115.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: photo-measured, source: 'as fin-01, x 116.25'}
+  - {id: nvlink-1, at: [126.31, 2.20], size: [0.50, 6.60], from: 13.50, depth: 49.50,
+     color: '#2b2f33', confidence: estimated, shows: [right],
+     source: 'PNY top render at 2.555 px/mm: caps 49.5 long from 13.5, 6.6 wide; 0.5 proud is estimated'}
+  - {id: nvlink-2, at: [126.31, 2.20], size: [0.50, 6.60], from: 70.70, depth: 49.50,
+     color: '#2b2f33', confidence: estimated, shows: [right],
+     source: 'PNY top render at 2.555 px/mm: the second cap from 70.7'}
+  - {id: nvlink-3, at: [126.31, 2.20], size: [0.50, 6.60], from: 126.10, depth: 49.50,
+     color: '#2b2f33', confidence: estimated, shows: [right],
+     source: 'PNY top render at 2.555 px/mm: the third cap from 126.1'}
+  # THE CPU 8-PIN (provenance body-power-connector): a black housing with eight
+  # dark cells, the 3D body of the tail face's `aux-power` port.
+  - {id: power-8pin, at: [105.60, 3.50], size: [18.40, 10.85], from: 250.60, depth: 17.80,
+     color: '#17191c', confidence: photo-measured,
+     source: 'IT Creations 575TK_5 at matched scale: 18.4 wide, 2.3 from the top edge, top flush with the cover; 10.85 high (y 3.5 to 14.35) is read at the cell pitch (about 1 mm, so 10.9 is as good) and ends 0.05 short of the cover-east ceiling at y 14.4, which a flush bottom would share and flicker on; black housing'}
+  - {id: power-8pin-cell-1, at: [119.30, 4.80], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: photo-measured,
+     source: 'IT Creations 575TK_5: two rows of four cells on the 4.2 pitch; 3.2 across is about 40 of the 50 px pitch'}
+  - {id: power-8pin-cell-2, at: [115.10, 4.80], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: photo-measured, source: 'as cell 1'}
+  - {id: power-8pin-cell-3, at: [110.90, 4.80], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: photo-measured, source: 'as cell 1'}
+  - {id: power-8pin-cell-4, at: [106.70, 4.80], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: photo-measured, source: 'as cell 1'}
+  - {id: power-8pin-cell-5, at: [119.30, 9.00], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: photo-measured, source: 'as cell 1'}
+  - {id: power-8pin-cell-6, at: [115.10, 9.00], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: photo-measured, source: 'as cell 1'}
+  - {id: power-8pin-cell-7, at: [110.90, 9.00], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: photo-measured, source: 'as cell 1'}
+  - {id: power-8pin-cell-8, at: [106.70, 9.00], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: photo-measured, source: 'as cell 1'}
+  # THE EXTENDER MOUNT (provenance body-extender-mount): two bosses on the end plate
+  - {id: mount-boss-1, shape: cylinder, axis: z, at: [33.30, 6.40], size: [4.00, 4.00], from: 268.20, depth: 0.40,
+     color: '#8a9199', confidence: estimated,
+     source: 'IT Creations 575TK_5: the extender''s thumbscrews, 28.8 apart at matched scale, centred on the flange; 4.0 across and 0.4 proud are estimated'}
+  - {id: mount-boss-2, shape: cylinder, axis: z, at: [62.10, 6.40], size: [4.00, 4.00], from: 268.20, depth: 0.40,
+     color: '#8a9199', confidence: estimated, source: 'as mount-boss-1, the second thumbscrew'}
+  # THE BRACKET'S FOOT below the card (provenance body-bracket-foot)
+  - {id: bracket-tab-1, at: [0.00, 7.40], size: [7.27, 9.80], from: 0.30, depth: 0.90,
+     color: '#9aa1a8', confidence: estimated,
+     source: 'the retention tab of skins/default.svg; 0.9 thick, estimated'}
+  - {id: bracket-tab-2, at: [0.00, 27.90], size: [7.27, 9.70], from: 0.30, depth: 0.90,
+     color: '#9aa1a8', confidence: estimated,
+     source: 'the second retention tab of skins/default.svg; 0.9 thick, estimated'}
+  - {id: bracket-standoff, at: [20.80, 2.00], size: [7.61, 2.40], from: 1.20, depth: 2.40,
+     color: '#26292c', confidence: photo-measured,
+     source: 'IT Creations 575TK_7: 7.6 below the lower edge, 2.4 along the card, 1.2..3.6 behind the face after the perspective correction; y estimated'}
+  # THE EXTENDERS, fitted by the `extender` field (provenance
+  # body-extender-straight and body-extender-long-offset). x from the card's
+  # lower edge (28.41) up; the plate is four bars with three slots between.
+  - {id: ext-straight-flange, at: [28.46, 6.01], size: [42.54, 4.74], from: 268.65, depth: 1.15,
+     color: '#1c1e20', confidence: estimated, when: {extender: [straight]},
+     source: 'the bent flange that bolts to the card end, from IT Creations 575TK_5; size estimated. Drawn 0.05 inside the bars at the sides and back, so no face of it lies in a bar''s plane'}
+  - {id: ext-straight-bar-1, at: [60.38, 9.60], size: [10.67, 1.20], from: 268.60, depth: 28.40,
+     color: '#1c1e20', confidence: photo-measured, when: {extender: [straight]},
+     source: 'IT Creations 575TK_7, perspective-corrected: the top bar, x 60.38..71.05, to the upright at 297.0'}
+  - {id: ext-straight-bar-2, at: [49.69, 9.60], size: [4.50, 1.20], from: 268.60, depth: 28.40,
+     color: '#1c1e20', confidence: photo-measured, when: {extender: [straight]},
+     source: 'IT Creations 575TK_7: the bar between the first and second slots, x 49.69..54.19'}
+  - {id: ext-straight-bar-3, at: [39.03, 9.60], size: [4.50, 1.20], from: 268.60, depth: 28.40,
+     color: '#1c1e20', confidence: photo-measured, when: {extender: [straight]},
+     source: 'IT Creations 575TK_7: the bar between the second and third slots, x 39.03..43.53'}
+  - {id: ext-straight-bar-4, at: [28.41, 9.60], size: [4.44, 1.20], from: 268.60, depth: 28.40,
+     color: '#1c1e20', confidence: photo-measured, when: {extender: [straight]},
+     source: 'IT Creations 575TK_7: the bottom bar, from the card''s lower edge to 32.85'}
+  - {id: ext-straight-fillet, at: [71.05, 9.60], size: [3.55, 1.20], from: 288.00, depth: 9.00,
+     color: '#1c1e20', confidence: estimated, when: {extender: [straight]},
+     source: 'IT Creations 575TK_7: the fillet into the upright, drawn as one step'}
+  - {id: ext-straight-upright, at: [28.41, 9.60], size: [75.00, 1.20], from: 297.00, depth: 15.00,
+     color: '#1c1e20', confidence: estimated, when: {extender: [straight]},
+     source: 'IT Creations 575TK_7: the strip starts at x 28.41 and far edge at 312, PB-10577; a flat strip as 575TK_5 shows it, 1.2 thick estimated. It ends at x 103.41, 2.2 short of the 8-pin housing (105.6), estimated: 575TK_5 shows the connector clear of the extender (the 575TK_7 width, x to 123.3, would cross its lower row from behind)'}
+  - {id: ext-long-flange, at: [28.46, 6.01], size: [42.54, 4.74], from: 268.65, depth: 1.15,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s flange; PB-10577 fig 8 draws the same mounting'}
+  - {id: ext-long-bar-1, at: [60.38, 9.60], size: [10.67, 1.20], from: 268.60, depth: 55.40,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'the straight extender''s top bar, run out to the upright at 324.0'}
+  - {id: ext-long-bar-2, at: [49.69, 9.60], size: [4.50, 1.20], from: 268.60, depth: 55.40,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s second bar, run out to 324.0'}
+  - {id: ext-long-bar-3, at: [39.03, 9.60], size: [4.50, 1.20], from: 268.60, depth: 55.40,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s third bar, run out to 324.0'}
+  - {id: ext-long-bar-4, at: [28.41, 9.60], size: [4.44, 1.20], from: 268.60, depth: 55.40,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s bottom bar, run out to 324.0'}
+  - {id: ext-long-fillet, at: [71.05, 9.60], size: [3.55, 1.20], from: 315.00, depth: 9.00,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s fillet'}
+  - {id: ext-long-upright, at: [28.41, 9.60], size: [75.00, 1.20], from: 324.00, depth: 15.00,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'far edge at 339, PB-10577 "card + extender"; the upright is the straight one''s, PB-10577 fig 8, ending at x 103.41 clear of the 8-pin housing as the straight one does (estimated)'}
+  # THE THUMBSCREWS that fasten either extender to the mount bosses
+  # (provenance body-extender-mount), on the flange's outer face at 269.80.
+  - {id: ext-straight-screw-1, shape: cylinder, axis: z, at: [31.80, 4.90], size: [7.00, 7.00], from: 269.80, depth: 3.00,
+     color: '#a8afb5', confidence: estimated, when: {extender: [straight]},
+     source: 'IT Creations 575TK_5: a knurled head about 7 across over each boss; 3.0 tall is estimated'}
+  - {id: ext-straight-screw-2, shape: cylinder, axis: z, at: [60.60, 4.90], size: [7.00, 7.00], from: 269.80, depth: 3.00,
+     color: '#a8afb5', confidence: estimated, when: {extender: [straight]},
+     source: 'as the first thumbscrew'}
+  - {id: ext-long-screw-1, shape: cylinder, axis: z, at: [31.80, 4.90], size: [7.00, 7.00], from: 269.80, depth: 3.00,
+     color: '#a8afb5', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s: PB-10577 fig 8 draws the same mounting; no photograph of the long offset one'}
+  - {id: ext-long-screw-2, shape: cylinder, axis: z, at: [60.60, 4.90], size: [7.00, 7.00], from: 269.80, depth: 3.00,
+     color: '#a8afb5', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the first thumbscrew'}
+elements:
+  grille: {at: [29.80, 9.90], size: [87.80, 29.40], class: bezel}
+  vent: {at: [31.20, 11.80], size: [84.60, 25.80], class: vent}
+  screw-1: {at: [30.35, 10.85], size: [4.30, 4.30], class: screw}
+  screw-2: {at: [112.45, 10.85], size: [4.30, 4.30], class: screw}
+  screw-3: {at: [30.35, 33.65], size: [4.30, 4.30], class: screw}
+  screw-4: {at: [112.45, 33.65], size: [4.30, 4.30], class: screw}
+relief:
+  wall: '#8a9199'
+  features:
+  - node: grille
+    out: 0.8
+    color: '#9aa1a8'
+    confidence: estimated
+    source: >-
+      the grille frame is a separate plate on four screws, raised off the
+      bracket. Its 0.8 is estimated from the shadow line in the reference
+      photograph.
+  - node: flange-fold
+    out: 9.4
+    color: '#9aa1a8'
+    confidence: estimated
+    source: >-
+      the fold at the flange end, PCIe CEM 5.0 figure 11-5's 9.40, drawn as on
+      std/pcie-bracket-fh@2. Not measured on this bracket.
+skins: [default]

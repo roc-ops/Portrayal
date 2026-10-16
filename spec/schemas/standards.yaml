@@ -1312,6 +1312,23 @@ standards:
       the key - because the extension lines for the four dimensions printed there
       trace like an outline. An extension line runs above the part; an outline
       edge starts at it.
+  pcie-bracket-fh-2slot:
+    w: 120.07
+    h: 41.91
+    description: >-
+      PCI Express two-slot (full height) add-in card I/O bracket - two slots of
+      the 20.32 pitch plus the keyed top, 38.74 body and 41.91 overall across
+    confidence: verified
+    registry: PCIe CEM 5.0 fig 11-13
+    source: >-
+      PCI Express Card Electromechanical Specification Revision 5.0, June 2021,
+      figure 11-13 "Detailed Two-Slot I/O Bracket Design", page 181. 120.07
+      long overall and 112.93 from the flange to the retention tabs; 38.74
+      body and 41.91 overall across; two tabs at 4.11 to 14.30 and 24.43 to
+      34.62, which is the single bracket's 10.20 tab twice on the 20.32 pitch.
+      41.91 IS 20.32 + 21.59: one slot pitch plus a single bracket's overall
+      width, so the two-slot bracket ends exactly where a single one seated in
+      the second slot would.
   pcie-bracket-lp:
     w: 79.20
     h: 18.42
@@ -2744,3 +2761,111 @@ standards:
       as `rj45-plug` excludes its own. One body serves the plug with two,
       four or six contacts loaded. The four-position handset plug is a
       narrower body and is not this entry.
+  # GPU POWER AND NVLINK (P-0028, docs/connectors-gpu-design.md). None of these
+  # is a panel cutout: each is the mating face of a board connector or of a cable
+  # plug, seen end on, and every figure was read from a drawing and transcribed.
+  mini-fit-8-header:
+    registry: Molex Mini-Fit Jr. 4.20 mm pitch dual-row family (catalogue pages E-57 to E-63, MX10), 8 circuits; the connector PCIe CEM 5.0 and the EPS12V (ATX12V) CPU supply connector are both built on
+    w: 12.6
+    h: 18.0
+    confidence: estimated
+    depth: 9.9
+    depth-confidence: estimated
+    source: >-
+      WIDTH 12.6: NVIDIA A100 80GB PCIe product brief PB-10577-001 v03, figure
+      7 (the CPU 8-pin to PCIe 8-pin adapter drawing), which prints 12.6 across
+      the face of the PCI-E 2x4 housing, across its two columns. LENGTH 18.0: a
+      distributor listing of the Molex 39-01-2085 8-circuit receptacle housing
+      (RS Components, 18 x 15.1 x 19.6 mm), and four pitches plus a 1.2 wall
+      comes to the same 18.0. That listing's 15.1 across disagrees with figure
+      7's 12.6, so it is not shown to be the same housing. Figure 7 prints 21.1 for the same
+      housing's long side; that is 3.1 more and is not reconciled, so the
+      length is estimated. The Molex catalogue states the 4.20 pitch, the 9.0 A
+      and 600 V ratings and the part numbers (header 5566 vertical and 5569
+      right angle, receptacle 5557), and prints no dimensioned drawing. DEPTH
+      9.9: the length of the plug's mating nose, figure 7's 9.9; the board
+      connector's cavity is taken as that deep, estimated.
+    notes: >-
+      THE MATING FACE OF A 2 x 4 BOARD HEADER, shared by the EPS12V (CPU 8-pin)
+      and the PCIe 8-pin headers, whose housings are the same size and differ in
+      polarisation (Molex's own catalogue lists the PCIe housing as having "a
+      unique polarization scheme ... for PCI Express applications only"). The
+      key is therefore two interfaces over one size. The pin pitch is 4.20 and
+      the contacts are 2 columns of 4.
+  mini-fit-8-plug:
+    registry: as mini-fit-8-header; the cable plug that enters it, NVIDIA A100 80GB PCIe product brief PB-10577-001 v03, figure 7 (the adapter's P1, P2 and P3 housings)
+    w: 12.6
+    h: 18.0
+    confidence: estimated
+    depth: 30.0
+    depth-confidence: drawing
+    source: >-
+      Figure 7 prints 20.1 for the overmoulded body and 9.9 for the nose of a
+      PCI-E 2x4 plug, 30.0 together, and 12.6 across the face. The 18.0 length
+      is as for mini-fit-8-header. The EPS12V plug is taken to be the same body;
+      no EPS plug drawing is held, so for that plug the depth too is estimated.
+    notes: >-
+      THE END-ON BOX OF A 2 x 4 CABLE PLUG, seen from the cable end. It is the
+      mating face of mini-fit-8-header, which it enters 9.9 deep.
+  pcie-16pin-header:
+    registry: PCIe CEM 5.0 (12VHPWR) and CEM 5.1 / ECN 6.0 (12V-2x6), 16-pin 12 + 4 board connector, 3.00 mm pitch; the plug it takes is Molex 2191140001-SD
+    w: 20.85
+    h: 11.7
+    confidence: estimated
+    depth: 9.0
+    depth-confidence: estimated
+    source: >-
+      The opening is taken as the plug's own outline, 20.85 across and 11.70
+      high, from the Molex customer drawing 2191140001-SD rev A (2024-03-11),
+      "PCIE CEM 5 12V2X6 RECEPTACLE HOUSING" (part 2191140161): 12 power
+      contacts in two rows of six on a 3.00 pitch, four sense contacts on a
+      2.00 pitch below them. No board header drawing was readable (the
+      Amphenol Minitek Pwr CEM-5 specification GS-12-1706 and Molex's own pages
+      refused the download), so the header's shroud is estimated, and so is its
+      9.0 depth. PCI-SIG's CEM specification is not held.
+    notes: >-
+      THE MATING FACE OF THE 16-PIN GPU POWER HEADER, 12 power and 4 sense
+      contacts. 12VHPWR and 12V-2x6 are one size; 12V-2x6 recesses the sense
+      contacts further so they touch only when the power contacts are home, and
+      the plug is unchanged (Wikipedia, "12VHPWR", citing PCIe CEM 5.1). The
+      sources for the recess disagree (1.5 mm, 1.25 mm, 0.1 mm), so it is not
+      drawn. The standard rates it 600 W (PCIe CEM 5.0); Molex's 12V-2x6 page
+      says up to 675 W, 9.5 A a contact.
+  pcie-16pin-plug:
+    registry: Molex 2191140001-SD rev A (2024-03-11), "PCIE CEM 5 12V2X6 RECEPTACLE HOUSING", part 2191140161
+    w: 20.85
+    h: 11.7
+    confidence: estimated
+    depth: 14.0
+    depth-confidence: drawing
+    source: >-
+      Molex 2191140001-SD rev A: 20.85 across the front and 14.00 deep from the
+      front to the rear of the housing, both drawing figures. The height is
+      estimated: 11.70 is dimensioned on the same axis as the 14.00 and 11.63 is
+      the end view's width, so the face height is read between them as 11.7. 12 power contacts, two rows of
+      six on a 3.00 pitch (15.00 across the outer pair), four sense contacts on
+      a 2.00 pitch (6.00 across the outer pair), the housing marked "H++".
+    notes: >-
+      THE END-ON BOX OF THE 12 + 4 CABLE HOUSING seen from the cable end. The
+      same housing serves 12VHPWR and 12V-2x6 cables. The wires leave its rear
+      face; no strain relief is drawn.
+  nvlink-a100-pcie-connector:
+    registry: NVIDIA A100 80GB PCIe product brief PB-10577-001 v03, figure 5 and the NVLink text; extent read from a public product render, not from a drawing
+    w: 6.6
+    h: 49.5
+    confidence: estimated
+    depth: 2.5
+    depth-confidence: estimated
+    source: >-
+      The brief says the card has three NVLink bridge interfaces on its top
+      (north) edge, under removable caps, and that the space above the north
+      edge must be 2.5 mm or more for the bridges; figure 5 is a keep-out
+      drawing with no dimensions. The 6.6 across the card and 49.5 along it are
+      read off PNY's public top-edge render at about 2.6 px/mm, scaled on the
+      267.70 card length, and are estimated: that render is not a drawing at a
+      known aspect.
+    notes: >-
+      THE TOP-EDGE FOOTPRINT OF ONE NVLINK BRIDGE CONNECTOR on an A100 PCIe
+      card, seen from above, long side along the card. Three sit on one card.
+      The depth is the brief's 2.5 clearance, an upper bound on the bridge's
+      stand-off.

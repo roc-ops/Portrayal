@@ -648,7 +648,36 @@ PART_POWER = {
     "generic/nema-l5-20p-plug": "nema-l5-20p",
     "generic/nema-5-20p-plug": "nema-5-20p",
     "generic/cs8365c-plug": "cs8365c",
+    # A GPU CARD'S AUXILIARY POWER INLET (P-0028, docs/connectors-gpu-design.md).
+    # Neither target has a type for these: PowerPortTypeChoices in
+    # netbox-community/netbox (netbox/dcim/choices.py at main, 2026-10-14) holds
+    # Molex Micro-Fit 1x2, 2x2, 2x3 and 2x4, which are a 3.0 mm family, and no
+    # Mini-Fit Jr., PCIe or 16-pin entry; nautobot/nautobot's list at develop has
+    # no Molex entry at all. So they are `other`, as `common/dc-barrel` is, and
+    # POWER_LABEL below says which connector, as OUTLET_LABEL does for an outlet.
+    "std/eps12v-header": "other",
+    "std/pcie-8pin-header": "other",
+    "std/12vhpwr-header": "other",
+    "std/12v-2x6-header": "other",
 }
+# THE CONNECTOR A `other` POWER PORT IS, for a reader who would otherwise see
+# "Other". Only the parts above that have no upstream type are listed; a test
+# holds the two tables to each other.
+POWER_LABEL = {
+    "std/eps12v-header": "EPS12V 8-pin (CPU 8-pin)",
+    "std/pcie-8pin-header": "PCIe 8-pin (6+2)",
+    "std/12vhpwr-header": "12VHPWR 16-pin",
+    "std/12v-2x6-header": "12V-2x6 16-pin",
+}
+
+
+def power_row(ref, pid):
+    """The power-port row an inlet `ref` placed as `pid` exports, with the
+    connector as its label where the type is `other`."""
+    row = {"name": pid or "Inlet", "type": PART_POWER[ref]}
+    if ref in POWER_LABEL:
+        row["label"] = POWER_LABEL[ref]
+    return row
 
 # WHERE A DEVICE HANDS POWER ON: a power OUTLET, the other half of PART_POWER
 # (docs/power-outlets-design.md, #806). A distribution panel's output circuit
@@ -1386,7 +1415,7 @@ def route_part(part, attrs, defaulted=None):
     if ref == DB9_CONSOLE_REF and DB9_CONSOLE.search(db9_words(part)):
         return "console", {"name": pid, "type": "de-9"}
     if ref in PART_POWER:
-        return "power", {"name": pid or "Inlet", "type": PART_POWER[ref]}
+        return "power", power_row(ref, pid)
     if ref in PART_CONSOLE:
         return "console", {"name": pid or "Console", "type": PART_CONSOLE[ref]}
     if ref in USB_CONSOLE_REFS:
@@ -1994,9 +2023,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
                 if trace is not None:
                     trace.add(p["id"])
             if p["ref"].split("@")[0] in PART_POWER:
-                powers.setdefault(p["id"], {
-                    "name": p["id"] or "Inlet",
-                    "type": PART_POWER[p["ref"].split("@")[0]]})
+                powers.setdefault(p["id"], power_row(p["ref"].split("@")[0], p["id"]))
                 if trace is not None:
                     trace.add(p["id"])
             # WHERE IT HANDS POWER ON (#806): one outlet per placement of a
@@ -2180,8 +2207,13 @@ def contract_view(entry):
             "optical": entry.get("optical") or {}}
 
 
-def bay_row(bay_id, accepts=None):
-    """One `module-bays` row, for a bay on a device or a bay on a module."""
+def bay_row(bay_id, accepts=None, span=None):
+    """One `module-bays` row, for a bay on a device or a bay on a module.
+
+    `span` is the bays a card wider than one slot covers from here
+    (docs/pcie-two-slot-bays-design.md, R5). Neither DCIM can reserve a second
+    bay for one module, so it is said first in the description, where a person
+    installing a card reads it: the covered bay stays empty in the DCIM."""
     name = (bay_id.replace("psu-", "PSU ").replace("fan-", "Fan ")
             .replace("front-", "Front ").replace("rear-", "Rear "))
     # THE POSITION IS THE BAY'S WHOLE ID, because it is what a card's
@@ -2192,9 +2224,13 @@ def bay_row(bay_id, accepts=None):
     # Neither library can express what a bay accepts as data yet, so it
     # goes where a person will still see it. Truncated to the 200 the
     # NetBox schema allows on a bay description.
+    spans = (f"Spans {', '.join(span)} for a card {len(span) + 1} slots wide. "
+             if span else "")
     if accepts:
         bay["description"] = fit_items(
-            "Accepts: ", [a.split("/")[-1].split("@")[0] for a in accepts])
+            spans + "Accepts: ", [a.split("/")[-1].split("@")[0] for a in accepts])
+    elif spans:
+        bay["description"] = spans.strip()
     return bay
 
 
@@ -2445,7 +2481,8 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
     nested = contract.get("bays") or {}
     if isinstance(nested, dict) and nested:
         out["module-bays"] = sorted(
-            (bay_row(bid, (b or {}).get("accepts")) for bid, b in nested.items()),
+            (bay_row(bid, (b or {}).get("accepts"), (b or {}).get("span"))
+             for bid, b in nested.items()),
             key=bay_order)
 
     # THE GLASS, IF THIS MODULE CARRIES ANY. A fibre cassette has no interfaces
@@ -2486,6 +2523,12 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
         typed.add("inlet")
     facts = [f"- {k}: {v}" for k, v in attrs.items()
              if k not in typed and isinstance(v, (str, int, float))]
+    # A CARD WIDER THAN ONE SLOT (docs/pcie-two-slot-bays-design.md, R5): a
+    # module sits in one bay in both DCIMs, so the bay it also covers is said
+    # here and stays empty there.
+    if isinstance(contract.get("slot-width"), int) and contract["slot-width"] > 1:
+        facts.append(f"- slot-width: {contract['slot-width']} (seated, it also covers "
+                     "the bay beside its own, which stays empty)")
     if facts:
         body.append("Facts carried in the model that this schema has no field for:")
         body += facts

@@ -1,0 +1,114 @@
+format: 1
+kind: component
+name: nvlink-bridge-a100-2slot
+version: 1.0.0
+class: port
+mates: nvlink-a100-pcie
+profile: server
+description: >-
+  NVIDIA's two-slot NVLink bridge for the A100 PCIe card, 900-53651-0000-000,
+  seen from above. One bridge spans two adjacent cards, plugging into the same
+  top-edge connector on each. Those sit two slot pitches (2 x 20.32) apart, and
+  three bridges join one pair of cards. `mate` seats on the first card and
+  `mate-b` on the second. The library seats a part at `mate` only, so nothing
+  seats the second end yet.
+size: {w: 47.24, h: 49.5}
+size-confidence: {w: estimated, h: estimated}
+size-notes: the span is two slot pitches plus one connector's width; the body between the ends is not dimensioned in anything held
+attrs:
+  media: nvlink
+  connector: nvlink-a100-pcie
+  part-number: 900-53651-0000-000
+  spans-slots: 2
+  per-card-pair: 3
+  weight-g: 20.5
+unplaced: seated by configurations downstream of this library; no bay spans two cards yet
+provenance:
+  size: >-
+    estimated - WIDTH 47.24 = 2 x 20.32 + 6.6: the CEM slot pitch twice (NVIDIA
+    PB-10577 names it "2-slot" and reseller listings say it is for 2-slot board
+    spacing), plus the 6.6 one connector spans across the card. LENGTH 49.5: the
+    connector's, which the plug fills. Neither is a measurement of the bridge: no
+    NVIDIA drawing of it is public. A reseller lists a 12.50 cm figure for the
+    part (Galaxus) whose meaning is unclear, and it is not used.
+  height: >-
+    estimated - 2.5 above the card's top edge: the brief's "clearance above the
+    north edge should meet or exceed 2.5 mm". It is drawn as the connector
+    ends' height; the cover stands higher (to 6.0 with its ridges), on a guess (`form-3d`).
+  identity: >-
+    datasheet - NVIDIA A100 80GB PCIe product brief PB-10577-001 v03, "NVLink
+    Bridge": "The 2-slot NVLink Bridge for the NVIDIA A100 80GB PCIe card has the
+    following NVIDIA part number: 900-53651-0000-000". Three bridges join one
+    adjacent pair, all three required (figure 4 marks anything else incorrect),
+    20.5 g each (table 1).
+  ends: >-
+    estimated - the two ends are the connector's centre line, 3.3 from the part's
+    edge and 40.64 apart, from the CEM slot pitch. The connector is the same on
+    both cards, so one interface covers both ends.
+  other-cards: >-
+    estimated - the A30, A40, H100 PCIe, H100 NVL and H200 NVL take bridges of
+    their own part numbers. This part is the A100's and is not offered to their
+    connectors until a source says they intermate.
+  form-3d: >-
+    estimated - NO DIMENSIONED SOURCE: NVIDIA publishes no drawing of the bridge
+    and the figures held place only its two ends. The body is built in steps, from
+    what a bridge has to be (two connector ends two slot pitches apart, a cover
+    between them): a 1.6 base plate, the two 6.5 x 49.4 connector ends (the 6.6 x
+    49.5 connector less 0.05 a side) standing 2.5, a top cover 31.24 x 43.5 standing 4.0 and a raised centre 19.24 x 33.5
+    standing 5.5 with three grip ridges to 6.0. The cover's and centre's
+    footprints are proportional and their heights are guesses. No two faces share
+    a plane where they overlap: the ends stand 0.05 inside the plate's edge, and
+    each piece above the plate starts 0.05 higher than the one it stands on (the
+    ends and the cover at 0.05, the centre at 0.10, the ridges at 0.15). It
+    replaces the earlier single 2.5 box, whose 2.5 (the brief's clearance above the card's top
+    edge) was read as an upper bound on the whole bridge; it is now only the ends'
+    shoulder, and the clearance is no longer claimed to contain the cover.
+relief:
+  features:
+    - node: body
+      out: 1.6
+      shape: true
+      color: '#202225'
+      confidence: estimated
+      source: no source holds the base plate's thickness; 1.6 is a guess (a PCB's usual thickness)
+    - node: end-a
+      out: 2.5
+      lift: 0.05
+      shape: true
+      color: '#2c2e32'
+      confidence: estimated
+      source: the brief's 2.5 clearance above the north edge, taken as the connector ends' height
+    - node: end-b
+      out: 2.5
+      lift: 0.05
+      shape: true
+      color: '#2c2e32'
+      confidence: estimated
+      source: the brief's 2.5 clearance above the north edge, taken as the connector ends' height
+    - node: cover
+      out: 4.0
+      lift: 0.05
+      shape: true
+      color: '#25282c'
+      confidence: estimated
+      source: no source holds the cover; its footprint and its 4.0 height are guesses
+    - node: cover-top
+      out: 5.5
+      lift: 0.1
+      shape: true
+      color: '#2e3136'
+      confidence: estimated
+      source: no source holds the stepped profile; the raised centre and its 5.5 height are guesses
+    - &ridge
+      node: ridge-1
+      out: 6.0
+      lift: 0.15
+      color: '#3a3e43'
+      confidence: estimated
+      source: no source holds the grip; three 0.5 ridges on the raised centre are a guess
+    - {<<: *ridge, node: ridge-2}
+    - {<<: *ridge, node: ridge-3}
+connection-points:
+  mate: {at: [3.3, 24.75], direction: front}
+  mate-b: {at: [43.94, 24.75], direction: front}
+skins: [default]

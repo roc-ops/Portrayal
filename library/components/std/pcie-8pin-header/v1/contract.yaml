@@ -1,0 +1,110 @@
+format: 1
+kind: component
+name: pcie-8pin-header
+version: 1.0.0
+class: inlet
+profile: server
+conforms: mini-fit-8-header
+interface: pcie-8pin
+description: >-
+  The PCIe 8-pin (6+2) power connector on a board, seen end on. It is a 2 x 4
+  Mini-Fit housing with the PCIe polarisation, three 12 V and five ground
+  contacts. It presents `pcie-8pin`, which
+  generic/pcie-8pin-plug@1 mates. It is the size of std/eps12v-header@1 and not
+  the same interface.
+size: {w: 12.6, h: 18.0, d: 9.9}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+size-notes: the 12.6 is printed on NVIDIA's adapter drawing; the 18.0 and the 9.9 are not dimensioned for this connector
+unplaced: a GPU card composes it; no card that takes it is modelled to (docs/connectors-gpu-design.md section 7)
+attrs:
+  media: pcie-8pin
+  input: dc
+  pins: 8
+  pins-12v: 3
+  pins-ground: 5
+  pitch-mm: 4.2
+  power-rated-w: 150
+provenance:
+  size: >-
+    estimated - registry `mini-fit-8-header`; the same housing as
+    std/eps12v-header@1, with the same figures and the same unreconciled 21.1 on
+    NVIDIA PB-10577 figure 7.
+  depth: >-
+    estimated - 9.9 is the plug's nose in figure 7, taken as the depth the cavity
+    gives it.
+  contacts: >-
+    datasheet - NVIDIA PB-10577 figure 7, the P2 and P3 "PCI-E 2*4" ends: pins
+    1, 2 and 3 are 12 V (yellow) and the other five are ground (black). The
+    figure marks pin 4 as tied to 7 and 8, and draws cell 4 with a differently
+    shaped corner. Which cards take this connector is not read from a brief
+    held here.
+  keying: >-
+    estimated - Molex's catalogue calls the Mini-Fit PCIe housing a "unique
+    polarization scheme ... for PCI Express applications only", 8 A a contact,
+    six-circuit listed. The one drawn chamfer follows figure 7's cell 4 and is
+    schematic.
+  power: >-
+    estimated - 150 W is the figure the PCIe CEM gives an 8-pin auxiliary
+    connector. No document held states it.
+  cells-3d: >-
+    estimated - `inlet-face` is the eight cells as eight subpaths, each 3.4 x 3.0
+    on the 4.20 pitch (0.8 of wall between them), so in 3D each is its own recess
+    to the full 9.9, walled in the cell's own shape, and the housing top between
+    them is solid. The cell size is proportional, not dimensioned: Molex's
+    catalogue gives the pitch and no cavity drawing. The face is a raster whose
+    cell openings are punched at 4 px/mm and land up to a pixel off the walls, so
+    a `plate` skin 0.05 proud of it, with each cell cut 0.03 smaller than the
+    cell, covers the walls' top edges and no sliver of the dark behind shows.
+  pins-3d: >-
+    estimated - a 1.6 square contact stands in each cell, its tip 2.4 behind the
+    housing's face (7.5 above the cavity floor). Molex's catalogue gives the 4.20
+    pitch and the current rating and no contact length.
+  latch: >-
+    estimated - Mini-Fit Jr. headers carry a latch ramp on a long side wall that
+    the plug's latch rides over. It is built as a 1.8 wide wedge on the outside of
+    the left long wall, 8.0 long along the mating axis, standing 0.3 out of the wall
+    at the mouth and 1.4 at the far end, so it slopes along the axis a plug comes
+    in on. The node is the wedge seen end on, outside the 12.6 outline, and its
+    `lift` of -8.0 starts it behind the face. Its length, width and height are
+    guesses; none is dimensioned anywhere held.
+elements:
+  opening: {at: [0.0, 0.0], size: [12.6, 18.0], class: cutout}
+relief:
+  wall: '#2c3036'
+  cavity: inlet-face
+  features:
+    - node: plate
+      out: 0.05
+      shape: true
+      color: '#23262b'
+      confidence: estimated
+      source: >-
+        not a part of the connector: a 0.05 skin over the housing's face that closes
+        the seam between the raster face and the exact cell walls (`cells-3d`)
+    - node: latch
+      lift: -8.0
+      out: 0.05
+      profile: [[0, -8.0], [1.1, 0.05], [1.4, 0.05]]
+      color: '#2c3036'
+      confidence: estimated
+      source: >-
+        Molex Mini-Fit Jr. catalogue MX10, E-57 to E-63, names a latch ramp and
+        draws no dimension; 1.4 is a guess at its height
+    - &pin
+      node: pin-1
+      top: 7.5
+      color: '#b9bfc6'
+      confidence: estimated
+      source: >-
+        a contact tip 2.4 behind the housing face in a 9.9 cavity; Molex gives no
+        contact length
+    - {<<: *pin, node: pin-2}
+    - {<<: *pin, node: pin-3}
+    - {<<: *pin, node: pin-4}
+    - {<<: *pin, node: pin-5}
+    - {<<: *pin, node: pin-6}
+    - {<<: *pin, node: pin-7}
+    - {<<: *pin, node: pin-8}
+connection-points:
+  mate: {at: [6.3, 9.0], direction: front}
+skins: [default]

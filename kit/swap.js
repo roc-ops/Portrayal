@@ -46,6 +46,12 @@ export function bayTransform(bay, c) {
   // when it does not - so an A9K-RSP880-LT-SE swapped into an ASR 9006 landed
   // 16.4 mm from where the build puts it, and hung out through the side of the
   // chassis. There is no origin to solve for now.
+  //
+  // A CARD WIDER THAN ONE SLOT is placed by the box its bays make together
+  // (spanBox), not by its own bay's, as render.py places it by manifest.py's
+  // span_box.
+  const box = spanBox(bay, c);
+  if (box) bay = {...bay, ...box};
   const sz = c?.insert || c?.size;
   if (!sz || !bay.size) return `translate(${bay.at[0]},${bay.at[1]})`;
   const cx = bay.at[0] + bay.size.w / 2;
@@ -53,6 +59,91 @@ export function bayTransform(bay, c) {
   const deg = bay.rotate || 0;
   return `translate(${cx},${cy})${deg ? ` rotate(${deg})` : ''}`
        + ` translate(${-sz.w / 2},${-sz.h / 2})`;
+}
+
+// A CARD WIDER THAN ONE SLOT (docs/pcie-two-slot-bays-design.md). The card
+// says how many slots it takes (components.json `slot-width`), its bay which
+// siblings it covers (`span`), and these read the pair the way manifest.py's
+// slot_width / span_covers / span_box do, so the kit and the build cannot
+// come to disagree about what a card covers or where it is drawn.
+export const slotWidth = c => Math.max(1, Number.parseInt(c?.['slot-width'], 10) || 1);
+
+// The sibling bay ids a part `width` slots wide covers when seated in `bay`:
+// the first width - 1 of its `span`. [] for one slot; null when the bay names
+// too few, and the part cannot seat there at all.
+export function spanCovers(bay, width) {
+  if (width <= 1) return [];
+  const span = (bay?.span || []).filter(s => typeof s === 'string');
+  return span.length >= width - 1 ? span.slice(0, width - 1) : null;
+}
+
+// The box a card is drawn in: its bay's, joined with the boxes of the
+// siblings it covers (`bay.spanned`, [{id, at, size}] in `span` order, which
+// nestedBays and slotResolver attach). null when the card is one slot wide or
+// the bay cannot hold it, and the bay's own box stands.
+export function spanBox(bay, c) {
+  const covers = spanCovers(bay, slotWidth(c));
+  if (!covers || !covers.length || !bay?.at || !bay?.size) return null;
+  const sib = new Map((bay.spanned || []).map(s => [s.id.split('/').pop(), s]));
+  const boxes = [bay, ...covers.map(id => sib.get(id))];
+  if (boxes.some(b => !b?.at || !b?.size)) return null;
+  const r4 = v => Math.round(v * 1e4) / 1e4;
+  const x0 = Math.min(...boxes.map(b => +b.at[0])), y0 = Math.min(...boxes.map(b => +b.at[1]));
+  const x1 = Math.max(...boxes.map(b => +b.at[0] + +b.size.w)), y1 = Math.max(...boxes.map(b => +b.at[1] + +b.size.h));
+  return {at: [r4(x0), r4(y0)], size: {w: r4(x1 - x0), h: r4(y1 - y0)}};
+}
+
+// A nested bay's entry with its span's sibling boxes attached: `id` is its
+// drawing path, `hostBays` the carrier's components.json `bays`.
+export function withSpan(b, id, hostBays) {
+  const e = {...b, id};
+  if (!Array.isArray(b?.span) || !b.span.length) return e;
+  const carrier = id.slice(0, id.lastIndexOf('/'));
+  e.spanned = b.span.filter(s => hostBays?.[s])
+    .map(s => ({id: `${carrier}/${s}`, at: hostBays[s].at, size: hostBays[s].size}));
+  return e;
+}
+
+// WHY A BAY CANNOT TAKE `ref` BECAUSE OF A SPAN, or null. `path` is a nested
+// bay's drawing path (`riser-1/module/slot-1`); `holds(p)` what the bay at a
+// path holds now (a carrier's bay included, for its component), `comp(ref)`
+// its components.json entry. Three refusals: the card is wider than the
+// bay's `span` allows; a bay it would cover holds something; or a card in a
+// sibling already covers this bay. Emptying a bay (`ref` null) is never
+// refused. A device bay takes no span (R1) and is never refused here.
+export function spanWhy(path, ref, {holds, comp}) {
+  const cut = typeof path === 'string' ? path.lastIndexOf('/module/') : -1;
+  if (cut < 0 || !ref) return null;
+  const carrier = path.slice(0, cut), here = path.slice(cut + '/module/'.length);
+  const bays = comp(holds(carrier))?.bays || {};
+  const me = bays[here];
+  if (!me) return null;
+  const at = id => `${carrier}/module/${id}`;
+  const width = slotWidth(comp(ref));
+  const covers = spanCovers(me, width);
+  if (covers === null)
+    return `${path} cannot take ${ref}: it is ${width} slots wide, and ${here} spans no bay beside it to cover.`;
+  for (const id of covers) {
+    const held = holds(at(id));
+    if (held) return `${path} cannot take ${ref}: it covers ${at(id)}, which holds ${held}. Empty ${id} first.`;
+  }
+  const by = coveredBy(path, {holds, comp});
+  return by ? `${path} is covered by ${holds(by)} in ${by}. Empty ${by.split('/').pop()} first.` : null;
+}
+
+// The path of the bay whose card covers the nested bay at `path`, or null.
+export function coveredBy(path, {holds, comp}) {
+  const cut = typeof path === 'string' ? path.lastIndexOf('/module/') : -1;
+  if (cut < 0) return null;
+  const carrier = path.slice(0, cut), here = path.slice(cut + '/module/'.length);
+  const bays = comp(holds(carrier))?.bays || {};
+  for (const [id, b] of Object.entries(bays)) {
+    if (id === here) continue;
+    const held = holds(`${carrier}/module/${id}`);
+    const covers = held ? spanCovers(b, slotWidth(comp(held))) : null;
+    if (covers && covers.includes(here)) return `${carrier}/module/${id}`;
+  }
+  return null;
 }
 
 // Re-address a component's own namespace into the bay's, matching render.py:
@@ -963,8 +1054,9 @@ export function nestedBays(rootEl, compByRef) {
     if (cut < 0) continue;                    // a bay on the device itself
     const carrier = bayGroup(rootEl, path.slice(0, cut + '/module'.length));
     const ref = (carrier?.getAttribute('data-ref') || '').split(':')[0];
-    const bay = ref ? compByRef(ref)?.bays?.[path.slice(cut + '/module/'.length)] : null;
-    if (bay) out.push({...bay, id: path});
+    const host = ref ? compByRef(ref) : null;
+    const bay = host?.bays?.[path.slice(cut + '/module/'.length)];
+    if (bay) out.push(withSpan(bay, path, host.bays));
   }
   return out;
 }
@@ -1390,12 +1482,32 @@ export async function applyOverrides(rootEl, bays, overrides, loadSkin, isCurren
     if (!isCurrent(bay.id)) continue;         // a newer swap owns this bay
     g.querySelector(`[id="${CSS.escape(idBase)}--module"]`)?.remove();
     applied++;
+    if (bay.span?.length) markSpan(rootEl, bay, ref && loaded ? loaded.comp : null);
     if (!ref) continue;                       // deliberately empty
     if (!loaded) continue;                    // unknown ref: leave the bay open
     g.appendChild(seatModule(rootEl.ownerDocument, bay.id, bay, ref,
                              loaded.comp, loaded.text, idBase));
   }
   return applied;
+}
+
+// THE BAYS A SEATED CARD COVERS, on the drawing, as render.py marks them: each
+// covered bay's group carries `data-covered-by` the card's bay, and the card's
+// bay group moves after the last one it covers, so the card paints over their
+// openings. Whatever this bay covered before is uncovered first, so emptying
+// the bay or seating a one-slot card clears the marks.
+export function markSpan(rootEl, bay, comp) {
+  for (const el of rootEl.querySelectorAll(`[data-covered-by="${CSS.escape(bay.id)}"]`))
+    el.removeAttribute('data-covered-by');
+  const covers = spanCovers(bay, slotWidth(comp)) || [];
+  const carrier = bay.id.slice(0, bay.id.lastIndexOf('/'));
+  let last = null;
+  for (const id of covers) {
+    const s = bayGroup(rootEl, `${carrier}/${id}`);
+    if (s) { s.setAttribute('data-covered-by', bay.id); last = s; }
+  }
+  const g = bayGroup(rootEl, bay.id);
+  if (last && g && last.parentNode && last.parentNode === g.parentNode) last.after(g);
 }
 
 // EVERY LEVEL, BY FOLLOWING THE FRONTIER. A device's own bays are known before
@@ -2016,8 +2128,29 @@ export function acceptSwaps(map, {bays = [], cages = [], built = () => null,
     if ((e.bores || []).some(b => holds(`${key}/${b}`)) || (bore && holds(key.slice(0, cut))))
       clash.push(key);
   }
-  for (const key of clash) { delete accepted[key]; isCage.delete(key); ignored.push(key); }
-  return {accepted, ignored, cages: keys.filter(k => isCage.has(k))};
+  // A CARD WIDER THAN ONE SLOT (docs/pcie-two-slot-bays-design.md, R2), on
+  // the same state and with the same both-refused rule: a two-slot card is
+  // not taken while a bay it would cover holds something, and nothing is
+  // taken into a bay a card covers. `why` says which, by key, and is left
+  // out when nothing was refused this way.
+  const why = {};
+  const bayHolds = id => {
+    if (own(accepted, id)) return accepted[id];
+    const was = reseated(id) ? undefined : built(id);
+    return was !== undefined ? was : R.entryAt(id)?.default ?? null;
+  };
+  const comp = ref => {
+    if (!ref || !compByRef) return null;
+    try { return compByRef(String(ref).split(':')[0]) || null; } catch (e) { return null; }
+  };
+  for (const key of Object.keys(accepted)) {
+    if (!accepted[key] || isCage.has(key)) continue;
+    const said = spanWhy(key, accepted[key], {holds: bayHolds, comp});
+    if (said) why[key] = said;
+  }
+  for (const key of [...clash, ...Object.keys(why)]) { delete accepted[key]; isCage.delete(key); ignored.push(key); }
+  return {accepted, ignored, cages: keys.filter(k => isCage.has(k)),
+          ...(Object.keys(why).length ? {why} : {})};
 }
 
 // WHAT IS AT A PATH, WITHOUT A DRAWING - the one reading of "which bay or
@@ -2101,7 +2234,7 @@ export function slotResolver({bays = [], cages = [], bayRef = (p, b) => b.defaul
     const c = comp(refAt(parent));
     if (!c) return null;
     const b = parent.endsWith('/module') ? c.bays?.[name] : null;
-    if (b) return {...b, id: path};
+    if (b) return withSpan(b, path, c.bays);
     const slot = (Array.isArray(c.cages) ? c.cages : []).find(g => g.id === name);
     if (!slot) return backEntry(path, parent, name, c);
     const host = parent.endsWith('/module') ? null : entryAt(parent);
