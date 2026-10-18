@@ -533,8 +533,12 @@ export function createShell(opts = {}) {
   // `fabric` ranks WITH traffic: on a distributed chassis the interconnect
   // ports are the other half of why the box exists, and on a fabric box they are
   // all of it. The group's document order places them within the rank.
-  const ROLE = {traffic: 0, fabric: 0, management: 1, service: 2, indicator: 3,
-                furniture: 4, marking: 5};
+  // `stack-control` ranks WITH management (#1042): the jacks that run a stacked
+  // pair are not why the box is bought, and not customer ports either. Document
+  // order places them within the rank. A role missing from this table falls to
+  // rank 0 (roleOf), so a new role needs its row here.
+  const ROLE = {traffic: 0, fabric: 0, management: 1, 'stack-control': 1, service: 2,
+                indicator: 3, furniture: 4, marking: 5};
   function roleOf(e) {
     const r = e && e.dataset.groupRole;
     return r in ROLE ? ROLE[r] : 0;

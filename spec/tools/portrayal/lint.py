@@ -10914,7 +10914,7 @@ def lint_component_groups(path, data, lib_roots):
     for gid, gdef in groups.items():
         if not (gdef or {}).get("role"):
             warn(path, "L37", f"group {gid} does not say what it is for. Add "
-                              "role: traffic|fabric|management|service|indicator|furniture")
+                              "role: traffic|fabric|management|stack-control|service|indicator|furniture")
         if gid not in joined:
             warn(path, "L37", f"group {gid} is declared and no part joins it. "
                               "Either place a part in it or drop it")
@@ -13198,7 +13198,7 @@ def lint_device(path, validator, lib_roots):
             if not gdef.get("role"):
                 (err if maturity == "verified" else warn)(
                     path, "L37", f"group {gid} does not say what it is for. Add "
-                    "role: traffic|fabric|management|service|indicator|furniture - a PSU "
+                    "role: traffic|fabric|management|stack-control|service|indicator|furniture - a PSU "
                     "bay and a line-card bay are the same class, so this is the "
                     "only thing that can rank them")
             # A GROUP NOTHING JOINS IS A CATEGORY THE DRAWING PROMISES AND DOES

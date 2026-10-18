@@ -547,7 +547,8 @@ Now populate. Reuse before building.
    `fabric` is the cell or chassis interconnect of a distributed chassis (the
    ports only; a fabric card is still `service`);
    `management` is how you reach and discipline it (OOB, console, craft,
-   timing); `service` is what keeps it running (PSUs, fans, filters);
+   timing); `stack-control` is the control and sync jacks of a stacked pair
+   (the stacking data cages stay `traffic`); `service` is what keeps it running (PSUs, fans, filters);
    `indicator` is what you read; `furniture` is what you neither connect to nor
    read. L37 warns at `modelled` and fails at `verified`.
 

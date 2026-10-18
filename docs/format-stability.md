@@ -167,6 +167,20 @@ also draws is that part's row. Each row may carry:
 A key whose attribute is absent is left out, except `parent` and `box`, which
 are always present.
 
+**`group-role`** says what a group of parts is for. The values are `traffic`,
+`fabric`, `management`, `stack-control`, `service`, `indicator` and
+`furniture`; the schemas' `role` describes each. A value is added the way
+`fabric` and `stack-control` were: it joins the enum in both schemas, and a
+reader that does not know it must treat it as none of the others rather than as
+`traffic`. `stack-control` is the control and sync jacks of a stacked pair (an
+Ethernet one is still a cabled port, and none is `mgmt_only`). A group of
+parts is a bank the author named, and **`group` promises nothing to a consumer**:
+a name such as `stacking` does not say what its ports are for, so pick ports by
+`group-role` and not by the name. On the CSR310, `stacking` holds the two
+QSFP28 cages that stack a second unit, which carry traffic unless the unit is
+stacked, so their role is `traffic`; its stack control and sync jacks are in
+`stack-signals`, role `stack-control`.
+
 **`parent`** is the nesting the Explorer shows, by the same rule
 (`faceTree` in `kit/swap.js`): the path's prefix, else for a projection the
 nearest drawn element it sits inside, else for a `cutout:<id>` the row `<id>`,

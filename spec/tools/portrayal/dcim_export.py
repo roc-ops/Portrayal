@@ -1280,7 +1280,14 @@ def breakout_note(breakout, n):
 # needs them as interfaces. They export exactly as they did when they sat in
 # `traffic`: typed from the cage and speed, and not `mgmt_only`, because the
 # fabric is the data path, not the way you reach the box.
-PORT_ROLES = {"traffic", "fabric", "management", "service"}
+#
+# `stack-control` IS A PORT ROLE TOO (#1042), and exports exactly as the same jacks
+# did before it existed. The stack control jack is a 1 GbE link to the peer unit,
+# cabled like any port, so it types from its stated speed and is not `mgmt_only`:
+# it is the way two units talk, not the way you reach the box. The stack sync jack
+# states no speed and carries no Ethernet, so the bare-RJ45 guard in `iface_type`
+# keeps it out, as it did under `management`.
+PORT_ROLES = {"traffic", "fabric", "management", "stack-control", "service"}
 NON_PORT_ROLES = {"indicator", "furniture"}
 
 

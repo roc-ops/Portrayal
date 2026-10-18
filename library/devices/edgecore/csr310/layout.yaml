@@ -248,29 +248,36 @@ groups:
     role: traffic
     index-origin: 0
     attrs: {media: qsfp28, speed: 100g}
+  # the two QSFP28 cages the datasheet names for stacking a second unit (callout 11); they carry
+  # traffic unless the unit is stacked
   stacking:
     term: Port
     role: traffic
     index-origin: 0
+  stack-signals:
+    term: Port
+    role: stack-control
+    index-origin: 1
     mixed: >-
-      the stacking cluster - two of the three 100G QSFP28 cages carry the data path between
-      a pair of CSR310s, and the STACK-CTRL RJ-45 carries the "1 x 1 GbE from CPU (control
-      signal)" the datasheet lists beside them. Two media, one job. The datasheet counts the
-      QSFP28s in its port total and names them separately in callout 11; both are true, and
-      this group is how a consumer finds the ones that are spoken for.
-      STACK-SYNC IS NOT IN HERE. The datasheet lists it separately as "1 x RJ-45 for sync
-      signals", and a sync signal is not Ethernet: leaving it in a `traffic` group typed it
-      as a gigabit interface AND as a timing port, and it was exported twice under one name.
-      It sits in `timing` with the BITS and PPS/ToD jacks, which is what it carries.
+      the stacking pair's control and sync jacks - the STACK-CTRL RJ-45, which carries the
+      "1 x 1 GbE from CPU (control signal)" the datasheet lists, and the STACK-SYNC RJ-45, which
+      the datasheet lists separately as "1 x RJ-45 for sync signals". Neither carries service
+      traffic, so neither is `traffic`; they are not how you reach the box either, so neither is
+      `management`. The two stacking QSFP28 cages are NOT in here: the datasheet counts them in
+      its port total and names them in callout 11, and they carry traffic unless the unit is
+      stacked, so they stay in `stacking` as `traffic`. A sync signal is not Ethernet, and it
+      once sat in a `traffic` group, was typed as a gigabit interface AND as a timing port, and
+      was exported twice under one name.
   port-leds: {term: LED, role: indicator, index-origin: 0}
   timing:
     term: Port
     role: management
     index-origin: 1
     mixed: >-
-      the synchronisation cluster - a BITS RJ-45, a PPS/ToD RJ-45, the STACK-SYNC RJ-45 and
-      the SMA antenna input of the integrated GNSS receiver. Two media, one job:
-      disciplining this box's clock from the network, from a stacked peer, or from the sky.
+      the synchronisation cluster - a BITS RJ-45, a PPS/ToD RJ-45 and the SMA antenna input of
+      the integrated GNSS receiver. Two media, one job: disciplining this box's clock from the
+      network or from the sky. The STACK-SYNC jack, which disciplines it from a stacked peer, is
+      in `stack-signals`.
   mgmt:
     term: Port
     role: management
@@ -525,10 +532,10 @@ views:
       - {ref: common/led-arrow-sm@1, id: led-port-18-1, at: [311.25, 17.14], skin: up, group: port-leds, rel-pos: 181, for: port-18, states: ['off', {name: 'on', color: '#22c55e'}]}
       - {ref: common/led-arrow-sm@1, id: led-port-19-2, at: [314.99, 17.14], skin: down, group: port-leds, rel-pos: 192, for: port-19, states: ['off', {name: 'on', color: '#22c55e'}]}
       - {ref: common/led-arrow-sm@1, id: led-port-18-2, at: [317.79, 17.14], skin: up, group: port-leds, rel-pos: 182, for: port-18, states: ['off', {name: 'on', color: '#22c55e'}]}
-      - {ref: std/rj45-ganged@2, id: stack-sync, at: [347.00, 6.00], rotate: 180, group: timing, rel-pos: 3, attrs: {media: rj45-sync, role: timing, function: stacking-sync}}
+      - {ref: std/rj45-ganged@2, id: stack-sync, at: [347.00, 6.00], rotate: 180, group: stack-signals, rel-pos: 3, attrs: {media: rj45-sync, role: timing, function: stacking-sync}}
       - {ref: std/rj45-ganged@2, id: bits, at: [360.97, 6.00], rotate: 180, group: timing, rel-pos: 1, attrs: {media: rj48, role: timing, function: BITS}}
       - {ref: std/rj45-ganged@2, id: console, at: [374.94, 6.00], rotate: 180, group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console, function: console}}
-      - {ref: std/rj45-ganged@2, id: stack-ctrl, at: [347.00, 19.50], group: stacking, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: stacking, function: stacking-control}}
+      - {ref: std/rj45-ganged@2, id: stack-ctrl, at: [347.00, 19.50], group: stack-signals, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: stacking, function: stacking-control}}
       - {ref: std/rj45-ganged@2, id: pps-tod, at: [360.97, 19.50], group: timing, rel-pos: 2, attrs: {media: rj45-tod, role: timing, function: PPS/ToD}}
       - {ref: std/rj45-ganged@2, id: mgmt-eth, at: [374.94, 19.50], group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt, function: management}}
       - {ref: std/qsfp-ganged@1, id: m0-0, at: [126.65, 21.01], group: qsfp28, rel-pos: 0,
