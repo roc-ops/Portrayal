@@ -302,7 +302,7 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = b
 // what a projection does not carry: relief, refs, behaviour, connection points
 const projectionDrops = n => n.startsWith('data-z-') || n.startsWith('data-cp')
   || ['data-depth', 'data-body-depth', 'data-ref', 'data-behaviour',
-      'data-vent', 'data-groove'].includes(n);
+      'data-vent', 'data-groove', 'data-wall-depth'].includes(n);
 
 // A GROUP MADE A PROJECTION, as render.py makes one: `data-path` becomes
 // `data-of` (the path is already the part's own), and everything
@@ -706,7 +706,7 @@ export function pyG(v) {
 const INSET_KEYS = ['out', 'lift', 'cyl', 'bar', 'uhandle'];
 const FEATURE_ATTRS = ['top', 'sink', 'out', 'dome', 'vent', 'cyl', 'lift', 'bar', 'uhandle',
                        'dia', 'profile', 'profile-y', 'color', 'hole-color', 'shape', 'knurl',
-                       'thread'].map(k => `data-z-${k}`).concat(['data-depth', 'data-wall']);
+                       'thread'].map(k => `data-z-${k}`).concat(['data-depth', 'data-wall', 'data-wall-depth']);
 
 // EVERY FEATURE BELOW A SEATED OCCUPANT, MOVED AS THE BUILD MOVES IT. The skin
 // the kit copies is the component's STANDALONE drawing, built at back 0; the

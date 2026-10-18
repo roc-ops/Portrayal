@@ -451,8 +451,8 @@ RULES = {
     "L116": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint, its bores at the depth that point presents, and the axis it derives putting a duplex connector's latches on its bores' keyway side - and a component MATING one is drawn on the canonical axis, the pair running across from its own `mate`", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector; compose the bores in the order whose derived axis carries the latch into the keyway, all at one `rotate`; draw a duplex connector itself with its pair ACROSS and its latches up, because the host's own axis arrives with the seat",
              "An adapter whose bores are off the standard pitch, at the wrong depth or the wrong way round would accept a duplex connector it cannot hold, seating it floating, sunk, or with its latches away from the keyway.",
              ERROR),
-    "L117": ("component",  "a part `on` a facet names a relief feature that declares `facet`, whose node is a declared element, and its projected box lies within that element; a facet does not also declare `out`, `profile` or `profile-y`; a facet sunk below the plate (`lift < 0`) lies inside the box of a `pocket` element at least `-lift` deep", "name the facet feature's node in `on`, declare the node in `elements`, move the part onto the facet, or drop the hand-written slope - the renderer derives it; for a sunk facet, declare the recess it stands in as a `pocket` around it, or deepen the pocket to the facet's lift",
-             "A tilted part needs a real slope to stand on: otherwise the 3D view floats it in the air, buries its wedge in a solid face, or takes the slope from two places that disagree.",
+    "L117": ("component",  "a part `on` a facet names a relief feature that declares `facet`, whose node is a declared element, and its projected box lies within that element; a facet does not also declare `out`, `profile` or `profile-y`; a facet sunk below the plate (`lift < 0`) lies inside the box of a `pocket` element at least `-lift` deep; a `pocket` that states a `wall` has `0 < wall < depth`, and a part on a sunk facet in it may run out of the pocket's box only below the wall depth, never above it", "name the facet feature's node in `on`, declare the node in `elements`, move the part onto the facet, or drop the hand-written slope - the renderer derives it; for a sunk facet, declare the recess it stands in as a `pocket` around it, or deepen the pocket to the facet's lift; for a part that runs out of a walled pocket above its wall depth, widen the pocket to the part or lower the `wall` to the plate's real thickness",
+             "A tilted part needs a real slope to stand on: otherwise the 3D view floats it in the air, buries its wedge in a solid face, or takes the slope from two places that disagree. A window in a thin plate is open to the inside of the card below the plate, so a cage may run back under the plate's edge there and nowhere above it.",
              ERROR),
     "L118": ("device",     "power is stated once - on the chassis where the box has one feed, and on a configuration only where it differs", "move it to `chassis.power`, or drop the configuration's copy",
              "Power written on both the chassis and its configurations gives two answers that can drift apart, and a reader cannot tell which one is meant.",
@@ -5208,12 +5208,16 @@ def _placed_drawn(q, facet, lib_roots):
     return [_turned(b, w, h, q.get("rotate"), facet, q["at"]) for b in local]
 
 
-def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
+def _lint_sunk_facet(path, node, f, data, elements, tol=0.5, lib_roots=()):
     """L117, recessed facets: a facet with `lift < 0` roots below the plate, so it
     has to stand in a hole - an element that is a `pocket` feature, whose box
     holds the facet's box (to within `tol`, as L117 measures parts) and which is
     at least `-lift` deep. Without one, the facet's wedge is buried in a solid
-    face; in a shallow one, its root is below the pocket's floor."""
+    face; in a shallow one, its root is below the pocket's floor.
+
+    A pocket that states its `wall` is cut through a plate that thick, and below
+    the wall it is open to the inside of the part: a well on the facet may run
+    out of the box there (`_lint_wall_exits`)."""
     sunk = -float(f["lift"])
     fx, fy = elements[node]["at"]
     fw, fh = elements[node]["size"]
@@ -5226,17 +5230,53 @@ def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
         pw, ph = pel["size"]
         if fx >= px - tol and fy >= py - tol and fx + fw <= px + pw + tol \
                 and fy + fh <= py + ph + tol:
-            holding.append((float(p["pocket"]), p["node"]))
+            pdepth, pwall = facets.pocket_depth_wall(p["pocket"])
+            holding.append((float(pdepth), p["node"], pwall))
     if not holding:
         err(path, "L117", f"facet {node!r} is sunk {sunk:g} mm (lift {f['lift']:g}) but is "
             "not inside any `pocket` element's box - a facet below the plate has to stand "
             "in a recess, or its wedge is buried in a solid face")
         return
-    depth, pnode = max(holding)
+    depth, pnode, wall = max(holding, key=lambda h: (h[0], h[1]))
     if depth < sunk:
         err(path, "L117", f"facet {node!r} is sunk {sunk:g} mm (lift {f['lift']:g}) in pocket "
             f"{pnode!r}, which is only {depth:g} mm deep - a pocket shallower than the facet "
             "is sunk puts the facet's root below the pocket floor")
+        return
+    if wall is not None and 0 < wall < depth:
+        _lint_wall_exits(path, node, f, data, elements, pnode, float(wall), lib_roots)
+
+
+def _lint_wall_exits(path, node, f, data, elements, pnode, wall, lib_roots, tol=0.05):
+    """L117: a part on a sunk facet, in a pocket that states its wall, may run out
+    of the pocket's box only below the wall. The well goes in along the facet's
+    normal, so it travels sideways as it goes down; where it crosses the box's
+    side tells whether it passes under the plate's solid edge (at or below the
+    wall: the card is open there) or out through the plate itself (above it).
+    A part too short to reach the side never leaves the box."""
+    facet = f["facet"]
+    rect = (*elements[node]["at"], *elements[node]["size"])
+    pel = elements[pnode]
+    pbox = (*pel["at"], *pel["size"])
+    for q in data.get("parts") or []:
+        if q.get("on") != node or not q.get("at"):
+            continue
+        size = _instance_size(q.get("ref"), lib_roots)
+        if not size:
+            continue
+        box = facets.projected_box(q["at"], size[0], size[1], q.get("rotate"), facet)
+        out = facets.leaves_pocket(facet, float(f["lift"]), rect, box, pbox)
+        if out is None:
+            continue
+        depth, travel = out
+        reach = _instance_depth(q.get("ref"), lib_roots)
+        if reach is not None and travel > reach:
+            continue
+        if depth < wall - tol:
+            err(path, "L117", f"part {q.get('id')!r} on sunk facet {node!r} runs out of pocket "
+                f"{pnode!r} at {depth:g} mm deep, above the pocket's wall depth of {wall:g} mm - "
+                "there it comes out through the plate, which is solid; a well may leave the "
+                "pocket's box only below the wall, under the plate's edge")
 
 
 def lint_component_facets(path, data, lib_roots):
@@ -5251,6 +5291,12 @@ def lint_component_facets(path, data, lib_roots):
     feats = {f.get("node"): f for f in (data.get("relief") or {}).get("features") or []}
     elements = data.get("elements") or {}
     for node, f in feats.items():
+        if isinstance(f.get("pocket"), dict):
+            depth, wall = facets.pocket_depth_wall(f["pocket"])
+            if not 0 < wall < depth:
+                err(path, "L117", f"pocket {node!r} states a wall of {wall:g} mm, which is not "
+                    f"shallower than the pocket's depth of {depth:g} mm - the walls stop at the "
+                    "plate's back face, above the floor")
         if f.get("facet"):
             for k in ("out", "profile", "profile-y"):
                 if k in f:
@@ -5261,7 +5307,7 @@ def lint_component_facets(path, data, lib_roots):
                 err(path, "L117", f"facet node {node!r} is not a declared element with a "
                     "size - the renderer needs its front-view rectangle to derive the wedge")
             elif (f.get("lift") or 0) < 0:
-                _lint_sunk_facet(path, node, f, data, elements)
+                _lint_sunk_facet(path, node, f, data, elements, lib_roots=lib_roots)
     for q in data.get("parts") or []:
         on = q.get("on")
         if not on:
@@ -5436,6 +5482,19 @@ def _instance_size(ref, lib_roots):
         return None
     sz = d.get("size")
     return (sz["w"], sz["h"]) if sz else None
+
+
+def _instance_depth(ref, lib_roots):
+    """The depth (`size.d`) of a component, or None when it cannot be resolved or
+    states none."""
+    c = resolve_component(ref, lib_roots) if ref else None
+    if c is None:
+        return None
+    try:
+        d = load_yaml(c) or {}
+    except yaml.YAMLError:
+        return None
+    return (d.get("size") or {}).get("d")
 
 
 def lint_device_mating(path, view_name, view, lib_roots):
