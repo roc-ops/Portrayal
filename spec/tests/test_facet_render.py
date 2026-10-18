@@ -186,6 +186,22 @@ def test_a_sunk_facet_carries_negative_heights(tmp_path):
     assert by_id(root, "--window").get("data-depth") == "12"
 
 
+def test_a_pocket_that_states_its_wall_publishes_it_beside_its_depth(tmp_path):
+    """`pocket: {depth, wall}`: data-depth is the floor as ever, and the plate's
+    back face goes out as its own attribute. data-wall is the wall COLOUR."""
+    root = plant_card(tmp_path, feat_lift=-12.0, pocket={"depth": 28, "wall": 12})
+    w = by_id(root, "--window")
+    assert w.get("data-depth") == "28"
+    assert w.get("data-wall-depth") == "12"
+    assert w.get("data-wall") is None
+
+
+def test_a_plain_pocket_publishes_no_wall_depth(tmp_path):
+    w = by_id(plant_card(tmp_path, feat_lift=-12.0, pocket=12), "--window")
+    assert w.get("data-depth") == "12"
+    assert w.get("data-wall-depth") is None
+
+
 def test_a_facet_sunk_wholly_below_the_plate_is_not_dropped(tmp_path):
     """-20 + 17.3205: the proud edge is still 2.68 below the plate. Nothing
     clamps it to 0 and nothing drops the feature for a negative `out`."""

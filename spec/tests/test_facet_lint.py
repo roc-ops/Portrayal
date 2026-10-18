@@ -152,6 +152,58 @@ def test_a_sunk_facet_in_a_shallow_pocket_is_an_error(tmp_path):
     assert errs and any("shallower" in e for e in errs)
 
 
+# A pocket that states its wall (`pocket: {depth, wall}`): the plate is `wall`
+# thick and below it the pocket is open to the interior, so a part may run out
+# of the pocket's box there and not above it.
+def test_schema_accepts_a_pocket_with_a_wall():
+    c = sunk(pocket={"depth": 28, "wall": 12})
+    jsonschema.Draft202012Validator(SCHEMA).validate(c)
+
+
+@pytest.mark.parametrize("bad", [{"depth": 28}, {"wall": 12}, {"depth": 28, "wall": 0},
+                                 {"depth": 0, "wall": 0}, {"depth": 28, "wall": 12, "x": 1},
+                                 {"depth": 28, "wall": "thin"}])
+def test_schema_refuses_a_malformed_pocket_wall(bad):
+    c = sunk()
+    c["relief"]["features"][0]["pocket"] = bad
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.Draft202012Validator(SCHEMA).validate(c)
+
+
+@pytest.mark.parametrize("wall", [12, 15])
+def test_a_wall_at_or_past_the_floor_is_an_error(tmp_path, wall):
+    errs = l117(tmp_path, sunk(pocket={"depth": 12, "wall": wall}))
+    assert errs and any("wall" in e and "shallower than the pocket" in e for e in errs)
+
+
+def walled(wall, depth=12, lift=-12.0, pocket=None):
+    """A 30-degree face 14 tall rooted 12 below the plate, a QSFP28 on its lower
+    end, and a window that ends where the face does. The cage runs back and down
+    and leaves the window's box 2.21 mm past its trailing edge, at 9.02 mm deep:
+    9.02 = 5.19 (the surface there) + 2.21 / tan 30."""
+    c = card(elements={
+        "window": {"at": [0.0, 60.0], "size": [25.0, 16.0], "class": "display"},
+        "housing": {"at": [0.0, 62.0], "size": [25.0, 14.0], "class": "display"}})
+    c["relief"]["features"][0]["lift"] = lift
+    c["relief"]["features"].insert(0, {"node": "window", "pocket": pocket or {"depth": depth, "wall": wall}})
+    c["parts"][0]["at"] = [2.5, 65.0]
+    return c
+
+
+def test_a_part_may_pass_under_the_plate_edge_below_the_wall(tmp_path):
+    assert not l117(tmp_path, walled(wall=8))
+
+
+def test_a_part_may_not_pass_out_through_the_plate_above_the_wall(tmp_path):
+    errs = l117(tmp_path, walled(wall=10))
+    assert errs and any("wall" in e and "p1" in e for e in errs), errs
+
+
+def test_a_plain_pocket_checks_nothing_of_its_parts(tmp_path):
+    # no `wall` stated: the number keeps its meaning and L117 reads what it did
+    assert not l117(tmp_path, walled(wall=0, pocket=12))
+
+
 def test_a_proud_facet_needs_no_pocket(tmp_path):
     c = card()
     c["relief"]["features"][0]["lift"] = 3.0

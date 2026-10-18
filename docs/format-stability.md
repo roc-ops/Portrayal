@@ -800,6 +800,28 @@ that routes cables may read them itself, so they are part of the format too:
 Renaming one, or changing what it means, is a format change as a rack.json
 key is; adding one is not.
 
+### What a compiled face says about a pocket
+
+A relief `pocket` compiles to `data-depth` on its node (mm to the pocket's
+floor), which the kit builds as a recess with walls and a floor. A pocket
+written `pocket: {depth, wall}` is a window cut through a thin plate and also
+publishes `data-wall-depth` (mm from the face to the plate's back face): the
+kit's walls stop there, and below it the pocket is open to the inside of the
+part. `data-wall` is the walls' colour and is unrelated.
+
+- A plain number publishes `data-depth` alone, with walls all the way to the
+  floor, exactly as before. A node without `data-wall-depth` builds as it
+  always did.
+- `data-wall-depth` is new, and a consumer that does not read it builds the
+  pocket with full-depth walls: the older picture, not a broken one. A
+  library that writes `{depth, wall}` is therefore read correctly only by a
+  kit that knows the attribute, which is why a pocket's schema type widened
+  from a number to a number or an object. Once published, the object form and
+  the attribute's name cannot be taken back without breaking a library that
+  uses them.
+- The wall is shallower than the depth (L117 checks it). A wall at or past the
+  floor is ignored by the kit and builds as a plain pocket.
+
 ## A part that slides
 
 A device may declare a part that slides: a rail panel bolted through slots in

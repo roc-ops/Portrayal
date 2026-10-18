@@ -605,6 +605,11 @@ Now populate. Reuse before building.
     into the plate, such as teeth behind a window or in a recess, is a sunk
     facet: give it a negative `lift` (its root that far below the plate) and
     declare the recess around it as a `pocket` at least that deep (L117).
+    When the windows are cut through a thin plate, write the pocket as
+    `{depth, wall}` with the plate's thickness as `wall` and fit the pocket to
+    the drawn windows: a cage near a window's end may then run back under the
+    plate's edge below the wall, and L117 refuses one that leaves the box above
+    it.
 7. **Cable management that is part of the product is declared, and drawn
    where it is a part**: a lacer panel and its rings, a tray, a slack spool, a
    bend-radius bracket. A ring declares where cables pass (`guide:` on its

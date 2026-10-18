@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fglt-a
-version: 1.4.1
+version: 1.4.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -96,9 +96,10 @@ provenance:
     teeth behind the same plate. DEPTH: the sawtooth stands BEHIND the plate. Figure 137
     (FGLT-B) draws the plate 12.0 mm deep (41.5 px, front line to back line) and nothing
     proud of it; the tooth tips touch the back of the plate and the roots lie 16.4 mm
-    further in. So the eight windows are one pocket, `well`, 43.0 to 366.65 and 28.38
-    deep, and every facet has `lift` -28.38: roots on the pocket floor, proud edges 12.0
-    below the plate front, where the bars between the windows stand in front of them.
+    further in. So the eight windows are one pocket, `well`, 43.0 to 355.6 (the bottom of
+    window 8) and 28.38 deep, and every facet has `lift` -28.38: roots on the pocket floor,
+    proud edges 12.0 below the plate front, where the bars between the windows stand in
+    front of them.
     The angles are unchanged by the depth. Section, plate front at 0: bar front 0, tooth
     crest -12.0, tooth root and pocket floor -28.38. Modelled as eight teeth of 31
     degrees (face-N, facing up, two cages and their PON lamps on it, the lamp in the
@@ -107,13 +108,21 @@ provenance:
     the bottom of its window and its return rises behind the bar below it to the crest,
     as Figure 137 draws; the bars are painted on the top 4 mm of each return. return-0
     is the short edge Figure 137 draws at the top of the first window. A cage runs back
-    square to its face, down and in; because 31 + 56 is under 90 degrees it descends
-    faster than the return below it and passes below the pocket floor before it reaches
-    any wall (0.58 mm worst clearance), so none comes out through a wall or the back of
-    a tooth. That is also why the last face needs its return: the pocket runs to 366.65,
-    11 mm past the bottom of window 8 (355.6) and over the top 6.5 mm of the barcode
-    label (gap); ending it at the window would put the lower cage of face-8 through the
-    pocket wall.
+    square to its face, down and in, so a cage at the end of a window leaves the
+    window's box on the way down. WALL: the pocket states `wall` 12.0, the plate's back
+    face, and below that it is open to the inside of the card, so the lower cage of face-8
+    runs under the plate's solid edge without coming out through a wall (L117 checks
+    this: it leaves the box at 12.0 mm). The walls stop at the plate; the floor stays at
+    28.38. The wall is ESTIMATED: 12.0 is the plate depth recorded in nokia/fglt-b@1 from
+    its Figure 137 and is the depth at which this card's own teeth crest (the facets
+    below), which is where the tooth tips touch the plate's back. Not re-measured for
+    this change: the staged guides are not on the machine that made it, and the layout
+    note above records that this card's own figure shows the plate almost edge-on, with
+    nothing to measure across. Window 8's bottom edge now ends the pocket: return-8,
+    the short wedge behind the bar below window 8, is no longer a facet (it stood 11 mm
+    outside the window, in the plate's own thickness, and is hidden by the plate from the
+    front); it stays drawn as the bar, and the barcode label, which starts at 360.2, is
+    no longer cut by the pocket's mouth.
   thumbscrews: >-
     photo - lab photos of an installed FX-8, 2026-09-24; flush-with-end per the maintainer's reading.
     One family figure for every NT, NTIO and LT card and blank, because every screw goes into
@@ -135,7 +144,7 @@ elements:
   logo-zone: {at: [0.5, 383.4], size: [5.0, 4.4], class: label}
   model-label: {at: [0.4, 366.9], size: [5.4, 16.1], class: label}
   barcode-label: {at: [7.1, 360.2], size: [13.4, 27.0], class: label}
-  well: {at: [2.5, 43], size: [20.5, 323.646], class: mechanical}
+  well: {at: [2.5, 43], size: [20.5, 312.6], class: mechanical}
   return-0: {at: [2.5, 49.2], size: [20.5, 11.046], class: mechanical}
   face-1: {at: [2.5, 60.246], size: [20.5, 27.254], class: mechanical}
   return-1: {at: [2.5, 87.5], size: [20.5, 11.046], class: mechanical}
@@ -169,9 +178,13 @@ relief:
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
     - node: well
-      pocket: 28.38
+      pocket: {depth: 28.38, wall: 12.0}
       confidence: estimated
-      source: 'as nokia/fglt-b@1 (Figure 137); Figure 129 draws the same plate and teeth'
+      source: >-
+        as nokia/fglt-b@1 (Figure 137); Figure 129 draws the same plate and teeth. depth
+        28.38 is the tooth roots; wall 12.0 is the plate's back face, nokia/fglt-b@1's
+        measured plate depth (41.5 px at 3.457 px/mm), taken here as an estimate and not
+        re-measured on this card
     - node: return-0
       facet: {deg: 56, facing: down}
       lift: -28.38
@@ -249,11 +262,6 @@ relief:
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: face-8
       facet: {deg: 31, facing: up}
-      lift: -28.38
-      confidence: estimated
-      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
-    - node: return-8
-      facet: {deg: 56, facing: down}
       lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'

@@ -94,7 +94,23 @@ export function cavityShell(c, INTO) {
   if (c.sheet) return {walls: false, floor: true, back: false, depth: Math.min(c.d, INTO - 2)};
   const open = !!(c.seeThrough || c.hollow);
   const depth = c.hollow ? Math.min(c.d, 6) : Math.min(c.d, INTO - 2);
+  // A WINDOW IN A THIN PLATE (`pocket: {depth, wall}`, render.py's
+  // `data-wall-depth`) has walls only as deep as the plate. Below the plate's
+  // back face the sides are open to the inside of the part, so a cage near the
+  // window's end may run back under the plate's edge. The floor and back stay
+  // where `depth` puts them. A wall at or past the floor is no wall: it builds
+  // as a plain pocket, as does a passage, which has no floor to be open above.
+  if (!open && c.wallDepth > 0 && c.wallDepth < depth)
+    return {walls: true, floor: true, back: true, depth, wallDepth: c.wallDepth};
   return {walls: true, floor: !open, back: !open, depth};
+}
+// WHERE A CAVITY'S WALLS STAND, in the face's z: from its mouth down to the
+// plate's back face when it states one, else all the way to the floor.
+// `openBelow` says the sides are open between the wall and the floor.
+export function wallSpan(c, INTO) {
+  const s = cavityShell(c, INTO);
+  const depth = s.wallDepth || s.depth;
+  return {top: c.lift, bottom: c.lift - depth, depth, openBelow: depth < s.depth};
 }
 
 // A CAVITY'S WALLS FOLLOW ITS OUTLINE. A cavity that names its outline node
@@ -420,6 +436,18 @@ export function emptyHeightAt(o, x, y) {
   if (!k) return 0;
   return x > k.x && x < k.x + k.w && y > k.y && y < k.y + k.h ? k.floor : k.mouth;
 }
+// WHERE THE PLATE ENDS BESIDE A SUNK FACET, for a pocket that states its wall:
+// the z below which what is beside face point (x, y) is open interior and not
+// plate. Outside the pocket's box the plate is solid from the mouth down to its
+// back face (mouth - wall); inside the box it is open pocket, which
+// emptyHeightAt already answers. null where there is no such edge: no wall
+// stated, a proud facet, or a point inside the box.
+export function openBelowAt(o, x, y) {
+  const k = o.pocket;
+  if (!(o.facet && (o.lift || 0) < 0) || !k || !(k.wall > 0)) return null;
+  const inside = x > k.x && x < k.x + k.w && y > k.y && y < k.y + k.h;
+  return inside ? null : k.mouth - k.wall;
+}
 export function skirtIsInterior(o, others, p, q, depthAt) {
   if (!others.length) return false;
   const pr = _skirtProbe(o, p, q);
@@ -465,25 +493,50 @@ export function profileSkirt(o, xs, ys, depthAt, others = []) {
     const pr = _skirtProbe(o, p, q);
     const beside = pr ? outHeightAt(others, pr[0], pr[1], 0, emptyHeightAt(o, ...pr)) : -Infinity;
     const base = Math.max(o.lift, beside);
-    if (Math.max(zp, zq) <= base + 0.01) continue;
-    // the quad p-top, q-top, q-base, p-base, kept where z >= base
+    // the quad p-top, q-top, q-base, p-base
     const quad = [[p[0], p[1], zp], [q[0], q[1], zq], [q[0], q[1], o.lift], [p[0], p[1], o.lift]];
-    const poly = [];
-    for (let i = 0; i < 4; i++) {
-      const a = quad[i], b = quad[(i + 1) % 4], ia = a[2] >= base, ib = b[2] >= base;
-      if (ia) poly.push(a);
-      if (ia !== ib) {
-        const t = (base - a[2]) / (b[2] - a[2]);
-        poly.push([a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]), base]);
+    // ...kept where z >= base
+    if (Math.max(zp, zq) > base + 0.01) {
+      const poly = clipZ(quad, base, true);
+      if (poly.length >= 3) {
+        const i0 = pts.length;
+        pts.push(...poly);
+        for (let i = 1; i + 1 < poly.length; i++) idx.push(i0, i0 + i, i0 + i + 1);
+        segs.push({k, base});
       }
     }
-    if (poly.length < 3) continue;
-    const i0 = pts.length;
-    pts.push(...poly);
-    for (let i = 1; i + 1 < poly.length; i++) idx.push(i0, i0 + i, i0 + i + 1);
-    segs.push({k, base});
+    // BESIDE A WALLED POCKET'S PLATE, the side is open below the plate's back
+    // face: the band from the base (or a neighbour's top) up to that face is
+    // seen from inside the card, and is built too. The plate itself, between
+    // its back face and the mouth, is solid and takes no skirt.
+    const under = pr ? openBelowAt(o, ...pr) : null;
+    if (under !== null) {
+      const lo = Math.max(o.lift, outHeightAt(others, pr[0], pr[1], 0, -Infinity));
+      if (under > lo + 0.01 && Math.max(zp, zq) > lo + 0.01) {
+        const poly = clipZ(clipZ(quad, lo, true), under, false);
+        if (poly.length >= 3) {
+          const i0 = pts.length;
+          pts.push(...poly);
+          for (let i = 1; i + 1 < poly.length; i++) idx.push(i0, i0 + i, i0 + i + 1);
+          segs.push({k, base: lo, under: true, verts: poly.map(v => v[2])});
+        }
+      }
+    }
   }
   return {ring, pts, idx, segs};
+}
+// a polygon clipped to z >= z0 (`above`) or z <= z0, its edges cut where they cross z0
+function clipZ(quad, z0, above) {
+  const keep = z => (above ? z >= z0 : z <= z0), poly = [];
+  for (let i = 0; i < quad.length; i++) {
+    const a = quad[i], b = quad[(i + 1) % quad.length], ia = keep(a[2]), ib = keep(b[2]);
+    if (ia) poly.push(a);
+    if (ia !== ib) {
+      const t = (z0 - a[2]) / (b[2] - a[2]);
+      poly.push([a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]), z0]);
+    }
+  }
+  return poly;
 }
 // WHICH FACET A NODE STANDS ON: the nearest `[data-tilt-on]` group at or above
 // it (render.py writes it on a part `on` a facet and on every occupant seated in
@@ -606,14 +659,21 @@ export function sunkIn(o, c, tol = 0.5) {
 // THE POCKET A SUNK FACET STANDS IN, as emptyHeightAt reads it: the smallest
 // untilted cavity with a floor it is sunk in, {x, y, w, h, floor, mouth}, the
 // floor at the cavity's lift less its built depth (`depthOf`). null if none.
-export function pocketOf(o, cavities, depthOf = c => c.d) {
+// `wallOf` answers the depth of the plate's back face where the cavity states
+// one (cavityShell's wallDepth); the pocket then carries `wall`, and what is
+// beside a tooth below it is open (openBelowAt). Without it nothing changes.
+export function pocketOf(o, cavities, depthOf = c => c.d, wallOf = () => null) {
   let best = null;
   for (const c of cavities) {
     if (c.tilt || c.hollow || c.seeThrough || !sunkIn(o, c)) continue;
     if (!best || c.w * c.h < best.w * best.h) best = c;
   }
-  return best && {x: best.x, y: best.y, w: best.w, h: best.h,
-                  floor: (best.lift || 0) - depthOf(best), mouth: best.lift || 0};
+  if (!best) return best;
+  const k = {x: best.x, y: best.y, w: best.w, h: best.h,
+             floor: (best.lift || 0) - depthOf(best), mouth: best.lift || 0};
+  const wall = wallOf(best);
+  if (wall > 0) k.wall = wall;
+  return k;
 }
 // WHERE A TILTED WELL CROSSES THE SLAB zlo..zhi (face mm): its true box, x/y
 // as built and z from its lift back `d`, carried by tiltFrame; each of the
@@ -2639,6 +2699,9 @@ export async function extractRelief(url, scope, {back = false} = {}) {
       }));
       const e = {...rect, owner: ownerOf(el), d: +el.dataset.depth, wall: el.dataset.wall || '#a7adb4',
               wallsInside: el.dataset.walls === 'inside',
+              // a window in a thin plate (render.py `data-wall-depth`, from
+              // `pocket: {depth, wall}`): the walls stop at the plate's back face
+              wallDepth: +el.dataset.wallDepth || 0,
               // A HOLE A BAY IS SEEN THROUGH (render.py's `rear:`) is a passage
               // to the front of the chassis. Whatever the bay holds stands in it
               // as its own body, back painted, and leaves with it when pulled;
@@ -3523,6 +3586,9 @@ export async function buildFaceRelief(F, ctx) {
       // rear drive bays - ended at a flat plane.
       const shell = cavityShell(c, INTO);
       if (!shell.walls && !shell.floor) continue;
+      // THE WALLS STOP AT THE PLATE WHEN THE POCKET SAYS HOW THICK IT IS: the
+      // floor and the back stay at `d`, the sides below the plate are open
+      const wd = wallSpan(c, INTO).depth;
       const wallMat = new THREE.MeshLambertMaterial({color: c.wall,
         side: c.wallsInside ? THREE.BackSide : THREE.DoubleSide});
       const backMat = new THREE.MeshLambertMaterial({color: 0x23262b, side: THREE.DoubleSide});
@@ -3530,7 +3596,7 @@ export async function buildFaceRelief(F, ctx) {
       if (!shell.walls) {
         // a sheet's well: its floor, below, and nothing round it
       } else if (c.rings) {
-        const g = outlineWalls(c.rings, (x, y) => [LX(x, 0), LY(y, 0)], c.lift, c.lift - d);
+        const g = outlineWalls(c.rings, (x, y) => [LX(x, 0), LY(y, 0)], c.lift, c.lift - wd);
         const geo = new THREE.BufferGeometry();
         geo.setAttribute('position', new THREE.Float32BufferAttribute(g.pos, 3));
         geo.setIndex(g.idx);
@@ -3538,18 +3604,18 @@ export async function buildFaceRelief(F, ctx) {
         walls = new THREE.Mesh(geo, wallMat);
       } else if (c.round) {
         walls = new THREE.Mesh(
-          new THREE.CylinderGeometry(c.w / 2, c.w / 2, d, 24, 1, true), wallMat);
+          new THREE.CylinderGeometry(c.w / 2, c.w / 2, wd, 24, 1, true), wallMat);
         walls.rotation.x = Math.PI / 2;
       } else {
         const noFace = new THREE.MeshBasicMaterial({visible: false});
-        walls = new THREE.Mesh(new THREE.BoxGeometry(c.w, c.h, d),
+        walls = new THREE.Mesh(new THREE.BoxGeometry(c.w, c.h, wd),
           [wallMat, wallMat, wallMat, wallMat, noFace, noFace]);
       }
       // A NON-FINITE POSITION IS NOT A DRAWING ERROR, IT IS A DISAPPEARANCE.
       // Three.js culls a mesh whose matrix holds a NaN rather than complaining,
       // so the failure looks exactly like geometry nobody wrote - which is how
       // seven see-through slits survived in a shipped drawing. Say it out loud.
-      const zc = c.lift - d / 2;
+      const zc = c.lift - wd / 2;
       if (!Number.isFinite(zc) || !Number.isFinite(LX(c.x, c.w)) || !Number.isFinite(LY(c.y, c.h)))
         console.error('relief: cavity has a non-finite position and will not render',
                       {owner: c.owner, x: c.x, y: c.y, d, lift: c.lift});
@@ -3559,7 +3625,7 @@ export async function buildFaceRelief(F, ctx) {
       // a box well whose sides are the chassis: a side against another face
       // shows that face's vents (ventWellWalls, once every face is read)
       if (walls && ctx.wells && c.wallsInside && !c.rings && !c.round && !c.tilt) {
-        ctx.wells.push({view: F.view, mesh: walls, well: c, d});
+        ctx.wells.push({view: F.view, mesh: walls, well: c, d: wd});
         held.add(walls);
       }
       if (!shell.floor) continue;
@@ -3683,7 +3749,8 @@ export async function buildFaceRelief(F, ctx) {
       curTilt = o.tilt || null;
       // the pocket a sunk facet stands in, for what its skirt stands beside
       // (profileSkirt, emptyHeightAt); a proud facet has none
-      if (o.facet && (o.lift || 0) < 0) o.pocket = pocketOf(o, cavities, builtDepth);
+      if (o.facet && (o.lift || 0) < 0)
+        o.pocket = pocketOf(o, cavities, builtDepth, c => cavityShell(c, INTO).wallDepth);
       if (o.facet) {
         // the wedge covers its footprint: clear the flat face under it (facetPunch)
         const fp = facetPunch(o);

@@ -552,9 +552,33 @@
         "description": "the same as `profile`, DOWN the node: [y, out] pairs, y in mm from the node's top edge. The bezel's front is 20 to 21 proud over most of its height and falls to 15 at the bottom rail with a lip at the edge, which is what looking up at it shows. Combined with `profile` by taking the lesser at every point."
        },
        "pocket": {
-        "type": "number",
-        "exclusiveMinimum": 0,
-        "description": "mm this node is sunk INTO an otherwise solid face - a window cut through a drive carrier, a button pressed into it. Distinct from `sink`, which measures from a cavity floor and so needs the part to be a hole already: a carrier is solid except where it is pocketed. The floor is the node's own art, so what is drawn behind a window is what shows down it."
+        "oneOf": [
+         {
+          "type": "number",
+          "exclusiveMinimum": 0
+         },
+         {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+           "depth",
+           "wall"
+          ],
+          "properties": {
+           "depth": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "mm to the pocket's floor, as the plain number gives it."
+           },
+           "wall": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "mm from the face to the back of the plate the pocket is cut through. The pocket's walls stop there, and below it the pocket is open to the inside of the part, so a cage near a window's end may run back under the plate's solid edge. Less than `depth`; L117 checks it."
+           }
+          }
+         }
+        ],
+        "description": "mm this node is sunk INTO an otherwise solid face - a window cut through a drive carrier, a button pressed into it. Distinct from `sink`, which measures from a cavity floor and so needs the part to be a hole already: a carrier is solid except where it is pocketed. The floor is the node's own art, so what is drawn behind a window is what shows down it. A plain number is the floor's depth, with walls all the way down to it. `{depth, wall}` is for a window in a thin plate: the walls stop at `wall`, the plate's back face, and the pocket is open to the inside below it."
        },
        "facet": {
         "type": "object",

@@ -2100,7 +2100,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     # walls and a floor taken from that node's own art, so this
                     # needs no new geometry - only a way for a feature to say it
                     # is a hole in a face rather than a lump on one.
-                    node.set("data-depth", str(feat["pocket"]))
+                    # `{depth, wall}` is a window in a thin plate: the floor is
+                    # still `data-depth`, and the plate's back face goes out as
+                    # `data-wall-depth` (`data-wall` is the wall COLOUR). A plain
+                    # number publishes exactly what it always did.
+                    depth, wall = _facets.pocket_depth_wall(feat["pocket"])
+                    node.set("data-depth", str(depth))
+                    if wall is not None:
+                        node.set("data-wall-depth", f"{wall:g}")
                     if (contract.get("relief") or {}).get("wall"):
                         node.set("data-wall", contract["relief"]["wall"])
                 if feat.get("shape"):
@@ -2247,7 +2254,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     # walls and a floor taken from that node's own art, so this
                     # needs no new geometry - only a way for a feature to say it
                     # is a hole in a face rather than a lump on one.
-                    node.set("data-depth", str(feat["pocket"]))
+                    # `{depth, wall}` is a window in a thin plate: the floor is
+                    # still `data-depth`, and the plate's back face goes out as
+                    # `data-wall-depth` (`data-wall` is the wall COLOUR). A plain
+                    # number publishes exactly what it always did.
+                    depth, wall = _facets.pocket_depth_wall(feat["pocket"])
+                    node.set("data-depth", str(depth))
+                    if wall is not None:
+                        node.set("data-wall-depth", f"{wall:g}")
                     if (contract.get("relief") or {}).get("wall"):
                         node.set("data-wall", contract["relief"]["wall"])
                 if feat.get("shape"):
@@ -4119,7 +4133,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     if (k.startswith("data-z-") or k.startswith("data-cp")
                             or k in ("data-depth", "data-body-depth",
                                      "data-ref", "data-behaviour",
-                                     "data-vent", "data-groove")
+                                     "data-vent", "data-groove", "data-wall-depth")
                             or k.startswith("data-guide")):
                         del node.attrib[k]
         # WHAT THE BLOCK IS FOR travels with every member, because the consumer
