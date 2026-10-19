@@ -91,9 +91,9 @@ function slotInfo(slot, comps, end, compByRef) {
 
 // WHAT A CABLE END UNDER A BAY NAMES, in the words looseReason reads, or null
 // when the catalogue cannot say: no parts list was loaded, the path is not
-// under a bay of this device, neither the item's swaps nor its configuration
-// names that bay, the part seated there is unknown, or the part composes no
-// port of that name on either side. The drawing decides then.
+// under a bay of this device's configuration, the part seated there is
+// unknown, or the part composes no port of that name on either side. The
+// drawing decides then.
 //   port      a port is at the path on the end's panel
 //   onView    the panel the port is on; where `port` is false, the port is on
 //             that panel and the end names the other one
@@ -115,11 +115,9 @@ function slotInfo(slot, comps, end, compByRef) {
 // back has the port all the same, and a cable on it lands; it is only not
 // drawn there, and a route to it ends at the device.
 //
-// `seen: true` is for an end whose panel a page read and found a part in that
-// bay: the bay is then one this configuration has, and where neither the
-// swaps nor the configuration names it, it holds what it ships with. Every
-// supply in a bay that only its default fills is read this way (settleEnd).
-export function seatedPort(item, end, ctx, {seen = false} = {}) {
+// A bay that neither the swaps nor the configuration names holds what it ships
+// with, when the configuration has the bay (its `only-in`, slots.js slotEnv).
+export function seatedPort(item, end, ctx) {
   if (!item || !loaded(ctx)) return null;
   const p = portPathOf(end?.path ?? ''), first = p.indexOf(MODULE), cut = p.lastIndexOf(MODULE);
   if (first < 0 || isElementId(p)) return null;
@@ -129,16 +127,11 @@ export function seatedPort(item, end, ctx, {seen = false} = {}) {
   const bay = env.bays.find(b => b.id === p.slice(0, first));
   if (!bay || !OTHER[bay.view]) return null;
   const carrier = p.slice(0, cut), steps = p.slice(cut + MODULE.length).split('/');
-  // ONLY A BAY THAT IS SPOKEN FOR: by the item's swaps, or by the
-  // configuration's own list. configs.json lists every bay of the device, and
-  // a device may give a bay to some configurations only (a double-width
-  // power bay where another has two card slots), which it does not publish.
-  // A bay nothing names reads as holding its default, and in a configuration
-  // that has no such bay the build draws nothing there. A BAY OF A MODULE IN
-  // THE DEVICE'S BAY (a holder in a drawer's slot) is spoken for by its own
-  // path: a configuration that fills the slots does not name the drawer.
-  const named = id => Object.hasOwn(swaps, id) || env.built(id) !== undefined;
-  if (!seen && !named(bay.id) && !(carrier !== bay.id && named(carrier))) return null;
+  // A BAY LEFT TO ITS DEFAULT IS ANSWERED FOR when the configuration has it. A
+  // device may give a bay to some configurations only (a double-width power
+  // bay where another has two card slots); configs.json publishes that as the
+  // bay's `only-in`, and slotEnv does not list a bay that leaves the item's
+  // configuration out, so `bay` above is none and the build draws nothing there.
   const R = resolverFor(env, swaps);
   const ref = R.refAt(`${carrier}/module`);
   const base = {item: true, drawing: true, port: false, cage: false, occupied: false, onView: null, back: false};
@@ -217,6 +210,8 @@ function absentOnPanel(item, end, ctx) {
   if (steps.length !== 1 || !slots || slots.error) return null;
   const env = slotEnv(item, slots, ctx.compByRef, ctx.redirects), swaps = item.swaps || {};
   const bay = env.bays.find(b => b.id === p.slice(0, first)), carrier = p.slice(0, cut);
+  // (kept as it was: this refuses a made-up port, so it speaks only for a bay that is spoken for; a bay left
+  // to its default is the drawing's here, though seatedPort answers for it)
   const named = id => Object.hasOwn(swaps, id) || env.built(id) !== undefined;
   if (!bay || !OTHER[bay.view] || !(named(bay.id) || (carrier !== bay.id && named(carrier)))) return null;
   const R = resolverFor(env, swaps), ref = R.refAt(`${carrier}/module`), comp = partOf(ctx.compByRef, ref);
@@ -569,25 +564,7 @@ export function settleEnd(rack, end, got, ctx) {
     return (z && zeroUEndFacts(z, end, ctx)) || (z ? null : got ?? null);
   }
   if (isElementId(end.path)) return {...got, reason: looseReason(end, {item: true})};
-  let own = seatedPort(item, end, ctx);
-  // A BAY THAT ONLY ITS DEFAULT FILLS, which the catalogue alone will not
-  // answer for: the page saw a part drawn in it and no port at the path. The
-  // catalogue is asked again, and heard only where it finds a slot that takes
-  // a cable end, or a part that takes none; a port is still the page's to say.
-  // AND ONLY WHERE THE PAGE SAW WHAT THE BAY SHIPS WITH: the part it names is
-  // the one the catalogue holds there, so a page whose drawing shows another
-  // part in the bay is not heard. (A page names the part as modelOf does, as
-  // it always has: its model, else its ref's name in capitals.)
-  // WHAT THIS DOES NOT CATCH: the catalogue does not say which configurations
-  // build a bay that only its default fills. A page that hands in the drawing
-  // of a configuration that builds the bay, for an item now in one that does
-  // not, names the very part the bay ships with and is heard. A page that
-  // reads the item's own configuration never does that
-  // (docs/cable-ends-design.md section 6).
-  if (!own && got?.facts?.drawing === true && got.facts.port === false && got.facts.holder?.part) {
-    const again = seatedPort(item, end, ctx, {seen: true});
-    if ((again?.slot || again?.part) && again.holder?.part === got.facts.holder.part) own = again;
-  }
+  const own = seatedPort(item, end, ctx);
   if (!own && got?.facts?.drawing === true && got.facts.port === false && !got.facts.holder) {
     // the device's own slot, where the page found no port (ownSlot)
     const mine = ownSlot(item, end, ctx);

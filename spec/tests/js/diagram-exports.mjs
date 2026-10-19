@@ -88,6 +88,44 @@ out.rack = {
          devices: [...opts.matchAll(/<mxCell id="([a-z0-9-]+-g\dr\d-[a-z]+)" value="Same"/g)].map(m => m[1])},
 };
 
+// ---------------------------------------------------------------- true width
+// Each face is drawn at its true width: 1 mm is the same width for every device
+// in a cabinet. Three 1U faces, each with a port at x=100 mm (the ringed one
+// has a second, out on its ring at x=-30): one exactly as wide as the 482.6 mm
+// opening, one 221 mm wide, and one whose end rings stand outside the face
+// (the FS CMH-6DR1U's `-43 0 568.6 44`, with the face declared on the root).
+const faceSvg = (box, declared) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box.join(' ')}"` +
+  (declared ? ` data-face-w="${declared[0]}" data-face-h="${declared[1]}"` : '') + '/>';
+const onePort = {id: 'p0', cls: 'port', path: 'p0', x: 100, y: 10, w: 20, h: 10};
+const ringPort = {id: 'ring', cls: 'port', path: 'ring', x: -30, y: 10, w: 10, h: 10};
+const widths = {
+  full: {vb: [0, 0, 482.6, 44], ports: [onePort]},
+  narrow: {vb: [0, 0, 221, 44], ports: [onePort]},
+  ringed: {vb: [-43, 0, 568.6, 44], ports: [onePort, ringPort], declared: [482.6, 44]},
+};
+const widthXml = {};
+for (const [k, f] of Object.entries(widths)) {
+  const fc = {svg: faceSvg(f.vb, f.declared), vb: f.vb, ports: f.ports};
+  widthXml[k] = drawio.rackDiagram([{label: 'W', racks: [{label: 'R', mounted:
+    [{name: k, id: k, u: 1, ru: 1, faces: {front: fc}}]}]}]);
+}
+const widthGeom = Object.fromEntries(Object.entries(widthXml).map(([k, x]) => [k, geom(x)]));
+out.trueWidth = {
+  geom: widthGeom,
+  // every cell of the full-width face but its group, written as it was
+  fullCells: widthXml.full.slice(widthXml.full.indexOf('<mxCell id="full-g0r0-front-face"'),
+                                 widthXml.full.indexOf('<mxCell id="full-g0r0-front-label"')),
+  todayCells: drawio.deviceCells('full-g0r0-front', faceSvg(widths.full.vb), widths.full.vb,
+    portsOf(widths.full.ports.map(p => ({...p})), {bays: true}),
+    drawio.RACK.marginL, drawio.RACK.marginTop, drawio.RACK.width, drawio.RACK.unit)
+    .slice(1).join('').replace(/parent="1"/g, 'parent="full-g0r0-front"'),
+  entry: Object.fromEntries(Object.entries(widths).map(([k, f]) => {
+    const e = drawio.entry(k, faceSvg(f.vb, f.declared), f.vb, f.ports, {ru: 1});
+    return [k, {w: e.w, h: e.h, geom: geom(e.xml)}];
+  })),
+  standalone: drawio.entry('s', faceSvg(widths.narrow.vb), widths.narrow.vb, [], {}).w,
+};
+
 // ---------------------------------------------------------------- cables
 // A rack builder's plan: one page per face, two racks on the front page, a
 // switch with a card seated in slot-2, a server whose NIC is on its rear, a

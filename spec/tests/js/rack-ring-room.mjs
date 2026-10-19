@@ -369,7 +369,9 @@ test('a ring between a plug and the ring its lead takes is cleared run out, thro
   // its room is a loop out, under the tray and back, 320 mm long. Run 15 mm
   // on out of its plug, the cable clears ring 2 through its opening
   const {rack, ctx} = shape({lacer: 'bottom'});
-  const c = cableOf(rack, 'c168'), path = R.routePath(rack, c, ctx);
+  const c = cableOf(rack, 'c168'), took = R.RUN_OUTS.taken, path = R.routePath(rack, c, ctx);
+  // the ring is the first body in the lead, so the run-out is tried, and taken (#1038)
+  assert.ok(R.RUN_OUTS.taken > took);
   assert.deepEqual(ringsOn(R.autoRoute(rack, c, ctx), 'm6'), [1]);
   assert.deepEqual(path.detours, []);
   assert.deepEqual(path.points.filter(q => q.at === 'lead').map(q => [q.end, r1(q.z)]), [['b', 79.8]]);

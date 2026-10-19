@@ -39,7 +39,7 @@ from portrayal import manifest as _manifest
 from portrayal import optical
 from portrayal import optical_ports
 from portrayal import stacks
-from portrayal.faces import DIRECTIONS, OPTICAL_FACES, face_ref
+from portrayal.faces import BODY_SIDES, DIRECTIONS, OPTICAL_FACES, face_ref, side_patch, side_viewbox
 from portrayal.manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml, nested_key_host, chained_occupant_ref,
@@ -268,7 +268,7 @@ RULES = {
     "L55": ("library",    "every vendor namespace is in spec/schemas/vendors.yaml", "add the vendor to the registry with display, role and source",
             "A namespace missing from the registry breaks the link from the name on the metal to the company that owns it now, so a search under the current name finds nothing.",
             MIXED),
-    "L56": ("listing",    "a listing sits under a software vendor in spec/schemas/vendors.yaml and lists a device that exists - every configuration it overrides, port it names and component it maps is the hardware's", "register the NOS vendor with role software, point `hardware` at a device's <namespace>/<directory>, and name only configurations and ids that device declares",
+    "L56": ("listing",    "a listing sits under a software or reseller vendor in spec/schemas/vendors.yaml and lists a device that exists - every configuration it overrides, port it names and component it maps is the hardware's, and a reseller's carries no `nos`, `nos-versions` or `interfaces`", "register the vendor with role software (a NOS) or reseller (hardware sold under its own part numbers), point `hardware` at a device's <namespace>/<directory>, and name only configurations and ids that device declares",
             "A listing that names a port, configuration or part the hardware lacks would export interfaces and modules to a DCIM that no box has.",
             ERROR),
     "L57": ("device",     "exactly one configuration is `kind: base`, and each says whether it is orderable", "set `kind` on every configuration",
@@ -313,8 +313,8 @@ RULES = {
     "L70": ("device",     "a `fact:` gap names a real fact and does not contradict the device", "fix the gap's scope or remove it",
             "A gap scoped to a misspelt fact leaves the comparison showing a bare blank although the search was done, and a device that states a figure while calling the vendor silent on it shows a number and a retraction at once.",
             ERROR),
-    "L71": ("component",  "a body box reaches no further than the part says it is deep; a round one states its axis (a ring its wall) and is square across it; one that `shows` a drawing is a box of a part declaring that face", "shrink the body box or raise `body.depth`; state `axis`/`wall` or square the envelope; declare the face or drop `shows`",
-            "A body box deeper than the part gives the wrong bay hole, pull distance and fit checks, and a round piece with no axis or a non-square section builds as an oval in 3D.",
+    "L71": ("component",  "a body box reaches no further than the part says it is deep, unless it is a fitted option (`when`); a round one states its axis (a ring its wall) and is square across it; one that `shows` a drawing is a box of a part declaring that face, and one that shows a side shows a patch inside that side's `skins/body-<side>.svg`, whose width and height are its viewBox's in mm", "shrink the body box or raise `body.depth`; state `axis`/`wall` or square the envelope; declare the face, draw the side, widen its viewBox or drop `shows`",
+            "A body box deeper than the part gives the wrong bay hole, pull distance and fit checks, a round piece with no axis or a non-square section builds as an oval in 3D, and a side patch outside its drawing is smeared with the drawing's edge.",
             MIXED),
     "L72": ("device",     "a bay's `plan:` or `rear:` lands in a view that exists, inside the chassis", "fix the plan view name or the coordinates",
             "A bay projected into a view or neighbour that does not exist draws nothing and raises nothing, so the plan or rear view silently loses the part.",
@@ -328,8 +328,8 @@ RULES = {
     "L75": ("component",  "a slot's structured facts agree with its prose, and lanes fit the connector", "fix `lanes`/`connector` or the description",
             "A slot's prose and its structured facts would drift apart, so a reader and the card-fit check would see different slots, and a lane count wider than the connector is a typo, not a slot.",
             ERROR),
-    "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps", "use std/rj45@2 with the lamp parts, or say in provenance the jack is bare",
-            "Every Ethernet jack has to answer whether it has link lamps the same way, or a drawing can leave out lamps the hardware has, or add them to a console jack, and the viewer cannot light them consistently.",
+    "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps, and the lamped cell that makes no Ethernet claim holds no Ethernet jack", "put an Ethernet jack on common/rj45-eth@1 or common/rj45-ganged-eth@1; a console or timing jack takes std/rj45@2 or std/rj45-ganged@2, or common/rj45-ganged-lamped@1 when its housing shows lamps",
+            "Every Ethernet jack has to answer whether it has link lamps the same way, or a drawing can leave out lamps the hardware has, or add them to a console jack, and the viewer cannot light them consistently. The lamped cell that claims no media suits a timing jack with lamps and would call an Ethernet jack something the part does not say.",
             WARNING),
     "L77": ("component",  "a `sink` sits in a cavity, because that is what it measures from", "use `pocket` for a recess in an otherwise solid face",
             "A sink with no cavity above it has no floor to measure from, so the recess is declared but never built in 3D, and nothing reports it.",
@@ -427,8 +427,8 @@ RULES = {
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal - judged at the trunk connector's own width, and only at a width a held source draws (a warning otherwise)", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim. For a width no source draws, add it to POLARITY_WIDTHS with the figure that draws it",
              "A polarity label the fibre paths do not match tells someone patching a link the wrong pair order, which is how a link ends up with transmit facing transmit.",
              MIXED),
-    "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`",
-             "A speed spelled more than one way breaks a filter such as every 1G port, and leaves the DCIM export unable to type the port, so it exports nothing for it.",
+    "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else; a `speeds` list holds only members of the set, none twice, with `speed` as its highest", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`; list a multi-rate cage's rates once, ascending, ending at `speed`",
+             "A speed spelled more than one way breaks a filter such as every 1G port, and leaves the DCIM export unable to type the port, so it exports nothing for it. A `speeds` list that disagrees with `speed` publishes two answers to one question.",
              ERROR),
     "L108": ("component, device", "a stacked cage pair faces the library's way - an SFP/QSFP/QSFP-DD pair belly-to-belly, upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side, so both bails face outward; an OSFP pair the same way up, turned alike - 0 over 0, or 180 over 180 for a cage under the board, or both 90 or both 270 on its side - because a stacked OSFP cage is one connector and the OSFP MSA rev 5.22 draws both its modules heat sink up (section 7.1, Table 7-1, Figures 7-1 and 7-2)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`",
              "A stack turned the other way seats its optics with their bails facing into the gap between the rows, where no thumb can reach them, and every rendering of the stack shows the wrong hardware.",
@@ -544,8 +544,8 @@ RULES = {
     "L147": ("component",  "a connection point's `turns` is a subset of the turns its part's interface allows in connectors.yaml, and only the presented point states one (an error)", "list only turns the interface allows - a point narrows the list, it cannot widen it; move `turns` to the point the interface is presented at, or drop it",
              "A connection point cannot allow a turn its interface does not, since no mating part is drawn for that turn, and `turns` on a point nothing reads would look like a setting that works when it does nothing.",
              ERROR),
-    "L148": ("component",  "a node a field moves or shows names a `choice` field the contract declares, and every option its `data-move` or `data-show` lists is one of that field's options; every option of a field with SHOW nodes shows at least one node, or is listed in the field's `drawn-by-absence` (an error)", "declare the field as a choice, or name only its options in the table; spell a move `option: dx dy [deg]`; show a node for the option, or list it in `drawn-by-absence`",
-             "A switch or selector position drawn for an option nobody can set, or an option with nothing drawn for it, would look correct while the drawing never changes when that option is chosen.",
+    "L148": ("component",  "a node a field moves or shows names a `choice` field the contract declares, and every option its `data-move` or `data-show` lists is one of that field's options; every option of a field with SHOW nodes shows at least one node, or is listed in the field's `drawn-by-absence`; a body piece fitted by an option (`when`) names a choice field and its options, and every skin shows a node for each option it lists (an error)", "declare the field as a choice, or name only its options in the table; spell a move `option: dx dy [deg]`; show a node for the option, or list it in `drawn-by-absence`; give a fitted piece's option a SHOW node in every skin",
+             "A switch or selector position drawn for an option nobody can set, or an option with nothing drawn for it, would look correct while the drawing never changes when that option is chosen; a fitted piece whose option no node shows is never built.",
              ERROR),
     "L149": ("component",  "a node a position moves stays inside its part under every move: its box, translated and turned, lies within `size` (an error)", "shorten the move, or move the node in the skin so its travel stays on the part",
              "An actuator moved off its own part would be drawn on the chassis beside it, and extruded there in the 3D view.",
@@ -571,11 +571,11 @@ RULES = {
     "L156": ("kit",        "every configuration of a kit has its own `id`, and names in `parts` only ids of the kit's own `parts` (error)", "list the part ids the configuration uses, as the kit's `parts` spell them; give each configuration an id of its own",
              "A kit configuration that names parts the kit does not have, or shares an id with another, cannot be assembled, and a device's depth override that names it could point at the wrong one.",
              ERROR),
-    "L157": ("kit",        "every depth range of a kit configuration, one `[min, max]` or one per hole type, has min below max (error)", "write the range as `[min, max]` in mm, from the source; a single figure is a `preset`, not a range",
-             "A depth range whose minimum is not below its maximum fits no rack, so a person building a rack would be told the kit fits a depth it cannot.",
+    "L157": ("kit",        "every depth range of a kit configuration, one `[min, max]` or one per hole type, has min below max, and a configuration with a `preset` and no `depth` has a kit `gaps` entry `what: depth` that lists its id in `scope` (error)", "write the range as `[min, max]` in mm, from the source; a single figure is a `preset`, not a range, and a preset may stand alone: leave `depth` out and add the gap `what: depth` with the configuration's id in `scope`",
+             "A depth range whose minimum is not below its maximum fits no rack, so a person building a rack would be told the kit fits a depth it cannot; a configuration that states only its factory setting has no range, and without a gap that says so the missing range looks like an oversight rather than a source that is silent.",
              ERROR),
-    "L158": ("kit",        "`travel` appears only on a kit whose `motion` is `sliding` (error)", "drop `travel`, or set `motion: sliding` if the rails really slide out for service",
-             "Travel on fixed rails would claim the equipment slides out for service when it does not.",
+    "L158": ("kit",        "`travel` appears only on a kit whose `motion` is `sliding`, and a kit whose `motion` is `telescoping` states a `preset` on at least one configuration (error)", "drop `travel`, or set `motion: sliding` if the rails really slide out for service; give a telescoping kit the factory setting its source prints, as the `preset` of the configuration it belongs to",
+             "Travel on fixed rails would claim the equipment slides out for service when it does not, and a telescoping kit is set at install, so one that records no factory setting leaves the rack builder nothing to start from.",
              ERROR),
     "L159": ("kit",        "every accessory `ref` of a kit resolves to a component in the library that is not a kit (error)", "fix the ref (namespace/name@major), or write the arm's or the bar's contract",
              "An accessory ref that points at nothing, or at another kit, leaves a cable arm or bar the kit promises and cannot draw.",
@@ -1820,6 +1820,18 @@ VENDORS, NAMESPACES = _load_vendors(
     Path(__file__).resolve().parents[2] / "schemas")
 
 
+def vendor_roles(entry):
+    """The roles a registry entry states, as a set.
+
+    `role` is one word or, for a vendor that is two things at once (FS makes
+    hardware and resells another maker's), a list of words. `both` is the old
+    spelling of hardware and software together.
+    """
+    role = (entry or {}).get("role")
+    words = [role] if isinstance(role, str) else list(role or [])
+    return {w for r in words for w in (("hardware", "software") if r == "both" else (r,))}
+
+
 def _load_pluggable_families(schemas):
     """The pluggable ladder registry, or an empty one if the checkout is broken.
 
@@ -2778,6 +2790,8 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
     a 170.9 reach and a PCB starting 13.9 behind the plate and running 170.9,
     which is 184.8. The number the part states has to contain its own body.
     A box with no `confidence` is counted, once per file, as L35 counts.
+    A piece that `shows` a side shows a patch of the part's own
+    body-<side>.svg that lies inside that drawing (faces.side_patch).
     """
     body = data.get("body") or {}
     boxes = body.get("boxes") or []
@@ -2785,8 +2799,15 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
         return
     d = float((data.get("size") or {}).get("d") or 0)
     unmarked = 0
+    sized = set()      # side drawings whose stated size has been checked
     for i, b in enumerate(boxes):
         reach = float(b.get("from") or 0) + float(b["depth"])
+        # A FITTED OPTION IS NOT THE BARE PART. size.d and body.depth are the
+        # part as it ships; an extender a buyer bolts on (`when`) makes it
+        # longer, and holding that piece to the bare reach would make the
+        # option undrawable or the part's own depth a lie.
+        if b.get("when"):
+            reach = 0.0
         if reach > d + 0.05:
             err(path, "L71", f"body box {b.get('id') or i} reaches {reach:g} behind the "
                              f"face and size.d says the part is {d:g} deep")
@@ -2827,15 +2848,141 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
         # `faces`, and the index publishes just those; a piece naming a face
         # the part never declared is built plain, silently, for as long as the
         # contract lives - the failure L77 exists for, one key over.
-        for which in b.get("shows") or []:
+        #
+        # A SIDE IS THE PART'S OWN body-<side>.svg, and a piece crops the patch
+        # of it the piece lies under - so the patch has to be inside the
+        # drawing, or the crop reads past its edge and the side is smeared
+        # with whatever the edge pixel holds. The drawing's width and height
+        # are its viewBox's, in mm, or a browser scales it to another aspect.
+        shows = b.get("shows") or []
+        if "plan" in shows and "top" in shows:
+            err(path, "L71", f"body box {name} shows both `plan` and `top` - they paint "
+                             f"the same side; keep one")
+        for which in shows:
             if shape != "box":
                 err(path, "L71", f"body box {name} is a {shape} and `shows` a drawing - "
-                                 f"only a box has a flat top or back to carry one")
+                                 f"only a box has a flat side to carry one")
+            elif which in BODY_SIDES:
+                sp = Path(path).parent / "skins" / f"body-{which}.svg"
+                vb = side_viewbox(sp)
+                if not sp.exists():
+                    err(path, "L71", f"body box {name} shows the part's `{which}` side and "
+                                     f"there is no skins/body-{which}.svg")
+                    continue
+                if vb is None:
+                    err(sp, "L71", f"body-{which}.svg has no viewBox of four numbers, so "
+                                   f"no piece can tell which patch of it to show")
+                    continue
+                if sp not in sized:
+                    sized.add(sp)
+                    root = ET.parse(sp).getroot()
+                    for attr, want in (("width", vb[2]), ("height", vb[3])):
+                        got = root.get(attr) or ""
+                        try:
+                            ok = got.endswith("mm") and abs(float(got[:-2]) - want) <= 0.05
+                        except ValueError:
+                            ok = False
+                        if not ok:
+                            err(sp, "L71", f"body-{which}.svg says {attr}={got!r} and its viewBox "
+                                           f"is {want:g} - state it as {want:g}mm")
+                x0, y0, x1, y1 = side_patch(b, which, float((data.get("size") or {}).get("w") or 0),
+                                            float(body.get("depth") or 0))
+                vx, vy, vw, vh = vb
+                if x0 < vx - 0.05 or y0 < vy - 0.05 or x1 > vx + vw + 0.05 or y1 > vy + vh + 0.05:
+                    err(path, "L71", f"body box {name} shows {x0:g}..{x1:g} x {y0:g}..{y1:g} of "
+                                     f"body-{which}.svg, whose viewBox covers {vx:g}..{vx + vw:g} x "
+                                     f"{vy:g}..{vy + vh:g} - widen the drawing or drop `{which}`")
             elif not face_ref(data, which):
                 err(path, "L71", f"body box {name} shows the part's `{which}` drawing and "
                                  f"the part declares no `faces.{which}`")
     if unmarked:
         warn(path, "L71", f"{unmarked} of {len(boxes)} body boxes carry no confidence")
+    for a, b, axis, at in coplanar_box_faces(boxes):
+        err(path, "L71", f"body boxes {a} and {b} share a face plane at {axis} {at:g} where "
+                         f"they overlap - the two faces z-fight and shimmer in 3D; end one "
+                         f"of them 0.05 short of the plane")
+
+
+def coplanar_box_faces(boxes):
+    """Pairs of plain boxes that have a face on one plane and overlap there.
+
+    Two faces on the same plane, facing the same way, over a shared patch are
+    drawn at one depth and the GPU picks between them pixel by pixel, so the
+    patch shimmers as the camera moves. Faces that face opposite ways (boxes
+    that abut) are not this. Pieces fitted for different options are never
+    drawn together and are not compared. Returns (id, id, axis, plane)."""
+    def extent(b):
+        x, y = (float(v) for v in b["at"])
+        w, h = (float(v) for v in b["size"])
+        z = float(b.get("from") or 0)
+        return {"x": (x, x + w), "y": (y, y + h), "z": (z, z + float(b["depth"]))}
+
+    plain = [(b.get("id") or str(i), b) for i, b in enumerate(boxes)
+             if (b.get("shape") or "box") == "box"]
+    found = []
+    for i, (na, a) in enumerate(plain):
+        for nb, b in plain[i + 1:]:
+            if a.get("when") and b.get("when") and a["when"] != b["when"]:
+                continue
+            ea, eb = extent(a), extent(b)
+            for axis in "xyz":
+                others = [k for k in "xyz" if k != axis]
+                if any(min(ea[k][1], eb[k][1]) - max(ea[k][0], eb[k][0]) <= 1e-6
+                       for k in others):
+                    continue
+                for end in (0, 1):
+                    if abs(ea[axis][end] - eb[axis][end]) < 1e-6:
+                        found.append((na, nb, axis, ea[axis][end]))
+    return found
+
+
+def lint_component_fitted_pieces(path, data):
+    """L148, for a body piece: a fitted option (`when`) is a choice the part
+    offers, and the drawing can say it was chosen.
+
+    The kit builds such a piece only while the part's drawing shows a
+    `data-show-from` node for one of the options it lists (relief.js
+    pieceFitted), because the drawing is where a configuration's choice and a
+    viewer's are both settled. A piece whose option no node shows is never
+    built, and nothing anywhere says so: the extender that was modelled and
+    is never seen. So every skin carries a SHOW node for each option a piece
+    lists - an empty group, when the face does not change with it."""
+    fields = data.get("fields") or {}
+    fitted = [(b.get("id") or i, b["when"]) for i, b in
+              enumerate((data.get("body") or {}).get("boxes") or []) if b.get("when")]
+    if not fitted:
+        return
+    skins_dir = Path(path).parent / "skins"
+    shown = {}
+    for skin in (data.get("skins") or ["default"]):
+        sp = skins_dir / f"{skin}.svg"
+        try:
+            root = ET.parse(sp).getroot()
+        except (OSError, ET.ParseError):
+            continue          # L3 reports a missing or unparseable skin
+        got = shown[skin] = {}
+        for el in root.iter():
+            k = el.get("data-show-from")
+            if k is not None:
+                got.setdefault(k, set()).update((el.get("data-show") or "").split())
+    for name, when in fitted:
+        for k, opts in sorted(when.items()):
+            f = fields.get(k) or {}
+            if f.get("type") != "choice":
+                err(path, "L148", f"body box {name} is fitted by {k!r}, which is not a choice "
+                                  "field the contract declares")
+                continue
+            options = {str(o) for o in f.get("options") or []}
+            for o in [str(o) for o in opts]:
+                if o not in options:
+                    err(path, "L148", f"body box {name} is fitted by {k}={o}, which is not an "
+                                      f"option of {k} ({', '.join(sorted(options))})")
+                    continue
+                for skin, got in sorted(shown.items()):
+                    if o not in got.get(k, set()):
+                        err(path, "L148", f"body box {name} is fitted by {k}={o} and skin {skin} "
+                                          f"shows no node for it, so the piece is never built - "
+                                          f"add a node with data-show-from=\"{k}\" data-show=\"{o}\"")
 
 
 def lint_component_sink_context(path, data, _lib_roots=None):
@@ -4166,8 +4313,11 @@ def lint_kit(path, data, lib_roots):
             parts under one id would make it ambiguous;
       L156  each configuration names only the kit's own part ids, and has an id
             of its own - a device's `chassis.kits[].depth.config` names one;
-      L157  every range has min < max;
-      L158  `travel` only with `motion: sliding`;
+      L157  every range has min < max, and a configuration that states a
+            `preset` and no `depth` ("factory setting known, range unknown",
+            decided 2026-10-18) is covered by a `gaps` entry `what: depth`;
+      L158  `travel` only with `motion: sliding`, and a telescoping kit states
+            a `preset` on at least one configuration;
       L159  each accessory ref resolves to a component that is not a kit.
 
     ERRORS, ALL OF THEM. The kind is new and no kit exists yet, so there is no
@@ -4190,6 +4340,7 @@ def lint_kit(path, data, lib_roots):
         ids.append(pid)
     known = set(ids)
     seen_cfg = set()
+    unknown_range = []
     for i, cfg in enumerate(data.get("configurations") or []):
         if not isinstance(cfg, dict):
             continue
@@ -4207,9 +4358,25 @@ def lint_kit(path, data, lib_roots):
             if isinstance(rng, list) and len(rng) == 2 \
                     and all(isinstance(x, (int, float)) for x in rng) and not rng[0] < rng[1]:
                 err(path, "L157", f"configuration {cid}: {label} {rng} - min must be below max")
+        if "depth" not in cfg and "preset" in cfg and cid not in unknown_range:
+            unknown_range.append(cid)
+    covered = set()
+    for gap in data.get("gaps") or []:
+        if isinstance(gap, dict) and gap.get("what") == "depth" and isinstance(gap.get("scope"), list):
+            covered.update(gap["scope"])
+    for cid in unknown_range:
+        if cid not in covered:
+            err(path, "L157", f"configuration {cid}: a `preset` and no `depth` - the factory setting "
+                "is known and the range is not, so add a `gaps` entry `what: depth` with this "
+                "configuration's id in its `scope`, saying what the source does not print")
     if "travel" in data and data.get("motion") != "sliding":
         err(path, "L158", f"travel: {data['travel']} on a kit whose motion is "
             f"{data.get('motion')!r} - only a sliding kit travels")
+    if data.get("motion") == "telescoping" and not any(
+            isinstance(c, dict) and "preset" in c for c in data.get("configurations") or []):
+        err(path, "L158", "motion: telescoping, and no configuration states a `preset` - a "
+            "telescoping kit is set at install, so give the factory setting the source prints "
+            "on at least one configuration")
     for i, acc in enumerate(data.get("accessories") or []):
         if not isinstance(acc, dict) or not isinstance(acc.get("ref"), str):
             continue
@@ -7810,7 +7977,12 @@ def lint_rack(path, data, roots):
 
 
 def lint_listing(path, data, roots):
-    """L56: a listing lives under a NOS vendor and lists hardware that exists.
+    """L56: a listing lives under a NOS vendor or a reseller and lists hardware that exists.
+
+    A reseller listing (FS.com selling an APC cabinet under an FS part number)
+    is the same file without the NOS: it may say `model`, `aliases`,
+    `portfolio` and `source`, and carries no `nos`, `nos-versions` or
+    `interfaces`.
 
     A listing is a NOS vendor's entry for a box on its compatibility list:
     devices/arrcus/as7726-32x/listing.yaml points at edgecore/as7726-32x and
@@ -7826,12 +7998,27 @@ def lint_listing(path, data, roots):
     path = Path(path)
     ns = path.parent.parent.name
     entry = VENDORS.get(ns)
-    if entry is None or entry.get("role") not in ("software", "both"):
-        err(path, "L56", f"a listing lives under a NOS vendor, and {ns!r} is "
+    roles = vendor_roles(entry)
+    nos_only = [k for k in ("nos", "nos-versions", "interfaces") if data.get(k)]
+    if not roles & {"software", "reseller"}:
+        err(path, "L56", f"a listing lives under a NOS vendor or a reseller, and {ns!r} is "
             + ("in no vendor registry" if entry is None else f"registered with role {entry.get('role')!r}")
-            + ". Add it to spec/schemas/vendors.yaml with role: software, or move the "
-            "listing under the vendor that sells this NOS - the hardware's own maker "
+            + ". Add it to spec/schemas/vendors.yaml with role: software (a NOS) or "
+            "reseller (hardware sold under its own part numbers), or move the "
+            "listing under the vendor that sells this - the hardware's own maker "
             "files it under its `manufacturer:` and needs no listing")
+    elif "software" not in roles and nos_only:
+        err(path, "L56", f"{ns!r} is a reseller, and a reseller listing says only what the "
+            f"seller changes - `model`, `aliases`, `portfolio`, `source`. It names a NOS "
+            f"({', '.join('`' + k + '`' for k in nos_only)}), which belongs to a vendor with "
+            "role: software; a reseller sells the hardware as it is, so its ports keep the "
+            "maker's names")
+    elif "reseller" not in roles and not data.get("nos"):
+        err(path, "L56", f"{ns!r} is a NOS vendor, so its listing says which NOS it lists: "
+            "add `nos`")
+    elif "reseller" in roles and not data.get("nos") and nos_only:
+        err(path, "L56", f"a listing without `nos` is a reseller listing, which carries no "
+            f"{', '.join('`' + k + '`' for k in nos_only)}; add `nos` or drop them")
     hw = str(data.get("hardware") or "")
     man = next((Path(r) / "devices" / hw / "device.yaml" for r in roots
                 if (Path(r) / "devices" / hw / "device.yaml").exists()), None)
@@ -8004,7 +8191,7 @@ def lint_vendor_registry(root):
                 continue
             warn(child, "L55", f"namespace {child.name!r} is in no vendor registry. "
                  "Add it to spec/schemas/vendors.yaml with `display`, `role` "
-                 "(hardware | software | both) and `source` - and, if the company "
+                 "(hardware | software | reseller | both, or a list of them) and `source` - and, if the company "
                  "has been renamed, bought or absorbed since the metal was made, "
                  "`successor`/`parent`/`brands`, because that is the part a "
                  "consumer cannot derive and nobody writes down later. If this is "
@@ -8496,7 +8683,7 @@ def lint_device_kits(path, data, lib_roots):
                 f"configuration of {ref} (it has {', '.join(sorted(configs)) or 'none'})")
             continue
         want, got = (configs[cid] or {}).get("depth"), over.get("range")
-        if isinstance(want, list) != isinstance(got, list) or (
+        if want is not None and isinstance(want, list) != isinstance(got, list) or (
                 isinstance(want, dict) and isinstance(got, dict)
                 and set(want) != set(got)):
             shape = (f"one range per hole type ({', '.join(sorted(want))})"
@@ -10979,9 +11166,38 @@ def lint_component_groups(path, data, lib_roots):
                               "Either place a part in it or drop it")
 
 
-def _speed_finding(path, where, speed):
-    """L110 for one declared speed. Nothing declared is not a finding - a port
-    that says nothing about its rate is answered by its group or its cage."""
+def _speeds_finding(path, where, speed, speeds):
+    """L110 for a declared `speeds` list: each member in the closed set, none
+    twice, and `speed` the highest member (so `speed` is in it). Nothing declared
+    is not a finding."""
+    if speeds is None:
+        return
+    if not isinstance(speeds, list):
+        err(path, "L110", f"{where}: speeds {speeds!r} is not a list of rates")
+        return
+    names = [str(s) for s in speeds]
+    for s in names:
+        if s not in PORT_SPEEDS:
+            err(path, "L110", f"{where}: speeds member {s!r} is not in the closed set "
+                              f"({' '.join(PORT_SPEEDS) or 'spec/schemas/speeds.yaml loaded nothing'})")
+    if len(set(names)) != len(names):
+        err(path, "L110", f"{where}: speeds {names} lists a rate twice")
+    known = [s for s in names if s in PORT_SPEEDS]
+    if len(set(names)) == len(names) and known == names \
+            and names != sorted(names, key=PORT_SPEEDS.index):
+        err(path, "L110", f"{where}: speeds {names} is not in ascending rate order")
+    if speed is not None and known and max(known, key=PORT_SPEEDS.index) != str(speed):
+        err(path, "L110", f"{where}: speeds {names} must have `speed` {speed!r} as its "
+                          "highest member, because `speed` is the highest native rate")
+    elif speed is None and known:
+        err(path, "L110", f"{where}: speeds {names} has no `speed` to be its highest member")
+
+
+def _speed_finding(path, where, speed, speeds=None):
+    """L110 for one declared speed (and `speeds`, the native rates of a
+    multi-rate cage). Nothing declared is not a finding - a port that says
+    nothing about its rate is answered by its group or its cage."""
+    _speeds_finding(path, where, speed, speeds)
     if speed is None:
         return
     if str(speed) in PORT_SPEEDS:
@@ -11005,13 +11221,21 @@ def lint_device_speed_vocabulary(path, data):
     group's attrs, which the renderer merges into every member, and a
     placement's own.
     """
-    for gname, gdef in (data.get("groups") or {}).items():
-        _speed_finding(path, f"groups/{gname}",
-                       attrs_mod.flatten((gdef or {}).get("attrs")).get("speed"))
+    groups = data.get("groups") or {}
+    for gname, gdef in groups.items():
+        a = attrs_mod.flatten((gdef or {}).get("attrs"))
+        _speed_finding(path, f"groups/{gname}", a.get("speed"), a.get("speeds"))
     for vname, view in (data.get("views") or {}).items():
         for p in view_parts(view or {})["placements"]:
-            _speed_finding(path, f"{vname}/{p.get('id')}",
-                           attrs_mod.flatten(p.get("attrs")).get("speed"))
+            a = attrs_mod.flatten(p.get("attrs"))
+            g = attrs_mod.flatten(((groups.get(p.get("group")) or {}).get("attrs")))
+            # a placement's `speeds` is held to its own speed, else its group's
+            _speed_finding(path, f"{vname}/{p.get('id')}", a.get("speed"))
+            # and so is a placement's own `speed` against its group's `speeds`
+            if "speeds" in a or ("speed" in a and "speeds" in g):
+                _speeds_finding(path, f"{vname}/{p.get('id')}",
+                                a.get("speed", g.get("speed")),
+                                a.get("speeds", g.get("speeds")))
 
 
 # L113's question: which media put a NETWORK INTERFACE behind the connector.
@@ -11098,8 +11322,8 @@ def lint_component_speed_vocabulary(path, data):
     if "speed" not in (data.get("fields") or {}):
         _speed_finding(path, "attrs", attrs_mod.flatten(data.get("attrs")).get("speed"))
     for gname, gdef in (data.get("groups") or {}).items():
-        _speed_finding(path, f"groups/{gname}",
-                       attrs_mod.flatten((gdef or {}).get("attrs")).get("speed"))
+        a = attrs_mod.flatten((gdef or {}).get("attrs"))
+        _speed_finding(path, f"groups/{gname}", a.get("speed"), a.get("speeds"))
     for part in data.get("parts") or []:
         if isinstance(part, dict):
             _speed_finding(path, f"parts/{part.get('id')}",
@@ -11902,6 +12126,11 @@ RJ45_BARE = re.compile(
 RJ45_LAMPED_REFS = {"common/rj45-eth@1", "common/rj45-eth-pinside@1", "common/rj45-ganged-eth@1",
                     "common/rj45-ganged-link@1"}
 RJ45_BARE_REFS = {"std/rj45@2", "std/rj45-ganged@2"}
+# The ganged cell with the two lamps and no Ethernet claim (#370): a timing,
+# BITS, ToD or console jack whose housing shows lamps. It is a lamped part
+# that takes the bare part's roles, and an Ethernet jack on it is sent to
+# common/rj45-ganged-eth@1, which says what the jack is.
+RJ45_NEUTRAL_REFS = {"common/rj45-ganged-lamped@1"}
 # A carrier that draws nothing and exists to attach one vendor's meanings
 # (dell/rj45-port-14g) is the family member it composes, for census purposes;
 # and the family's own members compose each other by definition, so a contract
@@ -11910,13 +12139,16 @@ RJ45_FAMILY_DIRS = {("std", "rj45"), ("std", "rj45-ganged"),
                     ("common", "rj45-eth"), ("common", "rj45-eth-pinside"),
                     ("common", "rj45-ganged-eth"),
                     ("common", "rj45-ganged-link"),
+                    ("common", "rj45-ganged-lamped"),
                     ("dell", "rj45-port-14g")}
 
 
 def rj45_class(ref, lib_roots, depth=0):
-    """'lamped', 'bare' or 'retired' for an RJ45-ish ref, following one carrier."""
+    """'lamped', 'neutral', 'bare' or 'retired' for an RJ45-ish ref, following one carrier."""
     if ref in RJ45_LAMPED_REFS:
         return "lamped"
+    if ref in RJ45_NEUTRAL_REFS:
+        return "neutral"
     if ref in RJ45_BARE_REFS:
         return "bare"
     if depth > 2:
@@ -11962,15 +12194,15 @@ def _rj45_census(placements, groups, lib_roots, name=None, elsewhere=(), view=No
     path (a contract's `parts:`), because 368 of the library's 762 RJ45 placements
     sit inside component contracts and the census that could not see them is how
     C1 got in (#125 review I5)."""
-    unlamped_eth = lamped_bare = retired = 0
+    unlamped_eth = lamped_bare = retired = neutral_eth = 0
     # A jack on a bare ref is not "on a part with no lamps" if this view
     # draws a `class: led` placement `for:` it beside the jack instead of
     # inside it - sweep_rj45.py leaves such a jack bare on purpose
     # (edgecore/as5912-54x mgmt-eth: two lamps drawn beside the bezel, not
     # composed into it), and the census must not re-flag what the sweep
     # deliberately left alone. The same exemption covers a BARE timing jack
-    # whose vendor draws lamps for it (juniper/mx204's bits): the family has
-    # no bare-with-lamps member, so the lamps stay separate placements.
+    # whose vendor draws lamps for it (juniper/mx204's bits, still to move to
+    # common/rj45-ganged-lamped@1): its lamps stay separate placements.
     #
     # THE LAMP MAY BE ON ANOTHER FACE. A desktop ONT puts its jack on the back
     # edge and the jack's one lamp on the top (nokia/xs-010x-r: DATA,
@@ -12004,18 +12236,29 @@ def _rj45_census(placements, groups, lib_roots, name=None, elsewhere=(), view=No
             retired += 1
             continue
         if rj45_wants_lamps(q, groups, name):
-            if cls != "lamped" and str(q.get("id")) not in lamped_for:
+            if cls == "neutral":
+                neutral_eth += 1
+            elif cls != "lamped" and str(q.get("id")) not in lamped_for:
                 unlamped_eth += 1
-        elif cls != "bare":
+        elif cls == "lamped":
             lamped_bare += 1
-    return unlamped_eth, lamped_bare, retired
+    return unlamped_eth, lamped_bare, retired, neutral_eth
 
 
 RJ45_CENSUS_MSG = ("An Ethernet jack is common/rj45-eth@1 or common/rj45-ganged-eth@1 "
                    "(common/rj45-ganged-link@1 where it has one lamp, "
                    "common/rj45-eth-pinside@1 where the lamps are opposite the keyway); "
-                   "a console or timing jack is std/rj45@2 or std/rj45-ganged@2 "
+                   "a console or timing jack is std/rj45@2 or std/rj45-ganged@2, or "
+                   "common/rj45-ganged-lamped@1 where its housing shows lamps "
                    "(docs/rj45-family-design.md; spec/tools/sweeps/sweep_rj45.py)")
+
+
+def _rj45_census_counts(unlamped_eth, lamped_bare, retired, neutral_eth):
+    """The census sentence, shared by the device and component paths."""
+    return (f"{unlamped_eth} Ethernet jack(s) on a part with no lamps, "
+            f"{neutral_eth} Ethernet jack(s) on the media-neutral lamped part "
+            f"(use the -eth part), {lamped_bare} console/timing jack(s) on a "
+            f"lamped part, {retired} on a retired RJ45 part. ")
 
 
 def lint_device_rj45_lamps(path, data, lib_roots):
@@ -12024,17 +12267,16 @@ def lint_device_rj45_lamps(path, data, lib_roots):
     lands and shrinks to zero as the sweeps go through; what it stops is the
     sixth way arriving quietly."""
     groups = data.get("groups") or {}
-    unlamped_eth = lamped_bare = retired = 0
+    unlamped_eth = lamped_bare = retired = neutral_eth = 0
     per_view = {vn: (((view or {}).get("components") or {}).get("placements") or [])
                 for vn, view in (data.get("views") or {}).items()}
     for vn, placements in per_view.items():
         elsewhere = [q for on, other in per_view.items() if on != vn for q in other]
-        a, b, c = _rj45_census(placements, groups, lib_roots, elsewhere=elsewhere, view=vn)
-        unlamped_eth += a; lamped_bare += b; retired += c
-    if unlamped_eth or lamped_bare or retired:
-        warn(path, "L76", f"RJ45 family: {unlamped_eth} Ethernet jack(s) on a part with no "
-                          f"lamps, {lamped_bare} console/timing jack(s) on a lamped part, "
-                          f"{retired} on a retired RJ45 part. " + RJ45_CENSUS_MSG)
+        a, b, c, d = _rj45_census(placements, groups, lib_roots, elsewhere=elsewhere, view=vn)
+        unlamped_eth += a; lamped_bare += b; retired += c; neutral_eth += d
+    if unlamped_eth or lamped_bare or retired or neutral_eth:
+        warn(path, "L76", "RJ45 family: " + _rj45_census_counts(
+            unlamped_eth, lamped_bare, retired, neutral_eth) + RJ45_CENSUS_MSG)
 
 
 def lint_component_rj45_lamps(path, data, lib_roots):
@@ -12058,13 +12300,12 @@ def lint_component_rj45_lamps(path, data, lib_roots):
             return
     except (ValueError, IndexError):
         pass
-    unlamped_eth, lamped_bare, retired = _rj45_census(
+    unlamped_eth, lamped_bare, retired, neutral_eth = _rj45_census(
         data.get("parts") or [], {}, lib_roots, data.get("name"))
-    if unlamped_eth or lamped_bare or retired:
-        warn(path, "L76", f"RJ45 family: {data.get('name')} parts: carry {unlamped_eth} "
-                          f"Ethernet jack(s) on a part with no lamps, {lamped_bare} "
-                          f"console/timing jack(s) on a lamped part, {retired} on a "
-                          f"retired RJ45 part. " + RJ45_CENSUS_MSG)
+    if unlamped_eth or lamped_bare or retired or neutral_eth:
+        warn(path, "L76", f"RJ45 family: {data.get('name')} parts: carry "
+             + _rj45_census_counts(unlamped_eth, lamped_bare, retired, neutral_eth)
+             + RJ45_CENSUS_MSG)
 
 
 def lint_device_id_convention(path, data, lib_roots):
@@ -14171,6 +14412,7 @@ def main():
                 lint_component_spanned_exclusion(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
+                lint_component_fitted_pieces(f, d)
                 lint_component_faces_once(f, d)
                 # L83 IS HANDED THE PART'S OWN REF, so it can catch a contract
                 # naming itself as its own face - a copy-paste away, and

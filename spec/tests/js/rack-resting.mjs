@@ -21,7 +21,7 @@ import * as G from './cable-solids-fixture.mjs';
 
 const EPS = 1e-6;
 const r15 = 1.5;                                   // an OM4 cord's radius
-// the lacer of the owner's rack (i4) at U41, as placed
+// the lacer of the reference rack of #949 (i4) at U41, as placed
 // A body is centred in its span (fit.js itemBox): the lacer is 44 mm in a
 // 44.45 mm unit, so it stands 0.225 mm above the bottom of its unit.
 const LIFT = (RU - 44) / 2;
@@ -86,9 +86,9 @@ test('a tray is a pathway: rack.json lists it by id, a route names it, and it re
   assert.equal(R.routePath(r, c, ctx).rings.length, 0);
 });
 
-// ── the owner's rack: its cords rest on the floor and the sills ───────────
+// ── the reference rack of #949: its cords rest on the floor and the sills ───────────
 
-test('the owner\'s rack: every cord lies through its ring on the sill, lifted by its radius', () => {
+test('the reference rack of #949: every cord lies through its ring on the sill, lifted by its radius', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   let checked = 0;
   for (const c of r.cables) {
@@ -106,7 +106,7 @@ test('the owner\'s rack: every cord lies through its ring on the sill, lifted by
   assert.equal(checked, 32);
 });
 
-test('the owner\'s rack: no point of any cord lies below a support it is over', () => {
+test('the reference rack of #949: no point of any cord lies below a support it is over', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   const [t] = S.traysOf(r, ctx), solids = S.solidsOf(r, ctx);
   let overFloor = 0, onFloor = 0, inRing = 0;

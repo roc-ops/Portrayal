@@ -1,4 +1,4 @@
-"""#935, the owner's decision of 2026-10-09: racks ship as npm packages.
+"""#935, decided 2026-10-09: racks ship as npm packages.
 
 A rack is a product of its own kind, so the packager (npm_packages.py) writes
 one `@portrayal/racks-<vendor>-<name>` package per rack, beside the device and

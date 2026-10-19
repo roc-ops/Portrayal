@@ -8,6 +8,11 @@
 //                  panel. The candidates are every part of what each bay could
 //                  hold in the configuration - what it lists, and the bay's own
 //                  default where it lists nothing - and of that part's back.
+//                  A bay whose `only-in` leaves the configuration out is no
+//                  bay of it (`absent`): the kit says nothing, and the build
+//                  drew nothing there. A bay the configuration has and does
+//                  not list holds its default and is answered for
+//                  (`unspoken`).
 //
 // One kind of yes has no drawing and is right: the back of a part in a host
 // that draws no back for that bay (an enclosure with a closed rear). The port
@@ -38,7 +43,7 @@ const compByRef = ref => (ref == null ? null : comps.get(String(ref).split(':')[
 const faceRef = f => (typeof f === 'string' ? f : f?.ref) || null;
 const attr = (tag, a) => (new RegExp(`\\s${a}="([^"]*)"`).exec(tag) || [])[1];
 
-const out = {devices: 0, configs: 0, drawn: 0, yes: 0, unsaid: 0, denied: [], asked: 0, said: 0, shown: 0, closed: 0, closedOn: [], phantom: [], unspoken: 0, slots: 0, undrawn: 0, own: 0};
+const out = {devices: 0, configs: 0, drawn: 0, yes: 0, unsaid: 0, denied: [], asked: 0, said: 0, shown: 0, closed: 0, closedOn: [], phantom: [], unspoken: 0, absent: 0, slots: 0, undrawn: 0, own: 0};
 for (const f of fs.readdirSync(D).filter(n => n.endsWith('.configs.json')).sort()) {
   const ref = f.slice(0, -'.configs.json'.length), j = read(f);
   const slots = {bays: j.bays || {}, cages: j.cages || {}, configs: j.configs || [], default: j.default ?? null};
@@ -81,6 +86,8 @@ for (const f of fs.readdirSync(D).filter(n => n.endsWith('.configs.json')).sort(
     }
     // kit -> drawn
     for (const [bayView, bays] of Object.entries(slots.bays)) for (const bay of bays || []) {
+      // a bay that states `only-in` is a bay of those configurations only (#1022)
+      const has = !bay['only-in']?.length || bay['only-in'].includes(cfg.name);
       const listed = Object.hasOwn(cfg.bays || {}, bay.id);
       const held = compByRef(listed ? cfg.bays[bay.id] : bay.default);
       if (!held) continue;
@@ -90,7 +97,15 @@ for (const f of fs.readdirSync(D).filter(n => n.endsWith('.configs.json')).sort(
         const path = `${bay.id}/module/${id}`;
         out.asked++;
         const got = seatedPort(item, {path, view}, ctx);
-        if (!listed) { out.unspoken++; if (got) out.phantom.push(`${ref} ${cfg.name} ${view} ${path}: answered for a bay the configuration does not list`); continue; }
+        if (!has) {
+          // no bay here: the kit says nothing, and the build drew nothing there
+          out.absent++;
+          if (got) out.phantom.push(`${ref} ${cfg.name} ${view} ${path}: answered for a bay the configuration does not have`);
+          if (ports[view].has(path) || parts[view].has(path)) out.phantom.push(`${ref} ${cfg.name} ${view} ${path}: drawn in a bay its only-in leaves out`);
+          continue;
+        }
+        // a bay the configuration has and does not list holds its default: answered for
+        if (!listed) out.unspoken++;
         if (!got?.port) continue;
         if (got.slot) { if (parts[view].has(path)) out.slots++; else out.phantom.push(`${ref} ${cfg.name} ${view} ${path}: a slot with no part drawn`); continue; }
         out.said++;

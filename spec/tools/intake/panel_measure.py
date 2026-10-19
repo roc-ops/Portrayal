@@ -28,8 +28,24 @@ a dark backdrop, the backdrop is the widest full-width dark band instead.
 `validate()` is what makes the result trustworthy: it enforces its own tolerance
 rather than just reporting one, so never call `plate()` without it. `measure()`
 is the way to be sure you have.
+
+TWO LOCATORS, CHOSEN BY THE CALLER. `measure(im)` finds the face with `plate()`:
+use it for a render of a dark chassis on a light ground. `measure(im, box=(x0,
+y0, x1, y1))` takes the face's bounds from the caller, in image pixels with both
+corners inclusive: use it when the caller knows where the face is and `plate()`
+cannot find it, as in a photograph of a rack where the background is the widest
+dark band. A box is refused if it leaves the image or has no area; it is never
+clamped.
+
+A BOX DOES NOT REMOVE THE HEIGHT GATE. The scale is still the box's width against
+the face's known width, and `validate()` still refuses it when the box's height
+does not reproduce the face's. So a straight-on photograph can be measured with a
+box, and a photograph taken at an angle cannot: the near end of the face is
+larger than the far end, the box's height disagrees with the face's, and the
+refusal is correct. This module does not rectify perspective.
 """
 import collections
+import operator
 
 Face = collections.namedtuple("Face", "name w_mm h_mm")
 
@@ -152,7 +168,31 @@ def validate(mm, y0, y1, *, face=FHD_MODULE, limit=3.0):
     return off
 
 
-def measure(im, face=FHD_MODULE, limit=3.0):
+def _caller_box(im, box, face):
+    """(x0, y0, x1, y1, mm_per_px) for a face the caller located by hand.
+
+    The bounds are inclusive pixel indices, as `plate()` returns them. A box that
+    leaves the image or has no area is refused rather than clamped: clamping
+    would scale on a width the caller did not draw.
+    """
+    try:
+        x0, y0, x1, y1 = (operator.index(v) for v in box)
+    except (TypeError, ValueError):
+        raise ValueError(
+            f"box must be four whole pixel coordinates (x0, y0, x1, y1), "
+            f"got {box!r}") from None
+    px, py = im.size
+    if x0 < 0 or y0 < 0 or x1 >= px or y1 >= py:
+        raise ValueError(
+            f"box {(x0, y0, x1, y1)} is not inside the {px}x{py} image")
+    if x1 <= x0 or y1 <= y0:
+        raise ValueError(
+            f"box {(x0, y0, x1, y1)} has no area - x1 must be past x0 and y1 "
+            "past y0")
+    return x0, y0, x1, y1, face.w_mm / (x1 - x0 + 1)
+
+
+def measure(im, face=FHD_MODULE, limit=3.0, box=None):
     """`((x0, y0, x1, y1, mm_per_px), off_percent)` for one face.
 
     THE WAY TO CALL THIS MODULE. `plate` and `validate` each take a face because
@@ -160,8 +200,16 @@ def measure(im, face=FHD_MODULE, limit=3.0):
     scale against somebody else's height - which fails for the wrong reason, or
     passes for no reason. Here one face does both, so the mismatch has nowhere
     to live.
+
+    `box=(x0, y0, x1, y1)` says where the face is, in image pixels with both
+    corners inclusive, and `plate()` is not called. The scale is the box's width
+    against the face's width and the height check runs on the box exactly as it
+    does on a located plate, with the same `limit`.
     """
-    box = plate(im, face)
+    if box is None:
+        box = plate(im, face)
+    else:
+        box = _caller_box(im, box, face)
     return box, validate(box[4], box[1], box[3], face=face, limit=limit)
 
 

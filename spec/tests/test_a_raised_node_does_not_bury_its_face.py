@@ -43,12 +43,7 @@ NONDRAWING = ("title", "defs", "style", "desc", "metadata")
 # in 17 devices between them, so correcting their art bumps every one of those
 # device versions and their locks. They are recorded here rather than left to a
 # sweep nobody runs - see roc-ops/Portrayal#498.
-EXEMPT = {
-    ("ufispace/psu-302-ac@1", "handle", "handle-grip"):
-        "the U-handle is raised over the darker grip pill drawn inside it",
-    ("edgecore/eps112-psu-ac@1", "handle", "handle-screws"):
-        "the U-handle is raised over the two screws drawn on it",
-}
+EXEMPT = {}
 
 
 def _box(el):

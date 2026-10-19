@@ -301,6 +301,116 @@ def test_the_plate_ends_where_it_is_solid_not_where_its_shadow_does(pm):
     assert (y0, y1) == (25, 25 + 100 - 1), (y0, y1)
 
 
+# --- a caller's box replaces the locator, not the height gate ------------------
+
+def _plate_on_dark_ground(Image, *, w=311, h=100, left=40, top=50, ground=(40, 40, 40)):
+    """A black plate on a ground that is itself dark, as in a photograph of a rack.
+
+    `plate()` takes the widest full-width dark band, which here is the ground, so
+    it scales off the whole frame and `validate()` refuses it. The face is at
+    x `left`..`left + w - 1`, y `top`..`top + h - 1`, inclusive.
+    """
+    im = Image.new("RGB", (w + 2 * left, h + 2 * top), ground)
+    for y in range(top, top + h):
+        for x in range(left, left + w):
+            im.putpixel((x, y), (10, 10, 10))
+    return im
+
+
+def test_plate_alone_is_refused_on_a_dark_ground(pm):
+    """The case `box=` exists for: if this stops being refused, the tests below
+    stop proving that a box does what `plate()` cannot."""
+    from PIL import Image
+    with pytest.raises(ValueError):
+        pm.measure(_plate_on_dark_ground(Image))
+
+
+def test_a_box_measures_a_dark_face_on_a_dark_ground(pm):
+    from PIL import Image
+    im = _plate_on_dark_ground(Image)
+    (x0, y0, x1, y1, mm), off = pm.measure(im, box=(40, 50, 40 + 311 - 1, 50 + 100 - 1))
+    assert (x0, y0, x1, y1) == (40, 50, 350, 149)
+    assert abs(mm - 108.97 / 311) < 1e-12
+    assert abs((x1 - x0 + 1) * mm - pm.FHD_MODULE.w_mm) < 1e-9
+    assert off < 3.0
+
+
+def test_a_box_still_has_to_pass_the_height_gate(pm):
+    """A box is a locator, not a licence: the height check is what says the
+    scale came off the face, and a hand-drawn box can be as wrong as a band."""
+    from PIL import Image
+    im = _plate_on_dark_ground(Image)
+    # same width, 20 px taller than the face: 120 px at the width's scale is
+    # 42.05 mm against a known 35.05
+    with pytest.raises(ValueError) as e:
+        pm.measure(im, box=(40, 40, 350, 159))
+    assert "scaled plate height 42.05 mm misses FHD module's known 35.05 mm by 20.0%" in str(e.value)
+    assert "likely a three-quarter render, a dark background, or the wrong face" in str(e.value)
+
+
+def test_a_box_honours_the_limit(pm):
+    from PIL import Image
+    im = _plate_on_dark_ground(Image)
+    box = (40, 40, 350, 159)
+    assert pm.measure(im, box=box, limit=25.0)[1] == pytest.approx(20.0, abs=0.05)
+    with pytest.raises(ValueError):
+        pm.measure(im, box=box, limit=15.0)
+
+
+def test_a_box_is_checked_against_the_face_it_was_given(pm):
+    from PIL import Image
+    im = _plate_on_dark_ground(Image)
+    with pytest.raises(ValueError) as e:
+        pm.measure(im, face=pm.MAIAEDGE_PBC, box=(40, 50, 350, 149))
+    assert "MaiaEdge" in str(e.value)
+
+
+def test_without_a_box_measure_answers_as_it_always_did(pm):
+    """Pinned to what `main` returned for this drawn plate before `box=` existed."""
+    from PIL import Image
+    im = _rounded_plate(Image)
+    got =pm.measure(im)
+    mm = 108.97 / 311
+    assert got[0] == (30, 25, 340, 124, mm)
+    assert got[1] == abs(100 * mm - 35.05) / 35.05 * 100
+    assert pm.measure(im, box=None) == got
+    shadowed = pm.measure(_shadowed_plate(Image))
+    assert shadowed[0][:4] == (30, 25, 340, 124)
+
+
+def test_openings_work_on_a_callers_box(pm):
+    from PIL import Image
+    im = _plate_on_dark_ground(Image)
+    for y in range(50 + 30, 50 + 70):          # a pale opening at x 80..119 of the face
+        for x in range(40 + 80, 40 + 120):
+            im.putpixel((x, y), (200, 205, 210))
+    box, _off = pm.measure(im, box=(40, 50, 350, 149))
+    (a, b, _c), = pm.openings(im, box)
+    px = 311 / 108.97
+    assert abs(a * px - 80) < 0.5 and abs(b * px - 120) < 0.5, (a * px, b * px)
+
+
+@pytest.mark.parametrize("box", [
+    (-1, 50, 350, 149),        # left of the image
+    (40, -1, 350, 149),        # above it
+    (40, 50, 391, 149),        # x1 is a pixel, and the image's last is 390
+    (40, 50, 350, 200),        # y1 past the last row
+    (40, 50, 40, 149),         # no width
+    (40, 50, 350, 50),         # no height
+    (350, 50, 40, 149),        # x reversed
+    (40, 149, 350, 50),        # y reversed
+    (40, 50, 350),             # not four numbers
+    (40, 50, 350, 149, 1),
+    (40.5, 50, 350, 149),      # not whole pixels
+])
+def test_a_bad_box_is_refused_not_clamped(pm, box):
+    from PIL import Image
+    im = _plate_on_dark_ground(Image)       # 391 x 200
+    with pytest.raises(ValueError) as e:
+        pm.measure(im, box=box)
+    assert "box" in str(e.value)
+
+
 def test_the_mtp_panel_scales_on_its_centre_row(pm):
     """On FS's own render the scale is the plate's width at its centre row.
 

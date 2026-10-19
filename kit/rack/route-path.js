@@ -57,7 +57,7 @@ export function routed2d(pts, r = 4, rings = null) {
 // would enter and leave by one face: that ring is not drawn through. The
 // cable is taken to that face only, and its index is in `back`.
 //
-// HELD, NOT HOOKED (#949, the owner's decision of 2026-10-09). A cable that
+// HELD, NOT HOOKED (#949, decided 2026-10-09). A cable that
 // only reaches a short way past its PORT into a ring just beyond it is held
 // by the ring, not hooked back through it: it passes, toward the ring and away
 // from both neighbours, and turns back beyond its far face. It applies only
@@ -197,11 +197,23 @@ const turnDeg = (u, v) => {
 // take all the room of its neighbours. A cable's own path is judged this way
 // (route.js routePath `bends`), since the kit lays it point by point, and so
 // is a bundle's trunk (bundles.js bendCheck, #984).
+//
+// A RIGID PLUG IS NOT A LEG (#985). A reach point with `rigid_mm` (route.js
+// PLUG_SPLIT) says the first `rigid_mm` of the leg from the port to it cannot
+// bend: the leg is a leg only from there on, so a corner at the reach point
+// has no leg in and no room, and the first corner past it has the leg from
+// where the rigid part ends. It is read only on the point next to the end of
+// the list, the port's own, so a stretch of a path cut from the middle carries
+// no plug. A point with no `rigid_mm` is measured as it always was.
 export function cornersOf(pts, {share = 'half'} = {}) {
   const P = [];
   pts.forEach((p, k) => { if (p && (!P.length || norm(sub(p, P.at(-1).p)) > 1e-6)) P.push({p, k}); });
   const cum = [0];
   for (let i = 1; i < P.length; i++) cum.push(cum[i - 1] + norm(sub(P[i].p, P[i - 1].p)));
+  const rigid = i => (P.length > 2 && P[i].p.rigid_mm > 0 ? P[i].p.rigid_mm : 0);
+  // where the first corner's leg in starts, and where the last corner's leg out ends
+  // (a list of three points has one point next to both ends, taken as the first's)
+  const first = Math.min(cum[1] ?? 0, rigid(1)), stop = cum.at(-1) - (P.length > 3 ? Math.min(cum.at(-1) - cum.at(-2), rigid(P.length - 2)) : 0);
   const at = [];
   let last = 0;
   for (let i = 1; i + 1 < P.length; i++) {
@@ -214,8 +226,8 @@ export function cornersOf(pts, {share = 'half'} = {}) {
   const tan = c => Math.tan((c.theta * Math.PI) / 360);
   return at.map((c, j) => {
     const prev = j ? at[j - 1] : null, next = j + 1 < at.length ? at[j + 1] : null;
-    const inMm = cum[c.i] - (prev ? cum[prev.i] : 0);
-    const outMm = (next ? cum[next.i] : cum.at(-1)) - cum[c.i];
+    const inMm = Math.max(0, cum[c.i] - (prev ? cum[prev.i] : first));
+    const outMm = Math.max(0, (next ? cum[next.i] : stop) - cum[c.i]);
     let room;
     if (back(c)) room = 0;
     else if (share === 'need') {

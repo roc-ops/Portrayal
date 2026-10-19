@@ -31,7 +31,7 @@
 // tree, and the difference in speed-goldens.json is then part of what is
 // reviewed: which racks and which answers it moved.
 //
-// THE RACKS (`racksOf`): the owner's two fixtures (cable-solids-fixture,
+// THE RACKS (`racksOf`): the two reference fixtures of #949 (cable-solids-fixture,
 // route-direct-fixture), the bundle fixtures (bundle-hops-fixture), every
 // rack file under spec/tests/fixtures/racks, the sixty generated racks of
 // bend-room-sample (1,803 cables), and the generated racks of speed-fixture

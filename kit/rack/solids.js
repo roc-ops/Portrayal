@@ -271,8 +271,11 @@ const within = (p, box) => AX.every(k => p[k] >= box[`${k}0`] - EPS && p[k] <= b
 // a cable going to the lane beside a zero-U PDU passes its corner close by,
 // and one whose centre line clears the corner by a fraction of a millimetre
 // would otherwise run across the PDU's outlet face, which section 1.3 rule 4
-// keeps for the last resort. Every other plate or envelope is met by the
-// centre line, as before: a cable lies against those at its radius.
+// keeps for the last resort. Its pass-through holes are judged on the tube
+// as well (#992, `legCrossings`). Every other plate or envelope is met by the
+// centre line, as before: a cable lies against those at its radius, and a
+// tube touching a plate the cable rests on is contact, not a fault. A plate
+// it does not rest on is left to the lay work (#986).
 const RING_PART = /^ring\/[^/]+\/./;
 // The box of a solid as a cable of `diameter` meets it, kept for the solid
 // and the diameter it was last asked for: a lay asks for the same few
@@ -289,6 +292,22 @@ const met = (s, diameter) => {
   if (s !== null && typeof s === 'object') metOf.set(s, {diameter, of: s.box, box});
   return box;
 };
+
+// A hole's box less `r` on each side across the hole: the two axes other than
+// the plate's thinnest, which is the way through it and is left as it is (the
+// stretch is measured inside the true plate, its ends on the plate's faces). A
+// side shorter than 2r closes to its middle.
+function shrunk(hole, plate, r) {
+  const thin = AX.reduce((m, k) => (plate[`${k}1`] - plate[`${k}0`] < plate[`${m}1`] - plate[`${m}0`] ? k : m), 'x');
+  const out = {...hole};
+  for (const k of AX) {
+    if (k === thin) continue;
+    const lo = hole[`${k}0`] + r, hi = hole[`${k}1`] - r, mid = (hole[`${k}0`] + hole[`${k}1`]) / 2;
+    out[`${k}0`] = lo <= hi ? lo : mid;
+    out[`${k}1`] = lo <= hi ? hi : mid;
+  }
+  return out;
+}
 
 // A LIST OF SOLIDS, READY TO BE CROSSED (kit 0.25.0). A lay asks which solids
 // a leg crosses some thousands of times, of a list that is the same every
@@ -346,8 +365,13 @@ export function legCrossings(a, b, solids, {diameter = 0} = {}) {
     const grown = met(s, diameter) !== s.box;
     const own = grown ? inside(a, b, s.box.x0, s.box.x1, s.box.y0, s.box.y1, s.box.z0, s.box.z1) : null;
     const [hp, hq] = own ? [lerp(a, b, own[0]), lerp(a, b, own[1])] : [p, q];
-    const through = (s.holes || []).some(h => within(hp, h.box) && within(hq, h.box)
-      && diameter <= Math.min(...h.size) + 1e-9);
+    // A ZERO-U PART's hole is judged on the tube too (#992): its box is taken
+    // less the cable's radius across the hole, so the tube fits inside it and
+    // does not lie a third in the wall. Not along the way through the plate.
+    const through = (s.holes || []).some(h => {
+      const box = s.zeroU === true && diameter > 0 ? shrunk(h.box, s.box, diameter / 2) : h.box;
+      return within(hp, box) && within(hq, box) && diameter <= Math.min(...h.size) + 1e-9;
+    });
     if (!through) out.push({solid: s, t0: span[0], t1: span[1], at: p});
   };
   if (!Array.isArray(solids) || solids.length < INDEX_FROM) {

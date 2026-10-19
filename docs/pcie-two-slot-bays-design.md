@@ -203,7 +203,11 @@ that has not been photographed composes this part, as a one-slot card composes
   seated across `slot-1` and `slot-2` on riser 1. It renders on the rear face,
   in 2D and 3D.
 - The A100 (`nvidia/a100-pcie-80gb`) moves onto this after both changes have
-  merged: `slot-width: 2`, and a riser bay with a `span` that accepts it.
+  merged: `slot-width: 2`, and a riser bay with a `span` that accepts it. It has:
+  riser 1A's `slot-1` accepts it, and the R740xd's example configuration
+  `sff24-rc4-1a2a3a-a100` seats it across slots 1 and 2. Its own plate is 36
+  across, which the note on the default bracket expected, so it draws its own
+  outline.
 
 ## Not in this change
 

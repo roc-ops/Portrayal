@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: a100-pcie-80gb-top
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The top edge of the NVIDIA A100 80GB PCIe card seen from outside, with the
+  three NVLink bridge connectors that sit under its removable caps. It is the
+  card's `faces.plan`, and it composes the connectors the bridge mates.
+size: {w: 38.23, h: 268.60}
+size-confidence: {w: estimated, h: drawing}
+size-notes: >-
+  THE TOP EDGE SEEN FROM OUTSIDE, which is the side the connectors face: the
+  card's top edge is the one 126.31 from the bracket's tip (the side the NVLink
+  bridges bolt to), and the drawing runs 268.60 behind the bracket's outer face
+  (y' = mm behind it) and 38.23 across the card's thickness (x' = the card's y
+  less 1.77, so the backplate is at the left, as the tail face has it). The
+  thickness is the card's estimated 38.2 (its `thickness`). ANOTHER CARD'S
+  `faces.plan` (common/pcie-card-plan@1) is the card seen from above lying in a
+  riser. This one is the top edge, because docs/connectors-gpu-design.md section
+  7 names `faces.plan` as the place for the top edge and the library has no other
+  face a connector off the bracket can be composed on. It is a choice for the
+  owner to confirm (the PR says so).
+attrs: {media: gpu}
+parts:
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-1, at: [0.43, 13.50]}
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-2, at: [0.43, 70.70]}
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-3, at: [0.43, 126.10]}
+provenance:
+  size: >-
+    drawing - the length is PB-10577 figure 3's 268.60; the width is the card's
+    estimated thickness, see size-notes.
+  connectors: >-
+    estimated - three NVLink bridge connectors on the top edge, 6.6 across and
+    49.5 along, starting 13.5, 70.7 and 126.1 behind the bracket's outer face,
+    from 2.2 to 8.8 across the card (x' 0.43 to 7.03). These are the card's
+    `body-nvlink` figures, measured on PNY's top-edge render at about 2.6 px/mm
+    and good to a millimetre or so; NVIDIA's figure 5 draws the keep-out and
+    prints no dimensions. The caps over them are the card's 3D boxes and are not
+    drawn here.
+  bands: >-
+    estimated - the edge's four bands, left to right: the black backplate, the
+    board's edge, the black cover and the champagne shroud, at the card's `body`
+    boxes (the card's y 1.77, 4.44, 6.01, 14.40 and 40.0, less 1.77). The ribs,
+    the lettering and the open end are the card's own side drawings, not drawn here.
+skins: [default]

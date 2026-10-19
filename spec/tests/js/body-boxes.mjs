@@ -38,6 +38,53 @@ const straight = [m.pieceIsStraight(null), m.pieceIsStraight({a: 1, b: 0, c: 0, 
   m.pieceIsStraight({a: -1, b: 0, c: 0, d: 1, e: 0, f: 0}),       // mirrored
   m.pieceIsStraight({a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}, {deg: 8})];
 const demoted = m.plainPiece(pieces[0]);
+// THE FOUR SIDES. A card's shroud: face x 28.41..126.31, y 14.4..40, 0.9..140.93
+// behind the face, on a 120.02 face 268.6 deep. Each side drawing's viewBox has
+// its own origin (`at`), and a crop is sampled at the four corners of the side
+// as three's BoxGeometry lays its uv out: +x and -x faces run u toward the back
+// and toward the front, +y has v toward the back, -y v toward the front.
+const shroud = {x: 28.41, y: 14.4, w: 97.9, h: 25.6, z0: 0.9, z1: 140.93};
+const side = (which, dw, dh, vbAt) => m.pieceArtCrop(shroud, which, 120.02, dw, dh, {at: vbAt, depth: 268.6});
+const sideAt = (c, u, v, dw, dh, [ax, ay]) => {
+  const [x, y] = at(c, u, v, dw, dh);
+  return [+(x + ax).toFixed(3), +(y + ay).toFixed(3)];
+};
+const right = side('right', 267.7, 38.23, [0.9, 1.77]);
+const left = side('left', 267.7, 25.6, [0, 14.4]);
+const top = side('top', 120, 268.6, [10, 0]);
+const bottom = side('bottom', 97.9, 267.7, [-6.29, 0]);
+const sides = {
+  // u 0 v 1 on +x is the front top corner: drawing x = z0, y = the box's top
+  rightFrontTop: sideAt(right, 0, 1, 267.7, 38.23, [0.9, 1.77]),
+  rightBackBottom: sideAt(right, 1, 0, 267.7, 38.23, [0.9, 1.77]),
+  // u 0 on -x is the back: drawing x = 268.6 - z1
+  leftBackTop: sideAt(left, 0, 1, 267.7, 25.6, [0, 14.4]),
+  // u 0 v 0 on +y is face x 28.41 at the front: drawing y = 268.6 - z0
+  topFrontLeft: sideAt(top, 0, 0, 120, 268.6, [10, 0]),
+  // u 0 v 0 on -y is face x 28.41 at the back: drawing x = 120.02 - 28.41
+  bottomBackLeft: sideAt(bottom, 0, 0, 97.9, 267.7, [-6.29, 0]),
+  bottomFrontRight: sideAt(bottom, 1, 1, 97.9, 267.7, [-6.29, 0]),
+};
+// A FITTED PIECE stands while the part shows a node for one of its options
+const ext = {id: 'ext', when: {extender: ['straight']}};
+const fitted = [m.pieceFitted({id: 'plain'}, undefined),
+  m.pieceFitted(ext, undefined), m.pieceFitted(ext, {extender: ['long-offset']}),
+  m.pieceFitted(ext, {extender: ['straight']}), m.pieceFitted(ext, {other: ['straight']})];
+// and what a drawing shows, by part: a hidden node (or one inside a hidden
+// group) shows nothing, and a part alone is keyed by its own path
+const {build} = await import('./fake-dom.mjs');
+const doc = build({a: {}, c: [
+  {a: {'data-path': 'card'}, c: [
+    {a: {'data-show-from': 'extender', 'data-show': 'straight'}},
+    {a: {'data-show-from': 'extender', 'data-show': 'long-offset', display: 'none'}}]},
+  {a: {'data-path': 'riser/module/slot-1/module'}, c: [
+    {a: {display: 'none'}, c: [{a: {'data-show-from': 'extender', 'data-show': 'straight'}}]},
+    {a: {'data-show-from': 'extender', 'data-show': 'long-offset'}}]},
+  {a: {'data-projection': '1', 'data-path': 'x'}, c: [{a: {'data-show-from': 'k', 'data-show': 'a'}}]}]});
+const shown = m.shownOptions(doc);
+const keptWhen = m.plainPiece(m.bodyBoxes({depth: 10, boxes: [
+  {id: 'e', at: [0, 0], size: [1, 1], depth: 1, when: {extender: ['straight']}, shows: ['right']}]}, 1, 1)[0]);
 console.log(JSON.stringify({one, fp, riser, plain, mirrored, pieces, straight, demoted,
   planNear: at(planCrop, 0, 0, 431, 250), planFar: at(planCrop, 1, 1, 431, 250),
-  rearTopLeft: at(rearCrop, 0, 1, 100, 21), rearBottomRight: at(rearCrop, 1, 0, 100, 21)}));
+  rearTopLeft: at(rearCrop, 0, 1, 100, 21), rearBottomRight: at(rearCrop, 1, 0, 100, 21),
+  sides, fitted, keptWhen, shown}));

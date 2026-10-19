@@ -90,6 +90,12 @@ PAIRS.update({f"ufispace/{m}": {(view, "ground-screws"): (H58_M4, None, c, "M4")
                                  ("s9510-30xc", "right", (16.2, 22.0)),
                                  ("s9511-20ct", "right", (16.4, 21.8)),
                                  ("s9601-104bc", "left", (16.4, 37.2)))})
+# #918: the S9501-18SMT's two locations, each a two-hole landing: its own HIG
+# Figure 22 reads the holes 9.4 and 25.2 mm and 193.3 and 209.0 mm from the front
+# (15.8 and 15.7 apart), so the hosts are centred at 17.3 and 201.15, at the
+# height the lug placements had (21.8).
+PAIRS["ufispace/s9501-18smt"] = {("right", "ground-screws-1"): (H58_M4, None, (17.3, 21.8), "M4"),
+                                 ("right", "ground-screws-2"): (H58_M4, None, (201.15, 21.8), "M4")}
 CASES = [(d, v, i) for d, pairs in sorted(PAIRS.items()) for (v, i) in sorted(pairs)]
 
 
@@ -203,6 +209,7 @@ def test_each_ufispace_pair_records_its_reading_and_its_gap():
 # is device silkscreen where the chassis prints it (provenance ground-pair).
 # device -> (rotate, {id: stud axis}, stud-size, {mark centre: the ids it is for})
 PLAIN = "common/ground-screw@1"
+SIZED_M5 = "common/ground-screw-m5@1"
 TWO_SCREW = {
     "edgecore/dcs500": ({"ground-1": 90, "ground-0": 90},
                         {"ground-1": (49.85, 32.7), "ground-1b": (67.05, 32.7),
@@ -222,12 +229,14 @@ def test_a_two_hole_plate_draws_both_screws_and_its_printed_mark(device):
     rots, studs, size, marks = TWO_SCREW[device]
     rear = _device(device)["views"]["rear"]
     placed = {p["id"]: p for p in rear["components"]["placements"]
-              if p["ref"] in (PLAIN, "common/ground-lug@1")}
+              if p["ref"] in (PLAIN, SIZED_M5, "common/ground-lug@1")}
     assert set(placed) == set(studs)
-    c = _contract(PLAIN)
+    # #918: the DCS500's M5 screws are the sized M5 screw; the unsized three keep the plain one
+    part = SIZED_M5 if device == "edgecore/dcs500" else PLAIN
+    c = _contract(part)
     for pid, axis in studs.items():
         p = placed[pid]
-        assert p["ref"] == PLAIN, pid
+        assert p["ref"] == part, pid
         assert p.get("rotate") == rots.get(pid), pid
         assert (p.get("attrs") or {}).get("stud-size") == size
         seat = render_mod.seat_point(p["at"], c["size"], p.get("rotate"),
@@ -238,6 +247,39 @@ def test_a_two_hole_plate_draws_both_screws_and_its_printed_mark(device):
            if m.get("for") and set([m["for"]] if isinstance(m["for"], str) else m["for"]) & set(studs)}
     assert got == {k: v for k, v in marks.items()}
     assert "ground-pair" in _device(device)["provenance"]
+
+
+def test_the_dcs500_m5_screw_sits_on_the_washer_its_datasheet_shows():
+    """The datasheet rear shows washered screws: the M5 screw draws the head
+    on an ISO 7089 washer (10 across, 1.0 thick), and a lug starts above it."""
+    c = _contract(SIZED_M5)
+    assert c["size"] == {"w": 10.0, "h": 10.0}
+    feats = {f["node"]: f for f in c["relief"]["features"]}
+    assert feats["washer"]["cyl"] == pytest.approx(1.0)
+    assert feats["head"]["cyl"] == pytest.approx(3.7)
+    assert feats["head"]["lift"] == pytest.approx(1.0)
+    svg = (LIB / "components/common/ground-screw-m5/v1/skins/default.svg").read_text()
+    assert 'id="washer"' in svg and 'id="head"' in svg
+
+
+def test_s9501_18smt_prints_an_earth_symbol_above_each_of_its_four_holes():
+    """Main drew the circled earth symbol 6.6 above each hole centre (the lug's
+    own art); the pair hosts draw none, so each hole has a silkscreen ring and
+    bars (a part there would lie across the lug's seat)."""
+    view = _device("ufispace/s9501-18smt")["views"]["right"]
+    paths = [m for m in view["silkscreen"] if m.get("path")]
+    holes = [(9.4, "ground-screws-1"), (25.2, "ground-screws-1"),
+             (193.3, "ground-screws-2"), (209.0, "ground-screws-2")]
+    assert {(m["for"], m["at"][0]) for m in paths} == {(host, x) for x, host in holes}
+    assert len(paths) == 2 * len(holes)
+    for m in paths:
+        assert m["at"][1] == pytest.approx(15.2)
+        assert m["fill"] == "#c7ccd1"
+    # the ring at 0.3 and the four bars at 0.32, as main drew them
+    for x, host in holes:
+        ours = [m for m in paths if (m["for"], m["at"][0]) == (host, x)]
+        assert sorted((m["stroke-width"], m["path"].count("M")) for m in ours) == [(0.3, 1), (0.32, 4)]
+    assert not [p for p in view["components"]["placements"] if p["ref"] == "common/ground-symbol@1"]
 
 
 def test_the_plain_screw_seats_a_ring_lug_where_ground_lug_does():

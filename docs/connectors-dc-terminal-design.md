@@ -681,7 +681,7 @@ offers the ring lug alone.
 | `common/ground-stud-pair-1-1-4@1` | `common/ground-screw-1-4@1` twice | `stud-pair-1` |
 
 **The sized screws (#830, part 1).** `common/ground-lug@1` stays the library's nominal
-ground screw, unsized, as the owner ruled. `common/ground-screw-m6@1` (ISO 7045 pan head,
+ground screw, unsized, decided in #830. `common/ground-screw-m6@1` (ISO 7045 pan head,
 12.0 across, 4.6 high) and `common/ground-screw-1-4@1` (ASME B18.6.3 pan head, 12.50
 across, 3.66 high) are drawn at a stated size and used only inside a pair host.
 `common/ground-screw-m4@1` (ISO 7045, 8.0 across, 3.1 high) joined them with the UfiSpace

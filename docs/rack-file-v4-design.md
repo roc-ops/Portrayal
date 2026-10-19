@@ -1886,6 +1886,9 @@ grey whatever was said of it, and on a dark stage nearly invisible.
 
 ### 14.2 The order
 
+**Decided 2026-10-18:** this order, and `color` as the new saved key on a
+cable. Nothing else in this section is decided by that (see 14.3 and 14.7).
+
 A cable is drawn in the first of these that says something:
 
 1. **its own colour**, `color` on the cable in the rack file;
@@ -1907,6 +1910,10 @@ drawing. The last two cables are the media's dark grey, as every AOC was.
 ### 14.3 What was decided in the build
 
 Each is built, and each waits for a person to confirm it, as section 13's do.
+The order of 14.2 and the `color` key were decided 2026-10-18; no item below
+is marked decided by that. Items 3 ("both ends, or neither") and 5 (a type's
+colour for a named type only) are how items 2 and 3 of 14.2 read, and are decided only as far as the order says so. Their further
+wording here, and every other item, still waits.
 
 1. **A colour is hex.** `#` and three or six hex digits, either case, stored
    as `#rrggbb` in lower case. That is how `jacket-color` is written on
@@ -2043,3 +2050,17 @@ same kind of question for every media.
   cable whose file names the type; nothing in the kit writes that key yet.
 - A colour for a bundle, a strap, or a plug.
 - A jacket colour for any type but the one with a source.
+
+### 14.7 Still open
+
+- **The AOC default** (`COLORS.aoc`, 14.5): whether it becomes aqua. One-way:
+  it recolours every existing drawing, sheet and 3D file with an AOC.
+- **The draw.io palette** (`CABLE_COLOURS` in `kit/drawio.js`): whether it
+  follows `COLORS`. One-way for the same reason.
+- **The Rack Builder page's half**, which is not in this repository: the
+  cable form's colour input, and passing the readers to `cablePlan` and
+  `cablePlan3d`. Until it does, no page shows a colour from the ends or a
+  type.
+- **Named cable types with sourced jacket colours** (#897): each type needs a
+  source for its colour; the table holds one today.
+- The rulings of 14.3 other than the order, as noted there.

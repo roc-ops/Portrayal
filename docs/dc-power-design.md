@@ -1,6 +1,6 @@
 # DC power: an inventory, and a proposed model for DC ends and feeds
 
-Status: **proposed, 2026-10-15, for the owner's approval. Nothing here is built.** The inventory
+Status: **proposed, 2026-10-15, for approval. Nothing here is built.** The inventory
 ([dc-power-inventory.md](dc-power-inventory.md), written by `spec/tools/dev/dc_inventory.py`) is
 the only code in this change. The fix is the next order and starts only after the model in
 sections 5 to 8 is approved. Section 11 lists what needs a yes, and which published schemas it
@@ -284,7 +284,7 @@ reads, and says what is missing otherwise. A polarity warning is first in the li
 |---|---|---|
 | `spec/schemas/component.schema.json` | the optional `dc` block of 5.2 (ports, voltage, rating, awg, side, poles with roles, the `stand-in` marker); additive, `format` unchanged | **yes**, `/schemas/v1/`: needs a yes |
 | `spec/schemas/device.schema.json` | an optional per-placement `dc` override (side, voltage, rating, the roles of poles); additive | **yes**, `/schemas/v1/`: needs a yes |
-| `spec/schemas/rack.schema.json` | **none.** A feed is `media: power`; an end is a path; the port path or a pole path are paths. Only the `end.path` and `media` descriptions get a sentence | the text change republishes it if the owner wants the sentence; skipping it costs nothing |
+| `spec/schemas/rack.schema.json` | **none.** A feed is `media: power`; an end is a path; the port path or a pole path are paths. Only the `end.path` and `media` descriptions get a sentence | the text change republishes it if the sentence is wanted; skipping it costs nothing |
 | `spec/schemas/connectors.yaml` | none for the shapes that exist; the bus-bar blade needs one entry when its end is drawn | no (tooling vocabulary) |
 | `spec/schemas/standards.yaml` | entries only where a figure is sourced: -48 V plant range, the terminal-block figures a vendor prints; nothing invented. Candidate sources to read and cite in the fix: the ETSI and ATIS documents for -48 V telecom plants | no |
 | `spec/schemas/dc.yaml` (new) | the role vocabulary and the match table of 5.1, each pair with its source | no |
@@ -294,7 +294,7 @@ reads, and says what is missing otherwise. A polarity warning is first in the li
 | DCIM exports | none. A DC output remains a power outlet, an input a power port, as today; the cables file keeps leaving power out | no |
 | `kit/` | section 8; a minor version of the kit | the kit is published |
 
-If the owner prefers no schema republish, the fallback is `attrs` on the part and the placement
+If no schema republish is preferred, the fallback is `attrs` on the part and the placement
 (`dc-poles: 'rtn,batt'`, `dc-side: a`): no schema change, and unstructured; the library's experience with
 `stud-size` is that a text attribute is a fact "nothing reads". The recommendation is the schema.
 
@@ -345,7 +345,7 @@ Sizes: S under a day of work, M a few days, L a week or more; counts are from th
 
 Order, not parallel: 1 before 2, 2 and 3 before 4, 4 before 6. 5 can follow 4 beside 6(a).
 
-## 11. What needs the owner's yes
+## 11. What needs a yes
 
 1. The recommendation of 5.4: one cable per feed, poles as child slots, arity 1 for a single conductor.
 2. The two schema changes of section 7: `component.schema.json` and `device.schema.json`, additive, each a republish of

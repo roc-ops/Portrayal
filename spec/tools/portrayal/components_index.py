@@ -27,7 +27,7 @@ from pathlib import Path
 import yaml
 from portrayal.manifest import load_yaml
 
-from portrayal.faces import DIRECTIONS, face_ref  # noqa: E402
+from portrayal.faces import BODY_SIDES, DIRECTIONS, face_ref, side_viewbox  # noqa: E402
 from portrayal.render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
                     seq_css_name, state_rule, component_cages, component_presents,
                     _pluggable_families, _pluggable_candidates,
@@ -294,6 +294,11 @@ def kit_entry(ref, ns, major, data):
     EVERY KEY ON EVERY ROW, null or empty where the contract says nothing, so a
     consumer reads one shape. The parts stay refs; a device's configs.json is
     where a kit is resolved inline with the geometry of its parts (#907).
+
+    A CONFIGURATION IS PUBLISHED AS THE CONTRACT WRITES IT. One that states a
+    `preset` and no `depth` ("factory setting known, range unknown") has no
+    `depth` key here: never null, never `[preset, preset]`. The `gaps` row says
+    the range is unknown.
     """
     row = {
         "ref": ref, "ns": ns, "name": data["name"], "major": major,
@@ -308,6 +313,7 @@ def kit_entry(ref, ns, major, data):
         "accessories": data.get("accessories") or [],
         "superseded-by": data.get("superseded-by"),
         "provenance": data.get("provenance") or {},
+        "gaps": data.get("gaps") or [],
     }
     if data.get("audience"):
         row["audience"] = data["audience"]
@@ -611,7 +617,8 @@ def main():
                 # and the drawing's size in mm to crop it - and the face's own
                 # size, because both drawings run right to left against it.
                 # Only when some box asks: 1,200 parts do not.
-                if any(b.get("shows") for b in data["body"].get("boxes") or []):
+                shown = {s for b in data["body"].get("boxes") or [] for s in b.get("shows") or []}
+                if shown:
                     drawings = {}
                     for k in ("plan", "rear"):
                         dref = face_ref(data, k)
@@ -622,6 +629,15 @@ def main():
                             drawings[k] = {
                                 "file": f"components/{dns}--{dname}--v{dmaj}--default.svg",
                                 "w": dc["size"]["w"], "h": dc["size"]["h"]}
+                    # A SIDE IS THE PART'S OWN body-<side>.svg, already copied
+                    # above, and it covers the patch of the body its viewBox
+                    # names - so the crop needs the origin as well as the size
+                    # (relief.js pieceArtCrop). Only the sides some piece shows.
+                    for k in sorted(shown & set(BODY_SIDES)):
+                        vb = side_viewbox(cf.parent / "skins" / f"body-{k}.svg")
+                        if k in sides and vb:
+                            drawings[k] = {"file": sides[k], "w": vb[2], "h": vb[3],
+                                           "at": [vb[0], vb[1]]}
                     entry["body"]["drawings"] = drawings
                     entry["body"]["face"] = [data["size"]["w"], data["size"]["h"]]
             # A PART'S OTHER DRAWINGS, flattened to refs. The viewer resolves

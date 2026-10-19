@@ -24,6 +24,13 @@
 #   LISTING - devices/<nos vendor>/<id>/listing.yaml, pointing at the hardware -
 #   and this entry is what names the namespace that listing lives in.
 #
+#   `role: reseller` marks a vendor that sells another maker's hardware under
+#   its own part numbers (FS.com selling APC cabinets). It too is expressed by a
+#   LISTING, with no NOS in it. A vendor that is two things says so with a list:
+#   `role: [hardware, reseller]`. `role` is one word (hardware | software |
+#   reseller | both) or a list of words from hardware, software and reseller;
+#   `both` stays as it is and means hardware and software.
+#
 # EVERY ENTRY CARRIES ITS SOURCE, for the reason every figure in this library
 # does: a corporate lineage claim is a fact about the world, it decays, and the
 # next person needs to know whether it came from a live device, a document, or

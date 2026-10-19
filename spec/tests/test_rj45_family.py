@@ -213,6 +213,80 @@ def test_l76_takes_the_pinside_jack_as_lamped():
     assert len(ws) == 1 and "1 console/timing jack(s) on a lamped part" in ws[0]
 
 
+def _neutral(id_, **attrs):
+    return {"id": id_, "ref": LAMPED_NEUTRAL, "at": [0, 0], "group": "mgmt", "attrs": attrs}
+
+
+@pytest.mark.parametrize("id_,attrs", [
+    ("bits", {"media": "rj48", "role": "timing", "timing": "BITS"}),
+    ("tod", {"media": "rj45-tod", "role": "timing"}),
+    ("console", {"media": "rj45-serial", "role": "console"}),
+])
+def test_l76_takes_a_timing_or_console_jack_on_the_neutral_lamped_cell(id_, attrs):
+    assert lint.rj45_class(LAMPED_NEUTRAL, [str(LIB)]) == "neutral"
+    assert l76(_dev([_neutral(id_, **attrs)])) == []
+    assert l76c("x", [{"id": id_, "ref": LAMPED_NEUTRAL, "at": [0, 0], "attrs": attrs}]) == []
+
+
+def test_l76_sends_an_ethernet_jack_on_the_neutral_lamped_cell_to_the_eth_part():
+    ws = l76(_dev([_neutral("port-1", media="rj45", role="port")]))
+    assert len(ws) == 1, ws
+    assert "1 Ethernet jack(s) on the media-neutral lamped part" in ws[0]
+    assert "common/rj45-ganged-eth@1" in ws[0]
+    assert "1 Ethernet jack(s) on a part with no lamps" not in ws[0], "it HAS lamps"
+    ws = l76c("mpc7e-10g", [{"id": "port-1", "ref": LAMPED_NEUTRAL, "at": [0, 0], "attrs": {"role": "port"}}])
+    assert len(ws) == 1 and "1 Ethernet jack(s) on the media-neutral lamped part" in ws[0]
+
+
+def test_l76_does_not_census_the_neutral_lamped_cell_itself():
+    p = LIB / "components/common/rj45-ganged-lamped/v1/contract.yaml"
+    with lint.collecting() as _found:
+        lint.lint_component_rj45_lamps(p, yaml.safe_load(p.read_text()), [str(LIB)])
+    assert [w for w in _found.warnings if "[L76]" in w] == []
+
+
+def test_l76_still_wants_a_console_jack_on_the_eth_part_refused():
+    """The neutral part did not loosen the Ethernet part's side of the rule."""
+    ws = l76(_dev([{**_neutral("bits", role="timing"), "ref": "common/rj45-ganged-eth@1"}]))
+    assert len(ws) == 1 and "1 console/timing jack(s) on a lamped part" in ws[0]
+
+
+def test_the_neutral_lamped_cell_is_not_typed_as_ethernet_by_the_export():
+    """The exporter's RJ45 guard reads `-eth` in the ref. This ref has none, so a
+    jack on it is typed by what the placement says, as a bare jack is: a timing
+    jack is `other` with its function, and nothing makes it a 1000base-t port."""
+    pl = {"ref": LAMPED_NEUTRAL, "id": "bits", "group": "timing"}
+    a = {"media": "rj48", "role": "timing", "timing": "BITS"}
+    assert dx.iface_type(pl, a, "management") is None
+    assert dx.iface_type(pl, {}, "management") is None
+    assert dx.device_timing_row(pl, a) == {"name": "bits", "type": "other", "label": "BITS"}
+    assert dx.device_port_type(pl, a, "management")[0] is None
+    # the card path types it the same way
+    out = dx.build_module({"kind": "module", "name": "m", "attrs": {"model": "m"},
+                           "parts": [{"id": "bits", "ref": LAMPED_NEUTRAL, "attrs": a}]}, "X")
+    assert out["interfaces"] == [{"name": "bits", "type": "other", "label": "BITS"}]
+    assert "console-ports" not in out
+
+
+def test_the_csr440_bits_jack_exports_as_other_bits_and_no_ethernet_for_it():
+    dev = yaml.safe_load((LIB / "devices/edgecore/csr440/device.yaml").read_text())
+    pl = [p for v in dev["views"].values() for p in ((v or {}).get("components") or {}).get("placements") or []
+          if p.get("id") == "bits"]
+    assert [p["ref"] for p in pl] == [LAMPED_NEUTRAL]
+    for name, cfg in dev["configurations"].items():
+        doc = dx.build(dev, name, cfg, None)
+        rows = [i for i in doc["interfaces"] if i["name"] == "bits"]
+        assert rows == [{"name": "bits", "type": "other", "label": "BITS"}], (name, rows)
+        assert not [c for c in doc.get("console-ports") or [] if c["name"] == "bits"]
+
+
+def test_the_csr440_needs_no_l76_waiver():
+    p = LIB / "devices/edgecore/csr440/device.yaml"
+    dev = yaml.safe_load(p.read_text())
+    assert "L76" not in ((dev.get("lint") or {}).get("waive") or {})
+    assert l76(dev) == []
+
+
 def test_the_pinside_jack_exports_as_ethernet_at_the_cards_speed():
     assert dx.iface_type({"ref": "common/rj45-eth-pinside@1", "id": "port-1"}, {}, "traffic") == "1000base-t"
     card = contract("hpe/flom-817745-b21@1")
@@ -241,6 +315,32 @@ def test_common_rj45_ganged_eth_composes_the_cell_and_adds_two_lamps():
     assert c["connection-points"]["net"] == {"at": [6.35, 5.1], "direction": "front"}
     s = skin("common/rj45-ganged-eth@1")
     assert 'fill-rule="evenodd"' in s and 'id="led-b"' in s
+
+
+LAMPED_NEUTRAL = "common/rj45-ganged-lamped@1"
+
+
+def test_the_neutral_lamped_cell_has_the_eth_cells_lamps_and_no_ethernet_claim():
+    """#370: the same cell and the same two windows as the Ethernet part, with
+    nothing that says Ethernet. A timing jack can sit on it and be told the
+    truth about what it carries by its own placement."""
+    c, eth = contract(LAMPED_NEUTRAL), contract("common/rj45-ganged-eth@1")
+    assert c["size"] == eth["size"]
+    assert c["parts"] == eth["parts"] == [{"ref": "std/rj45-ganged@2", "id": "jack", "at": [0.0, 0.0], "behind": True}]
+    for el in ("led-a", "led-b"):
+        for key in ("at", "size", "class"):
+            assert c["elements"][el][key] == eth["elements"][el][key], (el, key)
+    assert c["fields"] == eth["fields"], "the same finish rule"
+    assert c["connection-points"] == eth["connection-points"]
+    assert "media" not in (c.get("attrs") or {}) and "speed" not in (c.get("attrs") or {})
+    assert "eth" not in c["name"]
+    for el in ("led-a", "led-b"):
+        assert not {"link", "activity"} & set(c["elements"][el]["states"]), "no Ethernet vocabulary"
+    for key in ("lamps", "finish", "media"):
+        assert key in c["provenance"], key
+    assert "#370" in c["provenance"]["lamps"]
+    s = skin(LAMPED_NEUTRAL)
+    assert s == skin("common/rj45-ganged-eth@1"), "the same drawing"
 
 
 def test_the_dell_carrier_attaches_ism_meanings_to_the_new_lamps():

@@ -158,6 +158,10 @@ A cable crosses a solid only through:
 - **a duct**, into its channel and out through a finger gap;
 - **a pass-through**, along z, when the diameter of the cable (or of the
   bundle, at that point) is no larger than the smaller side of its `size`.
+  On a zero-U part (#992) the tube must also fit: the hole's box is taken
+  less the cable's radius across the hole, so a centre line 2 mm inside the
+  edge is a crossing for a 6 mm cable. The box is not shortened along the way
+  through the plate.
 
 A pass-through is the one opening kind for a hole in a plate. A slot that is
 big enough to take a cable is declared as one, with its size, and the check
@@ -178,7 +182,9 @@ pinned to the held face whose next waypoint is above the tray) passes
 through the plate and is a finding, unless the detours of 1.3 take it round
 the front edge first. A point of the tube exactly on a face of the plate is
 not inside it; the browser check of 1.4 tests the inside with the same
-tolerance it uses for every surface a cable rests on.
+tolerance it uses for every surface a cable rests on. The tube touching a
+plate the cable rests on is contact, not a fault (1.4); a plate it does not
+rest on is left to the lay work (#986).
 
 ### 1.3 Going around
 
@@ -289,6 +295,15 @@ so a corner that cuts metal is a drawing fault to fix, not a finding. For a
 routed cable `clearOf` then has nothing to do, and a test holds it to that;
 it stays for the unrouted hangs, which section 3 also brings to rest.
 
+**Contact is not a fault where the cable rests (#992).** A tube that touches
+a plate the cable rests on is contact, and the check does not fail on it: a
+tray floor's resting face, where the cable lies on the plate, and its held
+face, where it lies against it from below (2.3). That is the same contact
+1.2 calls lying against a plate. A tube inside a plate it is not resting on
+is not accepted by this rule: whether the lay should keep it clear is the
+question of #986, and nothing here settles it. The check lives outside this
+repository; this note is the rule it is held to.
+
 ### 1.5 The plug's reach
 
 Decided 2026-10-09 for #960; built in kit 0.13.0.
@@ -349,7 +364,7 @@ cord measured just under a stock break could be ordered short.
   does not add the plug's length; it bends that leg into a dog-leg, straight
   out of the face for the plug and only then toward the waypoint, so a
   length grows by what the dog-leg adds over the straight leg (11 to 28 mm
-  a cord on the owner's rack, not two whole plugs), and by any detour the
+  a cord on the reference rack, not two whole plugs), and by any detour the
   new leg needs. Nothing adds the reach a second time: the length is the
   path's points and the two allowances, and a test holds it to that.
 - **What a drawing does.** A drawing that starts its routed tube at the
@@ -362,7 +377,7 @@ cord measured just under a stock break could be ordered short.
   (path point 1 and the one before last) and pass the page's cable-point `z`
   as `plugReachOf`, so drawn and measured agree.
 
-On the owner's rack of #949, every automatic route grows by 11 to 28 mm, and
+On the reference rack of #949, every automatic route grows by 11 to 28 mm, and
 seven cords pass the 0.5 m break: c7, and c9 to c14 from the lower leaf. With
 a QSFP-LC optic in each leaf port (a reach of 47.6 mm), the lower leaf's
 eight cords go round the tray's front edge and measure 0.63 to 0.67 m.
@@ -373,7 +388,7 @@ Decided 2026-10-10 for #962; built in kit 0.16.0.
 
 The kit added 0.15 m at each end of every routed cable before rounding it
 up to a stock length. The figure came from the site's early routing spec,
-with no stated purpose and no source, and on the owner's rack it was most
+with no stated purpose and no source, and on the reference rack it was most
 of each measured length: fifteen of sixteen OM4 cords rounded up to 1 m
 where a 0.5 m cord leaves about a quarter of a metre spare.
 
@@ -447,7 +462,7 @@ When the library's plug parts are measured, the table follows them.
 is 73.8 mm shorter for LC fibre, 31 for copper and a cable with no media,
 and 50 for a DAC; an AOC's is 4.8 mm longer. (By the table alone, without
 the dressing allowance, they would be 273.8, 231, 250 and 195.2 shorter.)
-On the owner's rack of #949 every cord is 73.8 mm shorter: c1 to c8 measure
+On the reference rack of #949 every cord is 73.8 mm shorter: c1 to c8 measure
 0.422 to 0.495 m and are 0.5 m cords (seven of them were 1 m cords; c4 was
 0.5 already), and the lower leaf's c9 to c16 measure 0.547 to 0.592 and stay
 1 m cords. Seven of the sixteen change stock size. On the generated racks of
@@ -459,7 +474,7 @@ touched.
 
 The stock size is the first that holds the measured length, so a cord can
 round up with little to spare over its measure: 218 of the 3,120 have under
-50 mm (217 did at 0.15 m an end), and five of the owner's (c1 39.5, c2
+50 mm (217 did at 0.15 m an end), and five of the reference rack's (c1 39.5, c2
 48.7, c5 35.0, c6 29.7, c7 5.0). The measure has the dressing allowance in
 it, so each of those still has 0.2 m and more over its path and plugs; when
 step 4 takes the allowance away, what is spare is what a tray is given to
@@ -471,6 +486,10 @@ spread of the LC plug depth estimate at two ends (1.8 mm each). Its source
 and the figure's confirmation, 2026-10-18, are in decision 5 of
 `rack-file-v4-design.md`; the rule is written against end play, not the
 dressing allowance, in the same note's section on lengths.
+
+When the dressing allowance is removed, the 10 mm tolerance at a stock break
+stays, and it applies to the bare length: the measured length with no
+dressing allowance in it. Decided 2026-10-18.
 
 ### 1.7 A span in front of other ports (#1013)
 
@@ -869,7 +888,7 @@ the build chose as follows; each is in `kit/rack/resting.js` or
 
 Built in kit 0.15.0. Until then a ring was an opening and nothing else: its
 legs, hook and bar were in no list of solids, so a route could run through
-them and nothing saw it. On the owner's rack every upper cord came down into
+them and nothing saw it. On the reference rack every upper cord came down into
 its ring through the rear leg, and every lower cord, taken round the tray's
 front edge to the ring's face, ran along the face and grazed both legs.
 
@@ -1128,9 +1147,39 @@ kinds:
 - **A lane has no depth.** It runs on the rail plane, so a cable from a plug
   to a lane turns back toward the rail. The run-out gives that turn its
   leg; it does not put the lane where a gutter's cables are.
-- **A plug is a leg.** The measure gives a corner at a plug's end the whole
-  reach to bend in, as the bundle check gives a leg to a trunk's end. A boot
-  bends, a plug body does not, and the kit does not tell them apart.
+- **A plug is a leg, except where it is known to be rigid (#985).** A plug
+  body does not bend and a boot does, and the kit tells them apart only
+  where a cited drawing gives the split (`PLUG_SPLIT`, beside `PLUG_REACH`
+  in `kit/rack/route.js`):
+  - **DAC and AOC: all rigid.** Amphenol C-NDAAFR-0099, view RADIUS FROM END
+    OF DIECAST, gives 45 MIN required to bend the cable, measured from the
+    diecast rear and *including the boot*. The head stands 19.8 out of the
+    cage (`generic/qsfp-cable@1`) and 19.8 + 45 is the 64.8 mm reach, so the
+    whole reach is rigid and the boot adds none. The reach point is flagged
+    `rigid_mm: 64.8`; a corner at it has no leg in the plug and no room, and
+    `cornersOf` measures the first leg from where the rigid part ends. So
+    the cable runs on straight past the reach point to a lead point (the
+    run-out of 3.4, half a radius to three for a rigid plug) and turns
+    there. Where no run-out gives the turn its room, the corner at the reach
+    point is a finding with no room (`room_mm` 0).
+  - **LC, copper RJ45 and power: not split yet**, so the whole reach is a
+    leg, as before. LC: the boot's 15.1 mm is from SENKO DS-LC-000023 A
+    p.3, but the plug's 12.5 mm is an estimate (bracketed 11.6 to 13.4 by
+    DS-LC-000004), and no cited drawing gives a boot bend radius. Copper:
+    the boot's 26.4 mm is from EASE J0072 A, the plug's 13.0 mm is an
+    estimate, and no cited drawing gives a boot bend radius. Power: no cited
+    drawing gives a boot figure. A split needs the boot's length and
+    bend radius from a drawing, and the plug's rigid length from one too.
+    No figure here is estimated, and no boot bend radius is written.
+  - **A reach the page gives as a number** (`ctx.plugReachOf`, from the
+    part's `cablePoints`) cannot say how much of it is rigid, so it is
+    measured as before: the whole of it a leg. A page that gives the reach of
+    a DAC or an AOC measures it as before until the part can say.
+
+  A turn at a DAC's or an AOC's plug end that the old measure passed on the
+  plug's 64.8 mm now needs a lead point, or is a finding, on every saved
+  rack with such a cord: routed lengths, stock sizes and bend findings change
+  at the next measure (#985, one-way).
 - **A tray stretch** (2.1) keeps its rings' approach points at the radius
   and `CLEAR`: a cable along a tray passes its rings straight, and rises
   onto each sill by a drop's tangent points. A stretch pinned to the held
@@ -2368,10 +2417,11 @@ published file or a saved rack file uses it.
 | the ranking of `managerOf` (hosted, then a standalone manager, with its tie-break by port row, then a manager on a neighbour, then a neighbour with guides) | kit | automatic routes of saved racks follow it, and their routed lengths with them |
 | the version-4 table of the rack products note gaining `states`, `readings`, the PDU bracket key, `slack`, `lay` and `roll` | `docs/rack-products-design.md` section 9, rack file version 4 | one bump carries them all; a key left out needs a version 5 |
 | the stored slack counting in the routed length | kit | a saved routed length and stock size depend on it |
-| routed lengths changing on saved racks: detours, the plug's reach (1.5), cables resting at the floor and at the ring sill, ring passes from approach points and solid rings and zero-U parts met by the tube (3.3), room for the bends (3.4), the end allowance by media (1.6), positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
+| routed lengths changing on saved racks: detours, the plug's reach (1.5) and a DAC's or an AOC's plug taken as rigid (1.5, #985), cables resting at the floor and at the ring sill, ring passes from approach points and solid rings and zero-U parts met by the tube (3.3), room for the bends (3.4), the end allowance by media (1.6), positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
 | the lane moving outboard of a zero-U part that stands in the gutter and carries no lane (a zero-U PDU), and routed lengths changing beside one | kit (`laneXAt`), drawings | every route on that lane is longer, and a saved length moves on the next measure; a drawing that places lanes itself must follow |
-| the reach point (`at: 'reach'` with `end`) in `routePath`, `ctx.plugReachOf` and `PLUG_REACH` (the helpers that compute them stay internal), with the plug outside the face in the path (1.5) | kit API | a page passes `plugReachOf` and reads the points by these names; moving the plug into the allowance later would change every length again |
+| the reach point (`at: 'reach'` with `end`, and `rigid_mm` on a DAC's or an AOC's, #985) in `routePath`, `ctx.plugReachOf`, `PLUG_REACH` and `PLUG_SPLIT` (the helpers that compute them stay internal), with the plug outside the face in the path (1.5) | kit API | a page passes `plugReachOf` and reads the points by these names; moving the plug into the allowance later would change every length again |
 | the end allowance by media, `END_ALLOWANCE_BY_MEDIA` (the table: the plug inside the port and the maker's short tolerance, never slack), `endAllowance(cable)` and the path's `allowance` (what a length adds an end: the table's figure and, until #949 step 4, the temporary dressing allowance of 0.1 m, which is not exported) (1.6); `END_ALLOWANCE_M` is gone | kit API | a page reads the table by these names, and every routed length and stock size depends on the figures; removing the dressing allowance shortens every routed length by 0.2 m |
+| a zero-U part's pass-through hole judged on the tube (1.2, #992) | kit | a route through a pass-through hole, and its length, can change on saved racks |
 | `crosses-body` (with `part` and, for a held-face stack, `face`), `unheld` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
 | the public subpath `@portrayal/kit/rack/solids` (`solidsOf`, `legCrossings`, `detour` with its `room`, `CLEAR`) | kit package exports | a consumer imports it by that path and those names; a rename or removal is a breaking kit release |
 | `cable.slack`, `cable.slack.clear`, `cable.lay` (with `face`), and `roll` on `patch` | kit commands, offered to agents | agent sessions and saved prompts call them by name |

@@ -960,9 +960,11 @@ def seat_at(point, rotate, occ_size, occ_mate):
 
 def data_attrs(attrs):
     """An attrs bag as the SVG attributes the build writes for it:
-    {data-<k>: str(v)}, in key order. The one spelling, used by
+    {data-<k>: str(v)}, in key order; a list (`speeds`) is its members joined by
+    a space. The one spelling, used by
     instance_group for every placement and by group_side_attrs for a group."""
-    return {f"data-{k}": str(v) for k, v in sorted((attrs or {}).items())}
+    return {f"data-{k}": " ".join(map(str, v)) if isinstance(v, list) else str(v)
+            for k, v in sorted((attrs or {}).items())}
 
 
 def group_side_attrs(group_name, grp):
@@ -2538,6 +2540,18 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                 kids = list(holder)
                 holder.insert(max(kids.index(c) for c in last) + 1, mine)
                 break
+    # WHAT BELONGS ONLY TO A COVERED BAY IS NOT DRAWN. A composed part's ink is
+    # not inside any bay's group - the riser's plate is a part, painted over the
+    # cards - so a latch row that serves one slot would be drawn across the
+    # card that covers it and read as a second bracket. A skin node that names
+    # the sibling bay it serves in `data-hide-when-covered` is dropped when that
+    # bay is covered; the attribute is a bay id of THIS carrier, and a carrier
+    # with no span never has a covered bay, so the node stays everywhere else.
+    if covered_by:
+        for holder in list(g.iter()):
+            for kid in list(holder):
+                if kid.get("data-hide-when-covered") in covered_by:
+                    holder.remove(kid)
     # AN OPTIC IN A CAGE ON A SEATED CARD (#484, R2). A configuration's
     # `occupants:` keys such a cage by the MODULE-LESS path - `front-6/xg0` -
     # the convention its nested `bays:` keys already use (bay_path above), and
@@ -4969,7 +4983,10 @@ def published_kits(kits, lib):
     THE OVERRIDE IS APPLIED. A device's `depth: {config, range}` replaces the
     `depth` of the configuration it names (#906, L163), so `configurations`
     here are what this device can do; the row's `depth` still says that one was
-    overridden. The kit's own figure stays in kits.json.
+    overridden. The kit's own figure stays in kits.json. A configuration that
+    states a `preset` and no `depth` is copied as it is, with no `depth` key:
+    the range is unknown, and only a device's override, from its own source,
+    gives it one.
 
     THE SAME REFS AS THE LOCK. Every ref read here - the kit, its parts and its
     accessories - is one devicelock's `composed` follows from `chassis.kits`,
@@ -5667,6 +5684,10 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
                            group=groups.get(p.get("group")), extra_lift=extra,
                            occupant=default_occupants.get(p["id"]))
         if entry is not None:
+            # the configurations that have this cage, as the placement states
+            # them (#1022); the key is absent where it states none
+            if p.get("only-in"):
+                entry["only-in"] = list(p["only-in"])
             out.append(entry)
     return out
 
@@ -6162,7 +6183,13 @@ def main():
                                # way this bay holds it. Without `rotate` the C40G's
                                # horizontal slots re-rendered their card upright.
                                "rotate": b.get("rotate"),
-                               "at": b["at"], "size": b["size"]}
+                               "at": b["at"], "size": b["size"],
+                               # the configurations that have this bay, as the
+                               # device states them and absent where it states
+                               # none (#1022): the drawing leaves the bay out
+                               # of any other, so a reader of this list must
+                               # not read it as a bay of every configuration
+                               **({"only-in": list(b["only-in"])} if b.get("only-in") else {})}
                               for b in view_parts(device["views"][v])["bays"]]
                           for v in device["views"]},
                  # what a pluggable placement could take, derived - never

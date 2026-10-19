@@ -8,7 +8,7 @@ import * as M from '../../../kit/rack/model.js';
 // enclosure written by hand in the same shape (the file's `note` says why).
 export const CAT = JSON.parse(readFileSync(new URL('./cable-solids-catalogue.json', import.meta.url))).devices;
 
-// The owner's fixture of #949: an FHD panel with an FHD-CMP5DR lacer on it at
+// The first reference fixture of #949: an FHD panel with an FHD-CMP5DR lacer on it at
 // U12, a switch above at U13 and a switch below at U11. The panel and the
 // switches are plain box devices, so each is its envelope; the lacer is the
 // catalogue's, with its derived plates.

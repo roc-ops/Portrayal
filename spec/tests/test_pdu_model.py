@@ -173,7 +173,7 @@ def test_feed_leg_only_for_line_to_neutral_on_wye(power, lines, leg):
     ({}, "Through breaker-a"),                                            # nothing printed: the id
 ])
 def test_an_outlet_names_its_breaker_as_printed(attrs, said):
-    """Owner decision 2026-10-09: the description names the breaker as the unit
+    """Decided 2026-10-09: the description names the breaker as the unit
     prints it, so a reader finds it on the PDU; the id is the fallback."""
     doc = pdu(WYE)
     doc["views"]["front"]["components"]["placements"][0]["attrs"] = attrs

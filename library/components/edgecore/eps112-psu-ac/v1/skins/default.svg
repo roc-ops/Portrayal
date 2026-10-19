@@ -21,10 +21,20 @@
   <g id="handle">
     <rect id="handle-grip" x="6.07" y="4.80" width="7.86" height="30.40" rx="2.30" fill="#b7655f"
       stroke="#8f4b46" stroke-width="0.25" data-fill-from="handle-finish"/>
-    <rect x="2.50" y="1.80" width="6.60" height="2.40" rx="1.20" fill="#b7655f" stroke="#8f4b46" stroke-width="0.2"/>
-    <rect x="2.50" y="36.00" width="6.60" height="2.40" rx="1.20" fill="#b7655f" stroke="#8f4b46" stroke-width="0.2"/>
-    <circle cx="3.40" cy="3.00" r="1.85" fill="#b7655f" stroke="#8f4b46" stroke-width="0.2"/>
-    <circle cx="3.40" cy="37.20" r="1.85" fill="#b7655f" stroke="#8f4b46" stroke-width="0.2"/>
+    <!-- The handle is raised to the end of the drawing (it has a `uhandle`), so it would
+         paint over the two screws drawn on it. Each stub and eye leaves the screw's
+         r 1.25 circle as a hole instead: the eye is a ring, the stub is the pill with
+         that circle cut out of its inboard end, and the screws show through. -->
+    <path d="M 3.75 1.80 H 7.90 A 1.20 1.20 0 0 1 7.90 4.20 H 3.75 A 1.25 1.25 0 0 0 3.75 1.80 Z"
+      fill="#b7655f" stroke="#8f4b46" stroke-width="0.2"/>
+    <path d="M 3.75 36.00 H 7.90 A 1.20 1.20 0 0 1 7.90 38.40 H 3.75 A 1.25 1.25 0 0 0 3.75 36.00 Z"
+      fill="#b7655f" stroke="#8f4b46" stroke-width="0.2"/>
+    <path fill-rule="evenodd" fill="#b7655f" stroke="#8f4b46" stroke-width="0.2"
+      d="M 1.55 3.00 A 1.85 1.85 0 1 1 5.25 3.00 A 1.85 1.85 0 1 1 1.55 3.00 Z
+         M 2.15 3.00 A 1.25 1.25 0 1 1 4.65 3.00 A 1.25 1.25 0 1 1 2.15 3.00 Z"/>
+    <path fill-rule="evenodd" fill="#b7655f" stroke="#8f4b46" stroke-width="0.2"
+      d="M 1.55 37.20 A 1.85 1.85 0 1 1 5.25 37.20 A 1.85 1.85 0 1 1 1.55 37.20 Z
+         M 2.15 37.20 A 1.25 1.25 0 1 1 4.65 37.20 A 1.25 1.25 0 1 1 2.15 37.20 Z"/>
   </g>
   <g id="handle-screws" fill="#d7dbdf" stroke="#6e757c" stroke-width="0.22">
     <circle cx="3.40" cy="3.00" r="1.25"/>

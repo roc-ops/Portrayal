@@ -103,9 +103,12 @@ test('the catalogue answers for an end on the PDU: it lands, an outlet, its plug
   const fedEnds = P.settleEnds(fed, (await oldPage()(fed)).ends, ctx);
   assert.deepEqual([fedEnds.get('i2|rear|input').info.plug, fedEnds.get(CR.endKey(at('outlet-a2'))).info.plug], [C19, C20]);
   assert.equal(fedEnds.get(CR.endKey(at('outlet-a2'))).info.note, undefined);
-  // with the far end not known (psu-3 is filled by its default alone, which no
-  // page has seen), the first is drawn and the end says what to set
-  const unknown = cord(at('outlet-a2'), {a: {item: 'i1', path: 'psu-3/module/inlet', view: 'rear'}}).rack;
+  // psu-3 is filled by its default alone, and the catalogue knows what it holds: the far end is known
+  const dflt = cord(at('outlet-a2'), {a: {item: 'i1', path: 'psu-3/module/inlet', view: 'rear'}}).rack;
+  const known = P.settleEnds(dflt, new Map(), ctx).get(CR.endKey(at('outlet-a2'))).info;
+  assert.deepEqual([known.plug, known.note], [C14, undefined]);
+  // with the far end not known (a path under no bay), the first is drawn and the end says what to set
+  const unknown = cord(at('outlet-a2'), {a: {item: 'i1', path: 'nowhere', view: 'rear'}}).rack;
   assert.equal(P.settleEnds(unknown, new Map(), ctx).get(CR.endKey(at('outlet-a2'))).info.note,
     `outlet-a2 takes more than one plug and ${C14} is drawn; set "plug" on the end to ${C14} or ${C20}`);
   // a stated plug is the one drawn, whatever the far end

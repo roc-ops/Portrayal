@@ -7,10 +7,11 @@ has to be true of the built library, every configuration of every device:
 
 - every port the build drew under a bay is one the kit says yes to, or says
   nothing about. It never says there is none.
-- every port the kit says yes to is drawn on that panel. A bay the
-  configuration does not list gets no answer, though it has a default: a
-  device may give a bay to some configurations only, and the index does not
-  say which.
+- every port the kit says yes to is drawn on that panel. That includes a bay
+  the configuration has and does not list, which holds its default. A device
+  may give a bay to some configurations only (`only-in`, published in
+  `configs.json`, #1022); in the others the kit says nothing of it, and the
+  build has drawn nothing there.
 
 One kind of yes has no drawing and is right: the back of a part in a host that
 draws no back for that bay (an enclosure with a closed rear). It is counted
@@ -68,5 +69,12 @@ def test_every_yes_is_drawn(sweep):
     assert sweep["slots"] > 100, f"the kit said yes to {sweep['slots']} slots that take a cable end"
 
 
-def test_a_bay_the_configuration_does_not_list_gets_no_answer(sweep):
-    assert sweep["unspoken"] > 5000, "no bay left to its default was asked about"
+def test_a_bay_the_configuration_has_and_does_not_list_gets_an_answer(sweep):
+    # asked of every part of its default, each answer held to the drawing above
+    assert sweep["unspoken"] > 4000, "no bay left to its default was asked about"
+
+
+def test_a_bay_the_configuration_does_not_have_gets_no_answer(sweep):
+    # the ch3000's double-width bays, in the configurations that lack them: nothing
+    # was answered for them, and nothing was drawn there (both are in `phantom`)
+    assert sweep["absent"] > 1000, f"only {sweep['absent']} ports of absent bays were asked about"

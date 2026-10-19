@@ -208,6 +208,63 @@ def test_a_series_name_in_model_beside_a_vendor_number_is_found():
     assert marketing_in_model([("a", reversed_), ("b", right), ("c", only)]) == ["a"]
 
 
+def export_names(d):
+    """The names a device is exported under: each `part-numbers` key, in any
+    configuration or at the top, or `model` up to ` (` where there are none."""
+    keys = list((d.get("part-numbers") or {}))
+    for cfg in (d.get("configurations") or {}).values():
+        keys += list((cfg or {}).get("part-numbers") or {})
+    return keys or [str(d.get("model") or "").split(" (")[0]]
+
+
+def vendor_alias_as_export_name(docs):
+    """#997: the devices that export under a `kind: vendor` alias of their own.
+
+    A DCIM model is the export name. `Lightspan MF-8` with the mnemonic `LMFS-F`
+    as a vendor alias must not show `LMFS-F` there; the product name leads and
+    the mnemonic follows in brackets, as the 7360 ISAM FX shelves do.
+    """
+    out = []
+    for path, d in docs:
+        vendor = [str(a.get("name")) for a in d.get("aliases") or [] if a.get("kind") == "vendor"]
+        for name in export_names(d):
+            if any(name == v or name.startswith(v + " ") for v in vendor):
+                out.append((str(path), name))
+    return out
+
+
+def test_a_vendor_alias_used_as_the_export_name_is_found():
+    mnemonic = {"name": "LMFS-F", "kind": "vendor"}
+    cfg = lambda *keys: {"configurations": {"c": {"part-numbers": {k: {} for k in keys}}}}
+    bad = dict(dev("Lightspan MF-8", mnemonic), **cfg("LMFS-F", "LMFS-F AA kit", "3FE 79748 AA"))
+    good = dict(dev("Lightspan MF-8", mnemonic),
+                **cfg("Lightspan MF-8 (LMFS-F)", "Lightspan MF-8 (LMFS-F) AA kit"))
+    by_model = dev("LMFS-F", mnemonic)          # no keys: model up to ` (` is the name
+    bracketed = dev("7360 ISAM FX-16 (NFXS-D BA)", {"name": "NFXS-D BA", "kind": "vendor"})
+    other_kind = dict(dev("X", {"name": "LMFS-F", "kind": "marketing"}), **cfg("LMFS-F"))
+    got = vendor_alias_as_export_name([("a", bad), ("b", good), ("c", by_model),
+                                       ("d", bracketed), ("e", other_kind)])
+    assert got == [("a", "LMFS-F"), ("a", "LMFS-F AA kit"), ("c", "LMFS-F")]
+
+
+def test_no_device_exports_under_its_own_vendor_alias():
+    docs = _all_devices()
+    assert len(docs) > 200, "the library walk found too few devices"
+    assert vendor_alias_as_export_name(docs) == []
+
+
+def test_lmfs_f_exports_under_the_product_name():
+    d = {d["name"]: d for _, d in _all_devices()}["lmfs-f"]
+    keys = {k: v["part"] for c in d["configurations"].values()
+            for k, v in (c.get("part-numbers") or {}).items()}
+    assert keys == {"Lightspan MF-8 (LMFS-F)": "3FE 79748 AA",
+                    "Lightspan MF-8 (LMFS-F) AA kit": "3FE 79747 AA",
+                    "Lightspan MF-8 (LMFS-F) AB kit": "3FE 79747 AB"}
+    assert d["model"] == "Lightspan MF-8"
+    assert {"name": "LMFS-F", "kind": "vendor"} in [
+        {k: a[k] for k in ("name", "kind")} for a in d["aliases"]]
+
+
 def test_no_device_files_its_marketing_name_as_model():
     docs = _all_devices()
     edgecore = [d for _, d in docs if d.get("manufacturer") == "Edgecore"]

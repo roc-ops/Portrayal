@@ -12,7 +12,7 @@ import * as F from './route-direct-fixture.mjs';
 
 const mm = l => Math.round(l.measured * 10000) / 10;
 const len = pts => pts.reduce((s, q, k) => (k ? s + Math.hypot(q.x - pts[k - 1].x, q.y - pts[k - 1].y, q.z - pts[k - 1].z) : 0), 0);
-// The owner's rack with a QSFP-LC optic in each leaf port: the cord's LC plug
+// The reference rack of #949 with a QSFP-LC optic in each leaf port: the cord's LC plug
 // seats in the optic, which stands 20.0 out of its cage (generic/qsfp-lc@2),
 // so its boot ends 47.6 out of the leaf's face; the panel ends take the
 // default. What a page passes as `plugReachOf` from the seated plug.

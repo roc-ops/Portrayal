@@ -117,6 +117,68 @@ def test_connectable_counts_what_a_line_can_be_drawn_to(out):
     assert c["zones"] == 4   # what toDrawio used to report
 
 
+# ---------------------------------------------------------------- true width
+# Each face is drawn at its true width (#993): x is scaled by the rack opening
+# in mm (138 draw.io units for 482.6 mm), so 1 mm is as wide for every device.
+
+K = 138 / 482.6
+APPROX = dict(abs=0.011)
+
+
+def _g(out, kind):
+    return out["trueWidth"]["geom"][kind]
+
+
+def test_a_face_as_wide_as_the_opening_is_drawn_as_it_was(out):
+    t = out["trueWidth"]
+    assert t["fullCells"] == t["todayCells"]
+    assert _g(out, "full")["full-g0r0-front"] == pytest.approx([33, 21, 138, 14.8], **APPROX)
+
+
+def test_a_narrow_face_with_no_ears_is_centred_between_the_rails(out):
+    g = _g(out, "narrow")
+    # 221 mm, not the opening: it is centred, with rail showing on both sides
+    assert g["narrow-g0r0-front"] == pytest.approx(
+        [33 + (138 - 221 * K) / 2, 21, 221 * K, 14.8], **APPROX)
+    assert g["narrow-g0r0-front-face"] == pytest.approx([0, 0, 221 * K, 14.8], **APPROX)
+
+
+def test_a_drawing_wider_than_its_face_overhangs_the_opening(out):
+    g = _g(out, "ringed")
+    # -43 0 568.6 44: 43 mm out to the left of the opening, 43 mm out to the right
+    assert g["ringed-g0r0-front"] == pytest.approx([33 - 43 * K, 21, 568.6 * K, 14.8], **APPROX)
+    left, width = g["ringed-g0r0-front"][0], g["ringed-g0r0-front"][2]
+    assert left < 33 and left + width > 33 + 138
+
+
+def test_a_port_is_on_its_port_at_every_width(out):
+    # the port at x=100 mm is 100 mm from the face's left edge: the opening's
+    # for the full and the ringed face, the centred face's for the narrow one
+    for kind in ("full", "narrow", "ringed"):
+        g = _g(out, kind)
+        gx, px = g[f"{kind}-g0r0-front"][0], g[f"{kind}-g0r0-front-p0"]
+        left = 33 + (138 - 221 * K) / 2 if kind == "narrow" else 33
+        assert gx + px[0] == pytest.approx(left + 100 * K, **APPROX), kind
+        assert px[2:] == pytest.approx([20 * K, 10 * 14.8 / 44], **APPROX), kind
+    # and the one on the ring stands 30 mm outside the opening
+    g = _g(out, "ringed")
+    assert g["ringed-g0r0-front"][0] + g["ringed-g0r0-front-ring"][0] == pytest.approx(
+        33 - 30 * K, **APPROX)
+
+
+def test_a_rack_entry_is_drawn_at_its_width_too(out):
+    e = out["trueWidth"]["entry"]
+    assert (e["full"]["w"], e["full"]["h"]) == (138, 15)
+    assert (e["narrow"]["w"], e["narrow"]["h"]) == (round(221 * K), 15)
+    assert (e["ringed"]["w"], e["ringed"]["h"]) == (round(568.6 * K), 15)
+    # a port is the same distance from the drawing's left edge in mm everywhere
+    assert e["narrow"]["geom"]["narrow-p0"][0] == pytest.approx(100 * K, **APPROX)
+    assert e["ringed"]["geom"]["ringed-p0"][0] == pytest.approx(143 * K, **APPROX)
+    assert e["ringed"]["geom"]["ringed-ring"][0] == pytest.approx(13 * K, **APPROX)
+    # a standalone entry is still 2 px/mm
+    assert out["trueWidth"]["standalone"] == 442
+
+
 # ---------------------------------------------------------------- cables
 # A cable plan written as draw.io edges between the port cells (#728).
 

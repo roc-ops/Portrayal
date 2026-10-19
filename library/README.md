@@ -98,6 +98,39 @@ Rules of the road (see spec/DESIGN.md for the full set):
 - No datasheet copies or conversions — transcribed facts with provenance only.
 - Dumps must be sanitized (serials, MACs, IPs, hostnames, communities).
 
+## Which NetBox and Nautobot the exports need
+
+The DCIM exports under `library/exports/` need **NetBox 4.5.7 or later**. The
+reason is in the docstring of `nested_bays_for` in
+`spec/tools/portrayal/dcim_export.py` (the passage that begins "IT NEEDS
+NETBOX 4.5.7"): the nested bay tokens in a module type's port names rely on
+position templating on a bay, which arrived in NetBox 4.5.6, and on the single
+token's leaf rule, which arrived in 4.5.7. On an older NetBox the install forms
+refuse a card whose token count is not the depth of the bay tree, and the REST
+API fills the one token with the root bay's position.
+
+The exports were tried on running instances, NetBox 4.7.2 and Nautobot 3.2.6.
+That is recorded in `docs/rack-file-v4-design.md` (the opening note and section
+13, item 47), in the notes of `kit/rack/dcim-rules.js` and in
+`docs/optical-paths-design.md`. This README states no Nautobot floor: none is
+recorded in the repository.
+
+**The rule.** An export may carry a feature that needs NetBox 4.6 or later.
+Every such feature is listed here, with the NetBox it needs and what an older
+NetBox does with a file that carries it. A feature that is not listed here
+does not need more than 4.5.7.
+
+| feature | needs | what an older NetBox does with a file that carries it |
+|---|---|---|
+| none yet | | |
+
+No export on `main` carries such a feature. A search of the repository for
+"NetBox 4." finds the 4.5.7 floor above and the versions the exports were tried
+on; its one mention of 4.6 is the rack kit's note that NetBox 4.6 and later has
+cable bundles of its own and that the cables file does not fill a cable's
+bundle field (`kit/rack/dcim-rules.js`). A change that adds such a feature adds
+its row to this table in the same change.
+
 Licensed Apache-2.0, same as the rest of the repository. See `../LICENSE`, and
 the Licence section of `../README.md` for why the data is not under a separate
 content licence.

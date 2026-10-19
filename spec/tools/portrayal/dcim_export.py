@@ -57,6 +57,7 @@ from portrayal.artifacts import Dist, face_file
 from portrayal.manifest import view_parts, alias_names, config_airflow
 from portrayal import manifest as _manifest
 from portrayal import optical_ports
+from portrayal.faces import POWER_FACES
 
 # Portrayal media/speed -> DCIM interface type. Every value here is valid in
 # both libraries: NetBox's enum is a strict superset of Nautobot's (227 types
@@ -487,6 +488,12 @@ FAMILY_PART = {
     # the ganged cell with ONE lamp (a LINK/ACT jack, the AurCore AIS non-PoE
     # builds): the same Ethernet jack, so the same row (#738)
     "common/rj45-ganged-link@1": ("iface", "1000base-t"),
+    # the ganged cell with two lamps and NO Ethernet claim (#370): a timing or
+    # console jack whose housing shows lamps, so it falls back to the bare
+    # cell's answer. Its ref has no `-eth`, which is what iface_type's guard
+    # reads, so a placement that states no timing function and no Ethernet
+    # speed is not typed as an interface either.
+    "common/rj45-ganged-lamped@1": ("console", "rj-45"),
 }
 
 # ...AND FAMILY_PART IS A FALLBACK, NOT A DECISION. #125 gave std/rj45@2 seven
@@ -2445,6 +2452,20 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
             # L105 fails a part that declares them and routes anywhere else.
             ifaces.extend([{**row, "name": iid} for iid in part["interfaces"]]
                           if part.get("interfaces") else [row])
+
+    # A POWER INLET DRAWN ON THE CARD'S OTHER SIDE (docs/connectors-gpu-design.md
+    # section 7): a GPU's auxiliary header is on its far end, composed by its
+    # rear face, and the card is what carries the power port. One level, as
+    # optical.capacities walks faces; the face's own part id names the port.
+    # A face is `{ref: x}` in a contract and flattened to `x` in the index.
+    for face in POWER_FACES:
+        face_ref_ = (contract.get("faces") or {}).get(face)
+        if isinstance(face_ref_, dict):
+            face_ref_ = face_ref_.get("ref")
+        for part in ((load_ref(face_ref_) or {}).get("parts") or []) if face_ref_ else []:
+            ref = str(part.get("ref") or "").split("@")[0] if isinstance(part, dict) else ""
+            if ref in PART_POWER:
+                powers.append(power_row(ref, part.get("id")))
 
     # THE DECLARED INLET, when no part draws one. Second, not first: a composed
     # part knows its own id and there may be several, so it wins wherever it

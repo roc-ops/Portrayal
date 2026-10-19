@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: ground-screw-m4
-version: 1.0.0
+version: 1.0.1
 class: ground
 interface: terminal-stud
 profile: networking
@@ -10,7 +10,8 @@ description: >-
   recessed pan head 8 across. It is what a lug is landed under, so it is
   where one seats: it presents the nominal `terminal-stud` interface on its
   axis, at the top of its head. Composed by the parts that land a lug on a
-  pair of sized ground screws (#830); never placed alone.
+  pair of sized ground screws (#830). It is placed alone where a document
+  names a single M4 screw.
 size: {w: 8, h: 8}
 size-confidence: {w: registry, h: registry}
 size-notes: >-
@@ -29,7 +30,8 @@ provenance:
     library's nominal ground screw, drawn at about M3 and placed whatever a
     device's documents say (#830, docs/connectors-dc-terminal-design.md
     section 13.5). This part is drawn at the size a document states, and is
-    used only where one does: inside a part landing a two-hole lug on a pair.
+    used only where one does: inside a part landing a two-hole lug on a pair,
+    and alone where a document names a single M4 screw (#918).
   seat: >-
     THE LUG SEATS ON TOP OF THE HEAD, NOT UNDER IT, for the reason every stud
     part in the library gives: `mate` sits `on: head`, so a lug seated here
@@ -37,8 +39,9 @@ provenance:
     real lug lies on the panel under the head. See
     docs/connectors-dc-terminal-design.md, sections 12.5 and 13.
   behaviour: >-
-    DELIBERATELY OMITTED. The screw is composed by the part that lands the
-    lug and is never placed on its own; that part states `mounts`.
+    DELIBERATELY OMITTED. The screw has no behaviour of its own: a part that
+    composes it states `mounts`, and a device that places it alone offers its
+    `terminal-stud` seat to a ring lug through the interface.
 elements: {}
 relief:
   features:

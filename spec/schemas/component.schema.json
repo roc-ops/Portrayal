@@ -48,7 +48,8 @@
     "install",
     "parts",
     "configurations",
-    "accessories"
+    "accessories",
+    "gaps"
    ]
   },
   "properties": {
@@ -80,6 +81,7 @@
    "install": false,
    "configurations": false,
    "accessories": false,
+   "gaps": false,
    "parts": {
     "items": {
      "properties": {
@@ -348,10 +350,29 @@
         "items": {
          "enum": [
           "plan",
-          "rear"
+          "rear",
+          "left",
+          "right",
+          "top",
+          "bottom"
          ]
         },
-        "description": "THE PART'S OWN DRAWINGS THIS PIECE CARRIES. `plan` paints the piece's top with the patch of the part's `faces.plan` it stands under; `rear` paints its back with the patch of `faces.rear` behind it. So a tray riding in a drawer shows its splice holders from above, and the back of an adapter block shows its ports, although a body piece is otherwise a plain colour. Both drawings run right to left against the face (a plan is drawn face-at-the-top, a rear as seen from behind), the plan's y is mm behind the face plane, and the rear's is the face's own. A flat image, not relief. Boxes only, and only drawings the part declares (L71). In a bay that turns, mirrors or tilts its occupant the piece is built plain, because its top is then not the part's top."
+        "description": "THE PART'S OWN DRAWINGS THIS PIECE CARRIES. `plan` paints the piece's top with the patch of the part's `faces.plan` it stands under; `rear` paints its back with the patch of `faces.rear` behind it. So a tray riding in a drawer shows its splice holders from above, and the back of an adapter block shows its ports, although a body piece is otherwise a plain colour. Both drawings run right to left against the face (a plan is drawn face-at-the-top, a rear as seen from behind), the plan's y is mm behind the face plane, and the rear's is the face's own. `left`, `right`, `top` and `bottom` paint that side of the piece with the patch of the part's own `skins/body-<side>.svg` it lies under: the printing on a GPU's top edge, the ribs of its shroud. Each side drawing is that side of the whole body seen from outside, in mm, and its viewBox names the patch it covers: across a `right` runs mm behind the face plane and down it the face's y; a `left` is the same with the depth measured from `body.depth`; across a `top` runs the face's x and down it `body.depth` less mm behind the face; a `bottom` is a `top` with x measured from `size.w`. A flat image, not relief. Boxes only, only drawings the part has, every patch inside its drawing's viewBox, and not `plan` and `top` on one piece (L71). In a bay that turns, mirrors or tilts its occupant the piece is built plain, because its top is then not the part's top."
+       },
+       "when": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": {
+         "type": "array",
+         "minItems": 1,
+         "items": {
+          "type": [
+           "string",
+           "number"
+          ]
+         }
+        },
+        "description": "A FITTED OPTION: the piece stands only while the part's choice field holds one of the options listed, `{extender: [straight]}` - an extender bolted to a card's far end, which the buyer chooses. The value is read from the part's drawing, the one place a field's value is settled at build time and at runtime: each option listed has a `data-show-from` node in every skin (empty, when the face itself does not change), and the piece stands while that node is shown. A piece fitted by an option may reach past `size.d` and `body.depth`, which are the part as it ships bare; nothing checks such a piece against a bay. L148 checks the field, the options and the nodes."
        }
       }
      }
@@ -1111,9 +1132,30 @@
     "required": [
      "id",
      "racks",
-     "parts",
-     "depth"
+     "parts"
     ],
+    "$comment": "AT LEAST ONE OF `depth` AND `preset` (roc-ops/Portrayal#904, decided 2026-10-18). A source can print a factory setting and no range (the COR550 rail's 630, the first Smartoptics band's 600), and a range written as `[630, 630]` would invent one. `if`/`then` rather than `anyOf` so that the message for a configuration with neither names both keys: `anyOf` would say only that the configuration is not valid under any of the given schemas.",
+    "if": {
+     "not": {
+      "anyOf": [
+       {
+        "required": [
+         "depth"
+        ]
+       },
+       {
+        "required": [
+         "preset"
+        ]
+       }
+      ]
+     }
+    },
+    "then": {
+     "required": [
+      "depth or preset"
+     ]
+    },
     "additionalProperties": false,
     "properties": {
      "id": {
@@ -1143,12 +1185,13 @@
       "description": "the parts this configuration uses, each the `id` of one of the kit's own `parts` (L156)"
      },
      "depth": {
-      "$ref": "#/$defs/kit-depth"
+      "$ref": "#/$defs/kit-depth",
+      "description": "the rack depth this configuration fits, front flange to rear flange, in mm. OPTIONAL WHEN `preset` IS STATED, and one of the two is required: a source that prints a factory setting and no range leaves `depth` out, and the range is then unknown (a `gaps` entry says so, L157). Never `[preset, preset]`."
      },
      "preset": {
       "type": "number",
       "exclusiveMinimum": 0,
-      "description": "a factory setting the kit ships at, in mm of rack depth (the COR550 rail's 630)"
+      "description": "a factory setting the kit ships at, in mm of rack depth (the COR550 rail's 630). It may stand alone: a configuration with a `preset` and no `depth` reads as 'factory setting known, range unknown', and nothing derives a range from it. A telescoping kit states one on at least one of its configurations (L158)."
      },
      "tolerance": {
       "type": "number",
@@ -1201,6 +1244,51 @@
        ]
       },
       "description": "the sides of the rack, seen from the front, the accessory can be fitted on"
+     }
+    }
+   }
+  },
+  "gaps": {
+   "type": "array",
+   "description": "A KIT ONLY: what the sources do not say, in the shape a device's `gaps` has. Lint L157 asks for an entry `what: depth` whose `scope` lists every configuration that states a `preset` and no `depth`: the factory setting is known and the range is not.",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "what",
+     "reason",
+     "wanted"
+    ],
+    "properties": {
+     "what": {
+      "$ref": "#/$defs/segment",
+      "description": "the missing knowledge, as a token: `depth`"
+     },
+     "scope": {
+      "type": "array",
+      "description": "what it applies to: the `id` of each configuration",
+      "items": {
+       "type": "string"
+      }
+     },
+     "reason": {
+      "description": "why it is missing, because that decides who can close it",
+      "enum": [
+       "vendor-silent",
+       "sources-disagree",
+       "nos-dependent",
+       "needs-hardware",
+       "needs-photo",
+       "needs-drawing"
+      ]
+     },
+     "note": {
+      "type": "string",
+      "description": "what was looked at and what it did not say. Cite the section, so the next reader does not repeat the search"
+     },
+     "wanted": {
+      "type": "string",
+      "description": "what would close it, as a request someone can act on"
      }
     }
    }
@@ -1557,7 +1645,18 @@
      "description": "the job these ports do together, when they do NOT share a media or a speed and that is deliberate: a management cluster of SFP+, USB and RJ45, a timing block of RJ45 and coax. The default shape of a port group is one family - one media, one speed - because that is what lets the block declare its facts once in `attrs`; a group spanning families is normally a bucket nobody has sorted yet, and lint L23 says so. This field is the author's answer: the vendor's faceplate calls these one thing, and splitting them by media would be a worse drawing. State the function, e.g. 'management cluster' or 'timing inputs and outputs' - it is a reason, not a switch, and L23 also objects if it is set on a group that is in fact one family"
     },
     "attrs": {
-     "type": "object"
+     "type": "object",
+     "properties": {
+      "speeds": {
+       "type": "array",
+       "minItems": 2,
+       "uniqueItems": true,
+       "items": {
+        "type": "string"
+       },
+       "description": "every native rate this group's ports run at, ascending, when there is more than one (a 1/10/25G SFP28 cage: [1g, 10g, 25g]), written from the vendor's own figure and never derived from the cage type. Published as `data-speeds`, space-separated. Native rates only, not breakout. It includes `speed`, which is its highest member; lint L110 holds both to the closed speed set"
+      }
+     }
     },
     "states": {
      "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next. A block of eighteen speed lamps shares one vocabulary and says it once; a placement inside it may still override",

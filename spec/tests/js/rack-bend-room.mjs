@@ -31,7 +31,7 @@ test('cornersOf is one function, in route-path.js, and bundles.js still exports 
 
 test('a leg between two corners is shared by halves, or by what each turn needs of it', () => {
   // a right angle, then 47.7 mm on, a turn of 15 degrees: the plug's end to a
-  // ring's line on the owner's rack. A 25 mm bend uses 25 tan 45 = 25 mm of
+  // ring's line on the reference rack of #949. A 25 mm bend uses 25 tan 45 = 25 mm of
   // the leg at the right angle and 25 tan 7.5 = 3.3 at the other: 28.3 of
   // 47.7. By halves the right angle has 23.8 and is short; by need both have
   // 47.7 / (tan 45 + tan 7.5) = 42.2
@@ -71,9 +71,9 @@ test('by need is never stricter than by halves: what has room for a radius by ha
   assert.ok(both > 50 && onlyNeed > 10, `${both} by both, ${onlyNeed} by need alone`);
 });
 
-// ── the owner's rack ─────────────────────────────────────────────────────
+// ── the reference rack of #949 ─────────────────────────────────────────────────────
 
-test('the owner\'s rack: no corner of any cord is short of its 25 mm (86 were, before #973)', () => {
+test('the reference rack of #949: no corner of any cord is short of its 25 mm (86 were, before #973)', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   // by the measure a path is judged by, a leg shared by need: none, of any cause
   assert.deepEqual(tightCorners(r, ctx, 'need'), []);
@@ -97,7 +97,7 @@ test('the owner\'s rack: no corner of any cord is short of its 25 mm (86 were, b
   assert.deepEqual(R.ringFindings(r, ctx), []);
 });
 
-test('on the owner\'s rack a path is the same however often it is asked for, and from either end', () => {
+test('on the reference rack of #949 a path is the same however often it is asked for, and from either end', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   let read = 0;
   for (const c of r.cables) {
@@ -270,7 +270,10 @@ test('a hang is laid only where it leaves every corner its room, and is offered 
 // ── what stays tight ─────────────────────────────────────────────────────
 
 test('a bend the kit\'s rules find no room for is found, and the route still exists', () => {
-  const r = F.rack(), ctx = F.ctxOf(r);
+  // (the AOC's plug is given as a number, so it is measured whole, a leg its
+  // turn may use, as every plug was before #985; a plug that cannot bend is
+  // tested in rack-rigid-plug.mjs, which lays this cord with one)
+  const r = F.rack(), ctx = {...F.ctxOf(r), plugReachOf: (e, c) => R.PLUG_REACH[c?.media] ?? null};
   // c9 as an AOC from the leaf below: its head ends 64.8 mm out of the port,
   // and to reach ring 3 it goes out past the tray's front edge and back in
   // to the approach point, 60 mm (two radii of 30) in front of the ring's
@@ -349,7 +352,12 @@ test('a corner with more room than a lay is opened out for, and less than the ca
   let r = M.withItem(M.newRack(), {ref: 'leaf', cfg: 'x', ru: 10, label: 'a'}).rack;
   r = M.withItem(r, {ref: 'leaf', cfg: 'x', ru: 30, label: 'b'}).rack;
   const c = {id: 'c1', a: {item: 'i1', path: 'p', view: 'front'}, b: {item: 'i2', path: 'p', view: 'front'}, media: 'dac', route: []};
-  const ctx = need => ({chassisOf: () => ({ru: 1, w: 440, h: 44, d: 400}), guidesOf: () => [], portX: () => 0, bendOf: () => need});
+  // (the DAC's plug is given as a number, so it is measured whole, a leg its
+  // first turn may use, as every plug was before #985: this test is about the
+  // radius a lay is opened out for, not about a plug that cannot bend, which
+  // rack-rigid-plug.mjs tests)
+  const ctx = need => ({chassisOf: () => ({ru: 1, w: 440, h: 44, d: 400}), guidesOf: () => [], portX: () => 0, bendOf: () => need,
+    plugReachOf: () => R.PLUG_REACH.dac});
   assert.deepEqual(R.routePath(r, c, ctx(100)).bends, []);
   const got = R.routePath(r, c, ctx(150)).bends;
   assert.deepEqual(got.map(b => [b.point, b.angle_deg, b.room_mm, b.need_mm, b.short_mm]),

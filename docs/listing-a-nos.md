@@ -99,8 +99,9 @@ off by one on half the boxes.
 
 ## The gates
 
-- **L56** - the listing sits under a software vendor, `hardware` is a device,
-  and every configuration, port and component it names is the hardware's.
+- **L56** - the listing sits under a software vendor (or a reseller, below),
+  `hardware` is a device, and every configuration, port and component it names
+  is the hardware's.
 - **L124** - under one vendor, no two listings export the same DCIM model, and
   an alias names one listing unless every claimant marks it `shared: true`.
   DriveNets is the case: one NCP name can be certified on two ODMs' boxes, and
@@ -112,3 +113,53 @@ off by one on half the boxes.
 
 Then `./build.sh`, and `./publish.sh --no-images` to see the exported types
 under `library/exports/*/device-types/<Vendor>/`.
+
+## Listing hardware under a reseller
+
+Hardware is resold the same way. FS.com sells APC NetShelter cabinets under FS
+part numbers: the cabinet is modelled once under its maker (`apc`), and the
+reseller lists it. A reseller listing is the file above without the NOS.
+
+```yaml
+format: 1
+kind: listing
+hardware: apc/<directory>          # <namespace>/<directory> of the product
+version: 1.0.0
+model: <the seller's part number>
+aliases: [{name: ..., kind: vendor}]
+portfolio: {line: ..., family: ...}  # the seller's catalogue words
+source: >-
+  <the seller's public listing>
+```
+
+**What it may say.** `model`, `aliases`, `portfolio` and `source`, plus the
+`configurations` overrides and `gaps` any listing has. **What it may not.**
+`nos`, `nos-versions` and `interfaces`: the seller sells the product as the
+maker made it, so the ports keep the maker's names, and a NOS is another
+company's software. L56 refuses all three under a reseller, and says why. A
+NOS vendor's listing still has to name its `nos`; L56 asks for it, since the
+schema no longer does by itself.
+
+**The vendor.** Register the seller in `spec/schemas/vendors.yaml` with
+`role: reseller`. The role is new (decided 2026-10-18); `both` already means
+hardware and software, so FS is not `both`.
+
+**A maker that also resells.** FS makes hardware this library models and will
+resell APC's, so one entry has to say both. `role` takes a word or, for such a
+vendor, a list: `role: [hardware, reseller]`. This is the smallest additive
+shape: every existing entry is a single word and validates and publishes
+exactly as before, `both` keeps its meaning, and a consumer that reads `role`
+as a string meets a list only for a vendor that really is two things. A
+vendor that is a reseller only writes `role: reseller`.
+
+**What the DCIM export calls it.** The same as a NOS listing:
+`<seller display>/<part>`, where `display` is the registry's (`FS.com`) and the
+part is the listing's configuration `model`, else its own SKU, else the
+product's. The type's comments say `<seller> lists <maker> <model>.`, the
+seller's other names, and `Listed per:` the source, with the NOS line a NOS
+listing also gets left out.
+
+**The planned first use** is the APC cabinets in FS's catalogue, under
+FS's namespace once cabinets are library products (#935); its entry
+changes from `role: hardware` to `[hardware, reseller]` with that first
+listing, and not before.

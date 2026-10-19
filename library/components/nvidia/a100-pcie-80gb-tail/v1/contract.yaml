@@ -1,0 +1,70 @@
+format: 1
+kind: component
+name: a100-pcie-80gb-tail
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The far end of the NVIDIA A100 80GB PCIe card, seen from behind. It shows the
+  open shroud with its fin stack edge-on. The CPU 8-pin power connector is at the
+  corner by the top edge. Two bosses take the extenders' thumbscrews. It is the
+  card's `faces.rear`.
+size: {w: 97.90, h: 38.23}
+size-confidence: {w: drawing, h: estimated}
+size-notes: >-
+  The end face is 97.9 across (PB-10577 figure 3's 28.41 to 126.31) and runs from
+  the backplate's outer face to the shroud's far wall, 38.23 (the card's
+  thickness is itself estimated at 38.2, see the card's `thickness`). NO DEPTH IS
+  DECLARED: a face is a drawing of a back. SEEN FROM BEHIND WITH THE BOARD'S SIDE
+  AT THE TOP, so x' = 126.31 less the card's x (the top edge at the left) and y'
+  = the card's y less 1.77. The kit's rear frame measures x from the bracket's
+  tip and has no room for a card whose top edge stands past the bracket's 120.02,
+  so this face is not painted on the body's pieces; the pieces are built from
+  the same figures (the card's `body.boxes`) and each is named here.
+attrs: {media: gpu}
+parts:
+  # The header is 12.6 x 18.0 upright. Turned 270 about its centre it is 18.0
+  # across and 12.6 down, centred on the housing's centre (x' 11.51, y' 7.16),
+  # with its latch ramp (the left wall upright) toward the shroud, at the bottom.
+  - {ref: std/eps12v-header@1, id: aux-power, at: [5.21, -1.84], rotate: 270}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  fins: >-
+    photo-measured - IT Creations' photograph of the card's east end (575TK_5),
+    at matched scale (the end face's 97.9 across is about 1068 px of the 3630 px photograph, 10.9 px/mm).
+    18 fins stand edge-on at a pitch of about 55 px, 5.0 to 5.1 mm. THE FIN STACK'S PITCH IS
+    5.0, NOT THE 2.194 OF THE SHROUD'S TOP-EDGE RIBS (the card's `body-ribs`):
+    the ribs are grooves along the outer edge, the fins are the heat sink behind
+    the open end, and they agree with the 5.0 pitch of the 16 fins seen through
+    the bracket's vent window. The first is drawn at the face window's grid
+    (the card's x 31.25) and the stack runs to 116.25; the fin thickness (0.8) and
+    the wall round the opening (2.1) are estimated. How far the fins run in is
+    not seen: the card's body draws them 40 mm deep.
+  connector: >-
+    photo-measured - BLACK housing on this card, at the corner by the top edge:
+    its edge is 2 mm from the top edge and its top is flush with the cover's top.
+    The brief's "CPU 8-pin on the east edge" (PB-10577 table 1) is the fact; the
+    position is the photograph's, good to about 1 mm. The part is
+    std/eps12v-header@1 (12.6 x 18.0, figure 7's 12.6 and an estimated 18.0),
+    turned a quarter so its two columns of four become two rows, and centred where
+    the photographed housing's centre is. The photograph's housing is 18.4 x
+    10.85: the width agrees to 0.4 and the height differs by 1.75, which is more
+    than the photograph's 1 mm, so the card's 3D housing keeps the photograph's
+    size (the card's `body-power-connector`) and this face draws the header's own.
+  mount: >-
+    estimated - the extender's two thumbscrews in 575TK_5 are about 313 px apart,
+    which is 28.7 at 10.9 px/mm (they stand proud, so the true spacing is a little
+    less). Centred on the extender flange's width (the card's `body-extender-
+    straight`, x 28.41 to 71.05), they land at the card's x 35.3 and 64.1. Their
+    height is the flange's middle, y 8.4. The bosses are 4.0 across and stand
+    0.4 proud of the end plate: neither is dimensioned anywhere held.
+  not-drawn: >-
+    the photograph shows two dark rectangular recesses in the end plate beside the
+    connector (about 12 and 27 mm long). Nothing says what they are, and both are
+    hidden by an extender; they are not drawn.
+elements:
+  fins: {at: [9.66, 12.63], size: [85.8, 23.5], class: vent}
+  mount-1: {at: [89.01, 4.63], size: [4.0, 4.0], class: screw}
+  mount-2: {at: [60.21, 4.63], size: [4.0, 4.0], class: screw}
+skins: [default]

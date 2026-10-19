@@ -3,35 +3,32 @@
 Process that only the maintainer runs. A contributor does not need any of it:
 open the pull request, and the maintainer merges it once the gates are green.
 
-## How a merge happens, and why it is a script
-
-**This is the older single-pull-request path.** A set of ready pull requests is
-now tested together once on a `train/` branch and merged in that order with the
-lines the train prints ([`docs/merging.md`](merging.md)); `main` no longer
-requires a branch to be up to date, which the script below still insists on.
+## How a merge happens, and why it is a train
 
 ```sh
-.github/merge-if-green.sh <pr-number>
+python3 .github/merge-train.py <pr-number> [<pr-number> ...]
 ```
 
-**The script checks what branch protection checks.** While the repository was
-private, required status checks and rulesets were unavailable (a paid feature
-for a private repository), so GitHub could not refuse a bad merge, and the
-script was the stand-in: it checks the two things branch protection would have
-checked, at the one place every merge goes through. Now that the repository is
-public, #155 turns branch protection on for `main`. Until it has, the script is
-still the only check.
+**The train checks what branch protection cannot.** Branch protection on `main`
+requires a pull request with `lint` and `build` passing. It cannot say whether a
+set of pull requests that are each green is green together. The train checks
+that, at the one place every merge goes through, and prints the `gh pr merge`
+lines to run ([`docs/merging.md`](merging.md) has the whole procedure).
 
-The second of those two is the one that matters and the one a green tick does
-not give you. **A green run on a branch says the branch works; it does not say
-the branch works with what has landed since.** #100 and #101 were each green
-and each correct, and `main` went red the moment both were in, because neither
-had ever been run against the other. That is what `strict` means in branch
-protection, and the script checks it by refusing to merge a branch that is
-behind its base.
+The second of those is the one that matters and the one a green tick does not
+give you. **A green run on a branch says the branch works; it does not say the
+branch works with what has landed since.** #100 and #101 were each green and
+each correct, and `main` went red the moment both were in, because neither had
+ever been run against the other. The train answers that by merging the heads
+onto `origin/main` in the order they will land and running the full gates once
+on that tree, instead of requiring every branch to be brought up to date after
+each merge (which `strict` does, and which makes the checks the bottleneck).
 
-Use it rather than `gh pr merge` until branch protection is on. Before then,
-nothing enforces it, and that is exactly how it gets skipped.
+The train also refuses a pull request whose head has a check that failed, one
+still running, or a `build` that was skipped, as a draft's is. A skipped check
+reads as passing to branch protection (#867), so the train takes only `success`
+for `lint` and `build`. A single-pull-request merge script did this job before
+the train; it was retired in this change (see [`docs/merging.md`](merging.md)).
 
 **Green is enough for a two-way door, and not for a one-way one.** Every pull
 request states its merge danger; `CONTRIBUTING.md` lists what makes a change a

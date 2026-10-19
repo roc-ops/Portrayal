@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-1a-14g
-version: 2.2.0
+version: 2.3.0
 class: riser
 behaviour: fills
 profile: server
@@ -101,7 +101,10 @@ provenance:
     (docs/pcie-two-slot-bays-design.md, R2). THIS IS A FIT, NOT A SUPPORT
     STATEMENT: the bays say a figure 11-13 bracket fits across the two openings
     Dell punches. Which GPUs Dell qualifies in this riser, and at what power,
-    is not read here.
+    is not read here. Slot 1 names the NVIDIA A100 80GB PCIe
+    (nvidia/a100-pcie-80gb@1) too, a real two-slot card with the same fit and
+    the same caveat: its 268.60 length and its CPU 8-pin cable are not read
+    against this riser's reach or this chassis' power.
   adjacent-brackets-overlap-by-1.27-on-purpose: >-
     THE SLOT BAYS OVERLAP IN Y AND THE PARTS STILL FIT. A PCIe bracket is 21.59
     across overall on a 20.32 slot pitch, because its flange end is KEYED - the
@@ -146,7 +149,7 @@ bays:
     # A TWO-SLOT CARD HERE COVERS SLOT 2, the opening with no connector
     # behind it (provenance `a-two-slot-card-covers-slot-2`).
     span: [slot-2]
-    accepts: [dell/pcie-filler-fh-14g@2, std/pcie-bracket-fh@2, std/pcie-bracket-fh-2slot@1, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
+    accepts: [dell/pcie-filler-fh-14g@2, std/pcie-bracket-fh@2, std/pcie-bracket-fh-2slot@1, nvidia/a100-pcie-80gb@1, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
     default: dell/pcie-filler-fh-14g@2
   slot-2:
     # THE OPENING WITH NO CONNECTOR BEHIND IT. Same geometry as its neighbours -

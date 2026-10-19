@@ -17,7 +17,7 @@ const skip = existsSync(BUILT) ? false : 'library/dist not built - run ./build.s
 const entry = skip ? null : JSON.parse(readFileSync(BUILT, 'utf8')).devices['cmh-dfd1u'];
 const closed = entry && {...entry, solids: entry.solids.map(s => ({...s, holes: []}))};
 
-// the owner's fixture rack with the duct manager at U8, and a cord from the
+// the reference fixture rack of #949 with the duct manager at U8, and a cord from the
 // switch below to the switch above routed from its front duct to its rear
 // duct, both laid at rack x `x` (the part's centre is rack x 0)
 function rackWith(dev, x) {

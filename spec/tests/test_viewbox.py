@@ -13,7 +13,7 @@ data was right and the window onto it was too small. A test that reads the
 manifest and the output and compares the two is the only thing that can tell.
 
 It also silently corrupts 3D, because the face texture is rasterised from this
-SVG - which is how it was found: the owner reported cards apparently 30% too
+SVG - which is how it was found: cards were reported apparently 30% too
 wide and PEMs missing from a view whose YAML places them correctly.
 """
 import os

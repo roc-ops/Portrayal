@@ -103,7 +103,7 @@ def test_only_a_rack_face_is_wider_than_its_plane():
     # is the 482.6 rack face over the 430 panel.
     # dinrail2u / dinrail4u: FS's DIN rail brackets are an open frame whose ears
     # are the front ends of the two side brackets folded out, one piece with
-    # them (the owner's rule of 2026-10-09: built-in ears are part of the face),
+    # them (the rule decided 2026-10-09: built-in ears are part of the face),
     # so the front is the 484 / 483.7 rack face while the chassis - and the side
     # brackets built in 3D - is the 424 / 423 between them.
     assert set(wide) <= {"r740xd:front", "r740xd:front-lff-12", "fhd-1ufmt-n:front",

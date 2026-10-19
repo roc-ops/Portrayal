@@ -41,7 +41,7 @@ _FIELDS = (("id", "id"), ("class", "data-class"), ("ref", "data-ref"),
            ("media", "data-media"), ("speed", "data-speed"),
            ("group", "data-group"), ("group-role", "data-group-role"),
            ("rel-pos", "data-rel-pos"), ("covered-by", "data-covered-by"))
-_LISTS = (("states", "data-states"), ("for", "data-for"))
+_LISTS = (("states", "data-states"), ("for", "data-for"), ("speeds", "data-speeds"))
 
 # Subtrees that paint nothing where they stand: their shapes are referenced
 # from elsewhere (a pattern, a clip, a mask) or are not shapes at all.

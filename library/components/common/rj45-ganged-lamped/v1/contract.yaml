@@ -1,0 +1,68 @@
+format: 1
+kind: component
+name: rj45-ganged-lamped
+version: 1.0.0
+class: port
+profile: networking
+description: A ganged 2xN RJ45 that carries two lamps and says nothing about what it carries - the
+  std/rj45-ganged@2 cell with the two lamps of common/rj45-ganged-eth@1 in its keyway-side corners.
+size: {w: 12.7, h: 11.0, d: 18.6}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+provenance:
+  name: >-
+    the family's lamped members are named for what they add to the bare cell: `-eth` says the lamps are
+    an Ethernet jack's, `-link` that there is one. This one adds two lamps and no claim, so it is named
+    for the lamps. `-timing` was rejected because a lamped console or alarm jack would fit it as well.
+  size: via std/rj45-ganged@2 - the housing, TE 1734264 rev A2.
+  depth: via std/rj45-ganged@2.
+  lamps: >-
+    via common/rj45-ganged-eth@1 - the same two windows at the same places (2.0 wide, 1.2 from the
+    side, 0.27 from the keyway edge), which that part took from TE 6368011 rev L, Amphenol RJHSE-508X
+    and the S9600-72XC's management jack. The CSR440's elevation shows them on its BITS jack, where
+    the quick start calls them the "BITS/ToD LEDs" (#370).
+  finish: via common/rj45-ganged-eth@1 - the same `finish` field and default, a convention and not a census.
+  media: >-
+    none, on purpose. The part makes no Ethernet claim, so it carries no `media` and no `speed`; the
+    placement's group says what the jack is for, and L76 sends an Ethernet jack to
+    common/rj45-ganged-eth@1 instead.
+  states: >-
+    convention - `off` and `on` only, because what a lamp means is the placement's to say. The CSR440's
+    timing lamps are green for a valid BITS signal and blinking green for 1PPS ToD; a device whose
+    guide tables its lamps writes them with `states:` on the placement.
+  which-is-which: convention - led-a is the left window and led-b the right when the part is
+    unrotated (pins up, keyway down). rotate 180 swaps them on the face with the keyway, as on the metal.
+fields:
+  finish:
+    label: Shell finish
+    type: text
+    default: '#b0b5bb'
+elements:
+  led-a:
+    at: [1.2, 9.63]
+    size: [2.0, 1.1]
+    class: led
+    states: ['off', 'on']
+  led-b:
+    at: [9.5, 9.63]
+    size: [2.0, 1.1]
+    class: led
+    states: ['off', 'on']
+parts:
+  - {ref: std/rj45-ganged@2, id: jack, at: [0.0, 0.0], behind: true}
+relief:
+  features:
+    - node: led-a
+      out: 0.3
+      color: '#0d0f11'
+      confidence: estimated
+      source: >-
+        common/rj45-ganged-eth@1 - the same lamp-lens stand-off, itself unsourced.
+    - node: led-b
+      out: 0.3
+      color: '#0d0f11'
+      confidence: estimated
+      source: >-
+        common/rj45-ganged-eth@1 - the same one estimate as led-a.
+connection-points:
+  net: {at: [6.35, 5.1], direction: front}
+skins: [default]

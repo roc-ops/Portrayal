@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Component in 3D</title>
+<!--
+  ONE COMPONENT IN THE 3D VIEWER, with a camera for each side of it. The
+  viewer has a lone-component mode, `load({component})`, and nothing opened
+  it: a card was looked at by writing a scratch page and orbiting with the
+  mouse. Over a local build:
+
+      ./build.sh --device <any>          # library/dist, with components.json
+      python3 tools/serve.py 8931        # from the repository root
+      open http://localhost:8931/kit/component.html?c=nvidia/a100-pcie-80gb@1
+
+  ?c=        the component, ns/name@major
+  ?skin=     a skin other than the default
+  ?view=     the camera to start from: iso (from above the face's top),
+             under (from below its bottom), front, rear, left, right, top, bottom
+  ?lens=flat a narrow lens from far away, near enough to an orthographic
+             view to lay over a straight-on photograph
+  ?pxmm=     with lens=flat, the scale on screen in px/mm; the face texture
+             density too (4 unless given)
+  ?f.<key>=  a field's value, as the part's own `fields` names it:
+             ?f.extender=straight
+
+  The sides are the part's own frame: `front` looks at the face, `right` at
+  the face's right-hand side (a PCIe card's top edge, drawn tip-left), `bottom`
+  at what is under the face's lower edge (a card's shroud side). A top or
+  bottom view has the face at the bottom of the screen, as the side drawings
+  are drawn. `window.preview` drives the same controls for a script.
+-->
+<style>
+  html, body { margin: 0; height: 100%; background: #f3f4f6; font: 13px system-ui, sans-serif; }
+  #bar { position: fixed; top: 0; left: 0; right: 0; height: 34px; box-sizing: border-box;
+         display: flex; gap: 6px; align-items: center; padding: 0 8px; overflow-x: auto;
+         white-space: nowrap; background: #1f2328; color: #e6e6e6; z-index: 2; }
+  #bar button, #bar select { font: inherit; padding: 2px 8px; border: 1px solid #555;
+                             background: #2b3036; color: #e6e6e6; cursor: pointer; }
+  #bar button.on { background: #f59e0b; color: #111; border-color: #f59e0b; }
+  #bar .sep { width: 1px; height: 18px; background: #555; margin: 0 4px; }
+  #v { position: absolute; top: 34px; left: 0; right: 0; bottom: 0; }
+  #msg { margin-left: auto; opacity: .8; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<div id="bar"><span id="views"></span><span class="sep"></span><span id="fields"></span>
+  <span class="sep"></span><button id="lens">flat lens</button><span id="msg"></span></div>
+<div id="v"></div>
+<script type="module">
+import * as THREE from 'three';
+import { flatDist, jdist } from './dist.js';
+import { createViewer } from './viewer3d.js';
+
+const q = new URLSearchParams(location.search);
+const ref = q.get('c') || 'nvidia/a100-pcie-80gb@1';
+const pxmm = Number(q.get('pxmm')) || 0;
+const dist = flatDist('../library/dist');
+const msg = document.getElementById('msg');
+const v = createViewer(document.getElementById('v'),
+  {dist, background: '#f3f4f6', ...(pxmm ? {pxmm: Math.max(pxmm, 4)} : {})});
+
+// a direction to look FROM, and the up the camera keeps; a top or bottom view
+// is looked at a hair off the vertical so the orbit keeps its own up
+const VIEWS = {
+  iso: [[0.55, 0.45, 1], [0, 1, 0]], under: [[0.55, -0.45, 1], [0, 1, 0]], front: [[0, 0, 1], [0, 1, 0]], rear: [[0, 0, -1], [0, 1, 0]],
+  right: [[1, 0, 0], [0, 1, 0]], left: [[-1, 0, 0], [0, 1, 0]],
+  top: [[0, 1, 1e-4], [0, 1, 0]], bottom: [[0, -1, 1e-4], [0, 1, 0]],
+};
+let flat = q.get('lens') === 'flat', current = q.get('view') || 'iso', target = [0, 0, 0];
+
+function bounds() {
+  const box = new THREE.Box3();
+  v.three.scene.traverse(o => { if (o.isMesh && o.visible) box.expandByObject(o); });
+  return box;
+}
+
+function view(name = current) {
+  const [dir, up] = VIEWS[name] || VIEWS.iso;
+  current = name;
+  const {camera, controls} = v.three;
+  const box = bounds(), centre = box.getCenter(new THREE.Vector3());
+  const size = box.getSize(new THREE.Vector3());
+  const r = size.length() / 2 || 100;
+  const el = document.getElementById('v');
+  const n = new THREE.Vector3(...dir).normalize();
+  // A FLAT LENS LOOKS AT THE SIDE IT FACES. Its scale holds on the plane it
+  // is aimed at, and a face 130 mm nearer than the part's middle came out 9
+  // percent large at 2 degrees; aimed at the nearest extent of the part, at
+  // half a degree, what stands 10 mm behind that is 0.2 percent small.
+  if (flat && !['iso', 'under'].includes(name))
+    centre.addScaledVector(n, Math.abs(n.x) * size.x / 2 + Math.abs(n.y) * size.y / 2 +
+                              Math.abs(n.z) * size.z / 2);
+  target = centre.toArray();
+  camera.fov = flat ? 0.5 : 40;
+  // far enough that the part fills about 85 percent of the view, or, with a
+  // flat lens and a scale, far enough that a millimetre is `pxmm` pixels
+  const half = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+  const d = flat && pxmm ? el.clientHeight / pxmm / 2 / half : r / half / 0.85;
+  camera.near = Math.max(d - 2 * r, 1); camera.far = d + 2 * r;
+  // the orbit's own limit would pull a flat lens back in, inside its near plane
+  controls.maxDistance = Math.max(2500, d * 1.5);
+  camera.updateProjectionMatrix();
+  camera.up.set(...up);
+  camera.position.copy(centre).addScaledVector(n, d);
+  controls.target.copy(centre);
+  controls.update();
+  for (const b of document.querySelectorAll('#views button')) b.classList.toggle('on', b.dataset.v === name);
+  document.getElementById('lens').classList.toggle('on', flat);
+}
+
+const views = document.getElementById('views');
+for (const k of Object.keys(VIEWS)) {
+  const b = document.createElement('button');
+  b.textContent = k; b.dataset.v = k; b.onclick = () => view(k);
+  views.appendChild(b);
+}
+document.getElementById('lens').onclick = () => { flat = !flat; view(); };
+
+const [ns, rest] = ref.split('/');
+const [name, major] = rest.split('@');
+const entry = (await jdist(dist('components.json'))).components
+  .find(c => c.ns === ns && c.name === name && c.major === `v${major}`);
+// THE PART ALONE IS ITS OWN PATH, its name, as the compiled preview says
+const values = {};
+for (const [k, f] of Object.entries((entry && entry.fields) || {})) {
+  if (f.type !== 'choice') continue;
+  const s = document.createElement('select');
+  for (const o of f.options) s.add(new Option(`${f.label || k}: ${o}`, o));
+  s.value = q.get(`f.${k}`) ?? String(f.default ?? f.options[0]);
+  values[k] = s.value;
+  s.onchange = () => setField(k, s.value);
+  document.getElementById('fields').appendChild(s);
+}
+async function setField(k, val) {
+  values[k] = val;
+  await v.setFields({[name]: {...values}});
+  view();
+}
+
+try {
+  if (!entry) throw new Error(`${ref} is not in components.json`);
+  await v.load({component: ref, ...(q.get('skin') ? {skin: q.get('skin')} : {})});
+  if (Object.keys(values).length) await v.setFields({[name]: {...values}});
+  view(current);
+  msg.textContent = `${entry.ns}/${entry.name}@${major}`;
+  window.__ready = 'ok';
+} catch (e) {
+  msg.textContent = String(e.message || e);
+  window.__ready = 'error: ' + (e.message || e);
+  console.error(e);
+}
+// `target` is the point at the middle of the view and `bounds` the part's
+// extent, in the scene's mm (y up, the face plane at z = depth / 2), so a
+// script can lay a flat view over a photograph
+window.preview = {view, setField, get flat() { return flat; },
+                  set flat(b) { flat = !!b; view(); }, target: () => [...target],
+                  bounds: () => { const b = bounds(); return {min: b.min.toArray(), max: b.max.toArray()}; }};
+</script>
+</body>
+</html>

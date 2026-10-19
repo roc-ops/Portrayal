@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120.02mm" height="41.91mm" viewBox="0 0 120.02 41.91">
+  <!-- nvidia/a100-pcie-80gb: the A100 80GB PCIe dual-slot bracket, seen from
+       OUTSIDE the chassis, drawn from the facts in the contract's provenance.
+       TIP AT THE LEFT, flange end at the right, the board's side at the top,
+       as std/pcie-bracket-fh@2 is drawn. Two retention tabs on the 20.32 slot
+       pitch with a V notch between them; one plate across both slots. -->
+  <path id="plate" d="M1.9 7.4 L7.27 7.4 L9.57 5.1 L20.0 5.1 L21.0 4.1 L119.2 4.1 L119.2 0.3 L120.02 0.3 L120.02 39.7 L119.2 39.7 L119.2 40.0 L9.67 40.0 L7.27 37.6 L1.9 37.6 A1.9 1.9 0 0 1 0 35.7 L0 29.8 A1.9 1.9 0 0 1 1.9 27.9 L7.27 27.9 L10.95 24.22 A2.4 2.4 0 0 0 10.95 20.88 L7.27 17.2 L1.9 17.2 A1.9 1.9 0 0 1 0 15.3 L0 9.3 A1.9 1.9 0 0 1 1.9 7.4 Z" fill="#9aa1a8" stroke="#5f666d" stroke-width="0.4" stroke-linejoin="round"/>
+  <!-- the fold: the flange turns 90 degrees here. On an elevation it is a line. -->
+  <path id="flange-fold" d="M119.6 0.6 V39.4" stroke="#5f666d" stroke-width="0.3" fill="none"/>
+  <!-- the grille frame: a separate plate on four Torx screws. The window,
+       fins and screws are inside its group, because the 3D relief paints the
+       raised frame with this node's own art and would otherwise hide them. -->
+  <g id="grille">
+  <!-- THE FRAME ENDS 8.49 SHORT OF THE PHOTOGRAPH'S, so the window stops at
+       x 107.31 as std/pcie-bracket-fh-2slot@1's windows do (the riser's post
+       covers the window's edge otherwise). The screws on that end move with it. -->
+  <rect x="29.8" y="9.9" width="79.31" height="29.4" rx="2.0" fill="#a7aeb5" stroke="#5f666d" stroke-width="0.35"/>
+  <!-- the vent window, its corners cut round each screw boss (R3.5) -->
+  <path id="vent" d="M35.79 11.8 L102.82 11.8 A3.5 3.5 0 0 0 107.31 16.29 L107.31 32.51 A3.5 3.5 0 0 0 103.11 37.6 L35.5 37.6 A3.5 3.5 0 0 0 31.2 32.55 L31.2 16.25 A3.5 3.5 0 0 0 35.79 11.8 Z" fill="#141618" stroke="#41474d" stroke-width="0.3"/>
+  <!-- heat-sink fins behind the window, end-on, on a 5.0 pitch -->
+  <g id="fins" fill="#565c62">
+    <rect x="36.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="41.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="46.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="51.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="56.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="61.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="66.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="71.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="76.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="81.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="86.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="91.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="96.0" y="12.1" width="0.5" height="25.2"/>
+    <rect x="101.0" y="12.1" width="0.5" height="25.2"/>
+  </g>
+  <g id="screw-1"><circle cx="32.5" cy="13.0" r="2.15" fill="#b9bfc5" stroke="#5f666d" stroke-width="0.3"/><circle cx="32.5" cy="13.0" r="0.8" fill="#4a4f55"/></g>
+  <g id="screw-2"><circle cx="106.11" cy="13.0" r="2.15" fill="#b9bfc5" stroke="#5f666d" stroke-width="0.3"/><circle cx="106.11" cy="13.0" r="0.8" fill="#4a4f55"/></g>
+  <g id="screw-3"><circle cx="32.5" cy="35.8" r="2.15" fill="#b9bfc5" stroke="#5f666d" stroke-width="0.3"/><circle cx="32.5" cy="35.8" r="0.8" fill="#4a4f55"/></g>
+  <g id="screw-4"><circle cx="106.11" cy="35.8" r="2.15" fill="#b9bfc5" stroke="#5f666d" stroke-width="0.3"/><circle cx="106.11" cy="35.8" r="0.8" fill="#4a4f55"/></g>
+  </g>
+  <!-- THE EXTENDER bolts to the far end, which this face does not show. One
+       empty node per option says which is fitted, and the body's extender
+       pieces follow it (`when`, L148). None fitted shows neither. -->
+  <g id="extender-straight" data-show-from="extender" data-show="straight" display="none"/>
+  <g id="extender-long-offset" data-show-from="extender" data-show="long-offset" display="none"/>
+</svg>

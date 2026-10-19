@@ -30,7 +30,7 @@ def test_lint_green():
     parallelism flattens after two of them. Locally it is worth every second -
     it is what stops a green test run over a library that does not lint. On CI
     it is redundant, because the `lint` job runs beside the job this runs in and
-    merge-if-green refuses a head unless every check passed (#183).
+    the merge train refuses a head unless every check passed (#183).
     """
     r = onebuild.full_lint()    # the same command, run once for every test that reads it
     assert r.returncode == 0, r.stdout + r.stderr

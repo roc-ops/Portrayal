@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-72xc
-version: 6.0.9
+version: 6.0.10
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-72XC
@@ -121,6 +121,13 @@ provenance:
       Overview table agrees on the ranges: '0 ~ 63 SFP28 1/10/25G, 64 ~ 71 QSFP28 40/100G'. The
       band numerals are what is drawn here; the module-face numerals are on the schematic
       transceivers and would be covered by a real one.
+  speeds:
+    confidence: datasheet
+    note: >-
+      datasheet - '64 x 1/10/25G SFP28 ports' and '8 x 40/100G QSFP28 ports' (page 2), and the
+      HIG's Port Overview table (page 11), which rates '0 ~ 63 SFP28 ... 1/10/25G' and
+      '64 ~ 71 QSFP28 ... 40/100G'. The groups' speeds lists are those figures, native rates
+      only; the highest of each stays the group's speed.
   mirror:
     confidence: drawing
     note: >-
@@ -519,7 +526,7 @@ groups:
     term: Port
     role: traffic
     index-origin: 0
-    attrs: {media: sfp28, speed: 25g}
+    attrs: {media: sfp28, speed: 25g, speeds: [1g, 10g, 25g]}
     description: >-
       ports 0-63, the datasheet's '64 x 1/10/25G SFP28 ports' and the HIG port table's
       '0 ~ 63', in four ganged blocks of four columns. Numbering runs DOWN each column
@@ -529,7 +536,7 @@ groups:
     term: Port
     role: traffic
     index-origin: 0
-    attrs: {media: qsfp28, speed: 100g}
+    attrs: {media: qsfp28, speed: 100g, speeds: [40g, 100g]}
     description: >-
       ports 64-71, the datasheet's '8 x 40/100G QSFP28 ports', two columns of four at
       the right of the faceplate - the uplinks, and the only ports on this box the

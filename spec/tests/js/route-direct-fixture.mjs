@@ -1,10 +1,10 @@
-// The owner's second cable-lay rack (#949), kept in a file of its own so a
+// The second cable-lay reference rack of #949, kept in a file of its own so a
 // probe can load the rack the test does. Not a test file.
 //
 // Two AS7326-56X leaves, at U42 and U40, either side of an FHD-1UFCE panel at
 // U41 with an FHD-CMP5DR lacer hosted on it; sixteen OM4 cords from leaf
-// ports 49 to 56 to panel bays 2 to 4. Items, cables and frame as the owner
-// saved them, less their hand routes, their lengths and their bundles, so
+// ports 49 to 56 to panel bays 2 to 4. Items, cables and frame as the reference
+// rack saved them, less their hand routes, their lengths and their bundles, so
 // every route here is the automatic one.
 //
 // The port positions are what the Rack Builder's route context reads from
@@ -45,7 +45,7 @@ export const rack = () => ({
     media: 'om4', purpose: 'uplink', label: '', route: []})),
 });
 
-// [cable, leaf, leaf port, panel port], as the owner cabled them
+// [cable, leaf, leaf port, panel port], as the reference rack cables them
 export const CABLES = [
   ['c1', 'i1', 'port-49', 'bay-3/module/lc5'], ['c2', 'i1', 'port-50', 'bay-3/module/lc6'],
   ['c3', 'i1', 'port-51', 'bay-4/module/lc1'], ['c4', 'i1', 'port-52', 'bay-4/module/lc2'],

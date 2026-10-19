@@ -115,7 +115,7 @@ Where `through` names a FIXED breaker placement rather than a bay (#934, a rack
 PDU's branch breaker), the outlet description names that breaker as the unit prints
 it, `Through breaker A`, and not by its placement id: the first of the placement's
 `attrs.label` and `attrs.section` (the Eaton G4 tile letter) that is set, the id only
-when neither is (owner decision, 2026-10-09; `dcim_export.breaker_name`). A bay
+when neither is (decided 2026-10-09; `dcim_export.breaker_name`). A bay
 position keeps `Through breaker position <id>`, since a bay prints nothing of its own.
 
 Both are bare ids resolved over the whole device, because both cross a face: the output

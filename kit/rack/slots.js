@@ -37,18 +37,34 @@ export function partName(compByRef, ref) {
   return first && first.length <= 60 ? first : c?.attrs?.model || ref;
 }
 
+// A slot whose `only-in` list leaves out the configuration. No list is every
+// configuration; no configuration known is none left out.
+const leftOut = (slot, cfg) => Array.isArray(slot?.['only-in']) && slot['only-in'].length > 0 && !!cfg && !slot['only-in'].includes(cfg.name);
+
 // The device's own bays and cages, every view, each carrying its view; the
 // configuration the item is built as (its own, else the device's default);
 // and what that configuration seats, by the drawing's path.
+//
+// A BAY OR CAGE THAT STATES `only-in` is a slot of those configurations only
+// (configs.json publishes it as device.yaml states it, absent where none is
+// stated). In another configuration it is not listed in `bays` or `cages`, and
+// `gone` holds its id: the build draws nothing there.
 export function slotEnv(item, slots, compByRef = null, redirects = null) {
-  const flat = by => Object.entries(by || {}).flatMap(([view, list]) => (list || []).map(s => ({...s, view})));
-  const bays = flat(slots.bays), cages = flat(slots.cages);
   const configs = slots.configs || [];
   const cfg = configs.find(c => c.name === item.cfg) || configs.find(c => c.name === slots.default) || null;
+  const gone = new Set();
+  const flat = by => Object.entries(by || {}).flatMap(([view, list]) => (list || []).filter(s => {
+    if (!leftOut(s, cfg)) return true;
+    gone.add(s.id);
+    return false;
+  }).map(s => ({...s, view})));
+  const bays = flat(slots.bays), cages = flat(slots.cages);
+  // an id that one view lists in the configuration is a slot of it
+  for (const s of [...bays, ...cages]) gone.delete(s.id);
   const cb = builtBays(cfg);
   const occ = builtOccupants(cfg, cages, compByRef ? {bays, compByRef} : null);
   // `follow` reads a ref the library has replaced as its replacement (kit/redirects.js)
-  return {bays, cages, cfg, compByRef, follow: redirects?.follow ?? (ref => ref),
+  return {bays, cages, cfg, gone, compByRef, follow: redirects?.follow ?? (ref => ref),
           built: p => (own(cb, p) ? cb[p] || null : undefined),
           builtOcc: p => (own(occ, p) ? occ[p] || null : undefined)};
 }
@@ -57,7 +73,13 @@ export function slotEnv(item, slots, compByRef = null, redirects = null) {
 // configuration's, unless a carrier above it was swapped (a fresh seat holds
 // its defaults); else what the slot ships with. A ref the library has replaced
 // is read as its replacement; the map is not changed.
+//
+// A SLOT THE CONFIGURATION DOES NOT HAVE HOLDS NOTHING (null), as does anything
+// beneath it: its `only-in` leaves the item's configuration out, and the build
+// draws no bay there. A swap that names it is not honoured, so a rack file
+// kept from another configuration does not seat a part in a bay that is not.
 export function holdsAt(env, swaps, path, slot) {
+  if (leftOut(slot, env.cfg) || env.gone?.has(String(path).split('/')[0])) return null;
   if (own(swaps, path)) return (env.follow ? env.follow(swaps[path]) : swaps[path]) || null;
   const reseated = Object.keys(swaps || {}).some(k => k !== path && underCarrier(path, k));
   const was = reseated ? undefined : (slot?.isCage ? env.builtOcc(path) : env.built(path));

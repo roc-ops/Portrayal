@@ -1,0 +1,2 @@
+### Changed
+- **`generic/qsfp-lc@2`'s `head` provenance records a reproducible method for the nose split** (#693): the views, the calibration, the edge fit, how the pitch between the two side views is handled, the readings per view with their uncertainty, and why the earlier readings differed. Re-read on both side views with one kept script, the nose stands 1.42 above and 1.37 below the body (+/-0.15), inside the 1.4 / 1.4 already drawn, so no geometry, size or placement changes; the nose length reads 19.1 and 19.7 against SFF-8661's 20 MAX.

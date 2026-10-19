@@ -1,0 +1,68 @@
+format: 1
+kind: component
+name: ground-screw-m5
+version: 1.0.0
+class: ground
+interface: terminal-stud
+profile: networking
+description: >-
+  A M5 pan-head screw in a tapped grounding hole, seen head on: a cross
+  recessed pan head 9.5 across on its washer, 10 across. A lug is landed under
+  it, so it is where one seats. It presents the nominal `terminal-stud`
+  interface on its axis, at the top of its head. A device places it alone where
+  its documents name M5 screws that are not a lug pitch apart (#918). A part may
+  compose it for a pair.
+size: {w: 10.0, h: 10.0}
+size-confidence: {w: registry, h: registry}
+size-notes: >-
+  the outside diameter of the standard's M5 washer, which is larger than the
+  head; the thread is not drawn
+attrs: {connector: terminal-stud}
+provenance:
+  size: >-
+    registry - ISO 7045 (pan head, type H or Z cross recess, product grade A), the M5 row: head diameter dk 9.5, head height k 3.7 (Engineers Edge, ISO 7045 table; Wurth and Keller-Kalmbach product data agree). The maximum head is drawn. The washer is the ISO 7089 M5 row (plain washer, normal series, grade A): outside diameter d2 10, thickness h 1.0 (Engineers Edge, ISO 7089 table). The part is as wide as the washer.
+  washer: >-
+    The datasheet rear of the one device that places this part shows its
+    screws washered; the washer is part of the art, as the washer is in
+    common/ground-screw@1 and common/ground-screw-washer@1.
+  relief: >-
+    registry - the washer thickness, 1.0, and the head height of the ISO 7045
+    row, 3.7, built as cylinders from the face the screw is driven into, the
+    head standing on the washer. The screw's shank and the lug under the
+    washer are not built.
+  sized: >-
+    A SIZED PART BESIDE THE NOMINAL ONE. common/ground-lug@1 stays the
+    library's nominal ground screw, drawn at about M3 and placed whatever a
+    device's documents say (#830, docs/connectors-dc-terminal-design.md
+    section 13.5). This part is drawn at the size a document states, and is
+    used only where one does.
+  seat: >-
+    THE LUG SEATS ON TOP OF THE HEAD, NOT UNDER IT, for the reason every stud
+    part in the library gives: `mate` sits `on: head`, so a lug seated here
+    starts 3.7 off the face and no solid of it shares the head's volume. A
+    real lug lies on the panel under the head. See
+    docs/connectors-dc-terminal-design.md, sections 12.5 and 13.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on the other sized screws. The screw has no
+    behaviour of its own: a part that composes it states `mounts`, and a
+    device that places it alone offers its `terminal-stud` seat to a ring lug
+    through the interface.
+elements: {}
+relief:
+  features:
+    - node: washer
+      cyl: 1.0
+      color: '#a6acb2'
+      confidence: registry
+      source: >-
+        ISO 7089 (plain washers, normal series, product grade A), the M5 row: outside diameter d2 10, thickness h 1.0 (Engineers Edge, ISO 7089 table): thickness.
+    - node: head
+      cyl: 3.7
+      lift: 1.0
+      color: '#b9bec4'
+      confidence: registry
+      source: >-
+        ISO 7045 (pan head, type H or Z cross recess, product grade A), the M5 row: head diameter dk 9.5, head height k 3.7 (Engineers Edge, ISO 7045 table): head height, on the 1.0 washer.
+connection-points:
+  mate: {at: [5.0, 5.0], direction: front, 'on': head}
+skins: [default]

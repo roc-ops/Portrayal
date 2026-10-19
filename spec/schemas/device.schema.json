@@ -1017,7 +1017,18 @@
       "description": "the job these ports do together, when they do NOT share a media or a speed and that is deliberate: a management cluster of SFP+, USB and RJ45, a timing block of RJ45 and coax. The default shape of a port group is one family - one media, one speed - because that is what lets the block declare its facts once in `attrs`; a group spanning families is normally a bucket nobody has sorted yet, and lint L23 says so. This field is the author's answer: the vendor's faceplate calls these one thing, and splitting them by media would be a worse drawing. State the function, e.g. 'management cluster' or 'timing inputs and outputs' - it is a reason, not a switch, and L23 also objects if it is set on a group that is in fact one family"
      },
      "attrs": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+       "speeds": {
+        "type": "array",
+        "minItems": 2,
+        "uniqueItems": true,
+        "items": {
+         "type": "string"
+        },
+        "description": "every native rate this group's ports run at, ascending, when there is more than one (a 1/10/25G SFP28 cage: [1g, 10g, 25g]), written from the vendor's own figure and never derived from the cage type. Published as `data-speeds`, space-separated. Native rates only, not breakout. It includes `speed`, which is its highest member; lint L110 holds both to the closed speed set"
+       }
+      }
      },
      "states": {
       "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next. A block of eighteen speed lamps shares one vocabulary and says it once; a placement inside it may still override",

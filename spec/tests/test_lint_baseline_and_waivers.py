@@ -161,20 +161,21 @@ def test_waivers_have_not_become_the_answer():
     landed; a library where waiving is how warnings are dealt with would show
     here first.
 
-    SIX IS THE CSR440's L76, and the cap moved only after the alternative was
-    built and rejected BY LINT ITSELF. Its BITS jack carries two lamps inside the
-    bezel, so it is drawn with the Ethernet part that has them and waives the rule
-    that reserves that part for Ethernet. Drawing it the way L76 wants - bare jack
-    plus two placed lamps - lints as `[L39] two holes cannot share metal`, because
-    an integrated lamp shares the jack's opening. The waiver records that disproof
-    rather than asserting a preference, and the export is unaffected: dcim_export
-    reads the group, so the port still leaves as `other`/BITS.
+    THE CSR440's L76 WAS SIXTH, AND THE WAIVER IS RETIRED (#370). Its BITS jack
+    carries two lamps inside the bezel, and the only part that drew them said
+    Ethernet, so the device waived the rule that reserves that part for Ethernet.
+    Drawing it the way L76 wanted - bare jack plus two placed lamps - lints as
+    `[L39] two holes cannot share metal`, because an integrated lamp shares the
+    jack's opening, so the warning had no fix inside a device. The fix was a
+    part: common/rj45-ganged-lamped@1 is the ganged cell with the two lamps and no
+    Ethernet claim, L76 takes a timing jack on it, and the CSR440 waives nothing.
+    The export never depended on the waiver: dcim_export reads the placement, so
+    the port leaves as `other`/BITS on either part.
 
-    RAISING THIS NUMBER IS NOT THE NORMAL WAY TO PASS. The CSR440's warning has no
-    fix inside a device - it needs a lamped, media-neutral jack added to the RJ45
-    family, at which point this can go back to five. Before raising it again, check
+    RAISING THIS NUMBER IS NOT THE NORMAL WAY TO PASS. Before raising it, check
     whether the warning is right; on the CSR310 it was, ten times, and the fix was
-    arithmetic rather than a sixth entry here.
+    arithmetic rather than another entry here, and on the CSR440 the fix was a
+    library part rather than a waiver.
 
     THE AIS800-32D's L39 WAS SEVENTH, AND IT CAME BACK OFF (#395). Its thirty-two
     port lamps are common/qsfp-lane-leds-column@1, a column of four 1.4 mm windows,
@@ -191,10 +192,10 @@ def test_waivers_have_not_become_the_answer():
     L125 asks a rack device for `ru`, and the DS6001 is an Open Rack v3 tray: 2OU
     of 48 mm, a unit `ru` cannot hold - 96 mm is 2.16 U and the tray does not fit
     an EIA rack at all - so the only `ru` that would silence it is invented. What
-    would let this go back to six is an Open Rack value for `chassis.mount`."""
+    would let this go back to five is an Open Rack value for `chassis.mount`."""
     waived = [p for p in libwalk.iter_devices([LIB])
               if ((yaml.safe_load(p.read_text()) or {}).get("lint") or {}).get("waive")]
-    assert len(waived) <= 7, f"{len(waived)} devices waive a rule: {[p.parent.name for p in waived]}"
+    assert len(waived) <= 6, f"{len(waived)} devices waive a rule: {[p.parent.name for p in waived]}"
 
 
 # --- render's half ------------------------------------------------------------

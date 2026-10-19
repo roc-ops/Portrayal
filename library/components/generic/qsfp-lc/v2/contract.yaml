@@ -98,16 +98,52 @@ provenance:
     20 MAX long), which L121 checks this key against. THE NOSE IS TALLER THAN
     THE BODY: 1.4 above the body top and 1.4 below the body bottom, so 11.3
     tall, photo-measured off the maintainer's photographs of a QSFP SR4 module.
-    Both side views were scaled on the 8.5 module height read AT THE NOSE: each
-    body edge was fitted as a line along the in-cage body and evaluated at the
-    nose, because both views are slightly rotated and one is keystoned (its
-    module height grows 5 percent toward the nose). They read 1.36 above and
-    1.38 below, and 1.48 above and 1.45 below (+/-0.15 each; 11.24 and 11.43
-    tall). The second quantity is the nose's own length at the same scale,
-    19.69 and 19.96 against Figure 5-1's 20 MAX. An earlier reading of the same
-    photographs, taken on median body edges, split them 1.6 above and 1.4
-    below; the difference was the rotation, and the two views agree only once
-    it is removed. In plan the nose is not wider than the body, so the width
+    HOW IT WAS READ, so the next reading reproduces it: the measuring script
+    kept with the photographs reads side views 2190 and 2192 (the full
+    4032 x 3024 frames) and prints every figure below. EDGES: the metal reads
+    warmer (red less blue) than the bench and its shadow, so an edge is where
+    that signal, averaged over a 9 px strip and 5 px down, crosses +15 (table
+    and shadow about -18 to -9, metal +20 to +50), interpolated to a fraction
+    of a pixel and median-filtered over 5 columns. BODY: the top edge and the
+    bottom edge are each fitted as their own straight line along the in-cage
+    body (columns 600 to 1650 on 2190, 900 to 1640 on 2192; a Theil-Sen start,
+    then least squares inside 3 px; 0.7 to 1.4 px rms), so a rotation (both
+    lines tilt) and a keystone (the lines converge: 0.44 deg on 2190, 0.04 deg
+    on 2192; 2190's module height grows 5 percent toward the nose) are carried
+    by the fit and nothing is undone in the image. CALIBRATION: the 8.5 module
+    height is the distance between the two fitted lines at the nose's centre
+    column, perpendicular to the body axis: 25.97 px/mm on 2190 and 24.22 on
+    2192, taken from the body's own edges and nothing else. PITCH: each view is
+    read in its own axis frame (the mean of its two lines; 0.19 deg from the
+    horizontal on 2190, 0.84 deg on 2192), heights taken perpendicular to it
+    and lengths along it. The 1.7 deg that #647 found between the views is the
+    pull tab's pitch against the body (the strap has play on the nose), not the
+    body's, and the nose is body metal, so it is not applied; what would harm a
+    reading is a wrong line angle, since 1.7 deg on a line read 800 px from the
+    middle of its window moves it 0.9 mm, which is why every line is fitted per
+    view and none assumed. READINGS, the median nose edge over the whole nose
+    against the lines at the same column, at that column's own scale: 2190 1.33
+    above and 1.44 below (11.27 tall), 2192 1.51 above and 1.30 below (11.30
+    tall); the means, 1.42 and 1.37, are within 0.05 of the 1.4 and 1.4 drawn.
+    The nose top has two levels on 2190 (the front part stands about 0.2 higher
+    than the back), so the places along the nose spread by +/-0.1 above and
+    +/-0.05 below. UNCERTAINTY +/-0.15 on each side: half the difference
+    between the views 0.09 above and 0.07 below, the fitted window 0.1, and the
+    edge level, which at 0, 15 and 30 reads the means 1.34, 1.42 and 1.29 above
+    and 1.22, 1.37 and 1.29 below. The second quantity is the nose's own length
+    along the axis at the same scale: 19.10 (2190) and 19.65 (2192) against
+    Figure 5-1's 20 MAX, read on the top edge, because on 2192 the bottom edge
+    runs into the pull tab's underside past the nose front. WHY THE EARLIER
+    READINGS DIFFERED. The ledger's 1.6 above and 1.4 below were taken on
+    median body edges, and a median edge does not follow a rotated or keystoned
+    body to the nose, which is where the 1.6 came from. The 1.4 and 1.4 of the
+    nose split (2.1.0) are what this reading supports. The 1.62 above and 1.42
+    below of the #647 and #685 work, 2190 alone, used the same kind of fitted
+    lines (0.3 and 1.0 px residuals, 26.25 px/mm at the nose front) and its
+    below agrees; its above is 0.27 over the script's own 2190 readings (1.31
+    to 1.35 at any edge level) and could not be reproduced, most likely
+    because that edge was taken on the metal's bright rim, a few pixels above
+    where the signal crosses. In plan the nose is not wider than the body, so the width
     stays the registry's 18.35. Both offsets are inside the envelope (1.4 of
     3.4 above, 1.4 of 1.6 below), so nothing is listed in `exceeds`. The skin's
     `body` rect draws the nose's front outline, 0.1 inside the head box for

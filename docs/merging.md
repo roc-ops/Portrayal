@@ -86,13 +86,10 @@ place for the run's logs; the owner can delete them.
 Exit status: 0 the train passed; 1 something is not ready; 2 a conflict; 3 the
 run failed or timed out; 4 the result is stale.
 
-## The merge lines are not `merge-if-green.sh`
+## The older merge script
 
-`.github/merge-if-green.sh` refuses a head that is behind `main`, which is the
-rule the train replaces: after the first merge of a set, every other pull
-request in it is behind, by design. Merge a train with the lines it prints.
-Bringing `merge-if-green.sh` in line (dropping its behind check for a set that
-has passed a train) is a separate change, and a one-way one.
+`merge-if-green.sh` was retired in this change (#155) because it refused any
+head behind `main`, which is the second merge of every train.
 
 ## When the train fails
 

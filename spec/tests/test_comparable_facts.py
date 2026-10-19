@@ -14,6 +14,7 @@ it. So the tests below care less about coverage than about refusal: what the
 resolver must decline to say.
 """
 import pathlib
+import re
 import sys
 
 import yaml
@@ -291,9 +292,10 @@ def test_a_scope_key_is_not_reported_as_unclaimed():
 # ---- what promotion was for -------------------------------------------------
 
 def test_the_promoted_facts_reach_the_devices_that_carry_them():
-    """The census ranked these; each recurs on 20 to 46 devices, which is what
+    """The census ranked these; each recurs on 11 to 46 devices, which is what
     made them worth a name. Read off the built index so it also proves the
-    vocabulary and the values agree."""
+    vocabulary and the values agree. `macsec` is the lowest at 11, accepted
+    because it spans three vendors (docs/comparable-facts-design.md)."""
     import json
     p = LIB / "dist" / "comparable-facts.json"
     if not p.exists():
@@ -303,8 +305,67 @@ def test_the_promoted_facts_reach_the_devices_that_carry_them():
     for name, least in (("emc", 40), ("safety", 40), ("console", 40), ("bmc", 38),
                         ("environmental-directives", 38), ("timing", 30),
                         ("oob-management", 30), ("optics-sfp-plus", 30),
-                        ("nebs", 20), ("gnss", 18), ("timing-interfaces", 18)):
+                        ("nebs", 20), ("gnss", 18), ("timing-interfaces", 18),
+                        ("usb", 23), ("srv6", 19), ("macsec", 11)):
         assert cov.get(name, 0) >= least, (name, cov.get(name, 0))
+
+
+def test_nebs_on_an_asr_9000_is_the_headline_and_two_qualified_readings():
+    """Cisco splits its NEBS statement in three. The level is the headline; the
+    EMC/safety and physical parts are real but are not the headline, so they
+    ride behind it as qualified readings."""
+    rs = F.resolve(real("cisco/asr-9006"))["nebs"]["readings"]
+    assert [r.get("qualifier") for r in rs] == [None, "emc-safety", "physical"]
+    assert [r["from"].split("/")[-1] for r in rs] == [
+        "nebs", "nebs-emc-safety", "nebs-physical"]
+    assert "Level 3" in rs[0]["vendor"]
+
+
+def test_macsec_is_not_read_from_encryption_or_tpm():
+    """`encryption` holds IPsec on one of its three devices and `tpm` is a
+    platform module. Claiming either would put a different claim in a MACsec
+    column."""
+    sources = {k for k, _, _ in F.BY_NAME["macsec"].sources}
+    assert sources == {"macsec"}
+    res = F.resolve(dev({"security": {"encryption": "aes-256-gcm-ipsec", "tpm": "2.0"}}))
+    assert "macsec" not in res
+
+
+def _keys(fact):
+    return {k for k, _, _ in F.BY_NAME[fact].sources}
+
+
+def test_srv6_sources_are_the_three_spellings_and_usb_sources_the_two():
+    assert _keys("srv6") == {"routing", "segment-routing", "srv6"}
+    assert _keys("usb") == {"usb", "service-port"}
+
+
+def _library_values(keys):
+    for slug, doc in libdata.devices():
+        flat = F._flat(doc)
+        for k in sorted(keys & set(flat)):
+            yield slug, k, str(flat[k][1])
+
+
+def test_every_srv6_source_value_in_the_library_names_srv6():
+    """`routing` is a generic key name. The fact is promoted on the strength of
+    every value saying Segment Routing over IPv6, so a later `routing: BGP, OSPF`
+    must fail here and not turn up in an SRv6 column. Walks library/devices,
+    never dist, so it cannot skip."""
+    seen = list(_library_values(_keys("srv6")))
+    assert seen, "no device carries an SRv6 source key"
+    bad = [(s, k, v) for s, k, v in seen
+           if not re.search(r"srv6|segment routing over ipv6", v, re.I)]
+    assert not bad, f"these do not name SRv6, so the key is not this fact: {bad}"
+
+
+def test_every_usb_source_value_in_the_library_names_usb():
+    """`service-port` is UfiSpace's word for a front-panel data port elsewhere.
+    Here it holds a USB port, and the fact is only true while that stays so."""
+    seen = list(_library_values(_keys("usb")))
+    assert seen, "no device carries a USB source key"
+    bad = [(s, k, v) for s, k, v in seen if not re.search(r"usb", v, re.I)]
+    assert not bad, f"these do not name USB, so the key is not this fact: {bad}"
 
 
 def test_optics_are_one_fact_per_media():
@@ -318,7 +379,7 @@ def test_optics_are_one_fact_per_media():
 
 
 def test_the_long_tail_is_still_left_alone():
-    """102 of 211 spellings appear on exactly one device. Promoting those would
+    """160 of 446 spellings appear on exactly one device. Promoting those would
     be a taxonomy of nothing, so the census is expected to stay non-empty."""
     import json
     p = LIB / "dist" / "comparable-facts.json"

@@ -44,7 +44,8 @@ def needs(job):
 
 def test_lint_is_its_own_job_and_the_build_does_not_queue_behind_it(workflow):
     """`needs: lint` made a run queue twice on a busy pool. The gate it gave is
-    kept by the merge: see test_the_merge_refuses_a_failed_lint. The build
+    kept by the merge train: see test_merge_train.py, test_a_failed_check_refuses
+    and test_a_check_still_running_refuses. The build
     starts at once (`dist` needs nothing), and no job waits on lint."""
     jobs = workflow["jobs"]
     assert "lint" in jobs and "build" in jobs, list(jobs)
@@ -66,22 +67,11 @@ def test_the_build_job_does_not_lint_again(workflow):
     assert "NO_LINT=1 ./publish.sh" in build, build[:400]
 
 
-def test_the_merge_refuses_a_failed_lint():
-    """THE GATE `needs: lint` USED TO BE. With the jobs side by side, the only
-    thing standing between a manifest that does not lint and main is that
-    merge-if-green reads every check-run on the head and refuses on any that did
-    not succeed - and on any still running."""
-    t = (ROOT / ".github/merge-if-green.sh").read_text()
-    assert "check-runs" in t
-    assert '$3!="success"' in t, "a failed check must refuse the merge"
-    assert '$2!="completed"' in t, "a running check must refuse the merge"
-
-
 def test_a_push_to_main_lints_but_does_not_rebuild(workflow):
-    """merge-if-green merges only a green, up-to-date head, so main's tree after
-    the merge is the tree that was tested. The build on the push repeated it and
-    held a self-hosted runner through every merge burst. `workflow_dispatch`
-    keeps a full run on main one click away."""
+    """The merge train tests the set of pull requests together, in the order
+    they merge, so main's tree after the merges is the tree that was tested. The
+    build on the push repeated it and held a self-hosted runner through every
+    merge burst. `workflow_dispatch` keeps a full run on main one click away."""
     on = workflow.get("on", workflow.get(True))
     assert "workflow_dispatch" in on, on
     jobs = workflow["jobs"]
@@ -114,19 +104,14 @@ def test_a_draft_run_cannot_cancel_a_ready_run(workflow):
     If they share a concurrency group, the push's run - its payload still says
     draft - cancels the ready one and runs lint alone, and the skipped `build`
     it leaves reads as passing to branch protection (#867). Draft status in the
-    group keeps the two apart, so the ready run always lands a real `build`."""
+    group keeps the two apart, so the ready run always lands a real `build`.
+    What stops a skipped `build` being merged is the merge train, which takes
+    nothing but `success` for it: test_merge_train.py,
+    test_a_skipped_build_is_not_a_pass."""
     group = workflow["concurrency"]["group"]
     assert "github.event.pull_request.draft" in group, group
     assert "github.ref" in group, "pushes to one ref must still supersede each other"
     assert workflow["concurrency"]["cancel-in-progress"] is True
-
-
-def test_a_skipped_build_cannot_merge():
-    """A skipped required check reads as passing to branch protection, and a
-    draft's `build` is skipped. What stops that head merging is the merge script,
-    which takes nothing but `success`."""
-    t = (ROOT / ".github/merge-if-green.sh").read_text()
-    assert '$3!="success"' in t
 
 
 def test_build_sh_still_lints_by_default():

@@ -41,10 +41,12 @@ export const COMPONENTS = [
   comp('generic/sfp-lc@1', {class: 'transceiver', kind: 'module', attrs: {media: 'fiber', face: 'lc-duplex', mode: 'single-mode'}, parts: [], cages: [], bays: {}}),
 ];
 const ACCEPTS = [PANEL, PANEL_OM4, CASSETTE, BLANK, CARRIER];
-const bay = (id, def = null) => ({id, group: 'slots', accepts: ACCEPTS, default: def});
+const bay = (id, def = null, onlyIn = null) => ({id, group: 'slots', accepts: ACCEPTS, default: def, ...(onlyIn ? {'only-in': onlyIn} : {})});
 export const SLOTS = {
-  pp: {default: 'panels', 'pdu-class': null, // bay-9 ships a panel, and is a bay of some configurations only, which configs.json does not say
-       bays: {front: [bay('bay-1'), bay('bay-2'), bay('bay-3'), bay('bay-4'), bay('bay-9', PANEL)], rear: []}, cages: {front: [], rear: []},
+  // bay-7 and bay-9 ship a panel and are bays of some configurations only (`only-in`); bay-8 ships one in every
+  pp: {default: 'panels', 'pdu-class': null,
+       bays: {front: [bay('bay-1'), bay('bay-2'), bay('bay-3'), bay('bay-4'), bay('bay-7', PANEL, ['panels']), bay('bay-8', PANEL), bay('bay-9', PANEL, ['base'])], rear: []},
+       cages: {front: [], rear: []},
        configs: [{name: 'panels', description: '', airflow: 'passive', bays: {'bay-1': PANEL, 'bay-2': CASSETTE, 'bay-4': CARRIER}, occupants: {}},
                  {name: 'base', description: '', airflow: 'passive', bays: {}, occupants: {}}]},
   sw: {default: 'base', 'pdu-class': null, bays: {front: [], rear: []},

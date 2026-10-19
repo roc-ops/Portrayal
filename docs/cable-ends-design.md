@@ -166,9 +166,10 @@ The kit answers from the catalogue wherever the catalogue can:
 
 - **A part in a bay** (`psu-1/module/inlet`): the seated part's own components say
   whether a slot is at the path, what presents it and what it is. Where neither
-  the configuration nor a swap names the bay, which is how most supplies sit, the
-  catalogue alone does not know the bay is built; once a page has read the panel
-  and found a part there, the slot of what the bay ships with answers.
+  the configuration nor a swap names the bay, which is how most supplies sit,
+  the bay holds what it ships with, provided the configuration has the bay: a
+  bay that states `only-in` is published with it (`configs.json`), and one that
+  leaves the configuration out is no bay there.
 - **A slot of the device itself** (`outlet-rear-3`, `ground`): `configs.json`
   lists the slot, its panel and what it accepts, so the end lands. **Only on the
   panel this configuration shows**: a device lists the slots of every panel it
@@ -184,17 +185,6 @@ The kit answers from the catalogue wherever the catalogue can:
   on a guess, and an outlet that is no slot reads "is not on this panel" as it
   always did.
 
-**A limit, stated plainly.** The catalogue does not say which configurations
-build a bay that only its default fills. So a page that hands the kit the
-drawing of one configuration for an item now in another can make an end land
-on a supply the item's own configuration does not build: it names the very
-part the bay ships with, and the comparison passes. Over the catalogue that
-is 14 of 9,171 such questions, all `rear-15-16/module/inlet` on `ch3000`,
-whose bay two configurations draw and none names. A page that reads the
-item's own configuration never asks it. What would close it is the catalogue
-saying which configurations build a default-filled bay; the kit does not
-guess at it from names.
-
 So a page that still knows class `port` alone gets true answers from this kit for
 every end it reads, with one exception it must close before it offers power
 cabling: **without `drawnAt` an outlet-to-outlet or inlet-to-inlet cord on a
@@ -205,6 +195,8 @@ cannot be missed. To offer the ends, it asks the zone reader for them:
 Without `ends` the zone reader answers what it always did.
 
 ## 7. Later steps, named
+
+The audit of these steps against the code, and the design of the open ones, is in [power-cords-design.md](power-cords-design.md).
 
 1. **A zero-U part as an end** (a vertical PDU): **done in kit 0.38.0.** An end
    names the part's id as its `item` and one of its own connector slots as its

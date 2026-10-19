@@ -159,13 +159,25 @@ function reference(a, b, solids, diameter) {
     const own = grown ? stretch(s.box) : null;
     const [hp, hq] = own ? [at(own[0]), at(own[1])] : [p, q];
     const within = (pt, h) => AX.every(k => pt[k] >= h[`${k}0`] - EPS && pt[k] <= h[`${k}1`] + EPS);
-    if ((s.holes || []).some(h => within(hp, h.box) && within(hq, h.box) && diameter <= Math.min(...h.size) + 1e-9)) continue;
+    // #992: a zero-U part's hole is taken less the radius across the hole (the
+    // plate's thinnest axis is the way through, and is left as it is)
+    const way = AX.slice().sort((m, n) => (s.box[`${m}1`] - s.box[`${m}0`]) - (s.box[`${n}1`] - s.box[`${n}0`]))[0];
+    const less = h => {
+      if (!(s.zeroU === true && diameter > 0)) return h.box;
+      const r = diameter / 2, o = {...h.box};
+      for (const k of AX.filter(k => k !== way)) {
+        const mid = (o[`${k}0`] + o[`${k}1`]) / 2;
+        o[`${k}0`] = Math.min(o[`${k}0`] + r, mid); o[`${k}1`] = Math.max(o[`${k}1`] - r, mid);
+      }
+      return o;
+    };
+    if ((s.holes || []).some(h => within(hp, less(h)) && within(hq, less(h)) && diameter <= Math.min(...h.size) + 1e-9)) continue;
     out.push({solid: s, t0, t1, at: p});
   }
   return out.sort((x, y) => x.t0 - y.t0);
 }
 const said = hits => hits.map(h => [h.solid.item, h.solid.part, h.t0, h.t1, h.at]);
-// the owner's rack with a duct at the left front upright: its floor has eight pass-throughs
+// the reference rack of #949 with a duct at the left front upright: its floor has eight pass-throughs
 function ducted() {
   const rack = {...F.ownerRack(), zeroU: [{id: 'z1', ref: 'cmv-sfd45u5w', cfg: 'base', at: 'left-front', offsetMm: 0}]};
   const ctx = F.ctxOf(), solids = S.solidsOf(rack, ctx);

@@ -1,7 +1,7 @@
 // The corners of each cord's routed path that have less room than the cord's
 // installed bend radius, counted by what made the corner (#973). Not a test
 // file: rack-bend-room.mjs imports `tightCorners`, and run on its own it
-// prints the count for the owner's cable-lay rack (route-direct-fixture.mjs),
+// prints the count for the second cable-lay reference rack of #949 (route-direct-fixture.mjs),
 // so a change to how routes are laid is measured the same way before and
 // after:
 //
@@ -20,7 +20,7 @@
 // ON A REVISION BEFORE #973 this file does not run as it is: cornersOf was in
 // bundles.js and had no `share`. The `before` figures (86 by halves, 87 by
 // need) were measured by bend-room-sample.mjs --base <dir>, which lays the
-// owner's rack with that revision's kit and counts its paths with this
+// reference rack of #949 with that revision's kit and counts its paths with this
 // revision's cornersOf.
 //
 // THE CAUSE is read off the path's own labels (route.js routePath `at`):

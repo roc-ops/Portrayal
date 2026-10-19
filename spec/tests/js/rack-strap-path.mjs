@@ -247,7 +247,10 @@ function ducts(media, {at = {'guide-1': 0, 'guide-2': 762}, portX = () => -150} 
     r = {...r, cables: r.cables.map(c => (c.id === `c${k + 1}` ? {...c, route: way, routeEdited: true} : c))};
   });
   r = apply(r, {op: 'bundle.create', cables: media.map((m, k) => `c${k + 1}`), route: way}, {chassisOf}).rack;
-  const ctx = {chassisOf, portX,
+  // (a plug's reach is given as a number, so a DAC's and an AOC's are measured
+  // whole, as every plug was before #985: the cords here differ by how they
+  // hang, not by a plug that cannot bend)
+  const ctx = {chassisOf, portX, plugReachOf: (e, c) => R.PLUG_REACH[c?.media] ?? null,
     guidesOf: id => (id === 'i2' ? Object.entries(at).map(([via, x]) => ({via, kind: 'duct', face: 'front', x, box: {w: 40, h: 30}})) : [])};
   return {rack: r, ctx};
 }

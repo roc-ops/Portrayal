@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx2008
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: Juniper
 model: MX2008
@@ -70,9 +70,22 @@ provenance:
       Until #261 the slots were an estimated 41.0 x 425.0 on a 41.0 pitch, which no adapter fits. The
       native MX2K cards and the blank keep their estimated 41 x 425 and are centred in the wider slot.
       Down: the slot is centred on the photograph's LC cage, 331.5 to 791.9 mm (476 to 1058 px at 1.264
-      px/mm from the chassis top at 57 px): y 336.8. The band above it, which carries the RCB/SFB and LC
-      legends, closes up to 313.0 to 336.8, and the band below to 788.0 to 806.0.
+      px/mm from the chassis top at 57 px): y 336.8. The label strip above it, which carries the CB-RE/SFB
+      and LC legends, is the photograph's own: its two rows run 422.5 to 460.5 px, 289.2 to 319.2 mm
+      (#996; it had sat at 313.0 to 336.8, 23.8 mm low, against the photograph's cage edge of 475 px,
+      330.7 mm, which agrees with the cage drawn here to under 1 mm). The strip prints CB-RE where the
+      guide's RCB is the board; the legend rows sit at 297.2 and 313.3. The band below the cage is
+      788.0 to 806.0.
 attrs:
+  physical:
+    weight-base-kg: 118.39
+    weight-max-kg: 336.66
+    weight-note: >-
+      Table 98 (physical specifications) of the MX2008 hardware guide gives 261 lb (118.39 kg)
+      for the chassis with components removed. It gives 742.2 lb (336.66 kg) for the AC chassis
+      with maximum configuration. The DC chassis at maximum is 664.8 lb (301.55 kg). The chassis
+      with midplane and air filters only is 235.5 lb (106.82 kg). The kilogram figures are the
+      table's own.
   power:
     power-typical-w: 1520
     power-max-w: 4420
@@ -167,32 +180,32 @@ views:
     panel:
       decor:
         - {at: [0.0, 0.0], size: [440.0, 48.0], fill: '#4a4f55'}
-        - {at: [0.0, 313.0], size: [440.0, 23.8], fill: '#4a4f55'}
+        - {at: [0.0, 289.2], size: [440.0, 30.0], fill: '#4a4f55'}
         - {at: [0.0, 788.0], size: [440.0, 18.0], fill: '#4a4f55'}
         - {at: [8.0, 806.0], size: [424.0, 145.0], fill: '#8a8f95'}
         - {at: [14.0, 957.0], size: [412.0, 100.0], pattern: holes, fill: '#26292d'}
     silkscreen:
-      - {at: [25.69, 322.0], text: RCB 0, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: rcb0}
-      - {at: [68.87, 322.0], text: '0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb0}
-      - {at: [112.05, 322.0], text: '1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb1}
-      - {at: [155.23, 322.0], text: '2', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb2}
-      - {at: [198.41, 322.0], text: '3', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb3}
-      - {at: [241.59, 322.0], text: '4', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb4}
-      - {at: [284.77, 322.0], text: '5', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb5}
-      - {at: [327.95, 322.0], text: '6', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb6}
-      - {at: [371.13, 322.0], text: '7', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb7}
-      - {at: [414.31, 322.0], text: RCB 1, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: rcb1}
-      - {at: [14.0, 334.0], text: LC, font-size: 2.4, anchor: middle, fill: '#e8eaec', for: chassis}
-      - {at: [25.69, 334.0], text: '0', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc0}
-      - {at: [68.87, 334.0], text: '1', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc1}
-      - {at: [112.05, 334.0], text: '2', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc2}
-      - {at: [155.23, 334.0], text: '3', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc3}
-      - {at: [198.41, 334.0], text: '4', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc4}
-      - {at: [241.59, 334.0], text: '5', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc5}
-      - {at: [284.77, 334.0], text: '6', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc6}
-      - {at: [327.95, 334.0], text: '7', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc7}
-      - {at: [371.13, 334.0], text: '8', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc8}
-      - {at: [414.31, 334.0], text: '9', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc9}
+      - {at: [25.69, 297.2], text: CB-RE 0, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: rcb0}
+      - {at: [68.87, 297.2], text: '0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb0}
+      - {at: [112.05, 297.2], text: '1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb1}
+      - {at: [155.23, 297.2], text: '2', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb2}
+      - {at: [198.41, 297.2], text: '3', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb3}
+      - {at: [241.59, 297.2], text: '4', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb4}
+      - {at: [284.77, 297.2], text: '5', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb5}
+      - {at: [327.95, 297.2], text: '6', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb6}
+      - {at: [371.13, 297.2], text: '7', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: sfb7}
+      - {at: [414.31, 297.2], text: CB-RE 1, font-size: 2.0, anchor: middle, fill: '#e8eaec', for: rcb1}
+      - {at: [14.0, 313.3], text: LC, font-size: 2.4, anchor: middle, fill: '#e8eaec', for: chassis}
+      - {at: [25.69, 313.3], text: '0', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc0}
+      - {at: [68.87, 313.3], text: '1', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc1}
+      - {at: [112.05, 313.3], text: '2', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc2}
+      - {at: [155.23, 313.3], text: '3', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc3}
+      - {at: [198.41, 313.3], text: '4', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc4}
+      - {at: [241.59, 313.3], text: '5', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc5}
+      - {at: [284.77, 313.3], text: '6', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc6}
+      - {at: [327.95, 313.3], text: '7', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc7}
+      - {at: [371.13, 313.3], text: '8', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc8}
+      - {at: [414.31, 313.3], text: '9', font-size: 2.4, anchor: middle, fill: '#e8eaec', for: fpc9}
     components:
       bays:
         - {id: craft, at: [0.0, 0.0], size: {w: 440.0, h: 95.0},

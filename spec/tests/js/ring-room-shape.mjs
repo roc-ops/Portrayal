@@ -33,6 +33,7 @@
 import {pathToFileURL} from 'node:url';
 import {resolve} from 'node:path';
 import {RU} from '../../../kit/rack/rails.js';
+import {PLUG_REACH} from '../../../kit/rack/route.js';
 import {CAT, RINGS} from './cable-solids-fixture.mjs';
 
 export const SIZES = {
@@ -102,7 +103,13 @@ function cables() {
 // The rack and its route context: `lacer` 'top', 'bottom' or 'none' (the
 // unit of each switch its lacer is hosted on), `setback` mm (every switch),
 // `count` how many of the 275 cables to keep, from the first.
-export function shape({lacer = 'top', setback = 0, count = 275} = {}) {
+// `rigid` true measures a DAC's or an AOC's plug as the kit does by default
+// (#985: its 64.8 mm cannot bend, so a turn at its end has no leg in it); false,
+// the default here, gives the reach as a number (`plugReachOf`), which the kit
+// measures as a leg whole, as every plug was measured before #985. The figures
+// of docs/cable-lay-design.md section 3.5 and the tests that count them are of
+// that; the change of #985 is counted with `rigid: true`.
+export function shape({lacer = 'top', setback = 0, count = 275, rigid = false} = {}) {
   const items = SWITCHES.map(([id, ref, label, ru]) => ({id, ref, cfg: 'base', label, ru, face: 'front', turned: false, swaps: {}, fields: {},
     ...(setback ? {setback} : {})}));
   if (lacer !== 'none') SWITCHES.forEach(([id, , label, ru], k) => {
@@ -115,7 +122,9 @@ export function shape({lacer = 'top', setback = 0, count = 275} = {}) {
     zeroU: [{id: 'z1', ref: 'duct', cfg: 'base', label: 'Duct L', at: 'left-front', offsetMm: 0}, {id: 'z2', ref: 'duct', cfg: 'base', label: 'Duct R', at: 'right-front', offsetMm: 0}],
     cables: cables().slice(0, count)};
   const port = e => { const it = rack.items.find(i => i.id === e.item); const p = it && portOf(it.ref, e.path); return p ? {it, p} : null; };
+  const byId = new Map(rack.cables.map(c => [c.id, c]));
   const ctx = Object.freeze({chassisOf,
+    ...(rigid ? {} : {plugReachOf: (e, c) => PLUG_REACH[(c ?? byId.get(e?.cable))?.media] ?? null}),
     guidesOf: id => (rack.items.find(i => i.id === id)?.ref === 'fhd-cmp5dr' ? RINGS : []),
     portX: e => port(e)?.p[0] ?? null,
     // above the floor of U1: the bottom of the device's lowest unit, the gap a

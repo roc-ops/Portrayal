@@ -9,13 +9,28 @@ The modelling skill starts at "sort the sources you have." This skill is
 everything before that moment: deciding what to hunt, finding it, staging it
 where it survives, converting it, and proving the conversion is complete.
 
-The difference it makes is measured. The ASR 9000 intake was assembled ad hoc
-and the models built from it needed a long tail of corrections - a size filter
-silently dropped every datasheet faceplate, ground pads went unmodelled across
-seven chassis, dimensions were declared "not stated anywhere" that were in the
-intake all along. The MX intake followed the process below and 15 chassis plus
-a ~100-module catalogue went through review with the defect classes already
-fenced. Same modeller, same gates - different preparation.
+**How a lesson is written here.** Each lesson is a rule, then the check that
+would have caught the failure, as in `docs/modelling-a-device.md` and
+`docs/modelling-pitfalls.md`. A vendor or a document is named in three cases
+only: where it is data (a URL pattern, an id scheme, a setting that was
+measured), where it is the worked example of a rule, marked *Illustration* and
+placed after the rule, or where the rule is about that source. Whatever you
+learn on a new vendor goes in the same form: the mechanism, then its check.
+
+**Preparation decides how many corrections modelling needs.** An intake put
+together ad hoc surfaces its gaps as late corrections: a filter that silently
+drops product pictures, ground pads left unmodelled, a dimension declared "not
+stated anywhere" that was in the intake all along. An intake that follows the
+process below has those defect classes fenced before review. Check: each of
+those three classes has a step below that would have caught it (the sample of
+rejects, the grounding requirements in the install guide, the corpus-wide
+absence search). *Illustration.* The ASR 9000 intake was assembled ad hoc, and
+the models built from it needed a long tail of corrections: a size filter
+dropped every datasheet faceplate, ground pads went unmodelled across seven
+chassis, and dimensions were declared "not stated anywhere" that were in the
+intake. The MX intake followed the process below, and 15 chassis plus a
+~100-module catalogue went through review with those classes already fenced.
+Same modeller, same gates; different preparation.
 
 **Definition of done:** a staged corpus under `working/intake/<vendor>/<line>/`
 with a `SOURCES.md` naming every artefact and its URL, a **`COVERAGE.md`
@@ -27,30 +42,37 @@ into a machine-readable matrix. Only then does modelling start.
 
 ## Stage 0 - enumerate the line before hunting anything
 
-List every model FIRST, from the vendor's product-line page plus their EOL /
-end-of-support page. EOL hardware is still racked everywhere and its
-documentation is still (mostly) online; the MX set shipped seven EOL chassis
-and reviewers asked for them by name. For switch lines, enumerate to the SKU
-(EX4400-24P and EX4400-48P are different faceplates; MX240 and MX480 share
-cards but not chassis). The list is the checklist everything below runs
-against - without it, "done" means "what I happened to find."
-
-**An intake that starts from one URL is still an intake of the line.** Asked to
-stage a single datasheet, find the product page it hangs from and take
-everything that page publishes: the datasheet's siblings are usually one click
-away and the install guide, not the datasheet, is the geometry source.
-
-**Read the SKUs off the vendor's variant selector, not off a datasheet.** A
-datasheet lists the variants its author was thinking of. The Amphenol 300CB08
-datasheet names nine part numbers; the product page sells twelve, and the three
-it omits have a datasheet of their own. Where a page offers two option groups
-(fuse positions x input style), choosing one changes what the other offers, so
-walk them breadth-first and read each SKU from its own variant page.
-
-**Then cross-check against the ordering guide, in both directions.** Part
-numbers in the guide with no page, and pages with no entry in the guide, both go
-in COVERAGE.md by name. Neither list is the truth; the difference between them
-is the finding.
+- **List every model first, from the vendor's own pages, and include the
+  retired ones.** Take the product-line page plus the end-of-life or
+  end-of-support page. Retired hardware is still racked and its documentation
+  is mostly still online. Check: every model on both pages is a row in the
+  list before any URL is probed. *Illustration.* The MX set shipped seven EOL
+  chassis, and reviewers asked for them by name.
+- **Enumerate to the SKU wherever the SKUs differ in what is drawn.** Check:
+  two SKUs with different faceplates, or chassis that share cards but not a
+  frame, are two rows. *Illustration.* EX4400-24P and EX4400-48P are different
+  faceplates; MX240 and MX480 share cards but not chassis.
+- **The list is the checklist everything below runs against.** Without it,
+  "done" means "what I happened to find." Check: COVERAGE.md has a row for
+  every entry on the list.
+- **An intake that starts from one URL is still an intake of the line.** Asked
+  to stage a single datasheet, find the product page it hangs from and take
+  everything that page publishes: the datasheet's siblings are usually one
+  click away, and the install guide, not the datasheet, is the geometry
+  source. Check: the product page the first document hangs from is recorded in
+  SOURCES.md, with everything it publishes staged or listed as missing.
+- **Read the SKUs off the vendor's variant selector, not off a datasheet.** A
+  datasheet lists the variants its author was thinking of. Where a page offers
+  two option groups (fuse positions x input style), choosing one changes what
+  the other offers, so walk them breadth-first and read each SKU from its own
+  variant page. Check: the SKU count on the product page is compared with the
+  count in the datasheet, and a difference is explained. *Illustration.* The
+  Amphenol 300CB08 datasheet names nine part numbers; the product page sells
+  twelve, and the three it omits have a datasheet of their own.
+- **Cross-check against the ordering guide, in both directions.** Part numbers
+  in the guide with no page, and pages with no entry in the guide, both go in
+  COVERAGE.md by name. Neither list is the truth; the difference between them
+  is the finding. Check: COVERAGE.md has both lists, even when one is empty.
 
 ## What to hunt, and what each source is for
 
@@ -69,6 +91,15 @@ is the finding.
 | **rail sizing matrix** | which kit fits which chassis, and the depth range per chassis group; a matrix often gives one rail a different minimum on different chassis, which is a device-level override | 0-1 |
 | **accessory table** (in the datasheet, ordering guide or HIG) | the kit SKUs, whether each ships in the box or is sold separately, normal or reversed mounting, and the cable management arm and strain-relief bar | 1 per family |
 | **rack-mounting figures** (in the HIG) | the named ear positions (flush, recessed, mid-mount) and the one the box ships in; the reviewer checks the default against this figure | 1-4 per HIG |
+
+Two rules the table carries:
+
+- **A module reference is a catalogue, not a power source.** It is often
+  silent on watts. Check: before a module's power is recorded as absent, the
+  chassis guides' FRU power tables are searched (see "Power figures" below).
+- **Where a vendor has no public image library, the guides' own renders are
+  the elevation source.** Check: before writing "thin photo coverage", count
+  the front and rear views in the converted guides.
 
 **The four mounting sources are staged with the rest, each as a rule with
 its check.** `chassis.ears` and `chassis.kits` are written right after the
@@ -99,13 +130,17 @@ panel (docs/rack-mounting-design.md), and they are read from these four.
 ## Finding them: probe, don't browse
 
 Clicking through a documentation portal for 30 models wastes hours and misses
-things. The vendor's URL patterns are regular; **write a probe script** that
+things. **A vendor's URL patterns are regular, so write a probe script** that
 candidates every (model x artefact-kind x naming-variant) URL and checks them
-in parallel, then reads the hits. The MX/EX/QFX hunt probed ~1,150 URLs in
-minutes and the misses were as informative as the hits. Keep the probe script
-and its raw hit JSON beside the intake.
+in parallel, then reads the hits. Keep the probe script and its raw hit JSON
+beside the intake. Check: the intake folder holds the script and the hit file,
+and a re-run needs no browsing. *Illustration.* The MX/EX/QFX hunt probed
+~1,150 URLs in minutes, and the misses were as informative as the hits.
 
-Verified patterns (Juniper; add other vendors' here as they are learned):
+The patterns below are data: they are kept as they were verified, per vendor.
+Add other vendors' here as they are learned.
+
+Verified patterns (Juniper):
 
     hardware guide     https://www.juniper.net/documentation/us/en/hardware/<family>/<family>.pdf
     hardware guide EOL .../documentation/en_US/release-independent/junos/information-products/pathway-pages/<line>-series/<fam>/<model>.pdf
@@ -114,6 +149,10 @@ Verified patterns (Juniper; add other vendors' here as they are learned):
     studio photos      https://www.juniper.net/content/dam/www/assets/images/us/en/image-library/<line>-series/<KEY>/<KEY>-{front,rear,frontwtop}-high.jpg
     doc figures        https://www.juniper.net/documentation/us/en/hardware/<family>/images/g<NNNNNN>.png
     NetBox             https://raw.githubusercontent.com/netbox-community/devicetype-library/master/elevation-images/<Vendor>/<vendor>-<sku>.{front,rear}.png
+
+Juniper's `-front-high` / `-rear-high` DAM shots are straight-on studio
+elevations (1500-2100 px, port numerals legible); `-frontwtop-` is angled.
+Both are worth keeping; only the former is measurable.
 
 Amphenol Network Solutions (formerly Telect):
 
@@ -124,44 +163,50 @@ Amphenol Network Solutions (formerly Telect):
     ordering guide     https://amphenol-ns.com/Assets/P_OG_Power.pdf     (one per product area)
     gallery photos     https://amphenol-ns.com/DesktopModules/Revindex.Dnn.RevindexStorefront/Portals/0/Gallery/<uuid>.jpg   (600 px at most, angled)
 
-Probe craft, learned the hard way:
+Probe craft. Each is a rule with its check; the case, where one is kept,
+follows it.
 
-- **A 200 with an HTML content-type is a miss** dressed as a hit (portals
-  serve pretty 404s). Check content-type, not just status.
-- **A redirect is information, not a failure.** Juniper's current-product
-  datasheets 301 to HPE PSNow (`hpe.com/psnow/doc/<id>`); resolving the
-  redirect target gives the authoritative ID even when the target host is
-  unreachable from your sandbox. Record the IDs; fetch by browser if needed.
-- **Photo folders may be per-SKU where docs are per-family** (EX/QFX DAM is
-  keyed `ex4100-48p`, MX was keyed `mx480`). Probe both shapes.
-- **A miss at one pattern is not absence.** EOL guides moved twice at Juniper;
-  the oldest live only inside an archive zip whose existence a redirect to an
-  "archives" page revealed. Follow the redirect chain before writing
-  "no guide exists."
-- **The page can link an older document than the pattern URL serves.** One
-  product page linked a 2020 install guide while the 2023 revision answered at
-  the vendor's usual `P_IG_<part>.pdf` name, linked from nowhere. After
-  crawling the links, probe the pattern anyway, and compare footers when both
-  answer.
+- **A 200 with an HTML content-type is a miss dressed as a hit.** Portals
+  serve pretty 404s. Check: the probe tests content-type, not only status.
+- **A redirect is information, not a failure.** Resolving the redirect target
+  gives the authoritative document id even when the target host is unreachable
+  from where you run. Check: the probe records the final URL of every
+  redirect; ids are recorded and fetched by browser if needed.
+  *Illustration.* Juniper's current-product datasheets 301 to HPE PSNow
+  (`hpe.com/psnow/doc/<id>`).
+- **Photo folders may be keyed per SKU where documents are keyed per family.**
+  Check: the probe tries both shapes. *Illustration.* The EX/QFX DAM is keyed
+  `ex4100-48p`; MX was keyed `mx480`.
+- **A miss at one pattern is not absence.** Vendors move documents. Check:
+  the redirect chain is followed before "no guide exists" is written.
+  *Illustration.* EOL guides moved twice at Juniper; the oldest live only
+  inside an archive zip whose existence a redirect to an "archives" page
+  revealed.
+- **The page can link an older document than the pattern URL serves.** Check:
+  after crawling the links, probe the vendor's usual name pattern anyway, and
+  compare footers when both answer. *Illustration.* One product page linked a
+  2020 install guide while the 2023 revision answered at the vendor's usual
+  `P_IG_<part>.pdf` name, linked from nowhere.
 - **Cut the page before "related products".** A storefront page's gallery
   markup also carries the photos of whatever is "frequently purchased with"
-  it; a regex over the whole page files a rack under a breaker panel.
+  it. Check: the parser stops at the related-products marker, and no photo in
+  a product's folder belongs to a different product. *Illustration.* A regex
+  over the whole page filed a rack under a breaker panel.
 - **De-duplicate photos by bytes, per product.** Variant pages re-serve the
-  same shot under a new UUID, and half of what remains is the thumbnail of the
-  other half. Report the count after de-duplication and say what the largest
-  size is: a folder of 40 files can hold no measurable elevation at all.
-- **A 403 to a command-line client is not absence either.** Some manufacturer
-  sites refuse anything that is not a browser. Fetch through a browser session
-  and say so in SOURCES.md, so the next person does not record a miss.
+  same shot under a new id, and half of what remains is the thumbnail of the
+  other half. Check: the report gives the count after de-duplication and the
+  largest size; a folder of 40 files can hold no measurable elevation at all.
+- **A 403 to a command-line client is not absence either.** Some sites refuse
+  anything that is not a browser. Check: a refused URL is retried through a
+  browser session, and SOURCES.md says so, so the next person does not record
+  a miss.
 - **Note what robots.txt says about the asset path** and keep to the links the
   product pages publish, fetched once. A pattern probe is a handful of
-  requests, not a crawl.
+  requests, not a crawl. Check: SOURCES.md records what robots.txt said.
 - **Save the pages you parsed.** The crawler, the saved HTML and the parsed
   manifest live beside the intake, and the crawler skips files already on
   disk. Fixing a parsing mistake is then a re-read, not a second visit.
-- `-front-high` / `-rear-high` DAM shots are straight-on studio elevations
-  (1500-2100 px, port numerals legible); `-frontwtop-` is angled. Both are
-  worth keeping; only the former is measurable.
+  Check: the saved HTML is there.
 - **General image search is a modelling-time tool, not a staging-time one.**
   Bulk image-search results are angled marketing shots, reseller composites
   and watermarked stock - unmeasurable, uncitable ("found on an image
@@ -169,7 +214,8 @@ Probe craft, learned the hard way:
   configuration than labelled. At modelling time, a targeted search answers
   a specific question ("does this SKU's 24-bay front carry the LCD?"), and
   a vendor's press/media kit is the official middle ground when a face
-  needs colour or finish the document renders cannot give.
+  needs colour or finish the document renders cannot give. Check: no
+  SOURCES.md row cites an image search as its origin.
 
 ## The coverage report: say what you did NOT find
 
@@ -181,13 +227,17 @@ marked found / missing / not-applicable. Three rules make it honest:
 - **A probe miss is a claim about your URL patterns, not about the world.**
   Every model on the enumerated list HAS a manual and a datasheet somewhere;
   "missing" means "not found by these methods", and the report says which
-  methods were tried. The Dell intake wrote off an entire host as empty when
-  the host was merely rejecting the probe's user agent — and separately
-  listed models as undocumented that did not exist, because the model list
-  itself had been enumerated from memory instead of the vendor's own pages.
-  Both failure shapes belong in the report explicitly: *is this cell empty
-  because the artefact is hidden, or because the model is imaginary?*
-  Verify the enumeration against the vendor before trusting any zero.
+  methods were tried. A zero has two causes that look alike: the artefact is
+  hidden from the probe (a host rejecting its user agent, a pattern that does
+  not fit), or the model is imaginary (the list was enumerated from memory
+  instead of the vendor's own pages). Both failure shapes belong in the
+  report explicitly: *is this cell empty because the artefact is hidden, or
+  because the model is imaginary?* Check: each missing cell names the methods
+  tried, and the enumeration was verified against the vendor before any zero
+  is trusted. *Illustration.* The Dell intake wrote off an entire host as
+  empty when the host was merely rejecting the probe's user agent, and
+  separately listed models as undocumented that did not exist, because the
+  model list had been enumerated from memory.
 - **End with a handoff list, not a shrug.** The report's final section is
   addressed to a human: "these artefacts exist but need a login / a support
   portal / a browser" (vendor support accounts, HPE PSNow, JS-only portals),
@@ -202,22 +252,27 @@ marked found / missing / not-applicable. Three rules make it honest:
 
 ## Staging: where it lives and how it is recorded
 
-- Everything goes in the **MAIN checkout** `working/intake/<vendor>/<line>/`
+- **Everything goes in the MAIN checkout** `working/intake/<vendor>/<line>/`
   (`pdf/`, `datasheets/`, `photos/`), never in a worktree. `working/` is
-  gitignored, and gitignored files in a worktree DIE with the worktree -
-  the MX staging was lost exactly this way once and rebuilt from URLs.
-- Write **`SOURCES.md`** as you stage: every file, its exact URL, image
-  dimensions and view style for photos, and a "gaps to hunt" list. When the
-  staging was rebuilt after the worktree loss, SOURCES.md was the only reason
-  it took an hour instead of a day.
+  gitignored, and gitignored files in a worktree DIE with the worktree.
+  Check: `pwd` of the staging folder is the main checkout, not a worktree.
+  *Illustration.* The MX staging was lost this way once and rebuilt from URLs.
+- **Write `SOURCES.md` as you stage:** every file, its exact URL, image
+  dimensions and view style for photos, and a "gaps to hunt" list. Check: a
+  file in the folder with no row in SOURCES.md is a defect. A ledger written
+  as you go is what makes a lost folder cost an hour and not a day (the MX
+  rebuild took an hour).
 - **Name converted output `<vendor>--<stem>`.** Converted figure sets from
   every vendor share one directory, and stems like `151881` or `Drawing_307491`
-  mean nothing there and will collide.
+  mean nothing there and will collide. Check: no directory in
+  `working/images/` lacks the vendor prefix.
 - **Third-party documents get their own folder** (`third-party/`) and their
   own rows in SOURCES.md, so a breaker maker's datasheet is never cited as the
-  panel vendor's.
-- Reference material is **never committed and never published**. Transcribe
-  facts into contracts; the PDFs and photos stay in `working/`.
+  panel vendor's. Check: every cited document's row names its publisher.
+- **Reference material is never committed and never published.** Transcribe
+  facts into contracts; the PDFs and photos stay in `working/`. Check:
+  preflight's private-path and export checks, and `git status` shows nothing
+  from `working/`.
 
 ## Converting: docling, one process per file
 
@@ -229,13 +284,15 @@ afterwards - retuning a filter is then a one-second re-read instead of an
 hour of reconversion. Dependencies: `spec/tools/intake/requirements.txt`
 (docling + pillow; GPU optional but several times faster).
 
-The rules that two OOM kills and one lost evening bought:
+The rules that two OOM kills and one lost evening bought. The figures in them
+were measured and are kept as they were:
 
 1. **One fresh python process per PDF.** Docling holds a whole document in
    memory AND accumulates across documents in one process. A 963-page guide
    hit 52 GB and was killed; a chunked run in one process died ~2,900
    cumulative pages in. A loop that spawns `python extract.py <one-file>`
-   per file is immune.
+   per file is immune. Check: the driver is a loop that starts a process per
+   file, not one process given a list.
 2. **Split anything over ~600 pages** into 300-page chunks first
    (`<stem>-p0001-0300.pdf` naming); reassembly is just the shared stem.
 3. **Echo an EXIT marker per file** (`PERFILE-EXIT(<file>)=$?`). Over ssh,
@@ -256,8 +313,9 @@ The rules that two OOM kills and one lost evening bought:
    than ten times per document (a two-page datasheet always). Run it only
    once every file has a `raw.json`: `--reclassify` CONVERTS any file
    without one, in that same process, which is rule 1 broken - clear or
-   set aside the FAILs first. The knobs, each shaped by a publisher that
-   broke the default:
+   set aside the FAILs first. Check: every file has a `raw.json` before the
+   pass starts. The knobs, each shaped by a publisher that broke the default
+   (the values are measured):
    - `--icon-px N` - the icon size floor (default 200). Too high for small
      module front views; the CH3000 corpus needs 80.
    - `--banner-max-h N` - a picture at least N px tall is never a banner
@@ -269,11 +327,12 @@ The rules that two OOM kills and one lost evening bought:
      every figure is drawn at page width.
    Record the exact sort command in the intake `SOURCES.md`, so the next
    reclassify repeats it.
-6. **A PDF that is pure vector converts to nothing, and exits 0.** A customer
-   drawing with no text layer and no embedded images yields an empty `doc.md`
-   and no pictures. Check for empty output after the run and render those
-   pages (`pdftoppm -r 200 -png`) into the same output folder; such a drawing
-   is often the only source for its part.
+6. **A PDF that is pure vector converts to nothing, and exits 0.** A drawing
+   with no text layer and no embedded images yields an empty `doc.md` and no
+   pictures. Check for empty output after the run and render those pages
+   (`pdftoppm -r 200 -png`) into the same output folder; such a drawing is
+   often the only source for its part. *Illustration.* A customer drawing
+   converted to nothing this way.
 7. Watch the run with a monitor that reports **failures and completion,
    not progress** - and also reports the runner dying, because silence
    looks identical to "still working."
@@ -285,10 +344,10 @@ The rules that two OOM kills and one lost evening bought:
   part" means something very different at 62/62 than at 39/62. Store the
   baseline beside the intake (`figure-baseline.tsv`).
 - **The caption pattern is per publisher.** `Figure 12:` is one vendor's
-  habit; another writes `Fig. 2-7:`. Read one converted guide before trusting
-  a zero. And a list of figures without dot leaders matches the same pattern
-  as the captions it lists, so count the LAST occurrence of each caption, not
-  the first.
+  habit; another writes `Fig. 2-7:`. Check: read one converted guide before
+  trusting a zero. And a list of figures without dot leaders matches the same
+  pattern as the captions it lists, so count the LAST occurrence of each
+  caption, not the first.
 - **When caption attachment is unreliable, baseline by page.** Docling can
   hang a caption on the page-header logo and leave the drawing beside it
   uncaptioned, or merge four views on one page into one picture. The honest
@@ -297,26 +356,30 @@ The rules that two OOM kills and one lost evening bought:
   to find figures by page.
 - **The banner rule eats banner-shaped products.** The front of a 1RU panel
   is a wide, short picture that recurs across documents, which is exactly what
-  the rule looks for; it dropped the front views of five panels. Look at every
-  wide reject, not a sample, and re-sort with `--banner-max-h` when product
-  faces are among them. Record the flag in COVERAGE.md for the next re-sort.
-- **Look at a sample of the rejects.** A size filter is shaped like the last
-  vendor you looked at; the one that dropped every Cisco datasheet faceplate
-  made "vendor published no pictures" out of "filter ate them."
+  the rule looks for. Check: look at every wide reject, not a sample, and
+  re-sort with `--banner-max-h` when product faces are among them; record the
+  flag in COVERAGE.md for the next re-sort. *Illustration.* The rule dropped
+  the front views of five panels.
+- **A size filter is shaped by the last vendor you looked at.** Check: look at
+  a sample of the rejects of each new vendor before believing "the vendor
+  published no pictures". *Illustration.* The filter that dropped every Cisco
+  datasheet faceplate made "vendor published no pictures" out of "filter ate
+  them."
 - **Count the kept figures, report the kept count.** The raw picture count
-  on disk flatters you by 2x (icons, banners); say which number any claim is.
+  on disk flatters you by 2x (icons, banners). Check: every claim says which
+  number it is.
 
 ## While the tables are fresh: parse the matrix
 
 For a modular platform, the module reference's support tables ARE the
 `accepts:` lists. Parse them into TSV/JSON **before** modelling - models x
 chassis, module x carrier compatibility, per-model power - and hand-correct
-the rows the PDF table-wrapping mangles (verify against the per-model
-sections). The MX module catalogue shipped wired-by-vendor-table instead of
-wired-by-what-was-photographed because this happened first. Docling wraps
-model numbers with stray spaces (`MPC4E-3 D- 32XGE- SFPP`); normalise by
-stripping whitespace, and treat a release number in a cell as "supported",
-`-` as not.
+the rows the PDF table-wrapping mangles. Check: each corrected row is
+verified against the per-model sections. *Illustration.* The MX module
+catalogue shipped wired-by-vendor-table instead of wired-by-what-was-photographed
+because this happened first. Docling wraps model numbers with stray
+spaces (`MPC4E-3 D- 32XGE- SFPP`); normalise by stripping whitespace, and
+treat a release number in a cell as "supported", `-` as not.
 
 ## Power figures: which book, and which rung
 
@@ -324,27 +387,34 @@ Two traps, both of which have already cost a re-do across the Juniper corpus.
 
 **The module reference is not where the watts are.** It is the obvious place to
 look and it is often silent, while the FRU power tables sit in the CHASSIS
-guides - MX2K-MPC8E, MX2K-MPC9E, MIC3-100G-DWDM and SCB-MX were all found there
-after seven contracts had already recorded "NOT STATED for this model in the
-module reference extraction." That sentence was true of the book it named and
-false of the corpus, and it reads as the second. **Never scope an absence claim
-to one document.** Either say which books were searched, or search the corpus
-and say that. An absence claim is a fact about the world and needs the same
-sourcing as a number - it is what tells the next person to stop looking.
+guides. **Never scope an absence claim to one document.** Either say which
+books were searched, or search the corpus and say that. An absence claim is a
+fact about the world and needs the same sourcing as a number - it is what
+tells the next person to stop looking. Check: before "NOT STATED" is written,
+grep the whole converted corpus for the part number, and the sentence names
+what was searched. *Illustration.* MX2K-MPC8E, MX2K-MPC9E, MIC3-100G-DWDM and
+SCB-MX were all found in the chassis guides after seven contracts had already
+recorded "NOT STATED for this model in the module reference extraction." That
+sentence was true of the book it named and false of the corpus, and it reads
+as the second.
 
-**A vendor power figure is a ladder, not a scalar.** The same part is printed at
-25 C, 40 C and 55 C, and the rungs differ by enough to matter:
-MIC-3D-4COC3-1COC12 is 33.96 W at 25 C and 36.48 W at 55 C. Three guides print
-the 25 C figure bare, with no temperature anywhere near it, so an extractor that
-takes the first watts it sees reads seven percent low and looks right. **Take the
-maximum rung and record the ambient in `provenance.power`** - lint L52 asks for
-that record. Two more things the row itself says and the number does not: a card
-figure marked *without MICs* is the one that composes (the MICs answer for
-themselves), and a figure marked *with optics* already includes them.
+**A vendor power figure is a ladder, not a scalar.** The same part is printed
+at 25 C, 40 C and 55 C, and the rungs differ by enough to matter.
+Some guides print the 25 C figure bare, with no temperature anywhere near it,
+so an extractor that takes the first watts it sees reads low and looks right.
+**Take the maximum rung and record the ambient in `provenance.power`** - lint
+L52 asks for that record. Two more things the row itself says and the number
+does not: a card figure marked *without MICs* is the one that composes (the
+MICs answer for themselves), and a figure marked *with optics* already
+includes them. Check: the figure's row names its ambient, and `provenance.power`
+repeats it. *Illustration.* MIC-3D-4COC3-1COC12 is 33.96 W at 25 C and
+36.48 W at 55 C; three guides print the 25 C figure bare, which reads seven
+percent low.
 
-When extracting power in bulk, require a row to identify its own subject: ONE
-cell exactly a part number, and an explicit temperature. A looser rule put the
-MPC7E's 545 W onto the MPC6E.
+**When extracting power in bulk, require a row to identify its own subject:**
+ONE cell exactly a part number, and an explicit temperature. Check: the
+extractor rejects a row that fails either test. *Illustration.* A looser rule
+put the MPC7E's 545 W onto the MPC6E.
 
 ## Then
 

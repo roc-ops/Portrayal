@@ -43,9 +43,12 @@ def test_every_vendor_says_where_it_came_from():
 def test_every_vendor_declares_a_role():
     """`role` is what lets a NOS vendor be named by an overlay without being
     confused for the company that made the metal."""
+    words = ("hardware", "software", "reseller")
     for slug, v in VENDORS.items():
-        assert v.get("role") in ("hardware", "software", "both"), \
-            f"{slug} has role {v.get('role')!r}"
+        role = v.get("role")
+        assert role in (*words, "both") or (
+            isinstance(role, list) and role and set(role) <= set(words)
+            and len(set(role)) == len(role)), f"{slug} has role {role!r}"
 
 
 def test_lineage_does_not_loop():

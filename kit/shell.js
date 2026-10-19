@@ -1794,9 +1794,30 @@ export function createShell(opts = {}) {
   // what the shell's own handlers start and nobody awaits: a superseded load
   // is the expected end of one, and anything else is still reported
   const quiet = p => p.catch(err => { if (!isSuperseded(err)) throw err; });
+  // A LOAD THAT NEVER SETTLES IS GIVEN UP (#998). `loadstart` is emitted by
+  // every load as it begins - a host's loadDevice or loadStage, the shell's own
+  // selects, openModule, the back button, the start-up load - and carries what
+  // is being loaded: {kind: 'device' | 'stage', device, config, view, module}.
+  // For a device load, `config` and `view` are what the caller asked for (null
+  // when it asked for neither), since the manifest has not arrived to resolve
+  // them. A host starts a timer on it and calls `abandonLoad()` when the timer
+  // runs out. That moves the counter on exactly as a newer load would, so the
+  // load ends as a superseded one: it writes nothing, mounts nothing, emits no
+  // `load`, and its promise rejects with the `superseded` error. The request
+  // itself is not cancelled; its answer is thrown away when it comes. The stage
+  // stays as the abandoned load left it: loadStage empties it before it awaits,
+  // so it is blank, and the state still names the drawing that was there.
+  // Nothing in flight, nothing happens; the start-up `fields=` wait counts.
+  const abandonLoad = () => { claimLoad(); };
 
-  async function loadStage() {
+  const loadStage = () => stage(true);
+  // `announce` is false for the stage a loadDevice goes on to mount: that load
+  // has announced itself already, once
+  async function stage(announce) {
     const gen = claimLoad();
+    if (announce)
+      emit('loadstart', {kind: 'stage', device: state.device, config: state.cfg,
+                         view: state.view, module: state.module});
     el.svgHost.innerHTML = '';
     let file;
     if (state.module) {
@@ -1878,6 +1899,8 @@ export function createShell(opts = {}) {
     // NOTHING IS WRITTEN UNTIL THE MANIFEST IS IN and this is still the newest
     // load (#929): a superseded call must leave the state as the newer one set it
     const gen = claimLoad();
+    emit('loadstart', {kind: 'device', device: name, config: want.config ?? null,
+                       view: want.view ?? null, module: null});
     const meta = await j(`${name}.configs.json`);
     stillNewest(gen);
     // WHOSE BOX THIS IS goes with the box. A caller that names a listing sets
@@ -1903,7 +1926,7 @@ export function createShell(opts = {}) {
     if (picker && picker.value !== name) picker.value = name;
     syncCfgBays();
     emit('device', name, state.meta);
-    await loadStage();
+    await stage(false);
   }
   function syncCfgBays() {
     // BUMPED FIRST, before any of the objects below are replaced, so a
@@ -2245,7 +2268,7 @@ export function createShell(opts = {}) {
   return {
     state, el, ready, on, emit, setFields, fieldsOf, resetField, applyFields, setDisplays,
     select, fit, refreshTree, loadFaces, loadDevice, loadStage, openModule, swapBay,
-    swapCage, cageFor, applySwaps, swapDelta,
+    abandonLoad, swapCage, cageFor, applySwaps, swapDelta,
     // a seated lug's turn (#829): set one, apply a link's, the URL's delta,
     // and the whole state the 3D scene seats with
     turnCage, applyTurns, turnDelta, turnsNow: () => ({...state.cfgTurns}),

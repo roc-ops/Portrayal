@@ -230,8 +230,8 @@ FACTS = [
     #
     # Promoted from the unclaimed census, which is what the tail is for: these
     # recur on 20 to 46 devices each, so a comparison that cannot line them up
-    # is leaving real answers on the floor. The long tail stays unclaimed - 102
-    # of 211 spellings appear on exactly one device, and a fact per one-off is
+    # is leaving real answers on the floor. The long tail stays unclaimed - 160
+    # of 446 spellings appear on exactly one device, and a fact per one-off is
     # a taxonomy of nothing.
     Fact("console", "management", None, TEXT, [
         A("console"), A("console-serial"),
@@ -239,6 +239,11 @@ FACTS = [
     Fact("oob-management", "management", None, TEXT, [
         A("oob"), A("oob-sfp", qualifier="sfp"),
     ]),
+    # THE USB PORT, NOT A "SERVICE PORT". UfiSpace documents call a front-panel
+    # data port a service port; the `service-port` key here holds a USB port.
+    # The fact is named for the thing. `spec/tests/test_comparable_facts.py`
+    # holds every value of both keys to naming USB.
+    Fact("usb", "management", None, TEXT, [A("usb"), A("service-port")]),
     Fact("bmc", "platform", None, TEXT, [A("bmc")]),
 
     # ---- timing, which is the whole point on a cell-site router -------------
@@ -246,10 +251,30 @@ FACTS = [
     Fact("timing-interfaces", "features", None, TEXT, [A("timing-interfaces")]),
     Fact("gnss", "features", None, TEXT, [A("gnss")]),
 
+    # ---- link security and the protocols a box does -------------------------
+    #
+    # `encryption` and `tpm` are NOT sources of macsec: one `encryption` value
+    # is IPsec and `tpm` is a platform module. A different claim in a MACsec
+    # column is the failure this layer is built against.
+    Fact("macsec", "features", None, TEXT, [A("macsec")]),
+    # Named for the standard, not for the key. `routing` is a generic key name
+    # whose every value here says Segment Routing over IPv6; a test holds it to
+    # that, so a later "BGP, OSPF" fails there instead of turning up in this
+    # column.
+    Fact("srv6", "features", None, TEXT, [
+        A("routing"), A("segment-routing"), A("srv6"),
+    ]),
+
     # ---- the paperwork a reader actually compares --------------------------
     Fact("emc", "compliance", None, TEXT, [A("emc")]),
     Fact("safety", "compliance", None, TEXT, [A("safety")]),
-    Fact("nebs", "compliance", None, TEXT, [A("nebs")]),
+    # Cisco splits its NEBS statement in three: the level is the headline and
+    # the GR-1089 and GR-63 parts are qualified readings behind it.
+    Fact("nebs", "compliance", None, TEXT, [
+        A("nebs"),
+        A("nebs-emc-safety", qualifier="emc-safety"),
+        A("nebs-physical", qualifier="physical"),
+    ]),
     Fact("environmental-directives", "compliance", None, TEXT, [
         A("environment"), A("rohs"),
     ], note="RoHS, WEEE and the like - not the operating environment, which is "

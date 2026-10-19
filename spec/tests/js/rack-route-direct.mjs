@@ -14,7 +14,7 @@ import * as F from './route-direct-fixture.mjs';
 const ring = n => ({item: 'i4', via: `guide-${n}`});
 const mm = l => Math.round(l.measured * 10000) / 10;
 
-// Per cable of the owner's rack: the rings it runs through, its measured
+// Per cable of the reference rack of #949: the rings it runs through, its measured
 // length in mm (the path plus the end allowance at each end, 113.1 mm for an
 // OM4 cord since #962; 0.15 m before) and its stock length in m.
 // Before kit 0.12.0 every one ran out to the right lane and back, measuring
@@ -92,7 +92,7 @@ const OWNER = {
 };
 const LOWER = ['c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16'];
 
-test('the owner\'s rack: each cord runs along the lacer through a ring, with no lane', () => {
+test('the reference rack of #949: each cord runs along the lacer through a ring, with no lane', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   const got = Object.fromEntries(r.cables.map(c => {
     const route = R.autoRoute(r, c, ctx), l = R.routedLength(r, c, ctx);
@@ -120,7 +120,7 @@ test('the owner\'s rack: each cord runs along the lacer through a ring, with no 
   }
 });
 
-test('the owner\'s rack: no ring is entered and left by one face, and no route crosses a body', () => {
+test('the reference rack of #949: no ring is entered and left by one face, and no route crosses a body', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   assert.deepEqual(R.ringFindings(r, ctx), []);
   assert.deepEqual(R.bodyFindings(r, ctx), []);
@@ -203,7 +203,7 @@ test('c8: no ring between its ports; of the ring each side, the one it lays bett
   const c7 = r.cables.find(c => c.id === 'c7');
   assert.deepEqual(R.autoRoute(r, c7, ctx), [ring(4)]);
   assert.deepEqual(R.ringFindings({...r, cables: [{...c7, route: [ring(2)], routeEdited: true}]}, ctx).map(f => f.via), ['guide-2']);
-  // either side of the bound, on the owner's rack: lc6 moved so ring 5's near
+  // either side of the bound, on the reference rack of #949: lc6 moved so ring 5's near
   // face is 9.8 past it (6.8 + 3) is held; 9.9 past is a hook
   for (const [x, want] of [[202.4 - 9.8, []], [202.4 - 9.9, ['guide-5']]]) {
     const moved = {...ctx, portX: e => (e.item === 'i2' && e.path === c8.b.path ? x : ctx.portX(e))};
@@ -253,7 +253,7 @@ test('the site-facing outputs: ring marks, inspect and the route text read the r
 });
 
 // ── a cable whose ends use different managers ─────────────────────────────
-// The owner's rack with a second panel far below (U20, i5), no manager on it
+// The reference rack of #949 with a second panel far below (U20, i5), no manager on it
 // or beside it: a cable from LEAF-B leaves through the lacer, the other end
 // through nothing, so the route takes a gutter.
 function withFarPanel(bx) {

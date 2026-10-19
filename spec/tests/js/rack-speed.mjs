@@ -38,6 +38,11 @@ const WANT = JSON.parse(readFileSync(GOLDENS, 'utf8'));
 // record gained `straight` and `few`, a trunk is measured along its members'
 // paths, and a place half way between two tenths of a millimetre always
 // rounds up (bundles.js mm1).
+// RECORDED AGAIN FOR #985, which moves the answers of a DAC's or an AOC's
+// cord wherever the page gives no number for its reach (a plug that cannot
+// bend, PLUG_SPLIT): the generated racks of bend-room-sample (`sample-N`), and
+// only they, since every other rack here is LC, or gives the reach as a number
+// as speed-fixture does. 1,259 of the 3,094 answers moved.
 test('every answer for every rack is the one recorded', async () => {
   const {digests, count} = await digestsOf(K);
   assert.deepEqual(differences(digests, WANT.digests), []);
@@ -121,6 +126,20 @@ test('spareOf takes the path it is handed, and reads the one kept without', () =
   assert.ok(rack.cables.some(c => R.spareOf(rack, c, ctx)?.need_m > 0));
 });
 
+// ── the run-outs (#1038) ─────────────────────────────────────────────────
+// A run-out is tried at a lead end only where a way round in that lead goes
+// round a body that is no tray's floor (a ring's part, or its web, #1026): a
+// floor is gone round and a run-out does not clear it. Counted on the first
+// read of the rack of the budgets below, by the kit's own counter, not by the
+// clock: the run-outs were tried at 1,202 lead ends (1,070 of them with a
+// floor in the lead), three trial lays each, and taken at 34.
+test('at 300 cables: run-outs are tried at 87 lead ends, not 1,202, and the 34 taken before are taken', () => {
+  const made = speedRack(M, F, {cables: 300, bundles: 4, seed: 11}), rack = made.rack, ctx = made.ctxOf(rack);
+  R.RUN_OUTS.tried = R.RUN_OUTS.taken = 0;
+  for (const c of rack.cables) R.routePath(rack, c, ctx);
+  assert.deepEqual({...R.RUN_OUTS}, {tried: 87, taken: 34});
+});
+
 // ── the budgets ──────────────────────────────────────────────────────────
 // A rack of thirteen two-unit switches, a lacer on each, two ducts and 300
 // cords (speed-fixture.mjs), every path read (routePath over every cable).
@@ -133,7 +152,12 @@ test('spareOf takes the path it is handed, and reads the one kept without', () =
 // twentieth, a new context and one cable moved a fifth each), and a read
 // after one cable moved also to half of what the first read took in this
 // run, which is what says the other 299 cables were not laid again.
-const FIRST_MS = 10000, SECOND = 0.05, ANEW = 0.2, EDITED = 0.2;
+// HELD AFTER #1038 (run-outs tried only where a body that is no floor stands
+// in a lead): FIRST_MS was 10000 and is 6000, SECOND 0.05 and is 0.03, ANEW
+// and EDITED 0.2 and are 0.1. On a shared machine at a load of 14 a first
+// read took 3 s (2.9 s with the run-outs gated, 3.3 s without), so the
+// ceiling is twice that, and some nine times a quiet machine's.
+const FIRST_MS = 6000, SECOND = 0.03, ANEW = 0.1, EDITED = 0.1;
 test('at 300 cables: a first read within its budget, and a second, a new context and one cable moved within a fraction of it', () => {
   const made = speedRack(M, F, {cables: 300, bundles: 4, seed: 11}), rack = made.rack;
   assert.equal(rack.cables.length, 300);

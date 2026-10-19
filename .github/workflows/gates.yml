@@ -93,8 +93,8 @@ jobs:
   # night of 2026-09-24), longer than the build itself. Now both jobs queue at
   # once. What a broken manifest costs is a build run that was going to fail
   # anyway; what lint GATING buys is unchanged, because the gate is the merge:
-  # merge-if-green refuses a head with any check-run that did not succeed, and
-  # lint is one of them.
+  # branch protection requires `lint`, and the merge train (.github/merge-train.py)
+  # refuses a head with any check-run that did not succeed, lint among them.
   lint:
     runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
@@ -128,9 +128,9 @@ jobs:
   # was a minute of queue for the next pull request. The repository is public
   # and hosted minutes cost it nothing, so four runners do it side by side.
   #
-  # NOT ON A PUSH TO MAIN, any of the three. merge-if-green merges only a head
-  # that is green AND up to date with main, and `--merge` of such a head gives
-  # main the very tree that was just built and tested - so the build on the
+  # NOT ON A PUSH TO MAIN, any of the three. The merge train merges only heads
+  # that are green and were tested together, in the order they land, so `--merge`
+  # gives main the very tree the train built and tested - and the build on the
   # push re-ran twenty minutes of work on a known answer. Lint still runs on the
   # push (a minute), and `workflow_dispatch` runs everything on request.
   dist:

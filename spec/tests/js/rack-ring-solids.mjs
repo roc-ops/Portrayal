@@ -76,7 +76,7 @@ test('each ring is five solids, named, round the opening the catalogue places', 
   }
 });
 
-test('the owner\'s rack: no point of any cord comes within its radius of a ring', () => {
+test('the reference rack of #949: no point of any cord comes within its radius of a ring', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   const rings = S.solidsOf(r, ctx).filter(isRing);
   assert.equal(rings.length, 25);

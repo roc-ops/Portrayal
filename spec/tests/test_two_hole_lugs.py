@@ -64,6 +64,8 @@ AXIS = {"juniper/mx304-ground-plate@2": 90}
 # screw -> (head diameter, head height) from the standard each cites
 SCREWS = {"common/ground-screw-m6@1": (12.0, 4.6),
           "common/ground-screw-m4@1": (8.0, 3.1),
+          # the M5 pan head (9.5, 3.7) on its ISO 7089 washer (10, 1.0): the washered screws the DCS500 datasheet shows
+          "common/ground-screw-m5@1": (10.0, 4.7),
           "common/ground-screw-1-4@1": (12.5, 3.66),
           "common/ground-screw-10-32@1": (9.47, 2.79)}
 # lug -> (tongue width, overall length without the stub, tab thickness, barrel OD)
@@ -141,7 +143,7 @@ def test_a_sized_screw_presents_a_stud_on_top_of_its_head(ref):
 
 
 def test_the_nominal_ground_screw_is_untouched():
-    """#830: the owner kept common/ground-lug@1 unsized; the sized parts sit
+    """#830 decided common/ground-lug@1 stays unsized; the sized parts sit
     beside it and nothing that placed it changed."""
     c = _contract("common/ground-lug@1")
     assert c["version"] == "1.4.1" and c["size"] == {"w": 7.0, "h": 14.0}

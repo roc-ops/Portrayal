@@ -277,9 +277,8 @@ test('a front port on a seated card is settled as the page read it, and a device
 });
 
 // ── what the catalogue does not say ──────────────────────────────────────
-test('a bay neither the swaps nor the configuration names is left to the drawing, though it has a default', async () => {
-  // bay-9 ships a panel, and the configuration does not list it: in a configuration that has no such
-  // bay the build draws nothing there, and configs.json does not say which configurations have it
+test('a bay the configuration does not have is left to the drawing, though it has a default', async () => {
+  // bay-9 ships a panel and states `only-in: [base]`; this item is built as `panels`, which has no such bay
   const e = end('i1', 'bay-9/module/lc01');
   assert.equal(P.seatedPort(RACK.items[0], e, ctx), null);
   assert.equal(P.seatedPort(RACK.items[0], end('i1', 'bay-9/module/b01', 'rear'), ctx), null);
@@ -287,10 +286,8 @@ test('a bay neither the swaps nor the configuration names is left to the drawing
   const cableFacts = factsFor(x => (x.item === 'i1' ? lost(x) : landed));
   assert.deepEqual((await Q.looseEnds(rack, {...ctx, cableFacts})).ends.map(x => [x.cable, x.side, x.reason]), [['c1', 'a', 'bay-9 is empty']]);
   assert.deepEqual((await Q.inspect(rack, 'c1', {...ctx, cableFacts})).loose, [{end: 'a', reason: 'bay-9 is empty'}]);
-  // seated by the item's own swaps, the bay is spoken for
-  const fitted = run(rack, [{op: 'fit', id: 'i1', path: 'bay-9', ref: PANEL_OM4}]).rack;
-  assert.equal(P.seatedPort(fitted.items[0], e, ctx).port, true);
-  assert.deepEqual((await Q.looseEnds(fitted, {...ctx, cableFacts})).ends, []);
+  // a bay left to its default in a configuration that has it is answered for
+  assert.equal(P.seatedPort(RACK.items[0], end('i1', 'bay-8/module/lc01'), ctx).port, true);
   // and a bay the configuration lists as empty is empty
   assert.equal(P.seatedPort({...RACK.items[0], swaps: {'bay-1': null}}, B01, ctx).holder.part, null);
 });

@@ -102,8 +102,10 @@ is not a port of the device it is drawn on, and neither DCIM has an NVLink port.
 
 ## 7. What the A100 and the other cards need
 
-The A100 (`nvidia/a100-pcie-80gb@1`, PR #1070, revised by P-0024) is not changed
-here. To use these parts it needs:
+The A100 (`nvidia/a100-pcie-80gb@1`, PR #1070) was not changed by the change that
+added these parts. To use them it needed the list below, and PR #1070 now does it
+(see "How the A100 took it" at the end of this section). The list, as it was
+written:
 
 1. **A place for parts off the bracket face.** A card's `parts:` are placed in the
    bracket face's frame. The CPU 8-pin is on the card's east end and the three
@@ -128,6 +130,34 @@ here. To use these parts it needs:
    brief ("three per pair"); a lab or device that pairs two cards places three of
    `nvidia/nvlink-bridge-a100-2slot@1`, which needs the two-bay seating in
    section 5.
+
+### How the A100 took it
+
+- **Where the parts go (item 1).** The first way: the CPU 8-pin is composed by the
+  card's `faces.rear` (`nvidia/a100-pcie-80gb-tail@1`, port `aux-power`, now
+  `std/eps12v-header@1` turned a quarter), and the three NVLink connectors by its
+  `faces.plan` (`nvidia/a100-pcie-80gb-top@1`, ids `nvlink-1` to `nvlink-3`). That
+  makes the card's `faces.plan` the top edge seen from outside, not the card seen
+  from above that `common/pcie-card-plan@1` is for other cards; there is no other
+  face to put a connector off the bracket on, and a face of its own (a part that
+  says which face it is on) is the alternative if the plan face is wanted for the
+  card's view from above.
+- **The exporter.** `dcim_export.build_module` reads the inlets of the faces in
+  `faces.POWER_FACES` (`rear` only: a plan face is the same module from above, so
+  an inlet drawn there would count twice), so the A100's module type carries
+  `aux-power`, type `other`, labelled "EPS12V 8-pin (CPU 8-pin)". The NVLink
+  connectors export nothing, as section 6 says.
+- **The CPU 8-pin (item 2).** The 3D box `power-8pin` and its eight cells stay in
+  `body.boxes`: they are the photograph's size (18.4 x 10.85), and the header's
+  12.6 x 18.0 is estimated from figure 7. Turned a quarter the header is 18.0 x 12.6,
+  1.75 taller than the photograph's housing, which is more than the photograph's
+  error, so the two stay as they are and the contract says so. The header takes the
+  stand-in's place; the stand-in (`nvidia/a100-eps12v-standin@1`) is removed.
+- **NVLink (item 3).** The brief says the connectors sit under removable caps, so
+  the three cap boxes stay and the connectors are composed beneath them, at the
+  same starts, and not in place of them. Item 3 as written said to replace them.
+- **Items 4 and 5.** Nothing added: `power-input` and `nvlink` already say it, and
+  no bridge is placed.
 
 The other cards:
 

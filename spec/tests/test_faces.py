@@ -132,8 +132,9 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
     named = [p for p in lib.glob("*/*/v*/contract.yaml")
              if F.face_ref(yaml.safe_load(p.read_text()) or {}, "plan")]
     # 86 since the Fibrain XCU10's drawer, seen from above under the shell top.
-    assert len(named) == 86, \
-        f"expected 86 parts naming a plan drawing, found {len(named)}"
+    # 87 since the NVIDIA A100 80GB PCIe, whose plan face is its top edge.
+    assert len(named) == 87, \
+        f"expected 87 parts naming a plan drawing, found {len(named)}"
 
 
 def run83(doc, path="t/contract.yaml", name="t/thing@1", lib=LIB):
@@ -257,10 +258,11 @@ def test_the_index_carries_a_parts_other_faces():
     # 125 since the Fibrain XCU10's drawer and the four SC adapter holders,
     # each of which declares its rear face;
     # 141 since its ten LC holders and six multimode SC ones, each with a rear;
-    # 142 since the FHD RJ45 module's punch-down rear.
+    # 142 since the FHD RJ45 module's punch-down rear;
+    # 143 since nvidia/a100-pcie-80gb@1 declares its far end as a rear face.
     with_faces = [e for e in entries if e.get("faces")]
-    assert len(with_faces) == 142, \
-        f"expected exactly 142 of {len(entries)} entries to carry a faces " \
+    assert len(with_faces) == 143, \
+        f"expected exactly 143 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 

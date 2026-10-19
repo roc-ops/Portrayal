@@ -232,7 +232,7 @@ provenance:
   `version`, `description`, `provenance`, `unplaced`, `superseded-by` and the
   kit keys below. There is no `title`; the words go in `description`.
 - **Required**: `format`, `kind`, `name`, `version`, `motion`, `parts` and
-  `configurations`. `travel`, `install` and `accessories` are optional.
+  `configurations`. `travel`, `install`, `accessories` and `gaps` are optional.
 - **`motion`**: `fixed` (static rails, ears, a rear support); `telescoping`
   (depth set at install, nothing moves after: Smartoptics, the two-piece
   Edgecore kits); `sliding` (moves out for service); `shelf` (the device
@@ -241,16 +241,38 @@ provenance:
   `at`. All three are required, and `count` is an integer of at least 1. Each
   `ref` is an ordinary component, never another kit, and no two parts share an
   `id` (L155).
-- **`configurations`**: at least one. Each needs `id`, `racks`, `parts` and
-  `depth`, and may add `preset`, `tolerance` and `rail-depth`. The ids are
-  distinct, and `parts` names only ids from the `parts` of the kit (L156). A
-  slide kit has one configuration; Smartoptics has seven, one per depth band,
-  and the AMX3200 two. `depth` is the rack depth, front flange to rear flange:
-  one `[min, max]`, or one range for each of `square`, `round` and `threaded`
-  that the source gives. Every range has min below max (L157). `preset`
-  records a factory setting in mm of rack depth (the 630 of the COR550),
+- **`configurations`**: at least one. Each needs `id`, `racks` and `parts`,
+  **at least one of `depth` and `preset`**, and may add `tolerance` and
+  `rail-depth`. The ids are distinct, and `parts` names only ids from the
+  `parts` of the kit (L156). A slide kit has one configuration; Smartoptics has
+  seven, one per depth band, and the AMX3200 two. `depth` is the rack depth,
+  front flange to rear flange: one `[min, max]`, or one range for each of
+  `square`, `round` and `threaded` that the source gives. Every range has min
+  below max (L157). `preset` records a factory setting in mm of rack depth,
   `tolerance` the `x` of a stated `±x`, and `rail-depth` the depth of the rail
   itself, from the front face of the front flange, with no accessory fitted.
+- **A preset may stand alone** (decided 2026-10-18; this is one-way, see
+  [format-stability.md](format-stability.md)). Two sources print a factory
+  setting and no range: the Edgecore COR550 rail, whose quick start guide gives
+  only the rear slide plate's 630 mm, and the first Smartoptics DCP band, which
+  the manual prints as one figure, 600 mm. Writing `[630, 630]` would invent a
+  range, and L157 refuses a range whose min equals its max. So `depth` is left
+  out and `preset` is stated.
+  - A configuration with a `preset` and no `depth` reads as **"factory setting
+    known, range unknown"**. Nothing refuses it, and nothing derives a range
+    from it: `kits.json` and `configs.json` publish it with the `preset` and no
+    `depth` key (never `null`, never `[preset, preset]`), and a page that
+    checks a rack's depth against a kit answers "unknown" for it, never "fits"
+    or "does not fit".
+  - The missing range is a provenance gap. The kit's `gaps` (the shape a
+    device's `gaps` has) holds an entry `what: depth` whose `scope` lists the
+    `id` of each such configuration, and L157 asks for it.
+  - A device whose own source gives the range may state it in its
+    `chassis.kits[].depth` override, which replaces a `depth` the kit leaves out
+    as it replaces one the kit states.
+  - A `telescoping` kit states a `preset` on at least one configuration
+    (L158): it is set at install, so the factory setting is the one figure it
+    cannot be without. A band that has a range of its own needs none.
 - **`accessories`**: `{kind, ref}` with `kind` one of `cma` (cable management
   arm) and `srb` (strain-relief bar). Each may add the `rail-depth` with that
   accessory fitted and the `sides` it fits. Each `ref` resolves to a component

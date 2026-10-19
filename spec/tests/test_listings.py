@@ -112,6 +112,111 @@ def test_l56_refuses_a_listing_under_a_hardware_vendor():
     assert any(r == "L56" and "role 'hardware'" in m for r, m in got), got
 
 
+# ---- L56: a reseller lists hardware it sells, with no NOS --------------------
+
+HW = "edgecore/as7726-32x"
+
+
+def _reseller(monkeypatch, role="reseller", slug="testshop"):
+    """A fixture vendor in the registry lint reads, and where its listing sits."""
+    monkeypatch.setitem(lint.VENDORS, slug, {"display": "Test Shop", "role": role,
+                                             "source": "fixture"})
+    return LIB / "devices" / slug / "as7726-32x" / "listing.yaml"
+
+
+def _resold():
+    """What a reseller may say: its part number, names, catalogue words, source."""
+    return {"format": 1, "kind": "listing", "hardware": HW, "version": "1.0.0",
+            "model": "TS-7726", "aliases": [{"name": "TS 7726", "kind": "vendor"}],
+            "portfolio": {"line": "Switches", "family": "Leaf"},
+            "source": "Test Shop catalogue, TS-7726 page"}
+
+
+def test_a_reseller_listing_lints_clean_and_matches_the_schema(monkeypatch):
+    where, doc = _reseller(monkeypatch), _resold()
+    assert not list(Draft202012Validator(SCHEMA).iter_errors(doc))
+    assert not findings(lint.lint_listing, where, doc, [str(LIB)])
+
+
+def test_a_reseller_listing_may_not_name_a_nos(monkeypatch):
+    where = _reseller(monkeypatch)
+    for key, value in (("nos", "arcos"), ("nos-versions", ">=7.0"),
+                       ("interfaces", [{"physical": "mgmt-eth", "name": "eth0"}])):
+        doc = dict(_resold(), **{key: value})
+        if key == "nos-versions":
+            doc["nos"] = "arcos"
+        got = findings(lint.lint_listing, where, doc, [str(LIB)])
+        assert any(r == "L56" and key in m and "reseller" in m for r, m in got), (key, got)
+
+
+def test_a_nos_listing_still_needs_its_nos(monkeypatch):
+    where = _reseller(monkeypatch, role="software")
+    got = findings(lint.lint_listing, where, _resold(), [str(LIB)])
+    assert any(r == "L56" and "`nos`" in m for r, m in got), got
+
+
+def test_a_nos_listing_under_a_software_vendor_is_unchanged(monkeypatch):
+    where = _reseller(monkeypatch, role="software")
+    assert not findings(lint.lint_listing, where, dict(_resold(), nos="arcos"), [str(LIB)])
+
+
+def test_l56_still_refuses_a_listing_under_a_hardware_only_vendor(monkeypatch):
+    where = _reseller(monkeypatch, role="hardware")
+    got = findings(lint.lint_listing, where, _resold(), [str(LIB)])
+    assert any(r == "L56" and "reseller" in m and "role 'hardware'" in m for r, m in got), got
+
+
+def test_a_maker_that_also_resells_is_a_vendor_and_a_reseller(monkeypatch):
+    """FS makes hardware this library models and will resell APC's: one entry,
+    `role: [hardware, reseller]`. Its namespace passes L55 and its listing L56."""
+    where = _reseller(monkeypatch, role=["hardware", "reseller"])
+    assert not findings(lint.lint_listing, where, _resold(), [str(LIB)])
+    assert lint.vendor_roles(lint.VENDORS["testshop"]) == {"hardware", "reseller"}
+    # a maker-and-reseller is not a NOS vendor: it may not list a NOS
+    got = findings(lint.lint_listing, where, dict(_resold(), nos="arcos"), [str(LIB)])
+    assert any(r == "L56" and "nos" in m for r, m in got), got
+
+
+def test_a_maker_that_also_resells_passes_l55(monkeypatch, tmp_path):
+    monkeypatch.setitem(lint.VENDORS, "testshop", {"display": "Test Shop",
+                        "role": ["hardware", "reseller"], "source": "fixture"})
+    (tmp_path / "devices" / "testshop").mkdir(parents=True)
+    got = []
+    real = lint.warn
+    lint.warn = lambda path, rule, msg: got.append((rule, msg))
+    try:
+        lint.lint_vendor_registry(tmp_path)
+    finally:
+        lint.warn = real
+    assert not [g for g in got if "testshop" in g[1]], got
+
+
+def test_vendor_roles_reads_a_string_or_a_list():
+    assert lint.vendor_roles({"role": "both"}) == {"hardware", "software"}
+    assert lint.vendor_roles({"role": "software"}) == {"software"}
+    assert lint.vendor_roles({"role": ["hardware", "reseller"]}) == {"hardware", "reseller"}
+    assert lint.vendor_roles(None) == set()
+
+
+def test_a_reseller_export_is_named_seller_slash_part():
+    """`<seller display>/<part>`, with the comments a NOS listing gets less the
+    NOS line."""
+    from portrayal import dcim_export as dx
+    listing = dict(_resold(), ns="testshop", manufacturer="Test Shop",
+                   configurations={"ac": {"part-numbers": {"TS-7726-AC": {"part": "TS-7726-AC"}}}})
+    doc = {"manufacturer": "Edgecore", "model": "7726-32X-O-AC-F", "slug": "edgecore-x",
+           "comments": "Maker note."}
+    out = dx.apply_listing(doc, listing, "ac")
+    assert (out["manufacturer"], out["model"]) == ("Test Shop", "TS-7726-AC")
+    assert dx.manufacturer_dir(out["manufacturer"]) + "/" + out["model"] == "Test Shop/TS-7726-AC"
+    lines = out["comments"].split("\n")
+    assert lines[0] == "Test Shop lists Edgecore 7726-32X-O-AC-F."
+    assert lines[1] == "Test Shop also calls it: TS-7726, TS 7726."
+    assert lines[2].startswith("Listed per: Test Shop catalogue")
+    assert "NOS" not in out["comments"]
+    assert out["comments"].endswith("Maker note.")
+
+
 # ---- L124: one name, one box, per vendor -------------------------------------
 
 def _two(tmp_path, a, b):

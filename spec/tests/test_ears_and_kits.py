@@ -535,10 +535,10 @@ def test_a_published_kit_carries_what_kits_json_says_of_it(lib):
     """THE SAME KIT IN TWO FILES. kits.json states it once; configs.json
     resolves it per device. Every fact kits.json carries about the kit itself
     is in the row, except where it lives (`ns`, `name`, `major`), its
-    succession and its provenance, which are the catalogue's."""
+    succession, its provenance and its gaps, which are the catalogue's."""
     entry = components_index.kit_entry(KIT_REF, "acme", "v1", KIT)
     row = _published(lib, KITS[1:])[0] | {"ref": KIT_REF}
-    kept = set(entry) - {"ns", "name", "major", "kind", "superseded-by", "provenance"}
+    kept = set(entry) - {"ns", "name", "major", "kind", "superseded-by", "provenance", "gaps"}
     assert kept <= set(row)
     for key in kept - {"parts", "accessories"}:
         assert row[key] == entry[key], key
@@ -646,7 +646,7 @@ def _plate(body, front, at=200.0):
     (479.9, 482.6, True),    # just under the generic ear's own threshold
 ])
 def test_L43_a_face_that_is_the_whole_plate_is_its_own_ears(tmp_path, body, front, fires):
-    """The owner's rule of 2026-10-09: ears built into the face are part of the
+    """The rule decided 2026-10-09: ears built into the face are part of the
     face. A body as wide as the rack has no narrower body to have drawn instead,
     and the threshold is ears.EAR_WIDE, the one the generic ear uses to decide
     that a face already has its ears in it, so L43 and the ear cannot disagree."""

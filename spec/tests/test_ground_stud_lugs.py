@@ -45,7 +45,11 @@ IFACE, LUG = "terminal-stud", "generic/ring-lug@1"
 # the sized ground screws (#830) a pair host composes; test_two_hole_lugs.py
 # holds them and the pair hosts.
 SIZED_SCREWS = ("common/ground-screw-m6@1", "common/ground-screw-m4@1", "common/ground-screw-1-4@1",
-                "common/ground-screw-10-32@1")
+                "common/ground-screw-10-32@1", "common/ground-screw-m5@1")
+# #918: the M5 screw a device places alone (the DCS500's four, 17.2 apart, no lug pitch):
+# its stud axis and the height a lug starts at, as SINGLE holds them for the others
+M5 = "common/ground-screw-m5@1"
+SIZED_ALONE = {M5: dict(axis=(5.0, 5.0), top=4.7)}
 # the 10-32 studs of the SR-1 DC terminal block, two per pole host (#828)
 SR1_STUD = "nokia/sr-1-dc-stud@1"
 
@@ -77,7 +81,7 @@ CASA, CASA_STUD = "casa/c40g-ground-studs@1", "casa/shelf-ground-stud@1"
 # and test_grounding_devices.py hold them, and only their `stud-size` is read here
 PAIR_HOSTS = ("common/ground-stud-pair-5-8-m6@1", "common/ground-stud-pair-5-8-m4@1",
               "common/ground-stud-pair-5-8-1-4@1",
-              "common/ground-stud-pair-3-4-1-4@1", "common/ground-stud-pair-1-1-4@1")
+              "common/ground-stud-pair-3-4-1-4@1", "common/ground-stud-pair-1-1-4@1", M5)
 # the three studs of the Casa terminal: seat id -> stud axis in the terminal's frame
 CASA_SEATS = {"stud-tr": (21.45, 6.15), "stud-bl": (6.15, 21.45), "stud-br": (21.45, 21.45)}
 CASA_TOP = 3.5
@@ -116,9 +120,13 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # face, 3 -> 4 on 3 -> 4 devices: the grounding stud its spec sheet calls the
 # rear-panel grounding lug, one threaded stud under a hex nut and no pair, so
 # a single stud is the part and a ring lug lands on it.
+# #918 then moved the S9501-18SMT's four common/ground-lug@1 placements into two
+# common/ground-stud-pair-5-8-m4@1 hosts, 35 -> 31 on 23 -> 22 devices, and the
+# DCS500's four common/ground-screw@1 into common/ground-screw-m5@1, 10 -> 6 on
+# 4 -> 3 devices. The M5 screw is not in this census (SIZED_ALONE).
 CENSUS = {
-    "common/ground-lug@1": (35, 23),
-    "common/ground-screw@1": (10, 4),
+    "common/ground-lug@1": (31, 22),
+    "common/ground-screw@1": (6, 3),
     "common/ground-stud@1": (4, 4),
     CASA: (1, 1),
 }
@@ -178,7 +186,7 @@ STUD_SIZE = {
     "ufispace/m3000-14xc": UFI_PAIR,
     "ufispace/s9500-22xst": UFI_PAIR,
     "ufispace/s9500-30xs": {"ground-lug": "M4"},
-    "ufispace/s9501-18smt": {f"ground-{i}": "M4" for i in (1, 2, 3, 4)},
+    "ufispace/s9501-18smt": {"ground-screws-1": "M4", "ground-screws-2": "M4"},
     "ufispace/s9501-28smt": UFI_PAIR,
     "ufispace/s9502-16smt": UFI_PAIR,
     "ufispace/s9510-28dc": UFI_PAIR,
@@ -200,10 +208,8 @@ BUILT = {
     "casa/c40g": ("base", "rear", CASA, ["ground-studs-rear/stud-tr"]),
     # a pair, one stud above the other, both seated
     "ufispace/s9600-102xc": ("dc", "rear", "common/ground-lug@1", ["ground-1", "ground-2"]),
-    # a pair side by side, both seated
-    "ufispace/s9501-18smt": ("dc", "right", "common/ground-lug@1", ["ground-1", "ground-2"]),
-    # a placement turned 90
-    "edgecore/dcs500": ("base", "rear", "common/ground-screw@1", ["ground-1"]),
+    # a placement turned 90, on the sized M5 screw (#918)
+    "edgecore/dcs500": ("base", "rear", M5, ["ground-1"]),
 }
 # THE SEATS ASKED FOR AT THE SEAT'S OWN DIRECTION, `turn: 0` (#829). Every
 # other seat in BUILT states no turn and takes the default the build computes
@@ -398,8 +404,8 @@ def test_the_census_of_ground_stud_placements(placed):
     got = {ref: (n, len(devs)) for ref, (n, devs) in counts.items()}
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
-    assert sum(n for n, _ in got.values()) == 50
-    assert len({where for where, _, _ in placed}) == 32
+    assert sum(n for n, _ in got.values()) == 42
+    assert len({where for where, _, _ in placed}) == 30
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -441,11 +447,12 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         assert c["mate"] == pytest.approx(want, abs=EPS)
         seen += 1
     # every placement of the census but the Casa terminal's one
-    assert seen == 49
+    assert seen == 41
 
 
 def test_the_only_turned_placements_are_turned_90(placed):
-    turned = sorted((device, p["id"], p["rotate"]) for device, _, p in placed if p.get("rotate"))
+    turned = sorted((device, p["id"], p["rotate"])
+                    for device, _, p in [*placed, *placements_of((M5,))] if p.get("rotate"))
     assert turned == [("edgecore/dcs500", "ground-0", 90), ("edgecore/dcs500", "ground-1", 90),
 ]
 
@@ -493,7 +500,7 @@ def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed)
         if size is not None:
             got.setdefault(device, {})[p["id"]] = size
     assert got == STUD_SIZE
-    assert sum(len(v) for v in got.values()) == 65 and len(got) == 34
+    assert sum(len(v) for v in got.values()) == 63 and len(got) == 34
     mx = {}
     for device, view, p in placements_of(MX_PAIR_HOSTS):
         mx.setdefault(device, {})[p["id"]] = (p.get("attrs") or {}).get("stud-size")
@@ -670,7 +677,8 @@ def _axis_and_top(host):
     ref = host.get("data-ref").rsplit(":", 1)[0]
     if ref == CASA_STUD:
         return (5.4, 5.4), CASA_TOP
-    return SINGLE[ref]["axis"], SINGLE[ref]["top"]
+    g = {**SINGLE, **SIZED_ALONE}[ref]
+    return g["axis"], g["top"]
 
 
 def _angle(parents, el):
@@ -829,22 +837,6 @@ def test_two_lugs_on_a_pair_drawn_one_above_the_other_overlap(built):
     assert a[3] - b[1] == pytest.approx(27.4 - 14.7)        # 12.7 of the upper lug's length
 
 
-def test_two_lugs_on_a_pair_drawn_side_by_side_do_not_overlap(built):
-    """Other pairs are drawn side by side. The S9501-18SMT's two holes at
-    Location-1 are 15.8 apart and a lug is 5.5 wide, so two one-hole lugs lie
-    beside each other with 10.3 between them, both wires leaving downward.
-    (This case was the S9500-22XST's until #830 made its holes one M4 pair host.)"""
-    device = "ufispace/s9501-18smt"
-    one = _lug(built, device, "ground-1")
-    two = _lug(built, device, "ground-2")
-    parents = one[1]
-    (ax, ay), (bx, by) = (device_point(parents, h, (3.5, 9.8)) for h in (one[2], two[2]))
-    assert ay == pytest.approx(by) and bx - ax == pytest.approx(15.8)
-    a, b = _lug_box(parents, one[3]), _lug_box(parents, two[3])
-    assert not _overlap(a, b)
-    assert b[0] - a[2] == pytest.approx(15.8 - 5.5)
-
-
 @EACH_BUILT
 def test_the_device_index_publishes_the_slot(built, device):
     """A single stud is a cage of its device's view, id = the placement id.
@@ -858,7 +850,7 @@ def test_the_device_index_publishes_the_slot(built, device):
             continue
         c = ids[key]
         assert c["kind"] == "connector" and c["interface"] == IFACE
-        assert c["accepts"] == [LUG] and c["lift"] == pytest.approx(SINGLE[part]["top"])
+        assert c["accepts"] == [LUG] and c["lift"] == pytest.approx({**SINGLE, **SIZED_ALONE}[part]["top"])
     # and on no other view
     for other, cages in index["cages"].items():
         if other != view:
@@ -894,7 +886,7 @@ def kit(built, tmp_path_factory):
                          "turnTo": TURN_TO}
     payload = {"components": list(comps.values()), "cases": cases,
                "skins": {r: json.dumps(spec_of(ET.parse(skin_file(dist, comps[r])).getroot()))
-                         for r in (LUG, *SINGLE, CASA, CASA_STUD)}}
+                         for r in (LUG, *SINGLE, M5, CASA, CASA_STUD)}}
     p = subprocess.run(["node", str(KIT_SCRIPT)], input=json.dumps(payload),
                        capture_output=True, text=True, cwd=str(KIT_SCRIPT.parent))
     assert p.returncode == 0, p.stderr

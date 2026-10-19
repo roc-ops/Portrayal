@@ -38,7 +38,7 @@ function samples(points, step = 0.5) {
 const distTo = (p, b) => Math.hypot(Math.max(b.x0 - p.x, 0, p.x - b.x1), Math.max(b.y0 - p.y, 0, p.y - b.y1),
   Math.max(b.z0 - p.z, 0, p.z - b.z1));
 
-// The owner's rack, with a switch far below (U5) whose cable is routed by hand
+// The reference rack of #949, with a switch far below (U5) whose cable is routed by hand
 // through ring 2 of the lacer. Since the automatic route runs a patch along
 // one manager (#949, section 4.1), c1 to c5 run along the lacer and never
 // reach a lane; c7 to c11 take the same five a ends to the switch at U5,
@@ -52,7 +52,7 @@ function owner() {
   return {rack: {...r, cables: [...F.OWNER_CABLES, c6, ...lane]}, ctx: F.ctxOf({ports: {i5: {p100: -100}}})};
 }
 
-test('the solids of the owner\'s rack: four envelopes, the lacer\'s fifteen plates and its rings, placed', () => {
+test('the solids of the reference rack of #949: four envelopes, the lacer\'s fifteen plates and its rings, placed', () => {
   const {rack, ctx} = owner();
   const s = S.solidsOf(rack, ctx);
   // and since #968 the five parts of each of its five rings
@@ -263,6 +263,58 @@ test('the ways through windows are for a zero-U part only: a rack device\'s plat
   assert.ok(vert.every(w => w.y <= top && w.y >= duct[0].box.y0));
 });
 
+// ── a pass-through hole is judged on the tube (#992) ───────────────────────
+// A zero-U plate 200 wide, 1000 tall and 2 thick, with one 56 x 56 hole cut
+// through it, centred at x 0 and y 500. A cable runs straight through along z.
+function holed(size = [56, 56]) {
+  const plate = {x0: -100, x1: 100, y0: 0, y1: 1000, z0: -10, z1: -8};
+  const hole = {x0: -28, x1: 28, y0: 472, y1: 528, z0: -10, z1: -8};
+  return [{item: 'z1', part: 'back', zeroU: true, box: plate, holes: [{via: 'w', box: hole, size}]}];
+}
+const run = (x, y) => [{x, y, z: 0}, {x, y, z: -250}];
+
+test('a 6 mm cable 2 mm inside a hole\'s edge crosses the plate; through the middle it does not', () => {
+  const solids = holed();
+  assert.equal(S.legCrossings(...run(0, 500), solids, {diameter: 6}).length, 0);
+  // x -26 is 2 mm inside the edge at -28: a third of the tube is in the wall
+  assert.equal(S.legCrossings(...run(-26, 500), solids, {diameter: 6}).length, 1);
+  assert.equal(S.legCrossings(...run(0, 474), solids, {diameter: 6}).length, 1);
+  assert.equal(S.legCrossings(...run(0, 526), solids, {diameter: 6}).length, 1);
+  // its tube just fits at 3 mm from the edge, and a hair nearer it does not
+  assert.equal(S.legCrossings(...run(-25, 500), solids, {diameter: 6}).length, 0);
+  assert.equal(S.legCrossings(...run(-25.1, 500), solids, {diameter: 6}).length, 1);
+});
+
+test('a cable exactly the hole\'s smaller side passes through its middle; a diameter of 0 passes by its centre line', () => {
+  const solids = holed([56, 80]);
+  assert.equal(S.legCrossings(...run(0, 500), solids, {diameter: 56}).length, 0);
+  assert.equal(S.legCrossings(...run(1, 500), solids, {diameter: 56}).length, 1);
+  assert.equal(S.legCrossings(...run(0, 500), solids, {diameter: 57}).length, 1);
+  // no diameter, no radius: the edge itself is within the hole, as before
+  assert.equal(S.legCrossings(...run(-28, 500), solids, {diameter: 0}).length, 0);
+  assert.equal(S.legCrossings(...run(-27.9, 472), solids, {diameter: 0}).length, 0);
+  assert.equal(S.legCrossings(...run(-28.1, 500), solids, {diameter: 0}).length, 1);
+});
+
+test('the hole\'s depth is not shrunk: a leg that starts on the plate\'s face still passes', () => {
+  const solids = holed();
+  assert.equal(S.legCrossings({x: 0, y: 500, z: -8}, {x: 0, y: 500, z: -10}, solids, {diameter: 6}).length, 0);
+  assert.equal(S.legCrossings({x: 0, y: 500, z: -7}, {x: 0, y: 500, z: -11}, solids, {diameter: 6}).length, 0);
+});
+
+test('the detour still finds the hole a cable fits, and aims at its middle', () => {
+  const solids = holed();
+  const a = {x: 0, y: 700, z: 100}, b = {x: 0, y: 700, z: -250};
+  const pts = S.detour(a, b, solids, {diameter: 6, lanes: [0]});
+  assert.ok(Array.isArray(pts) && pts.length > 0);
+  assert.ok(pts.some(w => Math.abs(w.y - 500) < 1e-6), JSON.stringify(pts));
+  const chain = [a, ...pts, b];
+  assert.deepEqual(chain.slice(1).flatMap((w, i) => S.legCrossings(chain[i], w, solids, {diameter: 6})), []);
+  // a cable as wide as the hole is still taken through it
+  const wide = S.detour(a, b, solids, {diameter: 56, lanes: [0]});
+  assert.ok(wide.some(w => Math.abs(w.y - 500) < 1e-6), JSON.stringify(wide));
+});
+
 test('a duct whose fingers are its own body (CMV-5U3W): a route through its channel goes straight through', () => {
   // the 5U finger duct on the left rail beside the panel, U12 to U16
   const r = F.add(F.ownerRack(), 'cmv-5u3w', 12, {side: 'left', label: 'duct'});
@@ -461,7 +513,7 @@ test('the mirror: a front PDU, on a four-post and on a two-post, is gone round b
 });
 
 test('a cord from the lacer\'s end ring to the lane beside a front PDU never runs in front of its outlet face', () => {
-  // #968: the owner's rack with a zero-U PDU on the left-front upright,
+  // #968: the reference rack of #949 with a zero-U PDU on the left-front upright,
   // standing in the gutter beside the lacer's ring 1 (-209.2 to -202.4). c7
   // to c11 leave ring 1 from its approach point (-215.7, 73.7 out) for the
   // lane outboard of the PDU (U11). A straight leg from there to the lane

@@ -17,10 +17,20 @@
 #   - a PON port's flavour is `pon` (xgs-pon), beside its line rate in `speed`
 #   - a caveat ("reserved for future use") is the placement's `description`
 #
-# NOT HERE, ON PURPOSE: every rate a multi-rate cage also runs at, and breakout.
-# Both are real and both are deferred - breakout is a logical interface a NOS
-# makes of a port, which spec/DESIGN.md (Architecture, layer 2) gives to the NOS
-# vendor's listing, not to the hardware.
+# SPEEDS, FOR A MULTI-RATE CAGE. `speeds: [1g, 10g, 25g]` in a port group's attrs
+# (or a placement's) is every native rate the ports run at, compiled to
+# `data-speeds="1g 10g 25g"`, so `[data-speeds~='10g']` finds a 1/10/25G SFP28
+# group that `data-speed='25g'` alone cannot. Rules, held by L110: every member is
+# in the set above, none twice, ascending, and `speed` is the highest member
+# (`speed` stays the highest native rate). It is written per group from the
+# vendor's own figure, never derived from the cage type - SFP28 1G support varies
+# by box. A single-rate port carries no `speeds`; it would only repeat `speed`
+# (the schema asks for at least two members). A port without it publishes no
+# `data-speeds`.
+#
+# NOT HERE, ON PURPOSE: breakout. It is a logical interface a NOS makes of a
+# port, which spec/DESIGN.md (Architecture, layer 2) gives to the NOS vendor's
+# listing, not to the hardware. `speeds` lists native rates only.
 #
 # SCOPE. Port speed only: a device group's attrs, a placement's attrs, a
 # component's own attrs and its parts' attrs. A component that declares `speed`

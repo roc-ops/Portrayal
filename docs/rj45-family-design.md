@@ -69,6 +69,7 @@ Four components replace nine.
 | `common/rj45-eth@1` | `std/rj45@2` plus two lamps in the housing corners | `led-a`, `led-b` | every single Ethernet jack: data, mgmt, OOB, service |
 | `common/rj45-ganged-eth@1` | `std/rj45-ganged@2` plus two lamps in the outer corners | `led-a`, `led-b` | every Ethernet jack in a ganged block |
 | `common/rj45-ganged-link@1` | `std/rj45-ganged@2` plus ONE lamp, at `led-a`'s corner | `led-a` | a ganged Ethernet jack whose housing has a single LINK/ACT window - added for the AurCore AIS non-PoE builds, whose PoE siblings carry the second (PoE) lamp (#738) |
+| `common/rj45-ganged-lamped@1` | `std/rj45-ganged@2` plus two lamps in the outer corners, exactly where `-eth` puts them, and no Ethernet claim | `led-a`, `led-b` | a ganged jack that is NOT Ethernet but has two integrated corner lamps: a BITS or ToD jack on a timing panel (#370). The placement's role, media and group say what the jack is for; the type export does not read the part as Ethernet |
 | `common/rj45-eth-pinside@1` | `std/rj45@2` plus two lamps in the side walls at the PIN end, away from the keyway | `led-a`, `led-b` | a single Ethernet jack whose lamps are opposite the latch - added for three HPE 10GBASE-T FlexibleLOM adapters (#777); see the addendum |
 
 `dell/rj45-port-14g@1` stays. It draws nothing and exists to attach ISM table 11's
@@ -79,7 +80,9 @@ role, id or **media** says console, aux, serial, ToD, BITS, PPS, sync, PTP, 1588
 ICS or telemetry takes the bare part, and so does one on a card whose **name** says
 T1, E1, DS1 or RJ48 - a channelized card numbers its RJ48c jacks `port-*` like any
 other card, and they carry DS1, not Ethernet. Everything else that carries Ethernet
-takes the lamped one. This is the same test `sweep_jack_lamps.py` already applies to
+takes the lamped one. A timing jack whose housing really has the two corner lamps
+takes `common/rj45-ganged-lamped@1` and L76 accepts it there, but L76 sends an
+Ethernet jack on that part to `-eth`. This is the same test `sweep_jack_lamps.py` already applies to
 decide where a lamp belongs.
 
 ### Geometry and sources
@@ -239,11 +242,13 @@ flagged: the latch slot height (2.6, conventional) and the housing top wall
    comments, not the code.
 3. **Two of the 556 in-jack lamps were not lifted.** 554 were. The MX204's
    `led-bits-act` and `led-bits-link` sit inside its BITS jack, which is a timing
-   role - bare part, by decision 3 - that nonetheless has lamps, and the family
-   has no bare-with-lamps member. They stay as separate placements naming the
-   jack with `for:`, the shape as5912-54x already uses, and the device carries a
-   `bits-lamps` provenance entry saying so. One jack does not earn a fifth
-   member; if a second arrives, the family gains one.
+   role - bare part, by decision 3 - that nonetheless has lamps. At the sweep the
+   family had no bare-with-lamps member, so they stayed as separate placements
+   naming the jack with `for:`, the shape as5912-54x already uses, and the device
+   carries a `bits-lamps` provenance entry saying so. The family has one now:
+   `common/rj45-ganged-lamped@1`, added for the CSR440's BITS jack (#370). The
+   MX204's BITS jack is a follow-up candidate for it and is not moved by that
+   change.
 4. **The two lamps split link and activity.** The lamped parts shipped at 1.0.0
    with `off / link / activity` on BOTH lamps, as the retired `common/rj45-port@4`
    had. Review of the merged result found that unreadable - a jack whose two lamps
@@ -252,7 +257,9 @@ flagged: the latch slot height (2.6, conventional) and the housing top wall
    own mapping; three that had copied the both-on-each default were split.
 
 **The version rule the sweep answered two ways:** a composed-part swap that
-removes no id is a minor bump.
+removes no id is a minor bump. That held for the sweep, which kept every `ref`
+the lock hashes. A swap that changes a placement's `ref` (`PLACEMENT_HASHED` in
+`devicelock`) asks for a major, as the CSR440's BITS part swap did.
 
 ## Addendum: a third lamped member, lamps on the pin side
 

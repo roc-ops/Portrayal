@@ -93,27 +93,22 @@ test('a cable to a supply inlet lands by the path of its slot', async () => {
   assert.deepEqual(await loose(none), ['c1 a: psu-1 holds PSU-AC, which has no port nothing'], 'a path that names no part reads as it did');
 });
 
-test('a supply in a bay that only its default fills lands once a page has seen it there', async () => {
-  // no configuration and no swap names psu-3: the catalogue alone does not say what a configuration builds in it
+test('a supply in a bay that only its default fills lands from the catalogue, with no page to see it', async () => {
+  // no configuration and no swap names psu-3, and it states no only-in: it is a bay of every configuration
+  // and holds what it ships with
   const D3 = end('i1', 'psu-3/module/inlet');
-  assert.equal(P.seatedPort(RACK.items[0], D3, ctx), null);
+  assert.equal(P.seatedPort(RACK.items[0], D3, ctx).slot, true);
   const rack = cabled(RACK, {a: D3, b: OUT_F1, media: 'power'}, {a: end('i1', 'psu-3/module/led'), b: OUT_R1}, {a: end('i1', 'psu-3/module/gone'), b: PDU_IN});
-  // the page read the panel, found PSU-AC in the bay and no port at the path: the slot of what the bay ships with answers
   assert.deepEqual(await loose(rack), ['c2 a: psu-3 holds PSU-AC, whose led takes no plug or lug the library knows',
     'c3 a: psu-3 holds PSU-AC, which has no port gone']);
   assert.deepEqual((await Q.inspect(rack, 'c1', bare(rack))).mismatch, []);
-  // a page that did not read the end leaves it not checked, as before
-  assert.equal(P.settleEnd(rack, D3, undefined, ctx), null);
-  // A PORT IS STILL THE PAGE'S TO SAY: PSU-AC composes a jack `mgmt`, of class port, and the page found no port there
+  // a page that did not read the end is answered for all the same
+  assert.equal(P.settleEnd(rack, D3, undefined, ctx).facts.port, true);
+  // the catalogue's answer stands over a page that read the panel of another build: PSU-AC composes a jack
+  // `mgmt`, of class port, which a page of class `port` alone found nothing at
   const MG = end('i1', 'psu-3/module/mgmt');
-  assert.equal(P.seatedPort(RACK.items[0], MG, ctx, {seen: true}).port, true, 'the catalogue, asked, would say yes');
-  const jack = cabled(RACK, {a: MG, b: OUT_F1});
-  assert.deepEqual(await loose(jack), ['c1 a: psu-3 holds PSU-AC, which has no port mgmt'], 'and is not heard for a port');
-  // AND ONLY FOR THE PART THE BAY SHIPS WITH: a page that names another part there (a stale drawing) is not heard
-  const stale = {facts: {item: true, drawing: true, port: false, cage: false, occupied: false, holder: {path: 'psu-3', part: 'PSU-DC'}}, info: {family: null, mode: null}, reason: 'as the page had it'};
-  assert.equal(P.settleEnd(rack, D3, stale, ctx), stale);
-  const seen = {...stale, facts: {...stale.facts, holder: {path: 'psu-3', part: 'PSU-AC'}}};
-  assert.equal(P.settleEnd(rack, D3, seen, ctx).reason, null);
+  assert.equal(P.seatedPort(RACK.items[0], MG, ctx).port, true);
+  assert.deepEqual(await loose(cabled(RACK, {a: MG, b: OUT_F1})), []);
 });
 
 test('a slot of another build of the device is not a slot of this one', async () => {

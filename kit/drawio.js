@@ -31,6 +31,30 @@ export const RACK = {
 };
 RACK.width = RACK.outer - RACK.marginL - RACK.marginR;      // 138
 
+// THE OPENING IN MILLIMETRES: the 19-inch rack face (EIA-310) that RACK.width
+// draw.io units stand for. A face is drawn at its true width, so one millimetre
+// is RACK.width / RACK_FACE_MM units for every device in a cabinet - the
+// viewBox of a drawing is not the opening, and fitting one to the other
+// squeezed a drawing with end rings outside its face and stretched a narrow one.
+const RACK_FACE_MM = 482.6;
+
+/** Where a drawing sits in the opening and how wide it is, in draw.io units:
+ *  `x` from the opening's left edge, `w` its full width. A drawing that
+ *  declares its face (`data-face-w`, written when the drawing is bigger than
+ *  the face) has the face at 0 in its own millimetres, so what stands outside
+ *  it hangs out over the opening by the viewBox's offset. One that does not
+ *  declare one IS its face, with no ears of its own, and is centred between
+ *  the rails (a face as wide as the opening fills it, so it starts at 0). */
+function rackFit(svgText, vb) {
+  const k = RACK.width / RACK_FACE_MM;
+  // relief.js's faceDeclared reads the same attribute, but that file wants a
+  // browser to load and this one runs without a document
+  const root = /<svg\b[^>]*>/.exec(svgText || '');
+  const declared = !!root && /\sdata-face-w="[\d.eE+-]+"/.test(root[0]);
+  const w = vb[2] * k;
+  return {x: declared ? vb[0] * k : (RACK.width - w) / 2, w};
+}
+
 const esc = s => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;');
@@ -233,7 +257,7 @@ export function deviceCells(id, svgText, vb, ports, x, y, w, h, {visible = false
 /** A library entry for one device, at whatever scale the caller wants. */
 export function entry(name, svgText, vb, ports, opts = {}) {
   const {ru = null, visible = false} = opts;
-  const w = ru ? RACK.width : vb[2] * SCALE;
+  const w = ru ? rackFit(svgText, vb).w : vb[2] * SCALE;
   const h = ru ? RACK.unit * ru : vb[3] * SCALE;
   const id = slug(name);
   return {
@@ -580,15 +604,16 @@ export function rackDiagram(groups, {faces = ['front'], labels = true,
           // every device against a number it is not in.
           const top = RACK.marginTop + (m.u - 1) * RACK.unit;
           const dh = RACK.unit * ru;
-          const sub = deviceCells(id, f.svg, f.vb, f.ports, RACK.marginL, top,
-                                  RACK.width, dh, {visible: false});
+          const fit = rackFit(f.svg, f.vb);
+          const sub = deviceCells(id, f.svg, f.vb, f.ports, RACK.marginL + fit.x, top,
+                                  fit.w, dh, {visible: false});
           // The group keeps the name as its value - Outline lists it, search
           // finds it, an edge endpoint reports it - but does not PRINT it.
           // Drawn, it lands a couple of units off its own device and collides
           // with the U numbers, and a label against the wrong number is worse
           // than none. The faceplate carries the model in silkscreen anyway.
           sub[0] = cell(id, m.name, 'group;html=1;noLabel=1;',
-                        RACK.marginL, top, RACK.width, dh, rackId);
+                        RACK.marginL + fit.x, top, fit.w, dh, rackId);
           for (let k = 1; k < sub.length; k++) {
             sub[k] = sub[k].replace(/parent="1"/, `parent="${id}"`);
           }

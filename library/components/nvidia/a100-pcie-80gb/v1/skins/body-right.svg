@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="267.7mm" height="38.23mm" viewBox="0.9 1.77 267.7 38.23">
+  <!-- nvidia/a100-pcie-80gb: THE TOP EDGE, the body's right side seen from
+       outside. Across: mm behind the bracket's outer face (0.9 to 268.6, the
+       shroud's length). Down: the face's y (1.77 the backplate's outer face,
+       40.0 the shroud's). So the bracket is at the left and the black band,
+       backplate, board and cover, along the top. Every piece whose right side
+       is the card's top edge `shows: [right]` and carries its patch of this.
+       Provenance body-top-edge and body-ribs give every figure. -->
+  <defs>
+    <!-- the shroud's ribs, 122 on 267.7: one rib per 2.194, starting at the
+         shroud's bracket end -->
+    <pattern id="ribs" patternUnits="userSpaceOnUse" x="0.9" y="14.4" width="2.194" height="25.6">
+      <rect x="0" y="0" width="2.194" height="25.6" fill="#cdbca5"/>
+      <rect x="0.25" y="0" width="0.55" height="25.6" fill="#e2d5c2"/>
+      <rect x="1.80" y="0" width="0.394" height="25.6" fill="#8f7d67"/>
+    </pattern>
+  </defs>
+  <!-- the black band: backplate, board edge and cover -->
+  <rect x="0.9" y="1.77" width="267.7" height="12.63" fill="#24262a"/>
+  <rect x="0.9" y="4.44" width="267.7" height="1.57" fill="#1d2420"/>
+  <!-- the shroud's top edge -->
+  <rect x="0.9" y="14.4" width="267.7" height="25.6" fill="url(#ribs)"/>
+  <!-- the three NVLink caps, the contract's nvlink boxes -->
+  <rect x="13.5" y="2.2" width="49.5" height="6.6" rx="0.6" fill="#303237" stroke="#121315" stroke-width="0.25"/>
+  <rect x="70.7" y="2.2" width="49.5" height="6.6" rx="0.6" fill="#303237" stroke="#121315" stroke-width="0.25"/>
+  <rect x="126.1" y="2.2" width="49.5" height="6.6" rx="0.6" fill="#303237" stroke="#121315" stroke-width="0.25"/>
+  <!-- the NVIDIA mark is reserved, not drawn (L172) -->
+  <rect id="logo-zone" x="230.5" y="5.35" width="9.0" height="5.9" fill="none"/>
+  <g id="silkscreen">
+    <text x="2.9" y="9.2" font-family="Arial" font-weight="bold" font-size="2.5" fill="#ddd7c5">A100</text>
+    <text x="38.25" y="12.7" font-family="Arial" font-weight="bold" font-size="2.5" fill="#50535b" text-anchor="middle">NVLINK</text>
+    <text x="95.45" y="12.7" font-family="Arial" font-weight="bold" font-size="2.5" fill="#50535b" text-anchor="middle">NVLINK</text>
+    <text x="150.85" y="12.7" font-family="Arial" font-weight="bold" font-size="2.5" fill="#50535b" text-anchor="middle">NVLINK</text>
+    <text x="240.7" y="10.4" font-family="Arial" font-weight="bold" font-size="4.45" fill="#ddd7c5" textLength="20.9" lengthAdjust="spacingAndGlyphs">NVIDIA</text>
+  </g>
+</svg>

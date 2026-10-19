@@ -233,6 +233,24 @@ def test_the_build_seats_the_bracket_across_slot_1_and_slot_2(tmp_path):
         "the card's bay is drawn after the bay it covers, so the card paints over that opening")
 
 
+@pytest.mark.parametrize("card", [BRACKET, "nvidia/a100-pcie-80gb@1"])
+def test_a_two_slot_card_is_not_drawn_across_the_covered_slots_latch_row(tmp_path, card):
+    """The plate's louvre row under slot 1 is slot 2's retention latch. A card
+    that covers slot 2 is one bracket, so that row must not be drawn over it;
+    the row under slot 2 belongs to slot 3 and stays."""
+    rc, err, svg = _render(tmp_path, {"riser-1/slot-1": card, "riser-1/slot-2": ""})
+    assert rc == 0, err[-800:]
+    assert 'id="riser-1--module--plate--louvres-1"' not in svg
+    assert 'id="riser-1--module--plate--louvres-2"' in svg
+    assert 'id="riser-2--module--plate--louvres-1"' in svg, "another riser is untouched"
+
+
+def test_the_latch_row_stays_when_slot_2_is_not_covered(tmp_path):
+    rc, err, svg = _render(tmp_path, {"riser-1/slot-1": "std/pcie-bracket-fh@2"})
+    assert rc == 0, err[-800:]
+    assert 'id="riser-1--module--plate--louvres-1"' in svg
+
+
 def test_the_build_refuses_the_bracket_over_slot_2s_filler(tmp_path):
     rc, err, _svg = _render(tmp_path, {"riser-1/slot-1": BRACKET})
     assert rc != 0

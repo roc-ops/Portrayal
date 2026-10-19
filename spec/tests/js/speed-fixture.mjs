@@ -124,7 +124,7 @@ export function moveDevice(rack, id, by = -1) {
 }
 
 // SPANS PAST A TRAY'S EDGE, hung (resting.js hang): from over the middle of
-// the floor of the lacer's tray on the owner's rack (cable-solids-fixture)
+// the floor of the lacer's tray on the reference rack of #949 (cable-solids-fixture)
 // out past its front edge, its two ends and a corner, 30, 120 and 400 mm
 // beyond, from 4, 20 and 60 mm above the floor, the 120 mm ones 15 mm
 // downhill: 45 spans, each [its points to a millionth of a millimetre, what

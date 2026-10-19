@@ -11,7 +11,7 @@
 // The other tree's paths are counted with THIS tree's cornersOf, since a
 // revision before #973 has neither `share: 'need'` nor cornersOf in
 // route-path.js; that is how the `before` rows of section 3.4 were measured,
-// the owner's rack included (the first lines printed with --base).
+// the reference rack of #949 included (the first lines printed with --base).
 //
 // THE SAMPLE is one sample, of one generator: rack `seed` (1 to 60 by
 // default) is a four-post frame, or a two-post one where the seed divides by
@@ -122,7 +122,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const causeOf = at => (at === 'rest' ? 'rest' : at === 'detour' ? 'detour' : ['approach', 'entry', 'exit', 'face'].includes(at) ? 'approach' : at === 'lead' ? 'lead' : 'plug or other');
   const fam = c => (['om4', 'os2'].includes(c.media) ? 'fibre' : c.media);
 
-  // the owner's rack, by cause, each way of sharing a leg
+  // the reference rack of #949, by cause, each way of sharing a leg
   for (const [name, K] of [['this tree', This], ...(Base ? [['base', Base]] : [])]) {
     const r = K.O.rack(), ctx = K.O.ctxOf(r);
     for (const share of ['half', 'need']) {

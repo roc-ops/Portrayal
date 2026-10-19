@@ -75,7 +75,7 @@ def test_the_r740xd_shares_its_faces():
     idx = json.loads((DIST / "r740xd.configs.json").read_text())
     drawn = sum(len(c["files"]) for c in idx["configs"])
     files = {n for c in idx["configs"] for n in c["files"].values()}
-    assert drawn == 264, drawn
-    assert len(files) < 60, f"{len(files)} files for 264 faces - nothing was shared"
+    assert drawn == 270, drawn
+    assert len(files) < 60, f"{len(files)} files for 270 faces - nothing was shared"
     fronts = {c["files"]["front"] for c in idx["configs"]}
     assert len(fronts) == 2, f"the R740xd draws two fronts (SFF and LFF), not {len(fronts)}"

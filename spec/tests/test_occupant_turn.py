@@ -399,7 +399,10 @@ WANT = {"down": 108, "left": 27, "up": 8, "right": 21}
 # four poles (one level in), and one M4 pair on each of eight UfiSpace
 # chassis (#830), every one of which leads its wire left, toward the end of
 # the flank its pair sits at
-WANT_PAIRS = {"down": 45, "left": 12, "up": 1, "right": 1}
+# (#918) and the S9501-18SMT's two M4 pairs, one leading left and one right,
+# which brought the pair seats to 61 on 34 devices; their four studs are
+# still ring-lug seats, as the four lugs they replace were
+WANT_PAIRS = {"down": 45, "left": 13, "up": 1, "right": 2}
 NAMES = {0: "right", 90: "down", 180: "left", 270: "up"}
 LEADS = {"right": 0, "down": 90, "left": 180, "up": 270}
 PAIR_IFACES = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
@@ -464,7 +467,7 @@ def test_the_default_distribution_is_pinned(census):
     assert dict(collections.Counter(r["dir"] for r in ring.values())) == WANT
     assert len({k[0] for k in ring}) == 66   # 63, and the Eaton EVMI2130X, EVMA8365X and PDU12IEC
     assert dict(collections.Counter(r["dir"] for r in pairs.values())) == WANT_PAIRS
-    assert len({k[0] for k in pairs}) == 33
+    assert len({k[0] for k in pairs}) == 34
     # a pair is turned only along itself
     assert {r["turn"] for r in pairs.values()} == {0, 180}
 
