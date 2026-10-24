@@ -315,12 +315,20 @@ def test_memory_sockets_run_between_the_banks_as_figure_95_shows():
 SKIN = 1.0   # a tab, a lamp or a pressed plate: the library's own lid has stood 1.0 proud since the R760
 # the few things that do stand past a face, each with the document or the part that says so
 STANDS_PAST = (
-    # (view, owner path, the most it may stand, why)
+    # (view, owner path, the most it may stand, why[, node id it is limited to])
     ("front", r"^bezel/", 14.0, "the security bezel: ISM table 7 and the spec sheet give 36 mm to the front with it and 22 without"),
     ("front", r"^vga(/|$)", 6.73, "the D-sub shell of std/vga@1, the same part on every Dell front, inside the bezel's 14.0"),
     ("rear", r"/video(/|$)", 6.73, "the D-sub shell of std/vga@1 on the rear I/O board"),
     ("rear", r"^psu-\d/module/grip$", 2.6, "the 86 mm supplies' handle, at Dell's model's 2.6 (the allowance follows the model); ISM table 7's Zc less Zb is 2.455"),
     ("rear", r"^psu-\d/module/psu/", 36.0, "the R660's 60 mm supply seated in the adapter: its own part, and a bay cannot recess it 30.9 mm"),
+    # NOT A DELL DOCUMENT: a seated low-profile card's bracket carries the return flange std/pcie-bracket-lp@1 draws
+    # 9.4 out of its face (PCIe CEM 5.0 figure 11-9; the contract records the operator's reading that it points out,
+    # and the owner has confirmed that a seated card's flange stands past the wall). A bay cannot recess its occupant.
+    ("rear", r"/slot-\d+/module/bracket$", 9.4, "a seated low-profile card's bracket flange"),
+    # ALSO NOT A DELL DOCUMENT: the riser's metal over that flange stands past the wall with it. Dell's ISM gives no
+    # depth for the flange or the cover; the riser's `flange-cover` node is the CEM's 9.40 flange depth plus one 0.86
+    # sheet, an estimate (the contract says so). Only that node, and only that far: the rest of the riser stays inside.
+    ("rear", r"^riser-\d/module$", 10.26, "the riser's metal over a seated card's flange", r"--flange-cover$"),
 )
 
 
@@ -371,7 +379,10 @@ def _stands_past():
             if projection:      # the plan of a seated part is texture only: its body is built from its own face
                 continue
             owner = _owner(el, parent)
-            allowed = max((a for v, rx, a, _ in STANDS_PAST if v == view and re.search(rx, owner)), default=SKIN)
+            node = el.get("id") or ""
+            allowed = max((a for v, rx, a, _, *only in STANDS_PAST
+                           if v == view and re.search(rx, owner) and (not only or re.search(only[0], node))),
+                          default=SKIN)
             if reach > allowed + 1e-6:
                 found.append((svg.name, view, owner, reach, allowed))
     return found

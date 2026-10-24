@@ -58,6 +58,22 @@ relief:
       estimated - the cage's plate is the rear wall's own sheet metal, and ISM table 7 puts nothing but the supplies'
       handles past the wall; no R960 model or side figure is held. The first pass drew it 20.0 proud by analogy with
       dell/riser-2-lp-cage-16g@1, which stood the cage outside the 866.74 chassis
+  - node: flange-cover
+    out: 10.26
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - the metal over slot 4's seated card's bracket flange, which stands past the wall; the rest of the cage does not.
+      Neither the R960 ISM (table 7, chassis dimensions, and its riser sections) nor its figures give a depth for a bracket's
+      flange or for the riser's cover over it. The reach is the smallest that covers the flange: std/pcie-bracket-lp@1's
+      return-flange-depth, 9.40 (PCIe CEM 5.0 figure 11-9, the fold standing out of the face as that part reads it), plus 0.86
+      for the sheet over it (the CEM's 20 GA bracket stock, the same figure), 10.26. Dell's R960 service model (r960.glb) gives
+      no reach to read: its supply runs z 834.0 to 886.5, so the wall is at 886.5 less the handle's 2.455 (ISM table 7), 884.0,
+      and its riser 2 ends at 825.7, short of it. Dell's R660 model has the pieces over its low-profile risers' flange ends
+      reach 19.2 to 19.8 (see dell/riser-2-lp-cage-16g@1), which this cage does not borrow. The rectangle is the fold, 1.5 each
+      side, over its length. Slot 9's flange has no cover: the bay's estimated seat puts its fold at 151.84, 2.1 past the
+      cage's right edge (149.7), where there is no cage metal to stand out.
 bays:
   slot-4:
     slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 5}
