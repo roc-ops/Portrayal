@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10004
-version: 3.0.1
+version: 4.0.1
 maturity: modelled
 manufacturer: Juniper
 model: MX10004
@@ -48,9 +48,14 @@ provenance:
       The bays were 84.0 x 97.0 mm, the size the supply
       was drawn from that photograph, and spread over the height of the fan trays. The figure,
       anchored per-axis to the 442 mm body, puts the stack's top at about 23 mm. The guide's Table 9
-      gives the fan tray 6.6 in. (16.8 cm, about 167.6 mm) wide (guide page 48); the two fan bays are
-      175 mm, what 91.4 mm of supply leaves of the 350.6 mm beside it, and the part is still drawn
-      176 mm from the photograph, 8.4 mm wider than the guide's figure (see gaps)
+      gives the fan tray 6.6 in. (16.8 cm, about 167.6 mm) wide and 12.08 in. (30.68 cm) high (guide
+      page 48), and juniper/jnp10004-fan2@2 is drawn at that size; juniper/jnp10004-fan2@1, 176 x 293
+      mm from the photograph, is kept for a saved rack that names it. The two fan bays are 167.6 x
+      306.8 mm and stand against the supply column and against each other, as Figure 3 and Figure 21
+      show them, from the top of the chassis (y 1.6, centred in the 310 mm). 91.4 + 2 x 167.6 mm is
+      426.6 mm of the 442 mm body, and no figure shows the other 15.4 mm, so it is left empty at the
+      right edge, an estimate. The PSU 0 and FAN 0 / FAN 1 labels, which Figure 3 prints on the strip
+      above the supplies, sit on that strip
   power:
     confidence: datasheet
     note: >-
@@ -109,15 +114,6 @@ gaps:
       a flat figure or square-on photograph of the JNP10K-PWR-AC2 face; the guide gives its outer
       size (Table 22) and a photograph at an angle, so juniper/jnp10k-pwr-ac2@2 refits the face of
       version 1 to 91.4 x 88.9 mm by estimate
-  - what: fan-tray-width
-    scope: [cooling]
-    reason: sources-disagree
-    wanted: >-
-      Table 9 of the guide gives the JNP10004-FAN2 and -FAN3 fan trays 6.6 in. (16.8 cm) wide, about
-      167.6 mm; juniper/jnp10004-fan2@1 is drawn 176 mm from the photograph g101087. The two bays are
-      175 mm, what the 442 mm body leaves beside the 91.4 mm supplies, so the part overhangs its bay
-      by 1.00 mm (L33) while the guide's tray would fit it. The part is not redrawn here: its face art
-      is fitted to 176 mm, and a new fan version is a separate change
   - what: line-card-catalogue
     scope: [fpcs]
     reason: needs-photo
@@ -238,9 +234,9 @@ views:
       w: 442.0
       h: 310.0
     silkscreen:
-      - {at: [45.7, 13.0], text: PSU 0, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: psu0}
+      - {at: [24.0, 13.0], text: PSU 0, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: psu0}
       - {at: [45.7, 300.5], text: PSU 2, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: psu2}
-      - {at: [130.0, 6.5], text: FAN 0 / FAN 1, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: [fan0, fan1]}
+      - {at: [64.0, 13.0], text: FAN 0 / FAN 1, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: [fan0, fan1]}
     components:
       bays:
         - {id: psu0, at: [0.0, 23.0], size: {w: 91.4, h: 88.9},
@@ -252,11 +248,11 @@ views:
         - {id: psu2, at: [0.0, 200.8], size: {w: 91.4, h: 88.9},
            accepts: [juniper/jnp10k-pwr-ac2@2, juniper/jnp10k-pwr-blnk@2], default: juniper/jnp10k-pwr-ac2@2,
            group: psus, rel-pos: 2}
-        - {id: fan0, at: [91.6, 9.0], size: {w: 175.0, h: 293.0},
-           accepts: [juniper/jnp10004-fan2@1], default: juniper/jnp10004-fan2@1,
+        - {id: fan0, at: [91.4, 1.6], size: {w: 167.6, h: 306.8},
+           accepts: [juniper/jnp10004-fan2@2], default: juniper/jnp10004-fan2@2,
            group: cooling, rel-pos: 0}
-        - {id: fan1, at: [267.0, 9.0], size: {w: 175.0, h: 293.0},
-           accepts: [juniper/jnp10004-fan2@1], default: juniper/jnp10004-fan2@1,
+        - {id: fan1, at: [259.0, 1.6], size: {w: 167.6, h: 306.8},
+           accepts: [juniper/jnp10004-fan2@2], default: juniper/jnp10004-fan2@2,
            group: cooling, rel-pos: 1}
   left:
     size:
