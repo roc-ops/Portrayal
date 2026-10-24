@@ -1,0 +1,116 @@
+format: 1
+kind: module
+name: qfx10002-jnp10002-fan1
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP10002-FAN1, the fan module of the QFX10002-60C, with port-to-FRU (AFO, front-to-back)
+  airflow. A near-square orange bezel with two honeycomb exhaust windows above and below a centre
+  bar that carries the AIR OUT label and two ribbed release tabs, a captive screw at the top left
+  and a label strip at the edge of each window. Each module holds two counter-rotating fans. Three
+  fit across the right of the rear panel, hot-swappable. The 72Q and 36Q take QFX10002-FAN
+  (qfx10002-fan-afo), which the guide says has another orientation.
+attrs:
+  role: fan-module
+  airflow: front-to-back
+  power-draw-max-w: 80
+  fans-per-module: 2
+  airflow-cfm: 150
+  hot-swap: 'yes'
+part-numbers:
+  JNP10002-FAN1: {part: JNP10002-FAN1}
+provenance:
+  sources: >-
+    datasheet - QFX10002 Switch Hardware Guide (Juniper Networks, published 2026-02-11). Table 3
+    (the fan module row, with CLI output "QFX10002-60C Fan Tray, Front to Back Airflow - AFO"),
+    Table 17 and the cooling topic, Installing a Fan Module in a QFX10002 (the note that the 60C
+    uses a different fan module with a different orientation, and Figure 46, g050783, a
+    perspective). Juniper's studio photograph of the rear, qfx10002-60c-rear-high (JPEG, 2100 x
+    632), shows the face in colour and is the only flat view of it.
+  size: >-
+    photo-measured - on qfx10002-60c-rear-high, 4.277 px per mm from the rear panel's width of
+    1886 px against the stated 441.0 mm. One bezel runs 346 px across and about 351 px down, 81.0
+    x 82.0 mm, three of them on an 88.9 mm pitch, which is the pitch the 72Q's Figure 4 gives for
+    its module. The guide gives no dimension of the module.
+  depth: >-
+    estimated - 115 mm. The guide gives no depth for the fan module. Figure 46 (g050783) is a
+    perspective that shows a body longer than the bezel is wide behind it, with the two fan
+    rotors in a row; the figure dimensions nothing. The depth is the 72Q module's estimate.
+  face: >-
+    photo-measured - in module coordinates, on qfx10002-60c-rear-high: the upper exhaust window x
+    8.8 to 73.8 and y 4.4 to 35.8, narrowing toward the centre bar, the lower window y 47.4 to
+    77.0; the centre bar y 35.8 to 47.4 with the AIR OUT label at x 34.3 to 47.5 and y 38.9 to
+    45.7; ribbed release tabs at each end of the bar, x 0.5 to 12.2 and x 70.2 to 80.8; the
+    captive screw centred at 4.3, 5.3. A white strip lies along the top edge of the upper window
+    (x 27.7 to 53.3) and a dark label strip along the bottom edge of the lower one. The honeycomb
+    is drawn as a repeating pattern and not hole for hole. The shape reads nearly as the 72Q
+    module's; the guide's difference of orientation is inside the module and not on the face.
+  handle-colour: >-
+    photo-measured - the guide's Table 17 gives the handle colour as Juniper Gold and the line
+    drawings carry no colour. The photograph shows the bezel and handle orange; the bezel median
+    reads #ec640e. The photograph of the real unit wins, so the default is that orange and the
+    guide's word is kept here. The finish is a field so that a viewer can change it.
+  airflow: >-
+    datasheet - Table 3 (Front to Back Airflow - AFO) and Table 17: port-to-FRU airflow, labelled
+    AIR OUT. Air enters at the port end and leaves through the module. In legacy switches this
+    is called front-to-back. The guide lists no other fan module for the 60C.
+  part-number: >-
+    datasheet - Table 3 lists JNP10002-FAN1 beside QFX10002-FAN-S in the fan module row, and the
+    row's CLI output names a "QFX10002-60C Fan Tray" apart from the 72Q and 36Q ones. The install
+    topic says the 60C uses a different fan module. JNP10002-FAN1 is read as the 60C's. The guide
+    does not pair the two part numbers with the two CLI strings in so many words.
+  power: >-
+    datasheet - the cooling topic: three 80 W fan modules, each with two counter-rotating fans,
+    150 CFM at full speed. The figure is stated for the QFX10002 and not for the 60C alone. 80 W
+    is read as the figure for one module and filed as the maximum, because the guide does not
+    qualify it.
+  status-lamp: >-
+    datasheet - Fan Module Status: each slot has a status lamp labelled ST on the left of the
+    slot, so the lamp is on the chassis panel and not on the module (Tables 18 and 19). The
+    photograph shows the lamp as a dot under the fan number on the chassis strip. The module
+    draws no lamp.
+  relief: >-
+    estimated - the depth of the exhaust windows is taken as the 115 mm module depth less the
+    rotor housings, and the release tabs are taken to stand 1.5 mm proud of the face. Neither is
+    stated by the guide.
+states: [absent]
+elements:
+  handle: {at: [0.0, 0.0], size: [81.0, 82.0], class: handle}
+  grille-top: {at: [8.8, 4.4], size: [65.0, 31.4], class: rotor}
+  grille-bottom: {at: [8.8, 47.4], size: [65.0, 29.6], class: rotor}
+  latch-left: {at: [0.5, 36.8], size: [11.7, 9.6], class: latch}
+  latch-right: {at: [70.2, 36.8], size: [10.6, 9.6], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#ec640e'}
+size: {w: 81.0, h: 82.0, d: 115.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille-top
+      vent: 60
+      confidence: estimated
+      source: >-
+        qfx10002-jnp10002-fan1@1 provenance.relief - the window depth is not stated by the guide.
+    - node: grille-bottom
+      vent: 60
+      confidence: estimated
+      source: >-
+        qfx10002-jnp10002-fan1@1 provenance.relief - the window depth is not stated by the guide.
+    - node: latch-left
+      out: 1.5
+      color: '#c84f08'
+      confidence: estimated
+      source: >-
+        qfx10002-jnp10002-fan1@1 provenance.relief - the tab stands proud of the face in the
+        photograph and nothing gives how far.
+    - node: latch-right
+      out: 1.5
+      color: '#c84f08'
+      confidence: estimated
+      source: >-
+        qfx10002-jnp10002-fan1@1 provenance.relief - the tab stands proud of the face in the
+        photograph and nothing gives how far.
+skins: [default]

@@ -349,9 +349,11 @@ def test_the_census_every_cage_presenting_part_is_published(index, lib, families
     # the six single-MTP FHD backs, each ONE bulkhead a wrapper would forward,
     # and the tail faces of the A100 (its one CPU 8-pin header), the H100 PCIe,
     # the H100 NVL and the L40S (each one 16-pin header), and the A10's (one
-    # PCIe 8-pin header), and the V100 PCIe's, shared with the P100 PCIe and
-    # the P40 (one CPU 8-pin header)
-    assert sum(1 for r in faces if _forwarded_connector(lib, _contract(r))) == 12
+    # PCIe 8-pin header), the Quadro RTX passive cards' (one CPU 8-pin header),
+    # the RTX A6000's (one CPU 8-pin header), the RTX A5000's (one PCIe 8-pin
+    # header), and the V100 PCIe's, shared with the P100 PCIe and the P40 (one
+    # CPU 8-pin header)
+    assert sum(1 for r in faces if _forwarded_connector(lib, _contract(r))) == 15
     for ref, entry in index.items():
         skip = _forwarded_connector(lib, _contract(ref), face=ref in faces or ref in bays)
         forwarded += skip is not None

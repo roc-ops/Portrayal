@@ -411,9 +411,10 @@ def test_the_covers_are_not_the_mx_covers_whose_part_numbers_the_qfx_guides_neve
 
 
 def test_the_existing_mx_components_are_untouched():
-    """Each is reused as it is: the versions and the lock of every one the QFX10000 seats are unchanged."""
-    for part, version in (("jnp10008-fan", "1.0.0"), ("jnp10008-fan2", "1.0.0")):
-        assert load_component(part)["version"] == version
+    """Each is reused as it is: the QFX10008 accepts the MX10008 trays at the guide's size, version 2."""
+    for part in ("jnp10008-fan", "jnp10008-fan2"):
+        assert load_component(part, 2)["version"] == "2.0.0"
+        assert load_component(part, 1)["superseded-by"] == f"juniper/{part}@2"
 
 
 # --- the DCIM export ----------------------------------------------------------
