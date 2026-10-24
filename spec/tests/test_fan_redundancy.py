@@ -275,7 +275,11 @@ def test_the_unstated_ones_are_the_ones_we_could_not_source():
     # shutdown while one is replaced, and names no N+1 form, so each group quotes that and states no
     # form. The EX4500-40F has one fan tray in one bay, so its group is not counted here at all.
     assert {"juniper/ex4550-32f", "juniper/ex4550-32t"} <= set(unstated)
-    assert len(unstated) == 43, unstated
+    # THE JUNIPER QFX5130-48C MADE IT FORTY-FOUR: the guide gives six fan modules and redundancy only
+    # at the rotor level (one failed rotor tolerated), which is not a count of modules the switch can
+    # lose, so the group quotes that and states no form.
+    assert "juniper/qfx5130-48c" in unstated
+    assert len(unstated) == 44, unstated
 
 
 def test_the_comparison_layer_can_now_reach_them():

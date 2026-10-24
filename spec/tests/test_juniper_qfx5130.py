@@ -4,8 +4,8 @@ One device per front panel. The 32CD's power, airflow and spare-chassis variants
 configurations of the one device, because the guide shows one panel for all of them. Each
 field-replaceable unit is a component named for the family and its Juniper part number.
 
-The QFX5130-48C and QFX5130-48CM are not here: their 48 SFP56-DD ports need an SFP-DD cage, and the
-library has none (`std/` holds no cage for it and lint's media table has no `sfp-dd`).
+The QFX5130-48C and QFX5130-48CM are not here: they are `juniper/qfx5130-48c`, held by
+test_juniper_qfx5130_48c.py.
 
 What the guide fixes, and so what these tests hold:
   Table 31   the envelope - 1.72 x 17.26 x 21.1 in, 1RU
@@ -306,6 +306,6 @@ def test_the_dcim_device_types_export_one_per_orderable_configuration():
             assert doc["u_height"] == 1.0
 
 
-def test_no_other_qfx5130_export_exists():
-    got = {p.stem for p in (EXPORTS / "netbox/device-types/Juniper").glob("QFX5130*.yaml")}
+def test_no_other_qfx5130_32cd_export_exists():
+    got = {p.stem for p in (EXPORTS / "netbox/device-types/Juniper").glob("QFX5130*32CD*.yaml")}
     assert got == {v[2] for v in VARIANTS.values()} | {CHAS}

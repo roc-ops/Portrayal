@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: qfx5130-48c-fan-afi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5130-48C-FANAI, the field-replaceable fan module of the QFX5130-48C and QFX5130-48CM with
+  back-to-front airflow (AIR IN, FRU-to-port). Air comes in at the fan end and leaves at the port side.
+  It is marked AIR IN on a grey chip on its Juniper azure blue handle band. It is hot-removable and
+  hot-insertable. The chassis takes six, in slots 0 to 5 from the left, and cannot run on five: its
+  redundancy is at the rotor level. The front-to-back sibling is QFX5130-48C-FANAO. The two are never
+  mixed in one chassis, and never with supplies of the other direction. The datasheet orders it as
+  QFX5130-48C-FANAI; the hardware guide's Tables 4 and 17 print the same module as QFX5130-48C-FANAFI.
+  The status lamp is on the module, at the lower right of its face.
+attrs:
+  model: QFX5130-48C-FANAI
+  role: chassis-fan
+  airflow: back-to-front
+  hot-swap: 'yes'
+  power-absent: not-published
+provenance:
+  size: >-
+    photo-measured - as qfx5130-48c-fan-afo: the same module body in the other airflow, 40.7 by 40.8 mm
+    from the 48CM rear photograph. No photograph of the AIR IN module is held, and the guide's table of
+    fan modules (Table 17) gives no size.
+  depth: >-
+    not stated. Searched the guide (figure 34 and the fan sections) and the datasheet for the module's
+    depth: the figure is an isometric with no scale. No depth is written rather than a guessed one.
+  face: >-
+    estimated - the AIR OUT module's face with the handle band, the chip and the legend changed. No
+    photograph of an AIR IN 48C module is held; the guide's figure 36 (the AIR IN airflow diagram) is
+    an isometric. The blue is the colour the QFX5110 and QFX5130-32CD fan components use for Juniper
+    azure blue, not a sample of this part.
+  airflow: >-
+    datasheet - guide Table 17: QFX5130-48C-FANAFI is AIR IN, Juniper azure blue, FRU-to-port
+    (back-to-front); Table 4 and the datasheet ordering table agree on the airflow and differ on the
+    spelling of the code (FANAFI, FANAI).
+  lamp: >-
+    datasheet - guide, QFX5130 Fan Module LED (figure 40, Table 18): on the 48C the lamp is on the fan
+    module. Green is steady when the module works; amber is steady when an error is detected or the
+    module is seated wrongly.
+  power: >-
+    not published. Searched the QFX5130 hardware guide and datasheet near the cooling sections and the
+    power tables: only whole-switch figures exist (Tables 20, 27 and datasheet Table 4). The module
+    declares power-absent so the missing figure is a statement and not a silence.
+states: [ok, fault, absent]
+elements:
+  screw:
+    at: [2.6, 3.2]
+    size: [6.2, 6.2]
+    class: screw
+  handle:
+    at: [0.8, 21.6]
+    size: [39.1, 9.6]
+    class: latch
+  led:
+    at: [34.6, 35.6]
+    size: [3.0, 3.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+size:
+  w: 40.7
+  h: 40.8
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#2a8bd8'
+    confidence: estimated
+    source: photo of the AIR OUT module for the band; the AIR IN module is not photographed, its projection is the same and is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: photo - black captive screw head, projection not measured
+skins: [default]
