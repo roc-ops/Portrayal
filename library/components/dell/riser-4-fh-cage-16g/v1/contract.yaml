@@ -44,12 +44,17 @@ size-confidence: {w: drawing, h: drawing}
 relief:
   features:
   - node: plate
-    out: 20.0
+    out: 1.0
     shape: true
     color: '#cfd3d7'
     confidence: estimated
     source: >-
-      estimated by analogy with the low-profile cages, 20 mm proud in Dell's service model; the full-height risers are not in the model. Its windows are cut through it, so a card's face is seen down
-      them and the bracket's folded flange, 9.4 proud at the end the window
-      does not show, is inside the cage, as on the R740xd's riser shrouds.
+      estimated - the cage's plate is the rear wall's own sheet metal. The R660 ISM's table 12 (chassis dimensions, PDF page 27) puts the rear wall at Zb and nothing but the supplies' handles past it (Zc less Zb, 35.57 mm); the full-height risers are not in Dell's service model. The first pass drew the plate 20 mm proud by analogy with the low-profile cages, which stood it outside the chassis. Its windows are cut through it, so a card's face is seen down them.
+  - node: flange-cover
+    out: 10.26
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - the metal over a seated card's bracket flange, which stands past the wall; the rest of the cage does not. Neither the R660 ISM (table 12, chassis dimensions, PDF page 27, and its riser sections) nor its figures give a depth for a bracket's flange or for the riser's cover over it, and the full-height risers are not in Dell's service model. The reach is the smallest that covers the flange: std/pcie-bracket-fh@2's return-flange-depth, 9.40 (PCIe CEM 5.0 figure 11-5, the fold standing out of the face as that part reads it), plus 0.86 for the sheet over it (the CEM's 20 GA bracket stock), 10.26. The low-profile risers' cover pieces in the model reach 19.2 to 19.8 (see dell/riser-2-lp-cage-16g@1), which this cage does not borrow. The rectangle is the flange's fold, 1.5 each side, over its length.
 skins: [default]

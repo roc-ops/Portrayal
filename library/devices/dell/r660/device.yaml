@@ -25,7 +25,7 @@
 format: 1
 kind: device
 name: r660
-version: 5.2.0
+version: 5.2.2
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R660
@@ -352,6 +352,20 @@ gaps:
     wanted: >-
       a straight-on photograph of a single-slot E3.S blank, or of an R660 E3.S
       front with empty slots
+  - what: card-bracket-flange-past-the-wall
+    scope: [rear, risers]
+    reason: needs-drawing
+    note: >-
+      the risers' cage plates are drawn 1.0 proud of the rear wall (the ISM's table 12, PDF page 27, puts nothing but
+      the supplies' handles past it), and a seated card's bracket flange stands past the wall with the part of the riser
+      that covers it. The flange is the bracket's own 9.4 return flange (std/pcie-bracket-lp@1, PCIe CEM 5.0 figure
+      11-9) and the cover is each cage's `flange-cover` node at 10.26, the flange and one sheet: an estimate, as the
+      ISM gives no depth for either. A rear bay cannot recess its occupant, so the flange stands 9.4 past the wall in a
+      configuration with such a card seated. Dell's service model has the pieces over riser 2A's and 3A's flange ends
+      reach 19.2 to 19.8 and its low-profile brackets 8.2 to 9.2; its meshes are compressed, so only boxes were read
+      and the covers are not drawn to that reach or shape.
+    wanted: >-
+      a side view or dimensioned drawing of a seated bracket under its riser's cover, or the model's meshes decoded
 
 groups:
   drives:

@@ -30,10 +30,17 @@ size-confidence: {w: photo-measured, h: photo-measured}
 relief:
   features:
   - node: plate
-    out: 20.0
+    out: 1.0
     shape: true
     color: '#cfd3d7'
     confidence: estimated
     source: >-
-      estimated by analogy with the 1U R660 risers' cages, 20 mm proud in Dell's R660 service model; no ISM figure gives the cage's depth, and Dell's R760 service model (r760.glb, `R760_ ExpansionCardRiser2`) is held but the depth was not read from it in the change that measured the covers and fans.
+      estimated - the cage's plate is the rear wall's own sheet metal. The R760 ISM's table 10 (chassis dimensions, PDF page 34) puts the rear wall at Zb, 700.7 mm ear to rear wall, and nothing but the supplies' handles past it (Zc, 736.29 mm ear to PSU handle); no ISM figure gives the cage's depth. The first pass drew the plate 20.0 proud by analogy with the 1U R660 risers' cages, which stood the cages 20 mm outside the chassis; Dell's R760 service model (r760.glb, `R760_ ExpansionCardRiser2`) is held but the depth was not read from it.
+  - node: flange-cover
+    out: 10.26
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - the metal over a seated card's bracket flange, which stands past the wall; the rest of the cage does not. Neither the R760 ISM (table 10, chassis dimensions, PDF page 34, and its riser sections) nor its figures give a depth for a bracket's flange or for the riser's cover over it. The reach is the smallest that covers the flange: std/pcie-bracket-lp@1's return-flange-depth, 9.40 (PCIe CEM 5.0 figure 11-9, the fold standing out of the face as that part reads it), plus 0.86 for the sheet over it (the CEM's 20 GA bracket stock, the same figure), 10.26. Dell's R760 service model (r760.glb) gives no reach to read: its supply runs z 490.5 to 861.8, so the wall is at 861.8 less the handle's 35.59, 826.2, and its riser 2 ends at 754.9, short of it. The R660 model's cover pieces over the low-profile risers' flanges reach 19.2 to 19.8 (see dell/riser-2-lp-cage-16g@1), which this cage does not borrow. The rectangles are each flange's fold, 1.5 each side, over its length.
 skins: [default]

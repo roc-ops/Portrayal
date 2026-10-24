@@ -52,12 +52,17 @@ size-confidence: {w: drawing, h: drawing}
 relief:
   features:
   - node: plate
-    out: 20.0
+    out: 1.0
     shape: true
     color: '#cfd3d7'
-    confidence: measured
+    confidence: estimated
     source: >-
-      Dell's service model r660.glb: riser 3A's cage 3DGeom~26245 begins at plan y -20.1, 20 mm proud of the rear wall, its bracket 12.2 proud inside it. Its windows are cut through it, so a card's face is seen down
-      them and the bracket's folded flange, 9.4 proud at the end the window
-      does not show, is inside the cage, as on the R740xd's riser shrouds.
+      estimated - the cage's plate is the rear wall's own sheet metal. The R660 ISM's table 12 (chassis dimensions, PDF page 27) puts the rear wall at Zb and nothing but the supplies' handles past it (Zc less Zb, 35.57 mm). Dell's service model r660.glb has riser 3A's cage 3DGeom~26245 begin at plan y -20.1, 20 mm proud of the plane the supplies' faces sit in, which stood the cage outside that chassis; the plate is drawn 1.0 and the model's figure is kept here as the disagreement. Its windows are cut through it, so a card's face is seen down them.
+  - node: flange-cover
+    out: 10.26
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - the metal over a seated card's bracket flange, which stands past the wall; the rest of the cage does not. Neither the R660 ISM (table 12, chassis dimensions, PDF page 27, and its riser sections) nor its figures give a depth for a bracket's flange or for the riser's cover over it. The reach is the smallest that covers the flange: std/pcie-bracket-lp@1's return-flange-depth, 9.40 (PCIe CEM 5.0 figure 11-9, the fold standing out of the face as that part reads it), plus 0.86 for the sheet over it (the CEM's 20 GA bracket stock, the same figure), 10.26. Dell's service model r660.glb has the piece over riser 3A's flange end reach 19.2 past the plane the supplies' faces sit in (the bounding box of Body_8_15.004, with the plane at the supplies' rear 825.0 less the handle's 35.57) and its low-profile bracket 9.2; its meshes are Draco-compressed, so only boxes were read and the cover's shape is not known from it, and the model's reach is kept here as the disagreement. The rectangle is the flange's fold, 1.5 each side, over its length.
 skins: [default]

@@ -444,7 +444,9 @@ def test_the_bezel_is_the_models_front_bezel():
     assert c["size"]["d"] == pytest.approx(19.7, abs=0.06)
     assert set(c["size-confidence"].values()) == {"measured"}
     plate = next(f for f in c["relief"]["features"] if f["node"] == "plate")
-    assert plate["out"] == pytest.approx(19.7, abs=0.06) and plate["confidence"] == "measured"
+    # the part's depth is the model's 19.7 but the 3D plate stands what ISM table 10 allows out of the chassis: 35.84 with the
+    # bezel less 22.0 without is 13.84 (the R660's table gives the same), and the envelope test reads it against 14.0
+    assert plate["out"] == pytest.approx(13.84, abs=0.01) and plate["confidence"] == "datasheet"
     # `PEr760_ FrontBezel_ Button_-1.001` 19.9 x 43.8 at the left end (face x 25.3, y 21.2 -> bezel-local 0.0, 18.6) and
     # `PEr760_ FrontBezel_ Hook_-1.001` 15.0 x 15.0 (face x 66.4, y 13.4 -> local 41.0, 10.8): the lock the key turns
     release, lock = c["elements"]["release"], c["elements"]["lock"]
