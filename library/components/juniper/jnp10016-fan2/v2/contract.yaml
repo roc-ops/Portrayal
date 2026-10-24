@@ -1,0 +1,51 @@
+format: 1
+kind: module
+name: jnp10016-fan2
+version: 2.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX10016 fan tray - two full-height doors fill the rear beside
+  the ten-high PSU column; a 4 x 20 grid of rounded exhaust cells with
+  the FAN / FTC / SIB STATUS lamps at the top and two grab bars. Removal
+  exposes the SFBs. 167.6 x 929.6 mm; version 1 drew it 176 x 924 mm.
+attrs:
+  model: 'JNP10016-FAN2'
+  power-draw-typical-w: 2220
+  power-draw-max-w: 2340
+provenance:
+  size: >-
+    datasheet - the MX10016 hardware guide (published 2024-05-09), Table 7, Fan Tray Specifications,
+    the JNP10016-FAN2 column: Height 36.5 in. (92.97 cm), Width 6.6 in. (16.8 cm). The column's inch
+    and centimetre figures disagree (36.5 in. is 92.7 cm); the centimetre figure, 92.97 cm, is the
+    FAN column's 36.6 in. and is used, 929.6 x 167.6 mm; it is also the height the QFX10016 guide's
+    Table 8 gives its own tray, and the chassis is 930 mm high. Version 1 took about 176 x 924 mm from the isometric rear drawing g050702
+    anchored to the 442 mm chassis width, which only gives fractions; the table is used over the
+    drawing.
+  depth: >-
+    datasheet - Table 7: 5.5 in. (13.97 cm) without handles, 6.7 in. (17.01 cm) with handles. The
+    body depth 139.7 mm is used.
+  power: >-
+    MX10016 hardware guide, Table 32 'Power Requirements for MX10016 Components', whose two
+    figure columns are headed 'Typical Power' and 'Maximum Power': '| JNP10016-FAN2 |
+    MX10016 fan tray | 2220 Wat 77 F (25 C) | 2340 Wat maximum fan speed |'. The maximum is
+    carried. The guide names exactly two fan trays for this chassis, JNP10016-FAN and its
+    sibling, each with its own controller (JNP10016-FAN-CTRL supports the FAN, JNP10016-FTC2
+    supports the FAN2), and they are FOUR TIMES APART in power.
+  face: >-
+    drawing - g050702: 4-column rounded-cell grid, top lamp strip, two bars. The art of version 1,
+    with the cells and the bars stretched to the new size (about 0.95 across and 1.00 down), so the
+    layout is the drawing's and the cell size is estimated.
+states:
+- ok
+- fail
+- absent
+size:
+  w: 167.6
+  h: 929.6
+  d: 139.7
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  The MX10016 guide's Table 7; the height is the centimetre figure, where the inch figure reads 36.5
+  in. The depth is the body without the handles.

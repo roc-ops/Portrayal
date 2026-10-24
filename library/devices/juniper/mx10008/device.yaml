@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10008
-version: 3.0.1
+version: 4.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX10008
@@ -44,9 +44,13 @@ provenance:
       gives it (3.6 in. wide, 3.5 in. high; guide page 184), and the six stand one above the next
       with no gap, as the figure draws them, the earthing terminal's strip below PSU 5. The bays
       were 84.0 x 93.5 mm, spread over the fan trays' height. The guide's Table 12 gives the fan
-      trays 6.6 in. (16.8 cm, about 167.6 mm) wide (guide page 61); the two fan bays are 175 mm, what
-      91.4 mm of supply leaves of the 350.6 mm beside it, and the parts are still drawn 176 mm from
-      the drawing, 8.4 mm wider than the guide's figure (see gaps)
+      trays 6.6 in. (16.8 cm, about 167.6 mm) wide and 22.4 in. (56.9 cm) high (guide page 61), and
+      juniper/jnp10008-fan@2, juniper/jnp10008-fan2@2 and juniper/jnp10008-fan3@2 are drawn at that
+      size; juniper/jnp10008-fan@1, juniper/jnp10008-fan2@1 and juniper/jnp10008-fan3@1, 176 x 560
+      mm from the drawing, are kept for a saved rack that names them. The two fan bays are 167.6 x
+      569.0 mm, the size of the QFX10008's, and stand against the supply column and against each
+      other, centred in the 574 mm height (y 2.5). 91.4 + 2 x 167.6 mm is 426.6 mm of the 442 mm
+      body, and no figure shows the other 15.4 mm, so it is left empty at the right edge, an estimate
   power:
     confidence: datasheet
     note: >-
@@ -108,16 +112,6 @@ gaps:
       a flat figure or square-on photograph of the JNP10K-PWR-AC2 face; the guide gives its outer
       size (Table 55) and isometric drawings, so juniper/jnp10k-pwr-ac2@2 refits the face of
       version 1 to 91.4 x 88.9 mm by estimate
-  - what: fan-tray-width
-    scope: [cooling]
-    reason: sources-disagree
-    wanted: >-
-      Table 12 of the guide gives the JNP10008-FAN, -FAN2 and -FAN3 fan trays 6.6 in. (16.8 cm) wide,
-      about 167.6 mm; juniper/jnp10008-fan@1, -fan2@1 and -fan3@1 are drawn 176 mm from the drawing
-      g050553. The two bays are 175 mm, what the 442 mm body leaves beside the 91.4 mm supplies, so
-      each part overhangs its bay by 1.00 mm (L33) while the guide's tray would fit it. The parts are
-      not redrawn here: their face art is fitted to 176 mm, and the QFX10008 seats the same parts, so
-      a new fan version is a separate change
   - what: line-card-catalogue
     scope: [fpcs]
     reason: needs-photo
@@ -260,11 +254,11 @@ views:
         - {id: psu5, at: [0.0, 450.5], size: {w: 91.4, h: 88.9},
            accepts: [juniper/jnp10k-pwr-ac2@2, juniper/jnp10k-pwr-blnk@2], default: juniper/jnp10k-pwr-ac2@2,
            group: psus, rel-pos: 5}
-        - {id: fan0, at: [91.6, 7.0], size: {w: 175.0, h: 560.0},
-           accepts: [juniper/jnp10008-fan@1, juniper/jnp10008-fan2@1, juniper/jnp10008-fan3@1], default: juniper/jnp10008-fan@1,
+        - {id: fan0, at: [91.4, 2.5], size: {w: 167.6, h: 569.0},
+           accepts: [juniper/jnp10008-fan@2, juniper/jnp10008-fan2@2, juniper/jnp10008-fan3@2], default: juniper/jnp10008-fan@2,
            group: cooling, rel-pos: 0}
-        - {id: fan1, at: [267.0, 7.0], size: {w: 175.0, h: 560.0},
-           accepts: [juniper/jnp10008-fan@1, juniper/jnp10008-fan2@1, juniper/jnp10008-fan3@1], default: juniper/jnp10008-fan@1,
+        - {id: fan1, at: [259.0, 2.5], size: {w: 167.6, h: 569.0},
+           accepts: [juniper/jnp10008-fan@2, juniper/jnp10008-fan2@2, juniper/jnp10008-fan3@2], default: juniper/jnp10008-fan@2,
            group: cooling, rel-pos: 1}
   left:
     size:

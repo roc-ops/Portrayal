@@ -1,0 +1,48 @@
+format: 1
+kind: module
+name: jnp10004-fan2
+version: 2.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP10004-FAN2 fan tray - two fill the MX10004 rear beside the PSU stack.
+  Each is a 167.6 x 306.8 mm door of six round fans behind honeycomb cells.
+  It has FAN / FTC / SIB STATUS lamps and two grab bars. Removing one exposes the six
+  SFBs. The FAN3 variant shares the door. Version 1 drew it 176 x 293 mm.
+attrs:
+  model: JNP10004-FAN2
+  power-draw-max-w: 651
+provenance:
+  size: >-
+    datasheet - the MX10004 hardware guide (published 2026-09-24), Table 9, Fan Tray Specifications,
+    the JNP10004-FAN2 column: Height 12.08 in. (30.68 cm), Width 6.6 in. (16.8 cm). 306.8 x 167.6 mm.
+    The FAN3 column reads 12.09 in. (30.7 cm) by the same width. Version 1 took about 176 x 293 mm
+    from the rear studio figure g101087 anchored to the 442 mm chassis width, which is wider than the
+    table and shorter than it; the table is used over the figure, because the figure's scale is the
+    body width, which the supplies and the two trays do not add up to (3.6 + 6.6 + 6.6 = 16.8 in.
+    against 17.4 in.).
+  depth: >-
+    datasheet - Table 9: 5.5 in. (13.97 cm) without handles, 6.85 in. (17.4 cm) with handles. The body
+    depth 139.7 mm is used.
+  power: >-
+    guide FRU power table (Component | Model Number | Maximum Power Requirement), MX chassis
+    guides: '| JNP10004-FAN2 | MX10004 fan tray | 651W | 651W | 651W |'. MX10004 guide,
+    Table 55, whose header reads 'At 77 F (25 C) | At 104 F (40 C) | At 131 F (55 C)'. This
+    tray is rated the same at all three ambients.
+  face: >-
+    photo - g101087: 2x3 rounded mesh cells, lamp strip, heat chips, two horizontal bars. The art of
+    version 1, with the mesh and the bars stretched to the new size (about 0.95 across and 1.05 down),
+    so the cell layout is the photograph's and the cell size is estimated.
+states:
+- ok
+- fail
+- absent
+size:
+  w: 167.6
+  h: 306.8
+  d: 139.7
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  The MX10004 guide's Table 9, converted from inches (the centimetre figures agree to 0.1 mm). The
+  depth is the body without the handles.

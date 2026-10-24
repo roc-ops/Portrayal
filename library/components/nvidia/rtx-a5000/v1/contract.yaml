@@ -1,0 +1,314 @@
+format: 1
+kind: module
+name: rtx-a5000
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA RTX A5000 (24 GB GDDR6), an actively cooled dual-slot full-height
+  full-length workstation card with a blower. The bracket face is silver with
+  four DisplayPort connectors on the board's side and a grid of square vent holes
+  beside them. The shroud is matte black with the blower's opening on its broad
+  side and the heat sink's top showing along the top edge. One NVLink connector
+  sits on the top edge. It has one PCIe 8-pin power connector at the far end by
+  the top edge. It plugs into one riser slot and covers the one beside it.
+slot-width: 2
+size: {w: 120.02, h: 41.91, d: 266.70}
+size-confidence: {w: registry, h: registry, d: datasheet}
+unplaced: >-
+  no bay in the library lists this card in `accepts`. The one riser that spans,
+  dell/riser-1a-14g@2's `slot-1`, is the Dell R740xd's, and nvidia/a30@1 records
+  that server's manual (table 27) as naming data-center cards only. No document
+  held says any server takes a workstation card, and seating it is an edit to an
+  existing component that this change does not make.
+attrs:
+  model: 'RTX A5000'
+  part-numbers: 'PNY VCNRTXA5000-PB (retail), VCNRTXA5000-SB (single bulk), VCNRTXA5000-BLK (bulk), VCNRTXA5000-EDU (education)'
+  role: gpu
+  form-factor: 'Full-height, full-length (FHFL) 4.4 in x 10.5 in, dual slot'
+  pcie-connector: x16
+  pcie-generation: 4
+  pcie-height: full
+  power-draw-max-w: 230
+  power-input: 'host PCIe slot and one PCIe 8-pin auxiliary connector'
+  memory: '24 GB GDDR6, 384-bit, 768 GB/s'
+  display-ports: '4 x DisplayPort 1.4a on the bracket'
+  cooling: active
+  airflow: 'blower; it draws air from the card''s broad side and exhausts toward the bracket'
+  nvlink: 'one connector on the top edge; low-profile bridges connect two RTX A5000, 112.5 GB/s bidirectional'
+faces:
+  rear: {ref: nvidia/rtx-a5000-tail@1}
+provenance:
+  slot-width: >-
+    datasheet - NVIDIA's RTX A5000 datasheet: "Form factor 4.4' H x 10.5' L, dual
+    slot, full height"; the Ampere quick-start guide: "The RTX A6000, RTX A5000
+    and RTX A2000 are dual-slot GPUs and will require removing two adjacent slot
+    covers". The face is one plate about 38 across (`face-outline`). The card
+    declares `slot-width: 2` as docs/pcie-two-slot-bays-design.md R1 defines it.
+  sources: >-
+    NVIDIA RTX A5000 datasheet,
+    https://www.nvidia.com/content/dam/en-zz/Solutions/products/workstations/nvidia-rtx-a5000-datasheet.pdf.
+    PNY's copy,
+    https://www.pny.com/File%20Library/Company/Support/Product%20Brochures/NVIDIA%20Quadro/English/nvidia-rtx-a5000-datasheet.pdf,
+    for the order codes. NVIDIA's RTX Ampere online quick-start guide (r3, 7 March
+    2024), https://images.nvidia.com/aem-dam/en-zz/Solutions/design-visualization/quadro-product-literature/proviz-rtx-ampere-online-qsg-210x148mm-20240307-r3.pdf:
+    the dual-slot statement, "The RTX A5000 uses a PCI Express 8-pin cable" and the
+    connector figure. NVIDIA's power guide DA-07261-001_v15,
+    https://images.nvidia.com/aem-dam/en-zz/Solutions/design-visualization/quadro-product-literature/DA-07261-001_v15.pdf,
+    table 1. NVIDIA publishes no dimensioned drawing of this card: the geometry
+    is measured on PNY's photographs (below) and carried over from the standards.
+    Licence not stated; facts read from them, pictures not used.
+  reference-photos: >-
+    reference - PNY's product images for the RTX A5000, under
+    https://d2vfia6k6wrouk.cloudfront.net/productimages/bf379f95-e68e-4f27-9b6b-ad0800d78be0/images/:
+    rtx_a-series-a5000_left.png (the bracket straight on, 190 x 566 px, its tip at
+    the bottom), nvidia-rtx-a5000-fr.png (the broad side straight on, 708 x 317
+    px) and four 3/4 views (rtx_a-series-a5000_3qtr-left.png,
+    -3qtr-frontleft.png, -3qtr-topleft.png and rtx_a-series-a5000-nvlink_3qtr-topleft.png,
+    the last with a bridge fitted). Each was checked to be this card: four
+    DisplayPorts beside a grid of square vent holes, a matte black blower shroud,
+    the same card in all six. MM PER PIXEL: bracket photograph 0.2214 (4.516
+    px/mm), broad-side photograph 0.397 (2.52 px/mm). Both are set out under
+    `face-outline` and `body-fan`. NO STRAIGHT-ON VIEW OF THE TOP EDGE OR THE
+    FAR END EXISTS: the four 3/4 views cannot be scaled.
+  size: >-
+    registry - w is the full-height bracket's 120.02 (std/pcie-bracket-fh@2,
+    PCIe CEM 5.0 figure 11-5). h is two slots: the single bracket's 21.59 plus
+    one 20.32 slot pitch, 41.91, as on the A100.
+  depth: >-
+    datasheet - 10.5 in, exactly 266.70, from the bracket's outer face as
+    nvidia/a100-pcie-40gb@1 reads the same figure. On the broad-side photograph
+    the shroud runs 673 px from the bracket to the far end, which at 2.52 px/mm is
+    267.1, so the datasheet's length holds. The photograph is isotropic to
+    0.5 percent: 2.52 px/mm across the shroud's 247 px for the board's 97.9 and
+    2.51 over the 317 px from the bracket's tip to the top edge (126.31).
+  face-outline: >-
+    photo-measured - the bracket photograph (rtx_a-series-a5000_left.png) turned
+    a quarter into this frame, tip at the left and the board's side at the top.
+    Its scale is the plate itself: the 542 px from the tip to the flange's end (the
+    silver starts at row 140, the card's dark board above it) are the standard's
+    120.02, so 4.516 px/mm (0.2214 mm per pixel). The two retention tabs check it:
+    each is 46 px wide, 10.2 against CEM's 10.2, and their centres are 90.5 px
+    apart, 20.04 at that scale against the 20.32 slot pitch (1.4 percent). The
+    first tab's centre is put at y 12.38, where std/pcie-bracket-fh@2 puts its own.
+    Read that way the plate's board-side edge is at y 3.5 and its far edge at 41.2
+    (37.7 across, against 38.74 for two CEM single bodies on one pitch and the
+    A100's 35.9), with a step 20.5 from the tip to 5.3 and 40.1; the tabs are at 7.3
+    to 17.5 and 27.5 to 37.7, 10.2 wide. The tip's rounded corners and the V notch
+    between the tabs are the A100's. Readings are good to about 0.5 mm.
+  face-displayports: >-
+    photo-measured - four DisplayPort receptacles along the board's side, at the
+    same scale. Their openings are 16.2 long and 4.9 across, and the shell is drawn
+    1.0 larger all round, 18.2 x 6.9 (y 6.15 to 13.05), with the D shape's chamfer
+    at the flange end on the grid's side. Their centres along the bracket are 40.3,
+    61.4, 82.6 and 103.7, a pitch of 21.13 (measured 40.3, 62.0, 82.9 and 103.7).
+    THE LIBRARY HAS NO DISPLAYPORT PART OR INTERFACE, so each is an element of
+    class `connector` painted in the skin and not a seated part; nothing mates it
+    and the module type carries no port for them (the `display-ports` attr says 4
+    x DisplayPort 1.4a, the datasheet's words). The pins are drawn as two rows of
+    dashes, not counted.
+  face-grille: >-
+    photo-measured - a grid of square vent holes beside the DisplayPorts: 5 columns
+    and 18 rows, each hole 16.5 px (3.65) square on a pitch of 21.2 px across (4.73)
+    and 21.1 px along (4.67), from y 15.65 to 38.2 and from x 31.0 to 114.0. Four
+    Torx screws sit in the grid's corners, at x 32.3 and 113.5 and y 17.6 and 36.2,
+    their heads about 5.6 across on a boss about 8 across that takes the cells
+    beside them (the holes under the bosses are not drawn; the pattern drawn
+    over-counts nothing). There is no raised frame, so the relief has no grille
+    node.
+  face-markings: >-
+    photo-measured - the bracket carries no lamp, no label and no printing. The
+    control is the holes and the screw recesses, which resolve in the same
+    photograph at the same scale.
+  thickness: >-
+    estimated - the datasheet states no thickness. The shroud's far face is put at
+    y 40.0, as nvidia/a100-pcie-80gb@1 has it, 1.2 inside the bracket's far edge
+    (41.2). The bracket photograph's plate is 37.7 across, which bounds a dual-slot
+    card at 41.91.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-fh@2 and the A100 are. The board, and the
+    bracket's keyed side, are at the top (small y), which is where the
+    DisplayPorts are.
+  body: >-
+    the board, its edge and the pads follow PCIe CEM 5.0 (figures 6-5 and 11-3,
+    as nvidia/mcx755106-fh@1 has them): the card height 111.15, the lower edge
+    13.25 above the finger datum W and the key datum 57.15 behind the bracket, so
+    the top edge is at x 126.31. NVIDIA prints no figure for this card. The
+    broad-side photograph agrees: the shroud's 247 px at 2.52 px/mm are 98.0
+    against the board's 97.9. The lower edge has a notch at 145.7 to 158.0 behind
+    the bracket, 3.2 deep, ramping back to the edge by 160.0 (the A100's is 3.55
+    deep and 19.5 long): it is drawn as one box 14.3 long. The photograph's board
+    tab runs on to the notch, about 145, 6 mm past CEM's 139.03, and the body keeps
+    CEM's.
+  body-shroud: >-
+    photo-measured - the shroud is matte black, one slab from the board's
+    component face (y 6.01) to the far face (40.0), the outline of the board, split
+    at the notch as the board is. The back of the card is not seen in any
+    photograph held, so there is no backplate and the board's rear is bare, as
+    nvidia/a10@1 has it.
+  body-fan: >-
+    photo-measured - the blower's opening on the broad side. In PNY's side
+    photograph (708 x 317 px) its ring is 188 px across, centred at px (575,
+    354). The scale is 2.52 px/mm both ways (above), so the ring is 74.6 across, its
+    centre 70.6 from the far end and 44.6 below the top edge, and the hub is 36
+    across. The ring and the hub are black on black and read from a crop at 1.6
+    times, good to about 1 mm. The 24 blades are schematic: their number and slant
+    are not counted. Painted on the broad side, not an opening in the 3D body.
+  body-top-edge: >-
+    estimated - PNY's 3/4 views show the top edge black with a smooth champagne
+    strip along most of its length (the heat sink's top, ridged on the A6000 and
+    smooth here), "RTX A5000" in small print near the bracket end, and three
+    connectors on a ledge along the strip's board side: NVLINK (gold contacts) at
+    the bracket end, STEREO and SYNC beyond it. The views are at about 45 degrees
+    and cannot be scaled, so every place here is estimated: the strip from 12 to
+    230 behind the bracket and 14.0 to 32.0 across the card, "RTX A5000" at 3.0
+    behind it, 2.4 tall. THE NVLINK, STEREO AND SYNC CONNECTORS ARE NOT DRAWN: no
+    straight-on view shows them at scale (gaps). The 3/4 view with a bridge
+    fitted shows the maker's mark on the top edge near the far end: it is NOT
+    DRAWN and its box (228 to 237 behind the bracket, 20.0 to 25.9 across) is
+    reserved as `logo-zone` in `skins/body-right.svg`, estimated.
+  body-nvlink: >-
+    datasheet - one NVLink connector on the top edge; "low profile bridges connect
+    two NVIDIA RTX A5000 GPUs", 112.5 GB/s bidirectional. NOT DRAWN, AND NO
+    INTERFACE: no document held names the bridge's part number, and the registry
+    has the A100's connector only (nvidia/nvlink-a100-connector@1), which no source
+    says this card mates. The fact is the `nvlink` attr.
+  body-power-connector: >-
+    estimated - the datasheet says "Power connector 1x 8-pin PCIe" and NVIDIA's
+    power guide DA-07261 table 1 says "PCIe 8-pin", 230 W. The quick-start guide
+    says "The RTX A5000 uses a PCI Express 8-pin cable" and draws the connector at
+    the end face's corner by the top edge; the figure is a schematic with no scale.
+    The housing is drawn at nvidia/a10@1's place (105.6 to 123.6 on the card's x,
+    12.5 across the board's component face), black, with eight cells. No
+    photograph of the card's end is held. THE PORT is `aux-power` on the rear face
+    (`faces.rear`, nvidia/rtx-a5000-tail@1): std/pcie-8pin-header@1, which presents
+    `pcie-8pin` for a PCIe 8-pin cable and which the card exports as a power
+    port.
+  body-end: >-
+    estimated - a closed black end plate 1.0 thick, 1.4 inside the card's length,
+    and the connector housing standing 0.2 proud of it, as nvidia/a10@1 has it. No
+    photograph shows the end.
+  body-foot: >-
+    photo-measured - the broad-side photograph shows a dark block under the
+    shroud's near end: 7.1 below the lower edge and 2.8 along the card, 5.7 behind
+    the bracket (the A100's is 7.6 and 2.4), the board stepping down toward the
+    finger datum, drawn as a part of the board. The bracket's two retention tabs
+    below it are the face's (`skins/default.svg`), 0.9 thick, estimated.
+  power: >-
+    datasheet - total board power 230 W in the datasheet and DA-07261 table 1. The
+    sources agree.
+  memory: >-
+    datasheet - 24 GB GDDR6, 384-bit, 768 GB/s, ECC.
+  pcie: >-
+    datasheet - PCIe 4.0 x16.
+  part-numbers: >-
+    datasheet - PNY's datasheet: "Retail: VCNRTXA5000-PB, Single Bulk:
+    VCNRTXA5000-SB, Education: VCNRTXA5000-EDU, Bulk: VCNRTXA5000-BLK". NVIDIA's
+    own copy gives none. No NVIDIA board SKU or order code is in any document held.
+  weight: >-
+    not stated - no datasheet held gives a weight for the card.
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) a straight-on view of the top edge and the
+    far end (needs-photo; the top edge's strip and printing are estimated, the
+    NVLINK, STEREO and SYNC connectors are not drawn and the end is a
+    schematic); (2) the NVLink connector's place and the bridge's interface,
+    which the registry does not have (needs-photo, needs-drawing); (3) the
+    DisplayPort part and interface, which the library lacks (the four are painted,
+    not seated); (4) the thickness, which no source states (vendor-silent); (5)
+    the fingers' and the notch's true outline, which the broad-side photograph
+    draws otherwise than CEM by a few millimetres (needs-drawing); (6) the card's
+    back, which no photograph shows (needs-photo); (7) a weight and an NVIDIA
+    order code (vendor-silent in the documents held); (8) the lifecycle: no
+    end-of-life notice was searched for.
+body:
+  depth: 266.70
+  color: '#b9bec3'
+  plate: {at: [9.80, 3.50], size: [109.40, 37.70]}
+  boxes:
+  - {id: board, at: [28.41, 4.44], size: [97.90, 1.57], from: 0.90, depth: 144.80,
+     color: '#1d2420', confidence: registry, shows: [right],
+     source: 'CEM 5.0: 1.57 board, 1.27 inside the bracket keyed edge, lower edge W + 13.25, top edge W + 111.15; to the notch at 145.7 read on the broad-side photograph'}
+  - {id: board-notch, at: [31.61, 4.44], size: [94.70, 1.57], from: 145.70, depth: 14.30,
+     color: '#1d2420', confidence: photo-measured, shows: [right],
+     source: 'the broad-side photograph at 2.52 px/mm: the lower edge steps up 3.2 (8 px) from 145.7 behind the bracket and returns by 160.0'}
+  - {id: board-east, at: [28.41, 4.44], size: [97.90, 1.57], from: 160.00, depth: 106.30,
+     color: '#1d2420', confidence: registry, shows: [right],
+     source: 'the lower edge again east of the notch, to the 266.70 end less the 0.4 step (provenance body-end)'}
+  - {id: board-foot, at: [21.31, 4.44], size: [7.10, 1.57], from: 5.70, depth: 2.80,
+     color: '#1d2420', confidence: photo-measured,
+     source: 'the broad-side photograph: a dark block 7.1 below the lower edge and 2.8 along, under the shroud''s near end (provenance body-foot)'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [13.25, 1.57], from: 45.00, depth: 11.20,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: key datum 57.15 behind the bracket, tab 13.25 deep, 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [13.25, 1.57], from: 58.10, depth: 80.93,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM 5.0: the tab runs 81.88 past the key datum, to 139.03'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3.00, 1.67], from: 45.35, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3.00, 1.67], from: 58.35, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: shroud, at: [28.41, 6.01], size: [97.90, 33.99], from: 0.90, depth: 144.80,
+     color: '#17181b', confidence: photo-measured, shows: [right, left, bottom],
+     source: 'the broad-side photograph: one matte black slab; thickness estimated at 40.0 (provenance thickness)'}
+  - {id: shroud-notch, at: [31.61, 6.01], size: [94.70, 33.99], from: 145.70, depth: 14.30,
+     color: '#17181b', confidence: photo-measured, shows: [right, left, bottom],
+     source: 'as the board''s notch'}
+  - {id: shroud-east, at: [28.41, 6.01], size: [97.90, 33.99], from: 160.00, depth: 105.30,
+     color: '#17181b', confidence: photo-measured, shows: [right, left, bottom],
+     source: 'as the shroud, east of the notch, to the end plate at 265.30'}
+  - {id: end-plate, at: [28.41, 6.01], size: [97.90, 33.99], from: 265.30, depth: 1.00,
+     color: '#17181b', confidence: estimated,
+     source: 'a closed black end plate (provenance body-end)'}
+  # THE PCIe 8-PIN (provenance body-power-connector): a black housing with eight
+  # dark cells, the 3D body of the tail face's `aux-power` port.
+  - {id: power-8pin, at: [105.60, 6.06], size: [18.00, 12.50], from: 248.30, depth: 18.20,
+     color: '#17191c', confidence: estimated,
+     source: 'nvidia/a10@1''s place by the top edge on the board''s component face; 12.6 across, 18.0 along; ends 0.2 beyond the end plate'}
+  - {id: power-8pin-cell-1, at: [118.90, 7.50], size: [3.20, 3.20], from: 266.50, depth: 0.20,
+     color: '#08090a', confidence: estimated,
+     source: 'two rows of four cells on the 4.2 pitch, as the A100''s'}
+  - {id: power-8pin-cell-2, at: [114.70, 7.50], size: [3.20, 3.20], from: 266.50, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-3, at: [110.50, 7.50], size: [3.20, 3.20], from: 266.50, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-4, at: [106.30, 7.50], size: [3.20, 3.20], from: 266.50, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-5, at: [118.90, 12.70], size: [3.20, 3.20], from: 266.50, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-6, at: [114.70, 12.70], size: [3.20, 3.20], from: 266.50, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-7, at: [110.50, 12.70], size: [3.20, 3.20], from: 266.50, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-8, at: [106.30, 12.70], size: [3.20, 3.20], from: 266.50, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  # THE BRACKET'S FOOT below the card (provenance body-foot)
+  - {id: bracket-tab-1, at: [0.00, 7.30], size: [7.27, 10.20], from: 0.30, depth: 0.90,
+     color: '#b9bec3', confidence: estimated,
+     source: 'the retention tab of skins/default.svg; 0.9 thick, estimated'}
+  - {id: bracket-tab-2, at: [0.00, 27.50], size: [7.27, 10.20], from: 0.30, depth: 0.90,
+     color: '#b9bec3', confidence: estimated,
+     source: 'the second retention tab of skins/default.svg; 0.9 thick, estimated'}
+elements:
+  display-port-1: {at: [31.20, 6.15], size: [18.20, 6.90], class: connector}
+  display-port-2: {at: [52.33, 6.15], size: [18.20, 6.90], class: connector}
+  display-port-3: {at: [73.47, 6.15], size: [18.20, 6.90], class: connector}
+  display-port-4: {at: [94.60, 6.15], size: [18.20, 6.90], class: connector}
+  vent: {at: [30.97, 15.65], size: [83.03, 22.57], class: vent}
+  screw-1: {at: [110.70, 14.80], size: [5.60, 5.60], class: screw}
+  screw-2: {at: [110.70, 33.40], size: [5.60, 5.60], class: screw}
+  screw-3: {at: [29.50, 14.80], size: [5.60, 5.60], class: screw}
+  screw-4: {at: [29.50, 33.40], size: [5.60, 5.60], class: screw}
+relief:
+  wall: '#8a9199'
+  features:
+  - node: flange-fold
+    out: 9.4
+    color: '#b9bec3'
+    confidence: estimated
+    source: >-
+      the fold at the flange end, PCIe CEM 5.0 figure 11-5's 9.40, drawn as on
+      std/pcie-bracket-fh@2. Not measured on this bracket.
+skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: qfx10008
-version: 3.0.2
+version: 4.0.0
 maturity: modelled
 manufacturer: Juniper
 model: QFX10008
@@ -98,10 +98,11 @@ provenance:
       The JNP10K-PWR-AC2 is drawn here as juniper/jnp10k-pwr-ac2@2, to the guides' 3.6 x 3.5 in.
       (Table 16; the MX10008 guide's Table 55 agrees); juniper/jnp10k-pwr-ac2@1, drawn
       84.0 x 97.0 mm from a photograph, is retired. The JNP10008-FAN (Figure 104, "Installing a JNP10008-FAN Fan Tray in a QFX10008 Chassis")
-      and JNP10008-FAN2 (Table 4) are reused as they are, as juniper/jnp10008-fan@1 and
-      juniper/jnp10008-fan2@1, drawn 176 x 560 mm for the MX10008 from an isometric drawing. Both are
-      accepted by the fan bays and neither is seated by a configuration; the bay is 168 x 569 mm
-      (Table 8, QFX10008-FAN), so lint warns of the size difference (L123)
+      and JNP10008-FAN2 (Table 4) are reused as they are, as juniper/jnp10008-fan@2 and
+      juniper/jnp10008-fan2@2, drawn 167.6 x 569.0 mm from the MX10008 guide's Table 12 (version 1,
+      176 x 560 mm from an isometric drawing, is retired). Both are accepted by the fan bays and
+      neither is seated by a configuration; the bay is 168 x 569 mm (Table 8, QFX10008-FAN), 0.4 mm
+      wider than the part
   grounding:
     confidence: datasheet
     note: >-
@@ -252,7 +253,9 @@ gaps:
     reason: sources-disagree
     wanted: >-
       the cooling topic says the fans of a tray "are numbered 0 through 20" while Table 8 gives 11 fans
-      per tray and the show chassis fan listing runs Fan 0 to Fan 10; 11 is used (the 21 is the QFX10016's)
+      per tray and the show chassis fan listing runs Fan 0 to Fan 10; 11 is used (the 21 is the QFX10016's).
+      The bays also accept juniper/jnp10008-fan2@2, which the MX10008 guide's Table 12 gives 22 fans per
+      tray; the 11 is the QFX10008-FAN's and the JNP10008-FAN's
 groups:
   res:
     term: Slot
@@ -403,10 +406,10 @@ views:
            accepts: [juniper/qfx10000-pwr-ac@1, juniper/jnp10k-pwr-ac2@2, juniper/qfx10000-pwr-dc@1, juniper/qfx10000-jnp10k-pwr-dc2@1, juniper/qfx10000-pwr-cover@1],
            default: juniper/qfx10000-pwr-ac@1, group: psus, rel-pos: 5}
         - {id: fan0, at: [96.0, 2.5], size: {w: 168.0, h: 569.0},
-           accepts: [juniper/qfx10008-fan@1, juniper/jnp10008-fan@1, juniper/jnp10008-fan2@1], default: juniper/qfx10008-fan@1,
+           accepts: [juniper/qfx10008-fan@1, juniper/jnp10008-fan@2, juniper/jnp10008-fan2@2], default: juniper/qfx10008-fan@1,
            group: cooling, rel-pos: 0}
         - {id: fan1, at: [268.0, 2.5], size: {w: 168.0, h: 569.0},
-           accepts: [juniper/qfx10008-fan@1, juniper/jnp10008-fan@1, juniper/jnp10008-fan2@1], default: juniper/qfx10008-fan@1,
+           accepts: [juniper/qfx10008-fan@1, juniper/jnp10008-fan@2, juniper/jnp10008-fan2@2], default: juniper/qfx10008-fan@1,
            group: cooling, rel-pos: 1}
       placements:
         - {id: esd-rear-jack, ref: common/esd-jack@1, at: [72.0, 546.5], for: chassis, group: esd, rel-pos: 1}

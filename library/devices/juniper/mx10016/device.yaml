@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10016
-version: 3.0.1
+version: 4.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX10016
@@ -45,9 +45,13 @@ provenance:
       guide's Table 39 gives it (3.6 in. wide, 3.5 in. high; guide page 107), and the ten stand one
       above the next with no gap, as Figure 2 draws them, the earthing terminal's strip below PSU 9.
       The bays were 84.0 x 91.0 mm, spread over the fan trays' height. The guide's Table 7 gives the fan
-      trays 6.6 in. (16.8 cm, about 167.6 mm) wide (guide pages 32 to 33); the two fan bays are 175
-      mm, what 91.4 mm of supply leaves of the 350.6 mm beside it, and the parts are still drawn 176
-      mm from the drawing, 8.4 mm wider than the guide's figure (see gaps)
+      trays 6.6 in. (16.8 cm, about 167.6 mm) wide and 36.6 in. (92.97 cm) high (guide pages 32 to
+      33), and juniper/jnp10016-fan@2 and juniper/jnp10016-fan2@2 are drawn at that size; juniper/jnp10016-fan@1
+      and juniper/jnp10016-fan2@1, 176 x 924 mm from the drawing, are kept for a saved rack that
+      names them. The two fan bays are 167.6 x 929.6
+      mm and stand against the supply column and against each other, centred in the 930 mm height (y
+      0.2). 91.4 + 2 x 167.6 mm is 426.6 mm of the 442 mm body, and no figure shows the other 15.4
+      mm, so it is left empty at the right edge, an estimate
   power:
     confidence: datasheet
     note: >-
@@ -107,15 +111,6 @@ gaps:
       a flat figure or square-on photograph of the JNP10K-PWR-AC2 face; the guide gives its outer
       size (Table 39) and isometric drawings, so juniper/jnp10k-pwr-ac2@2 refits the face of
       version 1 to 91.4 x 88.9 mm by estimate
-  - what: fan-tray-width
-    scope: [cooling]
-    reason: sources-disagree
-    wanted: >-
-      Table 7 of the guide gives the JNP10016-FAN and -FAN2 fan trays 6.6 in. (16.8 cm) wide, about
-      167.6 mm; juniper/jnp10016-fan@1 and -fan2@1 are drawn 176 mm from the drawing g050702. The two
-      bays are 175 mm, what the 442 mm body leaves beside the 91.4 mm supplies, so each part
-      overhangs its bay by 1.00 mm (L33) while the guide's tray would fit it. The parts are not
-      redrawn here: their face art is fitted to 176 mm, and a new fan version is a separate change
   - what: line-card-catalogue
     scope: [fpcs]
     reason: needs-photo
@@ -304,11 +299,11 @@ views:
         - {id: psu9, at: [0.0, 801.6], size: {w: 91.4, h: 88.9},
            accepts: [juniper/jnp10k-pwr-ac2@2, juniper/jnp10k-pwr-blnk@2], default: juniper/jnp10k-pwr-ac2@2,
            group: psus, rel-pos: 9}
-        - {id: fan0, at: [91.6, 3.0], size: {w: 175.0, h: 924.0},
-           accepts: [juniper/jnp10016-fan@1, juniper/jnp10016-fan2@1], default: juniper/jnp10016-fan@1,
+        - {id: fan0, at: [91.4, 0.2], size: {w: 167.6, h: 929.6},
+           accepts: [juniper/jnp10016-fan@2, juniper/jnp10016-fan2@2], default: juniper/jnp10016-fan@2,
            group: cooling, rel-pos: 0}
-        - {id: fan1, at: [267.0, 3.0], size: {w: 175.0, h: 924.0},
-           accepts: [juniper/jnp10016-fan@1, juniper/jnp10016-fan2@1], default: juniper/jnp10016-fan@1,
+        - {id: fan1, at: [259.0, 0.2], size: {w: 167.6, h: 929.6},
+           accepts: [juniper/jnp10016-fan@2, juniper/jnp10016-fan2@2], default: juniper/jnp10016-fan@2,
            group: cooling, rel-pos: 1}
   left:
     size:
@@ -408,8 +403,8 @@ configurations:
       Both routing and control boards, all ten power supplies, both JNP10016-FAN2 fan
       trays, and a cover in each line-card slot. Line cards are ordered separately.
     bays:
-      fan0: juniper/jnp10016-fan2@1
-      fan1: juniper/jnp10016-fan2@1
+      fan0: juniper/jnp10016-fan2@2
+      fan1: juniper/jnp10016-fan2@2
       fpc0: juniper/jnp10k-lc-blank@1
       fpc1: juniper/jnp10k-lc-blank@1
       fpc2: juniper/jnp10k-lc-blank@1
