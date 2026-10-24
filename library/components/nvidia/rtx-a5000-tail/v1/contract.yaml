@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: rtx-a5000-tail
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The far end of the NVIDIA RTX A5000 card, seen from behind. It is a closed
+  black end plate with the PCIe 8-pin power connector at the corner by the top
+  edge. It is the card's `faces.rear`.
+size: {w: 97.90, h: 35.56}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The end face is 97.9 across (the board's height from the A100 80GB's
+  PB-10577 figure 3, 28.41 to 126.31 on the card, which the RTX A5000's photographed
+  side agrees with: 247 px at 2.52 px/mm is 98.0) and runs from the board's rear
+  face to the shroud's far wall, 35.56 (the card's thickness is itself estimated,
+  see the card's `thickness`). NO DEPTH IS DECLARED: a face is a drawing of a
+  back. SEEN FROM BEHIND WITH THE BOARD'S SIDE AT THE TOP, so x' = 126.31 less the
+  card's x (the top edge at the left) and y' = the card's y less 4.44. This is
+  the frame of nvidia/a10-tail@1, which has no backplate either.
+attrs: {media: gpu}
+parts:
+  # The header is 12.6 x 18.0 upright. Turned 270 about its centre it is 18.0
+  # across and 12.6 down, centred on the housing's centre (x' 11.71, y' 7.87),
+  # with its latch ramp toward the shroud, at the bottom.
+  - {ref: std/pcie-8pin-header@1, id: aux-power, at: [5.41, -1.13], rotate: 270}
+provenance:
+  size: >-
+    estimated - see size-notes.
+  connector: >-
+    estimated - the datasheet says "Power connector 1x 8-pin PCIe" and NVIDIA's
+    power guide DA-07261 table 1 says "PCIe 8-pin", 230 W. The Ampere quick-start
+    guide says "The RTX A5000 uses a PCI Express 8-pin cable" and draws the
+    connector at the end face's corner by the top edge; it is a schematic and has
+    no scale. The place is nvidia/a10-tail@1's, which is the A100's. The part is
+    std/pcie-8pin-header@1, turned a quarter so its two columns of four become
+    two rows. No photograph of the card's end is held.
+  end-plate: >-
+    estimated - a closed black end plate over the full 97.9 x 35.56. The
+    quick-start figure draws a plain end face with two small round holes; they
+    are not drawn.
+elements: {}
+skins: [default]

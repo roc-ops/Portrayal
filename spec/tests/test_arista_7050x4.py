@@ -8,9 +8,8 @@ Devices, one per front panel, under `arista/`:
     7050x4-48y-4df    DCS-7050X4-48Y-4DF
     7050cx4m-48d8     DCS-7050CX4M-48D8 (2RU)
 
-The 7050SDX4-48D8 and 7050SPX4-48D8 are NOT in the slice: their SFP-DD and DSFP cages have no
-`std/` component (the registry has no entry), so there is nothing to seat. They are named in the pull
-request.
+The 7050SDX4-48D8 has its own module, test_arista_7050sdx4.py (it needs the SFP-DD cage). The
+7050SPX4-48D8 is NOT modelled: the library has no DSFP cage, so there is nothing to seat.
 
 The expected figures are Arista's: the 7050X4 Series Quick Start Guide (DOC-06569-02: Table 1 for the
 envelope, Tables 3 and 4 for the supplies, Appendix C and D for the faces) and the 7050X4 Series Data
@@ -356,7 +355,6 @@ def test_the_dx4m_is_a_configuration_of_the_dx4_because_figure_c_1_is_shared():
     assert "423" in m["description"] and "1208" in m["description"]
     assert not [n for n in d["configurations"] if n.startswith("m-r")]
     assert not (LIB / "devices/arista/7050dx4m-32s").exists()
-    assert not (LIB / "devices/arista/7050sdx4-48d8").exists()
     assert not (LIB / "devices/arista/7050spx4-48d8").exists()
 
 
@@ -432,7 +430,7 @@ def test_the_dcim_types_export_one_per_orderable_configuration_with_the_guides_h
 @pytest.mark.parametrize("target", ["netbox", "nautobot"])
 def test_the_dcim_exports_nothing_for_an_example_or_a_left_out_model(target):
     folder = LIB / "exports" / target / "device-types" / "Arista"
-    got = {p.stem for p in folder.glob("DCS-7050*.yaml")}
+    got = {p.stem for p in folder.glob("DCS-7050*.yaml") if "7050SDX4" not in p.stem}
     want = {pn for v in DEVICES.values() for pn in v["orderable"].values()}
     assert got == want
 

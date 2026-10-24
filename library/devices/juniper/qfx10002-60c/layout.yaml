@@ -1,0 +1,802 @@
+format: 1
+kind: device
+name: qfx10002-60c
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: QFX10002-60C
+portfolio:
+  line: QFX Series
+  family: QFX10002
+description: >-
+  Juniper QFX10002-60C, a fixed 2RU deep-buffer spine and core switch with 60 QSFP28 ports in two bands
+  of 30. Every port auto-senses a 100 GbE QSFP28 or a 40 GbE QSFP+ transceiver, and any 40 GbE port can
+  be channelized to four 10 GbE interfaces with breakout cables. The management panel at the right of
+  the front has an RJ-45 management port above an RJ-45 console, an SFP management port, an SFP PTP
+  Ethernet port, 1PPS and 10 MHz timing connectors, a USB port and four status lamps. The rear has four
+  1600 W power supply bays numbered down the columns, all filled, three fan modules of the 60C's own
+  type and an ESD point. Cooling is port-to-FRU (front-to-back) only. The AC, the DC and the spare
+  chassis builds are configurations.
+profile: networking
+stack-exceptions:
+  - pairs: [[port-0, port-1], [port-2, port-3], [port-4, port-5], [port-6, port-7], [port-8, port-9],
+            [port-10, port-11], [port-12, port-13], [port-14, port-15], [port-16, port-17],
+            [port-18, port-19], [port-20, port-21], [port-22, port-23], [port-24, port-25],
+            [port-26, port-27], [port-28, port-29], [port-30, port-31], [port-32, port-33],
+            [port-34, port-35], [port-36, port-37], [port-38, port-39], [port-40, port-41],
+            [port-42, port-43], [port-44, port-45], [port-46, port-47], [port-48, port-49],
+            [port-50, port-51], [port-52, port-53], [port-54, port-55], [port-56, port-57],
+            [port-58, port-59]]
+    reason: >-
+      Photo-measured on qfx10002-60c-front-high: both cages of a column are the same way up (the latch
+      strip sits high in each opening and the lamp strip lies between the two), and Figure 11 of the
+      guide draws both rows alike. The 72Q and the 36Q, whose cages and panel art the 60C shares, read
+      the same; see provenance.stack-orientation.
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      QFX10002 Switch Hardware Guide, Juniper Networks, published 2026-02-11 (PDF, 214 pages, sha256 in
+      references; copyright Juniper Networks, all rights reserved, read here as data and nothing copied;
+      fetched from https://www.juniper.net/documentation/us/en/hardware/qfx10002/qfx10002.pdf). Taken
+      from it - Tables 1, 2 and 3 (product numbers, port capacities, spare numbers), Tables 4 and 5 and
+      the redundancy text (power supply bays), Tables 8 and 9 (port capacities and channelization),
+      Tables 13 to 16 and 18 and 19 (lamps), Tables 17, 20, 21, 24 and 25 (modules and power), Tables
+      29 and 30 (environment and physical specifications), Table 45 (what ships), and Figures 3, 11,
+      17, 20 and 22 and Figure 46. Figure 11 (g050765) is the flat front elevation of the 60C, the
+      same drawing as Figures 3 and 20; Figure 22 (g051219) is its management panel with callouts.
+      Juniper's image library, https://www.juniper.net/us/en/company/images/image-library-logos-and-
+      product-photos/products/qfx10002-60c.html, supplied the studio photographs
+      qfx10002-60c-front-high (JPEG, 2100 x 666) and qfx10002-60c-rear-high (JPEG, 2100 x 632), which
+      were opened and compared with every figure; they are the maker's published product images, read
+      as measurements and not copied, and the page states no reuse terms that were read here. The
+      guide has NO flat rear figure of the 60C (Figure 4, the FRU panel, is the 72Q's), so the rear is
+      measured on the rear photograph. The QFX10002 datasheet address
+      juniper.net/content/dam/www/assets/datasheets/us/en/switches/qfx10000-ethernet-switches-datasheet.pdf
+      returned an HTML 404 page when tried once and the product page timed out, so no datasheet is
+      cited and no figure comes from one. The held intake folder of earlier work is not on this host,
+      so no held photograph, Visio stencil or 3D model was available and none was used.
+  gate-1:
+    confidence: measured
+    note: >-
+      Both flat sources pass. Figure 11 (g050765, 1505 x 591 px, embedded image extracted from the PDF)
+      gives a frame 1472 px wide (outline centres x 14.5 to 1486.5) and 293.5 px tall (y 150.0 to
+      443.5), aspect 5.015 against the stated 441.0 / 88.0 = 5.011, 0.1 percent out. Scaled on the
+      width it is 3.338 px per mm across and 3.335 down. The front photograph's face is 1887 px
+      wide (x 100 to 1987), 4.279 px per mm, and 373 px tall, aspect 5.06, 1 percent out; the rear
+      photograph's panel is 1886 px wide (x 99 to 1985), 4.277 px per mm. Positions are taken per
+      axis on those scales and read to about half a millimetre; each is estimated, as it is read off a
+      picture and not off a dimension.
+  envelope:
+    confidence: datasheet
+    note: >-
+      Table 30, Physical Specifications for the QFX10002 (the QFX10002-60C rows): 3.46 in. (8.8 cm)
+      high, 17.36 in. (44.1 cm) wide, 31 in. (78.7 cm) deep "without handles for fans or power
+      supplies". The height is carried as 88.0 mm, the 8.8 cm of the table, 2RU. The face is the body
+      between the folds with no ears drawn. The depth 787.0 mm is the 78.7 cm of the table. WEIGHT
+      CONFLICT - Table 30 gives the 60C 90.39 lb (41 kg) with FRUs installed, AC or DC, and the
+      rack-mounting topic gives 80.5 lb (36.5 kg); the table is carried, as it is the guide's
+      specification table.
+  ports:
+    confidence: drawing
+    note: >-
+      Figure 11 and Tables 2 and 8, counted - 60 QSFP28 cages in four rows of 15 columns: two bands, each
+      two rows of 15 columns in five groups of three, each group one six-port cage, with a gutter
+      between groups carrying a field of hexagonal vent holes. The columns step 19.3 mm in the drawing
+      (cell lefts 70, 134 and 199 px on the lower band of the figure) and in the photograph (19.5 mm),
+      which is 1.6 percent wider than the 19.0 mm of the QSFP ganged registry entry the 72Q sits on; the
+      figure's pitch is used, on the cell the registry gives (18.5 mm). The group step is 78.45 mm
+      (the figure's five groups read 78.3 to 79.1 mm apart, the drawing being a little uneven, and
+      the photograph 79.2 mm; the mean is used, with both bands alike as the photograph shows them),
+      which leaves a 20.55 mm gutter. The first column's left edge is at 16.6 mm. The upper band's rows
+      are at 11.4 and 27.7 mm and the lower band's at 52.5 and 68.8 mm (row step 16.3 mm, which leaves
+      the lamp strip between a cage's bottom edge and the next cage's top). Counts confirmed by Table 2
+      and Table 8.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Figure 11 and the photograph print 0, 6, 12, 18 and 24 above the upper row of the upper band and
+      1, 7, 13, 19 and 25 below it, and 30, 36, 42, 48 and 54 above the lower band's upper row and 31,
+      37, 43, 49 and 55 below it: the first number of each group, as the 72Q's drawing does and as the
+      36Q photograph prints fewer. Each column holds the even port above the odd one and the ports run
+      left to right, the upper band holding 0 to 29 and the lower band 30 to 59 (Table 9 lists the
+      physical ports 0 to 59). Numbering starts at 0. Interface names are not printed on the metal and
+      the guide's Table 9 gives physical port numbers only, so none is carried.
+  channelization:
+    confidence: datasheet
+    note: >-
+      Table 9 - five ports per ASIC (PE0 to PE11, twelve ASICs); within each ASIC the fourth port
+      cannot be channelized and is disabled when one of the other four is, so a fully channelized
+      switch has 192 10 GbE interfaces. It is a configuration of the switch and not a printed mark, and
+      the port groups carry no per-port channel attribute.
+  stack-orientation:
+    confidence: photo-measured
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md) turns the lower cage of a belly to
+      belly pair by 180 degrees. It is not applied here, because qfx10002-60c-front-high shows both
+      cages of a column the same way up (the silver latch strip high in each opening, the dark module
+      body below it) and Figure 11 draws both rows alike. The lamp strip lies between the rows.
+  port-leds:
+    confidence: datasheet
+    note: >-
+      Figure 17 and Table 13 - each QSFP port has one bicolour LED, "triangle shaped". The strip
+      between the two cages of a column draws an up triangle at its left, four small slots and a down
+      triangle at its right, in Figure 11 and in the photograph. The up triangle is the upper port's
+      lamp and the down triangle the lower port's, as the triangles point at their ports. The lamp
+      centres are 1.4 mm and 17.0 mm right of the cell's left edge, 12.4 mm below the upper cage's
+      top. The slots are drawn as one dark plate per column. Table 13 gives the states: green steady is
+      a link (all four sub-channels up when channelized), green blinking is activity, slow green is the
+      beacon, amber steady is some but not all sub-channels up and amber blinking is activity on some
+      sub-channels.
+  hundred-gig-marks:
+    confidence: datasheet
+    note: >-
+      The 72Q and 36Q mark their 100 GbE ports with a fine line under the socket. The 60C has no such
+      line in Figure 11 or in the photograph, because all 60 ports take QSFP28 at 100 GbE (Table 2).
+  mgmt-panel:
+    confidence: drawing
+    note: >-
+      Figure 22 (g051219) callouts 1 to 8 and Figure 11, measured on Figure 11 per axis. This is a
+      different panel from the 72Q's: callout 1 is the USB port, upright, centred at 395.7, 53.0
+      with the USB symbol above it; callout 2 the four status lamps, PWR over STS at 403.0 across and
+      52.6 and 57.5 down and MAJ over MIN at 408.2 inside a bracket, with the word ALARM down its
+      right side; callout 3 the em0 RJ-45 (1000BASE-T) management port (MGMT) and callout 4 the RJ-45
+      console (CON) stacked in one shield outline at 420.2 across, 45.9 and 59.1 down in the
+      figure's outline; callout 8 the em1 SFP management port (MGMT) at 391.2 across and 69.0 down;
+      callout 7 the PTP Ethernet SFP port (the guide calls it ETH, the panel prints PTP) right of it
+      at 405.45; callout 6 the PPS SMB at 424.7, 73.0 and callout 5 the 10 MHz SMB at 432.8, 73.0. Two
+      small round lamps above the two SFP cages at 402.7 and 408.4 across and 65.8 down are the SFP
+      port lamps (Table 15 - one link and activity lamp). The two RJ-45 jacks are placed at the
+      registry's 13.2 mm height one under the other from 38.6 to 65.0 mm, 2 mm taller as a pair than
+      the drawn shield (24.6 mm), so that the PTP and CON legends clear the console jack. Jack sizes
+      come from the registry; the drawing's housing outlines are not used for size. The printed
+      bracket round MAJ and MIN is not drawn (a line round two lamps would paint over them), and the
+      word ALARM is drawn as five stacked letters.
+  reset-button:
+    confidence: datasheet
+    note: >-
+      The 72Q's Figure 21 numbers a reset button; the 60C's Figure 22 lists none. The photograph shows a
+      small dark dot above the MGMT legend of the SFP row (about 388.5, 64.5) that no figure or table
+      names. It may be a reset pinhole, and is not modelled; see the gap unnamed-dot.
+  drawing-vs-photo:
+    confidence: photo-measured
+    note: >-
+      Figures 11 and 22 and the photograph agree on what is printed: PWR, STS, MAJ, MIN with ALARM
+      down the bracket, MGMT, CON, PTP, PPS and 10M, and the model name. The guide's text (Table 16)
+      names the lamps PWR, STA, MJR and MIN and Figure 22's callout text says STS and MAJ; the
+      silkscreen follows the metal. The figure draws a laser-radiation label as a white box with
+      printed words at the left end of the upper band and a hazard triangle between the bands; the
+      photograph shows the label only as a faint pale outline and the triangle as a thin chevron,
+      neither yellow, so the label is drawn pale, the triangle as an outline, and their words are not
+      drawn. The drawing's group steps are uneven by a millimetre and a half and the photograph's are
+      even, so the mean is used (see ports).
+  usb-and-slots:
+    confidence: photo-measured
+    note: >-
+      The guide names no USB revision (Figure 22 callout 1, "USB port"), and the photograph shows a
+      silver body with a black tongue, which is neither colour the library's skins carry, so the white
+      USB 2.0 skin is used and no 3.0 is claimed. The four small slots between the two lamps of each
+      column are drawn as one dark plate 9.4 x 2.8 mm (the drawing shows two rows of four).
+  rear:
+    confidence: photo-measured
+    note: >-
+      Measured on qfx10002-60c-rear-high (the guide has no flat rear figure of the 60C), per axis from
+      the rear left edge (the chassis right side as seen from the front) at 4.277 px per mm. Power
+      supply bays are 74.1 x 40.6 mm in two columns at x 9.2 and 91.2 and two rows at y 2.5 and 43.9
+      (the photograph's supplies are 73.4 x 39.7 mm; the library's supply is 74.1 x 40.6). Fan module
+      faces are 81.0 x 82.0 mm at x 172.0, 260.9 and 349.8 and y 3.2, on an 88.9 mm pitch. The ESD
+      socket is centred at 435.9, 23.0 with the ESD symbol below it. Fan numbers 0, 1 and 2 with a
+      fan icon and a lamp are printed at 168.5, 257.4 and 346.3 across, the lamp at y 77.7. Power
+      symbols with the digits 0 and 1 are printed at x 86.8 between the supply columns and 2 and 3 at
+      x 168.0 between the right column and the first fan, at y 8.7 and 48.8. Two small round fixings
+      sit between the supply columns at y 20.7 and 71.2. A vertical legend at the left edge reads "AC
+      INPUT:100-240V ~ 60-50Hz 12.5A" and "DC INPUT:-48V TO-60V = 40A (FOR EACH POWER SUPPLY)".
+  rear-legend:
+    confidence: photo-measured
+    note: >-
+      The legend prints 12.5A for AC; the guide's Table 21 gives 11.5 A at 100-120 VAC for the 60C and
+      12.9 A for the 72Q (printed 14A on the 72Q's Figure 4). The DC line prints 40A; Table 25 gives
+      57.5 A maximum for the 60C. The photograph of the real unit wins for what is printed; the
+      guide's table is carried in the power attributes.
+  power-supplies:
+    confidence: datasheet
+    note: >-
+      Tables 4 and 5, Table 30 and the redundancy text - the 60C has four bays, ships with four 1600 W
+      supplies, and unlike the 72Q and the 36Q its bays are NUMBERED VERTICALLY from the top left to the
+      bottom right "which matches CLI output": 0 over 1 in the left column and 2 over 3 in the right.
+      At 220 VAC one supply runs the switch and at 110 VAC two are needed. The guide recommends twice
+      what is needed (2N), with feed A on supplies 0 or 1 and feed B on 2 or 3, and the remaining
+      slots covered with a power supply cover. Mixing AC and DC supplies is not supported. The supplies
+      are the family's JPSU-1600W-AC-AFO and JPSU-1600W-DC-AFO, modelled by the 72Q's slice and
+      reused as they are; Table 3's CLI output lists only an AC supply for the 60C ("AC AFO 1600W PSU
+      for QFX10002-60C") and none for the DC build, which Table 24 supplies with the same DC product
+      number (estimated).
+  airflow:
+    confidence: datasheet
+    note: >-
+      Description and Table 17 - every QFX10002 has port-to-FRU airflow (airflow out, AFO, front-to-back):
+      air enters through the vents of the port panel and leaves through the FRU panel. The guide lists
+      no back-to-front fan module or supply, so the device has no airflow configuration. The module
+      handles are gold in the guide's tables and orange in the photograph (the photograph wins; see
+      the module contracts).
+  fan-module:
+    confidence: datasheet
+    note: >-
+      Table 3 and the install topic - the 60C takes JNP10002-FAN1 ("a different fan module that has a
+      different orientation"), modelled as qfx10002-jnp10002-fan1. The 72Q's QFX10002-FAN-S fan is not
+      seated here.
+  spare-chassis:
+    confidence: datasheet
+    note: >-
+      Table 3 lists the chassis spares as QFX10002-72Q-CHAS-S, JNP10002-60C and QFX10002-36Q-CHAS-S,
+      beside CLI outputs QFX10002-72Q, QFX10002-60C and QFX10002-36Q. The 60C's spare is therefore the
+      part number JNP10002-60C and not a "-CHAS-S" name. The guide does not say what a spare chassis
+      ships with, so it is read as the chassis alone with every bay open (estimated).
+  mounting:
+    confidence: datasheet
+    note: >-
+      Mounting a QFX10002 in a Rack and Table 45 - a four-post kit ships in the box (rear mounting
+      blades, front mounting brackets, 4x6 mm flathead screws) and spare kits are ordered as
+      EX4500-4PST-RMK. The rack must have its rails 28 to 31 in. (71.1 to 78.7 cm) apart front to back.
+      The guide gives no ear distance in millimetres and no rail drawing that can be measured and says
+      the chassis must be supported at all four corners, so no ear position and no kit is written, as
+      for the 72Q. EX4500-4PST-RMK is not listed under chassis.kits. See the gap rack-mounting.
+  grounding:
+    confidence: datasheet
+    note: >-
+      Connect the QFX10002 to Ground - a two-hole protective grounding terminal on the chassis, for two
+      10-32 UNF x 0.25 in. screws and a Panduit LCD6-14BH-L lug. The figure is a perspective view, and
+      no flat figure places it, so it is not modelled. See the gap grounding-terminal.
+  colour:
+    confidence: photo-measured
+    note: >-
+      Median of the bare front face in qfx10002-60c-front-high (#c4c4c8 at the left margin, #bdbcbd near
+      the right). The rear chassis reads #6f7581 at its left strip and #838591 between the supply
+      columns in the rear photograph. The fan faces and the supply handles read #f67b44 and #c76234
+      in the photograph, the fan bezel median #ec640e.
+  vents:
+    confidence: drawing
+    note: >-
+      Figure 11 - a hexagonal punching above the upper band, between the two bands, below the lower
+      band, a column of hexagons in the gutter between groups, a strip at the left of each band, and
+      fields beside the logo, beside the management jacks and below the SFP cages. They are drawn as
+      repeating patterns inside simplified outlines and not hole for hole. The two rows between the
+      bands are drawn below the printed numbers 1 to 55, which sit on the hexagon field in the metal.
+  logo:
+    confidence: photo-measured
+    note: >-
+      The maker's logo at the top right is not drawn. It is reserved as the region logo-zone, 25.2 x 7.0
+      mm, read off Figure 11 (the logo spans 413.7 to 438.1 across and 1.7 to 7.8 down). The model name
+      below it is plain text, 415.5 to 437.2 across and ending at 12.2 down, and is drawn.
+  held-sources:
+    confidence: estimated
+    note: >-
+      The intake folder for the Juniper exqfx documents (COVERAGE.md, SOURCES.md and INVENTORY.md and its
+      photographs) is not present on the host that built this device, so the check for a held
+      photograph, Visio stencil or 3D model could not be made. Only the public sources named above
+      were used. If a held model exists it may refine the estimated positions.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      No end-of-life dates are carried: Juniper's own end-of-life pages were not read for the 60C, and
+      the aggregator dates the 72Q's slice carries were not checked for this model.
+attrs:
+  physical:
+    weight: 41 kg (90.39 lb) with four supplies and three fan modules fitted, AC or DC (Table 30; the rack-mounting topic gives 36.5 kg, 80.5 lb)
+    mounting: four-post rack kit in the box; spare kits EX4500-4PST-RMK
+  performance:
+    throughput: 12 Tbps and 4 Bpps of forwarding capacity (Q5 ASICs); 192 x 10 GbE, 60 x 40 GbE or 60 x 100 GbE ports (Tables 2 and 8)
+    packet-buffer: deep buffer from hybrid memory cubes (HMC)
+  power:
+    power-typical-w: 2000
+    power-max-w: 2500
+    power-envelope: fully-configured
+    psu-ac-input: 100 to 127 VAC and 200 to 240 VAC at 50 to 60 Hz, 11.5 A at 100-120 VAC (Table 21); each supply has one input
+    psu-dc-input: -48 to -60 VDC rated, -40 to -72 VDC operating range, 57.5 A maximum (Table 25); a 40 A breaker is recommended
+    psu-redundancy: four bays, 2N recommended; one supply at 220 VAC or two at 110 VAC run the 60C
+  thermal:
+    heat-dissipation: 6,825 BTU/hr typical and 8,530 BTU/hr maximum (Tables 21 and 25)
+    airflow: port-to-FRU (airflow out, front-to-back); three 80 W fan modules at 150 CFM each, and fans in the supplies
+  environmental:
+    operating-temp: 0 C to 40 C (32 F to 104 F)
+    storage-temp: -40 C to 70 C (-40 F to 158 F) in the shipping container
+    humidity: 5 to 90 percent noncondensing; short term 5 to 93 percent
+    altitude: no performance degradation to 1828.8 m (6000 ft)
+  platform:
+    cpu: 2.5-GHz quad-core Intel
+    memory: 32 GB SDRAM
+    storage: two 64 GB SSDs
+    asic: Q5 packet forwarding ASICs with hybrid memory cubes
+  features:
+    timing: 1PPS and 10 MHz SMB connectors and a PTP Ethernet SFP port
+  management:
+    oob: MGMT RJ-45 (em0), 10/100/1000BASE-T, and MGMT SFP (em1), 1000BASE-X
+    console: RJ-45 console (CON), RS-232
+    usb: one USB port
+  compliance:
+    seismic: Designed to comply with Zone 4 earthquake requirements per NEBS GR-63-CORE, Issue 3
+chassis:
+  width: 441.0
+  height: 88.0
+  depth: 787.0
+  ru: 2
+  color: '#c4c5c7'
+  airflow: front-to-back
+gaps:
+  - what: datasheet
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      The QFX10002 datasheet address tried (qfx10000-ethernet-switches-datasheet.pdf under
+      juniper.net/content/dam) returned an HTML 404 page and the product page timed out, so no
+      datasheet is cited and no figure comes from one.
+    wanted: the QFX10000 datasheet, for the bundle part numbers
+  - what: flat-rear-figure
+    scope: [rear]
+    reason: needs-drawing
+    note: >-
+      The guide draws the rear only for the 72Q and the 36Q (Figures 4 and 5) and in perspective for
+      the 60C's fan module (Figure 46), so the rear is measured on the studio photograph and every rear
+      position is estimated to about half a millimetre.
+    wanted: a flat rear elevation of the QFX10002-60C
+  - what: unnamed-dot
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      The photograph shows a small dark dot above the MGMT legend of the SFP row, and Figure 11 draws a
+      small circle there. Figure 22 numbers 8 callouts and none is it. It is not modelled.
+    wanted: the name of that dot (a reset pinhole?)
+  - what: rack-mounting
+    scope: [left, right]
+    reason: vendor-silent
+    note: >-
+      The guide's four-post procedure names no ear distance in millimetres and draws the rails only in
+      perspective, so no ears position is written, and the spare kit EX4500-4PST-RMK is left out of
+      chassis.kits in this slice.
+    wanted: the rail drawing and ear distances, and the four-post kit as a kit contract
+  - what: grounding-terminal
+    scope: [left, right]
+    reason: needs-drawing
+    note: >-
+      The two-hole protective grounding terminal is shown in perspective on a side panel and no flat
+      view places it, so it is not placed. The guide states the screws (10-32 UNF x 0.25 in.) and the
+      lug (Panduit LCD6-14BH-L) but not the hole spacing.
+    wanted: a flat side elevation with the terminal, and its hole spacing
+  - what: dc-connector-3w3
+    scope: [psu-0, psu-1, psu-2, psu-3]
+    reason: needs-drawing
+    note: >-
+      The DC supply takes a D-sub 3W3 connector and the library has no 3W3 standard, so the DC supply
+      draws the shell in its skin and offers no seat for the cable plug.
+    wanted: a D-sub 3W3 connector in the connector registry
+  - what: console-lamp
+    scope: [con]
+    reason: vendor-silent
+    note: >-
+      Figure 11 draws small squares in the corners of both jack outlines, and the 72Q's text says "the
+      LED below the port indicates status and link" for its console. The 60C's Figure 22 says nothing
+      of a console lamp and the photograph shows none, so the console is the bare jack.
+    wanted: a close-up of the management panel
+  - what: sfp-lamp-assignment
+    scope: [led-mgmt-sfp, led-ptp-sfp]
+    reason: vendor-silent
+    note: >-
+      Table 15 gives one link and activity lamp for the SFP management port and the guide does not say
+      which of the two lamps above the cages belongs to which cage. Each is tied to the cage under it,
+      left to left.
+    wanted: the lamp assignment of the two SFP ports
+  - what: supported-optics
+    scope: [qsfp-0-29, qsfp-30-59, mgmt-sfp, ptp-sfp]
+    reason: vendor-silent
+    note: >-
+      The guide lists in prose what each port takes (QSFP28, QSFP+, DAC, AOC and breakout cables) but no
+      transceiver table, so the port groups declare no interface.
+    wanted: the QFX10002 transceiver list from the Hardware Compatibility Tool
+  - what: laser-label-text
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      The laser-radiation label at the left end of the upper band is drawn as a pale plate. Its words
+      cannot be read at the resolution of Figure 11 or the photograph, so none is drawn.
+    wanted: a close-up of the label
+groups:
+  qsfp-0-29:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: qsfp28
+      speed: 100g
+    description: >-
+      The upper band, 30 QSFP28 ports numbered 0 to 29, the even port above the odd. Every port
+      auto-senses a 100 GbE QSFP28 or a 40 GbE QSFP+ transceiver; a 40 GbE port can be channelized to
+      four 10 GbE interfaces, and the fourth port of each five-port ASIC is disabled when another of
+      its five is (Table 9)
+  qsfp-30-59:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: qsfp28
+      speed: 100g
+    description: >-
+      The lower band, 30 QSFP28 ports numbered 30 to 59, the even port above the odd (rel-pos carries
+      the printed number, since the origin token cannot express a block that starts at 30)
+  qsfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      One bicolour triangle lamp for each port, in the strip between the rows of a band - the up triangle
+      for the upper port and the down triangle for the lower (Table 13)
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: reaching the switch - the RJ-45 management port, the RJ-45 console, the SFP management port
+      and the USB port
+  mgmt-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the link and activity lamps of the two SFP ports (Table 15)
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the timing block - the PTP Ethernet SFP port and the 1PPS and 10 MHz SMB connectors
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the four chassis status lamps PWR, STS, MAJ and MIN (Table 16)
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: n+n
+      redundancy-note: >-
+        Four bays, numbered down the columns from the top left (0 over 1, then 2 over 3), all filled.
+        One supply runs the 60C at 220 VAC and two at 110 VAC, and the guide recommends twice what is
+        needed, "also called 2N" (QFX10002 Component Redundancy), with feed A on supplies 0 or 1 and
+        feed B on 2 or 3
+    description: the four power supply bays (Table 4)
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy-note: >-
+        Cooling System and Airflow - "Each fan module is a redundant unit containing two fans" and "All
+        fan modules must be installed for optimal operation of the switch". The guide says how long the
+        switch runs with one module out (30 seconds) and not how many it can lose, so no n+1 form is
+        written. A removed module raises a minor alarm
+  fan-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
+    description: >-
+      The ST lamp on the chassis at the left of each fan module slot - green steady means the module is
+      present and operating normally, amber steady means it is absent or has failed (Tables 18 and 19)
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the rear wrist-strap ESD point
+views:
+  front:
+    size:
+      w: 441.0
+      h: 88.0
+    panel:
+      decor:
+        - {id: vent-top, at: [10.0, 2.0], size: [400.0, 5.8], pattern: vent, vent: 1.0}
+        - {id: vent-left-a, at: [7.0, 9.6], size: [8.0, 29.5], pattern: vent, vent: 1.0}
+        - {id: vent-left-b, at: [7.0, 51.0], size: [8.0, 29.0], pattern: vent, vent: 1.0}
+        - {id: vent-mid, at: [10.0, 42.6], size: [376.0, 5.0], pattern: vent, vent: 1.0}
+        - {id: vent-bottom, at: [10.0, 83.2], size: [377.0, 3.6], pattern: vent, vent: 1.0}
+        - {id: vent-right-a, at: [389.0, 2.2], size: [22.0, 40.0], pattern: vent, vent: 1.0}
+        - {id: vent-right-b, at: [412.0, 14.0], size: [25.4, 21.5], pattern: vent, vent: 1.0}
+        - {id: vent-right-c, at: [430.2, 35.5], size: [7.2, 32.0], pattern: vent, vent: 1.0}
+        - {id: vent-mgmt-bottom, at: [388.0, 80.8], size: [45.0, 4.2], pattern: vent, vent: 1.0}
+        - {id: laser-label, at: [1.4, 12.7], size: [5.1, 23.6], rx: 0.4, fill: '#e3e4e6', confidence: estimated}
+        - {id: gutter-a1, at: [74.70, 9.8], size: [19.3, 28.6], pattern: vent, vent: 1.0}
+        - {id: gutter-a2, at: [153.15, 9.8], size: [19.3, 28.6], pattern: vent, vent: 1.0}
+        - {id: gutter-a3, at: [231.60, 9.8], size: [19.3, 28.6], pattern: vent, vent: 1.0}
+        - {id: gutter-a4, at: [310.05, 9.8], size: [19.3, 28.6], pattern: vent, vent: 1.0}
+        - {id: gutter-b1, at: [74.70, 51.2], size: [19.3, 28.8], pattern: vent, vent: 1.0}
+        - {id: gutter-b2, at: [153.15, 51.2], size: [19.3, 28.8], pattern: vent, vent: 1.0}
+        - {id: gutter-b3, at: [231.60, 51.2], size: [19.3, 28.8], pattern: vent, vent: 1.0}
+        - {id: gutter-b4, at: [310.05, 51.2], size: [19.3, 28.8], pattern: vent, vent: 1.0}
+        - {id: slots-a0, at: [21.90, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a1, at: [41.20, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a2, at: [60.50, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a3, at: [100.35, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a4, at: [119.65, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a5, at: [138.95, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a6, at: [178.80, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a7, at: [198.10, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a8, at: [217.40, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a9, at: [257.25, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a10, at: [276.55, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a11, at: [295.85, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a12, at: [335.70, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a13, at: [355.00, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-a14, at: [374.30, 22.4], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b0, at: [21.90, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b1, at: [41.20, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b2, at: [60.50, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b3, at: [100.35, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b4, at: [119.65, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b5, at: [138.95, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b6, at: [178.80, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b7, at: [198.10, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b8, at: [217.40, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b9, at: [257.25, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b10, at: [276.55, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b11, at: [295.85, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b12, at: [335.70, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b13, at: [355.00, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: slots-b14, at: [374.30, 63.5], size: [9.4, 2.8], rx: 0.8, fill: '#23272b', vent: 1.0}
+        - {id: pps-ring, at: [421.1, 69.4], size: [7.2, 7.2], rx: 3.6, fill: '#b4b7ba'}
+        - {id: ten-mhz-ring, at: [429.2, 69.4], size: [7.2, 7.2], rx: 3.6, fill: '#b4b7ba'}
+      cutouts:
+        - {block: qsfp-0-29}
+        - {block: qsfp-30-59}
+        - {id: usb, at: [393.45, 47.0], size: [4.5, 12.0], shape: rect}
+        - {id: led-pwr, at: [401.0, 50.6], size: [4.0, 4.0], shape: circle}
+        - {id: led-sts, at: [401.0, 55.5], size: [4.0, 4.0], shape: circle}
+        - {id: led-maj, at: [406.2, 50.6], size: [4.0, 4.0], shape: circle}
+        - {id: led-min, at: [406.2, 55.5], size: [4.0, 4.0], shape: circle}
+        - {id: mgmt, at: [412.3, 38.6], size: [15.8, 13.2], shape: rect}
+        - {id: con, at: [412.3, 51.8], size: [15.8, 13.2], shape: rect}
+        - {id: mgmt-sfp, at: [391.2, 69.0], size: [14.25, 10.4], shape: rect}
+        - {id: ptp-sfp, at: [405.45, 69.0], size: [14.25, 10.4], shape: rect}
+        - {id: led-mgmt-sfp, at: [401.7, 64.8], size: [2.0, 2.0], shape: circle}
+        - {id: led-ptp-sfp, at: [407.4, 64.8], size: [2.0, 2.0], shape: circle}
+        - {id: pps, at: [422.3, 70.6], size: [4.83, 4.83], shape: circle}
+        - {id: ten-mhz, at: [430.4, 70.6], size: [4.83, 4.83], shape: circle}
+    silkscreen:
+      - {block: qsfp-0-29}
+      - {block: qsfp-30-59}
+      - {at: [437.2, 12.2], text: QFX10002-60C, font-size: 2.7, anchor: end, fill: '#2b2f33', for: chassis}
+      - {at: [3.2, 49.0], path: 'M 0 0 L 2.9 -4.8 L 5.8 0 Z', stroke-width: 0.25, for: chassis}
+      - {at: [20.60, 10.4], text: '0', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-0}
+      - {at: [99.05, 10.4], text: '6', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-6}
+      - {at: [177.50, 10.4], text: '12', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-12}
+      - {at: [255.95, 10.4], text: '18', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-18}
+      - {at: [334.40, 10.4], text: '24', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-24}
+      - {at: [20.60, 42.0], text: '1', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-1}
+      - {at: [99.05, 42.0], text: '7', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-7}
+      - {at: [177.50, 42.0], text: '13', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-13}
+      - {at: [255.95, 42.0], text: '19', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-19}
+      - {at: [334.40, 42.0], text: '25', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-25}
+      - {at: [20.60, 50.7], text: '30', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-30}
+      - {at: [99.05, 50.7], text: '36', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-36}
+      - {at: [177.50, 50.7], text: '42', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-42}
+      - {at: [255.95, 50.7], text: '48', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-48}
+      - {at: [334.40, 50.7], text: '54', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-54}
+      - {at: [20.60, 82.3], text: '31', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-31}
+      - {at: [99.05, 82.3], text: '37', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-37}
+      - {at: [177.50, 82.3], text: '43', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-43}
+      - {at: [255.95, 82.3], text: '49', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-49}
+      - {at: [334.40, 82.3], text: '55', font-size: 2.0, anchor: middle, fill: '#2b2f33', for: port-55}
+      - {at: [420.2, 38.0], text: MGMT, font-size: 1.8, anchor: middle, fill: '#2b2f33', for: mgmt}
+      - {at: [420.2, 67.6], text: CON, font-size: 1.8, anchor: middle, fill: '#2b2f33', for: con}
+      - {at: [403.0, 49.6], text: PWR, font-size: 1.7, anchor: middle, fill: '#2b2f33', for: led-pwr}
+      - {at: [408.2, 49.6], text: MAJ, font-size: 1.7, anchor: middle, fill: '#2b2f33', for: led-maj}
+      - {at: [403.0, 62.0], text: STS, font-size: 1.7, anchor: middle, fill: '#2b2f33', for: led-sts}
+      - {at: [408.2, 62.0], text: MIN, font-size: 1.7, anchor: middle, fill: '#2b2f33', for: led-min}
+      - {at: [410.8, 50.9], text: A, font-size: 1.5, anchor: middle, fill: '#2b2f33', for: chassis}
+      - {at: [410.8, 53.3], text: L, font-size: 1.5, anchor: middle, fill: '#2b2f33', for: chassis}
+      - {at: [410.8, 55.7], text: A, font-size: 1.5, anchor: middle, fill: '#2b2f33', for: chassis}
+      - {at: [410.8, 57.9], text: R, font-size: 1.5, anchor: middle, fill: '#2b2f33', for: chassis}
+      - {at: [410.8, 60.6], text: M, font-size: 1.5, anchor: middle, fill: '#2b2f33', for: chassis}
+      - {at: [398.3, 67.0], text: MGMT, font-size: 1.8, anchor: middle, fill: '#2b2f33', for: mgmt-sfp}
+      - {at: [412.6, 67.0], text: PTP, font-size: 1.8, anchor: middle, fill: '#2b2f33', for: ptp-sfp}
+      - {at: [424.7, 79.0], text: PPS, font-size: 1.8, anchor: middle, fill: '#2b2f33', for: pps}
+      - {at: [432.8, 79.0], text: 10M, font-size: 1.8, anchor: middle, fill: '#2b2f33', for: ten-mhz}
+      - {at: [395.7, 44.6], mark: usb, size: 3.0, fill: '#2b2f33', for: usb}
+    components:
+      blocks:
+        - id: qsfp-0-29
+          ref: std/qsfp-ganged@1
+          at: [16.6, 11.4]
+          count: 30
+          rows: 2
+          pitch: 19.3
+          row-pitch: 16.3
+          gang: 3
+          gutter: 20.55
+          number-from: 0
+          cutouts: true
+          attrs: {media: qsfp28, speed: 100g}
+          led:
+            ref: common/led-arrow-sm@1
+            id-format: 'led-port-{n}'
+            dx-by-row: [1.4, 15.9]
+            dy-top: 11.4
+            dy-bottom: -4.9
+            skin-top: up
+            skin-bottom: down
+            group: qsfp-leds
+            states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking},
+                     {name: sub-channels-up, color: '#f59e0b'}, {name: sub-channel-activity, color: '#f59e0b', behavior: blinking}]
+        - id: qsfp-30-59
+          ref: std/qsfp-ganged@1
+          at: [16.6, 52.5]
+          count: 30
+          rows: 2
+          pitch: 19.3
+          row-pitch: 16.3
+          gang: 3
+          gutter: 20.55
+          number-from: 30
+          cutouts: true
+          attrs: {media: qsfp28, speed: 100g}
+          led:
+            ref: common/led-arrow-sm@1
+            id-format: 'led-port-{n}'
+            dx-by-row: [1.4, 15.9]
+            dy-top: 11.4
+            dy-bottom: -4.9
+            skin-top: up
+            skin-bottom: down
+            group: qsfp-leds
+            states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking},
+                     {name: sub-channels-up, color: '#f59e0b'}, {name: sub-channel-activity, color: '#f59e0b', behavior: blinking}]
+      placements:
+        - {block: qsfp-0-29}
+        - {block: qsfp-30-59}
+        - {id: mgmt, ref: common/rj45-eth@1, at: [412.3, 38.6], rotate: 180, group: mgmt, rel-pos: 0, attrs: {speed: 1g, role: management, interface: em0},
+           description: 'Table 14 - status lamp: green steady at 1000 Mbps, unlit at 10 Mbps or no link. Link and activity lamp: yellow blinking with activity, unlit with no link'}
+        - {id: con, ref: std/rj45@2, at: [412.3, 51.8], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {id: mgmt-sfp, ref: std/sfp-ganged@1, at: [391.2, 69.0], group: mgmt, rel-pos: 2, attrs: {media: sfp, speed: 1g, role: management, interface: em1}}
+        - {id: usb, ref: std/usb-a@1, skin: usb2, at: [389.7, 50.75], rotate: 90, group: mgmt, rel-pos: 3}
+        - {id: ptp-sfp, ref: std/sfp-ganged@1, at: [405.45, 69.0], group: timing, rel-pos: 0, attrs: {media: sfp, speed: 1g, function: PTP Ethernet port}}
+        - {id: pps, ref: std/smb@1, at: [422.3, 70.6], group: timing, rel-pos: 1, attrs: {function: 10 Hz pulse-per-second input and output}}
+        - {id: ten-mhz, ref: std/smb@1, at: [430.4, 70.6], group: timing, rel-pos: 2, attrs: {function: 10 MHz timing input and output}}
+        - {id: led-mgmt-sfp, ref: common/led-dot@1, at: [401.7, 64.8], for: mgmt-sfp, group: mgmt-leds, rel-pos: 0,
+           states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}],
+           description: 'Table 15 - green steady: link up and no activity; green blinking: link and activity; unlit: no link'}
+        - {id: led-ptp-sfp, ref: common/led-dot@1, at: [407.4, 64.8], for: ptp-sfp, group: mgmt-leds, rel-pos: 1,
+           states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+        - {id: led-pwr, ref: common/led-indicator@1, at: [401.0, 50.6], for: chassis, group: status-leds, rel-pos: 0,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: power-problem, color: '#f59e0b', behavior: blinking}],
+           description: 'Table 16 - green steady: power is working correctly; yellow blinking: a problem with chassis power; unlit: no power'}
+        - {id: led-sts, ref: common/led-indicator@1, at: [401.0, 55.5], for: chassis, group: status-leds, rel-pos: 1,
+           states: ['off', {name: junos, color: '#22c55e'}, {name: beacon, color: '#22c55e', behavior: blinking}, {name: fault, color: '#f59e0b', behavior: blinking}],
+           description: 'Table 16 (STA) - green steady: Junos OS is loaded; green blinking: the beacon feature is enabled; yellow blinking: a fault is detected; unlit: powered off or halted'}
+        - {id: led-maj, ref: common/led-indicator@1, at: [406.2, 50.6], for: chassis, group: status-leds, rel-pos: 2,
+           states: ['off', {name: major, color: '#ef4444'}],
+           description: 'Table 16 (MJR) - red steady: a major hardware fault such as a temperature alarm or power failure, and the switch has halted; unlit: no major alarm'}
+        - {id: led-min, ref: common/led-indicator@1, at: [406.2, 55.5], for: chassis, group: status-leds, rel-pos: 3,
+           states: ['off', {name: minor, color: '#f59e0b'}],
+           description: 'Table 16 - yellow steady: a minor alarm such as a software error; unlit: no minor alarm'}
+    regions:
+      - {id: logo-zone, at: [413.4, 1.2], size: {w: 25.2, h: 7.0}, label: 'Vendor logo; not drawn'}
+  rear:
+    size:
+      w: 441.0
+      h: 88.0
+    panel:
+      decor:
+        - {id: rear-base, at: [0.0, 0.0], size: [441.0, 88.0], rx: 0.0, fill: '#737782'}
+        - {id: fixing-1, at: [84.7, 19.2], size: [3.0, 3.0], rx: 1.5, fill: '#8d8f92'}
+        - {id: fixing-2, at: [84.7, 69.7], size: [3.0, 3.0], rx: 1.5, fill: '#8d8f92'}
+      cutouts:
+        - {id: esd-rear, at: [432.9, 20.0], size: [6.0, 6.0], shape: circle}
+        - {id: led-fan-0, at: [167.5, 76.7], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-1, at: [256.4, 76.7], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-2, at: [345.3, 76.7], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {at: [4.9, 84.5], text: 'AC INPUT:100-240V ~ 60-50Hz 12.5A', font-size: 1.8, anchor: start, rotate: -90, fill: '#e6e8ea', for: chassis}
+      - {at: [3.0, 84.5], text: 'DC INPUT:-48V TO-60V = 40A (FOR EACH POWER SUPPLY)', font-size: 1.8, anchor: start, rotate: -90, fill: '#e6e8ea', for: chassis}
+      - {at: [86.8, 8.7], path: 'M 0 -1.5 L 0 -0.2 M -0.95 -0.95 A 1.35 1.35 0 1 0 0.95 -0.95', stroke-width: 0.28, fill: '#e6e8ea', for: psu-0}
+      - {at: [86.8, 13.6], text: '0', font-size: 2.6, anchor: middle, fill: '#e6e8ea', for: psu-0}
+      - {at: [86.8, 48.8], path: 'M 0 -1.5 L 0 -0.2 M -0.95 -0.95 A 1.35 1.35 0 1 0 0.95 -0.95', stroke-width: 0.28, fill: '#e6e8ea', for: psu-1}
+      - {at: [86.8, 54.4], text: '1', font-size: 2.6, anchor: middle, fill: '#e6e8ea', for: psu-1}
+      - {at: [168.0, 8.7], path: 'M 0 -1.5 L 0 -0.2 M -0.95 -0.95 A 1.35 1.35 0 1 0 0.95 -0.95', stroke-width: 0.28, fill: '#e6e8ea', for: psu-2}
+      - {at: [168.0, 13.6], text: '2', font-size: 2.6, anchor: middle, fill: '#e6e8ea', for: psu-2}
+      - {at: [168.0, 48.8], path: 'M 0 -1.5 L 0 -0.2 M -0.95 -0.95 A 1.35 1.35 0 1 0 0.95 -0.95', stroke-width: 0.28, fill: '#e6e8ea', for: psu-3}
+      - {at: [168.0, 54.4], text: '3', font-size: 2.6, anchor: middle, fill: '#e6e8ea', for: psu-3}
+      - {at: [168.5, 68.4], path: 'M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z M -1.1 -0.4 L 1.1 0.4 M -0.4 -1.1 L 0.4 1.1', stroke-width: 0.28, fill: '#e6e8ea', for: fan-0}
+      - {at: [168.5, 73.8], text: '0', font-size: 2.6, anchor: middle, fill: '#e6e8ea', for: fan-0}
+      - {at: [257.4, 68.4], path: 'M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z M -1.1 -0.4 L 1.1 0.4 M -0.4 -1.1 L 0.4 1.1', stroke-width: 0.28, fill: '#e6e8ea', for: fan-1}
+      - {at: [257.4, 73.8], text: '1', font-size: 2.6, anchor: middle, fill: '#e6e8ea', for: fan-1}
+      - {at: [346.3, 68.4], path: 'M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z M -1.1 -0.4 L 1.1 0.4 M -0.4 -1.1 L 0.4 1.1', stroke-width: 0.28, fill: '#e6e8ea', for: fan-2}
+      - {at: [346.3, 73.8], text: '2', font-size: 2.6, anchor: middle, fill: '#e6e8ea', for: fan-2}
+      - {at: [435.9, 31.5], path: 'M -1.6 1.4 L 0 -1.4 L 1.6 1.4 Z M -2.4 2.6 L -1.0 2.6 M 1.0 2.6 L 2.4 2.6', stroke-width: 0.28, fill: '#e6e8ea', for: esd-rear-jack}
+    components:
+      bays:
+        - {id: psu-0, at: [9.2, 2.5], size: {w: 74.1, h: 40.6}, accepts: [juniper/qfx10002-jpsu-1600w-ac-afo@1, juniper/qfx10002-jpsu-1600w-dc-afo@1, juniper/qfx10002-pwr-blnk@1],
+           default: juniper/qfx10002-jpsu-1600w-ac-afo@1, group: psus, rel-pos: 0}
+        - {id: psu-1, at: [9.2, 43.9], size: {w: 74.1, h: 40.6}, accepts: [juniper/qfx10002-jpsu-1600w-ac-afo@1, juniper/qfx10002-jpsu-1600w-dc-afo@1, juniper/qfx10002-pwr-blnk@1],
+           default: juniper/qfx10002-jpsu-1600w-ac-afo@1, group: psus, rel-pos: 1}
+        - {id: psu-2, at: [91.2, 2.5], size: {w: 74.1, h: 40.6}, accepts: [juniper/qfx10002-jpsu-1600w-ac-afo@1, juniper/qfx10002-jpsu-1600w-dc-afo@1, juniper/qfx10002-pwr-blnk@1],
+           default: juniper/qfx10002-jpsu-1600w-ac-afo@1, group: psus, rel-pos: 2}
+        - {id: psu-3, at: [91.2, 43.9], size: {w: 74.1, h: 40.6}, accepts: [juniper/qfx10002-jpsu-1600w-ac-afo@1, juniper/qfx10002-jpsu-1600w-dc-afo@1, juniper/qfx10002-pwr-blnk@1],
+           default: juniper/qfx10002-jpsu-1600w-ac-afo@1, group: psus, rel-pos: 3}
+        - {id: fan-0, at: [172.0, 3.2], size: {w: 81.0, h: 82.0}, accepts: [juniper/qfx10002-jnp10002-fan1@1], default: juniper/qfx10002-jnp10002-fan1@1, group: fans, rel-pos: 0}
+        - {id: fan-1, at: [260.9, 3.2], size: {w: 81.0, h: 82.0}, accepts: [juniper/qfx10002-jnp10002-fan1@1], default: juniper/qfx10002-jnp10002-fan1@1, group: fans, rel-pos: 1}
+        - {id: fan-2, at: [349.8, 3.2], size: {w: 81.0, h: 82.0}, accepts: [juniper/qfx10002-jnp10002-fan1@1], default: juniper/qfx10002-jnp10002-fan1@1, group: fans, rel-pos: 2}
+      placements:
+        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [432.9, 20.0], for: chassis, group: esd, rel-pos: 0}
+        - {id: led-fan-0, ref: common/led-dot@1, at: [167.5, 76.7], for: fan-0, group: fan-leds, rel-pos: 0}
+        - {id: led-fan-1, ref: common/led-dot@1, at: [256.4, 76.7], for: fan-1, group: fan-leds, rel-pos: 1}
+        - {id: led-fan-2, ref: common/led-dot@1, at: [345.3, 76.7], for: fan-2, group: fan-leds, rel-pos: 2}
+  left:
+    size:
+      w: 787.0
+      h: 88.0
+    empty: >-
+      Not drawn flat by any source. The guide shows the side panel only in perspective figures of the mounting
+      rails and the grounding terminal, which cannot be measured. The image library lists left and right
+      photographs of the 60C that were not fetched.
+  right:
+    size:
+      w: 787.0
+      h: 88.0
+    empty: >-
+      Not drawn flat by any source. The guide shows the side panel only in perspective figures of the mounting
+      rails and the grounding terminal, which cannot be measured. The image library lists left and right
+      photographs of the 60C that were not fetched.
+  top:
+    size:
+      w: 441.0
+      h: 787.0
+    empty: >-
+      Not drawn by any source. The guide has no figure of the top cover except the one that removes its screws
+      (perspective), and the serial number label is named on the top cover without a position.
+  bottom:
+    size:
+      w: 441.0
+      h: 787.0
+    empty: >-
+      Not drawn by any source. The guide has no figure of the underside.
+configurations:
+  ac:
+    kind: orderable
+    description: >-
+      The QFX10002-60C as shipped (Table 1 and Table 30): four 1600 W AC supplies and three JNP10002-FAN1
+      fan modules, all with port-to-FRU airflow.
+    default: true
+    power: ac
+    part-numbers:
+      QFX10002-60C: {}
+  dc:
+    kind: orderable
+    description: >-
+      The DC build QFX10002-60C-DC (Table 1): four 1600 W DC supplies. Mixing AC and DC supplies in one
+      chassis is not supported.
+    power: dc
+    bays:
+      psu-0: juniper/qfx10002-jpsu-1600w-dc-afo@1
+      psu-1: juniper/qfx10002-jpsu-1600w-dc-afo@1
+      psu-2: juniper/qfx10002-jpsu-1600w-dc-afo@1
+      psu-3: juniper/qfx10002-jpsu-1600w-dc-afo@1
+    part-numbers:
+      QFX10002-60C-DC: {}
+  s:
+    kind: orderable
+    description: >-
+      The spare chassis, JNP10002-60C (Table 3). The guide lists the chassis, the fan module and the
+      supplies as separate spares and does not say what a spare chassis ships with, so it is read as the
+      chassis alone with every bay open (estimated). It takes either feed once supplies are fitted.
+    power: [ac, dc]
+    bays:
+      psu-0: ''
+      psu-1: ''
+      psu-2: ''
+      psu-3: ''
+      fan-0: ''
+      fan-1: ''
+      fan-2: ''
+    part-numbers:
+      JNP10002-60C: {}
+references:
+  - {title: 'QFX10002 Switch Hardware Guide (Juniper Networks, published 2026-02-11)', sha256: 376a9cf762dc5c3a1d90b7f4fefb299446c0fb2595dfb0b773f754d3135b20d6}
+  - {title: 'QFX10002-60C front photograph, qfx10002-60c-front-high (Juniper Networks image library)', sha256: f62b6939305bffa6578e6baeb9d3674de66de926bcbc27880cb8e64581a15b3b}
+  - {title: 'QFX10002-60C rear photograph, qfx10002-60c-rear-high (Juniper Networks image library)', sha256: a05177fe5326ff9740662f81ff55b7b5cd6093b3bd2bca8c29b90594fe1bf918}
