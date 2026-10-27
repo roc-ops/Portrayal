@@ -1,0 +1,562 @@
+format: 1
+kind: device
+name: n9k-c9504
+version: 1.0.0
+maturity: modelled
+manufacturer: Cisco
+model: N9K-C9504
+aliases:
+- {name: Nexus 9504, kind: marketing}
+portfolio: {line: Nexus 9000, family: Nexus 9500, series: Nexus 9500 Series}
+description: >-
+  Cisco Nexus 9504 - the 7 RU, four-line-card modular chassis of the Nexus 9500 family, running NX-OS mode.
+  The FRONT carries four line-card slots LC 1 to LC 4 from top to bottom, two supervisor slots SUP 1 and
+  SUP 2 side by side below them, and below those four power-supply slots PS 1 to PS 4 lying flat in two rows
+  of two either side of a centre panel with the chassis lamps. The REAR carries three fan trays FAN 1 to
+  FAN 3, six fabric-module slots FM 1 to FM 6 behind the fan trays, and two system controllers SC 1 and SC 2
+  below them. Air enters at the front and leaves at the rear. This batch draws the chassis and its common
+  equipment; the line cards are added in a later batch, so each line-card slot holds its blank.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Cisco N9504 NX-OS Mode Switch Hardware Installation Guide (140 pp; first published 2014-03-24, last
+      modified 2026-07-30),
+      https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/hw/n9504_hig/guide/b_n9504_nxos_mode_hardware_install_guide.pdf
+      (page numbers below are PDF pages with the printed page after them, six lower: "PDF p10 (printed 4)").
+      Cisco's Nexus 9508 and 9516 hardware installation guides were read to confirm the parts the three
+      chassis share; each chassis cites its own guide. The NetBox devicetype-library file for N9K-C9504 and its
+      elevation images were NOT available to this work - only a path listing of that library is - so no NetBox
+      elevation was compared. No data sheet, photograph, 3D model or stencil is held for the 9504. The
+      guide has no flat front or rear view and prints no figure caption: both faces were read from its
+      isometric figures on PDF p10 (printed 4) and p11 (printed 5).
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - Appendix A "Switch Dimensions" (PDF p119, printed 113): "Cisco N9504 chassis: width 17.5
+      inches (44.5 cm); depth 33.15 inches (84.20 cm) for chassis and handles; height 12.25 inches (31.1 cm)
+      (7 RU)". Modelled as 444.5 x 311.15 x 842.0 mm. CONFLICT ON HEIGHT: three places say "7.1 RU (12.4
+      in [31.6 cm])" instead - Rack and Cabinet Requirements, "the 7.1-RU (12.4 inches or 31.6 cm) height of
+      the switch and its bottom support bracket" (PDF p24, printed 18); the bottom-rail step, "at least 7.1
+      RU (12.4 in [31.6 cm]) of vertical space above the rails" (PDF p32, printed 26, with callout 2 on
+      PDF p33, printed 27); and the chassis-install checklist (PDF p34, printed 28). The text counts the
+      bottom support bracket and the space above the rails, which the table does not, and 12.25 in is
+      311.15 mm, exactly 7 x 44.45 mm; the table (7 RU, 311.15 mm) is used, and it is also what the front
+      stack adds up to. The clearance figure (PDF p25, printed 19, callout 11) gives the same 33.15 in
+      (84.2 cm) depth as the table, so depth has no conflict here. Chassis weight 84.0 lb (38.2 kg), PDF p120
+      (printed 114).
+  ru:
+    confidence: datasheet
+    note: >-
+      datasheet - 7 RU, printed in the dimensions table (PDF p119, printed 113). "Maximum of 255 pounds [116
+      kg]" is the lift-tool requirement, "the full weight of the chassis ... and its installed modules" (PDF
+      p34, printed 28); it is carried as an attribute, not as the chassis weight.
+  front-stack:
+    confidence: estimated
+    note: >-
+      estimated - every position on the front is derived, not measured. The guide's front figure (PDF p10,
+      printed 4) is an isometric drawing, so no aspect check (Gate 1) can be made, and its numbers are not
+      scaled. The arrangement follows that figure and the dimension table: four line cards of 1.75 in (44.45
+      mm) stacked top to bottom from the top of the face, centred in it as the 17.0 in (431.8 mm) cage; the
+      two supervisors, 1.75 in high and 8.0 in (203.2 mm) wide with brackets, side by side; then four power
+      supplies of 5.25 in (133.35 mm) by 1.75 in (44.45 mm) lying flat in two rows of two, one pair at each
+      side of a centre panel. The arithmetic closes: 4 x 44.45 + 44.45 + 2 x 44.45 = 311.15 mm, and the panel
+      is 17.5 - 2 x 5.25 = 7.0 in (177.8 mm) wide. The supplies are the shared parts, drawn standing on end,
+      so each bay turns its supply by 270 degrees: in the figure the grille is at the outer end, the power
+      receptacle and handle at the inner end, and the two small lamps at the lower outer corner, which is
+      what a quarter turn of the part (grille at the top, receptacle at the bottom, lamps top left) gives.
+      Which supply of each pair is PS 1 is not shown: PS 1 and PS 2 are put in the left pair (top, bottom),
+      PS 3 and PS 4 in the right pair, as the guide numbers them left to right and puts PS 1 and PS 2 on
+      grid A (PDF pp78 and 80, printed 72 and 74). The seven chassis lamps are read from the figure's
+      centre panel, which carries them in a row about halfway down it, at an even pitch measured against
+      the panel's own width.
+  chassis-lamps-position:
+    confidence: estimated
+    note: >-
+      estimated - CONFLICT ON WHERE THE CHASSIS LAMPS ARE: Appendix B "Chassis LEDs" (PDF p133, printed 127)
+      says they are "located at the top of the front of the chassis"; the front figure (PDF p10, printed 4,
+      callout 5) puts them on the centre panel between the power supplies, at the bottom of the face. The
+      sentence is the same in the 9508 and 9516 guides, whose faces do have the lamps at the top. The figure
+      is drawn from, and the text is recorded. The legends BCN, SUP, FAB, IOM, PSU, FAN and PWR MGMT are
+      plain text as the guide prints them; the vendor logo and wordmark above them are not drawn, and a
+      logo-zone is reserved.
+  rear-stack:
+    confidence: estimated
+    note: >-
+      estimated - the rear is derived the same way. The guide's rear figure (PDF p11, printed 5) is
+      isometric. Three fan trays of 5.05 in (128.27 mm) are centred across the width, each 10.6 in (269.24
+      mm) tall with its brackets; the six fabric modules, 2.46 in (62.48 mm) wide and 9.4 in (238.76 mm)
+      tall, sit behind them on a pitch of half a fan tray, so FM 1 and FM 2 are behind FAN 1, FM 3 and FM 4
+      behind FAN 2, FM 5 and FM 6 behind FAN 3 (the guide says the even-numbered fabric slot is the one behind
+      a fan tray that powers it, PDF p135, printed 129). The two system controllers, 7.81 in (198.37 mm) wide
+      with brackets and 1.42 in (36.07 mm) high, sit below the fan trays. 10.6 in + 1.42 in fit inside the
+      12.25 in height; the vertical margins and the controllers' horizontal positions are estimated.
+      CONFLICT ON FAN-TRAY WIDTH: 5.05 in (128.27 mm) and 12.81 cm (128.1 mm) are printed in one cell
+      (PDF p120, printed 114), and the 9508 and 9516 guides print 5.04 in for the same tray; the inch figure
+      is used.
+  slots:
+    confidence: datasheet
+    note: >-
+      datasheet - "Overview" (PDF p7, printed 1, and p10, printed 4): supervisor modules in slots SUP 1 and
+      SUP 2 (modules 27 and 28), system controllers in SC 1 and SC 2, line cards in LC 1 to LC 4 (top to
+      bottom), fabric modules in FM 1 to FM 6 (slots 21 to 26, left to right), fan trays in FAN 1 to FAN 3
+      and power supplies in PS 1 to PS 4 (left to right). "Slots are numbered from left to right or from
+      top to bottom". Numbering is the guide's; whether each label is printed on the metal is not shown by
+      any figure the guide gives. The Overview list (PDF p10, printed 4) spells the second fan tray
+      "N9K-9504-FAN2": a slip for N9K-C9504-FAN2.
+  fabric-slots:
+    confidence: datasheet
+    note: >-
+      datasheet - "Overview" Table 1 and the note beneath it (PDF pp8-9, printed 2-3): three fabric modules
+      go in FM 2, 4 and 6; four in FM 2, 3, 4 and 6; five in FM 1, 2, 3, 4 and 6 or alternatively FM 2 to 6;
+      five FM-E in FM 2 to 6; six in FM 1 to 6. CONFLICT: "Installing a Chassis" (PDF p31, printed 25) says
+      five modules "must be in" FM 2 to 6 only. Both are carried; the slots accept any module and the
+      pairing is not enforced. With the N9K-C9504-FM or -FM-E "any empty slots should be filled with
+      N9K-C9504-FM-CV"; with the -FM-G they take N9K-C9504-FAN-PWR (PDF p9, printed 3); FM 1, FM 3 and FM 5
+      left empty take N9K-C95xx-FM-CV and FM 2, FM 4 and FM 6 are filled "with fabric modules to power the
+      fan trays" (PDF p118, printed 112). The guide names no N9K-C9504-FM-Z: the one "-Z" it prints,
+      "N9K-C950x-FM-G-Z" in that migration caution, is the 9508 guide's text copied and no part is made from
+      it. Where an even slot is empty with a non-G fabric module the guide does not say what fills it (a gap).
+      FM 5 works only with some line cards (not this batch). An empty odd slot defaults to the FM-CV.
+  power-slots:
+    confidence: datasheet
+    note: >-
+      datasheet - "Overview of Power Modes" (PDF pp77-80, printed 71-74): with grid redundancy PS 1 and PS 2
+      go to one source (grid A) and PS 3 and PS 4 to the other (grid B); "up to two with the combined power
+      mode, up to three with n+1, or up to four with n+n" (PDF p10, printed 4). The guide contradicts itself
+      on mixing supply types: "The switch can be powered by a mix of AC, DC, and HVAC/HVDC power sources"
+      (PDF p10, printed 4, and p24, printed 18), against "Do not use a mix of AC and DC power sources for a
+      switch" (PDF p123, printed 117). Every supply type is accepted by every slot.
+  line-cards-not-here:
+    confidence: datasheet
+    note: >-
+      The four line-card slots accept only the line-card blank N9K-C9500-LC-CV in this batch. The line cards
+      follow in a later batch and will be added to these slots.
+  ears-and-kits:
+    confidence: drawing
+    note: >-
+      drawing - the clearance figure (PDF p25, printed 19) shows the chassis between front and rear vertical
+      rack posts with its front at the front posts, and the front figure (PDF p10, printed 4, callout 4)
+      shows "2 vertical mounting brackets used to mount the chassis onto a rack" at the sides of the front.
+      The rack-mount step (PDF p37, printed 31) pushes the chassis on until "the vertical mounting brackets
+      on the front of the chassis come in contact with" the rack's vertical rails. The shipped position is
+      therefore flush, and no `at` is written: no figure gives the bracket's depth position. The clearance
+      figure (PDF p25, printed 19; callout 14 in the table on PDF p26, printed 20) prints "Width of the
+      chassis plus vertical mounting brackets on each side" as 19.2 in (48.8 cm), against the 17.5 in
+      chassis: about 21.6 mm of bracket on each side. The ear model takes a depth offset and a height and no
+      width, so that span is carried here and in a gap, not drawn. A rear-mount position is not given by the
+      guide. The shipment list (PDF p31, printed 25) names "Rack mount kit for the Cisco N9504
+      (N9K-C9504-RMK) chassis" - two bottom-support rails and 20 each of M6, 10-32 and 12-24 screws - and
+      the "Switch accessory kit (N9K-ACC-KIT)"; Appendix C (PDF p139, printed 133) prints the accessory kit
+      as N9K-C9500-ACK, holding the same bottom-support rails kit plus a ground lug kit and cables.
+      N9K-C9504-RMK is not the N9K-C9500-RMK that the 9508 and 9516 guides name. The rack must be a
+      four-post rack 24 to 32 in (61.0 to 81.3 cm) deep between its front and rear rails (PDF p24,
+      printed 18; the rails' span again on PDF p32, printed 26). No kit is listed under `chassis.kits`: a
+      listed kit that still says `unplaced:` fails lint, and removing the sentence edits a shared kit, so
+      the kits are a follow-up pull request.
+  airflow:
+    confidence: datasheet
+    note: >-
+      datasheet - "Air intake from the cold aisle for all modules and power supplies" and "Air exhaust to the
+      hot aisle" (clearance figure, PDF p25, printed 19, callouts 4 and 5; table on PDF pp25-26), and
+      "port-side intake airflow" for every supply. The chassis is front-to-back.
+  environmental:
+    confidence: datasheet
+    note: >-
+      datasheet - Appendix A "Environmental Specifications" (PDF p119, printed 113), transcribed.
+      CONFLICT ON ALTITUDE: the "Altitude Requirements" paragraph (PDF p14, printed 8) says 10,000 ft (3048 m),
+      and 6,562 ft (2000 m) for China; the Appendix A table says 0 to 13,123 ft (0 to 4,000 m). The table is
+      used, and the paragraph is recorded here.
+  power-tables:
+    confidence: datasheet
+    note: >-
+      datasheet - "Planning for Power Requirements" holds two tables. The first (PDF pp17-18, printed 11-12;
+      the copy begins at the foot of p18 and runs to p20, printed 14) is headed with the 9504's own parts and
+      is followed by a copy of the 9508's table, which names N9K-C9508-* parts and carries different figures
+      (its FM-E row is two lines, 570/420 and 455/266). The chassis's own table is used for every module
+      here, and the copy is recorded as a conflict. The worked example (PDF p21, printed 15) counts two
+      supervisor B at 90 W, two system controllers "2 x 26 W = 52 W" (the table says 25 W each, so the
+      example's 26 W is a slip), four line cards at 1050 W, six fabric modules at 504 W and three fan trays at
+      600 W: 9,256 W. The 9504's FM-R row prints a typical (140 W) above its maximum (130 W); lint refuses
+      that, so the part carries the maximum only and the typical is a gap. The N9K-C9504-FAN-PWR has no row in the 9504's own table; its only
+      row names the 9508's part.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      unknown - the held copy of Cisco's support page "Cisco Nexus 9000 Series Switches",
+      https://www.cisco.com/c/en/us/support/switches/nexus-9000-series-switches/series.html, has no Nexus 9504
+      entry, so its sale status is unknown (it is not inferred from the 9508's entry on the same page, which
+      says available). Sale status of each module is per module: N9K-C9504-FM and N9K-C9504-FM-S are
+      end-of-sale by notice; the others have no status and are recorded as unknown.
+attrs:
+  physical:
+    weight-fully-loaded-kg: 116
+  environmental:
+    operating-temp: 32 to 104degF (0 to 40degC)
+    storage-temp: -40 to 158degF (-40 to 70degC)
+    humidity-operating: 5 to 90 percent
+    humidity-non-operating: 5 to 95 percent
+    altitude-operating: 0 to 13,123 ft (0 to 4,000 m)
+  power:
+    power-supply-capacity-w: 3000 W per supply (3150 W for the N9K-PUV2-3000W-B), up to four
+    power-redundancy-modes: combined, n+1, n+n
+  thermal:
+    cooling-path: front-to-back; air enters at the line-card and power-supply side, leaves at the fan trays
+    fan-trays: three, FAN 1 to FAN 3, on the rear face
+  platform:
+    operating-system: Cisco NX-OS
+chassis:
+  width: 444.5
+  height: 311.15
+  depth: 842.0
+  ru: 7
+  weight-kg: 38.2
+  airflow: front-to-back
+  color: '#d0d2cf'
+  silk: '#231f20'
+  ears:
+    positions:
+    - {name: flush, label: vertical mounting brackets at the front of the chassis, default: true}
+gaps:
+- what: sale-status
+  reason: vendor-silent
+  note: >-
+    The held copy of Cisco's support page "Cisco Nexus 9000 Series Switches" has no entry for the Nexus 9504,
+    and no end-of-sale notice for the chassis is held, so its sale status is unknown. The 9508's entry on the
+    same page says nothing about it.
+  wanted: the Nexus 9504's status on Cisco's support page, or an end-of-sale notice for N9K-C9504
+- what: chassis-power-figure
+  scope: [power-supplies]
+  reason: vendor-silent
+  note: >-
+    The guide gives a typical and maximum draw per module and no figure for the chassis itself; the chassis
+    total is whatever its occupants sum to. The line cards are not in this batch, so a total here is a floor.
+  wanted: a chassis-level draw from Cisco, or confirmation that the sum of the module table is the answer
+- what: bracket-width
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The clearance figure (PDF p25, printed 19; callout 14 in the table on PDF p26, printed 20) gives the width
+    of the chassis plus the vertical mounting brackets as 19.2 in (48.8 cm). The ear model has no field for an
+    overall width, so the mounting-bracket region is not sized by it and the front face stays the 444.5 mm
+    chassis width.
+  wanted: ear support for an overall width, or a dimensioned front view of the bracket
+- what: rack-kit
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The guide's rack kit is N9K-C9504-RMK (two bottom-support rails and 20 each of M6, 10-32 and 12-24 screws;
+    PDF p31, printed 25), with the accessory kit N9K-ACC-KIT (printed N9K-C9500-ACK in Appendix C, PDF p139,
+    printed 133). The library has a kit contract for the N9K-C9500-RMK only, and listing it here would break
+    lint while it says `unplaced:`. The 9504's own kit is not modelled and no kit is listed.
+  wanted: a follow-up that adds the N9K-C9504-RMK kit and lists the kits on the 9504, 9508 and 9516
+- what: dc-supply-input-lamps
+  scope: [power-supplies]
+  reason: vendor-silent
+  note: >-
+    The guide's DC supply procedures say "Verify that the Input 1 (IN1) and Input 2 (IN2) LEDs light up on the
+    power supply" (PDF p43, printed 37, and p117, printed 111), but its Power Supply LEDs table lists only OK
+    and FAIL (PDF pp137-138, printed 131-132), and the shared N9K-PDC-3000W-B draws OK and FAIL only. The IN1
+    and IN2 lamps are not drawn, and the supply is not edited here.
+  wanted: the position and colours of the DC supply's IN1 and IN2 lamps, drawn in a new version of the supply
+- what: even-fabric-slot-blank
+  scope: [fabric]
+  reason: vendor-silent
+  note: >-
+    The guide says an even slot (FM 2, FM 4, FM 6) must hold a fabric module to power the fan tray in front
+    of it (PDF p118, printed 112; fan-tray lamps, PDF p135, printed 129, which lists only the FM, FM-E and
+    FM-S), and names a blank only for the odd slots (N9K-C9504-FM-CV) and, for the FM-G, N9K-C9504-FAN-PWR for
+    any empty slot. It names no N9K-C9504-FM-Z; "N9K-C950x-FM-G-Z" in the migration caution is the 9508's text
+    copied. What fills an empty even slot with a non-G fabric module is therefore unknown, and no part is made.
+  wanted: what Cisco ships to fill an empty FM 2, FM 4 or FM 6 with the N9K-C9504-FM, -FM-E, -FM-S or -FM-R
+- what: fm-r-typical-draw
+  scope: [fabric]
+  reason: sources-disagree
+  note: >-
+    The guide's own planning table (PDF p18, printed 12) gives the N9K-C9504-FM-R 130 W in the maximum column
+    and 140 W in the typical column. A typical draw above the maximum cannot be right, and lint refuses it, so
+    the part carries the 130 W maximum as printed and no typical figure.
+  wanted: the N9K-C9504-FM-R's typical and maximum draw from Cisco's data sheet or a corrected guide
+- what: power-supply-numbering-in-a-pair
+  scope: [power-supplies]
+  reason: needs-drawing
+  note: >-
+    The four supplies lie in two rows of two either side of the centre panel and the guide numbers them "left
+    to right" (PDF p10, printed 4), which does not say which of a vertical pair is PS 1. PS 1 and PS 2 are put
+    in the left pair (PS 1 on top) and PS 3 and PS 4 in the right pair (PS 3 on top), by estimate.
+  wanted: a figure that labels the four slots, or the slot numbers printed beside them
+- what: supervisor-and-controller-slot-blanks
+  scope: [supervisors, system-controllers]
+  reason: vendor-silent
+  note: >-
+    The guide says a blank module sits in an empty supervisor or system-controller slot ("remove the blank
+    module that is already in that slot. Unscrew its captive screw", PDF p85, printed 79, and p89, printed 83)
+    and gives it no part number, drawing or dimension. The supervisor and system-controller bays therefore
+    show nothing when empty.
+  wanted: the part number and a drawing of the supervisor and system-controller slot blanks
+- what: no-flat-views
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    The guide has no flat front or rear elevation, and the NetBox elevations are not held. Every position on
+    both faces is derived from the dimension table and the arrangement in the isometric figures; see the
+    front-stack and rear-stack provenance. No position is measured.
+  wanted: a flat front and rear elevation of the chassis with dimensions, or the NetBox elevation images
+- what: bay-extents-derived
+  scope: [line-cards, supervisors, system-controllers, fabric, fan-trays, power-supplies]
+  reason: needs-drawing
+  note: >-
+    The bay sizes are the module envelopes of the dimension table, and the positions are the stack derived
+    from them; none is a measurement of the chassis. The fan-tray bays and the fabric-module bays occupy the
+    same area of the rear face because the fabric modules are behind the fan trays.
+  wanted: a dimensioned rear view with the fan trays removed
+- what: top-bottom-side-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  note: >-
+    The side and top faces are named in the figures (handles on both sides, mounting bracket, rack rail
+    positions) and no figure dimensions any feature on them, so those faces carry regions with no
+    coordinates. The bottom face is empty: no view of it is published.
+  wanted: a dimensioned side and top view
+groups:
+  line-cards:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    physical-context: NetworkingDevice
+  supervisors:
+    term: Slot
+    role: management
+    index-origin: 1
+    physical-context: NetworkingDevice
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - hardware guide, "Overview of Supervisor Modules": one or two supervisors; with two, one is active and the other standby, and the standby takes over if the active goes down. Both must be the same type.'
+  system-controllers:
+    term: Slot
+    role: management
+    index-origin: 1
+    physical-context: NetworkingDevice
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - hardware guide, "Installing or Replacing a System Controller Module": the switch can operate with one or two system controllers; one is replaced while the other is installed.'
+  fabric:
+    term: Slot
+    role: service
+    index-origin: 1
+    physical-context: NetworkingDevice
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 - hardware guide, "Overview" Table 1 "Supported Fabric Modules and Line Cards": the number of fabric modules required for maximum bandwidth is three to six by line card, and the cloud-scale cards take five with the FM-E. Three to six fabric modules are supported, in the slots the Overview note names.'
+  fan-trays:
+    term: Fan Tray
+    role: service
+    index-origin: 1
+    physical-context: Fan
+    attrs:
+      redundancy: '2+1'
+      redundancy-note: '2+1 - hardware guide, "Replacing a Fan Tray" (PDF p96, printed 90): "The switch uses three fan trays. It can operate with two fan trays while you replace one"; the other trays speed up their fans when one is removed.'
+  power-supplies:
+    term: Slot
+    role: service
+    index-origin: 1
+    physical-context: PowerSupply
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 - hardware guide, "Overview of Power Modes": combined, n+1 and n+n modes; n+1 needs at least one supply more than the number the modules need, n+n twice that, half on each source.'
+  leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+views:
+  front:
+    size: {w: 444.5, h: 311.15}
+    panel:
+      decor:
+      - {at: [133.35, 222.25], size: [177.8, 88.9], fill: '#c9ccd0'}
+    silkscreen:
+    - {at: [165.0, 275.5], text: BCN, font-size: 3, anchor: middle, for: chassis}
+    - {at: [183.6, 275.5], text: SUP, font-size: 3, anchor: middle, for: chassis}
+    - {at: [202.2, 275.5], text: FAB, font-size: 3, anchor: middle, for: chassis}
+    - {at: [220.8, 275.5], text: IOM, font-size: 3, anchor: middle, for: chassis}
+    - {at: [239.4, 275.5], text: PSU, font-size: 3, anchor: middle, for: chassis}
+    - {at: [258.0, 275.5], text: FAN, font-size: 3, anchor: middle, for: chassis}
+    - {at: [276.6, 275.5], text: PWR MGMT, font-size: 3, anchor: middle, for: chassis}
+    components:
+      bays:
+      - {id: lc-1, at: [6.35, 0], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1'], group: line-cards, rel-pos: 0, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-2, at: [6.35, 44.45], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1'], group: line-cards, rel-pos: 1, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-3, at: [6.35, 88.9], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1'], group: line-cards, rel-pos: 2, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-4, at: [6.35, 133.35], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1'], group: line-cards, rel-pos: 3, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: sup-1, at: [6.35, 177.8], size: {w: 203.2, h: 44.45}, accepts: ['cisco/n9k-sup-a@1', 'cisco/n9k-sup-a-plus@1', 'cisco/n9k-sup-b@1', 'cisco/n9k-sup-b-plus@1'], group: supervisors, rel-pos: 0, default: cisco/n9k-sup-b@1}
+      - {id: sup-2, at: [209.55, 177.8], size: {w: 203.2, h: 44.45}, accepts: ['cisco/n9k-sup-a@1', 'cisco/n9k-sup-a-plus@1', 'cisco/n9k-sup-b@1', 'cisco/n9k-sup-b-plus@1'], group: supervisors, rel-pos: 1, default: cisco/n9k-sup-b@1}
+      - {id: ps-1, at: [0, 222.25], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 0, default: cisco/n9k-pac-3000w-b@1}
+      - {id: ps-2, at: [0, 266.7], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 1, default: cisco/n9k-pac-3000w-b@1}
+      - {id: ps-3, at: [311.15, 222.25], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 2, default: cisco/n9k-pac-3000w-b@1}
+      - {id: ps-4, at: [311.15, 266.7], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 3, default: cisco/n9k-pac-3000w-b@1}
+      placements:
+      - {ref: common/led-dot@1, id: led-bcn, at: [163.5, 266.5], group: leds, rel-pos: 0, for: chassis, states: ['off', {name: beacon, color: '#3b82f6'}]}
+      - {ref: common/led-dot@1, id: led-sup, at: [182.1, 266.5], group: leds, rel-pos: 1, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f5a623'}]}
+      - {ref: common/led-dot@1, id: led-fab, at: [200.7, 266.5], group: leds, rel-pos: 2, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f5a623'}]}
+      - {ref: common/led-dot@1, id: led-iom, at: [219.3, 266.5], group: leds, rel-pos: 3, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f5a623'}]}
+      - {ref: common/led-dot@1, id: led-psu, at: [237.9, 266.5], group: leds, rel-pos: 4, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f5a623'}]}
+      - {ref: common/led-dot@1, id: led-fan, at: [256.5, 266.5], group: leds, rel-pos: 5, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f5a623'}]}
+      - {ref: common/led-dot@1, id: led-pwr-mgmt, at: [275.1, 266.5], group: leds, rel-pos: 6, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f5a623'}]}
+    regions:
+    - {id: logo-zone, at: [276.0, 227.0], size: {w: 30.0, h: 14.0}, label: 'Vendor logo; not drawn'}
+    - {id: chassis-leds, at: [160.0, 263.0], size: {w: 124.0, h: 15.0}, label: 'Chassis LEDs - BCN, SUP, FAB, IOM, PSU, FAN, PWR MGMT, on the centre panel between the power supplies; their positions are estimated', members: [led-bcn, led-sup, led-fab, led-iom, led-psu, led-fan, led-pwr-mgmt]}
+    - {id: line-card-slots, label: 'Line cards LC 1 to LC 4, top to bottom - modules 1 to 4'}
+    - {id: supervisor-slots, label: 'Supervisors SUP 1 and SUP 2, left to right - modules 27 and 28'}
+    - {id: power-supply-slots, label: 'Power supplies PS 1 to PS 4, lying flat in two rows of two either side of the centre panel'}
+    - {id: mounting-brackets, label: 'Two vertical mounting brackets that mount the chassis onto the rack - present but not dimensioned in any figure'}
+  rear:
+    size: {w: 444.5, h: 311.15}
+    components:
+      bays:
+      - {id: fan-1, at: [29.845, 1.9], size: {w: 128.27, h: 269.24}, accepts: ['cisco/n9k-c9504-fan@1', 'cisco/n9k-c9504-fan2@1'], group: fan-trays, rel-pos: 0, default: cisco/n9k-c9504-fan2@1}
+      - {id: fan-2, at: [158.115, 1.9], size: {w: 128.27, h: 269.24}, accepts: ['cisco/n9k-c9504-fan@1', 'cisco/n9k-c9504-fan2@1'], group: fan-trays, rel-pos: 1, default: cisco/n9k-c9504-fan2@1}
+      - {id: fan-3, at: [286.385, 1.9], size: {w: 128.27, h: 269.24}, accepts: ['cisco/n9k-c9504-fan@1', 'cisco/n9k-c9504-fan2@1'], group: fan-trays, rel-pos: 2, default: cisco/n9k-c9504-fan2@1}
+      - {id: fm-1, at: [30.735, 17.14], size: {w: 62.48, h: 238.76}, accepts: ['cisco/n9k-c9504-fm@1', 'cisco/n9k-c9504-fm-s@1', 'cisco/n9k-c9504-fm-e@1', 'cisco/n9k-c9504-fm-g@1', 'cisco/n9k-c9504-fm-r@1', 'cisco/n9k-c9504-fm-cv@1', 'cisco/n9k-c9504-fan-pwr@1'], under: fan-1, group: fabric, rel-pos: 0, default: cisco/n9k-c9504-fm-g@1}
+      - {id: fm-2, at: [94.745, 17.14], size: {w: 62.48, h: 238.76}, accepts: ['cisco/n9k-c9504-fm@1', 'cisco/n9k-c9504-fm-s@1', 'cisco/n9k-c9504-fm-e@1', 'cisco/n9k-c9504-fm-g@1', 'cisco/n9k-c9504-fm-r@1', 'cisco/n9k-c9504-fm-cv@1', 'cisco/n9k-c9504-fan-pwr@1'], under: fan-1, group: fabric, rel-pos: 1, default: cisco/n9k-c9504-fm-g@1}
+      - {id: fm-3, at: [159.005, 17.14], size: {w: 62.48, h: 238.76}, accepts: ['cisco/n9k-c9504-fm@1', 'cisco/n9k-c9504-fm-s@1', 'cisco/n9k-c9504-fm-e@1', 'cisco/n9k-c9504-fm-g@1', 'cisco/n9k-c9504-fm-r@1', 'cisco/n9k-c9504-fm-cv@1', 'cisco/n9k-c9504-fan-pwr@1'], under: fan-2, group: fabric, rel-pos: 2, default: cisco/n9k-c9504-fm-g@1}
+      - {id: fm-4, at: [223.015, 17.14], size: {w: 62.48, h: 238.76}, accepts: ['cisco/n9k-c9504-fm@1', 'cisco/n9k-c9504-fm-s@1', 'cisco/n9k-c9504-fm-e@1', 'cisco/n9k-c9504-fm-g@1', 'cisco/n9k-c9504-fm-r@1', 'cisco/n9k-c9504-fm-cv@1', 'cisco/n9k-c9504-fan-pwr@1'], under: fan-2, group: fabric, rel-pos: 3, default: cisco/n9k-c9504-fm-g@1}
+      - {id: fm-5, at: [287.275, 17.14], size: {w: 62.48, h: 238.76}, accepts: ['cisco/n9k-c9504-fm@1', 'cisco/n9k-c9504-fm-s@1', 'cisco/n9k-c9504-fm-e@1', 'cisco/n9k-c9504-fm-g@1', 'cisco/n9k-c9504-fm-r@1', 'cisco/n9k-c9504-fm-cv@1', 'cisco/n9k-c9504-fan-pwr@1'], under: fan-3, group: fabric, rel-pos: 4, default: cisco/n9k-c9504-fm-g@1}
+      - {id: fm-6, at: [351.285, 17.14], size: {w: 62.48, h: 238.76}, accepts: ['cisco/n9k-c9504-fm@1', 'cisco/n9k-c9504-fm-s@1', 'cisco/n9k-c9504-fm-e@1', 'cisco/n9k-c9504-fm-g@1', 'cisco/n9k-c9504-fm-r@1', 'cisco/n9k-c9504-fm-cv@1', 'cisco/n9k-c9504-fan-pwr@1'], under: fan-3, group: fabric, rel-pos: 5, default: cisco/n9k-c9504-fm-g@1}
+      - {id: sc-1, at: [23.85, 273.0], size: {w: 198.37, h: 36.07}, accepts: ['cisco/n9k-sc-a@1'], group: system-controllers, rel-pos: 0, default: cisco/n9k-sc-a@1}
+      - {id: sc-2, at: [222.22, 273.0], size: {w: 198.37, h: 36.07}, accepts: ['cisco/n9k-sc-a@1'], group: system-controllers, rel-pos: 1, default: cisco/n9k-sc-a@1}
+    regions:
+    - {id: fan-tray-slots, label: 'Fan trays FAN 1 to FAN 3, left to right'}
+    - {id: fabric-module-slots, label: 'Fabric modules FM 1 to FM 6 (slots 21 to 26), left to right, behind the fan trays'}
+    - {id: system-controller-slots, label: 'System controllers SC 1 and SC 2, left to right'}
+    - {id: grounding-pad, label: 'Grounding pad - on the rear, present but not dimensioned in any figure'}
+    - {id: chassis-handles, label: 'Handles for positioning the chassis on the bottom support rails - not for lifting'}
+  top:
+    size: {w: 444.5, h: 842.0}
+    regions:
+    - {id: top-plate, label: 'Top plate - not dimensioned in any figure'}
+  bottom:
+    empty: >-
+      Searched and not published. The guide has no view of the underside of the chassis. The bottom-support
+      rails (N9K-C9504-RMK) stand under it in the rack and their position on the chassis is not shown.
+    size: {w: 444.5, h: 842.0}
+  left:
+    size: {w: 842.0, h: 311.15}
+    regions:
+    - {id: side-handle, label: 'Chassis handles (two) - present but not dimensioned in any figure; for positioning on the rails, not for lifting'}
+    - {id: mounting-bracket, label: 'Vertical rack mounting bracket - present but not dimensioned in any figure'}
+  right:
+    size: {w: 842.0, h: 311.15}
+    regions:
+    - {id: side-handle, label: 'Chassis handles (two) - present but not dimensioned in any figure; for positioning on the rails, not for lifting'}
+    - {id: mounting-bracket, label: 'Vertical rack mounting bracket - present but not dimensioned in any figure'}
+configurations:
+  base:
+    kind: base
+    default: true
+    power: ac
+    source: >-
+      derived - Cisco publishes no bundle for the Nexus 9504 in the guide, so the library defines one from the
+      guide's own power-budget example (Planning for Power Requirements, Step 1, PDF p21, printed 15: two
+      supervisor B, two N9K-SC-A system controllers, four line cards, six fabric modules at 504 W, the
+      N9K-C9504-FM-G's maximum, and three fan trays at 600 W, the N9K-C9504-FAN2's maximum, 9,256 W in all):
+      those parts in their slots, six N9K-C9504-FM-G in FM 1 to FM 6, three N9K-C9504-FAN2, and a line-card
+      blank in each of the four line-card slots. The example's 9,256 W over 3,000 W (Step 2) needs four
+      supplies, and the supply type is the library's choice: four N9K-PAC-3000W-B in PS 1 to PS 4. The example
+      names no supply and no line-card blank (it counts four 1050 W line cards).
+    description: >-
+      Chassis with the common equipment seated: both supervisors and system controllers, three fan trays, six
+      fabric modules, four 3 kW AC supplies and four line-card blanks.
+    part-numbers:
+      N9K-C9504: {}
+    bays:
+      lc-1: cisco/n9k-c9500-lc-cv@1
+      lc-2: cisco/n9k-c9500-lc-cv@1
+      lc-3: cisco/n9k-c9500-lc-cv@1
+      lc-4: cisco/n9k-c9500-lc-cv@1
+  psu-universal:
+    kind: example
+    power: [ac, hvdc]
+    description: >-
+      The base with four N9K-PUV-3000W-B universal AC/DC supplies in PS 1 to PS 4. An illustration: the guide
+      prints no ordering code for a build with this supply.
+    bays:
+      ps-1: cisco/n9k-puv-3000w-b@1
+      ps-2: cisco/n9k-puv-3000w-b@1
+      ps-3: cisco/n9k-puv-3000w-b@1
+      ps-4: cisco/n9k-puv-3000w-b@1
+  psu-dual-input:
+    kind: example
+    power: [ac, hvdc]
+    description: >-
+      The base with four N9K-PUV2-3000W-B dual-input universal AC/DC supplies in PS 1 to PS 4. An
+      illustration: the guide prints no ordering code for a build with this supply.
+    bays:
+      ps-1: cisco/n9k-puv2-3000w-b@1
+      ps-2: cisco/n9k-puv2-3000w-b@1
+      ps-3: cisco/n9k-puv2-3000w-b@1
+      ps-4: cisco/n9k-puv2-3000w-b@1
+  psu-dc:
+    kind: example
+    power: dc
+    description: >-
+      The base with four N9K-PDC-3000W-B -48 V DC supplies in PS 1 to PS 4. An illustration: the guide prints
+      no ordering code for a build with this supply.
+    bays:
+      ps-1: cisco/n9k-pdc-3000w-b@1
+      ps-2: cisco/n9k-pdc-3000w-b@1
+      ps-3: cisco/n9k-pdc-3000w-b@1
+      ps-4: cisco/n9k-pdc-3000w-b@1
+  fabric-g-five:
+    kind: example
+    description: >-
+      Five N9K-C9504-FM-G fabric modules in FM 2 to FM 6 and an N9K-C9504-FAN-PWR card in FM 1, with three
+      N9K-C9504-FAN2 trays, as the guide's note under Table 1 pairs them. An illustration: the guide prints no
+      ordering code for it.
+    bays:
+      fm-1: cisco/n9k-c9504-fan-pwr@1
+  fabric-e:
+    kind: example
+    description: >-
+      Five N9K-C9504-FM-E fabric modules in FM 2 to FM 6 (the guide says five FM-E must be in those slots),
+      the N9K-C9504-FM-CV blank in FM 1 and three N9K-C9504-FAN trays. An illustration: the guide prints no
+      ordering code for it.
+    bays:
+      fan-1: cisco/n9k-c9504-fan@1
+      fan-2: cisco/n9k-c9504-fan@1
+      fan-3: cisco/n9k-c9504-fan@1
+      fm-1: cisco/n9k-c9504-fm-cv@1
+      fm-2: cisco/n9k-c9504-fm-e@1
+      fm-3: cisco/n9k-c9504-fm-e@1
+      fm-4: cisco/n9k-c9504-fm-e@1
+      fm-5: cisco/n9k-c9504-fm-e@1
+      fm-6: cisco/n9k-c9504-fm-e@1
+  empty:
+    kind: example
+    description: >-
+      The chassis with every supervisor, system-controller, fan-tray and fabric-module bay empty, a blank over
+      each power-supply slot and a line-card blank in each line-card slot. An illustration of what the bays
+      look like with nothing seated.
+    bays:
+      sup-1: ''
+      sup-2: ''
+      sc-1: ''
+      sc-2: ''
+      ps-1: cisco/n9k-psu-blank@1
+      ps-2: cisco/n9k-psu-blank@1
+      ps-3: cisco/n9k-psu-blank@1
+      ps-4: cisco/n9k-psu-blank@1
+      fan-1: ''
+      fan-2: ''
+      fan-3: ''
+      fm-1: ''
+      fm-2: ''
+      fm-3: ''
+      fm-4: ''
+      fm-5: ''
+      fm-6: ''
+references:
+- {title: 'Cisco N9504 NX-OS Mode Switch Hardware Installation Guide (first published 2014-03-24; last modified 2026-07-30)', url: 'https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/hw/n9504_hig/guide/b_n9504_nxos_mode_hardware_install_guide.pdf'}
+- {title: 'Cisco Nexus 9000 Series Switches, support page (sale status; no Nexus 9504 entry)', url: 'https://www.cisco.com/c/en/us/support/switches/nexus-9000-series-switches/series.html'}
+- {title: 'Cisco N9508 NX-OS Mode Switch Hardware Installation Guide (the chassis family cross-check)', url: 'https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/hw/n9508_hig/guide/b_n9508_nxos-mode_hardware_install_guide.pdf'}
+- {title: 'Cisco N9516 NX-OS Mode Switch Hardware Installation Guide (the chassis family cross-check)', url: 'https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/hw/n9516_hig/guide/b_n9516_hardware_installation_guide.pdf'}

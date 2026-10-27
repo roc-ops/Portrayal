@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: n9k-c9504-fm-s
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9504 classic fabric module for the N9K-X9432C-S line card (N9K-C9504-FM-S). A vertical module
+  with a vented face, ejector levers, a BCN lamp and a status lamp; it sits in the rear of the chassis behind
+  a fan tray and pairs with the N9K-C9504-FAN tray. Cisco has announced its end of sale.
+size: {w: 62.48, h: 238.76, d: 297.18}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-C9504-FM-S'
+  role: 'fabric-module'
+  power-draw-typical-w: 171
+  power-draw-max-w: 251
+  weight-kg: 2.8
+  hot-swappable: true
+  eol: 'end-of-sale'
+provenance:
+  size: >-
+    datasheet - Cisco N9504 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p114, PDF p120), "Fabric modules": 2.46 in (6.25 cm) wide, 11.7 in (29.72 cm) deep, 9.4 in
+    (23.88 cm) high. One row serves every fabric type.
+  power: >-
+    datasheet - the chassis's own "Planning for Power Requirements" table (PDF p18, printed p12), the row
+    "Line cards that are supported by N9K-C9504-FM-S fabric modules": 171 W typical, 251 W maximum. The
+    guide's first table is a copy of the 9508's and is not used.
+  compatibility: >-
+    install guide - "Overview" Table 1 (PDF p8, printed p2) lists the N9K-C9504-FM-S for the N9K-X9432C-S
+    line card. The fan-tray lamp table (PDF p135, printed p129) names
+    it as a module that powers a fan tray from an even slot.
+  weight: >-
+    datasheet - Appendix A weights table (PDF p122, printed p116): 6.2 lb (2.8 kg), "supporting -S line
+    cards".
+  lamps: >-
+    install guide - "Fabric Module LEDs" (PDF p136, printed p130): a BCN lamp (blue) and a status lamp.
+    Positions estimated.
+  skin: >-
+    estimated - a vented face and two ejector levers, read from the rear figure of the overview (PDF p11,
+    printed p5), which is isometric; no figure dimensions them.
+  lifecycle: >-
+    end-of-sale - Cisco's notice "End-of-Sale and End-of-Life Announcement for the Cisco Nexus 9508 Classic
+    Fabric Module N9K-C9504-FM-S and N9K-C9508-FM-S",
+    https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/eos-eol-notice-c51-744909.html
+    (the notice names this part number; its dates are not held).
+elements:
+  bcn:
+    at: [10.0, 208.2]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp. The BCN lamp on the fan tray that covers the module also lights.
+    states:
+    - {name: blue, color: '#2a7de1'}
+    - 'off'
+  status:
+    at: [48.0, 208.2]
+    size: [3.0, 3.0]
+    class: led
+    description: Status lamp.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: flashing-green, color: '#39b54a', behavior: blinking}
+    - {name: flashing-yellow, color: '#f5c518', behavior: blinking}
+    - {name: flashing-red, color: '#d0021b', behavior: blinking}
+    - {name: flashing-amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+skins: [default]
