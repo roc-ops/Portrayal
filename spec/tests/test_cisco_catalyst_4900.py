@@ -97,12 +97,18 @@ def test_4948e_f_configurations_carry_the_data_sheets_part_numbers():
         "ac-ip-base": {"WS-C4948E-F-S"},
         "ac-ent-services": {"WS-C4948E-F-E"},
     }
+    # Data sheet Table 5 sells "AC p/s" with the second supply as PWR-C49E-300AC-F/2, and
+    # guide Table 1-1 covers an empty bay with the blank WS-X4994-F.
     for conf in orderable.values():
         assert conf["bays"] == {
             "psu-1": "cisco/pwr-c49e-300ac-f@1",
-            "psu-2": "cisco/pwr-c49e-300ac-f@1",
+            "psu-2": "cisco/ws-x4994-f@1",
             "fan-tray": "cisco/ws-x4993-f@1",
         }
+    # The base build keeps the bay defaults: two supplies.
+    assert "bays" not in cfg["ac"]
+    b = bays(d)
+    assert b["psu-1"]["default"] == b["psu-2"]["default"] == "cisco/pwr-c49e-300ac-f@1"
 
 
 def test_4948e_f_parts_state_back_to_front_airflow():
@@ -134,10 +140,16 @@ def test_4948e_f_lists_no_kit_until_the_census_tests_take_one():
 
 
 def test_4948e_is_untouched():
-    """The -F is its own device: the 4948E keeps its own parts and its own airflow."""
+    """The -F is its own device: the 4948E keeps its own airflow, configurations and bay accepts."""
     d = device("ws-c4948e")
     assert d["chassis"]["airflow"] == "front-to-back"
     assert bays(d)["psu-1"]["accepts"] == ["cisco/pwr-c49e-300ac-r@1"]
+    for bay in bays(d).values():
+        assert not any(ref.endswith("-f@1") for ref in bay["accepts"]), bay["id"]
+    assert not any("4948E-F" in part for c in d["configurations"].values()
+                   for part in c.get("part-numbers", {}))
+    for c in d["configurations"].values():
+        assert not any(ref.endswith("-f@1") for ref in c.get("bays", {}).values())
 
 
 # --- the DCIM exports: one device type per orderable configuration ---------------------

@@ -27,23 +27,25 @@ attrs:
 provenance:
   model: >-
     datasheet - the Catalyst 4948E and Catalyst 4948E-F Switch Installation Guide
-    OL-21561-02, Table 1-1: "PWR-C49E-300AC-F (300 W AC-input power supply, reversed air
+    OL-21561-02, Table 1-1 (the second supply is sold as PWR-C49E-300AC-F/2, data sheet
+    Table 5): "PWR-C49E-300AC-F (300 W AC-input power supply, reversed air
     flow)", "The front panel on the power supply for the Catalyst 4948E-F is color-coded
     blue", and "The power supplies are not interchangeable between the Catalyst 4948E and
     the Catalyst 4948E-F switch chassis"; appendix A, "300 W AC-Input Power Supply
     (PWR-C49E-300AC-F)". The trailing = is Cisco's spare-order mark and is not part of the
-    model. The data sheet's ordering table lists no DC supply for the -F ("Not Available at
-    this time"), so this is the only supply the -F takes.
+    model. The data sheet's Table 5 (Ordering Information) lists no DC supply for the -F
+    ("Not Available at this time"), so this is the only supply the -F takes.
   airflow: >-
-    CONFLICT, AND THE GUIDE LOST. Table 1-1 and the chassis airflow figures (1-4 and 1-6)
-    say the 4948E-F moves air from back to front, and call this supply's airflow "reversed".
-    The appendix's own specification tables print the opposite: Table A-3, this supply's,
-    says "Airflow direction - Front to back", and Table A-1, the -R's, says "Back to front".
-    The two lines are transposed. Table 1-1, the figures and the data sheet agree with each
-    other and with the part's name, so back-to-front is carried.
+    A DIFFERENCE OF FRAME, NOT A CONFLICT. Table 1-1 and the chassis airflow figures (1-4
+    and 1-6) say the 4948E-F moves air from back to front, and call this supply's airflow
+    "reversed". The appendix gives the supply fan's direction in the supply's own frame,
+    with its faceplate as its front: Table A-3, this supply's, says "Airflow direction -
+    Front to back" under "Power supply fan", and Table A-1, the -R's, says "Back to front".
+    In the chassis frame those are back-to-front and front-to-back, which agree with Table
+    1-1, the figures and the data sheet. Back-to-front is carried.
   power: >-
     datasheet - Table A-3 gives the output as 25 A at +12 VDC, which is 300 W, and the data
-    sheet's ordering table calls it the 300 W supply. An OUTPUT rating, so
+    sheet's Table 5 calls it the 300 W supply. An OUTPUT rating, so
     `power-output-w`. Input voltage, current and frequency, the 0.4 kVA rating and the 2 lb
     (0.9 kg) weight are the same table's, which matches the -R's table in all but the kVA
     (0.375 there).
@@ -93,8 +95,9 @@ relief:
       color: '#3a3d41'
       confidence: estimated
       source: >-
-        Not stated. The 4948E-F photograph shows a vertical pull bar at the right edge;
-        18 mm is the -R's reading of a wire loop standing clear of the face.
+        Not stated. The 4948E-F photograph (data sheet Figure 3) shows a vertical pull bar
+        at the right edge, drawn in the skin as a filled bar; 18 mm is the -R's reading of
+        a wire loop standing clear of the face.
 skins: [default]
 body:
   depth: 178

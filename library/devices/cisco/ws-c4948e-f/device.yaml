@@ -11,8 +11,8 @@ portfolio: {line: Catalyst, family: Catalyst 4900, series: Catalyst 4948E}
 description: >-
   48x 10/100/1000 RJ-45 and 4x 1/10G SFP+ 1RU top-of-rack switch running Cisco IOS, the back-to-front
   build of the Catalyst 4948E. The front is the 4948E's: all fifty-two ports, the console and management
-  jacks, the status lamps and the recessed reset switch. The rear is its own: two 300 W supplies and one
-  four-fan tray between them, all three colour-coded blue, drawing air in at the rear and out at the ports.
+  jacks, the status lamps and the recessed reset switch. The rear is its own: two 300 W supply bays and
+  one four-fan tray between them, all colour-coded blue, drawing air in at the rear and out at the ports.
   Ports number 1-52 and run DOWN each column - odd on the top row, even beneath it. Its front-to-back
   sibling, the WS-C4948E, takes different supplies and a different fan tray and is not this device. End-of-sale
   was announced in October 2016.
@@ -25,10 +25,11 @@ provenance:
       Guide, OL-21561-02, 162 pages: Table 1-1 features, Table 1-2 specifications, the fan tray and power
       supply rows of Table 1-1, Figures 1-2, 1-6 and 3-1, Table 3-1 rack-mount kits, appendix A power
       supplies. (2) Cisco Catalyst 4948E and 4948E-F Ethernet Switches Data Sheet, c78-598933, 9 pages:
-      Table 1, Table 2, Table 4 and Figure 3, a photograph of the back-to-front rear. (3) The 4948E model's
-      own provenance (library device cisco/ws-c4948e), from which the front is carried. THE GUIDE'S OWN
-      CHASSIS FIGURES ARE ISOMETRIC LINE DRAWINGS and gave callouts only. No vendor 3D model and no stencil
-      render was found.
+      Table 1, Table 2, Table 4 (regulatory compliance), Table 5 (ordering information: the SKUs, "AC
+      p/s", "Not Available at this time" for DC, and the second supply sold as PWR-C49E-300AC-F/2) and
+      Figure 3, a photograph of the back-to-front rear. (3) The 4948E model's own provenance (library
+      device cisco/ws-c4948e), from which the front is carried. THE GUIDE'S OWN CHASSIS FIGURES ARE ISOMETRIC
+      LINE DRAWINGS and gave callouts only. No vendor 3D model and no stencil render was found.
   the-front-is-the-4948es:
     confidence: estimated
     note: >-
@@ -36,12 +37,21 @@ provenance:
       identical features except that the Cisco Catalyst 4948E offers front-to-back cooling, and the Cisco
       Catalyst 4948E-F offers back-to-front cooling", and the guide covers both in one document with one
       front figure (1-1, 1-7). It holds no photograph of the -F's front: the data sheet's Figure 1 is
-      the 4948E's. So the front is not a second reading; it is the 4948E's reading (the gate-1 measurement
-      of its photograph, its four blocks, rows, port order, lamps and the console over the management
-      port, in that device's provenance) applied to a face the guide says is the same, and every position
-      on it is `estimated` here on that account. The one printed difference the guide names is on the
-      lid, where "The Cisco logo that appears on the Catalyst 4948E-F chassis top cover is rotated 180
-      degrees" and labels there give the airflow direction; the lid is not drawn flat by any staged source.
+      captioned "Cisco Catalyst 4948E and 4948E-F Front Panel", presenting one front for both builds,
+      but the unit photographed prints "Catalyst 4948E", and guide Figure 1-1 is captioned "(Catalyst
+      4948E Switch Shown)". So the front is not a second reading; it is the 4948E's reading (the gate-1
+      measurement of its photograph, its four blocks, rows, port order, lamps and the console over the
+      management port, in that device's provenance) applied to a face the guide says is the same, and
+      every position on it is `estimated` here on that account. The one printed difference the guide names
+      is on the lid, where "The Cisco logo that appears on the Catalyst 4948E-F chassis top cover is rotated
+      180 degrees" and labels there give the airflow direction; the lid is not drawn flat by any staged
+      source.
+  front-legend:
+    confidence: estimated
+    note: >-
+      The model legend on the face, "Catalyst 4948E", is carried from a 4948E unit: it is what the data
+      sheet's Figure 1 prints, and that figure is captioned as the front of both builds. No source shows
+      the -F's own legend (see the gap front-of-the-4948e-f-itself), so the text is an estimate.
   gate-1:
     confidence: estimated
     note: >-
@@ -81,6 +91,12 @@ provenance:
       As cisco/ws-c4948e: the data sheet's Table 2 "Typical operating power 230W at 25C" and "Maximum
       power 275W at 55C" and the guide's Table 1-2 heat of 1364 BTU per hour. These are the switch's draw
       and do not depend on the airflow build.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      The end-of-sale and end-of-life dates and the announcement URL are carried from cisco/ws-c4948e's
+      provenance. The notice itself (EOL11273) is not held, and its title names only the Catalyst 4948E
+      Ethernet Switch, so whether it lists WS-C4948E-F has not been checked here.
   interface-names:
     confidence: estimated
     note: >-
@@ -92,9 +108,11 @@ provenance:
     note: >-
       The guide says "The airflow in the Catalyst 4948E-F chassis is from back to front" and its Figure
       1-6 draws it; the fan tray "draws in air through vents at the rear of the chassis and exhausts it
-      through the front". THE APPENDIX'S SPECIFICATION TABLES ARE TRANSPOSED against that: Table A-3,
-      the -F supply's, says "Front to back" and Table A-1, the -R supply's, says "Back to front". Table
-      1-1, the figures and the data sheet agree, so back-to-front is carried.
+      through the front". The appendix gives the supply fan's direction in the supply's own frame, with
+      its faceplate as its front: Table A-3, the -F supply's, says "Front to back" and Table A-1, the
+      -R supply's, says "Back to front", under "Power supply fan". In the chassis frame those are back-to-front
+      and front-to-back, which agree with Table 1-1, the figures and the data sheet. Back-to-front is
+      carried.
   ears-and-kits:
     confidence: drawing
     note: >-
@@ -134,7 +152,7 @@ attrs:
     power-supply-options: PWR-C49E-300AC-F (300 W AC, reversed airflow); no DC supply is available for
       the -F
   environmental: {operating-temp: 0 to 40 C (32 to 104 F), storage-temp: -40 to 75 C (-40 to 167 F), humidity: '10
-      to 90%, noncondensing', altitude: -60 to 2000 m (-196 to 6561 ft), mtbf-hours: '145,422'}
+      to 90%, noncondensing', altitude: -60 to 2000 m (-196 to 6561 ft), mtbf-hours: '149,261'}
   platform: {processor: 1 GHz, memory: 1 GB SDRAM}
   features:
     optics-sfp-plus: >-
@@ -199,8 +217,9 @@ gaps:
   - front
   reason: needs-photo
   wanted: >-
-    A photograph of this build's front. The data sheet's Figure 1 is the 4948E's and the guide's front
-    figures are isometric drawings of both, so the front here is the 4948E's reading carried over and
+    A photograph of this build's front. No source shows the -F's own legend: the data sheet's Figure 1,
+    captioned as the front of both builds, prints "Catalyst 4948E", and guide Figure 1-1 is "(Catalyst
+    4948E Switch Shown)". The front here is the 4948E's reading carried over, legend text included, and
     is `estimated`. A square-on photograph would confirm or correct it.
 - what: end-label-text
   scope:
@@ -1196,19 +1215,22 @@ configurations:
   ac-ip-base:
     kind: orderable
     description: >-
-      WS-C4948E-F-S, the build with an AC supply and the IP Base image. The bare chassis WS-C4948E-F ("no
-      p/s") and the ten-unit bundle WS-C4948E-F-BDL are not configurations.
+      WS-C4948E-F-S, the build with an AC supply and the IP Base image. It seats one PWR-C49E-300AC-F
+      in psu-1 and the blank WS-X4994-F over psu-2 (data sheet Table 5, "AC p/s", the second supply sold
+      as PWR-C49E-300AC-F/2; guide Table 1-1, an empty bay takes WS-X4994-F). The bare chassis WS-C4948E-F
+      ("no p/s") and the bundle WS-C4948E-F-BDL are not configurations.
     part-numbers:
       WS-C4948E-F-S: {}
-    bays: {psu-1: cisco/pwr-c49e-300ac-f@1, psu-2: cisco/pwr-c49e-300ac-f@1, fan-tray: cisco/ws-x4993-f@1}
+    bays: {psu-1: cisco/pwr-c49e-300ac-f@1, psu-2: cisco/ws-x4994-f@1, fan-tray: cisco/ws-x4993-f@1}
   ac-ent-services:
     kind: orderable
     description: >-
-      WS-C4948E-F-E, the build with an AC supply and the Enterprise Services image: the same hardware
-      as WS-C4948E-F-S, a second software image and a second SKU.
+      WS-C4948E-F-E, the build with an AC supply and the Enterprise Services image. The hardware is WS-C4948E-F-S's
+      (one supply in psu-1, the blank WS-X4994-F over psu-2; data sheet Table 5, guide Table 1-1), with
+      a second software image and a second SKU.
     part-numbers:
       WS-C4948E-F-E: {}
-    bays: {psu-1: cisco/pwr-c49e-300ac-f@1, psu-2: cisco/pwr-c49e-300ac-f@1, fan-tray: cisco/ws-x4993-f@1}
+    bays: {psu-1: cisco/pwr-c49e-300ac-f@1, psu-2: cisco/ws-x4994-f@1, fan-tray: cisco/ws-x4993-f@1}
 references:
 - title: Catalyst 4948E and Catalyst 4948E-F Switch Installation Guide (OL-21561-02)
 - title: Cisco Catalyst 4948E and 4948E-F Ethernet Switches Data Sheet (c78-598933)
