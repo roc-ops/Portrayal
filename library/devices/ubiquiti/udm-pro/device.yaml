@@ -1,0 +1,434 @@
+format: 1
+kind: device
+name: udm-pro
+version: 0.1.0
+maturity: modelled
+manufacturer: Ubiquiti
+model: UDM-Pro
+portfolio: {line: UniFi Cloud Gateways, family: Dream Machine}
+description: >-
+  Ubiquiti UDM-Pro (UniFi Dream Machine Pro) is a fixed 1RU rack gateway. Its front carries a 1.3 inch
+  touchscreen at the left, a door over a 3.5 inch drive bay, eight Gigabit RJ45 LAN ports in two
+  stacked rows, one Gigabit RJ45 WAN port and two 10G SFP+ ports (one WAN, one LAN) in a column, and a
+  recessed factory-reset button. The rear carries the AC power inlet and the USP-RPS DC input for an
+  external redundant supply. The 50 W supply is internal, so it is part of the chassis and not a bay.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Ubiquiti data sheet "Datasheet UDM-Pro" (two pages, © 2023 Ubiquiti Inc., PDF created 2023-03-22;
+      https://dl.ui.com/ds/udm-pro.pdf): the Mechanical, Hardware and LEDs tables and its faceplate
+      photograph (923 x 197 px, a three-quarter view). The maker's techspecs.ui.com page data for the
+      model (https://techspecs.ui.com/unifi/unifi-cloud-gateways/udm-pro, read 2026-10-26): Form Factor
+      "Rack mount (1U)", dimensions, port layout, "(1) 3.5" NVR HDD bay". The NetBox community
+      devicetype-library entry UniFi-Dream-Machine-Pro.yaml and its front and rear elevation drawings
+      (netbox-community/devicetype-library, read 2026-10-26) are community work, not the maker's; they
+      are used as a second opinion and, for positions, as the only straight-on drawing held. The install
+      guide (dl.ui.com/qig/udm-pro) is not held.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      The data sheet photograph is oblique (the right side wall is in view), so it is not measured: it
+      supplies counts, arrangement, lamp places and printed legends. The measuring drawing is the
+      community front elevation, 1065 x 106 px: its aspect, 10.05, is 0.7 percent from the body's
+      442.4 / 43.7 = 10.12, so x is taken at 2.407 px per mm and y at 2.425 from the stated width and
+      height. The RJ45 column pitch then reads 15.6 mm (37.6 px) against the registry cell's 13.97,
+      so the jacks are drawn on the measured pitch and not the registry's; the cell and its
+      cutout are unchanged and the jacks stand 2.9 mm apart. Every position is estimated to about
+      1 mm.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Data sheet, Mechanical: "442.4 x 43.7 x 285.6 mm (17.4 x 1.7 x 11.2")", read as width, height and
+      depth (the 1U height settles it; the switch's sheet prints depth second, this one prints it
+      last: the order differs between the two sheets and each number is read against the model). Weight
+      3.9 kg (8.6 lb); enclosure "Aluminium CNC, SGCC steel", mount material "SGCC steel". The sheet
+      gives one weight and no with-bracket figure, so it does not say whether ears are in the box;
+      the maker's page says "Rack mount (1U)". The body is modelled at the sheet's 442.4 wide, not 482.6.
+  ports:
+    confidence: datasheet
+    note: >-
+      Data sheet, Hardware: "Networking interface (8) LAN: GbE RJ45 ports (1) WAN: GbE RJ45 port";
+      "SFP+ interface (1) LAN: 10G SFP+ (1) WAN: 10G SFP+". The page counts nine 1G RJ45 and two 10G SFP+.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Read off the community front elevation at 5x: the upper row of the LAN block prints 1, 3, 5, 7
+      and the lower row 2, 4, 6, 8; the single jack prints 9 and the SFP+ column 10 above and 11 below,
+      as printed on the metal. The elevation marks 9 and 10 with a small blue dot and gives 11 none;
+      the sheet names a WAN jack and a WAN SFP+, and the NetBox entry labels port 9 WAN 1 and port 10
+      SFP+ WAN 2, so 9 and 10 are the WAN ports and 1 to 8 and 11 are LAN. Digits are 3 to 4 px
+      high at that size and read with that caution.
+  front-layout:
+    confidence: estimated
+    note: >-
+      estimated - read off the community elevation at the scales under gate-1. LAN block: first
+      column's left edge 309.85, 15.6 mm column step, upper row at 9.5 and lower at 23.3; WAN jack at
+      388.6, 22.2 (a single jack, latch up, lamp at the upper right); the two SFP+ cages on the registry
+      cell (14.25 wide, 15.0 row pitch) at 405.5, 9.2; touchscreen 23 mm square at 6.5, 10.25; the door
+      107.2 x 28.1 at 185.9, 7.9; reset pinhole at 426.7, 37.5. The five horizontal slots along the top
+      edge are drawn as vents. The data sheet photograph agrees on every count.
+  jacks:
+    confidence: datasheet
+    note: >-
+      Data sheet, LEDs: "Ethernet: Link/ activity, Green: 1G, Amber: 10/100M". Each jack shows one lamp, at the
+      upper right on the upper row and the lower right on the lower row (green in the pictures), so the upper
+      row is turned 180 (latch up) and the lower row takes the lamp-right skin of
+      common/rj45-ganged-link@1. The WAN jack is drawn on the same ganged cell, turned 180, because the
+      library has no single jack with one lamp; its housing in the drawing is 13.6 wide against the cell's
+      12.7.
+  sfp:
+    confidence: datasheet
+    note: >-
+      Data sheet, LEDs: "SFP+: Link/ activity, White: 10G, Green: 1G". One white triangle per cage between
+      the two cages, up for the upper and down for the lower, as in the photograph.
+  display:
+    confidence: datasheet
+    note: >-
+      Data sheet, Hardware: "LCM display: (1) 1.3" touchscreen", the same part and words as on the
+      USW-Pro-24-PoE, so ubiquiti/lcm-touchscreen-1-3@1. The printed model name under it, "Dream Machine
+      Pro", is drawn as plain text; the brand mark is not.
+  hdd-bay:
+    confidence: photo-measured
+    note: >-
+      The page's "(1) 3.5" NVR HDD bay" and the sheet's HDD lamp ("White: disk activity, Amber: disk
+      error") are the sources for a drive bay. The photograph and the drawing show a flat door over it
+      with one dot near its right edge. The door is drawn as panel decor, not a bay: no held document says
+      how a drive is fitted, what the bay accepts, or whether a drive is supplied, so no occupant is
+      modelled. The dot is taken as the HDD lamp; that is a reading of the pictures (see the gap).
+  logo:
+    confidence: estimated
+    note: >-
+      The brand mark on the rear label is not drawn: one `logo-zone` region is reserved where the rear
+      elevation shows it. No brand mark is seen on the front elevation, so none is reserved there.
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      Data sheet, Hardware: "Power supply: AC/DC, internal, 50W" and "Power method: (1) Universal AC input,
+      100-240V AC, 50/60Hz; (1) USP-RPS DC input". The supply is internal, so it is part of the chassis, not
+      a bay and not a component. The sheet says nothing of fans; the slots along the top edges are drawn
+      as vents and no fan is placed (see the gap).
+  rear-layout:
+    confidence: estimated
+    note: >-
+      estimated - read off the community rear elevation (1258 x 128 px, 2.844 px per mm across from the
+      body width and 2.929 down). The USP-RPS socket (two rows of twelve contacts) is 63.5 x 18.0 at
+      18.4, 19.8 with its USP CONNECT legend under it; the AC inlet plate is 31.1 x 23.4 at 377.8, 12.6
+      with the C14 in it; three edge screws at 11.6, 220.5 and 429.8, y 37.4; five vent slots along the
+      top. The rating text block at the right and the rating line under the inlet are too small to read
+      and are left out; an empty label outline above the socket is not drawn.
+  rps:
+    confidence: datasheet
+    note: >-
+      Data sheet, LEDs: "RPS: Blue: ready". The lamp is the grey triangle left of the socket in the elevation, with the legend USP RPS,
+      OFF and ON beside it and a small blue dot at ON; which of the two marks is the lamp is not settled
+      (see the gap).
+  airflow:
+    confidence: estimated
+    note: >-
+      not stated by the data sheet or the page. The NetBox entry says front to rear; no fan is shown, so
+      no airflow is claimed on the chassis (see the gap).
+  colour:
+    confidence: photo-measured
+    note: >-
+      median of the bare plate in the community front elevation (#d1d1d3).
+attrs:
+  physical:
+    weight-note: 3.9 kg (8.6 lb), data sheet Mechanical
+    enclosure-material: Aluminium CNC, SGCC steel
+    mount-material: SGCC steel
+  performance:
+    ids-ips-throughput: 3.5 Gbps, measured with iPerf3 (data sheet)
+  power:
+    power-max-w: 33
+    power-supply: AC/DC, internal, 50 W
+    power-input: 100 to 240 VAC, 50/60 Hz
+  environmental:
+    operating-temp-c: -10 to 40
+    humidity: 5 to 95 percent noncondensing
+    esd: air ±15 kV, contact ±8 kV
+  platform:
+    processor: Quad-core ARM Cortex-A57 at 1.7 GHz
+    system-memory: 4 GB DDR4
+    onboard-storage: 16 GB eMMC
+  features:
+    nvr-bay: (1) 3.5 inch NVR HDD bay (maker's page)
+  management:
+    interface: Ethernet, Bluetooth
+  compliance:
+    certifications: CE, FCC, IC
+chassis:
+  width: 442.4
+  height: 43.7
+  depth: 285.6
+  ru: 1
+  weight-kg: 3.9
+  color: '#d1d1d3'
+  power: ac
+gaps:
+- what: rack-ears
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The data sheet gives one weight and no ear figure, and no install guide is held. No ear position is
+    stated, none is shipped as default and no kit is listed.
+  wanted: The install guide (dl.ui.com/qig/udm-pro) for the ear positions and the one shipped, and the maker's rail kits if any apply.
+- what: hdd-bay
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The page names "(1) 3.5" NVR HDD bay" and the sheet an HDD lamp. No held document says how the door
+    opens, what drive the bay takes, whether one is supplied, or where the lamp sits. The door is panel
+    decor and the lamp is placed on the dot the pictures show on it.
+  wanted: The install guide's drive-bay procedure and LED figure.
+- what: led-meaning
+  scope: [rj45, sfp-plus, rps-leds]
+  reason: vendor-silent
+  note: >-
+    The sheet's LED table gives each lamp its colours (Ethernet green 1G, amber 10/100M; SFP+ white 10G,
+    green 1G; RPS blue ready) but not whether the two states are steady or blink, and not which jack
+    lamp is which when a jack has more than one.
+  wanted: The install guide's LED table.
+- what: rps-lamp-and-legend
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    The legend beside the RPS lamp (USP RPS, OFF, ON) is read off a community drawing at the limit of
+    its resolution, and what the OFF and ON marks are for is not said.
+  wanted: The install guide's rear panel and LED table.
+- what: port-legend-detail
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    The blue marks beside 9 and 10 and the small line of text under 11 are not resolved in any picture
+    held, and are not drawn.
+  wanted: A straight-on photograph of the front, or the install guide's port figure.
+- what: fans-and-airflow
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    Neither the data sheet nor the page names a fan or an airflow direction. The NetBox entry says
+    front to rear; both faces carry vent slots; no fan is visible on the rear elevation.
+  wanted: The install guide or the maker's thermal description.
+- what: rear-photograph
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    No maker photograph of the rear is held: the data sheet shows the front only. The rear is drawn
+    from the community rear elevation.
+  wanted: A maker's straight-on photograph of the rear.
+- what: eol
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    No end-of-life notice is in any held document; none was searched for online.
+  wanted: The maker's end-of-life list, which the intake did not find.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      the nine built-in Gigabit RJ45 ports as numbered on the faceplate: 1 to 8 LAN, the upper row odd,
+      and 9 WAN (the placements carry role)
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the two built-in 10G SFP+ ports, 10 (WAN) above and 11 (LAN) below; their ids carry the
+      printed numbers and their position in the group is 1 and 2
+  sfp-plus-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the link and activity lamp between the two SFP+ cages, one triangle per cage
+  hdd-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the disk lamp on the drive-bay door
+  lcm:
+    term: Display
+    role: indicator
+    index-origin: 1
+    description: the 1.3 inch touchscreen
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+    description: the recessed factory-reset button
+  power-input:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the AC power inlet of the internal supply
+  rps-input:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the USP-RPS DC input for an external redundant supply
+  rps-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 442.4, h: 43.7}
+    panel:
+      decor:
+      - {at: [37.7, 3.2], size: [74.2, 1.2], pattern: vent, vent: 1.0}
+      - {at: [114.9, 3.2], size: [74.1, 1.2], pattern: vent, vent: 1.0}
+      - {at: [191.9, 3.2], size: [74.0, 1.2], pattern: vent, vent: 1.0}
+      - {at: [269.0, 3.2], size: [74.0, 1.2], pattern: vent, vent: 1.0}
+      - {at: [346.2, 3.2], size: [73.8, 1.2], pattern: vent, vent: 1.0}
+      - {id: hdd-door, kind: bay-door, at: [185.9, 7.9], size: [107.2, 28.1], rx: 0.6, fill: '#dadadd', stroke: '#3a3a3d', stroke-width: 0.3}
+      cutouts:
+      - {id: lcm, at: [6.5, 10.25], size: [23.0, 23.0], shape: rect}
+      - {id: port-1, at: [309.85, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [309.85, 23.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [325.45, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [325.45, 23.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [341.05, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [341.05, 23.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [356.65, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [356.65, 23.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-9, at: [388.6, 22.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-10, at: [405.5, 9.2], size: [14.25, 10.4], shape: rect}
+      - {id: port-11, at: [405.5, 24.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-10, at: [407.9, 20.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-11, at: [415.2, 20.9], size: [2.25, 2.0], shape: rect}
+      - {id: led-hdd, at: [281.8, 20.8], size: [2.0, 2.0], shape: circle}
+      - {id: btn-reset, at: [424.7, 35.5], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+    - {at: [6.3, 37.7], text: Dream Machine Pro, font-size: 2.7, anchor: start, fill: '#3a3d42', for: lcm}
+    - {at: [316.2, 7.0], text: '1', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-1}
+    - {at: [316.2, 37.3], text: '2', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-2}
+    - {at: [331.8, 7.0], text: '3', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-3}
+    - {at: [331.8, 37.3], text: '4', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-4}
+    - {at: [347.4, 7.0], text: '5', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-5}
+    - {at: [347.4, 37.3], text: '6', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-6}
+    - {at: [363.0, 7.0], text: '7', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-7}
+    - {at: [363.0, 37.3], text: '8', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-8}
+    - {at: [394.95, 37.3], text: '9', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-9}
+    - {at: [412.6, 7.0], text: '10', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-10}
+    - {at: [412.6, 37.3], text: '11', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-11}
+    - {at: [428.7, 38.2], text: RESET, font-size: 1.5, anchor: start, fill: '#7c7f83', for: btn-reset}
+    components:
+      placements:
+      - {ref: ubiquiti/lcm-touchscreen-1-3@1, id: lcm, at: [6.5, 10.25], for: chassis, group: lcm, rel-pos: 1}
+      - {ref: common/rj45-ganged-link@1, id: port-1, at: [309.85, 9.5], rotate: 180, group: rj45, rel-pos: 1, attrs: {role: lan},
+         states: {led-a: ['off', {name: link-activity-1g, color: '#22c55e'}, {name: link-activity-10-100m, color: '#f59e0b'}]},
+         description: 'LEDs table - Link/activity, green 1G, amber 10/100M'}
+      - {ref: common/rj45-ganged-link@1, id: port-2, at: [309.85, 23.3], skin: lamp-right, group: rj45, rel-pos: 2, attrs: {role: lan},
+         states: {led-a: ['off', {name: link-activity-1g, color: '#22c55e'}, {name: link-activity-10-100m, color: '#f59e0b'}]},
+         description: 'LEDs table - Link/activity, green 1G, amber 10/100M'}
+      - {ref: common/rj45-ganged-link@1, id: port-3, at: [325.45, 9.5], rotate: 180, group: rj45, rel-pos: 3, attrs: {role: lan},
+         states: {led-a: ['off', {name: link-activity-1g, color: '#22c55e'}, {name: link-activity-10-100m, color: '#f59e0b'}]},
+         description: 'LEDs table - Link/activity, green 1G, amber 10/100M'}
+      - {ref: common/rj45-ganged-link@1, id: port-4, at: [325.45, 23.3], skin: lamp-right, group: rj45, rel-pos: 4, attrs: {role: lan},
+         states: {led-a: ['off', {name: link-activity-1g, color: '#22c55e'}, {name: link-activity-10-100m, color: '#f59e0b'}]},
+         description: 'LEDs table - Link/activity, green 1G, amber 10/100M'}
+      - {ref: common/rj45-ganged-link@1, id: port-5, at: [341.05, 9.5], rotate: 180, group: rj45, rel-pos: 5, attrs: {role: lan},
+         states: {led-a: ['off', {name: link-activity-1g, color: '#22c55e'}, {name: link-activity-10-100m, color: '#f59e0b'}]},
+         description: 'LEDs table - Link/activity, green 1G, amber 10/100M'}
+      - {ref: common/rj45-ganged-link@1, id: port-6, at: [341.05, 23.3], skin: lamp-right, group: rj45, rel-pos: 6, attrs: {role: lan},
+         states: {led-a: ['off', {name: link-activity-1g, color: '#22c55e'}, {name: link-activity-10-100m, color: '#f59e0b'}]},
+         description: 'LEDs table - Link/activity, green 1G, amber 10/100M'}
+      - {ref: common/rj45-ganged-link@1, id: port-7, at: [356.65, 9.5], rotate: 180, group: rj45, rel-pos: 7, attrs: {role: lan},
+         states: {led-a: ['off', {name: link-activity-1g, color: '#22c55e'}, {name: link-activity-10-100m, color: '#f59e0b'}]},
+         description: 'LEDs table - Link/activity, green 1G, amber 10/100M'}
+      - {ref: common/rj45-ganged-link@1, id: port-8, at: [356.65, 23.3], skin: lamp-right, group: rj45, rel-pos: 8, attrs: {role: lan},
+         states: {led-a: ['off', {name: link-activity-1g, color: '#22c55e'}, {name: link-activity-10-100m, color: '#f59e0b'}]},
+         description: 'LEDs table - Link/activity, green 1G, amber 10/100M'}
+      - {ref: common/rj45-ganged-link@1, id: port-9, at: [388.6, 22.2], rotate: 180, group: rj45, rel-pos: 9, attrs: {role: wan},
+         states: {led-a: ['off', {name: link-activity-1g, color: '#22c55e'}, {name: link-activity-10-100m, color: '#f59e0b'}]},
+         description: 'LEDs table - Link/activity, green 1G, amber 10/100M'}
+      - {ref: std/sfp-ganged@1, id: port-10, at: [405.5, 9.2], group: sfp-plus, rel-pos: 1, attrs: {role: wan}}
+      - {ref: std/sfp-ganged@1, id: port-11, at: [405.5, 24.2], rotate: 180, group: sfp-plus, rel-pos: 2, attrs: {role: lan}}
+      - {ref: common/led-arrow-sm@1, id: led-port-10, at: [407.9, 20.9], skin: up, for: port-10, group: sfp-plus-leds, rel-pos: 0,
+         states: ['off', {name: link-activity-10g, color: '#ffffff'}, {name: link-activity-1g, color: '#22c55e'}],
+         description: 'LEDs table - SFP+ link/activity, white 10G, green 1G'}
+      - {ref: common/led-arrow-sm@1, id: led-port-11, at: [415.2, 20.9], skin: down, for: port-11, group: sfp-plus-leds, rel-pos: 1,
+         states: ['off', {name: link-activity-10g, color: '#ffffff'}, {name: link-activity-1g, color: '#22c55e'}],
+         description: 'LEDs table - SFP+ link/activity, white 10G, green 1G'}
+      - {ref: common/led-dot@1, id: led-hdd, at: [281.8, 20.8], for: chassis, group: hdd-leds, rel-pos: 1,
+         states: ['off', {name: activity, color: '#ffffff'}, {name: error, color: '#f59e0b'}],
+         description: 'LEDs table - HDD, white disk activity, amber disk error'}
+      - {ref: common/reset-button@1, id: btn-reset, at: [424.7, 35.5], for: chassis, group: controls, rel-pos: 1,
+         attrs: {function: Factory reset}}
+  rear:
+    size: {w: 442.4, h: 43.7}
+    panel:
+      decor:
+      - {at: [18.4, 4.4], size: [75.5, 1.4], pattern: vent, vent: 1.0}
+      - {at: [97.2, 4.4], size: [75.6, 1.4], pattern: vent, vent: 1.0}
+      - {at: [177.6, 4.4], size: [74.8, 1.4], pattern: vent, vent: 1.0}
+      - {at: [257.5, 4.4], size: [72.6, 1.4], pattern: vent, vent: 1.0}
+      - {at: [333.2, 4.4], size: [75.4, 1.4], pattern: vent, vent: 1.0}
+      - {id: ac-plate, kind: inlet-plate, at: [377.8, 12.6], size: [31.1, 23.4], rx: 0.8, fill: '#3a3c40'}
+      cutouts:
+      - {id: rps-input, at: [18.3, 19.8], size: [64.0, 19.0], shape: rect}
+      - {id: ac-inlet, at: [379.35, 14.3], size: [28.0, 20.0], shape: rect}
+      - {id: rps-led, at: [10.2, 26.9], size: [3.2, 3.6], shape: rect}
+    silkscreen:
+    - {at: [3.2, 27.6], text: USP RPS, font-size: 1.4, anchor: start, fill: '#55595e', for: rps-led}
+    - {at: [5.6, 30.4], text: 'OFF', font-size: 1.4, anchor: start, fill: '#55595e', for: rps-led}
+    - {at: [5.6, 32.6], text: 'ON', font-size: 1.4, anchor: start, fill: '#55595e', for: rps-led}
+    - {at: [50.5, 40.5], text: USP CONNECT, font-size: 1.6, anchor: middle, fill: '#55595e', for: rps-input}
+    components:
+      placements:
+      - {ref: ubiquiti/usp-rps-input@1, id: rps-input, at: [18.3, 19.8], group: rps-input, rel-pos: 1}
+      - {ref: common/led-arrow@1, id: rps-led, at: [10.0, 27.1], rotate: 90, skin: up, for: rps-input, group: rps-leds, rel-pos: 1,
+         states: ['off', {name: ready, color: '#3b82f6'}],
+         description: 'LEDs table - RPS, blue ready'}
+      - {ref: std/c14-inlet@1, id: ac-inlet, at: [379.35, 14.3], group: power-input, rel-pos: 1}
+      - {ref: common/screw-head@1, id: rear-screw-0, at: [9.8, 35.6], group: furniture, rel-pos: 1}
+      - {ref: common/screw-head@1, id: rear-screw-1, at: [218.7, 35.6], group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: rear-screw-2, at: [428.0, 35.6], group: furniture, rel-pos: 3}
+    regions:
+    - {id: logo-zone, at: [316.5, 14.0], size: {w: 7.0, h: 5.5}, label: 'Vendor logo; not drawn'}
+  top:
+    size: {w: 442.4, h: 285.6}
+    empty: >-
+      Not drawn by any source held: the data sheet photograph shows the lid only in perspective, and
+      the community drawings are front and rear elevations.
+  bottom:
+    size: {w: 442.4, h: 285.6}
+    empty: >-
+      Not drawn by any source held: neither the data sheet nor the community drawings picture the underside.
+  left:
+    size: {w: 285.6, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The data sheet photograph shows the right side wall in
+      perspective with its screw holes; no side elevation is given.
+  right:
+    size: {w: 285.6, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The data sheet photograph shows this wall in perspective with
+      four screw holes; no side elevation is given.
+configurations:
+  base:
+    kind: base
+    description: >-
+      UDM-Pro - eight Gigabit LAN, one Gigabit WAN, one 10G SFP+ LAN and one 10G SFP+ WAN port, an
+      empty 3.5 inch NVR drive bay, internal 50 W AC supply, USP-RPS DC input. The data sheet lists one
+      model and no other part number.
+    default: true
+    part-numbers:
+      UDM-Pro: {}
+datasheet:
+  title: 'Datasheet UDM-Pro (Ubiquiti Inc., 2023)'
+  sha256: f62fdc96d7183221e9fc613b2db4dfb880bab70935248c02bf06eb36795ff6e1
+references:
+- {title: 'techspecs.ui.com page data for UDM-Pro (Ubiquiti, read 2026-10-26)', sha256: 2e1040ab783b66b23f640eda08a48d233a1d9c0aa5bbcde869cc677427ef2ac2}
+- {title: 'NetBox devicetype-library UniFi-Dream-Machine-Pro.yaml (community, not the maker)', sha256: c664f06c80d260b800793200fe91f5442fe413a1f0fb05fff2bc323709b3957b}
+- {title: 'NetBox elevation ubiquiti-unifi-dream-machine-pro.front.png (community drawing)', sha256: 7d4e4d05d3fd857d6b56076fe52fbdd312ebc44a822d4a6003ca3d49710c8489}
+- {title: 'NetBox elevation ubiquiti-unifi-dream-machine-pro.rear.png (community drawing)', sha256: 64c46538e014d2e660990a5d532cf42281b208f73859ddb0126afd593ff27f01}

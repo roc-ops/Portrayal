@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: usp-rps-input
+version: 1.0.0
+class: inlet
+profile: networking
+description: >-
+  The USP-RPS DC input on the rear of the UniFi rack switches and the Dream Machine gateways - a wide
+  rectangular socket on the left of the rear face that takes the cable of an external redundant
+  power supply, printed USP CONNECT.
+size: {w: 64.0, h: 19.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  size: >-
+    estimated - read off the community rear elevations of the USW-Pro-24-PoE (63.7 x 19.3 mm at 2.873
+    px per mm across, from the 1271 px image over the 442.4 mm body, and 2.86 down) and of the
+    UDM-Pro (64.5 x 18.2 mm at 2.839 and 2.93 px per mm); 64.0 x 19.0 is carried. No held document
+    dimensions the socket. The data sheets name it ("USP RPS DC input" on the switch, "USP-RPS DC
+    input" on the gateway) and the switch sheet gives its rating, 52 V DC at 7.69 A and 11.5 V DC at
+    2.61 A.
+  pins: >-
+    estimated - the UDM-Pro elevation resolves two rows of twelve contacts at about 4.2 mm pitch
+    (12 px at 2.844 px per mm); the USW-Pro-24-PoE elevation shows the same two rows of twelve
+    cells but not each contact. The skin draws them as a pattern and no contact is addressable.
+    Their count is read off a community drawing, not a maker's document.
+  same-part: >-
+    the same socket, size and legend appear in the elevations of both models; the sheets use the
+    same name for it.
+elements:
+  opening: {at: [0.0, 0.0], size: [64.0, 19.0], class: cutout}
+connection-points:
+  mate: {at: [32.0, 9.5], direction: front}
+skins: [default]

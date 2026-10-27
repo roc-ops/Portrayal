@@ -1,0 +1,451 @@
+format: 1
+kind: device
+name: usw-pro-24-poe
+version: 0.1.0
+maturity: modelled
+manufacturer: Ubiquiti
+model: USW-Pro-24-PoE
+portfolio: {line: UniFi Switching, family: Switch Pro}
+description: >-
+  Ubiquiti USW-Pro-24-PoE (UniFi Switch Pro 24 PoE) is a fixed 1RU Layer 2 switch. Its front carries 24
+  Gigabit RJ45 ports in two stacked rows, 16 PoE/PoE+ and 8 60 W PoE++, two 1/10G SFP+ ports in a
+  column beside them, a 1.3 inch touchscreen on the left and a recessed factory-reset button. The rear
+  carries the AC power inlet and the USP RPS DC input for an external redundant supply. The 450 W
+  supply is internal, so it is part of the chassis and not a bay.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Ubiquiti data sheet "Datasheet USW-Pro-24-PoE" (two pages, © 2023 Ubiquiti Inc., PDF created
+      2023-03-08; https://dl.ui.com/ds/usw-pro-24-poe_ds.pdf): the Mechanical and Hardware tables and the
+      LEDs table, and its faceplate photograph (1053 x 228 px, a three-quarter view). The maker's
+      techspecs.ui.com page data for the model (https://techspecs.ui.com/unifi/switching/usw-pro-24-poe,
+      read 2026-10-26): Form Factor "Rack mount (1U)", dimensions, port layout, supported rack depth.
+      The NetBox community devicetype-library entry USW-Pro-24-PoE.yaml and its front and rear elevation
+      drawings (netbox-community/devicetype-library, read 2026-10-26) are community work, not the maker's,
+      and are used as a second opinion and, for positions, as the only straight-on drawing held. The
+      install guide (dl.ui.com/qig/usw-pro-24-poe) is not held.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      The data sheet photograph is oblique (the right-hand side wall is in view and the face is
+      foreshortened), so it is not measured: it supplies counts, the arrangement, lamp places and
+      printed legends. The measuring drawing is the community front elevation, 1179 x 113 px. Its
+      aspect, 10.43, is 3 percent from the body's 442.4 / 43.7 = 10.12, so x and y are not one scale:
+      x is taken at 2.673 px per mm, which is the width scale 2.665 corrected so that the registry
+      RJ45 pitch (13.97 mm) closes on the measured column pitch (37.7 px) with the 6 + 6 gang
+      gutter of 2.9 mm read as the 45 px between columns 6 and 7; y is taken at 2.586 px per mm from
+      the height. Every position is estimated to about 1.5 mm in x and 1 mm in y. Laid over the
+      render at matched scale, the drawing's last jack column stands about 2 mm right of this
+      model's (a pitch of 14.1 against 13.97 would close it) and the SFP+ column about 0.8 mm; the
+      registry pitch was kept, because that error is inside the drawing's own blur.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Data sheet, Mechanical: "442.4 x 285.4 x 43.7 mm (17.4 x 11.2 x 1.7")", read as width, depth and
+      height (the 1U height settles which is which; the maker's page prints 442 x 285 x 44 mm in
+      the same order). Weight "Without mounting brackets: 4.3 kg (9.5 lb) With mounting brackets: 4.4
+      kg (9.7 lb)"; the weights imply the mounting brackets ship with the switch, but no contents list is
+      held. The page's rack depth is 400 to 1200 mm ("Supported Rack Depth"). The elevation drawing
+      shows no ears, and the body is modelled as 442.4 wide, the sheet's own figure, not the 19 inch
+      482.6.
+  ports:
+    confidence: datasheet
+    note: >-
+      Data sheet, Hardware: "(24) GbE RJ45 ports (2) 1/10G SFP+ ports"; PoE interface "(16) PoE/PoE+
+      (Pins 1, 2+; 3, 6-) (8) 60W PoE++ ...". Which ports are PoE++ is not in the sheet: the
+      NetBox entry puts PoE++ on ports 17 to 24 and the elevation drawing prints a mark after the
+      numerals of 17 to 24 (and none on 1 to 16), so ports 17 to 24 carry `poe: PoE++` and 1 to 16
+      `poe: PoE+`, read as photo-measured, not stated by a sheet.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      The numerals are 1 to 2 px high in every picture held, so the order is read as a pattern and
+      not as digits: one numeral above each upper jack and one below each lower jack, each column's
+      pair running up then down, the SFP+ pair marked above and below the cages, and the 17 to 24 mark
+      matching the PoE++ group. The usual UniFi order is read from that: odd numbers on the upper row
+      (1, 3, 5 ... 23), even numbers on the lower row (2, 4 ... 24), then 25 above and 26 below the SFP+
+      cages. This is the figure most worth a second reading with the install guide.
+  front-layout:
+    confidence: estimated
+    note: >-
+      estimated - read off the community elevation at the scales under gate-1. Two shells of six
+      columns; column step 13.97 and one 2.9 mm extra gutter between the sixth and seventh columns;
+      the first jack's left edge at 213.1; the upper row at 7.8 and the lower at 22.3 (14.5 apart, read as
+      the jacks' tops at 20.7 and 58.3 px); the two SFP+ cages on the registry cell (14.25 wide, 15.0
+      row pitch) at 405.8 and 7.6; the touchscreen's dark square 23 mm across at 5.5, 9.2; the reset
+      pinhole at 426.2, 37.2. The five horizontal slots along the top edge are read off the same drawing and
+      are drawn as vents. The data sheet photograph agrees on every count: 12 columns, 2 rows, 2
+      cages, the screen at the left end.
+  jacks:
+    confidence: photo-measured
+    note: >-
+      Each jack carries one lamp, at its upper right corner on the upper row and its lower right corner on
+      the lower row (green in both pictures), so the upper row is turned 180 (latch up) and the lower
+      row takes the lamp-right skin of common/rj45-ganged-link@1. The sheet names the lamp as "Ethernet:
+      PoE Speed/link/activity" and gives no colour or state, so the jack keeps the component's own
+      link and activity vocabulary and no state is invented (see the gap).
+  sfp:
+    confidence: photo-measured
+    note: >-
+      Two cages stacked in one column, each lamp a small white triangle between them: up for the upper
+      cage and down for the lower. The sheet's LED table says "SFP+: Speed/link/activity" with no colours,
+      so the lamps keep the component's on and off.
+  display:
+    confidence: datasheet
+    note: >-
+      Data sheet, Hardware: "LCM display: (1) 1.3" touchscreen"; the same part and wording as the
+      UDM-Pro's, so both use ubiquiti/lcm-touchscreen-1-3@1. Its size is estimated from the elevation. The
+      printed model legend under the screen and the brand mark beside it are too small to read, so
+      only the logo zone is reserved and no legend is drawn.
+  logo:
+    confidence: estimated
+    note: >-
+      The brand mark beside the legend under the screen on the front, and the brand wordmark and mark on
+      the rear label, are not drawn: three `logo-zone` regions are reserved where the elevations show
+      them (the two on the rear named logo-zone and logo-zone-2).
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      Data sheet, Hardware: "Power supply: AC/DC, internal, 450W" and "Power method: Universal input,
+      100-240V AC, 50/60Hz; USP RPS DC input, 52V DC, 7.69A / 11.5V DC, 2.61A". The supply is internal,
+      so it is part of the chassis, not a bay and not a component. The sheet says nothing of fans; the
+      slots along the top edges of both faces are drawn as vents and no fan is placed (see the gap).
+  rear-layout:
+    confidence: estimated
+    note: >-
+      estimated - read off the community rear elevation (1271 x 126 px, 2.873 px per mm across from the
+      body width, 2.883 down). The USP RPS socket is 63.8 x 18.5 at 18.0, 19.3, with its USP CONNECT legend
+      under it; the AC inlet plate 30.8 x 23.6 at 379.6, 12.1 and the C14 in it; a serial label (a QR
+      code and three lines) above the socket; three edge screws at 11.1, 221.7 and 431.9, y 37.4; five vent
+      slots along the top. The rating label at the right carries the model text. The small legend
+      beside the RPS lamp reads USP RPS, OFF and ON. A line of rating text under the inlet has one
+      unreadable digit and is left out.
+  airflow:
+    confidence: estimated
+    note: >-
+      not stated by the data sheet or the page. The NetBox entry says front to rear, and the slots
+      on both faces are vents, but no fan is shown, so no airflow is claimed on the chassis (see the gap).
+  rps:
+    confidence: datasheet
+    note: >-
+      Data sheet, LEDs: "RPS: Status" with no colour or state; the page says "Redundancy: DC Power
+      Backup, with UniFi RPS". The lamp is the blue triangle left of the USP RPS socket in the elevation.
+  colour:
+    confidence: photo-measured
+    note: >-
+      median of the bare plate in the community front elevation (#e2e4e6).
+attrs:
+  physical:
+    weight-note: >-
+      without mounting brackets 4.3 kg (9.5 lb); with mounting brackets 4.4 kg (9.7 lb), data sheet
+      Mechanical
+    enclosure-material: SGCC steel
+    rack-depth-mm: 400 to 1200
+  performance:
+    switching-capacity-gbps: 88
+    non-blocking-throughput-gbps: 44
+    forwarding-rate-mpps: 65.472
+  power:
+    power-max-w: 50
+    power-envelope: bare
+    poe-budget-w: 400
+    power-supply: AC/DC, internal, 450 W
+    power-input: 100 to 240 VAC, 50/60 Hz
+    power-rps-input: 52 V DC at 7.69 A; 11.5 V DC at 2.61 A
+    poe-per-port: >-
+      PoE+ 32 W, PoE++ 64 W by the sheet's PSE column (the page says 30 W and 60 W at the device)
+    poe-voltage: PoE 44 to 57 V, PoE+ 50 to 57 V
+  environmental:
+    operating-temp-c: -5 to 40
+    humidity: 10 to 90 percent noncondensing
+    esd: air ±16 kV, contact ±12 kV
+    shock-vibration: ETSI 300-019-1.4
+  management:
+    interface: Ethernet in-band
+  compliance:
+    certifications: CE, FCC, IC
+chassis:
+  width: 442.4
+  height: 43.7
+  depth: 285.4
+  ru: 1
+  weight-kg: 4.3
+  color: '#e2e4e6'
+  power: ac
+gaps:
+- what: rack-ears
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The data sheet gives weights with and without mounting brackets and no figure for them, and no
+    install guide is held. No ear position is stated, none is shipped as default and no kit is listed.
+  wanted: The install guide (dl.ui.com/qig/usw-pro-24-poe) for the ear positions and the one shipped, and the maker's rail kits if any apply.
+- what: jack-lamp-meaning
+  scope: [rj45, sfp-plus-leds]
+  reason: vendor-silent
+  note: >-
+    The data sheet's LED table gives the Ethernet and SFP+ lamps a function ("PoE Speed/link/activity",
+    "Speed/link/activity") and no colour or state. The pictures show green lamps on the jacks and white
+    triangles on the cages; no state is written beyond the component's own vocabulary.
+  wanted: The install guide's LED table.
+- what: rps-lamp-and-legend
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    The data sheet says RPS "Status" and no state. The legend beside the RPS lamp (USP RPS, OFF, ON)
+    is read off a community drawing at the limit of its resolution, and what the OFF and ON marks are for
+    is not said.
+  wanted: The install guide's rear panel and LED table.
+- what: port-legend-detail
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    The numerals under and over the jacks are not legible in any picture held, so the order is
+    inferred (see provenance port-numbering) and the mark on ports 17 to 24 is not drawn. The screen's
+    own legend is likewise unreadable.
+  wanted: A straight-on photograph of the front, or the install guide's port figure.
+- what: fans-and-airflow
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    Neither the data sheet nor the page names a fan or an airflow direction. The NetBox entry says
+    front to rear; both faces carry vent slots; no fan is visible on the rear elevation.
+  wanted: The install guide or the maker's thermal description.
+- what: rear-photograph
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    No maker photograph of the rear is held: the data sheet shows the front only. The rear is drawn
+    from the community rear elevation.
+  wanted: A maker's straight-on photograph of the rear.
+- what: eol
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    No end-of-life notice is in any held document; none was searched for online.
+  wanted: The maker's end-of-life list, which the intake did not find.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      the 24 built-in Gigabit RJ45 ports, numbered 1 to 24, the upper row odd; 1 to 16 PoE+ and 17 to
+      24 PoE++ (the placements carry which)
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the two built-in 1/10G SFP+ ports; their ids carry the numbers 25 and 26 that the faceplate
+      prints, and their position in the group is 1 and 2
+  sfp-plus-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the speed, link and activity lamp between the two SFP+ cages, one triangle per cage
+  lcm:
+    term: Display
+    role: indicator
+    index-origin: 1
+    description: the 1.3 inch touchscreen
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+    description: the recessed factory-reset button
+  power-input:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the AC power inlet of the internal supply
+  rps-input:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the USP RPS DC input for an external redundant supply
+  rps-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 442.4, h: 43.7}
+    panel:
+      decor:
+      - {at: [36.7, 1.0], size: [74.4, 1.8], pattern: vent, vent: 1.0}
+      - {at: [113.7, 1.0], size: [74.9, 1.8], pattern: vent, vent: 1.0}
+      - {at: [191.2, 1.0], size: [74.7, 1.8], pattern: vent, vent: 1.0}
+      - {at: [268.2, 1.0], size: [74.8, 1.8], pattern: vent, vent: 1.0}
+      - {at: [345.3, 1.0], size: [74.4, 1.8], pattern: vent, vent: 1.0}
+      cutouts:
+      - {id: lcm, at: [5.5, 9.2], size: [23.0, 23.0], shape: rect}
+      - {id: port-1, at: [213.1, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [213.1, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [227.07, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [227.07, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [241.04, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [241.04, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [255.01, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [255.01, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-9, at: [268.98, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-10, at: [268.98, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-11, at: [282.95, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-12, at: [282.95, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-13, at: [299.82, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-14, at: [299.82, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-15, at: [313.79, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-16, at: [313.79, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-17, at: [327.76, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-18, at: [327.76, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-19, at: [341.73, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-20, at: [341.73, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-21, at: [355.7, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-22, at: [355.7, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-23, at: [369.67, 7.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-24, at: [369.67, 22.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-25, at: [405.8, 7.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-26, at: [405.8, 22.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-25, at: [407.9, 19.6], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-26, at: [415.7, 19.6], size: [2.25, 2.0], shape: rect}
+      - {id: btn-reset, at: [424.2, 35.2], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+    - {at: [219.45, 5.6], text: '1', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-1}
+    - {at: [219.45, 37.4], text: '2', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-2}
+    - {at: [233.42, 5.6], text: '3', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-3}
+    - {at: [233.42, 37.4], text: '4', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-4}
+    - {at: [247.39, 5.6], text: '5', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-5}
+    - {at: [247.39, 37.4], text: '6', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-6}
+    - {at: [261.36, 5.6], text: '7', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-7}
+    - {at: [261.36, 37.4], text: '8', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-8}
+    - {at: [275.33, 5.6], text: '9', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-9}
+    - {at: [275.33, 37.4], text: '10', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-10}
+    - {at: [289.3, 5.6], text: '11', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-11}
+    - {at: [289.3, 37.4], text: '12', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-12}
+    - {at: [306.17, 5.6], text: '13', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-13}
+    - {at: [306.17, 37.4], text: '14', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-14}
+    - {at: [320.14, 5.6], text: '15', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-15}
+    - {at: [320.14, 37.4], text: '16', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-16}
+    - {at: [334.11, 5.6], text: '17', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-17}
+    - {at: [334.11, 37.4], text: '18', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-18}
+    - {at: [348.08, 5.6], text: '19', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-19}
+    - {at: [348.08, 37.4], text: '20', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-20}
+    - {at: [362.05, 5.6], text: '21', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-21}
+    - {at: [362.05, 37.4], text: '22', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-22}
+    - {at: [376.02, 5.6], text: '23', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-23}
+    - {at: [376.02, 37.4], text: '24', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-24}
+    - {at: [412.93, 5.4], text: '25', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-25}
+    - {at: [412.93, 37.4], text: '26', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-26}
+    - {at: [428.8, 37.9], text: RESET, font-size: 1.5, anchor: start, fill: '#7c7f83', for: btn-reset}
+    components:
+      placements:
+      - {ref: ubiquiti/lcm-touchscreen-1-3@1, id: lcm, at: [5.5, 9.2], for: chassis, group: lcm, rel-pos: 1}
+      - {ref: common/rj45-ganged-link@1, id: port-1, at: [213.1, 7.8], rotate: 180, group: rj45, rel-pos: 1, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-2, at: [213.1, 22.3], skin: lamp-right, group: rj45, rel-pos: 2, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-3, at: [227.07, 7.8], rotate: 180, group: rj45, rel-pos: 3, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-4, at: [227.07, 22.3], skin: lamp-right, group: rj45, rel-pos: 4, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-5, at: [241.04, 7.8], rotate: 180, group: rj45, rel-pos: 5, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-6, at: [241.04, 22.3], skin: lamp-right, group: rj45, rel-pos: 6, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-7, at: [255.01, 7.8], rotate: 180, group: rj45, rel-pos: 7, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-8, at: [255.01, 22.3], skin: lamp-right, group: rj45, rel-pos: 8, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-9, at: [268.98, 7.8], rotate: 180, group: rj45, rel-pos: 9, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-10, at: [268.98, 22.3], skin: lamp-right, group: rj45, rel-pos: 10, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-11, at: [282.95, 7.8], rotate: 180, group: rj45, rel-pos: 11, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-12, at: [282.95, 22.3], skin: lamp-right, group: rj45, rel-pos: 12, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-13, at: [299.82, 7.8], rotate: 180, group: rj45, rel-pos: 13, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-14, at: [299.82, 22.3], skin: lamp-right, group: rj45, rel-pos: 14, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-15, at: [313.79, 7.8], rotate: 180, group: rj45, rel-pos: 15, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-16, at: [313.79, 22.3], skin: lamp-right, group: rj45, rel-pos: 16, attrs: {poe: PoE+}}
+      - {ref: common/rj45-ganged-link@1, id: port-17, at: [327.76, 7.8], rotate: 180, group: rj45, rel-pos: 17, attrs: {poe: PoE++}}
+      - {ref: common/rj45-ganged-link@1, id: port-18, at: [327.76, 22.3], skin: lamp-right, group: rj45, rel-pos: 18, attrs: {poe: PoE++}}
+      - {ref: common/rj45-ganged-link@1, id: port-19, at: [341.73, 7.8], rotate: 180, group: rj45, rel-pos: 19, attrs: {poe: PoE++}}
+      - {ref: common/rj45-ganged-link@1, id: port-20, at: [341.73, 22.3], skin: lamp-right, group: rj45, rel-pos: 20, attrs: {poe: PoE++}}
+      - {ref: common/rj45-ganged-link@1, id: port-21, at: [355.7, 7.8], rotate: 180, group: rj45, rel-pos: 21, attrs: {poe: PoE++}}
+      - {ref: common/rj45-ganged-link@1, id: port-22, at: [355.7, 22.3], skin: lamp-right, group: rj45, rel-pos: 22, attrs: {poe: PoE++}}
+      - {ref: common/rj45-ganged-link@1, id: port-23, at: [369.67, 7.8], rotate: 180, group: rj45, rel-pos: 23, attrs: {poe: PoE++}}
+      - {ref: common/rj45-ganged-link@1, id: port-24, at: [369.67, 22.3], skin: lamp-right, group: rj45, rel-pos: 24, attrs: {poe: PoE++}}
+      - {ref: std/sfp-ganged@1, id: port-25, at: [405.8, 7.6], group: sfp-plus, rel-pos: 1}
+      - {ref: std/sfp-ganged@1, id: port-26, at: [405.8, 22.6], rotate: 180, group: sfp-plus, rel-pos: 2}
+      - {ref: common/led-arrow-sm@1, id: led-port-25, at: [407.9, 19.6], skin: up, for: port-25, group: sfp-plus-leds, rel-pos: 0}
+      - {ref: common/led-arrow-sm@1, id: led-port-26, at: [415.7, 19.6], skin: down, for: port-26, group: sfp-plus-leds, rel-pos: 1}
+      - {ref: common/reset-button@1, id: btn-reset, at: [424.2, 35.2], for: chassis, group: controls, rel-pos: 1,
+         attrs: {function: Factory reset}}
+    regions:
+    - {id: logo-zone, at: [19.6, 33.4], size: {w: 5.0, h: 4.8}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 442.4, h: 43.7}
+    panel:
+      decor:
+      - {at: [18.0, 3.1], size: [76.0, 1.8], pattern: vent, vent: 1.0}
+      - {at: [97.1, 3.1], size: [74.3, 1.8], pattern: vent, vent: 1.0}
+      - {at: [176.1, 3.1], size: [73.8, 1.8], pattern: vent, vent: 1.0}
+      - {at: [255.1, 3.1], size: [76.3, 1.8], pattern: vent, vent: 1.0}
+      - {at: [334.3, 3.1], size: [76.3, 1.8], pattern: vent, vent: 1.0}
+      - {id: serial-label, kind: label-plate, at: [17.8, 6.6], size: [24.3, 10.4], fill: '#d3d5d7'}
+      - {id: ac-plate, kind: inlet-plate, at: [379.6, 12.1], size: [30.8, 23.6], rx: 0.8, fill: '#17191c'}
+      cutouts:
+      - {id: rps-input, at: [17.9, 19.3], size: [64.0, 19.0], shape: rect}
+      - {id: ac-inlet, at: [381.0, 13.9], size: [28.0, 20.0], shape: rect}
+      - {id: rps-led, at: [9.7, 26.6], size: [3.2, 3.6], shape: rect}
+    silkscreen:
+    - {at: [2.4, 27.6], text: USP RPS, font-size: 1.5, anchor: start, fill: '#55595e', for: rps-led}
+    - {at: [5.4, 30.8], text: 'OFF', font-size: 1.4, anchor: start, fill: '#55595e', for: rps-led}
+    - {at: [5.4, 33.8], text: 'ON', font-size: 1.4, anchor: start, fill: '#55595e', for: rps-led}
+    - {at: [49.9, 41.7], text: USP CONNECT, font-size: 1.6, anchor: middle, fill: '#55595e', for: rps-input}
+    - {at: [341.8, 17.6], text: USW Pro 24 PoE, font-size: 2.4, anchor: start, fill: '#55595e', for: chassis}
+    - {at: [318.1, 23.0], text: M/N USW-Pro-24-PoE, font-size: 1.5, anchor: start, fill: '#55595e', for: chassis}
+    components:
+      placements:
+      - {ref: ubiquiti/usp-rps-input@1, id: rps-input, at: [17.9, 19.3], group: rps-input, rel-pos: 1}
+      - {ref: common/led-arrow@1, id: rps-led, at: [9.5, 26.8], rotate: 90, skin: up, for: rps-input, group: rps-leds, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet, at: [381.0, 13.9], group: power-input, rel-pos: 1}
+      - {ref: common/screw-head@1, id: rear-screw-0, at: [9.3, 35.7], group: furniture, rel-pos: 1}
+      - {ref: common/screw-head@1, id: rear-screw-1, at: [219.9, 35.6], group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: rear-screw-2, at: [430.1, 35.5], group: furniture, rel-pos: 3}
+    regions:
+    - {id: logo-zone, at: [317.8, 11.4], size: {w: 23.5, h: 8.5}, label: 'Vendor logo; not drawn'}
+    - {id: logo-zone-2, at: [317.8, 29.6], size: {w: 6.0, h: 7.3}, label: 'Vendor mark; not drawn'}
+  top:
+    size: {w: 442.4, h: 285.4}
+    empty: >-
+      Not drawn by any source held: the data sheet photograph shows the lid only in perspective, and
+      the community drawings are front and rear elevations.
+  bottom:
+    size: {w: 442.4, h: 285.4}
+    empty: >-
+      Not drawn by any source held: neither the data sheet nor the community drawings picture the underside.
+  left:
+    size: {w: 285.4, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The data sheet photograph shows the right side wall in
+      perspective with its screw holes; no side elevation is given.
+  right:
+    size: {w: 285.4, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The data sheet photograph shows this wall in perspective with
+      four screw holes; no side elevation is given.
+configurations:
+  base:
+    kind: base
+    description: >-
+      USW-Pro-24-PoE - 24 Gigabit RJ45 ports (16 PoE+, 8 PoE++), two 1/10G SFP+ ports, internal 450 W AC
+      supply, USP RPS DC input. The data sheet lists one model and no other part number.
+    default: true
+    part-numbers:
+      USW-Pro-24-PoE: {}
+datasheet:
+  title: 'Datasheet USW-Pro-24-PoE (Ubiquiti Inc., 2023)'
+  sha256: 973f29678bceddace6003d1291b9920a5b4a2749ad27aa1e07a0db30f99faae3
+references:
+- {title: 'techspecs.ui.com page data for USW-Pro-24-PoE (Ubiquiti, read 2026-10-26)', sha256: a950c1b9bf07003dd92295c41e301401a68c744495dfc1e6fe9a9e7dfab9fbda}
+- {title: 'NetBox devicetype-library USW-Pro-24-PoE.yaml (community, not the maker)', sha256: 70a8a2fc2b068065bb242995afab246d68c07ec400e207f3362e6f0c34539e60}
+- {title: 'NetBox elevation ubiquiti-unifi-switch-24-pro-poe-gen2.front.png (community drawing)', sha256: 5a4f1266b88ee334cb9e866f8ff14b6190b9440554dffcedefd488f058a64581}
+- {title: 'NetBox elevation ubiquiti-unifi-switch-24-pro-poe-gen2.rear.png (community drawing)', sha256: da50ab97d8ff1599788d4c2400b09f81dbe4592262ae44be83b5a6f28fa0ee4d}
