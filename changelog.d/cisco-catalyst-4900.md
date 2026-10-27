@@ -6,7 +6,6 @@
   configuration.
 - The 4948E-F's field-replaceable units, family-prefixed by Cisco part number: `cisco/pwr-c49e-300ac-f`,
   `cisco/ws-x4993-f` and the blank power supply cover `cisco/ws-x4994-f`.
-- The first rack-mount kit in the library, Cisco's standard kit `cisco/69-2037-xx` and its bracket
-  `cisco/69-2037-xx-bracket`, with the 4948E-F's two bracket positions (front sides and rear sides).
+- The 4948E-F's two rack-bracket positions, on the front sides and on the rear sides of the chassis.
 - The DCIM device types for WS-C4948E-F-S and WS-C4948E-F-E, in the NetBox and Nautobot exports, and the
   module types for the three new parts.

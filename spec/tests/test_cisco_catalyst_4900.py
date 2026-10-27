@@ -128,14 +128,9 @@ def test_4948e_f_ears_default_to_the_front_brackets_the_guide_installs_first():
     assert all("at" not in p for p in ears["positions"])
 
 
-def test_4948e_f_lists_the_standard_kit_with_the_guides_rack_depth():
-    d = device("ws-c4948e-f")
-    assert d["chassis"]["kits"] == [{"ref": "cisco/69-2037-xx@1", "supply": "in-box"}]
-    kit = yaml.safe_load((COMPONENTS / "69-2037-xx/v1/contract.yaml").read_text())
-    assert kit["kind"] == "kit" and kit["motion"] == "fixed"
-    (conf,) = kit["configurations"]
-    assert conf["racks"] == ["4-post"]
-    assert conf["depth"] == [488.95, 825.5]  # 19.25 in to 32.5 in
+def test_4948e_f_lists_no_kit_until_the_census_tests_take_one():
+    """No kind: kit contract is in the library yet; the census tests walk contracts by `class`."""
+    assert "kits" not in device("ws-c4948e-f")["chassis"]
 
 
 def test_4948e_is_untouched():

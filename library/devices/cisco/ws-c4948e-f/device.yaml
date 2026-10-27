@@ -17,15 +17,6 @@ description: >-
   sibling, the WS-C4948E, takes different supplies and a different fan tray and is not this device. End-of-sale
   was announced in October 2016.
 profile: networking
-lint:
-  waive:
-    L29: >-
-      Neither the guide nor the data sheet gives a fan-tray draw, only the switch's, which already includes
-      it. The gap is recorded as fan-tray-power, and no figure is invented.
-    L61: >-
-      Sixteen port numerals sit under their lamps, not under their jacks: twelve lamps on a 5.8 mm step
-      stand under six columns on a 13.97 mm step, so a numeral lands within a millimetre or so of a jack's
-      centre by accident, as on the Catalyst 4948E whose face this is.
 provenance:
   sources:
     confidence: datasheet
@@ -111,14 +102,17 @@ provenance:
       lower view, to the rear sides; "The rack-mount brackets can be installed either on the front sides
       of the chassis or on the rear sides". Neither position is dimensioned, so the positions are named
       and carry no `at`; the front is the one the guide installs first and the one the Panduit inlet duct
-      needs, so it is the default. The standard kit 69-2037-xx "ships with the chassis as part of the
-      accessory kit" and the guide gives a rack depth "at least 19.25 inches (48.9 cm) but not more than
-      32.5 inches (82.5 cm)" between the front and rear mounting strips: 488.95 to 825.5 mm. WS-X4948E-19CNTR=
+      needs, so it is the default. NO KIT IS LISTED, and that is a decision, not an omission. The standard
+      kit 69-2037-xx "ships with the chassis as part of the accessory kit", and the guide gives a rack
+      depth "at least 19.25 inches (48.9 cm) but not more than 32.5 inches (82.5 cm)" between the front
+      and rear mounting strips: 488.95 to 825.5 mm. A `kind: kit` contract was written for it and withdrawn:
+      it would be the library's first, and the census tests that walk every component contract (power
+      roles for `class`, the cage census, the catalogue and the components index) do not yet take a contract
+      that has no `class`. Making them take one is tool and test work outside this change. WS-X4948E-19CNTR=
       and WS-X4948E-23CNTR= (centre-mount kits for 19- and 23-inch racks, orderable) are named in Table
-      3-1 with no figure, no depth and no part count - their installation note is not staged - so no contract
-      can be written for them. The cable management kit 69-1303-xx is a bracket for cables and not a rack
-      kit, and the Panduit CDE2 inlet air duct is a third party's accessory for the -F alone; neither
-      is listed.
+      3-1 with no figure, depth or part count - their installation note is not staged. The cable management
+      kit 69-1303-xx is not a rack kit, and the Panduit CDE2 inlet air duct is a third party's accessory
+      for the -F alone.
 attrs:
   physical:
     weight-note: >-
@@ -178,8 +172,6 @@ chassis:
     positions:
     - {name: flush, label: brackets on the front sides of the chassis, default: true}
     - {name: rear, label: brackets on the rear sides of the chassis}
-  kits:
-  - {ref: cisco/69-2037-xx@1, supply: in-box}
 gaps:
 - what: the-four-undrawn-faces
   scope:
