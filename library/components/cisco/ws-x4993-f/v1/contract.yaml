@@ -1,0 +1,77 @@
+format: 1
+kind: module
+name: ws-x4993-f
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The fan tray of the Cisco Catalyst 4948E-F, WS-X4993-F - four variable-speed 12 VDC fans
+  behind one long perforated blue face, a captive installation screw at each end and a
+  pull handle across the middle. It seats between the two power supplies and prints PS 1
+  and PS 2 at its two ends to name them. Back-to-front airflow; the Catalyst 4948E takes
+  the WS-X4993 instead, and the two trays are not interchangeable.
+size: {w: 190.7, h: 39.5}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'WS-X4993-F'
+  power-absent: not-published
+  fans: 4
+  airflow: back-to-front
+provenance:
+  model: >-
+    datasheet - the Catalyst 4948E and Catalyst 4948E-F Switch Installation Guide
+    OL-21561-02, Table 1-1: "The Catalyst 4948E-F chassis supports one hot-swappable fan
+    tray (part number WS-X4993-F=)", "The fan trays are not interchangeable between the
+    Catalyst 4948E and the Catalyst 4948E-F chassis", "four variable-speed 12 VDC fans",
+    "The fan tray for the Catalyst 4948E-F is color-coded blue" and "The airflow in the
+    Catalyst 4948E-F chassis is from back to front". The trailing = is Cisco's spare-order
+    mark and is not part of the model.
+  power: >-
+    NOT PUBLISHED. Neither the guide nor the data sheet gives a fan-tray figure apart from
+    the switch as a whole.
+  size: >-
+    estimated - carried from cisco/ws-x4993@1, measured off the 4948E's rear photograph.
+    The 4948E-F's own photograph (data sheet Figure 3) puts the tray's left edge at 117.7
+    mm and its right at about 313.7 mm from the left of the chassis on a 3.857 px per mm
+    scale read off the stated width, 196 mm against the -X4993's 190.7. The photograph is
+    a composite that is 10 per cent shorter than its width implies, and a blurred
+    boundary is good for two or three pixels each side, so the bay footprint is carried
+    and the difference is named here.
+  elements: >-
+    estimated - the -X4993's arrangement, which the -F photograph shows: a captive screw at
+    each end, a long perforated field with four fan hubs behind it and a bar handle across
+    the middle. The part number is printed at the upper left and a small airflow mark
+    beside it; the mark is not drawn, being too small to resolve.
+  colour: >-
+    photo-measured - the median of 980 pixels of the tray's end plate in the data sheet's
+    Figure 3 is #506b73, a blue-grey, against the guide's "color-coded blue".
+  depth: >-
+    estimated - not stated. The -X4993's 60 mm is carried.
+states: [absent]
+elements:
+  screw-left: {at: [2.7, 16.9], size: [6.0, 6.0], class: screw}
+  screw-right: {at: [184.6, 16.9], size: [6.0, 6.0], class: screw}
+  grille: {at: [12.0, 1.5], size: [171.9, 36.5], class: rotor}
+  handle: {at: [66.7, 17.8], size: [57.3, 5.2], class: handle}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 26
+      confidence: estimated
+      source: >-
+        cisco/ws-x4993@1's grille element - the perforated field's extent is carried from
+        it and the depth behind it is not stated.
+    - node: handle
+      uhandle: 12.0
+      color: '#c9ced2'
+      confidence: estimated
+      source: >-
+        Not stated. The photograph shows a bright bar handle standing off the grille;
+        12 mm is the -X4993's reading of the same feature.
+skins: [default]
+body:
+  depth: 60
+  color: '#506b73'
+  footprint: {at: [0, 0], size: [190.7, 39.5]}

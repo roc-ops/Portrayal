@@ -1,0 +1,102 @@
+format: 1
+kind: module
+name: pwr-c49e-300ac-f
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 300 W AC-input power supply of the Cisco Catalyst 4948E-F, PWR-C49E-300AC-F - the
+  back-to-front ("reversed air flow") supply, which the Catalyst 4948E does not take. A
+  blue-grey face with a captive installation screw on a flange at the left, a rocker power
+  switch over an AC receptacle, a honeycomb fan grille, a printed rating panel with the
+  INPUT OK and OUTPUT OK lamps beneath it, and a pull handle at the right edge.
+size: {w: 115.7, h: 39.5}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'PWR-C49E-300AC-F'
+  power-output-w: 300
+  input: ac
+  inlet: c14
+  input-voltage: 'low-line 85 to 132 VAC, high-line 170 to 264 VAC'
+  input-current-max: '4 A at 100 VAC, 2 A at 240 VAC'
+  input-frequency: '47 to 63 Hz'
+  output: '25 A at +12 VDC'
+  weight-kg: 0.9
+  airflow: back-to-front
+provenance:
+  model: >-
+    datasheet - the Catalyst 4948E and Catalyst 4948E-F Switch Installation Guide
+    OL-21561-02, Table 1-1: "PWR-C49E-300AC-F (300 W AC-input power supply, reversed air
+    flow)", "The front panel on the power supply for the Catalyst 4948E-F is color-coded
+    blue", and "The power supplies are not interchangeable between the Catalyst 4948E and
+    the Catalyst 4948E-F switch chassis"; appendix A, "300 W AC-Input Power Supply
+    (PWR-C49E-300AC-F)". The trailing = is Cisco's spare-order mark and is not part of the
+    model. The data sheet's ordering table lists no DC supply for the -F ("Not Available at
+    this time"), so this is the only supply the -F takes.
+  airflow: >-
+    CONFLICT, AND THE GUIDE LOST. Table 1-1 and the chassis airflow figures (1-4 and 1-6)
+    say the 4948E-F moves air from back to front, and call this supply's airflow "reversed".
+    The appendix's own specification tables print the opposite: Table A-3, this supply's,
+    says "Airflow direction - Front to back", and Table A-1, the -R's, says "Back to front".
+    The two lines are transposed. Table 1-1, the figures and the data sheet agree with each
+    other and with the part's name, so back-to-front is carried.
+  power: >-
+    datasheet - Table A-3 gives the output as 25 A at +12 VDC, which is 300 W, and the data
+    sheet's ordering table calls it the 300 W supply. An OUTPUT rating, so
+    `power-output-w`. Input voltage, current and frequency, the 0.4 kVA rating and the 2 lb
+    (0.9 kg) weight are the same table's, which matches the -R's table in all but the kVA
+    (0.375 there).
+  size: >-
+    estimated - from cisco/pwr-c49e-300ac-r@1, which was measured off the 4948E's rear
+    photograph. The 4948E-F's own rear photograph (data sheet Figure 3) is a composite
+    that is 10 per cent shorter than its width implies, so it cannot be measured on both
+    axes; scaled on the stated 444.4 mm width at 3.857 px per mm, the first supply runs
+    454 px, 117.7 mm, against the -R's 115.7, which agrees within the two or three pixels a
+    blurred edge is good for. The same bay footprint is therefore carried.
+  elements: >-
+    estimated - the same arrangement as the -R, which the -F photograph shows: rocker
+    switch over a C14 inlet at the left, a honeycomb fan grille with a brass-coloured
+    hub, a rating panel and two lamps at the right, a vertical pull handle at the right
+    edge. Positions are the -R's, not re-measured. The rating panel's text is not legible
+    at the photograph's resolution; only the model number is printed here.
+  inlet: >-
+    photo - a C14 with the earth pin down, as on the -R; the appendix's power cord table for
+    the 300 W supplies lists CAB-N5K6A-NA=, whose appliance end it labels C13.
+  colour: >-
+    photo-measured - the median of 1540 pixels of bare plate at the left flange of the data
+    sheet's Figure 3 is #4e5e65 (blue-grey), against the guide's "color-coded blue".
+  depth: >-
+    estimated - not stated in the guide; the -R's 178 mm is carried, which is itself a
+    resale listing's figure.
+states: [absent]
+elements:
+  screw: {at: [3.3, 16.4], size: [6.0, 6.0], class: screw}
+  fan: {at: [50.5, 1.2], size: [38.1, 37.2], class: rotor}
+  input-ok: {at: [93.6, 32.8], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  output-ok: {at: [102.0, 32.8], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  handle: {at: [110.2, 6.3], size: [4.4, 28.7], class: handle}
+parts:
+  - {ref: common/rocker-switch@1, id: power-switch, at: [21.3, 1.0]}
+  - {ref: std/c14-inlet@1, id: inlet, at: [18.3, 16.6], rotate: 180}
+relief:
+  wall: '#2b2e31'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/pwr-c49e-300ac-r@1's fan element - the grille's extent is carried from the
+        -R and the depth behind it is not stated.
+    - node: handle
+      uhandle: 18.0
+      color: '#3a3d41'
+      confidence: estimated
+      source: >-
+        Not stated. The 4948E-F photograph shows a vertical pull bar at the right edge;
+        18 mm is the -R's reading of a wire loop standing clear of the face.
+skins: [default]
+body:
+  depth: 178
+  color: '#4e5e65'
+  footprint: {at: [0, 0], size: [115.7, 39.5]}
