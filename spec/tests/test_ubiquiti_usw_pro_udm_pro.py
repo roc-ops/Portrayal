@@ -143,4 +143,5 @@ def test_dcim_device_type_is_one_u_per_configuration(name):
         assert f.exists(), f"{f} missing: run dcim_export.py for {name}"
         t = yaml.safe_load(f.read_text())
         assert t["u_height"] == 1
-        assert t["part_number"] == part
+        assert t["manufacturer"] == "Ubiquiti"
+        assert t["model"] == part

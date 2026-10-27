@@ -993,6 +993,10 @@ NOT_A_DCIM_PORT = {
                                "guide names the port and gives no connector type or pinout, and no "
                                "DCIM has a power port type for an RPS connector, so it cannot be "
                                "typed honestly",
+    "ubiquiti/usp-rps-input": "the USP-RPS DC input of the Ubiquiti UniFi rack switches and Dream "
+                              "Machine gateways, for an external redundant supply: the data sheets "
+                              "name the input (and the switch's rating, 52 V DC at 7.69 A) and no "
+                              "connector type, so it cannot be typed honestly",
 
     # --- USB: real ports, no device-type field to put them in ----------------
     # A DCIM device type has console ports, power ports and interfaces. A USB
