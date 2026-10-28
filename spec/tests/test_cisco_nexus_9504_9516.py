@@ -3,8 +3,9 @@
 Every figure here is Cisco's N9504 or N9516 NX-OS Mode Switch Hardware Installation Guide: Appendix A "Switch
 Dimensions" for the envelopes, the "Overview" for the slots and what each takes, and the chassis's own table in
 "Planning for Power Requirements" for the power figures (the guide's first table is a copy of the 9508's). Pages
-are PDF pages, and the printed page is six lower. The line cards are a later batch, so each line-card slot takes
-only the line-card blank here. The eleven parts shared with the 9508 are referenced by id, never redrawn.
+are PDF pages, and the printed page is six lower. Each line-card slot takes the line-card blank and the line
+cards its guide supports, which test_cisco_nexus_9500_line_cards.py models. The eleven parts shared with the
+9508 are referenced by id, never redrawn.
 """
 from pathlib import Path
 
@@ -29,6 +30,8 @@ BLANKS = {"9504": ["n9k-c9504-fm-cv", "n9k-c9504-fan-pwr"], "9516": ["n9k-c9516-
 NEW = {k: FANS[k] + FABRICS[k] + BLANKS[k] for k in FANS}
 
 LINE_CARDS = {"9504": 4, "9516": 16}
+CARDS_TAKEN = {"9504": ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx", "n9k-x9716d-gx"],
+               "9516": ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx"]}
 SUPPLY_BAYS = {"9504": 4, "9516": 10}
 HEIGHT = {"9504": 7 * 44.45, "9516": 21 * 44.45}      # 311.15 and 933.45 mm: the guide's own RU counts
 
@@ -196,7 +199,9 @@ def test_the_fan_tray_group_is_two_plus_one(device):
 def test_each_slot_accepts_what_the_guide_lists(device, chassis):
     front, rear = by_id(device, "front"), by_id(device, "rear")
     for n in range(1, LINE_CARDS[chassis] + 1):
-        assert set(front[f"lc-{n}"]["accepts"]) == {"cisco/n9k-c9500-lc-cv@1"}   # line cards: a later batch
+        # the line cards the chassis's own guide supports; the 9516 guide says the X9716D-GX is not compatible
+        # with it (PDF p7, printed 1)
+        assert set(front[f"lc-{n}"]["accepts"]) == {"cisco/n9k-c9500-lc-cv@1"} | refs(CARDS_TAKEN[chassis])
     for n in (1, 2):
         assert set(front[f"sup-{n}"]["accepts"]) == refs(SUPERVISORS)
         assert set(rear[f"sc-{n}"]["accepts"]) == {"cisco/n9k-sc-a@1"}
