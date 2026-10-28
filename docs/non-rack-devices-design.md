@@ -139,7 +139,14 @@ point is drawn and exported as a ceiling device.
   `ufispace/s6301-56stp`), with `poe-budget-scope` on 9 of them. It is not a
   schema-defined key. 37 of the 49 values are numbers; 12 are strings, ten of
   them prose such as "405 W available for PoE (Tables 3 and 14)". A tool
-  cannot sum against those 12 today.
+  cannot sum against those 12 today. 37 devices also state a free
+  `poe-standard`. On 36 of them it is what the switch gives ("IEEE
+  802.3af/at" on the EX2300-24P). On `mikrotik/crs309-1g-8s-plus-in` it is
+  the input ("IEEE 802.3af/at, and passive PoE (in)"). One key used for both
+  directions cannot be summed against a budget. A device that is both, such
+  as the GL-8xEP, needs the two facts under separate names, which is why the
+  keys below are prefixed `poe-pd-`. Re-filing the CRS309's input is for the
+  build task.
 - **The port side.** A port group's `attrs.poe` is free prose in 61 devices
   (`802.3at`, `802.3bt 90 W`, `none`, `passive PD (in)`, `802.3af PD`). No
   rule or exporter reads it.
