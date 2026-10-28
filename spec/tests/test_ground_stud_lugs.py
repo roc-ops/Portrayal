@@ -126,9 +126,11 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # 4 -> 3 devices. The M5 screw is not in this census (SIZED_ALONE).
 # The seven ReadyLinks GL-x siblings (#763) each place the GL-12xB-240D's rear
 # stud again, 4 -> 11 on 4 -> 11 devices.
+# The Cisco C9300-48P and C9300-48T each place two common/ground-screw@1 on their rear
+# face, the guide's "ground connectors", 6 -> 10 on 3 -> 5 devices.
 CENSUS = {
     "common/ground-lug@1": (31, 22),
-    "common/ground-screw@1": (6, 3),
+    "common/ground-screw@1": (10, 5),
     "common/ground-stud@1": (11, 11),
     CASA: (1, 1),
 }
@@ -409,8 +411,8 @@ def test_the_census_of_ground_stud_placements(placed):
     got = {ref: (n, len(devs)) for ref, (n, devs) in counts.items()}
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
-    assert sum(n for n, _ in got.values()) == 49
-    assert len({where for where, _, _ in placed}) == 37
+    assert sum(n for n, _ in got.values()) == 53
+    assert len({where for where, _, _ in placed}) == 39
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -452,7 +454,7 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         assert c["mate"] == pytest.approx(want, abs=EPS)
         seen += 1
     # every placement of the census but the Casa terminal's one
-    assert seen == 48
+    assert seen == 52
 
 
 def test_the_only_turned_placements_are_turned_90(placed):

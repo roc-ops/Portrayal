@@ -1,0 +1,44 @@
+format: 1
+kind: module
+name: g1483-0600wnb
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swap 600 W AC power supply that MikroTik names G1483-0600WNB, the supply the CRS320-8P-8B-4S+RM's brochure offers
+  for its expansion slot. A grey metal frame around a dark face with a round fan opening at the left, a black pull
+  handle across its foot, an IEC C14 inlet standing on end at the right with a blue release tab beside it, four
+  captive screws and three small round holes along the bottom edge.
+size: {w: 74.7, h: 41.9, d: 200.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs:
+  model: 'G1483-0600WNB'
+  power-output-w: 600
+  input: ac
+  inlet: c14
+  hot-swap: true
+provenance:
+  part-number: >-
+    datasheet - the CRS320-8P-8B-4S+RM brochure (MikroTik, revision stamp 240740, no date printed): "G1483-0600WNB,
+    hot-swap 600 W power supply, available for purchase separately!", and "we've reserved an expansion slot for an
+    additional PSU, in case you need to raise the power output to 1150 W". It is the only held document that names the
+    part. No data sheet and no drawing of it is held, so no input rating, no weight and no size are stated anywhere.
+  size: >-
+    estimated - no held document dimensions this part. The face is the supply seated in the first slot of the studio
+    photograph of the CRS320's rear (2356, seen from above), scaled at 5.355 px per mm across from the chassis width
+    and 4.775 px per mm down (the face is 0.89 of its true height, the photo looks down): 74.7 wide and 41.9 high. The
+    depth is a guess for a hot-swap supply of this width; nothing held states it. Gap `part-dimensions` on the
+    device.
+  face: >-
+    photo-measured - read off the same photograph: the dark face and its round fan opening (33 mm across, centred 24.3
+    mm from the left and 21.0 down), the black handle (42.4 x 10.9), four screws, the C14 inlet on end (centre 56.5
+    mm, 18.4 down), the blue tab and three round holes at the foot. Which of the holes is a lamp is not stated, so
+    none is placed as one.
+  power: >-
+    datasheet - "600 W" is the brochure's name for the supply and "1150 W with the additional PSU" its figure for
+    both. Carried as the output of this one module. Whether the supply shipped in the first slot is this part is not
+    stated by any held document (gap `shipped-supply-part` on the device).
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [42.5, 8.4], rotate: 90}
+skins: [default]

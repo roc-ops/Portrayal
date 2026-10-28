@@ -410,7 +410,8 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 # the Juniper QFX5241-64OD and -64QD each place the same two-stud M6 earthing pad on the rear: four more seats,
 # two down and two left
 # the Juniper EX9214's stud pair on its lower rear plate (guide Figure 5): two more seats (down)
-WANT = {"down": 138, "left": 41, "up": 13, "right": 31}   # the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's
+# the Cisco C9300-48P's and C9300-48T's two rear ground screws each: one more seat down and one left on each
+WANT = {"down": 140, "left": 43, "up": 13, "right": 31}   # the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's
 # THE TWO-HOLE LUG on a pair host: 59 seats on 33 devices - three on each of
 # the eleven Amphenol 300CB08 panels, one on each AIS800, the seven MX, the
 # LMFS-F, two on the FX-16, one on the FX-8 and FX-4, the SR-1-DC block's
@@ -502,7 +503,7 @@ def _pairs(census):
 def test_the_default_distribution_is_pinned(census):
     ring, pairs = _ring(census), _pairs(census)
     assert dict(collections.Counter(r["dir"] for r in ring.values())) == WANT
-    assert len({k[0] for k in ring}) == 98   # 63, the Juniper EX9204, EX9208 and EX9214, the Arista 7280CR3A-48D6 and -72, the Juniper QFX5241-64OD and -64QD, the Arista 7050CX4M-48D8, the Arista 7280CR3-96 (as the DR3A-36), the Arista 7280DR3A-36, and the Eaton EVMI2130X, EVMA8365X and PDU12IEC, the seven ReadyLinks GL-x siblings, the four Juniper EX3400, the four Juniper EX3300, the Arista 7010TX-48, the Juniper QFX5200-48Y, the Juniper QFX5120-32C, the Juniper QFX5240-64OD and -64QD, the Juniper EX9251 and the Juniper QFX5700
+    assert len({k[0] for k in ring}) == 100   # 63, the Cisco C9300-48P and C9300-48T, the Juniper EX9204, EX9208 and EX9214, the Arista 7280CR3A-48D6 and -72, the Juniper QFX5241-64OD and -64QD, the Arista 7050CX4M-48D8, the Arista 7280CR3-96 (as the DR3A-36), the Arista 7280DR3A-36, and the Eaton EVMI2130X, EVMA8365X and PDU12IEC, the seven ReadyLinks GL-x siblings, the four Juniper EX3400, the four Juniper EX3300, the Arista 7010TX-48, the Juniper QFX5200-48Y, the Juniper QFX5120-32C, the Juniper QFX5240-64OD and -64QD, the Juniper EX9251 and the Juniper QFX5700
     assert dict(collections.Counter(r["dir"] for r in pairs.values())) == WANT_PAIRS
     assert len({k[0] for k in pairs}) == 51   # the Juniper EX9204, EX9208 and EX9214 pair hosts, the four Juniper EX3300, the two Juniper QFX5240 earthing pads, the Juniper QFX5700's and the two on the QFX5241-64OD and -64QD
     # a pair is turned only along itself
@@ -556,7 +557,8 @@ def test_the_four_crossings_the_seat_gave_are_gone(census):
     # and one of the 7050CX4M-48D8's, on the same strip
     # and one of the two rear grounding screws of each of the 7280CR3A-48D6 and -72, on the same strip
     # and both studs of each of the EX9204's and EX9208's pairs, the MX240's and MX480's pair host
-    assert len(crossed) == 42 and not [k for k in crossed if census[k]["hard"]]
+    # and one of the two rear ground screws of each of the Cisco C9300-48P and C9300-48T, 15.8 away from its neighbour
+    assert len(crossed) == 44 and not [k for k in crossed if census[k]["hard"]]
 
 
 def test_a_barrier_block_pole_is_no_turnable_seat():
