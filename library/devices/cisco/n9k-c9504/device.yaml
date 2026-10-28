@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: n9k-c9504
-version: 2.0.0
+version: 2.1.0
 maturity: modelled
 manufacturer: Cisco
 model: N9K-C9504
@@ -14,8 +14,9 @@ description: >-
   SUP 2 side by side below them, and below those four power-supply slots PS 1 to PS 4 lying flat in two rows
   of two either side of a centre panel with the chassis lamps. The REAR carries three fan trays FAN 1 to
   FAN 3, six fabric-module slots FM 1 to FM 6 behind the fan trays, and two system controllers SC 1 and SC 2
-  below them. Air enters at the front and leaves at the rear. This batch draws the chassis and its common
-  equipment; the line cards are added in a later batch, so each line-card slot holds its blank.
+  below them. Air enters at the front and leaves at the rear. Each line-card slot holds its blank and accepts
+  the line-card blank and the four line cards modelled so far (N9K-X9736C-FX, N9K-X97160YC-EX, N9K-X9732C-FX
+  and N9K-X9716D-GX); the other 9500 line cards follow.
 profile: networking
 provenance:
   sources:
@@ -123,7 +124,9 @@ provenance:
       fan trays" (PDF p118, printed 112). The guide names no N9K-C9504-FM-Z: the one "-Z" it prints,
       "N9K-C950x-FM-G-Z" in that migration caution, is the 9508 guide's text copied and no part is made from
       it. Where an even slot is empty with a non-G fabric module the guide does not say what fills it (a gap).
-      FM 5 works only with some line cards (not this batch). An empty odd slot defaults to the FM-CV.
+      FM 5 (slot 25) works only with the N9K-X9736C-FX, N9K-X9736Q-FX and N9K-X9736C-FX3 and not with other
+      line cards (PDF p9, printed 3): of the line cards modelled here, only the N9K-X9736C-FX. That is not
+      enforced (see the gap line-card-fabric-pairing). An empty odd slot defaults to the FM-CV.
   power-slots:
     confidence: datasheet
     note: >-
@@ -133,11 +136,15 @@ provenance:
       on mixing supply types: "The switch can be powered by a mix of AC, DC, and HVAC/HVDC power sources"
       (PDF p10, printed 4, and p24, printed 18), against "Do not use a mix of AC and DC power sources for a
       switch" (PDF p123, printed 117). Every supply type is accepted by every slot.
-  line-cards-not-here:
+  line-cards:
     confidence: datasheet
     note: >-
-      The four line-card slots accept only the line-card blank N9K-C9500-LC-CV in this batch. The line cards
-      follow in a later batch and will be added to these slots.
+      datasheet - the four line-card slots accept the line-card blank N9K-C9500-LC-CV and the line cards this
+      guide supports among those modelled: N9K-X9736C-FX, N9K-X97160YC-EX, N9K-X9732C-FX and N9K-X9716D-GX,
+      which Overview Table 1 and the power tables (PDF pp8-9 and 17-20, printed 2-3 and 11-14) list. A line
+      card is accepted because this chassis's own guide supports it. The other 9500 line cards follow in later
+      batches; the N9K-X9788TC-FX is listed in the guide and not modelled, because the guides name its 48 ports
+      three ways and no figure of its faceplate is held.
   ears-and-kits:
     confidence: drawing
     note: >-
@@ -236,8 +243,25 @@ gaps:
   reason: vendor-silent
   note: >-
     The guide gives a typical and maximum draw per module and no figure for the chassis itself; the chassis
-    total is whatever its occupants sum to. The line cards are not in this batch, so a total here is a floor.
+    total is whatever its occupants sum to. Each line card carries its own typical and maximum draw, so a
+    loaded chassis's total is the sum of its occupants; none is written here.
   wanted: a chassis-level draw from Cisco, or confirmation that the sum of the module table is the answer
+- what: line-card-fabric-pairing
+  scope: [line-cards]
+  reason: needs-drawing
+  note: >-
+    Which fabric module each line card goes with, and how many are needed, is listed here and NOT ENFORCED:
+    no bay or card restricts the fabric module it is seated with. The guide's Overview Table 1 (PDF pp8-9,
+    printed 2-3) pairs the cards modelled here with the N9K-C9504-FM-E (this chassis has no FM-E2) and the
+    N9K-C9504-FM-G; the count is the fabric modules required for maximum bandwidth. N9K-X9736C-FX: FM-E 5,
+    FM-G 5. N9K-X97160YC-EX: FM-E 4, FM-G 4. N9K-X9732C-FX: FM-E 4, FM-G 4. N9K-X9716D-GX: FM-G 4 only. The
+    guide's notes: FM 5 (slot 25) works only with the N9K-X9736C-FX, N9K-X9736Q-FX and N9K-X9736C-FX3; the
+    -G fabric modules need the N9K-C9504-FAN2 fan trays and take N9K-C9504-FAN-PWR in empty slots; all fabric
+    modules in the switch must be of one type; and "Do not mix ACI-mode line cards with NX-OS mode line cards
+    in the same switch" (PDF p7, printed 1). "Migrate the switch to 400-Gigabit -GX line cards" (PDF p118,
+    printed 112) says to replace the older fabric modules with "N9K-C9508-FM-G" modules, a sentence copied
+    from the 9508 guide.
+  wanted: a restriction in the format between a card and the fabric modules it is seated with
 - what: bracket-width
   scope: [front]
   reason: needs-drawing
@@ -390,10 +414,10 @@ views:
     - {at: [276.6, 275.5], text: PWR MGMT, font-size: 3, anchor: middle, for: chassis}
     components:
       bays:
-      - {id: lc-1, at: [6.35, 0], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1'], group: line-cards, rel-pos: 0, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-2, at: [6.35, 44.45], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1'], group: line-cards, rel-pos: 1, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-3, at: [6.35, 88.9], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1'], group: line-cards, rel-pos: 2, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-4, at: [6.35, 133.35], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1'], group: line-cards, rel-pos: 3, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-1, at: [6.35, 0], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9716d-gx@1'], group: line-cards, rel-pos: 0, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-2, at: [6.35, 44.45], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9716d-gx@1'], group: line-cards, rel-pos: 1, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-3, at: [6.35, 88.9], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9716d-gx@1'], group: line-cards, rel-pos: 2, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-4, at: [6.35, 133.35], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9716d-gx@1'], group: line-cards, rel-pos: 3, default: cisco/n9k-c9500-lc-cv@1}
       - {id: sup-1, at: [6.35, 177.8], size: {w: 203.2, h: 44.45}, accepts: ['cisco/n9k-sup-a@1', 'cisco/n9k-sup-a-plus@1', 'cisco/n9k-sup-b@1', 'cisco/n9k-sup-b-plus@1'], group: supervisors, rel-pos: 0, default: cisco/n9k-sup-b@1}
       - {id: sup-2, at: [234.95, 177.8], size: {w: 203.2, h: 44.45}, accepts: ['cisco/n9k-sup-a@1', 'cisco/n9k-sup-a-plus@1', 'cisco/n9k-sup-b@1', 'cisco/n9k-sup-b-plus@1'], group: supervisors, rel-pos: 1, default: cisco/n9k-sup-b@1}
       - {id: ps-1, at: [6.35, 222.25], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 0, default: cisco/n9k-pac-3000w-b@1}
