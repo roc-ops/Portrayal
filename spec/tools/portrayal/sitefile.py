@@ -1,8 +1,11 @@
 """THE SITE FILE CHECKER: what JSON Schema cannot say about a `portrayal-site` file.
 
-The schema (`spec/schemas/site.schema.json`) gives the shape. Three rules of
+The schema (`spec/schemas/site.schema.json`) gives the shape. These rules of
 docs/site-file-design.md are not shapes, and are checked here:
 
+  - a placed rack's `file` is normalised, stays inside the site's folder, and
+    is compared normalised;
+  - a pathway segment has two different nodes at its ends;
   - every `id`, and every `guid`, is unique across the whole file;
   - every id a file names (a wall, a node, a rack placement, a placed device,
     a point outside the site, an item in a placed rack) is there;
@@ -18,6 +21,8 @@ one for one. A placed rack file is opened for reading only, and never written.
 """
 import argparse
 import json
+import posixpath
+import re
 import sys
 from pathlib import Path
 
@@ -71,6 +76,18 @@ def _walk_ids(node, where, ids, guids):
     elif isinstance(node, list):
         for i, v in enumerate(node):
             _walk_ids(v, f"{where}/{i}", ids, guids)
+
+
+def _inside(file):
+    """`file` normalised (`.` and `..` folded, `/` as the separator), or None when
+    it is absolute or resolves outside the site folder."""
+    text = file.replace("\\", "/")
+    if text.startswith("/") or re.match(r"[A-Za-z]:", text):
+        return None
+    norm = posixpath.normpath(text)
+    if norm == ".." or norm.startswith("../"):
+        return None
+    return norm
 
 
 def _rack_items(path, rack_id, cache):
@@ -140,13 +157,21 @@ def check(doc, base=None):
             if n["floor"] not in floors_of.get(bid, set()):
                 found.append(f"Pathway node {n['id']} is on floor {n['floor']}, which building {bid} does not have.")
         for s in paths.get("segments", []):
+            if s["a"] == s["b"]:
+                found.append(f"Pathway segment {s['id']} has node {s['a']} at both ends; a segment runs between two nodes.")
             for e in ("a", "b"):
                 if s[e] not in nodes_of[bid]:
                     found.append(f"Pathway segment {s['id']} ends at node {s[e]}, which building {bid} does not have.")
 
     # Each rack is placed once, and each placed rack is in its file.
     racks_cache, placed, items = {}, {}, {}
-    for pid, (sid, file, rack) in placements.items():
+    for pid, (sid, written, rack) in placements.items():
+        file = _inside(written)
+        if file is None:
+            found.append(f"Rack {pid} places a rack file at {written}, which is outside the site folder; "
+                         "a placed rack file is a relative path that stays inside it.")
+            continue
+        placements[pid] = (sid, file, rack)
         key = (file, rack)
         if key in placed:
             found.append(f"Racks {placed[key]} and {pid} both place rack {rack} of {file}; a rack stands in one place.")

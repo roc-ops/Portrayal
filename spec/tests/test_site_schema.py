@@ -21,7 +21,7 @@ from portrayal import sitefile
 
 ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_PATH = ROOT / "spec/schemas/site.schema.json"
-FIXTURE = ROOT / "spec/tests/fixtures/site/zorb.site.json"
+FIXTURE = ROOT / "spec/tests/fixtures/zorb.site.json"
 RACK_FILE = ROOT / "spec/tests/fixtures/racks/acceptance.rack.json"
 
 
@@ -155,6 +155,58 @@ def test_the_checker_does_read_the_placed_rack_file():
     room(doc)["cables"][0]["a"]["item"] = "i99"
     got = findings(doc)
     assert any("i99" in f and "r1" in f for f in got), got
+
+
+@pytest.mark.parametrize("file", [
+    "../../outside.rack.json", "racks/../../outside.rack.json", "/etc/outside.rack.json",
+    "C:/outside.rack.json", "..\\outside.rack.json"])
+def test_a_placed_rack_file_outside_the_site_folder_is_refused(tmp_path, file):
+    """Planted: a placement whose `file` climbs out of the site folder, or is
+    absolute. The file is refused by its path, before any read of it."""
+    (tmp_path / "racks").mkdir()
+    (tmp_path / "racks" / "acceptance.rack.json").write_bytes(RACK_FILE.read_bytes())
+    doc = fixture()
+    room(doc)["racks"][0]["file"] = file
+    got = sitefile.check(doc, base=tmp_path)
+    assert any("rk-1" in f and "outside the site folder" in f for f in got), got
+
+
+def test_two_spellings_of_one_rack_path_are_one_rack(tmp_path):
+    """Planted: the one rack placed twice, the second by a longer spelling of the
+    same path. Compared as written they differ; normalised they are one rack."""
+    (tmp_path / "racks").mkdir()
+    (tmp_path / "racks" / "acceptance.rack.json").write_bytes(RACK_FILE.read_bytes())
+    doc = fixture()
+    placements = room(doc)["racks"]
+    placements[0]["file"] = "racks/acceptance.rack.json"
+    again = copy.deepcopy(placements[0])
+    again.update(id="rk-2", guid="1Nn1GUFhPU_8QfqTLh$Yw2", x=3000,
+                 file="./racks/../racks/./acceptance.rack.json")
+    placements.append(again)
+    got = sitefile.check(doc, base=tmp_path)
+    assert any("rk-1" in f and "rk-2" in f and "one place" in f for f in got), got
+
+
+def test_a_pathway_segment_with_one_node_at_both_ends_is_refused():
+    """Planted: a segment whose `a` and `b` are the same node. JSON Schema
+    cannot compare two properties of one object, so the checker refuses it."""
+    doc = fixture()
+    seg = doc["site"]["buildings"][0]["pathways"]["segments"][0]
+    seg["b"] = seg["a"]
+    assert schema_errors(doc) == [], "the schema cannot state it; the checker does"
+    got = findings(doc)
+    assert any(seg["id"] in f and seg["a"] in f and "both ends" in f for f in got), got
+
+
+def test_the_note_and_the_schema_both_require_name():
+    """Planted: the file without `name` is refused by the schema, and the note's
+    sentence on the required keys names `name` among them."""
+    doc = fixture()
+    del doc["name"]
+    assert any("name" in e for e in schema_errors(doc)), schema_errors(doc)
+    note = (ROOT / "docs/site-file-design.md").read_text(encoding="utf-8")
+    required = [s for s in note.replace("\n", " ").split(". ") if "are required" in s and "`format`" in s]
+    assert required and "`name`" in required[0] and "optional" not in required[0].split("`name`")[0], required
 
 
 def test_version_1_is_refused_with_both_versions_named(tmp_path):

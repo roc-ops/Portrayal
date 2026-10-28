@@ -85,7 +85,7 @@ in reach of each other, and the two drift.
  "ext": {}}
 ```
 
-`format`, `version` and `site` are required. `name` and `ext` are optional.
+`format`, `version`, `name` and `site` are required. `ext` is optional.
 The document itself has no `id`: the site is what it describes, and the
 site's `id` and `guid` serve.
 
@@ -162,13 +162,15 @@ an installer measures to.
 
 ```json
 {"id": "rk-1", "guid": "1Nn1GUFhPU_8QfqTLh$Ywt",
- "file": "../racks/acceptance.rack.json", "rack": "r1",
+ "file": "racks/acceptance.rack.json", "rack": "r1",
  "x": 2000, "y": 800, "rotation": 0}
 ```
 
 - **`file`** is the rack file as a path relative to the site file, and
   **`rack`** the id of the rack in it. A rack file today may hold more than
-  one rack; the site names one.
+  one rack; the site names one. The checker normalises each path, refuses
+  one that is absolute or resolves outside the site file's folder, and
+  compares the normalised paths.
 - **`x`, `y`** are the middle of the front of the rack's footprint, and
   **`rotation`** turns it about that point. At 0 the front faces down the
   plan. The footprint's width and depth are the rack's own: its frame, or the
@@ -278,7 +280,9 @@ because a tray leaves the room it starts in, and a riser joins two floors.
 - **A segment** is a straight run of one carrier between two nodes. **Its
   height is that of its ends**: a segment whose ends differ in height is a
   rise or a drop, and one whose ends are on two floors is a riser. Routing
-  (section 12) reads rises and drops from the nodes.
+  (section 12) reads rises and drops from the nodes. A segment with the same
+  node at both ends is refused by the checker, since JSON Schema cannot
+  compare two properties of one object.
 - **`width`** is the carrier's width, or a conduit's inside diameter, where
   stated. Fill is the routing note's.
 
@@ -441,7 +445,7 @@ parsed document so that the kit can mirror them:
 It is format code, not kit code: it reads, and never writes, a site file or a
 rack file.
 
-**The fixture** is `spec/tests/fixtures/site/zorb.site.json`, made up: one
+**The fixture** is `spec/tests/fixtures/zorb.site.json`, made up: one
 floor with two spaces; the rack of `fixtures/racks/acceptance.rack.json`
 placed by reference; a plywood backboard with one wall device; two outlets;
 an access point; three pathway segments (ladder rack, J-hooks, a surface
@@ -464,6 +468,10 @@ building.
 | a cable end naming a port and no device is refused | ends are whole | an end with `port` alone |
 | the placed rack file is byte-identical before and after the site is read | placing a rack never rewrites it | none: a hash comparison |
 | the checker does read the placed rack file | the hash is not vacuous | a rack end naming an item the rack lacks |
+| a placed rack file outside the site folder is refused | a placement stays inside the site's folder | a `file` that climbs out, or is absolute |
+| two spellings of one rack path are one rack | paths are compared normalised | the one rack placed twice by two spellings |
+| a pathway segment with one node at both ends is refused | a segment runs between two nodes | a segment whose `a` and `b` are the same node |
+| the note and the schema both require `name` | the two agree on the required keys | the fixture without `name` |
 | version 1 is refused with both versions named | the reader rule | the fixture with `version: 1` |
 | another format is refused | the format gate | the fixture with `format: portrayal-rack` |
 
