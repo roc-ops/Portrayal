@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: n9k-c9516-fm
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9516 40-Gigabit fabric module (N9K-C9516-FM). A vertical module with a vented face, ejector
+  levers, a BCN lamp and a status lamp; it sits in the rear of the chassis behind a fan tray and pairs with
+  the N9K-C9516-FAN tray. An empty odd slot takes the N9K-C9516-FM-CV blank and an empty even slot the
+  N9K-C9516-FM-Z. Cisco has announced its end of sale.
+size: {w: 62.48, h: 772.16, d: 297.18}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-C9516-FM'
+  role: 'fabric-module'
+  power-draw-typical-w: 330
+  power-draw-max-w: 504
+  weight-kg: 5.2
+  hot-swappable: true
+  eol: 'end-of-sale'
+provenance:
+  size: >-
+    datasheet - Cisco N9516 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (PDF p116, printed 110), "Fabric modules": 2.46 in (6.25 cm) wide, 11.7 in (29.72 cm) deep, 30.4 in
+    (77.22 cm) high. One row serves every fabric type.
+  power: >-
+    datasheet - the chassis's own "Planning for Power Requirements" table (PDF p19, printed 13), the row
+    "Line cards that are supported by N9K-C9516-FM fabric modules": 330 W typical, 504 W maximum. The guide's
+    worked example (PDF p20, printed 14) counts six fabric modules at 504 W, which confirms the maximum. The
+    guide's first table (PDF pp17-19) is a copy of the 9508's and is not used.
+  compatibility: >-
+    install guide - "Overview" Table 1 (PDF p8, printed 2): three N9K-C9516-FM modules are required for
+    maximum bandwidth with the N9K-X9536PQ, X9564PX and X9564TX line cards. Slot rules (PDF p9, printed 3):
+    FM 2, FM 4 and FM 6 "must be filled with functioning fabric modules or blank modules with power
+    connectors (N9K-C9516-FM-Z)", and an empty FM 1, FM 3 or FM 5 takes N9K-C9516-FM-CV.
+  weight: >-
+    datasheet - Appendix A weights table (PDF p117, printed 111): 11.5 lb (5.2 kg).
+  lamps: >-
+    install guide - "Fabric Module LEDs" (PDF p132, printed 126): a BCN lamp (blue) and a status lamp.
+    Positions estimated.
+  skin: >-
+    estimated - a vented face and two ejector levers, read from the rear figure of the overview (PDF p11,
+    printed 5), which is isometric; no figure dimensions them.
+  lifecycle: >-
+    end-of-sale - Cisco's notice "End-of-Sale and End-of-Life Announcement for the Cisco Nexus 9516 Fabric
+    Module",
+    https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/eos-eol-notice-c51-743845.html
+    (the notice names this part number; its dates are not held).
+elements:
+  bcn:
+    at: [10.0, 741.6]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp. The BCN lamp on the fan tray that covers the module also lights.
+    states:
+    - {name: blue, color: '#2a7de1'}
+    - 'off'
+  status:
+    at: [48.0, 741.6]
+    size: [3.0, 3.0]
+    class: led
+    description: Status lamp.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: flashing-red, color: '#d0021b', behavior: blinking}
+    - {name: flashing-amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+skins: [default]
