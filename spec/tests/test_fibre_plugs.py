@@ -150,7 +150,7 @@ def _usb_receptacle_interfaces():
 def test_the_usb_receptacle_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
-    assert _usb_receptacle_interfaces() == {"usb-a", "micro-usb-b", "usb-c"}
+    assert _usb_receptacle_interfaces() == {"usb-a", "micro-usb-b", "mini-usb-b", "usb-c"}
 
 
 def _dsub_connector_interfaces():

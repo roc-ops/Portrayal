@@ -1,0 +1,44 @@
+format: 1
+kind: module
+name: c9300-nm-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The blank network module of the Cisco Catalyst 9300 (C9300-NM-BLANK) - a plain cover for the
+  uplink network module bay, with one jackscrew, fitted when the switch has no uplink ports. The
+  guide says it is required for sufficient air flow. The C9300X family has its own blank,
+  C9300X-NM-BLANK, which is not this part.
+size: {w: 76.0, h: 42.5, d: 40.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {model: C9300-NM-BLANK}
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 9300 Series Switches Hardware Installation Guide (first
+    published 2017-06-20, last modified 2026-05-15), Table 5: "C9300-NM-BLANK: Insert this
+    blank module when the switch has no uplink ports (this is required for sufficient air
+    flow)", and the network module chapter: "Do not remove the blank module from the slot
+    unless you are installing a network module" (Figure 39, Removing the Blank Module).
+  size: >-
+    estimated - THE GUIDE PRINTS NO DIMENSION OF A NETWORK MODULE. The face is the bay the
+    community NetBox front elevation of the C9300-48P draws for a C9300-NM-8X, 76.0 x 42.5 at
+    4.74 px per mm taken from the elevation's 19 inch width; the blank is assumed to close the
+    same bay. The depth is a reading of Figure 39's proportions.
+  face: >-
+    estimated - Figure 39 is isometric and the NetBox elevation draws a populated module, not
+    a blank. A plain plate with one jackscrew at its upper right, where the 8X module has
+    its screw, and the maker's wordmark reserved as the logo-zone, not drawn.
+  colour: >-
+    estimated - mid grey as the switch face of the NetBox elevation.
+elements:
+  plate: {at: [0.0, 0.0], size: [76.0, 42.5], class: mechanical}
+  jackscrew: {at: [68.2, 4.2], size: [5.6, 5.6], class: screw}
+  logo-zone: {at: [60.0, 14.0], size: [14.0, 7.0], class: mechanical}
+relief:
+  wall: '#8d949c'
+skins: [default]
+body:
+  depth: 40.0
+  color: '#b4b6b9'
+  footprint: {at: [0, 0], size: [76.0, 42.5]}
