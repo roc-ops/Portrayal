@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nc57-c3-fan2-hx
-version: 1.1.0
+version: 1.2.0
 class: fan
 behaviour: fills
 profile: networking
@@ -29,17 +29,18 @@ provenance:
     photo-measured - the size of nc57-c3-fan2-fw from Figure 20. The guide gives one figure for both parts and says nothing of how the
     hardened tray differs, so its face is the FW tray's, and this is a reading of that figure and not of a hardened tray.
   guard: >-
-    estimated - the hex-mesh guard of nc57-c3-fan2-fw, drawn from Figure 20 of the standard tray.
+    estimated - the hex-mesh guard of nc57-c3-fan2-fw, drawn from Figure 20 of the standard tray, with its
+    proportions: the grille is 56 mm across the 66 mm tray (0.85), on the tray's own grey, and the handle is a loop.
   elements: >-
     estimated - as nc57-c3-fan2-fw; no figure of the -HX tray itself is held, and the guide does not say how it differs.
   depth: >-
     estimated - not stated in any held document; 80 mm is a round figure for a fan tray of this class.
 states: [absent]
 elements:
-  fan-a: {at: [3.0, 3.0], size: [48.0, 54.0], class: rotor}
-  fan-b: {at: [3.0, 66.0], size: [48.0, 54.0], class: rotor}
-  handle: {at: [53.0, 6.0], size: [10.0, 114.0], class: handle}
-  status: {at: [4.0, 120.0], size: [2.2, 2.2], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: failed, color: '#ef4444'}]}
+  fan-a: {at: [3.0, 5.5], size: [56.0, 56.0], class: rotor}
+  fan-b: {at: [3.0, 65.0], size: [56.0, 56.0], class: rotor}
+  handle: {at: [59.0, 5.2], size: [6.2, 117.9], class: handle}
+  status: {at: [5.1, 117.7], size: [3.6, 3.6], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: failed, color: '#ef4444'}]}
 skins: [default]
 body:
   depth: 80

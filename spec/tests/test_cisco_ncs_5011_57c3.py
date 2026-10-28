@@ -232,6 +232,63 @@ def test_57c3_rear_grounding_pad_carries_its_two_marks(name):
     assert {"ground-pad-hole", "ground-pad-stud"} <= decor
 
 
+def _rear(name):
+    return device(name)["views"]["rear"]
+
+
+@pytest.mark.parametrize("name", C3)
+def test_57c3_rear_carries_both_fan_tray_plates_with_their_printed_text(name):
+    # Figure 20: "FAN TRAY" over "0 1" between the two large trays, "FAN TRAY" over "2 3 4 5" between the small ones.
+    rear = _rear(name)
+    decor = {d["id"] for d in rear["panel"]["decor"]}
+    assert {"fan-plate-0-1", "fan-plate-2-5"} <= decor
+    texts = [s["text"] for s in rear["silkscreen"] if "text" in s]
+    assert texts.count("FAN TRAY") == 2, texts
+    assert [t for t in texts if t in set("012345")] == list("01") + list("2345")
+    # the maker's logo is reserved, never drawn
+    assert not [t for t in texts if t.upper() == "CISCO"]
+    assert "logo-zone" in {r["id"] for r in rear["regions"]}
+
+
+@pytest.mark.parametrize("name", C3)
+def test_57c3_rear_carries_the_caution_marks_in_yellow_and_says_they_are_estimated(name):
+    rear = _rear(name)
+    texts = [s["text"] for s in rear["silkscreen"] if "text" in s]
+    assert texts.count("CAUTION!") == 2 and texts.count("HOT HANDLE SURFACE") == 2, texts
+    decor = {d["id"]: d for d in rear["panel"]["decor"]}
+    for plate in ("0-1", "2-5"):
+        for kind in ("sticker", "caution-label"):
+            d = decor[f"{kind}-{plate}"]
+            r, g, b = (int(d["fill"][i:i + 2], 16) for i in (1, 3, 5))
+            assert r > 200 and g > 200 and b < 100, d
+            assert d["confidence"] == "estimated", d
+    assert device(name)["provenance"]["rear-plates"]["confidence"] == "estimated"
+
+
+# What Figure 20 shows, as a fan grille's diameter over its tray's width. Figure 20 is scaled from the chassis width
+# (438.4 mm over 2337 px, 5.33 px/mm): the large grille is 56 mm across a 66 mm tray, the small one 35 mm across a
+# 45.5 mm tray.
+FAN_PROPORTION = {"fan2": 56.0 / 66.0, "fan1": 35.0 / 45.5}
+FAN_PARTS = [f"nc57-c3-{k}-{v}" for k in FAN_PROPORTION for v in ("fw", "hx")]
+
+
+@pytest.mark.parametrize("part", FAN_PARTS)
+def test_57c3_fans_fill_their_trays_as_the_figure_shows(part):
+    import xml.etree.ElementTree as ET
+
+    ns = "{http://www.w3.org/2000/svg}"
+    root = ET.parse(LIB / "components/cisco" / part / "v1/skins/default.svg").getroot()
+    tray_w = contract(part)["size"]["w"]
+    want = FAN_PROPORTION[part.split("-")[2]]
+    fans = [g for g in root.iter(ns + "g") if g.get("id") in ("fan-a", "fan-b")]
+    assert len(fans) == 2
+    for g in fans:
+        diameter = 2 * max(float(c.get("r")) for c in g.iter(ns + "circle"))
+        assert diameter / tray_w == pytest.approx(want, rel=0.10), (part, g.get("id"), diameter, tray_w)
+        # the figure draws no dark square behind the grille
+        assert not list(g.iter(ns + "rect")), (part, g.get("id"))
+
+
 def test_the_lock_agrees_with_the_devices():
     findings = [f for f in devicelock.check(LIB) if f[0] in {f"cisco/{n}" for n in DEVICES} | set(DEVICES)]
     assert findings == []

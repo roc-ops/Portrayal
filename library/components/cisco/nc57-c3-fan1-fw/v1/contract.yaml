@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nc57-c3-fan1-fw
-version: 1.1.0
+version: 1.2.0
 class: fan
 behaviour: fills
 profile: networking
@@ -9,7 +9,7 @@ description: >-
   The fan tray with two 40 mm fans of the Cisco NCS-57C3-MOD, ordered as NC57-C3-FAN1-FW, for fan tray slots 2 to 5. It
   installs from the rear: two round fans one above the other, a black pull handle at the right and a status lamp at the
   lower left. Airflow is port-side intake. The -HX chassis takes the NC57-C3-FAN1-HX instead.
-size: {w: 49.0, h: 89.0}
+size: {w: 45.5, h: 89.0}
 size-confidence: {w: photo-measured, h: photo-measured}
 part-numbers:
   NC57-C3-FAN1-FW: {part: NC57-C3-FAN1-FW}
@@ -27,11 +27,16 @@ provenance:
     written, and lint's missing-power warning stands.
   size: >-
     photo-measured - Figure 20 (a flat rear elevation) at about 2.87 px/mm taken from the chassis width of 438.4 mm: the
-    tray reads about 49 mm wide and 89 mm high (slots 2 to 5). The guide prints no dimension of the tray.
+    tray reads about 89 mm high (slots 2 to 5) and, re-measured at 5.33 px/mm on the guide page at 400 dpi, 45.5 mm wide across
+    the tray body (242 px); the 49 mm of the first reading took in the slot's latch tabs either side. The guide prints no
+    dimension of the tray.
   guard: >-
-    photo-measured - Figure 20 draws each 40 mm fan behind a round hex-mesh guard (holes about 2.4 mm across on a 2.6 mm pitch)
-    with a ring, a second inner ring, eight radial spokes and a hub, in a dark square well. The hole size and the spoke count are
-    read by eye from a 960 px figure.
+    photo-measured - Figure 20 draws each 40 mm fan behind a round hex-mesh guard (holes about 2.8 mm across on a 2.6 mm pitch, ribs about 0.2 mm)
+    with a ring, a second inner ring, eight radial spokes and a hub, on the tray's own grey with no dark square behind it. The grille
+    is 35 mm across a 45.5 mm tray (0.77), centred 21.25 mm from its left edge, measured at 5.33 px/mm from the chassis width. The
+    figure draws curved blades, not spokes, which stay a simplification. The black handle is a loop over the fans' right sides, as
+    on the large tray. The status lamp stays at the bottom edge; the figure puts its ring about 8 mm up, where it would sit inside
+    the lower fan's box, so the lamp was not moved.
   elements: >-
     photo-measured - two fans, the handle and the lamp read from Figure 20 and Figure 5. The lamp is Figure 135's STATUS lamp
     (the table under Figure 135: green fan operating normally, red fan failure, off not receiving power); FW is carried as front-to-back.
@@ -39,12 +44,12 @@ provenance:
     estimated - not stated in any held document; 80 mm is a round figure for a fan tray of this class.
 states: [absent]
 elements:
-  fan-a: {at: [2.5, 2.5], size: [34.0, 38.0], class: rotor}
-  fan-b: {at: [2.5, 46.0], size: [34.0, 38.0], class: rotor}
-  handle: {at: [39.0, 5.0], size: [8.0, 79.0], class: handle}
-  status: {at: [3.0, 85.0], size: [2.0, 2.0], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: failed, color: '#ef4444'}]}
+  fan-a: {at: [3.75, 4.0], size: [35.0, 35.0], class: rotor}
+  fan-b: {at: [3.75, 48.0], size: [35.0, 35.0], class: rotor}
+  handle: {at: [39.2, 5.0], size: [6.3, 77.0], class: handle}
+  status: {at: [4.2, 83.1], size: [2.8, 2.8], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: failed, color: '#ef4444'}]}
 skins: [default]
 body:
   depth: 80
   color: '#26292d'
-  footprint: {at: [0, 0], size: [49.0, 89.0]}
+  footprint: {at: [0, 0], size: [45.5, 89.0]}

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nc57-c3-fan2-fw
-version: 1.1.0
+version: 1.2.0
 class: fan
 behaviour: fills
 profile: networking
@@ -30,9 +30,16 @@ provenance:
     photo-measured - Figure 20 (a flat rear elevation) at about 2.87 px/mm taken from the chassis width of 438.4 mm: the
     tray reads about 66 mm wide and 126 mm high (slots 0 and 1). The guide prints no dimension of the tray.
   guard: >-
-    photo-measured - Figure 20 draws each 60 mm fan behind a round hex-mesh guard (holes about 2.4 mm across on a 2.6 mm pitch)
-    with a ring, a second inner ring, eight radial spokes and a hub, in a dark square well. The hole size and the spoke count are
-    read by eye from a 960 px figure.
+    photo-measured - Figure 20 draws each 60 mm fan behind a round hex-mesh guard (holes about 2.8 mm across on a 2.6 mm pitch, ribs about 0.2 mm)
+    with a ring, a second inner ring, eight radial spokes and a hub, on the tray's own grey with no dark square behind it. Scale
+    anchor: the chassis width of 438.4 mm is 2337 px on the guide page at 400 dpi, 5.33 px/mm. The grille is 297 to 300 px (56 mm)
+    across a tray 350 px (66 mm) wide, 0.85 of the width, centred 31.5 mm from the tray's left edge and 33 mm and 93.5 mm down;
+    the earlier drawing was 46 mm (0.70). The figure draws curved blades behind the grille, not spokes; the spokes stay a
+    simplification.
+  handle: >-
+    photo-measured - Figure 20: the black handle is a loop, a bar across the top (5 to 11.6 mm down) and another across the bottom
+    from x 33 mm, joined by a bar 6.2 mm wide at the right edge, passing over the fans' right sides; not a plain slab. The grey
+    release latch with two screws at the right and the two small holes at the left are drawn from the same figure.
   elements: >-
     photo-measured - two fans, the handle and the lamp read from Figure 20 and Figure 4. The lamp is Figure 135's STATUS lamp
     on the bottom-left corner (the table under Figure 135: green fan operating normally, red fan failure, off not receiving power). The guide gives the tray an airflow
@@ -41,10 +48,10 @@ provenance:
     estimated - not stated in any held document; 80 mm is a round figure for a fan tray of this class.
 states: [absent]
 elements:
-  fan-a: {at: [3.0, 3.0], size: [48.0, 54.0], class: rotor}
-  fan-b: {at: [3.0, 66.0], size: [48.0, 54.0], class: rotor}
-  handle: {at: [53.0, 6.0], size: [10.0, 114.0], class: handle}
-  status: {at: [4.0, 120.0], size: [2.2, 2.2], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: failed, color: '#ef4444'}]}
+  fan-a: {at: [3.0, 5.5], size: [56.0, 56.0], class: rotor}
+  fan-b: {at: [3.0, 65.0], size: [56.0, 56.0], class: rotor}
+  handle: {at: [59.0, 5.2], size: [6.2, 117.9], class: handle}
+  status: {at: [5.1, 117.7], size: [3.6, 3.6], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: failed, color: '#ef4444'}]}
 skins: [default]
 body:
   depth: 80

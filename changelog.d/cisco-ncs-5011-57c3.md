@@ -13,3 +13,7 @@
 - The 57C3 faces follow the guide's Figures 19 and 20: the port plate's vent fields and slot rows at the figure's extents, the four-cell port status display and its
   DISPLAY button, the grounding pad's hole and stud, each router's model legend, the supplies' fan wells, pull handles and IEC inlet (a C20 read from the figure's
   pin layout, since the guide names only "IEC 320-type"), and the fan trays' hex guards.
+- The 57C3 rear follows Figure 20 more closely: the two FAN TRAY plates (0 1, and 2 3 4 5) with their printed text, yellow CAUTION labels and
+  stickers, screws and the lower tab, all estimated from the figure, with the maker's logo left to a reserved zone; fan grilles sized to the figure's
+  proportion of their trays (56 mm of 66 mm, and 35 mm of 45.5 mm, the small trays being the 45.5 mm of the tray body and not the 49 mm of its slot),
+  with no dark square behind them, thinner ribs, and looped pull handles.
