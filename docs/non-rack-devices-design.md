@@ -3,7 +3,7 @@
 Status: proposed, decided 2026-10-28 to be written before any access point is
 modelled. Issue #1296. This note changes nothing: no schema, lint rule, device,
 export or test. It sets out two `device.schema.json` questions, recommends an
-answer to each, and leaves both for the owner to decide. A later change builds
+answer to each, and leaves both to be decided on review. A later change builds
 what is decided, then models the two ReadyLinks access points. Every count was
 taken from `main` at commit `a1982880c`.
 
@@ -355,7 +355,7 @@ a format change:
 - the meaning of `poe-pd-max-w` as the whole intake, including what is handed
   on.
 
-## 6. For the owner to decide
+## 6. The decisions asked for
 
 1. Ceiling mounting: option A (`ceiling`) or option B (`wall` with a note).
    Recommended: A.
