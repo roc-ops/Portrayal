@@ -1,0 +1,65 @@
+format: 1
+kind: kit
+name: nxk-acc-kit-1ru
+version: 1.0.0
+description: >-
+  The Cisco NXK-ACC-KIT-1RU rack-mount kit for 1 RU Nexus fixed switches. It holds two front
+  brackets, two rear brackets and two slider rails, with a ground lug kit and screws. The
+  brackets screw to the switch side and the rails to the rear posts of a four-post rack. The
+  switch slides onto the rails.
+motion: fixed
+parts:
+  - {ref: cisco/nxk-acc-kit-1ru-front-bracket@1, id: front-bracket, count: 2}
+  - {ref: cisco/nxk-acc-kit-1ru-rear-bracket@1, id: rear-bracket, count: 2}
+  - {ref: cisco/nxk-acc-kit-1ru-slider-rail@1, id: slider-rail, count: 2}
+configurations:
+  - id: four-post
+    racks: [4-post]
+    parts: [front-bracket, rear-bracket, slider-rail]
+    depth: [584.2, 762.0]
+provenance:
+  contents: >-
+    The kit's contents table, "Rack Mount Kit NXK-ACC-KIT-1RU", in appendix D of the Cisco
+    N93180YC-FX3 NX-OS Mode Switch Hardware Installation Guide (First Published 2021-02-16,
+    Last Modified 2026-07-27, page 61) and in the Cisco N93180YC-FX3S guide (Last Modified
+    2026-07-27, page 65): "Rack-mount kit - Front brackets (2) - Rear brackets (2) - Slider
+    rails (2) - M4 Phillips pan-head screws (10)", "Ground lug kit - Two-hole lug (1) - M4 x
+    8-mm Phillips pan-head screws (2)", and a console cable ordered separately. The Cisco
+    N93108TC-FX3 guide (Last Modified 2026-07-16) has no such table: its appendix D is empty.
+    Its rack-mount procedure (page 20) lists the same three parts, front brackets, rear
+    brackets and slider rails, with "M4 x 0.7 x 8-mm Phillips countersink screws (10-12)" and
+    no lug kit. The screws and the lug kit are hardware and are not parts here.
+  depth: >-
+    datasheet - the rack-and-cabinet requirements in the same three guides: the distance
+    between the outside face of the front mounting rail and the outside face of the back
+    mounting rail "should be 23.0 to 30.0 inches (58.4 to 76.2 cm)" to allow for rear-bracket
+    installation, 584.2 to 762.0 mm. The three guides print the same figure. THE SAME GUIDES
+    SAY ELSEWHERE that a four-post rack must be "24 to 32 inches (61.0 to 81.3 cm)" deep between
+    the front and rear mounting rails, for the bottom-support brackets or other mounting
+    hardware. That is 609.6 to 812.8 mm, it is worded for bottom-support brackets and not for
+    this kit, and it lost; the kit's own text is followed. No rail document is held, so the
+    range is checked against these three guides only. The second statement is carried by
+    cisco/nxk-acc-kit2-2ru@1, whose guides give no range of their own.
+  rack-type: >-
+    datasheet - the procedure installs "slider rails on the rear of the rack" and the
+    "front rack-mount brackets" on "two posts" of "the four vertical posts in the rack or
+    cabinet", so a four-post rack. Two-post use is not described.
+  the-two-places: >-
+    The guides' rack-mounting figure (art number 503557) draws the front bracket screwed to
+    the chassis side at two places, once on the drawing of the port end and once on the
+    drawing of the module end. The text says the holes used depend on the rack and on the
+    clearance needed for interface cables, 3 inches minimum, and for module handles, 1 inch
+    minimum. The devices that list this kit state the two positions in their `chassis.ears`;
+    the kit has no field for them.
+  rear-bracket: >-
+    "Depending on the chassis depth, the back rack-mount bracket may not fit. In that case,
+    you do not need the back rack-mount bracket." The kit is written with both brackets; a
+    switch too deep for the rear bracket uses the front bracket and the rail alone. The
+    guides give no depth range for that arrangement.
+gaps:
+  - what: part-dimensions
+    scope: [front-bracket, rear-bracket, slider-rail]
+    reason: needs-drawing
+    wanted: >-
+      A dimensioned drawing of each part. The guides dimension none; the parts carry
+      placeholder envelopes, and only the front bracket's reach is derived.

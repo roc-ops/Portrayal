@@ -158,6 +158,19 @@ def test_crs309_dc_jack_is_the_barrel_jack_with_the_rating_the_metal_prints():
     assert "DC 12-57 V" in {s.get("text") for s in d["views"]["rear"]["silkscreen"]}
 
 
+def test_crs309_de9_console_is_an_rs232_port_the_export_does_not_carry():
+    """The note says the DCIM export carries no console port for the DE-9; pin the note, the placement and the export,
+    so the day the exporter learns DE-9 this fails and the note is updated with it."""
+    d = load("crs309-1g-8s-plus-in")
+    (console,) = refs(d, "front", "common/db9-receptacle@1")
+    assert console["attrs"]["role"] == "rs232"
+    assert "the export carries no console port for it" in " ".join(d["provenance"]["console"]["note"].split())
+    for target in ("netbox", "nautobot"):
+        doc = yaml.safe_load((ROOT / "library/exports" / target / "device-types/MikroTik/CRS309-1G-8S+IN.yaml").read_text())
+        assert not doc.get("console-ports"), target
+        assert not doc.get("console_ports"), target
+
+
 def test_crs309_is_passive_with_a_chassis_art_earth_stud_and_a_narrow_body():
     d = load("crs309-1g-8s-plus-in")
     rear = d["views"]["rear"]

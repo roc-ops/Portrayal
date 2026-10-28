@@ -1,0 +1,579 @@
+format: 1
+kind: device
+name: n9k-c93108tc-fx3
+version: 3.0.0
+maturity: modelled
+manufacturer: Cisco
+model: N9K-C93108TC-FX3
+aliases:
+- {name: Nexus 93108TC-FX3, kind: marketing}
+portfolio: {line: Nexus 9000, family: Nexus 9300, series: Nexus 9300-FX3}
+description: >-
+  48x 100M/1G/10GBASE-T and 6x 40/100G QSFP28 1RU data-centre leaf switch running NX-OS. The
+  port side carries all fifty-four ports and the BCN, STS and ENV lamps. The other side carries
+  two power supplies, four fan modules, the console, an RJ-45 and an SFP management port and the
+  USB port. Ports number 1-54 and run DOWN each column, odd on the top row. Ships port-side
+  intake (burgundy modules) or port-side exhaust (blue).
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      One guide, held as PDF and as converted text and figures; it is not committed. Cisco
+      N93108TC-FX3 NX-OS Mode Switch Hardware Installation Guide, First Published 2023-12-14,
+      Last Modified 2026-07-16, 66 pages: the overview and its figures (art numbers 505474
+      and 505475, and a three-quarter view), appendix B specifications, appendix C LEDs, the
+      rack-mounting chapter. NO DATA SHEET, PHOTOGRAPH, 3D MODEL OR STENCIL IS HELD for this model, and the
+      NetBox devicetype-library is held as a path listing only: it names a device type and a
+      front and a rear elevation for this model, and neither file was read. THE GUIDE'S
+      FIGURES ARE FLAT LINE ART AND CARRY CALLOUTS: the front is 1254 px across the body at
+      this size, 2.85 px per mm, so every position here is a reading good to about a
+      millimetre. The 93180YC-FX3 and 93180YC-FX3S guides were read for the supplies and
+      kits they share with this one.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's convention: the upper cage upright over the lower turned 180, and the upper
+      jack turned 180 over the lower one. The front figure draws the upper jacks with their
+      latch notch up and a lamp triangle in each top corner, and the lower jacks with the notch
+      down, which is that arrangement. The three QSFP28 pairs follow the same rule.
+  gate-1:
+    confidence: measured
+    note: >-
+      The front figure's body, between its two fold lines, is 1254 px across and 126 px down:
+      aspect 9.96 against the guide's 17.3 x 1.72 in, 10.05, so 0.9% out, and it can be
+      measured; 2.854 px per mm across from 439.4 mm and 2.883 down from 43.7. The rear figure's
+      body is 1248 px across and 126 down, 9.90, 1.5% out, 2.840 px per mm across. A repeated
+      feature checks the scale: the jack columns step 40.25 px, 14.10 mm, against the
+      registry's 13.97 (0.9% out, the same as the aspect), so every pitch is the registry's
+      and the figure fixes where each group starts.
+  the-x-axis:
+    confidence: estimated
+    note: >-
+      From the front figure at 2.854 px per mm, origin the left fold line. Three groups of
+      eight jack columns start at 9.3, 130.5 and 251.7 mm, a stride of 121.2: at the registry's
+      13.97 mm pitch that is a gutter of 9.4 mm. The figure shows the same gap, 28 px, between
+      the groups. The three QSFP28 cages start at 368.3, 390.6 and 412.9 mm: the figure's step is
+      63.6 px, 22.3 mm, and its right edge, 433.1, fits 20 mm cages. The 93180YC-EX steps its
+      QSFP28 cages 24.4 mm and this figure does not.
+  the-y-axis:
+    confidence: estimated
+    note: >-
+      From the same figure, origin the top fold line. The upper jacks run 10.4 to 20.6 mm and the
+      lower jacks 26.0 to 36.0, and the QSFP28 block 10.7 to 36.3; two jack cells of the
+      registry's 11.0 fill 10.4 to 37.0 on a 15.6 row pitch, which is the pitch used for the
+      jacks; the 10.15 high QSFP28 cages use 15.4. THE LAMP TRIANGLES AND THE NUMERALS ARE DRAWN
+      HIGHER THAN THE FIGURE SHOWS THEM. The figure puts each lamp in a top corner of the
+      upper jack, beside its latch slot; the library's jack cell is a plain rectangle, and a
+      lamp placed over it is an overlap error (L13, L39). So the lamps sit in a row just above
+      the cells, 2.5 mm higher than the figure's, and the numerals and arrows above them move up
+      by the same amount. Their x is the figure's.
+  the-width:
+    confidence: datasheet
+    note: >-
+      The guide's Switch Dimensions table: "17.3 inches (43.9 cm)" wide, "17.9 inches (45.7
+      cm)" deep and "1.72 inches (4.4 cm) (1 RU)" high; the weights table gives the chassis
+      "15.8 lb (7.1 kg)". 439.4 mm, 454.7 mm and 43.7 mm are carried, the inch figures
+      converted. The metric weight is carried as printed; 15.8 lb is 7.17 kg.
+  port-order:
+    confidence: estimated
+    note: >-
+      The figure prints a pair of numerals over each column, "1 up down 2" to "47 up down 48",
+      and "49 up down 50", "51 ..." and "53 ..." over the QSFP28 pairs, so the odd port is the
+      upper cage or jack. The guide's text gives the ports as 1-48 and 49-54. Port numbers are
+      as printed; the NX-OS interface names are in the interface-names entry.
+  port-lamps:
+    confidence: datasheet
+    note: >-
+      Appendix C, Switch Chassis LEDs: "The port LEDs appear as triangles pointing up or down to
+      the nearest port." Green is admin up, module present and link up; amber is admin down or
+      module absent; off is up and present but no link. The figure draws an up triangle at the
+      left and a down triangle at the right of each column's upper jack, and one at each end of
+      each QSFP28 band with four small windows between them. The windows are drawn as marks and
+      carry no state; the guide does not name them.
+  chassis-lamps:
+    confidence: estimated
+    note: >-
+      Callout 3 is "BCN, STS, ENV LEDs"; appendix C says they sit "on the left side of the front".
+      The figure draws three lamps in a row under the first jacks, each with its legend to its
+      left, at 20.2, 29.5 and 39.3 mm across and 39.4 mm down. The vertical is measured from
+      the figure's top and bottom edges, 127 px for 43.7 mm, 2.9 px per mm. The lamps are flat
+      rectangles, about twice as wide as high, so they are common/led-rect-sm@1 (2.8 x 1.6), the
+      part the rear's lamps use, centred on those points, and not the square lamp; the lamp rows and
+      the legend sit 4.3 mm above the bottom edge. The legend after them reads CISCO NEXUS
+      N9K-C93108TC-FX3, from 41.8 mm; the library's practice for a Cisco face is that text,
+      as on the 93180YC-EX, and no logo artwork. The figure's mark at the top left is not
+      drawn. Under the jacks the figure draws two rows of small cells: an upper row from 75.2
+      mm to the right end, beside the legend, and a lower row that runs the whole width from
+      18.3 to 421.5 mm.
+  rear-face:
+    confidence: estimated
+    note: >-
+      Every x and y on the power-supply side is read off the rear figure (2.840 px per mm
+      across, 2.883 down). Supply 1, four fan modules, then the console jack over the RJ-45
+      management jack, the SFP management port, the USB port stood on end, and supply 2. THE
+      OUT-OF-BAND BLOCK SITS BETWEEN THE FANS AND SUPPLY 2, not beyond supply 2 as on the
+      93180YC-EX. Two lamps with a screw between them stand under the jacks, with the legends
+      BCN and STS, which the figure prints. The fan handles were redrawn from a 5x enlargement
+      of fan 1 (grey pads, a squeeze bar at each side of the hub, grip marks on the left). The
+      figure draws the management SFP cage with a latch plate across the foot of its opening;
+      the library's std/sfp@1 has one skin and no cage with a bail, so the cage is the plain
+      one. A bail skin on std/sfp@1 would rehash 121 devices.
+  power:
+    confidence: datasheet
+    note: >-
+      Appendix B, Switch Power Input Requirements: typical 420 W and maximum 464 W "(AC or DC)",
+      1583 BTU per hour. The figures are the switch's draw and not a supply rating; the guide
+      names no configuration or ambient.
+  interface-names:
+    confidence: estimated
+    note: >-
+      mgmt0 is stated: the guide's setup chapter asks for "the Management (Mgmt0) interface".
+      Ethernet1/1 to Ethernet1/54 are NOT IN THE GUIDE (searched for "Ethernet1/": none) and
+      the NetBox device-type file, which names them, is not held, only its path. They are the
+      slot/port form NX-OS uses on the fixed Nexus 9300 and are not written into the device:
+      the faceplate prints 1 to 54.
+  colour:
+    confidence: estimated
+    note: >-
+      NO SOURCE FOR THE COLOUR. The guide's figures are uncoloured line art. #d0d2cf is the
+      value the 93180YC-EX's stencil sample gave, carried across as a family colour; it is a
+      relative's figure and not a reading of this device.
+  rack-ears:
+    confidence: estimated
+    note: >-
+      The guide's NXK-ACC-KIT-1RU procedure draws the front bracket screwed to the chassis side
+      in a figure shared with the 93180YC-FX3 guide, and says the holes used depend on the rack
+      and on the clearance needed for interface cables, 3 inches minimum, and for module
+      handles, 1 inch minimum. The NXK-ACC-KIT2-2RU procedure says the chassis slides onto the
+      rails "until the front panel is flush with the front of the rack". No figure dimensions
+      a position and none says which the box ships with, so the two positions are written
+      without an `at`, named for what the text says they clear, and none is the default.
+attrs:
+  physical:
+    weight-note: '15.8 lb (7.1 kg) chassis; each fan module 0.28 lb (0.13 kg); each 500 W AC power supply 2.42 lb (1.1 kg), no weight given for the other supplies'
+  power:
+    power-typical-w: 420
+    power-max-w: 464
+    power-envelope: unstated
+    heat-dissipation-btu-hr: 1583
+    power-input-ac: '100 to 240 V, 50 to 60 Hz'
+    power-input-hvac: '200 to 277 V'
+    power-input-dc: '-48 to -72 V nominal, as printed'
+    power-input-hvdc: '240 to 380 V'
+    power-supply-options: '500W AC, 1200W HVAC/HVDC or 930W DC (two)'
+  environmental:
+    operating-temp: '0 to 40 C (32 to 104 F)'
+    storage-temp: '-40 to 70 C (-40 to 158 F)'
+    humidity: '5 to 90% operating, 5 to 95% non-operating'
+    altitude: '10,000 ft (3048 m); 6,562 ft (2000 m) for China'
+  features:
+    ports-t: 'guide: "48 100M/1G/10GBASE-T ports (ports 1-48)"'
+    optics-qsfp28: 'guide: "6 40/100-Gigabit ports QSFP28 (ports 49-54)"'
+    management-ports: 'guide: "Two management ports (one 10/100/1000BASE-T port and one SFP port)"'
+  management:
+    usb: '1 USB port'
+  compliance:
+    regulatory: 'Products should comply with CEMarkings according to directives 2004/108/EC and 2006/95/EC.'
+    safety: 'CAN/CSA-C22.2 No. 60950-1 Second Edition, CAN/CSA-C22.2 No. 62368-1-19 Third Edition, ANSI/UL 60950-1 Second edition, IEC 62368-1, EN 62368-1, AS/NZS 62368-1, GB4943, UL 62368-1'
+    emissions: '47CFR Part 15 (CFR 47) Class A, AS/NZS CISPR22 Class A, CISPR22 Class A, EN55022 Class A, ICES003 Class A, VCCI Class A, EN61000-3-2, EN61000-3-3, KN22 Class A, CNS13438 Class A'
+    immunity: 'EN55024, CISPR24, EN300386, KN 61000-4 series'
+    rohs: 'The product is RoH-6 compliant with exceptions for leaded-ball grid-array (BGA) balls and lead press-fit connectors.'
+  lifecycle:
+    eol: none-announced
+chassis: {width: 439.4, height: 43.7, depth: 454.7, ru: 1, weight-kg: 7.1, color: '#d0d2cf', airflow: front-to-back,
+  power: ac,
+  ears: {positions: [{name: recessed, label: 'port end to the front, set back for interface cables'}, {name: recessed, label: 'module end to the front, set back for module handles'}]},
+  kits: [{ref: 'cisco/nxk-acc-kit-1ru@1', supply: optional}, {ref: 'cisco/nxk-acc-kit2-2ru@1', supply: optional}]}
+gaps:
+- what: kit-contents-table-empty
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The guide's appendix D, Additional Kits (page 59 to 60, PDF page 65 to 66), has no content.
+    The NXK-ACC-KIT-1RU parts are read from the rack-mount procedure (page 20) alone: front
+    brackets, rear brackets and slider rails, with countersink screws and no ground lug kit.
+  wanted: >-
+    The NXK-ACC-KIT-1RU contents table for this switch, as the FX3 and FX3S guides print it. The
+    parts carried agree with those guides.
+- what: kit-named-without-contents
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The guide's installation options list "Rack-mount kit (N3K-C3064-ACC-KIT) which you can
+    order from Cisco" and say nothing else of it: no contents, no figure, no procedure, no
+    depth range.
+  wanted: >-
+    The kit's contents and its rack depth range, from a document that describes it. It is not
+    listed under the kits of this device, because a kit needs parts and a range.
+- what: the-four-undrawn-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A drawing of the lid, the underside and the two side walls. The guide's overview shows one
+    side wall in three-quarter view and calls out its mounting-bracket screw holes and a
+    grounding pad; none is flat and none can be measured. Each face carries an `empty:`
+    sentence.
+- what: supply-weights-not-given
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    The guide's weights table gives 2.42 lb (1.1 kg) against the 500 W AC supply and has no row
+    for the 1200 W HVAC/HVDC or the 930 W DC supply. No weight is carried for either.
+  wanted: >-
+    The weight of the N9K-PUV-1200W and the NXA-PDC-930W, from a document that prints it.
+- what: other-supplies-have-no-picture
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    A picture of the 930 W DC and the 1200 W HVAC/HVDC supply. The guide's figure shows AC
+    supplies only, and its replacement chapter has no picture. Their faces are the AC supply's
+    with the inlet changed.
+- what: sizes-off-a-figure
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    A stated size for the supply and the fan module. The guide gives "Form factor RSP1" for
+    every supply and nothing for the fan.
+- what: management-sfp-bail
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    A cage skin with a bail. The guide's rear figure draws the management SFP port with a
+    latch plate across the foot of its opening; the library's SFP cage has one skin and none
+    shows a bail, and a second skin on it would move every device that seats it.
+- what: fan-redundancy
+  scope: [fans]
+  reason: vendor-silent
+  note: >-
+    The Overview says the switch "will power down due to a fan-policy trigger if fewer than 3
+    fans are operational" and, in another note, that it "runs with +1 redundancy mode".
+  wanted: >-
+    Whether the first sentence counts fan modules or rotors. It is read as modules, three of
+    four, so the group says 3+1.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 10g}
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band block between the fan modules and supply 2: an RJ-45 console port, an
+      RJ-45 and an SFP management port and a USB port. Three media, one purpose: reaching the
+      switch when the data plane cannot.
+  furniture: {term: Part, role: furniture, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        installation guide: "Power supply modules (two-One for operations and one for
+        redundancy [1+1])". Slot 1 is on the left and slot 2 on the right.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: >-
+        Installation guide, Overview: four fan modules of two rotors each. The switch "will
+        power down due to a fan-policy trigger if fewer than 3 fans are operational". It works
+        with one rotor failed in any one module and, with more than one rotor failed, warns and
+        powers down in two minutes.
+views:
+  front:
+    size: {w: 439.4, h: 43.7}
+    panel:
+      decor:
+      - {id: vent-top, at: [3.30, 1.00], size: [433.20, 3.20], pattern: vent, pattern-pitch: [3.50, 3.20], vent: 1}
+      - {id: band-qsfp-49, at: [368.30, 20.75], size: [20.00, 5.25], fill: '#e4e7ea'}
+      - {id: lane-49-1, at: [373.80, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: lane-49-2, at: [376.15, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: lane-49-3, at: [378.50, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: lane-49-4, at: [380.85, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: band-qsfp-51, at: [390.60, 20.75], size: [20.00, 5.25], fill: '#e4e7ea'}
+      - {id: lane-51-1, at: [396.10, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: lane-51-2, at: [398.45, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: lane-51-3, at: [400.80, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: lane-51-4, at: [403.15, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: band-qsfp-53, at: [412.90, 20.75], size: [20.00, 5.25], fill: '#e4e7ea'}
+      - {id: lane-53-1, at: [418.40, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: lane-53-2, at: [420.75, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: lane-53-3, at: [423.10, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: lane-53-4, at: [425.45, 22.20], size: [1.50, 2.40], fill: '#1a1d1f'}
+      - {id: vent-bottom, at: [75.20, 38.60], size: [346.30, 2.00], pattern: vent, pattern-pitch: [4.70, 3.00], vent: 1}
+      - {id: vent-bottom-low, at: [18.30, 41.30], size: [403.20, 2.20], pattern: vent, pattern-pitch: [4.70, 3.00], vent: 1}
+      cutouts:
+      - {block: rj45}
+      - {block: qsfp28}
+      - {id: led-bcn, at: [18.80, 38.60], size: [2.8, 1.6], shape: rect}
+      - {id: led-sts, at: [28.05, 38.60], size: [2.8, 1.6], shape: rect}
+      - {id: led-env, at: [37.90, 38.60], size: [2.8, 1.6], shape: rect}
+    silkscreen:
+    - {block: rj45}
+    - {id: silk-arrows-1, at: [15.65, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-1, port-2]}
+    - {id: silk-arrows-3, at: [29.62, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-3, port-4]}
+    - {id: silk-arrows-5, at: [43.59, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-5, port-6]}
+    - {id: silk-arrows-7, at: [57.56, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-7, port-8]}
+    - {id: silk-arrows-9, at: [71.53, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-9, port-10]}
+    - {id: silk-arrows-11, at: [85.50, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-11, port-12]}
+    - {id: silk-arrows-13, at: [99.47, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-13, port-14]}
+    - {id: silk-arrows-15, at: [113.44, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-15, port-16]}
+    - {id: silk-arrows-17, at: [136.81, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-17, port-18]}
+    - {id: silk-arrows-19, at: [150.78, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-19, port-20]}
+    - {id: silk-arrows-21, at: [164.75, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-21, port-22]}
+    - {id: silk-arrows-23, at: [178.72, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-23, port-24]}
+    - {id: silk-arrows-25, at: [192.69, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-25, port-26]}
+    - {id: silk-arrows-27, at: [206.66, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-27, port-28]}
+    - {id: silk-arrows-29, at: [220.63, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-29, port-30]}
+    - {id: silk-arrows-31, at: [234.60, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-31, port-32]}
+    - {id: silk-arrows-33, at: [257.97, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-33, port-34]}
+    - {id: silk-arrows-35, at: [271.94, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-35, port-36]}
+    - {id: silk-arrows-37, at: [285.91, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-37, port-38]}
+    - {id: silk-arrows-39, at: [299.88, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-39, port-40]}
+    - {id: silk-arrows-41, at: [313.85, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-41, port-42]}
+    - {id: silk-arrows-43, at: [327.82, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-43, port-44]}
+    - {id: silk-arrows-45, at: [341.79, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-45, port-46]}
+    - {id: silk-arrows-47, at: [355.76, 7.00], mark: arrow-pair, size: 1.3, gap: 0.5, fill: '#1a1d1f', for: [port-47, port-48]}
+    - {id: silk-49, at: [374.70, 9.50], text: '49', font-size: 2.0, anchor: end, fill: '#1a1d1f', for: port-49}
+    - {id: silk-arrow-49, at: [375.60, 8.90], mark: arrow-up, size: 1.3, fill: '#1a1d1f', for: port-49}
+    - {id: silk-arrow-50, at: [378.30, 8.90], mark: arrow-down, size: 1.3, fill: '#1a1d1f', for: port-50}
+    - {id: silk-50, at: [381.30, 9.50], text: '50', font-size: 2.0, anchor: start, fill: '#1a1d1f', for: port-50}
+    - {id: silk-51, at: [397.00, 9.50], text: '51', font-size: 2.0, anchor: end, fill: '#1a1d1f', for: port-51}
+    - {id: silk-arrow-51, at: [397.90, 8.90], mark: arrow-up, size: 1.3, fill: '#1a1d1f', for: port-51}
+    - {id: silk-arrow-52, at: [400.60, 8.90], mark: arrow-down, size: 1.3, fill: '#1a1d1f', for: port-52}
+    - {id: silk-52, at: [403.60, 9.50], text: '52', font-size: 2.0, anchor: start, fill: '#1a1d1f', for: port-52}
+    - {id: silk-53, at: [419.30, 9.50], text: '53', font-size: 2.0, anchor: end, fill: '#1a1d1f', for: port-53}
+    - {id: silk-arrow-53, at: [420.20, 8.90], mark: arrow-up, size: 1.3, fill: '#1a1d1f', for: port-53}
+    - {id: silk-arrow-54, at: [422.90, 8.90], mark: arrow-down, size: 1.3, fill: '#1a1d1f', for: port-54}
+    - {id: silk-54, at: [425.90, 9.50], text: '54', font-size: 2.0, anchor: start, fill: '#1a1d1f', for: port-54}
+    - {id: silk-bcn, at: [17.40, 39.90], text: BCN, font-size: 1.4, anchor: end, fill: '#1a1d1f', for: led-bcn}
+    - {id: silk-sts, at: [26.70, 39.90], text: STS, font-size: 1.4, anchor: end, fill: '#1a1d1f', for: led-sts}
+    - {id: silk-env, at: [36.50, 39.90], text: ENV, font-size: 1.4, anchor: end, fill: '#1a1d1f', for: led-env}
+    - {id: silk-model, at: [41.80, 40.10], text: CISCO NEXUS N9K-C93108TC-FX3, font-size: 1.9, anchor: start, fill: '#1a1d1f', for: chassis}
+    components:
+      blocks:
+      - id: rj45
+        ref: common/rj45-ganged-eth-plain@1
+        at: [9.30, 10.40]
+        count: 48
+        rows: 2
+        pitch: 13.97
+        row-pitch: 15.6
+        gang: 8
+        gutter: 9.4
+        number-from: 1
+        cutouts: true
+        rotate: {top: 180}
+        numerals: {dx-by-row: [4.20, 9.20], anchor-by-row: [end, start], dy-top: -2.80, dy-bottom: -18.40, font-size: 2.0, fill: '#1a1d1f'}
+        led:
+          ref: common/led-arrow-sm@1
+          id-format: 'led-port-{n}'
+          dx-by-row: [0.70, 10.40]
+          dy-top: -2.00
+          dy-bottom: -17.60
+          skin-top: up
+          skin-bottom: down
+          group: port-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: disabled, color: '#f59e0b'}]
+      - id: qsfp28
+        ref: std/qsfp28@1
+        at: [368.30, 10.60]
+        count: 6
+        rows: 2
+        pitch: 22.3
+        row-pitch: 15.4
+        number-from: 49
+        cutouts: true
+        rotate: {bottom: 180}
+        led:
+          ref: common/led-arrow-sm@1
+          id-format: 'led-port-{n}'
+          dx-by-row: [2.00, 15.75]
+          dy-top: 11.80
+          dy-bottom: -3.60
+          skin-top: up
+          skin-bottom: down
+          group: port-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: disabled, color: '#f59e0b'}]
+      placements:
+      - {block: rj45}
+      - {block: qsfp28}
+      - {ref: common/led-rect-sm@1, id: led-bcn, at: [18.80, 38.60], group: leds, rel-pos: 1, for: chassis,
+         states: ['off', {name: beacon, color: '#3b82f6', behavior: blinking}]}
+      - {ref: common/led-rect-sm@1, id: led-sts, at: [28.05, 38.60], group: leds, rel-pos: 2, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: booting, color: '#f59e0b', behavior: blinking}, {name: minor-alarm, color: '#f59e0b'}, {name: major-alarm, color: '#ef4444'}]}
+      - {ref: common/led-rect-sm@1, id: led-env, at: [37.90, 38.60], group: leds, rel-pos: 3, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+    regions:
+    - {id: logo-zone, at: [2.5, 6.4], size: {w: 6.6, h: 3.8}, label: 'Vendor logo; not drawn'}
+    - {id: status-leds, at: [12.0, 37.5], size: {w: 29.5, h: 4.5}, label: 'BCN, STS and ENV LEDs',
+       members: [led-bcn, led-sts, led-env]}
+    - {id: downlinks, at: [8.5, 9.6], size: {w: 355.0, h: 27.4}, label: '48 x 100M/1G/10GBASE-T',
+       members: [port-1, port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13, port-14, port-15, port-16, port-17, port-18, port-19, port-20, port-21, port-22, port-23, port-24, port-25, port-26, port-27, port-28, port-29, port-30, port-31, port-32, port-33, port-34, port-35, port-36, port-37, port-38, port-39, port-40, port-41, port-42, port-43, port-44, port-45, port-46, port-47, port-48]}
+    - {id: uplinks, at: [367.3, 9.7], size: {w: 66.8, h: 27.3}, label: '6 x 40/100G QSFP28',
+       members: [port-49, port-50, port-51, port-52, port-53, port-54]}
+  rear:
+    size: {w: 439.4, h: 43.7}
+    panel:
+      decor:
+      - {id: io-plate-left, at: [295.10, 5.90], size: [18.00, 27.00], fill: '#e2e5e8'}
+      cutouts:
+      - {id: console, at: [297.55, 7.30], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-rj45, at: [297.55, 21.80], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-sfp, at: [314.25, 22.10], size: [14.5, 10.0], shape: rect}
+      - {id: usb, at: [331.75, 19.50], size: [4.5, 12.0], shape: rect}
+      - {id: led-bcn-rear, at: [309.20, 37.40], size: [2.8, 1.6], shape: rect}
+      - {id: led-sts-rear, at: [321.40, 37.40], size: [2.8, 1.6], shape: rect}
+    silkscreen:
+    - {id: silk-usb, at: [334.00, 15.80], mark: usb, size: 3.4, fill: '#1a1d1f', for: usb}
+    - {id: silk-bcn-rear, at: [310.60, 41.70], text: BCN, font-size: 1.2, anchor: middle, fill: '#1a1d1f', for: led-bcn-rear}
+    - {id: silk-sts-rear, at: [322.80, 41.70], text: STS, font-size: 1.2, anchor: middle, fill: '#1a1d1f', for: led-sts-rear}
+    components:
+      bays:
+      - {id: psu-1, at: [5.30, 2.40], size: {w: 96.8, h: 38.6}, group: psus, rel-pos: 1,
+         accepts: ['cisco/nxa-pac-500w@1', 'cisco/n9k-puv-1200w@1', 'cisco/nxa-pdc-930w@1'], default: 'cisco/nxa-pac-500w@1'}
+      - {id: fan-1, at: [110.00, 2.15], size: {w: 40.8, h: 40.7}, group: fans, rel-pos: 1,
+         accepts: ['cisco/nxa-sfan-35cfm@1'], default: 'cisco/nxa-sfan-35cfm@1'}
+      - {id: fan-2, at: [155.90, 2.15], size: {w: 40.8, h: 40.7}, group: fans, rel-pos: 2,
+         accepts: ['cisco/nxa-sfan-35cfm@1'], default: 'cisco/nxa-sfan-35cfm@1'}
+      - {id: fan-3, at: [201.80, 2.15], size: {w: 40.8, h: 40.7}, group: fans, rel-pos: 3,
+         accepts: ['cisco/nxa-sfan-35cfm@1'], default: 'cisco/nxa-sfan-35cfm@1'}
+      - {id: fan-4, at: [247.70, 2.15], size: {w: 40.8, h: 40.7}, group: fans, rel-pos: 4,
+         accepts: ['cisco/nxa-sfan-35cfm@1'], default: 'cisco/nxa-sfan-35cfm@1'}
+      - {id: psu-2, at: [340.40, 2.40], size: {w: 96.8, h: 38.6}, group: psus, rel-pos: 2,
+         accepts: ['cisco/nxa-pac-500w@1', 'cisco/n9k-puv-1200w@1', 'cisco/nxa-pdc-930w@1'], default: 'cisco/nxa-pac-500w@1'}
+      placements:
+      - {ref: std/rj45-ganged@2, id: console, at: [297.55, 7.30], rotate: 180, group: mgmt, rel-pos: 1,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: common/rj45-ganged-eth@1, id: mgmt-rj45, at: [297.55, 21.80], group: mgmt, rel-pos: 2,
+         attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: std/sfp@1, id: mgmt-sfp, at: [314.25, 22.10], group: mgmt, rel-pos: 3,
+         attrs: {media: sfp, speed: 1g, role: mgmt}}
+      - {ref: std/usb-a@1, id: usb, at: [328.00, 23.25], rotate: 90, skin: usb2, group: mgmt, rel-pos: 4,
+         attrs: {media: usb-a, usb: '2.0', role: storage}}
+      - {ref: common/serial-symbol@1, id: console-mark, at: [300.30, 3.20], group: furniture, rel-pos: 1}
+      - {ref: common/nic-symbol@1, id: mgmt-rj45-mark, at: [301.50, 33.40], group: furniture, rel-pos: 2}
+      - {ref: common/nic-symbol@1, id: mgmt-sfp-mark, at: [319.50, 17.30], group: furniture, rel-pos: 3}
+      - {ref: common/led-rect-sm@1, id: led-bcn-rear, at: [309.20, 37.40], group: leds, rel-pos: 4, for: chassis,
+         states: ['off', {name: beacon, color: '#3b82f6', behavior: blinking}]}
+      - {ref: common/led-rect-sm@1, id: led-sts-rear, at: [321.40, 37.40], group: leds, rel-pos: 5, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}]}
+      - {ref: common/screw-head@1, id: io-screw, at: [314.40, 37.60], group: furniture, rel-pos: 4}
+    regions:
+    - {id: power, at: [4.3, 1.4], size: {w: 98.8, h: 40.6}, label: 'Power supply 1',
+       members: [psu-1]}
+    - {id: cooling, at: [109.0, 1.4], size: {w: 180.5, h: 41.6}, label: '4 fan modules',
+       members: [fan-1, fan-2, fan-3, fan-4]}
+    - {id: out-of-band, at: [294.0, 3.0], size: {w: 44.0, h: 39.5}, label: 'Console, management and USB',
+       members: [console, mgmt-rj45, mgmt-sfp, usb, led-bcn-rear, led-sts-rear]}
+    - {id: power-2, at: [339.4, 1.4], size: {w: 98.8, h: 40.6}, label: 'Power supply 2',
+       members: [psu-2]}
+  top:
+    size: {w: 439.4, h: 454.7}
+    empty: >-
+      Not drawn flat by any guide held. The guide's overview shows the lid in three-quarter view
+      and nothing there can be measured.
+  bottom:
+    size: {w: 439.4, h: 454.7}
+    empty: >-
+      Not drawn by any guide held. The guide does not picture the underside.
+  left:
+    size: {w: 454.7, h: 43.7}
+    empty: >-
+      Not drawn flat by any guide held. The overview shows one side wall in three-quarter view
+      and calls out the mounting-bracket screw holes and a grounding pad; their positions cannot
+      be read.
+  right:
+    size: {w: 454.7, h: 43.7}
+    empty: >-
+      Not drawn by any guide held. The guide's figure shows one side wall and says nothing of
+      the other.
+configurations:
+  ac-500w-port-side-intake:
+    kind: base
+    description: >-
+      Dual NXA-PAC-500W-PI supplies and four NXA-SFAN-35CFM-PI fan modules: port-side intake
+      airflow, burgundy latches
+    default: true
+    part-numbers:
+      N9K-C93108TC-FX3: {part: N9K-C93108TC-FX3}
+  ac-500w-port-side-exhaust:
+    kind: orderable
+    description: >-
+      Dual NXA-PAC-500W-PE supplies and four NXA-SFAN-35CFM-PE fan modules: port-side exhaust
+      airflow, blue latches. The guide's Overview gives the colours.
+    airflow: back-to-front
+    part-numbers:
+      N9K-C93108TC-FX3: {part: N9K-C93108TC-FX3}
+    component-attrs:
+      nxa-sfan-35cfm: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+      nxa-pac-500w: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+  hvac-hvdc-1200w-port-side-intake:
+    kind: orderable
+    description: >-
+      Dual N9K-PUV-1200W HVAC/HVDC supplies with white latches and four NXA-SFAN-35CFM-PI fan
+      modules: port-side intake airflow
+    power: [ac, hvdc]
+    part-numbers:
+      N9K-C93108TC-FX3: {part: N9K-C93108TC-FX3}
+    bays:
+      psu-1: cisco/n9k-puv-1200w@1
+      psu-2: cisco/n9k-puv-1200w@1
+  hvac-hvdc-1200w-port-side-exhaust:
+    kind: orderable
+    description: >-
+      Dual N9K-PUV-1200W HVAC/HVDC supplies with white latches and four NXA-SFAN-35CFM-PE fan
+      modules: port-side exhaust airflow
+    airflow: back-to-front
+    power: [ac, hvdc]
+    part-numbers:
+      N9K-C93108TC-FX3: {part: N9K-C93108TC-FX3}
+    bays:
+      psu-1: cisco/n9k-puv-1200w@1
+      psu-2: cisco/n9k-puv-1200w@1
+    component-attrs:
+      nxa-sfan-35cfm: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+  dc-930w-port-side-intake:
+    kind: orderable
+    description: >-
+      Dual NXA-PDC-930W-PI DC supplies and four NXA-SFAN-35CFM-PI fan modules: port-side intake
+      airflow, burgundy latches
+    power: dc
+    part-numbers:
+      N9K-C93108TC-FX3: {part: N9K-C93108TC-FX3}
+    bays:
+      psu-1: cisco/nxa-pdc-930w@1
+      psu-2: cisco/nxa-pdc-930w@1
+  dc-930w-port-side-exhaust:
+    kind: orderable
+    description: >-
+      Dual NXA-PDC-930W-PE DC supplies and four NXA-SFAN-35CFM-PE fan modules: port-side exhaust
+      airflow, blue latches
+    airflow: back-to-front
+    power: dc
+    part-numbers:
+      N9K-C93108TC-FX3: {part: N9K-C93108TC-FX3}
+    bays:
+      psu-1: cisco/nxa-pdc-930w@1
+      psu-2: cisco/nxa-pdc-930w@1
+    component-attrs:
+      nxa-sfan-35cfm: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+      nxa-pdc-930w: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+references:
+- {title: 'Cisco N93108TC-FX3 NX-OS Mode Switch Hardware Installation Guide', url: 'https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/hw/n93108tc-fx3/cisco-nexus-93108tc-fx3-nx-os-mode-switch-hardware-installation-guide.pdf', sha256: ea69e956184f860e83f75578000ebda0d124e43a3bead16d9a91205d34b208d8}
+- {title: 'Cisco N93180YC-FX3 NX-OS Mode Switch Hardware Installation Guide', url: 'https://www.cisco.com/c/en/us/td/docs/dcn/hw/nx-os/nexus9000/93180yc-fx3/cisco-nexus-93180yc-fx3-nx-os-mode-switch-hardware-installation-guide.pdf', sha256: 8a60a617e39b3df0d1719c9d3933e232ead946496e786a95ec5d8dfa048173fe}
+- {title: 'Cisco N93180YC-FX3S NX-OS Mode Switch Hardware Installation Guide', url: 'https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/hw/n93180yc-fx3s-hig/cisco-nexus-93180yc-fx3s-nx-os-mode-switch-hardware-installation-guide.pdf', sha256: 2db9258f23cb68c3f2f7dfa9275ce2e3ffde5c80234f3f320b3e9fc3ceacebbe}

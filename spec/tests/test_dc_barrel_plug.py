@@ -2,9 +2,9 @@
 (#789, docs/connectors-dc-terminal-design.md).
 
 ONE SIZE, BY RULING. The library treats the DC barrel jack as one nominal
-connector, `dc-barrel`: barrel diameters vary by product and of the six devices
-that place common/dc-barrel@1 only one document held, the CSS326-24G-2S+RM quick
-guide, states one. What a
+connector, `dc-barrel`: barrel diameters vary by product and of the seven devices
+that place common/dc-barrel@1 only two documents held, the CSS326-24G-2S+RM and
+CRS309-1G-8S+IN quick guides, state one. What a
 jack is fed is carried as attributes of its placement, `input-voltage` and
 `current-max-a`, from that device's own documents, and neither the interface
 nor the plug states a rating. generic/dc-barrel-plug@1 is drawn at the common
@@ -96,7 +96,7 @@ def test_dc_barrel_is_one_connector_and_claims_no_size_or_rating():
     note = entry["note"]
     assert "ONE nominal connector" in note
     assert "diameters vary by product" in note
-    assert "six devices" in note and "only the CSS326-24G-2S+RM quick guide states one" in note
+    assert "seven devices" in note and "only the CSS326-24G-2S+RM and CRS309-1G-8S+IN quick guides state one" in note
     assert "input-voltage" in note and "current-max-a" in note
     assert "not by the interface" in note and PLUG in note
     for key in ("barrel-jack", "barrel-plug"):
@@ -125,12 +125,12 @@ def test_the_jack_gained_its_interface_and_kept_its_drawing():
 
 
 def test_the_jack_states_no_rating_of_its_own():
-    """Six devices feed it four different voltages; the part carries none."""
+    """Seven devices feed it five different voltages; the part carries none."""
     attrs = _contract(JACK)["attrs"]
     assert not {"input-voltage", "current-max-a", "voltage"} & set(attrs)
 
 
-# --- 2. the six placements, and their ratings ------------------------------------
+# --- 2. the seven placements, and their ratings ------------------------------------
 
 def test_the_jack_is_placed_on_exactly_these_devices():
     """The census: every placement of the jack in the library, and nothing
