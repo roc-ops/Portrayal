@@ -1,0 +1,467 @@
+format: 1
+kind: device
+name: crs510-8xs-2xq-in
+version: 1.0.0
+maturity: modelled
+manufacturer: MikroTik
+model: CRS510-8XS-2XQ-IN
+portfolio: {line: Switches, family: Cloud Router Switch, series: CRS510}
+description: >-
+  MikroTik CRS510-8XS-2XQ-IN is a fixed 1U indoor Cloud Router Switch, 320 mm wide with rack ears in the box, with eight
+  25 Gigabit SFP28 cages and two 100 Gigabit QSFP28 cages, a 100 Megabit management port that also takes PoE in, an RJ45
+  serial console, a DC jack and a two-pin DC terminal (both drawn or left out, see the gaps), and runs RouterOS v7.
+  Everything is on the front: two hot-swap AC
+  supply modules with their C14 inlets at the left, four stacks of two SFP28 cages, the QSFP28 stack, the console over the
+  management port, RESET, the two DC inputs and three status lamps. Two fan openings and an earthing stud are on the
+  rear. The brochure prints no part number for the supplies, so they are part of the chassis and there are no bays.
+profile: networking
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      Dimensions drawing "510-8XS-2XQ-IN", MikroTik, printed 03.10.2023 (file
+      10-8XS-2XQ-INoutlineanddimensiondrawings_250549.pdf; page image at 3308 px across, 3.94 px per mm on the front
+      view): front with the ears, top plan and end view. CRS510-8XS-2XQ-IN brochure, MikroTik (file
+      CRS510-8XS-2XQ-IN_230826.pdf; no date is printed, the file name carries a revision stamp): specifications, powering
+      and included parts. Product page, MikroTik (https://mikrotik.com/product/crs510_8xs_2xq_in, saved 2026-10-26).
+      Studio photographs 2232 (front, from slightly above), 2233 (rear, from above) and 2234 (front right,
+      three-quarter, showing the right wall). The quick guide page (Quick Guide - CRS510-8XS-2XQ-IN, help.mikrotik.com)
+      holds no figure and no LED table. The block diagram CRS510-8XS-2XQ-IN_230330.png. NetBox's device type as a second
+      opinion only. MikroTik prints no figure numbers. The hardware manual page is not held.
+  datasheet:
+    confidence: datasheet
+    note: >-
+      The brochure is MikroTik's datasheet for the model: product code CRS510-8XS-2XQ-IN, QCA9531 650 MHz MIPSBE, 128 MB
+      RAM, 32 MB flash, 1 x 100M Ethernet, 8 x 25G SFP28, 2 x 100G QSFP28, switch chip 98DX4310, 320 x 185 x 44 mm, RouterOS
+      v7 level 5, -40 to +70 C. Powering: three DC inputs (PoE-in 43-57 V passive or 802.3bt class 6; DC jack 36-57 V;
+      2-pin terminal 36-57 V), two AC inputs at 100-240 V and 47-63 Hz, 31 W without attachments and 51 W at most. Included
+      parts: 2 power cords, a fastening set, rack ears. The text says "dual hot-swap power supplies" and states no
+      redundancy form. Each figure is filed as the document words it.
+  gate-1:
+    confidence: drawing
+    note: >-
+      The drawing's front view body is 3780 px wide at 3 times enlargement for the printed 320 (3.9375 px per mm in the page
+      image) and 513 px tall between the lip lines, which reads 43.4 mm, the printed 44. Every x and y below is taken at
+      3.9375 px per mm from the body's top-left corner of the front view, to about 0.4 mm.
+  chassis:
+    confidence: drawing
+    note: >-
+      320 wide, 44 high, 185 deep, as the drawing prints them; the brochure prints 320 x 185 x 44 and agrees. The drawing
+      also dimensions 9 mm beyond the front (the two-pin terminal block), 8 mm beyond the rear (the earthing stud) and 210
+      mm overall to the ends of the supply handles; none of these is part of the 185. The 481 mm across the ears is the
+      ears' width, and the 462 mm the pitch of their holes.
+  front-layout:
+    confidence: drawing
+    note: >-
+      From the drawing's front view. Two supply modules 52.1 x 38.5 mm at 12.6 and 72.0 mm, 2.1 mm down, each with a C14
+      inlet turned a quarter turn (17.7 wide by 25.5 tall, earth pin at the left) centred 49.45 and 108.85 mm and 23.5 mm
+      down, a green lamp, a six-slot vent and a latch. Four stacks of two SFP28 cages, stack centres 153.6, 171.0, 192.1 and
+      209.5 mm (a 17.4 mm pitch inside a pair and 21.1 mm between pairs), the openings centred 15.7 and 30.9 mm, and a
+      middle strip 23.0 mm down with four arrow lamps read at -4.6, -1.9, +1.9 and +4.7 mm from the centre (a down, up, down
+      and up arrow). One QSFP28 stack centred at 233.3 mm, drawn 21.0 mm wide, with a strip carrying a down and an up
+      arrow, two round lamps and a down and an up arrow again, read at -7.5, -5.1, -2.0, +1.9, +5.0 and +7.3 mm. The console and
+      management jacks share a plate 17.6 x 26.6 at 248.2 mm, 10.0 mm, the console above. RESET is a ring at 270.7 mm,
+      31.9 mm. The two-pin terminal block is 11.4 x 11.8 at 275.4 mm and the DC jack housing 10.3 x 11.8 at 290.1 mm, both
+      24.8 mm down. Three lamps are small bars under the jacks at 267.1, 274.0 and 288.2 mm, 38.6 mm.
+  lamps:
+    confidence: estimated
+    note: >-
+      The four arrow lamps of a stack: an arrow points at the cage it belongs to, so a down arrow is the lower cage and an up
+      arrow the upper one. They are carried symmetric about the stack centre (at -4.65, -2.05, +2.05 and +4.65 mm for the
+      SFP28, 0.1 to 0.4 mm from the reading) and the QSFP28's at -7.4, -5.1, +5.1 and +7.4 mm with its two round lamps at
+      -2.1 and +2.1 mm. Which pair of a stack is the speed lamp and which the activity lamp is not stated by a document, and
+      the QSFP28's two round lamps name no cage that a document states (gap `led-states`); they are drawn for the
+      chassis. The three bar lamps are printed USER, FAULT and POWER (photograph 2232). The green lamp on each supply module is
+      drawn as the photograph shows it, with no meaning stated.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      The metal prints 2 4 6 8 over the SFP28 stacks and 1 3 5 7 under them, and 2 over and 1 under the QSFP28 stack, so the
+      lower cage of a stack takes the odd number. The groups are printed 25G SFP28 and 100G QSFP28 on a purple bar at the left
+      of each group.
+  management-and-console:
+    confidence: photo-measured
+    note: >-
+      Photograph 2232 prints CONSOLE over the upper jack and MGMT/PoE in under the lower. The page counts one 100M Ethernet
+      port, the management port, filed at 100m; the brochure lists PoE in at 43-57 V passive or 802.3bt class 6 on it, which is
+      an input and is carried in the power attributes, not as a PoE out.
+  dc-inputs:
+    confidence: photo-measured
+    note: >-
+      The DC jack is drawn at the drawn housing as chassis art and not placed (gap `dc-jack`: the barrel census wants a current no
+      document states); the photograph prints "36-57 V" over both DC inputs. The two-pin pluggable terminal block beside it is 11.4 x 11.8 mm; the registry's
+      common/dc-terminal-plug-2 is a 32.1 x 17.6 mm part drawn for another maker's box, so it is not placed and the terminal
+      is left out with a gap (`dc-terminal`). The polarity marks above the terminal are not drawn.
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      The brochure lists two AC inputs and "dual hot-swap power supplies". The drawing and photograph 2232 show two modules
+      at the front, each with a C14 inlet, a steel handle, a latch and a green lamp. No held document prints a part number for
+      the supply (the brochure, the page, the quick guide page and the drawing were searched), so none is named: the supplies
+      are part of the chassis with their inlets, as on juniper/ex2300-24t, and there are no bays (gap `hot-swap-supplies`). No
+      document says what covers an empty slot. The photograph prints "100-240 V 50/60 Hz" up the left edge of the first
+      module and PSU 1 and PSU 2 beside them. The brochure's 51 W is the box's maximum power consumption. The rear photograph
+      shows two fan openings; the brochure and the page give no fan count and no fan statement.
+  rear-layout:
+    confidence: photo-measured
+    note: >-
+      From photograph 2233 (the rear, from above), x across the 320 mm at 5.3 px per mm and y estimated (the photograph looks
+      down). Two fan openings 36 mm across, centred 117.0 and 158.5 mm and 23.0 mm down; an earthing stud at 12.3 mm and 33.7 mm
+      with its earth mark above it. Read to about 2 mm, as seen from behind.
+  side-layout:
+    confidence: estimated
+    note: >-
+      Photograph 2234 shows a field of hexagonal perforations on the right wall, behind the front. It is drawn 55 x 26 mm, 33
+      mm from the front and 9 mm down, read off the photograph, which looks at the wall obliquely (about 8 mm). No held
+      document shows the left wall. The drawing's end view shows the front's mounting screws and the supply handles, not a wall.
+  ears:
+    confidence: drawing
+    note: >-
+      Rack ears are in the box (the brochure and the page: Rack ears). The drawing's front view draws them 80.5 mm either
+      side of the 320 mm body (481 mm over the ears, holes 462 mm apart). They are shipped flush with the face and are not
+      drawn on it; no `at` is written and no kit is listed.
+  colour:
+    confidence: estimated
+    note: >-
+      The median of photograph 2232's face is #e7e6ea; the face is drawn #dddddd so it reads on the light stage.
+attrs:
+  power:
+    power-max-w: 51
+    power-envelope: fully-configured
+    power-without-attachments-w: 31
+    power-input: 100 - 240 V AC, 47 - 63 Hz, two inputs, two hot-swap supplies
+    power-dc-input: PoE in 43 - 57 V passive or 802.3bt class 6 (management port); DC jack 36 - 57 V; two-pin terminal 36 - 57 V
+    power-rating-label: 100-240 V 50/60 Hz (printed beside the first supply), 36-57 V (printed over the DC inputs)
+  environmental:
+    operating-temp-c: -40 to 70
+  platform:
+    cpu: QCA9531, 650 MHz, MIPSBE
+    switch-chip: 98DX4310
+    ram: 128 MB
+    storage: 32 MB flash
+    os: RouterOS v7, level 5
+  features:
+    optics-sfp28: >-
+      brochure: backward compatible with 40 Gigabit, 25 Gigabit, 10 Gigabit and 1 Gigabit connections
+    optics-qsfp28: >-
+      brochure: two 100 Gigabit QSFP28 ports, backward compatible with 40 Gigabit; no module is included
+chassis:
+  width: 320.0
+  height: 44.0
+  depth: 185.0
+  ru: 1
+  color: '#dddddd'
+  ears:
+    positions:
+    - {name: flush, default: true}
+  power: ac
+gaps:
+- what: power-figures
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    The brochure's text says the switch chip takes "only up to 27W (without attachments)" and its table prints 31 W
+    maximum power consumption without attachments. The table's 31 W and its 51 W maximum are carried.
+  wanted: MikroTik's statement of the figure without attachments.
+- what: hot-swap-supplies
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The brochure calls the two power supplies hot-swap and prints no part number; no data sheet or drawing of the supply is
+    held, and no document says what the box ships with or what covers an empty slot. They are drawn as part of the chassis
+    with their inlets and no bay is added; the base configuration exports two AC power ports.
+  wanted: The supply's part number and a statement of what a slot holds when empty.
+- what: dc-jack
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The drawing and photograph 2232 show a DC barrel jack, 10.3 x 11.8 mm, rated 36-57 V (brochure and legend). The
+    library's census of common/dc-barrel@1 pins a current rating beside the voltage on every placement, and no held document
+    states a current for this jack, so the jack is drawn as chassis art and not placed; the device exports no power port for
+    it. Placing it later is one census line and the box's current.
+  wanted: MikroTik's current rating for the DC jack.
+- what: dc-terminal
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The reason is the nearest the schema has: the part itself is what is missing, and the library has no needs-part reason.
+    The drawing and photograph 2232 show a two-pin pluggable DC terminal block, 11.4 x 11.8 mm, beside the DC jack. The
+    registry's only part, common/dc-terminal-plug-2@1, is 32.1 x 17.6 mm and belongs to another box, so the terminal is not
+    placed and the device exports no power port for it. The brochure lists it as a DC input (36-57 V).
+  wanted: A small two-pole pluggable terminal block part.
+- what: led-states
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    Searched the brochure, the page and the quick guide page for an LED table: none. The arrow lamps, the QSFP28's two
+    round lamps, the USER, FAULT and POWER lamps and the green lamp on each supply carry the component's own vocabulary and
+    no meaning is stated.
+  wanted: MikroTik's LED description for the CRS510-8XS-2XQ-IN.
+- what: left-wall
+  scope: [left]
+  reason: needs-drawing
+  note: >-
+    No held document shows the left wall: the drawing has no wall view and the photographs show the right wall, the front and
+    the rear. It is left empty and is not drawn from the right.
+  wanted: A left side view.
+- what: top-and-bottom
+  scope: [top, bottom]
+  reason: needs-drawing
+  note: >-
+    The top plan shows four shallow slots in the lid and the CLOUD SWITCH lettering, which photograph 2232 shows as embossed
+    grooves and not as openings; no document shows the underside.
+  wanted: A bottom view.
+- what: fan-count
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    The brochure and the page give no fan count and no fan statement; the rear photograph shows two openings, which are
+    drawn. No fan redundancy is written.
+  wanted: MikroTik's fan count and redundancy statement.
+- what: weight
+  scope: [front]
+  reason: vendor-silent
+  note: Neither the brochure nor the page gives a weight.
+  wanted: MikroTik's weight.
+- what: eol
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The saved product page carries no Discontinued badge and MikroTik publishes no end-of-life page, so no lifecycle is
+    written.
+  wanted: none
+groups:
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g}
+    description: the eight SFP28 cages in four stacks of two, printed 1 to 8, the lower cage of a stack odd
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: the two QSFP28 cages in one stack, printed 1 (lower) and 2 (upper)
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the arrow lamps in the middle of each cage stack (two per cage)
+  qsfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the two round lamps in the middle of the QSFP28 stack
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 100m}
+    description: the 100 Megabit Ethernet management port printed MGMT/PoE in
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the RJ45 serial console
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+    description: the RESET button
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the USER, FAULT and POWER lamps and the green lamp on each supply
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the two AC inlets, PSU 1 and PSU 2
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 320.0, h: 44.0}
+    panel:
+      decor:
+      - {id: psu-1-module, kind: module-plate, at: [12.6, 2.1], size: [52.1, 38.5], fill: '#b9b9b9'}
+      - {id: psu-2-module, kind: module-plate, at: [72.0, 2.1], size: [52.1, 38.5], fill: '#b9b9b9'}
+      - {id: psu-1-vent, kind: vent-field, at: [16.3, 19.9], size: [13.7, 16.6], pattern: vent, vent: 1.0}
+      - {id: psu-2-vent, kind: vent-field, at: [75.7, 19.9], size: [13.7, 16.6], pattern: vent, vent: 1.0}
+      - {id: bar-25g, kind: group-bar, at: [142.6, 9.5], size: [2.0, 27.0], fill: '#c9c3e6'}
+      - {id: bar-100g, kind: group-bar, at: [217.8, 9.5], size: [2.0, 27.0], fill: '#c9c3e6'}
+      - {id: mgmt-block, kind: jack-plate, at: [248.2, 10.0], size: [17.6, 26.6], fill: '#c9c5c5'}
+      - {id: dc-jack-housing, kind: dc-jack-art, at: [290.1, 24.8], size: [10.3, 11.8], rx: 0.8, fill: '#2b2b2b'}
+      - {id: dc-jack-bore, kind: dc-jack-art, at: [293.45, 28.15], size: [3.6, 3.6], rx: 1.8, fill: '#111111'}
+      cutouts:
+      - {id: ac-inlet-1, at: [39.45, 9.5], size: [20.0, 28.0], shape: rect}
+      - {id: ac-inlet-2, at: [98.85, 9.5], size: [20.0, 28.0], shape: rect}
+      - {block: qsfp28}
+      - {block: sfp28}
+      - {id: console, at: [249.1, 9.9], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt, at: [249.1, 23.9], size: [15.8, 13.2], shape: rect}
+      - {id: btn-reset, at: [268.7, 29.9], size: [4.0, 4.0], shape: circle}
+      - {id: led-psu-1, at: [23.9, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-psu-2, at: [83.3, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-sfp-1-a, at: [147.825, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-2-a, at: [150.425, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-1-b, at: [154.525, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-2-b, at: [157.125, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-3-a, at: [165.225, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-4-a, at: [167.825, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-3-b, at: [171.925, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-4-b, at: [174.525, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-5-a, at: [186.325, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-6-a, at: [188.925, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-5-b, at: [193.025, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-6-b, at: [195.625, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-7-a, at: [203.725, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-8-a, at: [206.325, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-7-b, at: [210.425, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-8-b, at: [213.025, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-q1-a, at: [224.775, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-q2-a, at: [227.075, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-q1-b, at: [237.275, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-q2-b, at: [239.575, 22.0], size: [2.25, 2.0], shape: rect}
+      - {id: led-q-dot-1, at: [230.2, 22.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-q-dot-2, at: [234.4, 22.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-user, at: [264.8, 37.3], size: [4.6, 2.6], shape: rect}
+      - {id: led-fault, at: [271.7, 37.3], size: [4.6, 2.6], shape: rect}
+      - {id: led-power, at: [285.9, 37.3], size: [4.6, 2.6], shape: rect}
+    silkscreen:
+    - {at: [10.9, 20.0], text: PSU 1, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [70.3, 20.0], text: PSU 2, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: ac-inlet-2}
+    - {at: [5.0, 22.0], text: 100-240 V 50/60 Hz, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [143.6, 23.0], text: 25G SFP28, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [218.8, 23.0], text: 100G QSFP28, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [153.6, 8.9], text: '2', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-2}
+    - {at: [153.6, 39.3], text: '1', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [171.0, 8.9], text: '4', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-4}
+    - {at: [171.0, 39.3], text: '3', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-3}
+    - {at: [192.1, 8.9], text: '6', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-6}
+    - {at: [192.1, 39.3], text: '5', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-5}
+    - {at: [209.5, 8.9], text: '8', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-8}
+    - {at: [209.5, 39.3], text: '7', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-7}
+    - {at: [233.3, 8.9], text: '2', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: qsfp-2}
+    - {at: [233.3, 39.3], text: '1', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: qsfp-1}
+    - {at: [257.0, 8.6], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: console}
+    - {at: [257.0, 39.3], text: MGMT/PoE in, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: mgmt}
+    - {at: [270.7, 28.4], text: RESET, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: btn-reset}
+    - {at: [295.2, 21.8], text: 36-57 V, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [267.1, 42.4], text: USER, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: led-user}
+    - {at: [274.0, 42.4], text: FAULT, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: led-fault}
+    - {at: [288.2, 42.4], text: POWER, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: led-power}
+    - {at: [297.5, 11.5], text: CRS510-8XS-2XQ-IN, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: chassis}
+    components:
+      blocks:
+      - id: sfp28
+        ref: std/sfp-ganged@1
+        at: [146.475, 25.7]
+        count: 8
+        rows: 2
+        pitch: 17.4
+        row-pitch: -15.2
+        gang: 2
+        gutter: 3.7
+        number-from: 1
+        id-format: 'cage-{n}'
+        cutouts: true
+        rotate: {top: 180}
+        attrs: {media: sfp28, speed: 25g}
+      - id: qsfp28
+        ref: std/qsfp28@1
+        at: [223.3, 25.8]
+        count: 2
+        rows: 2
+        pitch: 26.0
+        row-pitch: -15.2
+        number-from: 1
+        id-format: 'qsfp-{n}'
+        cutouts: true
+        rotate: {top: 180}
+        attrs: {media: qsfp28, speed: 100g}
+      placements:
+      - {block: sfp28}
+      - {block: qsfp28}
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [35.45, 13.5], rotate: -90, group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [94.85, 13.5], rotate: -90, group: inlets, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-psu-1, at: [23.9, 11.5], for: ac-inlet-1, group: status-leds, rel-pos: 1, states: ['off', {name: ok, color: '#22c55e'}]}
+      - {ref: common/led-dot@1, id: led-psu-2, at: [83.3, 11.5], for: ac-inlet-2, group: status-leds, rel-pos: 2, states: ['off', {name: ok, color: '#22c55e'}]}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-1-a, skin: down, at: [147.825, 22.0], group: sfp-leds, rel-pos: 1, for: cage-1}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-2-a, skin: up, at: [150.425, 22.0], group: sfp-leds, rel-pos: 2, for: cage-2}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-1-b, skin: down, at: [154.525, 22.0], group: sfp-leds, rel-pos: 3, for: cage-1}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-2-b, skin: up, at: [157.125, 22.0], group: sfp-leds, rel-pos: 4, for: cage-2}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-3-a, skin: down, at: [165.225, 22.0], group: sfp-leds, rel-pos: 5, for: cage-3}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-4-a, skin: up, at: [167.825, 22.0], group: sfp-leds, rel-pos: 6, for: cage-4}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-3-b, skin: down, at: [171.925, 22.0], group: sfp-leds, rel-pos: 7, for: cage-3}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-4-b, skin: up, at: [174.525, 22.0], group: sfp-leds, rel-pos: 8, for: cage-4}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-5-a, skin: down, at: [186.325, 22.0], group: sfp-leds, rel-pos: 9, for: cage-5}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-6-a, skin: up, at: [188.925, 22.0], group: sfp-leds, rel-pos: 10, for: cage-6}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-5-b, skin: down, at: [193.025, 22.0], group: sfp-leds, rel-pos: 11, for: cage-5}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-6-b, skin: up, at: [195.625, 22.0], group: sfp-leds, rel-pos: 12, for: cage-6}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-7-a, skin: down, at: [203.725, 22.0], group: sfp-leds, rel-pos: 13, for: cage-7}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-8-a, skin: up, at: [206.325, 22.0], group: sfp-leds, rel-pos: 14, for: cage-8}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-7-b, skin: down, at: [210.425, 22.0], group: sfp-leds, rel-pos: 15, for: cage-7}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-8-b, skin: up, at: [213.025, 22.0], group: sfp-leds, rel-pos: 16, for: cage-8}
+      - {ref: common/led-arrow-sm@1, id: led-q1-a, skin: down, at: [224.775, 22.0], group: sfp-leds, rel-pos: 17, for: qsfp-1}
+      - {ref: common/led-arrow-sm@1, id: led-q2-a, skin: up, at: [227.075, 22.0], group: sfp-leds, rel-pos: 18, for: qsfp-2}
+      - {ref: common/led-arrow-sm@1, id: led-q1-b, skin: down, at: [237.275, 22.0], group: sfp-leds, rel-pos: 19, for: qsfp-1}
+      - {ref: common/led-arrow-sm@1, id: led-q2-b, skin: up, at: [239.575, 22.0], group: sfp-leds, rel-pos: 20, for: qsfp-2}
+      - {ref: common/led-dot@1, id: led-q-dot-1, at: [230.2, 22.0], for: chassis, group: qsfp-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-q-dot-2, at: [234.4, 22.0], for: chassis, group: qsfp-leds, rel-pos: 2}
+      - {ref: std/rj45@2, id: console, at: [249.1, 9.9], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+      - {ref: common/rj45-eth@1, id: mgmt, at: [249.1, 23.9], group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 100m}}
+      - {ref: common/reset-button@1, id: btn-reset, at: [268.7, 29.9], for: chassis, group: controls, rel-pos: 1,
+         attrs: {function: reset}}
+      - {ref: common/led-rect@1, id: led-user, at: [264.8, 37.3], for: chassis, group: status-leds, rel-pos: 3}
+      - {ref: common/led-rect@1, id: led-fault, at: [271.7, 37.3], for: chassis, group: status-leds, rel-pos: 4}
+      - {ref: common/led-rect@1, id: led-power, at: [285.9, 37.3], for: chassis, group: status-leds, rel-pos: 5}
+    regions:
+      - {id: logo-zone, at: [282.0, 2.5], size: {w: 31.0, h: 7.0}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 320.0, h: 44.0}
+    panel:
+      decor:
+      - {id: fan-0, kind: fan-grille, at: [99.0, 5.0], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0}
+      - {id: fan-1, kind: fan-grille, at: [140.5, 5.0], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0}
+      - {id: earth-stud-base, kind: earth-stud, at: [8.3, 29.7], size: [8.0, 8.0], rx: 4.0, fill: '#b4b8bc'}
+      - {id: earth-stud-nut, kind: earth-stud, at: [10.3, 31.7], size: [4.0, 4.0], rx: 2.0, fill: '#8d9298'}
+    components:
+      placements:
+      - {ref: common/ground-symbol@1, id: earth-mark, at: [9.7, 19.7], for: chassis, group: furniture, rel-pos: 1}
+  top:
+    size: {w: 320.0, h: 185.0}
+    empty: >-
+      The drawing's top plan shows four shallow slots and the CLOUD SWITCH lettering in the lid, which the photograph shows as
+      embossed grooves, not openings, and no vent.
+  bottom:
+    size: {w: 320.0, h: 185.0}
+    empty: >-
+      Not drawn by any source held: neither the drawing, the brochure nor the studio photographs picture the underside.
+  left:
+    size: {w: 185.0, h: 44.0}
+    empty: >-
+      No held document shows the left wall: the drawing has no wall view and the photographs show the right wall, the front
+      and the rear. Not drawn from the right.
+  right:
+    size: {w: 185.0, h: 44.0}
+    panel:
+      decor:
+      - {id: side-vent, kind: vent-field, at: [33.0, 9.0], size: [55.0, 26.0], pattern: vent, vent: 1.0}
+configurations:
+  base:
+    kind: base
+    description: >-
+      CRS510-8XS-2XQ-IN - eight 25G SFP28 cages, two 100G QSFP28 cages, a 100 Megabit management port with PoE in, an RJ45
+      console, a DC jack and a two-pin DC terminal, with two hot-swap AC supplies (part of the chassis in this model) and
+      two fans. The box holds two power cords, rack ears and a fastening set.
+    default: true
+    part-numbers:
+      CRS510-8XS-2XQ-IN: {}
+references:
+- {title: 'CRS510-8XS-2XQ-IN brochure (MikroTik; revision stamp 230826, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS510-8XS-2XQ-IN_230826.pdf)', sha256: 444a099e24879283781d2740467f7aa5038be85cc32e68ddd993c50905f2d32e}
+- {title: '510-8XS-2XQ-IN dimensions (MikroTik; printed 03.10.2023; https://cdn.mikrotik.com/web-assets/product_files/10-8XS-2XQ-INoutlineanddimensiondrawings_250549.pdf)', sha256: 7f7a24e2ca75fe1b5420516d2179a71b432d8e8d99087b4afc6735e72ca1dd19}
