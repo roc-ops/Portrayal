@@ -1,0 +1,83 @@
+format: 1
+kind: module
+name: nxa-pdc-440w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 440 W DC power supply of the Cisco Nexus 9348GC-FX3 and 9348GC-FXP fixed switches.
+  It is ordered as NXA-PDC-440W-PI (port-side intake, burgundy latch) or NXA-PDC-440W-PE
+  (port-side exhaust, blue latch). No picture of this supply is held. The face is drawn from
+  the 350 W AC supply and the inlet is a plain recess.
+size: {w: 84.7, h: 40.6}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PDC-440W'
+  power-output-w: 440
+  input: dc
+  inlet: other
+  input-voltage: '-48 to -60 Vdc nominal'
+  input-current-max: '16 to 8 A, as printed'
+  weight-kg: 1.2
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N9348GC-FX3 NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2023-08-18, Last Modified 2026-09-18), Overview: "440-W DC power supply with
+    port-side intake airflow (burgundy coloring) (NXA-PDC-440W-PI)" and "... exhaust airflow
+    (blue coloring) (NXA-PDC-440W-PE)". THE AIRFLOW SUFFIX IS DROPPED from the model, as on
+    cisco/nxa-pac-500w@1.
+  power: >-
+    datasheet - appendix B, "440-W DC Power Supply Specifications": "Maximum output power
+    440W" (an OUTPUT rating, so `power-output-w`), "Input current 16 -8 A" and "DC input
+    voltage Nominal Range: -48 to -60 VDC". The table gives no form factor. The weight is the
+    guide's weights table, 2.64 lb (1.2 kg), printed once for the 350 W AC, 350 W PHV and
+    440 W DC supplies.
+  size: >-
+    estimated - THE GUIDE STATES NO DIMENSION AND NO FORM FACTOR for this supply. The size is
+    cisco/nxa-pac-350w@1's, which the guide's figure draws for the AC supply.
+  elements: >-
+    estimated - NO PICTURE OF THIS SUPPLY IS HELD. The housing, grille, lamps and latch are
+    cisco/nxa-pac-350w@1's arrangement; the inlet window is a plain dark recess because the
+    guide does not describe the DC connector.
+  lamps: >-
+    datasheet - appendix C, "Power Supply LEDs", one table for every supply.
+  latch-colour: >-
+    datasheet for the convention - burgundy for port-side intake and blue for port-side
+    exhaust. The values are cisco/nxa-pac-500w@1's.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-500w@1's round figure.
+states: [absent]
+elements:
+  ac-ok: {at: [8.1, 6.1], size: [4.4, 4.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  ps-ok: {at: [29.8, 6.1], size: [4.4, 4.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  fan: {at: [3.4, 11.0], size: [38.2, 23.0], class: rotor}
+  latch: {at: [73.0, 13.9], size: [10.2, 13.6], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-350w@1's grille, carried across - nothing held shows this supply.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        Not stated in any guide held. cisco/nxa-pac-500w@1 carries 3.0 mm for the same latch.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [84.7, 40.6]}
