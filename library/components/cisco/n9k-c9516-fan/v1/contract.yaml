@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: n9k-c9516-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9516 fan tray (N9K-C9516-FAN). A tall perforated plate with two diagonal pull handles, two
+  captive screws at the top and two at the bottom, and three lamps at the lower right: BCN (blue), FAN
+  (green or red) and FAB (green or amber). The switch uses three, in slots FAN 1 to FAN 3 on the rear, each
+  covering two fabric-module slots. It is the only fan tray the 9516 guide lists, and it pairs with the
+  N9K-C9516-FM, -FM-E and -FM-E2 fabric modules.
+size: {w: 128.02, h: 814.83, d: 98.3}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-C9516-FAN'
+  role: 'fan-tray'
+  airflow: 'port-side intake'
+  power-draw-typical-w: 330
+  power-draw-max-w: 600
+  weight-kg: 6.84
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    datasheet - Cisco N9516 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (PDF p116, printed 110), the "Fan trays" row: width 5.04 in (12.81 cm), depth 3.87 in (9.83 cm), height
+    30.5 in (77.47 cm) without mounting brackets and 32.08 in (81.48 cm) with them. The module is drawn at
+    the height with brackets, the extent of the plate in the rear figure. The inch figure (128.02 mm) is used
+    for the width where the centimetre figure gives 128.1.
+  depth: datasheet - the same row, 3.87 in (9.83 cm).
+  compatibility: >-
+    install guide - "Overview" (PDF p9, printed 3) lists "Fan trays (three) (N9K-C9516-FAN)" and Table 1
+    (PDF p8, printed 2) lists the N9K-C9516-FM, -FM-E and -FM-E2 fabric modules; no FAN2 or fan power card is
+    named anywhere in the 9516 guide, so none is modelled.
+  lamps: >-
+    install guide - "Fan Tray LEDs", "Table 4: LEDs for Fan Tray N9K-C9516-FAN" (PDF p131, printed 125, and
+    p132, printed 126): BCN blue or off; FAN green, red or off; FAB green, amber or off, "located on the
+    lower right portion of the module". Positions inside that area are estimated.
+  power: >-
+    datasheet - the chassis's own "Planning for Power Requirements" table (PDF p20, printed 14), "Fan Trays
+    (N9K-C9516-FAN)": 330 W typical, 600 W maximum. CONFLICT: the guide's worked example in the same step
+    counts three fan trays at "3 x 451 W = 1353 W", which matches neither figure; the table is used.
+  weight: >-
+    datasheet - Appendix A weights table (PDF p117, printed 111): 15.1 lb (6.84 kg).
+  skin: >-
+    estimated - the perforated plate, the two diagonal handles and the four captive screws are read from
+    the rear figure of the guide's overview (PDF p11, printed 5), which is isometric; no figure dimensions
+    them.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number, and no end-of-sale notice for
+    it is held.
+elements:
+  bcn:
+    at: [100.0, 783.6]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp, lower right.
+    states:
+    - {name: blue, color: '#2a7de1'}
+    - 'off'
+  fan:
+    at: [108.0, 783.6]
+    size: [3.0, 3.0]
+    class: led
+    description: FAN lamp. Green when the tray is operational, red when a fan has failed.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  fab:
+    at: [116.0, 783.6]
+    size: [3.0, 3.0]
+    class: led
+    description: FAB lamp. Green when the fabric modules behind the tray are operational, amber when one is not.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+skins: [default]

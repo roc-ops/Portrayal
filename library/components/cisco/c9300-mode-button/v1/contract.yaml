@@ -1,0 +1,27 @@
+format: 1
+kind: component
+name: c9300-mode-button
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  The Mode button of the Cisco Catalyst 9300 - a round black push button at the left of the
+  front panel that steps the port lamps through the modes (STAT, SPEED, DUPLX, ACTV, STACK and
+  PoE). On the M series, holding it for 21 seconds or more resets the switch to its factory
+  settings. A pictogram of two chevrons around a dot is printed under it.
+size: {w: 4.8, h: 4.8}
+size-confidence: {w: estimated, h: estimated}
+attrs: {function: mode}
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 9300 Series Switches Hardware Installation Guide (first
+    published 2017-06-20, last modified 2026-05-15): the front panel lists a Mode button (Figure
+    3 callout 2), Port LEDs and Modes says "To select or change a mode, press the Mode button
+    until the desired mode is highlighted", and the front panel text gives the 21 second factory
+    reset for M series switches. Figure 8 prints its pictogram under the name Mode.
+  size: >-
+    estimated - 4.8 mm across, read off the community NetBox front elevation of the C9300-48P at
+    4.74 px per mm taken from its 19 inch width. The guide gives no dimension.
+elements:
+  cap: {at: [0.0, 0.0], size: [4.8, 4.8], class: mechanical}
+skins: [default]

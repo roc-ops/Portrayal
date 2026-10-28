@@ -1,0 +1,49 @@
+format: 1
+kind: module
+name: c9300-psu-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The power supply slot cover of the Cisco Catalyst 9300 family - a plain plate that fills an
+  empty power supply slot, with two release handles and two retainer clips. Every Catalyst
+  9300 ships with one in the second power supply slot, and the guide says the switch must not
+  run with a slot empty.
+size: {w: 82.55, h: 40.1, d: 60.0}
+size-confidence: {w: datasheet, h: datasheet, d: estimated}
+attrs: {model: Power Supply Slot Cover}
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 9300 Series Switches Hardware Installation Guide (first
+    published 2017-06-20, last modified 2026-05-15), Figure 50, Power Supply Slot Cover:
+    "If no power supply is installed in a power supply slot, install a power supply slot
+    cover", with callouts for the release handles and the retainer clips. THE GUIDE PRINTS NO
+    PART NUMBER FOR IT: it is called the "blank module" and the "power supply slot cover" and
+    is named here by what it is, not by a PID. The Caution says not to operate the switch with
+    a power supply slot empty and to fit a blank in it, to keep the operating temperature and
+    fan noise lower.
+  size: >-
+    datasheet for the face - the cover closes the slot of the supplies it replaces, 82.55 x
+    40.1 (the guide's Physical Specifications of Power Supplies). The depth is estimated: the
+    figure draws a short moulded cover and gives no dimension; 60 mm is a reading of its
+    proportions.
+  face: >-
+    estimated - Figure 50 is isometric: a plate bearing the maker's wordmark, a release handle
+    at each end and two retainer clips. The wordmark is not drawn and its place is reserved
+    as the logo-zone.
+  colour: >-
+    estimated - the figure is a grey drawing and the NetBox elevations draw the empty slot
+    dark; the dark of the supplies beside it is carried.
+elements:
+  plate: {at: [0.0, 0.0], size: [82.55, 40.1], class: mechanical}
+  release-left: {at: [6.0, 12.0], size: [5.0, 16.0], class: handle}
+  release-right: {at: [71.5, 12.0], size: [5.0, 16.0], class: handle}
+  logo-zone: {at: [22.0, 12.0], size: [38.0, 16.0], class: mechanical}
+relief:
+  wall: '#15171a'
+skins: [default]
+body:
+  depth: 60.0
+  color: '#2a2c30'
+  footprint: {at: [0, 0], size: [82.55, 40.1]}

@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: n9k-c9504-fm-cv
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9504 fabric-module blank card (N9K-C9504-FM-CV). A plain cover that fills a fabric-module slot
+  holding no fabric module. The guide says to fill empty fabric slots with it when the fabric modules are
+  the N9K-C9504-FM or N9K-C9504-FM-E, and it is the blank for an empty odd slot (FM 1, FM 3, FM 5). The
+  guide names no blank for an empty even slot with these fabric modules: it says only to fill FM 2, FM 4 and
+  FM 6 with fabric modules to power the fan trays.
+size: {w: 62.48, h: 238.76, d: 297.18}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs:
+  model: 'N9K-C9504-FM-CV'
+  role: 'airflow-blank'
+  eol: 'unknown'
+provenance:
+  size: >-
+    estimated - the guide gives dimensions for the fabric module (2.46 in by 9.4 in by 11.7 in) and none for
+    its blank, so the blank takes the fabric module's slot envelope.
+  purpose: >-
+    install guide - "Overview" note (PDF p9, printed p3): with the N9K-C9504-FM or N9K-C9504-FM-E fabric
+    modules, any empty slots should be filled with N9K-C9504-FM-CV. The migration procedure (PDF p118,
+    printed p112) says that empty slots FM 1, FM 3 and FM 5 are filled with blank modules (N9K-C95xx-FM-CV),
+    and that FM 2, FM 4 and FM 6 are filled with fabric modules to power the fan trays outside those slots.
+  conflict: >-
+    install guide - the Overview note says "any empty slots", the migration procedure says FM 1, FM 3 and
+    FM 5; the procedure is the narrower reading and is the one the library follows (FM-CV is the default for
+    an empty odd slot). The 9504 guide names no N9K-C9504-FM-Z, so no blank is modelled for an empty even
+    slot; see the gap "even-fabric-slot-blank" on the device. The part number N9K-C9504-FM-CV is shared
+    in form with the 9508's and 9516's (the guides write N9K-C95xx-FM-CV); each is its own component.
+  skin: >-
+    estimated - a plain unpunched plate with two captive screws; no figure draws the blank.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+skins: [default]

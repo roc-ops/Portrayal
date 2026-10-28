@@ -1,0 +1,36 @@
+format: 1
+kind: module
+name: n9k-c9516-fm-cv
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9516 fabric-module blank card (N9K-C9516-FM-CV). A plain cover that fills an odd fabric-module
+  slot (FM 1, FM 3, FM 5) holding no fabric module, to preserve the designed airflow. It is a different part
+  number from the N9K-C9516-FM-Z, which goes in an empty even slot (FM 2, FM 4, FM 6) because it also passes
+  power to the fan tray.
+size: {w: 62.48, h: 772.16, d: 297.18}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs:
+  model: 'N9K-C9516-FM-CV'
+  role: 'airflow-blank'
+  eol: 'unknown'
+provenance:
+  size: >-
+    estimated - the guide gives dimensions for the fabric module (2.46 in by 30.4 in by 11.7 in) and none for
+    its blank, so the blank takes the fabric module's slot envelope.
+  purpose: >-
+    install guide - "Overview" note (PDF p9, printed 3): if fabric slots FM 1, FM 3 or FM 5 are not filled with
+    a fabric module, "verify that they have a blank module (N9K-C9516-FM-CV) installed to preserve the designed
+    airflow". FM 2, FM 4 and FM 6 take a functioning fabric module or the N9K-C9516-FM-Z. The migration
+    caution (PDF p114, printed 108) says the same of FM 1, FM 3 and FM 5 with "N9K-C95xx-FM-CV".
+  conflict: >-
+    install guide - the same migration caution names "N9K-C950x-FM-G-Z" for the odd slots, which is the 9508
+    guide's text copied; the Overview note is used. Both blanks are accepted in every fabric bay and the
+    FM-CV is the default for an odd slot; see cisco/n9k-c9516-fm-z.
+  skin: >-
+    estimated - a plain unpunched plate with two captive screws; no figure draws the blank.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+skins: [default]
