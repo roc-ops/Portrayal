@@ -35,11 +35,13 @@ For each home, section 4 answers the same six questions:
 **The scale.** A reseller's or a maker's compatibility list holds a few hundred
 neutral types against thousands of maker-coded part numbers. Each cost below is
 counted against those two numbers: about 10² types and about 10³ to 10⁴ codes.
+These are orders of magnitude to compare the homes by, not a count of any
+list; none is held.
 
 ## 2. What holds today
 
 - **A generic carries no rate.** `docs/pluggables-design.md`, decisions 1 and
-  5, say so. `generic/sfp-lc@1` is "SFP, SFP+ and SFP28 alike". A vendor's
+  5, say so: `generic/sfp-lc` is "SFP, SFP+ and SFP28 alike". A vendor's
   `kind: module` wraps it through `parts:` and carries `model`, the rate,
   `speed`, `reach`, `wavelength` and `power-draw-max-w` in its own `attrs`
   ("The vendor wrapper, once").
@@ -62,7 +64,8 @@ counted against those two numbers: about 10² types and about 10³ to 10⁴ code
   (`spec/tools/portrayal/dcim_export.py:3419`) answers `("", "<ns>/<name>")`
   for such a contract. `module_key` says that contract "is written nowhere".
 - **A module type is emitted only for `kind: module`** (`pluggables-design.md`,
-  "The vendor wrapper, once"; `artifacts.py:107`). It is named by its
+  "The vendor wrapper, once"; the `kind == "module"` tests in
+  `dcim_export.py`, from `_chassis_seated` at 3430 on). It is named by its
   `part-numbers` keys, else by `attrs.model`.
 - **The bill of materials reads one code.** `partNumbers`
   (`kit/rack/export-data.js:822`) takes the keys of `part-numbers`, else
@@ -73,7 +76,9 @@ counted against those two numbers: about 10² types and about 10³ to 10⁴ code
   ref" (`spec/schemas/rack.schema.json`). A cable's optional `type` names a
   row of `cable-types.json`. `cableTypeOf` (`kit/rack/cable-types.js:44`)
   falls back to the cable's `media` when a type id is not in the table, so a
-  file naming a newer type still opens.
+  file naming a newer type still opens. `rack.schema.json` does not yet
+  declare a cable `type`; the optic key, once named, should be declared there
+  as well.
 - **A vocabulary table has one build step.** `cable_types_index.py` checks
   `cable-types.yaml` and refuses a row with an unknown key or an unsourced
   figure. It writes `library/dist/cable-types.json`. The table carries its own
@@ -217,7 +222,7 @@ counterpart of `cable_types_index.py`, checks it and writes
 |---|---|
 | cost to lint and lock | One file. About 10² rows, checked by one build step, under one table `version`. An added row is a minor change, and a removed row or a changed id is a major one, as for cable types. No contract, skin or lock per type. Maker codes are not rows. |
 | L99 | **Unchanged.** The table is not a contract, so no generic gains a rate. A new check (not L99) holds that a wrapper's type id resolves, that the row's `generic` is the part the wrapper wraps, and that any fact both state agrees. |
-| rack file | `swaps: {"<cage>": "generic/sfp-lc@1"}` plus the type id beside it, under a key the picker task names (for example `optics: {"<cage>": "sfp-plus-10gbase-lr"}`). `generic/` ships in every library. An id the table does not know falls back to the generic shape, as `cableTypeOf` does for a cable's `type`. **This is the only home where a file naming a neutral type opens in any library.** |
+| rack file | `swaps: {"<cage>": "generic/sfp-lc@1"}` plus the type id beside it, under a key the Explorer type-picker change names (for example `optics: {"<cage>": "sfp-plus-10gbase-lr"}`). `generic/` ships in every library. An id the table does not know falls back to the generic shape, as `cableTypeOf` does for a cable's `type`. **This is the only home where a file naming a neutral type opens in any library.** |
 | bill of materials | A seated maker wrapper reads `attrs.model`, as today. A seated generic with a type prints the type's `label` ("SFP+ 10GBASE-LR") as its description, with no part number invented. Neither line changes `partNumbers`. |
 | a maker's part number | Its own wrapper, where a cited document models it: `juniper/ex-sfp-10ge-lr`, with `attrs.optic-type: sfp-plus-10gbase-lr`. Every other code on a compatibility list is a lookup kept outside the library. A downstream tool maps code to type id. That fits decision 2: Portrayal ships bare, and a list's code is not a sourced drawing. |
 | DCIM | Nothing new. The maker's `kind: module` is the module type, as today. A generic with a type seated in a rack exports no module type, as a seated generic does today. The type's label can reach the module's description. |
@@ -231,7 +236,7 @@ version: 1.0.0
 sources:
   juniper-mx104-hw:
     title: Juniper MX104 Universal Routing Platform Hardware Guide (2022), Built-in 10-Gigabit Ethernet MIC, Cables and connectors
-    url: <the guide's address, cited by the first wrapper's task>
+    url: <the guide's address, cited by the change that adds the first wrapper>
 types:
   sfp-plus-10gbase-lr:
     label: SFP+ 10GBASE-LR
@@ -246,7 +251,7 @@ types:
 
 `juniper/ex-sfp-10ge-lr@1` is the wrapper in section 3 with one more attr,
 `optic-type: sfp-plus-10gbase-lr`. The source's url is left open here.
-`cable_types_index.py` requires an https url, and the first wrapper's task
+`cable_types_index.py` requires an https url, and the change that adds the first wrapper
 cites the guide's real address.
 
 ## 5. Side by side
@@ -288,7 +293,7 @@ What (d) does not do: give a maker's code a place in the library without a
 wrapper. That is deliberate. A code the library models gets a wrapper from a
 cited document. Any other code is mapped to its type outside the library.
 
-**What follows, in a later task.** The `optic-types.yaml` table and its build
+**What follows, in later changes.** The `optic-types.yaml` table and its build
 step, with one row. Then `juniper/ex-sfp-10ge-lr` naming that row. The check
 from #897: it seats in the EX2300-24P's SFP+ cages, and the bill-of-materials
 export shows its model. The rack key and the Explorer type picker come after
@@ -306,7 +311,7 @@ not, until the first one ships.
 | the form factor in the id | Keying by form factor and PMD (`sfp-plus-10gbase-lr`) rather than by PMD alone (`10gbase-lr`) decides whether an XFP 10GBASE-LR is a second row or the same one. |
 | the published keys of `optic-types.json` | A removed or renamed key raises `format`, as for `cable-types.json`. |
 | the wrapper's attr name (`optic-type`) | Every wrapper states it, and the check reads it. |
-| the rack key that saves a seated type | A published rack-schema key. It is named by the picker task, not here. |
+| the rack key that saves a seated type | A published rack-schema key, declared in `rack.schema.json`. It is named by the Explorer type-picker change, not here. |
 | `juniper/ex-sfp-10ge-lr` as its own wrapper | It is the module type's name in a DCIM. Adding SFPP-10GE-LR to it later as a `part-numbers` key renames that module type (`component.schema.json`, `part-numbers`). |
 
 ## Sources
