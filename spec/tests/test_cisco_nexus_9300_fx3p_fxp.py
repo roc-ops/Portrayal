@@ -362,3 +362,13 @@ def test_the_exported_93108tc_fx3p_type_lists_the_54_ports_and_the_management_po
     assert "port-55" not in types
     assert {types[f"port-{n}"] for n in range(1, 49)} == {"10gbase-t"}
     assert {types[f"port-{n}"] for n in range(49, 55)} == {"100gbase-x-qsfp28"}
+
+
+def test_the_exported_9348gc_fx3_type_lists_48_copper_4_sfp28_and_2_qsfp28_ports():
+    doc = yaml.safe_load((LIB / "exports/netbox/device-types/Cisco/N9K-C9348GC-FX3.yaml").read_text())
+    types = {i["name"]: i["type"] for i in doc["interfaces"]}
+    assert {f"port-{n}" for n in range(1, 55)} <= set(types)
+    assert "port-55" not in types
+    assert {types[f"port-{n}"] for n in range(1, 49)} == {"1000base-t"}
+    assert {types[f"port-{n}"] for n in range(49, 53)} == {"25gbase-x-sfp28"}
+    assert {types[f"port-{n}"] for n in range(53, 55)} == {"100gbase-x-qsfp28"}
