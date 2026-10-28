@@ -1,0 +1,472 @@
+format: 1
+kind: device
+name: n9k-c9336c-fx2-e
+version: 1.0.0
+maturity: modelled
+manufacturer: Cisco
+model: N9K-C9336C-FX2-E
+aliases:
+- {name: Nexus 9336C-FX2-E, kind: marketing}
+portfolio: {line: Nexus 9000, family: Nexus 9300, series: Nexus 9300-FX2}
+description: >-
+  36x 40/100G QSFP28 1RU data-centre leaf switch running NX-OS. The port side carries the
+  thirty-six cages in two rows of eighteen, four lamps and a lane select button. The other side
+  carries six fan modules, the console, an RJ-45 and an SFP management port, the USB port and two
+  power supplies. Ships port-side intake (burgundy modules) or port-side exhaust (blue). A device
+  of its own, not a configuration of the N9K-C9336C-FX2: its guide draws six fan modules where the
+  other draws three.
+profile: networking
+lint:
+  waive:
+    L29: >-
+      The guide prints no per-module power draw for the fan module or either supply; its
+      appendix B gives the switch's draw as a whole (321 W typical, 702 W maximum). No figure is
+      invented, so the module total stays a floor.
+    L69: >-
+      The Overview says the switch works with one rotor failed in any one fan module and powers
+      down in two minutes with more than one rotor failed. It does not say how many of the six
+      modules may be lost, and no form such as n+1 is stated, so none is claimed.
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      One guide, held as PDF and as converted text and figures; it is not committed. Cisco
+      N9336C-FX2-E NX-OS Mode Switch Hardware Installation Guide, First Published 2021-02-16,
+      Last Modified 2026-07-27, 66 pages: the overview and its flat front figure (art number
+      503528, PDF page 8, printed 2), flat rear figure (503529, PDF page 9, printed 3) and
+      three-quarter view (503530), appendix B specifications (PDF page 55, printed 49),
+      appendix C LEDs, appendix D kits. NO DATA SHEET, PHOTOGRAPH, 3D MODEL OR STENCIL IS HELD for
+      this model (the Nexus 9300-FX2 Series data sheet is not in the intake), and the NetBox
+      devicetype-library is held as a path listing only: it names no device type for this model
+      and no file was read. The Cisco N9336C-FX2 guide (a twin, 2018-03-12, last modified
+      2026-07-16) was read for the decision below and for the callouts it prints; none of its
+      figures, which are three-quarter views only, is drawn from. THE FX2-E IS A DEVICE OF ITS
+      OWN: its rear figure draws six fan modules and the twin's text says three fan modules, its
+      supplies sit at both ends of the rear in a 56 mm bay where the twin's guide gives no flat
+      figure to compare, and the two guides pair different fans with their chassis (NXA-FAN-35CFM and NXA-SFAN-35CFM here, NXA-FAN-65CFM and
+      NXA-SFAN-65CFM there).
+  gate-1:
+    confidence: measured
+    note: >-
+      The front figure's body, between its two end lines, is about 1269 px across and 126.5 px
+      down: aspect 10.03 against the guide's 17.3 x 1.72 in, 10.06, so 0.3% out, and it can be
+      measured; 2.888 px per mm. The rear figure's body is 1274 px across and 126 px down: aspect
+      10.1, 0.5% out; 2.899 px per mm. A repeated feature checks the scale: the supply and fan
+      modules fill the width, 2 x 56.0 + 6 x 45.4 + the out-of-band block, 439 mm.
+  the-x-axis:
+    confidence: estimated
+    note: >-
+      From the front figure at 2.888 px per mm, origin the left end line. Eighteen stacked cage
+      pairs: the first cage's outline starts at 18.7 mm and the last at 411.0, a pitch of 23.08
+      mm; each outline is 20.7 mm wide, so the registry's 20.0 mm opening is centred in it
+      (x 19.05). The four lamps stand 12.4 mm from the end line and the lane select button is
+      centred there.
+  the-y-axis:
+    confidence: estimated
+    note: >-
+      From the same figure, origin the top line. The upper cage opening starts 9.5 mm down and
+      the lower 26.7 mm, a row pitch of 17.2 mm; the strip between the two cages carries the
+      printed arrows and four lane windows, centred at 22.7 mm. The lamps stand at 12.2, 16.3,
+      20.4 and 24.2 mm and the button's centre at 31.0 mm, 6.5 mm across.
+  the-width:
+    confidence: datasheet
+    note: >-
+      The guide's Switch Dimensions table (PDF page 55, printed 49): "17.3 inches (43.9 cm)"
+      wide, "24.7 inches (62.7 cm)" deep, "1.72 inches (4.4 cm) (1 RU)" high; the figures are
+      carried as inches converted. THE DEPTH COLUMN IS HEADED "Depth" ONLY: it states no
+      inclusion. The twin guide heads its column "Depth with Handles" and prints 24.5 in (62.3
+      cm); the 0.2 in difference is declared, not explained, and the twin's figure is not applied
+      to this model. 627.4 mm is carried as the chassis depth because it is the only figure the
+      FX2-E guide prints; whether it counts the module handles is not said. THE DIMENSION ROW
+      NAMES THE SWITCH "N9336C-FC2-E" (a typo for FX2; the weights, power and kit rows say
+      N9K-C9336C-FX2-E). The part number carried is N9K-C9336C-FX2-E and the guide's spelling is
+      declared here and not carried. The weights table gives the chassis 18.8 lb (8.5 kg); 8.5 kg
+      is carried.
+  port-order:
+    confidence: estimated
+    note: >-
+      The figure prints numbers in boxes along the foot of the face, two rows of small boxes too
+      small to read. Ports number 1-36, as the guide's text says ("36 40/100-Gigabit QSFP28
+      ports"; "Fiber Channel (FC) transceivers are supported on ports 9-36 only"), and run down
+      each column, odd on the top row, which is the library's convention for a stacked pair and
+      the way the 93180YC-FX3 prints its uplinks; THE FIGURE DOES NOT SHOW IT. Port numbers are as
+      printed; the NX-OS interface names are not in the guide.
+  port-lamps:
+    confidence: datasheet
+    note: >-
+      Appendix C, Switch Chassis LEDs: "The port LEDs appear as triangles pointing up or down to
+      the nearest port." Green is admin up, module present and link up; amber is admin down or
+      module absent; off is up and present but no link. The figure draws an up triangle and a
+      down triangle at the ends of the strip between each stacked pair, with four small windows
+      between them; the windows are drawn nowhere and carry no state.
+  chassis-lamps:
+    confidence: estimated
+    note: >-
+      Callout 1 is "LEDs" and the figure draws FOUR round lamps in a column at the left end, and
+      below them a ring that is callout 2, the lane select button. Appendix C lists three
+      chassis lamps, BCN, STS and ENV, "located on the left side of the front of the switch", and
+      a lane link LED text exists in the twin guide only. The first three lamps are named for the
+      table's three, in the table's order, top to bottom, and the fourth is the lane lamp: THE
+      FIGURE PRINTS NO LEGEND THAT CAN BE READ and the order is a reading, not a printed fact.
+      The figure's small marks at the logo's place are not drawn: the library's practice for a
+      Cisco face is no logo artwork.
+  rear-face:
+    confidence: estimated
+    note: >-
+      Every x and y on the module side is read off the rear figure (1274 px across, 2.899 px per
+      mm). Supply 1, six fan modules numbered 1 (left) to 6 (right), then the out-of-band block
+      (the console jack over the RJ-45 management jack, the SFP management port, the USB port) and
+      supply 2: callouts 3, 4, 5 and 6 and the guide's rule that slots are "numbered 1 (left)
+      and 2 (right)". The out-of-band block sits between the fans and supply 2. The fan frame
+      reads about 41.4 mm across and 40.7 down, and each bay reserves 40.8 by 40.7, the size of
+      cisco/nxa-sfan-35cfm@1. The supply frame reads 55.9 by 41.0 mm and each supply bay reserves
+      56.0 by 41.0. The figure's printed legends, the two small lamp boxes under the jacks and
+      the ground screw are not readable beyond the screw, which is placed.
+  power:
+    confidence: datasheet
+    note: >-
+      Appendix B, Switch Power Input Requirements: typical 321 W and maximum 702 W "(AC or DC)",
+      2395.323 BTU per hour. The figures are the switch's draw and not a supply rating; the guide
+      notes that optics of 5 W or more on all 36 ports need the 1100 W supplies.
+  colour:
+    confidence: estimated
+    note: >-
+      NO SOURCE FOR THE COLOUR. The guide's figures are uncoloured line art. #d0d2cf is the value
+      the 93180YC-EX's stencil sample gave, carried across as a family colour.
+  rack-ears:
+    confidence: estimated
+    note: >-
+      The guide's NXK-ACC-KIT-1RU procedure (PDF page 28, printed 22) says the holes used depend
+      on the rack and on the clearance needed for interface cables, 3 inches minimum, and for
+      module handles, 1 inch minimum, and its figure shows two ways to mount the brackets. None
+      dimensions a position and none says which the box ships with, so the two positions are
+      written without an `at`, named for what the text says they clear, and none is the default.
+attrs:
+  physical:
+    weight-note: '18.8 lb (8.5 kg) chassis. Fan module 0.26 lb (0.12 kg). 750 W supply 2.1 lb (0.95 kg); the 1100 W supplies 2.36 lb (1.07 kg) in one row.'
+  power:
+    power-typical-w: 321
+    power-max-w: 702
+    power-envelope: unstated
+    heat-dissipation-btu-hr: 2395
+    power-input-ac: '100 to 240 V, 50 to 60 Hz (750 W)'
+    power-input-dc: '-48 to -60 V (1100 W)'
+    power-supply-options: '750W AC or 1100W DC (two)'
+  environmental:
+    operating-temp: '0 to 40 C (32 to 104 F)'
+    storage-temp: '-40 to 70 C (-40 to 158 F)'
+    humidity: '5 to 90% operating, 5 to 95% non-operating'
+    altitude: '13,123 ft (4000 m) operating'
+  features:
+    optics-qsfp28: 'guide: "36 40/100-Gigabit QSFP28 ports"'
+    management-ports: 'guide: "Two management ports (one 10/100/1000BASE-T port and one SFP port)"'
+  management:
+    usb: '1 USB port'
+chassis: {width: 439.4, height: 43.7, depth: 627.4, ru: 1, weight-kg: 8.5, color: '#d0d2cf', airflow: front-to-back,
+  power: ac,
+  ears: {positions: [{name: recessed, label: 'port end to the front, set back for interface cables'}, {name: recessed, label: 'module end to the front, set back for module handles'}]},
+  kits: [{ref: 'cisco/nxk-acc-kit-1ru@1', supply: optional}, {ref: 'cisco/nxk-acc-kit2-2ru@1', supply: optional}]}
+gaps:
+- what: figure-spells-fc2-in-the-dimension-row
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    The guide's Switch Dimensions row names the switch "N9336C-FC2-E". Every other row, the title
+    and the kit table say FX2-E. The part number carried is N9K-C9336C-FX2-E.
+  wanted: >-
+    A corrected dimension row.
+- what: chassis-lamp-legends-unread
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    A larger picture of the left end. The figure's callout 1 names "LEDs", draws four round lamps
+    and prints no legend that can be read; appendix C names BCN, STS and ENV only. The fourth lamp
+    is read as the lane lamp the twin guide describes.
+- what: port-numerals-unread
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    A larger picture of the foot of the front. The figure prints two rows of small boxes under the
+    cages that carry the port numbers, too small to read; the numbering is the library's
+    convention (odd on the top row), not a reading.
+- what: lane-button-art
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    A round push-button part about 6.5 mm across. The registry's reset button is a 4 mm pinhole
+    and stands in for the lane select button.
+- what: supply-1100w-ac-not-seated
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    The guide lists a 1100 W AC supply (NXA-PAC-1100W-PE3, -PI3, -PE and -PI). cisco/nxa-pac-1100w@1
+    is drawn 84.7 mm wide from another guide's figure and this guide's supply bay is 56.0 mm wide;
+    the bay would reserve less room than a module it accepts. The part is not accepted and no
+    configuration seats it.
+  wanted: >-
+    A stated size for the 1100 W AC supply, and a new version of cisco/nxa-pac-1100w if it is
+    56 mm wide here.
+- what: nxa-fan-35cfm-not-seated
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    The guide lists the NXA-FAN-35CFM and the NXA-SFAN-35CFM. The bay is sized to the figure and to
+    cisco/nxa-sfan-35cfm@1 (40.8 by 40.7); cisco/nxa-fan-35cfm@1 is 39.9 by 39.3, from another
+    guide's figure, and one module may not be reserved two bay sizes. Only the SFAN is accepted.
+  wanted: >-
+    A stated size for each fan module.
+- what: supply-weights-not-given
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    The weights table gives 2.1 lb (0.95 kg) for the 750 W AC supply and one row, 2.36 lb (1.07 kg),
+    for six 1100 W supplies, AC and DC. No weight is carried for the 1100 W DC supply.
+  wanted: >-
+    The weight of the NXA-PDC-1100W.
+- what: other-supplies-have-no-picture
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    A picture of the 750 W supply by its rating and of the 1100 W DC supply. The guide's figure
+    shows AC supplies and does not say the rating; the 750 W AC supply takes the figure and the
+    1100 W DC supply is drawn from it with a plain recess for the inlet.
+- what: kit-contents-and-n3k-kit
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The guide's installation options name "Rack-mount kit (N3K-C3064-ACC-KIT) which you can
+    order from Cisco" and say nothing else of it, and its airflow sleeve (N9K-AIRFLOW-SLV) is
+    "only compatible with" it. The sleeve's rail depth table (806.90 to 898.70 mm for this
+    switch) is the sleeve's and not the kit's. Appendix D lists the NXK-ACC-KIT-1RU: two
+    front brackets, two rear brackets, two slider rails and ten M4 screws, and a ground lug kit.
+  wanted: >-
+    The N3K-C3064-ACC-KIT's contents and its rack depth range. It is not listed under the kits of
+    this device, because a kit needs parts and a range.
+- what: the-four-undrawn-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A drawing of the lid, the underside and the two side walls. The guide's three-quarter view
+    (art number 503530) shows the lid with its SSD cover and one side wall with six screw holes
+    for mounting brackets and a grounding pad; none is flat and none can be measured.
+- what: rear-legends-unread
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    A larger picture of the rear. The figure prints legends on the supplies, the fan modules and
+    beside the jacks; at 2.9 px per mm none can be read.
+- what: fan-redundancy
+  scope: [fans]
+  reason: vendor-silent
+  note: >-
+    The Overview says each fan module has two rotors and the switch works with one rotor failed
+    in any one module; with more than one rotor failed it warns and powers down in two minutes.
+    It states no count of modules that may fail.
+  wanted: >-
+    How many of the six modules the switch survives losing. No redundancy is claimed.
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band block between the fan modules and the second supply: an RJ-45 console port,
+      an RJ-45 and an SFP management port and a USB port. Three media, one purpose: reaching the
+      switch when the data plane cannot.
+  furniture: {term: Part, role: furniture, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        installation guide: "Power supply modules (two-One for operations and one for redundancy
+        [1+1])". Slot 1 is on the left and slot 2 on the right.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy-note: >-
+        Installation guide, Overview: six fan modules of two rotors each; the switch works with
+        one rotor failed in any one module. It states no module count that may fail, so none is
+        claimed.
+views:
+  front:
+    size: {w: 439.4, h: 43.7}
+    panel:
+      decor:
+      - {id: vent-top, at: [6.00, 1.20], size: [427.00, 3.40], pattern: vent, pattern-pitch: [3.50, 3.20], vent: 1}
+      cutouts:
+      - {block: qsfp28}
+      - {id: led-bcn, at: [11.40, 11.20], size: [2.0, 2.0], shape: circle}
+      - {id: led-sts, at: [11.40, 15.30], size: [2.0, 2.0], shape: circle}
+      - {id: led-env, at: [11.40, 19.40], size: [2.0, 2.0], shape: circle}
+      - {id: led-lane, at: [11.40, 23.20], size: [2.0, 2.0], shape: circle}
+      - {id: lane-select, at: [10.40, 29.00], size: [4.0, 4.0], shape: circle}
+    components:
+      blocks:
+      - id: qsfp28
+        ref: std/qsfp28@1
+        at: [19.05, 9.50]
+        count: 36
+        rows: 2
+        pitch: 23.08
+        row-pitch: 17.2
+        number-from: 1
+        cutouts: true
+        rotate: {bottom: 180}
+        led:
+          ref: common/led-arrow-sm@1
+          id-format: 'led-port-{n}'
+          dx-by-row: [2.00, 15.75]
+          dy-top: 12.30
+          dy-bottom: -4.90
+          skin-top: up
+          skin-bottom: down
+          group: port-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: disabled, color: '#f59e0b'}]
+      placements:
+      - {block: qsfp28}
+      - {ref: common/led-dot@1, id: led-bcn, at: [11.40, 11.20], group: leds, rel-pos: 1, for: chassis,
+         states: ['off', {name: beacon, color: '#3b82f6', behavior: blinking}]}
+      - {ref: common/led-dot@1, id: led-sts, at: [11.40, 15.30], group: leds, rel-pos: 2, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: booting, color: '#f59e0b', behavior: blinking}, {name: minor-alarm, color: '#f59e0b'}, {name: major-alarm, color: '#ef4444'}]}
+      - {ref: common/led-dot@1, id: led-env, at: [11.40, 19.40], group: leds, rel-pos: 3, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-dot@1, id: led-lane, at: [11.40, 23.20], group: leds, rel-pos: 4, for: chassis,
+         states: ['off', {name: lit, color: '#22c55e'}]}
+      - {ref: common/reset-button@1, id: lane-select, at: [10.40, 29.00], group: furniture, rel-pos: 1, for: chassis}
+    regions:
+    - {id: logo-zone, at: [4.0, 5.0], size: {w: 10.0, h: 4.0}, label: 'Vendor logo; not drawn'}
+    - {id: status-leds, at: [9.5, 10.5], size: {w: 6.0, h: 17.0}, label: 'Chassis LEDs',
+       members: [led-bcn, led-sts, led-env, led-lane]}
+    - {id: ports, at: [17.9, 8.5], size: {w: 420.0, h: 29.5}, label: '36 x 40/100G QSFP28',
+       members: [port-1, port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13, port-14, port-15, port-16, port-17, port-18, port-19, port-20, port-21, port-22, port-23, port-24, port-25, port-26, port-27, port-28, port-29, port-30, port-31, port-32, port-33, port-34, port-35, port-36]}
+  rear:
+    size: {w: 439.4, h: 43.7}
+    panel:
+      decor:
+      - {id: io-plate, at: [332.80, 5.40], size: [18.80, 26.20], fill: '#e2e5e8'}
+      cutouts:
+      - {id: console, at: [335.30, 6.50], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-rj45, at: [335.30, 19.50], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-sfp, at: [352.50, 21.30], size: [14.5, 10.0], shape: rect}
+      - {id: usb, at: [369.45, 17.25], size: [4.5, 12.0], shape: rect}
+    silkscreen:
+    - {id: silk-usb, at: [371.70, 13.30], mark: usb, size: 3.4, fill: '#1a1d1f', for: usb}
+    components:
+      bays:
+      - {id: fan-1, at: [63.60, 1.70], size: {w: 40.8, h: 40.7}, group: fans, rel-pos: 1,
+         accepts: ['cisco/nxa-sfan-35cfm@1'], default: 'cisco/nxa-sfan-35cfm@1'}
+      - {id: fan-2, at: [109.00, 1.70], size: {w: 40.8, h: 40.7}, group: fans, rel-pos: 2,
+         accepts: ['cisco/nxa-sfan-35cfm@1'], default: 'cisco/nxa-sfan-35cfm@1'}
+      - {id: fan-3, at: [154.40, 1.70], size: {w: 40.8, h: 40.7}, group: fans, rel-pos: 3,
+         accepts: ['cisco/nxa-sfan-35cfm@1'], default: 'cisco/nxa-sfan-35cfm@1'}
+      - {id: fan-4, at: [199.80, 1.70], size: {w: 40.8, h: 40.7}, group: fans, rel-pos: 4,
+         accepts: ['cisco/nxa-sfan-35cfm@1'], default: 'cisco/nxa-sfan-35cfm@1'}
+      - {id: fan-5, at: [245.20, 1.70], size: {w: 40.8, h: 40.7}, group: fans, rel-pos: 5,
+         accepts: ['cisco/nxa-sfan-35cfm@1'], default: 'cisco/nxa-sfan-35cfm@1'}
+      - {id: fan-6, at: [290.60, 1.70], size: {w: 40.8, h: 40.7}, group: fans, rel-pos: 6,
+         accepts: ['cisco/nxa-sfan-35cfm@1'], default: 'cisco/nxa-sfan-35cfm@1'}
+      - {id: psu-1, at: [5.80, 1.40], size: {w: 56.0, h: 41.0}, group: psus, rel-pos: 1,
+         accepts: ['cisco/nxa-pac-750w@1', 'cisco/nxa-pdc-1100w@1'], default: 'cisco/nxa-pac-750w@1'}
+      - {id: psu-2, at: [378.00, 1.40], size: {w: 56.0, h: 41.0}, group: psus, rel-pos: 2,
+         accepts: ['cisco/nxa-pac-750w@1', 'cisco/nxa-pdc-1100w@1'], default: 'cisco/nxa-pac-750w@1'}
+      placements:
+      - {ref: std/rj45-ganged@2, id: console, at: [335.30, 6.50], rotate: 180, group: mgmt, rel-pos: 1,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: common/rj45-ganged-eth@1, id: mgmt-rj45, at: [335.30, 19.50], group: mgmt, rel-pos: 2,
+         attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: std/sfp@1, id: mgmt-sfp, at: [352.50, 21.30], group: mgmt, rel-pos: 3,
+         attrs: {media: sfp, speed: 1g, role: mgmt}}
+      - {ref: std/usb-a@1, id: usb, at: [365.70, 21.00], rotate: 90, skin: usb2, group: mgmt, rel-pos: 4,
+         attrs: {media: usb-a, usb: '2.0', role: storage}}
+      - {ref: common/serial-symbol@1, id: console-mark, at: [338.05, 2.40], group: furniture, rel-pos: 1}
+      - {ref: common/nic-symbol@1, id: mgmt-rj45-mark, at: [339.25, 31.10], group: furniture, rel-pos: 2}
+      - {ref: common/nic-symbol@1, id: mgmt-sfp-mark, at: [357.75, 16.50], group: furniture, rel-pos: 3}
+      - {ref: common/screw-head@1, id: io-screw, at: [351.60, 37.40], group: furniture, rel-pos: 4}
+    regions:
+    - {id: power, at: [5.0, 0.8], size: {w: 57.6, h: 42.2}, label: 'Power supply 1',
+       members: [psu-1]}
+    - {id: cooling, at: [62.8, 0.8], size: {w: 270.0, h: 42.0}, label: '6 fan modules',
+       members: [fan-1, fan-2, fan-3, fan-4, fan-5, fan-6]}
+    - {id: out-of-band, at: [332.5, 3.0], size: {w: 44.0, h: 39.5}, label: 'Console, management and USB',
+       members: [console, mgmt-rj45, mgmt-sfp, usb]}
+    - {id: power-2, at: [377.2, 0.8], size: {w: 57.6, h: 42.2}, label: 'Power supply 2',
+       members: [psu-2]}
+  top:
+    size: {w: 439.4, h: 627.4}
+    empty: >-
+      Not drawn flat by any guide held. The guide's three-quarter view shows the lid with its SSD
+      cover and nothing there can be measured.
+  bottom:
+    size: {w: 439.4, h: 627.4}
+    empty: >-
+      Not drawn by any guide held. The guide does not picture the underside.
+  left:
+    size: {w: 627.4, h: 43.7}
+    empty: >-
+      Not drawn flat by any guide held. The three-quarter view shows one side wall with six screw
+      holes for mounting brackets and a grounding pad; their positions cannot be read.
+  right:
+    size: {w: 627.4, h: 43.7}
+    empty: >-
+      Not drawn by any guide held. The guide's figure shows one side wall and says nothing of the
+      other.
+configurations:
+  ac-750w-port-side-intake:
+    kind: base
+    description: >-
+      Dual NXA-PAC-750W-PI supplies and six NXA-SFAN-35CFM-PI fan modules: port-side intake
+      airflow, burgundy latches
+    default: true
+    part-numbers:
+      N9K-C9336C-FX2-E: {part: N9K-C9336C-FX2-E}
+  ac-750w-port-side-exhaust:
+    kind: orderable
+    description: >-
+      Dual NXA-PAC-750W-PE supplies and six NXA-SFAN-35CFM-PE fan modules: port-side exhaust
+      airflow, blue latches. The guide's Overview gives the colours.
+    airflow: back-to-front
+    part-numbers:
+      N9K-C9336C-FX2-E: {part: N9K-C9336C-FX2-E}
+    component-attrs:
+      nxa-sfan-35cfm: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+      nxa-pac-750w: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+  dc-1100w-port-side-intake:
+    kind: orderable
+    description: >-
+      Dual NXA-PDC-1100W-PI DC supplies and six NXA-SFAN-35CFM-PI fan modules: port-side intake
+      airflow, burgundy latches
+    power: dc
+    part-numbers:
+      N9K-C9336C-FX2-E: {part: N9K-C9336C-FX2-E}
+    bays:
+      psu-1: cisco/nxa-pdc-1100w@1
+      psu-2: cisco/nxa-pdc-1100w@1
+  dc-1100w-port-side-exhaust:
+    kind: orderable
+    description: >-
+      Dual NXA-PDC-1100W-PE DC supplies and six NXA-SFAN-35CFM-PE fan modules: port-side exhaust
+      airflow, blue latches
+    power: dc
+    airflow: back-to-front
+    part-numbers:
+      N9K-C9336C-FX2-E: {part: N9K-C9336C-FX2-E}
+    bays:
+      psu-1: cisco/nxa-pdc-1100w@1
+      psu-2: cisco/nxa-pdc-1100w@1
+    component-attrs:
+      nxa-sfan-35cfm: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+      nxa-pdc-1100w: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+references:
+- {title: 'Cisco N9336C-FX2-E NX-OS Mode Switch Hardware Installation Guide', url: 'https://www.cisco.com/c/en/us/td/docs/dcn/hw/nx-os/nexus9000/9336c-fx2-e/cisco-nexus-9336c-fx2-e-nx-os-mode-switch-hardware-installation-guide.pdf', sha256: 1520c8b114ff73123f7cd1d15fc591995df4ee9b9771314a8e5d7c879a861405}

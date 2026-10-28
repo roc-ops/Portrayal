@@ -283,7 +283,11 @@ def test_the_unstated_ones_are_the_ones_we_could_not_source():
     # at the rotor level (one failed rotor tolerated), which is not a count of modules the switch can
     # lose, so the group quotes that and states no form.
     assert "juniper/qfx5130-48c" in unstated
-    assert len(unstated) == 45, unstated
+    # THE CISCO NEXUS 9336C-FX2-E MADE IT FORTY-SIX: six fan modules and redundancy only at the rotor
+    # level (one failed rotor in any one module tolerated), no count of modules, so the group says
+    # so in its note and states no form.
+    assert "cisco/n9k-c9336c-fx2-e" in unstated
+    assert len(unstated) == 46, unstated
 
 
 def test_the_comparison_layer_can_now_reach_them():
