@@ -16,6 +16,7 @@ both versions, before any of it is read.
 These are plain functions over a parsed document, so the kit can mirror them
 one for one. A placed rack file is opened for reading only, and never written.
 """
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -210,11 +211,13 @@ def check_file(path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        sys.exit("usage: sitefile.py SITE_FILE")
+    ap = argparse.ArgumentParser(description="Check a portrayal-site file: its schema, unique ids and "
+                                             "GUIDs, references, and where each cable is stored.")
+    ap.add_argument("site_file", help="the site file to check; the rack files it places are read beside it")
+    args = ap.parse_args()
     try:
-        problems = check_file(sys.argv[1])
-    except ValueError as e:
+        problems = check_file(args.site_file)
+    except (OSError, ValueError) as e:
         sys.exit(str(e))
     print("\n".join(problems) or "ok")
     sys.exit(1 if problems else 0)
