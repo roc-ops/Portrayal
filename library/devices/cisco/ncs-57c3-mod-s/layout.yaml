@@ -1,0 +1,491 @@
+format: 1
+kind: device
+name: ncs-57c3-mod-s
+version: 1.0.0
+maturity: modelled
+manufacturer: Cisco
+model: NCS-57C3-MOD-S
+aliases:
+- {name: NCS-57C3-MOD-SYS, kind: marketing}
+- {name: NCS-57C3-MOD, kind: marketing}
+portfolio: {line: NCS, family: NCS 5700}
+description: >-
+  Cisco Network Convergence System 57C3-MOD-S, a three-rack-unit fixed-port router with forty-eight 25G SFP28 ports and eight
+  100G QSFP28 ports, three modular port adapter bays, two route processor bays and two 1600 W power supply bays, all at the
+  front, and six fan trays at the rear. NCS-57C3-MOD-S is the perpetual-licensing product ID and NCS-57C3-MOD-SYS the
+  flexible-consumption one: one hardware, two licensing IDs. The port adapter bays hold their blanks here; the adapters
+  themselves are left to a later batch. The guide says nothing about end-of-sale; the status is unknown.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      One document: Hardware Installation Guide for Cisco NCS 5700 Series Fixed-Port Routers, first published 2021-06-23, last
+      modified 2026-05-15 (https://www.cisco.com/c/en/us/td/docs/iosxr/ncs5500/hardware-install/b-ncs5700-hardware-installation-guide-fixed-port.pdf).
+      HELD AND SEARCHED FOR THIS MODEL: the guide's text and figures (1, 4, 5, 9, 19, 20, 127, 130, 131, 135 and 138 were read), and the
+      intake notes for the NCS line. NOT HELD: the NCS-57C3 Fixed Chassis Data Sheet, the modular port adapter data sheet, a NetBox
+      device type or elevation, a photograph, a 3D model. The guide prints no chassis dimension table: the size is in Figure 1, an image.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      Figure 19 (front) and Figure 20 (rear) are flat, face-on renders. Gate 1: the chassis in Figure 19 spans 1177 x 349 px, aspect
+      3.37, against Figure 1's 438.4 x 130.88 mm, aspect 3.35, within 0.7 percent; Figure 20 spans 1262 x 373 px, aspect 3.38, within 1
+      percent. Scale is taken from the 438.4 mm width: 2.685 px/mm on the front and 2.87 px/mm on the rear, with the vertical scale within
+      1 percent of it. Positions are read off gridded enlargements and are good to about 1 mm, apart from the modules' outer edges, which
+      are good to about 2 mm.
+  dimensions:
+    confidence: drawing
+    note: >-
+      Figure 1 (PDF page 9), a dimensioned drawing "with and without fans and power supplies": 17.26 in (438.4 mm) wide and 5.15 in (130.88
+      mm) high on the upper front view; the upper side view has two depth lines, 12.55 in (318.77 mm) along the body and 11.59 in (294.35 mm)
+      along its upper edge; the lower, populated side view has 12.8 in (324.76 mm), 11.68 in (296.57 mm) and 12.83 in (325.82 mm). THE FIGURE
+      DOES NOT SAY WHICH LINE IS THE CHASSIS DEPTH IN WORDS. The depth used is 318.77 mm, the longest line of the bare chassis, because
+      Figure 26 (Clearance Requirement, PDF page 47) prints "Chassis depth: NCS-57C3-MOD: 12.55 in. (31.88 cm)" and 31.88 cm is 318.8 mm. The
+      longer lines of the populated view reach the protruding handles and sliders and are not the body. Three rack units: the kit is named
+      NC57-3RU-ACC-KIT and 130.88 mm is 2.94 of 44.45 mm.
+  ports:
+    confidence: datasheet
+    note: >-
+      Table 2 (PDF page 8): NCS-57C3-MOD-S (perpetual) and NCS-57C3-MOD-SYS (flexible consumption), "a total of 56 ports: 48 ports of 25G SFP28, 8
+      ports of 100G QSFP28", and "3 Modular Port Adapter (MPA) slots". The Ports section numbers MACsec on "ports 0-7, 40-55". Figure 19
+      prints the numbers on the metal, in green strips, and they run 0 to 23 on the two left SFP28 groups, 24 to 31 on the QSFP28 and 32 to 55
+      on the two right groups: a column of three SFP28 ports is numbered upward from the bottom (0, 1, 2 for the first column), the printed pair
+      "0 down-arrow up-arrow 1" sits between the middle and bottom rows and the top row's number is printed over it (the first column's "2" is covered by
+      callout 1's arrow in Figure 19; it is drawn by the pattern of the other columns). The small triangles beside each pair are not drawn. Each
+      QSFP28 column prints "24 down-arrow up-arrow 25" and is numbered the same way, the lower cage first.
+  arrangement:
+    confidence: photo-measured
+    note: >-
+      Figure 19: four SFP28 assemblies of four columns by three rows, each column's upper two cages a stacked pair and the third cage below it, on a
+      14.25 mm column pitch (the registry's ganged pitch; the figure's dividers measure 14.2 to 14.3), at x = 23.6, 104.6, 268.6 and 349.6 mm.
+      Rows (top of the opening): 44.4, 59.4 and 73.5 mm. Eight QSFP28 cages in four columns of two at x = 165.5, 188.5, 221.7 and 244.8 mm, rows at 59.8
+      and 72.9 mm. The module bays are read from Figure 19 and Figure 1: three MPA bays (two at the top left, one at the bottom), two route processor
+      bays stacked at the top right, two supply bays at the bottom left, and a plate with a vent field at the bottom right. Every position is a reading
+      of a render and each is good to about 1 mm.
+  cage-orientation:
+    confidence: datasheet
+    note: >-
+      The guide's note on the SFP28 ports (PDF page 127): the router has three rows of SFP28 ports; in the top row the transceivers go in with their
+      electrical connectors on the bottom, and in the two bottom rows with the connectors on the top. The top row
+      is placed upright and the two lower rows turned 180, by the library's convention that the upper cage of a stack is upright; the mapping from
+      "connectors on the bottom" to upright is the library's and not the guide's. The QSFP28 stack takes the same convention (upper upright, lower turned 180),
+      which the guide does not state.
+  timing-ports:
+    confidence: photo-measured
+    note: >-
+      Figure 19 callouts 6 to 9, at the right edge: 1PPS, 10 MHz, GNSS and ToD. The guide gives the timing interfaces as 1.0/2.3 DIN for 1PPS and 10 MHz ("Network Timing
+      Interfaces", PDF page 38) and the ToD as an RJ-45; the GNSS jack is drawn as an SMA. THE GUIDE NAMES THE GNSS CONNECTOR NOWHERE IN THE
+      FIGURES; SMA is the registry jack of the round, threaded antenna connector the render shows. The ToD jack reads 16 mm wide in the figure and is placed on
+      the registry's 12.7 mm RJ-45 at its centre.
+  rear-face:
+    confidence: photo-measured
+    note: >-
+      Figure 20, left to right: fan tray slots 0 and 1 (2x60mm, tall) with a "FAN TRAY 0 1" plate between them, slots 2 and 3 (2x40mm), a plate "FAN TRAY 2 3 4 5",
+      slots 4 and 5, and below the 2x40 trays a lower strip holding a grounding pad (callout 3) at the centre and a vent field at the right. "The rear view of both
+      the chassis is same." The fan tray widths are read from the figure; slot 5 is the narrowest by about 1 mm and the trays share one component size.
+  lamps:
+    confidence: photo-measured
+    note: >-
+      Figure 127: the chassis' STATUS and ATTN lamps are at the lower right of the front plate and SYNC and GNSS below the route processors, next to
+      the port groups; their positions are read from Figure 19. THE GUIDE GIVES NO STATE TABLE FOR THE 57C3'S STATUS AND ATTN LAMPS: Table 31, the
+      only chassis LED table, follows the NCS-57D2's figure. The four-cell display and its DISPLAY button at the lower right show port status as "##BB" (GN, YL, RD;
+      Table 35) and are not modelled (see the gaps). Management port link and activity lamps (Figure 131, Table 36) belong to the route
+      processor and are listed there.
+  bays:
+    confidence: photo-measured
+    note: >-
+      Bay positions from Figure 19 at 2.685 px/mm: MPA 111 x 37.5 mm at x 7.5 and 124.5 (top) and 177 (bottom); route processors 196 x 18.5 mm at x 237.5, one
+      above the other; supplies 81 x 43.5 mm at x 3.5 and 92.5. Which of the two top MPA bays is slot 2 and which is slot 3 cannot be read: the figure prints
+      MPA3 and MPA2 on the strip between them with arrows that could point either way. The bottom one is MPA1 (Figure 19 prints MPA1 beside it, and the 12-port MPA's
+      slot-1 note places it there). The bays are therefore numbered left to right along the top, then the bottom, and the numbers are the library's.
+  ears-and-kits:
+    confidence: datasheet
+    note: >-
+      Rack Mount the NCS-57C3-MOD Chassis in a 2-Post Rack, step 1: the bracket ears are aligned to the front of the chassis and the bracket's seven holes to seven of the
+      chassis screw holes, so the shipped position is flush with the front; it is the default and has no `at` because no figure dimensions it. NC57-3RU-ACC-KIT ("Rack
+      mount kit and ground lug kit", Table 16) IS NOT MODELLED AS A KIT: a kit contract needs a rack depth range or a preset for each configuration, and the guide gives neither
+      for the bracket kit, which bolts to the front posts; the contract could not be written without inventing one. The slider kit NC55-2RU-ACC-SL2 with the tray
+      NC57C3-ACC-SL-TR (the 4-post procedure) and the air filter kit NCS-57C3-FR-KIT are gaps too. Table 21 lists the bracket kit: 2 brackets, 12 M4 x 8 mm and 2 M4 x 6 mm
+      countersunk screws, 12 to 14 10-32 screws.
+  configuration-names:
+    confidence: estimated
+    note: >-
+      THE GUIDE GIVES NO ORDERING CODE FOR ANY BUILD. The chassis product IDs are NCS-57C3-MOD-S (perpetual licensing) and NCS-57C3-MOD-SYS (flexible consumption) and are
+      carried as aliases. The base build seats what Figure 19 shows in the chassis: two NC57-1600W-ACFW supplies, six FW fan trays, two NC57-MOD-RP2-E route processors and MPA
+      blanks (the figure shows MPAs in the bays; the adapters wait for a later batch). The guide does not say which route processors or supplies ship with the chassis, so the base is
+      `derived`. The DC build is an example. The guide lists only port-side-intake parts, so there is no airflow build.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      SALE STATUS IS UNKNOWN. The guide says nothing about end-of-sale or end-of-life and no other document for this model is held. No end-of-sale date is written.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The port plate is cream (#d9d2c1) and the bay faces are light grey (#c3c7cc), by eye from Figure 19, not sampled.
+attrs:
+  power:
+    power-supply-options: NC57-1600W-ACFW (AC) and NC57-1600W-DCFW (DC), 1600 W each, two, 1+1 redundant, installed from the front
+  features:
+    optics-sfp28: guide Table 2 lists forty-eight 25G SFP28 ports
+    optics-qsfp28: guide Table 2 lists eight 100G QSFP28 ports
+    redundancy: >-
+      two 1+1 power supplies and two route processors, one active and one standby; the fan trays work with N+1 redundancy (guide, Fan Modules and Fan Trays)
+chassis:
+  width: 438.4
+  height: 130.88
+  depth: 318.77
+  ru: 3
+  airflow: front-to-back
+  color: '#c3c7cc'
+  ears:
+    positions:
+    - {name: flush, label: bracket ears at the front, default: true}
+gaps:
+- what: sale-status
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    Whether the NCS-57C3-MOD-S is on sale. The one held document is silent; the intake grid marks every NCS model unknown.
+- what: chassis-data-sheet
+  scope: [front, rear]
+  reason: needs-drawing
+  wanted: >-
+    The NCS-57C3 Fixed Chassis Data Sheet (not held): weight, power draw and a dimension table. The guide prints no chassis dimension table.
+- what: depth-lines
+  scope: [top, left, right]
+  reason: sources-disagree
+  wanted: >-
+    Which of Figure 1's depth lines is the chassis depth. Figure 1 prints 12.55 in (318.77 mm), 11.59 in (294.35 mm), 12.8 in (324.76 mm), 11.68 in (296.57 mm) and 12.83 in
+    (325.82 mm); Figure 26 prints 12.55 in (31.88 cm). 318.77 mm is used.
+- what: mpa-slot-numbers
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    Which top bay is MPA slot 2 and which is slot 3. Figure 19 prints "MPA3" and "MPA2" with arrows on the strip between the bays.
+- what: mpa-adapters
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    The modular port adapters, for a later batch: the guide's Modular Port Adapters section lists NC55-MPA-4H-S (4 x QSFP+/QSFP28), NC55-MPA-2TH-S (2 x CFP2-DCO), NC55-MPA-1TH2H-S (1 x CFP2-DCO and 2 x
+    QSFP+/QSFP28), NC55-MPA-12T-S (12 x SFP+), NC57-MPA-2D4H-S and its hardened -H-S (4 x QSFP28/QSFP-DD), NC55-OIP-02 (8 x SFP+) and NCS57-MPA-1FH1D-S, with slot rules (slots 2 and 3 do not support the 12-port
+    MPA's 1G ports; on slot 1 ports 0-3 and 8-11 only support 1G; 2x100GbE autobreakout on slots 2 and 3 from release 24.2.1). Each bay holds its blank until the adapters are modelled. The MPA data sheet is not held.
+- what: led-states
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The states of the chassis STATUS, ATTN, SYNC and GNSS lamps of the 57C3. Figure 127 shows them; the guide's Table 31 follows the NCS-57D2's figure, so no 57C3 state table is held.
+- what: chassis-display
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    The four-cell port status display and its DISPLAY button at the lower right of the front plate (Table 35: "##BB" with GN, YL and RD). They are not modelled as parts: the guide gives no size or
+    position beyond Figure 19.
+- what: rack-kit
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The rack-mount kit NC57-3RU-ACC-KIT as a kit contract: the bracket's dimensions and the rack depth range or preset it serves. Table 21 lists 2 brackets and the screws; the
+    2-post procedure gives no rack depth. Without a depth the library's kit contract cannot be written, so no kit is listed under the chassis.
+- what: slider-kit
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The 4-post slider kit NC55-2RU-ACC-SL2 (min. 650 x 650 mm cabinet) with the tray NC57C3-ACC-SL-TR, and NC55-2RU-ACC-SL1 (476 mm cabinets, attached to the chassis): the guide lists contents
+    (Table 25: 2 brackets, 2 slider rails, 8 M4 x 8 mm screws) and a rack requirement of 16.0 to 19.9 in between the outside faces of the rails for the SL1, and no dimension of a rail or the tray. The SL2 also fits the 2RU NCS 55A2.
+- what: air-filters
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The optional air filter kit NCS-57C3-FR-KIT, which needs the 19-inch bracket shipped with it ("(Optional) Install the Air Filter on the NCS-57C3 Router"). The guide gives no size or part
+    dimension and the base build takes no filter.
+- what: management-jack-speed
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The management Ethernet jacks' rate on the route processors. The guide names the port and gives no rate, so the DCIM export writes the exporter's default for a management jack.
+- what: fan-and-lamp-power
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The fan trays', route processors' and chassis' own power draw. The guide's power tables give supply ratings only.
+- what: gnss-connector
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The GNSS port's connector type, which the guide does not name. It is drawn as an SMA.
+- what: rear-labels
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    The printed legends and warning labels on the rear plates (FAN TRAY 0 1, FAN TRAY 2 3 4 5, a hot-handle caution) and the screws, which are not drawn.
+- what: the-four-undrawn-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A flat drawing of the lid, the underside and the side walls. Figure 1 shows a side view with screw holes and no dimension for them.
+groups:
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp28, speed: 25g}
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the network timing interfaces - 1PPS and 10 MHz on 1.0/2.3 DIN jacks, GNSS on an SMA and time-of-day on an RJ-45. One job (clock), several media.
+  leds: {term: LED, role: indicator, index-origin: 1}
+  mpa-bays:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    physical-context: NetworkingDevice
+  rp-bays:
+    term: Slot
+    role: management
+    index-origin: 1
+    physical-context: NetworkingDevice
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - guide, Install or Replace a Route Processor: the router "supports up to two redundant route processor (RP) cards"; one is the active and the other the standby, and a new RP can be installed in an empty slot in operation.'
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    physical-context: PowerSupply
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: 'guide, Power Supply Unit: "The PSUs have a capacity of 1600W and works with 1+1 redundancy."'
+  fans:
+    term: Fan Tray
+    role: service
+    index-origin: 0
+    physical-context: Fan
+    attrs:
+      redundancy: n+1
+      redundancy-note: 'n+1 - guide, Fan Modules and Fan Trays: "The fan modules work with N+1 redundancy." Said once for the whole family; it names no count for the six trays.'
+views:
+  front:
+    size: {w: 438.4, h: 130.88}
+    panel:
+      decor:
+      - {id: vent-left, at: [5.5, 47.0], size: [14.0, 36.0], pattern: vent, vent: 1.0, confidence: photo-measured, source: 'Figure 19: the hex vent field left of the first SFP28 assembly'}
+      - {id: vent-mid-left, at: [84.5, 47.0], size: [17.0, 36.0], pattern: vent, vent: 1.0, confidence: photo-measured, source: 'Figure 19: the hex vent field between the first two SFP28 assemblies'}
+      - {id: vent-centre, at: [166.0, 49.0], size: [99.0, 9.5], pattern: vent, vent: 1.0, confidence: photo-measured, source: 'Figure 19: the hex vent band above the QSFP28 cages'}
+      - {id: vent-mid-right, at: [328.0, 46.0], size: [18.0, 26.0], pattern: vent, vent: 1.0, confidence: photo-measured, source: 'Figure 19: the vent field between the right SFP28 assemblies, above the SYNC and GNSS lamps'}
+      - {id: vent-right, at: [409.0, 45.0], size: [12.0, 26.0], pattern: vent, vent: 1.0, confidence: photo-measured, source: 'Figure 19: the vent field left of the timing ports'}
+      - {id: vent-display, at: [300.0, 91.5], size: [125.0, 22.0], pattern: vent, vent: 1.0, confidence: photo-measured, source: 'Figure 19: the hex vent field of the plate at the lower right'}
+    silkscreen:
+    - {at: [431.3, 45.16], text: 1PPS, font-size: 1.5, anchor: start, fill: '#1a1d1f', for: timing-1pps}
+    - {at: [431.3, 54.27], text: 10MHz, font-size: 1.5, anchor: start, fill: '#1a1d1f', for: timing-10mhz}
+    - {at: [431.3, 64.35], text: GNSS, font-size: 1.5, anchor: start, fill: '#1a1d1f', for: timing-gnss}
+    - {at: [431.0, 78.97], text: TOD, font-size: 1.5, anchor: start, fill: '#1a1d1f', for: timing-tod}
+    - {at: [331.5, 77.0], text: SYNC, font-size: 1.4, anchor: end, fill: '#1a1d1f', for: led-sync}
+    - {at: [343.5, 77.0], text: GNSS, font-size: 1.4, anchor: start, fill: '#1a1d1f', for: led-gnss}
+    - {at: [331.0, 125.0], text: STATUS, font-size: 1.5, anchor: end, fill: '#1a1d1f', for: led-status}
+    - {at: [341.0, 125.0], text: ATTN, font-size: 1.5, anchor: start, fill: '#1a1d1f', for: led-attn}
+    - {at: [414.0, 125.0], text: NCS-57C3-MOD-S, font-size: 2.0, anchor: end, fill: '#1a1d1f', for: chassis}
+    - {at: [30.7, 42.4], text: '2', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-2}
+    - {at: [44.95, 42.4], text: '5', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-5}
+    - {at: [59.2, 42.4], text: '8', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-8}
+    - {at: [73.45, 42.4], text: '11', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-11}
+    - {at: [111.7, 42.4], text: '14', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-14}
+    - {at: [125.95, 42.4], text: '17', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-17}
+    - {at: [140.2, 42.4], text: '20', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-20}
+    - {at: [154.45, 42.4], text: '23', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-23}
+    - {at: [275.7, 42.4], text: '34', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-34}
+    - {at: [289.95, 42.4], text: '37', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-37}
+    - {at: [304.2, 42.4], text: '40', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-40}
+    - {at: [318.45, 42.4], text: '43', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-43}
+    - {at: [356.7, 42.4], text: '46', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-46}
+    - {at: [370.95, 42.4], text: '49', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-49}
+    - {at: [385.2, 42.4], text: '52', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-52}
+    - {at: [399.45, 42.4], text: '55', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-55}
+    - {at: [28.1, 71.8], text: '0', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-0}
+    - {at: [33.3, 71.8], text: '1', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-1}
+    - {at: [42.35, 71.8], text: '3', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-3}
+    - {at: [47.55, 71.8], text: '4', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-4}
+    - {at: [56.6, 71.8], text: '6', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-6}
+    - {at: [61.8, 71.8], text: '7', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-7}
+    - {at: [70.85, 71.8], text: '9', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-9}
+    - {at: [76.05, 71.8], text: '10', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-10}
+    - {at: [109.1, 71.8], text: '12', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-12}
+    - {at: [114.3, 71.8], text: '13', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-13}
+    - {at: [123.35, 71.8], text: '15', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-15}
+    - {at: [128.55, 71.8], text: '16', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-16}
+    - {at: [137.6, 71.8], text: '18', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-18}
+    - {at: [142.8, 71.8], text: '19', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-19}
+    - {at: [151.85, 71.8], text: '21', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-21}
+    - {at: [157.05, 71.8], text: '22', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-22}
+    - {at: [273.1, 71.8], text: '32', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-32}
+    - {at: [278.3, 71.8], text: '33', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-33}
+    - {at: [287.35, 71.8], text: '35', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-35}
+    - {at: [292.55, 71.8], text: '36', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-36}
+    - {at: [301.6, 71.8], text: '38', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-38}
+    - {at: [306.8, 71.8], text: '39', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-39}
+    - {at: [315.85, 71.8], text: '41', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-41}
+    - {at: [321.05, 71.8], text: '42', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-42}
+    - {at: [354.1, 71.8], text: '44', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-44}
+    - {at: [359.3, 71.8], text: '45', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-45}
+    - {at: [368.35, 71.8], text: '47', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-47}
+    - {at: [373.55, 71.8], text: '48', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-48}
+    - {at: [382.6, 71.8], text: '50', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-50}
+    - {at: [387.8, 71.8], text: '51', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-51}
+    - {at: [396.85, 71.8], text: '53', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-53}
+    - {at: [402.05, 71.8], text: '54', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-54}
+    - {at: [172.0, 71.6], text: '24', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-24}
+    - {at: [179.0, 71.6], text: '25', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-25}
+    - {at: [195.0, 71.6], text: '26', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-26}
+    - {at: [202.0, 71.6], text: '27', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-27}
+    - {at: [228.2, 71.6], text: '28', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-28}
+    - {at: [235.2, 71.6], text: '29', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-29}
+    - {at: [251.3, 71.6], text: '30', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-30}
+    - {at: [258.3, 71.6], text: '31', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-31}
+    components:
+      bays:
+      - {id: mpa-1, at: [7.5, 0.8], size: {w: 111.5, h: 37.5}, group: mpa-bays, rel-pos: 2,
+         accepts: ['cisco/nc55-mpa-blnk@1'], default: 'cisco/nc55-mpa-blnk@1'}
+      - {id: mpa-2, at: [124.5, 0.8], size: {w: 111.5, h: 37.5}, group: mpa-bays, rel-pos: 3,
+         accepts: ['cisco/nc55-mpa-blnk@1'], default: 'cisco/nc55-mpa-blnk@1'}
+      - {id: mpa-3, at: [177.0, 90.0], size: {w: 111.5, h: 37.5}, group: mpa-bays, rel-pos: 1,
+         accepts: ['cisco/nc55-mpa-blnk@1'], default: 'cisco/nc55-mpa-blnk@1'}
+      - {id: rp-1, at: [237.5, 0.5], size: {w: 196.0, h: 18.5}, group: rp-bays, rel-pos: 1,
+         accepts: ['cisco/nc57-mod-rp2-e@1', 'cisco/nc57c3-rp-blnk@1'], default: 'cisco/nc57-mod-rp2-e@1'}
+      - {id: rp-2, at: [237.5, 19.2], size: {w: 196.0, h: 18.5}, group: rp-bays, rel-pos: 2,
+         accepts: ['cisco/nc57-mod-rp2-e@1', 'cisco/nc57c3-rp-blnk@1'], default: 'cisco/nc57-mod-rp2-e@1'}
+      - {id: psu-1, at: [3.5, 87.38], size: {w: 81.0, h: 43.5}, group: psus, rel-pos: 1,
+         accepts: ['cisco/nc57-1600w-acfw@1', 'cisco/nc57-1600w-dcfw@1', 'cisco/nc57c3-ps-blnk@1'], default: 'cisco/nc57-1600w-acfw@1'}
+      - {id: psu-2, at: [92.5, 87.38], size: {w: 81.0, h: 43.5}, group: psus, rel-pos: 2,
+         accepts: ['cisco/nc57-1600w-acfw@1', 'cisco/nc57-1600w-dcfw@1', 'cisco/nc57c3-ps-blnk@1'], default: 'cisco/nc57-1600w-acfw@1'}
+      placements:
+      - {ref: std/sfp-ganged@1, id: port-0, at: [23.6, 73.5], rotate: 180, group: sfp28, rel-pos: 0}
+      - {ref: std/sfp-ganged@1, id: port-1, at: [23.6, 59.4], rotate: 180, group: sfp28, rel-pos: 1}
+      - {ref: std/sfp-ganged@1, id: port-2, at: [23.6, 44.4], group: sfp28, rel-pos: 2}
+      - {ref: std/sfp-ganged@1, id: port-3, at: [37.85, 73.5], rotate: 180, group: sfp28, rel-pos: 3}
+      - {ref: std/sfp-ganged@1, id: port-4, at: [37.85, 59.4], rotate: 180, group: sfp28, rel-pos: 4}
+      - {ref: std/sfp-ganged@1, id: port-5, at: [37.85, 44.4], group: sfp28, rel-pos: 5}
+      - {ref: std/sfp-ganged@1, id: port-6, at: [52.1, 73.5], rotate: 180, group: sfp28, rel-pos: 6}
+      - {ref: std/sfp-ganged@1, id: port-7, at: [52.1, 59.4], rotate: 180, group: sfp28, rel-pos: 7}
+      - {ref: std/sfp-ganged@1, id: port-8, at: [52.1, 44.4], group: sfp28, rel-pos: 8}
+      - {ref: std/sfp-ganged@1, id: port-9, at: [66.35, 73.5], rotate: 180, group: sfp28, rel-pos: 9}
+      - {ref: std/sfp-ganged@1, id: port-10, at: [66.35, 59.4], rotate: 180, group: sfp28, rel-pos: 10}
+      - {ref: std/sfp-ganged@1, id: port-11, at: [66.35, 44.4], group: sfp28, rel-pos: 11}
+      - {ref: std/sfp-ganged@1, id: port-12, at: [104.6, 73.5], rotate: 180, group: sfp28, rel-pos: 12}
+      - {ref: std/sfp-ganged@1, id: port-13, at: [104.6, 59.4], rotate: 180, group: sfp28, rel-pos: 13}
+      - {ref: std/sfp-ganged@1, id: port-14, at: [104.6, 44.4], group: sfp28, rel-pos: 14}
+      - {ref: std/sfp-ganged@1, id: port-15, at: [118.85, 73.5], rotate: 180, group: sfp28, rel-pos: 15}
+      - {ref: std/sfp-ganged@1, id: port-16, at: [118.85, 59.4], rotate: 180, group: sfp28, rel-pos: 16}
+      - {ref: std/sfp-ganged@1, id: port-17, at: [118.85, 44.4], group: sfp28, rel-pos: 17}
+      - {ref: std/sfp-ganged@1, id: port-18, at: [133.1, 73.5], rotate: 180, group: sfp28, rel-pos: 18}
+      - {ref: std/sfp-ganged@1, id: port-19, at: [133.1, 59.4], rotate: 180, group: sfp28, rel-pos: 19}
+      - {ref: std/sfp-ganged@1, id: port-20, at: [133.1, 44.4], group: sfp28, rel-pos: 20}
+      - {ref: std/sfp-ganged@1, id: port-21, at: [147.35, 73.5], rotate: 180, group: sfp28, rel-pos: 21}
+      - {ref: std/sfp-ganged@1, id: port-22, at: [147.35, 59.4], rotate: 180, group: sfp28, rel-pos: 22}
+      - {ref: std/sfp-ganged@1, id: port-23, at: [147.35, 44.4], group: sfp28, rel-pos: 23}
+      - {ref: std/qsfp28@1, id: port-24, at: [165.5, 72.9], rotate: 180, group: qsfp28, rel-pos: 24}
+      - {ref: std/qsfp28@1, id: port-25, at: [165.5, 59.8], group: qsfp28, rel-pos: 25}
+      - {ref: std/qsfp28@1, id: port-26, at: [188.5, 72.9], rotate: 180, group: qsfp28, rel-pos: 26}
+      - {ref: std/qsfp28@1, id: port-27, at: [188.5, 59.8], group: qsfp28, rel-pos: 27}
+      - {ref: std/qsfp28@1, id: port-28, at: [221.7, 72.9], rotate: 180, group: qsfp28, rel-pos: 28}
+      - {ref: std/qsfp28@1, id: port-29, at: [221.7, 59.8], group: qsfp28, rel-pos: 29}
+      - {ref: std/qsfp28@1, id: port-30, at: [244.8, 72.9], rotate: 180, group: qsfp28, rel-pos: 30}
+      - {ref: std/qsfp28@1, id: port-31, at: [244.8, 59.8], group: qsfp28, rel-pos: 31}
+      - {ref: std/sfp-ganged@1, id: port-32, at: [268.6, 73.5], rotate: 180, group: sfp28, rel-pos: 32}
+      - {ref: std/sfp-ganged@1, id: port-33, at: [268.6, 59.4], rotate: 180, group: sfp28, rel-pos: 33}
+      - {ref: std/sfp-ganged@1, id: port-34, at: [268.6, 44.4], group: sfp28, rel-pos: 34}
+      - {ref: std/sfp-ganged@1, id: port-35, at: [282.85, 73.5], rotate: 180, group: sfp28, rel-pos: 35}
+      - {ref: std/sfp-ganged@1, id: port-36, at: [282.85, 59.4], rotate: 180, group: sfp28, rel-pos: 36}
+      - {ref: std/sfp-ganged@1, id: port-37, at: [282.85, 44.4], group: sfp28, rel-pos: 37}
+      - {ref: std/sfp-ganged@1, id: port-38, at: [297.1, 73.5], rotate: 180, group: sfp28, rel-pos: 38}
+      - {ref: std/sfp-ganged@1, id: port-39, at: [297.1, 59.4], rotate: 180, group: sfp28, rel-pos: 39}
+      - {ref: std/sfp-ganged@1, id: port-40, at: [297.1, 44.4], group: sfp28, rel-pos: 40}
+      - {ref: std/sfp-ganged@1, id: port-41, at: [311.35, 73.5], rotate: 180, group: sfp28, rel-pos: 41}
+      - {ref: std/sfp-ganged@1, id: port-42, at: [311.35, 59.4], rotate: 180, group: sfp28, rel-pos: 42}
+      - {ref: std/sfp-ganged@1, id: port-43, at: [311.35, 44.4], group: sfp28, rel-pos: 43}
+      - {ref: std/sfp-ganged@1, id: port-44, at: [349.6, 73.5], rotate: 180, group: sfp28, rel-pos: 44}
+      - {ref: std/sfp-ganged@1, id: port-45, at: [349.6, 59.4], rotate: 180, group: sfp28, rel-pos: 45}
+      - {ref: std/sfp-ganged@1, id: port-46, at: [349.6, 44.4], group: sfp28, rel-pos: 46}
+      - {ref: std/sfp-ganged@1, id: port-47, at: [363.85, 73.5], rotate: 180, group: sfp28, rel-pos: 47}
+      - {ref: std/sfp-ganged@1, id: port-48, at: [363.85, 59.4], rotate: 180, group: sfp28, rel-pos: 48}
+      - {ref: std/sfp-ganged@1, id: port-49, at: [363.85, 44.4], group: sfp28, rel-pos: 49}
+      - {ref: std/sfp-ganged@1, id: port-50, at: [378.1, 73.5], rotate: 180, group: sfp28, rel-pos: 50}
+      - {ref: std/sfp-ganged@1, id: port-51, at: [378.1, 59.4], rotate: 180, group: sfp28, rel-pos: 51}
+      - {ref: std/sfp-ganged@1, id: port-52, at: [378.1, 44.4], group: sfp28, rel-pos: 52}
+      - {ref: std/sfp-ganged@1, id: port-53, at: [392.35, 73.5], rotate: 180, group: sfp28, rel-pos: 53}
+      - {ref: std/sfp-ganged@1, id: port-54, at: [392.35, 59.4], rotate: 180, group: sfp28, rel-pos: 54}
+      - {ref: std/sfp-ganged@1, id: port-55, at: [392.35, 44.4], group: sfp28, rel-pos: 55}
+      - {ref: std/din-1-0-2-3@1, id: timing-1pps, at: [423.1, 41.9], group: timing, rel-pos: 0}
+      - {ref: std/din-1-0-2-3@1, id: timing-10mhz, at: [423.1, 51.0], group: timing, rel-pos: 1}
+      - {ref: std/sma@1, id: timing-gnss, at: [424.3, 60.7], group: timing, rel-pos: 2}
+      - {ref: std/rj45-ganged@2, id: timing-tod, at: [412.4, 73.0], group: timing, rel-pos: 3, attrs: {media: rj45-tod}}
+      - {ref: common/led-dot@1, id: led-sync, at: [332.3, 72.9], group: leds, rel-pos: 1, for: chassis, states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-gnss, at: [341.6, 72.9], group: leds, rel-pos: 2, for: chassis, states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-status, at: [331.4, 123.5], group: leds, rel-pos: 3, for: chassis, states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-attn, at: [338.4, 123.5], group: leds, rel-pos: 4, for: chassis, states: ['off', 'on']}
+    regions:
+    - {id: logo-zone, at: [200.0, 41.0], size: {w: 30.0, h: 10.0}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 438.4, h: 130.88}
+    panel:
+      decor:
+      - {id: vent-rear, at: [272.0, 92.0], size: [164.0, 33.0], pattern: vent, vent: 1.0, confidence: photo-measured, source: 'Figure 20: the hex vent field at the lower right, under fan tray slots 4 and 5'}
+      - {id: ground-pad, at: [232.0, 94.0], size: [30.0, 12.0], fill: '#9aa0a6', confidence: photo-measured, source: 'Figure 20, callout 3: the grounding pad at the lower centre, a box holding two holes'}
+    components:
+      bays:
+      - {id: fan-0, at: [4.4, 2.5], size: {w: 66.0, h: 126.0}, group: fans, rel-pos: 0,
+         accepts: ['cisco/nc57-c3-fan2-fw@1'], default: 'cisco/nc57-c3-fan2-fw@1'}
+      - {id: fan-1, at: [117.0, 2.5], size: {w: 66.0, h: 126.0}, group: fans, rel-pos: 1,
+         accepts: ['cisco/nc57-c3-fan2-fw@1'], default: 'cisco/nc57-c3-fan2-fw@1'}
+      - {id: fan-2, at: [190.0, 1.5], size: {w: 49.0, h: 89.0}, group: fans, rel-pos: 2,
+         accepts: ['cisco/nc57-c3-fan1-fw@1'], default: 'cisco/nc57-c3-fan1-fw@1'}
+      - {id: fan-3, at: [243.5, 1.5], size: {w: 49.0, h: 89.0}, group: fans, rel-pos: 3,
+         accepts: ['cisco/nc57-c3-fan1-fw@1'], default: 'cisco/nc57-c3-fan1-fw@1'}
+      - {id: fan-4, at: [337.7, 1.5], size: {w: 49.0, h: 89.0}, group: fans, rel-pos: 4,
+         accepts: ['cisco/nc57-c3-fan1-fw@1'], default: 'cisco/nc57-c3-fan1-fw@1'}
+      - {id: fan-5, at: [389.0, 1.5], size: {w: 49.0, h: 89.0}, group: fans, rel-pos: 5,
+         accepts: ['cisco/nc57-c3-fan1-fw@1'], default: 'cisco/nc57-c3-fan1-fw@1'}
+    regions:
+    - {id: logo-zone, at: [85.0, 98.0], size: {w: 22.0, h: 14.0}, label: 'Vendor logo; not drawn'}
+  top:
+    size: {w: 438.4, h: 318.77}
+    empty: >-
+      Not drawn by any held source. The guide's Figure 1 gives the chassis side views, not the lid.
+  bottom:
+    size: {w: 438.4, h: 318.77}
+    empty: >-
+      Not drawn by any held source. The guide does not picture the underside.
+  left:
+    size: {w: 318.77, h: 130.88}
+    empty: >-
+      Figure 1 draws a side view with unlabelled screw holes and depth lines; its holes are not dimensioned and are not drawn.
+  right:
+    size: {w: 318.77, h: 130.88}
+    empty: >-
+      Figure 1 draws a side view with unlabelled screw holes and depth lines; its holes are not dimensioned and are not drawn.
+configurations:
+  ac-port-side-intake:
+    kind: base
+    default: true
+    power: ac
+    source: >-
+      derived - the guide prints no ordering code for any build and does not say which route processors or supplies ship, so the library defines the
+      base as what Figure 19 shows: two NC57-1600W-ACFW supplies, six FW fan trays and two NC57-MOD-RP2-E route processors, with the MPA bays holding blanks.
+    description: >-
+      Two NC57-1600W-ACFW supplies, six fan trays (two NC57-C3-FAN2-FW and four NC57-C3-FAN1-FW), two NC57-MOD-RP2-E route processors and three
+      NC55-MPA-BLNK blanks: AC power, port-side intake.
+  dc-port-side-intake:
+    kind: example
+    power: dc
+    description: >-
+      The base build with two NC57-1600W-DCFW supplies: DC power, port-side intake. An illustration: the guide prints no ordering code for this build.
+    bays:
+      psu-1: cisco/nc57-1600w-dcfw@1
+      psu-2: cisco/nc57-1600w-dcfw@1
+references:
+- {title: 'Hardware Installation Guide for Cisco NCS 5700 Series Fixed-Port Routers (first published 2021-06-23, last modified 2026-05-15)'}

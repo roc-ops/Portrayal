@@ -1,0 +1,56 @@
+format: 1
+kind: module
+name: nc57-1600w-acfw
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1600 W AC power supply of the Cisco NCS-57C3-MOD, ordered as NC57-1600W-ACFW, with port-side air intake.
+  It installs from the front of the chassis. A grey housing with a round fan behind a red ring printed 1600W AC, a
+  black power inlet, a blue release latch beside it and a status lamp at the lower right. Two work 1+1.
+size: {w: 81.0, h: 43.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+part-numbers:
+  NC57-1600W-ACFW: {part: NC57-1600W-ACFW}
+attrs:
+  power-output-w: 1600
+  input: ac
+  inlet: other
+  input-voltage: 100 to 240 V AC
+  output: 12 V / 133.3 A
+  hot-swappable: 'yes'
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - Hardware Installation Guide for Cisco NCS 5700 Series Fixed-Port Routers (first published 2021-06-23, last
+    modified 2026-05-15), Power Supply Unit: "NC57-1600W-ACFW - 1600W AC power supply module with port-side air intake";
+    the PSUs "have a capacity of 1600W and works with 1+1 redundancy" and install "from the front". Figure 9 draws the
+    unit.
+  power: >-
+    datasheet - the guide's Power Supply Unit Input and Output Ranges table: NC57-1600W-ACFW, 100 to 240 V AC, 20 A to 10 A
+    (Mainland China, Taiwan) or 16 A to 10 A, 1600 W, output 12 V/133.3 A. 1600 W is the output rating.
+  size: >-
+    photo-measured - Figure 19 (a flat front elevation, face-on) at 2.685 px/mm taken from the chassis width of 438.4 mm:
+    the supply's bay measures about 81 mm wide and 43.5 mm high, and the two supplies repeat on an 80.5 mm pitch. Figure 19 is
+    within 0.7 percent of the aspect of Figure 1's 438.4 x 130.88 mm. The guide prints no dimension of the supply itself.
+  elements: >-
+    photo-measured - positions read from Figure 19 and the Figure 1 front view; the inlet is drawn as a plain black opening
+    because the guide names no inlet type. The latch colour is as drawn in the figure (blue). The lamp is Figure 138's
+    STATUS lamp at the lower right; its states are Table 38 (green: on and transmitting; blinking green: connected, not
+    transmitting; amber: failure; blinking amber: warning; off: no input power).
+  airflow: >-
+    datasheet - "port-side air intake", carried as front-to-back as the NCS 5000 supplies are.
+  depth: >-
+    estimated - not stated in any held document; 250 mm is a round figure for a supply of this class.
+states: [absent]
+elements:
+  fan: {at: [2.0, 3.0], size: [38.0, 37.5], class: rotor}
+  inlet: {at: [43.5, 3.0], size: [26.0, 37.5], class: bezel}
+  latch: {at: [71.0, 12.0], size: [5.5, 19.0], class: latch}
+  status: {at: [75.0, 37.0], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b'}, {name: failed, color: '#f59e0b'}]}
+skins: [default]
+body:
+  depth: 250
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [81.0, 43.5]}

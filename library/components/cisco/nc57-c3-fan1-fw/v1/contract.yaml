@@ -1,0 +1,46 @@
+format: 1
+kind: module
+name: nc57-c3-fan1-fw
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The fan tray with two 40 mm fans of the Cisco NCS-57C3-MOD, ordered as NC57-C3-FAN1-FW, for fan tray slots 2 to 5. It
+  installs from the rear: two round fans one above the other, a black pull handle at the right and a status lamp at the
+  lower left. Airflow is port-side intake. The -HX chassis takes the NC57-C3-FAN1-HX instead.
+size: {w: 49.0, h: 89.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+part-numbers:
+  NC57-C3-FAN1-FW: {part: NC57-C3-FAN1-FW}
+attrs:
+  airflow: front-to-back
+  hot-swappable: 'yes'
+  power-absent: not-published
+provenance:
+  model: >-
+    datasheet - Hardware Installation Guide for Cisco NCS 5700 Series Fixed-Port Routers (first published 2021-06-23, last
+    modified 2026-05-15), Fan Modules and Fan Trays: "Fan tray slots 2 through 5 support fan tray assembly with 2x40mm fans
+    (NC57-C3-FAN1-FW/NC57-C3-FAN1-HX)"; Figure 5. Each tray has two fan units. The fan modules work with N+1 redundancy.
+  power: >-
+    NOT STATED. Searched the guide for the tray's watts, amps and CFM: only supply ratings are given. No power figure is
+    written, and lint's missing-power warning stands.
+  size: >-
+    photo-measured - Figure 20 (a flat rear elevation) at about 2.87 px/mm taken from the chassis width of 438.4 mm: the
+    tray reads about 49 mm wide and 89 mm high (slots 2 to 5). The guide prints no dimension of the tray.
+  elements: >-
+    photo-measured - two fans, the handle and the lamp read from Figure 20 and Figure 5. The lamp is Figure 135's STATUS lamp
+    (the table under Figure 135: green fan operating normally, red fan failure, off not receiving power); FW is carried as front-to-back.
+  depth: >-
+    estimated - not stated in any held document; 80 mm is a round figure for a fan tray of this class.
+states: [absent]
+elements:
+  fan-a: {at: [2.5, 2.5], size: [34.0, 38.0], class: rotor}
+  fan-b: {at: [2.5, 46.0], size: [34.0, 38.0], class: rotor}
+  handle: {at: [39.0, 5.0], size: [8.0, 79.0], class: handle}
+  status: {at: [3.0, 85.0], size: [2.0, 2.0], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: failed, color: '#ef4444'}]}
+skins: [default]
+body:
+  depth: 80
+  color: '#26292d'
+  footprint: {at: [0, 0], size: [49.0, 89.0]}

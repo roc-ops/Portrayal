@@ -1,0 +1,394 @@
+format: 1
+kind: device
+name: ncs-5011
+version: 1.0.0
+maturity: modelled
+manufacturer: Cisco
+model: NCS 5011
+aliases:
+- {name: NCS-5011, kind: marketing}
+portfolio: {line: NCS, family: NCS 5000}
+description: >-
+  Cisco Network Convergence System 5011, a one-rack-unit router with thirty-two 100G QSFP28 ports on the port
+  (front) side. Two power supplies, four fan modules and the management, console and USB interfaces are on the
+  fan (rear) side. Ships port-side intake or port-side exhaust and with AC or DC supplies, four builds of one
+  front panel. The guide also lists two 10GE SFP+ ports; no figure resolves them, so they are not drawn (see the
+  gaps). The guide says nothing about end-of-sale; the status is unknown.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      One document: Hardware Installation Guide for Cisco NCS 5000 Series Routers, first published 2015-12-23,
+      last modified 2019-01-31 (https://www.cisco.com/c/en/us/td/docs/iosxr/ncs5000/hardware-install/b-ncs5000-hardware-installation-guide.pdf).
+      It is an old revision and a newer one may exist. HELD AND SEARCHED FOR THIS MODEL: the guide's text and
+      figures (5, 6, 12, 13, 16 and 22 to 24 were read), and the intake notes for the NCS line. NOT HELD: a data
+      sheet, a NetBox device type or elevation, a photograph, a 3D model. THE GUIDE'S FACE FIGURES (5 and 6) ARE
+      GREYSCALE THREE-QUARTER VIEWS at 759 x 464 and 760 x 474 px, and Figures 12 and 13 show the port side and
+      the side wall in the same projection; there is no flat front or rear elevation, so every position below is
+      read off a perspective drawing.
+  gate-1:
+    confidence: estimated
+    note: >-
+      FAILED AND SAID SO. Figures 5 and 6 are not orthographic: the near end of each face is drawn larger than the
+      far end, so no px/mm can be derived from them and the aspect cannot be compared with Table 13's 439.4 by
+      43.7 mm. Only fractions of the face width were taken along the near edge, and the counts are the guide's.
+      Every x and y on both faces is therefore estimated.
+  dimensions:
+    confidence: datasheet
+    note: >-
+      Table 13 (printed page 42): "1.72 x 17.3 x 22.5 in. (4.4 cm x 43.9 cm x 57.15 cm)". The inch figures are
+      carried, converted to 43.7 x 439.4 x 571.5 mm; the centimetre figures round to 44, 439 and 571.5, within
+      0.4 mm of the same numbers. The guide's Cabinet and Rack Installation appendix states a minimum of one rack
+      unit. Whether the width includes the rack-mount brackets is not stated; the brackets are not drawn.
+  weight:
+    confidence: datasheet
+    note: >-
+      THE GUIDE'S TWO UNITS DISAGREE. Table 13: "Cisco NCS 5011 with two 650W power supplies, and four fan modules,
+      22.2 lb (10.6 kg)"; 22.2 lb is 10.07 kg, not 10.6. The pound figure is carried in the note because Chapter 2
+      repeats it ("The Cisco NCS 5011 with two power supplies, weighs 22.2 lbs"), so two places print 22.2 lb and one
+      prints 10.6 kg. It is a loaded weight, so no empty-chassis weight is written.
+  ports:
+    confidence: datasheet
+    note: >-
+      Chapter 1, Ports: "32 x 100G QSFP28-100 ports" and "2 x 10GE SFP + ports". The overview says "32 QSFP+/QSFP28
+      ports" without the SFP+, and that the system supports 10GE, 25GE, 40GE, 50GE and 100GE with 4x10G, 4x25G and
+      2x50G breakout for copper optics. Features: "A management, console, and the USB interface on fan side of the
+      router". THE TWO SFP+ PORTS ARE NOT DRAWN: Figures 6 and 12 show a small block at the left end of the port side
+      that cannot be resolved into cages at the figures' size, so they are a gap and not a guess. The USB port is a
+      gap for the same reason on the fan side.
+  arrangement:
+    confidence: estimated
+    note: >-
+      READ OFF FIGURES 6 AND 12, which show the same face: one long dark band of cages along the port side, with a
+      small block at its left end. Thirty-two cages are drawn as two rows of sixteen, the arrangement of a one-unit
+      box with that many QSFP28 cages; the figures do not let the cages be counted. The column step is the 24.4 mm and
+      the row step the 16.8 mm the library uses for a two-row QSFP28 block on the NCS 5001, and the block is centred
+      on the 43.7 mm face and sits clear of the left-end block. Both are estimates.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (the upper cage upright over the lower turned 180), by the rule and not by
+      observation: the figures' resolution does not show which way the cages' lips face.
+  port-order:
+    confidence: estimated
+    note: >-
+      THE GUIDE PRINTS NO PORT NUMBER IN ANY FIGURE AND NONE IS RESOLVED IN THE ARTWORK, so no numeral is drawn. The ids
+      port-1 to port-32 follow the library's convention for stacked cages, down each column with the upper cage first.
+      That order is a choice and not a reading. The guide's breakout text names interfaces (controller optics 0/0/0/0
+      is "port 0") and these are not recorded as port names.
+  intake-mesh:
+    confidence: estimated
+    note: >-
+      Figures 5 and 6 show a black strip along the port-side edge of the lid, from near one side to near the other. It is
+      on the lid, not on the face, so it is drawn in the top view and the front elevation stays plain. Its width, about
+      38 mm of the 571.5 mm lid, is read off the figures' foreshortened lid and is an estimate. THE GUIDE DOES NOT SAY
+      WHAT THE STRIP IS. Its text says only that "a replaceable air filter is located on the front of the chassis" for
+      port-side intake.
+  rear-face:
+    confidence: estimated
+    note: >-
+      Figure 5 (back, fan side), left to right as drawn: a supply, four fan modules, a block holding two stacked jacks, a
+      supply. Module widths are fractions of the face width along its near edge: a supply reads about a fifth, each fan
+      about an eighth, the jack block a thirtieth; the module sizes are the library's, with the fan width taken as the
+      remainder of the face. Slot height is the one-rack-unit face less a little clearance. A label on the fan side covers
+      the grounding holes ("remove the label on the rear side (fan side) of the router to expose the ground mounting
+      holes", Figure 16); its position is not drawn.
+  console-and-management:
+    confidence: estimated
+    note: >-
+      Two RJ-45 jacks stacked between the fourth fan module and the right supply, the console over the management jack, as
+      the library draws them on other Cisco boxes. Figure 5 shows a column of two stacked jacks there; the guide's text
+      names a console and a management interface and gives no more. Which is which is the library's convention, not a
+      reading.
+  lamps:
+    confidence: datasheet
+    note: >-
+      Appendix E, Table 23: a "Power LED" at the "Front of Chassis" (green solid on: system on and operating normally;
+      green off: router powered off; amber on: fault condition), and on each supply an OK lamp (green) and a FAILED lamp
+      (amber), Table 24. No port lamp, link lamp or fan lamp is described, so none is drawn; the chassis lamp's position
+      on the port side is a guess at the block at the left end.
+  airflow:
+    confidence: datasheet
+    note: >-
+      Chapter 2, Airflow Direction: front-to-back is "port side intake" and back-to-front is "port side exhaust", set by the
+      type of fan modules and power supplies, and it is not possible to mix airflow directions. The builds are
+      configurations. THE GUIDE GIVES NO COLOUR FOR EITHER DIRECTION in text or in its greyscale figures, so no handle colour
+      is set per configuration.
+  ears-and-kits:
+    confidence: estimated
+    note: >-
+      The `flush` position is the one Figure 12 draws: the front bracket bolts to the side of the chassis with its flange
+      level with the port-side face. The guide says "any four of the holes in the front rack-mount bracket" meet "four of the
+      six screw holes" in the chassis, so other positions exist, and none is measured; they are not written. NO KIT IS MODELLED:
+      Table 10 lists the rack-mount kit as four brackets, sixteen M4 x 7 mm screws, four rack-mount guides and two slider rails,
+      and Appendix A lists accessory kit NCS-5011-ACSR with two of each bracket, guide and slider and sixteen M4 x 6 mm
+      screws, so the guide disagrees with itself on the counts and on the screw length; no document held gives a bracket's,
+      a guide's or a slider's dimensions or the kit's depth range. See the gaps.
+  configuration-names:
+    confidence: estimated
+    note: >-
+      THE GUIDE GIVES NO CHASSIS PART NUMBER AND NO CODE FOR ANY BUILD. Its only orderable codes for this router are the supplies
+      and fan modules (Tables 6 and 7) and the accessory kit NCS-5011-ACSR, and it says "power supply options need to be configured
+      with the base chassis". The four builds are therefore one `kind: base` build (AC, port-side intake) and three
+      `kind: example` builds, with no `part-numbers`: each says which supplies and fan modules it seats, and none is an orderable
+      SKU.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      SALE STATUS IS UNKNOWN. The guide, in 66 pages, says nothing about end-of-sale or end-of-life, and no other document for
+      this model is held; a revision date is not a status. No end-of-sale date is written.
+  colour:
+    confidence: estimated
+    note: >-
+      The face is a light grey with dark printing in the guide's greyscale figures; #c9cccf is chosen by eye, not sampled.
+attrs:
+  physical:
+    weight-note: 22.2 lb (10.6 kg) with two 650 W power supplies and four fan modules; 22.2 lb is 10.07 kg
+  environmental:
+    operating-temp: 32 to 104 F (0 to 40 C)
+    storage-temp: -40 to 158 F (-40 to 70 C)
+    humidity: 5 to 95% (non condensing)
+    altitude: 0 to 10,000 ft (0 to 3000 m)
+  power:
+    power-supply-options: NC5K-PAC-650W-FR/-BK (AC), NC5K-PDC-930W-FR/-BK (DC), two, 1+1 redundant
+  features:
+    optics-qsfp28: guide Chapter 1 lists thirty-two 100G QSFP28 ports, supporting 10GE, 25GE, 40GE, 50GE and 100GE
+    redundancy: >-
+      two 1+1 power supplies and four 3+1 fan modules, all hot-swappable; the system works with a single fan failure
+      and more than one fan failure shuts it down
+chassis:
+  width: 439.4
+  height: 43.7
+  depth: 571.5
+  ru: 1
+  color: '#c9cccf'
+  ears:
+    positions:
+    - {name: flush, label: front bracket, default: true}
+gaps:
+- what: sale-status
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    Whether the NCS 5011 is on sale. The one held document is silent; the intake grid marks every NCS model unknown.
+    An end-of-sale notice or the product page would settle it.
+- what: flat-face-figures
+  scope: [front, rear]
+  reason: needs-drawing
+  wanted: >-
+    A flat front and rear elevation, or a photograph taken square on. The guide's Figures 5 and 6 are greyscale
+    three-quarter views, so every position is estimated and no printed numeral or legend can be read.
+- what: printed-legends
+  scope: [front, rear]
+  reason: needs-photo
+  wanted: >-
+    The legends printed beside the ports, lamps and jacks. None is resolved in the held figures, so none is drawn, and
+    the model name is not drawn either because nothing shows it as printed.
+- what: sfp-plus-ports
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    The two 10GE SFP+ ports the guide lists under Ports (Chapter 1). Figures 6 and 12 show a small block at the left
+    end of the port side that cannot be resolved into cages, so their position, and whether they are stacked, is not read
+    and they are not placed.
+- what: usb-port
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    The USB interface "on fan side of the router" (Features). Figure 5 resolves two stacked jacks and no USB port, so it is
+    not placed.
+- what: rack-kit
+  scope: [front, rear]
+  reason: sources-disagree
+  wanted: >-
+    The rack-mount kit as a kit contract: part numbers, the dimensions of the bracket, guide and slider rail, and the
+    rack depth range. The guide gives a parts list whose counts disagree: Table 10 has four brackets, sixteen M4 x 7 mm
+    screws, four guides and two slider rails; Appendix A's accessory kit NCS-5011-ACSR has two brackets, two guides, two
+    sliders and sixteen M4 x 6 mm screws. It gives a rack requirement of 23.5 to 34.0 in between the outside faces of the
+    front and rear rails, and no part numbers.
+- what: management-jack-speed
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The management jack's rate. Searched the guide for "10/100", "1000", "Gigabit" and "speed" beside the management
+    interface: it names the interface and gives no rate for the jack, so the DCIM export writes the exporter's default for
+    a management jack.
+- what: fan-and-lamp-power
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The fan module's power draw, and the chassis' own draw. Appendix C gives supply ratings only.
+- what: air-filters
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The air filters, which the guide draws but does not size or number. The port-side-intake builds take a three-piece filter
+    on the faceplate (Figure 22: pieces A, B and C); the port-side-exhaust builds take clip-on filters on the supply and the
+    fan fronts (Figures 23 and 24). The figures do not say which chassis they show. No part number, size or position is held
+    for either.
+- what: ground-label
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    The label on the fan side that covers the grounding holes (Figure 16) and the lug bracket. Its size and position are
+    not read from the three-quarter figure.
+- what: the-four-undrawn-faces
+  scope: [bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A drawing of the underside and the side walls. The guide shows one side wall in three-quarter view only, with six
+    bracket holes; its positions cannot be read.
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band ports - an RJ-45 console with an RJ-45 management jack, both on the fan side. Two jacks, one purpose:
+      reaching the router when the data plane cannot.
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        guide Chapter 1, Features: "Two 1+1 redundant, hot-swappable power supplies", and "A minimum of one power supply is
+        required for normal operation".
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: >-
+        guide Chapter 1, Fan Modules: "slots for four 3+1 redundant fan modules", hot-swappable; "The system can work with a
+        single fan failure. More than one fan failure leads to system shutdown."
+views:
+  front:
+    size: {w: 439.4, h: 43.7}
+    panel:
+      cutouts:
+      - {block: qsfp28}
+      - {id: led-power, at: [10.0, 21.0], size: [2.0, 2.0], shape: circle}
+    silkscreen: []
+    components:
+      blocks:
+      - id: qsfp28
+        ref: std/qsfp28@1
+        at: [36.0, 8.4]
+        count: 32
+        rows: 2
+        pitch: 24.4
+        row-pitch: 16.8
+        number-from: 1
+        cutouts: true
+        rotate: {bottom: 180}
+      placements:
+      - {block: qsfp28}
+      - {ref: common/led-dot@1, id: led-power, at: [10.0, 21.0], group: leds, rel-pos: 1, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  rear:
+    size: {w: 439.4, h: 43.7}
+    panel:
+      cutouts:
+      - {id: console, at: [319.5, 8.2], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt, at: [319.5, 19.3], size: [12.7, 11.0], shape: rect}
+    components:
+      bays:
+      - {id: psu-1, at: [2.0, 1.85], size: {w: 98.0, h: 40.0}, group: psus, rel-pos: 1,
+         accepts: ['cisco/nc5k-pac-650w-fr@1', 'cisco/nc5k-pac-650w-bk@1', 'cisco/nc5k-pdc-930w-fr@1', 'cisco/nc5k-pdc-930w-bk@1'],
+         default: 'cisco/nc5k-pac-650w-fr@1'}
+      - {id: fan-1, at: [102.0, 1.85], size: {w: 52.0, h: 40.0}, group: fans, rel-pos: 1,
+         accepts: ['cisco/ncs-5011-fn-fr@1', 'cisco/ncs-5011-fn-bk@1'], default: 'cisco/ncs-5011-fn-fr@1'}
+      - {id: fan-2, at: [156.0, 1.85], size: {w: 52.0, h: 40.0}, group: fans, rel-pos: 2,
+         accepts: ['cisco/ncs-5011-fn-fr@1', 'cisco/ncs-5011-fn-bk@1'], default: 'cisco/ncs-5011-fn-fr@1'}
+      - {id: fan-3, at: [210.0, 1.85], size: {w: 52.0, h: 40.0}, group: fans, rel-pos: 3,
+         accepts: ['cisco/ncs-5011-fn-fr@1', 'cisco/ncs-5011-fn-bk@1'], default: 'cisco/ncs-5011-fn-fr@1'}
+      - {id: fan-4, at: [264.0, 1.85], size: {w: 52.0, h: 40.0}, group: fans, rel-pos: 4,
+         accepts: ['cisco/ncs-5011-fn-fr@1', 'cisco/ncs-5011-fn-bk@1'], default: 'cisco/ncs-5011-fn-fr@1'}
+      - {id: psu-2, at: [337.4, 1.85], size: {w: 98.0, h: 40.0}, group: psus, rel-pos: 2,
+         accepts: ['cisco/nc5k-pac-650w-fr@1', 'cisco/nc5k-pac-650w-bk@1', 'cisco/nc5k-pdc-930w-fr@1', 'cisco/nc5k-pdc-930w-bk@1'],
+         default: 'cisco/nc5k-pac-650w-fr@1'}
+      placements:
+      - {ref: std/rj45-ganged@2, id: console, at: [319.5, 8.2], rotate: 180, group: mgmt, rel-pos: 1,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [319.5, 19.3], group: mgmt, rel-pos: 2,
+         attrs: {media: rj45, role: mgmt}}
+  top:
+    # REAR AT y=0, FRONT AT y=571.5 - the library's plan convention.
+    size: {w: 439.4, h: 571.5}
+    panel:
+      decor:
+      - {id: intake-mesh, at: [16.0, 531.5], size: [407.4, 38.0], pattern: vent, vent: 1.0, confidence: estimated, source: 'Figures 5 and 6 (PDF page 15): the black strip on the lid along the port-side edge, from near one side to near the other; its width is read off the foreshortened lid; the guide does not say what it is'}
+  bottom:
+    size: {w: 439.4, h: 571.5}
+    empty: >-
+      Not drawn by any held source. The guide does not picture the underside.
+  left:
+    size: {w: 571.5, h: 43.7}
+    empty: >-
+      Not drawn flat by any held source. Figures 12 and 13 show a side wall in three-quarter view with six screw holes for the
+      rack-mount brackets; their positions cannot be read.
+  right:
+    size: {w: 571.5, h: 43.7}
+    empty: >-
+      Not drawn by any held source. The guide's figures show one side wall and say nothing of the other.
+configurations:
+  ac-port-side-intake:
+    kind: base
+    default: true
+    power: ac
+    airflow: front-to-back
+    source: >-
+      derived - the guide prints no ordering code for any build, so the library defines the base as the first build the
+      guide lists: AC supplies and front-to-back fan modules (Tables 6 and 7).
+    description: >-
+      Two NC5K-PAC-650W-FR supplies and four NCS-5011-FN-FR fan modules: AC power, front-to-back airflow (port-side intake).
+  ac-port-side-exhaust:
+    kind: example
+    power: ac
+    airflow: back-to-front
+    description: >-
+      Two NC5K-PAC-650W-BK supplies and four NCS-5011-FN-BK fan modules: AC power, back-to-front airflow (port-side exhaust).
+      An illustration: the guide prints no ordering code for this build.
+    bays:
+      psu-1: cisco/nc5k-pac-650w-bk@1
+      psu-2: cisco/nc5k-pac-650w-bk@1
+      fan-1: cisco/ncs-5011-fn-bk@1
+      fan-2: cisco/ncs-5011-fn-bk@1
+      fan-3: cisco/ncs-5011-fn-bk@1
+      fan-4: cisco/ncs-5011-fn-bk@1
+  dc-port-side-intake:
+    kind: example
+    power: dc
+    airflow: front-to-back
+    description: >-
+      Two NC5K-PDC-930W-FR supplies and four NCS-5011-FN-FR fan modules: DC power, front-to-back airflow (port-side intake).
+      An illustration: the guide prints no ordering code for this build.
+    bays:
+      psu-1: cisco/nc5k-pdc-930w-fr@1
+      psu-2: cisco/nc5k-pdc-930w-fr@1
+  dc-port-side-exhaust:
+    kind: example
+    power: dc
+    airflow: back-to-front
+    description: >-
+      Two NC5K-PDC-930W-BK supplies and four NCS-5011-FN-BK fan modules: DC power, back-to-front airflow (port-side exhaust).
+      An illustration: the guide prints no ordering code for this build.
+    bays:
+      psu-1: cisco/nc5k-pdc-930w-bk@1
+      psu-2: cisco/nc5k-pdc-930w-bk@1
+      fan-1: cisco/ncs-5011-fn-bk@1
+      fan-2: cisco/ncs-5011-fn-bk@1
+      fan-3: cisco/ncs-5011-fn-bk@1
+      fan-4: cisco/ncs-5011-fn-bk@1
+references:
+- {title: 'Hardware Installation Guide for Cisco NCS 5000 Series Routers (first published 2015-12-23, last modified 2019-01-31)'}

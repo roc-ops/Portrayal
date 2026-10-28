@@ -1,0 +1,52 @@
+format: 1
+kind: module
+name: nc57-1600w-dcfw
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1600 W 48 V DC power supply of the Cisco NCS-57C3-MOD, ordered as NC57-1600W-DCFW, with port-side air intake. It
+  installs from the front of the chassis and is drawn on the outline of the AC supply with a dark DC input block in place
+  of the AC inlet. Two work 1+1.
+size: {w: 81.0, h: 43.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+part-numbers:
+  NC57-1600W-DCFW: {part: NC57-1600W-DCFW}
+attrs:
+  power-output-w: 1600
+  input: dc
+  inlet: dc-terminal
+  input-voltage: -48 V to -60 V DC
+  output: 12 V / 133.3 A
+  hot-swappable: 'yes'
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - Hardware Installation Guide for Cisco NCS 5700 Series Fixed-Port Routers (first published 2021-06-23, last
+    modified 2026-05-15), Power Supply Unit: "NC57-1600W-DCFW - 1600W 48VDC power supply module with port-side air intake".
+  power: >-
+    datasheet - the guide's Power Supply Unit Input and Output Ranges table: NC57-1600W-DCFW, -48 V to -60 V DC, 38 A,
+    1600 W, output 12 V/133.3 A. The DC cord is CAB-48DC-40A-8AWG (Connect DC Power).
+  size: >-
+    photo-measured - the outline of nc57-1600w-acfw, from Figure 19; no figure held draws the DC supply's own face, so its
+    face is the AC supply's outline with the inlet replaced. The guide prints no dimension of the supply.
+  elements: >-
+    estimated - NO HELD FIGURE DRAWS THIS SUPPLY'S FACE. Figure 93 (Connecting DC Power) shows a DC connector being inserted;
+    the arrangement here is the AC supply's with a dark block where the inlet is, and the fan ring carries no printed wattage.
+    The lamp is Figure 138's STATUS lamp (Table 38).
+  airflow: >-
+    datasheet - "port-side air intake", carried as front-to-back as the NCS 5000 supplies are.
+  depth: >-
+    estimated - not stated in any held document; 250 mm is a round figure for a supply of this class.
+states: [absent]
+elements:
+  fan: {at: [2.0, 3.0], size: [38.0, 37.5], class: rotor}
+  inlet: {at: [43.5, 3.0], size: [26.0, 37.5], class: bezel}
+  latch: {at: [71.0, 12.0], size: [5.5, 19.0], class: latch}
+  status: {at: [75.0, 37.0], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b'}, {name: failed, color: '#f59e0b'}]}
+skins: [default]
+body:
+  depth: 250
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [81.0, 43.5]}
