@@ -441,8 +441,12 @@ What each order also adds (new code, not counted above):
 **Each order, in the kit:**
 
 - adds its modules under `kit/rack/view/` and their paths to
-  `kit/package.json`'s `exports` (`"./rack/view/elevation"` and the rest), and
-  to its `test` script's `node --check` list;
+  `kit/package.json`'s `exports` (`"./rack/view/elevation"` and the rest);
+- in order 1 only, adds `rack/view/*.js` to `kit/package.json`'s `files`
+  (which publishes only `*.js` and `rack/*.js` now) and to its `test`
+  script's `node --check` loop (which checks only `rack/*.js` now). Without
+  them the view modules are left out of the published package and are not
+  checked;
 - adds a changelog fragment under `changelog.d/`, and **does not bump the
   kit version** (`CONTRIBUTING.md`: the version is bumped when the kit is
   published);
