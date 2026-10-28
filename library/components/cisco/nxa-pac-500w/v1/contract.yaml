@@ -1,0 +1,109 @@
+format: 1
+kind: module
+name: nxa-pac-500w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 500 W AC power supply of the Cisco Nexus 93108TC-FX3 fixed switch. It is ordered as
+  NXA-PAC-500W-PI (port-side intake, burgundy latch) or NXA-PAC-500W-PE (port-side exhaust,
+  blue latch). It has a round fan grille, a FAIL and an OK lamp, a pull handle, an IEC C14
+  inlet on its side and a coloured release latch.
+size: {w: 96.8, h: 38.6}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PAC-500W'
+  power-output-w: 500
+  input: ac
+  inlet: c14
+  input-voltage: '100 to 240 Vac nominal (range 90-264 Vac)'
+  input-current-max: '5.7 A at 100 Vac'
+  efficiency: 'Climate Savers Platinum Efficiency (80Plus Platinum certified)'
+  weight-kg: 1.1
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N93108TC-FX3 NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2023-12-14, Last Modified 2026-07-16), Overview: "500-W port-side intake AC
+    power supply with burgundy coloring (NXA-PAC-500W-PI)" and "500-W port-side exhaust AC
+    power supply with blue coloring (NXA-PAC-500W-PE)". THE AIRFLOW SUFFIX IS DROPPED from
+    the model, as on cisco/nxa-pac-650w@1: the two differ in the latch colour, which is this
+    contract's `latch-finish` field, and in the direction the fan turns, which the face does
+    not show.
+  power: >-
+    datasheet - the guide's appendix B, "500-W AC Power Supply Specifications", which names
+    NXA-PAC-500W: "Maximumoutput power per power supply 500W", AC input 100 to 240 Vac
+    nominal (range 90-264 Vac), 5.7 A at 100 Vac, 648 VA, form factor RSP1, Climate Savers
+    Platinum. An OUTPUT rating, so `power-output-w`. The weight is the guide's
+    "Switch and Module Weights and Quantities" row, 2.42 lb (1.1 kg).
+  size: >-
+    estimated - THE GUIDE STATES NO DIMENSION, only "Form factor RSP1" for this supply, the
+    1200 W HVAC/HVDC supply and the 930 W DC supply alike. The size is cisco/nxa-pac-650w@1's,
+    which is also RSP1 in the Nexus 93180YC-FX3 guide. It was checked against the TC guide's
+    rear figure (the 505475 artwork, 1297 x 287 px, the switch body 1257 px across for
+    439.4 mm): supply 1 reads 277 px across and 112 px down, 96.8 by 38.9 mm, which agrees
+    with 96.8 by 38.6 to a pixel. A figure is not a dimension, so the size stays estimated.
+  elements: >-
+    estimated - the arrangement is the TC guide's rear figure, which draws this supply with
+    the warning mark and two lamps in a column at the left, a round fan behind four corner
+    screws, a thumbscrew, a long handle, a C14 inlet and a latch at the right edge; it is
+    the same arrangement as cisco/nxa-pac-650w@1, and the artwork is that part's, with no
+    rating printed on it because the figure prints none.
+  lamps: >-
+    datasheet - the guide's appendix C, "Power Supply LEDs": a solid green lamp for a
+    regulated 12 V main and 12 V standby output, amber states for a failure or a warning, and
+    off for no input. The figure puts two lamps in a column, the upper beside the warning
+    mark; which one is amber and which green is the sibling's reading and is not in the guide.
+  latch-colour: >-
+    datasheet for the convention - the guide's Overview gives burgundy for port-side intake
+    and blue for port-side exhaust. The values are cisco/nxa-pac-650w@1's.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-650w@1's round figure for a supply of
+    this class and nothing here measures it.
+states: [absent]
+elements:
+  fail: {at: [2.5, 11.8], size: [2.8, 2.8], class: led, states: ['off', {name: fault, color: '#f59e0b'}]}
+  ok: {at: [2.5, 27.9], size: [2.8, 2.8], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
+  fan: {at: [11.6, 0.7], size: [37.2, 37.2], class: rotor}
+  handle: {at: [56.1, 1.9], size: [5.9, 35.6], class: handle}
+  latch: {at: [87.6, 9.8], size: [6.8, 19.5], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [62.9, 8.8], rotate: 90}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-500w@1's own elements key - the grille's extent is read off the TC
+        guide's rear figure and the depth of the cavity behind it is not stated.
+    - node: handle
+      uhandle: 20.0
+      color: '#1b1d20'
+      confidence: estimated
+      source: >-
+        Not stated in any guide held. cisco/nxa-pac-650w@1 reads the handle off a photograph
+        of its own supply; 20 mm is that part's figure carried across and nothing here
+        measures it.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-500w@1's own elements key - the latch stands proud in every picture of
+        the family and how far is not stated.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [96.8, 38.6]}

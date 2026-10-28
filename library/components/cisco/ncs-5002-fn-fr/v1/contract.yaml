@@ -1,0 +1,65 @@
+format: 1
+kind: module
+name: ncs-5002-fn-fr
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The two-rack-unit fan module of the Cisco NCS 5002, ordered as NCS-5002-FN-FR: front-to-back airflow, which
+  the guide calls port-side intake. A large round grille on a dark face with a captive screw at each top corner.
+  Hot-swappable; the router runs on one of its two fan modules. The back-to-front twin is NCS-5002-FN-BK.
+size: {w: 110.0, h: 85.0}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  NCS-5002-FN-FR: {part: NCS-5002-FN-FR}
+attrs:
+  airflow: front-to-back
+  hot-swappable: 'yes'
+  power-absent: not-published
+provenance:
+  model: >-
+    datasheet - Hardware Installation Guide for Cisco NCS 5000 Series Routers (first published 2015-12-23, last
+    modified 2019-01-31), Table 5: NCS-5002-FN-FR "Cisco NCS 5002 Router Fan Front to Back Airflow", with a spare
+    NCS-5002-FN-FR= that is the same part. The guide says the 5002 has "slots for two 1+1 redundant fan modules",
+    "hot-swappable", and "The system can work with a single fan failure."
+  power: >-
+    NOT STATED. Searched the guide for the fan module's watts, amps and CFM: Appendix C gives power-supply figures
+    only. No power figure is written, and lint's missing-power warning stands.
+  size: >-
+    estimated - NO HELD DOCUMENT STATES THE MODULE'S DIMENSIONS. Width is a fraction of the rear face in Figure 3
+    (the two modules each take about a quarter of it), height is the two-rack-unit face less a little clearance.
+    Figure 3 is a three-quarter view, so the width is an estimate to roughly ten percent.
+  elements: >-
+    estimated - Figure 3 shows a round grille filling the face; the replacement steps (Figure 18) say to "loosen
+    the captive screws" and "grasp the captive screws of the fan module", so two screws are drawn at the top
+    corners. The guide names no fan-module lamp, so none is drawn.
+  latch-colour: >-
+    NOT STATED. The guide gives no colour for either airflow, and its fan figures are greyscale.
+  depth: >-
+    estimated - not stated in any held document; 150 mm is a round figure for a fan module of this class.
+states: [absent]
+elements:
+  grille: {at: [8.0, 6.0], size: [94.0, 73.0], class: rotor}
+  screw-left: {at: [2.0, 2.0], size: [5.0, 5.0], class: fastener}
+  screw-right: {at: [103.0, 2.0], size: [5.0, 5.0], class: fastener}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 30
+      confidence: estimated
+      source: the grille's extent is read off Figure 3; the cavity behind it is not stated.
+    - node: screw-left
+      cyl: 1.6
+      confidence: estimated
+      source: the library's shared captive-screw proudness, itself an estimate; Figure 18 shows the screws standing out.
+    - node: screw-right
+      cyl: 1.6
+      confidence: estimated
+      source: the library's shared captive-screw proudness, itself an estimate; Figure 18 shows the screws standing out.
+skins: [default]
+body:
+  depth: 150
+  color: '#26292d'
+  footprint: {at: [0, 0], size: [110.0, 85.0]}

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx2k-mpc11e-v2k
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -10,7 +10,16 @@ description: >-
 attrs:
   model: MX2K-MPC11E
   power-draw-max-w: 1980
+  qsfp28: 40
 provenance:
+  qsfp28-rate: >-
+    module reference, 'MX2K-MPC11E Port Panel' (p226) and 'QSFP Transceivers and Port Speeds' (p227):
+    'The MX2K-MPC11E port panel has 40 rate-selectable (multi-rate) ports that support quad small
+    formfactor pluggable plus (QSFP28) transceivers', 'You can plug 100-GbE optics into any of the 40
+    ports', and Table 30 gives port 0 of each of the eight PICs 40, 4x10, 100, 4x100 and 400 Gbps and
+    ports 1-4 100 Gbps. The book states 400-Gbps for port 0 but does not name any port QSFP56-DD (its
+    hardware-features list says '400-Gbps with multi-rate QSFP56-DD interfaces' without naming ports), so
+    all forty are counted as QSFP28 and none is split.
   stack-orientation: >-
     The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
     drawn on its side a pair sits left and right, the left cage 270 beside the right 90,

@@ -312,8 +312,11 @@ places. It lives under the vendor namespace like any other contract
 same versions and devicelock. The design, and the sources it was drawn from,
 are in [docs/rack-mounting-design.md](../../docs/rack-mounting-design.md).
 
-The library holds two kits, `cisco/69-2037` and `cisco/n9k-c9500-rmk`, and no
-device lists one yet. This is an example of the shape, under the made-up
+The library holds four kits, `cisco/69-2037`, `cisco/n9k-c9500-rmk`,
+`cisco/nxk-acc-kit-1ru` and `cisco/nxk-acc-kit2-2ru`. Three devices list kits:
+the Nexus 93180YC-FX3 lists `cisco/nxk-acc-kit-1ru`, and the 93180YC-FX3S and
+93108TC-FX3 list both `cisco/nxk-acc-kit-1ru` and `cisco/nxk-acc-kit2-2ru`.
+`cisco/69-2037` and `cisco/n9k-c9500-rmk` are listed by no device yet. This is an example of the shape, under the made-up
 namespace `acme`:
 
 ```yaml

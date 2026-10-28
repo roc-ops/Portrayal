@@ -184,6 +184,8 @@ one plug stands for the class.
   | `nokia/xs-010x-r` | 12 VDC | 1.0 | product guide, Table 2-2 |
   | `nokia/xs-010xr-p` | 12 VDC | 1.0 | product guide, Table 4-2 |
   | `telco-systems/tm-280` | 5 VDC | 3.0 | data sheet, "5VDC @3A (max)" |
+  | `mikrotik/crs326-24g-2s-plus-rm` | 10-28 VDC | 1.2 | rear legend "DC 10-28V"; brochure, Included, 24 V 1.2 A adapter |
+  | `mikrotik/css326-24g-2s-plus-rm` | 8-30 VDC | 1.2 | rear legend "DC 8 - 30V"; brochure, Included, 24 V 1.2 A adapter |
 
   Neither the interface nor the plug states a voltage or a current. The DCIM exports do
   not read the two attributes; each device's export changes in its drawing version line
