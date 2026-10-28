@@ -703,6 +703,8 @@ def test_the_comparison_layer_can_now_reach_them():
     # 168 with the Cisco Nexus 93180YC-FX3, 93180YC-FX3S and 93108TC-FX3: n+1 over four fan modules (installation
     # guides, Overview), the last as 3+1 (its guide: powers down with fewer than 3 fans operational)
     # 170 with the Cisco C9300-48P and C9300-48T: 2+1 over three fan modules (hardware installation guide, Fan Module)
-    # 171 with the Cisco Catalyst 3650-48PD: 2+1 over three fan modules (3650 hardware installation guide,
+    # 171 with the Cisco Nexus 9504: 2+1 over three fan trays (hardware guide, PDF p96, printed 90)
+    # 172 with the Cisco Nexus 9516: 2+1 over three fan trays (hardware guide, PDF p89, printed 83)
+    # 173 with the Cisco Catalyst 3650-48PD: 2+1 over three fan modules (3650 hardware installation guide,
     # Fan Modules: "Three fans are required for proper cooling" and the switch "can operate with two operational fans")
-    assert n == 171, n
+    assert n == 173, n
