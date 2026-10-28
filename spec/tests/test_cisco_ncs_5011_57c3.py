@@ -7,7 +7,6 @@ Fixed-Port Routers (first published 2021-06-23, last modified 2026-05-15): the v
 dimensions (Figure 1) and the parts. The 5011's face figures are three-quarter views, so what is held to the guide
 there is counts, sizes and part numbers, not positions.
 """
-import sys
 from pathlib import Path
 
 import pytest
@@ -15,7 +14,6 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
-sys.path.insert(0, str(ROOT / "spec/tools"))
 
 from portrayal import devicelock  # noqa: E402
 
@@ -99,8 +97,8 @@ def test_57c3_front_is_48_sfp28_and_8_qsfp28_numbered_as_printed_from_zero(name)
 @pytest.mark.parametrize("name", C3)
 def test_57c3_timing_ports_are_two_din_one_sma_and_one_rj45(name):
     placements = {p["id"]: p for p in device(name)["views"]["front"]["components"]["placements"]}
-    assert ref_name(placements["timing-1pps"]["ref"]) == "din-1-0-2-3"
-    assert ref_name(placements["timing-10mhz"]["ref"]) == "din-1-0-2-3"
+    assert ref_name(placements["timing-1pps"]["ref"]) == "din-1-0-2-3-jack"
+    assert ref_name(placements["timing-10mhz"]["ref"]) == "din-1-0-2-3-jack"
     assert ref_name(placements["timing-gnss"]["ref"]) == "sma"
     assert placements["timing-tod"]["attrs"]["media"] == "rj45-tod"
 

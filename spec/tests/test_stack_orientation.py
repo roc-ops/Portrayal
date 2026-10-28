@@ -310,6 +310,11 @@ THREE_HIGH = {
     # the top takes the top row with the first block row, which leaves the second block's
     # lower row over; the device's stack-exceptions name the cross-pairs it does not mean.
     "arista/7280cr3-96": {f"port-{n}" for n in range(42, 73, 2)},
+    # the NCS-57C3-MOD-S and -HX: each column of SFP28 is a two-high stack (the middle and top rows) with
+    # a separate cage under it (the bottom row, ports 0, 3, 6 ...), as Figure 19's frames and its
+    # printed "0 down-arrow up-arrow 1" strip between the stack and the third row say
+    "cisco/ncs-57c3-mod-s": {f"port-{n}" for n in (*range(0, 24, 3), *range(32, 56, 3))},
+    "cisco/ncs-57c3-mod-hx": {f"port-{n}" for n in (*range(0, 24, 3), *range(32, 56, 3))},
 }
 
 

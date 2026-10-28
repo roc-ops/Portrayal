@@ -431,8 +431,8 @@ views:
       - {ref: std/sfp-ganged@1, id: port-53, at: [392.35, 73.5], rotate: 180, group: sfp28, rel-pos: 53}
       - {ref: std/sfp-ganged@1, id: port-54, at: [392.35, 59.4], rotate: 180, group: sfp28, rel-pos: 54}
       - {ref: std/sfp-ganged@1, id: port-55, at: [392.35, 44.4], group: sfp28, rel-pos: 55}
-      - {ref: std/din-1-0-2-3@1, id: timing-1pps, at: [423.1, 41.9], group: timing, rel-pos: 0}
-      - {ref: std/din-1-0-2-3@1, id: timing-10mhz, at: [423.1, 51.0], group: timing, rel-pos: 1}
+      - {ref: common/din-1-0-2-3-jack@1, id: timing-1pps, at: [422.4, 41.2], group: timing, rel-pos: 0}
+      - {ref: common/din-1-0-2-3-jack@1, id: timing-10mhz, at: [422.4, 50.3], group: timing, rel-pos: 1}
       - {ref: std/sma@1, id: timing-gnss, at: [424.3, 60.7], group: timing, rel-pos: 2}
       - {ref: std/rj45-ganged@2, id: timing-tod, at: [412.4, 73.0], group: timing, rel-pos: 3, attrs: {media: rj45-tod}}
       - {ref: common/led-dot@1, id: led-sync, at: [332.3, 72.9], group: leds, rel-pos: 1, for: chassis, states: ['off', 'on']}
@@ -484,6 +484,10 @@ configurations:
     kind: base
     default: true
     power: ac
+    bays:
+      mpa-1: cisco/nc55-mpa-blnk@1
+      mpa-2: cisco/nc55-mpa-blnk@1
+      mpa-3: cisco/nc55-mpa-blnk@1
     source: >-
       derived - the guide prints no ordering code for any build and does not say which route processors or supplies ship, so the library defines the
       base as the -S's Figure 19 shows, with the hardened parts Table 2 names: two NC57-1600W-ACFW supplies, six HX fan trays and two NC57-MOD-RP2-E-HX route processors, with the MPA bays holding blanks.
