@@ -1,0 +1,90 @@
+format: 1
+kind: module
+name: nxa-pdc-715w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 715 W DC power supply of the Cisco Nexus 93108TC-FX3P, 93108TC-FX3H and 9348GC-FX3
+  fixed switches, ordered as NXA-PDC-715W-PI (port-side intake, burgundy latch). No picture of
+  this supply is held. The face is drawn from the 1100 W AC supply of the FX3P guide's figure
+  and the inlet is a plain recess.
+size: {w: 84.7, h: 40.6}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PDC-715W'
+  power-output-w: 715
+  input: dc
+  inlet: other
+  input-voltage: '-48 to -60 Vdc nominal; the FX3P guide prints "DC Range -51V to 57V"'
+  efficiency: '83% to 89% (20% to 50% load)'
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N93108TC-FX3P NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2020-07-14, Last Modified 2026-07-16), Overview: "715-W port-side intake DC power
+    supply with blue coloring (NXA-PDC-715W-PI)", and the Cisco N9348GC-FX3 NX-OS Mode Switch
+    Hardware Installation Guide (First Published 2023-08-18, Last Modified 2026-09-18), which
+    lists "715-W DC power supply with port-side intake airflow (burgundy coloring)
+    (NXA-PDC-715W-PI)". THE FX3P GUIDE CALLS THE INTAKE SUPPLY BLUE in the sentence and
+    burgundy in its weights table; every other line of both guides gives burgundy for port-side
+    intake, and the contract carries burgundy. NO PORT-SIDE EXHAUST VERSION is listed by either
+    guide. THE AIRFLOW SUFFIX IS DROPPED from the model, as on cisco/nxa-pac-500w@1.
+  power: >-
+    datasheet - the FX3P guide's appendix B, "715-W DC Power Supply Specifications": power 715
+    W (an OUTPUT rating, so `power-output-w`), "DC Range -51V to 57V", "Input current 5 A at
+    240 Vdc and 50 Hz", frequency 40 to 100 Hz, efficiency 83% to 89% at 20% to 50% load,
+    form factor RSP1. THE TABLE IS INCONSISTENT WITH ITSELF (a 240 Vdc input against a -51 V
+    range) and the current is not carried. The 9348GC-FX3 guide prints the same table and, as
+    well, "Nominal range: -48 to -60 V" with "18 - 14 A", which is the nominal voltage carried
+    here. NO WEIGHT IS CARRIED: the FX3P guide's weights row gives 3 lb (1.36 kg) first in a
+    list of four supplies and the 9348GC-FX3 guide gives 2.61 lb (1.18 kg) for this supply, and
+    the two disagree.
+  size: >-
+    estimated - THE GUIDES STATE NO DIMENSION, only "Form factor RSP1". The size is
+    cisco/nxa-pac-1100w@1's, read off the FX3P guide's rear figure.
+  elements: >-
+    estimated - NO PICTURE OF THIS SUPPLY IS HELD. The guides' figures show AC supplies only.
+    The housing, grille, lamps and latch are cisco/nxa-pac-1100w@1's arrangement; the inlet
+    window is a plain dark recess because no guide describes the DC connector.
+  lamps: >-
+    datasheet - appendix C, "Power Supply LEDs", one table for every supply.
+  latch-colour: >-
+    datasheet for the convention - burgundy for port-side intake. The values are
+    cisco/nxa-pac-500w@1's.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-500w@1's round figure.
+states: [absent]
+elements:
+  ac-ok: {at: [8.1, 6.1], size: [4.4, 4.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  ps-ok: {at: [29.8, 6.1], size: [4.4, 4.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  fan: {at: [3.4, 11.0], size: [38.2, 23.0], class: rotor}
+  latch: {at: [73.0, 13.9], size: [10.2, 13.6], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-1100w@1's grille, carried across - nothing held shows this supply.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        Not stated in any guide held. cisco/nxa-pac-500w@1 carries 3.0 mm for the same latch.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [84.7, 40.6]}
