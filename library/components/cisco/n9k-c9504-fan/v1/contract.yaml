@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: n9k-c9504-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9504 fan tray (N9K-C9504-FAN). A tall perforated plate with two diagonal pull handles, two
+  captive screws at the top and two at the bottom, and three lamps at the lower right: BCN (blue), FAN
+  (green or red) and FAB (green or amber). The switch uses three, in slots FAN 1 to FAN 3 on the rear, each
+  covering two fabric-module slots. The N9K-C9504-FM-G fabric module needs the N9K-C9504-FAN2 tray instead.
+size: {w: 128.27, h: 269.24, d: 138.94}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-C9504-FAN'
+  role: 'fan-tray'
+  airflow: 'port-side intake'
+  power-draw-typical-w: 95
+  power-draw-max-w: 129
+  weight-kg: 2.9
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    datasheet - Cisco N9504 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p114, PDF p120), the "Fan trays" row: width 5.05 in (12.81 cm), depth 5.47 in (13.9 cm), height
+    9.0 in (22.86 cm) without mounting brackets and 10.6 in (26.93 cm) with them. The module is drawn at the
+    height with brackets, the extent of the plate in the rear figure. CONFLICT ON WIDTH: 5.05 in is 128.27
+    mm but 12.81 cm is 128.1 mm, and the 9508 and 9516 guides print 5.04 in for the same tray; the inch
+    figure of this guide, 128.27 mm, is used.
+  depth: datasheet - the same row, 5.47 in (13.9 cm).
+  compatibility: >-
+    install guide - "Overview" Table 1 (PDF pp8-9, printed pp2-3) has no fan column; its footnote says
+    "-G fabric modules require the N9K-C9504-FAN2 fan trays for operation", so the other fabric types are
+    read as going with this tray. The Overview list (PDF p10, printed p4) spells the other tray
+    "N9K-9504-FAN2", a slip for N9K-C9504-FAN2.
+  lamps: >-
+    install guide - "Fan Tray LEDs", "Table 3: LEDs for Fan Tray N9K-C9504-FAN" (PDF p135, printed p129): BCN
+    blue or off; FAN green, red or off; FAB green, amber or off, "located on the lower right portion of the
+    module". Positions inside that area are estimated.
+  power: >-
+    datasheet - the chassis's own "Planning for Power Requirements" table (PDF p18, printed p12), "Fan
+    Trays", N9K-C9504-FAN: 95 W typical, 129 W maximum. The guide's first table is a copy of the 9508's and
+    is not used.
+  weight: >-
+    datasheet - Appendix A weights table (PDF p122, printed p116): 6.4 lb (2.9 kg).
+  skin: >-
+    estimated - the perforated plate, the two diagonal handles and the four captive screws are read from
+    the rear figure of the guide's overview (PDF p11, printed p5), which is isometric; no figure dimensions
+    them.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+elements:
+  bcn:
+    at: [100.0, 238.0]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp, lower right.
+    states:
+    - {name: blue, color: '#2a7de1'}
+    - 'off'
+  fan:
+    at: [108.0, 238.0]
+    size: [3.0, 3.0]
+    class: led
+    description: FAN lamp. Green when the tray is operational, red when a fan has failed.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  fab:
+    at: [116.0, 238.0]
+    size: [3.0, 3.0]
+    class: led
+    description: FAB lamp. Green when the fabric modules behind the tray are operational, amber when one is not.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+skins: [default]

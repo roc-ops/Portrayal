@@ -1074,6 +1074,13 @@ NOT_A_DCIM_PORT = {
     "juniper/ex4200-vcp-port": "the 68-pin Virtual Chassis port of an EX4200: a proprietary stacking "
                                "connector with no registered interface and no port type in either "
                                "DCIM; the guide names it only as a 68-pin connector",
+    "cisco/stackwise-480-port": "the StackWise-480 stacking port of the Catalyst 9300: Cisco's own "
+                                "stacking connector, with no registered interface and no port type "
+                                "in either DCIM; the guide names it only as a StackWise-480 port "
+                                "connector",
+    "cisco/stackpower-port": "the StackPower connector of the Catalyst 9300 (S-PWR 1 and 2): a "
+                             "power-sharing link between switches, not a power input; neither DCIM "
+                             "has a type for it and a power port would read as a feed",
 
     # `dell/rj45-port-14g` USED TO BE HERE, as "a modelling gap, not an exporter
     # one": the NDC's four jacks carried no speed, so the exporter could not say
@@ -1579,6 +1586,10 @@ def device_console_row(p, a):
     # no mini-USB receptacle; the part is a console by what it is, so it needs no role
     # on the placement. `usb-mini-b` is a console-port type in both targets.
     if ref.split("@")[0] == "juniper/ex4300-console-usb-mini":
+        return {"name": "Console (mini-USB)", "type": "usb-mini-b"}
+    # THE REGISTRY'S OWN MINI-B RECEPTACLE, std/mini-usb (the Catalyst 9300's console). It is a
+    # console when its placement says role console; the same jack could be a service port.
+    if ref.split("@")[0] == "std/mini-usb" and role == "console":
         return {"name": "Console (mini-USB)", "type": "usb-mini-b"}
     return None
 
