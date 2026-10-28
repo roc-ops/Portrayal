@@ -186,6 +186,18 @@ def test_a_type_name_keeps_one_vendor_name_distinct_per_box():
     assert a["slug"] != b["slug"]
 
 
+def test_a_build_without_an_airflow_override_is_the_export_default():
+    """With no `default` and no `base`, the chassis as drawn names the type: a
+    configuration that overrides `airflow` is the variant and ranks after it."""
+    plain = {"part-numbers": {"X": 1}}
+    flipped = {"part-numbers": {"X": 1}, "airflow": "back-to-front"}
+    assert dx._config_rank(plain) < dx._config_rank(flipped)
+    assert dx._config_rank(None) < dx._config_rank(flipped)
+    # an explicit default or base still beats both
+    assert dx._config_rank({"default": True, "airflow": "back-to-front"}) < dx._config_rank(plain)
+    assert dx._config_rank({"kind": "base"}) < dx._config_rank(plain)
+
+
 def test_sonic_names_come_from_the_platform_alias_not_its_index():
     """SONiC's port_config.ini `index` is not the faceplate number on every
     platform - the AS5835-54T's 100G ports sit at index 49, 53, ... 69 - but

@@ -23,6 +23,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 
 from portrayal import components_catalogue as cat
+from portrayal.manifest import load_yaml
 
 
 @pytest.fixture(scope="module")
@@ -66,8 +67,11 @@ def test_every_component_major_in_the_library_has_a_row(generated):
     failed to find is short rather than wrong-looking. If the glob ever stops
     matching, this fails rather than passing quietly.
     """
+    # a `kind: kit` (#905) is not a component major: it is counted in the "Rail
+    # kits" table after the namespaces, and test_kit_census.py holds that
     on_disk = {f"`{c.parts[-4]}/{c.parts[-3]}@{c.parts[-2][1:]}`"
-               for c in LIB.glob("components/*/*/v*/contract.yaml")}
+               for c in LIB.glob("components/*/*/v*/contract.yaml")
+               if (load_yaml(c) or {}).get("kind") != "kit"}
     assert len(on_disk) > 400, f"only {len(on_disk)} contracts found - the walk is broken"
     missing = sorted(ref for ref in on_disk if ref not in generated)
     assert not missing, f"{len(missing)} component(s) have no row, e.g. {missing[:5]}"

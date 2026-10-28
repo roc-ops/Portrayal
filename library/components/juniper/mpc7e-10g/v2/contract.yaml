@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc7e-10g
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -11,7 +11,12 @@ description: >-
 attrs:
   model: MPC7E-10G
   power-draw-max-w: 500
+  sfp-plus: 40
 provenance:
+  sfp-plus-rate: >-
+    module reference, MPC7E-10G section (p202): 'Forty 10-Gigabit Ethernet ports. The ports support SFP+
+    transceivers. Each port supports 10 Gbps or 1 Gbps speed.' So all forty run 10G or 1G in an SFP+ cage.
+    Nothing new was measured and no placement moved.
   stack-orientation: >-
     The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
     the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face

@@ -14,9 +14,13 @@ Tracked in #904. Follows #865, which added `chassis.ears: behind` and
 | the move off `common/rack-ear@1` (#910) | open: 36 devices still place it |
 | the worked examples (#912 to #915) | not built |
 
-**No kit is in the library yet,** and no device lists one. Every kit and every
-kit ref in this note is an example. The examples use the made-up namespace
-`acme`, as [format-stability.md](format-stability.md) does. Four devices state
+**The library holds four kits,** `cisco/69-2037`, `cisco/n9k-c9500-rmk`,
+`cisco/nxk-acc-kit-1ru` and `cisco/nxk-acc-kit2-2ru`. Three devices list kits:
+the Nexus 93180YC-FX3 lists `cisco/nxk-acc-kit-1ru`, and the 93180YC-FX3S and
+93108TC-FX3 list both `cisco/nxk-acc-kit-1ru` and `cisco/nxk-acc-kit2-2ru`.
+`cisco/69-2037` and `cisco/n9k-c9500-rmk` are listed by no device yet. Every other kit and kit ref in this note is an
+example. The examples use the made-up namespace `acme`, as
+[format-stability.md](format-stability.md) does. Four devices state
 `chassis.ears`.
 
 The Rack Builder of the site is the first reader. When this was drawn up it

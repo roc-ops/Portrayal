@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc5e-100g10g
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -12,7 +12,17 @@ attrs:
   model: MPC5E-100G10G
   power-draw-max-w: 607
   model-variants: MPC5EQ-100G10G
+  cfp2: 2
+  sfp-plus: 4
 provenance:
+  cfp2-rate: >-
+    module reference, '2x100GE + 4x10GE MPC5E' (p190): 'Fixed-configuration MPC with two 100-Gigabit
+    Ethernet ports and four 10-Gigabit Ethernet ports', the 100G ports labelled 1/0 and 3/0. The cage
+    kind (CFP2) is the contract's own placement; the section names CFP2 optics in its notes. Nothing new
+    was measured.
+  sfp-plus-rate: >-
+    the same section (p190): 'Fixed-configuration MPC with two 100-Gigabit Ethernet ports and four
+    10-Gigabit Ethernet ports', the 10G ports labelled 0/0, 0/1, 2/0 and 2/1.
   stack-orientation: >-
     The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
     the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face

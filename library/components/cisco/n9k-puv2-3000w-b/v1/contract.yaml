@@ -1,0 +1,69 @@
+format: 1
+kind: module
+name: n9k-puv2-3000w-b
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Cisco N9500 Series 3.15-kW Dual Input Universal AC/DC power supply (N9K-PUV2-3000W-B). One supply with
+  two redundant high-voltage input lines, each a Saf-D-Grid receptacle, and a power switch; it delivers
+  3150 W with either line or both. It stands on end in a power-supply bay, with the OK and FAIL lamps at
+  the upper left. The Nexus 9504, 9508 and 9516 take the same part.
+size: {w: 44.45, h: 133.35, d: 450.85}
+size-confidence: {w: estimated, h: estimated, d: datasheet}
+attrs:
+  model: 'N9K-PUV2-3000W-B'
+  role: 'power-module'
+  input: 'ac-dc'
+  inlet: other
+  inputs: 2
+  power-output-w: 3150
+  input-voltage: '180 to 305 VAC or 192 to 400 VDC'
+  input-frequency: '50 to 60 Hz'
+  efficiency: '90% or greater (20 to 100% load)'
+  airflow: 'port-side intake'
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    estimated - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p113, PDF p119): 5.25 in by 1.75 in, 17.75 in deep. The figures (PDF pp102-103) stand the
+    supply on end, so 44.45 mm wide by 133.35 mm high. The guide gives no separate row for this supply, so
+    the dimensions are the table's one "Power supply" row.
+  depth: >-
+    datasheet - the same table, 17.75 in (450.85 mm) inside the chassis.
+  power: >-
+    datasheet - the guide's "3000-W Dual Input Universal AC/DC Power Supply Specifications" table (printed
+    under that title but stating 3150 W): 3150 W; input "180 to 305 VAC or 192 to 400 VDC or"; 50 to 60
+    Hz; efficiency 90 percent or greater. CONFLICT: the text of "Installing or Replacing a 3.15-kW Dual
+    Input Universal AC/DC Power Supply" says the supply accepts 200-240 VAC or 240/380 VDC. The
+    specifications table is used, as the table that states the supply's rating.
+  lamps: >-
+    install guide - "Power Supply LEDs", OK and FAIL or FAIL/ID, upper left. Positions estimated.
+  skin: >-
+    estimated - two input lines are stated ("grid A ... the receptacles closest to the power switch, grid B
+    ... the receptacles furthest from it"), and the figure on PDF p106 shows two receptacles; no figure
+    dimensions them, so the skin's positions are estimated.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+elements:
+  ok:
+    at: [4.2, 7.0]
+    size: [3.0, 3.0]
+    class: led
+    description: OK lamp, upper left of the module.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: flashing-green, color: '#39b54a', behavior: blinking}
+    - 'off'
+  fail:
+    at: [4.2, 12.5]
+    size: [3.0, 3.0]
+    class: led
+    description: FAIL or FAIL/ID lamp, below the OK lamp.
+    states:
+    - {name: amber, color: '#f5a623'}
+    - {name: flashing-amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+skins: [default]

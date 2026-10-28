@@ -1,0 +1,72 @@
+format: 1
+kind: module
+name: n9k-c9508-fan2
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9508 fan tray, second generation (N9K-C9508-FAN2). The same envelope and front as the
+  N9K-C9508-FAN: a perforated plate with two diagonal pull handles, four captive screws and BCN, FAN and
+  FAB lamps at the lower right. It is the tray the N9K-C9508-FM-G fabric module goes with, and it draws
+  more power, so a slot left empty of a fabric module takes an N9K-C9508-FAN-PWR card. The switch uses
+  three, in slots FAN 1 to FAN 3 on the rear.
+size: {w: 128.02, h: 459.2, d: 130.05}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-C9508-FAN2'
+  role: 'fan-tray'
+  airflow: 'port-side intake'
+  power-draw-typical-w: 450
+  power-draw-max-w: 900
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    datasheet - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p113, PDF p119), the "Fan trays" row, which does not tell the two fan types apart: width 5.04
+    in, depth 5.12 in, height 16.5 in (18.08 in with brackets). Both fan parts take the one row.
+  depth: datasheet - the same row, 5.12 in (13.0 cm).
+  compatibility: >-
+    install guide - "Overview", Table 1: N9K-C9508-FM-G goes with N9K-C9508-FAN2 and the fan power card
+    N9K-C9508-FAN-PWR; the other fabric types go with N9K-C9508-FAN. "When using FM-G fabric modules, any
+    empty slots should be filled with FAN-PWR modules ... due to additional power required for
+    N9K-C9508-FAN2 modules."
+  lamps: >-
+    install guide - "Fan Tray LEDs" gives "Table 6: LEDs for Fan Tray N9K-C9508-FAN" only; it is read as
+    the lamp set of this tray too, since the guide gives no second table. Positions estimated.
+  power: >-
+    datasheet - the guide's "Planning for Power Requirements" table (printed p13, PDF p19), "Fan Trays",
+    N9K-C9508-FAN2: 450 W typical, 900 W maximum.
+  skin: >-
+    estimated - nothing in the guide draws FAN2 differently from FAN; the drawing is the FAN's.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+elements:
+  bcn:
+    at: [100.0, 428.0]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp, lower right.
+    states:
+    - {name: blue, color: '#2a7de1'}
+    - 'off'
+  fan:
+    at: [108.0, 428.0]
+    size: [3.0, 3.0]
+    class: led
+    description: FAN lamp. Green when the tray is operational, red when a fan has failed.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  fab:
+    at: [116.0, 428.0]
+    size: [3.0, 3.0]
+    class: led
+    description: FAB lamp. Green when the fabric modules behind the tray are operational, amber when one is not.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+skins: [default]

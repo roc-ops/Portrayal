@@ -247,6 +247,11 @@ def block_items(block, library, standards):
         # has one media. A copy per port, so editing one never reaches another.
         if block.get("attrs"):
             p["attrs"] = dict(block["attrs"])
+        # ONE PORT THAT DIFFERS: `attrs-by-n` adds to the attrs of the port with
+        # that number (a single passive-PoE-in jack among plain ones).
+        extra = (block.get("attrs-by-n") or {}).get(n)
+        if extra:
+            p["attrs"] = {**p.get("attrs", {}), **extra}
         placements.append(p)
 
         if ap:

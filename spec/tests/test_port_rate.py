@@ -153,10 +153,14 @@ LEFT = {
     "smartoptics/dcp-sc-28p": {"port-probe"},      # vendor-silent
     "edgecore/csr180": {"stack-a-upper"},          # which jack it is is itself a gap
     "dell/r740xd": {"idrac9"},                     # a server; out of scope for now
+    "cisco/ncs-5001": {"mgmt"},                    # vendor-silent: the guide names the interface, no rate
+    "cisco/ncs-5002": {"mgmt"},                    # vendor-silent: the guide names the interface, no rate
 }
 # THE CEILING ONLY GOES DOWN. It was 123 when L113 was written, and #511's
 # device sweep took it to the entries above.
-CEILING = 7
+# Two more for the NCS 5001 and 5002 management jacks (9): the NCS 5000 guide names a management
+# interface and states no rate for its jack, recorded as the gap management-jack-speed on each.
+CEILING = 9
 
 
 def _findings():

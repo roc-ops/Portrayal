@@ -1,0 +1,73 @@
+format: 1
+kind: module
+name: nc5k-pdc-930w-bk
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 930 W DC power supply of the Cisco NCS 5000 routers (NCS 5001, 5002 and 5011), ordered as
+  NC5K-PDC-930W-BK: back-to-front airflow, which the guide calls port-side exhaust. The same face as the
+  front-to-back NC5K-PDC-930W-FR: a round fan grille behind a two-screw guard, an amber FAIL lamp over a green
+  OK lamp at the left, a dark pull handle under the fan, a three-position DC input housing printed -DC, +DC and
+  an earth symbol, and a green release latch at the right edge.
+size: {w: 98.0, h: 40.0}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  NC5K-PDC-930W-BK: {part: NC5K-PDC-930W-BK}
+attrs:
+  power-output-w: 930
+  input: dc
+  inlet: dc-terminal
+  input-voltage: -48/-60
+  efficiency: 94% (at 50% load)
+  airflow: back-to-front
+provenance:
+  model: >-
+    datasheet - Hardware Installation Guide for Cisco NCS 5000 Series Routers (first published 2015-12-23,
+    last modified 2019-01-31), Tables 2, 4 and 6: NC5K-PDC-930W-BK "Cisco NCS 5000 Power DC 930W Back to Front
+    Airflow", with a spare NC5K-PDC-930W-BK= that is the same part and not a second component. The Airflow
+    Direction section equates back-to-front with "port side exhaust". The guide does not say the two airflow
+    parts look different, so the face is the front-to-back part's face.
+  power: >-
+    datasheet - Tables 18, 20 and 22: maximum power 930 W, typical operating power 511 W, input voltage "-48/-60",
+    efficiency 94% at 50% load. Maximum power is an output rating, so `power-output-w` carries 930; the 511 W
+    typical is not stated to be output or input and is left out.
+  size: >-
+    estimated - as for NC5K-PDC-930W-FR: no held document states dimensions; 98 x 40 is the aspect of the guide's
+    Figure 21 (815 x 340 px) applied to a one-rack-unit slot height.
+  elements: >-
+    estimated - as for NC5K-PDC-930W-FR; fractions of Figure 21's body. Its callouts: 1 OK lamp, 2 FAIL lamp, 3 DC
+    connector, 4 the cord plug. Figure 21 prints -DC, +DC and an earth symbol beside the sockets.
+  latch-colour: >-
+    Figure 21 draws the latch green but does not say which airflow part it shows; the colour is not tied to airflow.
+  depth: >-
+    estimated - not stated in any held document; 185 mm is a round figure for a supply of this class.
+states: [absent]
+elements:
+  fail: {at: [2.6, 12.4], size: [2.8, 2.8], class: led, states: ['off', {name: fault, color: '#f59e0b'}]}
+  ok: {at: [2.6, 29.2], size: [2.8, 2.8], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
+  fan: {at: [15.2, 2.5], size: [30.0, 30.0], class: rotor}
+  handle: {at: [9.6, 32.8], size: [41.4, 6.4], class: handle}
+  latch: {at: [90.4, 10.8], size: [6.0, 12.6], class: latch}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: the grille's extent is read off Figure 21; the cavity behind it is not stated.
+    - node: handle
+      uhandle: 20.0
+      color: '#1b1d20'
+      confidence: estimated
+      source: Figure 19 shows a handle standing clear of the supply face; 20 mm is a reading of its proportions.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: the latch stands proud in Figure 21's plan and how far is not stated.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [98.0, 40.0]}

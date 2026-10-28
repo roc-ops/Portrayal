@@ -1,0 +1,451 @@
+format: 1
+kind: device
+name: crs328-24p-4s-plus-rm
+version: 2.0.0
+maturity: modelled
+manufacturer: MikroTik
+model: CRS328-24P-4S+RM
+portfolio: {line: Switches, family: Cloud Router Switch, series: CRS328}
+description: >-
+  MikroTik CRS328-24P-4S+RM is a fixed 1U Cloud Router Switch with PoE out. It has 24 10/100/1000 Ethernet ports
+  that supply PoE (802.3af/at, or 26 V or 53 V passive, chosen per port). It also has four SFP+ cages and an RJ45
+  serial console, and runs SwOS or RouterOS (dual boot). The front carries the 24 jacks in three blocks of four columns by
+  two rows under an orange PoE-out band. A pair of lamps sits above each column and another pair below it, each
+  lamp numbered. The four SFP+ cages are a block of two by two with a numbered lamp under each. The front also
+  has the CONSOLE jack, the RESET and MODE buttons and the PWR, USR, FAN and PoE lamps. The 500 W AC supply and the
+  two fans are built into the chassis, so there are no bays. The fans draw through grilles in the right wall. No
+  document held shows the rear, so the rear is not drawn and the AC inlet is not placed.
+profile: networking
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      Dimensions drawing "CRS328-24P-4S+ dimensions", MikroTik, printed 19.09.2023 (file
+      CRS32824P4S_dimensions_230947.pdf, rendered at 200 dpi): front, right side, top plan and isometric. CR328-24P-4S+RM
+      brochure, MikroTik (file CR328-24P-4SRM_250801.pdf; MikroTik's file name reads CR328; no date is printed, the
+      file name carries a revision stamp): specification table, quick specifications. CRS328-24P-4S+RM product page,
+      MikroTik (https://mikrotik.com/product/crs328_24p_4s_rm, saved 2026-10-26): AC inputs, PSU slots, maximum power,
+      cooling, PoE out, included parts. Studio photographs 1493 (front, from above) and 1494 (three-quarter front,
+      the right wall with a fan grille): colours, the printed legends and counts. The block diagram
+      CRS328-24P-4S_240414.png (ports Ether 1-8, 9-16, 17-24 and SFP+ 1 to 4). The saved quick guide page for the G1
+      CRS series lists this model and holds no figures. NetBox read as a second opinion only. MikroTik prints no figure
+      numbers. The device name spells MikroTik's + as -plus because a directory name cannot carry +; model: keeps the
+      + as printed.
+  datasheet:
+    confidence: datasheet
+    note: >-
+      The brochure is MikroTik's datasheet for the model: product code CRS328-24P-4S+RM, CPU 98DX3236 800 MHz, 512 MB
+      RAM, 16 MB flash, 24 10/100/1000 ports, four SFP+ cages, SwOS / RouterOS (dual boot), 100 - 240 V input, two
+      fans, 443 x 300 x 44 mm, -20 to +60 C tested, 44 W, serial RJ45; a 100 - 240 V AC 500 W built-in supply, 450 W
+      guaranteed for PoE (3 x 150 W per eight ports), up to 30 W per port at high voltage and 26 W at low voltage.
+      The brochure's 44 W is printed "without PoE devices connected"; the product page gives 44 W as "without
+      attachments" and 494 W as the maximum, which is that 44 W plus the 450 W PoE budget. Each figure is filed as the
+      document words it.
+  gate-1:
+    confidence: drawing
+    note: >-
+      The drawing prints no height. The front view's body is 1864 px wide in a 1.6 times enlargement of the 200 dpi
+      render for the printed 443 (4.208 px per mm) and 190 px tall, which reads 45.2 mm over the lip lines; the side
+      view is 1709 px for the printed 298 (5.735 px per mm) and 254 px tall, 44.3 mm, the figure the sister drawings
+      of the CRS354 print. The side view's 44.3 is carried and the brochure's 44 is its rounding. Every x and y below
+      is taken at 4.208 px per mm from the body's top-left corner of the front view.
+  chassis:
+    confidence: drawing
+    note: >-
+      443 wide, 44.3 high, 298 deep. The brochure and the product page print 443 x 300 x 44 mm; the drawing's 298
+      is carried and the 300 is declared a conflict, the 2 mm being the cable-management loop and the front lip. The
+      7 mm the drawing dimensions is a loop standing off the front, an accessory and not part of the depth. 443 is the
+      body between the ear folds (the top plan shows no ears).
+  front-layout:
+    confidence: drawing
+    note: >-
+      From the drawing's front view. Three jack plates, each 59.9 x 26.1 at 63.0, 133.3 and 203.7 mm (70.3 mm step), top
+      at 11.6 mm, four columns of two jacks on the 13.97 mm registry pitch (55.9 mm for four, so the plate's 59.9
+      holds them with 2.0 mm each side), first jack at 66.05 mm; the lower row's jack centre line is 14.1 mm below the
+      plate top and the upper row 13.4 mm above it; the upper jacks' latch notch is up, the lower's down. The SFP+
+      block is 30.2 x 26.4 at 274.7 mm, top 11.2 mm, two cages by two, each cage opening 14.5 x 10.0 (registry) on a
+      15.1 mm column pitch and 14.0 mm row pitch. The CONSOLE jack is the drawn 15.9 x 12.6 square at 311.8 mm, 25.2 mm,
+      and the registry jack is centred in it. The two round buttons are drawn 4.3 mm across at centres 332.7 and 342.7
+      mm, 33.3 mm. The orange PoE-out band and the plate colours are the photograph's medians (band #e9b159, plate
+      #bcbdbd, face #e9e9e9).
+  poe-band:
+    confidence: estimated
+    note: >-
+      estimated - the drawing shows no band. Measured on photograph 1493 against the front plate edges, which the
+      drawing fixes, at the render's 4.5 px per mm across the face; the photo looks down, so y is taken at the
+      face's 0.82 compression. The band is a frame on the tops of the three plates and down the left of the
+      first. Its top bar is 4.0 mm deep, from 7.6 mm to the plate tops at 11.6 mm, and runs from the first plate's
+      left edge (63.0 mm) to the third plate's right edge (264.0 mm), across the two gaps, and the numbered upper lamps sit on its top
+      edge. At the left it widens into a wing 8.9 mm wide at the top (54.1 to 63.0 mm) whose outer edge slants
+      inward to 61.5 mm at the plates' foot, 37.7 mm. The wing carries the 26 V, 53 V and PoE out lamps and legends; it is drawn in three pieces (above the lamps, a
+      strip behind them, below them) so no printed piece lies under a lamp.
+      The edge positions are read to about 1 mm.
+  lamps:
+    confidence: estimated
+    note: >-
+      estimated - the drawing shows no lamp. They are read off photograph 1493, which looks down on the face (its
+      face is 0.82 of the true height), so x is taken across the face at 4.145 px per mm and y is estimated. Above each
+      column of two jacks sit two lamps, and below it two more, each printed with a number: 1 2 3 4 5 6 7 8 above
+      and the same below for the first eight ports, then 9 to 16 and 17 to 24. So every port has a lamp above and a
+      lamp below, both numbered with the port. The lamp pair is 5.8 mm apart, centred 0.5 mm left of the column, the
+      upper lamp centre at 7.0 mm and the lower at 41.0 mm. The numbers are printed inside the lamp boxes; silkscreen
+      is painted under a placed lamp, so they are drawn just above the upper lamp (4.6 mm) and just above the lower one
+      (39.0 mm). On the band's left wing are three round lamps (2.0 mm, the library's led-dot) at centres 55.9, 58.8
+      and 61.6 mm, 10.4 mm down, read off photograph 1493 at 4.5 px per mm across the face: the first is green, the
+      second red and the third black, under the legends 26 V, 53 V and PoE out. The green and red are given as
+      the lamp's lit colour (#22c55e, #ef4444); the black one is unlit. The legends are 1.8 mm, turned to read
+      upward as printed, the largest the 2.9 mm lamp pitch allows. The quick guide G1-b holds no LED table and
+      the brochure none, so what the three lamps show is a gap. Under the console are four lamps PWR, USR, FAN and PoE at 309.9, 317.0, 323.9
+      and 330.9 mm, the FAN and PoE pair on an orange strip headed FAULT. No document held says what a lamp shows.
+  port-numbering:
+    confidence: estimated
+    note: >-
+      estimated - the metal prints a number only on the lamps. Which jack of a column takes which number is not
+      printed, and no held document says (the block diagram gives only Ether 1-8, 9-16 and 17-24 as the three
+      blocks). The pilot's convention is followed: the lower jack of a column takes the odd number, the upper the even,
+      and the left lamp of a pair is the odd port's. The four SFP+ cages are printed 1 and 2 under the left column and
+      3 and 4 under the right; which cage of a column takes which number is not printed either, and the upper cage is
+      taken as the lower number.
+  sfp-plus:
+    confidence: drawing
+    note: >-
+      Four SFP+ cages (brochure: SFP+ cages 4; block diagram SFP+ 1 to 4) in a block of two by two. The rotated
+      legend SFP+ is on the right of the block. The cage is the registry's std/sfp, which also takes 1.25 Gb SFP.
+  console:
+    confidence: drawing
+    note: >-
+      The RJ45 serial port (brochure: Serial port RJ45) is the shielded jack under the printed CONSOLE. The brochure
+      and the product page list no separate 10/100 management port for this model, and the front has none.
+  buttons:
+    confidence: photo-measured
+    note: >-
+      Two round buttons printed RESET and MODE on the metal (the product page lists "Mode button: Yes"). Both are
+      drawn with the library's recessed reset-button part; the MODE one carries function mode. The drawing gives
+      their centres.
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      The brochure says the 1U case has a 100 - 240 V AC 500 W power supply built in; the product page lists one AC input,
+      one PSU slot and two fans. No document held shows a removable supply module or gives a supply part number, so
+      the supply is part of the chassis and there are no bays, as on juniper/ex2300-24t. The two fans are the two
+      hexagonal grilles the drawing's right side view and photograph 1494 show.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      No held document shows the rear: the drawing has front, side, top and isometric views, the isometric hides the
+      rear, and neither studio photograph looks at it. The rear is left empty and the AC inlet is not placed; no
+      other model's rear is used. The export therefore carries no power port.
+  side-layout:
+    confidence: drawing
+    note: >-
+      The drawing's side view is the right wall, front at the left (the three-quarter photograph 1494 shows the right
+      wall with a grille). Two round hex-pattern fan grilles, each 37.5 mm across, centres 67.3 mm and 202.8 mm from the
+      front and 22.5 mm down. The side view is 5.735 px per mm. The screws and the rear plate line are not drawn.
+  ears:
+    confidence: drawing
+    note: >-
+      Rack ears are in the box (product page, Included parts: Rackmount ears; the product page also lists a K-54 kit and
+      an IEC cord, and no held document says what the K-54 kit is, so no kit is placed). The drawing's front view and
+      top plan show the body and the 7 mm cable loop, with no ear plate, so the ears are shipped flush with the face and
+      drawn at the face plane; the ears and the loop are not drawn.
+  colour:
+    confidence: photo-measured
+    note: >-
+      medians of photograph 1493: face #e9e9e9, lid #e1e1e1. The chassis colour is the face's.
+attrs:
+  power:
+    power-max-w: 494
+    power-envelope: fully-configured
+    power-without-attachments: >-
+      44 W (product page, without attachments; brochure, without PoE devices connected)
+    poe-budget-w: 450
+    poe-standard: IEEE 802.3af/at, and 26 V / 53 V passive
+    power-input: 100 - 240 V AC, one input, built-in 500 W supply
+    power-poe-note: 450 W guaranteed (3 x 150 W per eight ports); up to 30 W per port at high voltage, 26 W at low
+  thermal:
+    cooling: two built-in fans, temperature controlled
+  environmental:
+    operating-temp-c: -20 to 60 (tested)
+  platform:
+    cpu: 98DX3236, 800 MHz
+    switch-chip: 98DX3236
+    ram: 512 MB
+    storage: 16 MB flash
+    os: SwOS / RouterOS (dual boot)
+  features:
+    vlan-limit: IEEE 802.1Q, up to 4K VLANs
+    optics-sfp-plus: >-
+      brochure: the four SFP+ ports give up to 10 Gbps over optical fibre or Ethernet modules, none included
+  compliance:
+    certification: CE, EAC, RoHS
+chassis:
+  width: 443.0
+  height: 44.3
+  depth: 298.0
+  ru: 1
+  color: '#e9e9e9'
+  ears:
+    positions:
+    - {name: flush, at: 0, default: true}
+  power: ac
+gaps:
+- what: rear-face
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    No held document shows the rear: no rear view in the dimensions drawing, none in the two studio photographs, none in
+    the NetBox files. The rear is left empty and no AC inlet is placed, so the DCIM export carries no power port. The
+    product page counts one AC input.
+  wanted: A rear photograph or drawing showing the AC inlet and the earthing point.
+- what: left-wall
+  scope: [left]
+  reason: needs-drawing
+  note: >-
+    The drawing's side view and photograph 1494 show the right wall. No held document shows the left wall, so it is
+    left empty and not drawn from the right.
+  wanted: A left side view.
+- what: port-jack-numbers
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    Which jack of a column takes which number, and which SFP+ cage takes which number, is not printed or stated; the
+    pilot's lower-jack-odd order is used, estimated.
+  wanted: MikroTik's port order for the jacks.
+- what: led-states
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    Searched the brochure, the product page and the saved quick guide page for an LED table: none. The lamps carry the
+    component's own vocabulary and no meaning is stated. The two lamps above and below each port are not explained
+    either, nor are the 26 V, 53 V and PoE out lamps; the photograph shows them green, red and black, and the green
+    and red are given as lit colours on the first two.
+  wanted: MikroTik's LED description for the CRS328-24P-4S+RM.
+- what: weight
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    Neither the brochure nor the product page gives a weight.
+  wanted: MikroTik's weight.
+- what: eol
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The saved product page carries no Discontinued badge and MikroTik publishes no end-of-life page, so no lifecycle is
+    written.
+  wanted: none
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g, poe: '802.3af/at or 26 V / 53 V passive (out)'}
+    description: >-
+      the 24 10/100/1000 PoE-out ports; rel-pos carries the number printed on the lamps, the lower jack of a column
+      takes the odd number
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the four SFP+ cages, printed 1 to 4 on their lamps; they take 1.25 Gb SFP and 10 Gb SFP+ modules
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: two lamps per RJ45 port, one above its column and one below, each carrying the port number
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one lamp per SFP+ cage, carrying the cage number
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the RJ45 serial console
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+    description: the RESET and MODE buttons
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the 26 V, 53 V and PoE out lamps and the PWR, USR, FAN and PoE lamps
+views:
+  front:
+    size: {w: 443.0, h: 44.3}
+    panel:
+      decor:
+      - {id: poe-band, kind: poe-band, at: [63.0, 7.6], size: [201.0, 4.0], fill: '#e9b159'}
+      - {id: poe-band-wing-lamps, kind: poe-band, at: [54.9, 9.4], size: [8.1, 2.0], fill: '#e9b159'}
+      - {id: fault-strip, kind: fault-strip, at: [322.7, 38.2], size: [18.8, 6.0], fill: '#e9b159'}
+      - {id: plate-1, kind: jack-plate, at: [63.0, 11.6], size: [59.9, 26.1], fill: '#bcbdbd'}
+      - {id: plate-2, kind: jack-plate, at: [133.3, 11.6], size: [59.9, 26.1], fill: '#bcbdbd'}
+      - {id: plate-3, kind: jack-plate, at: [203.7, 11.6], size: [59.9, 26.1], fill: '#bcbdbd'}
+      cutouts:
+      - {block: rj45}
+      - {id: console, at: [311.85, 24.9], size: [15.8, 13.2], shape: rect}
+      - {id: cage-1, at: [275.1, 12.4], size: [14.5, 10.0], shape: rect}
+      - {id: cage-2, at: [275.1, 26.4], size: [14.5, 10.0], shape: rect}
+      - {id: cage-3, at: [290.2, 12.4], size: [14.5, 10.0], shape: rect}
+      - {id: cage-4, at: [290.2, 26.4], size: [14.5, 10.0], shape: rect}
+      - {id: btn-reset, at: [330.7, 31.3], size: [4.0, 4.0], shape: circle}
+      - {id: btn-mode, at: [340.7, 31.3], size: [4.0, 4.0], shape: circle}
+      - {id: led-sfp-1, at: [277.8, 39.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-2, at: [285.2, 39.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-3, at: [291.8, 39.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-4, at: [299.4, 39.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-pwr, at: [308.4, 39.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-usr, at: [315.5, 39.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-fan, at: [322.4, 39.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-poe, at: [329.4, 39.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-26v, at: [54.9, 9.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-53v, at: [57.8, 9.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-poe-out, at: [60.6, 9.4], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {id: poe-band-wing-top, at: [54.1, 7.6], path: M 0 0 H 8.9 V 1.8 H 0.44 Z, filled: true, fill: '#e9b159', for: chassis}
+    - {id: poe-band-wing-low, at: [55.03, 11.4], path: M 0 0 H 7.97 V 26.3 H 6.47 Z, filled: true, fill: '#e9b159', for: chassis}
+    - {block: rj45}
+    - {at: [319.75, 23.6], text: CONSOLE, font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: console}
+    - {at: [332.7, 29.7], text: RESET, font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: btn-reset}
+    - {at: [342.7, 29.7], text: MODE, font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: btn-mode}
+    - {at: [309.9, 39.3], text: PWR, font-size: 1.4, anchor: middle, fill: '#2b2b2b', for: led-pwr}
+    - {at: [317.0, 39.3], text: USR, font-size: 1.4, anchor: middle, fill: '#2b2b2b', for: led-usr}
+    - {at: [323.9, 39.3], text: FAN, font-size: 1.4, anchor: middle, fill: '#2b2b2b', for: led-fan}
+    - {at: [330.9, 39.3], text: PoE, font-size: 1.4, anchor: middle, fill: '#2b2b2b', for: led-poe}
+    - {at: [337.2, 41.6], text: FAULT, font-size: 1.4, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [307.6, 29.5], text: 'SFP+', font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b', for: cage-1}
+    - {at: [56.46, 16.0], text: 26 V, font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b', for: led-26v}
+    - {at: [59.36, 16.0], text: 53 V, font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b', for: led-53v}
+    - {at: [62.16, 17.0], text: PoE out, font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b', for: led-poe-out}
+    - {at: [279.3, 39.0], text: '1', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: led-sfp-1}
+    - {at: [286.7, 39.0], text: '2', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: led-sfp-2}
+    - {at: [293.3, 39.0], text: '3', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: led-sfp-3}
+    - {at: [300.9, 39.0], text: '4', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: led-sfp-4}
+    - {at: [69.65, 39.0], text: '1', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-1}
+    - {at: [75.45, 39.0], text: '2', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-2}
+    - {at: [83.62, 39.0], text: '3', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-3}
+    - {at: [89.42, 39.0], text: '4', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-4}
+    - {at: [97.59, 39.0], text: '5', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-5}
+    - {at: [103.39, 39.0], text: '6', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-6}
+    - {at: [111.56, 39.0], text: '7', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-7}
+    - {at: [117.36, 39.0], text: '8', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-8}
+    - {at: [140.05, 39.0], text: '9', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-9}
+    - {at: [145.85, 39.0], text: '10', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-10}
+    - {at: [154.02, 39.0], text: '11', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-11}
+    - {at: [159.82, 39.0], text: '12', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-12}
+    - {at: [167.99, 39.0], text: '13', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-13}
+    - {at: [173.79, 39.0], text: '14', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-14}
+    - {at: [181.96, 39.0], text: '15', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-15}
+    - {at: [187.76, 39.0], text: '16', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-16}
+    - {at: [210.45, 39.0], text: '17', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-17}
+    - {at: [216.25, 39.0], text: '18', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-18}
+    - {at: [224.42, 39.0], text: '19', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-19}
+    - {at: [230.22, 39.0], text: '20', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-20}
+    - {at: [238.39, 39.0], text: '21', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-21}
+    - {at: [244.19, 39.0], text: '22', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-22}
+    - {at: [252.36, 39.0], text: '23', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-23}
+    - {at: [258.16, 39.0], text: '24', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: port-24}
+    - {at: [439.5, 10.3], text: Cloud Router Switch, font-size: 6.7, anchor: end, fill: '#2b2b2b', for: chassis}
+    - {at: [439.5, 15.4], text: CRS328-24P-4S+RM, font-size: 3.3, anchor: end, fill: '#2b2b2b', for: chassis}
+    components:
+      blocks:
+      - id: rj45
+        ref: common/rj45-ganged-eth-plain@1
+        at: [66.05, 25.7]
+        count: 24
+        rows: 2
+        pitch: 13.97
+        row-pitch: -13.4
+        gang: 4
+        gutter: 14.52
+        number-from: 1
+        cutouts: true
+        rotate: {bottom: 180}
+        attrs: {media: rj45, speed: 1g, poe: '802.3af/at or 26 V / 53 V passive (out)'}
+        numerals: {dx-by-row: [3.6, 9.4], dy-top: -21.1, dy-bottom: -7.7, font-size: 1.6, anchor: middle, fill: '#2b2b2b'}
+        led:
+        - ref: common/led-sq@1
+          cutout-shape: rect
+          id-format: 'led-port-{n}-up'
+          dx-by-row: [2.1, 7.9]
+          dy-top: -20.2
+          dy-bottom: -6.8
+          group: port-leds
+          rel-pos-stride: 2
+          rel-pos-offset: -1
+        - ref: common/led-sq@1
+          cutout-shape: rect
+          id-format: 'led-port-{n}-low'
+          dx-by-row: [2.1, 7.9]
+          dy-top: 13.8
+          dy-bottom: 27.2
+          group: port-leds
+          rel-pos-stride: 2
+          rel-pos-offset: 0
+      placements:
+      - {block: rj45}
+      - {ref: std/rj45@2, id: console, at: [311.85, 24.9], group: console, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+      - {ref: std/sfp@1, id: cage-1, at: [275.1, 12.4], group: sfp-plus, rel-pos: 1, attrs: {media: sfp-plus, speed: 10g}}
+      - {ref: std/sfp@1, id: cage-2, at: [275.1, 26.4], rotate: 180, group: sfp-plus, rel-pos: 2, attrs: {media: sfp-plus, speed: 10g}}
+      - {ref: std/sfp@1, id: cage-3, at: [290.2, 12.4], group: sfp-plus, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g}}
+      - {ref: std/sfp@1, id: cage-4, at: [290.2, 26.4], rotate: 180, group: sfp-plus, rel-pos: 4, attrs: {media: sfp-plus, speed: 10g}}
+      - {ref: common/led-sq@1, id: led-sfp-1, at: [277.8, 39.5], for: cage-1, group: sfp-leds, rel-pos: 1}
+      - {ref: common/led-sq@1, id: led-sfp-2, at: [285.2, 39.5], for: cage-2, group: sfp-leds, rel-pos: 2}
+      - {ref: common/led-sq@1, id: led-sfp-3, at: [291.8, 39.5], for: cage-3, group: sfp-leds, rel-pos: 3}
+      - {ref: common/led-sq@1, id: led-sfp-4, at: [299.4, 39.5], for: cage-4, group: sfp-leds, rel-pos: 4}
+      - {ref: common/led-sq@1, id: led-pwr, at: [308.4, 39.5], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: common/led-sq@1, id: led-usr, at: [315.5, 39.5], for: chassis, group: status-leds, rel-pos: 2}
+      - {ref: common/led-sq@1, id: led-fan, at: [322.4, 39.5], for: chassis, group: status-leds, rel-pos: 3}
+      - {ref: common/led-sq@1, id: led-poe, at: [329.4, 39.5], for: chassis, group: status-leds, rel-pos: 4}
+      - {ref: common/led-dot@1, id: led-26v, at: [54.9, 9.4], for: chassis, group: status-leds, rel-pos: 5,
+         states: ['off', {name: green, color: '#22c55e'}]}
+      - {ref: common/led-dot@1, id: led-53v, at: [57.8, 9.4], for: chassis, group: status-leds, rel-pos: 6,
+         states: ['off', {name: red, color: '#ef4444'}]}
+      - {ref: common/led-dot@1, id: led-poe-out, at: [60.6, 9.4], for: chassis, group: status-leds, rel-pos: 7}
+      - {ref: common/reset-button@1, id: btn-reset, at: [330.7, 31.3], for: chassis, group: controls, rel-pos: 1,
+         attrs: {function: reset}}
+      - {ref: common/reset-button@1, id: btn-mode, at: [340.7, 31.3], for: chassis, group: controls, rel-pos: 2,
+         attrs: {function: mode}}
+    regions:
+      - {id: logo-zone, at: [409.5, 33.5], size: {w: 26.0, h: 7.0}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 443.0, h: 44.3}
+    empty: >-
+      No document held shows the rear: the dimensions drawing has no rear view, the two studio photographs look at the
+      front, and the NetBox files carry none. Not drawn from another model; the AC inlet is not placed.
+  top:
+    size: {w: 443.0, h: 298.0}
+    empty: >-
+      The drawing's top plan shows a plain lid with the Cloud Switch Series mark (a brand mark, not drawn) and no vents or
+      openings; the 7 mm loop it shows at the front is an accessory.
+  bottom:
+    size: {w: 443.0, h: 298.0}
+    empty: >-
+      Not drawn by any source held: neither the drawing, the brochure nor the studio photographs picture the underside.
+  left:
+    size: {w: 298.0, h: 44.3}
+    empty: >-
+      The drawing's side view and photograph 1494 show the right wall only. No document held shows the left wall, so it is
+      not drawn from the right.
+  right:
+    size: {w: 298.0, h: 44.3}
+    panel:
+      decor:
+      - {id: fan-0, kind: fan-grille, at: [48.55, 3.75], size: [37.5, 37.5], rx: 18.75, pattern: vent, vent: 1.0}
+      - {id: fan-1, kind: fan-grille, at: [184.05, 3.75], size: [37.5, 37.5], rx: 18.75, pattern: vent, vent: 1.0}
+configurations:
+  base:
+    kind: base
+    description: >-
+      CRS328-24P-4S+RM - 24 10/100/1000 PoE-out ports, four SFP+ cages and the RJ45 console, with a built-in 500 W AC
+      supply and two fans. The box holds rack ears, a K-54 kit and an IEC cord.
+    default: true
+    part-numbers:
+      CRS328-24P-4S+RM: {}
+references:
+- {title: 'CR328-24P-4S+RM brochure (MikroTik; revision stamp 250801, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CR328-24P-4SRM_250801.pdf)', sha256: ca7a30bb5ed430e58724e072804a57236404159649201981d3f4dded654750a2}
+- {title: 'CRS328-24P-4S+ dimensions (MikroTik; printed 19.09.2023; https://cdn.mikrotik.com/web-assets/product_files/CRS32824P4S_dimensions_230947.pdf)', sha256: 6c1ff8afb4be007dcc0d18c37f6523acd0549cb3f538e9e9cbb24c113fb8ac55}
+- {title: 'Quick Guide G1-b (MikroTik help page, saved 2026-10-26, no LED table; https://help.mikrotik.com/docs/display/QG/Quick+Guide+G1-b)', sha256: 4ef0031b8c90f531e8714cb2af8efecfaaf7e96badeff1abe8e2c52641fa5167}

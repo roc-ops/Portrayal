@@ -1,0 +1,37 @@
+format: 1
+kind: module
+name: n9k-c9508-fan-pwr
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9508 blank fan power card (N9K-C9508-FAN-PWR). It fills a fabric-module slot that holds no
+  fabric module when the switch uses the N9K-C9508-FM-G fabric module and the N9K-C9508-FAN2 fan trays, and
+  supplies the extra power those fan trays need. A plain plate, no ports and no lamps.
+size: {w: 62.48, h: 416.56, d: 297.18}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs:
+  model: 'N9K-C9508-FAN-PWR'
+  role: 'fan-power-card'
+  power-draw-typical-w: 45
+  power-draw-max-w: 90
+  eol: 'unknown'
+provenance:
+  size: >-
+    estimated - the guide gives dimensions for the fabric module (2.46 in by 16.4 in by 11.7 in) and none
+    for the fan power card, which takes a fabric-module slot, so it takes that envelope.
+  purpose: >-
+    install guide - "Overview", Table 1 lists N9K-C9508-FAN-PWR as the "Fabric Module Blank or Fan Power
+    Card" for N9K-C9508-FM-G with N9K-C9508-FAN2; the note beneath says "When using FM-G fabric modules, any
+    empty slots should be filled with FAN-PWR modules (N9K-C9508-FAN-PWR) due to additional power required
+    for N9K-C9508-FAN2 modules."
+  power: >-
+    datasheet - "Planning for Power Requirements" table (printed p13, PDF p19), "Blank Fan Power Card
+    (N9K-C9508-FAN-PWR)": 45 W typical, 90 W maximum. The guide's FM-G budget example counts two of them at 180
+    W. Recorded as a draw so a build's total includes the card.
+  skin: >-
+    estimated - a plain plate with a power connector and two captive screws; no figure draws the card.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+skins: [default]
