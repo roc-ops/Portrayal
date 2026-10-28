@@ -327,20 +327,14 @@ groups:
     role: indicator
     index-origin: 1
     description: the lamps printed FAN FAULT, POE FAULT, USER and POWER
-  psus:
-    term: PSU
+  supply-slots:
+    term: Slot
     role: service
     index-origin: 1
-    attrs:
-      redundancy: capacity adds, 1150 W with both (form not stated)
-      redundancy-note: >-
-        Brochure: the box "comes with a reliable 600 W power supply" and has an expansion slot for an additional PSU
-        to raise the output to 1150 W; the specification reads "600 W (1150 W with additional PSU)". The additional
-        supply raises the output; no held document says whether either supply can carry the box alone, so no 1+1
-        form is written.
     description: >-
       the two hot-swap supply slots, printed POWER 1 and POWER 2; one AC supply ships in slot 1 and slot 2 is the
-      expansion slot, covered as shipped
+      expansion slot, covered as shipped. The brochure says the additional supply raises the output to 1150 W and
+      states no redundancy form, so none is written
 views:
   front:
     size: {w: 444.5, h: 44.4}
@@ -487,8 +481,8 @@ views:
     - {at: [252.5, 40.4], text: '100-240 V ~9 A MAX, 50/60 Hz', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: chassis}
     components:
       bays:
-      - {id: psu-1, at: [357.6, 1.0], size: {w: 74.7, h: 41.9}, accepts: ['mikrotik/g1483-0600wnb@1'], group: psus, rel-pos: 1}
-      - {id: psu-2, at: [275.5, 1.0], size: {w: 74.7, h: 41.9}, accepts: ['mikrotik/g1483-0600wnb@1'], group: psus, rel-pos: 2}
+      - {id: psu-1, at: [357.6, 1.0], size: {w: 74.7, h: 41.9}, accepts: ['mikrotik/g1483-0600wnb@1'], group: supply-slots, rel-pos: 1}
+      - {id: psu-2, at: [275.5, 1.0], size: {w: 74.7, h: 41.9}, accepts: ['mikrotik/g1483-0600wnb@1'], group: supply-slots, rel-pos: 2}
   top:
     size: {w: 444.5, h: 235.0}
     panel:

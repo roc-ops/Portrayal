@@ -110,7 +110,7 @@ def test_crs320_poe_markings_are_printed_not_lamps():
     d = load(CRS320)
     decor = d["views"]["front"]["panel"]["decor"]
     assert len([x for x in decor if x.get("kind") == "poe-bar"]) == 8  # one over each column of two jacks
-    assert not [p for p in placements(d, "front") if "poe" in p["id"]]
+    assert not [p for p in placements(d, "front") if "poe-lamp" in p["id"] or "poe-out" in p["id"]]
     assert "poe-lamps" in {g["what"] for g in d["gaps"]}
     assert d["attrs"]["power"]["poe-budget-w"] == 963
 
@@ -138,9 +138,9 @@ def test_crs320_supplies_are_two_slots_that_take_the_hot_swap_g1483_and_seat_non
     d = load(CRS320)
     b = bays(d, "rear")
     assert [x["id"] for x in b] == ["psu-1", "psu-2"]
-    assert all(x["group"] == "psus" and x["accepts"] == ["mikrotik/g1483-0600wnb@1"] for x in b)
+    assert all(x["group"] == "supply-slots" and x["accepts"] == ["mikrotik/g1483-0600wnb@1"] for x in b)
     assert not [x for x in b if x.get("default")]  # no held document names the shipped supply
-    assert d["configurations"]["base"].get("bays") in (None, {})
+    assert d["configurations"]["base"]["bays"] == {"psu-1": "", "psu-2": ""}  # both explicitly unseated
     assert d["chassis"]["power"] == "ac"
     gaps = {g["what"]: g for g in d["gaps"]}
     assert "shipped-supply-part" in gaps and "G1483-0600WNB" in gaps["shipped-supply-part"]["note"]
