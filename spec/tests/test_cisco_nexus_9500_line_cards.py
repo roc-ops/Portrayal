@@ -1,6 +1,6 @@
 """The Cisco Nexus 9500 line cards, batch 1, and the chassis bays that take them.
 
-Four line cards are modelled, each a component `cisco/<part number>`: the N9K-X9736C-FX, N9K-X97160YC-EX,
+Four line cards are modelled here (five more in batch 2), each a component `cisco/<part number>`: the N9K-X9736C-FX, N9K-X97160YC-EX,
 N9K-X9732C-FX and N9K-X9716D-GX. The N9K-X9788TC-FX is NOT modelled: the guides call its 48 ports an SFP+
 port, a BASE-T port and just a 10G port, and no held figure shows its faceplate (see the last test).
 
@@ -45,8 +45,12 @@ IFACE = {"n9k-x9736c-fx": {"100gbase-x-qsfp28": 36},
 
 # chassis -> (bays, the cards its own guide supports). The 9516 guide's Overview says the N9K-X9716D-GX "is not
 # compatible with this switch" (PDF p7, printed 1), so its bays do not accept it.
-CHASSIS = {"9504": (4, set(CARDS)), "9508": (8, set(CARDS)), "9516": (16, set(CARDS) - {"n9k-x9716d-gx"})}
-VERSIONS = {"9504": "2.1.0", "9508": "1.1.0", "9516": "2.1.0"}
+# The five cards of batch 2 (test_cisco_nexus_9500_line_cards_2.py) are accepted by all three chassis, so each
+# bay accepts the blank, these four and those five.
+BATCH2 = {"n9k-x9736c-ex", "n9k-x9732c-ex", "n9k-x9736c-fx3", "n9k-x9736q-fx", "n9k-x9408pc-cfp2"}
+CHASSIS = {"9504": (4, set(CARDS) | BATCH2), "9508": (8, set(CARDS) | BATCH2),
+           "9516": (16, (set(CARDS) - {"n9k-x9716d-gx"}) | BATCH2)}
+VERSIONS = {"9504": "2.2.0", "9508": "1.2.0", "9516": "2.2.0"}
 
 
 def contract(name):

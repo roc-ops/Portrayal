@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: n9k-c9516
-version: 2.1.0
+version: 2.2.0
 maturity: modelled
 manufacturer: Cisco
 model: N9K-C9516
@@ -15,8 +15,9 @@ description: >-
   PS 10 standing on end along the bottom. The REAR carries three fan trays FAN 1 to FAN 3, six
   fabric-module slots FM 1 to FM 6 behind the fan trays, and two system controllers SC 1 and SC 2 below
   them. Air enters at the front and leaves at the rear. Each line-card slot holds its blank and accepts the
-  line-card blank and three of the four line cards modelled so far (N9K-X9736C-FX, N9K-X97160YC-EX and
-  N9K-X9732C-FX; the N9K-X9716D-GX is not compatible with this switch); the other 9500 line cards follow.
+  line-card blank and eight of the nine line cards modelled so far (N9K-X9736C-FX, N9K-X97160YC-EX,
+  N9K-X9732C-FX, N9K-X9736C-EX, N9K-X9732C-EX, N9K-X9736C-FX3, N9K-X9736Q-FX and N9K-X9408PC-CFP2; the
+  N9K-X9716D-GX is not compatible with this switch); the other 9500 line cards follow.
 profile: networking
 provenance:
   sources:
@@ -126,9 +127,10 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet - the sixteen line-card slots accept the line-card blank N9K-C9500-LC-CV and the line cards
-      this guide supports among those modelled: N9K-X9736C-FX, N9K-X97160YC-EX and N9K-X9732C-FX, which
-      Overview Table 1 and the power tables (PDF pp7-8 and 18-20, printed 1-2 and 12-14) list. A line card is
-      accepted because this chassis's own guide supports it. The N9K-X9716D-GX is NOT accepted: the Overview
+      this guide supports among those modelled: N9K-X9736C-FX, N9K-X97160YC-EX, N9K-X9732C-FX, N9K-X9736C-EX,
+      N9K-X9732C-EX, N9K-X9736C-FX3, N9K-X9736Q-FX and N9K-X9408PC-CFP2, which Overview Table 1 and the power
+      tables (PDF pp7-8 and 17-20, printed 1-2 and 11-14) list. A line card is accepted because this chassis's
+      own guide supports it. The N9K-X9716D-GX is NOT accepted: the Overview
       says "The N9K-X9716D-GX line card is not compatible with this switch" (PDF p7, printed 1), and that
       sentence wins over the Planning for Power table (PDF p18, printed 12), which is a copy of the 9508's, names
       the 9508's fabric modules and still lists the card. The other 9500 line cards follow in later batches; the
@@ -239,7 +241,9 @@ gaps:
     printed 1-2) pairs the cards modelled here with the N9K-C9516-FM-E and -FM-E2 (this chassis has no -G
     fabric module); the count is the fabric modules required for maximum bandwidth, read by line order.
     N9K-X9736C-FX: FM-E 5, FM-E2 5. N9K-X97160YC-EX: FM-E 4, FM-E2 4. N9K-X9732C-FX: FM-E 4, FM-E2 4 plus 1
-    redundant. The N9K-X9716D-GX appears in no row: it is not compatible with this switch. The guide's
+    redundant. N9K-X9736C-EX: FM-E 4, FM-E2 4. N9K-X9732C-EX: FM-E 4, FM-E2 4. N9K-X9736C-FX3: FM-E2 5, and
+    not the FM-E. N9K-X9736Q-FX: FM-E 5, FM-E2 5. N9K-X9408PC-CFP2: the plain N9K-C9516-FM, 4, and neither the
+    -E nor the -E2. The N9K-X9716D-GX appears in no row: it is not compatible with this switch. The guide's
     notes: FM 5 (slot 25) works only with the N9K-X9736C-FX, N9K-X9736Q-FX and N9K-X9736C-FX3 (PDF p9,
     printed 3); a N9516 "having 16 x N9K-X9788TC-FX line cards require a minimum of 3 FM-E2" (the note under
     the FM-E row, PDF p8, printed 2; that card is not modelled); and "Do not mix ACI-mode line cards with
@@ -382,22 +386,22 @@ views:
     - {at: [288.0, 33.0], text: PWR MGMT, font-size: 3, anchor: middle, for: chassis}
     components:
       bays:
-      - {id: lc-1, at: [6.35, 44.45], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 0, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-2, at: [6.35, 88.9], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 1, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-3, at: [6.35, 133.35], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 2, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-4, at: [6.35, 177.8], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 3, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-5, at: [6.35, 222.25], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 4, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-6, at: [6.35, 266.7], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 5, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-7, at: [6.35, 311.15], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 6, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-8, at: [6.35, 355.6], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 7, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-9, at: [6.35, 400.05], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 8, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-10, at: [6.35, 444.5], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 9, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-11, at: [6.35, 488.95], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 10, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-12, at: [6.35, 533.4], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 11, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-13, at: [6.35, 577.85], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 12, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-14, at: [6.35, 622.3], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 13, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-15, at: [6.35, 666.75], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 14, default: cisco/n9k-c9500-lc-cv@1}
-      - {id: lc-16, at: [6.35, 711.2], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1'], group: line-cards, rel-pos: 15, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-1, at: [6.35, 44.45], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 0, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-2, at: [6.35, 88.9], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 1, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-3, at: [6.35, 133.35], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 2, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-4, at: [6.35, 177.8], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 3, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-5, at: [6.35, 222.25], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 4, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-6, at: [6.35, 266.7], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 5, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-7, at: [6.35, 311.15], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 6, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-8, at: [6.35, 355.6], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 7, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-9, at: [6.35, 400.05], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 8, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-10, at: [6.35, 444.5], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 9, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-11, at: [6.35, 488.95], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 10, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-12, at: [6.35, 533.4], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 11, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-13, at: [6.35, 577.85], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 12, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-14, at: [6.35, 622.3], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 13, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-15, at: [6.35, 666.75], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 14, default: cisco/n9k-c9500-lc-cv@1}
+      - {id: lc-16, at: [6.35, 711.2], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1', 'cisco/n9k-x9736c-fx@1', 'cisco/n9k-x97160yc-ex@1', 'cisco/n9k-x9732c-fx@1', 'cisco/n9k-x9736c-ex@1', 'cisco/n9k-x9732c-ex@1', 'cisco/n9k-x9736c-fx3@1', 'cisco/n9k-x9736q-fx@1', 'cisco/n9k-x9408pc-cfp2@1'], group: line-cards, rel-pos: 15, default: cisco/n9k-c9500-lc-cv@1}
       - {id: sup-1, at: [6.35, 755.65], size: {w: 203.2, h: 44.45}, accepts: ['cisco/n9k-sup-a@1', 'cisco/n9k-sup-a-plus@1', 'cisco/n9k-sup-b@1', 'cisco/n9k-sup-b-plus@1'], group: supervisors, rel-pos: 0, default: cisco/n9k-sup-a@1}
       - {id: sup-2, at: [209.55, 755.65], size: {w: 203.2, h: 44.45}, accepts: ['cisco/n9k-sup-a@1', 'cisco/n9k-sup-a-plus@1', 'cisco/n9k-sup-b@1', 'cisco/n9k-sup-b-plus@1'], group: supervisors, rel-pos: 1, default: cisco/n9k-sup-a@1}
       - {id: ps-1, at: [0, 800.1], size: {w: 44.45, h: 133.35}, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 0, default: cisco/n9k-pac-3000w-b@1}
