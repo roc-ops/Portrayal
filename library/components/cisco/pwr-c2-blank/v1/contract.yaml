@@ -1,0 +1,43 @@
+format: 1
+kind: module
+name: pwr-c2-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The power supply slot blank cover of the Cisco Catalyst 3650 and 2960-X/XR families, PWR-C2-BLANK. A plain
+  plate the size of a PWR-C2 supply's face that covers a supply slot holding no supply, with a release handle
+  at each end. Every switch ships with it in the second supply slot when it is configured with one supply.
+size: {w: 95.25, h: 40.13, d: 60.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs:
+  model: 'PWR-C2-BLANK'
+  role: 'airflow-blank'
+  weight-kg: 0.09
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 3650 Switches Hardware Installation Guide, September 2016, OL-29734-01, Table
+    4-1: "PWR-C2-BLANK, Blank cover". Power Supply Modules (chapter 1): "All switches ship with a blank cover
+    in the second power supply slot if switches are configured with only one power supply", and "For proper
+    chassis cooling, both the power supply module slots must be populated, or with either a power supply or a
+    blank cover." Figure 4-7 is captioned "Power Supply Slot Blank Cover".
+  size: >-
+    estimated - the guide's spec Table 1-2 gives PWR-C2-BLANK a weight, 0.2 lb (0.09 kg), and no dimensions.
+    It covers a PWR-C2 supply's slot, so it takes that face, 1.58 x 3.75 in (40.13 x 95.25 mm).
+  depth: >-
+    estimated - not stated; Figure 4-7 draws a short cover, and 60 mm is a reading of its proportions beside
+    the 11.75 in supply it stands in for.
+  skin: >-
+    estimated - Figure 4-7, an isometric line drawing, callouts "Release handles" and "Retainer clips". Drawn
+    as a plain plate with a handle at each end. The vendor's logo is cut into the drawn cover and is not
+    drawn here.
+states: [absent]
+elements:
+  handle-left: {at: [0.0, 8.0], size: [6.0, 24.0], class: handle}
+  handle-right: {at: [89.25, 8.0], size: [6.0, 24.0], class: handle}
+skins: [default]
+body:
+  depth: 60.0
+  color: '#c4c7ca'
+  footprint: {at: [0, 0], size: [95.25, 40.13]}

@@ -700,4 +700,6 @@ def test_the_comparison_layer_can_now_reach_them():
     # 163 with the Cisco Nexus 9508: 2+1 over three fan trays (hardware guide, Replacing a Fan Tray)
     # 165 with the Cisco NCS 5001 and NCS 5002: 1+1 over two fan modules each (NCS 5000 hardware installation
     # guide, Fan Modules: "slots for two 1+1 redundant fan modules")
-    assert n == 165, n
+    # 166 with the Cisco Catalyst 3650-48PD: 2+1 over three fan modules (3650 hardware installation guide,
+    # Fan Modules: "Three fans are required for proper cooling" and the switch "can operate with two operational fans")
+    assert n == 166, n

@@ -1,0 +1,1333 @@
+format: 1
+kind: device
+name: ws-c3650-48pd
+version: 1.0.0
+maturity: modelled
+manufacturer: Cisco
+model: WS-C3650-48PD
+aliases:
+- {name: Catalyst 3650-48PD, kind: marketing}
+- {name: WS-C3650-48PD-L, kind: vendor, note: the LAN Base software image on this hardware}
+- {name: WS-C3650-48PD-S, kind: vendor, note: the IP Base software image on this hardware}
+- {name: WS-C3650-48PD-E, kind: vendor, note: the IP Services software image on this hardware}
+portfolio: {line: Catalyst, family: Catalyst 3650, series: Catalyst 3650-48PD}
+description: >-
+  48x 10/100/1000 PoE+ RJ-45 and 4 uplink cages - two 1G SFP and two that take 1G SFP or 10G SFP+ - on
+  a stackable 1RU switch, the 48PD of the Catalyst 3650. The downlinks, the mode button and status lamps,
+  the USB Type A port and the uplink module are on the front; the RJ-45 console port, the Ethernet management
+  port, the ground connector, three fan modules, two StackWise ports and two power supply bays are on
+  the rear. Ports number 1-48 and run DOWN each column - odd on the top row, even beneath it. It ships
+  with one 640 W AC supply and a blank cover in the second bay. -L, -S and -E are the LAN Base, IP Base
+  and IP Services software images of this one hardware and are not separate devices.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      One source, not committed: Cisco Catalyst 3650 Switches Hardware Installation Guide, September 2016,
+      OL-29734-01, 126 pages (https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst3650/hardware/installation/guide/Cat3650hig_book.pdf).
+      Table 1-1 (PDF p15-20) is the switch models table; the Technical Specifications appendix (from PDF
+      p103) restarts its table numbers, so "spec Table 1-1", "spec Table 1-2" and "spec Table 1-5" below
+      are the appendix's. Its figures are isometric line drawings that it says are "not intended to depict
+      any particular color scheme" (Front Panel, PDF p21). No data sheet, no flat elevation, no photograph
+      and no 3D model of any 3650 is held. The front is Figure 1-1 (the 48PD-L) with the left end enlarged
+      in Figure 1-8; the rear is Figure 1-13. THE NETBOX COMMUNITY DEVICE TYPES for this model were read
+      as a second opinion on the port list only and carry nothing else here.
+  the-envelope:
+    confidence: datasheet
+    note: >-
+      spec Table 1-1: "Catalyst 3650 48-port PoE+ switches 1.73 x 17.5 x 17.625 in. (4.4 x 44.5 x 44.8
+      cm)", H x W x D, for the chassis assembly as it is shipped: three fans, two StackWise adapter blanks,
+      one power supply blank and the default power supply. 17.5 in is 444.5 mm and 17.625 in 447.7 mm.
+      1.73 IN IS THE GUIDE'S NOMINAL 1RU: the same box is printed 1.75 in (4.45 cm) in other guides, neither
+      is measured, and 44.45 mm is carried. One row of the table covers every 24- and 48-port PoE+ model,
+      and the 48-port PoE+ row was read for this model. Weight 16.75 lb (7.6 kg) from the same table's
+      48-port PoE row. The 1025 W supply is 1.5 in deeper than the others (spec Table 1-2), and the table's
+      own deeper row, 19.125 in, belongs to the 48-port Full PoE models; no deeper figure is printed for
+      a PoE+ model carrying that supply.
+  gate-1:
+    confidence: estimated
+    note: >-
+      THE FIGURES ARE PERSPECTIVE DRAWINGS, NOT ELEVATIONS, so every position is an estimate. Figure 1-1
+      is 1280 x 440 px with the face seen from the right and above: its height reads 84 px at the left
+      end and about 109 px at the right, so the scale grows by about a third along the face and no single
+      px/mm holds. The anchors are the 17.5 in width (face edge to face edge, 24 to 982 px, 2.15 px/mm
+      on average) and the RJ-45 pitch, 13.97 mm, which reads 2.08 px/mm in the first block and 2.36 px/mm
+      in the fourth. Figure 1-8, the left end close up, is nearer square-on and gives the vertical order:
+      the face 12.8 px/mm tall, the jack openings at 8.4 and 20.4 mm down, the lamp strip at 34.5 mm,
+      and the mode button, lamp pills, mini-B and USB-A in a band above the jacks. Good to about 3 mm
+      along the face near the left and 8 mm near the right, 1 mm across it.
+  the-four-blocks:
+    confidence: estimated
+    note: >-
+      Figure 1-1: four windows of twelve jacks, six columns by two rows, 174 px wide in the first and
+      198 px in the fourth, which is 83.8 mm of 13.97 mm pitch each. The first jack opening starts about
+      9 mm in from the face edge (Figure 1-8 and Figure 1-1 agree to 0.5 mm once the edge is read at 24
+      px, not at the window frame), and the windows are separated by a bar about 2 mm wide, so the block
+      step is 85.8 mm. The fourth block is then read 266.7 mm in against 268 to 270 mm from the figure's
+      right-hand scale.
+  rows:
+    confidence: estimated
+    note: >-
+      Figure 1-8: the upper jacks stand with the latch at the top and the lower with it at the bottom,
+      the usual stacked mirror, so the top row is turned 180 as the registry's rj45-ganged is drawn. The
+      openings read 9.7 mm tall and 2 mm apart, so a 12.0 mm row pitch of 11.0 mm jacks.
+  port-order:
+    confidence: drawing
+    note: >-
+      Figures 1-1 and 1-8: each block of twelve prints one up-arrow and one down-arrow lamp under each
+      column, with "01X" at the left end of the strip and "12X" at the right, "13X" and "24X" under the
+      second, "25X" and "36X" under the third and "37X" and "48X" under the fourth. So the odd port is
+      the upper jack and numbering runs down each column. Only the ends of each strip are printed, so
+      only they are drawn.
+  lamps:
+    confidence: datasheet
+    note: >-
+      Front Panel (chapter 1), Figure 1-8: STAT, DUPLX, SPEED, STACK and PoE are the mode lamps beside
+      the mode button, SYST and ACTV beneath them, and the CONSOLE lamp beside the USB mini-B port. Table
+      1-2 (SYST): off, green normal, blinking green POST, blinking amber a power supply or fan fault,
+      amber receiving power but not functioning. Table 1-3 and Table 1-4 (port LEDs by mode): in STAT
+      mode off is no link, green link, blinking green activity, alternating green-amber a link fault,
+      amber blocked by spanning tree; the other modes read speed, duplex, active switch and PoE state.
+      Table 1-5 (USB console): off disabled, green enabled. Table 1-6 (ACTV): off not the active switch,
+      green active or standalone, amber an election or stack error, slow blinking green standby. Table
+      1-9 (uplink): off, green link, blinking green activity, blinking amber a fault or limit, amber disabled.
+      The guide's blink patterns are not states a drawing can hold, so each lamp lists its steady colours.
+  uplinks:
+    confidence: estimated
+    note: >-
+      Figure 1-1 draws the uplink module at the right: two long vent slots, the legend "Catalyst 3650
+      48PoE+ 2X10G", four cages and under them G1, G2, G3 TE3 and G4 TE4 with a lamp beside each. Uplink
+      Ports (chapter 1): "Two slots (left side) supporting only 1-Gigabit SFP modules and two slots (right
+      side) supporting either 10-Gigabit SFP+ modules or 1-Gigabit SFP modules", and Table 1-1 gives this
+      model two 1G SFP and two 10G SFP+ uplinks. "An SFP+ module ports has two labels, G(x) and TE(x)".
+      The cages read about 16.4 mm apart, wider than the registry's 14.25 mm abutting pitch, so they are
+      placed on that pitch. The vent slots and the legend are read as fractions of the module's height.
+  console-over-usb:
+    confidence: datasheet
+    note: >-
+      USB Mini-Type B Port (chapter 1): the switch has "a USB mini-Type B console connection on the front
+      panel, and the RJ-45 console port on the switch's rear panel", console input is active on one at
+      a time and the USB connector takes precedence. The mini-B receptacle is not yet a library part (see
+      the gap usb-console-jack), so only its lamp and its printed legend are drawn.
+  rear-face:
+    confidence: estimated
+    note: >-
+      Figure 1-13, read as fractions of the rear face (62 to 1000 px for 444.5 mm, 2.11 px/mm): at the
+      left the ground connector (callout 1, two threaded holes with the ground symbol between), the RJ-45
+      console port (2) over the RJ-45 management port (3) with their legend CONSOLE and MGMT beneath;
+      three fan modules (4) with a StackWise port (5) in the gap after the first and after the second;
+      two supply bays (8) at the right, each with the AC OK (6) and PS OK (7) lamps. The supplies read
+      95 mm wide, which agrees with spec Table 1-2's 3.75 in. The fan modules read 44 mm wide, which fixes
+      the face of spec Table 1-5 (see cisco/fan-t1).
+  stackwise:
+    confidence: datasheet
+    note: >-
+      StackWise Ports (chapter 1): "StackWise adapter blanks installed in the StackWise ports is the default
+      setup", and a stack needs adapters installed; "You cannot have a switch stack containing a mix of
+      Catalyst 3650 and Catalyst 3850 switches". The adapters and cables are sold as C3650-STACK-KIT=,
+      and no figure draws the adapter's own face, so the bays accept only the blank here.
+  rear-lamps:
+    confidence: datasheet
+    note: >-
+      Table 1-12 (RJ-45 console): off is disabled with USB console active, green enabled with USB console
+      disabled. Table 1-23 (Ethernet management port): green link up without activity, blinking green
+      link and activity, off link down. The supplies' AC OK and PS OK lamps are Table 1-21 and the fan
+      LED is green when the fan runs and amber when it fails (Fan Modules, chapter 1).
+  ears-and-rack:
+    confidence: drawing
+    note: >-
+      Rack-Mounting a Switch and Attaching the Rack-Mount Brackets (chapter 2): "The 19-inch brackets
+      are included with the switch", attached with four screws "for the front-mounting or rear-mounting
+      positions (Figure 2-8)", and "Use four screws to attach the brackets for the front-mounting position".
+      Figure 2-8 shows the bracket on the front and on the rear end of the side wall, so the front-mounting
+      position is the one shipped and the rear-mounting position the other. NO FIGURE DIMENSIONS EITHER
+      POSITION, so no `at` is written. Figure 2-7 lists RACK-KIT-T1= (19, 23, 24 inch and ETSI brackets)
+      and 4PT-KIT-T1= (extension rails for four-point mounting); neither is a library part yet (see the
+      gaps).
+  power:
+    confidence: datasheet
+    note: >-
+      Table 1-1: 640 W power supply. Table 1-13: 48-port PoE switch, default supply PWR-C2-640WAC, 390
+      W of PoE available; Table 1-14: 390 W with one 640 W DC supply and 780 W with two; Table 1-15: PoE+
+      on 48 ports needs two 1025 W supplies, and PoE (15.4 W) needs one 1025 W or two 640 W. Table 1-1
+      prints no typical or maximum draw for the switch itself and none is stated here.
+  interface-names:
+    confidence: estimated
+    note: >-
+      NOT IN THE GUIDE. Port naming lives in the IOS configuration guides, which are not held, so no `interfaces:`
+      block is written. The NetBox community type for this model names GigabitEthernet1/0/1 to 1/0/48
+      and TenGigabitEthernet1/1/1 to 1/1/4 (netbox-community/devicetype-library, device-types/Cisco/ WS-C3650-48PD-L.yaml);
+      that is a community file and is not carried.
+attrs:
+  physical:
+    weight-note: >-
+      16.75 lb (7.6 kg) for the 48-port PoE switch, as shipped with three fans, two StackWise adapter
+      blanks, one power supply blank and the default power supply (spec Table 1-1)
+    stackwise-adapter-weight: >-
+      0.25 lb (0.11 kg) for a StackWise stacking adapter, 0.1 lb (0.05 kg) for an adapter blank (spec
+      Table 1-1)
+  power:
+    poe-budget: 390 W with one PWR-C2-640WAC (Table 1-13); 780 W with two 640 W DC supplies (Table 1-14)
+    poe-power-per-port: >-
+      up to 15.4 W (IEEE 802.3af) and up to 30 W PoE+ (IEEE 802.3at) per port (PoE+ and Cisco UPOE Ports)
+    power-supply-options: >-
+      PWR-C2-250WAC, PWR-C2-640WAC, PWR-C2-1025WAC, PWR-C2-640WDC (Power Supply for Catalyst 3650-24TS/PS/TD/PD
+      and 3650-48TS/PS/FS/TD/PD/FD/FQ/PQ/TQ)
+    psu-redundancy: >-
+      two supply slots; the switch operates on one or two supplies, and on two AC, two DC or one of each
+  environmental:
+    operating-temp: >-
+      -5 to +45 C up to 1500 m, -5 to +40 C up to 3000 m, -5 to +35 C up to 4000 m, -5 to +30 C up to
+      5000 m with an AC supply (spec Table 1-1)
+    storage-temp: -40 to 70 C (-40 to 158 F)
+    humidity: 5 to 96%, noncondensing
+    altitude: storage up to 5000 m (16,400 ft)
+  features:
+    stacking: StackWise-160; a 3650 cannot stack with a 3850 (StackWise Ports)
+    usb-storage: USB Type A port for Cisco USB flash drives of 64 MB to 1 GB
+    uplink-optics: >-
+      SFP on G1 and G2; SFP or SFP+ on G3/TE3 and G4/TE4; an SFP+ module in an SFP-only slot does not
+      operate
+chassis:
+  width: 444.5
+  height: 44.45
+  depth: 447.7
+  ru: 1
+  weight-kg: 7.6
+  color: '#d6d7d9'
+  airflow: front-to-back
+  power: ac
+  ears:
+    positions:
+    - {name: flush, label: front-mounting position, default: true}
+    - {name: rear, label: rear-mounting position}
+gaps:
+- what: usb-console-jack
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    The USB mini-Type B console receptacle (Front Panel, USB Mini-Type B Port). It is not yet a library
+    part: the standard `mini-usb-b` is on main and no component presents it. The guide puts the port in
+    the band above the first block, between the CONSOLE lamp and the USB Type A port, at about 67 mm in.
+    The port is placed once the jack is on main, before this change merges. Nothing that reads as a port
+    is drawn there; its lamp and its CONSOLE legend are.
+- what: rack-kit
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  wanted: >-
+    RACK-KIT-T1= (Figure 2-7: 19-, 23-, 24-inch and ETSI brackets; the 19-inch pair ships in the box)
+    as a `kind: kit` component. A component with that part number is not on main, and the Catalyst 9300
+    names the same number, so it is not added here; it is listed under `chassis.kits` once it exists.
+    4PT-KIT-T1= (extension rails for four-point mounting) is likewise not added.
+- what: uplink-legend-and-positions
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    A flat elevation or a square-on photograph of the front. Every position on it is read off an isometric
+    line drawing, and the uplink module's legend "Catalyst 3650 48PoE+ 2X10G" and the cage pitch are read
+    at the figure's coarsest part. The port numerals under the lamps are drawn at the ends of each strip
+    only, because only those are printed.
+- what: rear-figure-positions
+  scope:
+  - rear
+  reason: needs-drawing
+  wanted: >-
+    A flat rear elevation. The rear is read off Figure 1-13, an isometric drawing at about 2.1 px/mm,
+    and the legends under the console and management ports are too small to read exactly.
+- what: mode-button-part
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    A round push-button part for the mode button. The library's closest part is the 4 mm recessed reset
+    button, which is placed here for want of one; the real button is a 5 mm round cap.
+- what: stackwise-adapter
+  scope:
+  - rear
+  reason: needs-drawing
+  wanted: >-
+    The StackWise adapter (C3650-STACK-KIT= sells two with a 0.5 m cable). No figure held draws its face,
+    so it is left for a later batch and the bays accept only the blank.
+- what: sale-status
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    A link to the end-of-sale notice. The Catalyst 3650 series page is held and says End of Sale, but
+    the notice itself is not, so no lifecycle is recorded.
+- what: the-four-undrawn-faces
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    A flat drawing of the lid, the underside and the two side walls. Figure 1-1 shows the lid with the
+    vendor's logo and several screws, and a side wall with a vent field and bracket screw holes, only
+    isometrically. None can be measured.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+  sfp:
+    term: Uplink
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+  sfp-plus:
+    term: Uplink
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  uplink-leds: {term: LED, role: indicator, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the console and management jacks of the rear and the USB Type A port of the front. Two jobs, one
+      purpose: reaching the switch when the data plane cannot, and holding the flash drive its software
+      is copied from.
+  controls: {term: Button, role: management, index-origin: 1}
+  furniture: {term: Part, role: furniture, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        Power Supply Modules (chapter 1): "The switch can operate with either one or two active power
+        supply modules"; both slots must hold a supply or a blank cover.
+  fans:
+    term: Fan module
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 2+1
+      redundancy-note: >-
+        Fan Modules (chapter 1): "Three fans are required for proper cooling" and "The switch can operate
+        with two operational fans".
+  stackwise: {term: StackWise port, role: fabric, index-origin: 1}
+views:
+  front:
+    size: {w: 444.5, h: 44.45}
+    panel:
+      decor:
+      - id: vent-upper
+        at: [367.5, 1.5]
+        size: [72.0, 6.0]
+        pattern: vent
+        vent: 1.0
+        confidence: estimated
+        source: >-
+          Figure 1-1: the upper of the two long slotted bars above the uplink cages, read as fractions
+          of the face height at that end
+      - id: vent-lower
+        at: [367.5, 9.5]
+        size: [72.0, 6.0]
+        pattern: vent
+        vent: 1.0
+        confidence: estimated
+        source: 'Figure 1-1: the lower of the two long slotted bars above the uplink cages'
+      cutouts:
+      - {id: port-1, at: [9.2, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-1, at: [11.5, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-2, at: [9.2, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-2, at: [17.3, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-3, at: [23.17, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-3, at: [25.47, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-4, at: [23.17, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-4, at: [31.27, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-5, at: [37.14, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-5, at: [39.44, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-6, at: [37.14, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-6, at: [45.24, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-7, at: [51.11, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-7, at: [53.41, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-8, at: [51.11, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-8, at: [59.21, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-9, at: [65.08, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-9, at: [67.38, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-10, at: [65.08, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-10, at: [73.18, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-11, at: [79.05, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-11, at: [81.35, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-12, at: [79.05, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-12, at: [87.15, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-13, at: [95.02, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-13, at: [97.32, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-14, at: [95.02, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-14, at: [103.12, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-15, at: [108.99, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-15, at: [111.29, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-16, at: [108.99, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-16, at: [117.09, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-17, at: [122.96, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-17, at: [125.26, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-18, at: [122.96, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-18, at: [131.06, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-19, at: [136.93, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-19, at: [139.23, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-20, at: [136.93, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-20, at: [145.03, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-21, at: [150.9, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-21, at: [153.2, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-22, at: [150.9, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-22, at: [159.0, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-23, at: [164.87, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-23, at: [167.17, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-24, at: [164.87, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-24, at: [172.97, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-25, at: [180.84, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-25, at: [183.14, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-26, at: [180.84, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-26, at: [188.94, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-27, at: [194.81, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-27, at: [197.11, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-28, at: [194.81, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-28, at: [202.91, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-29, at: [208.78, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-29, at: [211.08, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-30, at: [208.78, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-30, at: [216.88, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-31, at: [222.75, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-31, at: [225.05, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-32, at: [222.75, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-32, at: [230.85, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-33, at: [236.72, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-33, at: [239.02, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-34, at: [236.72, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-34, at: [244.82, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-35, at: [250.69, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-35, at: [252.99, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-36, at: [250.69, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-36, at: [258.79, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-37, at: [266.66, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-37, at: [268.96, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-38, at: [266.66, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-38, at: [274.76, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-39, at: [280.63, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-39, at: [282.93, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-40, at: [280.63, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-40, at: [288.73, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-41, at: [294.6, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-41, at: [296.9, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-42, at: [294.6, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-42, at: [302.7, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-43, at: [308.57, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-43, at: [310.87, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-44, at: [308.57, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-44, at: [316.67, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-45, at: [322.54, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-45, at: [324.84, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-46, at: [322.54, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-46, at: [330.64, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-47, at: [336.51, 8.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-47, at: [338.81, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-48, at: [336.51, 20.4], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-48, at: [344.61, 33.5], size: [2.25, 2.0], shape: circle}
+      - {id: uplink-1, at: [373.0, 21.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-uplink-1, at: [378.73, 34.8], size: [2.8, 1.6], shape: rect}
+      - {id: uplink-2, at: [389.3, 21.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-uplink-2, at: [395.03, 34.8], size: [2.8, 1.6], shape: rect}
+      - {id: uplink-3, at: [405.6, 21.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-uplink-3, at: [411.33, 34.8], size: [2.8, 1.6], shape: rect}
+      - {id: uplink-4, at: [421.9, 21.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-uplink-4, at: [427.63, 34.8], size: [2.8, 1.6], shape: rect}
+      - {id: usb-a, at: [77.0, 0.75], size: [12.0, 4.5], shape: rect}
+      - {id: mode, at: [12.4, 2.0], size: [4.0, 4.0], shape: circle}
+      - {id: led-stat, at: [20.2, 1.7], size: [2.8, 1.6], shape: rect}
+      - {id: led-duplx, at: [29.6, 1.7], size: [2.8, 1.6], shape: rect}
+      - {id: led-speed, at: [37.9, 1.7], size: [2.8, 1.6], shape: rect}
+      - {id: led-stack, at: [46.2, 1.7], size: [2.8, 1.6], shape: rect}
+      - {id: led-poe, at: [55.3, 1.7], size: [2.8, 1.6], shape: rect}
+      - {id: led-syst, at: [20.7, 4.8], size: [2.8, 1.6], shape: rect}
+      - {id: led-actv, at: [29.6, 4.8], size: [2.8, 1.6], shape: rect}
+      - {id: led-usb-console, at: [58.8, 4.3], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {id: silk-01, at: [10.9, 35.3], text: 01X, font-size: 1.5, anchor: end, fill: '#2b2e31', for: port-1}
+    - {id: silk-12, at: [89.8, 35.3], text: 12X, font-size: 1.5, anchor: start, fill: '#2b2e31', for: port-12}
+    - {id: silk-13, at: [96.7, 35.3], text: 13X, font-size: 1.5, anchor: end, fill: '#2b2e31', for: port-13}
+    - {id: silk-24, at: [175.6, 35.3], text: 24X, font-size: 1.5, anchor: start, fill: '#2b2e31', for: port-24}
+    - {id: silk-25, at: [182.5, 35.3], text: 25X, font-size: 1.5, anchor: end, fill: '#2b2e31', for: port-25}
+    - {id: silk-36, at: [261.4, 35.3], text: 36X, font-size: 1.5, anchor: start, fill: '#2b2e31', for: port-36}
+    - {id: silk-37, at: [268.4, 35.3], text: 37X, font-size: 1.5, anchor: end, fill: '#2b2e31', for: port-37}
+    - {id: silk-48, at: [347.2, 35.3], text: 48X, font-size: 1.5, anchor: start, fill: '#2b2e31', for: port-48}
+    - {id: silk-g1, at: [377.0, 37.2], text: G1, font-size: 1.4, anchor: end, fill: '#2b2e31', for: uplink-1}
+    - {id: silk-g2, at: [393.3, 37.2], text: G2, font-size: 1.4, anchor: end, fill: '#2b2e31', for: uplink-2}
+    - {id: silk-g3, at: [409.6, 37.2], text: G3, font-size: 1.4, anchor: end, fill: '#2b2e31', for: uplink-3}
+    - {id: silk-te3, at: [415.0, 37.2], text: TE3, font-size: 1.4, anchor: start, fill: '#2b2e31', for: uplink-3}
+    - {id: silk-g4, at: [425.9, 37.2], text: G4, font-size: 1.4, anchor: end, fill: '#2b2e31', for: uplink-4}
+    - {id: silk-te4, at: [431.3, 37.2], text: TE4, font-size: 1.4, anchor: start, fill: '#2b2e31', for: uplink-4}
+    - {id: silk-uplink-model, at: [404.0, 19.4], text: Catalyst 3650 48PoE+ 2X10G, font-size: 1.4, anchor: middle,
+      fill: '#2b2e31', for: chassis}
+    - {id: silk-mode, at: [14.4, 8.0], text: MODE, font-size: 1.1, anchor: middle, fill: '#2b2e31', for: mode}
+    - {id: silk-stat, at: [23.6, 2.87], text: STAT, font-size: 1.2, anchor: start, fill: '#2b2e31', for: led-stat}
+    - {id: silk-duplx, at: [33.0, 2.87], text: DUPLX, font-size: 1.2, anchor: start, fill: '#2b2e31',
+      for: led-duplx}
+    - {id: silk-speed, at: [41.3, 2.87], text: SPEED, font-size: 1.2, anchor: start, fill: '#2b2e31',
+      for: led-speed}
+    - {id: silk-stack, at: [49.6, 2.87], text: STACK, font-size: 1.2, anchor: start, fill: '#2b2e31',
+      for: led-stack}
+    - {id: silk-poe, at: [58.7, 2.87], text: PoE, font-size: 1.2, anchor: start, fill: '#2b2e31', for: led-poe}
+    - {id: silk-syst, at: [24.1, 5.97], text: SYST, font-size: 1.2, anchor: start, fill: '#2b2e31', for: led-syst}
+    - {id: silk-actv, at: [33.0, 5.97], text: ACTV, font-size: 1.2, anchor: start, fill: '#2b2e31', for: led-actv}
+    - {id: silk-console, at: [67.1, 7.5], text: CONSOLE, font-size: 1.1, anchor: middle, fill: '#2b2e31',
+      for: chassis}
+    components:
+      placements:
+      - {ref: std/rj45-ganged@2, id: port-1, at: [9.2, 8.4], rotate: 180, group: rj45, rel-pos: 1}
+      - {ref: std/rj45-ganged@2, id: port-2, at: [9.2, 20.4], group: rj45, rel-pos: 2}
+      - {ref: std/rj45-ganged@2, id: port-3, at: [23.17, 8.4], rotate: 180, group: rj45, rel-pos: 3}
+      - {ref: std/rj45-ganged@2, id: port-4, at: [23.17, 20.4], group: rj45, rel-pos: 4}
+      - {ref: std/rj45-ganged@2, id: port-5, at: [37.14, 8.4], rotate: 180, group: rj45, rel-pos: 5}
+      - {ref: std/rj45-ganged@2, id: port-6, at: [37.14, 20.4], group: rj45, rel-pos: 6}
+      - {ref: std/rj45-ganged@2, id: port-7, at: [51.11, 8.4], rotate: 180, group: rj45, rel-pos: 7}
+      - {ref: std/rj45-ganged@2, id: port-8, at: [51.11, 20.4], group: rj45, rel-pos: 8}
+      - {ref: std/rj45-ganged@2, id: port-9, at: [65.08, 8.4], rotate: 180, group: rj45, rel-pos: 9}
+      - {ref: std/rj45-ganged@2, id: port-10, at: [65.08, 20.4], group: rj45, rel-pos: 10}
+      - {ref: std/rj45-ganged@2, id: port-11, at: [79.05, 8.4], rotate: 180, group: rj45, rel-pos: 11}
+      - {ref: std/rj45-ganged@2, id: port-12, at: [79.05, 20.4], group: rj45, rel-pos: 12}
+      - {ref: std/rj45-ganged@2, id: port-13, at: [95.02, 8.4], rotate: 180, group: rj45, rel-pos: 13}
+      - {ref: std/rj45-ganged@2, id: port-14, at: [95.02, 20.4], group: rj45, rel-pos: 14}
+      - {ref: std/rj45-ganged@2, id: port-15, at: [108.99, 8.4], rotate: 180, group: rj45, rel-pos: 15}
+      - {ref: std/rj45-ganged@2, id: port-16, at: [108.99, 20.4], group: rj45, rel-pos: 16}
+      - {ref: std/rj45-ganged@2, id: port-17, at: [122.96, 8.4], rotate: 180, group: rj45, rel-pos: 17}
+      - {ref: std/rj45-ganged@2, id: port-18, at: [122.96, 20.4], group: rj45, rel-pos: 18}
+      - {ref: std/rj45-ganged@2, id: port-19, at: [136.93, 8.4], rotate: 180, group: rj45, rel-pos: 19}
+      - {ref: std/rj45-ganged@2, id: port-20, at: [136.93, 20.4], group: rj45, rel-pos: 20}
+      - {ref: std/rj45-ganged@2, id: port-21, at: [150.9, 8.4], rotate: 180, group: rj45, rel-pos: 21}
+      - {ref: std/rj45-ganged@2, id: port-22, at: [150.9, 20.4], group: rj45, rel-pos: 22}
+      - {ref: std/rj45-ganged@2, id: port-23, at: [164.87, 8.4], rotate: 180, group: rj45, rel-pos: 23}
+      - {ref: std/rj45-ganged@2, id: port-24, at: [164.87, 20.4], group: rj45, rel-pos: 24}
+      - {ref: std/rj45-ganged@2, id: port-25, at: [180.84, 8.4], rotate: 180, group: rj45, rel-pos: 25}
+      - {ref: std/rj45-ganged@2, id: port-26, at: [180.84, 20.4], group: rj45, rel-pos: 26}
+      - {ref: std/rj45-ganged@2, id: port-27, at: [194.81, 8.4], rotate: 180, group: rj45, rel-pos: 27}
+      - {ref: std/rj45-ganged@2, id: port-28, at: [194.81, 20.4], group: rj45, rel-pos: 28}
+      - {ref: std/rj45-ganged@2, id: port-29, at: [208.78, 8.4], rotate: 180, group: rj45, rel-pos: 29}
+      - {ref: std/rj45-ganged@2, id: port-30, at: [208.78, 20.4], group: rj45, rel-pos: 30}
+      - {ref: std/rj45-ganged@2, id: port-31, at: [222.75, 8.4], rotate: 180, group: rj45, rel-pos: 31}
+      - {ref: std/rj45-ganged@2, id: port-32, at: [222.75, 20.4], group: rj45, rel-pos: 32}
+      - {ref: std/rj45-ganged@2, id: port-33, at: [236.72, 8.4], rotate: 180, group: rj45, rel-pos: 33}
+      - {ref: std/rj45-ganged@2, id: port-34, at: [236.72, 20.4], group: rj45, rel-pos: 34}
+      - {ref: std/rj45-ganged@2, id: port-35, at: [250.69, 8.4], rotate: 180, group: rj45, rel-pos: 35}
+      - {ref: std/rj45-ganged@2, id: port-36, at: [250.69, 20.4], group: rj45, rel-pos: 36}
+      - {ref: std/rj45-ganged@2, id: port-37, at: [266.66, 8.4], rotate: 180, group: rj45, rel-pos: 37}
+      - {ref: std/rj45-ganged@2, id: port-38, at: [266.66, 20.4], group: rj45, rel-pos: 38}
+      - {ref: std/rj45-ganged@2, id: port-39, at: [280.63, 8.4], rotate: 180, group: rj45, rel-pos: 39}
+      - {ref: std/rj45-ganged@2, id: port-40, at: [280.63, 20.4], group: rj45, rel-pos: 40}
+      - {ref: std/rj45-ganged@2, id: port-41, at: [294.6, 8.4], rotate: 180, group: rj45, rel-pos: 41}
+      - {ref: std/rj45-ganged@2, id: port-42, at: [294.6, 20.4], group: rj45, rel-pos: 42}
+      - {ref: std/rj45-ganged@2, id: port-43, at: [308.57, 8.4], rotate: 180, group: rj45, rel-pos: 43}
+      - {ref: std/rj45-ganged@2, id: port-44, at: [308.57, 20.4], group: rj45, rel-pos: 44}
+      - {ref: std/rj45-ganged@2, id: port-45, at: [322.54, 8.4], rotate: 180, group: rj45, rel-pos: 45}
+      - {ref: std/rj45-ganged@2, id: port-46, at: [322.54, 20.4], group: rj45, rel-pos: 46}
+      - {ref: std/rj45-ganged@2, id: port-47, at: [336.51, 8.4], rotate: 180, group: rj45, rel-pos: 47}
+      - {ref: std/rj45-ganged@2, id: port-48, at: [336.51, 20.4], group: rj45, rel-pos: 48}
+      - ref: common/led-arrow-sm@1
+        id: led-port-1
+        at: [11.5, 33.5]
+        skin: up
+        states: &id001
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: blocked, color: '#f59e0b'}
+        - {name: fault, color: '#f59e0b'}
+        for: port-1
+        group: port-leds
+        rel-pos: 1
+      - ref: common/led-arrow-sm@1
+        id: led-port-2
+        at: [17.3, 33.5]
+        skin: down
+        states: *id001
+        for: port-2
+        group: port-leds
+        rel-pos: 2
+      - ref: common/led-arrow-sm@1
+        id: led-port-3
+        at: [25.47, 33.5]
+        skin: up
+        states: *id001
+        for: port-3
+        group: port-leds
+        rel-pos: 3
+      - ref: common/led-arrow-sm@1
+        id: led-port-4
+        at: [31.27, 33.5]
+        skin: down
+        states: *id001
+        for: port-4
+        group: port-leds
+        rel-pos: 4
+      - ref: common/led-arrow-sm@1
+        id: led-port-5
+        at: [39.44, 33.5]
+        skin: up
+        states: *id001
+        for: port-5
+        group: port-leds
+        rel-pos: 5
+      - ref: common/led-arrow-sm@1
+        id: led-port-6
+        at: [45.24, 33.5]
+        skin: down
+        states: *id001
+        for: port-6
+        group: port-leds
+        rel-pos: 6
+      - ref: common/led-arrow-sm@1
+        id: led-port-7
+        at: [53.41, 33.5]
+        skin: up
+        states: *id001
+        for: port-7
+        group: port-leds
+        rel-pos: 7
+      - ref: common/led-arrow-sm@1
+        id: led-port-8
+        at: [59.21, 33.5]
+        skin: down
+        states: *id001
+        for: port-8
+        group: port-leds
+        rel-pos: 8
+      - ref: common/led-arrow-sm@1
+        id: led-port-9
+        at: [67.38, 33.5]
+        skin: up
+        states: *id001
+        for: port-9
+        group: port-leds
+        rel-pos: 9
+      - ref: common/led-arrow-sm@1
+        id: led-port-10
+        at: [73.18, 33.5]
+        skin: down
+        states: *id001
+        for: port-10
+        group: port-leds
+        rel-pos: 10
+      - ref: common/led-arrow-sm@1
+        id: led-port-11
+        at: [81.35, 33.5]
+        skin: up
+        states: *id001
+        for: port-11
+        group: port-leds
+        rel-pos: 11
+      - ref: common/led-arrow-sm@1
+        id: led-port-12
+        at: [87.15, 33.5]
+        skin: down
+        states: *id001
+        for: port-12
+        group: port-leds
+        rel-pos: 12
+      - ref: common/led-arrow-sm@1
+        id: led-port-13
+        at: [97.32, 33.5]
+        skin: up
+        states: *id001
+        for: port-13
+        group: port-leds
+        rel-pos: 13
+      - ref: common/led-arrow-sm@1
+        id: led-port-14
+        at: [103.12, 33.5]
+        skin: down
+        states: *id001
+        for: port-14
+        group: port-leds
+        rel-pos: 14
+      - ref: common/led-arrow-sm@1
+        id: led-port-15
+        at: [111.29, 33.5]
+        skin: up
+        states: *id001
+        for: port-15
+        group: port-leds
+        rel-pos: 15
+      - ref: common/led-arrow-sm@1
+        id: led-port-16
+        at: [117.09, 33.5]
+        skin: down
+        states: *id001
+        for: port-16
+        group: port-leds
+        rel-pos: 16
+      - ref: common/led-arrow-sm@1
+        id: led-port-17
+        at: [125.26, 33.5]
+        skin: up
+        states: *id001
+        for: port-17
+        group: port-leds
+        rel-pos: 17
+      - ref: common/led-arrow-sm@1
+        id: led-port-18
+        at: [131.06, 33.5]
+        skin: down
+        states: *id001
+        for: port-18
+        group: port-leds
+        rel-pos: 18
+      - ref: common/led-arrow-sm@1
+        id: led-port-19
+        at: [139.23, 33.5]
+        skin: up
+        states: *id001
+        for: port-19
+        group: port-leds
+        rel-pos: 19
+      - ref: common/led-arrow-sm@1
+        id: led-port-20
+        at: [145.03, 33.5]
+        skin: down
+        states: *id001
+        for: port-20
+        group: port-leds
+        rel-pos: 20
+      - ref: common/led-arrow-sm@1
+        id: led-port-21
+        at: [153.2, 33.5]
+        skin: up
+        states: *id001
+        for: port-21
+        group: port-leds
+        rel-pos: 21
+      - ref: common/led-arrow-sm@1
+        id: led-port-22
+        at: [159.0, 33.5]
+        skin: down
+        states: *id001
+        for: port-22
+        group: port-leds
+        rel-pos: 22
+      - ref: common/led-arrow-sm@1
+        id: led-port-23
+        at: [167.17, 33.5]
+        skin: up
+        states: *id001
+        for: port-23
+        group: port-leds
+        rel-pos: 23
+      - ref: common/led-arrow-sm@1
+        id: led-port-24
+        at: [172.97, 33.5]
+        skin: down
+        states: *id001
+        for: port-24
+        group: port-leds
+        rel-pos: 24
+      - ref: common/led-arrow-sm@1
+        id: led-port-25
+        at: [183.14, 33.5]
+        skin: up
+        states: *id001
+        for: port-25
+        group: port-leds
+        rel-pos: 25
+      - ref: common/led-arrow-sm@1
+        id: led-port-26
+        at: [188.94, 33.5]
+        skin: down
+        states: *id001
+        for: port-26
+        group: port-leds
+        rel-pos: 26
+      - ref: common/led-arrow-sm@1
+        id: led-port-27
+        at: [197.11, 33.5]
+        skin: up
+        states: *id001
+        for: port-27
+        group: port-leds
+        rel-pos: 27
+      - ref: common/led-arrow-sm@1
+        id: led-port-28
+        at: [202.91, 33.5]
+        skin: down
+        states: *id001
+        for: port-28
+        group: port-leds
+        rel-pos: 28
+      - ref: common/led-arrow-sm@1
+        id: led-port-29
+        at: [211.08, 33.5]
+        skin: up
+        states: *id001
+        for: port-29
+        group: port-leds
+        rel-pos: 29
+      - ref: common/led-arrow-sm@1
+        id: led-port-30
+        at: [216.88, 33.5]
+        skin: down
+        states: *id001
+        for: port-30
+        group: port-leds
+        rel-pos: 30
+      - ref: common/led-arrow-sm@1
+        id: led-port-31
+        at: [225.05, 33.5]
+        skin: up
+        states: *id001
+        for: port-31
+        group: port-leds
+        rel-pos: 31
+      - ref: common/led-arrow-sm@1
+        id: led-port-32
+        at: [230.85, 33.5]
+        skin: down
+        states: *id001
+        for: port-32
+        group: port-leds
+        rel-pos: 32
+      - ref: common/led-arrow-sm@1
+        id: led-port-33
+        at: [239.02, 33.5]
+        skin: up
+        states: *id001
+        for: port-33
+        group: port-leds
+        rel-pos: 33
+      - ref: common/led-arrow-sm@1
+        id: led-port-34
+        at: [244.82, 33.5]
+        skin: down
+        states: *id001
+        for: port-34
+        group: port-leds
+        rel-pos: 34
+      - ref: common/led-arrow-sm@1
+        id: led-port-35
+        at: [252.99, 33.5]
+        skin: up
+        states: *id001
+        for: port-35
+        group: port-leds
+        rel-pos: 35
+      - ref: common/led-arrow-sm@1
+        id: led-port-36
+        at: [258.79, 33.5]
+        skin: down
+        states: *id001
+        for: port-36
+        group: port-leds
+        rel-pos: 36
+      - ref: common/led-arrow-sm@1
+        id: led-port-37
+        at: [268.96, 33.5]
+        skin: up
+        states: *id001
+        for: port-37
+        group: port-leds
+        rel-pos: 37
+      - ref: common/led-arrow-sm@1
+        id: led-port-38
+        at: [274.76, 33.5]
+        skin: down
+        states: *id001
+        for: port-38
+        group: port-leds
+        rel-pos: 38
+      - ref: common/led-arrow-sm@1
+        id: led-port-39
+        at: [282.93, 33.5]
+        skin: up
+        states: *id001
+        for: port-39
+        group: port-leds
+        rel-pos: 39
+      - ref: common/led-arrow-sm@1
+        id: led-port-40
+        at: [288.73, 33.5]
+        skin: down
+        states: *id001
+        for: port-40
+        group: port-leds
+        rel-pos: 40
+      - ref: common/led-arrow-sm@1
+        id: led-port-41
+        at: [296.9, 33.5]
+        skin: up
+        states: *id001
+        for: port-41
+        group: port-leds
+        rel-pos: 41
+      - ref: common/led-arrow-sm@1
+        id: led-port-42
+        at: [302.7, 33.5]
+        skin: down
+        states: *id001
+        for: port-42
+        group: port-leds
+        rel-pos: 42
+      - ref: common/led-arrow-sm@1
+        id: led-port-43
+        at: [310.87, 33.5]
+        skin: up
+        states: *id001
+        for: port-43
+        group: port-leds
+        rel-pos: 43
+      - ref: common/led-arrow-sm@1
+        id: led-port-44
+        at: [316.67, 33.5]
+        skin: down
+        states: *id001
+        for: port-44
+        group: port-leds
+        rel-pos: 44
+      - ref: common/led-arrow-sm@1
+        id: led-port-45
+        at: [324.84, 33.5]
+        skin: up
+        states: *id001
+        for: port-45
+        group: port-leds
+        rel-pos: 45
+      - ref: common/led-arrow-sm@1
+        id: led-port-46
+        at: [330.64, 33.5]
+        skin: down
+        states: *id001
+        for: port-46
+        group: port-leds
+        rel-pos: 46
+      - ref: common/led-arrow-sm@1
+        id: led-port-47
+        at: [338.81, 33.5]
+        skin: up
+        states: *id001
+        for: port-47
+        group: port-leds
+        rel-pos: 47
+      - ref: common/led-arrow-sm@1
+        id: led-port-48
+        at: [344.61, 33.5]
+        skin: down
+        states: *id001
+        for: port-48
+        group: port-leds
+        rel-pos: 48
+      - {ref: std/sfp-ganged@1, id: uplink-1, at: [373.0, 21.8], group: sfp, rel-pos: 1}
+      - {ref: std/sfp-ganged@1, id: uplink-2, at: [389.3, 21.8], group: sfp, rel-pos: 2}
+      - ref: common/led-rect-sm@1
+        id: led-uplink-1
+        at: [378.73, 34.8]
+        states: &id002
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#f59e0b'}
+        for: uplink-1
+        group: uplink-leds
+        rel-pos: 1
+      - ref: common/led-rect-sm@1
+        id: led-uplink-2
+        at: [395.03, 34.8]
+        states: *id002
+        for: uplink-2
+        group: uplink-leds
+        rel-pos: 2
+      - {ref: std/sfp-ganged@1, id: uplink-3, at: [405.6, 21.8], group: sfp-plus, rel-pos: 3}
+      - {ref: std/sfp-ganged@1, id: uplink-4, at: [421.9, 21.8], group: sfp-plus, rel-pos: 4}
+      - ref: common/led-rect-sm@1
+        id: led-uplink-3
+        at: [411.33, 34.8]
+        states: &id003
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#f59e0b'}
+        for: uplink-3
+        group: uplink-leds
+        rel-pos: 3
+      - ref: common/led-rect-sm@1
+        id: led-uplink-4
+        at: [427.63, 34.8]
+        states: *id003
+        for: uplink-4
+        group: uplink-leds
+        rel-pos: 4
+      - {ref: std/usb-a@1, id: usb-a, at: [77.0, 0.75], group: mgmt, rel-pos: 1}
+      - {ref: common/usb-symbol@1, id: usb-mark, at: [70.6, 0.8], group: furniture, rel-pos: 1, for: chassis}
+      - {ref: common/reset-button@1, id: mode, at: [12.4, 2.0], group: controls, rel-pos: 1, for: chassis}
+      - ref: common/led-rect-sm@1
+        id: led-stat
+        at: [20.2, 1.7]
+        group: leds
+        rel-pos: 1
+        for: chassis
+        states:
+        - 'off'
+        - {name: selected, color: '#22c55e'}
+      - ref: common/led-rect-sm@1
+        id: led-duplx
+        at: [29.6, 1.7]
+        group: leds
+        rel-pos: 2
+        for: chassis
+        states:
+        - 'off'
+        - {name: selected, color: '#22c55e'}
+      - ref: common/led-rect-sm@1
+        id: led-speed
+        at: [37.9, 1.7]
+        group: leds
+        rel-pos: 3
+        for: chassis
+        states:
+        - 'off'
+        - {name: selected, color: '#22c55e'}
+      - ref: common/led-rect-sm@1
+        id: led-stack
+        at: [46.2, 1.7]
+        group: leds
+        rel-pos: 4
+        for: chassis
+        states:
+        - 'off'
+        - {name: selected, color: '#22c55e'}
+      - ref: common/led-rect-sm@1
+        id: led-poe
+        at: [55.3, 1.7]
+        group: leds
+        rel-pos: 5
+        for: chassis
+        states:
+        - 'off'
+        - {name: selected, color: '#22c55e'}
+      - ref: common/led-rect-sm@1
+        id: led-syst
+        at: [20.7, 4.8]
+        group: leds
+        rel-pos: 6
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-rect-sm@1
+        id: led-actv
+        at: [29.6, 4.8]
+        group: leds
+        rel-pos: 7
+        for: chassis
+        states:
+        - 'off'
+        - {name: active, color: '#22c55e'}
+        - {name: error, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-usb-console
+        at: [58.8, 4.3]
+        group: leds
+        rel-pos: 8
+        for: chassis
+        states:
+        - 'off'
+        - {name: enabled, color: '#22c55e'}
+    regions:
+    - id: logo-zone
+      at: [1.2, 0.8]
+      size: {w: 10.5, h: 6.0}
+      label: Vendor logo; not drawn
+    - id: downlinks
+      at: [8.0, 7.4]
+      size: {w: 342.0, h: 32.0}
+      label: 48 x 10/100/1000 PoE+ RJ-45
+      members:
+      - port-1
+      - port-2
+      - port-3
+      - port-4
+      - port-5
+      - port-6
+      - port-7
+      - port-8
+      - port-9
+      - port-10
+      - port-11
+      - port-12
+      - port-13
+      - port-14
+      - port-15
+      - port-16
+      - port-17
+      - port-18
+      - port-19
+      - port-20
+      - port-21
+      - port-22
+      - port-23
+      - port-24
+      - port-25
+      - port-26
+      - port-27
+      - port-28
+      - port-29
+      - port-30
+      - port-31
+      - port-32
+      - port-33
+      - port-34
+      - port-35
+      - port-36
+      - port-37
+      - port-38
+      - port-39
+      - port-40
+      - port-41
+      - port-42
+      - port-43
+      - port-44
+      - port-45
+      - port-46
+      - port-47
+      - port-48
+    - id: uplinks
+      at: [366.0, 1.0]
+      size: {w: 76.0, h: 40.0}
+      label: 2 x 1G SFP and 2 x 1G SFP / 10G SFP+
+      members:
+      - uplink-1
+      - uplink-2
+      - uplink-3
+      - uplink-4
+    - id: status
+      at: [10.0, 0.8]
+      size: {w: 82.0, h: 7.0}
+      label: Mode button, status lamps and USB
+      members:
+      - mode
+      - led-stat
+      - led-duplx
+      - led-speed
+      - led-stack
+      - led-poe
+      - led-syst
+      - led-actv
+      - led-usb-console
+      - usb-a
+  rear:
+    size: {w: 444.5, h: 44.45}
+    panel:
+      decor:
+      - id: ground-hole-1
+        at: [4.3, 6.5]
+        size: [3.0, 3.0]
+        shape: circle
+        fill: '#5c6167'
+        confidence: estimated
+        source: 'Figure 1-13, callout 1: the upper of the two ground-lug holes'
+      - id: ground-hole-2
+        at: [4.3, 29.5]
+        size: [3.0, 3.0]
+        shape: circle
+        fill: '#5c6167'
+        confidence: estimated
+        source: 'Figure 1-13, callout 1: the lower of the two ground-lug holes'
+      cutouts:
+      - {id: console, at: [13.0, 6.2], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt, at: [13.0, 18.2], size: [12.7, 11.0], shape: rect}
+      - {id: led-console, at: [21.0, 38.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-mgmt, at: [28.0, 38.2], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {id: silk-console, at: [3.0, 40.6], text: CONSOLE, font-size: 1.1, anchor: start, fill: '#2b2e31',
+      for: console}
+    - {id: silk-mgmt, at: [31.5, 40.6], text: MGMT, font-size: 1.1, anchor: start, fill: '#2b2e31', for: mgmt}
+    components:
+      bays:
+      - id: fan-1
+        at: [42.5, 1.65]
+        size: {w: 43.94, h: 41.15}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - cisco/fan-t1@1
+        default: cisco/fan-t1@1
+      - id: fan-2
+        at: [116.5, 1.65]
+        size: {w: 43.94, h: 41.15}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - cisco/fan-t1@1
+        default: cisco/fan-t1@1
+      - id: fan-3
+        at: [190.5, 1.65]
+        size: {w: 43.94, h: 41.15}
+        group: fans
+        rel-pos: 3
+        accepts:
+        - cisco/fan-t1@1
+        default: cisco/fan-t1@1
+      - id: stack-1
+        at: [93.5, 9.2]
+        size: {w: 16.0, h: 26.0}
+        group: stackwise
+        rel-pos: 1
+        accepts:
+        - cisco/c3650-stackwise-blank@1
+        default: cisco/c3650-stackwise-blank@1
+      - id: stack-2
+        at: [167.5, 9.2]
+        size: {w: 16.0, h: 26.0}
+        group: stackwise
+        rel-pos: 2
+        accepts:
+        - cisco/c3650-stackwise-blank@1
+        default: cisco/c3650-stackwise-blank@1
+      - id: psu-1
+        at: [250.0, 2.16]
+        size: {w: 95.25, h: 40.13}
+        group: psus
+        rel-pos: 1
+        accepts:
+        - cisco/pwr-c2-250wac@1
+        - cisco/pwr-c2-640wac@1
+        - cisco/pwr-c2-1025wac@1
+        - cisco/pwr-c2-640wdc@1
+        - cisco/pwr-c2-blank@1
+        default: cisco/pwr-c2-640wac@1
+      - id: psu-2
+        at: [347.0, 2.16]
+        size: {w: 95.25, h: 40.13}
+        group: psus
+        rel-pos: 2
+        accepts:
+        - cisco/pwr-c2-250wac@1
+        - cisco/pwr-c2-640wac@1
+        - cisco/pwr-c2-1025wac@1
+        - cisco/pwr-c2-640wdc@1
+        - cisco/pwr-c2-blank@1
+        default: cisco/pwr-c2-blank@1
+      placements:
+      - ref: std/rj45-ganged@2
+        id: console
+        at: [13.0, 6.2]
+        rotate: 180
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: rj45-serial, role: console}
+      - ref: std/rj45-ganged@2
+        id: mgmt
+        at: [13.0, 18.2]
+        group: mgmt
+        rel-pos: 3
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+      - {ref: common/ground-symbol@1, id: ground-mark, at: [2.8, 16.0], group: furniture, rel-pos: 2}
+      - ref: common/led-dot@1
+        id: led-console
+        at: [21.0, 38.2]
+        group: leds
+        rel-pos: 9
+        for: console
+        states:
+        - 'off'
+        - {name: enabled, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-mgmt
+        at: [28.0, 38.2]
+        group: leds
+        rel-pos: 10
+        for: mgmt
+        states:
+        - 'off'
+        - {name: link, color: '#22c55e'}
+    regions:
+    - id: out-of-band
+      at: [1.0, 5.0]
+      size: {w: 38.0, h: 36.0}
+      label: Ground, console and management
+      members:
+      - console
+      - mgmt
+      - led-console
+      - led-mgmt
+      - ground-mark
+    - id: cooling
+      at: [41.5, 0.8]
+      size: {w: 194.5, h: 42.9}
+      label: Fan modules and StackWise ports
+      members:
+      - fan-1
+      - fan-2
+      - fan-3
+      - stack-1
+      - stack-2
+    - id: power
+      at: [249.0, 1.2]
+      size: {w: 194.0, h: 42.0}
+      label: Power supplies
+      members:
+      - psu-1
+      - psu-2
+  top:
+    size: {w: 444.5, h: 447.7}
+    empty: >-
+      Not drawn flat by any held source. Figure 1-1 shows the lid isometrically with the vendor's logo
+      and a row of screws, and Figure 1-16 the lid's raised edge; nothing there can be measured.
+  bottom:
+    size: {w: 444.5, h: 447.7}
+    empty: >-
+      Not drawn by any held source. The guide says rubber feet are attached "to the recessed areas at
+      the bottom of the chassis" (Figure 2-11) and draws no flat underside.
+  left:
+    size: {w: 447.7, h: 44.45}
+    empty: >-
+      Not drawn flat by any held source. Figure 2-8 shows a side wall isometrically with bracket screw
+      holes, and the guide draws a vent field at one end of it; nothing there can be measured.
+  right:
+    size: {w: 447.7, h: 44.45}
+    empty: >-
+      Not drawn flat by any held source. Figure 1-1 shows the side wall nearest the viewer with a vent
+      field and screws; nothing there can be measured.
+configurations:
+  ac:
+    kind: base
+    description: >-
+      One PWR-C2-640WAC in bay 1 and the PWR-C2-BLANK cover in bay 2, three FAN-T1 fan modules and a StackWise
+      adapter blank in each StackWise port - the switch as Table 1-1 sells it, with every port empty.
+      The guide prints a SKU for each software image, WS-C3650-48PD-L, -S and -E, and none for the hardware
+      alone, so this build carries no part number.
+    default: true
+  ac-dual:
+    kind: example
+    description: >-
+      Two PWR-C2-640WAC supplies, the "(1) 640 W + (1) 640 W" combination of Table 1-15. The guide prints
+      no SKU for it.
+    bays: {psu-2: cisco/pwr-c2-640wac@1}
+  ac-1025:
+    kind: example
+    description: >-
+      One PWR-C2-1025WAC in bay 1 and the blank cover in bay 2, the "(1) 1025 W" combination of Table
+      1-15. The guide prints no SKU for it.
+    bays: {psu-1: cisco/pwr-c2-1025wac@1}
+  dc:
+    kind: example
+    description: >-
+      One PWR-C2-640WDC in bay 1 and the blank cover in bay 2, the DC build of Table 1-14. The guide prints
+      no SKU for it.
+    bays: {psu-1: cisco/pwr-c2-640wdc@1}
+  dc-dual:
+    kind: example
+    description: Two PWR-C2-640WDC supplies, 780 W of PoE (Table 1-14). The guide prints no SKU for it.
+    bays: {psu-1: cisco/pwr-c2-640wdc@1, psu-2: cisco/pwr-c2-640wdc@1}
+references:
+- title: Cisco Catalyst 3650 Switches Hardware Installation Guide (September 2016, OL-29734-01)
+  url: >-
+    https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst3650/hardware/installation/guide/Cat3650hig_book.pdf
+  sha256: 869ad32a4637185d507d38022a8ea870557f1c2e5a7afa9bf7257069faad8329
