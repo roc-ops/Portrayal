@@ -288,8 +288,8 @@ def test_9504_supplies_lie_flat_in_two_rows_of_two_either_side_of_the_lamp_panel
         assert (ps["size"]["w"], ps["size"]["h"]) == pytest.approx((5.25 * IN, 1.75 * IN), abs=0.05)
     assert front["ps-1"]["at"][0] == front["ps-2"]["at"][0] < front["ps-3"]["at"][0] == front["ps-4"]["at"][0]
     assert front["ps-1"]["at"][1] == front["ps-3"]["at"][1] < front["ps-2"]["at"][1] == front["ps-4"]["at"][1]
-    # the centre panel between them is 17.5 - 2 x 5.25 = 7.0 in wide
-    assert front["ps-3"]["at"][0] - (front["ps-1"]["at"][0] + 5.25 * IN) == pytest.approx(7.0 * IN, abs=0.1)
+    # the row is inset to the cage, so the centre panel between them is 17.0 - 2 x 5.25 = 6.5 in wide
+    assert front["ps-3"]["at"][0] - (front["ps-1"]["at"][0] + 5.25 * IN) == pytest.approx(6.5 * IN, abs=0.1)
     lamps = [p for p in device["views"]["front"]["components"]["placements"] if p["group"] == "leds"]
     assert len(lamps) == 7
     assert all(front["ps-1"]["at"][0] + 5.25 * IN <= p["at"][0] <= front["ps-3"]["at"][0] for p in lamps)
@@ -493,3 +493,42 @@ def test_module_types_export(name):
     file = contract(name)["attrs"]["model"] + ".yaml"     # a module is exported under its model
     assert (EXPORTS / "netbox/module-types/Cisco" / file).exists(), f"no NetBox module type for {name}"
     assert (EXPORTS / "nautobot/module-types/Cisco" / file).exists()
+
+
+# ---- the face against the guide's figures (positions are estimated from isometric drawings)
+
+def _extent(rows):
+    return min(b["at"][0] for b in rows), max(b["at"][0] + b["size"]["w"] for b in rows)
+
+
+def test_9504_supervisors_span_the_line_card_width():
+    """The guide's front figure lines the two supervisors up with the line cards' right edge."""
+    b = by_id(load("9504"), "front")
+    cards = _extent([b[f"lc-{i}"] for i in range(1, 5)])
+    sups = _extent([b["sup-1"], b["sup-2"]])
+    assert sups == pytest.approx(cards, abs=0.01)
+    assert b["sup-1"]["at"][0] + b["sup-1"]["size"]["w"] <= b["sup-2"]["at"][0] + 0.01
+
+
+def test_9504_supply_row_is_inset_like_the_rows_above():
+    """The figure shows the supplies inside the chassis edges, level with the cards."""
+    b = by_id(load("9504"), "front")
+    cards = _extent([b[f"lc-{i}"] for i in range(1, 5)])
+    supplies = _extent([b[f"ps-{i}"] for i in range(1, 5)])
+    assert supplies == pytest.approx(cards, abs=0.01)
+
+
+def test_9516_controllers_sit_in_a_full_width_tray_below_the_fans():
+    d = load("9516")
+    rear = d["views"]["rear"]
+    tray = [r for r in rear.get("panel", {}).get("decor", []) if r["size"][0] == rear["size"]["w"]]
+    assert tray, "no full-width tray drawn across the rear"
+    x, y = tray[0]["at"]
+    w, h = tray[0]["size"]
+    assert x == 0 and y + h == pytest.approx(rear["size"]["h"], abs=0.01)
+    b = by_id(d, "rear")
+    for fan in ("fan-1", "fan-2", "fan-3"):
+        assert b[fan]["at"][1] + b[fan]["size"]["h"] <= y + 0.01
+    for sc in ("sc-1", "sc-2"):
+        bay = b[sc]
+        assert bay["at"][1] >= y and bay["at"][1] + bay["size"]["h"] <= y + h

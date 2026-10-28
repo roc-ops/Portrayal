@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: n9k-c9516
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Cisco
 model: N9K-C9516
@@ -80,8 +80,14 @@ provenance:
       tall, sit behind them on a pitch of half a fan tray, so FM 1 and FM 2 are behind FAN 1, FM 3 and FM 4
       behind FAN 2, FM 5 and FM 6 behind FAN 3 (the guide says the even-numbered fabric slot is the one behind
       a fan tray that powers it, PDF p131, printed 125). The two system controllers, 7.81 in (198.37 mm) wide
-      with brackets and 1.42 in (36.07 mm) high, sit below the fan trays. The vertical position of the
-      controllers and the margin above the fan trays are estimated.
+      with brackets and 1.42 in (36.07 mm) high, sit below the fan trays. The margin above the fan trays is
+      estimated. In the rear figure (fig-0013, PDF p11) the controllers sit in a recessed tray that runs the
+      full width of the face under the fan trays; it is drawn as a full-width panel from the fan trays' lower
+      end (821.18 mm) to the foot of the face, and the controllers stand near its top, about 18 mm below its
+      edge and inset 23.85 mm from each side, estimated by laying the figure's tray, fan-tray foot and
+      controller edges against the face height (the figure is isometric, so this is a ratio, not a
+      measurement). The fan trays keep the guide's 32.08 in height: the figure's fan-tray foot, read the same
+      way, falls at about 808 mm, within the isometric error of that figure.
   slots:
     confidence: datasheet
     note: >-
@@ -396,6 +402,9 @@ views:
     - {id: mounting-brackets, label: 'Two vertical mounting brackets that mount the chassis onto the rack - present but not dimensioned in any figure'}
   rear:
     size: {w: 444.5, h: 933.45}
+    panel:
+      decor:
+      - {at: [0, 821.18], size: [444.5, 112.27], fill: '#b9bcc1'}
     components:
       bays:
       - {id: fan-1, at: [30.2, 6.35], size: {w: 128.02, h: 814.83}, accepts: ['cisco/n9k-c9516-fan@1'], group: fan-trays, rel-pos: 0, default: cisco/n9k-c9516-fan@1}
@@ -407,8 +416,8 @@ views:
       - {id: fm-4, at: [222.995, 27.685], size: {w: 62.48, h: 772.16}, accepts: ['cisco/n9k-c9516-fm@1', 'cisco/n9k-c9516-fm-e@1', 'cisco/n9k-c9516-fm-e2@1', 'cisco/n9k-c9516-fm-cv@1', 'cisco/n9k-c9516-fm-z@1'], under: fan-2, group: fabric, rel-pos: 3, default: cisco/n9k-c9516-fm@1}
       - {id: fm-5, at: [287.005, 27.685], size: {w: 62.48, h: 772.16}, accepts: ['cisco/n9k-c9516-fm@1', 'cisco/n9k-c9516-fm-e@1', 'cisco/n9k-c9516-fm-e2@1', 'cisco/n9k-c9516-fm-cv@1', 'cisco/n9k-c9516-fm-z@1'], under: fan-3, group: fabric, rel-pos: 4, default: cisco/n9k-c9516-fm@1}
       - {id: fm-6, at: [351.015, 27.685], size: {w: 62.48, h: 772.16}, accepts: ['cisco/n9k-c9516-fm@1', 'cisco/n9k-c9516-fm-e@1', 'cisco/n9k-c9516-fm-e2@1', 'cisco/n9k-c9516-fm-cv@1', 'cisco/n9k-c9516-fm-z@1'], under: fan-3, group: fabric, rel-pos: 5, default: cisco/n9k-c9516-fm@1}
-      - {id: sc-1, at: [23.85, 850.0], size: {w: 198.37, h: 36.07}, accepts: ['cisco/n9k-sc-a@1'], group: system-controllers, rel-pos: 0, default: cisco/n9k-sc-a@1}
-      - {id: sc-2, at: [222.22, 850.0], size: {w: 198.37, h: 36.07}, accepts: ['cisco/n9k-sc-a@1'], group: system-controllers, rel-pos: 1, default: cisco/n9k-sc-a@1}
+      - {id: sc-1, at: [23.85, 839.0], size: {w: 198.37, h: 36.07}, accepts: ['cisco/n9k-sc-a@1'], group: system-controllers, rel-pos: 0, default: cisco/n9k-sc-a@1}
+      - {id: sc-2, at: [222.22, 839.0], size: {w: 198.37, h: 36.07}, accepts: ['cisco/n9k-sc-a@1'], group: system-controllers, rel-pos: 1, default: cisco/n9k-sc-a@1}
     regions:
     - {id: fan-tray-slots, label: 'Fan trays FAN 1 to FAN 3, left to right - modules 41 to 43'}
     - {id: fabric-module-slots, label: 'Fabric modules FM 1 to FM 6 (slots 21 to 26), left to right, behind the fan trays'}

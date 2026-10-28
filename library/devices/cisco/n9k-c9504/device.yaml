@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: n9k-c9504
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Cisco
 model: N9K-C9504
@@ -61,8 +61,13 @@ provenance:
       mm) stacked top to bottom from the top of the face, centred in it as the 17.0 in (431.8 mm) cage; the
       two supervisors, 1.75 in high and 8.0 in (203.2 mm) wide with brackets, side by side; then four power
       supplies of 5.25 in (133.35 mm) by 1.75 in (44.45 mm) lying flat in two rows of two, one pair at each
-      side of a centre panel. The arithmetic closes: 4 x 44.45 + 44.45 + 2 x 44.45 = 311.15 mm, and the panel
-      is 17.5 - 2 x 5.25 = 7.0 in (177.8 mm) wide. The supplies are the shared parts, drawn standing on end,
+      side of a centre panel. The arithmetic closes: 4 x 44.45 + 44.45 + 2 x 44.45 = 311.15 mm. In the figure
+      (fig-0007, PDF p10) the supervisor row and the supply row both reach the line cards' left and right
+      edges, so each row is inset 0.25 in (6.35 mm) from the chassis edge like the cards, estimated by laying
+      the figure's row ends against the card ends. The two supervisors keep their own 8.0 in width (the
+      part is shared with the 9508 and 9516 and is not changed): SUP 1 stands at the cage's left edge and SUP 2
+      at its right edge, which leaves a 1.0 in (25.4 mm) gap between them, not at the right end. The supplies
+      stand at the cage's edges and the panel between them is 17.0 - 2 x 5.25 = 6.5 in (165.1 mm) wide. The supplies are the shared parts, drawn standing on end,
       so each bay turns its supply by 270 degrees: in the figure the grille is at the outer end, the power
       receptacle and handle at the inner end, and the two small lamps at the lower outer corner, which is
       what a quarter turn of the part (grille at the top, receptacle at the bottom, lamps top left) gives.
@@ -374,7 +379,7 @@ views:
     size: {w: 444.5, h: 311.15}
     panel:
       decor:
-      - {at: [133.35, 222.25], size: [177.8, 88.9], fill: '#c9ccd0'}
+      - {at: [139.7, 222.25], size: [165.1, 88.9], fill: '#c9ccd0'}
     silkscreen:
     - {at: [165.0, 275.5], text: BCN, font-size: 3, anchor: middle, for: chassis}
     - {at: [183.6, 275.5], text: SUP, font-size: 3, anchor: middle, for: chassis}
@@ -390,11 +395,11 @@ views:
       - {id: lc-3, at: [6.35, 88.9], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1'], group: line-cards, rel-pos: 2, default: cisco/n9k-c9500-lc-cv@1}
       - {id: lc-4, at: [6.35, 133.35], size: {w: 431.8, h: 44.45}, accepts: ['cisco/n9k-c9500-lc-cv@1'], group: line-cards, rel-pos: 3, default: cisco/n9k-c9500-lc-cv@1}
       - {id: sup-1, at: [6.35, 177.8], size: {w: 203.2, h: 44.45}, accepts: ['cisco/n9k-sup-a@1', 'cisco/n9k-sup-a-plus@1', 'cisco/n9k-sup-b@1', 'cisco/n9k-sup-b-plus@1'], group: supervisors, rel-pos: 0, default: cisco/n9k-sup-b@1}
-      - {id: sup-2, at: [209.55, 177.8], size: {w: 203.2, h: 44.45}, accepts: ['cisco/n9k-sup-a@1', 'cisco/n9k-sup-a-plus@1', 'cisco/n9k-sup-b@1', 'cisco/n9k-sup-b-plus@1'], group: supervisors, rel-pos: 1, default: cisco/n9k-sup-b@1}
-      - {id: ps-1, at: [0, 222.25], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 0, default: cisco/n9k-pac-3000w-b@1}
-      - {id: ps-2, at: [0, 266.7], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 1, default: cisco/n9k-pac-3000w-b@1}
-      - {id: ps-3, at: [311.15, 222.25], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 2, default: cisco/n9k-pac-3000w-b@1}
-      - {id: ps-4, at: [311.15, 266.7], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 3, default: cisco/n9k-pac-3000w-b@1}
+      - {id: sup-2, at: [234.95, 177.8], size: {w: 203.2, h: 44.45}, accepts: ['cisco/n9k-sup-a@1', 'cisco/n9k-sup-a-plus@1', 'cisco/n9k-sup-b@1', 'cisco/n9k-sup-b-plus@1'], group: supervisors, rel-pos: 1, default: cisco/n9k-sup-b@1}
+      - {id: ps-1, at: [6.35, 222.25], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 0, default: cisco/n9k-pac-3000w-b@1}
+      - {id: ps-2, at: [6.35, 266.7], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 1, default: cisco/n9k-pac-3000w-b@1}
+      - {id: ps-3, at: [304.8, 222.25], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 2, default: cisco/n9k-pac-3000w-b@1}
+      - {id: ps-4, at: [304.8, 266.7], size: {w: 133.35, h: 44.45}, rotate: 270, accepts: ['cisco/n9k-pac-3000w-b@1', 'cisco/n9k-puv-3000w-b@1', 'cisco/n9k-puv2-3000w-b@1', 'cisco/n9k-pdc-3000w-b@1', 'cisco/n9k-psu-blank@1'], group: power-supplies, rel-pos: 3, default: cisco/n9k-pac-3000w-b@1}
       placements:
       - {ref: common/led-dot@1, id: led-bcn, at: [163.5, 266.5], group: leds, rel-pos: 0, for: chassis, states: ['off', {name: beacon, color: '#3b82f6'}]}
       - {ref: common/led-dot@1, id: led-sup, at: [182.1, 266.5], group: leds, rel-pos: 1, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f5a623'}]}
