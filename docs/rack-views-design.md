@@ -509,7 +509,7 @@ DOM does not provide. So the parity tests are a page under
 `spec/tests/browser/`, which is run by hand like the pages already there. The
 result is quoted in each pull request. The automated gate is the site's
 own browser checks, which run in its CI against the kit's copy in `vendor/`
-at orders 8 and 9. **This is a decision for the owner** (§10): the other
+at orders 8 and 9. **This is one of the decisions in §10**: the other
 choice is a browser job in Portrayal's CI. That job is a change to how
 changes are checked, so it is a one-way door under `CONTRIBUTING.md`.
 
@@ -582,7 +582,7 @@ is kit consumers, once the release is out.
 - A second surface kind (§2.5), and the multi-rack editor itself (§3): both
   are separate pieces that build on this API.
 
-## 10. Decisions for the owner
+## 10. What is to be decided
 
 1. The handle (§2.2), the pick event and the path grammar (§2.4).
 2. The `surface` seam (§2.5) as the place a backboard mounts.
