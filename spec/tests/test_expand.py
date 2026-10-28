@@ -362,3 +362,16 @@ def test_a_block_hands_its_attrs_to_every_port_but_not_to_its_lamps():
     # each port's attrs is its own - editing one must not reach the others
     ports[0]["attrs"]["speed"] = "10g"
     assert ports[1]["attrs"]["speed"] == "25g"
+
+
+def test_attrs_by_n_adds_to_one_port_and_leaves_the_rest():
+    """A single passive-PoE-in jack among plain ones: `attrs-by-n` is keyed by the
+    port's number, adds to the block's attrs and reaches no other port."""
+    block = {"id": "ports", "ref": "std/sfp-ganged@1", "at": [0, 0], "count": 4,
+             "rows": 2, "row-pitch": 13.73, "pitch": 14.25, "number-from": 1,
+             "attrs": {"media": "sfp28"},
+             "attrs-by-n": {1: {"poe": "passive PD (in)"}}}
+    pl, _, _ = E.block_items(block, LIB, STD)
+    by_id = {p["id"]: p for p in pl}
+    assert by_id["port-1"]["attrs"] == {"media": "sfp28", "poe": "passive PD (in)"}
+    assert all(by_id[f"port-{n}"]["attrs"] == {"media": "sfp28"} for n in (2, 3, 4))

@@ -1,0 +1,377 @@
+format: 1
+kind: device
+name: crs326-24s-plus-2q-plus-rm
+version: 1.0.0
+maturity: modelled
+manufacturer: MikroTik
+model: CRS326-24S+2Q+RM
+portfolio: {line: Switches, family: Cloud Router Switch, series: CRS326}
+description: >-
+  MikroTik CRS326-24S+2Q+RM is a fixed 1U Cloud Router Switch. It has 24 SFP+ cages and two 40G QSFP+ cages. It
+  also has a 10/100 management and boot port, an RJ45 serial console and a USB type A port. It runs RouterOS or
+  SwOS. The front carries the 24 SFP+ cages in three blocks of four columns by two rows. They are numbered 1 to 24
+  as printed, with the odd number on the lower cage of a column. The two QSFP+ cages are 1 and 2, stacked with the
+  odd number below. Right of them are the CONSOLE and MGMT/BOOT jacks, the RESET button, the USB port and the USER,
+  FAULT, PWR 2 and PWR 1 lamps. The rear carries two AC inlets (POWER 1 and POWER 2, 100-240 V) and three fans. The
+  power supplies and the fans are built into the chassis, so there are no bays.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      CRS326-24S+2Q+RM brochure, MikroTik (file CRS326-24Splus2QplusRM_250749.pdf; no date is printed, the file name
+      carries a revision stamp): specification table and included parts. CRS326-24S+2Q+RM product page, MikroTik
+      (saved 2026-10-26): dimensions, switch chip, AC inputs and PSU slots, cooling type, power, USB. CRS326-24S+2Q+RM
+      quick guide, MikroTik (file CRS326-24Splus2QplusRM-qg_190808.pdf; no date is printed, the file name carries a
+      revision stamp): extension slots and ports, powering, reset. The product-page studio photographs 1831 (front)
+      and 1832 (rear). No dimensions drawing is held for this model: the one held for the CRS326-24G-2S+ is a different
+      chassis. The NetBox community device type was read as a second opinion only. No figure numbers: MikroTik prints
+      none. The device name spells MikroTik's + as -plus because a directory name cannot carry +; model: keeps the +
+      as printed.
+  datasheet:
+    confidence: datasheet
+    note: >-
+      The brochure is MikroTik's datasheet for the model: QCA9531 CPU at 650 MHz, 128 MB RAM, 32 MB flash, one 10/100
+      port, 24 SFP+ and two QSFP+ cages, RouterOS or SwitchOS (licence level 5), AC supply 100 - 240 V, "Redundant
+      supply: Yes", USB type A, serial RJ45, 443 x 200 x 44 mm, -20 to +60 C, "Max power consumption" 69 W. The page
+      adds the switch chip 98DX8332, two AC inputs, two PSU slots, three fans, 42 W without attachments and a 1 A USB
+      limit. The 69 W is unqualified and filed as the maximum; the quick guide says "up to 42 W. With attachments up to
+      69 W", which agrees.
+  gate-1:
+    confidence: estimated
+    note: >-
+      estimated - the front photograph 1831 (3000 x 1200 px) shows the face between the ear folds 1685 px across in
+      the 2000 px view for the printed 443 (3.805 px per mm) and 164 px between the ears' top and bottom edges for 44.45
+      (3.69 px per mm): 3 percent apart, so the picture is not orthographic enough to call photo-measured. x is taken
+      at 3.805 px per mm from the body's left edge and y at 3.66 px per mm from the face's top edge. The cage pitch
+      then reads 14.37 mm against the registry's 14.25 for a ganged SFP cage, 0.8 percent apart. Every position is good
+      to about 1 mm in x and 1.5 mm in y.
+  chassis:
+    confidence: datasheet
+    note: >-
+      443 wide, 44.45 high (the brochure's "44" is the 1U pitch, 44.45), 200 deep: the brochure's and the product
+      page's one source for the depth, both "443 x 200 x 44 mm". No drawing is held, so no figure is checked against
+      one. 443 is the body between the ear folds.
+  front-layout:
+    confidence: estimated
+    note: >-
+      estimated - read off photograph 1831 as gate-1 says. Three cage blocks of four columns by two rows at 15.7, 78.9
+      and 142.1 mm (63.2 mm apart), the cage pitch 14.37 mm, the QSFP+ block 19.8 mm wide at 207.0 mm, the CONSOLE and
+      MGMT/BOOT block 17.6 mm wide at 232.1 mm. Each cage column's lamp strip shows four arrows; they are drawn as
+      two lamps for each cage, as the CRS354 drawing shows.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Printed numbers in photograph 1831: 2 4 6 ... 24 above the upper row and 1 3 5 ... 23 below the lower row,
+      40G QSFP+ 2 above and 1 below, CONSOLE above the upper right jack and MGMT/BOOT below the lower. The brochure's
+      one 10/100 port is the MGMT/BOOT jack; the serial console is the CONSOLE jack.
+  lamps:
+    confidence: photo-measured
+    note: >-
+      Four lamps right of the USB port, top to bottom USER (green), FAULT (red), PWR 2 (blue) and PWR 1 (blue), as
+      printed beside them. No document held says what a lamp shows (the brochure and the quick guide give no LED
+      table, only that the reset button works with "a green LED"), so none carries states beyond the component's own.
+  reset:
+    confidence: photo-measured
+    note: >-
+      RESET is a round button between the MGMT/BOOT jack and the USB port; the quick guide's reset section says to
+      hold it at power-up until the LED flashes.
+  usb:
+    confidence: photo-measured
+    note: >-
+      The USB type A port (brochure; product page: 1 A maximum, "USB Power Reset: Yes") is mounted with its long side
+      vertical, so the library's std/usb-a is turned a quarter turn.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      estimated - no rear elevation is held; the positions are read off the studio rear photograph 1832. It looks down
+      on the rear, so x is taken at 4.036 px per mm across the 443 mm body and y is estimated at 2.9 px per mm.
+      They are good to about 2 mm in x and 3 mm in y. As seen from the rear: the inlets centred at 29.0 and 113.7 mm
+      with POWER 1 and POWER 2 above their rating legends, and three fans 35 mm across at 225.2, 267.4 and 336.2 mm.
+      The fans' corner screws and the wire retaining loops over the inlets are not drawn (the loops are accessories).
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      The product page lists two AC inputs, two PSU slots and "3 fans"; the quick guide says "Two integrated power
+      supply units with AC inputs for redundancy" and "Three cooling fans with automatic speed control"; the brochure
+      lists "Redundant supply: Yes" and two IEC cords in the box. The rear photograph shows a plain panel with the two
+      inlets on it and no removable module, and no held document prints a supply module part number, so the supplies
+      are built in: part of the chassis, not bays. The three round openings of the rear have a fan behind each, so
+      they are fans of the chassis.
+  ac-input-rating:
+    confidence: photo-measured
+    note: >-
+      Each inlet prints "100-240 V ~1 A MAX 50/60 Hz" under POWER 1 or POWER 2 (photograph 1832); the brochure's range
+      is 100 - 240 V.
+  ears:
+    confidence: datasheet
+    note: >-
+      Rack ears are in the box (brochure and product page, Included: Rack ears; Screw and feet kit K10). No drawing is
+      held, so no position is dimensioned: the shipped position is taken as flush, as on the other CRS in the library,
+      and the ears are not drawn.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The pilot's face (#dadada) is carried; the studio render is lit differently.
+attrs:
+  power:
+    power-max-w: 69
+    power-without-attachments-w: 42
+    power-input: 100 - 240 V AC, two inputs (redundant supply), 50 - 60 Hz
+  thermal:
+    cooling: 3 fans (product page and quick guide)
+  environmental:
+    operating-temp-c: -20 to 60 (tested)
+  platform:
+    cpu: QCA9531, 650 MHz
+    switch-chip: 98DX8332
+    ram: 128 MB
+    storage: 32 MB flash
+    os: RouterOS or SwitchOS (licence level 5)
+  performance:
+    throughput: non-blocking 320 Gbps, switching capacity 640 Gbps, forwarding rate 252 Mpps (brochure)
+    port-modes-sfp-plus: 10G SFP+ (brochure); no module list is printed
+    port-modes-qsfp: 40G QSFP+ (brochure); no module or breakout list is printed
+  compliance:
+    certification: CE, EAC, RoHS
+chassis:
+  width: 443.0
+  height: 44.45
+  depth: 200.0
+  ru: 1
+  color: '#dadada'
+  ears:
+    positions:
+    - {name: flush, at: 0, default: true}
+  power: ac
+gaps:
+- what: dimensions-drawing
+  scope: [front, rear, left, right, top, bottom]
+  reason: needs-drawing
+  note: >-
+    No dimensions drawing is held for this model (the one held for the CRS326-24G-2S+ is a different chassis). The
+    depth is the brochure's and the product page's; the positions are read off studio photographs.
+  wanted: MikroTik's dimensions drawing for the CRS326-24S+2Q+RM.
+- what: led-states
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    Searched the brochure and the quick guide for an LED table: none. The lamps carry the components' own vocabulary
+    and no meaning is stated for USER, FAULT, PWR 2 and PWR 1.
+  wanted: MikroTik's LED description for the CRS326-24S+2Q.
+- what: weight
+  scope: [front]
+  reason: vendor-silent
+  note: Neither the brochure nor the product page gives a weight.
+  wanted: MikroTik's weight.
+- what: eol
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The saved product page carries no Discontinued badge and MikroTik publishes no end-of-life page, so no
+    lifecycle is written.
+  wanted: none
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the 24 SFP+ cages; rel-pos carries the number printed on the front, the lower cage of a column takes the odd
+      number
+  qsfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp, speed: 40g}
+    description: the two 40G QSFP+ cages, 1 below and 2 above
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the arrow lamps of the SFP+ and QSFP+ strips
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the RJ45 serial console over the 10/100 management and boot Ethernet RJ45, and the USB type A port beside them
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+    description: the RESET button
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the USER, FAULT, PWR 2 and PWR 1 lamps
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the two AC inlets, POWER 1 and POWER 2, as seen from the rear
+views:
+  front:
+    size: {w: 443.0, h: 44.45}
+    panel:
+      decor:
+      - {id: plate-1, kind: cage-plate, at: [15.3, 9.6], size: [58.5, 27.0], fill: '#2b2b2b'}
+      - {id: plate-2, kind: cage-plate, at: [78.5, 9.6], size: [58.5, 27.0], fill: '#2b2b2b'}
+      - {id: plate-3, kind: cage-plate, at: [141.7, 9.6], size: [58.5, 27.0], fill: '#2b2b2b'}
+      - {id: strip-1, kind: lamp-band, at: [15.3, 20.2], size: [58.5, 5.5], fill: '#8f8f8e'}
+      - {id: strip-2, kind: lamp-band, at: [78.5, 20.2], size: [58.5, 5.5], fill: '#8f8f8e'}
+      - {id: strip-3, kind: lamp-band, at: [141.7, 20.2], size: [58.5, 5.5], fill: '#8f8f8e'}
+      - {id: qsfp-block, kind: cage-plate, at: [207.0, 9.6], size: [19.8, 27.0], fill: '#2b2b2b'}
+      - {id: qsfp-strip, kind: lamp-band, at: [207.0, 19.8], size: [19.8, 5.6], fill: '#8f8f8e'}
+      - {id: qsfp-lanes-1, kind: lane-marks, at: [212.6, 21.9], size: [2.4, 1.5], fill: '#2b2b2b', rx: 0.3}
+      - {id: qsfp-lanes-2, kind: lane-marks, at: [215.5, 21.9], size: [2.4, 1.5], fill: '#2b2b2b', rx: 0.3}
+      - {id: qsfp-lanes-3, kind: lane-marks, at: [218.4, 21.9], size: [2.4, 1.5], fill: '#2b2b2b', rx: 0.3}
+      - {id: qsfp-lanes-4, kind: lane-marks, at: [221.3, 21.9], size: [2.4, 1.5], fill: '#2b2b2b', rx: 0.3}
+      - {id: mgmt-block, kind: jack-plate, at: [232.1, 9.6], size: [17.6, 27.0], fill: '#6b6b6b'}
+      cutouts:
+      - {block: sfp-plus}
+      - {block: qsfp-plus}
+      - {id: console, at: [233.0, 10.1], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt-boot, at: [233.0, 23.4], size: [15.8, 13.2], shape: rect}
+      - {id: btn-reset, at: [252.9, 29.4], size: [4.0, 4.0], shape: circle}
+      - {id: usb, at: [260.65, 24.05], size: [4.5, 12.0], shape: rect}
+      - {id: led-qsfp-2, at: [208.8, 21.6], size: [2.25, 2.0], shape: rect}
+      - {id: led-qsfp-1, at: [223.2, 21.6], size: [2.25, 2.0], shape: rect}
+      - {id: led-user, at: [270.8, 16.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-fault, at: [270.8, 21.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr2, at: [270.8, 26.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr1, at: [270.8, 31.2], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {block: sfp-plus}
+    - {block: qsfp-plus}
+    - {at: [240.9, 7.4], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: console}
+    - {at: [240.9, 39.4], text: MGMT/BOOT, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: mgmt-boot}
+    - {at: [254.9, 39.4], text: RESET, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: btn-reset}
+    - {at: [276.3, 17.65], text: USER, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-user}
+    - {at: [276.3, 22.85], text: FAULT, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-fault}
+    - {at: [276.3, 27.75], text: PWR 2, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-pwr2}
+    - {at: [276.3, 32.65], text: PWR 1, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-pwr1}
+    - {at: [435.0, 10.6], text: Cloud Router Switch, font-size: 4.2, anchor: end, fill: '#2b2b2b', for: chassis}
+    - {at: [435.0, 15.2], text: CRS326-24S+2Q+RM, font-size: 2.4, anchor: end, fill: '#2b2b2b', for: chassis}
+    components:
+      blocks:
+      - id: sfp-plus
+        ref: std/sfp-ganged@1
+        at: [15.7, 26.2]
+        count: 24
+        rows: 2
+        pitch: 14.37
+        row-pitch: -16.3
+        gang: 4
+        gutter: 5.7
+        number-from: 1
+        id-format: 'uplink-{n}'
+        cutouts: true
+        rotate: {top: 180}
+        attrs: {media: sfp-plus, speed: 10g}
+        numerals: {dx: 7.125, dy-top: 13.3, dy-bottom: -2.1, font-size: 1.9, anchor: middle, fill: '#2b2b2b'}
+        led:
+        - ref: common/led-arrow-sm@1
+          id-format: 'led-sfp-a-{n}'
+          cutout-shape: rect
+          skin-top: down
+          skin-bottom: up
+          dx-by-row: [2.4, 6.0]
+          dy-top: -4.3
+          dy-bottom: 12.0
+          group: sfp-leds
+          rel-pos-stride: 2
+          rel-pos-offset: -1
+        - ref: common/led-arrow-sm@1
+          id-format: 'led-sfp-b-{n}'
+          cutout-shape: rect
+          skin-top: down
+          skin-bottom: up
+          dx-by-row: [8.3, 11.0]
+          dy-top: -4.3
+          dy-bottom: 12.0
+          group: sfp-leds
+          rel-pos-stride: 2
+          rel-pos-offset: 0
+      - id: qsfp-plus
+        ref: std/qsfp-ganged@1
+        at: [207.8, 27.0]
+        count: 2
+        rows: 2
+        pitch: 19.0
+        row-pitch: -17.1
+        number-from: 1
+        id-format: 'uplink-40g-{n}'
+        cutouts: true
+        rotate: {top: 180}
+        attrs: {media: qsfp, speed: 40g}
+        numerals: {dx: 9.25, dy-top: 12.5, dy-bottom: -2.1, font-size: 1.9, anchor: middle, fill: '#2b2b2b'}
+      placements:
+      - {block: sfp-plus}
+      - {block: qsfp-plus}
+      - {ref: std/rj45@2, id: console, at: [233.0, 10.1], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+      - {ref: common/rj45-eth@1, id: mgmt-boot, at: [233.0, 23.4], group: mgmt, rel-pos: 2, attrs: {media: rj45, role: mgmt, speed: 100m}}
+      - {ref: std/usb-a@1, id: usb, at: [256.9, 27.8], rotate: 90, group: mgmt, rel-pos: 3}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp-2, skin: up, at: [208.8, 21.6], group: sfp-leds, rel-pos: 100, for: uplink-40g-2}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp-1, skin: down, at: [223.2, 21.6], group: sfp-leds, rel-pos: 101, for: uplink-40g-1}
+      - {ref: common/led-dot@1, id: led-user, at: [270.8, 16.2], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-fault, at: [270.8, 21.4], for: chassis, group: status-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-pwr2, at: [270.8, 26.3], for: chassis, group: status-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-pwr1, at: [270.8, 31.2], for: chassis, group: status-leds, rel-pos: 4}
+      - {ref: common/reset-button@1, id: btn-reset, at: [252.9, 29.4], for: chassis, group: controls, rel-pos: 1,
+         attrs: {function: reset}}
+    regions:
+      - {id: logo-zone, at: [408.0, 33.0], size: {w: 27.0, h: 7.0}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 443.0, h: 44.45}
+    panel:
+      decor:
+      - {id: fan-1, kind: fan-grille, at: [207.7, 4.5], size: [35.0, 35.0], rx: 17.5, pattern: vent, vent: 1.0}
+      - {id: fan-2, kind: fan-grille, at: [249.9, 4.5], size: [35.0, 35.0], rx: 17.5, pattern: vent, vent: 1.0}
+      - {id: fan-3, kind: fan-grille, at: [318.7, 4.5], size: [35.0, 35.0], rx: 17.5, pattern: vent, vent: 1.0}
+      cutouts:
+      - {id: ac-inlet-1, at: [15.0, 11.5], size: [28.0, 20.0], shape: rect}
+      - {id: ac-inlet-2, at: [99.7, 11.5], size: [28.0, 20.0], shape: rect}
+    silkscreen:
+    - {at: [29.0, 36.2], text: POWER 1, font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [29.0, 39.2], text: '100-240 V ~1 A MAX 50/60 Hz', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [113.7, 36.2], text: POWER 2, font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
+    - {at: [113.7, 39.2], text: '100-240 V ~1 A MAX 50/60 Hz', font-size: 1.6, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [15.0, 11.5], group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [99.7, 11.5], group: inlets, rel-pos: 2}
+  top:
+    size: {w: 443.0, h: 200.0}
+    empty: >-
+      No drawing is held, and the studio photographs show a plain lid with the Cloud Switch mark (a brand mark, not
+      drawn) and no vents or openings; the lid is not measured.
+  bottom:
+    size: {w: 443.0, h: 200.0}
+    empty: >-
+      Not drawn by any source held: neither the brochure, the quick guide nor the studio photographs picture the
+      underside.
+  left:
+    size: {w: 200.0, h: 44.45}
+    empty: >-
+      No document held shows the side walls: there is no dimensions drawing and neither studio photograph looks at
+      one. They are not drawn from another model.
+  right:
+    size: {w: 200.0, h: 44.45}
+    empty: >-
+      No document held shows the side walls: there is no dimensions drawing and neither studio photograph looks at
+      one. They are not drawn from another model.
+configurations:
+  base:
+    kind: base
+    description: >-
+      CRS326-24S+2Q+RM - 24 SFP+ cages, two QSFP+ cages, the management and boot jack, the RJ45 console and a USB
+      type A port. The box holds two IEC cords, rack ears and the K10 screw and feet kit.
+    default: true
+    part-numbers:
+      CRS326-24S+2Q+RM: {}
+references:
+- {title: 'CRS326-24S+2Q+RM brochure (MikroTik; revision stamp 250749, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS326-24Splus2QplusRM_250749.pdf)', sha256: fddb022aae672117c800a9204a4ae99b9fcd239d62dfd8af579d0b69a9dee0c8}
+- {title: 'CRS326-24S+2Q+RM quick guide (MikroTik; revision stamp 190808, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS326-24Splus2QplusRM-qg_190808.pdf)', sha256: ff1ff4370866fad707a10470cd50e8149635c8d18799df5cdf37f34d14617bdf}

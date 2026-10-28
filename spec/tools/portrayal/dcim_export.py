@@ -3881,14 +3881,16 @@ def _config_rank(cfg):
 
     Lower wins, and ties keep the one already there so the order inside a rank
     is still the file's. A device states its own default; failing that, `base` is
-    the chassis-as-you-order-it and the next best answer.
+    the chassis-as-you-order-it and the next best answer. Failing that, a
+    configuration that states no `airflow` of its own is the chassis as drawn, and
+    one that overrides it is the variant.
     """
     cfg = cfg or {}
     if cfg.get("default"):
         return 0
     if cfg.get("kind") == "base":
         return 1
-    return 2
+    return 3 if cfg.get("airflow") else 2
 
 
 def export_device(dist, device_name, out_root, images):

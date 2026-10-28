@@ -1,0 +1,67 @@
+format: 1
+kind: module
+name: n9k-pdc-3000w-b
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Cisco N9500 Series 3-kW (-48 V) DC power supply (N9K-PDC-3000W-B). Same envelope as the AC supply; the
+  input is a terminal box on the front, under a three-screw cover, with two positive and two negative
+  posts for four customer cables, and a power switch (0 is standby). It stands on end in a power-supply
+  bay, with the OK and FAIL lamps at the upper left. The Nexus 9504, 9508 and 9516 take the same part.
+size: {w: 44.45, h: 133.35, d: 450.85}
+size-confidence: {w: estimated, h: estimated, d: datasheet}
+attrs:
+  model: 'N9K-PDC-3000W-B'
+  role: 'power-module'
+  input: 'dc'
+  inlet: dc-terminal
+  power-output-w: 3000
+  input-voltage: '-48 to -60 VDC'
+  efficiency: '90% or greater (20 to 100% load)'
+  airflow: 'port-side intake'
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    estimated - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p113, PDF p119): 5.25 in by 1.75 in, 17.75 in deep. The figures (PDF pp102-103) stand the
+    supply on end, so 44.45 mm wide by 133.35 mm high.
+  depth: >-
+    datasheet - the same table, 17.75 in (450.85 mm) inside the chassis.
+  power: >-
+    datasheet - the guide's "3000-W DC Power Supply Specifications" table: 3000 W, input -48 to -60 VDC,
+    efficiency 90 percent or greater, hot swappable, port-side intake. No frequency, current or
+    dissipation.
+  lamps: >-
+    install guide - "Power Supply LEDs", OK and FAIL or FAIL/ID, upper left. Positions estimated. The
+    DC procedure names the output lamp "OUT"; the LED table names it OK, which is used. GAP: the DC
+    connection and installation procedures (printed pp35 and 106, PDF pp41 and 112) also tell the reader to
+    verify that the Input 1 (IN1) and Input 2 (IN2) lamps light, and the LED table (PDF p137) does not list
+    them. No figure shows where they sit, so they are not drawn; the module has only OK and FAIL.
+  skin: >-
+    estimated - the terminal box, its cover and the four posts are described in "Connecting a 3-kW DC Power
+    Supply to a DC Power Source" and drawn in the figures of PDF pp108-110; none dimensions them.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+elements:
+  ok:
+    at: [4.2, 7.0]
+    size: [3.0, 3.0]
+    class: led
+    description: OK lamp, upper left of the module.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: flashing-green, color: '#39b54a', behavior: blinking}
+    - 'off'
+  fail:
+    at: [4.2, 12.5]
+    size: [3.0, 3.0]
+    class: led
+    description: FAIL or FAIL/ID lamp, below the OK lamp.
+    states:
+    - {name: amber, color: '#f5a623'}
+    - {name: flashing-amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+skins: [default]

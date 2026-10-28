@@ -1,0 +1,106 @@
+format: 1
+kind: module
+name: nxa-pdc-930w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 930 W DC power supply of the Cisco Nexus 9300 fixed switches. It is ordered as
+  NXA-PDC-930W-PI (port-side intake, burgundy latch) or NXA-PDC-930W-PE (port-side exhaust,
+  blue latch). It has a round fan grille, a FAIL and an OK lamp, a pull handle, a DC inlet and
+  a coloured release latch. No picture of this supply is held. The face is drawn from its AC
+  sibling and the inlet is a plain recess.
+size: {w: 96.8, h: 38.6}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PDC-930W'
+  power-output-w: 930
+  input: dc
+  inlet: other
+  input-voltage: '-48 to -72 Vdc nominal (range -40 to -60 Vdc), as printed'
+  input-current-max: '23 A at -48 Vdc'
+  efficiency: 'Greater than 92% at 50% load'
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N93180YC-FX3 NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2021-02-16, Last Modified 2026-07-27), Overview: "930-W port-side exhaust DC
+    power supply with blue coloring (NXA-PDC-930W-PE)" and "930-W port-side intake DC power
+    supply with burgundy coloring (NXA-PDC-930W-PI)". The N93180YC-FX3S guide (Last Modified
+    2026-07-27) and the N93108TC-FX3 guide (Last Modified 2026-07-16) list the same two. THE
+    AIRFLOW SUFFIX IS DROPPED from the model, as on cisco/nxa-pac-650w@1.
+  power: >-
+    datasheet - appendix B, "930-W DC Power Supply Specifications", the same table in all
+    three guides: "Maximumoutput power per power supply 930W", "Maximum DC input current 23
+    A at -48 Vdc", inrush 35 A, hold-up 8 ms at 930 W, 12 Vdc output and standby, efficiency
+    "Greater than 92% at 50% load", form factor RSP1. THE INPUT RANGE IS PRINTED AGAINST
+    ITSELF: "Nominal range: -48 to -72 Vdc nominal (Range: -40 to -60 Vdc" - a range inside
+    the nominal one - and is carried as printed, not corrected. NO WEIGHT IS CARRIED: the
+    guides' weights tables give 2.42 lb (1.1 kg) only against the AC supply rows, and none
+    has a row for this supply. The installation chapter says "All DC power supplies
+    have reverse polarity protection".
+  size: >-
+    estimated - THE GUIDES STATE NO DIMENSION, only "Form factor RSP1", which they print for
+    this supply, the 650 W AC supply and the 1200 W HVAC/HVDC supply alike. The size is
+    cisco/nxa-pac-650w@1's, the only RSP1 supply any of them draws.
+  elements: >-
+    estimated - NO PICTURE OF THIS SUPPLY IS HELD. The guides' figures show AC supplies
+    only ("AC power supplies shown"), and the replacement chapters of the three guides carry
+    no figure at all. The housing, the fan, the lamps, the handle and the latch are
+    cisco/nxa-pac-650w@1's arrangement, which the guides' removal text supports for every
+    supply ("Grasp the power supply handle while pressing the release latch"). The inlet
+    window is a plain dark recess: the guide says only that the cable attaches "to the
+    electrical inlet on the front of the power supply" and that a latch on the
+    Cisco-supplied power cord releases it. The connector is not drawn, and the ring of the
+    input symbol is left empty because the marking this supply prints is not pictured.
+  lamps: >-
+    datasheet - the guides' appendix C, "Power Supply LEDs", one table for every supply:
+    solid green for a regulated 12 V main and 12 V standby output, solid or blinking amber
+    for a failure or warning, off for no input.
+  latch-colour: >-
+    datasheet for the convention - the guides' Overview: burgundy for port-side intake, blue
+    for port-side exhaust. The values are cisco/nxa-pac-650w@1's.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-650w@1's round figure.
+states: [absent]
+elements:
+  fail: {at: [2.5, 11.8], size: [2.8, 2.8], class: led, states: ['off', {name: fault, color: '#f59e0b'}]}
+  ok: {at: [2.5, 27.9], size: [2.8, 2.8], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
+  fan: {at: [11.6, 0.7], size: [37.2, 37.2], class: rotor}
+  handle: {at: [56.1, 1.9], size: [5.9, 35.6], class: handle}
+  latch: {at: [87.6, 9.8], size: [6.8, 19.5], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pdc-930w@1's own elements key - the grille is cisco/nxa-pac-650w@1's.
+    - node: handle
+      uhandle: 20.0
+      color: '#1b1d20'
+      confidence: estimated
+      source: >-
+        Not stated in any guide held; cisco/nxa-pac-650w@1's figure carried across.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-pdc-930w@1's own elements key - the latch stands proud in every picture of
+        the family and how far is not stated.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [96.8, 38.6]}

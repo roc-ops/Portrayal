@@ -1,0 +1,75 @@
+format: 1
+kind: module
+name: n9k-c9508-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9508 fan tray (N9K-C9508-FAN). A tall perforated plate with two diagonal pull handles, two
+  captive screws at the top and two at the bottom, and three lamps at the lower right: BCN (blue), FAN
+  (green or red) and FAB (green or amber). The switch uses three, in slots FAN 1 to FAN 3 on the rear, each
+  covering two fabric-module slots. It pairs with the N9K-C9508-FM, -FM-E, -FM-E2 and -FM-R fabric
+  modules; the N9K-C9508-FAN2 pairs with the -FM-G.
+size: {w: 128.02, h: 459.2, d: 130.05}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-C9508-FAN'
+  role: 'fan-tray'
+  airflow: 'port-side intake'
+  power-draw-typical-w: 176
+  power-draw-max-w: 250
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    datasheet - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p113, PDF p119), the "Fan trays" row: width 5.04 in (12.81 cm), depth 5.12 in (13.0 cm), height
+    16.5 in (41.91 cm) without mounting brackets and 18.08 in (45.92 cm) with them. The module is drawn at
+    the height with brackets, the extent of the plate in the rear figure. The inch figure (128.02 mm) is
+    used for the width where the centimetre figure gives 128.1.
+  depth: datasheet - the same row, 5.12 in (13.0 cm).
+  compatibility: >-
+    install guide - "Overview", Table 1 "Compatibility of Fabric Modules, Fans, and Fabric Module
+    Blanks/Fan Power Cards": N9K-C9508-FAN goes with N9K-C9508-FM, -FM-E, -FM-E2 and -FM-R, and the empty
+    fabric slots take N9K-C9508-FM-Z. Table 1 is where a fan tray is paired with a fabric type.
+  lamps: >-
+    install guide - "Fan Tray LEDs", "Table 6: LEDs for Fan Tray N9K-C9508-FAN": BCN blue or off; FAN green,
+    red or off; FAB green, amber or off, "located on the lower right portion of the module". Positions
+    inside that area are estimated.
+  power: >-
+    datasheet - the guide's "Planning for Power Requirements" table (printed p13, PDF p19), "Fan Trays",
+    N9K-C9508-FAN: 176 W typical, 250 W maximum.
+  skin: >-
+    estimated - the perforated plate, the two diagonal handles and the four captive screws are read from
+    the rear figure of the guide's overview (PDF p12); no figure dimensions them.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+elements:
+  bcn:
+    at: [100.0, 428.0]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp, lower right.
+    states:
+    - {name: blue, color: '#2a7de1'}
+    - 'off'
+  fan:
+    at: [108.0, 428.0]
+    size: [3.0, 3.0]
+    class: led
+    description: FAN lamp. Green when the tray is operational, red when a fan has failed.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  fab:
+    at: [116.0, 428.0]
+    size: [3.0, 3.0]
+    class: led
+    description: FAB lamp. Green when the fabric modules behind the tray are operational, amber when one is not.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+skins: [default]

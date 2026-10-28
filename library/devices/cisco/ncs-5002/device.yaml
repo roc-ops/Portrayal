@@ -1,0 +1,636 @@
+format: 1
+kind: device
+name: ncs-5002
+version: 1.0.1
+maturity: modelled
+manufacturer: Cisco
+model: NCS 5002
+aliases:
+- {name: NCS-5002, kind: marketing}
+portfolio: {line: NCS, family: NCS 5000}
+description: >-
+  Cisco Network Convergence System 5002, a two-rack-unit router with eighty 1/10G SFP+ ports and four
+  100G QSFP28 ports, built as two stacked boards. The ports, the console, the management jack and the
+  USB port are on the port (front) side; two power supplies and two fan modules are on the other. Ships
+  port-side intake or port-side exhaust and with AC or DC supplies, four builds of one front panel. The
+  guide says nothing about end-of-sale; the status is unknown.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      One document: Hardware Installation Guide for Cisco NCS 5000 Series Routers, first published 2015-12-23,
+      last modified 2019-01-31 (https://www.cisco.com/c/en/us/td/docs/iosxr/ncs5000/hardware-install/b-ncs5000-hardware-installation-guide.pdf).
+      It is an old revision and a newer one may exist. HELD AND SEARCHED FOR THIS MODEL: the guide's text
+      and figures, and the intake notes for the NCS line. NOT HELD: a data sheet, a NetBox device type
+      or elevation, a photograph, a 3D model. THE GUIDE'S FACE FIGURES (3 and 4) ARE GREYSCALE THREE-QUARTER
+      VIEWS at 1013 x 228 and 770 x 506 px; there is no flat front or rear panel figure, so every position
+      below is read off a perspective drawing.
+  gate-1:
+    confidence: estimated
+    note: >-
+      FAILED AND SAID SO. Figure 4 (front) and Figure 3 (rear) are not orthographic: the near end of each
+      face is drawn larger than the far end, so no px/mm can be derived and the aspect cannot be compared
+      with Table 12's 442.5 by 88.9 mm. Only fractions of the face width were taken along the near edge,
+      with a repeated feature of known size as the ruler: ten SFP cages at 14.25 mm abut for 142.5 mm,
+      and each group of ten reads about a third of the cage field in Figure 4. Every x and y on both faces
+      is therefore estimated; the counts are the guide's.
+  dimensions:
+    confidence: datasheet
+    note: >-
+      Appendix C, Table 12, p.41: "3.5 x 17.42 x 19.28 in. (8.9 cm x 44.3 cm x 48.97 cm)". The inch figures
+      are carried, converted to 88.9 x 442.5 x 489.7 mm; the centimetre figures round to 44.3 and 48.97
+      and agree within 0.6 mm. Chapter 1 calls it "2RU form factor". Whether the width includes the rack-mount
+      brackets is not stated; the brackets are a separate kit (Table 9) and are not drawn.
+  weight:
+    confidence: datasheet
+    note: >-
+      Table 12: "Cisco NCS 5002 with two 650W power supplies, and two fan modules, 46 lb (20.9 kg)", and
+      Chapter 2 says "46 lbs". Both are a loaded weight, so no empty-chassis weight is written.
+  ports:
+    confidence: datasheet
+    note: >-
+      Chapter 1, Ports: "80 x One GE/10GE SFP+ ports", of which "40 x Regular 10G SFP+ Ports, on baseboard"
+      and "40 x DWDM and ZR Capable 10G SFP+ Ports, on mezzanine (Cisco Metallic Grey in color)", and
+      "4 x 100G QSFP28 ports (Light Green in color)". WHICH HALF OF THE FACE IS THE BASEBOARD AND WHICH
+      THE MEZZANINE IS NOT STATED, and the groups are named for where they sit, upper and lower. Features:
+      "A management, console, and the USB interface on the port (front) side of the router". Appendix
+      D: the console is "an asynchronous RS-232 serial port with an RJ-45 connector". The guide describes
+      no timing port; none is modelled.
+  arrangement:
+    confidence: estimated
+    note: >-
+      READ OFF FIGURE 4 AND THE RACK-MOUNTING FIGURES 9 AND 11, which show the same face: two stacked
+      one-rack-unit halves with a seam between them, each with two rows of cages split into two groups
+      of equal length, a block of larger cages at the right end, and at the left a plate (upper half)
+      and a cluster of lamps, jacks and a USB port (lower half). Twenty cages a row is the guide's 80
+      over four rows; ten a group is the cage count in each group of Figure 4; the 2.5 mm gutter is a
+      guess. Two QSFP28 a half is the guide's four over two halves, drawn as one column of two. The row
+      pitch is the registry's 15.0 mm stack figure. THE SEAM BETWEEN THE TWO PAIRS IS 3.0 MM: on Figure
+      4 (printed page 4) the gap between the upper half's lower row and the lower half's upper row measures
+      about 10 px against the 310 px height of the face's near end (88.9 mm, about 3.5 px per mm), and
+      the two pairs with that seam are centred on the face, 17.5 mm clear above and below. An earlier
+      draft centred each pair in its half and left a 19 mm band. The measure is on a three-quarter view,
+      so it is an estimate to a millimetre or two. The console, management jack, USB port and lamp keep
+      their offsets from the lower pair.
+  intake-mesh:
+    confidence: estimated
+    note: >-
+      NOT DRAWN. Figure 4 (printed page 4) shows no black perforated strip: the lid is plain to its front
+      edge and the front is the two cage fields, which read dark at this resolution. The 5001's perforated
+      strip on the lid (Figure 2) has no counterpart here, so no vent is drawn on this device. The vendor
+      logo at the upper left stays reserved as `logo-zone`.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (the upper cage upright over the lower turned 180) in each half,
+      by the rule and not by observation: Figure 4's resolution does not show which way the cages' lips
+      face.
+  port-order:
+    confidence: estimated
+    note: >-
+      THE GUIDE PRINTS NO PORT NUMBER IN ANY FIGURE AND NONE IS RESOLVED IN THE ARTWORK, so no numeral
+      is drawn. The ids port-1 to port-40 (upper SFP+), port-41 to port-80 (lower SFP+), port-81 and port-82
+      (upper QSFP28) and port-83 and port-84 (lower QSFP28) follow the library's convention for stacked
+      cages, down each column with the upper cage first. That order is a choice and not a reading. Interface
+      names (the guide does not give them for the 5002) are not recorded.
+  rear-face:
+    confidence: estimated
+    note: >-
+      Figure 3 (back, fan side), left to right as drawn: a plate over a power supply, two fan modules
+      each the full two units tall, a plate over a power supply. The supplies sit in the lower half and
+      a blank plate fills the half above each. Module widths are fractions of the face width along its
+      near edge: a supply reads about a quarter, a fan module about a quarter. Nothing is on the rear
+      but these four modules and the plates: the console, management and USB ports are on the port side.
+      The plates above the supplies carry a label; its text is not resolved and it is not drawn.
+  console-and-management:
+    confidence: estimated
+    note: >-
+      Two RJ-45 jacks stacked at the left of the lower half, the console over the management jack, and
+      a USB-A port beside them, as the library draws them on other Cisco boxes. Figure 4 shows a lamp
+      cluster, a small upright port and two stacked jacks there; the guide's text names a console, a management
+      and a USB interface and gives no more.
+  lamps:
+    confidence: datasheet
+    note: >-
+      Appendix E: a "Power LED" on the front of the chassis (green solid on: system on and operating normally;
+      green off: powered off; amber on: fault condition), and on each supply an OK lamp (green) and a
+      FAILED lamp (amber), Tables 24 and 25. No port lamp, link lamp or fan lamp is described, so none
+      is drawn; the chassis lamp's position is a guess at the lamp cluster in Figure 4.
+  airflow:
+    confidence: datasheet
+    note: >-
+      Chapter 2, Airflow Direction: front-to-back is "port side intake" and back-to-front is "port side
+      exhaust", set by the type of fan modules and power supplies, and "it is not possible to mix airflow
+      directions". The two builds are configurations. THE GUIDE GIVES NO COLOUR FOR EITHER DIRECTION in
+      text or in its greyscale figures (it says only that a replacement has "the same coloring as the
+      other fan and power supply modules in the same chassis"), so no handle colour is set per configuration.
+  ears-and-kits:
+    confidence: estimated
+    note: >-
+      The `flush` position is the one Figures 9 and 11 draw: the front bracket, held by two screws to
+      two holes, stands with its flange level with the port-side face. Its two-hole bracket differs from
+      the 5001's four-of-six, and no other position is drawn. NO KIT IS MODELLED: Table 9 lists the rack-mount
+      kit as four brackets, sixteen M4 screws, four rack-mount guides and two slider rails, and Appendix
+      A lists accessory kit NCS-5002-ACSR with two of each bracket and guide, so the guide disagrees with
+      itself on the counts; no held document gives a bracket's, a guide's or a slider's dimensions or
+      the kit's depth range. See the gaps.
+  configuration-names:
+    confidence: estimated
+    note: >-
+      THE GUIDE GIVES NO CHASSIS PART NUMBER AND NO CODE FOR ANY BUILD. Its only orderable codes for this
+      router are the supplies and fan modules (Tables 4 and 5) and the accessory kit NCS-5002-ACSR, and
+      it says "power supply options need to be configured with the base chassis". The four configurations
+      are therefore one `kind: base` build (AC, port-side intake) and three `kind: example` builds, with
+      no `part-numbers`: each says which supplies and fan modules it seats, and none is an orderable SKU.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      SALE STATUS IS UNKNOWN. The guide, in 66 pages, says nothing about end-of-sale or end-of-life, and
+      no other document for this model is held; a revision date is not a status. No end-of-sale date is
+      written.
+  colour:
+    confidence: estimated
+    note: >-
+      The face is a light grey with dark printing in the guide's greyscale figures; #c9cccf is chosen
+      by eye, not sampled.
+attrs:
+  physical:
+    weight-note: 46 lb (20.9 kg) with two 650 W power supplies and two fan modules
+  environmental: {operating-temp: 32 to 104 F (0 to 40 C), storage-temp: -40 to 158 F (-40 to 70 C), humidity: 5
+      to 95% (non condensing), altitude: '0 to 10,000 ft (0 to 3000 m)'}
+  power:
+    power-supply-options: NC5K-PAC-650W-FR/-BK (AC), NC5K-PDC-930W-FR/-BK (DC), two, 1+1 redundant
+  features:
+    optics-sfp-plus: >-
+      guide Chapter 1: eighty one-GE/ten-GE SFP+ ports, 40 regular on the baseboard and 40 DWDM and ZR
+      capable on the mezzanine (metallic grey); four 100G QSFP28 ports (light green)
+    redundancy: >-
+      two 1+1 power supplies and two 1+1 fan modules, all hot-swappable; the system works with a single
+      fan failure and more than one fan failure shuts it down
+chassis:
+  width: 442.5
+  height: 88.9
+  depth: 489.7
+  ru: 2
+  color: '#c9cccf'
+  ears:
+    positions:
+    - {name: flush, label: front bracket, default: true}
+gaps:
+- what: sale-status
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    Whether the NCS 5002 is on sale. The one held document is silent; the intake grid marks every NCS
+    model unknown. An end-of-sale notice or the product page would settle it.
+- what: flat-face-figures
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  wanted: >-
+    A flat front and rear elevation, or a photograph taken square on. The guide's Figures 3 and 4 are
+    greyscale three-quarter views, so every position is estimated and no printed numeral or legend can
+    be read.
+- what: seam-width
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    The width of the seam between the two stacked halves and the margin above and below the cage fields.
+    They are read off Figure 4 as 3.0 mm and 17.5 mm from a three-quarter view, and a flat elevation would
+    settle them to the millimetre.
+- what: printed-legends
+  scope:
+  - front
+  - rear
+  reason: needs-photo
+  wanted: >-
+    The legends printed beside the ports, lamps and jacks. None is resolved in the held figures, so none
+    is drawn, and the model name is not drawn either because nothing shows it as printed.
+- what: which-half-is-which-board
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    Which half of the face is the baseboard and which the DWDM and ZR mezzanine. The guide gives the counts
+    and the colours and no position.
+- what: management-jack-speed
+  scope:
+  - mgmt
+  reason: vendor-silent
+  wanted: >-
+    The management jack's rate. Searched the guide for "10/100", "1000", "Gigabit" and "speed" beside
+    the management interface: it names the interface and the console's RS-232 and gives no rate for the
+    jack.
+- what: grounding-pad
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    The grounding pad. The guide says to remove "the label on the right side of the front side (port side)"
+    of the 5002 to expose it and shows it in Figure 15 in three-quarter view; its position and size cannot
+    be read, so it is not drawn.
+- what: rack-kit
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The rack-mount kit as a kit contract: part numbers, the dimensions of the bracket, guide and slider
+    rail, and the rack depth range. The guide gives a parts list (Table 9; accessory kit NCS-5002-ACSR
+    in Appendix A) whose counts disagree, and a rack requirement of 23.5 to 34.0 in between the outside
+    faces of the front and rear rails.
+- what: fan-and-lamp-power
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The fan module's power draw, and the chassis' own draw. Appendix C gives supply ratings only.
+- what: air-filters
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The air filters, which the guide draws but does not size or number. Port-side intake takes a three-piece
+    filter on the port-side faceplate (Figure 22); port-side exhaust takes clip-on filters on the supply
+    and fan fronts (Figure 23, drawn on this chassis's two-fan rear). No part number, size or position
+    is held for either.
+- what: the-four-undrawn-faces
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    A drawing of the lid, the underside and the side walls. The guide shows them in three-quarter view
+    only, with bracket holes on a side wall.
+groups:
+  sfp-plus-upper:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  sfp-plus-lower:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  qsfp28-upper:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+  qsfp28-lower:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band ports on the lower half of the port side - an RJ-45 console, an RJ-45 management
+      jack and a USB port. Two media and a USB, one purpose: reaching the router when the data plane cannot.
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        guide Chapter 1, Features: "Two 1+1 redundant, hot-swappable power supplies", and "A minimum of
+        one power supply is required for normal operation".
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        guide Chapter 1, Fan Modules: "slots for two 1+1 redundant fan modules", hot-swappable; "The system
+        can work with a single fan failure. More than one fan failure leads to system shutdown."
+views:
+  front:
+    size: {w: 442.5, h: 88.9}
+    panel:
+      cutouts:
+      - {id: port-1, at: [62.0, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-2, at: [62.0, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-3, at: [76.25, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-4, at: [76.25, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-5, at: [90.5, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-6, at: [90.5, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-7, at: [104.75, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-8, at: [104.75, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-9, at: [119.0, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-10, at: [119.0, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-11, at: [133.25, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-12, at: [133.25, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-13, at: [147.5, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-14, at: [147.5, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-15, at: [161.75, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-16, at: [161.75, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-17, at: [176.0, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-18, at: [176.0, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-19, at: [190.25, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-20, at: [190.25, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-21, at: [207.0, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-22, at: [207.0, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-23, at: [221.25, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-24, at: [221.25, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-25, at: [235.5, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-26, at: [235.5, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-27, at: [249.75, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-28, at: [249.75, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-29, at: [264.0, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-30, at: [264.0, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-31, at: [278.25, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-32, at: [278.25, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-33, at: [292.5, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-34, at: [292.5, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-35, at: [306.75, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-36, at: [306.75, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-37, at: [321.0, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-38, at: [321.0, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-39, at: [335.25, 17.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-40, at: [335.25, 32.5], size: [14.25, 10.4], shape: rect}
+      - {id: port-41, at: [62.0, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-42, at: [62.0, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-43, at: [76.25, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-44, at: [76.25, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-45, at: [90.5, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-46, at: [90.5, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-47, at: [104.75, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-48, at: [104.75, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-49, at: [119.0, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-50, at: [119.0, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-51, at: [133.25, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-52, at: [133.25, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-53, at: [147.5, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-54, at: [147.5, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-55, at: [161.75, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-56, at: [161.75, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-57, at: [176.0, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-58, at: [176.0, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-59, at: [190.25, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-60, at: [190.25, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-61, at: [207.0, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-62, at: [207.0, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-63, at: [221.25, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-64, at: [221.25, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-65, at: [235.5, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-66, at: [235.5, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-67, at: [249.75, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-68, at: [249.75, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-69, at: [264.0, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-70, at: [264.0, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-71, at: [278.25, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-72, at: [278.25, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-73, at: [292.5, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-74, at: [292.5, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-75, at: [306.75, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-76, at: [306.75, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-77, at: [321.0, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-78, at: [321.0, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-79, at: [335.25, 45.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-80, at: [335.25, 60.9], size: [14.25, 10.4], shape: rect}
+      - {id: port-81, at: [364.0, 16.75], size: [20.0, 10.15], shape: rect}
+      - {id: port-82, at: [364.0, 33.55], size: [20.0, 10.15], shape: rect}
+      - {id: port-83, at: [364.0, 45.15], size: [20.0, 10.15], shape: rect}
+      - {id: port-84, at: [364.0, 61.95], size: [20.0, 10.15], shape: rect}
+      - {id: led-power, at: [8.0, 55.75], size: [2.0, 2.0], shape: circle}
+      - {id: console, at: [24.0, 44.95], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt, at: [24.0, 56.05], size: [12.7, 11.0], shape: rect}
+      - {id: usb, at: [41.0, 48.8], size: [4.5, 12.0], shape: rect}
+    components:
+      placements:
+      - {ref: std/sfp-ganged@1, id: port-1, at: [62.0, 17.5], group: sfp-plus-upper, rel-pos: 1}
+      - {ref: std/sfp-ganged@1, id: port-2, at: [62.0, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 2}
+      - {ref: std/sfp-ganged@1, id: port-3, at: [76.25, 17.5], group: sfp-plus-upper, rel-pos: 3}
+      - {ref: std/sfp-ganged@1, id: port-4, at: [76.25, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 4}
+      - {ref: std/sfp-ganged@1, id: port-5, at: [90.5, 17.5], group: sfp-plus-upper, rel-pos: 5}
+      - {ref: std/sfp-ganged@1, id: port-6, at: [90.5, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 6}
+      - {ref: std/sfp-ganged@1, id: port-7, at: [104.75, 17.5], group: sfp-plus-upper, rel-pos: 7}
+      - {ref: std/sfp-ganged@1, id: port-8, at: [104.75, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 8}
+      - {ref: std/sfp-ganged@1, id: port-9, at: [119.0, 17.5], group: sfp-plus-upper, rel-pos: 9}
+      - {ref: std/sfp-ganged@1, id: port-10, at: [119.0, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 10}
+      - {ref: std/sfp-ganged@1, id: port-11, at: [133.25, 17.5], group: sfp-plus-upper, rel-pos: 11}
+      - {ref: std/sfp-ganged@1, id: port-12, at: [133.25, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 12}
+      - {ref: std/sfp-ganged@1, id: port-13, at: [147.5, 17.5], group: sfp-plus-upper, rel-pos: 13}
+      - {ref: std/sfp-ganged@1, id: port-14, at: [147.5, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 14}
+      - {ref: std/sfp-ganged@1, id: port-15, at: [161.75, 17.5], group: sfp-plus-upper, rel-pos: 15}
+      - {ref: std/sfp-ganged@1, id: port-16, at: [161.75, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 16}
+      - {ref: std/sfp-ganged@1, id: port-17, at: [176.0, 17.5], group: sfp-plus-upper, rel-pos: 17}
+      - {ref: std/sfp-ganged@1, id: port-18, at: [176.0, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 18}
+      - {ref: std/sfp-ganged@1, id: port-19, at: [190.25, 17.5], group: sfp-plus-upper, rel-pos: 19}
+      - {ref: std/sfp-ganged@1, id: port-20, at: [190.25, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 20}
+      - {ref: std/sfp-ganged@1, id: port-21, at: [207.0, 17.5], group: sfp-plus-upper, rel-pos: 21}
+      - {ref: std/sfp-ganged@1, id: port-22, at: [207.0, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 22}
+      - {ref: std/sfp-ganged@1, id: port-23, at: [221.25, 17.5], group: sfp-plus-upper, rel-pos: 23}
+      - {ref: std/sfp-ganged@1, id: port-24, at: [221.25, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 24}
+      - {ref: std/sfp-ganged@1, id: port-25, at: [235.5, 17.5], group: sfp-plus-upper, rel-pos: 25}
+      - {ref: std/sfp-ganged@1, id: port-26, at: [235.5, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 26}
+      - {ref: std/sfp-ganged@1, id: port-27, at: [249.75, 17.5], group: sfp-plus-upper, rel-pos: 27}
+      - {ref: std/sfp-ganged@1, id: port-28, at: [249.75, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 28}
+      - {ref: std/sfp-ganged@1, id: port-29, at: [264.0, 17.5], group: sfp-plus-upper, rel-pos: 29}
+      - {ref: std/sfp-ganged@1, id: port-30, at: [264.0, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 30}
+      - {ref: std/sfp-ganged@1, id: port-31, at: [278.25, 17.5], group: sfp-plus-upper, rel-pos: 31}
+      - {ref: std/sfp-ganged@1, id: port-32, at: [278.25, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 32}
+      - {ref: std/sfp-ganged@1, id: port-33, at: [292.5, 17.5], group: sfp-plus-upper, rel-pos: 33}
+      - {ref: std/sfp-ganged@1, id: port-34, at: [292.5, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 34}
+      - {ref: std/sfp-ganged@1, id: port-35, at: [306.75, 17.5], group: sfp-plus-upper, rel-pos: 35}
+      - {ref: std/sfp-ganged@1, id: port-36, at: [306.75, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 36}
+      - {ref: std/sfp-ganged@1, id: port-37, at: [321.0, 17.5], group: sfp-plus-upper, rel-pos: 37}
+      - {ref: std/sfp-ganged@1, id: port-38, at: [321.0, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 38}
+      - {ref: std/sfp-ganged@1, id: port-39, at: [335.25, 17.5], group: sfp-plus-upper, rel-pos: 39}
+      - {ref: std/sfp-ganged@1, id: port-40, at: [335.25, 32.5], rotate: 180, group: sfp-plus-upper, rel-pos: 40}
+      - {ref: std/sfp-ganged@1, id: port-41, at: [62.0, 45.9], group: sfp-plus-lower, rel-pos: 41}
+      - {ref: std/sfp-ganged@1, id: port-42, at: [62.0, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 42}
+      - {ref: std/sfp-ganged@1, id: port-43, at: [76.25, 45.9], group: sfp-plus-lower, rel-pos: 43}
+      - {ref: std/sfp-ganged@1, id: port-44, at: [76.25, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 44}
+      - {ref: std/sfp-ganged@1, id: port-45, at: [90.5, 45.9], group: sfp-plus-lower, rel-pos: 45}
+      - {ref: std/sfp-ganged@1, id: port-46, at: [90.5, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 46}
+      - {ref: std/sfp-ganged@1, id: port-47, at: [104.75, 45.9], group: sfp-plus-lower, rel-pos: 47}
+      - {ref: std/sfp-ganged@1, id: port-48, at: [104.75, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 48}
+      - {ref: std/sfp-ganged@1, id: port-49, at: [119.0, 45.9], group: sfp-plus-lower, rel-pos: 49}
+      - {ref: std/sfp-ganged@1, id: port-50, at: [119.0, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 50}
+      - {ref: std/sfp-ganged@1, id: port-51, at: [133.25, 45.9], group: sfp-plus-lower, rel-pos: 51}
+      - {ref: std/sfp-ganged@1, id: port-52, at: [133.25, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 52}
+      - {ref: std/sfp-ganged@1, id: port-53, at: [147.5, 45.9], group: sfp-plus-lower, rel-pos: 53}
+      - {ref: std/sfp-ganged@1, id: port-54, at: [147.5, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 54}
+      - {ref: std/sfp-ganged@1, id: port-55, at: [161.75, 45.9], group: sfp-plus-lower, rel-pos: 55}
+      - {ref: std/sfp-ganged@1, id: port-56, at: [161.75, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 56}
+      - {ref: std/sfp-ganged@1, id: port-57, at: [176.0, 45.9], group: sfp-plus-lower, rel-pos: 57}
+      - {ref: std/sfp-ganged@1, id: port-58, at: [176.0, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 58}
+      - {ref: std/sfp-ganged@1, id: port-59, at: [190.25, 45.9], group: sfp-plus-lower, rel-pos: 59}
+      - {ref: std/sfp-ganged@1, id: port-60, at: [190.25, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 60}
+      - {ref: std/sfp-ganged@1, id: port-61, at: [207.0, 45.9], group: sfp-plus-lower, rel-pos: 61}
+      - {ref: std/sfp-ganged@1, id: port-62, at: [207.0, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 62}
+      - {ref: std/sfp-ganged@1, id: port-63, at: [221.25, 45.9], group: sfp-plus-lower, rel-pos: 63}
+      - {ref: std/sfp-ganged@1, id: port-64, at: [221.25, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 64}
+      - {ref: std/sfp-ganged@1, id: port-65, at: [235.5, 45.9], group: sfp-plus-lower, rel-pos: 65}
+      - {ref: std/sfp-ganged@1, id: port-66, at: [235.5, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 66}
+      - {ref: std/sfp-ganged@1, id: port-67, at: [249.75, 45.9], group: sfp-plus-lower, rel-pos: 67}
+      - {ref: std/sfp-ganged@1, id: port-68, at: [249.75, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 68}
+      - {ref: std/sfp-ganged@1, id: port-69, at: [264.0, 45.9], group: sfp-plus-lower, rel-pos: 69}
+      - {ref: std/sfp-ganged@1, id: port-70, at: [264.0, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 70}
+      - {ref: std/sfp-ganged@1, id: port-71, at: [278.25, 45.9], group: sfp-plus-lower, rel-pos: 71}
+      - {ref: std/sfp-ganged@1, id: port-72, at: [278.25, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 72}
+      - {ref: std/sfp-ganged@1, id: port-73, at: [292.5, 45.9], group: sfp-plus-lower, rel-pos: 73}
+      - {ref: std/sfp-ganged@1, id: port-74, at: [292.5, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 74}
+      - {ref: std/sfp-ganged@1, id: port-75, at: [306.75, 45.9], group: sfp-plus-lower, rel-pos: 75}
+      - {ref: std/sfp-ganged@1, id: port-76, at: [306.75, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 76}
+      - {ref: std/sfp-ganged@1, id: port-77, at: [321.0, 45.9], group: sfp-plus-lower, rel-pos: 77}
+      - {ref: std/sfp-ganged@1, id: port-78, at: [321.0, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 78}
+      - {ref: std/sfp-ganged@1, id: port-79, at: [335.25, 45.9], group: sfp-plus-lower, rel-pos: 79}
+      - {ref: std/sfp-ganged@1, id: port-80, at: [335.25, 60.9], rotate: 180, group: sfp-plus-lower, rel-pos: 80}
+      - {ref: std/qsfp28@1, id: port-81, at: [364.0, 16.75], group: qsfp28-upper, rel-pos: 81}
+      - {ref: std/qsfp28@1, id: port-82, at: [364.0, 33.55], rotate: 180, group: qsfp28-upper, rel-pos: 82}
+      - {ref: std/qsfp28@1, id: port-83, at: [364.0, 45.15], group: qsfp28-lower, rel-pos: 83}
+      - {ref: std/qsfp28@1, id: port-84, at: [364.0, 61.95], rotate: 180, group: qsfp28-lower, rel-pos: 84}
+      - ref: common/led-dot@1
+        id: led-power
+        at: [8.0, 55.75]
+        group: leds
+        rel-pos: 1
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: std/rj45-ganged@2
+        id: console
+        at: [24.0, 44.95]
+        rotate: 180
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: common/rj45-ganged-eth@1
+        id: mgmt
+        at: [24.0, 56.05]
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: rj45, role: mgmt}
+      - ref: std/usb-a@1
+        id: usb
+        at: [37.25, 52.55]
+        rotate: 90
+        group: mgmt
+        rel-pos: 3
+        attrs: {media: usb-a}
+    regions:
+    - id: logo-zone
+      at: [3.0, 4.0]
+      size: {w: 12.0, h: 8.0}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 442.5, h: 88.9}
+    components:
+      bays:
+      - id: psu-1
+        at: [2.0, 46.3]
+        size: {w: 98.0, h: 40.0}
+        group: psus
+        rel-pos: 1
+        accepts:
+        - cisco/nc5k-pac-650w-fr@1
+        - cisco/nc5k-pac-650w-bk@1
+        - cisco/nc5k-pdc-930w-fr@1
+        - cisco/nc5k-pdc-930w-bk@1
+        default: cisco/nc5k-pac-650w-fr@1
+      - id: fan-1
+        at: [109.0, 1.95]
+        size: {w: 110.0, h: 85.0}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - cisco/ncs-5002-fn-fr@1
+        - cisco/ncs-5002-fn-bk@1
+        default: cisco/ncs-5002-fn-fr@1
+      - id: fan-2
+        at: [223.0, 1.95]
+        size: {w: 110.0, h: 85.0}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - cisco/ncs-5002-fn-fr@1
+        - cisco/ncs-5002-fn-bk@1
+        default: cisco/ncs-5002-fn-fr@1
+      - id: psu-2
+        at: [342.5, 46.3]
+        size: {w: 98.0, h: 40.0}
+        group: psus
+        rel-pos: 2
+        accepts:
+        - cisco/nc5k-pac-650w-fr@1
+        - cisco/nc5k-pac-650w-bk@1
+        - cisco/nc5k-pdc-930w-fr@1
+        - cisco/nc5k-pdc-930w-bk@1
+        default: cisco/nc5k-pac-650w-fr@1
+  top:
+    size: {w: 442.5, h: 489.7}
+    empty: >-
+      Not drawn flat by any held source. The guide's Figures 3, 4, 9 and 11 show the lid in three-quarter
+      view with a label area; nothing there can be measured.
+  bottom:
+    size: {w: 442.5, h: 489.7}
+    empty: Not drawn by any held source. The guide does not picture the underside.
+  left:
+    size: {w: 489.7, h: 88.9}
+    empty: >-
+      Not drawn flat by any held source. Figures 9 and 11 show a side wall in three-quarter view with
+      the bracket holes; their positions cannot be read.
+  right:
+    size: {w: 489.7, h: 88.9}
+    empty: >-
+      Not drawn by any held source. The guide's figures show one side wall and say nothing of the other.
+configurations:
+  ac-port-side-intake:
+    kind: base
+    default: true
+    power: ac
+    airflow: front-to-back
+    source: >-
+      derived - the guide prints no ordering code for any build, so the library defines the base as the
+      first build the guide lists: AC supplies and front-to-back fan modules (Tables 4 and 5).
+    description: >-
+      Two NC5K-PAC-650W-FR supplies and two NCS-5002-FN-FR fan modules: AC power, front-to-back airflow
+      (port-side intake).
+  ac-port-side-exhaust:
+    kind: example
+    power: ac
+    airflow: back-to-front
+    description: >-
+      Two NC5K-PAC-650W-BK supplies and two NCS-5002-FN-BK fan modules: AC power, back-to-front airflow
+      (port-side exhaust). An illustration: the guide prints no ordering code for this build.
+    bays: {psu-1: cisco/nc5k-pac-650w-bk@1, psu-2: cisco/nc5k-pac-650w-bk@1, fan-1: cisco/ncs-5002-fn-bk@1,
+      fan-2: cisco/ncs-5002-fn-bk@1}
+  dc-port-side-intake:
+    kind: example
+    power: dc
+    airflow: front-to-back
+    description: >-
+      Two NC5K-PDC-930W-FR supplies and two NCS-5002-FN-FR fan modules: DC power, front-to-back airflow
+      (port-side intake). An illustration: the guide prints no ordering code for this build.
+    bays: {psu-1: cisco/nc5k-pdc-930w-fr@1, psu-2: cisco/nc5k-pdc-930w-fr@1}
+  dc-port-side-exhaust:
+    kind: example
+    power: dc
+    airflow: back-to-front
+    description: >-
+      Two NC5K-PDC-930W-BK supplies and two NCS-5002-FN-BK fan modules: DC power, back-to-front airflow
+      (port-side exhaust). An illustration: the guide prints no ordering code for this build.
+    bays: {psu-1: cisco/nc5k-pdc-930w-bk@1, psu-2: cisco/nc5k-pdc-930w-bk@1, fan-1: cisco/ncs-5002-fn-bk@1,
+      fan-2: cisco/ncs-5002-fn-bk@1}
+references:
+- title: >-
+    Hardware Installation Guide for Cisco NCS 5000 Series Routers (first published 2015-12-23, last modified
+    2019-01-31)

@@ -1,0 +1,691 @@
+format: 1
+kind: device
+name: crs328-4c-20s-4s-plus-rm
+version: 1.0.0
+maturity: modelled
+manufacturer: MikroTik
+model: CRS328-4C-20S-4S+RM
+portfolio: {line: Switches, family: Cloud Router Switch, series: CRS328}
+description: >-
+  MikroTik CRS328-4C-20S-4S+RM is a fixed 1U Cloud Router Switch with 20 SFP cages, four SFP+ cages and
+  four combo ports. Each combo port is a gigabit RJ45 jack (1T to 4T) and an SFP cage (1F to 4F), one
+  in use at a time. It also has an RJ45 serial console and runs SwOS or RouterOS (dual boot). The front
+  carries the 20 SFP cages in two rows of ten, with the odd numbers on the lower row. Next come the combo
+  cages and jacks under a COMBO bracket and the four SFP+ cages. The CONSOLE jack, the RESET and MODE
+  buttons and the USER, FAULT, PWR 2 and PWR 1 lamps follow. The rear carries two IEC C14 inlets (POWER
+  1 and POWER 2) and two fans. Two supplies are built into the chassis, so there are no bays.
+profile: networking
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      Dimensions drawing "CRS328-4C-20S-4S_dimensions", MikroTik, printed 20.09.2023 (file CRS328-4C-20S-4S_dimensions_230928.pdf,
+      rendered at 200 dpi): front, left side, top plan and isometric. CR328-4C-20S-4S+RM brochure, MikroTik
+      (file CR328-4C-20S-4SRM_211003.pdf; MikroTik's file name reads CR328; no date is printed, the file
+      name carries a revision stamp): specification table, quick specifications. CRS328-4C-20S-4S+RM product
+      page, MikroTik (https://mikrotik.com/product/crs328_4c_20s_4s_rm, saved 2026-10-26): dimensions,
+      AC inputs, PSU slots, cooling. Quick Guide CRS328-4C-20S-4S+ (file CRS328-4C-20S-4Splus-qgwnc_191052.pdf,
+      revision stamp 191052): powering, combo ports, mode button. Studio photographs 1526 (front) and
+      1528 (rear): printed legends, colours and counts, and the rear's positions. The block diagram CRS328-4C-20S-4SRM_220948.png.
+      The saved help page Quick Guide G1-b lists the model and holds no figures. NetBox read as a second
+      opinion only. MikroTik prints no figure numbers. The device name spells MikroTik's + as -plus because
+      a directory name cannot carry +; model: keeps the + as printed.
+  datasheet:
+    confidence: datasheet
+    note: >-
+      The brochure is MikroTik's datasheet for the model: product code CRS328-4C-20S-4S+RM, CPU 98DX3236A1
+      800 MHz, 512 MB RAM, 16 MB flash, 20 SFP cages, four SFP+ cages, four Ethernet/SFP combo ports,
+      SwOS / RouterOS (dual boot), 100 - 240 V input by two power supplies with failover, 443 x 194 x
+      44 mm, -20 to +60 C tested, 43 W maximum power consumption, serial RJ45, a mode button, temperature
+      based fan control, two IEC power cords and rack ears. The quick guide words the 43 W as the consumption
+      under maximum load, so it is filed as the maximum. The quick guide says each combo interface has
+      two physical connectors of which only one can be used at a time.
+  gate-1:
+    confidence: drawing
+    note: >-
+      The drawing's front view body is 1161 px wide in the 200 dpi render for the printed 443 (2.62 px
+      per mm) and 114 px tall, 43.5 mm for the side view's 44, so every x and y below is taken at 2.62
+      px per mm from the body's top-left corner of the front view. The 20 SFP cages read a 14.25 mm pitch
+      inside a block and a 70.2 mm block step.
+  chassis:
+    confidence: drawing
+    note: >-
+      443 wide, 44 high, 193 deep: the drawing dimensions 443, 193 and 44. The brochure and the product
+      page print 443 x 194 x 44 mm; the drawing's 193 is carried and the 194 is declared a conflict. The
+      6 mm the plan dimensions is the two cable loops standing off the rear, an accessory and not part
+      of the depth. 443 is the body between the ear folds.
+  front-layout:
+    confidence: drawing
+    note: >-
+      From the drawing's front view. Three SFP blocks, each 58.9 x 26.6 at 18.3, 88.3 and 158.6 mm (70.2
+      mm step), top at 8.65 mm, four columns of two cages on a 14.25 mm pitch; the third block holds two
+      columns of SFP cages (17 to 20) and then the two columns of the combo SFP cages, which begin at
+      188.15 mm. The combo copper block is 35.1 x 28.8 at 228.1 mm, top 6.4 mm, four jacks on a 16.8 mm
+      column pitch and 14.6 mm row pitch. The SFP+ block is 30.0 x 26.6 at 274.0 mm, top 8.65 mm, two
+      cages by two on the registry's 15.1 mm column pitch and 14.0 mm row pitch. The lamps are four circles
+      at 307.9 mm, 16.2, 21.1, 26.2 and 31.0 mm. The CONSOLE jack is the 15.8 x 13.2 housing at 311.3
+      mm, 22.4 mm. The two round buttons are at 332.2 and 342.4 mm, 30.8 mm. The lower cage and jack of
+      each pair are turned the other way up.
+  legends-and-colours:
+    confidence: photo-measured
+    note: >-
+      Photograph 1526 prints the SFP numbers 2 4 6 8 over and 1 3 5 7 under each row (and so on to 20),
+      2F 4F and 2T 4T over and 1F 3F and 1T 3T under the combo ports, 2 4 over and 1 3 under the SFP+
+      cages, COMBO over the combo bracket and SFP, GIGABIT ETH and SFP+ along the blocks, rotated. Their
+      positions are taken from the photograph's proportions (the face is 0.92 of its true height there),
+      so they are estimated, good to about 1 mm. The USER, FAULT, PWR 2 and PWR 1 legends sit in the photograph
+      above and to the right of the lamps, joined to them by a thin bracket that is not drawn. The lamps
+      are given the lit colours the photograph shows (yellow, red, blue, blue). The face reads #d9d9d9
+      in the photograph's median.
+  lamps:
+    confidence: estimated
+    note: >-
+      The SFP cages and the combo jacks carry no lamp the photograph shows, and the brochure counts none.
+      The quick guide holds no LED table, so what the four lamps show is a gap.
+  port-numbering:
+    confidence: datasheet
+    note: >-
+      The metal prints the numbers as above. The odd number is on the lower cage of a column. The combo
+      ports are printed 1T to 4T and 1F to 4F and RouterOS shows them as combo 1 to 4 (quick guide); the
+      copper jacks are named copper-1 to copper-4 and the combo cages combo-sfp-1 to combo-sfp-4, with
+      the same numbers: the groups say they are one port at a time. The SFP+ cages are printed 1 to 4
+      under the 2 4 / 1 3 arrangement.
+  console:
+    confidence: drawing
+    note: >-
+      The RJ45 serial port (brochure: serial port RJ45; quick guide: 115200 bit/s) is the jack under the
+      printed CONSOLE.
+  buttons:
+    confidence: drawing
+    note: >-
+      Two round buttons printed RESET and MODE (quick guide: the reset button, and a mode button that
+      runs a RouterOS script). The drawing gives their centres. Both are drawn with the library's recessed
+      reset-button part; the MODE one carries function mode.
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      The product page lists two AC inputs, two PSU slots and two fans; the brochure says two 100 - 240
+      V power supplies with failover and temperature based fan control; the quick guide says power comes
+      from two IEC connectors. No document held shows a removable supply module or gives a supply part
+      number, and the rear photograph shows two bare inlets, so the supplies are built into the chassis
+      and there are no bays, as on juniper/ex2300-24t. The two fans are the two hexagon grilles of the
+      rear photograph. The photograph also shows a spring wire retaining clip on each inlet, which is
+      a cord accessory and is not drawn.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      estimated - read off photograph 1528, which looks slightly down on the rear, so x is taken at 3.80
+      px per mm across the 443 mm width and y is estimated, good to about 2 mm. The two C14 inlets are
+      centred at 22.6 and 61.3 mm and carry POWER 1 and POWER 2 with 100-240 V~1 A MAX 50/60 Hz printed
+      under each. The two fan grilles are 35.5 mm across, centred at 183.2 and 390.3 mm. Two of the rear's
+      crosshead screws are drawn.
+  side-layout:
+    confidence: estimated
+    note: >-
+      The drawing's side view is the left wall (plain: a screw, small holes and the ear plate at the front).
+      The isometric shows the right wall with a rectangular field of round holes; it is not an orthographic
+      view, so the field is read as a fraction of the wall (from 27 to 122 mm behind the front, 9 to 33
+      mm down) and is estimated, good to about 5 mm. The left wall is drawn empty.
+  ears:
+    confidence: drawing
+    note: >-
+      Rack ears are in the box (brochure: rack ears; the product page lists them under Included parts).
+      The drawing's side view shows the ear plate at the front end of the body, on the face, and the plan
+      shows no ears (443 is the body), so the shipped position is flush. The ears are not drawn.
+  colour: {confidence: photo-measured, note: median of photograph 1526's face (#d9d9d9).}
+attrs:
+  power:
+    power-max-w: 43
+    power-input: 100 - 240 V AC, two inputs (IEC C14), built-in supplies with failover
+  thermal: {cooling: 'two built-in fans, temperature based fan control'}
+  environmental: {operating-temp-c: -20 to 60 (tested)}
+  platform: {cpu: '98DX3236A1, 800 MHz', switch-chip: 98DX3236A1, ram: 512 MB, storage: 16 MB flash, os: SwOS
+      / RouterOS (dual boot)}
+  features:
+    vlan-limit: IEEE 802.1Q, up to 4K VLANs
+    optics-sfp: 'brochure: twenty SFP cages for 1G modules and four combo SFP cages, none included'
+    optics-sfp-plus: 'brochure: four SFP+ cages for 10G modules, none included'
+    combo-ports: >-
+      four combo ports, each a gigabit RJ45 jack and an SFP cage of which only one can be used at a time
+      (quick guide)
+  compliance: {certification: 'CE, EAC, RoHS'}
+chassis:
+  width: 443.0
+  height: 44.0
+  depth: 193.0
+  ru: 1
+  color: '#d9d9d9'
+  ears:
+    positions:
+    - {name: flush, at: 0, default: true}
+  power: ac
+gaps:
+- what: depth-figure
+  scope:
+  - top
+  reason: sources-disagree
+  note: >-
+    The drawing dimensions 193 mm; the brochure and the product page print 194 mm. The drawing's figure
+    is carried.
+  wanted: MikroTik's statement of the depth.
+- what: right-wall-vent
+  scope:
+  - right
+  reason: needs-drawing
+  note: >-
+    The right wall's field of round holes is read off the drawing's isometric view, which is not orthographic,
+    so its size and position are estimated.
+  wanted: A right side view of the unit.
+- what: left-wall
+  scope:
+  - left
+  reason: needs-drawing
+  note: The drawing's side view shows the left wall as plain, and it is left empty.
+  wanted: none
+- what: rear-elevation
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    The dimensions drawing has no rear view; the rear is read off studio photograph 1528, which looks
+    slightly down on it, so the y positions are estimated.
+  wanted: A dimensioned rear view.
+- what: led-states
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    Searched the brochure, the product page and the quick guide for an LED table: none. The lamps carry
+    the component's own vocabulary and no meaning is stated for USER, FAULT, PWR 2 or PWR 1.
+  wanted: MikroTik's LED description for the CRS328-4C-20S-4S+RM.
+- what: weight
+  scope:
+  - front
+  reason: vendor-silent
+  note: Neither the brochure, the product page nor the quick guide gives a weight.
+  wanted: MikroTik's weight.
+- what: eol
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The saved product page carries no Discontinued badge and MikroTik publishes no end-of-life page, so
+    no lifecycle is written.
+  wanted: none
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the 20 SFP cages, printed 1 to 20 with the odd numbers on the lower row
+  combo-sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: >-
+      the four combo SFP cages, printed 1F to 4F; combo-sfp-N shares its number with the copper jack copper-N
+      printed NT, and only one of the pair can be used at a time
+  combo-copper:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      the four combo gigabit RJ45 jacks, printed 1T to 4T; copper-N shares its number with the SFP cage
+      combo-sfp-N printed NF, and only one of the pair can be used at a time
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the four SFP+ cages, printed 1 to 4; they take 10 Gb SFP+ modules
+  console: {term: Port, role: management, index-origin: 1, description: the RJ45 serial console}
+  controls: {term: Button, role: management, index-origin: 1, description: the RESET and MODE buttons}
+  status-leds: {term: LED, role: indicator, index-origin: 1, description: 'the USER, FAULT, PWR 2 and
+      PWR 1 lamps'}
+  inlets: {term: Inlet, role: service, index-origin: 1, description: 'the two IEC C14 AC inlets, printed
+      POWER 1 and POWER 2'}
+  furniture: {term: Item, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 443.0, h: 44.0}
+    panel:
+      decor:
+      - {id: plate-sfp-1, kind: jack-plate, at: [18.3, 8.65], size: [58.9, 26.6], fill: '#bcbdbd'}
+      - {id: plate-sfp-2, kind: jack-plate, at: [88.3, 8.65], size: [58.9, 26.6], fill: '#bcbdbd'}
+      - {id: plate-sfp-3, kind: jack-plate, at: [158.6, 8.65], size: [58.9, 26.6], fill: '#bcbdbd'}
+      - {id: plate-copper, kind: jack-plate, at: [228.1, 6.4], size: [35.1, 28.8], fill: '#bcbdbd'}
+      - {id: plate-sfp-plus, kind: jack-plate, at: [274.0, 8.65], size: [30.0, 26.6], fill: '#bcbdbd'}
+      cutouts:
+      - {id: port-1, at: [19.25, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-2, at: [19.25, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-3, at: [33.5, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-4, at: [33.5, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-5, at: [47.75, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-6, at: [47.75, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-7, at: [62.0, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-8, at: [62.0, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-9, at: [89.45, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-10, at: [89.45, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-11, at: [103.7, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-12, at: [103.7, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-13, at: [117.95, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-14, at: [117.95, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-15, at: [132.2, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-16, at: [132.2, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-17, at: [159.65, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-18, at: [159.65, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-19, at: [173.9, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: port-20, at: [173.9, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: combo-sfp-1, at: [188.15, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: combo-sfp-2, at: [188.15, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: combo-sfp-3, at: [202.4, 23.75], size: [14.25, 10.4], shape: rect}
+      - {id: combo-sfp-4, at: [202.4, 9.75], size: [14.25, 10.4], shape: rect}
+      - {id: copper-1, at: [229.6, 22.0], size: [15.8, 13.2], shape: rect}
+      - {id: copper-2, at: [229.6, 7.4], size: [15.8, 13.2], shape: rect}
+      - {id: copper-3, at: [246.4, 22.0], size: [15.8, 13.2], shape: rect}
+      - {id: copper-4, at: [246.4, 7.4], size: [15.8, 13.2], shape: rect}
+      - {id: cage-1, at: [274.4, 23.85], size: [14.5, 10.0], shape: rect}
+      - {id: cage-2, at: [274.4, 9.85], size: [14.5, 10.0], shape: rect}
+      - {id: cage-3, at: [289.5, 23.85], size: [14.5, 10.0], shape: rect}
+      - {id: cage-4, at: [289.5, 9.85], size: [14.5, 10.0], shape: rect}
+      - {id: console, at: [311.3, 22.4], size: [15.8, 13.2], shape: rect}
+      - {id: btn-reset, at: [330.2, 28.8], size: [4.0, 4.0], shape: circle}
+      - {id: btn-mode, at: [340.4, 28.8], size: [4.0, 4.0], shape: circle}
+      - {id: led-user, at: [306.9, 15.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-fault, at: [306.9, 20.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr2, at: [306.9, 25.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr1, at: [306.9, 30.0], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [26.38, 38.2], text: '1', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-1}
+    - {at: [26.38, 6.0], text: '2', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-2}
+    - {at: [40.62, 38.2], text: '3', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-3}
+    - {at: [40.62, 6.0], text: '4', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-4}
+    - {at: [54.88, 38.2], text: '5', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-5}
+    - {at: [54.88, 6.0], text: '6', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-6}
+    - {at: [69.12, 38.2], text: '7', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-7}
+    - {at: [69.12, 6.0], text: '8', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-8}
+    - {at: [96.58, 38.2], text: '9', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-9}
+    - {at: [96.58, 6.0], text: '10', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-10}
+    - {at: [110.83, 38.2], text: '11', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-11}
+    - {at: [110.83, 6.0], text: '12', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-12}
+    - {at: [125.08, 38.2], text: '13', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-13}
+    - {at: [125.08, 6.0], text: '14', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-14}
+    - {at: [139.32, 38.2], text: '15', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-15}
+    - {at: [139.32, 6.0], text: '16', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-16}
+    - {at: [166.78, 38.2], text: '17', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-17}
+    - {at: [166.78, 6.0], text: '18', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-18}
+    - {at: [181.03, 38.2], text: '19', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-19}
+    - {at: [181.03, 6.0], text: '20', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: port-20}
+    - {at: [281.65, 38.2], text: '1', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [281.65, 6.0], text: '2', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-2}
+    - {at: [296.75, 38.2], text: '3', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-3}
+    - {at: [296.75, 6.0], text: '4', font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-4}
+    - {id: combo-top, at: [188.0, 1.2], path: M 0 0 H 78.1, filled: false, stroke-width: 0.25, fill: '#2b2b2b',
+      for: chassis}
+    - {id: combo-bottom, at: [188.0, 40.3], path: M 0 0 H 78.1, filled: false, stroke-width: 0.25, fill: '#2b2b2b',
+      for: chassis}
+    - {id: combo-left, at: [188.0, 1.2], path: M 0 0 V 39.1, filled: false, stroke-width: 0.25, fill: '#2b2b2b',
+      for: chassis}
+    - {id: combo-right, at: [266.1, 1.2], path: M 0 0 V 39.1, filled: false, stroke-width: 0.25, fill: '#2b2b2b',
+      for: chassis}
+    - {at: [223.5, 4.6], text: COMBO, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [195.28, 4.4], text: 2F, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: combo-sfp-2}
+    - {at: [209.53, 4.4], text: 4F, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: combo-sfp-4}
+    - {at: [195.28, 38.6], text: 1F, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: combo-sfp-1}
+    - {at: [209.53, 38.6], text: 3F, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: combo-sfp-3}
+    - {at: [237.5, 4.4], text: 2T, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: copper-2}
+    - {at: [254.3, 4.4], text: 4T, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: copper-4}
+    - {at: [237.5, 38.6], text: 1T, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: copper-1}
+    - {at: [254.3, 38.6], text: 3T, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: copper-3}
+    - {at: [78.6, 21.2], text: SFP, font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [148.5, 21.2], text: SFP, font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [218.4, 21.2], text: SFP, font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [265.2, 21.2], text: GIGABIT ETH, font-size: 1.6, anchor: middle, rotate: -90, fill: '#2b2b2b',
+      for: chassis}
+    - {at: [272.6, 21.2], text: SFP+, font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [319.2, 40.2], text: CONSOLE, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: console}
+    - {at: [332.2, 40.2], text: RESET, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: btn-reset}
+    - {at: [342.4, 40.2], text: MODE, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: btn-mode}
+    - {at: [316.3, 5.0], text: USER, font-size: 2.0, anchor: start, fill: '#2b2b2b', for: led-user}
+    - {at: [316.3, 8.3], text: FAULT, font-size: 2.0, anchor: start, fill: '#2b2b2b', for: led-fault}
+    - {at: [316.3, 11.6], text: PWR 2, font-size: 2.0, anchor: start, fill: '#2b2b2b', for: led-pwr2}
+    - {at: [316.3, 14.9], text: PWR 1, font-size: 2.0, anchor: start, fill: '#2b2b2b', for: led-pwr1}
+    - {at: [439.0, 9.7], text: Cloud Router Switch, font-size: 5.1, anchor: end, fill: '#2b2b2b', for: chassis}
+    - {at: [438.6, 14.2], text: CRS328-4C-20S-4S+RM, font-size: 3.2, anchor: end, fill: '#2b2b2b', for: chassis}
+    components:
+      placements:
+      - ref: std/sfp-ganged@1
+        id: port-1
+        at: [19.25, 23.75]
+        rotate: 180
+        group: sfp
+        rel-pos: 1
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-2
+        at: [19.25, 9.75]
+        group: sfp
+        rel-pos: 2
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-3
+        at: [33.5, 23.75]
+        rotate: 180
+        group: sfp
+        rel-pos: 3
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-4
+        at: [33.5, 9.75]
+        group: sfp
+        rel-pos: 4
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-5
+        at: [47.75, 23.75]
+        rotate: 180
+        group: sfp
+        rel-pos: 5
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-6
+        at: [47.75, 9.75]
+        group: sfp
+        rel-pos: 6
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-7
+        at: [62.0, 23.75]
+        rotate: 180
+        group: sfp
+        rel-pos: 7
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-8
+        at: [62.0, 9.75]
+        group: sfp
+        rel-pos: 8
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-9
+        at: [89.45, 23.75]
+        rotate: 180
+        group: sfp
+        rel-pos: 9
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-10
+        at: [89.45, 9.75]
+        group: sfp
+        rel-pos: 10
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-11
+        at: [103.7, 23.75]
+        rotate: 180
+        group: sfp
+        rel-pos: 11
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-12
+        at: [103.7, 9.75]
+        group: sfp
+        rel-pos: 12
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-13
+        at: [117.95, 23.75]
+        rotate: 180
+        group: sfp
+        rel-pos: 13
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-14
+        at: [117.95, 9.75]
+        group: sfp
+        rel-pos: 14
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-15
+        at: [132.2, 23.75]
+        rotate: 180
+        group: sfp
+        rel-pos: 15
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-16
+        at: [132.2, 9.75]
+        group: sfp
+        rel-pos: 16
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-17
+        at: [159.65, 23.75]
+        rotate: 180
+        group: sfp
+        rel-pos: 17
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-18
+        at: [159.65, 9.75]
+        group: sfp
+        rel-pos: 18
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-19
+        at: [173.9, 23.75]
+        rotate: 180
+        group: sfp
+        rel-pos: 19
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: port-20
+        at: [173.9, 9.75]
+        group: sfp
+        rel-pos: 20
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: combo-sfp-1
+        at: [188.15, 23.75]
+        rotate: 180
+        group: combo-sfp
+        rel-pos: 1
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: combo-sfp-2
+        at: [188.15, 9.75]
+        group: combo-sfp
+        rel-pos: 2
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: combo-sfp-3
+        at: [202.4, 23.75]
+        rotate: 180
+        group: combo-sfp
+        rel-pos: 3
+        attrs: {media: sfp, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: combo-sfp-4
+        at: [202.4, 9.75]
+        group: combo-sfp
+        rel-pos: 4
+        attrs: {media: sfp, speed: 1g}
+      - ref: common/rj45-eth@1
+        id: copper-1
+        at: [229.6, 22.0]
+        rotate: 180
+        group: combo-copper
+        rel-pos: 1
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-eth@1
+        id: copper-2
+        at: [229.6, 7.4]
+        group: combo-copper
+        rel-pos: 2
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-eth@1
+        id: copper-3
+        at: [246.4, 22.0]
+        rotate: 180
+        group: combo-copper
+        rel-pos: 3
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-eth@1
+        id: copper-4
+        at: [246.4, 7.4]
+        group: combo-copper
+        rel-pos: 4
+        attrs: {media: rj45, speed: 1g}
+      - ref: std/sfp@1
+        id: cage-1
+        at: [274.4, 23.85]
+        rotate: 180
+        group: sfp-plus
+        rel-pos: 1
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-2
+        at: [274.4, 9.85]
+        group: sfp-plus
+        rel-pos: 2
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-3
+        at: [289.5, 23.85]
+        rotate: 180
+        group: sfp-plus
+        rel-pos: 3
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-4
+        at: [289.5, 9.85]
+        group: sfp-plus
+        rel-pos: 4
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/rj45@2
+        id: console
+        at: [311.3, 22.4]
+        group: console
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: common/reset-button@1
+        id: btn-reset
+        at: [330.2, 28.8]
+        for: chassis
+        group: controls
+        rel-pos: 1
+        attrs: {function: reset}
+      - ref: common/reset-button@1
+        id: btn-mode
+        at: [340.4, 28.8]
+        for: chassis
+        group: controls
+        rel-pos: 2
+        attrs: {function: mode}
+      - ref: common/led-dot@1
+        id: led-user
+        at: [306.9, 15.2]
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states:
+        - 'off'
+        - {name: yellow, color: '#e5d800'}
+      - ref: common/led-dot@1
+        id: led-fault
+        at: [306.9, 20.1]
+        for: chassis
+        group: status-leds
+        rel-pos: 2
+        states:
+        - 'off'
+        - {name: red, color: '#ef4444'}
+      - ref: common/led-dot@1
+        id: led-pwr2
+        at: [306.9, 25.2]
+        for: chassis
+        group: status-leds
+        rel-pos: 3
+        states:
+        - 'off'
+        - {name: blue, color: '#2563eb'}
+      - ref: common/led-dot@1
+        id: led-pwr1
+        at: [306.9, 30.0]
+        for: chassis
+        group: status-leds
+        rel-pos: 4
+        states:
+        - 'off'
+        - {name: blue, color: '#2563eb'}
+    regions:
+    - id: logo-zone
+      at: [407.0, 34.0]
+      size: {w: 29.0, h: 8.0}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 443.0, h: 44.0}
+    panel:
+      decor:
+      - {id: fan-0, kind: fan-grille, at: [165.45, 4.25], size: [35.5, 35.5], rx: 17.75, pattern: vent,
+        vent: 1.0}
+      - {id: fan-1, kind: fan-grille, at: [372.55, 4.25], size: [35.5, 35.5], rx: 17.75, pattern: vent,
+        vent: 1.0}
+      cutouts:
+      - {id: ac-inlet-1, at: [8.6, 13.0], size: [28.0, 20.0], shape: rect}
+      - {id: ac-inlet-2, at: [47.3, 13.0], size: [28.0, 20.0], shape: rect}
+    silkscreen:
+    - {at: [22.6, 37.3], text: POWER 1, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [22.6, 40.3], text: 100-240 V~1 A MAX 50/60 Hz, font-size: 2.0, anchor: middle, fill: '#2b2b2b',
+      for: ac-inlet-1}
+    - {at: [61.3, 37.3], text: POWER 2, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
+    - {at: [61.3, 40.3], text: 100-240 V~1 A MAX 50/60 Hz, font-size: 2.0, anchor: middle, fill: '#2b2b2b',
+      for: ac-inlet-2}
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [8.6, 13.0], group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [47.3, 13.0], group: inlets, rel-pos: 2}
+      - {ref: common/screw-head@1, id: rear-screw-1, at: [145.3, 5.3], group: furniture, rel-pos: 1}
+      - {ref: common/screw-head@1, id: rear-screw-2, at: [422.5, 5.3], group: furniture, rel-pos: 2}
+  top:
+    size: {w: 443.0, h: 193.0}
+    empty: >-
+      The drawing's top plan shows a plain lid with the Cloud Switch Series mark (a brand mark, not drawn)
+      and no vents or openings; the two loops it shows at the rear are an accessory.
+  bottom:
+    size: {w: 443.0, h: 193.0}
+    empty: >-
+      Not drawn by any source held: neither the drawing, the brochure nor the studio photographs picture
+      the underside.
+  left:
+    size: {w: 193.0, h: 44.0}
+    empty: >-
+      The drawing's side view is the left wall: plain, with a screw, small holes and the ear plate at
+      the front, and no openings. Not drawn here.
+  right:
+    size: {w: 193.0, h: 44.0}
+    panel:
+      decor:
+      - {id: vent-field, kind: vent-window, at: [27.0, 9.0], size: [95.0, 24.0], pattern: vent, vent: 1.0}
+configurations:
+  base:
+    kind: base
+    description: >-
+      CRS328-4C-20S-4S+RM - 20 SFP cages, four SFP+ cages, four combo RJ45 / SFP ports and the RJ45 console,
+      with two built-in AC supplies and two fans. The box holds two IEC power cords and rack ears.
+    default: true
+    part-numbers:
+      CRS328-4C-20S-4S+RM: {}
+references:
+- title: >-
+    CR328-4C-20S-4S+RM brochure (MikroTik; revision stamp 211003, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CR328-4C-20S-4SRM_211003.pdf)
+  sha256: 4a36fa68e3beb1eb1675673a4c42ad8240342ec89bc767e3571c0cb2f47b48c9
+- title: >-
+    CRS328-4C-20S-4S dimensions (MikroTik; printed 20.09.2023; https://cdn.mikrotik.com/web-assets/product_files/CRS328-4C-20S-4S_dimensions_230928.pdf)
+  sha256: b4d90b3e654bb4bbf5b467a0230a0c5ea9ecca642e6a283147860c9ef53f9869
+- title: >-
+    CRS328-4C-20S-4S+ Quick Guide (MikroTik; revision stamp 191052, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS328-4C-20S-4Splus-qgwnc_191052.pdf)
+  sha256: 85615d7f3391b7c6f68a6277b5231767a16f5e78b2c8bae5b5213e824ec4bbe7

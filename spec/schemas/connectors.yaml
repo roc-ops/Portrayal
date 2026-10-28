@@ -67,6 +67,7 @@ interfaces:
   # generation.
   usb-a: {standard: usb-a, note: 'USB Standard-A receptacle (USB 2.0 specification, figure 6-7); generic/usb-a-plug@1 mates it. A USB 3.x Standard-A plug mates the same opening'}
   micro-usb-b: {standard: micro-usb-b, note: 'USB 2.0 Micro-B receptacle (Micro-USB Cables and Connectors Specification 1.01, figure 4-10); generic/micro-usb-b-plug@1 mates it. Micro-AB and the wider USB 3.x Micro-B are different interfaces'}
+  mini-usb-b: {standard: mini-usb-b, note: 'USB 2.0 Mini-B receptacle (shell from Molex sales drawing SD-54819-026, part 54819-0519). No part presents it and no cable plug mates it yet. Micro-B and Mini-AB are different interfaces'}
   usb-c: {standard: usb-c, note: 'USB Type-C receptacle (USB Type-C Cable and Connector Specification, figure 3-1); generic/usb-c-plug@1 mates it, either way up'}
   # D-subminiature and VGA connectors (#787, docs/connectors-dsub-design.md).
   # The hooded cable plug that mates each is a generic plug; the far end of
@@ -91,7 +92,7 @@ interfaces:
   terminal-508-6: {standard: terminal-508-6-header, note: 'six-position plain pluggable header on a 5.08 mm pitch (Phoenix Contact MSTBA 2,5/ 6-G-5,08 and equivalents); generic/terminal-508-6-plug@1 mates it'}
   # The DC barrel jack (#789, docs/connectors-dc-terminal-design.md). ONE
   # INTERFACE, BY RULING: see the note.
-  dc-barrel: {standard: barrel-jack, note: 'the library treats the DC barrel jack as ONE nominal connector. Barrel diameters vary by product, and none of the documents held for the four devices that place common/dc-barrel@1 states one, so the interface claims no diameter. The rating is carried as attributes of each placement of the jack (input-voltage, current-max-a) and not by the interface. generic/dc-barrel-plug@1, drawn at the common 5.5 mm barrel, mates it'}
+  dc-barrel: {standard: barrel-jack, note: 'the library treats the DC barrel jack as ONE nominal connector. Barrel diameters vary by product, and of the seven devices that place common/dc-barrel@1 only the CSS326-24G-2S+RM and CRS309-1G-8S+IN quick guides state one (5.5 mm outside, 2 mm inside), so the interface claims no diameter. The rating is carried as attributes of each placement of the jack (input-voltage, current-max-a) and not by the interface. generic/dc-barrel-plug@1, drawn at the common 5.5 mm barrel, mates it'}
   # Screw and stud terminals a lug lands on (#789,
   # docs/connectors-dc-terminal-design.md section 12). ONE INTERFACE, BY
   # RULING: see the note. The part that presents it is the terminal screw

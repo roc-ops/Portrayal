@@ -44,6 +44,27 @@ standards:
       is what the panel is cut for, so the shell is what is registered here. No
       radius - the Micro-B shell is a D-profile with two chamfered corners rather
       than a rounded rectangle, and no corner figure is sourced.
+  mini-usb-b:
+    registry: Molex sales drawing SD-54819-026 rev A (USB Series Mini-B Receptacle Ass'y, Lead Free; part 54819-0519, right angle, through hole), https://www.molex.com/content/dam/molex/molex-dot-com/products/automated/en-us/salesdrawingpdf/548/54819/548190519_sd.pdf
+    w: 7.7
+    h: 3.9
+    confidence: drawing
+    depth: 9.0
+    depth-confidence: drawing
+    notes: Mini-B receptacle shield case, from one maker's drawing of one part (Molex
+      54819-0519, sheets 1 and 2). 7.7 is the case's widest line on the front view. The
+      shell is 3.9 high, the 3.1 opening plus two 0.4 walls (note 1, t=0.4), which both
+      views show at scale; the printed 3.95 on the side view runs from the shell's top to
+      the seating plane, so 3.9 is the shell. The front view's 3.55 runs from the top of
+      the opening (the shell's inner top) to the base. Depth 9 is the overall length on
+      the side view, as dimensioned. The plug opening inside it is 6.9 wide by 3.1 high,
+      with five contacts at 0.8 pitch. No radius - the shell is not a rounded rectangle; its
+      lower sides bend inward through two R0.7 bends, with R0.3 at the other corners, and
+      7.7 x 3.9 is its bounding box. Sheet 2's bracketed 4.2 and 4.5 are reference heights
+      across the case and its spring tabs and are not used. Other makers' Mini-B shells
+      may differ by a few tenths. Mini-B is
+      not Micro-B (micro-usb-b, 7.5 x 2.75) and not Mini-AB, which is a different
+      receptacle that also takes a Mini-A plug.
   sfp:
     registry: SFF-8432 / INF-8074
     w: 14.5
@@ -2591,8 +2612,8 @@ standards:
       is read at five positions. The MSTB 2,5/ 5-GF-5,08 header's data sheet
       (p.18) names MSTB 2,5/ 5-STF-5,08, 1778014, as a mate.
   # The DC barrel jack and its plug (#789). ONE NOMINAL SIZE, CHOSEN FOR THE
-  # LIBRARY: barrel diameters vary by product, and no document held for any
-  # device that places common/dc-barrel@1 states one. Neither entry is a
+  # LIBRARY: barrel diameters vary by product, and of the seven devices that place
+  # common/dc-barrel@1 only the CSS326-24G-2S+RM and CRS309-1G-8S+IN quick guides state one. Neither entry is a
   # figure from a placing device. THE KEYS DO NOT OPEN WITH `dc`: lint L62
   # reads every `conforms:` value and its leading segment as a connector
   # word, and `dc` as one flags every `dc-in` placement id.

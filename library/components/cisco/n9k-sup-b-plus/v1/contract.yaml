@@ -1,0 +1,105 @@
+format: 1
+kind: module
+name: n9k-sup-b-plus
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9500 Supervisor B+ (N9K-SUP-B+): six cores, twelve executable threads at 1.9 GHz, 32 GB of
+  memory and a 256 GB SSD; required for the -R and -R2 line cards. The same card face as the Supervisor A:
+  ejector levers at each end, a console port, a MGMT ETH port with link and activity lamps, two USB ports
+  and the BCN, STS and ACT lamps. One or two go in slots SUP 1 and SUP 2 (modules 27 and 28); a pair must
+  be the same type. The Nexus 9504, 9508 and 9516 take the same part.
+size: {w: 203.2, h: 44.45, d: 525.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-SUP-B+'
+  role: 'supervisor'
+  cpu: '6 cores, 12 threads, 1.9 GHz'
+  memory: '32 GB'
+  storage: '256 GB SSD'
+  power-draw-typical-w: 75
+  power-draw-max-w: 90
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    datasheet - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p113, PDF p119), "Supervisor modules": 7.0 in (8.0 in with brackets) by 1.75 in; drawn at the
+    width with brackets. The guide's one row serves all four supervisor types.
+  depth: >-
+    datasheet - the same row: 20.67 in (52.5 cm) inside the chassis, ejector levers 0.75 in outside it.
+  power: >-
+    datasheet - "Planning for Power Requirements" table (printed p11, PDF p17): typical 75 W, maximum 90 W,
+    "(required for -R and -R2 line cards)". CONFLICT: the worked example of the same section (Step 2) uses
+    80 W maximum for two N9K-SUP-B+; the table is used.
+  spec: >-
+    install guide - "Overview of Supervisor Modules": Supervisor B+ (N9K-SUP-B+) with six cores, 12
+    executable threads, 1.9 GHz, 32 GB of memory and 256 GB of SSD.
+  lamps: >-
+    install guide - "Supervisor Module LEDs": BCN, STS and ACT lower left; management port LINK and ACT above
+    the port. Positions estimated.
+  ports: >-
+    install guide - console (RJ-45), MGMT ETH (10/100/1000 RJ-45) and "USB ports" (count not given). Two USB
+    ports drawn, as the figure on PDF p81 shows; every port position is estimated.
+  skin: >-
+    estimated - the skin is the Supervisor A's; nothing in the guide tells the four apart by appearance.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+groups:
+  ports:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: console and out-of-band management jacks plus two USB ports, which together let an operator reach the module
+elements:
+  bcn:
+    at: [14.0, 31.0]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp, lower left.
+    states:
+    - {name: blue, color: '#2a7de1', behavior: blinking}
+    - 'off'
+  sts:
+    at: [20.0, 31.0]
+    size: [3.0, 3.0]
+    class: led
+    description: STS lamp, lower left.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623', behavior: blinking}
+    - {name: red, color: '#d0021b', behavior: blinking}
+    - 'off'
+  act:
+    at: [26.0, 31.0]
+    size: [3.0, 3.0]
+    class: led
+    description: ACT lamp, lower left. Green when active, amber when standby.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  mgmt-link:
+    at: [118.0, 8.0]
+    size: [3.0, 3.0]
+    class: led
+    description: Management port LINK lamp, above the port.
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  mgmt-act:
+    at: [124.0, 8.0]
+    size: [3.0, 3.0]
+    class: led
+    description: Management port ACT lamp, above the port.
+    states:
+    - {name: green, color: '#39b54a', behavior: blinking}
+    - 'off'
+parts:
+  - {ref: std/rj45-ganged@2, id: console, at: [74.0, 16.0], group: ports}
+  - {ref: common/rj45-ganged-eth@1, id: mgmt-eth, at: [116.0, 16.0], group: ports}
+  - {ref: std/usb-a@1, id: usb-1, at: [150.0, 12.0], group: ports}
+  - {ref: std/usb-a@1, id: usb-2, at: [150.0, 24.0], group: ports}
+skins: [default]

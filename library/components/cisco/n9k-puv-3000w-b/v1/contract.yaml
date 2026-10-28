@@ -1,0 +1,67 @@
+format: 1
+kind: module
+name: n9k-puv-3000w-b
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Cisco N9500 Series 3-kW Universal AC/DC power supply (N9K-PUV-3000W-B). Same envelope as the 3-kW AC
+  supply, but the input is a Saf-D-Grid receptacle that takes either a high-voltage AC or a high-voltage DC
+  cord, with a power switch beside it (set to 0 for standby, 1 for on). It stands on end in a power-supply
+  bay, with the OK and FAIL lamps at the upper left. The Nexus 9504, 9508 and 9516 take the same part.
+size: {w: 44.45, h: 133.35, d: 450.85}
+size-confidence: {w: estimated, h: estimated, d: datasheet}
+attrs:
+  model: 'N9K-PUV-3000W-B'
+  role: 'power-module'
+  input: 'ac-dc'
+  inlet: other
+  power-output-w: 3000
+  input-voltage: '200 to 277 VAC or 240 to 380 VDC'
+  input-frequency: '47 to 63 Hz'
+  efficiency: '90% or greater (20 to 100% load)'
+  airflow: 'port-side intake'
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    estimated - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p113, PDF p119): 5.25 in by 1.75 in, 17.75 in deep. The guide's figures (PDF pp102-103) stand
+    the supply on end, so it is 44.45 mm wide by 133.35 mm high; the table lists the two numbers the other
+    way round.
+  depth: >-
+    datasheet - the same table, 17.75 in (450.85 mm) inside the chassis.
+  power: >-
+    datasheet - the guide's "3000-W Universal AC/DC Power Supply Specifications" table: 3000 W; input
+    "200 to 277 VAC or 240 to 380 VDC or" (the printed row ends on that "or"); 47 to 63 Hz; efficiency 90
+    percent or greater; hot swappable; port-side intake. Dissipation and input current are not given.
+  lamps: >-
+    install guide - "Power Supply LEDs": OK lamp and FAIL or FAIL/ID lamp on the upper left front portion
+    of the module. Positions estimated from the figure on PDF p103.
+  skin: >-
+    estimated - the Saf-D-Grid receptacle and the power switch are named in "Connecting a 3-kW Universal
+    AC/DC Power Supply to an AC Power Source" and drawn in the figures of PDF pp104-105; no figure dimensions
+    them, so every position in the skin is estimated.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+elements:
+  ok:
+    at: [4.2, 7.0]
+    size: [3.0, 3.0]
+    class: led
+    description: OK lamp, upper left of the module.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: flashing-green, color: '#39b54a', behavior: blinking}
+    - 'off'
+  fail:
+    at: [4.2, 12.5]
+    size: [3.0, 3.0]
+    class: led
+    description: FAIL or FAIL/ID lamp, below the OK lamp.
+    states:
+    - {name: amber, color: '#f5a623'}
+    - {name: flashing-amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+skins: [default]

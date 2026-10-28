@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: nc5k-pdc-930w-fr
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 930 W DC power supply of the Cisco NCS 5000 routers (NCS 5001, 5002 and 5011), ordered as
+  NC5K-PDC-930W-FR: front-to-back airflow, which the guide calls port-side intake. A grey housing with a
+  round fan grille behind a two-screw guard, an amber FAIL lamp over a green OK lamp at the left, a dark
+  pull handle under the fan, a three-position DC input housing printed -DC, +DC and an earth symbol, and a
+  green release latch at the right edge. The back-to-front twin is NC5K-PDC-930W-BK.
+size: {w: 98.0, h: 40.0}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  NC5K-PDC-930W-FR: {part: NC5K-PDC-930W-FR}
+attrs:
+  power-output-w: 930
+  input: dc
+  inlet: dc-terminal
+  input-voltage: -48/-60
+  efficiency: 94% (at 50% load)
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - Hardware Installation Guide for Cisco NCS 5000 Series Routers (first published 2015-12-23,
+    last modified 2019-01-31), Tables 2, 4 and 6: NC5K-PDC-930W-FR "Cisco NCS 5000 Power DC 930W Front to Back
+    Airflow", with a spare NC5K-PDC-930W-FR= that is the same part and not a second component. The Airflow
+    Direction section equates front-to-back with "port side intake". Listed for the NCS 5001, 5002 and 5011.
+  power: >-
+    datasheet - Tables 18, 20 and 22: maximum power 930 W, typical operating power 511 W, input voltage "-48/-60",
+    efficiency 94% at 50% load. Maximum power is an output rating, so `power-output-w` carries 930; the 511 W
+    typical is not stated to be output or input and is left out. Input fuse 40 A/80 V, protective device 50 A,
+    minimum cable 10 AWG, from the installation chapter and the note under Table 18.
+  size: >-
+    estimated - NO HELD DOCUMENT STATES THE SUPPLY'S DIMENSIONS. 98 x 40 is the aspect of the guide's Figure 21,
+    the only flat face-on drawing of a supply: the body measures 815 x 340 px, 2.40 to 1, and a one-rack-unit slot
+    is about 40 mm tall. The figure is a close crop whose bottom edge may cut the housing, so the width is an
+    estimate to that order.
+  elements: >-
+    estimated - positions are fractions of Figure 21's body: lamps in a column at the left (amber FAIL above, green
+    OK below, with a warning triangle and a supply symbol), the fan grille with its two top screws and a blue ring,
+    the handle as a dark U under the fan, the DC housing with three stacked sockets, and the green latch at the
+    right. Figure 21's callouts: 1 OK lamp, 2 FAIL lamp, 3 DC connector, 4 the cord plug.
+  legends: >-
+    Figure 21 prints -DC beside the upper socket, +DC beside the middle one and an earth symbol under the lower.
+  latch-colour: >-
+    Figure 21 draws the latch green. The guide does not say whether that is the front-to-back or the back-to-front
+    part, and its replacement steps say only that a replacement has "the same coloring as the other fan and power
+    supply modules in the same chassis"; the colour is not tied to airflow.
+  depth: >-
+    estimated - not stated in any held document; 185 mm is a round figure for a supply of this class.
+states: [absent]
+elements:
+  fail: {at: [2.6, 12.4], size: [2.8, 2.8], class: led, states: ['off', {name: fault, color: '#f59e0b'}]}
+  ok: {at: [2.6, 29.2], size: [2.8, 2.8], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
+  fan: {at: [15.2, 2.5], size: [30.0, 30.0], class: rotor}
+  handle: {at: [9.6, 32.8], size: [41.4, 6.4], class: handle}
+  latch: {at: [90.4, 10.8], size: [6.0, 12.6], class: latch}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: the grille's extent is read off Figure 21; the cavity behind it is not stated.
+    - node: handle
+      uhandle: 20.0
+      color: '#1b1d20'
+      confidence: estimated
+      source: Figure 19 shows a handle standing clear of the supply face; 20 mm is a reading of its proportions.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: the latch stands proud in Figure 21's plan and how far is not stated.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [98.0, 40.0]}

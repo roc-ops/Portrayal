@@ -52,6 +52,8 @@ def test_the_connector_registry_is_not_vacuous():
     # generic/c14-plug@1 is the cord end that mates it
     # iec-c19: the C19 outlet of a PDU, a slot for a C20 jumper end (#933)
     # usb-a/micro-usb-b/usb-c: the USB receptacles, made slots for their cable plugs (#786)
+    # mini-usb-b: the Mini-B receptacle, registered from Molex
+    # 54819-0519; no part presents it yet and no plug mates it, so it is in no slot below
     # db9/hd15/da15/db25: the D-sub and VGA connectors, made slots for their hooded plugs (#787)
     # terminal-508-2/-5/-6: the pluggable 5.08 mm terminal headers, made slots for their
     # screw-clamp plugs (#789)
@@ -80,7 +82,7 @@ def test_the_connector_registry_is_not_vacuous():
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
                          "nema-5-15r", "nema-5-20r", "eaton-c39",
-                         "usb-a", "micro-usb-b", "usb-c",
+                         "usb-a", "micro-usb-b", "mini-usb-b", "usb-c",
                          "db9", "hd15", "da15", "db25",
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",

@@ -1,0 +1,47 @@
+format: 1
+kind: kit
+name: 69-2037
+version: 1.0.0
+description: >-
+  The standard rack-mount kit of the Catalyst 4948E and 4948E-F (69-2037-xx; the xx is a
+  revision): two 19-inch brackets that bolt to either the front sides or the rear sides of the
+  chassis. It ships in the box.
+unplaced: >-
+  no device lists this kit yet: cisco/ws-c4948e and cisco/ws-c4948e-f will name it in
+  chassis.kits, with supply in-box, once the device batches that hold them can list a kit.
+motion: fixed
+parts:
+- {ref: cisco/69-2037-bracket@1, id: bracket, count: 2}
+configurations:
+- id: four-post
+  racks: [4-post]
+  parts: [bracket]
+  depth: [488.95, 825.5]
+gaps:
+- what: part-dimensions
+  scope: [four-post]
+  reason: vendor-silent
+  note: >-
+    The Installation Guide (OL-21561-02), Table 3-1 (p. 3-5) and Attaching the Rack-Mount
+    Brackets to the Chassis (p. 3-6) print no dimension of a bracket; the size of
+    cisco/69-2037-bracket@1 is estimated from the figures.
+  wanted: >-
+    A drawing or a measurement of the 69-2037-xx bracket: its width, height and depth.
+provenance:
+  depth: >-
+    Catalyst 4948E and Catalyst 4948E-F Switch Installation Guide, OL-21561-02, January 2011,
+    Rack-Mounting Guidelines (p. 2-2): "at least 19.25 inches (48.9 cm) but not more than 32.5
+    inches (82.5 cm)" between the front and rear mounting strips; 19.25 in is 488.95 mm and 32.5 in
+    is 825.5 mm. This is the guide's requirement of the rack, not a span of the kit: the two
+    brackets bolt to one pair of posts only, the front or the rear (Table 3-1, p. 3-5), so the
+    kit does not reach across the rack and 488.95 to 825.5 mm is the depth the guide asks the
+    rack to have. The Catalyst 4900 guide (78-18039-02) prints 19.25 to
+    32 in for the same kit family and is not used. The kit is named 69-2037 and its -xx revision
+    is dropped, as the guide's Table 3-1 (p. 3-5) names it 69-2037-xx.
+  parts: >-
+    Table 3-1 (p. 3-5) and Verifying Package Contents (p. 3-4): two 19-inch rack-mount brackets,
+    eight M4 x 8 mm Phillips flat-head screws to the chassis, and four 12-24 x 3/4 in and four
+    10-32 x 3/4 in Phillips screws to the rack (screws not modelled). The brackets fit the front
+    or the rear sides of the chassis (p. 3-6); this kit states no ear position. Not part of this
+    kit: the centre-mount kits WS-X4948E-19CNTR= and WS-X4948E-23CNTR= (their note is not held),
+    the cable management bracket 69-1303-xx, and the Panduit CDE2 duct.

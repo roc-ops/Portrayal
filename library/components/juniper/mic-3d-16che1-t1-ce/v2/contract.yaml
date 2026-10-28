@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-16che1-t1-ce
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -11,7 +11,12 @@ attrs:
   model: MIC-3D-16CHE1-T1-CE
   power-draw-max-w: 29.08
   model-variants: MIC-3D-16CHE1-T1-CE-H
+  ports: 16
 provenance:
+  ports-count: >-
+    module reference, 'Channelized E1/T1 Circuit Emulation MIC' (p342): 'Sixteen E1 or T1 ports', RJ-48
+    connectors, numbered 0 through 15. The rate is per port, E1 or T1, so the sixteen are counted under
+    `ports`. Nothing new was measured.
   port-jacks-are-bare: >-
     THE PORT JACKS ARE BARE. port-0-0..15 are RJ48 receptacles carrying channelized E1/T1,
     not Ethernet, so they take the RJ45 family's bare cell rather than its lamped one

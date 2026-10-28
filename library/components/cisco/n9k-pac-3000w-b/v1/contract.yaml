@@ -1,0 +1,71 @@
+format: 1
+kind: module
+name: n9k-pac-3000w-b
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Cisco N9500 Series 3-kW AC power supply (N9K-PAC-3000W-B), the hot-swappable supply of the Nexus 9500
+  chassis. It stands on end in a power-supply bay: a vented upper half with a release handle, the OK and
+  FAIL lamps at the upper left, and an IEC 60320 C19 power-cord inlet at the bottom. Cooling air enters at
+  the port side. The Nexus 9504, 9508 and 9516 take the same part.
+size: {w: 44.45, h: 133.35, d: 450.85}
+size-confidence: {w: estimated, h: estimated, d: datasheet}
+attrs:
+  model: 'N9K-PAC-3000W-B'
+  role: 'power-module'
+  input: 'ac'
+  inlet: c20
+  power-output-w: 3000
+  input-voltage: '200-277 VAC'
+  input-frequency: '50 to 60 Hz'
+  efficiency: '90% or greater (20 to 100% load)'
+  airflow: 'port-side intake'
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    estimated - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p113, PDF p119) gives the power supply as 5.25 in wide by 1.75 in high and 17.75 in deep inside
+    the chassis. The installation figures of the same guide (PDF pp102-103) show the supply standing on end
+    in the front bay, so the long side is vertical: 44.45 mm wide by 133.35 mm high. The guide's table has
+    the two numbers the other way round; the figures decide the orientation and the table decides the
+    numbers.
+  depth: >-
+    datasheet - the same table, 17.75 in (450.85 mm) inside the chassis, with the ejector levers 0.75 in
+    outside it, which is not added.
+  power: >-
+    datasheet - the guide's "3000-W AC Power Supply Specifications" table: power 3000 W, input 200-277 VAC,
+    50 to 60 Hz, efficiency 90 percent or greater from 20 to 100 percent load, hot swappable, port-side
+    intake airflow. The same table names the supply PSU3KW-HVPI. It gives no input current and no
+    dissipation.
+  lamps: >-
+    install guide - "Power Supply LEDs": an OK lamp (green, flashing green) and a FAIL or FAIL/ID lamp
+    (flashing amber, amber), on the upper left front portion of the module. Their positions inside that
+    area are estimated from the figure on PDF p103.
+  skin: >-
+    estimated - the arrangement (vented upper half, handle, inlet at the bottom) is read from the guide's
+    figures on PDF pp102-103; none dimensions it, so every position in the skin is estimated.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+elements:
+  ok:
+    at: [4.2, 7.0]
+    size: [3.0, 3.0]
+    class: led
+    description: OK lamp, upper left of the module.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: flashing-green, color: '#39b54a', behavior: blinking}
+    - 'off'
+  fail:
+    at: [4.2, 12.5]
+    size: [3.0, 3.0]
+    class: led
+    description: FAIL or FAIL/ID lamp, below the OK lamp.
+    states:
+    - {name: amber, color: '#f5a623'}
+    - {name: flashing-amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+skins: [default]
