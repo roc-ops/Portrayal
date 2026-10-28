@@ -199,7 +199,8 @@ gaps:
   reason: needs-photo
   wanted: >-
     The legends printed beside the ports, lamps and jacks. None is resolved in the held figures, so none
-    is drawn, and the model name is not drawn either because nothing shows it as printed.
+    is drawn. The one legend drawn is the model name, NCS 5011, below the left end of the ports: an estimate
+    of where the vendor prints it, since the figures do not show it.
 - what: sfp-plus-ports
   scope:
   - front
@@ -336,6 +337,8 @@ views:
       - {id: port-31, at: [402.0, 8.4], size: [20.0, 10.15], shape: rect}
       - {id: port-32, at: [402.0, 25.2], size: [20.0, 10.15], shape: rect}
       - {id: led-power, at: [10.0, 21.0], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [36.0, 41.4], text: NCS 5011, font-size: 2.0, anchor: start, fill: '#1a1d1f', for: chassis}
     components:
       placements:
       - {ref: std/qsfp28@1, id: port-1, at: [36.0, 8.4], group: qsfp28, rel-pos: 1}

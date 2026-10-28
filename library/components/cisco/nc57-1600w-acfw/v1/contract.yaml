@@ -1,14 +1,15 @@
 format: 1
 kind: module
 name: nc57-1600w-acfw
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
 description: >-
   The 1600 W AC power supply of the Cisco NCS-57C3-MOD, ordered as NC57-1600W-ACFW, with port-side air intake.
-  It installs from the front of the chassis. A grey housing with a round fan behind a red ring printed 1600W AC, a
-  black power inlet, a blue release latch beside it and a status lamp at the lower right. Two work 1+1.
+  It installs from the front of the chassis. A grey housing with a round fan behind a red ring printed 1600W AC and a
+  grey pull handle under the fan. Beside the fan are an IEC power inlet in a black housing, a blue release latch and
+  a status lamp at the lower right. Two work 1+1.
 size: {w: 81.0, h: 43.5}
 size-confidence: {w: photo-measured, h: photo-measured}
 part-numbers:
@@ -34,9 +35,20 @@ provenance:
     photo-measured - Figure 19 (a flat front elevation, face-on) at 2.685 px/mm taken from the chassis width of 438.4 mm:
     the supply's bay measures about 81 mm wide and 43.5 mm high, and the two supplies repeat on an 80.5 mm pitch. Figure 19 is
     within 0.7 percent of the aspect of Figure 1's 438.4 x 130.88 mm. The guide prints no dimension of the supply itself.
+  inlet: >-
+    estimated - THE GUIDE NAMES NO INLET TYPE for this supply: its Replace Power Supply text says only "an IEC 320-type power
+    receptacle". Figure 19 draws a black housing about 27 x 36 mm holding three pale blade marks, two one above the other at
+    the left and one at mid-height to the right, 12.7 mm apart and 8 mm off their line. That is the layout of a C19/C20
+    coupler turned a quarter turn (earth to the right), so std/c20-inlet is seated turned 90 degrees in the housing. The
+    type is the figure's shape read as a C20, not a stated one; a 16 A to 20 A rating makes C20 the likelier but no held
+    document says so, hence `inlet: other` is kept.
+  fan: >-
+    photo-measured - Figure 19 at 9.4 px/mm on a 4x enlargement: the fan well is a dark disc about 33 mm across inside a
+    thin rim, its blades separated by twelve light radial slits, behind a 19 mm white hub with a dark-red ring printed
+    1600W AC; four screws sit at the corners of the housing and a grey U handle wraps the fan from below. The slit count
+    and the handle's curve are read by eye and are not dimensioned.
   elements: >-
-    photo-measured - positions read from Figure 19 and the Figure 1 front view; the inlet is drawn as a plain black opening
-    because the guide names no inlet type. The latch colour is as drawn in the figure (blue). The lamp is Figure 138's
+    photo-measured - positions read from Figure 19 and the Figure 1 front view. The latch colour is as drawn in the figure (blue). The lamp is Figure 138's
     STATUS lamp at the lower right; its states are Table 38 (green: on and transmitting; blinking green: connected, not
     transmitting; amber: failure; blinking amber: warning; off: no input power).
   airflow: >-
@@ -46,9 +58,10 @@ provenance:
 states: [absent]
 elements:
   fan: {at: [2.0, 3.0], size: [38.0, 37.5], class: rotor}
-  inlet: {at: [43.5, 3.0], size: [26.0, 37.5], class: bezel}
   latch: {at: [71.0, 12.0], size: [5.5, 19.0], class: latch}
   status: {at: [75.0, 37.0], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b'}, {name: failed, color: '#f59e0b'}]}
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [40.3, 9.55], rotate: 90}
 skins: [default]
 body:
   depth: 250

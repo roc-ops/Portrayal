@@ -10,3 +10,6 @@
   -DCFW, fan trays NC57-C3-FAN2-FW and NC57-C3-FAN1-FW (and -HX), route processors NC57-MOD-RP2-E and -E-HX, and the blanks NC55-MPA-BLNK,
   NC57C3-RP-BLNK and NC57C3-PS-BLNK (`cisco/ncs-5011-fn-fr` and its eleven siblings).
 - The DCIM device types for the three routers, one each, in the NetBox and Nautobot exports.
+- The 57C3 faces follow the guide's Figures 19 and 20: the port plate's vent fields and slot rows at the figure's extents, the four-cell port status display and its
+  DISPLAY button, the grounding pad's hole and stud, each router's model legend, the supplies' fan wells, pull handles and IEC inlet (a C20 read from the figure's
+  pin layout, since the guide names only "IEC 320-type"), and the fan trays' hex guards.

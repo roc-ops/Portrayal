@@ -183,8 +183,8 @@ gaps:
   scope: [front, rear]
   reason: needs-photo
   wanted: >-
-    The legends printed beside the ports, lamps and jacks. None is resolved in the held figures, so none is drawn, and
-    the model name is not drawn either because nothing shows it as printed.
+    The legends printed beside the ports, lamps and jacks. None is resolved in the held figures, so none is drawn. The
+    one legend drawn is the model name, NCS 5011, below the left end of the ports: an estimate of where the vendor prints it, since the figures do not show it.
 - what: sfp-plus-ports
   scope: [front]
   reason: needs-drawing
@@ -278,7 +278,8 @@ views:
       cutouts:
       - {block: qsfp28}
       - {id: led-power, at: [10.0, 21.0], size: [2.0, 2.0], shape: circle}
-    silkscreen: []
+    silkscreen:
+    - {at: [36.0, 41.4], text: NCS 5011, font-size: 2.0, anchor: start, fill: '#1a1d1f', for: chassis}
     components:
       blocks:
       - id: qsfp28

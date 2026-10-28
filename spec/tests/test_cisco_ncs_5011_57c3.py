@@ -200,6 +200,38 @@ def test_dcim_device_type_is_one_per_chassis_at_the_guides_u_height(name, tool):
     assert types[0]["u_height"] == ENVELOPE[name]["ru"]
 
 
+@pytest.mark.parametrize("name", sorted(DEVICES))
+def test_front_carries_its_model_legend(name):
+    legends = [s["text"] for s in device(name)["views"]["front"].get("silkscreen", [])]
+    assert DEVICES[name] in legends, legends
+
+
+def test_the_57c3_ac_supply_seats_an_iec_inlet_instead_of_drawing_a_box():
+    c = contract("nc57-1600w-acfw")
+    inlets = [p for p in c["parts"] if ref_name(p["ref"]) == "c20-inlet"]
+    assert len(inlets) == 1 and inlets[0]["rotate"] == 90
+    assert "inlet" not in c["elements"]
+    # the guide names no inlet type, so the contract says the C20 is a reading of the figure
+    assert c["provenance"]["inlet"].startswith("estimated")
+
+
+@pytest.mark.parametrize("name", C3)
+def test_57c3_front_draws_the_port_status_display_and_its_button(name):
+    front = device(name)["views"]["front"]
+    decor = {d["id"]: d for d in front["panel"]["decor"]}
+    cells = [i for i in decor if i.startswith("display-cell-")]
+    assert len(cells) == 4
+    assert "display-housing" in decor and "display-button" in decor
+    assert "DISPLAY" in [s["text"] for s in front["silkscreen"]]
+
+
+@pytest.mark.parametrize("name", C3)
+def test_57c3_rear_grounding_pad_carries_its_two_marks(name):
+    decor = {d["id"] for d in device(name)["views"]["rear"]["panel"]["decor"]}
+    assert "ground-pad" in decor
+    assert {"ground-pad-hole", "ground-pad-stud"} <= decor
+
+
 def test_the_lock_agrees_with_the_devices():
     findings = [f for f in devicelock.check(LIB) if f[0] in {f"cisco/{n}" for n in DEVICES} | set(DEVICES)]
     assert findings == []

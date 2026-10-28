@@ -111,9 +111,9 @@ provenance:
       and GNSS below the route processors, next to the port groups; their positions are read from Figure
       19. THE GUIDE GIVES NO STATE TABLE FOR THE 57C3'S STATUS AND ATTN LAMPS: Table 31, the only chassis
       LED table, follows the NCS-57D2's figure. The four-cell display and its DISPLAY button at the lower
-      right show port status as "##BB" (GN, YL, RD; Table 35) and are not modelled (see the gaps). Management
-      port link and activity lamps (Figure 131, Table 36) belong to the route processor and are listed
-      there.
+      right show port status as "##BB" (GN, YL, RD; Table 35) and are drawn as marks on the plate, not
+      as parts (see the gaps). Management port link and activity lamps (Figure 131, Table 36) belong to
+      the route processor and are listed there.
   bays:
     confidence: estimated
     note: >-
@@ -238,8 +238,8 @@ gaps:
   - front
   reason: needs-photo
   wanted: >-
-    The model text printed on the -HX's front plate. No figure of the -HX is held, so none is drawn; the
-    -S's figure prints NCS-57C3-MOD-S in that place.
+    The model text printed on the -HX's front plate. No figure of the -HX is held; NCS-57C3-MOD-HX is
+    drawn in the place where the -S's figure prints NCS-57C3-MOD-S, as an estimate.
 - what: led-states
   scope:
   - front
@@ -250,11 +250,11 @@ gaps:
 - what: chassis-display
   scope:
   - front
-  reason: needs-drawing
+  reason: vendor-silent
   wanted: >-
-    The four-cell port status display and its DISPLAY button at the lower right of the front plate (Table
-    35: "##BB" with GN, YL and RD). They are not modelled as parts: the guide gives no size or position
-    beyond Figure 19.
+    The four-cell port status display's cell size and segment layout, and the DISPLAY button's size. Both
+    are drawn as marks on the plate from the -S's Figure 19 (the cells as plain blocks, not lit); the
+    guide gives no dimension for either and its Table 35 lists the codes (GN, YL, RD) the display shows.
 - what: rack-kit
   scope:
   - front
@@ -309,7 +309,8 @@ gaps:
   reason: needs-photo
   wanted: >-
     The printed legends and warning labels on the rear plates (FAN TRAY 0 1, FAN TRAY 2 3 4 5, a hot-handle
-    caution) and the screws, which are not drawn.
+    caution) and the screws, which are not drawn. The grounding pad (callout 3) is drawn with its hole
+    and stud.
 - what: the-four-undrawn-faces
   scope:
   - top
@@ -375,39 +376,147 @@ views:
     size: {w: 438.4, h: 130.88}
     panel:
       decor:
-      - id: vent-left
-        at: [5.5, 47.0]
-        size: [14.0, 36.0]
-        pattern: vent
+      - id: vent-slots-top
+        at: [9.1, 38.0]
+        size: [411.0, 1.9]
+        pattern: slots-h
+        pattern-pitch: [2.6, 1.9]
         vent: 1.0
-        confidence: photo-measured
-        source: 'Figure 19: the hex vent field left of the first SFP28 assembly'
-      - id: vent-mid-left
-        at: [84.5, 47.0]
-        size: [17.0, 36.0]
-        pattern: vent
-        vent: 1.0
-        confidence: photo-measured
-        source: 'Figure 19: the hex vent field between the first two SFP28 assemblies'
-      - {id: vent-centre, at: [166.0, 49.0], size: [99.0, 9.5], pattern: vent, vent: 1.0, confidence: photo-measured,
-        source: 'Figure 19: the hex vent band above the QSFP28 cages'}
-      - id: vent-mid-right
-        at: [328.0, 46.0]
-        size: [18.0, 26.0]
-        pattern: vent
-        vent: 1.0
-        confidence: photo-measured
+        confidence: estimated
         source: >-
-          Figure 19: the vent field between the right SFP28 assemblies, above the SYNC and GNSS lamps
-      - {id: vent-right, at: [409.0, 45.0], size: [12.0, 26.0], pattern: vent, vent: 1.0, confidence: photo-measured,
-        source: 'Figure 19: the vent field left of the timing ports'}
-      - id: vent-display
-        at: [300.0, 91.5]
-        size: [125.0, 22.0]
+          The NCS-57C3-MOD-S's Figure 19, carried over: the row of small slots along the top edge of the
+          port plate
+      - id: vent-slots-bottom
+        at: [9.1, 84.0]
+        size: [398.0, 1.4]
+        pattern: slots-h
+        pattern-pitch: [2.6, 1.9]
+        vent: 1.0
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 19, carried over: the row of small slots along the bottom edge of
+          the port plate
+      - id: vent-left
+        at: [9.2, 43.9]
+        size: [11.2, 25.7]
         pattern: vent
         vent: 1.0
-        confidence: photo-measured
-        source: 'Figure 19: the hex vent field of the plate at the lower right'
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 19, carried over: the hex vent field left of the first SFP28 assembly
+      - id: vent-mid-left
+        at: [85.5, 43.9]
+        size: [14.5, 25.7]
+        pattern: vent
+        vent: 1.0
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 19, carried over: the upper hex vent field between the first two
+          SFP28 assemblies
+      - id: vent-mid-left-low
+        at: [85.5, 72.2]
+        size: [14.0, 11.0]
+        pattern: vent
+        vent: 1.0
+        confidence: estimated
+        source: 'The NCS-57C3-MOD-S''s Figure 19, carried over: the small hex vent field under it'
+      - id: vent-centre
+        at: [165.3, 44.8]
+        size: [101.1, 13.5]
+        pattern: vent
+        vent: 1.0
+        confidence: estimated
+        source: 'The NCS-57C3-MOD-S''s Figure 19, carried over: the hex vent band over the QSFP28 cages'
+      - id: vent-centre-drop
+        at: [208.7, 58.3]
+        size: [13.8, 13.5]
+        pattern: vent
+        vent: 1.0
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 19, carried over: the cells of the band between the second and third
+          QSFP28 columns
+      - id: vent-mid-right
+        at: [331.7, 44.3]
+        size: [13.8, 24.7]
+        pattern: vent
+        vent: 1.0
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 19, carried over: the vent field between the right SFP28 assemblies
+      - id: vent-mid-right-low
+        at: [332.5, 78.0]
+        size: [12.5, 5.4]
+        pattern: vent
+        vent: 1.0
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 19, carried over: the small vent field under the SYNC and GNSS legends
+      - id: vent-right
+        at: [412.0, 44.1]
+        size: [11.0, 21.3]
+        pattern: vent
+        vent: 1.0
+        confidence: estimated
+        source: 'The NCS-57C3-MOD-S''s Figure 19, carried over: the vent field left of the timing ports'
+      - id: vent-display
+        at: [302.0, 92.7]
+        size: [121.0, 17.5]
+        pattern: vent
+        vent: 1.0
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 19, carried over: the hex vent field of the plate at the lower right,
+          upper rows
+      - id: vent-display-low
+        at: [323.5, 110.2]
+        size: [99.5, 10.0]
+        pattern: vent
+        vent: 1.0
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 19, carried over: the same field below the port status display
+      - id: display-housing
+        at: [303.0, 110.2]
+        size: [18.0, 8.4]
+        fill: '#2a2c2f'
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 19, carried over: the four-cell port status display (guide, Table
+          35, NCS-57C3 Port Status LED Display)
+      - id: display-cell-1
+        at: [303.6, 111.0]
+        size: [3.6, 6.8]
+        fill: '#d8c79a'
+        confidence: estimated
+        source: 'The NCS-57C3-MOD-S''s Figure 19, carried over: first of the display''s four cells'
+      - id: display-cell-2
+        at: [308.0, 111.0]
+        size: [3.6, 6.8]
+        fill: '#d8c79a'
+        confidence: estimated
+        source: 'The NCS-57C3-MOD-S''s Figure 19, carried over: second of the display''s four cells'
+      - id: display-cell-3
+        at: [312.4, 111.0]
+        size: [3.6, 6.8]
+        fill: '#d8c79a'
+        confidence: estimated
+        source: 'The NCS-57C3-MOD-S''s Figure 19, carried over: third of the display''s four cells'
+      - id: display-cell-4
+        at: [316.8, 111.0]
+        size: [3.6, 6.8]
+        fill: '#d8c79a'
+        confidence: estimated
+        source: 'The NCS-57C3-MOD-S''s Figure 19, carried over: fourth of the display''s four cells'
+      - id: display-button
+        at: [421.1, 121.7]
+        size: [2.6, 2.6]
+        rx: 1.3
+        fill: '#1a1d1f'
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 19, carried over: the black DISPLAY button at the lower right of
+          the plate
     silkscreen:
     - {at: [431.3, 45.16], text: 1PPS, font-size: 1.5, anchor: start, fill: '#1a1d1f', for: timing-1pps}
     - {at: [431.3, 54.27], text: 10MHz, font-size: 1.5, anchor: start, fill: '#1a1d1f', for: timing-10mhz}
@@ -415,6 +524,8 @@ views:
     - {at: [431.0, 78.97], text: TOD, font-size: 1.5, anchor: start, fill: '#1a1d1f', for: timing-tod}
     - {at: [331.5, 77.0], text: SYNC, font-size: 1.4, anchor: end, fill: '#1a1d1f', for: led-sync}
     - {at: [343.5, 77.0], text: GNSS, font-size: 1.4, anchor: start, fill: '#1a1d1f', for: led-gnss}
+    - {at: [407.5, 125.0], text: NCS-57C3-MOD-HX, font-size: 2.0, anchor: end, fill: '#1a1d1f', for: chassis}
+    - {at: [424.2, 124.2], text: DISPLAY, font-size: 1.5, anchor: start, fill: '#1a1d1f', for: chassis}
     - {at: [331.0, 125.0], text: STATUS, font-size: 1.5, anchor: end, fill: '#1a1d1f', for: led-status}
     - {at: [341.0, 125.0], text: ATTN, font-size: 1.5, anchor: start, fill: '#1a1d1f', for: led-attn}
     - {at: [30.7, 42.4], text: '2', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: port-2}
@@ -621,18 +732,47 @@ views:
     panel:
       decor:
       - id: vent-rear
-        at: [272.0, 92.0]
-        size: [164.0, 33.0]
+        at: [271.7, 91.5]
+        size: [160.7, 33.0]
         pattern: vent
+        pattern-pitch: [5.73, 3.3]
         vent: 1.0
-        confidence: photo-measured
-        source: 'Figure 20: the hex vent field at the lower right, under fan tray slots 4 and 5'
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 20, carried over: the hex vent field at the lower right, under fan
+          tray slots 4 and 5
       - id: ground-pad
-        at: [232.0, 94.0]
-        size: [30.0, 12.0]
-        fill: '#9aa0a6'
-        confidence: photo-measured
-        source: 'Figure 20, callout 3: the grounding pad at the lower centre, a box holding two holes'
+        at: [231.6, 93.9]
+        size: [27.6, 12.0]
+        fill: '#c9cdd1'
+        confidence: estimated
+        source: The NCS-57C3-MOD-S's Figure 20, callout 3, "Grounding pad", carried over
+      - id: ground-pad-outline
+        at: [231.6, 93.9]
+        size: [27.6, 12.0]
+        stroke: '#1a1d1f'
+        stroke-width: 0.4
+        rx: 0.2
+        confidence: estimated
+        source: 'The NCS-57C3-MOD-S''s Figure 20, carried over: the black outline around the grounding
+          pad'
+      - id: ground-pad-hole
+        at: [235.55, 97.45]
+        size: [4.9, 4.9]
+        rx: 2.45
+        fill: '#0d0f11'
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 20, carried over: the round hole at the left of the grounding pad
+      - id: ground-pad-stud
+        at: [251.9, 97.7]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#8d9298'
+        confidence: estimated
+        source: >-
+          The NCS-57C3-MOD-S's Figure 20, carried over: the stud at the right of the grounding pad, drawn
+          as a plain round stud
     components:
       bays:
       - id: fan-0
