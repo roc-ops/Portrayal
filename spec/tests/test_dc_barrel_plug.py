@@ -2,9 +2,9 @@
 (#789, docs/connectors-dc-terminal-design.md).
 
 ONE SIZE, BY RULING. The library treats the DC barrel jack as one nominal
-connector, `dc-barrel`: barrel diameters vary by product and of the six devices
-that place common/dc-barrel@1 only one document held, the CSS326-24G-2S+RM quick
-guide, states one. What a
+connector, `dc-barrel`: barrel diameters vary by product and of the seven devices
+that place common/dc-barrel@1 only two documents held, the CSS326-24G-2S+RM and
+CRS309-1G-8S+IN quick guides, state one. What a
 jack is fed is carried as attributes of its placement, `input-voltage` and
 `current-max-a`, from that device's own documents, and neither the interface
 nor the plug states a rating. generic/dc-barrel-plug@1 is drawn at the common
@@ -51,9 +51,12 @@ PLACED = {
     "telco-systems/tm-280": ("front", "dc-in", None, "5 VDC", 3.0, "5VDC @3A (max)"),
     "mikrotik/crs326-24g-2s-plus-rm": ("rear", "dc-in", None, "10-28 VDC", 1.2, "DC 10-28V"),
     "mikrotik/css326-24g-2s-plus-rm": ("rear", "dc-in", None, "8-30 VDC", 1.2, "DC 8 - 30V"),
+    # the CRS309-1G-8S+IN: the rear prints DC 12-57 V; its quick guide gives the barrel size
+    "mikrotik/crs309-1g-8s-plus-in": ("rear", "dc-in", None, "12-57 VDC", 1.2, "DC 12-57 V"),
 }
-# the one placing device whose own document states a barrel size
-SIZE_STATED = {"mikrotik/css326-24g-2s-plus-rm"}
+# the placing devices whose own document states a barrel size (the CRS309 quick guide: 5.5 mm outside and 2 mm
+# inside, female, pin positive)
+SIZE_STATED = {"mikrotik/css326-24g-2s-plus-rm", "mikrotik/crs309-1g-8s-plus-in"}
 EACH_DEVICE = pytest.mark.parametrize("device", sorted(PLACED))
 
 
@@ -93,7 +96,7 @@ def test_dc_barrel_is_one_connector_and_claims_no_size_or_rating():
     note = entry["note"]
     assert "ONE nominal connector" in note
     assert "diameters vary by product" in note
-    assert "six devices" in note and "only the CSS326-24G-2S+RM quick guide states one" in note
+    assert "seven devices" in note and "only the CSS326-24G-2S+RM and CRS309-1G-8S+IN quick guides state one" in note
     assert "input-voltage" in note and "current-max-a" in note
     assert "not by the interface" in note and PLUG in note
     for key in ("barrel-jack", "barrel-plug"):
@@ -122,16 +125,16 @@ def test_the_jack_gained_its_interface_and_kept_its_drawing():
 
 
 def test_the_jack_states_no_rating_of_its_own():
-    """Six devices feed it four different voltages; the part carries none."""
+    """Seven devices feed it five different voltages; the part carries none."""
     attrs = _contract(JACK)["attrs"]
     assert not {"input-voltage", "current-max-a", "voltage"} & set(attrs)
 
 
-# --- 2. the six placements, and their ratings ------------------------------------
+# --- 2. the seven placements, and their ratings ------------------------------------
 
-def test_the_jack_is_placed_on_exactly_these_six_devices():
+def test_the_jack_is_placed_on_exactly_these_devices():
     """The census: every placement of the jack in the library, and nothing
-    composes it inside another part."""
+    composes it inside another part. Seven: the CRS309-1G-8S+IN is the seventh."""
     found = set()
     for f in sorted((LIB / "devices").glob("*/*/device.yaml")):
         d = yaml.safe_load(f.read_text())
@@ -139,7 +142,7 @@ def test_the_jack_is_placed_on_exactly_these_six_devices():
             for p in ((view or {}).get("components") or {}).get("placements") or []:
                 if p.get("ref") == JACK:
                     found.add(f"{f.parts[-3]}/{f.parts[-2]}")
-    assert found == set(PLACED) and len(found) == 6
+    assert found == set(PLACED) and len(found) == 7
     composed = []
     for f in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
         c = yaml.safe_load(f.read_text())
@@ -166,7 +169,7 @@ def test_each_placement_states_what_its_device_is_fed(device):
 def test_the_ratings_differ_which_is_why_they_are_not_the_parts():
     volts = {PLACED[d][3] for d in PLACED}
     amps = {PLACED[d][4] for d in PLACED}
-    assert volts == {"12 VDC", "5 VDC", "10-28 VDC", "8-30 VDC"}
+    assert volts == {"12 VDC", "5 VDC", "10-28 VDC", "8-30 VDC", "12-57 VDC"}
     assert amps == {1.0, 3.0, 1.2}
 
 

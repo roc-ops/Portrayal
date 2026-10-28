@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: stackwise-480-port
+version: 1.1.0
+class: port
+profile: networking
+description: >-
+  A Cisco StackWise-480 stacking port of the Catalyst 9300 - a latched carrier between two fan
+  modules holding three stacked wide, flat edge connectors, for the StackWise-480 stacking
+  cable. It is Cisco's own connector and has no registry standard.
+size: {w: 14.9, h: 23.8, d: 20.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {media: stackwise-480}
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 9300 Series Switches Hardware Installation Guide (first
+    published 2017-06-20, last modified 2026-05-15), Figure 10 callout 10, "StackWise-480
+    port connectors", and the StackWise Ports text: "StackWise ports are used to connect
+    switches in StackWise stacking configurations." The guide's Table 51 lists the cables.
+  size: >-
+    estimated - THE GUIDE PRINTS NO DIMENSION OF THE CONNECTOR. The community NetBox rear
+    elevation of the C9300-48T draws the opening 14.9 x 5.2 at 5.03 px per mm (its 19 inch
+    width over 2428 px), three of them stacked in each carrier at a 9.3 mm pitch (46.9 px), so
+    the part is the whole carrier, 23.8 mm tall, and the guide's Figure 10 two ports in all are
+    the two carriers. The depth is a reading.
+  registry: >-
+    There is no standard for it: no entry of spec/schemas/standards.yaml, and no other
+    component in the library presents a StackWise connector.
+elements:
+  opening-1: {at: [0.0, 0.0], size: [14.9, 5.2], class: mechanical}
+  opening-2: {at: [0.0, 9.3], size: [14.9, 5.2], class: mechanical}
+  opening-3: {at: [0.0, 18.6], size: [14.9, 5.2], class: mechanical}
+skins: [default]

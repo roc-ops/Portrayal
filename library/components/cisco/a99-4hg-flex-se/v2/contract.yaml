@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a99-4hg-flex-se
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -161,6 +161,14 @@ provenance:
     box drawn to look right is a line no measurement supports. The grouping is a fact
     about the ports, and it is in this sentence and in the port ids rather than in the
     paint.
+  media: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router Ethernet Line Card
+    Installation Guide, section '400G Combo Multi-Rate Line Card', page 52. It gives the
+    module type by port number. Ports 0-5, 10-15, 20-25 and 30-35 take 10GE SFP+ modules,
+    so those placements carry media sfp-plus. Ports 6-9, 16-19, 26-29 and 36-39 take
+    10GE/25GE SFP28 modules, so those carry media sfp28. Ports 40-43 take QSFP+ or
+    QSFP28 modules and are the four std/qsfp-ganged placements. Each placement id is the
+    guide's port number, so the split is read straight off the ids.
   power: >-
     NOT PUBLISHED. Cisco does not state per-card power for this generation in any document
     that could be found, and the search was thorough enough to say so.
@@ -252,46 +260,46 @@ relief:
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
 parts:
-  - {ref: std/sfp-ganged@1, id: p0, at: [7.49, 32.18], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p1, at: [7.49, 46.11], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p2, at: [7.49, 60.06], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p3, at: [7.49, 74], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p4, at: [7.49, 87.94], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p5, at: [7.49, 101.9], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p6, at: [7.79, 119.97], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p7, at: [7.79, 133.76], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p8, at: [7.79, 147.54], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p9, at: [7.79, 161.33], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p10, at: [22.87, 32.18], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p11, at: [22.87, 46.11], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p12, at: [22.87, 60.06], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p13, at: [22.87, 74], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p14, at: [22.87, 87.94], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p15, at: [22.87, 101.9], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p16, at: [22.58, 119.97], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p17, at: [22.58, 133.76], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p18, at: [22.58, 147.54], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p19, at: [22.58, 161.33], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p20, at: [7.49, 202.01], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p21, at: [7.49, 215.95], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p22, at: [7.49, 229.89], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p23, at: [7.49, 243.85], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p24, at: [7.49, 257.79], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p25, at: [7.49, 271.74], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p26, at: [7.79, 289.8], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p27, at: [7.79, 303.58], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p28, at: [7.79, 317.37], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p29, at: [7.79, 331.15], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p30, at: [22.87, 202.01], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p31, at: [22.87, 215.95], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p32, at: [22.87, 229.89], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p33, at: [22.87, 243.85], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p34, at: [22.87, 257.79], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p35, at: [22.87, 271.74], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p36, at: [22.58, 289.8], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p37, at: [22.58, 303.58], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p38, at: [22.58, 317.37], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p39, at: [22.58, 331.15], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p0, at: [7.49, 32.18], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p1, at: [7.49, 46.11], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p2, at: [7.49, 60.06], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p3, at: [7.49, 74], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p4, at: [7.49, 87.94], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p5, at: [7.49, 101.9], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p6, at: [7.79, 119.97], rotate: 270, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p7, at: [7.79, 133.76], rotate: 270, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p8, at: [7.79, 147.54], rotate: 270, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p9, at: [7.79, 161.33], rotate: 270, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p10, at: [22.87, 32.18], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p11, at: [22.87, 46.11], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p12, at: [22.87, 60.06], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p13, at: [22.87, 74], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p14, at: [22.87, 87.94], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p15, at: [22.87, 101.9], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p16, at: [22.58, 119.97], rotate: 90, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p17, at: [22.58, 133.76], rotate: 90, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p18, at: [22.58, 147.54], rotate: 90, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p19, at: [22.58, 161.33], rotate: 90, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p20, at: [7.49, 202.01], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p21, at: [7.49, 215.95], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p22, at: [7.49, 229.89], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p23, at: [7.49, 243.85], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p24, at: [7.49, 257.79], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p25, at: [7.49, 271.74], rotate: 270, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p26, at: [7.79, 289.8], rotate: 270, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p27, at: [7.79, 303.58], rotate: 270, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p28, at: [7.79, 317.37], rotate: 270, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p29, at: [7.79, 331.15], rotate: 270, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p30, at: [22.87, 202.01], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p31, at: [22.87, 215.95], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p32, at: [22.87, 229.89], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p33, at: [22.87, 243.85], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p34, at: [22.87, 257.79], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p35, at: [22.87, 271.74], rotate: 90, attrs: {media: sfp-plus}}
+  - {ref: std/sfp-ganged@1, id: p36, at: [22.58, 289.8], rotate: 90, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p37, at: [22.58, 303.58], rotate: 90, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p38, at: [22.58, 317.37], rotate: 90, attrs: {media: sfp28}}
+  - {ref: std/sfp-ganged@1, id: p39, at: [22.58, 331.15], rotate: 90, attrs: {media: sfp28}}
   - {ref: std/qsfp-ganged@1, id: p40, at: [21.21, 182.17], rotate: 90}
   - {ref: std/qsfp-ganged@1, id: p41, at: [4.55, 182.17], rotate: 270}
   - {ref: std/qsfp-ganged@1, id: p42, at: [21.21, 352.01], rotate: 90}
