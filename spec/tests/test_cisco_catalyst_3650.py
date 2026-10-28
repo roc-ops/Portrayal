@@ -43,8 +43,8 @@ def test_envelope_is_spec_table_1_1_for_48_port_poe_plus(name):
 
 
 @pytest.mark.parametrize("name", DEVICES)
-def test_a_new_device_is_at_1_0_0(name):
-    assert load(name)["version"] == "1.0.0"
+def test_a_new_device_is_below_2_0_0(name):
+    assert load(name)["version"].startswith("1.")
 
 
 def test_48pd_has_48_rj45_numbered_1_to_48_odd_on_top():
@@ -68,15 +68,17 @@ def test_48pd_uplinks_are_two_sfp_and_two_sfp_plus_cages():
     assert d["groups"]["sfp-plus"]["attrs"] == {"media": "sfp-plus", "speed": "10g"}
 
 
-def test_48pd_front_has_usb_a_and_the_mini_b_stays_a_gap_while_no_jack_is_on_main():
+def test_48pd_front_places_the_mini_b_console_between_its_lamp_and_the_usb_a():
     d = load("ws-c3650-48pd")
-    assert placements(d, "front")["usb-a"]["ref"] == "std/usb-a@1"
-    mini_b = [c for c in (LIB / "components").rglob("contract.yaml")
-              if "conforms: mini-usb-b" in c.read_text()]
+    p = placements(d, "front")
+    assert p["usb-a"]["ref"] == "std/usb-a@1"
+    assert p["usb-console"]["ref"] == "std/mini-usb@1"
+    lamp, jack, usb_a = p["led-usb-console"]["at"][0], p["usb-console"]["at"][0], p["usb-a"]["at"][0]
+    assert lamp + 2.0 < jack and jack + 7.7 < usb_a
+    cutouts = {c["id"] for c in d["views"]["front"]["panel"]["cutouts"] if "id" in c}
+    assert "usb-console" in cutouts
     gaps = {g["what"] for g in d["gaps"]}
-    if mini_b:
-        pytest.fail("a mini-B jack is now a library part: place it and drop the gap")
-    assert "usb-console-jack" in gaps
+    assert "usb-console-jack" not in gaps
     assert "rack-kit" in gaps
 
 

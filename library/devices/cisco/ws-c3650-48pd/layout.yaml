@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ws-c3650-48pd
-version: 1.0.0
+version: 1.1.0
 maturity: modelled
 manufacturer: Cisco
 model: WS-C3650-48PD
@@ -107,8 +107,9 @@ provenance:
     note: >-
       USB Mini-Type B Port (chapter 1): the switch has "a USB mini-Type B console connection on the front
       panel, and the RJ-45 console port on the switch's rear panel", console input is active on one at a time
-      and the USB connector takes precedence. The mini-B receptacle is not yet a library part (see the gap
-      usb-console-jack), so only its lamp and its printed legend are drawn.
+      and the USB connector takes precedence. The mini-B receptacle is `std/mini-usb@1`, placed in the band
+      above the first block between the CONSOLE lamp and the USB Type A port, centred about 66.5 mm in and
+      level with the USB Type A port (Figures 1-1 and 1-8, an estimate like the rest of the front).
   rear-face:
     confidence: estimated
     note: >-
@@ -189,15 +190,6 @@ chassis:
     - {name: flush, label: front-mounting position, default: true}
     - {name: rear, label: rear-mounting position}
 gaps:
-- what: usb-console-jack
-  scope: [front]
-  reason: needs-drawing
-  wanted: >-
-    The USB mini-Type B console receptacle (Front Panel, USB Mini-Type B Port). It is not yet a library part:
-    the standard `mini-usb-b` is on main and no component presents it. The guide puts the port in the band
-    above the first block, between the CONSOLE lamp and the USB Type A port, at about 67 mm in. The port is
-    placed once the jack is on main, before this change merges. Nothing that reads as a port is drawn there;
-    its lamp and its CONSOLE legend are.
 - what: rack-kit
   scope: [front, rear]
   reason: needs-drawing
@@ -304,6 +296,7 @@ views:
       - {block: sfp}
       - {block: sfp-plus}
       - {id: usb-a, at: [77.0, 0.75], size: [12.0, 4.5], shape: rect}
+      - {id: usb-console, at: [62.65, 1.05], size: [7.7, 3.9], shape: rect}
       - {id: mode, at: [12.4, 2.0], size: [4.0, 4.0], shape: circle}
       - {id: led-stat, at: [20.2, 1.7], size: [2.8, 1.6], shape: rect}
       - {id: led-duplx, at: [29.6, 1.7], size: [2.8, 1.6], shape: rect}
@@ -340,7 +333,7 @@ views:
     - {id: silk-poe, at: [58.7, 2.87], text: PoE, font-size: 1.2, anchor: start, fill: '#2b2e31', for: led-poe}
     - {id: silk-syst, at: [24.1, 5.97], text: SYST, font-size: 1.2, anchor: start, fill: '#2b2e31', for: led-syst}
     - {id: silk-actv, at: [33.0, 5.97], text: ACTV, font-size: 1.2, anchor: start, fill: '#2b2e31', for: led-actv}
-    - {id: silk-console, at: [67.1, 7.5], text: CONSOLE, font-size: 1.1, anchor: middle, fill: '#2b2e31', for: chassis}
+    - {id: silk-console, at: [66.5, 7.5], text: CONSOLE, font-size: 1.1, anchor: middle, fill: '#2b2e31', for: usb-console}
     components:
       blocks:
       - id: rj45
@@ -405,6 +398,8 @@ views:
       - {block: sfp}
       - {block: sfp-plus}
       - {ref: std/usb-a@1, id: usb-a, at: [77.0, 0.75], group: mgmt, rel-pos: 1}
+      - {ref: std/mini-usb@1, id: usb-console, at: [62.65, 1.05], group: mgmt, rel-pos: 4,
+         attrs: {role: console}}
       - {ref: common/usb-symbol@1, id: usb-mark, at: [70.6, 0.8], group: furniture, rel-pos: 1, for: chassis}
       - {ref: common/reset-button@1, id: mode, at: [12.4, 2.0], group: controls, rel-pos: 1, for: chassis}
       - {ref: common/led-rect-sm@1, id: led-stat, at: [20.2, 1.7], group: leds, rel-pos: 1, for: chassis,
@@ -430,7 +425,7 @@ views:
     - {id: uplinks, at: [366.0, 1.0], size: {w: 76.0, h: 40.0}, label: '2 x 1G SFP and 2 x 1G SFP / 10G SFP+',
        members: [uplink-1, uplink-2, uplink-3, uplink-4]}
     - {id: status, at: [10.0, 0.8], size: {w: 82.0, h: 7.0}, label: 'Mode button, status lamps and USB',
-       members: [mode, led-stat, led-duplx, led-speed, led-stack, led-poe, led-syst, led-actv, led-usb-console, usb-a]}
+       members: [mode, led-stat, led-duplx, led-speed, led-stack, led-poe, led-syst, led-actv, led-usb-console, usb-console, usb-a]}
   rear:
     size: {w: 444.5, h: 44.45}
     panel:
