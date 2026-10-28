@@ -10,7 +10,7 @@
 //      rear holes that show a swapped bay's back - on ANY view, not only the
 //      front. (build2dElevation seated the front alone, which is how rear
 //      plugs and PSUs went missing from the rear elevation.)
-//   2. paints `fields` (an optic's latch color, its label) the way Explorer
+//   2. paints `fields` (an optic's latch colour, its label) the way Explorer
 //      does: shortest path first, on the part and on its projections.
 //   3. reads ports and bays with zones.js's readSvg, so a port on a seated
 //      card or optic is a port like any other.

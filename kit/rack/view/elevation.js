@@ -26,9 +26,9 @@ import {createView} from './view.js';
 // front, unless it is turned; on the other face, the reverse.
 export const panelFor = (item, pane) => (((item.face === pane) !== !!item.turned) ? 'front' : 'rear');
 
-// RAIL COLORS. The showcase draws its rails from the site's theme tokens, so
+// RAIL COLOURS. The showcase draws its rails from the site's theme tokens, so
 // they follow light and dark mode. The Rack Builder draws them as metal:
-// fixed colors that stay silver in either theme, taken from site/rack3d.js's
+// fixed colours that stay silver in either theme, taken from site/rack3d.js's
 // own rail, hole, ear and screw materials so 2D and 3D agree.
 const THEMED = {rail: 'var(--pt-surface-2)', railLine: 'var(--pt-line)', hole: 'var(--pt-ground)',
                 num: 'var(--pt-ink-muted)', ear: 'var(--pt-ink-muted)', earOpacity: 0.35,
