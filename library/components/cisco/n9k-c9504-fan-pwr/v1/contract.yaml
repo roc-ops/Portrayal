@@ -1,0 +1,40 @@
+format: 1
+kind: module
+name: n9k-c9504-fan-pwr
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9504 blank fan power card (N9K-C9504-FAN-PWR). It fills a fabric-module slot that holds no
+  fabric module when the switch uses the N9K-C9504-FM-G fabric module and the N9K-C9504-FAN2 fan trays, and
+  supplies the extra power those fan trays need. A plain plate, no ports and no lamps.
+size: {w: 62.48, h: 238.76, d: 297.18}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs:
+  model: 'N9K-C9504-FAN-PWR'
+  role: 'fan-power-card'
+  power-draw-typical-w: 45
+  power-draw-max-w: 90
+  eol: 'unknown'
+provenance:
+  size: >-
+    estimated - the guide gives dimensions for the fabric module (2.46 in by 9.4 in by 11.7 in) and none for
+    the fan power card, which takes a fabric-module slot, so it takes that envelope.
+  purpose: >-
+    install guide - "Overview" note (PDF p9, printed p3), the only place the 9504 guide names this part:
+    "When using FM-G fabric modules, any empty slots should be filled with FAN-PWR modules
+    (N9K-C9504-FAN-PWR) due to additional power required for N9K-C9504-FAN2 modules." Table 1 (PDF p9,
+    printed p3) gives no blank column.
+  power: >-
+    datasheet - the only power row for a fan power card in the guide is in the second planning table
+    (PDF p20, printed p14), under the heading "Blank Fan Power Card", and that row names
+    N9K-C9508-FAN-PWR, not this part number: 45 W typical, 90 W maximum. That table is the 9508's copy;
+    the 9504's own table (PDF pp17-18) has no such row. The figures are carried onto the 9504's card because
+    it is the same part in the same role and the guide gives it no other figure; read it as the 9508's
+    row applied here, not as a 9504 specification.
+  skin: >-
+    estimated - a plain plate with a power connector and two captive screws; no figure draws the card.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+skins: [default]
