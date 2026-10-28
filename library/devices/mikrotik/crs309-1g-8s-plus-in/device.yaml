@@ -1,0 +1,517 @@
+format: 1
+kind: device
+name: crs309-1g-8s-plus-in
+version: 1.0.0
+maturity: modelled
+manufacturer: MikroTik
+model: CRS309-1G-8S+IN
+portfolio: {line: Switches, family: Cloud Router Switch, series: CRS309}
+description: >-
+  MikroTik CRS309-1G-8S+IN is a compact Cloud Router Switch, 272 mm wide. It has eight SFP+ cages, one
+  10/100/1000 Ethernet port that takes PoE in, and a DE-9 serial console. It runs SwOS or RouterOS (dual
+  boot). The front carries the eight cages with an ACT and a 10G lamp above each. Beside them are the
+  POE/BOOT jack, the CONSOLE connector, the RESET button and the USER and PWR lamps. The rear carries
+  the DC jack (DC 12-57 V as printed), a cable-restraint slot, an earthing stud and a finned heatsink
+  that cools the unit. There is no fan and no built-in mains supply: a 24 V 1.2 A adapter ships in the
+  box. It mounts in a rack on the ears supplied.
+profile: networking
+provenance:
+  sources:
+    confidence: estimated
+    note: >-
+      estimated - no dimensions drawing is held for this model. CRS309-1G-8S+IN brochure, MikroTik (file
+      CRS309-1G-8SplusIN_200133.pdf; no date is printed, the file name carries a revision stamp): specification
+      table, powering, included parts. CRS309-1G-8S+IN product page, MikroTik (https://mikrotik.com/product/crs309_1g_8s_in,
+      saved 2026-10-26): dimensions, DC inputs, cooling. Quick Guide CRS309-1G-8S+IN (file CRS309-1G-8Splus-w_190708.pdf,
+      revision stamp 190708): mounting, powering, LED indicators, accessories. The studio photographs
+      1730 (front, from slightly above), 1731 (rear, from above), 1732 (rear with a rack ear) and 1733
+      (front with a rack ear): every position and legend. The block diagram CRS309-1G-8S_220900.png. The
+      saved help page Quick Guide G1 CRS series lists the model and holds no figures. NetBox read as a
+      second opinion only. MikroTik prints no figure numbers. The device name spells MikroTik's + as -plus
+      because a directory name cannot carry +; model: keeps the + as printed.
+  datasheet:
+    confidence: datasheet
+    note: >-
+      The brochure is MikroTik's datasheet for the model: product code CRS309-1G-8S+IN, CPU 98DX8208 800
+      MHz dual core, 512 MB RAM, 16 MB flash, 272 x 191 x 44 mm, -40 to +70 C tested, one 10/100/1000
+      port, eight SFP+ ports, serial port RS232, PoE in (passive and 802.3af/at), 12 - 57 V on the DC
+      jack and 18 - 57 V on PoE in, one DC jack, 23 W maximum and 17 W without attachments, an included
+      24 V 1.2 A adapter, a screw kit and rack ears. The brochure says "special rackmount ears" are provided.
+  gate-1:
+    confidence: estimated
+    note: >-
+      estimated - the face of photograph 1730 is 3480 px wide for the printed 272 mm (12.79 px per mm)
+      and 523 px tall for the printed 44 mm (11.89 px per mm), 0.93 of the horizontal scale, so the camera
+      looks down and the photograph is not orthographic. Every x on the front is taken at 12.79 px per
+      mm from the body's left edge and every y at 11.89 px per mm from the face's top edge; the y values
+      are estimated, good to about 1 mm. The eight cage openings read a pitch of 252.7 px, 19.76 mm, uniform
+      to 0.2 mm.
+  chassis:
+    confidence: datasheet
+    note: >-
+      272 x 44 x 191 from the brochure and the product page, which agree; no drawing is held. The body
+      is narrower than the rack, and the rack ears supplied carry it to the rack face (photographs 1732
+      and 1733).
+  front-layout:
+    confidence: estimated
+    note: >-
+      estimated - read off photograph 1730 as described under gate-1. Eight SFP+ cages, the first centred
+      at 31.3 mm, 19.76 mm apart, top at 27.1 mm; each has its ACT lamp 5.05 mm left and its 10G lamp
+      4.55 mm right of its centre, 23.0 mm down, with the legends ACT and 10G above them and SFP+ n under
+      the cage. The POE/BOOT jack is centred at 194.8 mm and the DE-9 CONSOLE connector at 222.6 mm. The
+      RESET button is at 243.2 mm, with the USER and PWR lamps at 251 mm. The hexagon vent band over the
+      cages is drawn as the photograph shows it.
+  lamps:
+    confidence: datasheet
+    note: >-
+      The quick guide's LED section says the power LED is lit when the router is powered from the DC jack
+      or PoE, the user LED can be configured from RouterOS, and the port LEDs indicate the individual
+      Ethernet and SFP port activity. The USER and PWR lamps are given the lit colours photograph 1730
+      shows (green and blue). Nothing held says what ACT and 10G mean as colours or states, so that is
+      a gap.
+  port-numbering:
+    confidence: datasheet
+    note: >-
+      The metal prints SFP+ 1 to SFP+ 8 left to right under the cages, POE/BOOT under the Ethernet jack
+      and CONSOLE under the DE-9 (photograph 1730). The block diagram names the cages SFP+ 1 to 8 and
+      the management port Ether 1.
+  poe-in:
+    confidence: datasheet
+    note: >-
+      The Ethernet port (Ether 1, printed POE/BOOT) accepts 802.3af/at and passive PoE power input, 18
+      - 57 V DC (quick guide; brochure: 18 - 57 V on PoE in). The face marks the port only with its printed
+      name, POE/BOOT: no band or lamp, so none is drawn. The port carries a poe attr.
+  console:
+    confidence: datasheet
+    note: >-
+      The brochure and the product page call the serial port RS232 and the quick guide an RS-232 serial
+      port at 115200 bit/s. The metal shows a nine-pin D-sub connector with jackscrews under the printed
+      CONSOLE, so it is drawn with the library's DE-9 receptacle. Its role is rs232 and not console: the
+      DCIM exporter's device path exports no DE-9 as a console port, so the export carries no console
+      port for it.
+  buttons:
+    confidence: estimated
+    note: >-
+      One round button printed RESET (quick guide: the reset button, for reset and Netinstall).
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      The unit is powered by the DC jack or by PoE in on Ethernet 1, with a 24 V 1.2 A adapter in the
+      box; no supply is built in, so there are no bays. The product page lists the cooling as passive
+      and the brochure says the enclosure acts as a heatsink, so no fan is drawn; the finned heatsink
+      on the rear is the cooling. The two inputs work in fail-over (quick guide: the input with the higher
+      voltage is the main source).
+  dc-input:
+    confidence: photo-measured
+    note: >-
+      The rear prints "DC 12-57 V" above the jack and a polarity symbol under it (photograph 1731). The
+      brochure and the product page list 12 - 57 V on the DC jack; the quick guide says it accepts 11-57
+      V. The legend is drawn as printed, the polarity symbol sits clear of the jack part's footprint (3.6
+      mm lower than the photograph shows it), and the quick guide's figure is declared a conflict. The
+      jack is the placed common/dc-barrel (dc-in), its bore positioned on the bore of photograph 1731.
+  dc-in-rating:
+    confidence: datasheet
+    note: >-
+      The rear prints "DC 12-57 V" above the jack (photograph 1731): the `input-voltage` of the dc-in
+      jack, carried as printed. The brochure's and the quick guide's included 24 V 1.2 A adapter gives
+      the `current-max-a`. The quick guide states the jack as 5.5 mm outside, 2 mm inside, pin positive
+      (female); that size is not part of the library's one nominal dc-barrel and is carried here. The
+      quick guide's 11-57 V is a conflict declared in the gaps.
+  earth:
+    confidence: estimated
+    note: >-
+      The rear carries an earthing stud with a wing nut under an earth symbol (photograph 1731). common/ground-stud
+      draws a hex nut and a lug seat the stud does not have, so the stud is chassis art and the symbol
+      is placed; the gap earth-stud-part asks for a wing-nut stud part.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      estimated - read off photograph 1731, which looks down on the rear, so x is taken at 11.96 px per
+      mm across the 272 mm width and y at 10.9 px per mm from the wall's top, good to about 2 mm. The
+      cable-restraint slot is at 8.1 to 40.3 mm, the DC jack's bore at 65.8 mm, the heatsink fin ends
+      from 85.0 to 257.7 mm (about 24 fins on a 7.1 mm pitch) and the earthing stud at 260 mm. Two of
+      the rear's crosshead screws are drawn.
+  ears:
+    confidence: estimated
+    note: >-
+      Rack ears are in the box (brochure: special rackmount ears are provided; product page: rack ears;
+      quick guide: the mounting kit 1U RCB 190 mm, fitted to both sides with four screws). Photographs
+      1732 and 1733 show the ear bracket bolted to the side wall flush with the face, long enough to reach
+      the rack face, with the body at one side of the opening. The generic ear is drawn symmetrically
+      and does not show that. No drawing is held, so no distance behind the face is given. The K-37 fastening
+      set is a screw set and not a rack kit, so no kit is listed. The ears are not drawn.
+  colour: {confidence: photo-measured, note: median of photograph 1730's face (#d4d4d4).}
+attrs:
+  power:
+    power-max-w: 23
+    power-without-attachments: 17 W (brochure and product page, without attachments)
+    power-input: >-
+      DC jack 12 - 57 V, or PoE in on Ethernet 1, 18 - 57 V. The quick guide says 11 - 57 V for the jack;
+      the rear prints DC 12-57 V
+    power-adapter: 24 V 1.2 A, in the box
+    poe-standard: IEEE 802.3af/at, and passive PoE (in)
+  thermal: {cooling: passive (product page); no fan}
+  environmental: {operating-temp-c: -40 to 70 (tested)}
+  platform: {cpu: '98DX8208, 800 MHz, dual core', switch-chip: 98DX8208, ram: 512 MB, storage: 16 MB flash,
+    os: SwOS / RouterOS (dual boot)}
+  features:
+    optics-sfp-plus: 'brochure: the eight SFP+ slots support up to 10 Gbit modules, none included'
+  compliance: {certification: 'CE, EAC, RoHS'}
+chassis:
+  width: 272.0
+  height: 44.0
+  depth: 191.0
+  ru: 1
+  color: '#d4d4d4'
+  ears:
+    positions:
+    - {name: flush, default: true}
+  power: dc
+gaps:
+- what: dimensions-drawing
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  note: >-
+    No dimensions drawing is held for this model (MikroTik publishes none for it). The positions are read
+    off studio photographs that look down on the unit, so every y is estimated.
+  wanted: MikroTik's dimensions drawing for the CRS309-1G-8S+IN.
+- what: power-max-w
+  scope:
+  - front
+  reason: sources-disagree
+  note: >-
+    The brochure and the product page give a maximum power consumption of 23 W (17 W without attachments);
+    the quick guide says the consumption under maximum load is up to 17 W. 23 W is carried as the maximum
+    and 17 W as the figure without attachments.
+  wanted: MikroTik's statement of which figure is the maximum.
+- what: dc-input-range
+  scope:
+  - rear
+  reason: sources-disagree
+  note: >-
+    The brochure and the product page give 12 - 57 V for the DC jack and the rear prints DC 12-57 V; the
+    quick guide says 11-57 V. The metal's figure is carried.
+  wanted: MikroTik's statement of the DC jack range.
+- what: earth-stud-part
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    The earthing stud has a wing nut (photograph 1731). common/ground-stud draws a hex nut and a lug seat,
+    so the stud is chassis art and exports no earth. The reason is the nearest the schema has: the part
+    itself is what is missing, and the library has no needs-part reason.
+  wanted: A wing-nut earth stud part, so the stud is placed and not drawn as chassis art.
+- what: led-states
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The quick guide's LED section says what the power, user and port lamps show, and nothing held says
+    what the ACT and 10G lamps show as colours or states, or which colour each lamp lights.
+  wanted: MikroTik's LED table for the CRS309-1G-8S+IN.
+- what: side-walls
+  scope:
+  - left
+  - right
+  reason: needs-drawing
+  note: >-
+    No held document shows a side wall of the body: there is no dimensions drawing and the photographs
+    show the rack ear bracket and no wall detail. They are left empty.
+  wanted: A side view of the unit.
+- what: weight
+  scope:
+  - front
+  reason: vendor-silent
+  note: Neither the brochure, the product page nor the quick guide gives a weight.
+  wanted: MikroTik's weight.
+- what: eol
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The saved product page carries no Discontinued badge and MikroTik publishes no end-of-life page, so
+    no lifecycle is written.
+  wanted: none
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the eight SFP+ cages, printed SFP+ 1 to SFP+ 8; they take 1.25 Gb SFP and 10 Gb SFP+ modules
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      two lamps per cage, ACT and 10G, the ACT lamp of cage n numbered 2n-1 and its 10G lamp 2n
+  eth:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the 10/100/1000 Ethernet port printed POE/BOOT, which takes PoE in
+  console: {term: Port, role: management, index-origin: 1, description: the DE-9 serial console}
+  controls: {term: Button, role: management, index-origin: 1, description: the RESET button}
+  status-leds: {term: LED, role: indicator, index-origin: 1, description: the USER and PWR lamps}
+  inlets: {term: Inlet, role: service, index-origin: 1, description: the DC jack}
+  furniture: {term: Item, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 272.0, h: 44.0}
+    panel:
+      decor:
+      - {id: vent-left, kind: vent-window, at: [7.4, 12.0], size: [16.4, 10.1], pattern: vent, vent: 1.0}
+      - {id: vent-main, kind: vent-window, at: [24.2, 5.3], size: [176.5, 9.5], pattern: vent, vent: 1.0}
+      - {id: vent-right, kind: vent-window, at: [206.4, 15.4], size: [38.2, 6.3], pattern: vent, vent: 1.0}
+      cutouts:
+      - {id: cage-1, at: [24.05, 27.1], size: [14.5, 10.0], shape: rect}
+      - {id: led-sfp-1-act, at: [24.75, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-1-10g, at: [34.35, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: cage-2, at: [43.81, 27.1], size: [14.5, 10.0], shape: rect}
+      - {id: led-sfp-2-act, at: [44.51, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-2-10g, at: [54.11, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: cage-3, at: [63.57, 27.1], size: [14.5, 10.0], shape: rect}
+      - {id: led-sfp-3-act, at: [64.27, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-3-10g, at: [73.87, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: cage-4, at: [83.33, 27.1], size: [14.5, 10.0], shape: rect}
+      - {id: led-sfp-4-act, at: [84.03, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-4-10g, at: [93.63, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: cage-5, at: [103.09, 27.1], size: [14.5, 10.0], shape: rect}
+      - {id: led-sfp-5-act, at: [103.79, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-5-10g, at: [113.39, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: cage-6, at: [122.85, 27.1], size: [14.5, 10.0], shape: rect}
+      - {id: led-sfp-6-act, at: [123.55, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-6-10g, at: [133.15, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: cage-7, at: [142.61, 27.1], size: [14.5, 10.0], shape: rect}
+      - {id: led-sfp-7-act, at: [143.31, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-7-10g, at: [152.91, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: cage-8, at: [162.37, 27.1], size: [14.5, 10.0], shape: rect}
+      - {id: led-sfp-8-act, at: [163.07, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-8-10g, at: [172.67, 21.5], size: [3.0, 3.0], shape: rect}
+      - {id: eth-1, at: [186.9, 23.1], size: [15.8, 13.2], shape: rect}
+      - {id: console, at: [212.37, 26.1], size: [20.47, 11.4], shape: rect}
+      - {id: btn-reset, at: [241.2, 30.8], size: [4.0, 4.0], shape: circle}
+      - {id: led-user, at: [250.0, 28.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr, at: [249.8, 33.5], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [222.6, 40.5], text: CONSOLE, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: console}
+    - {at: [243.2, 30.2], text: RESET, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: btn-reset}
+    - {at: [253.6, 30.02], text: USER, font-size: 2.0, anchor: start, fill: '#2b2b2b', for: led-user}
+    - {at: [253.4, 35.12], text: PWR, font-size: 2.0, anchor: start, fill: '#2b2b2b', for: led-pwr}
+    - {at: [194.8, 40.5], text: POE/BOOT, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: eth-1}
+    - {at: [31.3, 40.5], text: SFP+ 1, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [51.06, 40.5], text: SFP+ 2, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-2}
+    - {at: [70.82, 40.5], text: SFP+ 3, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-3}
+    - {at: [90.58, 40.5], text: SFP+ 4, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-4}
+    - {at: [110.34, 40.5], text: SFP+ 5, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-5}
+    - {at: [130.1, 40.5], text: SFP+ 6, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-6}
+    - {at: [149.86, 40.5], text: SFP+ 7, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-7}
+    - {at: [169.62, 40.5], text: SFP+ 8, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: cage-8}
+    - {at: [26.25, 20.9], text: ACT, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-1-act}
+    - {at: [35.85, 20.9], text: 10G, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-1-10g}
+    - {at: [46.01, 20.9], text: ACT, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-2-act}
+    - {at: [55.61, 20.9], text: 10G, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-2-10g}
+    - {at: [65.77, 20.9], text: ACT, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-3-act}
+    - {at: [75.37, 20.9], text: 10G, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-3-10g}
+    - {at: [85.53, 20.9], text: ACT, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-4-act}
+    - {at: [95.13, 20.9], text: 10G, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-4-10g}
+    - {at: [105.29, 20.9], text: ACT, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-5-act}
+    - {at: [114.89, 20.9], text: 10G, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-5-10g}
+    - {at: [125.05, 20.9], text: ACT, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-6-act}
+    - {at: [134.65, 20.9], text: 10G, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-6-10g}
+    - {at: [144.81, 20.9], text: ACT, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-7-act}
+    - {at: [154.41, 20.9], text: 10G, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-7-10g}
+    - {at: [164.57, 20.9], text: ACT, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-8-act}
+    - {at: [174.17, 20.9], text: 10G, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: led-sfp-8-10g}
+    - {at: [269.1, 7.0], text: Cloud Router Switch, font-size: 5.2, anchor: end, fill: '#2b2b2b', for: chassis}
+    - {at: [268.4, 12.0], text: CRS309-1G-8S+IN, font-size: 3.0, anchor: end, fill: '#2b2b2b', for: chassis}
+    components:
+      placements:
+      - ref: std/sfp@1
+        id: cage-1
+        at: [24.05, 27.1]
+        group: sfp-plus
+        rel-pos: 1
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-2
+        at: [43.81, 27.1]
+        group: sfp-plus
+        rel-pos: 2
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-3
+        at: [63.57, 27.1]
+        group: sfp-plus
+        rel-pos: 3
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-4
+        at: [83.33, 27.1]
+        group: sfp-plus
+        rel-pos: 4
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-5
+        at: [103.09, 27.1]
+        group: sfp-plus
+        rel-pos: 5
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-6
+        at: [122.85, 27.1]
+        group: sfp-plus
+        rel-pos: 6
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-7
+        at: [142.61, 27.1]
+        group: sfp-plus
+        rel-pos: 7
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-8
+        at: [162.37, 27.1]
+        group: sfp-plus
+        rel-pos: 8
+        attrs: {media: sfp-plus, speed: 10g}
+      - {ref: common/led-sq@1, id: led-sfp-1-act, at: [24.75, 21.5], for: cage-1, group: sfp-leds, rel-pos: 1}
+      - {ref: common/led-sq@1, id: led-sfp-1-10g, at: [34.35, 21.5], for: cage-1, group: sfp-leds, rel-pos: 2}
+      - {ref: common/led-sq@1, id: led-sfp-2-act, at: [44.51, 21.5], for: cage-2, group: sfp-leds, rel-pos: 3}
+      - {ref: common/led-sq@1, id: led-sfp-2-10g, at: [54.11, 21.5], for: cage-2, group: sfp-leds, rel-pos: 4}
+      - {ref: common/led-sq@1, id: led-sfp-3-act, at: [64.27, 21.5], for: cage-3, group: sfp-leds, rel-pos: 5}
+      - {ref: common/led-sq@1, id: led-sfp-3-10g, at: [73.87, 21.5], for: cage-3, group: sfp-leds, rel-pos: 6}
+      - {ref: common/led-sq@1, id: led-sfp-4-act, at: [84.03, 21.5], for: cage-4, group: sfp-leds, rel-pos: 7}
+      - {ref: common/led-sq@1, id: led-sfp-4-10g, at: [93.63, 21.5], for: cage-4, group: sfp-leds, rel-pos: 8}
+      - {ref: common/led-sq@1, id: led-sfp-5-act, at: [103.79, 21.5], for: cage-5, group: sfp-leds, rel-pos: 9}
+      - {ref: common/led-sq@1, id: led-sfp-5-10g, at: [113.39, 21.5], for: cage-5, group: sfp-leds, rel-pos: 10}
+      - {ref: common/led-sq@1, id: led-sfp-6-act, at: [123.55, 21.5], for: cage-6, group: sfp-leds, rel-pos: 11}
+      - {ref: common/led-sq@1, id: led-sfp-6-10g, at: [133.15, 21.5], for: cage-6, group: sfp-leds, rel-pos: 12}
+      - {ref: common/led-sq@1, id: led-sfp-7-act, at: [143.31, 21.5], for: cage-7, group: sfp-leds, rel-pos: 13}
+      - {ref: common/led-sq@1, id: led-sfp-7-10g, at: [152.91, 21.5], for: cage-7, group: sfp-leds, rel-pos: 14}
+      - {ref: common/led-sq@1, id: led-sfp-8-act, at: [163.07, 21.5], for: cage-8, group: sfp-leds, rel-pos: 15}
+      - {ref: common/led-sq@1, id: led-sfp-8-10g, at: [172.67, 21.5], for: cage-8, group: sfp-leds, rel-pos: 16}
+      - ref: common/rj45-eth@1
+        id: eth-1
+        at: [186.9, 23.1]
+        group: eth
+        rel-pos: 1
+        attrs: {media: rj45, speed: 1g, poe: '802.3af/at or passive PoE (in), 18 - 57 V'}
+      - ref: common/db9-receptacle@1
+        id: console
+        at: [207.2, 25.55]
+        group: console
+        rel-pos: 1
+        attrs: {media: db9, role: rs232}
+      - ref: common/reset-button@1
+        id: btn-reset
+        at: [241.2, 30.8]
+        for: chassis
+        group: controls
+        rel-pos: 1
+        attrs: {function: reset}
+      - ref: common/led-dot@1
+        id: led-user
+        at: [250.0, 28.4]
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states:
+        - 'off'
+        - {name: green, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-pwr
+        at: [249.8, 33.5]
+        for: chassis
+        group: status-leds
+        rel-pos: 2
+        states:
+        - 'off'
+        - {name: blue, color: '#2563eb'}
+    regions:
+    - id: logo-zone
+      at: [246.5, 37.5]
+      size: {w: 20.5, h: 5.5}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 272.0, h: 44.0}
+    panel:
+      decor:
+      - {id: cable-slot, kind: cable-slot, at: [8.1, 22.0], size: [32.2, 14.7], rx: 7.3, fill: '#a9acaf'}
+      - {id: heatsink, kind: heatsink, at: [85.0, 3.0], size: [172.7, 41.0], fill: '#a9a39d'}
+      - {id: earth-stud-base, kind: earth-stud, at: [256.2, 32.7], size: [8.0, 8.0], rx: 4.0, fill: '#b4b8bc'}
+      - {id: earth-stud-nut, kind: earth-stud, at: [258.2, 34.7], size: [4.0, 4.0], rx: 2.0, fill: '#8d9298'}
+    silkscreen:
+    - {at: [65.0, 23.7], text: DC 12-57 V, font-size: 2.5, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - id: polarity
+      at: [65.6, 42.0]
+      path: >-
+        M -7.5 0 a 1.5 1.5 0 1 0 3 0 a 1.5 1.5 0 1 0 -3 0 M -6.8 0 h 1.6 M -4.5 0 H -1 M -1 0 a 1 1 0
+        1 0 2 0 a 1 1 0 1 0 -2 0 M 1 0 H 4.5 M 4.5 0 a 1.5 1.5 0 1 0 3 0 a 1.5 1.5 0 1 0 -3 0 M 5.2 0
+        h 1.6 M 6 -0.8 v 1.6
+      filled: false
+      stroke-width: 0.25
+      fill: '#2b2b2b'
+      for: chassis
+    - id: heatsink-fins
+      at: [90.0, 4.0]
+      path: >-
+        M 0 0 V 38 M 7.13 0 V 38 M 14.26 0 V 38 M 21.39 0 V 38 M 28.52 0 V 38 M 35.65 0 V 38 M 42.78 0
+        V 38 M 49.91 0 V 38 M 57.04 0 V 38 M 64.17 0 V 38 M 71.3 0 V 38 M 78.43 0 V 38 M 85.56 0 V 38
+        M 92.69 0 V 38 M 99.82 0 V 38 M 106.95 0 V 38 M 114.08 0 V 38 M 121.21 0 V 38 M 128.34 0 V 38
+        M 135.47 0 V 38 M 142.6 0 V 38 M 149.73 0 V 38 M 156.86 0 V 38
+      filled: false
+      stroke-width: 0.5
+      fill: '#6f6a65'
+      for: chassis
+    components:
+      placements:
+      - ref: common/dc-barrel@1
+        id: dc-in
+        at: [59.8, 24.7]
+        group: inlets
+        rel-pos: 1
+        attrs: {input-voltage: 12-57 VDC, current-max-a: 1.2}
+      - {ref: common/ground-symbol@1, id: earth-mark, at: [257.6, 22.7], for: chassis, group: furniture,
+        rel-pos: 1}
+      - {ref: common/screw-head@1, id: rear-screw-1, at: [23.0, 3.4], group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: rear-screw-2, at: [260.4, 3.4], group: furniture, rel-pos: 3}
+  top:
+    size: {w: 272.0, h: 191.0}
+    empty: >-
+      Photographs 1730 and 1731 show a plain lid with the Cloud Switch Series mark (a brand mark, not
+      drawn) and no vents or openings; no drawing is held.
+  bottom:
+    size: {w: 272.0, h: 191.0}
+    empty: >-
+      Not drawn by any source held: no drawing is held and no studio photograph pictures the underside.
+  left:
+    size: {w: 191.0, h: 44.0}
+    empty: >-
+      No document held shows the left wall of the body: there is no dimensions drawing and the photographs
+      that show a side show the rack ear bracket only. Not drawn from another model.
+  right:
+    size: {w: 191.0, h: 44.0}
+    empty: >-
+      No document held shows the right wall of the body: there is no dimensions drawing and the photographs
+      that show a side show the rack ear bracket only. Not drawn from another model.
+configurations:
+  base:
+    kind: base
+    description: >-
+      CRS309-1G-8S+IN - eight SFP+ cages, one 10/100/1000 port with PoE in and the DE-9 console, passively
+      cooled. The box holds a 24 V 1.2 A adapter, a screw kit and rack ears.
+    default: true
+    part-numbers:
+      CRS309-1G-8S+IN: {}
+references:
+- title: >-
+    CRS309-1G-8S+IN brochure (MikroTik; revision stamp 200133, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS309-1G-8SplusIN_200133.pdf)
+  sha256: dd81fdea0e9c0681948359ead0180560c58f70226bcc5e5c5d6dbbe169850276
+- title: >-
+    CRS309-1G-8S+IN Quick Guide (MikroTik; revision stamp 190708, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS309-1G-8Splus-w_190708.pdf)
+  sha256: 941edda7c44ded6b2ce39e92069a7377cd65226c2607fd3d4e27e9b552e7adb0

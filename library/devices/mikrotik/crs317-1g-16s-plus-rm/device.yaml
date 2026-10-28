@@ -1,0 +1,611 @@
+format: 1
+kind: device
+name: crs317-1g-16s-plus-rm
+version: 1.0.0
+maturity: modelled
+manufacturer: MikroTik
+model: CRS317-1G-16S+RM
+portfolio: {line: Switches, family: Cloud Router Switch, series: CRS317}
+description: >-
+  MikroTik CRS317-1G-16S+RM is a fixed 1U Cloud Router Switch with 16 SFP+ cages, one 10/100/1000 management
+  port and an RJ45 serial console. It runs SwOS or RouterOS (dual boot). The front carries the 16 cages
+  in four blocks of four. Each has an ACT lamp, a 10G lamp and its printed name, SFP+ 1 to SFP+ 16. Beside
+  them sit the CONSOLE jack, the ETH/BOOT jack, the RESET button and the USR, FAULT, PWR 2 and PWR 1 lamps.
+  The rear carries two IEC C14 inlets (POWER 1 and POWER 2), two fans and a finned heatsink. Two supplies
+  are built into the chassis, one active at a time, so there are no bays. The left and right walls are
+  not drawn.
+profile: networking
+provenance:
+  sources:
+    confidence: estimated
+    note: >-
+      estimated - no dimensions drawing is held for this model. CRS317-1G-16S+RM brochure, MikroTik (file
+      CRS317-1G-16Splus_211004.pdf; no date is printed, the file name carries a revision stamp): specification
+      table, features, included parts. CRS317-1G-16S+RM product page, MikroTik (https://mikrotik.com/product/crs317_1g_16s_rm,
+      saved 2026-10-26): dimensions, AC inputs, PSU slots, cooling, included parts. Quick Guide CRS317-1G-16S+RM
+      (file CRS317-1G-16S-qg_200107.pdf, revision stamp 200107): powering, cooling, ports, accessories.
+      The studio photographs 1324 (front, from slightly above) and 2055 (rear, from above): every position
+      and legend. The block diagram CRS317-1G-16S_220904.png (ports SFP+ 1 to 16 and Ether 1). The saved
+      help page Quick Guide G1-b lists the model and holds no figures. NetBox read as a second opinion
+      only (its part_number CRS317-1G-16S+ is not MikroTik's product code). MikroTik prints no figure
+      numbers. The device name spells MikroTik's + as -plus because a directory name cannot carry +; model:
+      keeps the + as printed.
+  datasheet:
+    confidence: datasheet
+    note: >-
+      The brochure is MikroTik's datasheet for the model: product code CRS317-1G-16S+RM, CPU 98DX8216B0
+      800 MHz, two cores, 1 GB RAM, 16 MB flash, 16 SFP+ cages (1.25 Gb SFP and 10 Gb SFP+, none included),
+      443 x 224 x 44 mm, two AC inputs of 100 - 240 V, redundant supply, 44 W maximum power consumption,
+      -20 to 60 C tested, 38 LEDs, serial RJ45. The 44 W is unqualified in the brochure and the product
+      page, and the quick guide words it as the consumption under maximum load, so it is filed as the
+      maximum. The quick guide says the device was tested from -40 to +70 C; the brochure and the product
+      page say -20 to 60 C, which is carried (the quick guide's range is a conflict declared here). The
+      product page's suggested price is not carried.
+  gate-1:
+    confidence: estimated
+    note: >-
+      estimated - the face of photograph 1324 is 3130 px wide between the ear folds for the printed 443
+      mm (7.065 px per mm) and 285 px tall for the printed 44 mm (6.48 px per mm), 0.92 of the horizontal
+      scale, so the camera looks down and the photograph is not orthographic. Every x on the front is
+      taken at 7.065 px per mm from the body's left edge; every y is taken at 6.48 px per mm from the
+      face's top edge and is estimated, good to about 1 mm. The 4 x 14.25 mm SFP+ cages abut inside a
+      block and read 100.7 px, 14.25 mm, on a quantity the scale never saw.
+  chassis:
+    confidence: datasheet
+    note: >-
+      443 x 44 x 224 from the brochure and the product page, which agree; no drawing is held to dimension
+      them further. 443 is the body between the ear folds. The rear heatsink is part of the depth the
+      sources print.
+  front-layout:
+    confidence: estimated
+    note: >-
+      estimated - read off photograph 1324 as described under gate-1. Four blocks of four SFP+ cages,
+      the first cage at 13.2 mm, 14.25 mm apart inside a block and 63.5 mm block to block, top at 25.8
+      mm. Each cage has its ACT lamp 2.55 mm and its 10G lamp 12.2 mm from its left edge, 22.4 mm down,
+      with the legends ACT and 10G above them, and the printed SFP+ n under the cage. The CONSOLE jack
+      (top) and the ETH/BOOT jack (below it) share one housing 17.7 mm wide at 266.0 mm; the RESET button
+      is at 287.6 mm. The USR, FAULT, PWR 2 and PWR 1 lamps sit in a rounded bracket at 295.3 mm on a
+      5.1 mm pitch. The slotted vent windows over the cages and the model text are drawn as the photograph
+      shows them.
+  lamps:
+    confidence: estimated
+    note: >-
+      estimated - the brochure counts 38 LEDs: 16 cages x 2 lamps, the four status lamps and the two lamps
+      of the ETH/BOOT jack. The status lamps are given the lit colours the photograph shows (USR yellow,
+      FAULT red, PWR 2 and PWR 1 blue). Photograph 1324 shows the ACT and 10G lamps unlit. No held document
+      says what a lamp shows; the quick guide has no LED table, so that is a gap.
+  port-numbering:
+    confidence: datasheet
+    note: >-
+      The metal prints SFP+ 1 to SFP+ 16 left to right under the cages (photograph 1324), ETH/BOOT under
+      the management jack and CONSOLE over the serial jack. The block diagram names the cages SFP+ 1 to
+      16 and the management port Ether 1.
+  console:
+    confidence: estimated
+    note: >-
+      The RJ45 serial port (brochure: Serial port RJ45; quick guide: RJ45 serial port, 115200 bit/s) is
+      the upper jack of the housing, under the printed CONSOLE. The lower jack is the ETH/BOOT management
+      Ethernet port (quick guide: Ethernet port (ETH/BOOT), can be used for network booting).
+  buttons:
+    confidence: estimated
+    note: 'One round button printed RESET (quick guide: the RouterBOOT reset button).'
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      The product page lists two AC inputs, two PSU slots and two fans; the brochure says dual redundant
+      power supplies; the quick guide says the device takes power through two IEC C14 connectors and only
+      one supply is active at a time, the second being for redundancy. No document held shows a removable
+      supply module or gives a supply part number, and the rear photograph shows two bare inlets and no
+      module handle, so the supplies are built into the chassis and there are no bays, as on juniper/ex2300-24t.
+      The two fans are the two hexagon-grille openings of the rear photograph. The quick guide says the
+      passive heatsinks cool the unit and the two redundant fans switch on when the ambient is above normal.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      estimated - read off photograph 2055, which looks down on the rear, so x is taken at 14.24 px per
+      mm across the 443 mm width and y is estimated from a vertical scale of 12 px per mm, good to about
+      3 mm. The two C14 inlets are centred at 37.2 and 102.7 mm and carry POWER 1 and POWER 2 with 100-240V~2A
+      MAX 50/60Hz printed under each. The two fan grilles are 36.5 mm across, centred at 160.8 and 200.1
+      mm. The heatsink fin ends fill 220 to 385.5 mm (22 fins drawn on a 7.1 mm pitch; the photograph
+      shows about 23). Two of the rear's crosshead screws are drawn where the photograph shows them; the
+      screws on the fan plates are not.
+  ears:
+    confidence: estimated
+    note: >-
+      Rack ears are in the box (product page, Included parts: Rack ears; the quick guide: 1U rackmount
+      bracket, and the mounting section describes fitting them to both sides with four screws). Photograph
+      1324 shows them flush with the face. No drawing is held, so no distance behind the face is given.
+      The product page also lists a K10 screw kit, which is a fastening set and not a rack kit, so no
+      kit is listed. The ears are not drawn.
+  colour: {confidence: photo-measured, note: median of photograph 1324's face (#dbdbdb).}
+attrs:
+  power:
+    power-max-w: 44
+    power-input: 100 - 240 V AC, 50 - 60 Hz, two inputs (IEC C14), built-in supplies
+    power-redundancy: only one supply is active at a time and the other is for redundancy (quick guide)
+  thermal: {cooling: passive heatsinks with two fans that switch on when hot}
+  environmental: {operating-temp-c: -20 to 60 (tested)}
+  platform: {cpu: '98DX8216B0, 800 MHz, two cores', switch-chip: 98DX8216, ram: 1 GB, storage: 16 MB flash,
+    os: SwOS / RouterOS (dual boot)}
+  features:
+    vlan-limit: IEEE 802.1Q, up to 4K VLANs
+    optics-sfp-plus: >-
+      brochure: the SFP+ cages support both 1.25 Gb SFP and 10 Gb SFP+ modules, with DDMI support, none
+      included
+  compliance: {certification: 'CE, EAC, RoHS'}
+chassis:
+  width: 443.0
+  height: 44.0
+  depth: 224.0
+  ru: 1
+  color: '#dbdbdb'
+  ears:
+    positions:
+    - {name: flush, default: true}
+  power: ac
+gaps:
+- what: dimensions-drawing
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  note: >-
+    No dimensions drawing is held for this model (MikroTik publishes none for it). The positions are read
+    off two studio photographs that look down on the unit, so every y is estimated and the rear more than
+    the front.
+  wanted: MikroTik's dimensions drawing for the CRS317-1G-16S+RM.
+- what: led-states
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    Searched the brochure, the product page and the quick guide for an LED table: none. The lamps carry
+    the component's own vocabulary and no meaning is stated for ACT, 10G, USR, FAULT, PWR 2 or PWR 1.
+  wanted: MikroTik's LED description for the CRS317-1G-16S+RM.
+- what: side-walls
+  scope:
+  - left
+  - right
+  reason: needs-drawing
+  note: >-
+    No held document shows either side wall: there is no dimensions drawing and neither photograph looks
+    at a wall. They are left empty.
+  wanted: A side view of the unit.
+- what: weight
+  scope:
+  - front
+  reason: vendor-silent
+  note: Neither the brochure, the product page nor the quick guide gives a weight.
+  wanted: MikroTik's weight.
+- what: eol
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The saved product page carries no Discontinued badge and MikroTik publishes no end-of-life page, so
+    no lifecycle is written.
+  wanted: none
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the 16 SFP+ cages, printed SFP+ 1 to SFP+ 16; they take 1.25 Gb SFP and 10 Gb SFP+ modules
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      two lamps per cage, ACT and 10G, the ACT lamp of cage n numbered 2n-1 and its 10G lamp 2n
+  eth:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the 10/100/1000 Ethernet port printed ETH/BOOT, which can boot over the network
+  console: {term: Port, role: management, index-origin: 1, description: the RJ45 serial console}
+  controls: {term: Button, role: management, index-origin: 1, description: the RESET button}
+  status-leds: {term: LED, role: indicator, index-origin: 1, description: 'the USR, FAULT, PWR 2 and PWR
+      1 lamps'}
+  inlets: {term: Inlet, role: service, index-origin: 1, description: 'the two IEC C14 AC inlets, printed
+      POWER 1 and POWER 2'}
+  furniture: {term: Item, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 443.0, h: 44.0}
+    panel:
+      decor:
+      - {id: jack-plate, kind: jack-plate, at: [266.0, 9.2], size: [17.7, 29.2], fill: '#bcbdbd'}
+      - {id: vent-1a, kind: vent-window, at: [11.5, 11.2], size: [20.0, 3.0], pattern: vent, vent: 1.0}
+      - {id: vent-1b, kind: vent-window, at: [33.3, 2.4], size: [36.8, 12.3], pattern: vent, vent: 1.0}
+      - {id: vent-2, kind: vent-window, at: [77.5, 2.4], size: [55.5, 12.3], pattern: vent, vent: 1.0}
+      - {id: vent-3, kind: vent-window, at: [140.8, 2.4], size: [57.3, 12.3], pattern: vent, vent: 1.0}
+      - {id: vent-4a, kind: vent-window, at: [204.5, 2.4], size: [60.9, 12.3], pattern: vent, vent: 1.0}
+      - {id: vent-4b, kind: vent-window, at: [266.5, 3.2], size: [25.0, 2.8], pattern: vent, vent: 1.0}
+      cutouts:
+      - {id: cage-1, at: [13.2, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-1-act, at: [14.25, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-1-10g, at: [23.9, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-2, at: [27.45, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-2-act, at: [28.5, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-2-10g, at: [38.15, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-3, at: [41.7, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-3-act, at: [42.75, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-3-10g, at: [52.4, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-4, at: [55.95, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-4-act, at: [57.0, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-4-10g, at: [66.65, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-5, at: [76.7, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-5-act, at: [77.75, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-5-10g, at: [87.4, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-6, at: [90.95, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-6-act, at: [92.0, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-6-10g, at: [101.65, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-7, at: [105.2, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-7-act, at: [106.25, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-7-10g, at: [115.9, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-8, at: [119.45, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-8-act, at: [120.5, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-8-10g, at: [130.15, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-9, at: [140.2, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-9-act, at: [141.25, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-9-10g, at: [150.9, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-10, at: [154.45, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-10-act, at: [155.5, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-10-10g, at: [165.15, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-11, at: [168.7, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-11-act, at: [169.75, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-11-10g, at: [179.4, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-12, at: [182.95, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-12-act, at: [184.0, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-12-10g, at: [193.65, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-13, at: [203.7, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-13-act, at: [204.75, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-13-10g, at: [214.4, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-14, at: [217.95, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-14-act, at: [219.0, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-14-10g, at: [228.65, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-15, at: [232.2, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-15-act, at: [233.25, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-15-10g, at: [242.9, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: cage-16, at: [246.45, 25.8], size: [14.25, 10.4], shape: rect}
+      - {id: led-sfp-16-act, at: [247.5, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: led-sfp-16-10g, at: [257.15, 20.9], size: [3.0, 3.0], shape: rect}
+      - {id: console, at: [267.4, 10.0], size: [15.8, 13.2], shape: rect}
+      - {id: eth-1, at: [267.4, 24.8], size: [15.8, 13.2], shape: rect}
+      - {id: btn-reset, at: [285.6, 29.9], size: [4.0, 4.0], shape: circle}
+      - {id: led-usr, at: [294.3, 16.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-fault, at: [294.3, 21.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr2, at: [294.3, 26.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr1, at: [294.3, 31.6], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {id: status-bracket-top, at: [293.8, 14.4], path: M 0 0 H 11.1, filled: false, stroke-width: 0.25,
+      fill: '#2b2b2b', for: chassis}
+    - {id: status-bracket-bottom, at: [293.8, 35.5], path: M 0 0 H 11.1, filled: false, stroke-width: 0.25,
+      fill: '#2b2b2b', for: chassis}
+    - {id: status-bracket-left, at: [292.3, 15.9], path: M 0 0 V 18.1, filled: false, stroke-width: 0.25,
+      fill: '#2b2b2b', for: chassis}
+    - {id: status-bracket-right, at: [306.4, 15.9], path: M 0 0 V 18.1, filled: false, stroke-width: 0.25,
+      fill: '#2b2b2b', for: chassis}
+    - {at: [275.3, 9.1], text: CONSOLE, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: console}
+    - {at: [275.3, 39.8], text: ETH/BOOT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: eth-1}
+    - {at: [287.6, 37.3], text: RESET, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: btn-reset}
+    - {at: [298.4, 17.8], text: USR, font-size: 1.8, anchor: start, fill: '#2b2b2b', for: led-usr}
+    - {at: [298.4, 22.9], text: FAULT, font-size: 1.8, anchor: start, fill: '#2b2b2b', for: led-fault}
+    - {at: [298.4, 28.0], text: PWR 2, font-size: 1.8, anchor: start, fill: '#2b2b2b', for: led-pwr2}
+    - {at: [298.4, 33.1], text: PWR 1, font-size: 1.8, anchor: start, fill: '#2b2b2b', for: led-pwr1}
+    - {at: [20.33, 40.2], text: SFP+ 1, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [34.58, 40.2], text: SFP+ 2, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-2}
+    - {at: [48.83, 40.2], text: SFP+ 3, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-3}
+    - {at: [63.08, 40.2], text: SFP+ 4, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-4}
+    - {at: [83.83, 40.2], text: SFP+ 5, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-5}
+    - {at: [98.08, 40.2], text: SFP+ 6, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-6}
+    - {at: [112.33, 40.2], text: SFP+ 7, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-7}
+    - {at: [126.58, 40.2], text: SFP+ 8, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-8}
+    - {at: [147.33, 40.2], text: SFP+ 9, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-9}
+    - {at: [161.58, 40.2], text: SFP+ 10, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-10}
+    - {at: [175.83, 40.2], text: SFP+ 11, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-11}
+    - {at: [190.08, 40.2], text: SFP+ 12, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-12}
+    - {at: [210.83, 40.2], text: SFP+ 13, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-13}
+    - {at: [225.08, 40.2], text: SFP+ 14, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-14}
+    - {at: [239.33, 40.2], text: SFP+ 15, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-15}
+    - {at: [253.58, 40.2], text: SFP+ 16, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-16}
+    - {at: [15.75, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-1-act}
+    - {at: [25.4, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-1-10g}
+    - {at: [30.0, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-2-act}
+    - {at: [39.65, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-2-10g}
+    - {at: [44.25, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-3-act}
+    - {at: [53.9, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-3-10g}
+    - {at: [58.5, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-4-act}
+    - {at: [68.15, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-4-10g}
+    - {at: [79.25, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-5-act}
+    - {at: [88.9, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-5-10g}
+    - {at: [93.5, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-6-act}
+    - {at: [103.15, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-6-10g}
+    - {at: [107.75, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-7-act}
+    - {at: [117.4, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-7-10g}
+    - {at: [122.0, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-8-act}
+    - {at: [131.65, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-8-10g}
+    - {at: [142.75, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-9-act}
+    - {at: [152.4, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-9-10g}
+    - {at: [157.0, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-10-act}
+    - {at: [166.65, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-10-10g}
+    - {at: [171.25, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-11-act}
+    - {at: [180.9, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-11-10g}
+    - {at: [185.5, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-12-act}
+    - {at: [195.15, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-12-10g}
+    - {at: [206.25, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-13-act}
+    - {at: [215.9, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-13-10g}
+    - {at: [220.5, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-14-act}
+    - {at: [230.15, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-14-10g}
+    - {at: [234.75, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-15-act}
+    - {at: [244.4, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-15-10g}
+    - {at: [249.0, 19.0], text: ACT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-16-act}
+    - {at: [258.65, 19.0], text: 10G, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: led-sfp-16-10g}
+    - {at: [438.3, 8.8], text: Cloud Router Switch, font-size: 7.8, anchor: end, fill: '#2b2b2b', for: chassis}
+    - {at: [438.1, 15.4], text: CRS 317-1G-16S+, font-size: 4.1, anchor: end, fill: '#2b2b2b', for: chassis}
+    components:
+      placements:
+      - ref: std/sfp-ganged@1
+        id: cage-1
+        at: [13.2, 25.8]
+        group: sfp-plus
+        rel-pos: 1
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-2
+        at: [27.45, 25.8]
+        group: sfp-plus
+        rel-pos: 2
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-3
+        at: [41.7, 25.8]
+        group: sfp-plus
+        rel-pos: 3
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-4
+        at: [55.95, 25.8]
+        group: sfp-plus
+        rel-pos: 4
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-5
+        at: [76.7, 25.8]
+        group: sfp-plus
+        rel-pos: 5
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-6
+        at: [90.95, 25.8]
+        group: sfp-plus
+        rel-pos: 6
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-7
+        at: [105.2, 25.8]
+        group: sfp-plus
+        rel-pos: 7
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-8
+        at: [119.45, 25.8]
+        group: sfp-plus
+        rel-pos: 8
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-9
+        at: [140.2, 25.8]
+        group: sfp-plus
+        rel-pos: 9
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-10
+        at: [154.45, 25.8]
+        group: sfp-plus
+        rel-pos: 10
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-11
+        at: [168.7, 25.8]
+        group: sfp-plus
+        rel-pos: 11
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-12
+        at: [182.95, 25.8]
+        group: sfp-plus
+        rel-pos: 12
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-13
+        at: [203.7, 25.8]
+        group: sfp-plus
+        rel-pos: 13
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-14
+        at: [217.95, 25.8]
+        group: sfp-plus
+        rel-pos: 14
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-15
+        at: [232.2, 25.8]
+        group: sfp-plus
+        rel-pos: 15
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-16
+        at: [246.45, 25.8]
+        group: sfp-plus
+        rel-pos: 16
+        attrs: {media: sfp-plus, speed: 10g}
+      - {ref: common/led-sq@1, id: led-sfp-1-act, at: [14.25, 20.9], for: cage-1, group: sfp-leds, rel-pos: 1}
+      - {ref: common/led-sq@1, id: led-sfp-1-10g, at: [23.9, 20.9], for: cage-1, group: sfp-leds, rel-pos: 2}
+      - {ref: common/led-sq@1, id: led-sfp-2-act, at: [28.5, 20.9], for: cage-2, group: sfp-leds, rel-pos: 3}
+      - {ref: common/led-sq@1, id: led-sfp-2-10g, at: [38.15, 20.9], for: cage-2, group: sfp-leds, rel-pos: 4}
+      - {ref: common/led-sq@1, id: led-sfp-3-act, at: [42.75, 20.9], for: cage-3, group: sfp-leds, rel-pos: 5}
+      - {ref: common/led-sq@1, id: led-sfp-3-10g, at: [52.4, 20.9], for: cage-3, group: sfp-leds, rel-pos: 6}
+      - {ref: common/led-sq@1, id: led-sfp-4-act, at: [57.0, 20.9], for: cage-4, group: sfp-leds, rel-pos: 7}
+      - {ref: common/led-sq@1, id: led-sfp-4-10g, at: [66.65, 20.9], for: cage-4, group: sfp-leds, rel-pos: 8}
+      - {ref: common/led-sq@1, id: led-sfp-5-act, at: [77.75, 20.9], for: cage-5, group: sfp-leds, rel-pos: 9}
+      - {ref: common/led-sq@1, id: led-sfp-5-10g, at: [87.4, 20.9], for: cage-5, group: sfp-leds, rel-pos: 10}
+      - {ref: common/led-sq@1, id: led-sfp-6-act, at: [92.0, 20.9], for: cage-6, group: sfp-leds, rel-pos: 11}
+      - {ref: common/led-sq@1, id: led-sfp-6-10g, at: [101.65, 20.9], for: cage-6, group: sfp-leds, rel-pos: 12}
+      - {ref: common/led-sq@1, id: led-sfp-7-act, at: [106.25, 20.9], for: cage-7, group: sfp-leds, rel-pos: 13}
+      - {ref: common/led-sq@1, id: led-sfp-7-10g, at: [115.9, 20.9], for: cage-7, group: sfp-leds, rel-pos: 14}
+      - {ref: common/led-sq@1, id: led-sfp-8-act, at: [120.5, 20.9], for: cage-8, group: sfp-leds, rel-pos: 15}
+      - {ref: common/led-sq@1, id: led-sfp-8-10g, at: [130.15, 20.9], for: cage-8, group: sfp-leds, rel-pos: 16}
+      - {ref: common/led-sq@1, id: led-sfp-9-act, at: [141.25, 20.9], for: cage-9, group: sfp-leds, rel-pos: 17}
+      - {ref: common/led-sq@1, id: led-sfp-9-10g, at: [150.9, 20.9], for: cage-9, group: sfp-leds, rel-pos: 18}
+      - {ref: common/led-sq@1, id: led-sfp-10-act, at: [155.5, 20.9], for: cage-10, group: sfp-leds, rel-pos: 19}
+      - {ref: common/led-sq@1, id: led-sfp-10-10g, at: [165.15, 20.9], for: cage-10, group: sfp-leds,
+        rel-pos: 20}
+      - {ref: common/led-sq@1, id: led-sfp-11-act, at: [169.75, 20.9], for: cage-11, group: sfp-leds,
+        rel-pos: 21}
+      - {ref: common/led-sq@1, id: led-sfp-11-10g, at: [179.4, 20.9], for: cage-11, group: sfp-leds, rel-pos: 22}
+      - {ref: common/led-sq@1, id: led-sfp-12-act, at: [184.0, 20.9], for: cage-12, group: sfp-leds, rel-pos: 23}
+      - {ref: common/led-sq@1, id: led-sfp-12-10g, at: [193.65, 20.9], for: cage-12, group: sfp-leds,
+        rel-pos: 24}
+      - {ref: common/led-sq@1, id: led-sfp-13-act, at: [204.75, 20.9], for: cage-13, group: sfp-leds,
+        rel-pos: 25}
+      - {ref: common/led-sq@1, id: led-sfp-13-10g, at: [214.4, 20.9], for: cage-13, group: sfp-leds, rel-pos: 26}
+      - {ref: common/led-sq@1, id: led-sfp-14-act, at: [219.0, 20.9], for: cage-14, group: sfp-leds, rel-pos: 27}
+      - {ref: common/led-sq@1, id: led-sfp-14-10g, at: [228.65, 20.9], for: cage-14, group: sfp-leds,
+        rel-pos: 28}
+      - {ref: common/led-sq@1, id: led-sfp-15-act, at: [233.25, 20.9], for: cage-15, group: sfp-leds,
+        rel-pos: 29}
+      - {ref: common/led-sq@1, id: led-sfp-15-10g, at: [242.9, 20.9], for: cage-15, group: sfp-leds, rel-pos: 30}
+      - {ref: common/led-sq@1, id: led-sfp-16-act, at: [247.5, 20.9], for: cage-16, group: sfp-leds, rel-pos: 31}
+      - {ref: common/led-sq@1, id: led-sfp-16-10g, at: [257.15, 20.9], for: cage-16, group: sfp-leds,
+        rel-pos: 32}
+      - ref: std/rj45@2
+        id: console
+        at: [267.4, 10.0]
+        group: console
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - {ref: common/rj45-eth@1, id: eth-1, at: [267.4, 24.8], group: eth, rel-pos: 1}
+      - ref: common/reset-button@1
+        id: btn-reset
+        at: [285.6, 29.9]
+        for: chassis
+        group: controls
+        rel-pos: 1
+        attrs: {function: reset}
+      - ref: common/led-dot@1
+        id: led-usr
+        at: [294.3, 16.3]
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states:
+        - 'off'
+        - {name: yellow, color: '#e5d800'}
+      - ref: common/led-dot@1
+        id: led-fault
+        at: [294.3, 21.4]
+        for: chassis
+        group: status-leds
+        rel-pos: 2
+        states:
+        - 'off'
+        - {name: red, color: '#ef4444'}
+      - ref: common/led-dot@1
+        id: led-pwr2
+        at: [294.3, 26.5]
+        for: chassis
+        group: status-leds
+        rel-pos: 3
+        states:
+        - 'off'
+        - {name: blue, color: '#2563eb'}
+      - ref: common/led-dot@1
+        id: led-pwr1
+        at: [294.3, 31.6]
+        for: chassis
+        group: status-leds
+        rel-pos: 4
+        states:
+        - 'off'
+        - {name: blue, color: '#2563eb'}
+    regions:
+    - id: logo-zone
+      at: [406.5, 33.5]
+      size: {w: 29.0, h: 8.0}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 443.0, h: 44.0}
+    panel:
+      decor:
+      - {id: fan-0, kind: fan-grille, at: [142.55, 1.25], size: [36.5, 36.5], rx: 18.25, pattern: vent,
+        vent: 1.0}
+      - {id: fan-1, kind: fan-grille, at: [181.85, 1.25], size: [36.5, 36.5], rx: 18.25, pattern: vent,
+        vent: 1.0}
+      - {id: heatsink, kind: heatsink, at: [220.0, 1.0], size: [165.5, 42.0], fill: '#a9a39d'}
+      cutouts:
+      - {id: ac-inlet-1, at: [23.2, 9.0], size: [28.0, 20.0], shape: rect}
+      - {id: ac-inlet-2, at: [88.7, 9.0], size: [28.0, 20.0], shape: rect}
+    silkscreen:
+    - {at: [41.7, 32.4], text: POWER 1, font-size: 2.7, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [41.7, 36.4], text: 100-240V~2A MAX 50/60Hz, font-size: 2.7, anchor: middle, fill: '#2b2b2b',
+      for: ac-inlet-1}
+    - {at: [105.3, 32.4], text: POWER 2, font-size: 2.7, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
+    - {at: [105.3, 36.4], text: 100-240V~2A MAX 50/60Hz, font-size: 2.7, anchor: middle, fill: '#2b2b2b',
+      for: ac-inlet-2}
+    - id: heatsink-fins
+      at: [225.0, 2.0]
+      path: >-
+        M 0 0 V 40 M 7.1 0 V 40 M 14.2 0 V 40 M 21.3 0 V 40 M 28.4 0 V 40 M 35.5 0 V 40 M 42.6 0 V 40
+        M 49.7 0 V 40 M 56.8 0 V 40 M 63.9 0 V 40 M 71.0 0 V 40 M 78.1 0 V 40 M 85.2 0 V 40 M 92.3 0 V
+        40 M 99.4 0 V 40 M 106.5 0 V 40 M 113.6 0 V 40 M 120.7 0 V 40 M 127.8 0 V 40 M 134.9 0 V 40 M
+        142.0 0 V 40
+      filled: false
+      stroke-width: 0.5
+      fill: '#6f6a65'
+      for: chassis
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [23.2, 9.0], group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [88.7, 9.0], group: inlets, rel-pos: 2}
+      - {ref: common/screw-head@1, id: rear-screw-1, at: [29.1, 2.4], group: furniture, rel-pos: 1}
+      - {ref: common/screw-head@1, id: rear-screw-2, at: [123.9, 2.4], group: furniture, rel-pos: 2}
+  top:
+    size: {w: 443.0, h: 224.0}
+    empty: >-
+      Photograph 1324 shows a plain lid with the Cloud Switch Series mark (a brand mark, not drawn) and
+      no vents or openings; no drawing is held.
+  bottom:
+    size: {w: 443.0, h: 224.0}
+    empty: >-
+      Not drawn by any source held: no drawing is held and neither studio photograph pictures the underside.
+  left:
+    size: {w: 224.0, h: 44.0}
+    empty: >-
+      No document held shows the left wall: there is no dimensions drawing and neither studio photograph
+      looks at a side wall. Not drawn from another model.
+  right:
+    size: {w: 224.0, h: 44.0}
+    empty: >-
+      No document held shows the right wall: there is no dimensions drawing and neither studio photograph
+      looks at a side wall. Not drawn from another model.
+configurations:
+  base:
+    kind: base
+    description: >-
+      CRS317-1G-16S+RM - 16 SFP+ cages, one 10/100/1000 management port and the RJ45 console, with two
+      built-in AC supplies and two fans. The box holds two IEC cords, rack ears and a K10 screw kit.
+    default: true
+    part-numbers:
+      CRS317-1G-16S+RM: {}
+references:
+- title: >-
+    CRS317-1G-16S+RM brochure (MikroTik; revision stamp 211004, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS317-1G-16Splus_211004.pdf)
+  sha256: 80fc87e87eb2e4a6e4fe2a222eb256f1571d0249d9f5b86403e066f0ce6c198f
+- title: >-
+    CRS317-1G-16S+RM Quick Guide (MikroTik; revision stamp 200107, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS317-1G-16S-qg_200107.pdf)
+  sha256: 62e6b035c52126fa2dff6787b38d775624effe7c29ecbefc3678334c572d2351

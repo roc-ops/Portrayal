@@ -1,0 +1,545 @@
+format: 1
+kind: device
+name: crs312-4c-plus-8xg-rm
+version: 1.0.0
+maturity: modelled
+manufacturer: MikroTik
+model: CRS312-4C+8XG-RM
+portfolio: {line: Switches, family: Cloud Router Switch, series: CRS312}
+description: >-
+  MikroTik CRS312-4C+8XG-RM is a fixed 1U Cloud Router Switch. It has eight 1G/2.5G/5G/10G RJ45 ports
+  and four combo ports. Each combo port is a 10G RJ45 jack (1T to 4T) and an SFP+ cage (1F to 4F), one
+  in use at a time. It also has a 10/100 management jack (MGMT/BOOT), an RJ45 serial console and a USB
+  type A port. It runs SwOS or RouterOS. The front carries the eight 10G jacks in two blocks of four.
+  Beside them are the combo jacks under a blue bracket and the two by two SFP+ block. Then come the CONSOLE
+  and MGMT/BOOT jacks, the RESET button and the USB port. The USER, FAULT, POWER 2 and POWER 1 lamps follow.
+  The two AC supplies and the four fans are built into the chassis, so there are no bays. The air passes
+  through a vent field in the right wall. No document held shows the rear, so the rear is not drawn and
+  the AC inlets are not placed.
+profile: networking
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      Dimensions drawing "CRS312-4C+8XG dimensions", MikroTik, printed 20.09.2023 (file CRS312-4C8XG_dimensions_230944.pdf,
+      rendered at 200 dpi): front, left side, top plan and isometric. CRS312-4C+8XG-RM brochure, MikroTik
+      (file CRS312-4C8XG-RM_220517.pdf; no date is printed, the file name carries a revision stamp): specification
+      table, included parts. CRS312-4C+8XG-RM product page, MikroTik (https://mikrotik.com/product/crs312_4c_8xg_rm,
+      saved 2026-10-26): dimensions, AC inputs, cooling, ports. Quick Guide CRS312-4C+8XG-RM (file CRS312-4Cplus8XG-RM-qg_190711.pdf,
+      revision stamp 190711): powering, ports, combo interface, accessories. Studio photograph 1825 (front):
+      the printed legends, colours and counts. The block diagram CRS312-4C8XGr2_261038.png. NetBox read
+      as a second opinion only. MikroTik prints no figure numbers. The device name spells MikroTik's +
+      as -plus because a directory name cannot carry +; model: keeps the + as printed.
+  datasheet:
+    confidence: datasheet
+    note: >-
+      The brochure is MikroTik's datasheet for the model: product code CRS312-4C+8XG-RM, one 10/100 port,
+      eight 1G/2.5G/5G/10G RJ45 ports, four combo 10G Ethernet / SFP ports, AC 100 - 240 V with a redundant
+      supply, USB type A, serial RJ45, 443 x 183 x 44 mm, -30 to +70 C, 60 W maximum power consumption,
+      two IEC cords, a screw and feet kit (K57) and rack ears. The product page agrees on the dimensions,
+      the AC input range, 60 W, the ports and the -30 to 70 C tested range, and adds two AC inputs and
+      four fans. The two documents disagree on the platform: the brochure gives 64 MB RAM and 16 MB flash,
+      the page 128 MB RAM, 32 MB flash and RouterOS v7; both are kept in the attrs as worded. The quick
+      guide adds that each combo port has two physical connectors of which only one can be used at a time.
+  gate-1:
+    confidence: drawing
+    note: >-
+      The drawing's front view body is 1163 px wide in the 200 dpi render for the printed 443 (2.624 px
+      per mm) and 115 px tall, which reads 43.8 mm for the printed 44, 0.5 percent apart, so every x and
+      y below is taken at 2.624 px per mm from the body's top-left corner of the front view. The four
+      jacks of a block read a 15.9 mm pitch.
+  chassis:
+    confidence: drawing
+    note: >-
+      443 wide, 44 high, 183 deep: the drawing dimensions 443, 183 and 44 and the brochure and the product
+      page print the same. The 6 mm the plan dimensions is the two cable loops standing off the rear,
+      an accessory and not part of the depth. 443 is the body between the ear folds.
+  front-layout:
+    confidence: drawing
+    note: >-
+      From the drawing's front view. Three jack plates 65.3 mm wide, 14.5 mm tall, top at 20.7 mm, at
+      12.8, 81.7 and 151.0 mm (69.1 mm step), four jacks each on a 15.9 mm pitch with the first 0.8 mm
+      inside its plate (13.6, 82.7 and 151.8 mm), top at 21.35 mm. The SFP+ block is 30.4 x 26.7 at 221.3
+      mm, top 8.7 mm, two cages by two (14.5 x 10.0 each on a 15.1 mm column pitch and 14.0 mm row pitch,
+      as the registry cage). The console housing holds two jacks, 18.1 mm wide at 256.3 mm, top 8.9 mm,
+      the upper jack the CONSOLE and the lower the MGMT/BOOT, turned the other way up. The RESET button
+      is at 278.8, 31.0 mm, the USB-A port stands on end centred at 287.7, 27.75 mm, and four lamp circles
+      at 296.8 mm, 16.3, 21.3, 26.2 and 31.3 mm. The zigzag vent band over the jacks is the drawing's,
+      18.2 to 211.3 mm, 5.5 to 16.1 mm.
+  legends-and-colours:
+    confidence: photo-measured
+    note: >-
+      Photograph 1825 prints 1 to 8 under the eight jacks, 1T to 4T under the combo jacks, 2F and 4F over
+      the upper cages and 1F and 3F under the lower ones, 10G ETHERNET beside each plate, 10G COMBO over
+      the third plate and SFP+ beside the cages. The combo jacks and cages sit on a light blue bracket.
+      The jack plates read #bcbdbd and the face #c4c4ca in the photograph's medians. The positions of
+      the legends are taken from the photograph's proportions and are estimated, good to about 1 mm. The
+      USER, FAULT, POWER 2 and POWER 1 lamps are given the lit colours the photograph shows (green, red,
+      blue, blue).
+  lamps:
+    confidence: estimated
+    note: >-
+      The jacks carry their own two lamps each (the library's Ethernet jack). The quick guide holds no
+      LED table and the brochure none, so what a lamp shows is a gap.
+  port-numbering:
+    confidence: datasheet
+    note: >-
+      The metal prints 1 to 8 for the 10G jacks and 1T to 4T and 1F to 4F for the combo pairs; the quick
+      guide says RouterOS shows them as combo 1 to 4. The copper jacks are named copper-1 to copper-4
+      and the cages cage-1 to cage-4, with the same numbers: the group says they are one port at a time.
+      The upper cage of the left column is printed 2F and the lower 1F, so cage-1 is the lower one.
+  console:
+    confidence: drawing
+    note: >-
+      The RJ45 serial port (brochure: serial port RJ45) is the upper jack of the housing under the printed
+      CONSOLE; the lower jack is the 10/100 management port, printed MGMT/BOOT (brochure: one 10/100 Ethernet
+      port).
+  buttons:
+    confidence: drawing
+    note: >-
+      One round button printed RESET (quick guide: the RouterBOOT reset button). Its centre is the drawing's.
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      The product page lists two AC inputs and four fans; the brochure says it has a dual power supply
+      for redundancy; the quick guide says two alternating current inputs with IEC power connectors and
+      four cooling fans with automatic speed control. No document held shows a removable supply module
+      or gives a supply part number, so the supplies are part of the chassis and there are no bays, as
+      on juniper/ex2300-24t. The fans are inside; the only opening the drawing shows for them is the vent
+      field in the right wall.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      No held document shows the rear: the drawing has no rear view, its isometric hides the rear, the
+      one studio photograph looks at the front, and the NetBox files carry no rear. The rear is left empty
+      and the two AC inlets are not placed; no other model's rear is used. The export therefore carries
+      no power port, though the product page counts two AC inputs.
+  side-layout:
+    confidence: estimated
+    note: >-
+      The drawing's side view is the left wall (plain: a screw, two small holes, ear plate at the front).
+      The isometric shows the right wall with a rectangular hexagon vent field; it is not an orthographic
+      view, so the field is read as a fraction of the wall (from 25 to 119 mm behind the front, 4.4 to
+      27.4 mm down) and is estimated, good to about 5 mm. The left wall is drawn empty.
+  ears:
+    confidence: drawing
+    note: >-
+      Rack ears are in the box (brochure and product page, Included parts: Rack ears; the quick guide:
+      1U rackmount bracket, fitted to both sides with four screws). The drawing's side view shows the
+      ear plate at the front end of the body, on the face, and the plan shows no ears (443 is the body),
+      so the shipped position is flush. The K57 kit is a screw and feet kit and not a rack kit, so no
+      kit is listed. The ears are not drawn.
+  colour:
+    confidence: photo-measured
+    note: >-
+      median of photograph 1825's face (#c4c4ca); the jack plates are the photograph's #bcbdbd.
+attrs:
+  power:
+    power-max-w: 60
+    power-input: 100 - 240 V AC, 50 - 60 Hz, two inputs (IEC), built-in redundant supplies
+  thermal: {cooling: four built-in fans with automatic fan speed control}
+  environmental: {operating-temp-c: -30 to 70 (tested)}
+  platform: {cpu: 'QCA9531, 650 MHz', switch-chip: 98DX8212, ram: 64 MB (brochure); 128 MB (product page),
+    storage: 16 MB flash (brochure); 32 MB flash (product page), os: SwOS / RouterOS}
+  features:
+    optics-sfp-plus: 'brochure and quick guide: the four combo ports take 10G SFP+ modules, none included'
+    combo-ports: >-
+      four combo ports, each a 10G RJ45 jack and an SFP+ cage of which only one can be used at a time
+      (quick guide)
+  compliance: {certification: 'CE, EAC, RoHS'}
+chassis:
+  width: 443.0
+  height: 44.0
+  depth: 183.0
+  ru: 1
+  color: '#c4c4ca'
+  ears:
+    positions:
+    - {name: flush, at: 0, default: true}
+  power: ac
+gaps:
+- what: rear-face
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    No held document shows the rear: no rear view in the dimensions drawing, none in the one studio photograph,
+    none in the NetBox files. The rear is left empty and no AC inlet is placed, so the DCIM export carries
+    no power port. The product page counts two AC inputs.
+  wanted: A rear photograph or drawing showing the two AC inlets.
+- what: left-wall
+  scope:
+  - left
+  reason: needs-drawing
+  note: >-
+    The drawing's side view shows the left wall as plain (a screw and two small holes), and it is left
+    empty.
+  wanted: none
+- what: right-wall-vent
+  scope:
+  - right
+  reason: needs-drawing
+  note: >-
+    The right wall's vent field is read off the drawing's isometric view, which is not orthographic, so
+    its size and position are estimated.
+  wanted: A right side view of the unit.
+- what: platform-figures
+  scope:
+  - front
+  reason: sources-disagree
+  note: >-
+    The brochure gives 64 MB RAM and 16 MB flash; the product page gives 128 MB RAM and 32 MB flash. Both
+    are kept in the attrs as worded.
+  wanted: MikroTik's statement of which revision is current.
+- what: usb-generation
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The brochure and the product page say USB type A, with a 1 A maximum, and state no USB generation.
+    The port is drawn with the library's USB-A part, whose tongue is its default blue; photograph 1825
+    shows a pale tongue, so the colour is not the photograph's.
+  wanted: MikroTik's USB generation for the port.
+- what: led-states
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    Searched the brochure, the product page and the quick guide for an LED table: none. The lamps carry
+    the component's own vocabulary and no meaning is stated for the jack lamps or for USER, FAULT, POWER
+    2 and POWER 1.
+  wanted: MikroTik's LED description for the CRS312-4C+8XG-RM.
+- what: weight
+  scope:
+  - front
+  reason: vendor-silent
+  note: Neither the brochure, the product page nor the quick guide gives a weight.
+  wanted: MikroTik's weight.
+- what: eol
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The saved product page carries no Discontinued badge and MikroTik publishes no end-of-life page, so
+    no lifecycle is written.
+  wanted: none
+groups:
+  xg:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 10g}
+    description: the eight 1G/2.5G/5G/10G RJ45 ports, printed 1 to 8
+  combo-copper:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 10g}
+    description: >-
+      the four combo 10G RJ45 jacks, printed 1T to 4T; copper-N shares its number with the SFP+ cage cage-N
+      printed NF beside them, and only one of the pair can be used at a time
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the four combo SFP+ cages, printed 1F to 4F; they take 10 Gb SFP+ modules; cage-N shares its number
+      with the copper jack copper-N printed NT beside them, and only one of the pair can be used at a
+      time
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 100m}
+    description: the 10/100 Ethernet port printed MGMT/BOOT
+  console: {term: Port, role: management, index-origin: 1, description: the RJ45 serial console}
+  usb: {term: Port, role: management, index-origin: 1, description: the USB type A port}
+  controls: {term: Button, role: management, index-origin: 1, description: the RESET button}
+  status-leds: {term: LED, role: indicator, index-origin: 1, description: 'the USER, FAULT, POWER 2 and
+      POWER 1 lamps'}
+views:
+  front:
+    size: {w: 443.0, h: 44.0}
+    panel:
+      decor:
+      - {id: blue-bracket, kind: combo-bracket, at: [150.4, 7.8], size: [102.6, 32.0], fill: '#c3dbec'}
+      - {id: plate-1, kind: jack-plate, at: [12.8, 20.7], size: [65.3, 14.5], fill: '#bcbdbd'}
+      - {id: plate-2, kind: jack-plate, at: [81.7, 20.7], size: [65.3, 14.5], fill: '#bcbdbd'}
+      - {id: plate-3, kind: jack-plate, at: [151.0, 20.7], size: [65.3, 14.5], fill: '#bcbdbd'}
+      - {id: sfp-plate, kind: jack-plate, at: [221.3, 8.7], size: [30.4, 26.7], fill: '#bcbdbd'}
+      - {id: console-plate, kind: jack-plate, at: [256.3, 8.9], size: [18.1, 26.9], fill: '#bcbdbd'}
+      - {id: vent-band, kind: vent-window, at: [18.2, 5.5], size: [193.1, 10.6], pattern: vent, vent: 1.0}
+      cutouts:
+      - {id: port-1, at: [13.6, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: port-2, at: [29.5, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: port-3, at: [45.4, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: port-4, at: [61.3, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: port-5, at: [82.7, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: port-6, at: [98.6, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: port-7, at: [114.5, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: port-8, at: [130.4, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: copper-1, at: [151.8, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: copper-2, at: [167.7, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: copper-3, at: [183.6, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: copper-4, at: [199.5, 21.35], size: [15.8, 13.2], shape: rect}
+      - {id: usb, at: [285.5, 21.75], size: [4.5, 12.0], shape: rect}
+      - {id: cage-1, at: [221.7, 23.9], size: [14.5, 10.0], shape: rect}
+      - {id: cage-2, at: [221.7, 9.9], size: [14.5, 10.0], shape: rect}
+      - {id: cage-3, at: [236.8, 23.9], size: [14.5, 10.0], shape: rect}
+      - {id: cage-4, at: [236.8, 9.9], size: [14.5, 10.0], shape: rect}
+      - {id: console, at: [257.45, 9.2], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt, at: [257.45, 22.4], size: [15.8, 13.2], shape: rect}
+      - {id: btn-reset, at: [276.8, 29.0], size: [4.0, 4.0], shape: circle}
+      - {id: led-user, at: [295.8, 15.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-fault, at: [295.8, 20.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-power2, at: [295.8, 25.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-power1, at: [295.8, 30.3], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [21.5, 38.35], text: '1', font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: port-1}
+    - {at: [37.4, 38.35], text: '2', font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: port-2}
+    - {at: [53.3, 38.35], text: '3', font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: port-3}
+    - {at: [69.2, 38.35], text: '4', font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: port-4}
+    - {at: [90.6, 38.35], text: '5', font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: port-5}
+    - {at: [106.5, 38.35], text: '6', font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: port-6}
+    - {at: [122.4, 38.35], text: '7', font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: port-7}
+    - {at: [138.3, 38.35], text: '8', font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: port-8}
+    - {at: [159.7, 38.35], text: 1T, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: copper-1}
+    - {at: [175.6, 38.35], text: 2T, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: copper-2}
+    - {at: [191.5, 38.35], text: 3T, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: copper-3}
+    - {at: [207.4, 38.35], text: 4T, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: copper-4}
+    - {at: [80.2, 28.0], text: 10G ETHERNET, font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b',
+      for: chassis}
+    - {at: [149.3, 28.0], text: 10G ETHERNET, font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b',
+      for: chassis}
+    - {at: [218.9, 28.0], text: 10G ETHERNET, font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b',
+      for: chassis}
+    - {at: [184.1, 19.5], text: 10G COMBO, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [252.4, 22.0], text: SFP+, font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2b2b', for: cage-1}
+    - {at: [228.95, 8.7], text: 2F, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-2}
+    - {at: [244.05, 8.7], text: 4F, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-4}
+    - {at: [228.95, 38.6], text: 1F, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [244.05, 38.6], text: 3F, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: cage-3}
+    - {at: [265.35, 7.7], text: CONSOLE, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: console}
+    - {at: [265.35, 38.8], text: MGMT/BOOT, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: mgmt}
+    - {at: [278.8, 36.8], text: RESET, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: btn-reset}
+    - {at: [299.8, 16.8], text: USER, font-size: 1.8, anchor: start, fill: '#2b2b2b', for: led-user}
+    - {at: [299.8, 21.8], text: FAULT, font-size: 1.8, anchor: start, fill: '#2b2b2b', for: led-fault}
+    - {at: [299.8, 26.7], text: POWER 2, font-size: 1.8, anchor: start, fill: '#2b2b2b', for: led-power2}
+    - {at: [299.8, 31.8], text: POWER 1, font-size: 1.8, anchor: start, fill: '#2b2b2b', for: led-power1}
+    - {at: [439.5, 9.4], text: Cloud Router Switch, font-size: 3.8, anchor: end, fill: '#2b2b2b', for: chassis}
+    - {at: [439.5, 14.0], text: CRS312-4C+8XG, font-size: 2.2, anchor: end, fill: '#2b2b2b', for: chassis}
+    components:
+      placements:
+      - ref: common/rj45-eth@1
+        id: port-1
+        at: [13.6, 21.35]
+        group: xg
+        rel-pos: 1
+        attrs: {media: rj45, speed: 10g}
+      - ref: common/rj45-eth@1
+        id: port-2
+        at: [29.5, 21.35]
+        group: xg
+        rel-pos: 2
+        attrs: {media: rj45, speed: 10g}
+      - ref: common/rj45-eth@1
+        id: port-3
+        at: [45.4, 21.35]
+        group: xg
+        rel-pos: 3
+        attrs: {media: rj45, speed: 10g}
+      - ref: common/rj45-eth@1
+        id: port-4
+        at: [61.3, 21.35]
+        group: xg
+        rel-pos: 4
+        attrs: {media: rj45, speed: 10g}
+      - ref: common/rj45-eth@1
+        id: port-5
+        at: [82.7, 21.35]
+        group: xg
+        rel-pos: 5
+        attrs: {media: rj45, speed: 10g}
+      - ref: common/rj45-eth@1
+        id: port-6
+        at: [98.6, 21.35]
+        group: xg
+        rel-pos: 6
+        attrs: {media: rj45, speed: 10g}
+      - ref: common/rj45-eth@1
+        id: port-7
+        at: [114.5, 21.35]
+        group: xg
+        rel-pos: 7
+        attrs: {media: rj45, speed: 10g}
+      - ref: common/rj45-eth@1
+        id: port-8
+        at: [130.4, 21.35]
+        group: xg
+        rel-pos: 8
+        attrs: {media: rj45, speed: 10g}
+      - ref: common/rj45-eth@1
+        id: copper-1
+        at: [151.8, 21.35]
+        group: combo-copper
+        rel-pos: 1
+        attrs: {media: rj45, speed: 10g}
+      - ref: common/rj45-eth@1
+        id: copper-2
+        at: [167.7, 21.35]
+        group: combo-copper
+        rel-pos: 2
+        attrs: {media: rj45, speed: 10g}
+      - ref: common/rj45-eth@1
+        id: copper-3
+        at: [183.6, 21.35]
+        group: combo-copper
+        rel-pos: 3
+        attrs: {media: rj45, speed: 10g}
+      - ref: common/rj45-eth@1
+        id: copper-4
+        at: [199.5, 21.35]
+        group: combo-copper
+        rel-pos: 4
+        attrs: {media: rj45, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-1
+        at: [221.7, 23.9]
+        rotate: 180
+        group: sfp-plus
+        rel-pos: 1
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-2
+        at: [221.7, 9.9]
+        group: sfp-plus
+        rel-pos: 2
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-3
+        at: [236.8, 23.9]
+        rotate: 180
+        group: sfp-plus
+        rel-pos: 3
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp@1
+        id: cage-4
+        at: [236.8, 9.9]
+        group: sfp-plus
+        rel-pos: 4
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/rj45@2
+        id: console
+        at: [257.45, 9.2]
+        group: console
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: common/rj45-eth@1
+        id: mgmt
+        at: [257.45, 22.4]
+        rotate: 180
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45, speed: 100m}
+      - ref: common/reset-button@1
+        id: btn-reset
+        at: [276.8, 29.0]
+        for: chassis
+        group: controls
+        rel-pos: 1
+        attrs: {function: reset}
+      - ref: common/usb-a@2
+        id: usb
+        at: [279.25, 25.75]
+        rotate: 270
+        group: usb
+        rel-pos: 1
+        attrs: {media: usb-a}
+      - ref: common/led-dot@1
+        id: led-user
+        at: [295.8, 15.3]
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states:
+        - 'off'
+        - {name: green, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-fault
+        at: [295.8, 20.3]
+        for: chassis
+        group: status-leds
+        rel-pos: 2
+        states:
+        - 'off'
+        - {name: red, color: '#ef4444'}
+      - ref: common/led-dot@1
+        id: led-power2
+        at: [295.8, 25.2]
+        for: chassis
+        group: status-leds
+        rel-pos: 3
+        states:
+        - 'off'
+        - {name: blue, color: '#2563eb'}
+      - ref: common/led-dot@1
+        id: led-power1
+        at: [295.8, 30.3]
+        for: chassis
+        group: status-leds
+        rel-pos: 4
+        states:
+        - 'off'
+        - {name: blue, color: '#2563eb'}
+    regions:
+    - id: logo-zone
+      at: [403.5, 33.5]
+      size: {w: 31.0, h: 8.0}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 443.0, h: 44.0}
+    empty: >-
+      No document held shows the rear: the dimensions drawing has no rear view, the one studio photograph
+      looks at the front, and the NetBox files carry no rear. Not drawn from another model; the two AC
+      inlets are not placed.
+  top:
+    size: {w: 443.0, h: 183.0}
+    empty: >-
+      The drawing's top plan shows a plain lid with the Cloud Switch Series mark (a brand mark, not drawn)
+      and no vents or openings; the two loops it shows at the rear are an accessory.
+  bottom:
+    size: {w: 443.0, h: 183.0}
+    empty: >-
+      Not drawn by any source held: neither the drawing, the brochure nor the studio photograph pictures
+      the underside.
+  left:
+    size: {w: 183.0, h: 44.0}
+    empty: >-
+      The drawing's side view is the left wall: plain, with a screw, two small holes and the ear plate
+      at the front, and no openings. Not drawn here.
+  right:
+    size: {w: 183.0, h: 44.0}
+    panel:
+      decor:
+      - {id: vent-field, kind: vent-window, at: [25.0, 4.4], size: [94.0, 23.0], pattern: vent, vent: 1.0}
+configurations:
+  base:
+    kind: base
+    description: >-
+      CRS312-4C+8XG-RM - eight 10G RJ45 ports, four combo 10G RJ45 / SFP+ ports, one 10/100 management
+      port, the RJ45 console and a USB type A port. It has two built-in AC supplies and four fans. The
+      box holds two IEC cords, a screw and feet kit (K57) and rack ears.
+    default: true
+    part-numbers:
+      CRS312-4C+8XG-RM: {}
+references:
+- title: >-
+    CRS312-4C+8XG-RM brochure (MikroTik; revision stamp 220517, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS312-4C8XG-RM_220517.pdf)
+  sha256: e797b40882bd504973f03cab8853e142c4132dadc34da6dc1cdbcc9aef787738
+- title: >-
+    CRS312-4C+8XG dimensions (MikroTik; printed 20.09.2023; https://cdn.mikrotik.com/web-assets/product_files/CRS312-4C8XG_dimensions_230944.pdf)
+  sha256: f3b2bd77103925980ae1360f6bc1d3a43a197a1ffbdae9feeb90b80723a3203c
+- title: >-
+    CRS312-4C+8XG-RM Quick Guide (MikroTik; revision stamp 190711, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS312-4Cplus8XG-RM-qg_190711.pdf)
+  sha256: a218943e2d97462c3acfceb260275aad6ff96e1b98a27b98f04afbab90c4d054

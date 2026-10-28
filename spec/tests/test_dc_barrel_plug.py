@@ -51,9 +51,12 @@ PLACED = {
     "telco-systems/tm-280": ("front", "dc-in", None, "5 VDC", 3.0, "5VDC @3A (max)"),
     "mikrotik/crs326-24g-2s-plus-rm": ("rear", "dc-in", None, "10-28 VDC", 1.2, "DC 10-28V"),
     "mikrotik/css326-24g-2s-plus-rm": ("rear", "dc-in", None, "8-30 VDC", 1.2, "DC 8 - 30V"),
+    # the CRS309-1G-8S+IN: the rear prints DC 12-57 V; its quick guide gives the barrel size
+    "mikrotik/crs309-1g-8s-plus-in": ("rear", "dc-in", None, "12-57 VDC", 1.2, "DC 12-57 V"),
 }
-# the one placing device whose own document states a barrel size
-SIZE_STATED = {"mikrotik/css326-24g-2s-plus-rm"}
+# the placing devices whose own document states a barrel size (the CRS309 quick guide: 5.5 mm outside and 2 mm
+# inside, female, pin positive)
+SIZE_STATED = {"mikrotik/css326-24g-2s-plus-rm", "mikrotik/crs309-1g-8s-plus-in"}
 EACH_DEVICE = pytest.mark.parametrize("device", sorted(PLACED))
 
 
@@ -129,9 +132,9 @@ def test_the_jack_states_no_rating_of_its_own():
 
 # --- 2. the six placements, and their ratings ------------------------------------
 
-def test_the_jack_is_placed_on_exactly_these_six_devices():
+def test_the_jack_is_placed_on_exactly_these_devices():
     """The census: every placement of the jack in the library, and nothing
-    composes it inside another part."""
+    composes it inside another part. Seven: the CRS309-1G-8S+IN is the seventh."""
     found = set()
     for f in sorted((LIB / "devices").glob("*/*/device.yaml")):
         d = yaml.safe_load(f.read_text())
@@ -139,7 +142,7 @@ def test_the_jack_is_placed_on_exactly_these_six_devices():
             for p in ((view or {}).get("components") or {}).get("placements") or []:
                 if p.get("ref") == JACK:
                     found.add(f"{f.parts[-3]}/{f.parts[-2]}")
-    assert found == set(PLACED) and len(found) == 6
+    assert found == set(PLACED) and len(found) == 7
     composed = []
     for f in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
         c = yaml.safe_load(f.read_text())
@@ -166,7 +169,7 @@ def test_each_placement_states_what_its_device_is_fed(device):
 def test_the_ratings_differ_which_is_why_they_are_not_the_parts():
     volts = {PLACED[d][3] for d in PLACED}
     amps = {PLACED[d][4] for d in PLACED}
-    assert volts == {"12 VDC", "5 VDC", "10-28 VDC", "8-30 VDC"}
+    assert volts == {"12 VDC", "5 VDC", "10-28 VDC", "8-30 VDC", "12-57 VDC"}
     assert amps == {1.0, 3.0, 1.2}
 
 
