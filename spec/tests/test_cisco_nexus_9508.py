@@ -2,8 +2,8 @@
 
 Every figure here is Cisco's N9508 NX-OS Mode Switch Hardware Installation Guide: Appendix A "Switch
 Dimensions" for the envelopes, the "Overview" for the slots and what each takes, "Planning for Power
-Requirements" for the power figures. The line cards are a later batch, so each line-card slot takes only
-the line-card blank here.
+Requirements" for the power figures. Each line-card slot takes the line-card blank and the four line cards
+modelled in test_cisco_nexus_9500_line_cards.py.
 """
 from pathlib import Path
 
@@ -23,6 +23,7 @@ FANS = ["n9k-c9508-fan", "n9k-c9508-fan2"]
 FABRICS = ["n9k-c9508-fm", "n9k-c9508-fm-s", "n9k-c9508-fm-e", "n9k-c9508-fm-e2",
            "n9k-c9508-fm-g", "n9k-c9508-fm-r", "n9k-c9508-fm-r2"]
 FABRIC_BLANKS = ["n9k-c9508-fm-z", "n9k-c9508-fm-cv", "n9k-c9508-fan-pwr"]
+LINE_CARDS = ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx", "n9k-x9716d-gx"]
 EVERY_MODULE = (SUPERVISORS + ["n9k-sc-a"] + SUPPLIES + ["n9k-psu-blank"] + FANS + FABRICS
                 + FABRIC_BLANKS + ["n9k-c9500-lc-cv"])
 
@@ -121,7 +122,7 @@ def test_each_face_has_its_groups_in_index_origin_one(device):
 def test_each_slot_accepts_what_the_guide_lists(device):
     front, rear = by_id(device, "front"), by_id(device, "rear")
     for n in range(1, 9):
-        assert set(front[f"lc-{n}"]["accepts"]) == {"cisco/n9k-c9500-lc-cv@1"}   # line cards: later batch
+        assert set(front[f"lc-{n}"]["accepts"]) == {"cisco/n9k-c9500-lc-cv@1"} | refs(LINE_CARDS)
     for n in (1, 2):
         assert set(front[f"sup-{n}"]["accepts"]) == refs(SUPERVISORS)
         assert set(rear[f"sc-{n}"]["accepts"]) == {"cisco/n9k-sc-a@1"}
