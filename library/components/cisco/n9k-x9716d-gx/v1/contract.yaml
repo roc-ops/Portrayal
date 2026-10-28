@@ -1,0 +1,140 @@
+format: 1
+kind: module
+name: n9k-x9716d-gx
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9500 16-port 400-Gigabit Ethernet QSFP-DD line card (N9K-X9716D-GX). Sixteen QSFP-DD ports in
+  two rows of eight, a Beacon and a Status lamp at the left and one Link triangle per port between the rows,
+  with an ejector lever at each end. The Nexus 9504 and 9508 take it, with the -G fabric modules; the 9516
+  guide says it is not compatible with that switch.
+size: {w: 431.8, h: 44.45, d: 419.1}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-X9716D-GX'
+  role: 'line-card'
+  qsfp-dd: 16
+  media: 'QSFP-DD, 400 Gigabit Ethernet'
+  weight-kg: 6.8
+  power-draw-typical-w: 650
+  power-draw-max-w: 1680
+  chassis: 'Nexus 9504, Nexus 9508'
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    datasheet - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (PDF p120, printed 114), "Line cards": 17.0 in (43.18 cm) wide by 1.75 in (4.4 cm) high; the 9504 guide
+    (PDF p120, printed 114) and the 9516 guide (PDF p116, printed 110) print the same row. It is the class row
+    for every line card, not a row of this card.
+  depth: >-
+    datasheet - the same row: 16.5 in (41.91 cm) inside the chassis, ejector levers 2.5 in (6.35 cm) outside
+    it. The depth is the inside figure, as the supervisor's is; the levers swing out and are not added.
+  weight: >-
+    datasheet - Cisco N9504 NX-OS Mode Switch Hardware Installation Guide, "Weights and Quantities" (PDF p122,
+    printed 116), under the line cards the -G fabric modules support: 15.2 lb (6.8 kg). CONFLICT WITHIN THE
+    ROW: 15.2 lb is 6.89 kg, not 6.8; the printed metric figure is used. The 9508 guide's weights section has
+    no table and the 9516 does not take this card.
+  power: >-
+    datasheet - the "Planning for Power Requirements" tables (9504 guide, PDF pp18-20, printed 12-14; 9508
+    guide, PDF p18, printed 12): typical 650 W, maximum 1,680 W, under the N9K-C9504-FM-G and N9K-C9508-FM-G
+    headings. The 9508 guide's worked example (four of them, 1,680 W each, 6,720 W) agrees. The 9516 guide
+    lists the same figures in a table copied from the 9508's; the card is not compatible with that switch.
+  ports: >-
+    install guide - the Overview tables and the power tables call it a "16-port 400-Gigabit Ethernet QSFP-DD
+    line card". TEXT ONLY: no held figure shows this card's faceplate, so the count and cage are the guide's
+    words and every position is estimated - two rows of eight, laid out evenly between the lamps and the
+    right-hand lever on a 47 mm pitch, odd ports over even in each column. The numbering as printed on the
+    metal is not shown; Ethernet1/n interface names are not drawn. The registry's QSFP-DD cage is placed.
+  lamps: >-
+    install guide - "Line Card LEDs" (9504 and 9508 guides PDF p136, printed 130; 9516 guide PDF p132,
+    printed 126): the Beacon (BCN) and Status (STS) lamps are "on the front, toward the left side of the
+    module"; the Link lamp of each port is "between the two rows of ports", a triangle pointing to the port
+    above or below it. BCN: flashing blue, or off. STS: green, flashing red, flashing amber, or off. Link:
+    green, orange, flashing orange, or off. The lamps are drawn beside what they name; positions estimated.
+  skin: >-
+    estimated - the card's own faceplate is not shown, so the skin does not show this card. The levers follow
+    the install procedure ("Installing or Replacing a Line Card", 9504 guide PDF p91, printed 85): a release
+    button on each ejector lever, which is pressed before the lever is rotated away. A figure of an unnamed
+    36-port card (9504 guide PDF p93, printed 87) shows two rows with the lamps at the left, a ventilation
+    strip over each row and the levers at each end, and is used for that arrangement only. The maker's mark is
+    reserved as the logo-zone and not drawn.
+  chassis-compatibility: >-
+    install guide - the 9504 guide (Overview Table 1, PDF p9, printed 3, and the power tables) and the 9508
+    guide (PDF p9, printed 3) list it under the -G fabric modules only. The 9516 guide's Overview says "The
+    N9K-X9716D-GX line card is not compatible with this switch" (PDF p7, printed 1), so the 9516 bays do not
+    accept it, although its power table (a copy of the 9508's) still lists the card. The fabric modules the
+    guides pair with it, four of them for maximum bandwidth, are listed in the chassis and are not enforced.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number, and no end-of-sale notice is held.
+elements:
+  bcn:
+    at: [12.5, 12.0]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp, at the left of the face.
+    states:
+    - {name: blue, color: '#2a7de1', behavior: blinking}
+    - 'off'
+  sts:
+    at: [12.5, 25.0]
+    size: [3.0, 3.0]
+    class: led
+    description: STS lamp, at the left of the face.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#d0021b', behavior: blinking}
+    - {name: amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+  logo-zone:
+    at: [413.5, 18.0]
+    size: [8.0, 8.0]
+    class: mechanical
+    description: The maker's mark, reserved and not drawn.
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+  link-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    attrs:
+      led-states: 'green (port active), orange (port disabled or not initialising), flashing orange (beacon on the port, or the port is faulty and disabled), off (port not active, link not connected)'
+parts:
+  - {ref: std/qsfp-dd@1, id: port-1, at: [46, 9.8], group: ports}
+  - {ref: std/qsfp-dd@1, id: port-2, at: [46, 24.65], rotate: 180, group: ports}
+  - {ref: std/qsfp-dd@1, id: port-3, at: [93, 9.8], group: ports}
+  - {ref: std/qsfp-dd@1, id: port-4, at: [93, 24.65], rotate: 180, group: ports}
+  - {ref: std/qsfp-dd@1, id: port-5, at: [140, 9.8], group: ports}
+  - {ref: std/qsfp-dd@1, id: port-6, at: [140, 24.65], rotate: 180, group: ports}
+  - {ref: std/qsfp-dd@1, id: port-7, at: [187, 9.8], group: ports}
+  - {ref: std/qsfp-dd@1, id: port-8, at: [187, 24.65], rotate: 180, group: ports}
+  - {ref: std/qsfp-dd@1, id: port-9, at: [234, 9.8], group: ports}
+  - {ref: std/qsfp-dd@1, id: port-10, at: [234, 24.65], rotate: 180, group: ports}
+  - {ref: std/qsfp-dd@1, id: port-11, at: [281, 9.8], group: ports}
+  - {ref: std/qsfp-dd@1, id: port-12, at: [281, 24.65], rotate: 180, group: ports}
+  - {ref: std/qsfp-dd@1, id: port-13, at: [328, 9.8], group: ports}
+  - {ref: std/qsfp-dd@1, id: port-14, at: [328, 24.65], rotate: 180, group: ports}
+  - {ref: std/qsfp-dd@1, id: port-15, at: [375, 9.8], group: ports}
+  - {ref: std/qsfp-dd@1, id: port-16, at: [375, 24.65], rotate: 180, group: ports}
+  - {ref: common/led-arrow-sm@1, id: link-1, at: [52, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-2, at: [56.75, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-3, at: [99, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-4, at: [103.75, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-5, at: [146, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-6, at: [150.75, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-7, at: [193, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-8, at: [197.75, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-9, at: [240, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-10, at: [244.75, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-11, at: [287, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-12, at: [291.75, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-13, at: [334, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-14, at: [338.75, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-15, at: [381, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-16, at: [385.75, 21.2], skin: down, group: link-leds}
+skins: [default]
