@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: udm-pro
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Ubiquiti
 model: UDM-Pro
@@ -68,7 +68,7 @@ provenance:
       388.6, 22.2 (a single jack, latch up, lamp at the upper right); the two SFP+ cages on the registry
       cell (14.25 wide, 15.0 row pitch) at 405.5, 9.2; touchscreen 23 mm square at 6.5, 10.25; the door
       107.2 x 28.1 at 185.9, 7.9; reset pinhole at 426.7, 37.5. The five horizontal slots along the top
-      edge are drawn as vents. The data sheet photograph agrees on every count.
+      edge are drawn as plain bars that declare `vent` (see vents). The data sheet photograph agrees on every count.
   jacks:
     confidence: datasheet
     note: >-
@@ -130,9 +130,35 @@ provenance:
       not stated by the data sheet or the page. The NetBox entry says front to rear; no fan is shown, so
       no airflow is claimed on the chassis (see the gap).
   colour:
-    confidence: photo-measured
+    confidence: estimated
     note: >-
-      median of the bare plate in the community front elevation (#d1d1d3).
+      #c8cacc on both Ubiquiti devices. The two data sheet strips do not agree on the plain plate (median
+      #c8c8ca on this strip, #acadaf on the switch's: the lighting and the angle differ), and the
+      community elevations differ as well (#d1d1d3 and #e2e4e6), so no one picture gives the grey. #c8cacc
+      is the plate grey most used by silver chassis already in the library, and it is within two levels of
+      this strip's plate. Chosen to make the two models one grey, not measured.
+  vents:
+    confidence: estimated
+    note: >-
+      estimated - five plain dark bars per face, at the places and sizes read off the community elevations
+      (the data sheet strip shows the same five bars on the front, plain and straight). They are plain
+      rectangles that declare `vent`, not a perforated `pattern: vent` field: a field of 1.0 mm cells
+      in a bar 1.2 or 1.4 mm high drew as a broken chain.
+  legend:
+    confidence: estimated
+    note: >-
+      estimated - "Dream Machine Pro" under the screen is read on both the data sheet strip and the
+      community elevation, which agree on the words and on their length (about 24 mm from the screen's
+      left edge); plain text at 2.7 mm. No brand mark is drawn.
+  wan-mark:
+    confidence: estimated
+    note: >-
+      estimated - the data sheet strip and the community elevation both show a small blue circle just
+      right of the numeral 9 under the WAN jack, about 2.2 mm across (read at 6x on the elevation:
+      centre 395.0 mm across, 36.6 mm down; the numeral stands at 392.6 there and is kept at 394.95
+      here, so the circle is set at the same 2.4 mm to its right). It is printed art, not a lamp: the
+      jack's own lamp is the green one at its upper right, carried by the component's led-a as on
+      ports 1 to 8. The same blue circle beside 10 is not drawn (see the gap).
 attrs:
   physical:
     weight-note: 3.9 kg (8.6 lb), data sheet Mechanical
@@ -164,7 +190,7 @@ chassis:
   depth: 285.6
   ru: 1
   weight-kg: 3.9
-  color: '#d1d1d3'
+  color: '#c8cacc'
   power: ac
 gaps:
 - what: rack-ears
@@ -201,8 +227,8 @@ gaps:
   scope: [front]
   reason: needs-photo
   note: >-
-    The blue marks beside 9 and 10 and the small line of text under 11 are not resolved in any picture
-    held, and are not drawn.
+    The blue mark beside 10 and the small line of text under 11 are not resolved in any picture
+    held, and are not drawn. The blue circle beside 9 is drawn (see provenance wan-mark).
   wanted: A straight-on photograph of the front, or the install guide's port figure.
 - what: fans-and-airflow
   scope: [front, rear]
@@ -284,11 +310,12 @@ views:
     size: {w: 442.4, h: 43.7}
     panel:
       decor:
-      - {at: [37.7, 3.2], size: [74.2, 1.2], pattern: vent, vent: 1.0}
-      - {at: [114.9, 3.2], size: [74.1, 1.2], pattern: vent, vent: 1.0}
-      - {at: [191.9, 3.2], size: [74.0, 1.2], pattern: vent, vent: 1.0}
-      - {at: [269.0, 3.2], size: [74.0, 1.2], pattern: vent, vent: 1.0}
-      - {at: [346.2, 3.2], size: [73.8, 1.2], pattern: vent, vent: 1.0}
+      - {at: [37.7, 3.2], size: [74.2, 1.2], vent: 1.0, fill: '#17191c'}
+      - {at: [114.9, 3.2], size: [74.1, 1.2], vent: 1.0, fill: '#17191c'}
+      - {at: [191.9, 3.2], size: [74.0, 1.2], vent: 1.0, fill: '#17191c'}
+      - {at: [269.0, 3.2], size: [74.0, 1.2], vent: 1.0, fill: '#17191c'}
+      - {at: [346.2, 3.2], size: [73.8, 1.2], vent: 1.0, fill: '#17191c'}
+      - {id: wan-mark, at: [396.25, 35.5], size: [2.2, 2.2], rx: 1.1, fill: '#5b8def'}
       - {id: hdd-door, kind: bay-door, at: [185.9, 7.9], size: [107.2, 28.1], rx: 0.6, fill: '#dadadd', stroke: '#3a3a3d', stroke-width: 0.3}
       cutouts:
       - {id: lcm, at: [6.5, 10.25], size: [23.0, 23.0], shape: rect}
@@ -368,11 +395,11 @@ views:
     size: {w: 442.4, h: 43.7}
     panel:
       decor:
-      - {at: [18.4, 4.4], size: [75.5, 1.4], pattern: vent, vent: 1.0}
-      - {at: [97.2, 4.4], size: [75.6, 1.4], pattern: vent, vent: 1.0}
-      - {at: [177.6, 4.4], size: [74.8, 1.4], pattern: vent, vent: 1.0}
-      - {at: [257.5, 4.4], size: [72.6, 1.4], pattern: vent, vent: 1.0}
-      - {at: [333.2, 4.4], size: [75.4, 1.4], pattern: vent, vent: 1.0}
+      - {at: [18.4, 4.4], size: [75.5, 1.4], vent: 1.0, fill: '#17191c'}
+      - {at: [97.2, 4.4], size: [75.6, 1.4], vent: 1.0, fill: '#17191c'}
+      - {at: [177.6, 4.4], size: [74.8, 1.4], vent: 1.0, fill: '#17191c'}
+      - {at: [257.5, 4.4], size: [72.6, 1.4], vent: 1.0, fill: '#17191c'}
+      - {at: [333.2, 4.4], size: [75.4, 1.4], vent: 1.0, fill: '#17191c'}
       - {id: ac-plate, kind: inlet-plate, at: [377.8, 12.6], size: [31.1, 23.4], rx: 0.8, fill: '#3a3c40'}
       cutouts:
       - {id: rps-input, at: [18.3, 19.8], size: [64.0, 19.0], shape: rect}

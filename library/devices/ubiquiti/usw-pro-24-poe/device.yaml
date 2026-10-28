@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: usw-pro-24-poe
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Ubiquiti
 model: USW-Pro-24-PoE
@@ -76,7 +76,7 @@ provenance:
       the jacks' tops at 20.7 and 58.3 px); the two SFP+ cages on the registry cell (14.25 wide, 15.0
       row pitch) at 405.8 and 7.6; the touchscreen's dark square 23 mm across at 5.5, 9.2; the reset
       pinhole at 426.2, 37.2. The five horizontal slots along the top edge are read off the same drawing and
-      are drawn as vents. The data sheet photograph agrees on every count: 12 columns, 2 rows, 2
+      are drawn as plain bars that declare `vent` (see vents). The data sheet photograph agrees on every count: 12 columns, 2 rows, 2
       cages, the screen at the left end.
   jacks:
     confidence: photo-measured
@@ -97,8 +97,8 @@ provenance:
     note: >-
       Data sheet, Hardware: "LCM display: (1) 1.3" touchscreen"; the same part and wording as the
       UDM-Pro's, so both use ubiquiti/lcm-touchscreen-1-3@1. Its size is estimated from the elevation. The
-      printed model legend under the screen and the brand mark beside it are too small to read, so
-      only the logo zone is reserved and no legend is drawn.
+      legend under the screen is drawn as "USW Pro" (see legend); the brand mark beside it is not drawn,
+      and its logo zone stays reserved.
   logo:
     confidence: estimated
     note: >-
@@ -131,11 +131,36 @@ provenance:
     confidence: datasheet
     note: >-
       Data sheet, LEDs: "RPS: Status" with no colour or state; the page says "Redundancy: DC Power
-      Backup, with UniFi RPS". The lamp is the blue triangle left of the USP RPS socket in the elevation.
+      Backup, with UniFi RPS". The lamp is the blue triangle left of the USP RPS socket in the elevation;
+      its colour is the estimated one in rps-lamp-colour.
   colour:
-    confidence: photo-measured
+    confidence: estimated
     note: >-
-      median of the bare plate in the community front elevation (#e2e4e6).
+      #c8cacc on both Ubiquiti devices. The two data sheet strips do not agree on the plain plate (median
+      #acadaf on this switch's strip, #c8c8ca on the UDM-Pro's: the lighting and the angle differ), and the
+      community elevations differ as well (#e2e4e6 and #d1d1d3), so no one picture gives the grey. #c8cacc
+      is the plate grey most used by silver chassis already in the library, and it is within two levels of
+      the brighter strip's plate. Chosen to make the two models one grey, not measured.
+  vents:
+    confidence: estimated
+    note: >-
+      estimated - five plain dark bars per face, at the places and sizes read off the community elevations
+      (the data sheet strip shows the same five bars on the front, plain and straight). They are plain
+      rectangles that declare `vent`, not a perforated `pattern: vent` field: a field of 1.0 mm cells
+      in a bar 1.8 mm high drew as a zig-zag.
+  legend:
+    confidence: estimated
+    note: >-
+      estimated - the legend under the screen reads "USW Pro" on the data sheet strip, with the brand mark
+      to its right (the mark is not drawn: the logo zone stays reserved). It is read at the limit of the
+      picture: the community elevation shows the same line as an unreadable smear of the same length. It
+      is drawn as plain text at 2.4 mm, the height the strip's letters have beside the 23 mm screen.
+  rps-lamp-colour:
+    confidence: estimated
+    note: >-
+      estimated - the triangle left of the USP RPS socket is blue in the community rear elevation, so the
+      lamp carries one lit state, blue. The data sheet gives no state for it, so the state is named for its
+      colour and not for a meaning.
 attrs:
   physical:
     weight-note: >-
@@ -172,7 +197,7 @@ chassis:
   depth: 285.4
   ru: 1
   weight-kg: 4.3
-  color: '#e2e4e6'
+  color: '#c8cacc'
   power: ac
 gaps:
 - what: rack-ears
@@ -194,8 +219,9 @@ gaps:
   scope: [rear]
   reason: vendor-silent
   note: >-
-    The data sheet says RPS "Status" and no state. The legend beside the RPS lamp (USP RPS, OFF, ON)
-    is read off a community drawing at the limit of its resolution, and what the OFF and ON marks are for
+    The data sheet says RPS "Status" and no state, so what the lamp means is not known; only its colour
+    (blue) is read, off the community drawing. The legend beside the RPS lamp (USP RPS, OFF, ON)
+    is read off the same drawing at the limit of its resolution, and what the OFF and ON marks are for
     is not said.
   wanted: The install guide's rear panel and LED table.
 - what: port-legend-detail
@@ -203,8 +229,8 @@ gaps:
   reason: needs-photo
   note: >-
     The numerals under and over the jacks are not legible in any picture held, so the order is
-    inferred (see provenance port-numbering) and the mark on ports 17 to 24 is not drawn. The screen's
-    own legend is likewise unreadable.
+    inferred (see provenance port-numbering) and the mark on ports 17 to 24 is not drawn. The line under
+    the screen reads "USW Pro" and nothing more is legible after it.
   wanted: A straight-on photograph of the front, or the install guide's port figure.
 - what: fans-and-airflow
   scope: [front, rear]
@@ -281,11 +307,11 @@ views:
     size: {w: 442.4, h: 43.7}
     panel:
       decor:
-      - {at: [36.7, 1.0], size: [74.4, 1.8], pattern: vent, vent: 1.0}
-      - {at: [113.7, 1.0], size: [74.9, 1.8], pattern: vent, vent: 1.0}
-      - {at: [191.2, 1.0], size: [74.7, 1.8], pattern: vent, vent: 1.0}
-      - {at: [268.2, 1.0], size: [74.8, 1.8], pattern: vent, vent: 1.0}
-      - {at: [345.3, 1.0], size: [74.4, 1.8], pattern: vent, vent: 1.0}
+      - {at: [36.7, 1.0], size: [74.4, 1.8], vent: 1.0, fill: '#17191c'}
+      - {at: [113.7, 1.0], size: [74.9, 1.8], vent: 1.0, fill: '#17191c'}
+      - {at: [191.2, 1.0], size: [74.7, 1.8], vent: 1.0, fill: '#17191c'}
+      - {at: [268.2, 1.0], size: [74.8, 1.8], vent: 1.0, fill: '#17191c'}
+      - {at: [345.3, 1.0], size: [74.4, 1.8], vent: 1.0, fill: '#17191c'}
       cutouts:
       - {id: lcm, at: [5.5, 9.2], size: [23.0, 23.0], shape: rect}
       - {id: port-1, at: [213.1, 7.8], size: [12.7, 11.0], shape: rect}
@@ -318,6 +344,7 @@ views:
       - {id: led-port-26, at: [415.7, 19.6], size: [2.25, 2.0], shape: rect}
       - {id: btn-reset, at: [424.2, 35.2], size: [4.0, 4.0], shape: circle}
     silkscreen:
+    - {at: [9.4, 37.4], text: USW Pro, font-size: 2.4, anchor: start, fill: '#3a3d42', for: lcm}
     - {at: [219.45, 5.6], text: '1', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-1}
     - {at: [219.45, 37.4], text: '2', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-2}
     - {at: [233.42, 5.6], text: '3', font-size: 1.6, anchor: middle, fill: '#7c7f83', for: port-3}
@@ -384,11 +411,11 @@ views:
     size: {w: 442.4, h: 43.7}
     panel:
       decor:
-      - {at: [18.0, 3.1], size: [76.0, 1.8], pattern: vent, vent: 1.0}
-      - {at: [97.1, 3.1], size: [74.3, 1.8], pattern: vent, vent: 1.0}
-      - {at: [176.1, 3.1], size: [73.8, 1.8], pattern: vent, vent: 1.0}
-      - {at: [255.1, 3.1], size: [76.3, 1.8], pattern: vent, vent: 1.0}
-      - {at: [334.3, 3.1], size: [76.3, 1.8], pattern: vent, vent: 1.0}
+      - {at: [18.0, 3.1], size: [76.0, 1.8], vent: 1.0, fill: '#17191c'}
+      - {at: [97.1, 3.1], size: [74.3, 1.8], vent: 1.0, fill: '#17191c'}
+      - {at: [176.1, 3.1], size: [73.8, 1.8], vent: 1.0, fill: '#17191c'}
+      - {at: [255.1, 3.1], size: [76.3, 1.8], vent: 1.0, fill: '#17191c'}
+      - {at: [334.3, 3.1], size: [76.3, 1.8], vent: 1.0, fill: '#17191c'}
       - {id: serial-label, kind: label-plate, at: [17.8, 6.6], size: [24.3, 10.4], fill: '#d3d5d7'}
       - {id: ac-plate, kind: inlet-plate, at: [379.6, 12.1], size: [30.8, 23.6], rx: 0.8, fill: '#17191c'}
       cutouts:
@@ -405,7 +432,8 @@ views:
     components:
       placements:
       - {ref: ubiquiti/usp-rps-input@1, id: rps-input, at: [17.9, 19.3], group: rps-input, rel-pos: 1}
-      - {ref: common/led-arrow@1, id: rps-led, at: [9.5, 26.8], rotate: 90, skin: up, for: rps-input, group: rps-leds, rel-pos: 1}
+      - {ref: common/led-arrow@1, id: rps-led, at: [9.5, 26.8], rotate: 90, skin: up, for: rps-input, group: rps-leds, rel-pos: 1,
+         states: ['off', {name: blue, color: '#3b82f6'}]}
       - {ref: std/c14-inlet@1, id: ac-inlet, at: [381.0, 13.9], group: power-input, rel-pos: 1}
       - {ref: common/screw-head@1, id: rear-screw-0, at: [9.3, 35.7], group: furniture, rel-pos: 1}
       - {ref: common/screw-head@1, id: rear-screw-1, at: [219.9, 35.6], group: furniture, rel-pos: 2}

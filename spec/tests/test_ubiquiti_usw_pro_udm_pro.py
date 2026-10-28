@@ -145,3 +145,93 @@ def test_dcim_device_type_is_one_u_per_configuration(name):
         assert t["u_height"] == 1
         assert t["manufacturer"] == "Ubiquiti"
         assert t["model"] == part
+
+
+# ---- the owner's six fixes -------------------------------------------------------------------
+
+SLOT_X = {
+    ("usw-pro-24-poe", "front"): [36.7, 113.7, 191.2, 268.2, 345.3],
+    ("usw-pro-24-poe", "rear"): [18.0, 97.1, 176.1, 255.1, 334.3],
+    ("udm-pro", "front"): [37.7, 114.9, 191.9, 269.0, 346.2],
+    ("udm-pro", "rear"): [18.4, 97.2, 177.6, 257.5, 333.2],
+}
+
+
+@pytest.mark.parametrize("name,view", list(SLOT_X))
+def test_vent_slots_are_plain_bars_not_a_pattern(name, view):
+    # `pattern: vent` is a perforated field drawn at a 1.0 mm pitch: in a strip under 2 mm high it
+    # shows as a zig-zag or a broken chain. A slot is a plain dark bar that declares `vent`.
+    decor = load(name)["views"][view]["panel"]["decor"]
+    slots = [r for r in decor if "vent" in r]
+    assert [r["at"][0] for r in slots] == SLOT_X[(name, view)]
+    for r in slots:
+        assert "pattern" not in r, f"{name} {view}: slot at {r['at']} is a pattern fill"
+        assert r["vent"] == 1.0 and r["size"][1] < 2.0 and r.get("fill")
+
+
+def _skin(comp):
+    import xml.etree.ElementTree as ET
+    return ET.parse(LIB / "components/ubiquiti" / comp / "v1/skins/default.svg").getroot()
+
+
+def _contract(comp):
+    return yaml.safe_load((LIB / "components/ubiquiti" / comp / "v1/contract.yaml").read_text())
+
+
+@pytest.mark.parametrize("comp,outer", [("lcm-touchscreen-1-3", "bezel"), ("usp-rps-input", "opening")])
+def test_component_sides_close_flush(comp, outer):
+    # the 3D body is a box of the skin's size; a rounded or stroked outermost rect leaves the box's
+    # corners and top and right edges standing clear of the drawing as a thin strip
+    root = _skin(comp)
+    vb = [float(v) for v in root.get("viewBox").split()]
+    ns = "{http://www.w3.org/2000/svg}"
+    rect = next(e for e in root.iter(ns + "rect") if e.get("id") == outer)
+    assert (float(rect.get("x")), float(rect.get("y"))) == (0.0, 0.0)
+    assert (float(rect.get("width")), float(rect.get("height"))) == (vb[2], vb[3])
+    assert not rect.get("rx") and not rect.get("ry") and not rect.get("stroke")
+
+
+def test_component_versions_carry_the_fixes():
+    assert _contract("lcm-touchscreen-1-3")["version"] == "1.1.0"
+    assert _contract("usp-rps-input")["version"] == "1.1.0"
+
+
+def test_touchscreen_is_a_plain_lit_field():
+    root = _skin("lcm-touchscreen-1-3")
+    ns = "{http://www.w3.org/2000/svg}"
+    tags = {e.tag.replace(ns, "") for e in root.iter()}
+    assert tags <= {"svg", "rect", "defs", "linearGradient", "radialGradient", "stop"}, tags
+    screen = next(e for e in root.iter(ns + "rect") if e.get("id") == "screen")
+    assert screen.get("fill", "").startswith("url(#")
+
+
+@pytest.mark.parametrize("name,legend", [("usw-pro-24-poe", "USW Pro"), ("udm-pro", "Dream Machine Pro")])
+def test_legend_under_the_screen(name, legend):
+    texts = [s["text"] for s in load(name)["views"]["front"]["silkscreen"] if s.get("for") == "lcm"]
+    assert texts == [legend]
+    assert any(r["id"] == "logo-zone" for r in load(name)["views"]["rear"]["regions"])
+
+
+def test_switch_rps_lamp_has_a_blue_lit_state():
+    d = load("usw-pro-24-poe")
+    lamp = next(p for p in placements(d, "rear") if p["id"] == "rps-led")
+    assert lamp["states"][0] == "off"
+    assert [s["color"] for s in lamp["states"][1:]] == ["#3b82f6"]
+
+
+def test_wan_jack_carries_its_lamp_and_its_mark_like_the_others():
+    d = load("udm-pro")
+    jacks = {p["id"]: p for p in placements(d, "front") if "rj45" in p["ref"]}
+    for i in range(1, 9):
+        assert jacks["port-9"]["states"] == jacks[f"port-{i}"]["states"]
+    # the blue circle printed beside the numeral 9 (the photograph and the elevation both show it)
+    num = next(s for s in d["views"]["front"]["silkscreen"] if s.get("for") == "port-9")
+    marks = [r for r in d["views"]["front"]["panel"]["decor"] if r.get("id") == "wan-mark"]
+    assert len(marks) == 1
+    cx = marks[0]["at"][0] + marks[0]["size"][0] / 2
+    assert 1.5 < cx - num["at"][0] < 4.0
+    assert marks[0]["fill"].lower() not in ("#000000", "#17191c")
+
+
+def test_both_chassis_are_one_grey():
+    assert load("usw-pro-24-poe")["chassis"]["color"] == load("udm-pro")["chassis"]["color"] == "#c8cacc"
