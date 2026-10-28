@@ -1,0 +1,104 @@
+format: 1
+kind: module
+name: nxa-pac-1100w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1100 W AC power supply of the Cisco Nexus 93108TC-FX3P and 93108TC-FX3H fixed switches.
+  It is ordered as NXA-PAC-1100W-PI (port-side intake, burgundy latch) or NXA-PAC-1100W-PE
+  (port-side exhaust, blue latch). It has a honeycomb fan grille, an IEC C14 inlet, two lamps
+  and a coloured release latch.
+size: {w: 84.7, h: 40.6}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PAC-1100W'
+  power-output-w: 1100
+  input: ac
+  inlet: c14
+  input-voltage: '100 to 240 Vac nominal (range 90-132 Vac, 180-264 Vac)'
+  input-current-max: '13 A at 100 Vac, 6 A at 240 Vac'
+  efficiency: 'Climate Savers Platinum Efficiency (80Plus Platinum certified)'
+  weight-kg: 1.36
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N93108TC-FX3P NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2020-07-14, Last Modified 2026-07-16), Overview: "1100-W port-side exhaust AC
+    power supply with blue coloring (NXA-PAC-1100W-PE)" and "1100-W port-side intake AC power
+    supply with burgundy coloring (NXA-PAC-1100W-PI)". THE AIRFLOW SUFFIX IS DROPPED from the
+    model, as on cisco/nxa-pac-500w@1: the two differ in the latch colour, which is this
+    contract's `latch-finish` field, and in the direction the fan turns, which the face does
+    not show.
+  power: >-
+    datasheet - appendix B, "1100-W AC Power Supply Specifications", which applies "to all
+    versions of the NXA-PAC-1100W power supply": nominal 100 and 240 VAC (range 90-132 VAC,
+    180-264 VAC), 13 A at 100 VAC and 6 A at 240 VAC, 1300 VA at 100 VAC, "Maximumoutput power
+    per power supply 1100W" (an OUTPUT rating, so `power-output-w`), inrush 33 A, hold-up 12 ms
+    at 1100 W, 12 VDC output and standby, Climate Savers Platinum, form factor RSP1. The
+    weight is the guide's weights table, 3 lb (1.36 kg).
+  size: >-
+    estimated - THE GUIDE STATES NO DIMENSION, only "Form factor RSP1". The size is read off
+    the guide's rear figure (art number 502826, 708 px across the switch body for 436.8 mm,
+    1.58 px per mm): supply 1 is 133 px across and 65 px down, 84.6 by 40.6 mm. The figure is
+    a small bitmap and the reading is good to about 1 mm; the 9348GC-FX3 guide's clean
+    drawing of its own RSP1 supply (art number 504861, 4.03 px per mm) gives 84.7 by 40.6, and
+    that is the size carried. It is not the width of cisco/nxa-pac-500w@1 (96.8 mm), which the
+    93108TC-FX3 guide's figure gave for the same RSP1 form factor.
+  elements: >-
+    estimated - the arrangement is the rear figure's, which shows two ring lamps at the top
+    left, a honeycomb grille below them, a C14-style inlet in the middle, a latch block and
+    two screws at the right edge and a pull bar along the foot. The positions are measured off
+    the 9348GC-FX3 guide's clean figure of its 350 W supply (art number 504861), which draws
+    the same module; this guide's bitmap shows the same arrangement and is too small to
+    measure. The legend text printed on the module ("AC OK" and "PS OK" above the lamps) is
+    not carried.
+  lamps: >-
+    datasheet - appendix C, "Power Supply LEDs": a solid green lamp for a regulated 12 V main
+    and 12 V standby output, amber states for a failure or a warning, off for no input. The
+    ring lamps are labelled AC OK and PS OK on the module; the guide's table does not say
+    which state belongs to which.
+  latch-colour: >-
+    datasheet for the convention - the guide's Overview gives burgundy for port-side intake
+    and blue for port-side exhaust. The values are cisco/nxa-pac-500w@1's.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-500w@1's round figure for a supply of
+    this class and nothing here measures it.
+states: [absent]
+elements:
+  ac-ok: {at: [8.1, 6.1], size: [4.4, 4.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  ps-ok: {at: [29.8, 6.1], size: [4.4, 4.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  fan: {at: [3.4, 11.0], size: [38.2, 23.0], class: rotor}
+  latch: {at: [73.0, 13.9], size: [10.2, 13.6], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [43.8, 8.1]}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-1100w@1's own elements key - the grille's extent is read off the rear
+        figure and the depth of the cavity behind it is not stated.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        Not stated in any guide held. cisco/nxa-pac-500w@1 carries 3.0 mm for the same latch
+        and nothing here measures it.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [84.7, 40.6]}

@@ -1,0 +1,88 @@
+format: 1
+kind: module
+name: nxa-pac-1900w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1900 W AC power supply of the Cisco Nexus 93108TC-FX3P and 93108TC-FX3H fixed switches,
+  ordered as NXA-PAC-1900W-PI (port-side intake, burgundy latch). No picture of this supply is
+  held. The face is drawn from its 1100 W sibling: a honeycomb fan grille, an IEC C14 inlet,
+  two lamps and a coloured release latch.
+size: {w: 84.7, h: 40.6}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PAC-1900W'
+  power-output-w: 1900
+  input: ac
+  inlet: c14
+  input-voltage: '115 to 120 Vac, 200 to 240 Vac'
+  input-current-max: '16 A at 115 to 120 Vac, 12 A at 200 to 240 Vac'
+  efficiency: 'Climate Savers Platinum Efficiency (80Plus Platinum certified)'
+  weight-kg: 1.63
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N93108TC-FX3P NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2020-07-14, Last Modified 2026-07-16), Overview: "1900-W port-side intake AC
+    power supply with burgundy coloring (NXA-PAC-1900W-PI)". The guide lists no port-side
+    exhaust version. The Overview adds that its details "will not display in the CLI show
+    commands, until a working power source is connected".
+  power: >-
+    datasheet - appendix B, "1900-W AC Power Supply Specifications": input 115 to 120 VAC and
+    200 to 240 VAC, 16 A at 115 to 120 VAC, 12 A at 200 to 240 VAC, 2,400 VA at 200 VAC,
+    "Maximum output power per power supply 1900W" (an OUTPUT rating, so `power-output-w`),
+    inrush 48 A, hold-up 20 ms at 1900 W, output "(-) 56VDC", Climate Savers Platinum. The
+    weight is the guide's weights table, 3.6 lb (1.63 kg). The table gives no form factor
+    for this supply.
+  size: >-
+    estimated - THE GUIDE STATES NO DIMENSION AND NO FORM FACTOR for this supply. The size is
+    cisco/nxa-pac-1100w@1's, read off the same guide's rear figure, which draws AC supplies
+    and does not say which. A figure is not a dimension.
+  elements: >-
+    estimated - NO PICTURE OF THIS SUPPLY IS HELD. The artwork is cisco/nxa-pac-1100w@1's: the
+    guide's rear figure labels its supplies "AC power supplies shown" without naming the
+    rating. A 1900 W supply may differ in its inlet and grille.
+  lamps: >-
+    datasheet - appendix C, "Power Supply LEDs", one table for every supply.
+  latch-colour: >-
+    datasheet for the convention - burgundy for port-side intake. The values are
+    cisco/nxa-pac-500w@1's.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-500w@1's round figure.
+states: [absent]
+elements:
+  ac-ok: {at: [8.1, 6.1], size: [4.4, 4.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  ps-ok: {at: [29.8, 6.1], size: [4.4, 4.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  fan: {at: [3.4, 11.0], size: [38.2, 23.0], class: rotor}
+  latch: {at: [73.0, 13.9], size: [10.2, 13.6], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [43.8, 8.1]}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-1100w@1's grille, carried across - nothing held shows this supply.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        Not stated in any guide held. cisco/nxa-pac-500w@1 carries 3.0 mm for the same latch.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [84.7, 40.6]}
