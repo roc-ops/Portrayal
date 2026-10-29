@@ -1,0 +1,105 @@
+{
+ "format": "portrayal-site",
+ "version": 0,
+ "name": "Zorb test site",
+ "site": {
+  "id": "site-zorb",
+  "guid": "2FdDpCuT5VnPosDIfBc4JF",
+  "name": "Zorb campus",
+  "buildings": [
+   {
+    "id": "bldg-zorb",
+    "guid": "27hJgyVGfSPOYdCqEa6IuM",
+    "name": "Zorb hall",
+    "floors": [
+     {
+      "id": "floor-1",
+      "guid": "1o5IUzFY1Oiw0CtNvuR5mt",
+      "name": "Ground floor",
+      "elevation": 0,
+      "spaces": [
+       {
+        "id": "sp-er",
+        "guid": "3Vdw3hHsLPzfe0cWq4hF3B",
+        "name": "Zorb equipment room",
+        "outline": [{"x": 0, "y": 0}, {"x": 4000, "y": 0}, {"x": 4000, "y": 3000}, {"x": 0, "y": 3000}],
+        "height": 3000,
+        "walls": [
+         {"id": "wall-er-n", "guid": "1WxAloXNvKSQ845EcXC0Nv", "a": {"x": 0, "y": 3000}, "b": {"x": 4000, "y": 3000}}
+        ],
+        "racks": [
+         {"id": "rk-1", "guid": "1Nn1GUFhPU_8QfqTLh$Ywt", "file": "racks/acceptance.rack.json", "rack": "r1",
+          "x": 2000, "y": 800, "rotation": 0}
+        ],
+        "surfaces": [
+         {
+          "id": "bb-1",
+          "guid": "2PTTfpCL1HxxBq4T9M7x7U",
+          "kind": "backboard",
+          "material": "plywood, fire-rated",
+          "wall": "wall-er-n",
+          "along": 1000,
+          "bottom": 900,
+          "width": 2440,
+          "height": 1220,
+          "thickness": 19,
+          "devices": [
+           {"id": "wd-1", "guid": "27fXJnno9UCO7ZfJX7C8Ln", "ref": "zorb/wall-switch", "label": "Zorb wall switch",
+            "x": 300, "y": 600}
+          ]
+         }
+        ],
+        "devices": [
+         {"id": "out-1", "guid": "3lUiNWrEDRFgzxIWhHLGoF", "ref": "zorb/faceplate-2", "label": "ER-01",
+          "wall": "wall-er-n", "x": 3600, "y": 3000, "height": 450}
+        ],
+        "cables": [
+         {"id": "cb-1", "guid": "1s1zBkHsTNJuFpJ38oeMMB",
+          "a": {"rack": "rk-1", "item": "i4", "path": "copper-3-1", "view": "front"},
+          "b": {"device": "out-1", "port": "jack-1"},
+          "media": "cat6", "label": "ER-01 to rack"}
+        ]
+       },
+       {
+        "id": "sp-cl",
+        "guid": "3Vekm_1cvV7w8QJS1t1kLS",
+        "name": "Zorb closet B",
+        "outline": [{"x": 6000, "y": 0}, {"x": 8000, "y": 0}, {"x": 8000, "y": 2500}, {"x": 6000, "y": 2500}],
+        "height": 2700,
+        "walls": [
+         {"id": "wall-cl-e", "guid": "1VNILKXTHP4fNKWXTNkxtG", "a": {"x": 8000, "y": 2500}, "b": {"x": 8000, "y": 0}}
+        ],
+        "devices": [
+         {"id": "out-2", "guid": "37F4vdRGTS9eCtLqGEdzB0", "ref": "zorb/faceplate-2", "label": "CB-01",
+          "wall": "wall-cl-e", "x": 8000, "y": 1200, "height": 450},
+         {"id": "ap-1", "guid": "01h56pQunK3fOkFT83ISX1", "ref": "zorb/access-point", "label": "AP-CB",
+          "wall": "wall-cl-e", "x": 8000, "y": 400, "height": 2400,
+          "ext": {"example.wifi@1": {"channel": 36}}}
+        ]
+       }
+      ]
+     }
+    ],
+    "pathways": {
+     "nodes": [
+      {"id": "pn-1", "guid": "1gVfEQG4zUZxeFD$aoCvM$", "floor": "floor-1", "x": 2000, "y": 1300, "height": 2400},
+      {"id": "pn-2", "guid": "290YTYvLTUbPIppp6vJnX8", "floor": "floor-1", "x": 4000, "y": 2500, "height": 2400},
+      {"id": "pn-3", "guid": "09CMhEB9XH9xeVdG3scbsE", "floor": "floor-1", "x": 6000, "y": 2000, "height": 2400},
+      {"id": "pn-4", "guid": "26peviXOjU$wCM5ppXWTX0", "floor": "floor-1", "x": 8000, "y": 1200, "height": 450}
+     ],
+     "segments": [
+      {"id": "ps-1", "guid": "3DjCRCZFLNcghbo2V7V0Vf", "kind": "ladder-rack", "a": "pn-1", "b": "pn-2", "width": 300},
+      {"id": "ps-2", "guid": "0Fo8icv2TLxfxn9BCN9rNs", "kind": "j-hook", "a": "pn-2", "b": "pn-3"},
+      {"id": "ps-3", "guid": "1M4bgj5AvLUfUtvD9iBI0G", "kind": "surface-raceway", "a": "pn-3", "b": "pn-4", "width": 40}
+     ]
+    },
+    "cables": [
+     {"id": "cb-2", "guid": "0uQI_5QTzTCBajuUFcU__r",
+      "a": {"device": "wd-1", "port": "port-1"},
+      "b": {"device": "out-2", "port": "jack-1"},
+      "media": "cat6", "label": "Tie stub ER to CB"}
+    ]
+   }
+  ]
+ }
+}
