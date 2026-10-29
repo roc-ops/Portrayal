@@ -1586,7 +1586,7 @@ def _tilt_offset(local_q, size, rotate, facet):
 
 def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                            occ_used, z_inset, z_group_lift, palette, inst_palette,
-                           skin_overrides, attr_overrides, resolved):
+                           skin_overrides, attr_overrides, resolved, build_airflow=None):
     """Seat the configuration's occupants keyed to THIS instance's slots - and,
     to a fixed point, to occupants already seated in them (a plug in the
     optic, a boot on the plug) - inside the instance group `g`.
@@ -1763,6 +1763,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 z_inset=z_inset - lift, z_group_lift=z_group_lift + lift,
                 skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                 path=f"{path}/{local}", resolved=resolved, tilt=tilt_facet,
+                build_airflow=build_airflow,
                 # AND A SLOT INSIDE WHAT WAS JUST SEATED, keyed under the
                 # occupant's own path - `bay-1/lc01-occupant/a`, half `a` of a
                 # duplex plug seated on the adapter `lc01`. The same widening
@@ -1854,7 +1855,7 @@ def _inherited_fields(lib, contract, merged, part):
     return out
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False, tilt=None, inherited_fields=None):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False, tilt=None, inherited_fields=None, build_airflow=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -2013,6 +2014,12 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     merged.update(attrs or {})
     for k, v in data_attrs(merged).items():
         g.set(k, v)
+    # THE DIRECTION OF THE BUILD, ON EVERY FAN AND SUPPLY DRAWN. `data-airflow`
+    # above is the part's own statement as the build adjusts it; this is the
+    # configuration's airflow, the value the root <svg> carries. Written after
+    # the merge so nothing overrides it, and nothing where the build states none.
+    if build_airflow and contract.get("class") in ("fan", "psu"):
+        g.set("data-config-airflow", build_airflow)
     if group:
         g.set("data-group", group)
     if rel_pos is not None:
@@ -2189,6 +2196,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                path=f"{path}/{part['id']}", resolved=resolved,
                                in_port=parts_in_port, tilt=tilt,
+                               build_airflow=build_airflow,
                                # a slot on a composed part, at any depth (B3)
                                occupants=occupants, occ_used=occ_used)
         if tilt:
@@ -2493,7 +2501,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
             path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1,
             z_inset=z_inset - occ_lift, z_group_lift=z_group_lift + occ_lift,
-            seated=seated, bay_attrs=bay_attrs,
+            seated=seated, bay_attrs=bay_attrs, build_airflow=build_airflow,
             occupants=occupants, occ_used=occ_used)
         # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
         # cage and wrong for a card in a riser: what shows of a PCIe bracket is
@@ -2563,7 +2571,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # published by component_cages as this cage's `mate`.
     _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                            occ_used, z_inset, z_group_lift, palette, inst_palette,
-                           skin_overrides, attr_overrides, resolved)
+                           skin_overrides, attr_overrides, resolved,
+                           build_airflow=build_airflow)
     # EVERY DECLARED CONNECTION POINT REACHES THE DRAWING, not just `mate`.
     # This function read `mate` to place an occupant and dropped the rest, so a
     # part's optical-tx, power or cable point existed in the contract and in no
@@ -4057,6 +4066,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      z_group_lift=seat_lift,
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
+                                     build_airflow=airflow,
                                      resolved=resolved,
                                      # A SLOT ON A PLACED PART (B3): `port-1510/1`,
                                      # an adapter placed directly - and, since
@@ -4448,6 +4458,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                          inst_palette=inst_palette,
                                          centre=bay_centre,
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
+                                         build_airflow=airflow,
                                          path=f"{b['id']}/module", resolved=resolved,
                                          seated=config.get("bays"),
                                          bay_attrs=config.get("bay-attrs"),
