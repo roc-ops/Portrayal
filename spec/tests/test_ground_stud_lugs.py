@@ -414,9 +414,10 @@ def test_the_census_of_ground_stud_placements(placed):
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
     # 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
-    assert sum(n for n, _ in got.values()) == 59
-    # 39 -> 42 with the Cisco C9300-24P, C9300-24U and C9300-48U
-    assert len({where for where, _, _ in placed}) == 42
+    # 59 -> 63 with the Cisco C9300-24S and C9300-48S's two ground screws each
+    assert sum(n for n, _ in got.values()) == 63
+    # 42 -> 44 with the Cisco C9300-24S and C9300-48S
+    assert len({where for where, _, _ in placed}) == 44
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got

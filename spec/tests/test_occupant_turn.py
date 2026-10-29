@@ -562,7 +562,7 @@ def test_the_four_crossings_the_seat_gave_are_gone(census):
     # and one of the two rear ground screws of each of the Cisco C9300-48P and C9300-48T, 15.8 away from its neighbour
     # and the same ground screw of each of the Cisco C9300-24P, C9300-24U and C9300-48U
     # and the same ground screw of each of the Cisco C9300-24S and C9300-48S
-    assert len(crossed) == 49and not [k for k in crossed if census[k]["hard"]]
+    assert len(crossed) == 49 and not [k for k in crossed if census[k]["hard"]]
 
 
 def test_a_barrier_block_pole_is_no_turnable_seat():
