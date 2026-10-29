@@ -1,5 +1,47 @@
 {
  "bay-accepts": {
+  "front/bays/ps0-dcpm-0": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps0-dcpm-1": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps0-dcpm-2": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps0-dcpm-3": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps0-pm-0": [
+   "cisco/pwr-6kw-ac-v3@1"
+  ],
+  "front/bays/ps0-pm-1": [
+   "cisco/pwr-6kw-ac-v3@1"
+  ],
+  "front/bays/ps0-pm-2": [
+   "cisco/pwr-6kw-ac-v3@1"
+  ],
+  "front/bays/ps1-dcpm-0": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps1-dcpm-1": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps1-dcpm-2": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps1-dcpm-3": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps1-pm-0": [
+   "cisco/pwr-6kw-ac-v3@1"
+  ],
+  "front/bays/ps1-pm-1": [
+   "cisco/pwr-6kw-ac-v3@1"
+  ],
+  "front/bays/ps1-pm-2": [
+   "cisco/pwr-6kw-ac-v3@1"
+  ],
   "front/bays/slot-0": [
    "cisco/a99-rsp-se@2",
    "cisco/a9k-rsp5-se@2",
@@ -259,7 +301,7 @@
    "cisco/asr-9910-fan@1"
   ]
  },
- "composed": "c0630a4647c32254",
+ "composed": "13f67cb4957f05ef",
  "composed-refs": {
   "cisco/a99-10x400ge-x-se@2": "2.0.0+2cafa41984d516db",
   "cisco/a99-10x400ge-x-tr@2": "2.0.0+19038735632bb9ea",
@@ -305,6 +347,8 @@
   "cisco/a9k-rsp880-lt-tr@2": "2.0.0+bf5b7274829fa94b",
   "cisco/a9k-slot-cover@1": "1.0.1+3c808f8598a130fd",
   "cisco/asr-9910-fan@1": "1.1.2+628ec18598e891b0",
+  "cisco/pwr-4p4kw-dc-v3@1": "1.0.0+fc5129e2b7e99447",
+  "cisco/pwr-6kw-ac-v3@1": "1.0.0+e169f19d8b6ce3bb",
   "common/db9-receptacle@1": "1.1.0+92f8de85b306faeb",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
   "common/screw-head@1": "1.1.0+0f38d482bcc27ec9",
@@ -320,17 +364,35 @@
   "std/xfp@1": "1.0.0+beb5b8168c581dc6"
  },
  "configs": [
-  "base"
+  "ac",
+  "base",
+  "dc"
  ],
  "format": 1,
- "gaps": "4f16da6c97369d95",
+ "gaps": "26305a69da4fe216",
  "groups": [
   "fabric",
   "fan-trays",
   "grounding",
+  "power-modules-ac",
+  "power-modules-dc",
   "slots"
  ],
  "ids": [
+  "front/bays/ps0-dcpm-0",
+  "front/bays/ps0-dcpm-1",
+  "front/bays/ps0-dcpm-2",
+  "front/bays/ps0-dcpm-3",
+  "front/bays/ps0-pm-0",
+  "front/bays/ps0-pm-1",
+  "front/bays/ps0-pm-2",
+  "front/bays/ps1-dcpm-0",
+  "front/bays/ps1-dcpm-1",
+  "front/bays/ps1-dcpm-2",
+  "front/bays/ps1-dcpm-3",
+  "front/bays/ps1-pm-0",
+  "front/bays/ps1-pm-1",
+  "front/bays/ps1-pm-2",
   "front/bays/slot-0",
   "front/bays/slot-1",
   "front/bays/slot-2",
@@ -353,9 +415,23 @@
   "rear/cutout/ground-pad",
   "rear/placements/ground-pad"
  ],
- "names": "85c29db33895139c",
+ "names": "a69c4f33eda30d65",
  "placement-addressing": {
   "rel-pos": {
+   "front/bays/ps0-dcpm-0": 0,
+   "front/bays/ps0-dcpm-1": 1,
+   "front/bays/ps0-dcpm-2": 2,
+   "front/bays/ps0-dcpm-3": 3,
+   "front/bays/ps0-pm-0": 0,
+   "front/bays/ps0-pm-1": 1,
+   "front/bays/ps0-pm-2": 2,
+   "front/bays/ps1-dcpm-0": 4,
+   "front/bays/ps1-dcpm-1": 5,
+   "front/bays/ps1-dcpm-2": 6,
+   "front/bays/ps1-dcpm-3": 7,
+   "front/bays/ps1-pm-0": 3,
+   "front/bays/ps1-pm-1": 4,
+   "front/bays/ps1-pm-2": 5,
    "front/bays/slot-0": 0,
    "front/bays/slot-1": 1,
    "front/bays/slot-2": 2,
@@ -377,8 +453,22 @@
   }
  },
  "placement-attrs": "44136fa355b3678a",
- "placement-geometry": "105a4fa2db9904eb",
+ "placement-geometry": "1a74309fd4085581",
  "placement-groups": {
+  "front/bays/ps0-dcpm-0": "power-modules-dc",
+  "front/bays/ps0-dcpm-1": "power-modules-dc",
+  "front/bays/ps0-dcpm-2": "power-modules-dc",
+  "front/bays/ps0-dcpm-3": "power-modules-dc",
+  "front/bays/ps0-pm-0": "power-modules-ac",
+  "front/bays/ps0-pm-1": "power-modules-ac",
+  "front/bays/ps0-pm-2": "power-modules-ac",
+  "front/bays/ps1-dcpm-0": "power-modules-dc",
+  "front/bays/ps1-dcpm-1": "power-modules-dc",
+  "front/bays/ps1-dcpm-2": "power-modules-dc",
+  "front/bays/ps1-dcpm-3": "power-modules-dc",
+  "front/bays/ps1-pm-0": "power-modules-ac",
+  "front/bays/ps1-pm-1": "power-modules-ac",
+  "front/bays/ps1-pm-2": "power-modules-ac",
   "front/bays/slot-0": "slots",
   "front/bays/slot-1": "slots",
   "front/bays/slot-2": "slots",
@@ -399,7 +489,7 @@
   "rear/placements/ground-pad": "grounding"
  },
  "placement-surface": "44136fa355b3678a",
- "shape": "2bed4b869f62f4a8",
- "surface": "a7e7e42002224cd1",
- "version": "1.3.0"
+ "shape": "8a78f99f76a015bf",
+ "surface": "be22bbc0fd282235",
+ "version": "2.0.0"
 }

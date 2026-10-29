@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9906
-version: 1.3.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9906
@@ -323,8 +323,23 @@ provenance:
       drawing + datasheet - the power shelf is VERTICAL and runs down the LEFT of the card cage,
       which no other chassis in this family does. Figure 21 labels it PS0 and stacks M0 at the
       bottom through M2 at the top, and Table 15 agrees: "ASR 9906: Version 3 power system: Up to
-      three AC power modules per system". The master draws the column POPULATED, so the individual
-      module openings are not separately measured - see gaps
+      three AC power modules per system"; Table 16 gives four DC modules. THE CUTOUT WAS REDRAWN to
+      the measured extent of the module stack: 46.0 x 418.8 at x 16.0, y 35.9. It had been 46.0 x
+      364.32 at y 94.09, which is the CARD CAGE's vertical span and not the shelf's; the shelf runs
+      from y 35.9 (top of M2's plate) to 452.9 (bottom of M0's pitch cell) in the master. Source:
+      the stencil master "ASR-9906 Front", which draws the AC column populated: three modules, six
+      fan wheels, module pitch 1212.8 px on a 4200 px render = 139.0 mm; three of them are 417.0 mm.
+      The cutout is 418.8 because four DC modules at the ASR 9910 master's 104.7 mm pitch (Figure
+      43's four-across tray) are 418.8, and the one shelf has to hold either set. The scale is the
+      master's own frame, checked: the render's width is the 19.0 in rack face and its height
+      Table 13's 619.51 mm, which agree to 0.3 percent (0.1149 and 0.1146 mm/px), the same
+      calibration as the cage above. Figure 42 (the AC tray, PDF p73 / printed p61) and Figure
+      43 (the DC tray, PDF p74 / printed p62) are perspective views with a straight-on oval callout
+      of the tray, printed turned 90 degrees; they settle the module count (six fan wheels for AC,
+      eight for DC) and the arrangement. The module boundaries are now the pitch, drawn as bays,
+      and the module size is in the two components' own provenance. Mixed AC and DC supplies are
+      not supported (Data Sheet p5; Hardware Installation Guide Table 2 caution), so the two bay
+      sets share this one footprint and never coexist - see gaps
   fan-trays:
     confidence: datasheet
     note: >-
@@ -434,6 +449,15 @@ attrs:
     power-ac-service-requirement: 20 A North America; 16 A international; 13 A United Kingdom
     power-ac-redundancy: at least two AC power modules required for N+1 redundancy for a fully
       configured system
+    power-modules-per-tray-v3: three AC or four DC, one tray
+    power-dc-input-per-module-v3: 4730 W (4400 W output module)
+    power-dc-input-voltage: -48 VDC nominal in North America, -60 VDC in the European Community.
+      Range -40.5 to -72 VDC [-75 VDC for 5 ms] (Table 16). Table 18 gives -40 to -72 VDC
+    power-dc-input-current: 49 A maximum at -48 VDC nominal; 39 A maximum at -60 VDC nominal
+    power-output-bus-voltage: -54.0 VDC nominal, -55.5 VDC maximum, -52.5 VDC minimum (Table 21)
+    power-output-maximum: 18,000 W (three 6000 W AC power modules per tray) or 17,600 W (four 4400 W
+      DC power modules per tray). It is what the power system can support. It is not system power
+      consumption (Table 21)
   thermal:
     cooling-path: front-to-top-to-rear; inlet at the bottom front, exhaust at the lower rear
     fan-trays: two, FT0 above FT1, to the right of the card cage
@@ -493,20 +517,33 @@ gaps:
   scope: [front]
   reason: needs-drawing
   note: >-
-    The vertical power shelf is drawn as one opening rather than three module openings. Figure 21
-    and Table 15 both establish three modules stacked M0 at the bottom to M2 at the top, so the
-    count and numbering are not in doubt; the boundaries are. The master draws this column
-    POPULATED - each module rendered with its own fan wheel - so a scan returns grille detail
-    rather than separators, the same obstacle the ASR 9904's horizontal shelf presents. The
-    column's outer rectangle is measured and drawn.
-  wanted: a figure showing the power shelf empty, or a dimensioned front elevation
+    The shelf is one cutout, as on the ASR 9904, and the module positions are now bays inside it:
+    three AC (`ps0-pm-0` to `ps0-pm-2`, PWR-6KW-AC-V3, base and `ac`) and four DC (`ps0-dcpm-0` to
+    `ps0-dcpm-3`, PWR-4.4KW-DC-V3, `dc` only), M0 at the bottom, each turned from the horizontal
+    drawing. Figure 21, Figure 42 (AC, six fan wheels), Figure 43 (DC, eight) and Tables 15 and 16
+    give the counts; the pitch is the stencil master's, 139.0 mm for AC and 104.7 mm for DC. THE AC
+    AND DC BAYS SHARE ONE FOOTPRINT; FILL ONE SET. Each set is `only-in` its own configurations so
+    the two never coexist, and that mixing AC and DC is not supported (Data Sheet p5, "mixing of AC
+    and DC supplies is not supported"; Hardware Installation Guide Table 2: "A hybrid (AC+DC) power
+    configuration is not supported") is not enforced by the model. STILL OPEN: the module
+    dimensions are measured off the stencil's populated drawing and a straight-on callout, not
+    stated by Cisco (see the two components); the shelf is not drawn empty, so its own metal
+    (the end hardware, the divider rails, the ON/STANDBY switch Figure 67 shows on the front) is not
+    drawn; the module weight and depth are not stated; the DC tray's feed arrangement is not
+    modelled; the tray itself (`A9K-AC-PEM-V3` and `A9K-DC-PEM-V3`, drawn 468.12 mm wide against a
+    447 mm chassis) is not seated, because no tray-level bay exists - which part is the 9906's tray
+    is a question, since the guide's `show platform` output names `0/PT0 A9K-AC-PEM-V3` only for
+    the 9910. The module-to-module bays are positioned on the measured pitch and sized by their
+    occupants, so they are a modelling standard and not a measurement of the empty shelf.
+  wanted: a figure showing the power shelf empty, or a dimensioned front elevation, and the module
+    dimensions from Cisco
 - what: rear-face
   scope: [rear]
   reason: needs-drawing
   note: >-
     The ASR 9906's rear carries the fabric card cage and we know a great deal ABOUT it and almost
-    nothing about its geometry. There is no ASR-9906 Rear master in Cisco's stencil, and Figure 21
-    shows only the front. The count is sourced but indirectly: Table 13 quotes the configured
+    nothing about its geometry. Cisco's stencil does list an "ASR-9906 Rear" master (image104.emf,
+    24.50 in tall), which has not been used to draw this face, and Figure 21 shows only the front. The count is sourced but indirectly: Table 13 quotes the configured
     weight for a chassis "Configured with two fan trays, two RSPs, five fabric cards, and one PEM",
     so five, and the sibling ASR 9910's Figure 22 shows fabric slots numbered from 0. Nothing
     states their width, their height, or where the PEM sits. The rear is therefore sized and
@@ -549,6 +586,14 @@ gaps:
   wanted: >-
     a Cisco document that names either -SE part beside a chassis, or says it is not compatible with one
 groups:
+  power-modules:
+    term: PM
+    role: service
+    index-origin: 0
+    physical-context: Power Module
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 - Overview and Reference Guide, "Cisco ASR 9906 Router Power Modules": one power tray with up to three AC or four DC version 3 modules, N+1 (Tables 15 and 16, PDF pp145 and 147). The install guide adds that at least two AC power modules are required for N+1 on a fully configured system. The AC and DC bays share one footprint; fill one set; mixing is not supported and not enforced'
   slots:
     term: Slot
     role: traffic
@@ -565,7 +610,7 @@ views:
       decor:
         - {at: [20.0, 500.0], size: [300.0, 105.0], fill: '#3a3c3e', pattern: grille, vent: 60}
       cutouts:
-        - {id: power-shelf, at: [16.0, 94.09], size: [46.0, 364.32], shape: rect}
+        - {id: power-shelf, at: [16.0, 35.9], size: [46.0, 418.8], shape: rect}
         - {id: esd, at: [352.0, 512.0], size: [5.0, 5.0], shape: circle}
     silkscreen:
       - {at: [39.48, 487.0], text: PS0, font-size: 6, anchor: middle}
@@ -583,6 +628,13 @@ views:
         - {id: slot-3, at: [202.885, 78.4], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/a99-10x400ge-x-se@2', 'cisco/a99-10x400ge-x-tr@2', 'cisco/a99-32x100ge-se@1', 'cisco/a99-32x100ge-tr@1', 'cisco/a99-32x100ge-x-se@1', 'cisco/a99-32x100ge-x-tr@1', 'cisco/a99-4hg-flex-se@2', 'cisco/a99-4hg-flex-tr@2', 'cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4hg-flex-se@2', 'cisco/a9k-4hg-flex-tr@2', 'cisco/a9k-4x100ge@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
         - {id: slot-4, at: [246.285, 78.4], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/a99-10x400ge-x-se@2', 'cisco/a99-10x400ge-x-tr@2', 'cisco/a99-32x100ge-se@1', 'cisco/a99-32x100ge-tr@1', 'cisco/a99-32x100ge-x-se@1', 'cisco/a99-32x100ge-x-tr@1', 'cisco/a99-4hg-flex-se@2', 'cisco/a99-4hg-flex-tr@2', 'cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4hg-flex-se@2', 'cisco/a9k-4hg-flex-tr@2', 'cisco/a9k-4x100ge@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
         - {id: slot-5, at: [289.705, 78.4], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/a9k-rsp880-lt-se@2', 'cisco/a9k-rsp880-lt-tr@2', 'cisco/a99-rsp-se@2', 'cisco/a9k-rsp5-se@2', 'cisco/a9k-rsp5-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
+        - {id: ps0-pm-0, at: [19.95, 313.9], size: {w: 40.1, h: 139.0}, rotate: 270, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules, rel-pos: 0, only-in: [base, ac]}
+        - {id: ps0-pm-1, at: [19.95, 174.9], size: {w: 40.1, h: 139.0}, rotate: 270, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules, rel-pos: 1, only-in: [base, ac]}
+        - {id: ps0-pm-2, at: [19.95, 35.9], size: {w: 40.1, h: 139.0}, rotate: 270, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules, rel-pos: 2, only-in: [base, ac]}
+        - {id: ps0-dcpm-0, at: [19.7, 350.0], size: {w: 40.6, h: 104.7}, rotate: 270, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 0, only-in: [dc]}
+        - {id: ps0-dcpm-1, at: [19.7, 245.3], size: {w: 40.6, h: 104.7}, rotate: 270, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 1, only-in: [dc]}
+        - {id: ps0-dcpm-2, at: [19.7, 140.6], size: {w: 40.6, h: 104.7}, rotate: 270, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 2, only-in: [dc]}
+        - {id: ps0-dcpm-3, at: [19.7, 35.9], size: {w: 40.6, h: 104.7}, rotate: 270, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 3, only-in: [dc]}
       placements:
         - {id: esd-jack, ref: common/esd-jack@1, at: [351.5, 511.5], for: chassis, group: grounding, rel-pos: 0}
     regions:
@@ -661,7 +713,7 @@ configurations:
     default: true
     description: >-
       Chassis only - what you spec before deciding what goes in it. The 6 slot bays are
-      EMPTY; nothing else is fitted. Enough to power on and reach the box, which is the
+      EMPTY; the three AC power modules are fitted. Enough to power on and reach the box, which is the
       question most people ask first and the one `default` used to answer with whatever
       the drawing happened to be populated with.
     bays:
@@ -671,6 +723,29 @@ configurations:
       slot-3: cisco/a9k-slot-cover@1
       slot-4: cisco/a9k-slot-cover@1
       slot-5: cisco/a9k-slot-cover@1
+      ps0-pm-0: cisco/pwr-6kw-ac-v3@1
+      ps0-pm-1: cisco/pwr-6kw-ac-v3@1
+      ps0-pm-2: cisco/pwr-6kw-ac-v3@1
+  ac:
+    kind: example
+    description: >-
+      The power system with three PWR-6KW-AC-V3 modules in the one AC tray, M0 at the bottom. Not an
+      orderable chassis: Cisco lists only ASR-9906, with no -AC form, so no part number is given.
+    bays:
+      ps0-pm-0: cisco/pwr-6kw-ac-v3@1
+      ps0-pm-1: cisco/pwr-6kw-ac-v3@1
+      ps0-pm-2: cisco/pwr-6kw-ac-v3@1
+  dc:
+    kind: example
+    description: >-
+      The power system with four PWR-4.4KW-DC-V3 modules in the one DC tray, M0 at the bottom. Not
+      an orderable chassis: Cisco lists only ASR-9906, with no -DC form, so no part number is
+      given. The DC bays share the AC bays' footprint and exist only in this configuration.
+    bays:
+      ps0-dcpm-0: cisco/pwr-4p4kw-dc-v3@1
+      ps0-dcpm-1: cisco/pwr-4p4kw-dc-v3@1
+      ps0-dcpm-2: cisco/pwr-4p4kw-dc-v3@1
+      ps0-dcpm-3: cisco/pwr-4p4kw-dc-v3@1
 references:
   - {title: 'Cisco ASR 9000 Series Aggregation Services Router Overview and Reference Guide (2019-01-31)', sha256: c5cda172cebf4484d73a1c5f27c186b39c8e0c11b9b2cacb9523e8c1449dfd2e}
   - {title: 'Cisco ASR 9000 Series Aggregation Services Router Hardware Installation Guide (2021-03-30)', sha256: 7234959c22f167817eb287ba5cfc665c7729c37bd221e5bc9857aca0a2ca365e}
