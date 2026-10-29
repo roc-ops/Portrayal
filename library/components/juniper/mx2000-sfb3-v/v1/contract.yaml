@@ -1,0 +1,80 @@
+format: 1
+kind: module
+name: mx2000-sfb3-v
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX2000-SFB3 Switch Fabric Board (CLI name Switch Fabric Board 3) - eight stand in the centre of
+  the upper cage of the MX2010 and MX2020, in the slots the SFB and SFB2 use. The faceplate has two grille
+  panels between an ejector handle at each end and one OK/FAIL lamp; the online/offline buttons print on
+  the chassis beside each slot. It delivers up to 4 Tbps per line card slot (MX2K-MPC11E).
+attrs:
+  model: MX2000-SFB3
+  power-draw-max-w: 540
+  fabric-bandwidth: up to 4 Tbps per line card slot (eight boards; all eight are required for line rate with
+    the MX2K-MPC11E)
+provenance:
+  size: >-
+    guide - MX2010 Hardware Guide (PDF dated 2025-11-18), MX2000-SFB3 Switch Fabric Board Description
+    (PDF p133, printed p113): width 1.7 in (4.3 cm), height 16.2 in (41.2 cm), depth 23.7 in (60.1 cm) not
+    including the ejector handle and 26.2 in (64.4 cm) with it, weight 22.6 lb (10.3 kg). The width is the
+    43.18 of juniper/mx2000-sfb-v@2 and the sfb bays that take this board (1.7 in is 43.18 mm). The height
+    16.2 in (41.2 cm) is a rounded figure that agrees with the 412.1 of the bays (the same guides print the
+    SFB and SFB2 at 16.225 in), so the bay's 412.1 is carried and marked estimated. The depth is carried
+    without the handle
+  weight: guide - 22.6 lb (10.3 kg), MX2010 Hardware Guide printed p113
+  software: >-
+    guide - MX2010 Hardware Guide, MX2000-SFB3 description (printed p113): Junos OS Release 19.3R2 and later
+    19.3 releases and 20.1R1 and later; the MX2K-MPC11E is not supported in any 19.4 release. Name in CLI
+    Switch Fabric Board 3. Orderable names MX2000-SFB3-BB, -R and -S (MX2000 data sheet) are a note only:
+    no configuration is added
+  power: >-
+    EVERY PRINTED FIGURE, WITH ITS SCOPE (watts). The SFB3 description's System Power Requirements row,
+    'Maximum Power at 40 C (72 F) + 6000 ft (1829 m): 540 W (MX2020); 385 W (MX2010)'. The MX2010 guide's
+    power budget row 'SFB-slots 0 through 7 | MX2000-SFB3 | 385W*8=3080W' and the MX2020 guide's
+    'SFB-slots 0 through 7 | MX2000-SFB3 | 540W*8=4320W', each with its own multiplication as the check.
+    The MX2020 guide's FRU table also gives '| SFB3 | MX2000-SFB3 | 500 W (Typical) |'. The MX2020 guide's
+    per-board table lists 540 W beside MX2000-SFB3; the 7760 W and 6590 W on that row are SYSTEM power with
+    droop sharing and are not this board. THE GUIDES DISAGREE only by scope: 385 W is the MX2010's, 540 W is
+    the MX2020's and 500 W is typical. The highest, 540 W, is carried as power-draw-max-w, as cisco/a99-sfc3
+    carries the larger of its two chassis scopes; a build is conservative in the MX2010
+  fabric: >-
+    guide - MX2010 and MX2020 hardware guides, MX2000-SFB3 description (printed p112): up to 4 Tbps of
+    full-duplex switching capacity per line card slot for MX2010 and MX2020; up to three fabric planes per
+    Packet Forwarding Engine; 24 fabric planes with eight boards, and all eight are required for line rate
+    traffic on the MX2K-MPC11E (7+1 redundancy with MPC6E, MPC8E and MPC9E)
+  face: >-
+    drawing, ESTIMATED - Figure 49 of the MX2010 guide (PDF p132, printed p112; the MX2020 guide's Figure 53
+    is the same drawing) is a STRAIGHT elevation of the faceplate, laid along the page with the top of the
+    card at the left, and the second figure on the next page is a perspective drawing that was not used.
+    Read at about 1.1 px/mm from a page image, so positions are good to about 3 mm along the card and 2 mm
+    across: an ejector handle at each end (about 29 x 24 here), two rounded grille panels (card y 44 to 200
+    and 211 to 381, drawn 30.8 wide), a small label near the top end that prints MX2000-SFB3 and one OK/FAIL
+    lamp beside it (card y about 36). The grille is drawn as stripes, which the figure only suggests. The
+    label's legend is the model as printed; no vendor mark is drawn
+  leds: >-
+    guide - MX2010 and MX2020 hardware guides, MX2000-SFB3 description (LED row): one OK/FAIL lamp, green
+    online and normal, red an error or failure, off offline. The per-slot online/offline lamps are on the
+    chassis, not on the board
+  logo-zone: >-
+    reserved - Figure 49 prints no vendor mark on the board; a zone between the panels is kept clear and no
+    logo or wordmark is drawn
+states:
+- ok
+- fail
+- absent
+elements:
+  logo-zone:
+    at: [10.0, 202.5]
+    size: [23.0, 7.0]
+    class: label
+size:
+  w: 43.18
+  h: 412.1
+  d: 601.0
+size-notes: >-
+  w and h are the sfb bays' envelope (43.18 x 412.1, as juniper/mx2000-sfb-v@2 carries it); d is the guide's
+  60.1 cm without the ejector handle (64.4 cm with it).
+size-confidence: {w: datasheet, h: estimated, d: datasheet}
