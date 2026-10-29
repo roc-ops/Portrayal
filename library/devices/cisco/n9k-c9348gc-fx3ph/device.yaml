@@ -1,0 +1,1705 @@
+format: 1
+kind: device
+name: n9k-c9348gc-fx3ph
+version: 1.0.0
+maturity: modelled
+manufacturer: Cisco
+model: N9K-C9348GC-FX3PH
+aliases:
+- {name: Nexus 9348GC-FX3PH, kind: marketing}
+portfolio: {line: Nexus 9000, family: Nexus 9300, series: Nexus 9300-FX3}
+description: >-
+  48x copper PoE/PoE+/PoE++ access (40 at 10M/100M/1G and 8 at 10M/100M), 4x 10/25G SFP28 and 2x 40/100G
+  QSFP28 uplink 1RU data-centre switch running NX-OS. The port side carries all fifty-four ports and the
+  BCN, STS, ENV and P lamps. The other side carries the console, an RJ-45 and an SFP management port,
+  the USB port, three fan modules and two power supplies. Ports number 1-54 and run DOWN each column,
+  odd on the top row. Ships port-side intake (burgundy modules) or port-side exhaust (blue).
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      One guide, held as PDF and as converted text and figures; it is not committed. Cisco N9348GC-FX3PH
+      NX-OS Mode Switch Hardware Installation Guide, 66 pages, First Published 2023-08-18, Last Modified
+      2026-07-22 (the figures were read from the PDF pages themselves, rendered at 400 dpi, and the text
+      from its text layer). Page numbers are PDF pages with the printed page after them. The Overview
+      (PDF p7, printed 1) and its front and rear figures (PDF p8 and p9, printed 2 and 3; art numbers
+      504860 and 504861), appendix B (PDF p54, printed 48, and PDF p55, printed 49), appendix C (PDF p61,
+      printed 55) and appendix D. THE FRONT FIGURE IS CLEAN FLAT LINE ART, a 1821 px bitmap, about 4 px
+      per mm, with callouts. NO DATA SHEET, PHOTOGRAPH, 3D MODEL OR STENCIL IS HELD for this model, and
+      the NetBox devicetype-library is held as a path listing only: no file was read, so nothing is taken
+      from it.
+  rear-figure:
+    confidence: estimated
+    note: >-
+      THE REAR FIGURE IS THE 9348GC-FX3's. Art number 504861, PDF p9 (printed 3), the page whose text
+      under the callout table says "The figure shows the Cisco N9348GC-FX3 switch." The embedded bitmap
+      is pixel for pixel the one in the N9348GC-FX3 guide's rear figure (the same 1820 x 412 image and
+      mask, compared after extraction), so the two guides' drawings agree exactly. This guide holds no
+      rear figure drawn for the PH: the callout list is the PH's (3 power supply modules, 1 or 2) and
+      the figure is the sibling's. The rear is drawn from the figure, as a reading of this guide, and
+      the gap says what is not shown.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's convention: the upper cage upright over the lower turned 180, and the upper jack turned
+      180 over the lower one. The front figure draws the upper jacks with their latch notch up and the
+      lower jacks with the notch down, which is that arrangement.
+  gate-1:
+    confidence: measured
+    note: >-
+      The front figure's body, between its outermost end lines on the 400 dpi render of PDF p8, is 2344
+      px across and 235 px down: aspect 9.97 against the guide's 17.3 x 1.72 in, 10.06, so 0.9% out, and
+      it can be measured; 5.33 px per mm across from 439.4 mm and 5.38 down from 43.7. A repeated feature
+      checks the scale: the jack columns step 74.5 px, 13.97 mm, against the registry's 13.97, so every
+      pitch is the registry's and the figure fixes where each group starts. The rear figure's body is
+      2344 px across and 234 down, 10.02, 5.33 px per mm. The origin is the outermost end line on the
+      left (the body outline is drawn double, 1.2 to 1.5 mm apart); the merged 9348GC-FX3 reads its positions
+      from an inner line, so the same bitmap's left-end positions here are 1.2 mm further right.
+  the-x-axis:
+    confidence: estimated
+    note: >-
+      From the front figure, origin the left end line. FOUR boxed groups of six jack columns: the box
+      lines start at 15.0, 105.0, 195.0 and 285.0 mm, a stride of 90.0, and the jacks stand 2.7 mm inside
+      each box, so the columns start at 17.55, 107.55, 197.55 and 287.55 mm (the figure's jack outline
+      is 12.2 wide against the registry's 12.7, centred). At the registry's 13.97 mm pitch the stride
+      is a gutter of 6.2 mm. The two SFP28 columns' boxes start at 376.1 and 390.9 mm, a 14.65 mm step,
+      and the QSFP28 pair at 409.9 mm.
+  the-y-axis:
+    confidence: estimated
+    note: >-
+      From the same figure, origin the top line. The upper jack's centre is at 15.25 mm and the lower
+      jack's at 29.9, a 14.6 mm row pitch; with the registry's 11.0 high cell the upper jack runs 9.75
+      to 20.75 mm. The SFP28 boxes run 9.5 to 19.3 and 25.2 to 34.8 mm and the QSFP28 boxes 9.2 to 19.2
+      and 25.6 to 35.2. THE PORT LAMPS ARE SMALL RECTANGLES BELOW THE JACKS, one under each port, about
+      4.1 by 2.8 mm in the figure, so common/led-rect@1 (4.6 x 2.6), two to a column, the left one for
+      the upper port, at 38.3 mm; the numerals and a pair of arrows stand above them, the numerals' baseline
+      at 37.65 mm.
+  the-width:
+    confidence: datasheet
+    note: >-
+      The guide's Switch Dimensions table (PDF p54, printed 48): "17.3 inches (43.9 cm)" wide, "1.72 inches
+      (4.4 cm) (1 RU)" high, and for depth "Chassis without PSUs - 18.0 in (45.72 cm)", "With NXA-PAC-350W
+      PSUs - 19.7 in (49.9 cm)", "With NXA-PHV-350W PSUs - 19.7 in (49.9 cm)", "With NXA-PDC-440W PSUs
+      - 21.0 in (53.34 cm)" and "With NXA-PAC-1900W PSUs - 21.1 in (53.6 cm)". The chassis depth carried
+      is the first, 457.2 mm: the library's depth is the chassis, and the others include the modules.
+      439.4 mm and 43.7 mm are carried, the inch figures converted. The weights table on the same page
+      gives this chassis "14.33 lb (6.49 kg)"; this is the PH's own row (the 9348GC-FX3's is 14.5 lb,
+      6.57 kg).
+  port-order:
+    confidence: estimated
+    note: >-
+      The figure prints a pair of numerals over each column of lamps with an up and a down triangle between
+      them, "1 up down 2" to "47 up down 48", and "49 up down 50", "51 up down 52" and "53 up down 54"
+      under the SFP28 and QSFP28 cages, so the odd port is the upper jack or cage. The Overview (PDF p7)
+      gives 40 10M/100M/1G and 8 10M/100M copper downlink ports that support PoE, PoE+ and PoE++, 4 SFP28
+      uplinks and 2 QSFP28 uplinks, and the callout table (PDF p8) gives "100M/1G RJ45 ports (40)" and
+      "100M RJ45 ports (8)". The Overview note says "Ports 41-48 support 10M/100M half-duplex only", and
+      the figure marks ports 41 to 48 with a shaded band above their jacks and a shaded strip behind their
+      numerals, so the first 40 are ports 1 to 40. Port numbers are as printed; the NX-OS interface names
+      are not in the guide.
+  port-rates:
+    confidence: datasheet
+    note: >-
+      Ports 1-40 take the group's rate, 1g (10M/100M/1G). Ports 41-48 state `speed: 100m` and a `rate-note`
+      of their own: the guide says they support 10M/100M half-duplex only. The DCIM export types them
+      100base-tx.
+  port-lamps:
+    confidence: datasheet
+    note: >-
+      Appendix C, Switch Chassis LEDs (PDF p61, printed 55): "The port LEDs appear as triangles pointing
+      up or down to the nearest port." Green is admin up, module present and link up; amber is admin down
+      or module absent; off is up and present but no link. The figure draws the SFP28 triangles large,
+      between the two cage rows, and the QSFP28 triangles at the ends of a band with eight small windows
+      between them; the windows are drawn as marks and carry no state. The copper triangles are the printed
+      arrows beside the numerals; the copper lamps are the rectangles under the jacks.
+  chassis-lamps:
+    confidence: estimated
+    note: >-
+      Callout 1 is "LEDs". The figure draws a boxed panel at the left end with four ring lamps in a column,
+      legends BCN, STS, ENV and P to their left, at 10.6 mm across and 11.7, 15.6, 19.6 and 23.5 mm down.
+      The P lamp is read as the PoE lamp: Appendix C (PDF p62, printed 56) lists a "PoE" row, green "PoE
+      mode is operational", amber "Any fault, or power that is denied on PoE ports because providing power
+      exceeds the switch power capacity" and off "PoE is disabled", under a heading that reads "Fan Module
+      LEDs" because the table runs over a page, and the sentence naming the lamps ("The BCN, STS, and
+      ENV, LEDs") does not name P. The figure's legend and the table's row are the evidence for the reading.
+      The same table has a "(GPS)" row that no figure here draws. Under the panel the figure draws a block
+      of nine small rings in three rows and a mark; the guide does not name them and they are drawn as
+      marks. The figure also draws a column of seven rings at the right end, beside the QSFP28 pair; they
+      are drawn as marks and are in the gaps. The mark is the maker's logo; none is drawn, as the library's
+      practice for a Cisco face is no logo artwork. The model legend under the uplinks, CISCO NEXUS N9K-C9348GC-FX3PH,
+      is printed on the figure and is carried as text.
+  shaded-ports:
+    confidence: estimated
+    note: >-
+      The figure draws ports 41 to 48 (callout 5) shaded: a dark band above the upper jacks of the last
+      four columns, 53.8 mm long, and a strip behind their numerals. They are decor, on the panel, in
+      a mid grey that keeps the dark numerals readable on both stages. The guide's text gives the reason
+      only as the half-duplex note.
+  rear-face:
+    confidence: estimated
+    note: >-
+      Every x and y on the module side is read off the rear figure (5.33 px per mm across, 5.36 down,
+      origin the outermost end line). The console jack over the RJ-45 management jack, the USB port stood
+      on end, the SFP management port, two lamps labelled BCN and STS, a grounding symbol with two screws,
+      three fan modules, then supply 1 and supply 2. THE OUT-OF-BAND BLOCK IS AT THE LEFT END, as on the
+      93180YC-EX. The figure draws small airflow legends, F1 and F2 with arrows, beside the first fan
+      and P1 and P2 beside the supplies; they are not carried. The management SFP cage is the registry's
+      plain one. The grounding pad is drawn as the plain earth symbol; the registry's ground symbol is
+      the circled one, so the mark is drawn.
+  power:
+    confidence: datasheet
+    note: >-
+      Appendix B, Switch Power Input Requirements (PDF p55, printed 49, read from the page): typical 238
+      W and maximum 251 W "(AC or DC)", 856.447 BTU per hour. The figures are the switch's draw and not
+      a supply rating; the guide names no configuration or ambient. The Overview (PDF p8, printed 2) says
+      "48 PoE++ (60W ports) - two 1900W power supplies needed", "21 PoE++ (60W ports) - one 1900W power
+      supplies needed" and "Non-PoE - one or two 350W power supplies needed". No table prints a PoE budget,
+      so none is carried.
+  supply-1900w:
+    confidence: datasheet
+    note: >-
+      THIS GUIDE CONTRADICTS cisco/nxa-pac-1900w@1 in two places, and the component is not edited. (1)
+      The Overview (PDF p8, printed 2) and the weights table (PDF p54, printed 48) list both NXA-PAC-1900W-PI
+      (port-side intake, burgundy) and NXA-PAC-1900W-PE (port-side exhaust, blue); the component says
+      the FX3P guide "lists no port-side exhaust version". The exhaust build here is written with component-attrs
+      (the airflow and the latch colour of the configuration), as the exhaust builds of the 350 W, PHV
+      and 440 W supplies are. (2) The weights table gives ONE row for all eight supplies, "2.64 lb (1.2
+      kg)", where the FX3P guide's row for its 1900 W supply is 3.6 lb (1.63 kg) (the component's weight).
+      The PH row is carried in this device's weight note only; no weight is put on the component.
+  colour:
+    confidence: estimated
+    note: >-
+      NO SOURCE FOR THE COLOUR. The guide's figures are uncoloured line art. #d0d2cf is the value the
+      93180YC-EX's stencil sample gave, carried across as a family colour.
+  rack-ears:
+    confidence: estimated
+    note: >-
+      The guide's NXK-ACC-KIT-1RU procedure says the holes used depend on the rack and on the clearance
+      needed for interface cables, 3 inches minimum, and for module handles, 1 inch minimum, and its figure
+      shows two ways to mount the brackets. None dimensions a position and none says which the box ships
+      with, so the two positions are written without an `at`, named for what the text says they clear,
+      and none is the default.
+attrs:
+  physical:
+    weight-note: >-
+      14.33 lb (6.49 kg) chassis without fans or PSUs. Fan module 0.26 lb (0.12 kg). One row, 2.64 lb
+      (1.2 kg), for all eight supplies including the 1900 W.
+  power:
+    power-typical-w: 238
+    power-max-w: 251
+    power-envelope: unstated
+    heat-dissipation-btu-hr: 856
+    power-input-ac: >-
+      350 W AC: 100 to 120 V or 200 to 240 V, 50 to 60 Hz. 1900 W AC: 115 to 120 V or 200 to 240 V
+    power-input-hvac: 100 to 277 V (350 W PHV)
+    power-input-dc: -48 to -60 V nominal (440 W)
+    power-input-hvdc: 240 to 380 V (350 W PHV)
+    power-supply-options: 350W AC, 1900W AC, 350W PHV or 440W DC (two)
+    poe-power-supplies: >-
+      guide: "48 PoE++ (60W ports) - two 1900W power supplies needed"; "21 PoE++ (60W ports) - one 1900W
+      power supplies needed"; "Non-PoE - one or two 350W power supplies needed"
+  environmental: {operating-temp: 0 to 40 C (32 to 104 F), storage-temp: -40 to 70 C (-40 to 158 F), humidity: '5
+      to 90% operating, 5 to 95% non-operating', altitude: '13,123 ft (4000 m) operating'}
+  features:
+    ports-t: >-
+      guide: "40 10M/100M/1G copper RJ45 downlink ports that support PoE/PoE+/PoE++ and 8 10M/100M copper
+      RJ45 downlink ports that support PoE/PoE+/PoE++"; "Ports 41-48 support 10M/100M half-duplex only"
+    optics-sfp28: 'guide: "4 10-/25G SFP28 uplink ports"'
+    optics-qsfp28: 'guide: "2 40-/100G QSFP28 uplink ports"'
+    management-ports: 'rear figure: one RJ-45 and one SFP management port, and a console port'
+  management: {usb: 1 USB port}
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 439.4
+  height: 43.7
+  depth: 457.2
+  ru: 1
+  weight-kg: 6.49
+  color: '#d0d2cf'
+  airflow: front-to-back
+  power: ac
+  ears:
+    positions:
+    - {name: recessed, label: 'port end to the front, set back for interface cables'}
+    - {name: recessed, label: 'module end to the front, set back for module handles'}
+  kits:
+  - {ref: cisco/nxk-acc-kit-1ru@1, supply: optional}
+  - {ref: cisco/nxk-acc-kit2-2ru@1, supply: optional}
+gaps:
+- what: unnamed-rings
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The front figure draws a column of seven rings at the right end beside the QSFP28 pair and a block
+    of nine rings under the lamp panel. Callout 1 is "LEDs" and the text names no others, and appendix
+    C lists the BCN, STS, ENV and PoE lamps and the port lamps only. They are drawn as marks without a
+    state.
+  wanted: What the sixteen rings are, and whether they are lamps.
+- what: rear-figure-is-the-sibling-9348gc-fx3
+  scope:
+  - rear
+  reason: vendor-silent
+  note: >-
+    The guide's rear figure (art 504861, PDF p9) is the N9348GC-FX3's, by the guide's own sentence and
+    by the identical bitmap. It shows AC supplies of the 350 W kind and no 1900 W supply, and nothing
+    in it is specific to the PoE model.
+  wanted: A rear drawing of the PH itself, and a picture of its 1900 W supply.
+- what: default-configuration
+  scope:
+  - rear
+  reason: vendor-silent
+  note: >-
+    The guide states no default build among its eight supply and airflow combinations. The configuration
+    `ac-350w-port-side-intake` is the base, as for the 9348GC-FX3, so that a plain chassis lists with
+    the family's first supply; it is a choice, not a statement of the guide.
+  wanted: Which combination Cisco ships by default.
+- what: mixed-ac-dc-supplies
+  scope:
+  - rear
+  reason: vendor-silent
+  note: >-
+    The guide's supply list allows "a mix of AC and DC power sources" but not a mix of airflow directions.
+    A configuration seats one supply type in both bays, so a mixed build (for instance a 1900 W AC beside
+    a 440 W DC) is not written as a configuration. The bays accept every listed supply, so a user can
+    seat the mix by hand.
+  wanted: Which mixed pairs Cisco supports, and for how long, if that is limited.
+- what: poe-budget
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The Overview says how many 1900 W supplies 48 and 21 PoE++ (60 W) ports need and prints no PoE budget
+    in watts, per supply or per chassis; none is carried.
+  wanted: The PoE power budget of the chassis with one and with two of each supply.
+- what: kit-named-without-contents
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The installation options (PDF p23, printed 17) also name the N3K-C3064-ACC-KIT, with no contents and
+    no procedure. NXK-ACC-KIT-1RU (appendix D, PDF p65, printed 59) and NXK-ACC-KIT2-2RU (install procedure,
+    PDF p29, printed 23) have procedures and are on main as cisco/nxk-acc-kit-1ru@1 and cisco/nxk-acc-kit2-2ru@1;
+    the third is not modelled.
+  wanted: The contents or procedure of the N3K-C3064-ACC-KIT.
+- what: the-four-undrawn-faces
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    A drawing of the lid, the underside and the two side walls. The guide's overview shows the chassis
+    only in the two flat views and calls out the grounding pad; no side wall is drawn and none can be
+    measured.
+- what: other-supplies-have-no-picture
+  scope:
+  - rear
+  reason: needs-photo
+  wanted: >-
+    A picture of the 1900 W AC, the 350 W PHV and the 440 W DC supplies. The guide's figure shows AC supplies
+    only ("AC power supplies shown"). Their faces are the 350 W AC supply's with the inlet changed.
+- what: sizes-off-a-figure
+  scope:
+  - rear
+  reason: needs-drawing
+  wanted: >-
+    A stated size for the supplies and the fan module. The guide gives "Form factor RSP1" for the 350
+    W AC and PHV supplies and nothing for the others or for the fan.
+- what: management-sfp-bail
+  scope:
+  - rear
+  reason: needs-drawing
+  wanted: A cage skin with a bail. The library's SFP cage has one skin and none shows a bail.
+- what: fan-redundancy
+  scope:
+  - fans
+  reason: vendor-silent
+  note: >-
+    The Overview says the switch "will power down due to a fan-policy trigger if fewer than 2 fans are
+    operational", and that with more than one rotor failed it "will issue a warning and power down in
+    2 minute".
+  wanted: >-
+    Whether the first sentence counts fan modules or rotors. It is read as modules, two of three, so the
+    group says 2+1.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+  rj45-100m:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 100m, rate-note: 'guide: ports 41-48 support 10M/100M half-duplex only'}
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g}
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band block at the left end: an RJ-45 console port, an RJ-45 and an SFP management port
+      and a USB port. Three media, one purpose: reaching the switch when the data plane cannot.
+  furniture: {term: Part, role: furniture, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        installation guide: "Power supply modules (two-one for operations and one for redundancy [1+1])".
+        Slot 1 is on the left and slot 2 on the right.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 2+1
+      redundancy-note: >-
+        Installation guide, Overview: three fan modules of two rotors each. The switch "will power down
+        due to a fan-policy trigger if fewer than 2 fans are operational". It works with one rotor failed
+        in any one module and, with more than one rotor failed, warns and powers down in two minutes.
+views:
+  front:
+    size: {w: 439.4, h: 43.7}
+    panel:
+      decor:
+      - {id: vent-top, at: [5.6, 2.1], size: [425.4, 3.2], pattern: vent, pattern-pitch: [3.5, 3.0], vent: 1}
+      - {id: ring-1, at: [3.5, 26.2], size: [2.6, 2.6], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-2, at: [6.95, 26.2], size: [2.6, 2.6], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-3, at: [10.4, 26.2], size: [2.6, 2.6], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-4, at: [3.5, 29.6], size: [2.6, 2.6], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-5, at: [6.95, 29.6], size: [2.6, 2.6], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-6, at: [10.4, 29.6], size: [2.6, 2.6], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-7, at: [3.5, 33.2], size: [2.6, 2.6], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-8, at: [6.95, 33.2], size: [2.6, 2.6], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-9, at: [10.4, 33.2], size: [2.6, 2.6], shape: circle, fill: '#bfc3c8'}
+      - {id: shade-top-41-48, at: [315.9, 6.7], size: [53.8, 2.4], fill: '#8f949a'}
+      - {id: shade-num-41-48, at: [315.9, 35.9], size: [53.8, 2.9], fill: '#a3a8ad'}
+      - {id: band-qsfp-53, at: [410.2, 19.4], size: [20.0, 5.9], fill: '#e4e7ea'}
+      - {id: win-53-1, at: [415.8, 21.0], size: [1.8, 1.1], fill: '#1a1d1f'}
+      - {id: win-53-2, at: [418.15, 21.0], size: [1.8, 1.1], fill: '#1a1d1f'}
+      - {id: win-53-3, at: [420.5, 21.0], size: [1.8, 1.1], fill: '#1a1d1f'}
+      - {id: win-53-4, at: [422.85, 21.0], size: [1.8, 1.1], fill: '#1a1d1f'}
+      - {id: win-53-5, at: [415.8, 22.45], size: [1.8, 1.1], fill: '#1a1d1f'}
+      - {id: win-53-6, at: [418.15, 22.45], size: [1.8, 1.1], fill: '#1a1d1f'}
+      - {id: win-53-7, at: [420.5, 22.45], size: [1.8, 1.1], fill: '#1a1d1f'}
+      - {id: win-53-8, at: [422.85, 22.45], size: [1.8, 1.1], fill: '#1a1d1f'}
+      - {id: ring-10, at: [431.9, 11.5], size: [2.2, 2.2], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-11, at: [431.9, 15.1], size: [2.2, 2.2], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-12, at: [431.9, 18.5], size: [2.2, 2.2], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-13, at: [431.9, 22.0], size: [2.2, 2.2], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-14, at: [431.9, 25.4], size: [2.2, 2.2], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-15, at: [431.9, 28.9], size: [2.2, 2.2], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-16, at: [431.9, 32.4], size: [2.2, 2.2], shape: circle, fill: '#bfc3c8'}
+      cutouts:
+      - {id: port-1, at: [17.55, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-1, at: [19.45, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-2, at: [17.55, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-2, at: [24.75, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-3, at: [31.52, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-3, at: [33.42, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-4, at: [31.52, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-4, at: [38.72, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-5, at: [45.49, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-5, at: [47.39, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-6, at: [45.49, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-6, at: [52.69, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-7, at: [59.46, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-7, at: [61.36, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-8, at: [59.46, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-8, at: [66.66, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-9, at: [73.43, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-9, at: [75.33, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-10, at: [73.43, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-10, at: [80.63, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-11, at: [87.4, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-11, at: [89.3, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-12, at: [87.4, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-12, at: [94.6, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-13, at: [107.57, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-13, at: [109.47, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-14, at: [107.57, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-14, at: [114.77, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-15, at: [121.54, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-15, at: [123.44, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-16, at: [121.54, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-16, at: [128.74, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-17, at: [135.51, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-17, at: [137.41, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-18, at: [135.51, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-18, at: [142.71, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-19, at: [149.48, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-19, at: [151.38, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-20, at: [149.48, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-20, at: [156.68, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-21, at: [163.45, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-21, at: [165.35, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-22, at: [163.45, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-22, at: [170.65, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-23, at: [177.42, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-23, at: [179.32, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-24, at: [177.42, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-24, at: [184.62, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-25, at: [197.59, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-25, at: [199.49, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-26, at: [197.59, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-26, at: [204.79, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-27, at: [211.56, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-27, at: [213.46, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-28, at: [211.56, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-28, at: [218.76, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-29, at: [225.53, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-29, at: [227.43, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-30, at: [225.53, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-30, at: [232.73, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-31, at: [239.5, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-31, at: [241.4, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-32, at: [239.5, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-32, at: [246.7, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-33, at: [253.47, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-33, at: [255.37, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-34, at: [253.47, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-34, at: [260.67, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-35, at: [267.44, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-35, at: [269.34, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-36, at: [267.44, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-36, at: [274.64, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-37, at: [287.61, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-37, at: [289.51, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-38, at: [287.61, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-38, at: [294.81, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-39, at: [301.58, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-39, at: [303.48, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-40, at: [301.58, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-40, at: [308.78, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-41, at: [315.55, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-41, at: [317.45, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-42, at: [315.55, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-42, at: [322.75, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-43, at: [329.52, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-43, at: [331.42, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-44, at: [329.52, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-44, at: [336.72, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-45, at: [343.49, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-45, at: [345.39, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-46, at: [343.49, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-46, at: [350.69, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-47, at: [357.46, 9.75], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-47, at: [359.36, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-48, at: [357.46, 24.35], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-48, at: [364.66, 38.3], size: [4.6, 2.6], shape: circle}
+      - {id: port-49, at: [376.0, 9.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-49, at: [379.3, 20.6], size: [3.6, 3.2], shape: circle}
+      - {id: port-50, at: [376.0, 24.9], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-50, at: [383.7, 20.6], size: [3.6, 3.2], shape: circle}
+      - {id: port-51, at: [390.65, 9.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-51, at: [393.95, 20.6], size: [3.6, 3.2], shape: circle}
+      - {id: port-52, at: [390.65, 24.9], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-52, at: [398.35, 20.6], size: [3.6, 3.2], shape: circle}
+      - {id: port-53, at: [409.9, 9.2], size: [20.0, 10.15], shape: rect}
+      - {id: led-port-53, at: [411.9, 21.0], size: [2.25, 2.0], shape: circle}
+      - {id: port-54, at: [409.9, 25.1], size: [20.0, 10.15], shape: rect}
+      - {id: led-port-54, at: [425.65, 21.0], size: [2.25, 2.0], shape: circle}
+      - {id: led-bcn, at: [9.6, 10.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-sts, at: [9.6, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-env, at: [9.6, 18.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-p, at: [9.6, 22.5], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [20.3, 37.65], text: '1', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-1}
+    - {at: [28.3, 37.65], text: '2', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-2}
+    - {at: [34.27, 37.65], text: '3', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-3}
+    - {at: [42.27, 37.65], text: '4', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-4}
+    - {at: [48.24, 37.65], text: '5', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-5}
+    - {at: [56.24, 37.65], text: '6', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-6}
+    - {at: [62.21, 37.65], text: '7', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-7}
+    - {at: [70.21, 37.65], text: '8', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-8}
+    - {at: [76.18, 37.65], text: '9', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-9}
+    - {at: [84.18, 37.65], text: '10', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-10}
+    - {at: [90.15, 37.65], text: '11', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-11}
+    - {at: [98.15, 37.65], text: '12', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-12}
+    - {at: [110.32, 37.65], text: '13', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-13}
+    - {at: [118.32, 37.65], text: '14', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-14}
+    - {at: [124.29, 37.65], text: '15', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-15}
+    - {at: [132.29, 37.65], text: '16', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-16}
+    - {at: [138.26, 37.65], text: '17', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-17}
+    - {at: [146.26, 37.65], text: '18', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-18}
+    - {at: [152.23, 37.65], text: '19', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-19}
+    - {at: [160.23, 37.65], text: '20', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-20}
+    - {at: [166.2, 37.65], text: '21', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-21}
+    - {at: [174.2, 37.65], text: '22', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-22}
+    - {at: [180.17, 37.65], text: '23', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-23}
+    - {at: [188.17, 37.65], text: '24', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-24}
+    - {at: [200.34, 37.65], text: '25', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-25}
+    - {at: [208.34, 37.65], text: '26', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-26}
+    - {at: [214.31, 37.65], text: '27', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-27}
+    - {at: [222.31, 37.65], text: '28', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-28}
+    - {at: [228.28, 37.65], text: '29', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-29}
+    - {at: [236.28, 37.65], text: '30', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-30}
+    - {at: [242.25, 37.65], text: '31', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-31}
+    - {at: [250.25, 37.65], text: '32', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-32}
+    - {at: [256.22, 37.65], text: '33', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-33}
+    - {at: [264.22, 37.65], text: '34', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-34}
+    - {at: [270.19, 37.65], text: '35', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-35}
+    - {at: [278.19, 37.65], text: '36', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-36}
+    - {at: [290.36, 37.65], text: '37', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-37}
+    - {at: [298.36, 37.65], text: '38', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-38}
+    - {at: [304.33, 37.65], text: '39', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-39}
+    - {at: [312.33, 37.65], text: '40', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-40}
+    - {at: [318.3, 37.65], text: '41', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-41}
+    - {at: [326.3, 37.65], text: '42', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-42}
+    - {at: [332.27, 37.65], text: '43', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-43}
+    - {at: [340.27, 37.65], text: '44', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-44}
+    - {at: [346.24, 37.65], text: '45', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-45}
+    - {at: [354.24, 37.65], text: '46', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-46}
+    - {at: [360.21, 37.65], text: '47', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-47}
+    - {at: [368.21, 37.65], text: '48', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-48}
+    - id: silk-arrows-1
+      at: [23.9, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-1
+      - port-2
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-3
+      at: [37.87, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-3
+      - port-4
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-5
+      at: [51.84, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-5
+      - port-6
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-7
+      at: [65.81, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-7
+      - port-8
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-9
+      at: [79.78, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-9
+      - port-10
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-11
+      at: [93.75, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-11
+      - port-12
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-13
+      at: [113.92, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-13
+      - port-14
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-15
+      at: [127.89, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-15
+      - port-16
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-17
+      at: [141.86, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-17
+      - port-18
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-19
+      at: [155.83, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-19
+      - port-20
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-21
+      at: [169.8, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-21
+      - port-22
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-23
+      at: [183.77, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-23
+      - port-24
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-25
+      at: [203.94, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-25
+      - port-26
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-27
+      at: [217.91, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-27
+      - port-28
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-29
+      at: [231.88, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-29
+      - port-30
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-31
+      at: [245.85, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-31
+      - port-32
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-33
+      at: [259.82, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-33
+      - port-34
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-35
+      at: [273.79, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-35
+      - port-36
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-37
+      at: [293.96, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-37
+      - port-38
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-39
+      at: [307.93, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-39
+      - port-40
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-41
+      at: [321.9, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-41
+      - port-42
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-43
+      at: [335.87, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-43
+      - port-44
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-45
+      at: [349.84, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-45
+      - port-46
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-47
+      at: [363.81, 36.9]
+      fill: '#1a1d1f'
+      for:
+      - port-47
+      - port-48
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - {id: silk-49, at: [377.6, 37.4], text: '49', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-49}
+    - {id: silk-arrow-49, at: [380.5, 36.9], fill: '#1a1d1f', for: port-49, path: M -0.65 0.57785 L 0.65
+        0.57785 L 0 -0.57785 Z, filled: true}
+    - {id: silk-arrow-50, at: [385.25, 36.9], fill: '#1a1d1f', for: port-50, path: M -0.65 -0.57785 L
+        0.65 -0.57785 L 0 0.57785 Z, filled: true}
+    - {id: silk-50, at: [387.8, 37.4], text: '50', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-50}
+    - {id: silk-51, at: [392.3, 37.4], text: '51', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-51}
+    - {id: silk-arrow-51, at: [395.2, 36.9], fill: '#1a1d1f', for: port-51, path: M -0.65 0.57785 L 0.65
+        0.57785 L 0 -0.57785 Z, filled: true}
+    - {id: silk-arrow-52, at: [399.95, 36.9], fill: '#1a1d1f', for: port-52, path: M -0.65 -0.57785 L
+        0.65 -0.57785 L 0 0.57785 Z, filled: true}
+    - {id: silk-52, at: [402.5, 37.4], text: '52', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-52}
+    - {id: silk-53, at: [414.8, 37.4], text: '53', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-53}
+    - {id: silk-arrow-53, at: [417.75, 36.9], fill: '#1a1d1f', for: port-53, path: M -0.65 0.57785 L 0.65
+        0.57785 L 0 -0.57785 Z, filled: true}
+    - {id: silk-arrow-54, at: [422.1, 36.9], fill: '#1a1d1f', for: port-54, path: M -0.65 -0.57785 L 0.65
+        -0.57785 L 0 0.57785 Z, filled: true}
+    - {id: silk-54, at: [425.4, 37.4], text: '54', font-size: 2.0, anchor: middle, fill: '#1a1d1f', for: port-54}
+    - {id: silk-bcn, at: [7.8, 12.2], text: BCN, font-size: 1.6, anchor: end, fill: '#1a1d1f', for: led-bcn}
+    - {id: silk-sts, at: [7.8, 16.1], text: STS, font-size: 1.6, anchor: end, fill: '#1a1d1f', for: led-sts}
+    - {id: silk-env, at: [7.8, 20.1], text: ENV, font-size: 1.6, anchor: end, fill: '#1a1d1f', for: led-env}
+    - {id: silk-p, at: [5.9, 24.0], text: P, font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: led-p}
+    - {id: silk-model, at: [378.9, 40.5], text: CISCO NEXUS N9K-C9348GC-FX3PH, font-size: 2.75, anchor: start,
+      fill: '#1a1d1f', for: chassis}
+    components:
+      placements:
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-1, at: [17.55, 9.75], rotate: 180, group: rj45,
+        rel-pos: 1}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-2, at: [17.55, 24.35], group: rj45, rel-pos: 2}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-3, at: [31.52, 9.75], rotate: 180, group: rj45,
+        rel-pos: 3}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-4, at: [31.52, 24.35], group: rj45, rel-pos: 4}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-5, at: [45.49, 9.75], rotate: 180, group: rj45,
+        rel-pos: 5}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-6, at: [45.49, 24.35], group: rj45, rel-pos: 6}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-7, at: [59.46, 9.75], rotate: 180, group: rj45,
+        rel-pos: 7}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-8, at: [59.46, 24.35], group: rj45, rel-pos: 8}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-9, at: [73.43, 9.75], rotate: 180, group: rj45,
+        rel-pos: 9}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-10, at: [73.43, 24.35], group: rj45, rel-pos: 10}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-11, at: [87.4, 9.75], rotate: 180, group: rj45,
+        rel-pos: 11}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-12, at: [87.4, 24.35], group: rj45, rel-pos: 12}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-13, at: [107.57, 9.75], rotate: 180, group: rj45,
+        rel-pos: 13}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-14, at: [107.57, 24.35], group: rj45, rel-pos: 14}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-15, at: [121.54, 9.75], rotate: 180, group: rj45,
+        rel-pos: 15}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-16, at: [121.54, 24.35], group: rj45, rel-pos: 16}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-17, at: [135.51, 9.75], rotate: 180, group: rj45,
+        rel-pos: 17}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-18, at: [135.51, 24.35], group: rj45, rel-pos: 18}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-19, at: [149.48, 9.75], rotate: 180, group: rj45,
+        rel-pos: 19}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-20, at: [149.48, 24.35], group: rj45, rel-pos: 20}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-21, at: [163.45, 9.75], rotate: 180, group: rj45,
+        rel-pos: 21}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-22, at: [163.45, 24.35], group: rj45, rel-pos: 22}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-23, at: [177.42, 9.75], rotate: 180, group: rj45,
+        rel-pos: 23}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-24, at: [177.42, 24.35], group: rj45, rel-pos: 24}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-25, at: [197.59, 9.75], rotate: 180, group: rj45,
+        rel-pos: 25}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-26, at: [197.59, 24.35], group: rj45, rel-pos: 26}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-27, at: [211.56, 9.75], rotate: 180, group: rj45,
+        rel-pos: 27}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-28, at: [211.56, 24.35], group: rj45, rel-pos: 28}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-29, at: [225.53, 9.75], rotate: 180, group: rj45,
+        rel-pos: 29}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-30, at: [225.53, 24.35], group: rj45, rel-pos: 30}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-31, at: [239.5, 9.75], rotate: 180, group: rj45,
+        rel-pos: 31}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-32, at: [239.5, 24.35], group: rj45, rel-pos: 32}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-33, at: [253.47, 9.75], rotate: 180, group: rj45,
+        rel-pos: 33}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-34, at: [253.47, 24.35], group: rj45, rel-pos: 34}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-35, at: [267.44, 9.75], rotate: 180, group: rj45,
+        rel-pos: 35}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-36, at: [267.44, 24.35], group: rj45, rel-pos: 36}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-37, at: [287.61, 9.75], rotate: 180, group: rj45,
+        rel-pos: 37}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-38, at: [287.61, 24.35], group: rj45, rel-pos: 38}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-39, at: [301.58, 9.75], rotate: 180, group: rj45,
+        rel-pos: 39}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-40, at: [301.58, 24.35], group: rj45, rel-pos: 40}
+      - ref: common/led-rect@1
+        id: led-port-1
+        at: [19.45, 38.3]
+        states: &id001
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#f59e0b'}
+        for: port-1
+        group: port-leds
+        rel-pos: 1
+      - ref: common/led-rect@1
+        id: led-port-2
+        at: [24.75, 38.3]
+        states: *id001
+        for: port-2
+        group: port-leds
+        rel-pos: 2
+      - ref: common/led-rect@1
+        id: led-port-3
+        at: [33.42, 38.3]
+        states: *id001
+        for: port-3
+        group: port-leds
+        rel-pos: 3
+      - ref: common/led-rect@1
+        id: led-port-4
+        at: [38.72, 38.3]
+        states: *id001
+        for: port-4
+        group: port-leds
+        rel-pos: 4
+      - ref: common/led-rect@1
+        id: led-port-5
+        at: [47.39, 38.3]
+        states: *id001
+        for: port-5
+        group: port-leds
+        rel-pos: 5
+      - ref: common/led-rect@1
+        id: led-port-6
+        at: [52.69, 38.3]
+        states: *id001
+        for: port-6
+        group: port-leds
+        rel-pos: 6
+      - ref: common/led-rect@1
+        id: led-port-7
+        at: [61.36, 38.3]
+        states: *id001
+        for: port-7
+        group: port-leds
+        rel-pos: 7
+      - ref: common/led-rect@1
+        id: led-port-8
+        at: [66.66, 38.3]
+        states: *id001
+        for: port-8
+        group: port-leds
+        rel-pos: 8
+      - ref: common/led-rect@1
+        id: led-port-9
+        at: [75.33, 38.3]
+        states: *id001
+        for: port-9
+        group: port-leds
+        rel-pos: 9
+      - ref: common/led-rect@1
+        id: led-port-10
+        at: [80.63, 38.3]
+        states: *id001
+        for: port-10
+        group: port-leds
+        rel-pos: 10
+      - ref: common/led-rect@1
+        id: led-port-11
+        at: [89.3, 38.3]
+        states: *id001
+        for: port-11
+        group: port-leds
+        rel-pos: 11
+      - ref: common/led-rect@1
+        id: led-port-12
+        at: [94.6, 38.3]
+        states: *id001
+        for: port-12
+        group: port-leds
+        rel-pos: 12
+      - ref: common/led-rect@1
+        id: led-port-13
+        at: [109.47, 38.3]
+        states: *id001
+        for: port-13
+        group: port-leds
+        rel-pos: 13
+      - ref: common/led-rect@1
+        id: led-port-14
+        at: [114.77, 38.3]
+        states: *id001
+        for: port-14
+        group: port-leds
+        rel-pos: 14
+      - ref: common/led-rect@1
+        id: led-port-15
+        at: [123.44, 38.3]
+        states: *id001
+        for: port-15
+        group: port-leds
+        rel-pos: 15
+      - ref: common/led-rect@1
+        id: led-port-16
+        at: [128.74, 38.3]
+        states: *id001
+        for: port-16
+        group: port-leds
+        rel-pos: 16
+      - ref: common/led-rect@1
+        id: led-port-17
+        at: [137.41, 38.3]
+        states: *id001
+        for: port-17
+        group: port-leds
+        rel-pos: 17
+      - ref: common/led-rect@1
+        id: led-port-18
+        at: [142.71, 38.3]
+        states: *id001
+        for: port-18
+        group: port-leds
+        rel-pos: 18
+      - ref: common/led-rect@1
+        id: led-port-19
+        at: [151.38, 38.3]
+        states: *id001
+        for: port-19
+        group: port-leds
+        rel-pos: 19
+      - ref: common/led-rect@1
+        id: led-port-20
+        at: [156.68, 38.3]
+        states: *id001
+        for: port-20
+        group: port-leds
+        rel-pos: 20
+      - ref: common/led-rect@1
+        id: led-port-21
+        at: [165.35, 38.3]
+        states: *id001
+        for: port-21
+        group: port-leds
+        rel-pos: 21
+      - ref: common/led-rect@1
+        id: led-port-22
+        at: [170.65, 38.3]
+        states: *id001
+        for: port-22
+        group: port-leds
+        rel-pos: 22
+      - ref: common/led-rect@1
+        id: led-port-23
+        at: [179.32, 38.3]
+        states: *id001
+        for: port-23
+        group: port-leds
+        rel-pos: 23
+      - ref: common/led-rect@1
+        id: led-port-24
+        at: [184.62, 38.3]
+        states: *id001
+        for: port-24
+        group: port-leds
+        rel-pos: 24
+      - ref: common/led-rect@1
+        id: led-port-25
+        at: [199.49, 38.3]
+        states: *id001
+        for: port-25
+        group: port-leds
+        rel-pos: 25
+      - ref: common/led-rect@1
+        id: led-port-26
+        at: [204.79, 38.3]
+        states: *id001
+        for: port-26
+        group: port-leds
+        rel-pos: 26
+      - ref: common/led-rect@1
+        id: led-port-27
+        at: [213.46, 38.3]
+        states: *id001
+        for: port-27
+        group: port-leds
+        rel-pos: 27
+      - ref: common/led-rect@1
+        id: led-port-28
+        at: [218.76, 38.3]
+        states: *id001
+        for: port-28
+        group: port-leds
+        rel-pos: 28
+      - ref: common/led-rect@1
+        id: led-port-29
+        at: [227.43, 38.3]
+        states: *id001
+        for: port-29
+        group: port-leds
+        rel-pos: 29
+      - ref: common/led-rect@1
+        id: led-port-30
+        at: [232.73, 38.3]
+        states: *id001
+        for: port-30
+        group: port-leds
+        rel-pos: 30
+      - ref: common/led-rect@1
+        id: led-port-31
+        at: [241.4, 38.3]
+        states: *id001
+        for: port-31
+        group: port-leds
+        rel-pos: 31
+      - ref: common/led-rect@1
+        id: led-port-32
+        at: [246.7, 38.3]
+        states: *id001
+        for: port-32
+        group: port-leds
+        rel-pos: 32
+      - ref: common/led-rect@1
+        id: led-port-33
+        at: [255.37, 38.3]
+        states: *id001
+        for: port-33
+        group: port-leds
+        rel-pos: 33
+      - ref: common/led-rect@1
+        id: led-port-34
+        at: [260.67, 38.3]
+        states: *id001
+        for: port-34
+        group: port-leds
+        rel-pos: 34
+      - ref: common/led-rect@1
+        id: led-port-35
+        at: [269.34, 38.3]
+        states: *id001
+        for: port-35
+        group: port-leds
+        rel-pos: 35
+      - ref: common/led-rect@1
+        id: led-port-36
+        at: [274.64, 38.3]
+        states: *id001
+        for: port-36
+        group: port-leds
+        rel-pos: 36
+      - ref: common/led-rect@1
+        id: led-port-37
+        at: [289.51, 38.3]
+        states: *id001
+        for: port-37
+        group: port-leds
+        rel-pos: 37
+      - ref: common/led-rect@1
+        id: led-port-38
+        at: [294.81, 38.3]
+        states: *id001
+        for: port-38
+        group: port-leds
+        rel-pos: 38
+      - ref: common/led-rect@1
+        id: led-port-39
+        at: [303.48, 38.3]
+        states: *id001
+        for: port-39
+        group: port-leds
+        rel-pos: 39
+      - ref: common/led-rect@1
+        id: led-port-40
+        at: [308.78, 38.3]
+        states: *id001
+        for: port-40
+        group: port-leds
+        rel-pos: 40
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-41, at: [315.55, 9.75], rotate: 180, group: rj45-100m,
+        rel-pos: 41}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-42, at: [315.55, 24.35], group: rj45-100m, rel-pos: 42}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-43, at: [329.52, 9.75], rotate: 180, group: rj45-100m,
+        rel-pos: 43}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-44, at: [329.52, 24.35], group: rj45-100m, rel-pos: 44}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-45, at: [343.49, 9.75], rotate: 180, group: rj45-100m,
+        rel-pos: 45}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-46, at: [343.49, 24.35], group: rj45-100m, rel-pos: 46}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-47, at: [357.46, 9.75], rotate: 180, group: rj45-100m,
+        rel-pos: 47}
+      - {ref: common/rj45-ganged-eth-plain@1, id: port-48, at: [357.46, 24.35], group: rj45-100m, rel-pos: 48}
+      - ref: common/led-rect@1
+        id: led-port-41
+        at: [317.45, 38.3]
+        states: &id002
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#f59e0b'}
+        for: port-41
+        group: port-leds
+        rel-pos: 41
+      - ref: common/led-rect@1
+        id: led-port-42
+        at: [322.75, 38.3]
+        states: *id002
+        for: port-42
+        group: port-leds
+        rel-pos: 42
+      - ref: common/led-rect@1
+        id: led-port-43
+        at: [331.42, 38.3]
+        states: *id002
+        for: port-43
+        group: port-leds
+        rel-pos: 43
+      - ref: common/led-rect@1
+        id: led-port-44
+        at: [336.72, 38.3]
+        states: *id002
+        for: port-44
+        group: port-leds
+        rel-pos: 44
+      - ref: common/led-rect@1
+        id: led-port-45
+        at: [345.39, 38.3]
+        states: *id002
+        for: port-45
+        group: port-leds
+        rel-pos: 45
+      - ref: common/led-rect@1
+        id: led-port-46
+        at: [350.69, 38.3]
+        states: *id002
+        for: port-46
+        group: port-leds
+        rel-pos: 46
+      - ref: common/led-rect@1
+        id: led-port-47
+        at: [359.36, 38.3]
+        states: *id002
+        for: port-47
+        group: port-leds
+        rel-pos: 47
+      - ref: common/led-rect@1
+        id: led-port-48
+        at: [364.66, 38.3]
+        states: *id002
+        for: port-48
+        group: port-leds
+        rel-pos: 48
+      - {ref: std/sfp-ganged@1, id: port-49, at: [376.0, 9.4], group: sfp28, rel-pos: 49}
+      - {ref: std/sfp-ganged@1, id: port-50, at: [376.0, 24.9], rotate: 180, group: sfp28, rel-pos: 50}
+      - {ref: std/sfp-ganged@1, id: port-51, at: [390.65, 9.4], group: sfp28, rel-pos: 51}
+      - {ref: std/sfp-ganged@1, id: port-52, at: [390.65, 24.9], rotate: 180, group: sfp28, rel-pos: 52}
+      - ref: common/led-arrow@1
+        id: led-port-49
+        at: [379.3, 20.6]
+        skin: up
+        states: &id003
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#f59e0b'}
+        for: port-49
+        group: port-leds
+        rel-pos: 49
+      - ref: common/led-arrow@1
+        id: led-port-50
+        at: [383.7, 20.6]
+        skin: down
+        states: *id003
+        for: port-50
+        group: port-leds
+        rel-pos: 50
+      - ref: common/led-arrow@1
+        id: led-port-51
+        at: [393.95, 20.6]
+        skin: up
+        states: *id003
+        for: port-51
+        group: port-leds
+        rel-pos: 51
+      - ref: common/led-arrow@1
+        id: led-port-52
+        at: [398.35, 20.6]
+        skin: down
+        states: *id003
+        for: port-52
+        group: port-leds
+        rel-pos: 52
+      - {ref: std/qsfp28@1, id: port-53, at: [409.9, 9.2], group: qsfp28, rel-pos: 53}
+      - {ref: std/qsfp28@1, id: port-54, at: [409.9, 25.1], rotate: 180, group: qsfp28, rel-pos: 54}
+      - ref: common/led-arrow-sm@1
+        id: led-port-53
+        at: [411.9, 21.0]
+        skin: up
+        states: &id004
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#f59e0b'}
+        for: port-53
+        group: port-leds
+        rel-pos: 53
+      - ref: common/led-arrow-sm@1
+        id: led-port-54
+        at: [425.65, 21.0]
+        skin: down
+        states: *id004
+        for: port-54
+        group: port-leds
+        rel-pos: 54
+      - ref: common/led-dot@1
+        id: led-bcn
+        at: [9.6, 10.7]
+        group: leds
+        rel-pos: 1
+        for: chassis
+        states:
+        - 'off'
+        - {name: beacon, color: '#3b82f6', behavior: blinking}
+      - ref: common/led-dot@1
+        id: led-sts
+        at: [9.6, 14.6]
+        group: leds
+        rel-pos: 2
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: booting, color: '#f59e0b', behavior: blinking}
+        - {name: minor-alarm, color: '#f59e0b'}
+        - {name: major-alarm, color: '#ef4444'}
+      - ref: common/led-dot@1
+        id: led-env
+        at: [9.6, 18.6]
+        group: leds
+        rel-pos: 3
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-p
+        at: [9.6, 22.5]
+        group: leds
+        rel-pos: 4
+        for: chassis
+        states:
+        - 'off'
+        - {name: poe-on, color: '#22c55e'}
+        - {name: poe-fault, color: '#f59e0b'}
+    regions:
+    - id: logo-zone
+      at: [4.1, 36.8]
+      size: {w: 7.2, h: 3.6}
+      label: Vendor logo; not drawn
+    - id: status-leds
+      at: [2.7, 8.0]
+      size: {w: 11.1, h: 17.6}
+      label: BCN, STS, ENV and P LEDs
+      members:
+      - led-bcn
+      - led-sts
+      - led-env
+      - led-p
+    - id: downlinks
+      at: [15.0, 9.3]
+      size: {w: 356.0, h: 32.0}
+      label: 48 x PoE copper (40 x 10M/100M/1G, 8 x 10M/100M)
+      members:
+      - port-1
+      - port-2
+      - port-3
+      - port-4
+      - port-5
+      - port-6
+      - port-7
+      - port-8
+      - port-9
+      - port-10
+      - port-11
+      - port-12
+      - port-13
+      - port-14
+      - port-15
+      - port-16
+      - port-17
+      - port-18
+      - port-19
+      - port-20
+      - port-21
+      - port-22
+      - port-23
+      - port-24
+      - port-25
+      - port-26
+      - port-27
+      - port-28
+      - port-29
+      - port-30
+      - port-31
+      - port-32
+      - port-33
+      - port-34
+      - port-35
+      - port-36
+      - port-37
+      - port-38
+      - port-39
+      - port-40
+      - port-41
+      - port-42
+      - port-43
+      - port-44
+      - port-45
+      - port-46
+      - port-47
+      - port-48
+    - id: sfp-uplinks
+      at: [375.3, 9.0]
+      size: {w: 31.0, h: 31.0}
+      label: 4 x 10/25G SFP28
+      members:
+      - port-49
+      - port-50
+      - port-51
+      - port-52
+    - id: qsfp-uplinks
+      at: [408.9, 9.0]
+      size: {w: 22.0, h: 31.0}
+      label: 2 x 40/100G QSFP28
+      members:
+      - port-53
+      - port-54
+  rear:
+    size: {w: 439.4, h: 43.7}
+    panel:
+      decor:
+      - {id: io-plate-left, at: [11.0, 9.7], size: [18.3, 26.1], fill: '#e2e5e8'}
+      cutouts:
+      - {id: console, at: [13.95, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-rj45, at: [13.95, 25.0], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-sfp, at: [43.7, 25.55], size: [14.5, 10.0], shape: rect}
+      - {id: usb, at: [33.45, 22.1], size: [4.5, 12.0], shape: rect}
+      - {id: led-bcn-rear, at: [63.55, 37.9], size: [4.6, 2.6], shape: rect}
+      - {id: led-sts-rear, at: [72.6, 37.9], size: [4.6, 2.6], shape: rect}
+    silkscreen:
+    - id: silk-usb
+      at: [35.7, 18.4]
+      fill: '#1a1d1f'
+      for: usb
+      path: >-
+        M 0 1.7 L 0 -0.935 M -0.476 -0.935 L 0.476 -0.935 L 0 -1.7 Z M 0 0.17 L -0.935 -0.51 M 0 -0.17
+        L 0.935 0.34
+      stroke-width: 0.28
+    - id: silk-ground
+      at: [66.0, 9.6]
+      fill: '#1a1d1f'
+      for: chassis
+      path: >-
+        M 0 -3.08 L 0 -0.56 M -2.8 -0.56 L 2.8 -0.56 M -1.736 0.672 L 1.736 0.672 M -0.784 1.904 L 0.784
+        1.904
+      stroke-width: 0.28
+    - {id: silk-bcn-rear, at: [65.85, 36.2], text: BCN, font-size: 2.2, anchor: middle, fill: '#1a1d1f',
+      for: led-bcn-rear}
+    - {id: silk-sts-rear, at: [74.9, 36.2], text: STS, font-size: 2.2, anchor: middle, fill: '#1a1d1f',
+      for: led-sts-rear}
+    components:
+      bays:
+      - id: fan-1
+        at: [107.0, 2.0]
+        size: {w: 40.8, h: 40.7}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - cisco/nxa-sfan-30cfm@1
+        default: cisco/nxa-sfan-30cfm@1
+      - id: fan-2
+        at: [153.1, 2.0]
+        size: {w: 40.8, h: 40.7}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - cisco/nxa-sfan-30cfm@1
+        default: cisco/nxa-sfan-30cfm@1
+      - id: fan-3
+        at: [199.2, 2.0]
+        size: {w: 40.8, h: 40.7}
+        group: fans
+        rel-pos: 3
+        accepts:
+        - cisco/nxa-sfan-30cfm@1
+        default: cisco/nxa-sfan-30cfm@1
+      - id: psu-1
+        at: [254.5, 2.0]
+        size: {w: 84.7, h: 40.6}
+        group: psus
+        rel-pos: 1
+        accepts:
+        - cisco/nxa-pac-350w@1
+        - cisco/nxa-pac-1900w@1
+        - cisco/nxa-phv-350w@1
+        - cisco/nxa-pdc-440w@1
+        default: cisco/nxa-pac-350w@1
+      - id: psu-2
+        at: [344.9, 2.0]
+        size: {w: 84.7, h: 40.6}
+        group: psus
+        rel-pos: 2
+        accepts:
+        - cisco/nxa-pac-350w@1
+        - cisco/nxa-pac-1900w@1
+        - cisco/nxa-phv-350w@1
+        - cisco/nxa-pdc-440w@1
+        default: cisco/nxa-pac-350w@1
+      placements:
+      - ref: std/rj45-ganged@2
+        id: console
+        at: [13.95, 9.5]
+        rotate: 180
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: common/rj45-ganged-eth@1
+        id: mgmt-rj45
+        at: [13.95, 25.0]
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+      - ref: std/sfp@1
+        id: mgmt-sfp
+        at: [43.7, 25.55]
+        group: mgmt
+        rel-pos: 3
+        attrs: {media: sfp, speed: 1g, role: mgmt}
+      - ref: std/usb-a@1
+        id: usb
+        at: [29.7, 25.85]
+        rotate: 90
+        skin: usb2
+        group: mgmt
+        rel-pos: 4
+        attrs: {media: usb-a, usb: '2.0', role: storage}
+      - {ref: common/serial-symbol@1, id: console-mark, at: [16.6, 4.9], group: furniture, rel-pos: 1}
+      - {ref: common/nic-symbol@1, id: mgmt-rj45-mark, at: [17.7, 36.0], group: furniture, rel-pos: 2}
+      - {ref: common/nic-symbol@1, id: mgmt-sfp-mark, at: [47.95, 19.3], group: furniture, rel-pos: 3}
+      - ref: common/led-rect@1
+        id: led-bcn-rear
+        at: [63.55, 37.9]
+        group: leds
+        rel-pos: 5
+        for: chassis
+        states:
+        - 'off'
+        - {name: beacon, color: '#3b82f6', behavior: blinking}
+      - ref: common/led-rect@1
+        id: led-sts-rear
+        at: [72.6, 37.9]
+        group: leds
+        rel-pos: 6
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+      - {ref: common/screw-head@1, id: ground-screw-1, at: [76.7, 7.1], group: furniture, rel-pos: 4}
+      - {ref: common/screw-head@1, id: ground-screw-2, at: [93.1, 7.1], group: furniture, rel-pos: 5}
+    regions:
+    - id: out-of-band
+      at: [10.2, 3.0]
+      size: {w: 70.0, h: 39.5}
+      label: Console, management and USB
+      members:
+      - console
+      - mgmt-rj45
+      - mgmt-sfp
+      - usb
+      - led-bcn-rear
+      - led-sts-rear
+    - id: cooling
+      at: [106.0, 1.2]
+      size: {w: 136.0, h: 42.0}
+      label: 3 fan modules
+      members:
+      - fan-1
+      - fan-2
+      - fan-3
+    - id: power
+      at: [253.5, 1.2]
+      size: {w: 86.7, h: 42.2}
+      label: Power supply 1
+      members:
+      - psu-1
+    - id: power-2
+      at: [343.9, 1.2]
+      size: {w: 86.7, h: 42.2}
+      label: Power supply 2
+      members:
+      - psu-2
+  top:
+    size: {w: 439.4, h: 457.2}
+    empty: Not drawn by any guide held. The guide shows the chassis in its two flat views only.
+  bottom:
+    size: {w: 439.4, h: 457.2}
+    empty: Not drawn by any guide held. The guide does not picture the underside.
+  left:
+    size: {w: 457.2, h: 43.7}
+    empty: Not drawn by any guide held. The guide shows no side wall.
+  right:
+    size: {w: 457.2, h: 43.7}
+    empty: Not drawn by any guide held. The guide shows no side wall.
+configurations:
+  ac-350w-port-side-intake:
+    kind: base
+    description: >-
+      Dual NXA-PAC-350W-PI2 supplies and three NXA-SFAN-30CFM-PI fan modules: port-side intake airflow,
+      burgundy latches
+    default: true
+    part-numbers:
+      N9K-C9348GC-FX3PH: {part: N9K-C9348GC-FX3PH}
+  ac-350w-port-side-exhaust:
+    kind: orderable
+    description: >-
+      Dual NXA-PAC-350W-PE2 supplies and three NXA-SFAN-30CFM-PE fan modules: port-side exhaust airflow,
+      blue latches. The guide's Overview gives the colours.
+    airflow: back-to-front
+    part-numbers:
+      N9K-C9348GC-FX3PH: {part: N9K-C9348GC-FX3PH}
+    component-attrs:
+      nxa-sfan-30cfm: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+      nxa-pac-350w: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+  ac-1900w-port-side-intake:
+    kind: orderable
+    description: >-
+      Dual NXA-PAC-1900W-PI supplies and three NXA-SFAN-30CFM-PI fan modules: port-side intake airflow,
+      burgundy latches. The 1900 W supply is the one the PoE paragraph names.
+    part-numbers:
+      N9K-C9348GC-FX3PH: {part: N9K-C9348GC-FX3PH}
+    bays: {psu-1: cisco/nxa-pac-1900w@1, psu-2: cisco/nxa-pac-1900w@1}
+  ac-1900w-port-side-exhaust:
+    kind: orderable
+    description: >-
+      Dual NXA-PAC-1900W-PE supplies and three NXA-SFAN-30CFM-PE fan modules: port-side exhaust airflow,
+      blue latches. This guide lists the exhaust 1900 W supply. The component's own guide lists none,
+      so the build is an attribute override of it.
+    airflow: back-to-front
+    part-numbers:
+      N9K-C9348GC-FX3PH: {part: N9K-C9348GC-FX3PH}
+    bays: {psu-1: cisco/nxa-pac-1900w@1, psu-2: cisco/nxa-pac-1900w@1}
+    component-attrs:
+      nxa-sfan-30cfm: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+      nxa-pac-1900w: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+  hvac-hvdc-350w-port-side-intake:
+    kind: orderable
+    description: >-
+      Dual NXA-PHV-350W-PI HVAC/HVDC supplies and three NXA-SFAN-30CFM-PI fan modules: port-side intake
+      airflow, burgundy latches
+    power:
+    - ac
+    - hvdc
+    part-numbers:
+      N9K-C9348GC-FX3PH: {part: N9K-C9348GC-FX3PH}
+    bays: {psu-1: cisco/nxa-phv-350w@1, psu-2: cisco/nxa-phv-350w@1}
+  hvac-hvdc-350w-port-side-exhaust:
+    kind: orderable
+    description: >-
+      Dual NXA-PHV-350W-PE HVAC/HVDC supplies and three NXA-SFAN-30CFM-PE fan modules: port-side exhaust
+      airflow, blue latches
+    airflow: back-to-front
+    power:
+    - ac
+    - hvdc
+    part-numbers:
+      N9K-C9348GC-FX3PH: {part: N9K-C9348GC-FX3PH}
+    bays: {psu-1: cisco/nxa-phv-350w@1, psu-2: cisco/nxa-phv-350w@1}
+    component-attrs:
+      nxa-sfan-30cfm: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+      nxa-phv-350w: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+  dc-440w-port-side-intake:
+    kind: orderable
+    description: >-
+      Dual NXA-PDC-440W-PI DC supplies and three NXA-SFAN-30CFM-PI fan modules: port-side intake airflow,
+      burgundy latches
+    power: dc
+    part-numbers:
+      N9K-C9348GC-FX3PH: {part: N9K-C9348GC-FX3PH}
+    bays: {psu-1: cisco/nxa-pdc-440w@1, psu-2: cisco/nxa-pdc-440w@1}
+  dc-440w-port-side-exhaust:
+    kind: orderable
+    description: >-
+      Dual NXA-PDC-440W-PE DC supplies and three NXA-SFAN-30CFM-PE fan modules: port-side exhaust airflow,
+      blue latches
+    airflow: back-to-front
+    power: dc
+    part-numbers:
+      N9K-C9348GC-FX3PH: {part: N9K-C9348GC-FX3PH}
+    bays: {psu-1: cisco/nxa-pdc-440w@1, psu-2: cisco/nxa-pdc-440w@1}
+    component-attrs:
+      nxa-sfan-30cfm: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+      nxa-pdc-440w: {latch-finish: '#50a2cf', latch-edge: '#2c6f96', airflow: back-to-front}
+references:
+- title: Cisco N9348GC-FX3PH NX-OS Mode Switch Hardware Installation Guide
+  url: >-
+    https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus9000/hw/9348gc-fx3ph/nxos/cisco-nexus-9348gc-fx3ph-nx-os-mode-switch-hardware-installation-guide.pdf
+  sha256: b582c05dd508bdb96f9da9f7cef68da718bed2f703697f486e1dda3ed34ee813

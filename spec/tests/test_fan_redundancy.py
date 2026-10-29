@@ -707,4 +707,6 @@ def test_the_comparison_layer_can_now_reach_them():
     # 172 with the Cisco Nexus 9516: 2+1 over three fan trays (hardware guide, PDF p89, printed 83)
     # 174 with the Cisco Nexus 93108TC-FX3P (3+1 over four fan modules) and 9348GC-FX3 (2+1 over three):
     # installation guides, Overview
-    assert n == 174, n
+    # 176 with the Cisco Nexus 9348GC-FX3PH and 92348GC-FX3 (2+1 over three fan modules each): installation
+    # guides, Overview
+    assert n == 176, n
