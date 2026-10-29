@@ -300,9 +300,9 @@ def test_the_device_type_export_lists_the_boards_in_the_scb_bays(tree, slug):
     seen = 0
     for b in doc["module-bays"]:
         if b["position"] in scb:
-            assert "scb-mx" in b["description"]
             if "more)" in b["description"]:   # the shared slots' long lists are cut by the exporter
                 continue
+            assert "scb-mx" in b["description"]
             seen += 1
             for board in BOARDS:
                 assert board in b["description"].removeprefix("Accepts: ").split(", ")
