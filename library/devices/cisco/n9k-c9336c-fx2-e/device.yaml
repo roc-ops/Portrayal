@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: n9k-c9336c-fx2-e
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Cisco
 model: N9K-C9336C-FX2-E
@@ -15,25 +15,6 @@ description: >-
   intake (burgundy modules) or port-side exhaust (blue). A device of its own, not a configuration of the
   N9K-C9336C-FX2: its guide draws six fan modules where the other draws three.
 profile: networking
-lint:
-  waive:
-    L29: >-
-      The rule wants a draw figure on every module a bay accepts. The two supplies are not counted (their
-      figure is an output rating, 750 W and 1100 W, and is carried). The one module counted is the fan,
-      cisco/nxa-sfan-35cfm, and the only held document, the installation guide, prints no draw for it:
-      appendix B gives the switch's draw as a whole (321 W typical, 702 W maximum) and does not split it.
-      Dividing the whole by six bays would be an invented figure, and marking the fan `not-applicable`
-      would call the total complete when it is not. The waiver comes off when a document states a
-      per-fan-module draw (the Nexus 9300-FX2 data sheet, which is not held, is the likely place); the fan
-      contract then carries it.
-    L69: >-
-      The rule wants a stated form (n+1, 5+1) on the six-bay fan group. The only held document, the
-      installation guide, states redundancy per rotor: the switch works with one rotor failed in any one
-      two-rotor module and powers down in two minutes with more than one rotor failed. It does not say how
-      many of the six modules may be lost, and no form is printed. Reading n+1 from the rotor sentence
-      would be arithmetic presented as a citation. The waiver comes off when a held document prints a
-      module-level form for this model, such as a data sheet line "n+1 redundant fans"; the group then
-      carries it with that sentence in its note.
 provenance:
   sources:
     confidence: datasheet
@@ -128,7 +109,8 @@ provenance:
     note: >-
       Appendix B, Switch Power Input Requirements: typical 321 W and maximum 702 W "(AC or DC)", 2395.323
       BTU per hour. The figures are the switch's draw and not a supply rating; the guide notes that optics
-      of 5 W or more on all 36 ports need the 1100 W supplies.
+      of 5 W or more on all 36 ports need the 1100 W supplies. No held document prints a draw for one
+      fan module (cisco/nxa-sfan-35cfm) or splits the switch's draw; none is derived by dividing it.
   colour:
     confidence: estimated
     note: >-
