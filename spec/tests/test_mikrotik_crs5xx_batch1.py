@@ -439,17 +439,28 @@ def test_crs510_dc_legends_are_the_bracket_the_voltage_and_the_polarity_marks():
     assert "centre pin" in prov and "positive" in prov
 
 
-def test_crs510_unlit_lamps_are_left_as_the_component_draws_them():
-    """common/led-rect fills its lamp from var(--led-color, #2a6b3f); a placement cannot set that variable's
-    resting value, and a component on main is not edited here. The photograph shows unlit grey (#878686, #858584 and
-    #898888 for USER, FAULT and POWER)."""
+@pytest.mark.parametrize("name", NAMES)
+def test_no_lamp_seats_a_major_that_rests_dark_green(name):
+    """common/led-rect@1 and common/led-rect-sm@1 rest dark green; the @2 of each rests unlit grey."""
+    d = load(name)
+    seated = [(view, p["id"]) for view in d["views"] for p in placements(d, view)
+              if p["ref"] in ("common/led-rect@1", "common/led-rect-sm@1")]
+    assert not seated
+
+
+def test_crs510_bar_lamps_seat_led_rect_2_in_the_same_places():
+    """The USER, FAULT and POWER bars keep their ids, places and order when they move to led-rect@2."""
     d = load(CRS510)
+    leds = {p["id"]: p for p in refs(d, "front", "common/led-rect@2")}
+    assert {k: (v["at"], v["rel-pos"], v["group"], v["for"]) for k, v in leds.items()} == {
+        "led-user": ([264.8, 37.3], 3, "status-leds", "chassis"),
+        "led-fault": ([271.7, 37.3], 4, "status-leds", "chassis"),
+        "led-power": ([285.9, 37.3], 5, "status-leds", "chassis"),
+    }
+    assert not [p for p in placements(d, "front") if p["ref"].startswith("common/led-rect") and "color" in str(p)]
     note = d["provenance"]["lamps"]["note"]
-    assert all(v in note for v in ("#878686", "#858584", "#898888", "#5e6d52"))
-    assert "common/led-rect" in note and "left" in note and "#2a6b3f" in note
-    leds = {p["id"]: p for p in refs(d, "front", "common/led-rect@1")}
-    assert sorted(leds) == ["led-fault", "led-power", "led-user"]
-    assert not [p for p in placements(d, "front") if p["ref"] == "common/led-rect@1" and "color" in str(p)]
+    assert all(v in note for v in ("#878686", "#858584", "#898888", "#5e6d52", "common/led-rect@2", "#3a3938"))
+    assert "#2a6b3f" not in note and "dark green" not in note and "is left" not in note
 
 
 CRS510_COLOURS = {  # drawn value -> where it sits
@@ -461,7 +472,7 @@ CRS518_COLOURS = {
     "psu-1-module": "#6f6d68", "psu-2-module": "#6f6d68", "mgmt-block": "#63625f",
     "fan-module-0": "#92918e", "fan-module-1": "#92918e", "fan-module-2": "#92918e", "fan-module-3": "#92918e",
     "fan-module-hole-0": "#3a3a3a", "fan-module-hole-1": "#3a3a3a", "fan-module-hole-2": "#3a3a3a",
-    "fan-module-hole-3": "#3a3a3a",
+    "fan-module-hole-3": "#3a3a3a", "ac-inlet-bezel-1": "#262626", "ac-inlet-bezel-2": "#262626",
     "fan-hub-0": "#817f7c", "fan-hub-1": "#817f7c", "fan-hub-2": "#817f7c", "fan-hub-3": "#817f7c",
 }
 
@@ -525,6 +536,27 @@ def test_crs518_rear_inlets_stand_upright_with_the_earth_pin_at_the_right_under_
         assert (cut["at"][0] + 10.0, cut["at"][1] + 14.0) == pytest.approx((centre_x, 21.5), abs=0.05), inlet_id
     note = d["provenance"]["rear-layout"]["note"]
     assert all(token in note for token in ("24.9 x 30.7", "50.7", "114.0", "earth pin", "figure 5"))
+
+
+def test_crs518_inlet_housings_are_drawn_at_the_photographs_width_and_height():
+    """Photograph 2197 (5.80 px/mm) shows each housing 24.9 x 30.7 mm round the C14 opening; the part draws only its
+    20 x 28 opening, so the bezel round it is chassis art of the photograph's size on the same centre, under the part."""
+    d = load(CRS518)
+    decor = _decor(d, "rear")
+    for n, centre_x in ((1, 50.7), (2, 114.0)):
+        bezel = decor[f"ac-inlet-bezel-{n}"]
+        cut = _cutout(d, "rear", f"ac-inlet-{n}")
+        assert bezel["kind"] == "inlet-bezel-art" and bezel["size"] == [24.9, 30.7] and bezel["fill"] == "#262626"
+        assert _centre(bezel) == pytest.approx([centre_x, 21.5], abs=0.05)
+        assert _centre(bezel) == pytest.approx([cut["at"][0] + 10.0, cut["at"][1] + 14.0], abs=0.05)
+        assert bezel["size"][0] > cut["size"][0] and bezel["size"][1] > cut["size"][1]  # round the opening, not in it
+    ids = list(decor)
+    assert ids.index("ac-inlet-bezel-1") > ids.index("psu-1-module") and ids.index("ac-inlet-bezel-2") > ids.index("psu-2-module")
+    note = d["provenance"]["rear-layout"]["note"]
+    assert all(token in note for token in ("24.9 x 30.7", "5.80 px/mm", "ac-inlet-bezel", "#262626"))
+    assert "is not drawn" not in note
+    colour = d["provenance"]["colour"]["note"]
+    assert all(token in colour for token in ("#262626", "960 pixels", "378,520 to 390,600", "868,520 to 880,600"))
 
 
 def test_crs518_usb_tongue_is_at_the_left_of_the_opening():

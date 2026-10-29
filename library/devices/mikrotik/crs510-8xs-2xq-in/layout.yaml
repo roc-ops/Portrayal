@@ -85,9 +85,9 @@ provenance:
       the QSFP28's two round lamps name no cage that a document states (gap `led-states`); they are drawn for the
       chassis. The three bar lamps are printed USER, FAULT and POWER (photograph 2232), and show unlit grey there (#878686,
       #858584 and #898888: medians of 225, 225 and 207 pixels, boxes 2565,1028 to 2590,1037, 2625,1028 to 2650,1037 and
-      2750,1028 to 2773,1037). The render draws them in the lamp component's resting colour, a dark green: common/led-rect@1
-      fills its lamp from var(--led-color, #2a6b3f), no placement can change that resting value, and a component on main is
-      not edited here, so the colour is left. Their place and size agree with the drawing. The green lamp on each supply
+      2750,1028 to 2773,1037). The render draws them in the resting colour of common/led-rect@2, #3a3938, a dark grey: the
+      component's own median of 27 unlit lamps in two MikroTik photographs, which disagree (this photograph's three bars
+      read lighter than that), and no placement sets it. Their place and size agree with the drawing. The green lamp on each supply
       module is lit in the photograph (#5e6d52, median of 193 pixels within 8 px of 484,831) and drawn here in the
       resting colour of common/led-dot@1, which is a dark grey, also left as the component draws it.
   port-numbering:
@@ -506,9 +506,9 @@ views:
       - {ref: common/rj45-eth@1, id: mgmt, at: [249.1, 23.9], group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 100m}}
       - {ref: common/reset-button@1, id: btn-reset, at: [268.7, 29.9], for: chassis, group: controls, rel-pos: 1,
          attrs: {function: reset}}
-      - {ref: common/led-rect@1, id: led-user, at: [264.8, 37.3], for: chassis, group: status-leds, rel-pos: 3}
-      - {ref: common/led-rect@1, id: led-fault, at: [271.7, 37.3], for: chassis, group: status-leds, rel-pos: 4}
-      - {ref: common/led-rect@1, id: led-power, at: [285.9, 37.3], for: chassis, group: status-leds, rel-pos: 5}
+      - {ref: common/led-rect@2, id: led-user, at: [264.8, 37.3], for: chassis, group: status-leds, rel-pos: 3}
+      - {ref: common/led-rect@2, id: led-fault, at: [271.7, 37.3], for: chassis, group: status-leds, rel-pos: 4}
+      - {ref: common/led-rect@2, id: led-power, at: [285.9, 37.3], for: chassis, group: status-leds, rel-pos: 5}
     regions:
       - {id: logo-zone, at: [282.0, 2.5], size: {w: 31.0, h: 7.0}, label: 'Vendor logo; not drawn'}
   rear:
