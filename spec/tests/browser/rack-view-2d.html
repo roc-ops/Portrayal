@@ -37,6 +37,7 @@ import {mountRack2d} from '../../../kit/rack/view/elevation.js';
 import {joinPath, splitPath} from '../../../kit/rack/view/view.js';
 import {parseDoc} from '../../../kit/rack/model.js';
 import {loadCatalog} from '../../../kit/rack/catalog.js';
+import {flatDist, jdist, faceFile} from '../../../kit/dist.js';
 import {serialise, loadFixtures, goldenBody} from './rack-view-common.js';
 
 const DIST = '../../../library/dist/';
@@ -51,7 +52,7 @@ const firstDiff = (a, b) => { let i = 0; while (i < a.length && a[i] === b[i]) i
 
 async function main() {
   const cat = await loadCatalog(DIST);
-  const opts = {document, dist: DIST, chassisOf: cat.chassisOf};
+  const opts = {document, distAt: flatDist(DIST), chassisOf: cat.chassisOf};
   const docs = await loadFixtures(FIXTURES, parseDoc);
 
   // 1. the SVG the site drew, for both fixtures and both faces
@@ -213,6 +214,44 @@ async function main() {
       for (const [n, d] of kept) { if (d) Object.defineProperty(window, n, d); else delete window[n]; }
     }
   } catch (err) { note('a mount with the globals made to throw still draws', false, String(err?.stack || err)); }
+
+  // 7. two libraries on one page, mounted without waiting between: library A is the build, library B is
+  // the same build with the first item's front face marked. Each view draws from its own, early and late.
+  try {
+    const A = flatDist(DIST);
+    const first = acc.racks[0].items[0];
+    const file = faceFile(await jdist(A(`${first.ref}.configs.json`)), first.cfg, 'front');
+    const marked = (await text(A(file))).replace(/<\/svg>\s*$/, '<rect id="library-b-marker" x="0" y="0" width="1" height="1"/></svg>');
+    const url = URL.createObjectURL(new Blob([marked], {type: 'image/svg+xml'}));
+    const B = path => (path === file ? url : A(path));
+    const golden = goldenBody(await text(`${FIXTURES}rack-views/acceptance.2d.front.txt`));
+    // (the drawing library A makes on its own: what the two-library drawing must equal, and whether it is the golden is said beside it)
+    const soloView = mountRack2d(box(), {...opts, distAt: A, doc: acc});
+    await soloView.ready;
+    const solo = serialise(stage.lastChild.querySelector('svg'));
+    soloView.dispose();
+    const same = got => (got === solo ? `equal to the library alone${solo === golden ? ' and to the golden' : ' (the golden differs, as in case 1)'}` : firstDiff(got, solo));
+    const [boxA, boxB] = [box(), box()];
+    const viewA = mountRack2d(boxA, {...opts, distAt: A, doc: acc});
+    const viewB = mountRack2d(boxB, {...opts, distAt: B, doc: acc});
+    await Promise.all([viewA.ready, viewB.ready]);
+    const [gotA, gotB] = [boxA, boxB].map(b => serialise(b.querySelector('svg')));
+    note('two libraries on one page: the first view draws its own library, with no marker', gotA === solo && !gotA.includes('library-b-marker'), same(gotA));
+    note('two libraries on one page: the second view draws its own library, with the marker', gotB.includes('library-b-marker') && gotB !== gotA,
+         `marker ${gotB.includes('library-b-marker')}, differs from the first ${gotB !== gotA}`);
+    await viewA.update(acc);
+    const lateA = serialise(boxA.querySelector('svg'));
+    note('an update of the first view, after the second was mounted, still reads its own library', lateA === solo && !lateA.includes('library-b-marker'), same(lateA));
+    viewA.dispose(); viewB.dispose();
+    URL.revokeObjectURL(url);
+  } catch (err) { note('two libraries on one page', false, String(err?.stack || err)); }
+
+  // 8. the removed option is refused in a sentence that names its replacement
+  try {
+    let refused = null;
+    try { mountRack2d(box(), {document, doc: acc, dist: DIST}); } catch (e) { refused = e.message; }
+    note('the dist option is refused, naming distAt', /distAt/.test(refused || ''), String(refused));
+  } catch (err) { note('the dist option is refused', false, String(err?.stack || err)); }
 }
 
 try { await main(); } catch (err) { note('the page', false, String(err?.stack || err)); }
