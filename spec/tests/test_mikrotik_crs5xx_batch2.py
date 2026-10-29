@@ -140,6 +140,13 @@ def test_crs504_fans_are_on_the_right_wall_and_the_other_faces_are_empty():
     d = load(CRS504)
     fans = [x["id"] for x in d["views"]["right"]["panel"]["decor"] if x.get("kind") == "fan-grille"]
     assert fans == ["fan-0", "fan-1"]
+    # unwarped from photograph 2158: guards 20 x 31 mm, centred 107.5 and 129.5 mm from the front, 2.5 mm apart
+    f0, f1 = decor(d, "right", "fan-0"), decor(d, "right", "fan-1")
+    assert (f0["at"], f0["size"], f0["rx"]) == ([97.5, 3.0], [20.0, 31.0], 10.0)
+    assert (f1["at"], f1["size"]) == ([119.5, 3.0], [20.0, 31.0])
+    for fan, hub in ((f0, decor(d, "right", "fan-hub-0")), (f1, decor(d, "right", "fan-hub-1"))):  # a clear hub in each ring
+        assert hub["kind"] == "fan-hub" and hub["size"] == [12.5, 19.0] and hub["fill"] == d["chassis"]["color"]
+        assert hub["at"][0] + 6.25 == pytest.approx(fan["at"][0] + 10.0) and hub["at"][1] + 9.5 == pytest.approx(fan["at"][1] + 15.5)
     for view in ("left", "top", "bottom"):
         assert d["views"][view].get("empty"), view
     gaps = {g["what"] for g in d["gaps"]}
@@ -153,8 +160,9 @@ def decor(d, view, id_):
 def test_crs504_cage_vent_is_a_motif_tile_of_the_measured_weave():
     d = load(CRS504)
     v = decor(d, "front", "cage-vent")
-    assert v["pattern"] == "motif" and v["at"] == [144.7, 10.4] and v["size"] == [97.7, 11.5]
+    assert v["pattern"] == "motif" and v["at"] == [144.7, 10.4] and v["size"] == [97.0, 11.5]
     assert v["pattern-pitch"] == [16.9, 11.5]
+    assert v["rx"] == 0  # square field corners: no rounded clip at the ends
     assert len(v["pattern-cells"]) == 9
     pts = [p for cell in v["pattern-cells"] for p in cell]
     assert all(0 <= x <= 16.9 and 0 <= y <= 11.5 for x, y in pts)
@@ -163,6 +171,53 @@ def test_crs504_cage_vent_is_a_motif_tile_of_the_measured_weave():
     assert v["pattern-offset"] == v["at"]  # the tile's phase starts at the field's left and top edges
     for x in d["views"]["front"]["panel"]["decor"]:
         assert x.get("pattern") != "vent", x["id"]
+
+
+def test_crs504_cage_vent_small_holes_are_diamonds_and_the_ends_leave_no_slivers():
+    v = decor(load(CRS504), "front", "cage-vent")
+    small = [c for c in v["pattern-cells"]
+             if max(p[0] for p in c) - min(p[0] for p in c) < 2 and max(p[1] for p in c) - min(p[1] for p in c) < 2]
+    diamonds = [c for c in small if len(c) == 4]
+    assert len(small) == len(diamonds) == 2  # the two small holes of the period, one at each edge of the band
+    for c in diamonds:
+        xs, ys = [p[0] for p in c], [p[1] for p in c]
+        cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+        assert max(xs) - min(xs) == pytest.approx(1.6) and max(ys) - min(ys) == pytest.approx(1.6)
+        # every corner sits on an axis through the centre: a square turned 45 degrees, not an upright one
+        assert all(p[0] == pytest.approx(cx) or p[1] == pytest.approx(cy) for p in c)
+    # the field ends on 12.5 mm of the 16.9 mm tile, where the cut leaves no sliver of a slot (measured: the
+    # smallest piece touching the cut is 8.2 square mm; the earlier 97.7 left 0.4)
+    assert v["size"][0] % 16.9 == pytest.approx(12.5, abs=0.01)
+
+
+def test_crs504_cage_bracket_is_one_continuous_line_with_hooked_ends_and_set_in_numerals():
+    d = load(CRS504)
+    assert not [x for x in d["views"]["front"]["panel"]["decor"] if x["id"].startswith("cage-bracket-")]
+    silk = d["views"]["front"]["silkscreen"]
+    b = [s for s in silk if s.get("id") == "cage-bracket"]
+    assert len(b) == 1 and b[0]["filled"] is False and b[0]["stroke-width"] == 0.25
+    path = b[0]["path"].split()
+    assert path[:3] == ["M", "144.9", "25.3"] and path[-3:] == ["L", "242.3", "25.3"]  # both ends hook down
+    assert path.count("Q") == 2
+    # the line breaks only for the numerals printed in it
+    numerals = {s["text"]: s["at"] for s in silk if s.get("for", "").startswith("qsfp-")}
+    assert sorted(numerals) == ["1", "2", "3", "4"]
+    assert path.count("M") == 5  # four breaks, one per numeral
+
+
+def test_crs504_supplies_carry_handles_latches_and_screw_holes_and_their_legends_are_drawn_larger():
+    d = load(CRS504)
+    for i, dx in ((1, 0.0), (2, 59.9)):
+        h, latch = decor(d, "front", f"psu-{i}-handle"), decor(d, "front", f"psu-{i}-latch")
+        assert (h["kind"], h["size"], h["fill"]) == ("handle", [6.0, 36.0], "#a4a5a5")  # drawing: 6.0 x 36 mm bar
+        assert h["at"] == [pytest.approx(30.5 + dx), 4.3]
+        assert (latch["kind"], latch["size"], latch["fill"]) == ("latch", [7.1, 14.3], "#4f566a")
+        assert latch["at"] == [pytest.approx(13.7 + dx), 5.5]
+    holes = [x for x in d["views"]["front"]["panel"]["decor"] if x["kind"] == "screw-hole"]
+    assert len(holes) == 6 and all(x["fill"] == "#020202" and x["size"] == [2.0, 2.0] for x in holes)
+    legend = {s["text"]: s["font-size"] for s in d["views"]["front"]["silkscreen"]
+              if s.get("text") in ("100-240 V 50/60 Hz", "PSU 1", "PSU 2")}
+    assert legend == {"100-240 V 50/60 Hz": 2.6, "PSU 1": 2.2, "PSU 2": 2.2}  # cap height 1.9 and 1.6 mm, was 1.1
 
 
 def test_crs504_supply_vents_are_rects_of_slots_measured_on_the_drawing():
@@ -319,26 +374,80 @@ def test_crs520_ears_and_the_rail_kit_are_declared_not_modelled():
 def test_crs520_walls():
     d = load(CRS520)
     assert [x["id"] for x in d["views"]["right"]["panel"]["decor"]] == ["side-vent"]
-    assert decor(d, "right", "side-vent")["pattern"] == "holes"  # photograph 2352 shows round perforations
+    v = decor(d, "right", "side-vent")
+    assert v["pattern"] == "holes"  # photograph 2352 shows round perforations
+    assert (v["at"], v["size"]) == ([11.0, 14.0], [35.0, 17.0])  # unwarped from the photograph's wall quad
+    assert (v["pattern-pitch"], v["pattern-offset"]) == ([3.6, 3.0], [11.0, 14.0])  # 10 columns and 6 rows of holes
     assert d["views"]["left"].get("empty")
     assert d["views"]["top"].get("empty") and d["views"]["bottom"].get("empty")
 
 
 def test_crs520_front_strips_are_motif_tiles_of_the_measured_slots():
     d = load(CRS520)
-    top, bottom = decor(d, "front", "top-vent"), decor(d, "front", "bottom-vent")
-    assert (top["pattern"], top["at"], top["size"], top["pattern-pitch"]) == ("motif", [4.1, 0.9], [434.0, 5.5], [5.09, 5.5])
-    assert (bottom["pattern"], bottom["at"], bottom["size"], bottom["pattern-pitch"]) == (
-        "motif", [4.1, 41.8], [278.0, 2.2], [5.09, 2.2])
-    assert top["pattern-offset"] == top["at"] and bottom["pattern-offset"] == bottom["at"]  # phase starts at the field
-    assert len(top["pattern-cells"]) == 2 and len(bottom["pattern-cells"]) == 1  # two rows, one row of notches
-    rows = sorted((min(y for _, y in c), max(y for _, y in c)) for c in top["pattern-cells"])
-    assert rows == [(0.0, 2.0), (3.5, 5.5)]
-    for cell in top["pattern-cells"] + bottom["pattern-cells"]:
+    row1 = decor(d, "front", "top-vent-row-1")
+    row2 = [decor(d, "front", f"top-vent-row-2-{k}") for k in "abc"]
+    assert (row1["pattern"], row1["at"], row1["size"], row1["pattern-pitch"]) == ("motif", [4.1, 0.9], [434.0, 1.5], [5.09, 1.5])
+    for f in [row1] + row2:
+        assert f["pattern-offset"] == f["at"] and f["pattern-pitch"] == [5.09, 1.5] and f["rx"] == 0
+        assert len(f["pattern-cells"]) == 1  # one row of slots in each field
+        cell = f["pattern-cells"][0]
         assert (min(x for x, _ in cell), max(x for x, _ in cell)) == (0.55, 4.55)  # 4.0 mm slots, all one width
-    assert max(y for _, y in bottom["pattern-cells"][0]) == 2.2  # the notches reach the bottom edge
+        assert (min(y for _, y in cell), max(y for _, y in cell)) == (0.0, 1.5)  # slots 1.5 mm tall
+    assert all(f["at"][1] == 3.9 for f in row2)  # rows 3.0 mm apart: 0.9 and 3.9
+    # the second row breaks at each legend: the gaps are whole slot pitches and hold the printed legends
+    ends = [(f["at"][0], f["at"][0] + f["size"][0]) for f in row2]
+    assert ends == [(4.1, pytest.approx(95.72)), (pytest.approx(110.99), pytest.approx(212.79)),
+                    (pytest.approx(233.15), pytest.approx(438.1))]
+    legends = {s["text"]: s for s in d["views"]["front"]["silkscreen"] if s.get("text") in ("100G QSFP28", "25G SFP28")}
+    assert ends[0][1] < legends["100G QSFP28"]["at"][0] - 6 and legends["100G QSFP28"]["at"][0] + 6 < ends[1][0]
+    assert ends[1][1] < legends["25G SFP28"]["at"][0] - 5 and legends["25G SFP28"]["at"][0] + 5 < ends[2][0]
+    # the bottom edge is 54 shallow light notches 4.0 x 1.5 mm on the slot pitch, not black slots
+    notches = [x for x in d["views"]["front"]["panel"]["decor"] if x["kind"] == "notch"]
+    assert len(notches) == 54 and all(n["size"] == [4.0, 1.5] and n["fill"] == "#d3cac3" for n in notches)
+    assert [n["at"][0] for n in notches][:3] == [4.65, 9.74, 14.83]
+    assert notches[1]["at"][0] - notches[0]["at"][0] == pytest.approx(5.09, abs=0.01)
+    assert all(n["at"][1] + n["size"][1] == 44.0 for n in notches)
     for x in d["views"]["front"]["panel"]["decor"]:
         assert x.get("pattern") != "vent", x["id"]
+
+
+def test_crs520_front_prints_every_port_numeral_and_brackets_the_groups_and_lamps():
+    d = load(CRS520)
+    silk = d["views"]["front"]["silkscreen"]
+    qsfp = {s["text"]: s["for"] for s in silk if s.get("for", "").startswith("qsfp-")}
+    assert sorted(qsfp, key=int) == [str(n) for n in range(1, 17)]
+    assert all(qsfp[n] == f"qsfp-{n}" for n in qsfp)
+    sfp = {s["text"]: s["for"] for s in silk if s.get("for", "").startswith("cage-")}
+    assert sorted(sfp) == ["1", "2", "3", "4"]
+    ids = {s["id"]: s for s in silk if s.get("id", "").startswith("bracket-")}
+    assert set(ids) == {"bracket-100g", "bracket-25g", "bracket-user", "bracket-fault"}
+    assert all(s["filled"] is False and s["stroke-width"] == 0.2 for s in ids.values())
+    # the hooks stop short of the lamps over the cages (3.0 and 2.0 mm long) so that no lamp paints over the line
+    assert ids["bracket-100g"]["path"].startswith("M 7.6 9.3") and ids["bracket-100g"]["path"].endswith("198.1 9.3")
+    assert ids["bracket-25g"]["path"].startswith("M 205.5 8.3") and ids["bracket-25g"]["path"].endswith("240.4 8.3")
+    # the lamp brackets start over and under the left lamp column and run right to USER and FAULT
+    assert ids["bracket-user"]["path"].startswith("M 279.6") and ids["bracket-fault"]["path"].startswith("M 279.6")
+
+
+def test_crs520_rear_modules_carry_handles_thumbscrews_latches_chassis_screws_and_the_legend_underline():
+    d = load(CRS520)
+    for i, x in ((1, 171.3), (2, 240.4), (3, 309.0), (4, 376.8)):
+        h, core = decor(d, "rear", f"fan-{i}-handle"), decor(d, "rear", f"fan-{i}-handle-core")
+        assert (h["at"], h["size"], h["fill"]) == ([x, 5.0], [4.6, 38.0], "#776d64") and core["fill"] == "#524339"
+        t = decor(d, "rear", f"fan-{i}-thumbscrew")
+        assert (t["size"], t["fill"]) == ([7.2, 13.4], "#6d635c") and t["at"][0] < h["at"][0]  # left of the handle
+    for i in (1, 2):
+        h = decor(d, "rear", f"psu-{i}-handle")
+        assert (h["size"], h["fill"]) == ([4.0, 39.8], "#776d64")
+        assert decor(d, "rear", f"psu-{i}-thumbscrew")["fill"] == "#737268"
+        assert decor(d, "rear", f"psu-{i}-latch-top")["fill"] == decor(d, "rear", f"psu-{i}-latch-bottom")["fill"] == "#89978e"
+    screws = [x for x in d["views"]["rear"]["panel"]["decor"] if x["kind"] == "earth-screw"]
+    assert len(screws) == 5 and all(s["size"] == [4.4, 4.4] and s["fill"] == "#51453b" for s in screws)
+    silk = {s["id"]: s for s in d["views"]["rear"]["silkscreen"] if s.get("id")}
+    assert silk["legend-underline"]["path"] == "M 131.8 17.4 L 157.6 17.4"  # under POWER 1 / POWER 2, 25.8 mm
+    for i in range(1, 5):  # the arrowhead after each fan numeral is a filled triangle
+        assert silk[f"fan-{i}-arrow"]["filled"] is True and silk[f"fan-{i}-arrow"]["path"].endswith("Z")
+    assert len([k for k in silk if k.startswith("chassis-screw-cross-")]) == 5
 
 
 def test_crs520_rear_honeycombs_are_scaled_to_the_photographs_hexagons():
