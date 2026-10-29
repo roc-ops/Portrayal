@@ -473,7 +473,9 @@ gaps:
     its own configurations so they never coexist; that mixing AC and DC is not supported (Data
     Sheet p5; Hardware Installation Guide Table 2) is not enforced by the model. STILL OPEN: the
     redundancy is stated two ways - the text of the guide's "Cisco ASR 9910 Router Power Modules"
-    says AC 4+2 and DC 5+3, Table 15 says AC N+N and Table 16 says DC N+3 - and neither is chosen;
+    says AC 4+2 and DC 5+3, Table 15 says AC N+N and Table 16 says DC N+3. The groups `power-modules-ac`
+    and `power-modules-dc` state the table forms (`n+n`, `n+3`) and declare the text forms as conflicts
+    in their `redundancy-note`, so the text and the tables are still unreconciled;
     Table 13 gives the 9910's weight "configured with ... one PEM" although it has two trays; Table
     21 has no maximum output for the 9910; the module dimensions are measured, not stated (see the
     two components); the shelf is not drawn empty, so its end hardware and the tray's switch are not
@@ -516,13 +518,22 @@ gaps:
   wanted: >-
     a Cisco document that names either -SE part beside a chassis, or says it is not compatible with one
 groups:
-  power-modules:
+  power-modules-ac:
     term: PM
     role: service
     index-origin: 0
     physical-context: Power Module
     attrs:
-      redundancy-note: 'The guide states it two ways and neither is chosen here: "Cisco ASR 9910 Router Power Modules" gives AC 4+2 and DC 5+3 in its text, while Table 15 gives AC N+N and Table 16 gives DC N+3 for the 9910. Two trays, three AC or four DC modules each. The AC and DC bays share one footprint; fill one set; mixing is not supported and not enforced'
+      redundancy: 'n+n'
+      redundancy-note: 'n+n - Overview and Reference Guide, Table 15 (PDF pp144-146): N+N for the ASR 9910 with version 3 AC power modules. Declared conflict: the text of "Cisco ASR 9910 Router Power Modules" (PDF p74 / printed p62) says AC 4+2. Neither is chosen over the other; the table form is the one stated here. Two trays, three AC modules each. The AC and DC bays share one footprint; fill one set; mixing is not supported and not enforced'
+  power-modules-dc:
+    term: PM
+    role: service
+    index-origin: 0
+    physical-context: Power Module
+    attrs:
+      redundancy: 'n+3'
+      redundancy-note: 'n+3 - Overview and Reference Guide, Table 16 (PDF pp146-147): N+3 for the ASR 9910 with version 3 DC power modules. Declared conflict: the text of "Cisco ASR 9910 Router Power Modules" (PDF p74 / printed p62) says DC 5+3. Neither is chosen over the other; the table form is the one stated here. Two trays, four DC modules each. The AC and DC bays share one footprint; fill one set; mixing is not supported and not enforced'
   slots:
     term: Slot
     role: traffic
@@ -578,20 +589,20 @@ views:
         - {id: slot-7, at: [315.755, 259.18], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/a99-10x400ge-x-se@2', 'cisco/a99-10x400ge-x-tr@2', 'cisco/a99-12x100ge@1', 'cisco/a99-32x100ge-se@1', 'cisco/a99-32x100ge-tr@1', 'cisco/a99-32x100ge-x-se@1', 'cisco/a99-32x100ge-x-tr@1', 'cisco/a99-4hg-flex-se@2', 'cisco/a99-4hg-flex-tr@2', 'cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4hg-flex-se@2', 'cisco/a9k-4hg-flex-tr@2', 'cisco/a9k-4x100ge@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 7, default: cisco/a9k-slot-cover@1}
         - {id: slot-8, at: [359.545, 259.18], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/a99-10x400ge-x-se@2', 'cisco/a99-10x400ge-x-tr@2', 'cisco/a99-12x100ge@1', 'cisco/a99-32x100ge-se@1', 'cisco/a99-32x100ge-tr@1', 'cisco/a99-32x100ge-x-se@1', 'cisco/a99-32x100ge-x-tr@1', 'cisco/a99-4hg-flex-se@2', 'cisco/a99-4hg-flex-tr@2', 'cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4hg-flex-se@2', 'cisco/a9k-4hg-flex-tr@2', 'cisco/a9k-4x100ge@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 8, default: cisco/a9k-slot-cover@1}
         - {id: slot-9, at: [403.325, 259.18], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/a9k-rsp880-lt-se@2', 'cisco/a9k-rsp880-lt-tr@2', 'cisco/a99-rsp-se@2', 'cisco/a9k-rsp5-se@2', 'cisco/a9k-rsp5-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 9, default: cisco/a9k-slot-cover@1}
-        - {id: ps0-pm-0, at: [15.9, 824.19], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules, rel-pos: 0, only-in: [base, ac]}
-        - {id: ps0-pm-1, at: [154.9, 824.19], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules, rel-pos: 1, only-in: [base, ac]}
-        - {id: ps0-pm-2, at: [293.9, 824.19], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules, rel-pos: 2, only-in: [base, ac]}
-        - {id: ps1-pm-0, at: [15.9, 875.95], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules, rel-pos: 3, only-in: [base, ac]}
-        - {id: ps1-pm-1, at: [154.9, 875.95], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules, rel-pos: 4, only-in: [base, ac]}
-        - {id: ps1-pm-2, at: [293.9, 875.95], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules, rel-pos: 5, only-in: [base, ac]}
-        - {id: ps0-dcpm-0, at: [15.9, 823.94], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 0, only-in: [dc]}
-        - {id: ps0-dcpm-1, at: [120.6, 823.94], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 1, only-in: [dc]}
-        - {id: ps0-dcpm-2, at: [225.3, 823.94], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 2, only-in: [dc]}
-        - {id: ps0-dcpm-3, at: [330.0, 823.94], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 3, only-in: [dc]}
-        - {id: ps1-dcpm-0, at: [15.9, 875.7], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 4, only-in: [dc]}
-        - {id: ps1-dcpm-1, at: [120.6, 875.7], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 5, only-in: [dc]}
-        - {id: ps1-dcpm-2, at: [225.3, 875.7], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 6, only-in: [dc]}
-        - {id: ps1-dcpm-3, at: [330.0, 875.7], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules, rel-pos: 7, only-in: [dc]}
+        - {id: ps0-pm-0, at: [15.9, 824.19], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules-ac, rel-pos: 0, only-in: [base, ac]}
+        - {id: ps0-pm-1, at: [154.9, 824.19], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules-ac, rel-pos: 1, only-in: [base, ac]}
+        - {id: ps0-pm-2, at: [293.9, 824.19], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules-ac, rel-pos: 2, only-in: [base, ac]}
+        - {id: ps1-pm-0, at: [15.9, 875.95], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules-ac, rel-pos: 3, only-in: [base, ac]}
+        - {id: ps1-pm-1, at: [154.9, 875.95], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules-ac, rel-pos: 4, only-in: [base, ac]}
+        - {id: ps1-pm-2, at: [293.9, 875.95], size: {w: 139.0, h: 40.1}, accepts: ['cisco/pwr-6kw-ac-v3@1'], default: cisco/pwr-6kw-ac-v3@1, group: power-modules-ac, rel-pos: 5, only-in: [base, ac]}
+        - {id: ps0-dcpm-0, at: [15.9, 823.94], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules-dc, rel-pos: 0, only-in: [dc]}
+        - {id: ps0-dcpm-1, at: [120.6, 823.94], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules-dc, rel-pos: 1, only-in: [dc]}
+        - {id: ps0-dcpm-2, at: [225.3, 823.94], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules-dc, rel-pos: 2, only-in: [dc]}
+        - {id: ps0-dcpm-3, at: [330.0, 823.94], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules-dc, rel-pos: 3, only-in: [dc]}
+        - {id: ps1-dcpm-0, at: [15.9, 875.7], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules-dc, rel-pos: 4, only-in: [dc]}
+        - {id: ps1-dcpm-1, at: [120.6, 875.7], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules-dc, rel-pos: 5, only-in: [dc]}
+        - {id: ps1-dcpm-2, at: [225.3, 875.7], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules-dc, rel-pos: 6, only-in: [dc]}
+        - {id: ps1-dcpm-3, at: [330.0, 875.7], size: {w: 104.7, h: 40.6}, accepts: ['cisco/pwr-4p4kw-dc-v3@1'], default: cisco/pwr-4p4kw-dc-v3@1, group: power-modules-dc, rel-pos: 7, only-in: [dc]}
     regions:
       - {id: rsp-slots, label: 'RSP cards - the outer pair, slots 0 and 9'}
       - {id: lc-slots, label: 'Line cards 0 to 7 - slots 1 to 8'}

@@ -52,6 +52,21 @@ def _power_bays(doc, kind):
     return {i: b for i, b in _bays(doc).items() if marker in i}
 
 
+def _power_group(name, kind):
+    """The 9906 keeps one power group; the 9910 splits AC and DC (Tables 15 and 16 differ)."""
+    return "power-modules" if name == "asr-9906" else f"power-modules-{kind}"
+
+
+def test_the_9910_power_groups_state_the_tables_and_declare_the_text():
+    groups = _device("asr-9910")["groups"]
+    for kind, form, text_form in (("ac", "n+n", "4+2"), ("dc", "n+3", "5+3")):
+        g = groups[f"power-modules-{kind}"]
+        assert g["attrs"]["redundancy"] == form
+        note = g["attrs"]["redundancy-note"]
+        assert text_form in note and "Table" in note and "conflict" in note
+    assert "power-modules" not in groups
+
+
 def _all_devices():
     for p in (LIB / "devices").glob("*/*/device.yaml"):
         yield p, yaml.safe_load(p.read_text())
@@ -148,11 +163,11 @@ def test_each_bay_takes_exactly_its_own_module(name):
     doc = _device(name)
     for i, b in _power_bays(doc, "ac").items():
         assert b["accepts"] == [AC], i
-        assert b["default"] == AC and b["group"] == "power-modules"
+        assert b["default"] == AC and b["group"] == _power_group(name, "ac")
         assert b["only-in"] == ["base", "ac"], i
     for i, b in _power_bays(doc, "dc").items():
         assert b["accepts"] == [DC], i
-        assert b["default"] == DC and b["group"] == "power-modules"
+        assert b["default"] == DC and b["group"] == _power_group(name, "dc")
         assert b["only-in"] == ["dc"], i
 
 
@@ -292,9 +307,10 @@ def test_the_existing_bays_are_unchanged():
 @pytest.mark.parametrize("name", ["asr-9906", "asr-9910"])
 def test_the_power_group_is_declared_and_the_rear_is_still_undrawn_for_power(name):
     doc = _device(name)
-    g = doc["groups"]["power-modules"]
-    assert g["term"] == "PM" and g["role"] == "service"
-    assert g["physical-context"] == "Power Module"
+    groups = [doc["groups"][n] for n in {_power_group(name, "ac"), _power_group(name, "dc")}]
+    for g in groups:
+        assert g["term"] == "PM" and g["role"] == "service"
+        assert g["physical-context"] == "Power Module"
     # devicelock: "This change needs at least a major bump" - the shelf cutouts moved and grew
     assert doc["version"] == "2.0.0"
     rear_ids = {b["id"] for b in doc["views"]["rear"]["components"].get("bays", [])}
