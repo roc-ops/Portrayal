@@ -129,9 +129,10 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # The Cisco C9300-48P and C9300-48T each place two common/ground-screw@1 on their rear
 # face, the guide's "ground connectors", 6 -> 10 on 3 -> 5 devices.
 # The Cisco C9300-24P, C9300-24U and C9300-48U each place the same two, 10 -> 16 on 5 -> 8 devices.
+# The Cisco C9300-24S and C9300-48S each place the same two, 16 -> 20 on 8 -> 10 devices.
 CENSUS = {
     "common/ground-lug@1": (31, 22),
-    "common/ground-screw@1": (16, 8),
+    "common/ground-screw@1": (20, 10),
     "common/ground-stud@1": (11, 11),
     CASA: (1, 1),
 }
@@ -458,7 +459,8 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         seen += 1
     # every placement of the census but the Casa terminal's one
     # 52 -> 58 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
-    assert seen == 58
+    # 58 -> 62 with the Cisco C9300-24S and C9300-48S's two ground screws each
+    assert seen == 62
 
 
 def test_the_only_turned_placements_are_turned_90(placed):
