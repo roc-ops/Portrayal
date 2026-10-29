@@ -1,5 +1,26 @@
 {
  "bay-accepts": {
+  "front/bays/ps0-dcpm-0": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps0-dcpm-1": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps0-dcpm-2": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps0-dcpm-3": [
+   "cisco/pwr-4p4kw-dc-v3@1"
+  ],
+  "front/bays/ps0-pm-0": [
+   "cisco/pwr-6kw-ac-v3@1"
+  ],
+  "front/bays/ps0-pm-1": [
+   "cisco/pwr-6kw-ac-v3@1"
+  ],
+  "front/bays/ps0-pm-2": [
+   "cisco/pwr-6kw-ac-v3@1"
+  ],
   "front/bays/slot-0": [
    "cisco/a99-rsp-se@2",
    "cisco/a9k-rsp5-se@2",
@@ -121,7 +142,7 @@
    "cisco/a9k-slot-cover@1"
   ]
  },
- "composed": "0f6896699ae9b6cf",
+ "composed": "2ed9135be0f435c7",
  "composed-refs": {
   "cisco/a99-10x400ge-x-se@2": "2.0.0+2cafa41984d516db",
   "cisco/a99-10x400ge-x-tr@2": "2.0.0+19038735632bb9ea",
@@ -163,6 +184,8 @@
   "cisco/a9k-rsp880-lt-se@2": "2.0.0+80a999257b1234cb",
   "cisco/a9k-rsp880-lt-tr@2": "2.0.0+bf5b7274829fa94b",
   "cisco/a9k-slot-cover@1": "1.0.1+3c808f8598a130fd",
+  "cisco/pwr-4p4kw-dc-v3@1": "1.0.0+fc5129e2b7e99447",
+  "cisco/pwr-6kw-ac-v3@1": "1.0.0+e169f19d8b6ce3bb",
   "common/db9-receptacle@1": "1.1.0+92f8de85b306faeb",
   "common/esd-jack@1": "1.0.0+0991d3874bfac0f4",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
@@ -179,15 +202,25 @@
   "std/xfp@1": "1.0.0+beb5b8168c581dc6"
  },
  "configs": [
-  "base"
+  "ac",
+  "base",
+  "dc"
  ],
  "format": 1,
- "gaps": "17dafcbaf9407116",
+ "gaps": "02bca3880c68f9dc",
  "groups": [
   "grounding",
+  "power-modules",
   "slots"
  ],
  "ids": [
+  "front/bays/ps0-dcpm-0",
+  "front/bays/ps0-dcpm-1",
+  "front/bays/ps0-dcpm-2",
+  "front/bays/ps0-dcpm-3",
+  "front/bays/ps0-pm-0",
+  "front/bays/ps0-pm-1",
+  "front/bays/ps0-pm-2",
   "front/bays/slot-0",
   "front/bays/slot-1",
   "front/bays/slot-2",
@@ -202,7 +235,7 @@
   "rear/cutout/ground-pad-rear",
   "rear/placements/ground-pad-rear"
  ],
- "names": "d8d82f262e77763b",
+ "names": "9ebacc786207f898",
  "placement-addressing": {
   "for": {
    "front/placements/esd-jack": [
@@ -210,6 +243,13 @@
    ]
   },
   "rel-pos": {
+   "front/bays/ps0-dcpm-0": 0,
+   "front/bays/ps0-dcpm-1": 1,
+   "front/bays/ps0-dcpm-2": 2,
+   "front/bays/ps0-dcpm-3": 3,
+   "front/bays/ps0-pm-0": 0,
+   "front/bays/ps0-pm-1": 1,
+   "front/bays/ps0-pm-2": 2,
    "front/bays/slot-0": 0,
    "front/bays/slot-1": 1,
    "front/bays/slot-2": 2,
@@ -222,8 +262,15 @@
   }
  },
  "placement-attrs": "44136fa355b3678a",
- "placement-geometry": "f6688f209f4d2cc4",
+ "placement-geometry": "82faa5e9a13b28f9",
  "placement-groups": {
+  "front/bays/ps0-dcpm-0": "power-modules",
+  "front/bays/ps0-dcpm-1": "power-modules",
+  "front/bays/ps0-dcpm-2": "power-modules",
+  "front/bays/ps0-dcpm-3": "power-modules",
+  "front/bays/ps0-pm-0": "power-modules",
+  "front/bays/ps0-pm-1": "power-modules",
+  "front/bays/ps0-pm-2": "power-modules",
   "front/bays/slot-0": "slots",
   "front/bays/slot-1": "slots",
   "front/bays/slot-2": "slots",
@@ -235,7 +282,7 @@
   "rear/placements/ground-pad-rear": "grounding"
  },
  "placement-surface": "44136fa355b3678a",
- "shape": "416d7a3dfc60b07a",
- "surface": "be0f2e2ee98352ae",
- "version": "1.3.0"
+ "shape": "41809dfd196174a8",
+ "surface": "f3a5d8db61a04904",
+ "version": "2.0.0"
 }
