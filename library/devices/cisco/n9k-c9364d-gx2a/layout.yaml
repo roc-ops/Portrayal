@@ -1,0 +1,521 @@
+format: 1
+kind: device
+name: n9k-c9364d-gx2a
+version: 1.0.0
+maturity: modelled
+manufacturer: Cisco
+model: N9K-C9364D-GX2A
+aliases:
+- {name: Nexus 9364D-GX2A, kind: marketing}
+portfolio: {line: Nexus 9000, family: Nexus 9300, series: Nexus 9300-GX2}
+description: >-
+  64x 400G QSFP-DD and 2x 10G SFP+ 2RU data-centre switch running NX-OS. The port side carries
+  the QSFP-DD cages in sixteen columns of stacked pairs in an upper and a lower group, the
+  stacked SFP+ pair, the console, an RJ-45 and an SFP management port, the USB port and the BCN,
+  STS and ENV lamps. The other side carries four fan modules and two power supplies stacked at
+  the right. Ports number 1-64 in pairs down each column, odd on the upper cage. Ships
+  port-side intake only (burgundy modules).
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      One guide, held as PDF and as converted text and figures; it is not committed. Cisco
+      N9364D-GX2A NX-OS Mode Switch Hardware Installation Guide, 72 pages, First Published
+      2022-06-24, Last Modified 2026-09-16: the Overview and its two flat figures (front art
+      number 503684, rear 503685, both PDF page 8), appendix B specifications, appendix C LEDs,
+      appendix D kits. PAGES ARE PDF PAGES with the printed page after them; THE PRINTED PAGE IS
+      THE TABLE OF CONTENTS' NUMBER, and the converted set puts the dimension table on PDF page
+      60 against a printed 54, so PDF = printed + 6; no PDF renderer is installed on the host
+      that did this work, so no PDF page was viewed and the text layer and the converted
+      figures were read. NO DATA SHEET, PHOTOGRAPH, 3D MODEL OR STENCIL IS HELD for this
+      model (the Nexus 9300-GX2 data sheet is on the intake's hand-off list and is not in the
+      intake), and the NetBox devicetype-library is held as a path listing only: no file was
+      read and nothing is taken from it. The figures are the guide's embedded bitmaps at about
+      2.85 pixels per mm and are low resolution; the 2-RU figure is flat and has callouts.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      Each column of each group is a stacked pair of QSFP-DD cages with a belly band between
+      them, printed with a pair of numbers ("1~2"). The library's convention is the upper cage
+      upright over the lower turned 180, as cisco/n9k-x9716d-gx@1 places its pairs; the figure
+      is too coarse to show which way the contacts face, so the convention is taken.
+  gate-1:
+    confidence: measured
+    note: >-
+      The front figure's outline is 1261 px across (x 5 to 1266) and 249 px down (y 104 to 353):
+      aspect 5.06 against the guide's 17.41 x 3.45 in, 5.05, so 0.3% out, and it can be
+      measured; 2.85 px per mm across and 2.84 down. THE FIGURE AGREES WITH 2 RU (one rack unit
+      would be 10.1). The rear figure's outline is 1273 px across and 253 down, 5.03, 2.88 px
+      per mm. The cage columns repeat at 67.6 px, 23.72 mm, from 167 px to 1181 px, so the pitch
+      is the figure's and not the registry's.
+  the-x-axis:
+    confidence: estimated
+    note: >-
+      From the front figure, origin the left outline. The first cage opening starts at 56.8 mm
+      and the sixteen columns step 23.72 mm; the last cage ends at 431.6 mm, 10.7 mm short of
+      the right outline. The std/qsfp-dd@1 opening is 19.0 mm wide and the figure's reads about
+      19.9, so a column is the registry's cage centred on the figure's.
+  the-y-axis:
+    confidence: estimated
+    note: >-
+      From the same figure, origin the top outline. The upper group's stack runs 10.0 to 35.6 mm
+      and the lower group's 50.2 to 76.5, so each stack is two 10 mm cages 15.8 mm apart
+      (cisco/n9k-x9716d-gx@1 uses 14.85). A perforated band between the groups runs 36.3 to
+      49.6 mm and a row of small squares along the bottom edge.
+  port-order:
+    confidence: estimated
+    note: >-
+      The figure prints a pair of numbers over each column of the upper group, "1~2", "3~4" to
+      "31~32", and under each column of the lower group a pair that reads "33~34" to "63~64" at
+      this resolution (the first of the lower group reads like "35~36" and the rest of the lower
+      group is not sharper, so the lower pair numbers are the sequence and not a reading). The
+      guide's overview lists 64 QSFP-DD ports and its Table 1 reads "Ports 1-64" and "Odd
+      numbered ports" against "Even numbered ports", so the upper cage of a pair is odd. Port
+      numbers are as printed; the NX-OS interface names are not in the guide. The two SFP+ ports
+      are numbered 65 and 66: the figure prints a number under each and the figure does not
+      resolve them.
+  port-lamps:
+    confidence: estimated
+    note: >-
+      Appendix C, Switch Chassis LEDs: "The port LEDs appear as triangles pointing up or down to
+      the nearest port." Green is admin up, SFP present and link up; amber is admin down or
+      SFP absent; off is up and present but no link. The figure draws four marks under each
+      column of the LOWER group only: a boxed triangle at each end and two circles between
+      them. The boxed triangles are drawn as the up and down lamps of the pair and the circles
+      as marks. The upper group draws none.
+  chassis-lamps:
+    confidence: estimated
+    note: >-
+      Appendix C: "The BCN, STS, and ENV, LEDs are located on the left side of the front of the
+      switch." The figure draws three lamps in a row with a vertical legend under each, at 18.4,
+      23.1 and 27.5 mm across and 40.8 down. Above the management SFP cage the figure draws two
+      small circles under printed text the resolution does not read; they are drawn as marks.
+      The mark at the top left is the maker's logo; none is drawn. The model legend, NEXUS over
+      N9K-C9364D-GX2A, is printed on the figure and is carried as text.
+  rear-face:
+    confidence: estimated
+    note: >-
+      Every x and y on the rear is read off the rear figure (2.88 px per mm). Four fan modules
+      at the left, "slots numbered from 1 (left) to 4 (right)", then two supplies stacked at the
+      right, "slots numbered 1 (top) and 2 (bottom)", with a vertical MAC legend between the
+      fans and the supplies. The figure shows AC supplies. The rear carries no port.
+  power:
+    confidence: datasheet
+    note: >-
+      Appendix B, Switch Power Input Requirements: typical 1378 W and maximum 3000 W "(AC or
+      DC)", 10,236.426 BTU per hour. The figures are the switch's draw and not a supply rating;
+      the guide names no configuration or ambient. The same page carries a note, "If you want to
+      use optics that consume 5W or more power on all the 36 ports , you must install 1100W
+      power supplies", that cannot be this 64-port switch's (it names 36 ports and a supply this
+      guide does not list) and is not carried.
+  colour:
+    confidence: estimated
+    note: >-
+      NO SOURCE FOR THE COLOUR. The guide's figures are uncoloured line art. #d0d2cf is the
+      value the 93180YC-EX's stencil sample gave, carried across as the family colour.
+  rack-ears:
+    confidence: estimated
+    note: >-
+      The guide's Overview and its Clearance Requirements give no ear position: its rack-mount
+      procedure for the NXK-ACC-KIT2-2RU installs two inner rails on the chassis sides and two
+      outer rails on the posts, and slides the chassis in "until the front panel is flush with
+      the front of the rack". The Clearance table calls the front clearance width "equal to the
+      width of the chassis with two rack-mount brackets that are attached to it", 19.0 in, and
+      no figure dimensions a bracket. So `chassis.ears` is left out and the gap says so.
+attrs:
+  physical:
+    weight-note: '58 lb (26.3 kg) chassis. Fan module 1.35 lb (0.61 kg). Supply 3.6 lb (1.63 kg), the row for the 3200 W and the 3000 W AC/HVDC supplies.'
+  power:
+    power-typical-w: 1378
+    power-max-w: 3000
+    power-envelope: unstated
+    heat-dissipation-btu-hr: 10236
+    power-input-ac: '100 to 120 V or 200 to 240 V at 16 A max, 50/60 Hz (3200 W AC/HVDC)'
+    power-input-hvdc: '240 VDC at 14.5 max (3200 W AC/HVDC and DC/HVDC)'
+    power-input-dc: '-40 to -72 VDC (3200 W DC/HVDC)'
+    power-supply-options: '3200W AC/HVDC or 3200W DC/HVDC (two); the weights row also names a 3000W AC/HVDC'
+  environmental:
+    operating-temp: '0 to 40 C (32 to 104 F)'
+    storage-temp: '-40 to 70 C (-40 to 158 F)'
+    humidity: '8 to 80% operating, 5 to 95% non-operating'
+    altitude: '0 to 10,000 ft (3,048 m) operating; 6,562 ft (2000 m) for China'
+  features:
+    optics-qsfp-dd: 'guide: "400-Gigabit QSFP-DD ports (64)". Table 1, 3200 W supplies, 40 C ambient limit: 12 W per port with 16 MACsec ports enabled; 20 W on 8 or 16 odd ports and 12 W on the rest with 8 or 0 MACsec ports'
+    optics-sfp-plus: 'guide: "10-Gigabit SFP+ ports (2)"'
+    management-ports: 'front figure: one RJ-45 and one SFP management port, and a console port'
+  management:
+    usb: '1 USB port'
+  lifecycle:
+    eol: none-announced
+chassis: {width: 442.3, height: 87.6, depth: 757.6, ru: 2, weight-kg: 26.3, color: '#d0d2cf', airflow: front-to-back,
+  power: ac,
+  kits: [{ref: 'cisco/nxk-acc-kit2-2ru@1', supply: optional}]}
+gaps:
+- what: size-figures
+  scope: [front, rear]
+  reason: sources-disagree
+  note: >-
+    The Switch Dimensions table (PDF p60, printed 54) gives the depth as 29.82 in (75.76 cm)
+    and the width as 17.41 in (44.23 cm); the Clearance Requirements table (printed p10) gives
+    the depth of the chassis as 29.78 in (75.65 cm) and the chassis width as 17.3 in (43.9 cm).
+    The Dimensions table is carried, 442.3 by 757.6 mm, because its row also carries the height
+    and the RU; the 4 mm of depth and 3 mm of width are not explained by the guide.
+  wanted: >-
+    Which inclusion each figure has (whether 29.78 in is the chassis without a module handle).
+- what: ears-not-dimensioned
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The guide names two rack kits, NXK-ACC-KIT2-2RU and N9K-C9300-RMK ("Installation Options with
+    Rack-Mount Kits", printed p17), and gives the install procedure for NXK-ACC-KIT2-2RU only
+    (printed p21); no ear position is drawn or dimensioned.
+  wanted: >-
+    The shipped ear position, if the chassis has ears, and what N9K-C9300-RMK holds. The guide's
+    "Installing the Chassis in a Four-Post Rack" table lists "Rack-mount brackets (2)", "Rack-mount
+    guides (2)", "Rack-mount guide rails (2)" and screws without naming the kit it belongs to.
+- what: kit-contents-disagree
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    Appendix D lists the NXK-ACC-KIT2-2RU as a slider bracket (2), slider rails (2) and twelve
+    M4 screws, with a ground lug kit; the install procedure calls its parts inner rails and
+    outer rails. cisco/nxk-acc-kit2-2ru@1 is the procedure's wording and is referenced, not
+    edited.
+  wanted: >-
+    Nothing further for this device.
+- what: ac-3000w-supply-named-not-seated
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    The weights row (PDF p60, printed 54) names a 3000-W AC/HVDC port-side intake supply
+    (NXA-PAC-3000W-PI) and the power-specifications contents name a 3000-W AC supply (for
+    PSU3KW-HVPI). The Overview's user-replaceable components list names the two 3200 W supplies
+    only, and the Table 1 rows name the 3200 W supplies only. The 3000 W supply is not seated
+    and no component is added; cisco/n9k-pac-3000w-b@1 is the Nexus 9500's different part and
+    is not used.
+  wanted: >-
+    Whether NXA-PAC-3000W-PI is orderable for this chassis, and its face.
+- what: shipment-list-names-other-supplies
+  scope: [rear]
+  reason: sources-disagree
+  note: >-
+    "Unpacking and Inspecting a New Switch" (printed p18) lists a 3000 W dual AC/DC supply
+    (PSU3KW-HVPI), a 2000 W AC/DC supply (PSU-2KW-ACPI) and a 1400 W AC supply (PSU-1.4KW-ACPI) with
+    red or blue tabs. They are not in the Overview and no other page names them; the text is read
+    as left over from another switch's guide and is not carried.
+  wanted: >-
+    Nothing further.
+- what: fan-part-number-printed-three-ways
+  scope: [rear]
+  reason: sources-disagree
+  note: >-
+    The Overview prints NXA-SFAN-160CFM2-PI, the weights row NXA-FAN-160CFM2-PI, Table 1 "NXA-SF
+    AN-160CFM2PI", and the label on the rear figure (art 503685) a label of the "NXA-FAN-160CFM2PI"
+    form that the figure is too small to read letter by letter. The component is
+    cisco/nxa-sfan-160cfm2@1, named by the Overview's and the Dimensions appendix's form.
+  wanted: >-
+    The printed label at full size, and whether NXA-FAN-160CFM2 is a second part.
+- what: fan-and-supply-lamps-unnamed
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    Appendix C describes the fan status lamp and the power-supply lamps by state and not by
+    position; the figure draws a ring on each fan and two circles with a small mark on each supply.
+  wanted: >-
+    Which circle is which, and what the small mark between them is.
+- what: unnamed-marks-on-the-front
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The figure draws two small circles above the management SFP cage under printed text, two
+    circles between the boxed triangles under each lower-group column, one lamp under the SFP+ pair,
+    printed marks beside it and perforation fields. None is named by the guide's Switch Chassis LEDs
+    table or its callout table; they are drawn as marks, and the SFP+ marks are not drawn.
+  wanted: >-
+    What those marks are, and the printed numerals under the SFP+ pair.
+- what: upper-group-has-no-port-lamps
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    Appendix C says every port has a lamp. The figure draws lamps under the lower group only and
+    no lamp near the upper group's cages.
+  wanted: >-
+    Where the upper group's lamps are.
+- what: other-supplies-have-no-picture
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    A picture of the 3200 W DC/HVDC supply. The guide's figure shows AC supplies only ("AC power
+    supplies shown"). Its face is the AC supply's with the inlet changed, and the guide's lug
+    (a two-hole copper lug, #2 AWG) is not drawn.
+- what: sizes-off-a-figure
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    A stated size for the supplies and the fan module. The guide gives neither.
+- what: the-four-undrawn-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A flat drawing of the lid, the underside and the two side walls. The guide's only picture of a
+    side (PDF page 9, art 503686, "The figure shows the side of the chassis", with one callout,
+    "Grounding pad") is a three-quarter view from the front left that shows a side wall, the lid
+    with a rectangular cover plate and the grounding pad; it is perspective, so nothing on a wall can
+    be measured from it, and no wall is drawn. The grounding pad is left out of the rear for the
+    same reason.
+- what: fan-redundancy-counting
+  scope: [fans]
+  reason: vendor-silent
+  note: >-
+    "Replacing a Fan Module During Operations" (printed p37): "there must be three fan modules
+    circulating air in the chassis at all times. The other fan module is redundant", and the Overview
+    note says that if one fan fails the others go to 100%, and if two fail "the switch will issue
+    a warning, and power down in 2 minutes".
+  wanted: >-
+    Nothing further: read as modules, three of four, so the group says 3+1.
+groups:
+  qsfpdd-400g-1-32:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp-dd, speed: 400g}
+  qsfpdd-400g-33-64:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp-dd, speed: 400g}
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band block at the left end of the port side: an RJ-45 console port, an RJ-45 and an
+      SFP management port and a USB port. Three media, one purpose: reaching the switch when the
+      data plane cannot.
+  furniture: {term: Part, role: furniture, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        installation guide, Overview: "Power supply modules (two-One for operations and one for
+        redundancy [1+1])". Slot 1 is the top one and slot 2 the bottom one.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: >-
+        installation guide: four fan modules, "slots numbered from 1 (left) to 4 (right)". The
+        replacement section (printed p37) says three fan modules must be circulating air at all
+        times and the fourth is redundant. If one fan fails the others go to 100%; if two fail the
+        switch warns and powers down in 2 minutes (Overview note).
+views:
+  front:
+    size: {w: 442.3, h: 87.6}
+    panel:
+      decor:
+      - {id: vent-top, at: [4.20, 1.00], size: [428.00, 3.20], pattern: vent, pattern-pitch: [3.50, 3.00], vent: 1}
+      - {id: vent-mid, at: [55.00, 37.00], size: [378.00, 12.00], pattern: vent, pattern-pitch: [3.50, 3.00], vent: 1}
+      - {id: vent-bottom, at: [4.20, 84.20], size: [428.00, 2.60], pattern: vent, pattern-pitch: [3.50, 3.00], vent: 1}
+      - {id: ring-mgmt-1, at: [19.30, 22.00], size: [2.2, 2.2], shape: circle, fill: '#bfc3c8'}
+      - {id: ring-mgmt-2, at: [25.10, 22.00], size: [2.2, 2.2], shape: circle, fill: '#bfc3c8'}
+      cutouts:
+      - {block: qsfpdd-400g-1-32}
+      - {block: qsfpdd-400g-33-64}
+      - {block: sfp-plus}
+      - {id: led-bcn, at: [17.40, 39.80], size: [2.0, 2.0], shape: circle}
+      - {id: led-sts, at: [22.10, 39.80], size: [2.0, 2.0], shape: circle}
+      - {id: led-env, at: [26.50, 39.80], size: [2.0, 2.0], shape: circle}
+      - {id: mgmt-sfp, at: [16.55, 26.00], size: [14.5, 10.0], shape: rect}
+      - {id: console, at: [37.35, 10.80], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-rj45, at: [37.35, 24.60], size: [12.7, 11.0], shape: rect}
+      - {id: usb, at: [22.95, 63.10], size: [4.5, 12.0], shape: rect}
+    silkscreen:
+    - {block: qsfpdd-400g-1-32}
+    - {block: qsfpdd-400g-33-64}
+    - {id: silk-1-2, at: [66.30, 9.00], text: 1~2, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-1, port-2]}
+    - {id: silk-3-4, at: [90.02, 9.00], text: 3~4, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-3, port-4]}
+    - {id: silk-5-6, at: [113.74, 9.00], text: 5~6, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-5, port-6]}
+    - {id: silk-7-8, at: [137.46, 9.00], text: 7~8, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-7, port-8]}
+    - {id: silk-9-10, at: [161.18, 9.00], text: 9~10, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-9, port-10]}
+    - {id: silk-11-12, at: [184.90, 9.00], text: 11~12, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-11, port-12]}
+    - {id: silk-13-14, at: [208.62, 9.00], text: 13~14, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-13, port-14]}
+    - {id: silk-15-16, at: [232.34, 9.00], text: 15~16, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-15, port-16]}
+    - {id: silk-17-18, at: [256.06, 9.00], text: 17~18, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-17, port-18]}
+    - {id: silk-19-20, at: [279.78, 9.00], text: 19~20, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-19, port-20]}
+    - {id: silk-21-22, at: [303.50, 9.00], text: 21~22, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-21, port-22]}
+    - {id: silk-23-24, at: [327.22, 9.00], text: 23~24, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-23, port-24]}
+    - {id: silk-25-26, at: [350.94, 9.00], text: 25~26, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-25, port-26]}
+    - {id: silk-27-28, at: [374.66, 9.00], text: 27~28, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-27, port-28]}
+    - {id: silk-29-30, at: [398.38, 9.00], text: 29~30, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-29, port-30]}
+    - {id: silk-31-32, at: [422.10, 9.00], text: 31~32, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-31, port-32]}
+    - {id: silk-33-34, at: [66.30, 78.40], text: 33~34, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-33, port-34]}
+    - {id: silk-35-36, at: [90.02, 78.40], text: 35~36, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-35, port-36]}
+    - {id: silk-37-38, at: [113.74, 78.40], text: 37~38, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-37, port-38]}
+    - {id: silk-39-40, at: [137.46, 78.40], text: 39~40, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-39, port-40]}
+    - {id: silk-41-42, at: [161.18, 78.40], text: 41~42, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-41, port-42]}
+    - {id: silk-43-44, at: [184.90, 78.40], text: 43~44, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-43, port-44]}
+    - {id: silk-45-46, at: [208.62, 78.40], text: 45~46, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-45, port-46]}
+    - {id: silk-47-48, at: [232.34, 78.40], text: 47~48, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-47, port-48]}
+    - {id: silk-49-50, at: [256.06, 78.40], text: 49~50, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-49, port-50]}
+    - {id: silk-51-52, at: [279.78, 78.40], text: 51~52, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-51, port-52]}
+    - {id: silk-53-54, at: [303.50, 78.40], text: 53~54, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-53, port-54]}
+    - {id: silk-55-56, at: [327.22, 78.40], text: 55~56, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-55, port-56]}
+    - {id: silk-57-58, at: [350.94, 78.40], text: 57~58, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-57, port-58]}
+    - {id: silk-59-60, at: [374.66, 78.40], text: 59~60, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-59, port-60]}
+    - {id: silk-61-62, at: [398.38, 78.40], text: 61~62, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-61, port-62]}
+    - {id: silk-63-64, at: [422.10, 78.40], text: 63~64, font-size: 1.8, anchor: middle, fill: '#1a1d1f', for: [port-63, port-64]}
+    - {id: silk-bcn, at: [18.86, 43.40], text: BCN, font-size: 1.5, anchor: middle, rotate: -90, fill: '#1a1d1f', for: led-bcn}
+    - {id: silk-sts, at: [23.56, 43.40], text: STS, font-size: 1.5, anchor: middle, rotate: -90, fill: '#1a1d1f', for: led-sts}
+    - {id: silk-env, at: [27.96, 43.40], text: ENV, font-size: 1.5, anchor: middle, rotate: -90, fill: '#1a1d1f', for: led-env}
+    - {id: silk-usb, at: [18.40, 69.10], mark: usb, size: 3.4, fill: '#1a1d1f', for: usb}
+    - {id: silk-model-1, at: [5.90, 79.60], text: NEXUS, font-size: 2.2, anchor: start, fill: '#1a1d1f', for: chassis}
+    - {id: silk-model-2, at: [5.90, 83.00], text: N9K-C9364D-GX2A, font-size: 2.2, anchor: start, fill: '#1a1d1f', for: chassis}
+    components:
+      blocks:
+      - id: qsfpdd-400g-1-32
+        ref: std/qsfp-dd@1
+        at: [56.80, 10.00]
+        count: 32
+        rows: 2
+        pitch: 23.72
+        row-pitch: 15.8
+        number-from: 1
+        cutouts: true
+        rotate: {bottom: 180}
+      - id: qsfpdd-400g-33-64
+        ref: std/qsfp-dd@1
+        at: [56.80, 50.20]
+        count: 32
+        rows: 2
+        pitch: 23.72
+        row-pitch: 15.8
+        number-from: 33
+        cutouts: true
+        rotate: {bottom: 180}
+        led:
+          ref: common/led-arrow-sm@1
+          id-format: 'led-port-{n}'
+          dx-by-row: [1.40, 15.40]
+          dy-top: 29.70
+          dy-bottom: 13.90
+          skin-top: up
+          skin-bottom: down
+          group: port-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: disabled, color: '#f59e0b'}]
+      - id: sfp-plus
+        ref: std/sfp-ganged@1
+        at: [36.20, 51.00]
+        count: 2
+        rows: 2
+        pitch: 15.0
+        row-pitch: 15.0
+        number-from: 65
+        cutouts: true
+        rotate: {bottom: 180}
+      placements:
+      - {block: qsfpdd-400g-1-32}
+      - {block: qsfpdd-400g-33-64}
+      - {block: sfp-plus}
+      - {ref: std/sfp@1, id: mgmt-sfp, at: [16.55, 26.00], group: mgmt, rel-pos: 3,
+         attrs: {media: sfp, speed: 1g, role: mgmt}}
+      - {ref: std/rj45-ganged@2, id: console, at: [37.35, 10.80], rotate: 180, group: mgmt, rel-pos: 1,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: common/rj45-ganged-eth@1, id: mgmt-rj45, at: [37.35, 24.60], group: mgmt, rel-pos: 2,
+         attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: std/usb-a@1, id: usb, at: [19.20, 66.85], rotate: 90, group: mgmt, rel-pos: 4,
+         attrs: {media: usb-a, role: storage}}
+      - {ref: common/serial-symbol@1, id: console-mark, at: [39.70, 5.50], group: furniture, rel-pos: 1}
+      - {ref: common/nic-symbol@1, id: mgmt-rj45-mark, at: [40.60, 36.80], group: furniture, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-bcn, at: [17.40, 39.80], group: leds, rel-pos: 1, for: chassis,
+         states: ['off', {name: beacon, color: '#3b82f6', behavior: blinking}]}
+      - {ref: common/led-dot@1, id: led-sts, at: [22.10, 39.80], group: leds, rel-pos: 2, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: booting, color: '#f59e0b', behavior: blinking}, {name: minor-alarm, color: '#f59e0b'}, {name: major-alarm, color: '#ef4444'}]}
+      - {ref: common/led-dot@1, id: led-env, at: [26.50, 39.80], group: leds, rel-pos: 3, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+    regions:
+    - {id: logo-zone, at: [5.0, 6.4], size: {w: 7.0, h: 3.6}, label: 'Vendor logo; not drawn'}
+    - {id: out-of-band, at: [15.5, 8.5], size: {w: 38.0, h: 68.5}, label: 'Console, management, USB and chassis lamps',
+       members: [console, mgmt-rj45, mgmt-sfp, usb, led-bcn, led-sts, led-env]}
+    - {id: sfp-uplinks, at: [35.2, 50.0], size: {w: 17.0, h: 27.0}, label: '2 x 10G SFP+',
+       members: [port-65, port-66]}
+  rear:
+    size: {w: 442.3, h: 87.6}
+    panel:
+      decor: []
+    silkscreen:
+    - {id: silk-mac, at: [339.40, 68.40], text: MAC, font-size: 2.4, anchor: middle, rotate: -90, fill: '#1a1d1f', for: chassis}
+    components:
+      bays:
+      - {id: fan-1, at: [7.60, 4.50], size: {w: 80.0, h: 78.8}, group: fans, rel-pos: 1,
+         accepts: ['cisco/nxa-sfan-160cfm2@1'], default: 'cisco/nxa-sfan-160cfm2@1'}
+      - {id: fan-2, at: [89.65, 4.50], size: {w: 80.0, h: 78.8}, group: fans, rel-pos: 2,
+         accepts: ['cisco/nxa-sfan-160cfm2@1'], default: 'cisco/nxa-sfan-160cfm2@1'}
+      - {id: fan-3, at: [171.70, 4.50], size: {w: 80.0, h: 78.8}, group: fans, rel-pos: 3,
+         accepts: ['cisco/nxa-sfan-160cfm2@1'], default: 'cisco/nxa-sfan-160cfm2@1'}
+      - {id: fan-4, at: [253.75, 4.50], size: {w: 80.0, h: 78.8}, group: fans, rel-pos: 4,
+         accepts: ['cisco/nxa-sfan-160cfm2@1'], default: 'cisco/nxa-sfan-160cfm2@1'}
+      - {id: psu-1, at: [343.80, 0.90], size: {w: 89.2, h: 43.2}, group: psus, rel-pos: 1,
+         accepts: ['cisco/nxa-pac-3200w@1', 'cisco/nxa-pdc-3200w@1'], default: 'cisco/nxa-pac-3200w@1'}
+      - {id: psu-2, at: [343.80, 44.30], size: {w: 89.2, h: 43.2}, group: psus, rel-pos: 2,
+         accepts: ['cisco/nxa-pac-3200w@1', 'cisco/nxa-pdc-3200w@1'], default: 'cisco/nxa-pac-3200w@1'}
+    regions:
+    - {id: cooling, at: [6.6, 3.5], size: {w: 328.0, h: 80.8}, label: '4 fan modules',
+       members: [fan-1, fan-2, fan-3, fan-4]}
+    - {id: power, at: [342.8, 0.5], size: {w: 91.2, h: 43.8}, label: 'Power supply 1',
+       members: [psu-1]}
+    - {id: power-2, at: [342.8, 43.9], size: {w: 91.2, h: 43.8}, label: 'Power supply 2',
+       members: [psu-2]}
+  top:
+    size: {w: 442.3, h: 757.6}
+    empty: >-
+      Not drawn by any guide held. The guide shows the chassis in its two flat views only.
+  bottom:
+    size: {w: 442.3, h: 757.6}
+    empty: >-
+      Not drawn by any guide held. The guide does not picture the underside.
+  left:
+    size: {w: 757.6, h: 87.6}
+    empty: >-
+      Not drawn flat by any guide held. The guide's only picture of a side (PDF page 9, art 503686)
+      is a three-quarter view; no side wall is drawn and none can be measured.
+  right:
+    size: {w: 757.6, h: 87.6}
+    empty: >-
+      Not drawn flat by any guide held. The guide's only picture of a side (PDF page 9, art 503686)
+      is a three-quarter view; no side wall is drawn and none can be measured.
+configurations:
+  ac-3200w-port-side-intake:
+    kind: base
+    description: >-
+      Dual NXA-PAC-3200W-PI AC/HVDC supplies and four NXA-SFAN-160CFM2-PI fan modules: port-side
+      intake airflow, burgundy latches
+    default: true
+    power: [ac, hvdc]
+    part-numbers:
+      N9K-C9364D-GX2A: {part: N9K-C9364D-GX2A}
+  dc-3200w-port-side-intake:
+    kind: orderable
+    description: >-
+      Dual NXA-PDC-3200W-PI DC/HVDC supplies and four NXA-SFAN-160CFM2-PI fan modules: port-side
+      intake airflow, burgundy latches
+    power: [dc, hvdc]
+    part-numbers:
+      N9K-C9364D-GX2A: {part: N9K-C9364D-GX2A}
+    bays:
+      psu-1: cisco/nxa-pdc-3200w@1
+      psu-2: cisco/nxa-pdc-3200w@1
+references:
+- {title: 'Cisco N9364D-GX2A NX-OS Mode Switch Hardware Installation Guide', url: 'https://www.cisco.com/c/en/us/td/docs/dcn/hw/nx-os/nexus9000/9364d-gx2a/cisco-nexus-9364d-gx2a-nx-os-mode-switch-hardware-installation-guide.pdf', sha256: 43ff3ca2c8f0ea4130e03d45e28592c0bad685de6e3e33e58af273317302d68e}

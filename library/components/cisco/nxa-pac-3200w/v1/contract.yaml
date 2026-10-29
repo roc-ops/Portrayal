@@ -1,0 +1,111 @@
+format: 1
+kind: module
+name: nxa-pac-3200w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 3200 W AC/HVDC power supply of the Cisco Nexus 9364D-GX2A and 9348D-GX2A fixed switches. It
+  is ordered as NXA-PAC-3200W-PI (port-side intake, burgundy) or, for the 9348D-GX2A only,
+  NXA-PAC-3200-PE (port-side exhaust, blue). It has a round fan behind four corner screws with a
+  strap across it, a column of three lamp marks, an IEC C20 inlet turned on end in a recess and
+  a coloured release latch.
+size: {w: 89.2, h: 43.2}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PAC-3200W'
+  power-output-w: 3200
+  input: ac
+  inlet: c20
+  input-voltage: 'AC range 100-120 VAC, 16 A max, 50/60 Hz; HVAC range 200-240 VAC, 16 A max, 50/60 Hz; HVDC range 240 VDC, 14.5 max; input voltage row 264 to 300 VAC; 47 to 63 Hz'
+  efficiency: '90% or greater (20 to 100% load)'
+  weight-kg: 1.63
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N9364D-GX2A NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2022-06-24, Last Modified 2026-09-16), Overview: "3200-W port-side intake AC/HVDC
+    power supply with burgundy coloring (NXA-PAC-3200W-PI)", and the Cisco N9348D-GX2A guide
+    (First Published 2022-07-04, Last Modified 2026-07-28), Overview, which adds "3200-W
+    port-side exhaust AC power supply with blue coloring (NXA-PAC-3200-PE)": THE GUIDE SPELLS
+    THE EXHAUST PART NUMBER WITHOUT THE W after 3200, in its Overview and its weights row, and
+    it is read as the same 3200 W supply with the other airflow. The airflow suffix is dropped
+    from the model, as on cisco/nxa-pac-500w@1: the two differ in the latch colour, which is
+    this contract's `latch-finish` field, and in the direction the fan turns, which the face
+    does not show.
+  power: >-
+    datasheet - the guides' appendix B, "3200-W AC/HVDC Power Supply Specifications": "Power
+    3200W", and a second table with the ranges as printed, "AC Range 100-120 VAC; 16A Max.
+    50/60Hz", "HVAC Range 200-240 VAC; 16A Max. 50/60Hz", "HVDC Range 240 VDC; 14.5 Max.",
+    "Input Voltage 264 to 300 VAC" (a row the guide does not reconcile with the ranges above
+    it), 47 to 63 Hz, 90% or greater efficiency, combined, n+1 and n+n redundancy, hot
+    swappable. An OUTPUT rating, so `power-output-w`. The weight is the weights row for the
+    supplies, 3.6 lb (1.63 kg), printed in each guide for every supply it lists.
+  size: >-
+    estimated - THE GUIDES STATE NO DIMENSION for this supply. Read off the 9364D rear figure
+    (art 503685, 1304 x 360 px, the body 1273 px across for 442.3 mm, 2.88 px per mm): the left
+    edge of supply 1 is at 994 px and the right edge at 1251, 89.2 mm, and the two supplies share
+    the height with a seam at 130 px, 43.2 and 43.6 mm. The 9348D figure (503779) draws the same.
+  elements: >-
+    estimated - the arrangement is the 9364D rear figure's supply 1 at 3.5x: a fan 38.2 mm across
+    centred 23.8 mm from the left, with a Phillips screw at each corner and a strap running
+    from the lower left screw to the upper right one; three small marks in a column at 49.6 mm,
+    the upper and the lower a circle and the middle a small symbol; a recess 27.8 by 35.2 mm at
+    53.1 mm; and a latch tab 6.9 by 14.4 mm at the right edge.
+  inlet: >-
+    The recess holds a three-slot inlet with one wide slot and two narrow ones, which is the
+    IEC C20 of std/c20-inlet@1, turned on end as std/c14-inlet@1 is on cisco/nxa-pac-500w@1.
+    The AC cord list (appendix B, "Power Cables for NXA-PAC-3200W Power Supplies") names C19
+    cords. THE GUIDES' HVAC/HVDC LISTS name cords that end in Saf-D-Grid connectors and the
+    figure draws no such inlet; the figure's supply is "AC power supplies shown" and is drawn
+    with the C20 only. Which inlet the HVDC feed uses on this supply is not shown.
+  lamps: >-
+    estimated - the guides' appendix C, "Power Supply LEDs", says the lamps are "on the lower
+    right portion of the power supply" and lists solid, blinking green, solid and blinking amber
+    and off, without naming a lamp. The figure draws two circles with a small mark between them,
+    to the left of the inlet. Both circles are drawn as lamps with the guide's states; which one
+    is which is not stated.
+  latch-colour: >-
+    datasheet for the convention - both guides' Overview: burgundy for port-side intake, blue for
+    port-side exhaust (the 9348D guide only). The values are cisco/nxa-pac-500w@1's.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-500w@1's round figure for a supply of this
+    class and nothing here measures it.
+states: [absent]
+elements:
+  lamp-1: {at: [48.4, 9.2], size: [2.6, 2.6], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b'}, {name: fault, color: '#f59e0b'}]}
+  lamp-2: {at: [48.4, 20.3], size: [2.6, 2.6], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b'}, {name: fault, color: '#f59e0b'}]}
+  fan: {at: [4.7, 2.2], size: [38.2, 38.2], class: rotor}
+  latch: {at: [81.4, 9.9], size: [6.9, 14.4], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [51.3, 10.3], rotate: 90}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-3200w@1's own elements key - the grille's extent is read off the 9364D rear
+        figure and the depth of the cavity behind it is not stated.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-3200w@1's own elements key - the latch stands proud in every picture of the
+        family and how far is not stated.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [89.2, 43.2]}
