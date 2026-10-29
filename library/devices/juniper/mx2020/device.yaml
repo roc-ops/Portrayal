@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx2020
-version: 2.0.2
+version: 2.1.0
 maturity: modelled
 manufacturer: Juniper
 model: MX2020
@@ -86,6 +86,15 @@ chassis:
   ru: 45
   color: '#565b61'
 gaps:
+  - what: sfb-generation-mixing
+    scope: [sfbs]
+    reason: needs-hardware
+    note: >-
+      That the SFB, SFB2 and SFB3 cannot be mixed in one chassis is NOT ENFORCED: no bay restricts what
+      sits beside it. The MX2020 Hardware Guide says switch fabric board models (SFB, SFB2, SFB3) cannot
+      be mixed in a single MX2000 series chassis, except for the duration of an upgrade, and that all
+      fabric boards must be MX2000-SFB3 when the SFB3 is used (MX2000-SFB3 description).
+    wanted: a rule that holds one fabric board generation per chassis.
   - what: psm-numbering-and-bay-height
     scope: [psus]
     reason: needs-photo
@@ -248,28 +257,28 @@ views:
         - {id: cbre0, at: [4.10, 764.9], size: {w: 43.18, h: 412.1},
            accepts: [juniper/mx2000-cb-re-v@2, juniper/mx2000-cb-re-128g-v@2, juniper/mx2000-cb-re-1800-v@2], default: juniper/mx2000-cb-re-v@2, group: res, rel-pos: 0}
         - {id: sfb0, at: [47.28, 764.9], size: {w: 43.18, h: 412.1},
-           accepts: [juniper/mx2000-sfb-v@2],
+           accepts: [juniper/mx2000-sfb-v@2, juniper/mx2000-sfb2-v@1, juniper/mx2000-sfb3-v@1],
            default: juniper/mx2000-sfb-v@2, group: sfbs, rel-pos: 0}
         - {id: sfb1, at: [90.46, 764.9], size: {w: 43.18, h: 412.1},
-           accepts: [juniper/mx2000-sfb-v@2],
+           accepts: [juniper/mx2000-sfb-v@2, juniper/mx2000-sfb2-v@1, juniper/mx2000-sfb3-v@1],
            default: juniper/mx2000-sfb-v@2, group: sfbs, rel-pos: 1}
         - {id: sfb2, at: [133.64, 764.9], size: {w: 43.18, h: 412.1},
-           accepts: [juniper/mx2000-sfb-v@2],
+           accepts: [juniper/mx2000-sfb-v@2, juniper/mx2000-sfb2-v@1, juniper/mx2000-sfb3-v@1],
            default: juniper/mx2000-sfb-v@2, group: sfbs, rel-pos: 2}
         - {id: sfb3, at: [176.82, 764.9], size: {w: 43.18, h: 412.1},
-           accepts: [juniper/mx2000-sfb-v@2],
+           accepts: [juniper/mx2000-sfb-v@2, juniper/mx2000-sfb2-v@1, juniper/mx2000-sfb3-v@1],
            default: juniper/mx2000-sfb-v@2, group: sfbs, rel-pos: 3}
         - {id: sfb4, at: [220.00, 764.9], size: {w: 43.18, h: 412.1},
-           accepts: [juniper/mx2000-sfb-v@2],
+           accepts: [juniper/mx2000-sfb-v@2, juniper/mx2000-sfb2-v@1, juniper/mx2000-sfb3-v@1],
            default: juniper/mx2000-sfb-v@2, group: sfbs, rel-pos: 4}
         - {id: sfb5, at: [263.18, 764.9], size: {w: 43.18, h: 412.1},
-           accepts: [juniper/mx2000-sfb-v@2],
+           accepts: [juniper/mx2000-sfb-v@2, juniper/mx2000-sfb2-v@1, juniper/mx2000-sfb3-v@1],
            default: juniper/mx2000-sfb-v@2, group: sfbs, rel-pos: 5}
         - {id: sfb6, at: [306.36, 764.9], size: {w: 43.18, h: 412.1},
-           accepts: [juniper/mx2000-sfb-v@2],
+           accepts: [juniper/mx2000-sfb-v@2, juniper/mx2000-sfb2-v@1, juniper/mx2000-sfb3-v@1],
            default: juniper/mx2000-sfb-v@2, group: sfbs, rel-pos: 6}
         - {id: sfb7, at: [349.54, 764.9], size: {w: 43.18, h: 412.1},
-           accepts: [juniper/mx2000-sfb-v@2],
+           accepts: [juniper/mx2000-sfb-v@2, juniper/mx2000-sfb2-v@1, juniper/mx2000-sfb3-v@1],
            default: juniper/mx2000-sfb-v@2, group: sfbs, rel-pos: 7}
         - {id: cbre1, at: [392.72, 764.9], size: {w: 43.18, h: 412.1},
            accepts: [juniper/mx2000-cb-re-v@2, juniper/mx2000-cb-re-128g-v@2, juniper/mx2000-cb-re-1800-v@2], default: juniper/mx2000-cb-re-v@2, group: res, rel-pos: 1}
