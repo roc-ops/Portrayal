@@ -3252,6 +3252,14 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     **({"moves-with": common["moves-with"]} if common.get("moves-with") else {}),
                     **({"in": common["in"]} if common.get("in") else {})})
 
+    def motif_id(d):
+        """The id of the tile a `motif` rect draws: its cells and its pitch, hashed, so two rects
+        that state the same tile share one."""
+        canon = json.dumps({"cells": [[[float(v) for v in pt] for pt in cell] for cell in d["pattern-cells"]],
+                            "pitch": [float(v) for v in d["pattern-pitch"]]},
+                           sort_keys=True, separators=(",", ":"))
+        return "portrayal-motif-" + hashlib.sha256(canon.encode()).hexdigest()[:10]
+
     used_patterns = {d.get("pattern") for d in parts["decor"] if d.get("pattern")}
     if used_patterns:
         defs = ET.SubElement(svg, f"{{{SVG_NS}}}defs")
@@ -3330,6 +3338,30 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             gap = ET.SubElement(pat, f"{{{SVG_NS}}}rect")
             gap.set("x", "5.4"); gap.set("y", "0"); gap.set("width", "1.8"); gap.set("height", "6")
             gap.set("fill", "#6a7075")
+        # A MOTIF IS A TILE THE FACE DRAWS ITSELF. The fixed tiles above are one vendor's
+        # lattice each; a vent whose openings are slanted slots or alternating chevrons has
+        # none to borrow. `pattern-pitch` is the tile - there is no base tile to scale - and
+        # `pattern-cells` are its dark cells, in mm from its top-left corner. The schema
+        # cannot say that a point lies inside the tile, so it is refused here.
+        for i, d in enumerate(parts["decor"]):
+            if d.get("pattern") != "motif" or svg.find(f".//*[@id='{motif_id(d)}']") is not None:
+                continue
+            who = d.get("id") or f"decor {i} on this face"
+            if not d.get("pattern-cells") or not d.get("pattern-pitch"):
+                raise ValueError(f"{who}: pattern motif needs pattern-cells and pattern-pitch")
+            tw, th = (float(v) for v in d["pattern-pitch"])
+            for cell in d["pattern-cells"]:
+                for x, y in cell:
+                    if not (0 <= x <= tw and 0 <= y <= th):
+                        raise ValueError(f"{who}: pattern-cells point [{x:g}, {y:g}] lies outside "
+                                         f"the {tw:g} x {th:g} mm tile that pattern-pitch states")
+            pat = ET.SubElement(defs, f"{{{SVG_NS}}}pattern")
+            pat.set("id", motif_id(d)); pat.set("width", f"{tw:g}"); pat.set("height", f"{th:g}")
+            pat.set("patternUnits", "userSpaceOnUse")
+            for cell in d["pattern-cells"]:
+                cp = ET.SubElement(pat, f"{{{SVG_NS}}}path")
+                cp.set("d", "M " + " L ".join(f"{x:g} {y:g}" for x, y in cell) + " Z")
+                cp.set("fill", "#17191c")
     # DECOR USED TO LAND AS LOOSE, UNNAMED RECTS ON THE ROOT. Opening a
     # faceplate in an XML editor showed twenty anonymous rectangles above
     # everything that IS named, and the only way to find out whether one was a
@@ -3410,7 +3442,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # to this rect" has to mean once the tile is no longer 14 x 8.
             tile = (f"brush-{d.get('bristle') or 'vertical'}" if d.get("pattern") == "brush"
                     else d.get("pattern"))
-            if d.get("pattern") and (d.get("pattern-offset") or d.get("pattern-pitch")):
+            if d.get("pattern") == "motif":
+                # a motif's tile is its pitch, so the clone only shifts the phase: no scale
+                mid = motif_id(d)
+                if d.get("pattern-offset"):
+                    ox, oy = d["pattern-offset"]
+                    pid = f"{mid}-o{ox:g}-{oy:g}".replace(".", "_")
+                    if svg.find(f".//*[@id='{pid}']") is None:
+                        clone = ET.fromstring(ET.tostring(svg.find(f".//*[@id='{mid}']")))
+                        clone.set("id", pid)
+                        clone.set("patternTransform", f"translate({ox:g} {oy:g})")
+                        svg.find(f".//{{{SVG_NS}}}defs").append(clone)
+                    r.set("fill", f"url(#{pid})")
+                else:
+                    r.set("fill", f"url(#{mid})")
+            elif d.get("pattern") and (d.get("pattern-offset") or d.get("pattern-pitch")):
                 base = svg.find(f".//*[@id='portrayal-{tile}']")
                 ox, oy = d.get("pattern-offset") or (0.0, 0.0)
                 pw, ph = d.get("pattern-pitch") or (float(base.get("width")),

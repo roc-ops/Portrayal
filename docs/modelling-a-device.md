@@ -324,6 +324,13 @@ Establish `chassis.width/height/depth` and each view's `size`.
   well (`relief: {walls: inside}`) has a side within 3 mm of a face, that side
   shows the face's declared vents, so with the cover off you can see where the
   air leaves. Undeclared, the wall is blank from inside.
+- A vent whose openings no fixed tile draws (slanted slots, alternating
+  chevrons) is `pattern: motif`. The face states the tile: `pattern-pitch` is
+  its size in mm, and `pattern-cells` are the dark cells in it, each a closed
+  polygon of points measured from the tile's top-left corner. Read one period
+  of the vent off a straight-on source, not a guess at a lattice; `vent:`
+  still makes it an air aperture, and the renderer refuses a point outside the
+  tile.
 
 **Gate 1: prove a figure can be measured before you measure it.** Render the
 guide page at 400 to 600 dpi (`pdftocairo -png -r 600`), find the panel in it,
