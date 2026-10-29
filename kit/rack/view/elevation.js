@@ -13,7 +13,7 @@
 
 import {RU, RAIL_W, OPENING, HOLE_DY, HOLE_SQUARE, HOLE_ROUND, SIDES} from '../rails.js';
 import {earHoles} from './ear-holes.js';
-import {configuredFace, earPlanFor, zeroUModuleEnds, setDist} from './face.js';
+import {configuredFace, earPlanFor, zeroUModuleEnds} from './face.js';
 import {dom} from './dom.js';
 import {paintFace, paintMaps} from './settable.js';
 import {uLabel, zeroUOf, zeroUBottomMm} from '../model.js';
@@ -239,11 +239,14 @@ export const rackSurface = {
 };
 
 // `document` is the one every node is made through (and whose window parses a
-// drawing): the view reads no global.
-export async function drawElevation({document: domDoc, surface = rackSurface, items, frame, view = 'front', baseRU = 1,
+// drawing): the view reads no global. `distAt` is the library's: a function from
+// a path in the build to its URL (kit/dist.js flatDist makes one), which the
+// drawing is read through and nothing else.
+export async function drawElevation({document: domDoc, distAt, surface = rackSurface, items, frame, view = 'front', baseRU = 1,
                                      hitTargets = false, selectedId = null, selectedU = null,
                                      placeholders = true, ears = false, metal = false, paper = false, laneGap = 0,
                                      zeroU = [], selectedZeroU = null, chassisOf = null}) {
+  if (typeof distAt !== 'function') throw new Error(`drawElevation needs the library to draw from: ${DIST_AT}`);
   const {svgEl, importDrawingNode} = dom(domDoc);
   const win = domDoc.defaultView;
   const C = metal ? METAL : THEMED;
@@ -258,7 +261,7 @@ export async function drawElevation({document: domDoc, surface = rackSurface, it
   for (const z of zeroU.filter(x => zeroUShown(x, view))) {
     const panel = zeroUPanel(z, view);
     // (`swaps`: the plugs derived at its outlets, never stored: cable-plugs.js zeroUFacts. `ends`: its outlets, for picking)
-    const face = await configuredFace({ref: z.ref, cfg: z.cfg, view: panel, swaps: z.swaps || {}, fields: {}, ends: true}, domDoc);
+    const face = await configuredFace({ref: z.ref, cfg: z.cfg, view: panel, swaps: z.swaps || {}, fields: {}, ends: true}, domDoc, distAt);
     const bottom = totalH - zeroURise(z, baseRU);
     const attrs = {'data-zerou-id': z.id, 'data-device-name': z.label, 'data-device-ref': z.ref,
                    'data-panel': 'zerou', 'data-zerou-at': z.at, style: 'cursor: pointer',
@@ -282,7 +285,7 @@ export async function drawElevation({document: domDoc, surface = rackSurface, it
       // Cable mode's portAt, as a device's slots are; the end is {item: the part's id, path, view: this panel}.
       // (and, kit 0.44.0, the ports of the modules in its bays, which the kit names: face.js zeroUModuleEnds)
       const slotEnds = [...new Set([...(face.ports || []).filter(p => p.end).map(p => p.path ?? p.id),
-                                    ...await zeroUModuleEnds(z, panel)])];
+                                    ...await zeroUModuleEnds(z, panel, distAt)])];
       if (slotEnds.length) { gz.setAttribute('data-cable-ends', slotEnds.join(' ')); gz.setAttribute('data-zerou-panel', panel); }
     } else {
       gz = svgEl('g', attrs);
@@ -346,7 +349,7 @@ export async function drawElevation({document: domDoc, surface = rackSurface, it
     const topOf = ruH => totalH - (it.ru - baseRU + ruH) * RU;
     const panel = panelFor(it, view);
     const face = await configuredFace({ref: it.ref, cfg: it.cfg, view: panel,
-                                       swaps: it.swaps || {}, fields: it.fields || {}, ends: true}, domDoc);
+                                       swaps: it.swaps || {}, fields: it.fields || {}, ends: true}, domDoc, distAt);
     // One height for this item, computed before the `!face` branch: `it.u`
     // when it is known (every real caller sets it via fit.js's itemsWithU, in
     // halves since rack file version 4), falling back to the compiled
@@ -440,7 +443,7 @@ export async function drawElevation({document: domDoc, surface = rackSurface, it
     // screw heads only. In the plan's colour, silver unless the device states
     // `chassis.ears.color`.
     if (!through && ears && isRackMount(it)) drawEars(svgEl, out, it, {top: paneY(box.hi), bottom: paneY(box.lo), holes: surface.ears(box).map(paneY)},
-                                                      C, await earPlanFor(it.ref, it.cfg), [fx, fx + faceW]);
+                                                      C, await earPlanFor(it.ref, it.cfg, distAt), [fx, fx + faceW]);
     if (it.id === selectedId) rings.push([topOf(ruH), ruH]);
   }
   // A U carrying a manager says so in the gutter: the manager itself is mostly
@@ -460,15 +463,21 @@ export async function drawElevation({document: domDoc, surface = rackSurface, it
 
 // ---- MOUNTING ONE FACE OF ONE RACK (docs/rack-views-design.md §2) -----------
 // `mountRack2d(container, {document, doc, rackId, surface, face, chassisOf, ctx,
-// dist, ears, metal})` draws the pane at once and returns the handle of
-// view.js. It makes every node through `document` and reads no global.
+// distAt, ears, metal})` draws the pane at once and returns the handle of
+// view.js. It makes every node through `document` and reads no global. `distAt`
+// is the library the pane is drawn from and has no default: make one per
+// library and pass it to every view of that library.
 
 const SURFACES = {rack: rackSurface};
 const noRack = id => new Error(`There is no rack ${id} in this document.`);
+const DIST_AT = 'pass distAt, a function from a path in the build to its URL (flatDist(base) in kit/dist.js makes one for a build directory).';
 
 export function mountRack2d(container, opts = {}) {
-  const {document: domDoc, face = 'front', chassisOf = () => null, ctx, ears = true, metal = true} = opts;
+  const {document: domDoc, distAt, face = 'front', chassisOf = () => null, ctx, ears = true, metal = true} = opts;
   if (!domDoc) throw new Error('mountRack2d needs the document to draw into: pass {document}.');
+  if ('dist' in opts) throw new Error(`mountRack2d takes {distAt}, not {dist}: ${DIST_AT}`);
+  if (distAt == null) throw new Error(`mountRack2d needs the library to draw from: ${DIST_AT}`);
+  if (typeof distAt !== 'function') throw new Error(`distAt must be a function from a path in the build to its URL, not ${typeof distAt}; flatDist(base) in kit/dist.js makes one for a build directory.`);
   if (face !== 'front' && face !== 'rear') throw new Error(`face is "front" or "rear", not ${JSON.stringify(face)}.`);
   const kind = opts.surface?.kind ?? 'rack';
   if (kind === 'backboard') {
@@ -479,7 +488,6 @@ export function mountRack2d(container, opts = {}) {
     throw new Error(`rackId ${opts.rackId} and the surface's id ${opts.surface.id} name different racks.`);
   }
   const surface = SURFACES[kind];
-  setDist(opts.dist);
   const st = {doc: null, rackId: opts.rackId ?? opts.surface?.id ?? null, svg: null, drawn: null, sel: null};
   let epoch = 0, gone = false;
 
@@ -499,7 +507,7 @@ export function mountRack2d(container, opts = {}) {
     const paint = await paintMaps(rack, ctx || {}, async () => null);
     const items = itemsWithU(rack, chassisOf).map(it => (paint.has(it.id) ? {...it, paint: paint.get(it.id)} : it));
     const zeroU = zeroUDrawn(rack, chassisOf).map(z => (paint.has(z.id) ? {...z, paint: paint.get(z.id)} : z));
-    const svg = await drawElevation({document: domDoc, surface, items, frame: rack.frame, view: face, hitTargets: true,
+    const svg = await drawElevation({document: domDoc, distAt, surface, items, frame: rack.frame, view: face, hitTargets: true,
                                      ears, metal, zeroU, chassisOf, ...selected()});
     if (mine !== epoch || gone) return;   // overtaken by a later update, or disposed
     st.svg?.remove();

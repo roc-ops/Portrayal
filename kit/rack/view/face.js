@@ -3,7 +3,7 @@
 // Rack Builder - asks here, so none of them can show the base build while
 // another shows the cards and optics the reader seated.
 //
-//   configuredFace({ref, cfg, view, swaps, fields, turned})
+//   configuredFace({ref, cfg, view, swaps, fields, turned}, domDoc, distAt)
 //
 // fetches <ref>.<cfg>.<view>.svg and then, on a detached copy:
 //   1. seats `swaps` through swap.js's seatFace - bays, then cages, then the
@@ -24,39 +24,48 @@
 // what every other caller sees. Treat all of it as read-only.
 
 import {faceUrl} from './faces.js';
-import {jdist} from '../../dist.js';
+import {jdist, readIndex} from '../../dist.js';
 import {seatFace} from '../../swap.js';
 import {paintFields} from '../../fields.js';
 import {readSvg, portsOf} from '../../zones.js';
 import {loadSlots} from '../catalog.js';
 import {cableEndPaths, zeroUEnds} from '../ports.js';
 
-// Where the compiled faces are. The site's one constant is the view's `dist`
-// option now: setDist sets it (mountRack2d does, from its `dist`), and
-// forgets what was read from the other place.
-export let DIST = 'assets/dist/';
-export function setDist(base) {
-  if (!base || base === DIST) return;
-  DIST = base.endsWith('/') ? base : `${base}/`;
-  COMPONENTS = null;
-  SKINS.clear(); MEMO.clear(); TEXTS.clear(); EAR_PLANS.clear();
-}
+// WHERE THE COMPILED FACES ARE is the `distAt` each call is given: a function from
+// a path in a build (`components.json`, `<device>.configs.json`, a face file,
+// `components/<skin>.svg`) to its URL, as kit/dist.js makes one. Nothing here
+// holds a library of its own, so two views of two libraries read their own. What
+// is remembered per library is keyed by that function: the same function is the
+// same library, and two functions share nothing.
 const OPPOSITE = {front: 'rear', rear: 'front'};
 
-let COMPONENTS = null;
-export function components() {
-  if (!COMPONENTS) {
-    COMPONENTS = jdist(`${DIST}components.json`)
+const LIBRARY_IDS = new WeakMap();
+let libraries = 0;
+const libraryId = distAt => {
+  if (typeof distAt !== 'function') {
+    throw new Error('A face is read from a library: pass distAt, a function from a path in the build to its URL (flatDist(base) in kit/dist.js makes one for a build directory).');
+  }
+  if (!LIBRARY_IDS.has(distAt)) LIBRARY_IDS.set(distAt, ++libraries);
+  return LIBRARY_IDS.get(distAt);
+};
+
+const COMPONENTS = new WeakMap();
+export function components(distAt) {
+  libraryId(distAt);
+  let hit = COMPONENTS.get(distAt);
+  if (!hit) {
+    hit = readIndex(distAt, 'components.json')
       .then(j => j.components || [])
       .catch(err => {
         // Not remembered: the next ask fetches again. A cached [] meant one
         // hiccup left every card and optic unseatable until a reload.
         console.warn('[portrayal] no component index', err);
-        COMPONENTS = null;
+        if (COMPONENTS.get(distAt) === hit) COMPONENTS.delete(distAt);
         return [];
       });
+    COMPONENTS.set(distAt, hit);
   }
-  return COMPONENTS;
+  return hit;
 }
 
 const refKey = c => `${c.ns}/${c.name}@${c.major.slice(1)}`;
@@ -90,11 +99,11 @@ function skinText(url) {
   return hit;
 }
 
-export async function loadSkin(ref) {
-  const c = findComp(await components(), ref);
+export async function loadSkin(ref, distAt) {
+  const c = findComp(await components(distAt), ref);
   if (!c) return null;
   const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
-  const text = await skinText(`${DIST}components/${c.ns}--${c.name}--${c.major}--${skin}.svg`);
+  const text = await skinText(distAt(`components/${c.ns}--${c.name}--${c.major}--${skin}.svg`));
   return text == null ? null : {comp: c, text};
 }
 
@@ -128,10 +137,12 @@ export const faceMemoSize = () => MEMO.size;
 // reads each as a port with `end: true`. Off, the ports are what they always
 // were, for the callers that list data ports only.
 // `domDoc` is the document the drawing is for: its window parses and writes the
-// SVG text. It is not part of the memo's key.
-export function configuredFace({ref, cfg, view = 'front', swaps = {}, fields = {}, turned = false, ends = false}, domDoc = null) {
+// SVG text. It is not part of the memo's key. `distAt` is: the same device in
+// two libraries is two entries.
+export function configuredFace({ref, cfg, view = 'front', swaps = {}, fields = {}, turned = false, ends = false}, domDoc = null, distAt) {
   const args = {ref, cfg, view, swaps: swaps || {}, fields: fields || {}, turned: !!turned, ...(ends ? {ends: true} : {})};
-  const key = JSON.stringify(canon(args));
+  const json = JSON.stringify(canon(args));
+  const key = `${libraryId(distAt)}:${json}`;
   // `build` awaits several times (fetch, jdist, components) and, in the
   // showcase, the caller's `swaps`/`fields` are the SAME object it goes on
   // mutating in place afterward (applyPlanSeats, dropBelow, stage 2/3
@@ -139,13 +150,13 @@ export function configuredFace({ref, cfg, view = 'front', swaps = {}, fields = {
   // onto `args` itself would let a build in flight read the mutated object
   // after an await and cache a wrong face under the key computed before the
   // mutation - a sticky wrong face for the rest of the session. `key` is
-  // already a canonical JSON string of a plain deep copy, so parsing it
-  // back gives `build` its own snapshot, immune to later mutation.
+  // already a canonical JSON string of a plain deep copy (`json`), so parsing
+  // it back gives `build` its own snapshot, immune to later mutation.
   let hit = MEMO.get(key);
   if (hit) {
     MEMO.delete(key);            // re-insert: Map order is recency
   } else {
-    hit = build(JSON.parse(key), domDoc).catch(err => { MEMO.delete(key); throw err; });
+    hit = build(JSON.parse(json), domDoc, distAt).catch(err => { MEMO.delete(key); throw err; });
   }
   MEMO.set(key, hit);
   while (MEMO.size > limit) MEMO.delete(MEMO.keys().next().value);
@@ -178,8 +189,8 @@ function faceText(url) {
 // which the part's own drawing does not list as ends. The kit names them
 // (ports.js zeroUEnds), each at `<bay>/module/<port>` on the panel its bay is
 // on, for the panel `view` of the part `z` ({ref, cfg, swaps}).
-export async function zeroUModuleEnds(z, view) {
-  const {slotsOf, compByRef} = await loadSlots(DIST, [z.ref]);
+export async function zeroUModuleEnds(z, view, distAt) {
+  const {slotsOf, compByRef} = await loadSlots(distAt, [z.ref]);
   return zeroUEnds({ref: z.ref, cfg: z.cfg, swaps: z.swaps || {}}, {slotsOf, compByRef})
     .filter(e => e.module && e.view === view).map(e => e.path);
 }
@@ -191,9 +202,9 @@ const windowOf = domDoc => {
   return win;
 };
 
-async function build({ref, cfg, view, swaps, fields, turned, ends}, domDoc) {
+async function build({ref, cfg, view, swaps, fields, turned, ends}, domDoc, distAt) {
   const shown = turned ? (OPPOSITE[view] || view) : view;
-  let text = await faceText(await faceUrl(DIST, ref, cfg, shown));   // #670: may be another config's file
+  let text = await faceText(await faceUrl(distAt, ref, cfg, shown));   // #670: may be another config's file
   if (text == null) return null;
   const seat = {applied: 0, refused: [], failed: []};
   const hasSwaps = Object.keys(swaps).length > 0;
@@ -202,11 +213,11 @@ async function build({ref, cfg, view, swaps, fields, turned, ends}, domDoc) {
     const win = windowOf(domDoc);
     const root = new win.DOMParser().parseFromString(text, 'image/svg+xml').documentElement;
     if (hasSwaps) {
-      const idx = await jdist(`${DIST}${ref}.configs.json`);
-      const list = await components();
+      const idx = await jdist(distAt(`${ref}.configs.json`));
+      const list = await components(distAt);
       const r = await seatFace(root,
         {bays: idx?.bays?.[shown] || [], cages: idx?.cages?.[shown] || []},
-        swaps, loadSkin, x => findComp(list, x));
+        swaps, x => loadSkin(x, distAt), x => findComp(list, x));
       seat.applied = r.applied; seat.refused = r.refused; seat.failed = r.failed;
     }
     if (hasFields) applyFields(root, fields, win);
@@ -214,7 +225,7 @@ async function build({ref, cfg, view, swaps, fields, turned, ends}, domDoc) {
   }
   let endPaths = null;
   if (ends) {
-    const {slotsOf, compByRef} = await loadSlots(DIST, [ref]);
+    const {slotsOf, compByRef} = await loadSlots(distAt, [ref]);
     endPaths = cableEndPaths({ref, cfg, swaps}, shown, {slotsOf, compByRef});
   }
   const {vb, zones} = readSvg(text, endPaths?.length ? {ends: endPaths} : {});
@@ -258,19 +269,21 @@ function deepFreeze(v) {
 // not null, in the plan's colour: silver (#c8cacc) unless the device states
 // `chassis.ears.color`. Memoized per device and configuration. A device whose
 // index cannot be read gets no plan (null: nothing says it is a rack device);
-// one whose front cannot be read is judged on its chassis width alone.
+// one whose front cannot be read is judged on its chassis width alone. Kept per
+// library.
 const EAR_PLANS = new Map();
-export function earPlanFor(ref, cfg) {
-  const key = `${ref}.${cfg || ''}`;
+export function earPlanFor(ref, cfg, distAt) {
+  const key = `${libraryId(distAt)}:${ref}.${cfg || ''}`;
   if (!EAR_PLANS.has(key)) {
     EAR_PLANS.set(key, (async () => {
       // imported on first use: ears2d.js brings relief.js, which reads the
       // page's location as it loads, and this module is also loaded under
       // node (the tests of route-context.js, which imports it)
       const {earPlan, frontWidthOfText} = await import('../../ears2d.js');
-      const idx = await jdist(`${DIST}${ref}.configs.json`).catch(() => null);
+      await Promise.resolve(distAt.ready).catch(() => {});   // a layered library knows its roots first
+      const idx = await jdist(distAt(`${ref}.configs.json`)).catch(() => null);
       if (!idx) return null;
-      const w = await faceUrl(DIST, ref, cfg || idx.default, 'front')
+      const w = await faceUrl(distAt, ref, cfg || idx.default, 'front')
         .then(faceText).then(t => frontWidthOfText(t ?? '')).catch(() => null);
       return earPlan(idx, w);
     })());
