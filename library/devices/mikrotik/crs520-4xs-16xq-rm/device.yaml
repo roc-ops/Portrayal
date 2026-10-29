@@ -155,7 +155,11 @@ provenance:
       y at 0.88 of that); each supply has a handle 4.0 x 39.8 mm, two latch tabs above and below the inlet
       and a thumbscrew at its left edge. Five chassis screws 4.4 mm across (133.1, 224.8, 294.0, 363.1
       and 438.3 mm) sit between the modules and at the right end. The legend POWER 1 / POWER 2 is underlined
-      25.8 mm and each fan numeral is followed by a filled arrowhead (estimated, about 2 mm).
+      25.8 mm and each fan numeral is followed by a filled arrowhead (estimated, about 2 mm). Each inlet
+      is turned so that its earth pin is at the right as seen from behind: photograph 2353 (5.36 px per
+      mm) shows the first inlet's housing 139 x 159 px (25.9 x 29.7 mm, pixel box 361,709 to 500,868)
+      with its two line pins aligned at the left and the offset middle pin at the right (estimated, about
+      1 mm); the first drawing had the earth pin at the left.
   side-layout:
     confidence: estimated
     note: >-
@@ -277,6 +281,18 @@ gaps:
     is not changed here: the photographs show the lamps unlit grey and the render draws them with the
     component's own colour.
   wanted: MikroTik's LED description for the CRS520-4XS-16XQ-RM.
+- what: qsfp28-orientation
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    The sixteen QSFP28 cages are two rows, the upper row turned half a turn from the lower as the other
+    stacked cages are. Photograph 2354 and the brochure's close view show each cage as a dark window with
+    a light rim and, in the lower row, a ledge at the bottom of the window; they do not show which side
+    holds the contacts or the latch tongue clearly enough to read, so the turn is carried as drawn and
+    not confirmed. The SFP28 cages, whose pull tabs face each other across the rows, and the RJ45 jacks,
+    whose key notches and lamps are readable, do match the photograph.
+  wanted: A straight-on, close photograph of a QSFP28 cage in each row.
 - what: rack-rail-kit
   scope:
   - front
@@ -999,8 +1015,8 @@ views:
       stroke-width: 0.3, fill: '#bbbbb7', for: chassis}
     components:
       placements:
-      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [40.0, 12.5], rotate: -90, group: inlets, rel-pos: 1}
-      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [103.4, 12.5], rotate: -90, group: inlets, rel-pos: 2}
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [40.0, 12.5], rotate: 90, group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [103.4, 12.5], rotate: 90, group: inlets, rel-pos: 2}
   top:
     size: {w: 443.0, h: 367.0}
     empty: >-

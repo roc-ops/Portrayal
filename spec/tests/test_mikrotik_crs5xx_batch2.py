@@ -118,7 +118,7 @@ def test_crs504_front_carries_console_management_reset_dc_jack_and_three_lamps()
     assert {"CONSOLE", "MGMT/PoE in", "RESET", "USER", "FAULT", "POWER", "36 - 60 V", "CRS504-4XQ-IN",
             "ACT", "100G", "1", "2", "3", "4"} <= text_of(d, "front")
     gaps = {g["what"] for g in d["gaps"]}
-    assert {"dc-jack", "dc-terminal", "hot-swap-supplies", "led-states", "left-wall", "rear-face"} <= gaps
+    assert {"dc-jack", "dc-terminal", "hot-swap-supplies", "led-states", "right-wall", "rear-face"} <= gaps
     assert not [p for p in placements(d, "front") if p["ref"].startswith("common/dc-terminal")]
     ports = [p for p in placements(d, "front") if p.get("group") in {"qsfp28", "mgmt", "console"}]
     assert len(ports) == 4 + 1 + 1  # page: 4 QSFP28 and one 100M Ethernet port; the console is on the metal
@@ -136,25 +136,70 @@ def test_crs504_supplies_are_two_front_modules_with_c14_inlets_and_no_bays():
     assert "fan-redundancy" not in json.dumps(d["groups"])
 
 
-def test_crs504_fans_are_on_the_right_wall_and_the_other_faces_are_empty():
-    d = load(CRS504)
-    fans = [x["id"] for x in d["views"]["right"]["panel"]["decor"] if x.get("kind") == "fan-grille"]
-    assert fans == ["fan-0", "fan-1"]
-    # unwarped from photograph 2158: guards 20 x 31 mm, centred 107.5 and 129.5 mm from the front, 2.5 mm apart
-    f0, f1 = decor(d, "right", "fan-0"), decor(d, "right", "fan-1")
-    assert (f0["at"], f0["size"], f0["rx"]) == ([97.5, 3.0], [20.0, 31.0], 10.0)
-    assert (f1["at"], f1["size"]) == ([119.5, 3.0], [20.0, 31.0])
-    for fan, hub in ((f0, decor(d, "right", "fan-hub-0")), (f1, decor(d, "right", "fan-hub-1"))):  # a clear hub in each ring
-        assert hub["kind"] == "fan-hub" and hub["size"] == [12.5, 19.0] and hub["fill"] == d["chassis"]["color"]
-        assert hub["at"][0] + 6.25 == pytest.approx(fan["at"][0] + 10.0) and hub["at"][1] + 9.5 == pytest.approx(fan["at"][1] + 15.5)
-    for view in ("left", "top", "bottom"):
-        assert d["views"][view].get("empty"), view
-    gaps = {g["what"] for g in d["gaps"]}
-    assert {"fan-count", "left-wall", "rear-face", "top-and-bottom"} <= gaps
-
-
 def decor(d, view, id_):
     return next(x for x in d["views"][view]["panel"]["decor"] if x.get("id") == id_)
+
+
+def test_crs504_fan_guards_are_two_round_rings_on_the_rear_and_the_side_walls_carry_no_fan():
+    d = load(CRS504)
+    rear = d["views"]["rear"]["panel"]["decor"]
+    assert [x["id"] for x in rear if x.get("kind") == "fan-grille"] == ["fan-0", "fan-1"]
+    # photograph 2158 looks at the rear (320 mm face), unwarped onto 320 x 44 mm at 10 px per mm: two rings, round
+    centres = {"fan-0": (114.8, 22.0), "fan-1": (154.8, 22.0)}  # from the stud's end of the rear, as seen from behind
+    for id_, (cx, cy) in centres.items():
+        fan = decor(d, "rear", id_)
+        assert fan["size"] == [37.0, 37.0] and fan["rx"] == 18.5  # round: the unwarp reads 1.09 tall, so heights are divided by it
+        assert fan["at"] == [pytest.approx(cx - 18.5), pytest.approx(cy - 18.5)]
+        # the base tile 8.86 x 5.11 mm scaled by the photograph's cell pitch 6.3 mm over 5.11 mm, on both axes
+        assert fan["pattern"] == "vent" and fan["pattern-pitch"] == [10.92, 6.3]
+        assert fan["pattern-offset"] == [cx, cy]  # a cell on each ring's centre
+    for n, (cx, cy) in enumerate(centres.values()):
+        hub = decor(d, "rear", f"fan-hub-{n}")
+        assert hub["kind"] == "fan-hub" and hub["size"] == [21.0, 21.0] and hub["rx"] == 10.5
+        assert hub["fill"] == d["chassis"]["color"] == "#d4d4d4"  # the hub and the plain face read the same #bababa in 2158
+        assert hub["at"] == [pytest.approx(cx - 10.5), pytest.approx(cy - 10.5)]
+    for view in ("right", "left"):  # nothing the photograph puts on the rear stays on a wall
+        panel = d["views"][view].get("panel") or {}
+        assert not [x for x in panel.get("decor", []) if x.get("kind") in ("fan-grille", "fan-hub")], view
+    for view in ("right", "top", "bottom"):
+        assert d["views"][view].get("empty"), view
+    gaps = {g["what"]: g for g in d["gaps"]}
+    assert {"fan-count", "right-wall", "rear-face", "top-and-bottom"} <= set(gaps)
+    assert gaps["fan-count"]["scope"] == ["rear"]
+    assert "photograph 2158" in gaps["fan-count"]["note"] and "rear" in gaps["fan-count"]["note"]
+    assert "rear-layout" in d["provenance"] and "2158" in d["provenance"]["rear-layout"]["note"]
+    assert "on the right wall" not in d["description"]
+
+
+def test_crs504_rear_has_four_small_holes_beside_the_guards_one_upper_right_and_one_lower_left_of_each():
+    d = load(CRS504)
+    # seen from behind, centres on the 2158 unwarp (the dark opening), 3.8 mm across, fill the median of 224 dark pixels
+    want = {"fan-0-hole-a": (132.7, 5.8), "fan-0-hole-b": (99.4, 37.5),
+            "fan-1-hole-a": (173.0, 5.4), "fan-1-hole-b": (139.4, 37.5)}
+    for id_, (cx, cy) in want.items():
+        hole = decor(d, "rear", id_)
+        assert hole["kind"] == "screw-hole" and hole["size"] == [3.8, 3.8] and hole["rx"] == 1.9 and hole["fill"] == "#232323"
+        assert hole["at"] == [pytest.approx(cx - 1.9), pytest.approx(cy - 1.9)]
+    # a guard's holes sit at the corners of its box, upper right and lower left
+    for n, (id_a, id_b) in enumerate((("fan-0-hole-a", "fan-0-hole-b"), ("fan-1-hole-a", "fan-1-hole-b"))):
+        fan = decor(d, "rear", f"fan-{n}")
+        cx, cy = fan["at"][0] + 18.5, fan["at"][1] + 18.5
+        a, b = decor(d, "rear", id_a)["at"], decor(d, "rear", id_b)["at"]
+        assert a[0] + 1.9 > cx and a[1] + 1.9 < cy and b[0] + 1.9 < cx and b[1] + 1.9 > cy
+
+
+def test_crs504_left_wall_draws_the_two_small_holes_of_the_drawings_end_view_and_the_right_is_declared():
+    d = load(CRS504)
+    # the drawing's end view (page image 3308 px across, 3.94 px per mm) is the left wall: the stud 9.1 mm from the bottom edge
+    # puts the lid at the right of the page. Two rings 2.8 mm across, 5.0 mm from the rear end, 15.9 and 20.9 mm below the lid;
+    # the left wall's x runs from the rear, so 5.0 mm in
+    holes = d["views"]["left"]["panel"]["decor"]
+    assert [x["id"] for x in holes] == ["side-hole-a", "side-hole-b"]
+    for hole, y in zip(holes, (15.9, 20.9)):
+        assert hole["kind"] == "screw-hole" and hole["size"] == [2.8, 2.8] and hole["rx"] == 1.4 and hole["fill"] == "#646464"
+        assert hole["at"] == [pytest.approx(3.6), pytest.approx(y - 1.4)]
+    assert d["views"]["right"].get("empty") and "left wall" in d["views"]["right"]["empty"]
+    assert "2158" in next(g for g in d["gaps"] if g["what"] == "right-wall")["note"]
 
 
 def test_crs504_cage_vent_is_a_motif_tile_of_the_measured_weave():
@@ -266,15 +311,19 @@ def test_crs504_dc_legends_bracket_and_polarity_marks_are_drawn_for_the_chassis(
     assert "dc-terminal" in {g["what"] for g in d["gaps"]}
 
 
-def test_crs504_rear_draws_only_the_earthing_stud_and_declares_the_rest():
+def test_crs504_rear_draws_the_stud_the_guards_and_their_holes_and_declares_what_2158_cannot_show():
     d = load(CRS504)
     rear = d["views"]["rear"]
     assert not rear.get("empty") and not rear.get("components")
-    assert [x["id"] for x in rear["panel"]["decor"]] == ["rear-stud"]
-    stud = rear["panel"]["decor"][0]
-    assert stud["size"] == [4.3, 4.3] and stud["at"] == [8.85, 7.05]  # centred 11.0 mm from the right edge, 9.2 down
+    assert [x["id"] for x in rear["panel"]["decor"]] == [
+        "rear-stud", "fan-0", "fan-1", "fan-hub-0", "fan-hub-1",
+        "fan-0-hole-a", "fan-0-hole-b", "fan-1-hole-a", "fan-1-hole-b"]
+    stud = decor(d, "rear", "rear-stud")
+    # as seen from behind: centred 11.0 mm from the left end (the drawing's right edge) and, as 2158 settles, 9.2 mm up from the bottom
+    assert stud["size"] == [4.3, 4.3] and stud["at"] == [8.85, 32.65]
     gap = next(g for g in d["gaps"] if g["what"] == "rear-face")
     assert "4.3 mm" in gap["note"] and "11.0 mm" in gap["note"] and "9.2 mm" in gap["note"]
+    assert "MikroTik's own pages were searched" in gap["note"] and "photograph 2158" in gap["note"]
 
 
 def test_crs504_colours_are_the_photographs_medians():
@@ -361,6 +410,52 @@ def test_crs520_supplies_and_fans_are_part_of_the_chassis_with_no_part_number():
     assert {"hot-swap-supplies", "hot-swap-fans", "optional-dc-supply"} <= set(gaps)
     assert "fan-redundancy" not in json.dumps(d["groups"])
     assert "G1483" not in json.dumps(d)  # no document prints the supply's number
+
+
+def layout_of(name):
+    return yaml.safe_load((DEVICES / name / "layout.yaml").read_text())
+
+
+def test_crs520_rear_inlets_are_turned_so_the_earth_pin_is_at_the_right_as_seen_from_behind():
+    d = load(CRS520)
+    # std/c14-inlet@1 has its earth pin up at rotate 0; a turn of 90 carries it to the right, which is where photograph 2353
+    # shows it (two aligned line pins at the left of the housing, the offset middle pin at the right)
+    inlets = {p["id"]: p for p in refs(d, "rear", "std/c14-inlet@1")}
+    assert {k: v["rotate"] for k, v in inlets.items()} == {"ac-inlet-1": 90, "ac-inlet-2": 90}
+    assert (inlets["ac-inlet-1"]["at"], inlets["ac-inlet-2"]["at"]) == ([40.0, 12.5], [103.4, 12.5])  # a half turn keeps the box
+    cuts = {c["id"]: c for c in d["views"]["rear"]["panel"]["cutouts"] if c.get("id", "").startswith("ac-inlet")}
+    assert {k: (v["at"], v["size"]) for k, v in cuts.items()} == {
+        "ac-inlet-1": ([44.0, 8.5], [20.0, 28.0]), "ac-inlet-2": ([107.4, 8.5], [20.0, 28.0])}  # portrait, symmetric
+    latches = {x["id"]: x["at"] for x in d["views"]["rear"]["panel"]["decor"] if x.get("id", "").startswith("psu-") and "latch" in x["id"]}
+    assert latches == {"psu-1-latch-top": [46.0, 2.6], "psu-1-latch-bottom": [48.2, 38.6],
+                       "psu-2-latch-top": [109.4, 2.6], "psu-2-latch-bottom": [111.6, 38.6]}
+
+
+def test_crs504_connectors_are_turned_as_the_photographs_show_them():
+    lay = layout_of(CRS504)
+    front = lay["views"]["front"]["components"]
+    blocks = {b["id"]: b for b in front["blocks"]}
+    assert "rotate" not in blocks["qsfp28"]  # 2157: landscape cages, the gold contacts in the lower part of the window
+    placed = {p["id"]: p for p in front["placements"] if "id" in p}
+    # 2157: the earth pin of each inlet at the left of the housing, the chamfered corners at the left: -90 carries it there
+    assert placed["ac-inlet-1"]["rotate"] == placed["ac-inlet-2"]["rotate"] == -90
+    assert placed["console"]["rotate"] == 180  # 2157: the key notch at the top of the jack, so the plug's side is up
+    assert "rotate" not in placed["mgmt"]  # 2157: the key notch and the two lamps at the bottom of the jack
+    assert "components" not in lay["views"]["rear"]  # the rear carries the guards and the stud: no connector
+
+
+def test_crs520_connectors_are_turned_as_the_photographs_show_them():
+    lay = layout_of(CRS520)
+    front = lay["views"]["front"]["components"]
+    blocks = {b["id"]: b for b in front["blocks"]}
+    # 2354: the two rows are a mirrored pair, the upper row turned half a turn
+    assert blocks["qsfp28"]["rotate"] == blocks["sfp28"]["rotate"] == {"top": 180}
+    placed = {p["id"]: p for p in front["placements"] if "id" in p}
+    assert placed["console"]["rotate"] == 180  # 2354: the key notch at the top, the contacts below it
+    assert "rotate" not in placed["mgmt-1"] and "rotate" not in placed["mgmt-2"]  # 2354: notch and lamps at the bottom
+    rear = {p["id"]: p for p in lay["views"]["rear"]["components"]["placements"]}
+    assert rear["ac-inlet-1"]["rotate"] == rear["ac-inlet-2"]["rotate"] == 90  # 2353: the earth pin at the right
+    assert "qsfp28-orientation" in {g["what"] for g in lay["gaps"]}  # no held image reads the QSFP28 contact side
 
 
 def test_crs520_ears_and_the_rail_kit_are_declared_not_modelled():
