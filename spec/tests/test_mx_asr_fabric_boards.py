@@ -1,13 +1,14 @@
 """Fabric boards for the Juniper MX and Cisco ASR 9000 families, and the chassis bays that take them.
 
-Reached so far: the SCBE3-MX (`juniper/scbe3-mx`) and the SCBE2-MX (`juniper/scbe2-mx`), each for every SCB bay of
-the MX240, MX480 and MX960 that already accepts `juniper/scb-mx@3`; and the MX2000-SFB3 (`juniper/mx2000-sfb3-v`) for the
+Reached so far: the SCBE3-MX (`juniper/scbe3-mx`), the SCBE2-MX (`juniper/scbe2-mx`) and the SCBE-MX (`juniper/scbe-mx`),
+each for every SCB bay of the MX240, MX480 and MX960 that already accepts `juniper/scb-mx@3`; and the MX2000-SFB3 (`juniper/mx2000-sfb3-v`) for the
 eight `sfb` bays of the MX2010 and MX2020, from the MX2010 guide (PDF dated 2025-11-18, Figure 49, PDF p132, printed p112)
 and the MX2020 guide. Boards listed in NOT_REACHED are NOT modelled here and no bay accepts them (see the last test).
 
 Figures are Juniper's MX960 Universal Routing Platform Hardware Guide (PDF dated 2025-08-19): SCBE3-MX description with
-Figure 49 (PDF pp. 217-226, printed 198-207), SCBE2-MX description with Figure 50 (PDF pp. 226-232), and the MX480 guide's
-SCB tables. PDF pages run 19 above the printed ones.
+Figure 49 (PDF pp. 217-226, printed 198-207), SCBE2-MX description with Figure 50 (PDF pp. 226-232), SCBE-MX description
+with Figure 51 (PDF pp. 232-237, printed 213-218), and the MX480 and MX240 guides' SCB tables. PDF pages run 19 above the
+printed ones in the MX960 guide.
 """
 from pathlib import Path
 
@@ -32,8 +33,10 @@ BOARDS = {
                      re_bay=False),
     "scbe2-mx": dict(model="SCBE2-MX", max_w=185, fabric=["480 Gbps", "340 Gbps"],
                      power_figures=["185", "160", "155"], re_bay=True),
+    "scbe-mx": dict(model="SCBE-MX", max_w=160, fabric=["240 Gbps", "160 Gbps"],
+                    power_figures=["160", "130", "120"], re_bay=True),
 }
-NOT_REACHED = ["scbe-mx"]
+NOT_REACHED = []
 
 # the ASR 9000 switch fabric card 2, for the seven `fc` bays of the ASR 9912 and ASR 9922 (41.4 x 395.7, the card standard)
 ASR = ["cisco/asr-9912", "cisco/asr-9922"]
@@ -123,6 +126,37 @@ def test_scbe2_guide_size_is_stated_against_the_bay():
         assert figure in note, figure
 
 
+def test_scbe_guide_size_row_is_stated_against_the_bay_and_the_join_is_named():
+    note = " ".join(contract("scbe-mx")["provenance"]["size"].split())
+    for figure in ("17 in", "43.2 cm", "22 in", "55.9 cm", "1.25 in", "3.2 cm", "9.6 lb", "4.4 kg",
+                   "Table 83", "Table 88", "SCBE", "join", "printed 228", "printed 204", "printed 210"):
+        assert figure in note, figure
+    assert contract("scbe-mx")["provenance"]["weight"].count("9.6 lb") == 1
+
+
+def test_scbe_power_scopes_are_named():
+    note = " ".join(contract("scbe-mx")["provenance"]["power"].split())
+    for word in ("MX960", "MX480", "MX240", "printed p215", "printed p198", "printed p200", "printed p206",
+                 "printed p217", "printed p219", "no conflict", "55 / 40 / 25 C"):
+        assert word in note, word
+
+
+def test_scbe_names_and_release_are_recorded_as_notes():
+    c = contract("scbe-mx")
+    note = " ".join(c["provenance"]["software"].split())
+    for word in ("11.4R1", "Enhanced MX SCB", "SCBE-MX960-S", "SCBE-MX-BB", "note only", "MPC3E"):
+        assert word in note, word
+    assert c["attrs"]["model"] == "SCBE-MX"
+    assert c["attrs"]["generation"] == "2nd"
+
+
+def test_scbe_fabric_figures_are_stated():
+    c = contract("scbe-mx")
+    note = " ".join(c["provenance"]["fabric"].split())
+    for word in ("930 Gbps", "2.79 Tbps", "5.25 Tbps", "5.12 Tbps", "XF"):
+        assert word in note, word
+
+
 def test_power_max_is_the_highest_printed_figure_and_every_figure_is_declared(board):
     c = contract(board)
     assert c["attrs"]["power-draw-max-w"] == BOARDS[board]["max_w"]
@@ -174,6 +208,28 @@ def test_the_scbe2_re_bay_takes_the_two_routing_engines_the_guide_lists_that_the
     assert "RE-S-X6" in contract("scbe2-mx")["provenance"]["re-bay"]
 
 
+def test_the_scbe_re_bay_takes_the_two_routing_engines_the_guide_lists_that_the_library_has():
+    c = contract("scbe-mx")
+    bay = c["bays"]["re"]
+    assert bay["accepts"] == ["juniper/re-s-1300@2", "juniper/re-s-2000@2"]
+    assert bay["default"] == "juniper/re-s-1300@2"
+    note = " ".join(c["provenance"]["re-bay"].split())
+    for word in ("RE-S-1800", "not in the library", "RE-S-2000-4096", "Table 77", "printed p216"):
+        assert word in note, word
+    models = {ref: (doc.get("attrs") or {}).get("model") for ref, _, doc in libdata.components()}
+    assert models["juniper/re-s-1300"] == "RE-S-1300-2048" and models["juniper/re-s-2000"] == "RE-S-2000-4096"
+    assert not [r for r in models if r.startswith("juniper/re-s-1800")]
+
+
+@pytest.mark.parametrize("slug", MX)
+def test_the_chassis_re_bay_gap_names_the_scbe_bay(slug):
+    gaps = [g for g in device(slug)["gaps"] if g["what"] == "re-bay"]
+    assert len(gaps) == 1
+    note = " ".join(gaps[0]["note"].split())
+    assert "The SCBE-MX's bay accepts RE-S-1300 and RE-S-2000 (RE-S-2000-4096) only" in note
+    assert "also lists RE-S-1800" in note
+
+
 # ---- the face
 
 def lamp_ids(name):
@@ -201,6 +257,40 @@ def test_scbe2_face_has_the_figure_50_lamps_ports_and_levers():
     assert refs.count("std/sfp@1") == 2 and refs.count("std/rj45@2") == 1 and len(refs) == 3
     assert 'id="lever-left"' in svg and 'id="lever-right"' in svg
     assert "estimated" in c["provenance"]["face"]
+
+
+def test_scbe_face_has_the_figure_51_lamps_jack_opening_and_levers_and_no_cage():
+    c, svg = contract("scbe-mx"), skin("scbe-mx")
+    assert sorted(lamp_ids("scbe-mx")) == sorted(
+        ["led-ok-fail", "led-fabric-active", "led-fabric-only", "led-bits", "led-gps", "led-uti"])
+    refs = [p["ref"] for p in c["parts"]]
+    assert refs == ["std/rj45@2"]                       # the figure shows one jack; no SFP+ cage is drawn
+    assert [p["id"] for p in c["parts"]] == ["ext-clk"]
+    for ident in ("lever-left", "lever-right", "port-opening", "label-recess", "panel-screws", "re"):
+        assert f'id="{ident}"' in svg, ident
+    assert {"lever-left", "lever-right"} <= set(c["elements"])
+    face = " ".join(c["provenance"]["face"].split())
+    for word in ("ESTIMATED", "Figure 51", "perspective", "straight", "no cage", "not named", "Visio"):
+        assert word in face, word
+    assert "sfp" not in svg.lower()
+
+
+def test_scbe_lamp_positions_are_the_ones_the_face_note_states():
+    import re
+    svg = skin("scbe-mx")
+    pos = {m[0]: (float(m[1]), float(m[2])) for m in re.findall(r'id="(led-[a-z-]+)" cx="([\d.]+)" cy="([\d.]+)"', svg)}
+    assert pos["led-ok-fail"] == (33.75, 22.6)
+    assert pos["led-fabric-active"] == (40.6, 22.0) and pos["led-fabric-only"] == (40.6, 17.0)
+    assert pos["led-bits"] == (359.7, 9.1) and pos["led-gps"] == (359.7, 13.8) and pos["led-uti"] == (359.7, 19.0)
+    note = " ".join(contract("scbe-mx")["provenance"]["face"].split())
+    for text in ("card x 33.75", "x 40.6", "x 359.7"):
+        assert text in note, text
+
+
+def test_scbe_leds_declare_the_unsupported_lamps_and_the_misfiled_rows():
+    note = " ".join(contract("scbe-mx")["provenance"]["leds"].split())
+    for word in ("not currently supported", "BITS", "GPS", "UTI", "misfiled", "Table 80", "printed p217"):
+        assert word in note, word
 
 
 def test_ports_sit_inside_the_envelope_at_the_right_hand_end(board):
@@ -262,6 +352,8 @@ def test_every_bay_that_took_a_board_before_still_takes_it(slug):
 
 
 def test_the_not_reached_boards_are_not_modelled_and_no_bay_accepts_them():
+    # the SCBE-MX is reached now, so the list is empty and this keeps the check for the next board left out
+    assert "scbe-mx" not in NOT_REACHED and (COMPONENTS / "scbe-mx/v1/contract.yaml").exists()
     for name in NOT_REACHED:
         for ns in ("juniper", "cisco"):
             assert not (LIBRARY / "components" / ns / name).exists(), name
@@ -278,7 +370,13 @@ def test_the_chassis_no_longer_says_only_the_scb_mx_is_accepted(slug):
     gap = [g for g in d["gaps"] if g["what"] == "current-generation-frus"]
     assert len(gap) == 1
     assert "only the SCB-MX is accepted" not in " ".join(gap[0]["wanted"].split())
-    assert "SCBE2-MX and SCBE3-MX" in " ".join(gap[0]["wanted"].split())
+    assert "SCBE-MX, SCBE2-MX and SCBE3-MX" in " ".join(gap[0]["wanted"].split())
+
+
+def test_the_mx960_pairing_note_lists_the_four_boards_the_slots_accept():
+    note = " ".join(
+        [g for g in device("juniper/mx960")["gaps"] if g["what"] == "scb-generation-pairing"][0]["note"].split())
+    assert "The SCB-MX, SCBE-MX, SCBE2-MX and SCBE3-MX are accepted in the three SCB slots" in note
 
 
 @pytest.mark.parametrize("slug", MX)
@@ -298,7 +396,7 @@ def test_chassis_versions_and_locks(slug):
     assert [f for f in devicelock.check(LIBRARY) if f[0] == slug] == []
 
 
-VERSIONS = {"juniper/mx240": "6.1.0", "juniper/mx480": "7.1.0", "juniper/mx960": "5.1.0"}
+VERSIONS = {"juniper/mx240": "6.2.0", "juniper/mx480": "7.2.0", "juniper/mx960": "5.2.0"}
 
 
 # ---- the DCIM exports
