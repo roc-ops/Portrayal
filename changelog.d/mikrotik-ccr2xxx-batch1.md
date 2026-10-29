@@ -5,5 +5,6 @@
   SFP28 cages, a management jack and an RJ45 console, with two AC inlets, two fans and a finned heatsink block), both with
   rack ears in the box and both from the brochure, the product page and the studio photographs, as no drawing is held.
   The supplies and fans are part of the chassis, not bays, because no held document prints a part number for them. The
-  vent bands are drawn with the nearest pattern the schema has today. The CCR2004-16G-2S+ (its rear shows removable
+  front vent bands are drawn as measured with the `motif` pattern: the CCR2116's V and lambda strokes and the
+  CCR2004's slanted slots with a dash at each end. The CCR2004-16G-2S+ (its rear shows removable
   supply modules) is not in this batch.

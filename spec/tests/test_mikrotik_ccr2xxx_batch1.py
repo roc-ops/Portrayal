@@ -240,15 +240,123 @@ def test_ccr2004_left_wall_is_plain_and_the_right_is_not_shown():
 
 # --- every device ---------------------------------------------------------------------------------------------
 
+def slant_degrees(cell):
+    """The angles from the vertical of a cell's edges that are neither horizontal nor vertical."""
+    import math
+    out = []
+    for (x0, y0), (x1, y1) in zip(cell, cell[1:] + cell[:1]):
+        if abs(y1 - y0) > 0.5 and abs(x1 - x0) > 0.5:
+            out.append(round(math.degrees(math.atan2(abs(x1 - x0), abs(y1 - y0))), 1))
+    return out
+
+
 @pytest.mark.parametrize("name", NAMES)
-def test_the_front_vent_band_is_the_nearest_pattern_and_the_zigzag_is_a_gap(name):
-    """`chevrons` is not on main: the band takes `vent` and the gap says the metal's band is a zigzag."""
-    d = load(name)
-    band = decor(d, "front")["vent-field"]
-    assert band["pattern"] == "vent" and band["vent"]
-    assert "chevrons" not in json.dumps(d["views"])
-    g = gaps(d)["vent-pattern"]
-    assert "zigzag" in g["note"] and "chevrons" in g["note"]
+def test_no_front_vent_is_drawn_with_the_hexagon_pattern(name):
+    front = load(name)["views"]["front"]["panel"]["decor"]
+    assert [x["id"] for x in front if x.get("pattern") == "vent"] == []
+    assert [x["id"] for x in front if x.get("kind") == "vent-field" and x["pattern"] != "motif"] == []
+
+
+def test_ccr2116_front_band_is_one_motif_period_of_v_and_lambda_strokes():
+    band = decor(load(CCR2116), "front")["vent-field"]
+    assert band["pattern"] == "motif" and band["pattern-pitch"] == [31.2, 6.8]
+    assert band["at"] == [44.3, 11.6] and band["pattern-offset"] == band["at"]
+    assert band["size"][1] == 6.8  # the tile's height: one row of strokes
+    cells = band["pattern-cells"]
+    assert [len(c) for c in cells] == [4, 6, 4, 6, 4]  # "\", V, "/", lambda (cut at the tile's edge), its foot
+    assert all(0 <= x <= 31.2 and 0 <= y <= 6.8 for c in cells for x, y in c)
+    slants = {a for c in cells for a in slant_degrees(c)}
+    assert slants == {45.0}  # every slanted edge, the V's and the lambda's too, at 45 degrees
+
+
+def test_ccr2116_front_band_meets_in_a_v_and_a_lambda_and_runs_six_and_seven_tenths_periods():
+    band = decor(load(CCR2116), "front")["vent-field"]
+    v, lam = band["pattern-cells"][1], band["pattern-cells"][3]
+    # the V's two strokes meet at the foot (its lowest point), the lambda's at the head
+    assert max(y for _, y in v) > 6.7 and min(y for x, y in v if 0 < x < 31) == 0
+    assert min(y for x, y in lam if 20 < x < 31) < 0.1 and max(y for _, y in lam) == 6.8
+    assert abs(band["size"][0] / band["pattern-pitch"][0] - 6.75) < 0.05  # six periods and 0.7 of a seventh
+    assert int(band["size"][0] // band["pattern-pitch"][0]) == 6
+    assert -(-band["size"][0] // band["pattern-pitch"][0]) == 7  # seven V points are cut or whole across it
+
+
+def test_ccr2116_has_no_vent_pattern_gap_and_its_rear_guards_keep_the_honeycomb():
+    d = load(CCR2116)
+    assert "vent-pattern" not in gaps(d)
+    r = decor(d, "rear")
+    assert [r[k]["pattern"] for k in ("psu-opening", "fan-0", "fan-1", "fan-2", "fan-3")] == ["vent"] * 5
+
+
+def test_ccr2116_right_wall_vent_is_round_holes_not_hexagons():
+    side = {x["id"]: x for x in load(CCR2116)["views"]["right"]["panel"]["decor"]}["side-vent"]
+    assert side["pattern"] == "holes"
+
+
+def test_ccr2004_front_band_is_sixty_slanted_slots_in_five_drawings():
+    d = load(CCR2004)
+    f = decor(d, "front")
+    main = f["vent-field"]
+    pitch = main["pattern-pitch"][0]
+    assert pitch == 4.736 and main["pattern-pitch"][1] == 9.3 and main["pattern-offset"] == main["at"]
+    assert main["at"][1] == 4.9 and main["size"][1] == 9.3
+    full = round((main["size"][0] - 2.4 - 2.70) / pitch) + 1
+    assert full == 41  # slots 11 to 51
+    assert [len(c) for c in main["pattern-cells"]] == [4, 8]  # the slot, and its corner wrapped past the tile's edge
+    slants = [a for c in main["pattern-cells"] for a in slant_degrees(c)]
+    assert slants and all(abs(a - 16.2) < 0.2 for a in slants)  # a 2.70 mm lean over 9.3 mm
+    dashes = [f["vent-dashes-left"], f["vent-dashes-right"]]
+    assert [round((x["size"][0] - 2.4 - 0.725) / pitch) + 1 for x in dashes] == [5, 5]
+    assert all(x["size"][1] == 2.5 and x["pattern"] == "motif" for x in dashes)
+    left = [f[f"vent-ramp-left-{n}"] for n in range(1, 6)]
+    right = [f[f"vent-ramp-right-{n}"] for n in range(1, 5)]
+    heights = [x["size"][1] for x in left + right]
+    assert heights == sorted(heights[:5]) + sorted(heights[5:], reverse=True)  # the sweep down and back up
+    assert 5 + 5 + full + 4 + 5 == 60
+    # each shortened slot starts one pitch after the last, on the same row of slots
+    xs = [x["at"][0] + 0.0 for x in left] + [main["at"][0]]
+    assert all(abs((b - a) - pitch) < 0.7 for a, b in zip(xs, xs[1:])), xs
+    assert all(x["pattern"] == "motif" and x["pattern-pitch"] == x["size"] for x in left + right)
+
+
+def test_ccr2004_vent_gap_names_the_curved_edge_and_no_chevrons_are_asked_for():
+    g = gaps(load(CCR2004))["vent-pattern"]
+    assert "curve" in g["note"] and "chevrons" not in json.dumps(g)
+
+
+def test_ccr2004_face_and_plates_are_the_photographs_medians():
+    d = load(CCR2004)
+    assert d["chassis"]["color"] == "#c4c4c4"
+    f = decor(d, "front")
+    assert f["mgmt-block"]["fill"] == "#787674" and f["sfp28-strip"]["fill"] == "#898784"
+    r = decor(d, "rear")
+    assert all(r[k]["fill"] == "#c4c4c4" for k in ("fan-hub-0", "fan-hub-1"))
+    note = d["provenance"]["colour"]["note"] + d["provenance"]["colour-sample"]["note"]
+    for value in ("#c4c4c4", "#787674", "#898784", "#373737", "#a8a8a8"):
+        assert value in note
+
+
+def test_ccr2116_colours_state_the_sample_beside_the_face():
+    d = load(CCR2116)
+    assert d["chassis"]["color"] == "#dddddd"
+    note = d["provenance"]["colour-sample"]["note"]
+    assert "#dbdbde" in note and "#dddddd" in note and "68600" in note
+
+
+def test_ccr2004_heatsink_is_dark_base_with_twenty_one_fin_edges_and_two_rims():
+    d = load(CCR2004)
+    rear = d["views"]["rear"]
+    block = decor(d, "rear")["heatsink"]
+    assert block["at"] == [200.0, 7.5] and block["size"] == [166.9, 36.5] and block["fill"] == "#373737"
+    sk = {s["id"]: s for s in rear["silkscreen"] if s.get("id")}
+    fins = sk["heatsink-fins"]
+    assert fins["path"].count("V 33") == 21 and fins["fill"] == "#a8a8a8"
+    assert sk["heatsink-rim-left"]["at"][0] == 202.5 and sk["heatsink-rim-right"]["at"][0] == 365.9
+    assert "7.31" in fins["path"]
+
+
+def test_ccr2004_rear_guards_keep_the_honeycomb():
+    r = decor(load(CCR2004), "rear")
+    assert [r[k]["pattern"] for k in ("fan-0", "fan-1")] == ["vent", "vent"]
 
 
 @pytest.mark.parametrize("name", NAMES)

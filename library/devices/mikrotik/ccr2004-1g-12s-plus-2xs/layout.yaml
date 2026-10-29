@@ -59,9 +59,32 @@ provenance:
       From photograph 1937 at 3.30 px per mm in x. SFP28 stack: cage left at 15.4 mm, upper cage top at 11.5 mm and
       lower at 27.5 mm (a 16.0 mm row pitch), with a grey strip between the cages that carries four printed arrows.
       SFP+ cages: 15.2 mm wide, first centre at 43.0 mm, 19.8 mm pitch, top at 27.4 mm. The console and management
-      jacks sit in one 17.6 x 27.0 mm plate at 277.7 mm; RESET at 299.7 mm. The vent band over the cages is a row
-      of slots that grow towards the right and end in a sweep over the console; it is drawn as one field.
-      Face colour #dddddd (the photograph's lit median is lighter), drawn so it reads on the light stage.
+      jacks sit in one 17.6 x 27.0 mm plate at 277.7 mm; RESET at 299.7 mm. The plates are drawn at the photograph's
+      median over each (see colour).
+  vent-band:
+    confidence: estimated
+    note: >-
+      estimated - measured on photograph 1937 at 6.106 px per mm across (the body's 2705 px at the band for the
+      printed 443 mm; the body's left edge at 507.5 px) and 5.59 px per mm up the face (the face is 246 px for 44 mm
+      because the camera looks down). The band is 60 parallel slots leaning right, one every 4.736 mm (28.92 px, 59
+      steps from 589 px to 2295 px), the first slot's top-left corner at 13.35 mm. A full slot is 2.4 mm wide across
+      and 9.3 mm tall, its foot 2.70 mm left of its top, with corners cut 0.3 mm for the rounded ends. The slots'
+      tops are at 4.9 mm; the lower edge of the band sweeps down from the left end and back up at the right end.
+      Drawn as: the 41 full slots 11 to 51 as one `motif` field with a 4.736 x 9.3 mm tile holding one slot (it is
+      2.4 + 2.70 = 5.1 mm across, so its corner wraps into the next tile and is cut in two); five dashes at each end
+      (slots 1 to 5 and 56 to 60, 2.5 mm tall) as one `motif` field each with a 4.736 x 2.5 mm tile; and the slots the
+      sweep shortens, 6 to 10 and 52 to 55, each as its own one-tile `motif` rect at the height measured at its foot
+      (2.9, 4.1, 5.9, 7.7 and 8.8 mm on the left; 8.9, 7.7, 5.4 and 3.2 mm on the right). No source draws the
+      sweep's outline, and the foot of each shortened slot is cut square: the metal cuts it along the curve, up to
+      about 0.8 mm off. The `vent` hexagons do not draw any of it.
+  colour-sample:
+    confidence: photo-measured
+    note: >-
+      Face #c4c4c4: the median of 52220 pixels of photograph 1937 over x 2492 to 2865, y 995 to 1135 (plain face, right
+      of the lamp legends) is #c5c3c3, and of 11400 pixels of the brochure's front figure (fig. 2) over x 1130 to
+      1320, y 285 to 345 is #c4c4c4. The management plate #787674 is the median of 1040 pixels of photograph 1937 over
+      x 2215 to 2295, y 1037 to 1050 (between the two jacks); the SFP28 strip #898784 is the median of 92 pixels over
+      x 597 to 620, y 1054 to 1058. The lamps' colours belong to the component skins and are not changed here.
   lamps:
     confidence: photo-measured
     note: >-
@@ -82,8 +105,13 @@ provenance:
       estimated - no rear elevation is held; the positions are read off photograph 1936 (crop at 4.33 px per mm).
       It looks down on the rear, so x is good to about 1.5 mm and y, from the face's bottom edge, to about 2.5 mm.
       Inlets at 31.0 and 111.6 mm with POWER 1 or 2 and the rating line under each; fan openings 37 mm across at
-      170.2 and 385.5 mm; the heatsink block 161 mm wide from 203.4 mm, with 23 fins on a 7.0 mm pitch. The inlets'
-      wire retaining clips are not drawn (no registry part).
+      170.2 and 385.5 mm. The heatsink block, re-read on photograph 1936 at 6.124 px per mm (the body's 2713 px at the
+      fins, left edge 515 px): a thick rim 200.0 to 205.0 mm, 21 fin edges every 7.31 mm (44.75 px) from 211.9 mm,
+      and a thin rim at 365.0 to 366.9 mm, so the block is 166.9 mm wide from 200.0 mm. Photograph 1936 and the
+      brochure's rear figure (fig. 3) show the fins reaching past the box's lower edge: the camera looks down and
+      the block stands out of the rear plane, so it is the block's depth, not a lower edge; the depth is not held and
+      the block is drawn inside the rear face. The guards are honeycombs (hexagonal holes round a hub) and keep
+      `vent`. The inlets' wire retaining clips and the screws are not drawn (no registry part).
   built-in-power-and-fans:
     confidence: datasheet
     note: >-
@@ -105,8 +133,12 @@ provenance:
   colour:
     confidence: estimated
     note: >-
-      The median of photograph 1937's face is lighter than #dddddd; the face is drawn #dddddd so it reads on the
-      light stage.
+      The face and the fan hubs are drawn #c4c4c4, the samples listed under colour-sample: photograph 1937's
+      median is #c5c3c3 and the brochure's front figure is #c4c4c4. The rear photograph 1936 reads #c5c5c5 over
+      x 1215 to 1420, y 972 to 1103 (26855 pixels); the brochure's rear figure reads lighter (#d1d1d1), so the rear's
+      colour is the more lit of the two and not taken. The heatsink's base is #373737 (the median of 4250 pixels of
+      photograph 1936 over x 1870 to 1895, y 930 to 1100, between two fins) and its fin edges and rims #a8a8a8 (850
+      pixels over x 1856 to 1861, y 930 to 1100).
 attrs:
   power:
     power-max-w: 49
@@ -133,7 +165,7 @@ chassis:
   height: 44.0
   depth: 224.0
   ru: 1
-  color: '#dddddd'
+  color: '#c4c4c4'
   ears:
     positions:
     - {name: flush, default: true}
@@ -181,10 +213,10 @@ gaps:
   scope: [front]
   reason: needs-drawing
   note: >-
-    The metal's vent band over the cages is a row of slots that grow towards the right, and the schema on main has no
-    such pattern (it is the zigzag family #1311 adds as `chevrons`), so the band is drawn with the nearest, `vent`.
-    The band takes `chevrons` once that pattern is on main, if the owner agrees it fits.
-  wanted: The `chevrons` decoration pattern, or a slot-row pattern.
+    The slots are drawn as measured, but the metal's band is a recess whose lower edge sweeps down from the left end
+    and back up at the right end, and the slots the sweep shortens are cut along that curve. No decor draws a curved
+    edge, so the shortened slots are cut square and the curve is not drawn: they are up to about 0.8 mm off.
+  wanted: A dimensioned front view, or a decor edge that follows a curve.
 - what: led-states
   scope: [front]
   reason: vendor-silent
@@ -272,9 +304,141 @@ views:
     size: {w: 443.0, h: 44.0}
     panel:
       decor:
-      - {id: vent-field, kind: vent-field, at: [13.0, 4.5], size: [283.0, 9.5], pattern: vent, vent: 1.0}
-      - {id: sfp28-strip, kind: module-plate, at: [15.4, 21.9], size: [14.25, 5.6], fill: '#a0a0a0'}
-      - {id: mgmt-block, kind: jack-plate, at: [277.7, 10.5], size: [17.6, 27.0], fill: '#c4c4c4'}
+      - id: vent-field
+        kind: vent-field
+        at: [58.01, 4.9]
+        size: [194.54, 9.3]
+        pattern: motif
+        pattern-pitch: [4.736, 9.3]
+        pattern-offset: [58.01, 4.9]
+        pattern-cells:
+        - [[0.0, 0.0], [0.064, 0.0], [0.28, 0.288], [0.0, 1.254]]
+        - [[2.616, 0.288], [3.0, 0.0], [4.736, 0.0], [4.736, 1.254], [2.484, 9.012], [2.1, 9.3], [0.3, 9.3],
+           [0.084, 9.012]]
+        vent: 1.0
+      - id: vent-dashes-left
+        kind: vent-field
+        at: [12.62, 4.9]
+        size: [22.07, 2.5]
+        pattern: motif
+        pattern-pitch: [4.736, 2.5]
+        pattern-offset: [12.62, 4.9]
+        pattern-cells:
+        - [[0.642, 0.288], [1.026, 0.0], [2.826, 0.0], [3.042, 0.288], [2.484, 2.212], [2.1, 2.5], [0.3, 2.5],
+           [0.084, 2.212]]
+        vent: 1.0
+      - id: vent-dashes-right
+        kind: vent-field
+        at: [273.1, 4.9]
+        size: [22.07, 2.5]
+        pattern: motif
+        pattern-pitch: [4.736, 2.5]
+        pattern-offset: [273.1, 4.9]
+        pattern-cells:
+        - [[0.642, 0.288], [1.026, 0.0], [2.826, 0.0], [3.042, 0.288], [2.484, 2.212], [2.1, 2.5], [0.3, 2.5],
+           [0.084, 2.212]]
+        vent: 1.0
+      - id: vent-ramp-left-1
+        kind: vent-field
+        at: [36.2, 4.9]
+        size: [3.23, 2.862]
+        pattern: motif
+        pattern-pitch: [3.23, 2.862]
+        pattern-offset: [36.2, 4.9]
+        pattern-cells:
+        - [[0.747, 0.288], [1.131, 0.0], [2.931, 0.0], [3.147, 0.288], [2.484, 2.574], [2.1, 2.862],
+           [0.3, 2.862], [0.084, 2.574]]
+        vent: 1.0
+      - id: vent-ramp-left-2
+        kind: vent-field
+        at: [40.57, 4.9]
+        size: [3.59, 4.114]
+        pattern: motif
+        pattern-pitch: [3.59, 4.114]
+        pattern-offset: [40.57, 4.9]
+        pattern-cells:
+        - [[1.111, 0.288], [1.495, 0.0], [3.295, 0.0], [3.511, 0.288], [2.484, 3.826], [2.1, 4.114],
+           [0.3, 4.114], [0.084, 3.826]]
+        vent: 1.0
+      - id: vent-ramp-left-3
+        kind: vent-field
+        at: [44.79, 4.9]
+        size: [4.11, 5.903]
+        pattern: motif
+        pattern-pitch: [4.11, 5.903]
+        pattern-offset: [44.79, 4.9]
+        pattern-cells:
+        - [[1.63, 0.288], [2.014, 0.0], [3.814, 0.0], [4.03, 0.288], [2.484, 5.615], [2.1, 5.903],
+           [0.3, 5.903], [0.084, 5.615]]
+        vent: 1.0
+      - id: vent-ramp-left-4
+        kind: vent-field
+        at: [49.0, 4.9]
+        size: [4.63, 7.692]
+        pattern: motif
+        pattern-pitch: [4.63, 7.692]
+        pattern-offset: [49.0, 4.9]
+        pattern-cells:
+        - [[2.15, 0.288], [2.533, 0.0], [4.333, 0.0], [4.55, 0.288], [2.484, 7.404], [2.1, 7.692],
+           [0.3, 7.692], [0.084, 7.404]]
+        vent: 1.0
+      - id: vent-ramp-left-5
+        kind: vent-field
+        at: [53.43, 4.9]
+        size: [4.94, 8.766]
+        pattern: motif
+        pattern-pitch: [4.94, 8.766]
+        pattern-offset: [53.43, 4.9]
+        pattern-cells:
+        - [[2.461, 0.288], [2.845, 0.0], [4.645, 0.0], [4.861, 0.288], [2.484, 8.478], [2.1, 8.766],
+           [0.3, 8.766], [0.084, 8.478]]
+        vent: 1.0
+      - id: vent-ramp-right-1
+        kind: vent-field
+        at: [252.29, 4.9]
+        size: [5.0, 8.945]
+        pattern: motif
+        pattern-pitch: [5.0, 8.945]
+        pattern-offset: [252.29, 4.9]
+        pattern-cells:
+        - [[2.513, 0.288], [2.897, 0.0], [4.697, 0.0], [4.913, 0.288], [2.484, 8.656], [2.1, 8.945],
+           [0.3, 8.945], [0.084, 8.656]]
+        vent: 1.0
+      - id: vent-ramp-right-2
+        kind: vent-field
+        at: [257.39, 4.9]
+        size: [4.63, 7.692]
+        pattern: motif
+        pattern-pitch: [4.63, 7.692]
+        pattern-offset: [257.39, 4.9]
+        pattern-cells:
+        - [[2.15, 0.288], [2.533, 0.0], [4.333, 0.0], [4.55, 0.288], [2.484, 7.404], [2.1, 7.692],
+           [0.3, 7.692], [0.084, 7.404]]
+        vent: 1.0
+      - id: vent-ramp-right-3
+        kind: vent-field
+        at: [262.8, 4.9]
+        size: [3.96, 5.367]
+        pattern: motif
+        pattern-pitch: [3.96, 5.367]
+        pattern-offset: [262.8, 4.9]
+        pattern-cells:
+        - [[1.474, 0.288], [1.858, 0.0], [3.658, 0.0], [3.874, 0.288], [2.484, 5.079], [2.1, 5.367],
+           [0.3, 5.367], [0.084, 5.079]]
+        vent: 1.0
+      - id: vent-ramp-right-4
+        kind: vent-field
+        at: [268.16, 4.9]
+        size: [3.33, 3.22]
+        pattern: motif
+        pattern-pitch: [3.33, 3.22]
+        pattern-offset: [268.16, 4.9]
+        pattern-cells:
+        - [[0.851, 0.288], [1.235, 0.0], [3.035, 0.0], [3.251, 0.288], [2.484, 2.932], [2.1, 3.22],
+           [0.3, 3.22], [0.084, 2.932]]
+        vent: 1.0
+      - {id: sfp28-strip, kind: module-plate, at: [15.4, 21.9], size: [14.25, 5.6], fill: '#898784'}
+      - {id: mgmt-block, kind: jack-plate, at: [277.7, 10.5], size: [17.6, 27.0], fill: '#787674'}
       cutouts:
       - {block: sfp28}
       - {block: sfp-plus}
@@ -433,15 +597,27 @@ views:
     panel:
       decor:
       - {id: fan-0, kind: fan-grille, at: [151.7, 5.4], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
-      - {id: fan-hub-0, kind: fan-hub, at: [160.7, 14.4], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
-      - {id: heatsink, kind: heatsink, at: [203.4, 7.5], size: [161.1, 36.5], fill: '#b4b4b4'}
+      - {id: fan-hub-0, kind: fan-hub, at: [160.7, 14.4], size: [19.0, 19.0], rx: 9.5, fill: '#c4c4c4'}
+      - {id: heatsink, kind: heatsink, at: [200.0, 7.5], size: [166.9, 36.5], fill: '#373737'}
       - {id: fan-1, kind: fan-grille, at: [367.0, 4.5], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
-      - {id: fan-hub-1, kind: fan-hub, at: [376.0, 13.5], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
+      - {id: fan-hub-1, kind: fan-hub, at: [376.0, 13.5], size: [19.0, 19.0], rx: 9.5, fill: '#c4c4c4'}
       cutouts:
       - {id: ac-inlet-1, at: [17.0, 13.0], size: [28.0, 20.0], shape: rect}
       - {id: ac-inlet-2, at: [97.6, 13.0], size: [28.0, 20.0], shape: rect}
     silkscreen:
-    - {id: heatsink-fins, at: [206.9, 9.5], path: M 0 0 V 33 M 7 0 V 33 M 14 0 V 33 M 21 0 V 33 M 28 0 V 33 M 35 0 V 33 M 42 0 V 33 M 49 0 V 33 M 56 0 V 33 M 63 0 V 33 M 70 0 V 33 M 77 0 V 33 M 84 0 V 33 M 91 0 V 33 M 98 0 V 33 M 105 0 V 33 M 112 0 V 33 M 119 0 V 33 M 126 0 V 33 M 133 0 V 33 M 140 0 V 33 M 147 0 V 33 M 154 0 V 33, filled: false, stroke-width: 0.5, fill: '#6f6a65', for: chassis}
+    - id: heatsink-fins
+      at: [211.9, 9.5]
+      path: >-
+        M 0 0 V 33 M 7.31 0 V 33 M 14.62 0 V 33 M 21.93 0 V 33 M 29.24 0 V 33 M 36.55 0 V 33 M 43.86 0 V 33
+        M 51.17 0 V 33 M 58.48 0 V 33 M 65.79 0 V 33 M 73.1 0 V 33 M 80.41 0 V 33 M 87.72 0 V 33 M 95.03 0 V 33
+        M 102.34 0 V 33 M 109.65 0 V 33 M 116.96 0 V 33 M 124.27 0 V 33 M 131.58 0 V 33 M 138.89 0 V 33
+        M 146.2 0 V 33
+      filled: false
+      stroke-width: 1.2
+      fill: '#a8a8a8'
+      for: chassis
+    - {id: heatsink-rim-left, at: [202.5, 7.5], path: 'M 0 0 V 36.5', filled: false, stroke-width: 4.8, fill: '#a8a8a8', for: chassis}
+    - {id: heatsink-rim-right, at: [365.9, 7.5], path: 'M 0 0 V 36.5', filled: false, stroke-width: 2.0, fill: '#a8a8a8', for: chassis}
     - {at: [31.0, 38.7], text: POWER 1, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
     - {at: [31.0, 41.7], text: '100-240 V ~1 A MAX 50/60 Hz', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
     - {at: [111.6, 38.7], text: POWER 2, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
