@@ -41,6 +41,25 @@ provenance:
       cisco/ws-c2960s-48fpd stand (the first jack 202.9 mm from the chassis side, read by eye against the same
       stencil family), and that device's positions are used for the jacks and the right-hand cluster. Every position
       is `estimated`; the image is community art, not Cisco's.
+  colour:
+    confidence: estimated
+    note: >-
+      Front: the faceplate is two-tone, read from this model's own NetBox stencil (cisco-ws-c2960s-24pd-l.front.png,
+      5475 x 503 px), whose fills are flat. The largest plain area is the charcoal panel, #404040 (median of 3600 px,
+      box (435,30,480,110), in the plain left of the panel), so that is `chassis.color`. The teal bezel round it is
+      #255e6d (median of 7000 px, box (700,6,1200,20); the same on the lower edge, box (700,482,1200,497)); the
+      console surround is #bad4d7 and the jack-block, SFP+ cage and management-jack outlines and the port-number tags
+      are #ffff99. Legends are inked as the stencil prints them: #ffffff for the lamps, #bbd5d8 for CONSOLE and
+      #f2f2f2 for the model name. A NetBox stencil is a community artist's flat render, so these are that artist's
+      palette and not a reading of the metal. The stencils of the 48FPD-L and 48TD-L give the same panel and teal, and
+      Figure 1-1 (PDF p4, printed 1-2), Cisco's colour drawing of the 48FPD-L, agrees on the scheme; it is a sibling's
+      and is not used for a value. Rear: no held rear carries this model's colour. The only rear in colour is the
+      WS-C2960S-48LPD-L NetBox photograph, whose plain rear plate reads #3f4447 (median of 2000 px, box
+      (440,15,520,40)) and whose fitted module's frame reads #344a54; a photograph's colour depends on its lighting.
+      Its printed ratings (AC "8-4A", RPS "+12V @11.25A, -48V @7.8A") match none of the five rows of spec Tables 1-2
+      and 1-3, so it is another model's rear. The guide names no housing colour and says nothing of a shared finish.
+      The rear is therefore drawn in the chassis colour and the `faceplate-colour` gap says so. The rear reads
+      charcoal, not teal; the teal is the fitted module's frame only.
   numbering:
     confidence: drawing
     note: >-
@@ -105,7 +124,22 @@ provenance:
       the RPS connector is present. The guide says "If you are not using an RPS with your switch, use the two
       Phillips pan-head screws to attach the RPS connector cover" (Figure 1-15, PDF p39, printed 1-15), so the
       connector is drawn open, as the photograph shows it. It is chassis art and not a part: no RPS 2300 connector is
-      a registry part.
+      a registry part, and no `std/` header names it (the EPS12V, PCIe 8-pin and 12V-2x6 headers are other
+      connectors). Measured on the photograph at 3.41 px per mm: a metal plate 72.8 x 22.6 mm at (285.0, 21.4) with a
+      raised rating strip above it (49.2 x 3.8 mm at 297.7, 17.9), a black shroud 48.2 x 11.3 mm at (298.4, 24.0)
+      holding a cream housing 46.9 x 9.7 mm, and in it two rows of eleven cavities, 3.5 x 3.7 mm each, on a 4.17 mm
+      pitch across and 4.03 mm between the rows, with a screw hole at each end of the plate. Eleven across is what this
+      model's serial-number figure draws (PDF p55, printed 1-5, Figure 1-1); Figure 1-10 (PDF p19, printed 1-17) draws
+      seven across in a smaller figure, and the photograph and the larger figure are followed. The warning label above
+      the plate ("DC inputs for remote power supply specified in manual", with a triangle) is printed on the metal at
+      (294.0, 5.9), 45.2 x 9.7 mm, and is drawn as an outline with no text; the rating label beside the inlet is a
+      plate 32.7 x 13.4 mm at (351.0, 6.1) whose text is another model's and is not carried. The inlet sits in a
+      moulded black surround 29.3 x 22.5 mm at (387.6, 8.3). The fan exhaust is a honeycomb of hexagons about 9.7 x 8.5
+      mm on an 8.8 mm column pitch (21 cells, flat-topped); the library's `vent` pattern is hexagonal and is the
+      nearest of the schema's patterns, scaled by 2.0 with `pattern-pitch` to that pitch. Three more pan-head screws,
+      6.8 mm across, stand at 111.4, 274.2 and 436.4 mm along and 28.7 mm down, centres (the fourth, at 7.3 mm, is on
+      the cover). The FlexStack slot is the fitted module's stepped frame, 103.3 x 39.0 mm at (2.6, 1.8) (see the
+      blank cover's contract). The faint stamped corner marks round the fan and one small drilled hole are not drawn.
   airflow:
     confidence: estimated
     note: >-
@@ -151,7 +185,8 @@ chassis:
   depth: 386.0
   ru: 1
   weight-kg: 5.66
-  color: '#d3d4d1'
+  color: '#404040'
+  silk: '#ffffff'
   power: ac
   ears:
     positions:
@@ -170,9 +205,21 @@ gaps:
   scope: [rear]
   reason: vendor-silent
   wanted: >-
-    A part for the RPS connector. No registry part exists for an RPS 2300 connector, so it is drawn as chassis art
-    where the photograph puts it, open. The guide says the cover (two Phillips pan-head screws, Figure 1-15) goes on
-    when no RPS is connected.
+    A part for the RPS connector. No registry part exists for an RPS 2300 connector and no `std/` header names it, so
+    it is drawn as chassis art where the photograph puts it: a plate, a shroud, a housing with two rows of eleven
+    cavities, two screw holes and a rating strip. It is drawn open. The guide says the cover (two Phillips pan-head
+    screws, Figure 1-15) goes on when no RPS is connected.
+- what: faceplate-colour
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    This model's own rear in colour. The only held rear in colour is the NetBox photograph of the WS-C2960S-48LPD-L,
+    whose plain plate reads #3f4447 and whose fitted module's frame reads #344a54; its printed ratings ("8-4A",
+    "+12V @11.25A, -48V @7.8A") match none of the five rows of spec Tables 1-2 and 1-3, so it is another model's
+    rear. Figure 1-10 (PDF p19, printed 1-17) fills the rear face pale grey, which is the drawing's shading. The guide
+    gives no housing colour and says nothing of a shared finish ("All the 24- and 48-port switches have similar
+    components" is about parts). The rear is drawn in the chassis colour, #404040, which is the front's own measured
+    panel colour: a stand-in the owner may accept or replace.
 - what: etsi-bracket
   scope: [front]
   reason: vendor-silent
@@ -254,9 +301,25 @@ views:
     size: {w: 444.5, h: 44.45}
     panel:
       decor:
-      - {id: number-strip-1, at: [202.86, 2.40], size: [83.82, 3.70], fill: '#f1e6a8'}
-      - {id: number-strip-2, at: [292.26, 2.40], size: [83.82, 3.70], fill: '#f1e6a8'}
-      - {id: mode-button, at: [9.60, 37.50], size: [6.4, 3.8], fill: '#2b2e31'}
+      - {id: bezel-top, kind: bezel, at: [0, 0], size: [444.5, 2.1], rx: 0, fill: '#255e6d'}
+      - {id: bezel-bottom, kind: bezel, at: [0, 42.35], size: [444.5, 2.1], rx: 0, fill: '#255e6d'}
+      - {id: bezel-left, kind: bezel, at: [0, 0], size: [18.7, 44.45], rx: 0, fill: '#255e6d'}
+      - {id: bezel-right, kind: bezel, at: [440.5, 0], size: [4.0, 44.45], rx: 0, fill: '#255e6d'}
+      - {id: legend-band, kind: bezel, at: [386.0, 0], size: [56.6, 4.6], rx: 0, fill: '#255e6d'}
+      - {id: lamp-block, kind: panel, at: [3.2, 2.1], size: [13.0, 34.5], rx: 1.8, fill: '#404040'}
+      - {id: lamp-block-foot, kind: panel, at: [3.2, 36.0], size: [5.9, 6.2], rx: 1.0, fill: '#404040'}
+      - {id: usb-surround, kind: bezel, at: [379.4, 4.8], size: [7.9, 17.4], rx: 0.8, fill: '#255e6d'}
+      - {id: console-surround, kind: bezel, at: [387.9, 6.0], size: [31.6, 18.6], rx: 2.2, fill: '#bad4d7'}
+      - {id: console-panel, kind: panel, at: [389.0, 7.1], size: [29.4, 16.4], rx: 1.6, fill: '#404040'}
+      - {id: console-usb-surround, kind: bezel, at: [389.0, 13.9], size: [11.6, 9.4], rx: 1.0, fill: '#255e6d'}
+      - {id: number-strip-1, at: [202.86, 2.40], size: [83.82, 3.70], fill: '#ffff99'}
+      - {id: number-strip-2, at: [292.26, 2.40], size: [83.82, 3.70], fill: '#ffff99'}
+      - {id: jack-block-outline-1, at: [199.46, 10.9], size: [89.2, 27.6], rx: 2.5, stroke: '#ffff99', stroke-width: 1.0}
+      - {id: jack-block-outline-2, at: [288.86, 10.9], size: [89.2, 27.6], rx: 2.5, stroke: '#ffff99', stroke-width: 1.0}
+      - {id: sfp-outline-1, at: [379.1, 26.7], size: [16.3, 11.6], rx: 1.8, stroke: '#ffff99', stroke-width: 1.0}
+      - {id: sfp-outline-2, at: [409.5, 26.7], size: [16.3, 11.6], rx: 1.8, stroke: '#ffff99', stroke-width: 1.0}
+      - {id: mgmt-outline, at: [420.5, 6.5], size: [17.7, 14.3], rx: 2.0, stroke: '#ffff99', stroke-width: 1.0}
+      - {id: mode-button, kind: button, at: [9.60, 37.50], size: [6.4, 3.8], rx: 1.2, fill: '#255e6d'}
       cutouts:
       - {block: rj45}
       - {id: usb-a, at: [381.25, 7.60], size: [4.5, 12.0], shape: rect}
@@ -280,20 +343,20 @@ views:
       - {id: port-26, at: [410.50, 27.40], size: [14.5, 10.0], shape: rect}
     silkscreen:
     - {block: rj45}
-    - {id: silk-model, at: [416.00, 4.50], text: 'Catalyst 2960-S Series PoE+ 10G', font-size: 2.9, anchor: middle, fill: '#2b2e31', for: chassis}
-    - {id: silk-console, at: [400.40, 7.40], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#2b2e31', for: console}
-    - {id: silk-sfp, at: [402.50, 41.10], text: 'SFP+', font-size: 1.9, anchor: middle, fill: '#2b2e31', for: chassis}
-    - {id: silk-25, at: [387.65, 42.60], text: '1', font-size: 1.9, anchor: middle, fill: '#2b2e31', for: port-25}
-    - {id: silk-26, at: [417.75, 42.60], text: '2', font-size: 1.9, anchor: middle, fill: '#2b2e31', for: port-26}
-    - {id: silk-mode, at: [5.90, 40.00], text: MODE, font-size: 1.5, anchor: middle, fill: '#2b2e31', for: chassis}
-    - {id: silk-syst, at: [10.00, 13.83], text: SYST, font-size: 1.7, anchor: start, fill: '#2b2e31', for: led-system}
-    - {id: silk-rps, at: [10.00, 16.43], text: RPS, font-size: 1.7, anchor: start, fill: '#2b2e31', for: led-rps}
-    - {id: silk-mstr, at: [10.00, 18.93], text: MSTR, font-size: 1.7, anchor: start, fill: '#2b2e31', for: led-master}
-    - {id: silk-stat, at: [10.00, 21.43], text: STAT, font-size: 1.7, anchor: start, fill: '#2b2e31', for: led-stat}
-    - {id: silk-dplx, at: [10.00, 23.93], text: DPLX, font-size: 1.7, anchor: start, fill: '#2b2e31', for: led-duplx}
-    - {id: silk-sped, at: [10.00, 26.53], text: SPED, font-size: 1.7, anchor: start, fill: '#2b2e31', for: led-speed}
-    - {id: silk-stck, at: [10.00, 29.13], text: STCK, font-size: 1.7, anchor: start, fill: '#2b2e31', for: led-stack}
-    - {id: silk-poe, at: [10.00, 31.53], text: PoE, font-size: 1.7, anchor: start, fill: '#2b2e31', for: led-poe}
+    - {id: silk-model, at: [416.00, 4.50], text: 'Catalyst 2960-S Series PoE+ 10G', font-size: 2.9, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {id: silk-console, at: [400.40, 7.40], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#bbd5d8', for: console}
+    - {id: silk-sfp, at: [402.50, 41.10], text: 'SFP+', font-size: 1.9, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {id: silk-25, at: [387.65, 42.60], text: '1', font-size: 1.9, anchor: middle, fill: '#ffffff', for: port-25}
+    - {id: silk-26, at: [417.75, 42.60], text: '2', font-size: 1.9, anchor: middle, fill: '#ffffff', for: port-26}
+    - {id: silk-mode, at: [5.90, 40.00], text: MODE, font-size: 1.5, anchor: middle, fill: '#ffffff', for: chassis}
+    - {id: silk-syst, at: [10.00, 13.83], text: SYST, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-system}
+    - {id: silk-rps, at: [10.00, 16.43], text: RPS, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-rps}
+    - {id: silk-mstr, at: [10.00, 18.93], text: MSTR, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-master}
+    - {id: silk-stat, at: [10.00, 21.43], text: STAT, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-stat}
+    - {id: silk-dplx, at: [10.00, 23.93], text: DPLX, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-duplx}
+    - {id: silk-sped, at: [10.00, 26.53], text: SPED, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-speed}
+    - {id: silk-stck, at: [10.00, 29.13], text: STCK, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-stack}
+    - {id: silk-poe, at: [10.00, 31.53], text: PoE, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-poe}
     components:
       blocks:
       - id: rj45
@@ -371,20 +434,52 @@ views:
     size: {w: 444.5, h: 44.45}
     panel:
       decor:
-      - {id: fan-exhaust, kind: fan-grille, at: [157.0, 11.7], size: [53.0, 25.0], pattern: vent, vent: 1.0}
-      - {id: rps-connector, at: [285.0, 22.0], size: [73.0, 22.4], fill: '#a9adb1'}
-      - {id: rps-connector-pins, at: [299.0, 25.8], size: [46.8, 9.5], fill: '#d8c98a'}
-      - {id: rating-label, at: [351.0, 5.3], size: [33.0, 13.0], fill: '#c9cbcd'}
+      - {id: fan-exhaust, kind: fan-grille, at: [158.1, 13.2], size: [52.5, 27.3], pattern: vent, vent: 1.0,
+         pattern-pitch: [17.72, 10.22], pattern-offset: [161.8, 21.9]}
+      - {id: rps-plate, kind: bracket, at: [285.0, 21.4], size: [72.8, 22.6], rx: 0.6, fill: '#b3b7b4'}
+      - {id: rps-rating-strip, kind: label-plate, at: [297.7, 17.9], size: [49.2, 3.8], rx: 0.4, fill: '#b3b7b4'}
+      - {id: rps-shroud, kind: shroud, at: [298.4, 24.0], size: [48.2, 11.3], rx: 0.5, fill: '#141717'}
+      - {id: rps-housing, kind: housing, at: [299.1, 25.1], size: [46.9, 9.7], rx: 0.3, fill: '#e9ebe1'}
+      - {id: rps-pin-1-1, kind: pin-cavity, at: [299.85, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-2, kind: pin-cavity, at: [304.02, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-3, kind: pin-cavity, at: [308.19, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-4, kind: pin-cavity, at: [312.36, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-5, kind: pin-cavity, at: [316.53, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-6, kind: pin-cavity, at: [320.70, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-7, kind: pin-cavity, at: [324.87, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-8, kind: pin-cavity, at: [329.04, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-9, kind: pin-cavity, at: [333.21, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-10, kind: pin-cavity, at: [337.38, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-11, kind: pin-cavity, at: [341.55, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-1, kind: pin-cavity, at: [299.85, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-2, kind: pin-cavity, at: [304.02, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-3, kind: pin-cavity, at: [308.19, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-4, kind: pin-cavity, at: [312.36, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-5, kind: pin-cavity, at: [316.53, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-6, kind: pin-cavity, at: [320.70, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-7, kind: pin-cavity, at: [324.87, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-8, kind: pin-cavity, at: [329.04, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-9, kind: pin-cavity, at: [333.21, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-10, kind: pin-cavity, at: [337.38, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-11, kind: pin-cavity, at: [341.55, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-screw-l, kind: screw-hole, at: [293.3, 28.4], size: [2.8, 2.8], shape: slot, fill: '#141717'}
+      - {id: rps-screw-r, kind: screw-hole, at: [348.8, 28.4], size: [2.8, 2.8], shape: slot, fill: '#141717'}
+      - {id: warning-label, kind: label-print, at: [294.0, 5.9], size: [45.2, 9.7], rx: 0.4, stroke: '#ffffff', stroke-width: 0.2}
+      - {id: rating-label, kind: label-plate, at: [351.0, 6.1], size: [32.7, 13.4], rx: 0.6, fill: '#a5aba7'}
+      - {id: inlet-surround, kind: moulding, at: [387.6, 8.3], size: [29.3, 22.5], rx: 3.5, fill: '#111113'}
+      - {id: rear-screw-1, kind: screw, at: [108.0, 25.3], size: [6.8, 6.8], shape: slot, fill: '#c2cfce'}
+      - {id: rear-screw-2, kind: screw, at: [270.8, 25.3], size: [6.8, 6.8], shape: slot, fill: '#c2cfce'}
+      - {id: rear-screw-3, kind: screw, at: [433.0, 25.3], size: [6.8, 6.8], shape: slot, fill: '#c2cfce'}
       cutouts:
       - {id: ac-inlet, at: [388.4, 9.1], size: [28.0, 20.0], shape: rect}
     components:
       bays:
-      - {id: flexstack-slot, at: [4.4, 2.3], size: {w: 96.8, h: 39.4}, group: stack-slot, rel-pos: 1,
+      - {id: flexstack-slot, at: [2.6, 1.8], size: {w: 103.3, h: 39.0}, group: stack-slot, rel-pos: 1,
          accepts: ['cisco/c2960s-flexstack-blank@1'], default: 'cisco/c2960s-flexstack-blank@1'}
       placements:
       - {ref: std/c14-inlet@1, id: ac-inlet, at: [388.4, 9.1], group: power-input, rel-pos: 0}
     regions:
-    - {id: stacking, at: [3.6, 1.5], size: {w: 98.4, h: 41.0}, label: 'FlexStack module slot', members: [flexstack-slot]}
+    - {id: stacking, at: [1.8, 1.0], size: {w: 104.9, h: 40.6}, label: 'FlexStack module slot', members: [flexstack-slot]}
     - {id: power, at: [387.0, 8.0], size: {w: 31.0, h: 22.0}, label: 'AC power connector', members: [ac-inlet]}
   top:
     size: {w: 444.5, h: 386.0}

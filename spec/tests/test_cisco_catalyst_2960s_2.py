@@ -133,8 +133,98 @@ def test_power_is_built_in_with_a_chassis_inlet_and_no_supply_bay(name):
 @pytest.mark.parametrize("name", NAMES)
 def test_rps_connector_is_chassis_art_with_a_gap(name):
     d = device(name)
-    assert "rps-connector" in {x["id"] for x in d["views"]["rear"]["panel"]["decor"]}
+    assert {"rps-plate", "rps-shroud", "rps-housing"} <= set(decor(d, "rear"))
     assert "rps-connector-part" in {g["what"] for g in d["gaps"]}
+
+
+def decor(d, view):
+    return {x["id"]: x for x in d["views"][view]["panel"].get("decor") or [] if x.get("id")}
+
+
+def gaps(d):
+    return {g["what"]: g for g in d.get("gaps") or []}
+
+
+# the models whose own NetBox stencil is held, and so measure their own front colour
+OWN_STENCIL = {"ws-c2960s-48td": "cisco-ws-c2960s-48td-l.front.png", "ws-c2960s-24pd": "cisco-ws-c2960s-24pd-l.front.png"}
+NO_FRONT_OF_ITS_OWN = ["ws-c2960s-48lpd", "ws-c2960s-24td"]
+
+
+@pytest.mark.parametrize("name", NAMES)
+def test_rps_connector_has_twenty_two_pins_in_two_rows_of_eleven_at_the_measured_pitch(name):
+    dc = decor(device(name), "rear")
+    pins = [v for k, v in dc.items() if k.startswith("rps-pin-")]
+    assert len(pins) == 22
+    xs = sorted({p["at"][0] for p in pins})
+    ys = sorted({p["at"][1] for p in pins})
+    assert len(xs) == 11 and len(ys) == 2
+    assert abs((xs[-1] - xs[0]) / 10 - 4.17) < 0.01 and abs(ys[1] - ys[0] - 4.03) < 0.01
+    assert dc["rps-plate"]["at"] == [285.0, 21.4] and dc["rps-plate"]["size"] == [72.8, 22.6]
+    assert dc["rps-shroud"]["at"] == [298.4, 24.0] and dc["rps-shroud"]["size"] == [48.2, 11.3]
+    assert {dc["rps-screw-l"]["at"][0], dc["rps-screw-r"]["at"][0]} == {293.3, 348.8}
+    assert dc["rps-rating-strip"]["at"] == [297.7, 17.9] and dc["warning-label"]["at"] == [294.0, 5.9]
+
+
+@pytest.mark.parametrize("name", NAMES)
+def test_rps_connector_is_drawn_open_and_the_provenance_says_so(name):
+    note = device(name)["provenance"]["rear"]["note"]
+    assert "drawn open" in note and "Figure 1-15" in note and "Figure 1-10" in note
+
+
+@pytest.mark.parametrize("name", NAMES)
+def test_rear_carries_the_inlet_surround_the_fan_hexagons_and_the_pan_head_screws(name):
+    dc = decor(device(name), "rear")
+    assert dc["inlet-surround"]["at"] == [387.6, 8.3] and dc["inlet-surround"]["size"] == [29.3, 22.5]
+    fan = dc["fan-exhaust"]
+    assert fan["pattern"] == "vent" and fan["pattern-pitch"] == [17.72, 10.22]
+    assert [dc[f"rear-screw-{n}"]["at"][0] for n in range(1, 4)] == [108.0, 270.8, 433.0]
+
+
+@pytest.mark.parametrize("name", NAMES)
+def test_flexstack_bay_is_the_modules_bounding_box_in_the_photograph(name):
+    bay = bays(device(name))["flexstack-slot"]
+    assert bay["at"] == [2.6, 1.8] and bay["size"] == {"w": 103.3, "h": 39.0}
+
+
+@pytest.mark.parametrize("name", list(OWN_STENCIL))
+def test_chassis_colour_is_this_models_own_stencils_sampled_charcoal_panel(name):
+    """Median of 3600 px of plain panel, box (435,30)-(480,110) of the model's own stencil: #404040."""
+    d = device(name)
+    assert d["chassis"]["color"] == "#404040" and d["chassis"]["silk"] == "#ffffff"
+    note = d["provenance"]["colour"]["note"]
+    assert d["provenance"]["colour"]["confidence"] == "estimated"
+    for needle in (OWN_STENCIL[name], "(435,30,480,110)", "3600", "#404040", "#255e6d", "median", "community"):
+        assert needle in note, needle
+    dc = decor(d, "front")
+    for i in ("bezel-top", "bezel-bottom", "bezel-left", "bezel-right", "usb-surround", "console-usb-surround"):
+        assert dc[i]["fill"] == "#255e6d", i
+    assert dc["console-surround"]["fill"] == "#bad4d7"
+    assert {dc[i]["stroke"] for i in dc if i.startswith(("jack-block-outline", "sfp-outline"))} == {"#ffff99"}
+    assert "#d3d4d1" not in str(d["chassis"]), "that is the 4948E's colour"
+
+
+def test_outline_places_follow_each_models_own_blocks():
+    assert [decor(device("ws-c2960s-48td"), "front")[f"jack-block-outline-{n}"]["at"][0] for n in range(1, 5)] == [
+        20.66, 110.06, 199.46, 288.86]
+    assert [decor(device("ws-c2960s-24pd"), "front")[f"jack-block-outline-{n}"]["at"][0] for n in (1, 2)] == [
+        199.46, 288.86]
+
+
+@pytest.mark.parametrize("name", NO_FRONT_OF_ITS_OWN)
+def test_a_model_with_no_front_of_its_own_claims_no_housing_colour_and_declares_a_gap(name):
+    d = device(name)
+    assert "color" not in d["chassis"], "no face of this model has a source of its own: the default housing applies"
+    assert d["chassis"]["silk"] == "#ffffff"
+    g = gaps(d)["faceplate-colour"]
+    assert set(g["scope"]) == {"front", "rear"}
+    assert "#404040" in g["wanted"] and "stand-in" in g["wanted"] and "similar components" in g["wanted"]
+    silk = {s["id"]: s for s in d["views"]["front"]["silkscreen"] if s.get("id")}
+    assert all(s.get("fill") != "#2b2e31" for i, s in silk.items() if i.startswith("silk-"))
+
+
+def test_the_48lpd_rear_photograph_is_another_models_by_its_printed_ratings():
+    note = device("ws-c2960s-48lpd")["provenance"]["colour"]["note"]
+    assert "8-4A" in note and "11.25A" in note and "match none" in note
 
 
 def test_the_td_rear_slot_conflict_is_a_declared_gap():
