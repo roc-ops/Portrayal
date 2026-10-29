@@ -1,0 +1,177 @@
+format: 1
+kind: module
+name: pwr-6kw-ac-v3
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Cisco ASR 9000 version 3 AC power module, 6000 W, PWR-6KW-AC-V3 ("ASR 9000 6kW AC Power
+  Module Version 3"), for the ASR 9906 and ASR 9910 power trays (ASR9K-AC-PEM-V3). Two axial
+  fans behind finger guards, a door latch and ejector between them, and Input, Output and Fault
+  lamps. Three of these fill one tray. Drawn once, in the horizontal attitude the ASR 9910
+  shows; the ASR 9906's vertical shelf turns it.
+size: {w: 139.0, h: 40.1}
+size-confidence: {w: drawing, h: drawing}
+attrs:
+  model: 'PWR-6KW-AC-V3'
+  role: 'power-module'
+  generation: '3'
+  input: 'ac'
+  inlet: none
+  fans: '2'
+  power-output-w: 6000
+  eol: 'none-announced'
+provenance:
+  seated: >-
+    Overview and Reference Guide (2019-01-31), "Cisco ASR 9922 Router Power Modules": "ASR9K-AC-PEM-V3
+    power entry modules and PWR-6KW-AC-V3 single-phase 220-V 20-A power supplies"; "Cisco ASR 9906
+    Router Power Modules" and "Cisco ASR 9910 Router Power Modules" (PDF pp73-74, printed pp61-62)
+    give up to three AC version 3 modules per tray, one tray on the 9906 and two on the 9910.
+    Hardware Installation Guide (2021-03-30) "Changing Between Version 1, Version 2, Version 3, AC,
+    and DC Power Modules" (PDF pp251-252, printed pp237-238): "AC power supply version 3, fits 3
+    across in single power shelf". The same guide's firmware-upgrade caution (PDF p177) and the Data
+    Sheet's Table 1 (p6: "AC power supply, 6000W PWR-6KW-AC-V3 / PWR-6KW-AC-V3=") name the part.
+    The "=" spare form is the same part and is not a second component. Release notes, first
+    supported in Release 6.1.2. The ASR 9904, 9006, 9010, 9912 and 9922 also take it per the guides;
+    they are not seated here.
+  size: >-
+    drawing - MEASURED, NOT STATED: no document gives this module's dimensions (HIG p237's "about
+    6.5 pounds (2.95 kg)" is a version 2 procedure and is not used, and the reseller figure the
+    tray contract refused is not used). Width 139.0 is the module PITCH read off the stencil master
+    "ASR-9906 Front" (24.50 in tall; its populated shelf draws three modules with six fan wheels):
+    fan-wheel centres at 620.6, 1230.8, 1833.4, 2443.6, 3046.2 and 3656.4 px on a 4200 px render,
+    so the pair centres are 1212.8 px apart twice. Scale is the master's own frame: the render's
+    width is the 19.0 in rack face (482.6 mm, 0.1149 mm/px) and its height is Table 13's 619.51 mm
+    for the chassis (0.1146 mm/px), which agree to 0.3 percent; the pitch is read down the height,
+    so 1212.8 x 0.1146 = 139.0 mm, and 139.3 on the width scale. The plate itself is 135.4 mm and
+    the rest of the pitch is the divider between modules, so the bay envelope is the pitch. Height
+    40.1 is the plate's extent across the shelf (x 329 to 678 px, 349 px at 0.1149): the door latch
+    stands 2.5 mm proud of that edge and is drawn inside it. Cross-check, Figure 44 (ASR 9910, V3 AC
+    trays, PDF p76 / printed p64, a straight-on callout of the two trays): six fan wheels, three
+    modules per tray, a pair-to-pair pitch of about 140 mm read off a 200 dpi raster against the
+    19.0 in rack face, good to about 2 mm; it agrees with the stencil and the stencil is carried. It
+    does not agree with an earlier reading of 137.2 to 137.4 mm, which was not reproduced. Figure
+    42 (ASR 9906, V3 AC tray, PDF p73 / printed p61) shows the same three modules and six fans in a
+    perspective view and settles arrangement only. The ASR 9910's front master ("ASR-9910 Rear",
+    the two masters are swapped) draws the DC trays, so it gives no AC reading. One part number is
+    one size: the ASR 9910 draws this module at this size too. Depth is absent, see `body`.
+  fans: >-
+    drawing - two fan wheels per module, centred across the plate and 69.9 mm apart (module-local
+    x 33.9 and 103.8), outer guard diameter about 36 mm, each with four corner screws at 16 mm. Read
+    off the same master: the wheels at x 504 px against a plate of 329 to 678 px. The stencil draws
+    each wheel as four dark arcs round a light ring and a yellow hub; the skin draws the same
+    arrangement and no more.
+  lamps: >-
+    install guide - Hardware Installation Guide Figure 203 (V3 AC status indicators, PDF p224 /
+    p210) and the Overview Figure 62: Input ON continuously when the input voltage is present and
+    within the correct range, BLINKING when it is out of acceptable range, OFF when none is
+    present; Output ON when the module output voltage is present, BLINKING in a power limit or
+    overcurrent condition; Fault ON when a module failure has occurred. NO COLOUR IS STATED IN THE
+    TEXT FOR ANY OF THE THREE, and none is asserted by the skin. The FIGURE does draw them: Figure
+    203's callout shows the Input and Output lamps green and the Fault lamp red (and the Overview's
+    Figure 60, the version 1 module, shows green, green, red). That is a picture, not a statement,
+    so it is recorded here and in the pull request's gaps rather than set as a state colour.
+    Positions are drawn from the stencil's lamp group, between the first fan and the latch, in the
+    order the stencil prints (Input, Output, Fault).
+  colour: >-
+    estimated - from the stencil master "ASR-9906 Front", sampled on the module plate away from the
+    fans and lamps: plate #bfbfbf, fan guard #404040, latch #a6a6a6, hub #ffb900. The same master
+    family draws its version 2 module plate and the version 3 tray at #bfbfbf as well, so the value
+    is the stencil's own colour for these modules. THE LIBRARY'S pwr-3kw-ac-v2 SKIN IS LIGHTER
+    (#e6e7e9) THAN ITS OWN STENCIL MASTER, so beside it this module looks darker; that is the
+    existing skin departing from the stencil and not this module. The guides are line art and carry
+    no colour, and no photograph or 3D model of a version 3 module is held.
+  handle: >-
+    drawing - the door latch and ejector, a grey block at the middle of the module edge (module-local
+    x 62 to 74), from the stencil. Overview Figure 61 says "The version 3 power module is similar"
+    to the version 2 face, which has a door latch, a door and ejector lever and LED indicators. The
+    Hardware Installation Guide's "Installing AC Power Modules" step 2 tightens the handle for
+    "Version 2 and version 3 power modules". No Cisco logo or wordmark is drawn, and the stencil's
+    module carries none, so no `logo-zone` is reserved.
+  power: >-
+    datasheet - output: Data Sheet Table 1, "AC power supply, 6000W". Input, Overview Table 15 (PDF
+    pp144-146, printed pp132-134), per module: "6510 VA (6000 W output module)" total AC input
+    power; 200-240 VAC nominal (range 180 to 264 VAC), 220-240 VAC in the UK; 50/60 Hz (range 47 to
+    63 Hz); "15 A maximum at 200 VAC", "13 A maximum at 220 to 240 VRMS (UK)"; source service 20 A
+    North America, 16 A international, 13 A UK. Output bus, Table 21: -54.0 VDC nominal, -55.5
+    maximum, -52.5 minimum; three 6000 W modules per tray give 18,000 W (ASR 9906 only; the table has
+    no ASR 9910 figure). CONFLICT, DECLARED: the module is "fed by two single-phase 220-V 20-A
+    circuits" (Overview, "Cisco ASR 9912 Router Power Modules", PDF p80), the tray rear shows two
+    inlets (Figure 66, "IEC input receptacles"), and Table 15's footnote 9 puts the current rows
+    "for each AC power supply module". 6510 VA at 200 V is about 32.5 A, so the 15 A reads as per
+    circuit; no sentence says so. Both readings are kept and neither is chosen.
+  body: >-
+    NO `body:` BLOCK, AND NO `size.d`: no document gives a depth or a weight for this module, the
+    same record the version 2 modules and the tray hold. Searched: the whole intake tree, the PDFs'
+    text and the html folder, for "PWR-6KW-AC-V3" and "PWR-4.4KW-DC-V3"; the hits name the part and
+    its output and nothing else.
+  relief: >-
+    Relief is declared, ESTIMATED throughout, and is a handful of pooled numbers: the pull handle
+    at uhandle 8.0 (edgecore/agr-fan@1) and three panel lamps at dome 0.3 (common/led-dot@1), the
+    figures the version 2 modules carry. They are an interpolation for a realistic view, not a claim
+    about the hardware.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  input:
+    at: [56.7, 12.8]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Input LED. ON continuously when the input voltage is present and within the correct range;
+      BLINKING when the input voltage is out of acceptable range; OFF when no input voltage is
+      present. Cisco states no colour for it.
+    states:
+    - 'off'
+    - 'on'
+    - {name: blinking, behavior: blinking}
+  output:
+    at: [56.7, 19.3]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Output LED. ON when the power module output voltage is present; BLINKING when the power
+      module is in a power limit or overcurrent condition. Cisco states no colour for it.
+    states:
+    - 'off'
+    - 'on'
+    - {name: blinking, behavior: blinking}
+  fault:
+    at: [56.7, 25.6]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Fault LED. ON indicates that a power module failure has occurred. Cisco states no colour for
+      it, and gives no off-state sentence.
+    states:
+    - 'off'
+    - 'on'
+relief:
+  wall: '#4a4f55'
+  features:
+    - node: handle
+      uhandle: 8.0
+      confidence: estimated
+      source: >-
+        edgecore/agr-fan@1 handle - the library's one pull-handle figure. Its provenance
+        describes the handle's appearance from a photograph, not its proudness
+    - node: input
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
+    - node: output
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
+    - node: fault
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
+skins: [default]
