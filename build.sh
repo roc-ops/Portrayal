@@ -186,7 +186,7 @@ python3 spec/tools/portrayal/cable_types_index.py --schemas spec/schemas --out "
 pids+=("$!")
 # THE LINT RULES, from lint.py's own rule table: code, scope, rule, why, fix
 # and severity, for the site's rule page. No library walk either.
-python3 spec/tools/portrayal/lint.py --list-rules --json > "$OUT/lint-rules.json" &
+python3 spec/tools/portrayal/lint.py --list-rules --json --out "$OUT/lint-rules.json" &
 pids+=("$!")
 for pid in "${pids[@]}"; do wait "$pid"; done
 # THE RACK CATALOGUE reads devices.json and the compiled faces, so it runs

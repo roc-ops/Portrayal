@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9922
-version: 2.2.0
+version: 2.3.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9922
@@ -255,7 +255,7 @@ provenance:
       datasheet - c78-743580's "Chassis compatibility" row names this chassis: "Compatible with
       the Cisco ASR 9006, ASR 9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, and ASR 9922 chassis".
       Those four flex cards go in all twenty line card bays with the blank. The seven fabric bays
-      take cisco/a99-sfc3@1, which Table 23 names as "A99-SFC3 Card (ASR 9922)" - this chassis by
+      take cisco/a99-sfc2@1 ('FC2 Card (ASR 9922)' in Table 23) and cisco/a99-sfc3@1, which Table 23 names as "A99-SFC3 Card (ASR 9922)" - this chassis by
       name, and the 340 W it carries is this chassis's figure rather than the 9912's lower one
   modular-line-card-support:
     confidence: datasheet
@@ -403,6 +403,15 @@ chassis:
   color: '#c8cacc'
   silk: '#231f20'
 gaps:
+- what: fabric-card-generations
+  scope: [fabric]
+  reason: needs-hardware
+  note: >-
+    Which line cards run with which fabric card generation, and whether the A99-SFC2 and A99-SFC3 may be
+    fitted together, is NOT ENFORCED: no bay restricts what sits beside it. The Hardware Installation Guide has
+    a 'Migrating from A99-SFC2 to A99-SFC3 Card' section (printed p270) that was not read for a rule. Table 23
+    gives 'FC2 Card (ASR 9922)' 165 W at 55 C, which is the figure the component carries.
+  wanted: a rule that pairs a fabric card generation with the line cards and with the other fabric cards.
 - what: chassis-power-figure
   scope:
   - fact:peak-power-w
@@ -593,13 +602,13 @@ views:
         - {id: slot-17, at: [312.395, 1404.22], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/a99-10x400ge-x-se@2', 'cisco/a99-10x400ge-x-tr@2', 'cisco/a99-12x100ge@1', 'cisco/a99-32x100ge-se@1', 'cisco/a99-32x100ge-tr@1', 'cisco/a99-32x100ge-x-se@1', 'cisco/a99-32x100ge-x-tr@1', 'cisco/a99-4hg-flex-se@2', 'cisco/a99-4hg-flex-tr@2', 'cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4hg-flex-se@2', 'cisco/a9k-4hg-flex-tr@2', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-4x100ge@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 17, default: cisco/a9k-slot-cover@1}
         - {id: slot-18, at: [355.785, 1404.22], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/a99-10x400ge-x-se@2', 'cisco/a99-10x400ge-x-tr@2', 'cisco/a99-12x100ge@1', 'cisco/a99-32x100ge-se@1', 'cisco/a99-32x100ge-tr@1', 'cisco/a99-32x100ge-x-se@1', 'cisco/a99-32x100ge-x-tr@1', 'cisco/a99-4hg-flex-se@2', 'cisco/a99-4hg-flex-tr@2', 'cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4hg-flex-se@2', 'cisco/a9k-4hg-flex-tr@2', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-4x100ge@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 18, default: cisco/a9k-slot-cover@1}
         - {id: slot-19, at: [399.185, 1404.22], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/a99-10x400ge-x-se@2', 'cisco/a99-10x400ge-x-tr@2', 'cisco/a99-12x100ge@1', 'cisco/a99-32x100ge-se@1', 'cisco/a99-32x100ge-tr@1', 'cisco/a99-32x100ge-x-se@1', 'cisco/a99-32x100ge-x-tr@1', 'cisco/a99-4hg-flex-se@2', 'cisco/a99-4hg-flex-tr@2', 'cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4hg-flex-se@2', 'cisco/a9k-4hg-flex-tr@2', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-4x100ge@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 19, default: cisco/a9k-slot-cover@1}
-        - {id: fc-0, at: [59.79, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 0, default: cisco/asr-9922-sfc110@1}
-        - {id: fc-1, at: [107.46, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 1, default: cisco/asr-9922-sfc110@1}
-        - {id: fc-2, at: [155.13, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 2, default: cisco/asr-9922-sfc110@1}
-        - {id: fc-3, at: [202.8, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 3, default: cisco/asr-9922-sfc110@1}
-        - {id: fc-4, at: [250.47, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 4, default: cisco/asr-9922-sfc110@1}
-        - {id: fc-5, at: [298.14, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 5, default: cisco/asr-9922-sfc110@1}
-        - {id: fc-6, at: [345.81, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 6, default: cisco/asr-9922-sfc110@1}
+        - {id: fc-0, at: [59.79, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1', 'cisco/a99-sfc2@1'], group: fabric, rel-pos: 0, default: cisco/asr-9922-sfc110@1}
+        - {id: fc-1, at: [107.46, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1', 'cisco/a99-sfc2@1'], group: fabric, rel-pos: 1, default: cisco/asr-9922-sfc110@1}
+        - {id: fc-2, at: [155.13, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1', 'cisco/a99-sfc2@1'], group: fabric, rel-pos: 2, default: cisco/asr-9922-sfc110@1}
+        - {id: fc-3, at: [202.8, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1', 'cisco/a99-sfc2@1'], group: fabric, rel-pos: 3, default: cisco/asr-9922-sfc110@1}
+        - {id: fc-4, at: [250.47, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1', 'cisco/a99-sfc2@1'], group: fabric, rel-pos: 4, default: cisco/asr-9922-sfc110@1}
+        - {id: fc-5, at: [298.14, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1', 'cisco/a99-sfc2@1'], group: fabric, rel-pos: 5, default: cisco/asr-9922-sfc110@1}
+        - {id: fc-6, at: [345.81, 878.85], size: {w: 41.4, h: 395.7}, opening: {w: 41.4, h: 355.6}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1', 'cisco/a99-sfc2@1'], group: fabric, rel-pos: 6, default: cisco/asr-9922-sfc110@1}
         - {id: ps0-pm-0, at: [16.11, 2.92], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 0, default: cisco/a9k-power-module-v2@1}
         - {id: ps0-pm-1, at: [121.16, 2.92], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 1, default: cisco/a9k-power-module-v2@1}
         - {id: ps0-pm-2, at: [226.21, 2.92], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 2, default: cisco/a9k-power-module-v2@1}
