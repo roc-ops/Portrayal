@@ -714,4 +714,8 @@ def test_the_comparison_layer_can_now_reach_them():
     # 177 with the Cisco C9300-24P, C9300-24U and C9300-48U, the same 2+1 over three fan modules
     # 179 with the Cisco Nexus 9348GC-FX3PH and 92348GC-FX3 (2+1 over three fan modules each): installation
     # guides, Overview
-    assert n == 179, n
+    # 180 with the Cisco Catalyst 3650-48PD: 2+1 over three fan modules (3650 hardware installation guide,
+    # Fan Modules: "Three fans are required for proper cooling" and the switch "can operate with two operational fans")
+    # 183 with the Cisco NCS 5011 (3+1 over four fan modules; the NCS 5000 guide, Fan Modules) and the
+    # NCS-57C3-MOD-S and -MOD-HX (n+1 over six fan trays; the NCS 5700 guide, Fan Modules and Fan Trays)
+    assert n == 183, n

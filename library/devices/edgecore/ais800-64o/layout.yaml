@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-64o
-version: 4.0.3
+version: 4.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-64O
@@ -764,8 +764,8 @@ configurations:
     airflow: back-to-front
     region-context: {exhaust: Intake}
     component-attrs:
-      fan-2u-1x1sn: {handle-finish: '#3d7bd6'}
-      ais800-64-psu-ac: {latch-finish: '#3d7bd6'}
+      fan-2u-1x1sn: {handle-finish: '#3d7bd6', airflow: back-to-front}
+      ais800-64-psu-ac: {latch-finish: '#3d7bd6', airflow: back-to-front}
     part-numbers:
       AIS800-64O-AB-UN: {part: FP6EC9664006Z, power-cord: 'IEC 60320 C19-C20'}
       AIS800-64O-AB: {part: FP6EC9664007Z, power-cord: none}
@@ -789,7 +789,7 @@ configurations:
     region-context: {exhaust: Intake}
     bays: {psu-1: 'edgecore/ais800-64-psu-dc@1', psu-2: 'edgecore/ais800-64-psu-dc@1'}
     component-attrs:
-      fan-2u-1x1sn: {handle-finish: '#3d7bd6'}
+      fan-2u-1x1sn: {handle-finish: '#3d7bd6', airflow: back-to-front}
     part-numbers:
       AIS800-64O-DB: {part: FP6EC9664012Z}
 references:
