@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: nc57-mod-rp2-e
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  The route processor of the Cisco NCS-57C3-MOD, ordered as NC57-MOD-RP2-E. A landscape module for one of the two route
+  processor bays at the front: a USB port, a console jack and a management Ethernet jack, a recessed reset button, and
+  three lamps (STS, ACT and ATTN) at the lower left, in a hex-vented faceplate with an ejector at each end. Two route
+  processors run active and standby; the -HX chassis takes the NC57-MOD-RP2-E-HX instead.
+size: {w: 196.0, h: 18.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+part-numbers:
+  NC57-MOD-RP2-E: {part: NC57-MOD-RP2-E}
+attrs:
+  role: route-processor
+  power-absent: not-published
+provenance:
+  model: >-
+    datasheet - Hardware Installation Guide for Cisco NCS 5700 Series Fixed-Port Routers (first published 2021-06-23, last
+    modified 2026-05-15), Route Processor Card: "NC57-MOD-RP2-E/NC57-MOD-RP2-E-HX", callouts 1 USB port, 2 Console port, 3
+    Management Ethernet port, 4 Recessed reset (ORS) button; the router "supports up to two redundant route processor (RP)
+    cards", one active and one standby.
+  power: >-
+    NOT STATED. Searched the guide for the route processor's watts: only supply ratings are given. No power figure is
+    written, and lint's missing-power warning stands.
+  size: >-
+    photo-measured - Figure 19 (a flat front elevation) at 2.685 px/mm taken from the chassis width of 438.4 mm: the two
+    route processors read about 196 mm wide and 18.5 mm high and are stacked, one above the other, at the top right. The
+    guide prints no dimension of the card.
+  ports: >-
+    photo-measured - positions read from Figure 19, in which the callouts are 3 USB ports, 4 console ports and 5 management
+    Ethernet ports. The jacks are the library's. The guide gives no rate for the management jack (searched "10/100",
+    "1000" and "Gigabit" beside it), so no speed is written; the console is typed as a serial jack as on other Cisco boxes.
+  lamps: >-
+    datasheet - Route Processor Card LEDs (Figure 130, Table 33): STS (green operational; flashing amber booting or
+    shutting down; flashing red major or critical alarms; amber host kernel booted; red slot ID parity error or not fully
+    inserted; off no power), ACT (green active; amber standby; off XR VM not operational) and ATTN (flashing blue the
+    operator is identifying the module; off), at the lower left front. The lamp positions are read from Figure 19; the
+    management port's link and activity lamps (Table 33) sit below the jack and are not drawn.
+  reset: >-
+    The recessed reset button (callout 4) is drawn in the skin as a small round opening; it has no element.
+  depth: >-
+    estimated - not stated in any held document; 250 mm is a round figure for a route processor of this class.
+states: [absent]
+elements:
+  sts: {at: [49.0, 14.0], size: [2.0, 2.0], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: boot, color: '#f59e0b'}, {name: alarm, color: '#ef4444'}]}
+  act: {at: [58.0, 14.0], size: [2.0, 2.0], class: led, states: ['off', {name: active, color: '#22c55e'}, {name: standby, color: '#f59e0b'}]}
+  attn: {at: [67.0, 14.0], size: [2.0, 2.0], class: led, states: ['off', {name: identify, color: '#3b82f6'}]}
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the route processor's out-of-band ports - a USB port, a console jack and a management Ethernet jack. Three media, one
+      purpose: reaching the router when the data plane cannot.
+parts:
+  - {ref: std/usb-a@1, id: usb, group: mgmt, at: [27.0, 7.0], attrs: {media: usb-a}}
+  - {ref: std/rj45-ganged@2, id: console, group: mgmt, at: [124.0, 3.5], attrs: {media: rj45-serial, role: console}}
+  - {ref: common/rj45-ganged-eth@1, id: mgmt, group: mgmt, at: [147.0, 3.5], attrs: {media: rj45, role: mgmt}}
+skins: [default]
+body:
+  depth: 250
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [196.0, 18.5]}
