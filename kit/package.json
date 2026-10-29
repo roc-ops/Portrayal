@@ -20,7 +20,7 @@
   "scripts": {
     "prepack": "cp ../LICENSE ../NOTICE .",
     "postpack": "rm -f LICENSE NOTICE",
-    "test": "node --check shell.js && node --check viewer3d.js && node --check relief.js && node --check lamps.js && node --check marks.js && node --check fields.js && node --check displays.js && node --check states.js && node --check dist.js && node --check swap.js && node --check share.js && node --check devsel.js && node --check nosnames.js && node --check gif.js && node --check optical.js && node --check zones.js && node --check bevel.js && node --check camera-fit.js &&node --check drawio.js && node --check omnigraffle.js && node --check ears2d.js && node --check positions.js && node --check redirects.js && for f in rack/*.js; do node --check $f || exit 1; done"
+    "test": "node --check shell.js && node --check viewer3d.js && node --check relief.js && node --check lamps.js && node --check marks.js && node --check fields.js && node --check displays.js && node --check states.js && node --check dist.js && node --check swap.js && node --check share.js && node --check devsel.js && node --check nosnames.js && node --check gif.js && node --check optical.js && node --check zones.js && node --check bevel.js && node --check camera-fit.js &&node --check drawio.js && node --check omnigraffle.js && node --check ears2d.js && node --check positions.js && node --check redirects.js && for f in rack/*.js; do node --check $f || exit 1; done && for f in rack/view/*.js; do node --check $f || exit 1; done"
   },
   "exports": {
     "./shell": "./shell.js",
@@ -70,7 +70,14 @@
     "./rack/solids": "./rack/solids.js",
     "./rack/states": "./rack/states.js",
     "./rack/validate": "./rack/validate.js",
-    "./rack/zero-u": "./rack/zero-u.js"
+    "./rack/zero-u": "./rack/zero-u.js",
+    "./rack/view/view": "./rack/view/view.js",
+    "./rack/view/elevation": "./rack/view/elevation.js",
+    "./rack/view/dom": "./rack/view/dom.js",
+    "./rack/view/face": "./rack/view/face.js",
+    "./rack/view/faces": "./rack/view/faces.js",
+    "./rack/view/ear-holes": "./rack/view/ear-holes.js",
+    "./rack/view/settable": "./rack/view/settable.js"
   },
   "peerDependencies": {
     "three": "^0.161.0"
@@ -83,6 +90,7 @@
   "files": [
     "*.js",
     "rack/*.js",
+    "rack/view/*.js",
     "portrayal.png",
     "README.md",
     "LICENSE",

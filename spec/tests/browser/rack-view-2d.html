@@ -1,0 +1,262 @@
+<!doctype html>
+<!--
+  THE 2D RACK VIEW'S PARITY PAGE (docs/rack-views-design.md §6, order 1). Run by
+  hand, like the pages beside it: Portrayal's CI has no browser.
+
+    ./build.sh                           # the page reads library/dist
+    python3 tools/serve.py 8793          # from the repository root
+    open http://localhost:8793/spec/tests/browser/rack-view-2d.html
+
+  It mounts the KIT's mountRack2d (kit/rack/view/elevation.js) for each fixture
+  and face, serialises the SVG as the recorder did (rack-view-common.js: sorted
+  attributes, numbers to six decimals) and compares it with the golden under
+  spec/tests/fixtures/rack-views/, which was recorded from portrayal-site's
+  drawElevation at the commit its header names. It also checks that `select`
+  draws the ring `drawElevation({selectedId})` draws, the pick event for a
+  device, a part beside the rack, an empty unit and a port, a two-rack document,
+  and `dispose`. `window.harness.results` is one {case, ok, detail} per check and
+  `window.harness.done` is true at the end.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>rack view 2D parity</title>
+<style>
+  body { margin: 8px; background: #16181c; color: #d8dce2; font: 12px/1.4 system-ui, sans-serif; }
+  pre { white-space: pre-wrap; }
+  .fail { color: #ff8a80; }
+  #stage > div { display: inline-block; vertical-align: top; width: 240px; }
+  iframe { width: 300px; height: 200px; }
+</style>
+</head>
+<body>
+<pre id="out">running…</pre>
+<div id="stage"></div>
+<script type="module">
+import {mountRack2d} from '../../../kit/rack/view/elevation.js';
+import {joinPath, splitPath} from '../../../kit/rack/view/view.js';
+import {parseDoc} from '../../../kit/rack/model.js';
+import {loadCatalog} from '../../../kit/rack/catalog.js';
+import {flatDist, jdist, faceFile} from '../../../kit/dist.js';
+import {serialise, loadFixtures, goldenBody} from './rack-view-common.js';
+
+const DIST = '../../../library/dist/';
+const FIXTURES = '../fixtures/';
+const results = [];
+const harness = window.harness = {results, done: false};
+const note = (name, ok, detail = '') => results.push({case: name, ok: !!ok, detail});
+const stage = document.getElementById('stage');
+const box = () => stage.appendChild(document.createElement('div'));
+const text = async url => { const r = await fetch(url); if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`); return r.text(); };
+const firstDiff = (a, b) => { let i = 0; while (i < a.length && a[i] === b[i]) i++; return `first difference at ${i} of ${a.length}/${b.length}: kit …${a.slice(Math.max(0, i - 60), i + 80)}… golden …${b.slice(Math.max(0, i - 60), i + 80)}…`; };
+
+async function main() {
+  const cat = await loadCatalog(DIST);
+  const opts = {document, distAt: flatDist(DIST), chassisOf: cat.chassisOf};
+  const docs = await loadFixtures(FIXTURES, parseDoc);
+
+  // 1. the SVG the site drew, for both fixtures and both faces
+  for (const [name, doc] of Object.entries(docs)) {
+    for (const face of ['front', 'rear']) {
+      const label = `the elevation of ${name}, ${face}, is the SVG the site draws`;
+      try {
+        const view = mountRack2d(box(), {...opts, doc, face});
+        await view.ready;
+        const got = serialise(stage.lastChild.querySelector('svg'));
+        const golden = goldenBody(await text(`${FIXTURES}rack-views/${name}.2d.${face}.txt`));
+        note(label, got === golden, got === golden ? `${got.length} characters equal` : firstDiff(got, golden));
+        view.dispose();
+      } catch (err) { note(label, false, String(err?.stack || err)); }
+    }
+  }
+
+  // 2. select draws the ring (and the class) drawElevation({selectedId}) draws: a view selected
+  // before its first draw is drawn with the selection in drawElevation; one selected after is painted in place
+  const acc = docs.acceptance;
+  const pane = async (key, early) => {
+    const view = mountRack2d(box(), {...opts, doc: acc});
+    if (early) view.select(key);
+    await view.ready;
+    if (!early) view.select(key);
+    const s = serialise(stage.lastChild.querySelector('svg'));
+    view.dispose();
+    return s;
+  };
+  for (const key of ['item:i2', 'item:i1', 'u:10']) {
+    const label = `select(${key}) draws the ring drawElevation({selected}) draws`;
+    try {
+      const early = await pane(key, true), late = await pane(key, false);
+      const rings = (late.match(/rk-sel-ring/g) || []).length;
+      note(label, early === late && (key.startsWith('u:') || rings === 1), early === late ? `${rings} ring(s), equal` : firstDiff(late, early));
+    } catch (err) { note(label, false, String(err?.stack || err)); }
+  }
+  try {
+    const view = mountRack2d(box(), {...opts, doc: acc});
+    await view.ready;
+    const plain = serialise(stage.lastChild.querySelector('svg'));
+    view.select('item:i2'); view.select(null);
+    note('select(null) clears the ring', serialise(stage.lastChild.querySelector('svg')) === plain);
+    view.dispose();
+  } catch (err) { note('select(null) clears the ring', false, String(err?.stack || err)); }
+
+  // 3. the pick event: a device, a part beside the rack, an empty unit and a port
+  const clickOn = (target, view) => {
+    const events = [];
+    const off = view.on('pick', e => events.push(e));
+    target.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+    off();
+    return events;
+  };
+  const withPart = structuredClone(acc);
+  const lamps = JSON.parse(await text(`${FIXTURES}rack-view-site/lamps-displays.rack.json`));
+  // (a four-post's upright is on one face, and only that pane draws the part: this one is on the front)
+  const part = {...lamps.racks[0].zeroU[0], at: 'left-front', states: {}, displays: {}};
+  withPart.racks[0].zeroU = [part];
+  try {
+    const view = mountRack2d(box(), {...opts, doc: withPart});
+    await view.ready;
+    const svg = stage.lastChild.querySelector('svg');
+    const sameEvent = (e, key, path, u) => e.view === '2d' && e.rackId === 'r1' && e.surface.kind === 'rack' && e.surface.id === 'r1'
+      && e.key === key && e.path === path && e.face === 'front' && e.u === u && e.originalEvent instanceof MouseEvent;
+    const show = e => JSON.stringify({...e, originalEvent: undefined});
+
+    const device = svg.querySelector('g[data-item-id="i2"][data-panel]');
+    const ear = [...device.children].find(n => n.nodeName === 'rect') || device;
+    const [onDevice] = clickOn(ear, view);
+    note('a click on a device gives its item key', onDevice && onDevice.key === 'item:i2' && onDevice.view === '2d' && onDevice.u === null && onDevice.originalEvent instanceof MouseEvent, show(onDevice || {}));
+
+    const port = [...device.querySelectorAll('[data-path]')].find(n => /^port/.test(n.getAttribute('data-path'))) || device.querySelector('[data-path]');
+    const [onPort] = clickOn(port, view);
+    note('a click on a port gives its item key and its part path', onPort && sameEvent(onPort, 'item:i2', port.closest('[data-path]').getAttribute('data-path'), null) && onPort.path,
+         show(onPort || {}));
+    note('and selecting what was picked paints its ring', (() => {
+      view.select(joinPath(onPort.key, onPort.path));
+      const ok = svg.querySelectorAll('.rk-sel-ring').length === 1 && splitPath(joinPath(onPort.key, onPort.path)).path === onPort.path;
+      view.select(null);
+      return ok;
+    })());
+
+    const beside = svg.querySelector('g[data-zerou-id="z1"]');
+    const [onPart] = beside ? clickOn(beside.querySelector('[data-zerou-hit]') || beside, view) : [];
+    note('a click on a part beside the rack gives a zeroU key', onPart && onPart.key === 'zeroU:z1' && onPart.u === null, show(onPart || {}));
+    if (beside) {
+      view.select('zeroU:z1');
+      note('select(zeroU:z1) draws the ring beside the part', svg.querySelectorAll('.rk-sel-ring').length === 1 && beside.getAttribute('class') === 'rk-selected');
+      view.select(null);
+    }
+
+    const empty = svg.querySelector('rect[data-u="10"]');
+    const [onUnit] = clickOn(empty, view);
+    note('a click on an empty unit gives u: and the position', onUnit && sameEvent(onUnit, 'u:10', null, 10), show(onUnit || {}));
+    view.dispose();
+  } catch (err) { note('the pick events', false, String(err?.stack || err)); }
+
+  // 4. a two-rack document: rackId names the second, and it draws
+  try {
+    const two = structuredClone(acc);
+    const second = structuredClone(two.racks[0]);
+    Object.assign(second, {id: 'r2', name: 'Rack 2', items: second.items.filter(i => i.id === 'i2'), cables: []});
+    two.racks.push(second);
+    const drawn = async rackId => {
+      const view = mountRack2d(box(), {...opts, doc: two, rackId});
+      await view.ready;
+      const ids = [...new Set([...stage.lastChild.querySelectorAll('g[data-item-id][data-panel]')].map(g => g.getAttribute('data-item-id')))];
+      view.dispose();
+      return ids.sort().join(',');
+    };
+    const first = await drawn(undefined), other = await drawn('r2');
+    note('racks[1] draws when rackId names it', first === 'i1,i2,i3,i4,i5,i6,i7' && other === 'i2', `racks[0] ${first}; r2 ${other}`);
+    const lost = mountRack2d(box(), {...opts, doc: two, rackId: 'r9'});
+    let refused = null;
+    await lost.ready.catch(e => { refused = e.message; });
+    note('an unknown rackId is refused naming it', /rack r9/.test(refused || ''), String(refused));
+    lost.dispose();
+  } catch (err) { note('a two-rack document', false, String(err?.stack || err)); }
+
+  // 5. dispose removes the SVG and every listener; a second call does nothing
+  try {
+    const host = box();
+    let added = 0, removed = 0;
+    const add = host.addEventListener.bind(host), remove = host.removeEventListener.bind(host);
+    host.addEventListener = (...a) => { added++; return add(...a); };
+    host.removeEventListener = (...a) => { removed++; return remove(...a); };
+    const view = mountRack2d(host, {...opts, doc: acc});
+    await view.ready;
+    const events = [];
+    view.on('pick', e => events.push(e));
+    view.dispose(); view.dispose();
+    host.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+    note('dispose removes the SVG and its listener, and a second call does nothing',
+         host.querySelector('svg') === null && added === 1 && removed === 1 && events.length === 0, `added ${added}, removed ${removed}, svg ${!!host.querySelector('svg')}`);
+  } catch (err) { note('dispose', false, String(err?.stack || err)); }
+
+  // 6. the view reads no global: mounted into another document, with the globals it must not read made to throw
+  try {
+    const frame = document.createElement('iframe');
+    stage.append(frame);
+    const inner = frame.contentDocument, win = frame.contentWindow;
+    const parsers = [];
+    win.DOMParser = class extends win.DOMParser { constructor() { super(); parsers.push(1); } };
+    const names = ['XMLSerializer', 'localStorage', 'devicePixelRatio', 'ResizeObserver', 'requestAnimationFrame', 'HTMLCanvasElement', 'DOMPoint'];
+    const kept = names.map(n => [n, Object.getOwnPropertyDescriptor(window, n)]);
+    for (const n of names) Object.defineProperty(window, n, {configurable: true, get() { throw new Error(`the view read ${n} as a global`); }});
+    let detail;
+    try {
+      const host = inner.body.appendChild(inner.createElement('div'));
+      const view = mountRack2d(host, {...opts, document: inner, doc: acc});
+      await view.ready;
+      const svg = host.querySelector('svg');
+      detail = `ownerDocument is the other document: ${svg.ownerDocument === inner}; its parser made ${parsers.length} parse(s); ${svg.querySelectorAll('g[data-item-id][data-panel]').length} device group(s)`;
+      note('a mount with the globals made to throw still draws, through the document it is given',
+           svg.ownerDocument === inner && parsers.length > 0 && svg.querySelectorAll('g[data-item-id][data-panel]').length === 7, detail);
+      view.dispose();
+    } finally {
+      for (const [n, d] of kept) { if (d) Object.defineProperty(window, n, d); else delete window[n]; }
+    }
+  } catch (err) { note('a mount with the globals made to throw still draws', false, String(err?.stack || err)); }
+
+  // 7. two libraries on one page, mounted without waiting between: library A is the build, library B is
+  // the same build with the first item's front face marked. Each view draws from its own, early and late.
+  try {
+    const A = flatDist(DIST);
+    const first = acc.racks[0].items[0];
+    const file = faceFile(await jdist(A(`${first.ref}.configs.json`)), first.cfg, 'front');
+    const marked = (await text(A(file))).replace(/<\/svg>\s*$/, '<rect id="library-b-marker" x="0" y="0" width="1" height="1"/></svg>');
+    const url = URL.createObjectURL(new Blob([marked], {type: 'image/svg+xml'}));
+    const B = path => (path === file ? url : A(path));
+    const golden = goldenBody(await text(`${FIXTURES}rack-views/acceptance.2d.front.txt`));
+    // (the drawing library A makes on its own: what the two-library drawing must equal, and whether it is the golden is said beside it)
+    const soloView = mountRack2d(box(), {...opts, distAt: A, doc: acc});
+    await soloView.ready;
+    const solo = serialise(stage.lastChild.querySelector('svg'));
+    soloView.dispose();
+    const same = got => (got === solo ? `equal to the library alone${solo === golden ? ' and to the golden' : ' (the golden differs, as in case 1)'}` : firstDiff(got, solo));
+    const [boxA, boxB] = [box(), box()];
+    const viewA = mountRack2d(boxA, {...opts, distAt: A, doc: acc});
+    const viewB = mountRack2d(boxB, {...opts, distAt: B, doc: acc});
+    await Promise.all([viewA.ready, viewB.ready]);
+    const [gotA, gotB] = [boxA, boxB].map(b => serialise(b.querySelector('svg')));
+    note('two libraries on one page: the first view draws its own library, with no marker', gotA === solo && !gotA.includes('library-b-marker'), same(gotA));
+    note('two libraries on one page: the second view draws its own library, with the marker', gotB.includes('library-b-marker') && gotB !== gotA,
+         `marker ${gotB.includes('library-b-marker')}, differs from the first ${gotB !== gotA}`);
+    await viewA.update(acc);
+    const lateA = serialise(boxA.querySelector('svg'));
+    note('an update of the first view, after the second was mounted, still reads its own library', lateA === solo && !lateA.includes('library-b-marker'), same(lateA));
+    viewA.dispose(); viewB.dispose();
+    URL.revokeObjectURL(url);
+  } catch (err) { note('two libraries on one page', false, String(err?.stack || err)); }
+
+  // 8. the removed option is refused in a sentence that names its replacement
+  try {
+    let refused = null;
+    try { mountRack2d(box(), {document, doc: acc, dist: DIST}); } catch (e) { refused = e.message; }
+    note('the dist option is refused, naming distAt', /distAt/.test(refused || ''), String(refused));
+  } catch (err) { note('the dist option is refused', false, String(err?.stack || err)); }
+}
+
+try { await main(); } catch (err) { note('the page', false, String(err?.stack || err)); }
+harness.done = true;
+document.getElementById('out').innerHTML = results.map(r => `<span class="${r.ok ? '' : 'fail'}">${r.ok ? 'ok  ' : 'FAIL'} ${r.case}\n      ${r.detail}</span>`).join('\n');
+</script>
+</body>
+</html>
