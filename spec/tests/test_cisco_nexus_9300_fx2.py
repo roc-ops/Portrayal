@@ -95,7 +95,7 @@ def test_the_names_and_the_family_are_as_printed():
     assert d["model"] == "N9K-C9336C-FX2-E"
     assert d["portfolio"] == {"line": "Nexus 9000", "family": "Nexus 9300", "series": "Nexus 9300-FX2"}
     assert d["maturity"] == "modelled"
-    assert d["version"] == "1.0.0"
+    assert d["version"] == "1.0.1"
     assert d["chassis"].get("mount", "rack") == "rack"
 
 
@@ -326,6 +326,6 @@ def test_the_lock_file_agrees_with_the_device_and_its_components():
     lib = ROOT / "library"
     assert not [f for f in devicelock.check(lib) if f[0] in ("cisco/" + E,)]
     known = devicelock.load_lock(lib)["devices"]
-    assert known["cisco/" + E]["version"] == load(E)["version"] == "1.0.0"
+    assert known["cisco/" + E]["version"] == load(E)["version"] == "1.0.1"
     per_device = json.loads((LIB / "devices/cisco" / E / "device.lock.json").read_text())
     assert per_device["gaps"] == known["cisco/" + E]["gaps"]
