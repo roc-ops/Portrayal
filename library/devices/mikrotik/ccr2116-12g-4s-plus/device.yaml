@@ -1,0 +1,576 @@
+format: 1
+kind: device
+name: ccr2116-12g-4s-plus
+version: 1.0.0
+maturity: modelled
+manufacturer: MikroTik
+model: CCR2116-12G-4S+
+portfolio: {line: Routers, family: Cloud Core Router, series: CCR2116}
+description: >-
+  MikroTik CCR2116-12G-4S+ is a fixed 1U Cloud Core Router with twelve gigabit Ethernet jacks, four SFP+
+  cages, a thirteenth gigabit jack for management, an RJ45 serial console and a USB 3.0 type A port, and
+  runs RouterOS v7. The front carries the four SFP+ cages in two stacks of two with eight arrow lamps,
+  the twelve jacks in three blocks of four, the console over the management jack, USB, the MODE and RESET
+  buttons and four status lamps. Two AC inlets, each with its supply built in, and five round openings,
+  four of them fans, are on the rear. The brochure says the supply is dual redundant and the page counts
+  two PSU slots, but no held document prints a part number and the rear photograph shows no removable
+  module, so the supplies are part of the chassis and there are no bays.
+profile: networking
+provenance:
+  sources:
+    confidence: photo-measured
+    note: >-
+      CCR2116-12G-4S+ brochure, MikroTik (file CCR2116-12G-4S_260316.pdf; no date is printed, the file
+      name carries a revision stamp): specifications, powering, included parts. Product page, MikroTik
+      (saved 2026-10-26): dimensions, AC inputs, PSU slots, cooling type, power. Quick guide page (help.mikrotik.com,
+      pageId 67633301): first steps and safety, no figure and no LED table. Block diagram CCR2116-12G-4S_240122.png.
+      Studio photographs, each opened: 2625 (straight front, from slightly above; measured), 2116 (straight
+      rear, from slightly above; measured), 2629 (front left, three-quarter, shows the left wall), 2632
+      (front right, three-quarter, shows the right wall). NetBox's device type and front and rear elevation
+      images as a second opinion only: its front elevation agrees with photograph 2625 on every count
+      and its rear with photograph 2116. ID171_CCR2116-12G-4S_DOC_220159.pdf is the EU declaration of
+      conformity (CE, Riga, 12 July 2021) and holds no dimension, port or figure. No figure numbers: MikroTik
+      prints none. The hardware manual page is not held.
+  datasheet:
+    confidence: datasheet
+    note: >-
+      Brochure specifications: product code CCR2116-12G-4S+, AL73400 2 GHz ARM 64 bit, 16 cores, 16 GB
+      DDR4, 128 MB NAND, 13 gigabit Ethernet ports, 4 SFP+ ports, 1 M.2 slot, 1 USB 3.0 type A, 98DX3255
+      switch chip, 443 x 199 x 44 mm, -20 to +60 C; powering 2 AC inputs, 100-240 V, adapter nominal 12
+      V and 10.8 A, 60 W without attachments, 72 W maximum; included: 2 power cords, rackmount bracket
+      white, fastening set.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      No drawing is held. Photograph 2625's body is 1777 px across at the displayed 2000 px width for
+      the printed 443 (4.01 px per mm); x is taken at that scale from the body's left edge. The photograph
+      looks slightly down, so the face is foreshortened by about 5 percent: y is measured up from the
+      face's bottom edge at 44 mm for the face and is estimated. The jack pitch reads 68.2 px = 17.0 mm
+      on three gangs, and the same 17.0 mm across the three blocks' twelve jacks (first centres 51.4,
+      123.5 and 195.8 mm) on a quantity the scale never saw.
+  chassis:
+    confidence: datasheet
+    note: >-
+      443 x 199 x 44 mm: the brochure and the product page print the same figures. The width is the full
+      ear-to-ear width as printed (the ears ship flush). No drawing is held, so it cannot be checked whether
+      the 199 includes what stands off the rear: the two wire retaining clips of the inlets stand off
+      the lid at the rear edge in photographs 2629 and 2632, and the depth is carried as printed, taken
+      as the body with the retaining clips not counted (assumed, not measured).
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      From photograph 2625 at 4.01 px per mm. SFP+ cages: left column centre 15.2 mm, right 30.4 mm, upper
+      cages top at 11.7 mm and lower at 27.3 mm (a 15.6 mm row pitch). Jacks: 16.5 mm frames on a 17.0
+      mm pitch, jack top at 25.6 mm, in three plates of four at gutters of 4.2 mm. The console and management
+      jacks sit in one 17.2 x 27.4 mm plate at 258.9 mm, USB at 282.5 mm, MODE at 291.4 mm and RESET at
+      301.4 mm. Face colour #dddddd (the photograph's lit median is lighter), drawn so it reads on the
+      light stage.
+  lamps:
+    confidence: photo-measured
+    note: >-
+      Each jack carries its own two small lamps (the component's, green at the left and amber at the right
+      in the photograph). The eight arrows between the SFP+ cages are read as four to a stack, two per
+      cage, as the CRS518's: down for the lower cage and up for the upper, estimated from the photograph.
+      The four chassis lamps (USER, FAULT, PWR 2, PWR 1) are at 309.7 mm, 18.8 to 33.5 mm down. No held
+      document says what a lamp shows.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Jacks 1 to 12 are printed under the jacks, left to right, under GIGABIT ETHERNET. The SFP+ cages
+      print 1 and 3 under the stacks and 2 and 4 over them, so the lower cage of a stack is odd. ETH/BOOT
+      is printed under the lower of the two stacked jacks and CONSOLE over the upper, so the management
+      jack (the brochure's thirteenth gigabit port) is the lower one and the console the upper.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      estimated - no rear elevation is held; the positions are read off photograph 2116 (body 1885 px
+      across a 1.05 scaled crop, 4.255 px per mm) and the NetBox rear elevation agrees on every opening.
+      It looks down on the rear, so x is good to about 1.5 mm and y, from the face's bottom edge, to about
+      2.5 mm. Inlets at 30.9 and 116.3 mm, each with POWER 1 or 2 and the rating line under it; round
+      openings at 72.4, 223.7, 264.4, 304.4 and 345.0 mm, 37 mm across. The inlets' wire retaining clips
+      are not drawn (no registry part).
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      The brochure says "a dual-redundant power supply" and "Number of AC inputs 2"; the page says "Number
+      of AC inputs 2" and "Number of PSU slots 2". No held document prints a supply part number and photograph
+      2116 shows two plain C14 inlets with wire clips and no module, handle or latch, so the supplies
+      are part of the chassis with their inlets and no bay is drawn. The page says "Cooling type 4 fans"
+      and the photograph shows five round openings: the four in the right half are the fans, and the fifth,
+      between the inlets, is drawn as a vent.
+  side-layout:
+    confidence: estimated
+    note: >-
+      Photograph 2632 shows the right wall with a field of round perforations at the rear half of the
+      wall; it is read as a 100 x 22 mm field starting 66 mm from the front, estimated to about 10 mm
+      because the wall is foreshortened. Photograph 2629 shows the left wall plain, with screws and a
+      few holes.
+  ears:
+    confidence: datasheet
+    note: >-
+      Rack ears are in the box (brochure: Rackmount bracket white; page: the same). They ship flush with
+      the face and are not drawn.
+  colour:
+    confidence: estimated
+    note: >-
+      The median of photograph 2625's face is lighter than #dddddd; the face is drawn #dddddd so it reads
+      on the light stage.
+attrs:
+  power:
+    power-max-w: 72
+    power-max-w-page: 83
+    power-without-attachments-w: 60
+    power-input: '100 - 240 V AC, two inputs (page: 47 - 63 Hz)'
+    power-adapter-nominal: >-
+      12 V and 10.8 A, the brochure's "Power adapter nominal voltage" and "nominal current": the adapter's
+      nominal figures, not the box's input
+    power-rating-label: 100-240 V ~2 A MAX, 50/60 Hz (printed under each inlet)
+  thermal: {cooling: 4 fans (page)}
+  environmental: {operating-temp-c: -20 to 60}
+  platform: {cpu: 'AL73400, 2 GHz, 16 cores, ARM 64 bit', switch-chip: 98DX3255, ram: 16 GB DDR4, storage: 128
+      MB NAND, os: 'RouterOS v7, license level 6'}
+  features:
+    m2: one M.2 slot (brochure), not on either face
+    optics-sfp-plus: >-
+      brochure: four 10G SFP+ ports; the brochure prints no list of optics, so none is claimed beyond
+      the cage
+chassis:
+  width: 443.0
+  height: 44.0
+  depth: 199.0
+  ru: 1
+  color: '#dddddd'
+  ears:
+    positions:
+    - {name: flush, default: true}
+  power: ac
+gaps:
+- what: front-elevation
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    No dimensions drawing is held; the front is read off studio photograph 2625, which looks slightly
+    down, so x is photo-measured and y is estimated.
+  wanted: A dimensioned front view.
+- what: rear-elevation
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    No rear view is held; the rear is read off studio photograph 2116, which looks down on it, so the
+    y positions are estimated.
+  wanted: A dimensioned rear view.
+- what: power-figures
+  scope:
+  - front
+  reason: sources-disagree
+  note: >-
+    The brochure gives 72 W maximum and 60 W without attachments; the product page gives 83 W maximum
+    and 60 W without attachments. The brochure's are carried and the page's maximum is kept as power-max-w-page.
+    The brochure's "Power adapter nominal voltage 12 V" and "nominal current 10.8 A" are the adapter's
+    nominal figures, filed as such and not as the box's input.
+  wanted: MikroTik's statement of the maximum consumption.
+- what: psu-slots
+  scope:
+  - rear
+  reason: vendor-silent
+  note: >-
+    The page says "Number of PSU slots 2", the brochure says a dual-redundant power supply is included,
+    and no held document prints a supply part number or shows a module. The two supplies are part of the
+    chassis with their inlets and no bay is added; the base configuration exports two power ports.
+  wanted: The supply's part number and a statement of what a slot holds.
+- what: fan-count
+  scope:
+  - rear
+  reason: vendor-silent
+  note: >-
+    The page says 4 fans and the rear photograph shows five round openings. The four in the right half
+    are fans; the fifth, between the inlets, is drawn as a vent. No document says what it is, and none
+    states a fan redundancy form.
+  wanted: MikroTik's fan count and the opening's purpose.
+- what: m2-slot
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    The brochure lists "Number of M.2 slots 1". No photograph shows an M.2 slot on either face, so it
+    is internal: nothing is drawn and no port is added for it, and the export carries no interface for
+    it.
+  wanted: A statement of where the slot is reached.
+- what: vent-pattern
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    The metal's vent band over the jacks is a zigzag of V shapes and the schema on main has no such pattern,
+    so the band is drawn with the nearest, `vent`. The band takes `chevrons` once that pattern is on main.
+  wanted: The `chevrons` decoration pattern.
+- what: led-states
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    Searched the brochure, the page and the quick guide page for an LED table: none. The lamps carry the
+    component's own vocabulary and no meaning is stated.
+  wanted: MikroTik's LED description for the CCR2116-12G-4S+.
+- what: top-and-bottom
+  scope:
+  - top
+  - bottom
+  reason: needs-drawing
+  note: >-
+    Photographs 2625, 2629 and 2632 show a plain lid with embossed lettering; no document shows the underside.
+  wanted: A top and a bottom view.
+- {what: weight, scope: [front], reason: vendor-silent, note: Neither the brochure nor the page gives
+    a weight., wanted: MikroTik's weight.}
+- what: eol
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The saved product page carries no Discontinued badge and MikroTik publishes no end-of-life page, so
+    no lifecycle is written.
+  wanted: none
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      the twelve gigabit jacks printed 1 to 12 under GIGABIT ETHERNET, each with its own two lamps
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the four SFP+ cages printed 1 to 4, the lower cage of a stack odd
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the four arrow lamps in the middle of each SFP+ stack (two per cage)
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the gigabit management jack printed ETH/BOOT
+  console: {term: Port, role: management, index-origin: 1, description: the RJ45 serial console}
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a}
+    description: the USB 3.0 type A port
+  controls: {term: Button, role: management, index-origin: 1, description: the MODE and RESET buttons}
+  status-leds: {term: LED, role: indicator, index-origin: 1, description: 'the USER, FAULT, PWR 2 and
+      PWR 1 lamps'}
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the two AC inlets, POWER 1 and POWER 2, as seen from the rear
+views:
+  front:
+    size: {w: 443.0, h: 44.0}
+    panel:
+      decor:
+      - {id: vent-field, kind: vent-field, at: [42.9, 11.6], size: [212.7, 7.0], pattern: vent, vent: 1.0}
+      - {id: jack-plate-1, kind: jack-plate, at: [42.9, 23.8], size: [67.9, 13.0], fill: '#c4c4c4'}
+      - {id: jack-plate-2, kind: jack-plate, at: [115.0, 23.8], size: [68.1, 13.0], fill: '#c4c4c4'}
+      - {id: jack-plate-3, kind: jack-plate, at: [187.3, 23.8], size: [68.0, 13.0], fill: '#c4c4c4'}
+      - {id: mgmt-block, kind: jack-plate, at: [258.9, 10.4], size: [17.2, 27.4], fill: '#c4c4c4'}
+      - {id: usb-bezel, kind: usb-bezel, at: [278.25, 22.0], size: [8.5, 15.8], rx: 1.6, fill: '#2b2b2b'}
+      cutouts:
+      - {id: port-1, at: [45.05, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [62.05, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [79.05, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [96.05, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [117.25, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [134.25, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [151.25, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [168.25, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-9, at: [189.45, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-10, at: [206.45, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-11, at: [223.45, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-12, at: [240.45, 25.6], size: [12.7, 11.0], shape: rect}
+      - {id: cage-1, at: [8.1, 27.3], size: [14.25, 10.4], shape: rect}
+      - {id: cage-2, at: [8.1, 11.7], size: [14.25, 10.4], shape: rect}
+      - {id: cage-3, at: [23.3, 27.3], size: [14.25, 10.4], shape: rect}
+      - {id: cage-4, at: [23.3, 11.7], size: [14.25, 10.4], shape: rect}
+      - {id: console, at: [259.6, 11.2], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt, at: [259.6, 24.9], size: [15.8, 13.2], shape: rect}
+      - {id: usb, at: [280.25, 24.0], size: [4.5, 12.0], shape: rect}
+      - {id: btn-mode, at: [289.4, 31.3], size: [4.0, 4.0], shape: circle}
+      - {id: btn-reset, at: [299.4, 31.3], size: [4.0, 4.0], shape: circle}
+      - {id: led-sfp-1, at: [8.605, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-2, at: [11.605, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-3, at: [16.605, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-4, at: [19.605, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-5, at: [23.795, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-6, at: [26.795, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-7, at: [31.795, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-8, at: [34.795, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-user, at: [308.7, 17.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-fault, at: [308.7, 22.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr2, at: [308.7, 27.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr1, at: [308.7, 32.5], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [15.23, 9.1], text: '2', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-2}
+    - {at: [30.42, 9.1], text: '4', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-4}
+    - {at: [15.23, 40.8], text: '1', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [30.42, 40.8], text: '3', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-3}
+    - {at: [6.0, 23.1], text: SFP+, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [149.1, 21.9], text: GIGABIT ETHERNET, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {id: gbe-bracket-left, at: [42.9, 21.2], path: M 0 1.2 V 0 H 93.1, filled: false, stroke-width: 0.2,
+      fill: '#2b2b2b', for: chassis}
+    - {id: gbe-bracket-right, at: [162.4, 21.2], path: M 0 0 H 93.1 V 1.2, filled: false, stroke-width: 0.2,
+      fill: '#2b2b2b', for: chassis}
+    - {at: [51.4, 40.8], text: '1', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-1}
+    - {at: [68.4, 40.8], text: '2', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-2}
+    - {at: [85.4, 40.8], text: '3', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-3}
+    - {at: [102.4, 40.8], text: '4', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-4}
+    - {at: [123.6, 40.8], text: '5', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-5}
+    - {at: [140.6, 40.8], text: '6', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-6}
+    - {at: [157.6, 40.8], text: '7', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-7}
+    - {at: [174.6, 40.8], text: '8', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-8}
+    - {at: [195.8, 40.8], text: '9', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-9}
+    - {at: [212.8, 40.8], text: '10', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-10}
+    - {at: [229.8, 40.8], text: '11', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-11}
+    - {at: [246.8, 40.8], text: '12', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-12}
+    - {at: [267.5, 9.3], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: console}
+    - {at: [267.5, 40.8], text: ETH/BOOT, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: mgmt}
+    - {at: [282.6, 40.8], text: USB, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: usb}
+    - {at: [291.4, 40.8], text: MODE, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: btn-mode}
+    - {at: [301.4, 40.8], text: RESET, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: btn-reset}
+    - {at: [313.2, 19.26], text: USER, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-user}
+    - {at: [313.2, 24.26], text: FAULT, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-fault}
+    - {at: [313.2, 29.26], text: PWR 2, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-pwr2}
+    - {at: [313.2, 33.96], text: PWR 1, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-pwr1}
+    - {at: [439.0, 15.3], text: CCR2116-12G-4S+, font-size: 2.8, anchor: end, fill: '#2b2b2b', for: chassis}
+    components:
+      placements:
+      - ref: common/rj45-ganged-eth@1
+        id: port-1
+        at: [45.05, 25.6]
+        group: rj45
+        rel-pos: 1
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-2
+        at: [62.05, 25.6]
+        group: rj45
+        rel-pos: 2
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-3
+        at: [79.05, 25.6]
+        group: rj45
+        rel-pos: 3
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-4
+        at: [96.05, 25.6]
+        group: rj45
+        rel-pos: 4
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-5
+        at: [117.25, 25.6]
+        group: rj45
+        rel-pos: 5
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-6
+        at: [134.25, 25.6]
+        group: rj45
+        rel-pos: 6
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-7
+        at: [151.25, 25.6]
+        group: rj45
+        rel-pos: 7
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-8
+        at: [168.25, 25.6]
+        group: rj45
+        rel-pos: 8
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-9
+        at: [189.45, 25.6]
+        group: rj45
+        rel-pos: 9
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-10
+        at: [206.45, 25.6]
+        group: rj45
+        rel-pos: 10
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-11
+        at: [223.45, 25.6]
+        group: rj45
+        rel-pos: 11
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-12
+        at: [240.45, 25.6]
+        group: rj45
+        rel-pos: 12
+        attrs: {media: rj45, speed: 1g}
+      - ref: std/sfp-ganged@1
+        id: cage-1
+        at: [8.1, 27.3]
+        rotate: 180
+        group: sfp-plus
+        rel-pos: 1
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-2
+        at: [8.1, 11.7]
+        group: sfp-plus
+        rel-pos: 2
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-3
+        at: [23.3, 27.3]
+        rotate: 180
+        group: sfp-plus
+        rel-pos: 3
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: cage-4
+        at: [23.3, 11.7]
+        group: sfp-plus
+        rel-pos: 4
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/rj45@2
+        id: console
+        at: [259.6, 11.2]
+        rotate: 180
+        group: console
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: common/rj45-eth@1
+        id: mgmt
+        at: [259.6, 24.9]
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45, speed: 1g}
+      - ref: std/usb-a@1
+        id: usb
+        at: [276.6, 27.8]
+        rotate: 90
+        skin: usb2
+        group: usb
+        rel-pos: 1
+        attrs: {media: usb-a}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-1, skin: down, at: [8.605, 23.7], group: sfp-leds, rel-pos: 1,
+        for: cage-1}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-2, skin: up, at: [11.605, 23.7], group: sfp-leds, rel-pos: 2,
+        for: cage-2}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-3, skin: down, at: [16.605, 23.7], group: sfp-leds, rel-pos: 3,
+        for: cage-1}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-4, skin: up, at: [19.605, 23.7], group: sfp-leds, rel-pos: 4,
+        for: cage-2}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-5, skin: down, at: [23.795, 23.7], group: sfp-leds, rel-pos: 5,
+        for: cage-3}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-6, skin: up, at: [26.795, 23.7], group: sfp-leds, rel-pos: 6,
+        for: cage-4}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-7, skin: down, at: [31.795, 23.7], group: sfp-leds, rel-pos: 7,
+        for: cage-3}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-8, skin: up, at: [34.795, 23.7], group: sfp-leds, rel-pos: 8,
+        for: cage-4}
+      - ref: common/reset-button@1
+        id: btn-mode
+        at: [289.4, 31.3]
+        for: chassis
+        group: controls
+        rel-pos: 1
+        attrs: {function: mode}
+      - ref: common/reset-button@1
+        id: btn-reset
+        at: [299.4, 31.3]
+        for: chassis
+        group: controls
+        rel-pos: 2
+        attrs: {function: reset}
+      - {ref: common/led-dot@1, id: led-user, at: [308.7, 17.8], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-fault, at: [308.7, 22.8], for: chassis, group: status-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-pwr2, at: [308.7, 27.8], for: chassis, group: status-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-pwr1, at: [308.7, 32.5], for: chassis, group: status-leds, rel-pos: 4}
+    regions:
+    - id: logo-zone
+      at: [405.0, 5.5]
+      size: {w: 34.0, h: 7.0}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 443.0, h: 44.0}
+    panel:
+      decor:
+      - {id: psu-opening, kind: round-vent, at: [53.9, 2.4], size: [37.0, 37.0], rx: 18.5, pattern: vent,
+        vent: 1.0}
+      - {id: psu-opening-hub, kind: fan-hub, at: [62.9, 11.4], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
+      - {id: fan-0, kind: fan-grille, at: [205.2, 3.1], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
+      - {id: fan-1, kind: fan-grille, at: [245.9, 3.1], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
+      - {id: fan-2, kind: fan-grille, at: [285.9, 3.1], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
+      - {id: fan-3, kind: fan-grille, at: [326.5, 3.1], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
+      - {id: fan-hub-0, kind: fan-hub, at: [214.2, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
+      - {id: fan-hub-1, kind: fan-hub, at: [254.9, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
+      - {id: fan-hub-2, kind: fan-hub, at: [294.9, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
+      - {id: fan-hub-3, kind: fan-hub, at: [335.5, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
+      cutouts:
+      - {id: ac-inlet-1, at: [16.9, 15.6], size: [28.0, 20.0], shape: rect}
+      - {id: ac-inlet-2, at: [102.3, 15.6], size: [28.0, 20.0], shape: rect}
+    silkscreen:
+    - {at: [30.9, 38.6], text: POWER 1, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [30.9, 41.6], text: '100-240 V ~2 A MAX, 50/60 Hz', font-size: 1.5, anchor: middle, fill: '#2b2b2b',
+      for: ac-inlet-1}
+    - {at: [116.3, 38.6], text: POWER 2, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
+    - {at: [116.3, 41.6], text: '100-240 V ~2 A MAX, 50/60 Hz', font-size: 1.5, anchor: middle, fill: '#2b2b2b',
+      for: ac-inlet-2}
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [16.9, 15.6], group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [102.3, 15.6], group: inlets, rel-pos: 2}
+  top:
+    size: {w: 443.0, h: 199.0}
+    empty: Photographs 2625, 2629 and 2632 show a plain lid with embossed lettering and no opening.
+  bottom:
+    size: {w: 443.0, h: 199.0}
+    empty: >-
+      Not drawn by any source held: neither the brochure nor the studio photographs picture the underside.
+  left:
+    size: {w: 199.0, h: 44.0}
+    empty: 'Photograph 2629 shows the left wall plain: screws and a few holes, no vent or grille.'
+  right:
+    size: {w: 199.0, h: 44.0}
+    panel:
+      decor:
+      - {id: side-vent, kind: vent-field, at: [66.0, 11.0], size: [100.0, 22.0], pattern: vent, vent: 1.0}
+configurations:
+  base:
+    kind: base
+    description: >-
+      CCR2116-12G-4S+ - twelve gigabit Ethernet jacks, four SFP+ cages, a gigabit management jack, an
+      RJ45 console and a USB 3.0 type A port, with two AC supplies and four fans (all part of the chassis
+      in this model). The box holds two power cords, rack ears and a fastening set.
+    default: true
+    part-numbers:
+      CCR2116-12G-4S+: {}
+references:
+- title: >-
+    CCR2116-12G-4S+ brochure (MikroTik; revision stamp 260316, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CCR2116-12G-4S_260316.pdf)
+  sha256: 7f448a5af7ea3831d662564c4df604208164a27d1036279bb898d303822ef454
+- title: >-
+    CCR2116-12G-4S+ product page (MikroTik; saved 2026-10-26; https://mikrotik.com/product/ccr2116_12g_4splus)
+  sha256: 630c26c4c30d5e7b2d62cf22d41478d8d4598f9e7db8dce2e56e4db09989140a
+- title: >-
+    CCR2116-12G-4S+ declaration of conformity ID-171 (MikroTik; Riga, 12 July 2021; https://cdn.mikrotik.com/web-assets/product_files/ID171_CCR2116-12G-4S_DOC_220159.pdf)
+  sha256: f98d8c32de1760a64c2555cd5bacc5aabb3686fec54ab194546a4a200ec824fa
