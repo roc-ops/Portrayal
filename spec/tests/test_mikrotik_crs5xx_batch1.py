@@ -223,28 +223,36 @@ def test_the_motif_band_states_its_tile_once_in_provenance():
     assert "no V before the first lambda" in note and "grey" in note and "5.67" in note
 
 
-HEX_BASE = (8.86, 5.11)  # the renderer's base vent tile, mm
-
-
 def _centre(x):
     return [round(x["at"][0] + x["size"][0] / 2, 2), round(x["at"][1] + x["size"][1] / 2, 2)]
 
 
-@pytest.mark.parametrize("name, ids, scale", [
-    (CRS518, [f"fan-{i}" for i in range(4)], 0.955),
-    (CRS518, ["psu-1-vent", "psu-2-vent"], 1.15),
-    (CRS510, ["fan-0", "fan-1"], 1.063),
+@pytest.mark.parametrize("name, ids, corners, pitch", [
+    (CRS518, [f"fan-{i}" for i in range(4)], 4.31, 4.88),
+    (CRS518, ["psu-1-vent", "psu-2-vent"], 5.34, 5.88),
+    (CRS510, ["fan-0", "fan-1"], 5.32, 5.43),
 ])
-def test_rear_hexagon_fields_state_the_photographs_pitch_and_a_lattice_that_starts_at_a_hexagon(name, ids, scale):
-    """The renderer's base tile is 8.86 x 5.11 mm. Photograph 2197 (5.80 px per mm) reads a column step of 4.23 mm on
-    the CRS518's fans and 5.09 mm on its supply grilles, and photograph 2233 (8.84 px per mm) 4.71 mm on the CRS510's
-    fans, against the base's 4.43: the tile is the base times that ratio on both axes, so the hexagons stay regular."""
+def test_rear_hexagon_fields_state_the_photographs_pitch_and_a_lattice_that_starts_at_a_hexagon(name, ids, corners,
+                                                                                               pitch):
+    """Photograph 2197 (5.80 px per mm) reads openings 4.31 mm across the corners on a 4.88 mm nearest-neighbour
+    pitch on the CRS518's fans and 5.34 on 5.88 on its supply grilles; photograph 2233 (8.84 px per mm) 5.32 on 5.43
+    on the CRS510's fans. The renderer's plain vent tile (hexagons 5.1 mm on a 5.11 mm pitch) cannot give those webs,
+    so each field is a motif tile of one regular hexagon period: a whole hexagon at the middle of the tile and a
+    quarter of one at each corner, the tile 1.732 pitches wide and one pitch high."""
     decor = _decor(load(name), "rear")
     for i in ids:
         d = decor[i]
-        assert d["pattern"] == "vent"
-        assert d["pattern-pitch"] == [round(HEX_BASE[0] * scale, 2), round(HEX_BASE[1] * scale, 2)], i
-        assert d["pattern-pitch"][0] / d["pattern-pitch"][1] == pytest.approx(HEX_BASE[0] / HEX_BASE[1], rel=0.01)
+        assert d["pattern"] == "motif"
+        tw, th = d["pattern-pitch"]
+        assert th == pitch and tw == pytest.approx(pitch * 3 ** 0.5, abs=0.01), i  # regular: column step = pitch x 0.866
+        full, *quarters = d["pattern-cells"]
+        assert len(full) == 6 and len(quarters) == 4
+        xs = [x for x, _ in full]
+        assert max(xs) - min(xs) == pytest.approx(corners, abs=0.02), i  # across the corners
+        assert (min(xs) + max(xs)) / 2 == pytest.approx(tw / 2, abs=0.01)  # the whole hexagon sits at the tile's middle
+        assert sum(y for _, y in full) / 6 == pytest.approx(th / 2, abs=0.01)
+        for cell in d["pattern-cells"]:
+            assert all(0 <= x <= tw and 0 <= y <= th for x, y in cell), i
         if d["kind"] == "fan-grille":
             assert d["pattern-offset"] == _centre(d), i  # a hexagon is centred under the hub, as the photographs show
         else:  # a supply grille: a whole column of hexagons starts 5.3 mm in from the left and 5.1 mm down

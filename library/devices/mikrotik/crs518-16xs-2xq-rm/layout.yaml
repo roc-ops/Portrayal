@@ -134,14 +134,14 @@ provenance:
       to 1395,665; 42 whole openings) an opening is 4.31 mm across its corners and 3.62 mm across its flats, the column
       step 4.23 mm and the same-column pitch 4.70 mm (the photograph looks down, so the vertical figure reads short);
       on a supply grille (box 200,455 to 360,635; 14 whole openings) 5.34 across corners, 4.66 across flats, a column
-      step of 5.09 mm and a pitch of 5.82 mm. The renderer's base tile (8.86 x 5.11 mm, column step 4.43) is scaled by
-      the column step's ratio on both axes (0.955 for a fan, 1.15 for a supply grille), so `pattern-pitch` is 8.46 x
-      4.88 mm and 10.19 x 5.88 mm, and was the base tile (no pitch) before. A fan's lattice starts on a hexagon
-      centred under the hub, as the photograph shows (a column of hexagons runs through the hub), and a supply
-      grille's at a whole column 5.3 mm in and 5.1 mm down; each ring holds two to three hexagons between the hub and
-      the edge, cut by the guard's circle. The plain pattern's opening is wider against its pitch than the metal's
-      (5.1 mm across corners on a 4.43 mm column step, against 4.31 on 4.23): the webs are thinner than the metal's,
-      which no `pattern-pitch` changes.
+      step of 5.09 mm and a pitch of 5.82 mm. They were the renderer's plain vent tile (8.86 x 5.11 mm, hexagons 5.1 mm
+      across the corners on a 4.43 mm column step), which scaled by `pattern-pitch` cannot give the metal's thick
+      webs (the openings are 4.31 on a 4.23 step, not 5.1 on 4.43), so each field is a `motif` tile of one regular
+      hexagon period: a fan's is 8.45 x 4.88 mm with openings 4.31 mm across the corners, a supply grille's 10.18 x
+      5.88 mm with 5.34 mm openings (the nearest-neighbour distance is the measured pitch, 4.88 and 5.88 mm). A fan's
+      lattice starts on a hexagon centred under the hub, as the photograph shows (a column of hexagons runs through
+      the hub), and a supply grille's at a whole column 5.3 mm in and 5.1 mm down; the guard's circle cuts the outer
+      ring, two to three hexagons between the hub and the edge. The `pattern-pitch` of each is its tile.
   side-layout:
     confidence: estimated
     note: >-
@@ -517,22 +517,98 @@ views:
       decor:
       - {id: psu-1-module, kind: module-plate, at: [3.2, 2.0], size: [62.9, 38.0], fill: '#6f6d68'}
       - {id: psu-2-module, kind: module-plate, at: [66.1, 2.0], size: [62.9, 38.0], fill: '#6f6d68'}
-      - {id: psu-1-vent, kind: vent-field, at: [8.7, 5.5], size: [27.0, 31.0], pattern: vent, vent: 1.0,
-         pattern-pitch: [10.19, 5.88], pattern-offset: [14.0, 10.6]}
-      - {id: psu-2-vent, kind: vent-field, at: [74.3, 5.5], size: [24.5, 31.0], pattern: vent, vent: 1.0,
-         pattern-pitch: [10.19, 5.88], pattern-offset: [79.6, 10.6]}
+      - id: psu-1-vent
+        kind: vent-field
+        at: [8.7, 5.5]
+        size: [27.0, 31.0]
+        pattern: motif
+        vent: 1.0
+        pattern-pitch: [10.18, 5.88]
+        pattern-offset: [14.0, 10.6]
+        pattern-cells:
+        - [[7.76, 2.94], [6.42, 5.25], [3.75, 5.25], [2.42, 2.94], [3.75, 0.63], [6.42, 0.63]]
+        - [[0, 0], [2.67, 0], [1.33, 2.31], [0, 2.31]]
+        - [[10.18, 0], [10.18, 2.31], [8.84, 2.31], [7.51, 0]]
+        - [[0, 5.88], [0, 3.57], [1.33, 3.57], [2.67, 5.88]]
+        - [[10.18, 5.88], [7.51, 5.88], [8.84, 3.57], [10.18, 3.57]]
+      - id: psu-2-vent
+        kind: vent-field
+        at: [74.3, 5.5]
+        size: [24.5, 31.0]
+        pattern: motif
+        vent: 1.0
+        pattern-pitch: [10.18, 5.88]
+        pattern-offset: [79.6, 10.6]
+        pattern-cells:
+        - [[7.76, 2.94], [6.42, 5.25], [3.75, 5.25], [2.42, 2.94], [3.75, 0.63], [6.42, 0.63]]
+        - [[0, 0], [2.67, 0], [1.33, 2.31], [0, 2.31]]
+        - [[10.18, 0], [10.18, 2.31], [8.84, 2.31], [7.51, 0]]
+        - [[0, 5.88], [0, 3.57], [1.33, 3.57], [2.67, 5.88]]
+        - [[10.18, 5.88], [7.51, 5.88], [8.84, 3.57], [10.18, 3.57]]
       - {id: fan-module-0, kind: module-plate, at: [156.3, 2.0], size: [61.5, 38.0], fill: '#878682'}
       - {id: fan-module-1, kind: module-plate, at: [226.5, 2.0], size: [60.0, 38.0], fill: '#878682'}
       - {id: fan-module-2, kind: module-plate, at: [296.6, 2.0], size: [60.4, 38.0], fill: '#878682'}
       - {id: fan-module-3, kind: module-plate, at: [363.0, 2.0], size: [60.0, 38.0], fill: '#878682'}
-      - {id: fan-0, kind: fan-grille, at: [172.8, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0,
-         pattern-pitch: [8.46, 4.88], pattern-offset: [191.8, 20.5]}
-      - {id: fan-1, kind: fan-grille, at: [242.9, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0,
-         pattern-pitch: [8.46, 4.88], pattern-offset: [261.9, 20.5]}
-      - {id: fan-2, kind: fan-grille, at: [313.5, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0,
-         pattern-pitch: [8.46, 4.88], pattern-offset: [332.5, 20.5]}
-      - {id: fan-3, kind: fan-grille, at: [374.8, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0,
-         pattern-pitch: [8.46, 4.88], pattern-offset: [393.8, 20.5]}
+      - id: fan-0
+        kind: fan-grille
+        at: [172.8, 1.5]
+        size: [38.0, 38.0]
+        rx: 19.0
+        pattern: motif
+        vent: 1.0
+        pattern-pitch: [8.45, 4.88]
+        pattern-offset: [191.8, 20.5]
+        pattern-cells:
+        - [[6.38, 2.44], [5.3, 4.31], [3.15, 4.31], [2.07, 2.44], [3.15, 0.57], [5.3, 0.57]]
+        - [[0, 0], [2.15, 0], [1.08, 1.87], [0, 1.87]]
+        - [[8.45, 0], [8.45, 1.87], [7.37, 1.87], [6.29, 0]]
+        - [[0, 4.88], [0, 3.01], [1.08, 3.01], [2.15, 4.88]]
+        - [[8.45, 4.88], [6.29, 4.88], [7.37, 3.01], [8.45, 3.01]]
+      - id: fan-1
+        kind: fan-grille
+        at: [242.9, 1.5]
+        size: [38.0, 38.0]
+        rx: 19.0
+        pattern: motif
+        vent: 1.0
+        pattern-pitch: [8.45, 4.88]
+        pattern-offset: [261.9, 20.5]
+        pattern-cells:
+        - [[6.38, 2.44], [5.3, 4.31], [3.15, 4.31], [2.07, 2.44], [3.15, 0.57], [5.3, 0.57]]
+        - [[0, 0], [2.15, 0], [1.08, 1.87], [0, 1.87]]
+        - [[8.45, 0], [8.45, 1.87], [7.37, 1.87], [6.29, 0]]
+        - [[0, 4.88], [0, 3.01], [1.08, 3.01], [2.15, 4.88]]
+        - [[8.45, 4.88], [6.29, 4.88], [7.37, 3.01], [8.45, 3.01]]
+      - id: fan-2
+        kind: fan-grille
+        at: [313.5, 1.5]
+        size: [38.0, 38.0]
+        rx: 19.0
+        pattern: motif
+        vent: 1.0
+        pattern-pitch: [8.45, 4.88]
+        pattern-offset: [332.5, 20.5]
+        pattern-cells:
+        - [[6.38, 2.44], [5.3, 4.31], [3.15, 4.31], [2.07, 2.44], [3.15, 0.57], [5.3, 0.57]]
+        - [[0, 0], [2.15, 0], [1.08, 1.87], [0, 1.87]]
+        - [[8.45, 0], [8.45, 1.87], [7.37, 1.87], [6.29, 0]]
+        - [[0, 4.88], [0, 3.01], [1.08, 3.01], [2.15, 4.88]]
+        - [[8.45, 4.88], [6.29, 4.88], [7.37, 3.01], [8.45, 3.01]]
+      - id: fan-3
+        kind: fan-grille
+        at: [374.8, 1.5]
+        size: [38.0, 38.0]
+        rx: 19.0
+        pattern: motif
+        vent: 1.0
+        pattern-pitch: [8.45, 4.88]
+        pattern-offset: [393.8, 20.5]
+        pattern-cells:
+        - [[6.38, 2.44], [5.3, 4.31], [3.15, 4.31], [2.07, 2.44], [3.15, 0.57], [5.3, 0.57]]
+        - [[0, 0], [2.15, 0], [1.08, 1.87], [0, 1.87]]
+        - [[8.45, 0], [8.45, 1.87], [7.37, 1.87], [6.29, 0]]
+        - [[0, 4.88], [0, 3.01], [1.08, 3.01], [2.15, 4.88]]
+        - [[8.45, 4.88], [6.29, 4.88], [7.37, 3.01], [8.45, 3.01]]
       - {id: fan-hub-0, kind: fan-hub, at: [182.3, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
       - {id: fan-hub-1, kind: fan-hub, at: [252.4, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
       - {id: fan-hub-2, kind: fan-hub, at: [323.0, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
