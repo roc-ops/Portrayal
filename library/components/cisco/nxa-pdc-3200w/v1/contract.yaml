@@ -1,0 +1,92 @@
+format: 1
+kind: module
+name: nxa-pdc-3200w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 3200 W DC/HVDC power supply of the Cisco Nexus 9364D-GX2A and 9348D-GX2A fixed switches,
+  ordered as NXA-PDC-3200W-PI (port-side intake, burgundy). It is drawn from the 3200 W AC supply's
+  footprint, with a plain recess where the AC supply has its inlet, because no figure of it is
+  held: a round fan with a strap across it, a column of three lamp marks and a coloured release
+  latch.
+size: {w: 89.2, h: 43.2}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PDC-3200W'
+  power-output-w: 3200
+  input: dc
+  inlet: dc-terminal
+  input-voltage: 'DC range 100-120 VDC, 16 A max, 50/60 Hz (as printed); HVDC range 240 VDC, 14.5 max; input voltage row -40 to -72 VDC; 47 to 63 Hz'
+  efficiency: '90% or greater (20 to 100% load)'
+  weight-kg: 1.63
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N9364D-GX2A NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2022-06-24, Last Modified 2026-09-16), Overview: "3200-W port-side intake DC/HVDC
+    power supply with burgundy coloring (NXA-PDC-3200W-PI)", and the same line in the Cisco
+    N9348D-GX2A guide (First Published 2022-07-04, Last Modified 2026-07-28). Both guides list
+    this supply with port-side intake only. The airflow suffix is dropped from the model, as on
+    cisco/nxa-pac-3200w@1.
+  power: >-
+    datasheet - the guides' appendix B, "3200-W DC/HVDC Power Supply Specifications": "Power
+    3200W", "DC Range 100-120 VDC; 16A Max. 50/60Hz" (a DC range with a frequency, as printed),
+    "HVDC Range 240 VDC; 14.5 Max.", "Input Voltage -40 to -72 VDC", 47 to 63 Hz, 90% or greater
+    efficiency, combined, n+1 and n+n redundancy, hot swappable. An OUTPUT rating, so
+    `power-output-w`. The weight is the weights row for the supplies, 3.6 lb (1.63 kg).
+  size: >-
+    estimated - THE GUIDES STATE NO DIMENSION and show no picture of this supply. It carries
+    cisco/nxa-pac-3200w@1's size and its fan, lamps and latch, read off the AC supply's picture
+    in the 9364D rear figure (art 503685; "AC power supplies shown").
+  elements: >-
+    estimated - THE DC SUPPLY IS NOT PICTURED. It is drawn as the AC supply with a plain recess
+    where the inlet is. The guides' cable section for it, "Power Cables for NXA-PDC-3200W Power
+    Supplies", lists a two-hole copper lug, size 1/4 inch, #2 AWG (Panduit LCD2-14A-Q), which is
+    not drawn: the library holds no part for that lug, and where on this supply it lands is
+    not shown.
+  lamps: >-
+    estimated - as cisco/nxa-pac-3200w@1: two circles, which are drawn as lamps with the guides'
+    "Power Supply LEDs" states, and a small mark between them.
+  latch-colour: >-
+    datasheet for the convention - both guides' Overview: burgundy for port-side intake. The
+    values are cisco/nxa-pac-500w@1's.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-500w@1's round figure for a supply of this
+    class and nothing here measures it.
+states: [absent]
+elements:
+  lamp-1: {at: [48.4, 9.2], size: [2.6, 2.6], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b'}, {name: fault, color: '#f59e0b'}]}
+  lamp-2: {at: [48.4, 20.3], size: [2.6, 2.6], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b'}, {name: fault, color: '#f59e0b'}]}
+  fan: {at: [4.7, 2.2], size: [38.2, 38.2], class: rotor}
+  latch: {at: [81.4, 9.9], size: [6.9, 14.4], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pdc-3200w@1's own elements key - the grille's extent is read off the AC
+        supply's picture and the depth of the cavity behind it is not stated.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-pdc-3200w@1's own elements key - the latch stands proud in every picture of the
+        family and how far is not stated.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [89.2, 43.2]}
