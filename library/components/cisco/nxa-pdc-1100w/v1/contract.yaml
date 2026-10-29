@@ -1,0 +1,85 @@
+format: 1
+kind: module
+name: nxa-pdc-1100w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1100 W DC power supply of the Cisco Nexus 9336C-FX2-E fixed switch, ordered as
+  NXA-PDC-1100W-PI (port-side intake, burgundy) or NXA-PDC-1100W-PE (port-side exhaust, blue).
+  No picture of this supply is held. The face is drawn from the 750 W AC supply of the same
+  guide's rear figure, and the inlet is a plain recess.
+size: {w: 56.0, h: 41.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PDC-1100W'
+  power-output-w: 1100
+  input: dc
+  inlet: other
+  input-voltage: '-48 to -60 Vdc'
+  efficiency: '94% at 50% load'
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N9336C-FX2-E NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2021-02-16, Last Modified 2026-07-27), Overview: "1100-W port-side exhaust DC
+    power supply with blue coloring" and its burgundy intake twin. THE GUIDE SPELLS THE
+    SUFFIXES TWO WAYS: the Overview ends the parts -PE2 and -PI2, the weights table and the
+    specification heading -PE and -PI. The Cisco N9336C-FX2 guide (First Published 2018-03-12,
+    Last Modified 2026-07-16) names the same supply -PE and -PI. THE AIRFLOW SUFFIX AND ITS
+    REVISION MARK ARE DROPPED from the model, as on cisco/nxa-pac-500w@1: the parts differ in
+    the latch colour, which is this contract's `latch-finish`, and in the way the fan turns.
+  power: >-
+    datasheet - appendix B, "1100-W DC Power Supply Specifications": input -48 to -60 VDC,
+    efficiency 94% at 50% load, "Output Power 1100 W at rated input voltage" (an OUTPUT rating,
+    so `power-output-w`), n+1 and 1+1, hot swappable. NO WEIGHT IS CARRIED: the weights table
+    gives 2.36 lb (1.07 kg) once for a row of six 1100 W supplies, AC and DC, and not for this
+    supply's own row.
+  size: >-
+    estimated - THE GUIDES STATE NO DIMENSION. cisco/nxa-pac-750w@1's size, read off the same
+    guide's rear figure; nothing held shows a DC supply.
+  elements: >-
+    estimated - NO PICTURE OF THIS SUPPLY IS HELD. The housing, grille, lamps and handle slot
+    are cisco/nxa-pac-750w@1's arrangement; the inlet window is a plain dark recess because no
+    guide describes the DC connector.
+  lamps: >-
+    datasheet - appendix C, "Power Supply LEDs", one table for every supply.
+  latch-colour: >-
+    datasheet for the convention - burgundy for port-side intake and blue for port-side
+    exhaust. The values are cisco/nxa-pac-500w@1's.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-500w@1's round figure.
+states: [absent]
+elements:
+  lamp-1: {at: [44.4, 2.7], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  lamp-2: {at: [44.4, 7.8], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  fan: {at: [42.8, 12.0], size: [10.3, 17.4], class: rotor}
+  latch: {at: [37.3, 1.6], size: [5.8, 36.7], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-750w@1's grille, carried across - nothing held shows this supply.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        Not stated in any guide held. cisco/nxa-pac-500w@1 carries 3.0 mm for a supply latch.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [56.0, 41.0]}

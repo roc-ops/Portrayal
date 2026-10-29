@@ -1586,7 +1586,7 @@ def _tilt_offset(local_q, size, rotate, facet):
 
 def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                            occ_used, z_inset, z_group_lift, palette, inst_palette,
-                           skin_overrides, attr_overrides, resolved):
+                           skin_overrides, attr_overrides, resolved, build_airflow=None):
     """Seat the configuration's occupants keyed to THIS instance's slots - and,
     to a fixed point, to occupants already seated in them (a plug in the
     optic, a boot on the plug) - inside the instance group `g`.
@@ -1763,6 +1763,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 z_inset=z_inset - lift, z_group_lift=z_group_lift + lift,
                 skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                 path=f"{path}/{local}", resolved=resolved, tilt=tilt_facet,
+                build_airflow=build_airflow,
                 # AND A SLOT INSIDE WHAT WAS JUST SEATED, keyed under the
                 # occupant's own path - `bay-1/lc01-occupant/a`, half `a` of a
                 # duplex plug seated on the adapter `lc01`. The same widening
@@ -1854,7 +1855,7 @@ def _inherited_fields(lib, contract, merged, part):
     return out
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False, tilt=None, inherited_fields=None):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False, tilt=None, inherited_fields=None, build_airflow=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -2013,6 +2014,12 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     merged.update(attrs or {})
     for k, v in data_attrs(merged).items():
         g.set(k, v)
+    # THE DIRECTION OF THE BUILD, ON EVERY FAN AND SUPPLY DRAWN. `data-airflow`
+    # above is the part's own statement as the build adjusts it; this is the
+    # configuration's airflow, the value the root <svg> carries. Written after
+    # the merge so nothing overrides it, and nothing where the build states none.
+    if build_airflow and contract.get("class") in ("fan", "psu"):
+        g.set("data-config-airflow", build_airflow)
     if group:
         g.set("data-group", group)
     if rel_pos is not None:
@@ -2189,6 +2196,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                path=f"{path}/{part['id']}", resolved=resolved,
                                in_port=parts_in_port, tilt=tilt,
+                               build_airflow=build_airflow,
                                # a slot on a composed part, at any depth (B3)
                                occupants=occupants, occ_used=occ_used)
         if tilt:
@@ -2493,7 +2501,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
             path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1,
             z_inset=z_inset - occ_lift, z_group_lift=z_group_lift + occ_lift,
-            seated=seated, bay_attrs=bay_attrs,
+            seated=seated, bay_attrs=bay_attrs, build_airflow=build_airflow,
             occupants=occupants, occ_used=occ_used)
         # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
         # cage and wrong for a card in a riser: what shows of a PCIe bracket is
@@ -2563,7 +2571,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # published by component_cages as this cage's `mate`.
     _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                            occ_used, z_inset, z_group_lift, palette, inst_palette,
-                           skin_overrides, attr_overrides, resolved)
+                           skin_overrides, attr_overrides, resolved,
+                           build_airflow=build_airflow)
     # EVERY DECLARED CONNECTION POINT REACHES THE DRAWING, not just `mate`.
     # This function read `mate` to place an occupant and dropped the rest, so a
     # part's optical-tx, power or cable point existed in the contract and in no
@@ -3252,6 +3261,14 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     **({"moves-with": common["moves-with"]} if common.get("moves-with") else {}),
                     **({"in": common["in"]} if common.get("in") else {})})
 
+    def motif_id(d):
+        """The id of the tile a `motif` rect draws: its cells and its pitch, hashed, so two rects
+        that state the same tile share one."""
+        canon = json.dumps({"cells": [[[float(v) for v in pt] for pt in cell] for cell in d["pattern-cells"]],
+                            "pitch": [float(v) for v in d["pattern-pitch"]]},
+                           sort_keys=True, separators=(",", ":"))
+        return "portrayal-motif-" + hashlib.sha256(canon.encode()).hexdigest()[:10]
+
     used_patterns = {d.get("pattern") for d in parts["decor"] if d.get("pattern")}
     if used_patterns:
         defs = ET.SubElement(svg, f"{{{SVG_NS}}}defs")
@@ -3330,6 +3347,30 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             gap = ET.SubElement(pat, f"{{{SVG_NS}}}rect")
             gap.set("x", "5.4"); gap.set("y", "0"); gap.set("width", "1.8"); gap.set("height", "6")
             gap.set("fill", "#6a7075")
+        # A MOTIF IS A TILE THE FACE DRAWS ITSELF. The fixed tiles above are one vendor's
+        # lattice each; a vent whose openings are slanted slots or alternating chevrons has
+        # none to borrow. `pattern-pitch` is the tile - there is no base tile to scale - and
+        # `pattern-cells` are its dark cells, in mm from its top-left corner. The schema
+        # cannot say that a point lies inside the tile, so it is refused here.
+        for i, d in enumerate(parts["decor"]):
+            if d.get("pattern") != "motif" or svg.find(f".//*[@id='{motif_id(d)}']") is not None:
+                continue
+            who = d.get("id") or f"decor {i} on this face"
+            if not d.get("pattern-cells") or not d.get("pattern-pitch"):
+                raise ValueError(f"{who}: pattern motif needs pattern-cells and pattern-pitch")
+            tw, th = (float(v) for v in d["pattern-pitch"])
+            for cell in d["pattern-cells"]:
+                for x, y in cell:
+                    if not (0 <= x <= tw and 0 <= y <= th):
+                        raise ValueError(f"{who}: pattern-cells point [{x:g}, {y:g}] lies outside "
+                                         f"the {tw:g} x {th:g} mm tile that pattern-pitch states")
+            pat = ET.SubElement(defs, f"{{{SVG_NS}}}pattern")
+            pat.set("id", motif_id(d)); pat.set("width", f"{tw:g}"); pat.set("height", f"{th:g}")
+            pat.set("patternUnits", "userSpaceOnUse")
+            for cell in d["pattern-cells"]:
+                cp = ET.SubElement(pat, f"{{{SVG_NS}}}path")
+                cp.set("d", "M " + " L ".join(f"{x:g} {y:g}" for x, y in cell) + " Z")
+                cp.set("fill", "#17191c")
     # DECOR USED TO LAND AS LOOSE, UNNAMED RECTS ON THE ROOT. Opening a
     # faceplate in an XML editor showed twenty anonymous rectangles above
     # everything that IS named, and the only way to find out whether one was a
@@ -3410,7 +3451,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # to this rect" has to mean once the tile is no longer 14 x 8.
             tile = (f"brush-{d.get('bristle') or 'vertical'}" if d.get("pattern") == "brush"
                     else d.get("pattern"))
-            if d.get("pattern") and (d.get("pattern-offset") or d.get("pattern-pitch")):
+            if d.get("pattern") == "motif":
+                # a motif's tile is its pitch, so the clone only shifts the phase: no scale
+                mid = motif_id(d)
+                if d.get("pattern-offset"):
+                    ox, oy = d["pattern-offset"]
+                    pid = f"{mid}-o{ox:g}-{oy:g}".replace(".", "_")
+                    if svg.find(f".//*[@id='{pid}']") is None:
+                        clone = ET.fromstring(ET.tostring(svg.find(f".//*[@id='{mid}']")))
+                        clone.set("id", pid)
+                        clone.set("patternTransform", f"translate({ox:g} {oy:g})")
+                        svg.find(f".//{{{SVG_NS}}}defs").append(clone)
+                    r.set("fill", f"url(#{pid})")
+                else:
+                    r.set("fill", f"url(#{mid})")
+            elif d.get("pattern") and (d.get("pattern-offset") or d.get("pattern-pitch")):
                 base = svg.find(f".//*[@id='portrayal-{tile}']")
                 ox, oy = d.get("pattern-offset") or (0.0, 0.0)
                 pw, ph = d.get("pattern-pitch") or (float(base.get("width")),
@@ -4057,6 +4112,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      z_group_lift=seat_lift,
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
+                                     build_airflow=airflow,
                                      resolved=resolved,
                                      # A SLOT ON A PLACED PART (B3): `port-1510/1`,
                                      # an adapter placed directly - and, since
@@ -4448,6 +4504,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                          inst_palette=inst_palette,
                                          centre=bay_centre,
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
+                                         build_airflow=airflow,
                                          path=f"{b['id']}/module", resolved=resolved,
                                          seated=config.get("bays"),
                                          bay_attrs=config.get("bay-attrs"),

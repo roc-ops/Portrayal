@@ -1147,9 +1147,22 @@
             "slots",
             "slots-h",
             "ribs",
-            "brush"
+            "brush",
+            "motif"
            ],
-           "description": "`brush` is a brush strip: bristles closing an opening that cables pass through. Unlike the other patterns it paints itself as a solid field - the bristles and the dark between them - so it needs no backing rect, and it is never an air aperture. In 3D it is opaque wherever it is drawn; on a sheet body give it `sink` for the depth of the plate it fills, and it is built as a slab there. Say which way the bristles run with `bristle`"
+           "description": "`brush` is a brush strip: bristles closing an opening that cables pass through. Unlike the other patterns it paints itself as a solid field - the bristles and the dark between them - so it needs no backing rect, and it is never an air aperture. In 3D it is opaque wherever it is drawn; on a sheet body give it `sink` for the depth of the plate it fills, and it is built as a slab there. Say which way the bristles run with `bristle`. `motif` is a tile the face draws itself, for a vent whose openings no fixed tile shows (slanted slots, chevrons): `pattern-cells` are its dark cells and `pattern-pitch` is its size"
+          },
+          "pattern-cells": {
+           "type": "array",
+           "minItems": 1,
+           "items": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+             "$ref": "#/$defs/xy"
+            }
+           },
+           "description": "with `pattern: motif`: the dark cells of ONE tile, each a closed polygon of three or more [x, y] points in mm, measured from the tile's top-left corner. Every point lies inside the tile `pattern-pitch` states, which the renderer checks. Each cell is filled with the dark of the `vent` pattern's cells and has no stroke. Measure one period of the vent from a held source"
           },
           "bristle": {
            "enum": [
@@ -1169,7 +1182,7 @@
           },
           "pattern-pitch": {
            "$ref": "#/$defs/xy",
-           "description": "this rect's pattern tile in mm, w x h. Without it the face gets the pattern's own tile - `slots-h` is 14 x 8, one vendor's louvre pitch - so a bezel with eight rows of louvres in 25mm could only be drawn with three. Pair it with `pattern-offset` to put the lattice's first cell on the rect's own corner"
+           "description": "this rect's pattern tile in mm, w x h. Without it the face gets the pattern's own tile - `slots-h` is 14 x 8, one vendor's louvre pitch - so a bezel with eight rows of louvres in 25mm could only be drawn with three. Pair it with `pattern-offset` to put the lattice's first cell on the rect's own corner. With `pattern: motif` it IS the tile, nothing is scaled, and it is required"
           },
           "id": {
            "type": "string",
@@ -1238,8 +1251,45 @@
          "dependentRequired": {
           "moves-with": [
            "id"
+          ],
+          "pattern-cells": [
+           "pattern"
           ]
-         }
+         },
+         "allOf": [
+          {
+           "if": {
+            "properties": {
+             "pattern": {
+              "const": "motif"
+             }
+            },
+            "required": [
+             "pattern"
+            ]
+           },
+           "then": {
+            "required": [
+             "pattern-cells",
+             "pattern-pitch"
+            ]
+           }
+          },
+          {
+           "if": {
+            "required": [
+             "pattern-cells"
+            ]
+           },
+           "then": {
+            "properties": {
+             "pattern": {
+              "const": "motif"
+             }
+            }
+           }
+          }
+         ]
         }
        },
        "cutouts": {
