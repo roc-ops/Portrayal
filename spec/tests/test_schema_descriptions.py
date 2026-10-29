@@ -34,7 +34,7 @@ import pytest
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SCHEMAS = ROOT / "spec/schemas"
 SHAPE = pathlib.Path(__file__).resolve().parent / "fixtures/schema-shape.json"
-NAMES = ("component", "device", "lab", "listing", "marks", "rack", "rack-product")
+NAMES = ("component", "device", "lab", "listing", "marks", "rack", "rack-product", "site")
 
 # The forms a description may not use. `#\d+\b` is an issue number; a hex
 # colour (`#c8cacc`, `#22262a`) has a letter in it and is not matched. `§`
