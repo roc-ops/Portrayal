@@ -6,3 +6,5 @@
   with rack ears in the box), both from MikroTik's dimensions drawings. The supplies and fans are part of the chassis, not
   bays, because no held document prints a part number for them. The CRS504-4XQ-IN and the CRS520-4XS-16XQ-RM are not in
   this batch.
+- A `chevrons` pattern for a decor vent field: a zigzag of V shapes in strokes, which the CRS518's top-edge vent is
+  drawn as. The CRS510's supply vents are drawn as slots and both devices' fans show a plain hub.

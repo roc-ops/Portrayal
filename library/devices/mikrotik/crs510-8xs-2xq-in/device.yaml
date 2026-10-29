@@ -70,6 +70,20 @@ provenance:
       above. RESET is a ring at 270.7 mm, 31.9 mm. The two-pin terminal block is 11.4 x 11.8 at 275.4
       mm and the DC jack housing 10.3 x 11.8 at 290.1 mm, both 24.8 mm down. Three lamps are small bars
       under the jacks at 267.1, 274.0 and 288.2 mm, 38.6 mm.
+  vent-slots:
+    confidence: estimated
+    note: >-
+      Each supply's vent is slots, as the drawing's front view and photograph 2232 show, not round perforations:
+      six tall slots (three across, two down) under the handle and a row of four short ones along the
+      top edge, the first of them left of the handle and three right of it. Read at the drawing page's
+      3.94 px per mm (the 320 mm body is 1261 px) to about 0.4 mm: a tall slot 3.8 mm wide and 7.6 mm
+      high (7.5 for the lower row) on a 5.0 mm pitch across and a 9.2 mm pitch down, the first 3.7 mm
+      in from the module's left edge and 20.0 mm and 29.2 mm down; a short slot 2.5 mm high, 5.2 mm down,
+      6.1 to 6.3 mm wide, at 11.0, 27.1, 34.6 and 41.9 mm from the module's left edge. The second supply
+      is the first at a 59.4 mm offset. Photograph 2232, at 8.74 px per mm, shows the same grid (slots
+      3.4 by 6.7 mm on a 5.0 and 8.4 mm pitch, the photograph looking slightly down on the face) and the
+      same four short slots. The photograph hints at a fourth tall column behind the handle (a sliver
+      shows at its right edge); the drawing shows nothing there, so none is drawn.
   lamps:
     confidence: estimated
     note: >-
@@ -112,8 +126,8 @@ provenance:
       inlets, as on juniper/ex2300-24t, and there are no bays (gap `hot-swap-supplies`). No document says
       what covers an empty slot. The photograph prints "100-240 V 50/60 Hz" up the left edge of the first
       module and PSU 1 and PSU 2 beside them. The brochure's 51 W is the box's maximum power consumption.
-      The rear photograph shows two fan openings; the brochure and the page give no fan count and no fan
-      statement.
+      The rear photograph shows two fan openings, each a ring of mesh round a plain hub about 19 mm across
+      (read at 5.3 px per mm); the brochure and the page give no fan count and no fan statement.
   rear-layout:
     confidence: photo-measured
     note: >-
@@ -298,8 +312,28 @@ views:
       decor:
       - {id: psu-1-module, kind: module-plate, at: [12.6, 2.1], size: [52.1, 38.5], fill: '#b9b9b9'}
       - {id: psu-2-module, kind: module-plate, at: [72.0, 2.1], size: [52.1, 38.5], fill: '#b9b9b9'}
-      - {id: psu-1-vent, kind: vent-field, at: [16.3, 19.9], size: [13.7, 16.6], pattern: vent, vent: 1.0}
-      - {id: psu-2-vent, kind: vent-field, at: [75.7, 19.9], size: [13.7, 16.6], pattern: vent, vent: 1.0}
+      - {id: psu-1-slot-a1, kind: vent-field, at: [16.3, 20.0], size: [3.8, 7.6], fill: '#17191c', vent: 1.0}
+      - {id: psu-1-slot-a2, kind: vent-field, at: [21.3, 20.0], size: [3.8, 7.6], fill: '#17191c', vent: 1.0}
+      - {id: psu-1-slot-a3, kind: vent-field, at: [26.3, 20.0], size: [3.8, 7.6], fill: '#17191c', vent: 1.0}
+      - {id: psu-1-slot-b1, kind: vent-field, at: [16.3, 29.2], size: [3.8, 7.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-1-slot-b2, kind: vent-field, at: [21.3, 29.2], size: [3.8, 7.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-1-slot-b3, kind: vent-field, at: [26.3, 29.2], size: [3.8, 7.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-1-slot-top-1, kind: vent-field, at: [23.6, 5.2], size: [6.3, 2.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-1-slot-top-2, kind: vent-field, at: [39.7, 5.2], size: [6.1, 2.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-1-slot-top-3, kind: vent-field, at: [47.2, 5.2], size: [6.1, 2.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-1-slot-top-4, kind: vent-field, at: [54.5, 5.2], size: [6.3, 2.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-2-slot-a1, kind: vent-field, at: [75.7, 20.0], size: [3.8, 7.6], fill: '#17191c', vent: 1.0}
+      - {id: psu-2-slot-a2, kind: vent-field, at: [80.7, 20.0], size: [3.8, 7.6], fill: '#17191c', vent: 1.0}
+      - {id: psu-2-slot-a3, kind: vent-field, at: [85.7, 20.0], size: [3.8, 7.6], fill: '#17191c', vent: 1.0}
+      - {id: psu-2-slot-b1, kind: vent-field, at: [75.7, 29.2], size: [3.8, 7.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-2-slot-b2, kind: vent-field, at: [80.7, 29.2], size: [3.8, 7.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-2-slot-b3, kind: vent-field, at: [85.7, 29.2], size: [3.8, 7.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-2-slot-top-1, kind: vent-field, at: [83.0, 5.2], size: [6.3, 2.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-2-slot-top-2, kind: vent-field, at: [99.1, 5.2], size: [6.1, 2.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-2-slot-top-3, kind: vent-field, at: [106.6, 5.2], size: [6.1, 2.5], fill: '#17191c',
+        vent: 1.0}
+      - {id: psu-2-slot-top-4, kind: vent-field, at: [113.9, 5.2], size: [6.3, 2.5], fill: '#17191c',
+        vent: 1.0}
       - {id: bar-25g, kind: group-bar, at: [142.6, 9.5], size: [2.0, 27.0], fill: '#c9c3e6'}
       - {id: bar-100g, kind: group-bar, at: [217.8, 9.5], size: [2.0, 27.0], fill: '#c9c3e6'}
       - {id: mgmt-block, kind: jack-plate, at: [248.2, 10.0], size: [17.6, 26.6], fill: '#c9c5c5'}
@@ -538,6 +572,8 @@ views:
       decor:
       - {id: fan-0, kind: fan-grille, at: [99.0, 5.0], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0}
       - {id: fan-1, kind: fan-grille, at: [140.5, 5.0], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0}
+      - {id: fan-hub-0, kind: fan-hub, at: [107.5, 13.5], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
+      - {id: fan-hub-1, kind: fan-hub, at: [149.0, 13.5], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
       - {id: earth-stud-base, kind: earth-stud, at: [8.3, 29.7], size: [8.0, 8.0], rx: 4.0, fill: '#b4b8bc'}
       - {id: earth-stud-nut, kind: earth-stud, at: [10.3, 31.7], size: [4.0, 4.0], rx: 2.0, fill: '#8d9298'}
     components:

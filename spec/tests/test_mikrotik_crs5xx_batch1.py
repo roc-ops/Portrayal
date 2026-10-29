@@ -137,6 +137,81 @@ def test_crs518_supplies_and_fans_are_part_of_the_chassis_with_no_part_number():
     assert p["power-max-w"] == 77 and p["power-without-attachments-w"] == 45
 
 
+def _decor(d, view):
+    return {x["id"]: x for x in d["views"][view]["panel"]["decor"]}
+
+
+def _render_decor(decor, w=443.0, h=44.0):
+    import re
+    from portrayal import render
+    view = {"size": {"w": w, "h": h}, "panel": {"decor": decor}}
+    dev = {"name": "f", "manufacturer": "F", "model": "F", "version": "0.1.0",
+           "chassis": {"width": w, "height": h, "depth": 100.0}, "views": {"front": view}}
+    out = render.render_view(dev, "front", view, render.Library([str(ROOT / "library")]), config={})
+    return out if isinstance(out, str) else render.ET.tostring(out, encoding="unicode")
+
+
+def test_crs518_front_vent_band_is_chevrons_along_the_top_edge():
+    """The drawing and photograph 2196 show a zigzag of V shapes, not perforations. Read off the drawing at 2.63 px
+    per mm (the 443 mm body is 1164 px): the band runs 2.3 to 440.3 mm, 2.7 to 9.5 mm down, one V every 16.7 mm
+    (autocorrelation of the ink, peak at 44 px), so 26 V shapes with a peak between each pair."""
+    d = load(CRS518)
+    band = _decor(d, "front")["vent-field"]
+    assert band["pattern"] == "chevrons" and band["vent"]
+    assert band["at"] == [2.3, 2.7] and band["size"] == [438.0, 6.8]
+    assert band["pattern-offset"] == band["at"]  # the first stroke starts at the band's left end, at the bottom
+    assert band["pattern-pitch"][0] == 16.7
+    assert round(band["size"][0] / band["pattern-pitch"][0]) == 26
+    svg = _render_decor([band])
+    import re
+    m = re.search(r'<rect id="vent-field"[^>]*fill="url\(#([^)]+)\)"', svg)
+    assert m and "chevrons" in m.group(1), svg[:600]
+    pat = re.search(rf'<pattern[^>]*id="{re.escape(m.group(1))}"[^>]*>(.*?)</pattern>', svg, re.S)
+    assert pat and "<path" in pat.group(1) and 'fill="none"' in pat.group(1)
+    assert 'data-aperture="air"' in svg  # still an opening, not paint
+
+
+@pytest.mark.parametrize("name, fans", [(CRS518, 4), (CRS510, 2)])
+def test_every_fan_opening_has_a_plain_hub_in_its_centre(name, fans):
+    """Photographs 2197 and 2233 show each fan as a ring of mesh round a plain hub, not a disc of mesh."""
+    decor = _decor(load(name), "rear")
+    for i in range(fans):
+        g, hub = decor[f"fan-{i}"], decor[f"fan-hub-{i}"]
+        centre = lambda x: (round(x["at"][0] + x["size"][0] / 2, 2), round(x["at"][1] + x["size"][1] / 2, 2))
+        assert centre(g) == centre(hub)
+        assert 0.4 <= hub["size"][0] / g["size"][0] <= 0.6
+        assert "pattern" not in hub and not hub.get("vent")
+
+
+def test_crs510_front_has_no_vent_band_along_the_top():
+    """The drawing's front view and photograph 2232 show a plain top edge: no chevrons on this box."""
+    d = load(CRS510)
+    assert not [x for x in d["views"]["front"]["panel"]["decor"]
+                if x.get("pattern") == "chevrons" or x["id"] == "vent-field"]
+
+
+@pytest.mark.parametrize("psu, left", [("psu-1", 12.6), ("psu-2", 72.0)])
+def test_crs510_supply_vent_is_slots_not_perforations(psu, left):
+    """Each supply shows six tall slots (three across, two down) and a row of four short ones along its top edge, in
+    the drawing's front view and in photograph 2232. Sizes are read off the drawing at 3.94 px per mm and are
+    estimates to about 0.4 mm; the photograph, at 8.74 px per mm, agrees on the count."""
+    d = load(CRS510)
+    decor = _decor(d, "front")
+    assert f"{psu}-vent" not in decor  # the round-perforation field is gone
+    tall = [decor[f"{psu}-slot-{r}{c}"] for r in "ab" for c in "123"]
+    short = [decor[f"{psu}-slot-top-{i}"] for i in range(1, 5)]
+    for s in tall + short:
+        assert s["kind"] == "vent-field" and s["vent"] and "pattern" not in s
+        assert left <= s["at"][0] and s["at"][0] + s["size"][0] <= left + 52.1
+    assert {tuple(s["size"]) for s in tall} == {(3.8, 7.6), (3.8, 7.5)}
+    xs = sorted({round(s["at"][0] - left, 2) for s in tall})
+    assert xs == [3.7, 8.7, 13.7]  # a 5.0 mm pitch
+    assert sorted({s["at"][1] for s in tall}) == [20.0, 29.2]
+    assert all(s["at"][1] < 12 and s["size"][1] == 2.5 for s in short)
+    lay = d["provenance"]["vent-slots"]
+    assert lay["confidence"] == "estimated"
+
+
 def test_crs518_walls():
     d = load(CRS518)
     assert [x["id"] for x in d["views"]["right"]["panel"]["decor"]] == ["side-vent"]

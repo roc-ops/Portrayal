@@ -67,7 +67,13 @@ provenance:
       and management jacks share a plate 18.0 x 26.7 at 250.2 mm, 10.2 mm, the console above. The RESET
       button is a ring at 272.7 mm, 32.1 mm. The USB bezel is 8.5 x 15.8 at 277.3 mm, 21.2 mm, standing
       upright. The four status lamps are a column of rings at 290.6 mm, 17.6, 22.5, 27.5 and 32.4 mm.
-      The vent along the top edge is the band of chevrons the drawing draws from end to end, 7.5 mm high.
+      The vent along the top edge is the zigzag of V shapes the drawing and photograph 2196 show. Measured
+      on the drawing page at 2.6275 px per mm (the 443 mm body is 1164 px across, 542 to 1706): ink from
+      2.3 to 440.3 mm across and 2.7 to 9.5 mm down from the top edge, one V every 16.7 mm (the ink profile
+      repeats every 44 px, with a peak between each pair of Vs), so 26 V shapes across the band, each
+      stroke about 2 mm wide. The first stroke rises from the bottom at the left end. The rear's four
+      fan openings each show a plain hub about half the opening's width, read off photograph 2197 (about
+      19 mm).
   lamps:
     confidence: estimated
     note: >-
@@ -274,7 +280,8 @@ views:
       decor:
       - {id: mgmt-block, kind: jack-plate, at: [250.2, 10.2], size: [18.0, 26.7], fill: '#c9c5c5'}
       - {id: usb-bezel, kind: usb-bezel, at: [277.3, 21.2], size: [8.5, 15.8], rx: 1.6, fill: '#2b2b2b'}
-      - {id: vent-field, kind: vent-field, at: [4.0, 1.2], size: [435.0, 7.5], pattern: vent, vent: 1.0}
+      - {id: vent-field, kind: vent-field, at: [2.3, 2.7], size: [438.0, 6.8], pattern: chevrons, vent: 1.0,
+        pattern-offset: [2.3, 2.7], pattern-pitch: [16.7, 6.8]}
       cutouts:
       - {id: qsfp-1, at: [18.5, 26.2], size: [20.0, 10.15], shape: rect}
       - {id: qsfp-2, at: [44.5, 26.2], size: [20.0, 10.15], shape: rect}
@@ -617,6 +624,10 @@ views:
       - {id: fan-1, kind: fan-grille, at: [242.9, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0}
       - {id: fan-2, kind: fan-grille, at: [313.5, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0}
       - {id: fan-3, kind: fan-grille, at: [374.8, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0}
+      - {id: fan-hub-0, kind: fan-hub, at: [182.3, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#b9b9b9'}
+      - {id: fan-hub-1, kind: fan-hub, at: [252.4, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#b9b9b9'}
+      - {id: fan-hub-2, kind: fan-hub, at: [323.0, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#b9b9b9'}
+      - {id: fan-hub-3, kind: fan-hub, at: [384.3, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#b9b9b9'}
       cutouts:
       - {id: ac-inlet-1, at: [36.2, 11.5], size: [28.0, 20.0], shape: rect}
       - {id: ac-inlet-2, at: [99.1, 11.5], size: [28.0, 20.0], shape: rect}
