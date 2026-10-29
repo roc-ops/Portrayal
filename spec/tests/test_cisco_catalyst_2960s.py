@@ -90,7 +90,7 @@ def test_48fpd_rear_has_the_flexstack_slot_seating_its_blank_by_default():
     d = device("ws-c2960s-48fpd")
     b = bays(d)
     assert set(b) == {"flexstack-slot"}
-    assert b["flexstack-slot"]["accepts"] == [BLANK]
+    assert b["flexstack-slot"]["accepts"] == [BLANK, "cisco/c2960s-stack@1"]
     assert b["flexstack-slot"]["default"] == BLANK
 
 
@@ -286,6 +286,236 @@ def test_48fpd_unmeasurable_faces_are_empty():
     d = device("ws-c2960s-48fpd")
     for face in ("top", "bottom", "left", "right"):
         assert d["views"][face].get("empty"), face
+
+
+# --- the second look: plates, bar, silver, MODE button, marks, labels, fan, bay and the module -----------
+#
+# Every figure below is read from a held source at a stated scale: the NetBox 48FPD-L front stencil at
+# 11.345 px per mm (5475 px over 482.6 mm, the chassis starting 216 px in) and the NetBox rear photograph
+# of the WS-C2960S-48LPD-L at 3.41 px per mm. The three stencils agree on every value used here.
+
+STENCIL_PLATE_X = [22.65, 112.03, 201.41, 290.79]
+STENCIL_OUTLINE_X = [20.66, 110.06, 199.46, 288.86]
+
+
+def order(d, view):
+    return [x["id"] for x in d["views"][view]["panel"].get("decor") or [] if x.get("id")]
+
+
+def silk_ids(d, view):
+    return {s["id"]: s for s in d["views"][view].get("silkscreen") or [] if s.get("id")}
+
+
+def test_48fpd_jack_plates_are_the_stencils_silver_inside_a_white_ring_and_a_dark_channel():
+    """Plate #efefef (23316 px), bar #dcdcdc (31850 px), ring #ffffff (1800 px) on the 48FPD-L stencil."""
+    dc = decor(device("ws-c2960s-48fpd"), "front")
+    for n in range(1, 5):
+        ring, chan, plate, bar = (dc[f"jack-{k}-{n}"] for k in ("ring", "channel", "plate", "bar"))
+        assert ring["at"] == [STENCIL_OUTLINE_X[n - 1], 10.9] and ring["size"] == [89.2, 27.6]
+        assert ring["fill"] == "#ffffff" and ring["kind"] == "jack-plate"
+        assert chan["fill"] == "#404040"
+        assert plate["kind"] == "jack-plate" and plate["fill"] == "#efefef"
+        assert plate["at"] == [STENCIL_PLATE_X[n - 1], 12.87] and plate["size"] == [85.5, 23.89]
+        assert bar["fill"] == "#dcdcdc" and bar["at"] == [STENCIL_PLATE_X[n - 1], 22.92] and bar["size"] == [85.5, 3.7]
+
+
+def test_48fpd_plates_are_painted_above_the_charcoal_and_under_the_outlines_and_the_jacks():
+    d = device("ws-c2960s-48fpd")
+    o = order(d, "front")
+    for n in range(1, 5):
+        seq = [o.index(f"jack-{k}-{n}") for k in ("ring", "channel", "plate", "bar")]
+        assert seq == sorted(seq) and seq[-1] < o.index(f"jack-block-outline-{n}")
+    # the decor layer is painted before the cutouts and the placed jacks, which the renderer keeps in that order
+    assert o.index("lamp-block") < o.index("jack-ring-1")
+
+
+def test_48fpd_mode_button_is_the_stencils_teal_rounded_button_with_its_black_rim():
+    """Interior #255e6d (1375 px, box 330,435,385,460), rim #020404 (90 px, box 315,430,318,460); 85 x 62 px."""
+    dc = decor(device("ws-c2960s-48fpd"), "front")
+    rim, b = dc["mode-button-rim"], dc["mode-button"]
+    assert rim["at"] == [8.73, 36.32] and rim["size"] == [7.5, 5.46] and rim["rx"] == 1.8 and rim["fill"] == "#020404"
+    assert b["at"] == [8.99, 36.58] and b["size"] == [6.88, 4.76] and b["fill"] == "#255e6d"
+    assert list(dc).index("mode-button-rim") < list(dc).index("mode-button"), "the rim is under the teal"
+
+
+def test_48fpd_usb_a_and_sfp_cages_are_drawn_silver_as_surrounds_the_parts_leave_visible():
+    """USB-A shell #7b7b7b (7675 px), cage frames #cfcfcf (1423 px each); the parts' own skins are not edited."""
+    d = device("ws-c2960s-48fpd")
+    dc = decor(d, "front")
+    assert dc["usb-shell"]["fill"] == "#7b7b7b" and dc["usb-shell"]["at"] == [380.96, 6.52]
+    assert dc["sfp-frame-1"]["fill"] == "#cfcfcf" and dc["sfp-frame-2"]["fill"] == "#cfcfcf"
+    assert dc["sfp-frame-1"]["at"] == [379.9, 27.3] and dc["sfp-frame-2"]["at"] == [409.87, 27.3]
+    o = order(d, "front")
+    assert o.index("usb-shell") > o.index("usb-surround") and o.index("sfp-frame-1") < o.index("sfp-outline-1")
+    p = by_id(d, "front")
+    assert p["port-49"]["ref"] == "std/sfp@1" and p["usb-a"]["ref"] == "std/usb-a@1"
+    assert "sfp-collar-silver" in gaps(d)
+
+
+def test_48fpd_ticks_are_a_yellow_band_with_a_motif_of_gaps_at_the_stencils_pitch():
+    """47 ticks a block, 5 px (0.44 mm) wide on a 20.41 px (1.799 mm) pitch, from 481 px, 444 to 471 px tall."""
+    dc = decor(device("ws-c2960s-48fpd"), "front")
+    for n in range(1, 5):
+        band, gap = dc[f"tick-band-{n}"], dc[f"tick-gaps-{n}"]
+        assert band["fill"] == "#ffff99" and band["size"] == [83.2, 2.37]
+        assert gap["pattern"] == "motif" and gap["pattern-pitch"] == [1.8, 2.37] and gap["size"] == band["size"]
+        assert gap["at"] == band["at"]
+    assert dc["tick-band-1"]["at"] == [23.36, 39.13]
+
+
+def test_48fpd_corner_marks_are_left_and_the_gap_says_why():
+    """The jack part paints the corner shoulders the marks sit on, and silkscreen lies under the parts."""
+    d = device("ws-c2960s-48fpd")
+    assert not [k for k in silk_ids(d, "front") if k.startswith("mark-")]
+    g = gaps(d)["front-text-and-corner-marks"]["wanted"]
+    assert "corner marks 1X to 48X" in g and "under the parts" in g
+
+
+def test_48fpd_poe_strip_text_is_drawn_and_740_w_is_left_because_it_is_unreadable_on_the_ticks():
+    d = device("ws-c2960s-48fpd")
+    dc = decor(d, "front")
+    assert dc["poe-label-box"]["fill"] == "#ffffff" and dc["poe-label-box"]["at"] == [26.97, 38.17]
+    s = silk_ids(d, "front")
+    assert [s[i]["text"] for i in ("silk-poe-power", "silk-poe-over", "silk-poe-ethernet")] == ["POWER", "OVER", "ETHERNET"]
+    assert not any("740" in str(v.get("text", "")) for v in s.values())
+    g = gaps(d)["front-text-and-corner-marks"]["wanted"]
+    assert "740 W" in g and "USB symbol" in g
+
+
+def test_48fpd_rear_warning_label_is_the_photographs_three_lines_and_triangle():
+    d = device("ws-c2960s-48fpd")
+    s = silk_ids(d, "rear")
+    lines = [s[f"silk-warning-{i}"] for i in (1, 2, 3)]
+    assert [x["text"] for x in lines] == ["DC INPUTS FOR REMOTE", "POWER SUPPLY", "SPECIFIED IN MANUAL"]
+    assert [x["at"] for x in lines] == [[322.2, 8.42], [322.2, 11.76], [322.2, 14.93]]
+    assert {x["fill"] for x in lines} == {"#cfd3d1"} and {x["anchor"] for x in lines} == {"middle"}
+    tri = s["warning-triangle"]
+    assert tri["at"] == [298.15, 7.6] and tri["fill"] == "#dce0e0" and tri["filled"] is False and tri["path"].startswith("M")
+
+
+def test_48fpd_rear_ratings_strip_and_rating_plate_carry_the_photographs_text_as_stand_ins():
+    d = device("ws-c2960s-48fpd")
+    s = silk_ids(d, "rear")
+    strip = [s[i]["text"] for i in ("silk-rps-12v", "silk-rps-48v", "silk-rps-78a")]
+    assert strip == ["+12V", "@11.25A, -48V", "@7.8A"]
+    assert "dc-symbol-1" in s and "dc-symbol-2" in s
+    assert {s[i]["fill"] for i in ("silk-rps-12v", "silk-rps-48v", "silk-rps-78a")} == {"#626661"}
+    plate = [s[i] for i in ("silk-rating-1", "silk-rating-2", "silk-rating-3")]
+    assert [x["text"] for x in plate] == ["RATING", "100-240V~", "8-4A, 50-60Hz"]
+    assert {x["fill"] for x in plate} == {"#414445"} and {x["at"][0] for x in plate} == {368.0}
+    for x in list(s.values()):
+        if x.get("text"):
+            assert x["font-size"] >= 1.5
+
+
+def test_48fpd_rear_label_gap_quotes_the_photograph_and_each_models_own_row():
+    g = gaps(device("ws-c2960s-48fpd"))["rear-label-text"]["wanted"]
+    for needle in ("NetBox photograph", "another model", "8-4A", "+12V", "11.25A", "7.8A", "9 to 4 A",
+                   "5 to 2 A", "1 to 0.5 A", "+12 V @ 3 A", "15 A", "12-6A", "estimated", "Table 1-2", "Table 1-3"):
+        assert needle in g, needle
+
+
+def test_48fpd_rear_label_provenance_marks_every_figure_estimated_with_file_box_count_and_median():
+    n = device("ws-c2960s-48fpd")["provenance"]["rear-labels"]
+    assert n["confidence"] == "estimated"
+    for needle in ("cisco-ws-c2960s-48lpd-l.rear.png", "(1043,20,1160,55)", "948", "#cfd3d1", "#626661", "#414445",
+                   "median", "stand-in"):
+        assert needle in n["note"], needle
+
+
+def test_48fpd_fan_exhaust_is_a_web_plate_under_the_vent_field_with_the_photographs_light_edges():
+    d = device("ws-c2960s-48fpd")
+    dc = decor(d, "rear")
+    plate = dc["fan-exhaust-plate"]
+    assert plate["kind"] == "fan-exhaust-plate" and plate["at"] == [158.1, 13.2] and plate["size"] == [52.5, 27.3]
+    assert plate["fill"] == "#404345"
+    assert order(d, "rear").index("fan-exhaust-plate") < order(d, "rear").index("fan-exhaust")
+    fan = dc["fan-exhaust"]
+    assert fan["pattern"] == "vent" and fan["pattern-pitch"] == [17.72, 10.22] and fan["size"] == [52.5, 27.3]
+    assert dc["fan-edge-top"]["fill"] == "#b9bcba" and dc["fan-edge-top"]["at"] == [158.1, 12.0]
+    assert dc["fan-edge-bottom"]["fill"] == "#b9bcba" and dc["fan-edge-bottom"]["at"][1] == 40.5
+    note = d["provenance"]["rear"]["note"]
+    assert "crisp" in note and "cairosvg" in note and "#404345" in note and "#040507" in note
+
+
+def test_48fpd_flexstack_bay_corners_overpaint_the_seam_so_no_rectangle_shows():
+    """The corner fills reach 0.4 mm past the box so the bay's dark opening cannot show as a hairline."""
+    import re
+    skin = (COMPONENTS / "c2960s-flexstack-blank/v1/skins/default.svg").read_text()
+    fill = re.search(r'<g id="rear-plate-fill"[^>]*>(.*?)</g>', skin, re.S).group(1)
+    corners = [[float(n) for n in re.findall(r"-?\d+(?:\.\d+)?", d)] for d in re.findall(r' d="([^"]+)"', fill)]
+    assert len(corners) == 2
+    upper_right, lower_left = corners
+    assert max(upper_right[0::2]) >= 103.7 and min(upper_right[1::2]) <= -0.4
+    assert min(lower_left[0::2]) <= -0.4 and max(lower_left[1::2]) >= 39.4
+    assert path_points(skin, "plate") == BLANK_OUTLINE, "the outline is the owner's answer A and does not change"
+    bay = bays(device("ws-c2960s-48fpd"))["flexstack-slot"]
+    assert bay["at"] == [2.6, 1.8] and bay["size"] == {"w": 103.3, "h": 39.0}
+
+
+# --- the C2960S-STACK FlexStack module, its own part -----------------------------------------------------
+
+STACK = "cisco/c2960s-stack@1"
+
+
+def test_flexstack_module_is_one_new_component_with_the_printed_part_number():
+    c = component("c2960s-stack")
+    assert c["version"] == "1.0.0" and c["kind"] == "module"
+    assert c["part-numbers"] == {"C2960S-STACK": {"part": "C2960S-STACK"}}
+    assert "model" not in c["attrs"], "a part with part-numbers carries its name there (lint L1)"
+    assert "PDF p29" in c["provenance"]["part-number"] and "1-5" in c["provenance"]["part-number"]
+
+
+def test_flexstack_module_has_the_covers_outline_and_size_so_it_fits_the_bay():
+    skin = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
+    assert path_points(skin, "plate") == BLANK_OUTLINE
+    c = component("c2960s-stack")
+    assert c["size"] == {"w": 103.3, "h": 39.0, "d": 3.0}
+    assert c["relief"]["features"][0]["node"] == "plate" and c["relief"]["features"][0]["shape"] is True
+    b = bays(device("ws-c2960s-48fpd"))["flexstack-slot"]
+    assert (c["size"]["w"], c["size"]["h"]) == (b["size"]["w"], b["size"]["h"])
+
+
+def test_flexstack_module_has_two_stack_ports_declared_as_port_elements():
+    c = component("c2960s-stack")
+    ports_ = {k: v for k, v in c["elements"].items() if v["class"] == "port"}
+    assert set(ports_) == {"stack-1", "stack-2"}
+    skin = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
+    assert ">STACK 1<" in skin and ">STACK 2<" in skin and ">C2960S-STACK<" in skin
+    assert 'id="stack-1"' in skin and 'id="stack-2"' in skin
+
+
+def test_flexstack_module_logo_is_a_reserved_region_and_not_drawn():
+    c = component("c2960s-stack")
+    assert "logo-zone" in c["provenance"]["logo"] and "not drawn" in c["provenance"]["logo"].lower()
+    assert c["elements"]["logo-zone"]["class"] == "logo-zone"
+    skin = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
+    assert "cisco" not in skin.lower().replace("c2960s-stack", "")
+
+
+def test_flexstack_module_colours_equal_their_photograph_samples():
+    c = component("c2960s-stack")
+    skin = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
+    for colour in ("#393e41", "#344a54", "#171615", "#a29886", "#2b3f45", "#b3b8bb", "#a1a5a8"):
+        assert colour in skin, colour
+    note = c["provenance"]["colour"]
+    for needle in ("(80,60,140,120)", "3600", "#393e41", "2478", "#171615", "960", "#a29886", "606", "#2b3f45",
+                   "median", "estimated"):
+        assert needle in note, needle
+
+
+@pytest.mark.parametrize("name", ["ws-c2960s-48fpd"])
+def test_every_stacking_models_bay_accepts_the_blank_and_the_module_and_defaults_to_the_blank(name):
+    """Table 1-1 (PDF p3, printed 1-1) marks the model with footnote 1, 'Support Cisco FlexStack technology'."""
+    b = bays(device(name))["flexstack-slot"]
+    assert b["accepts"] == [BLANK, STACK] and b["default"] == BLANK
+
+
+def test_48fpd_has_a_configuration_that_seats_the_module_and_the_default_still_seats_the_blank():
+    cfg = device("ws-c2960s-48fpd")["configurations"]
+    assert cfg["with-flexstack-module"]["kind"] == "example"
+    assert cfg["with-flexstack-module"]["bays"] == {"flexstack-slot": STACK}
+    assert cfg["ws-c2960s-48fpd-l"]["bays"] == {"flexstack-slot": BLANK}
 
 
 def test_48fpd_exports_one_device_type_per_orderable_part_number():

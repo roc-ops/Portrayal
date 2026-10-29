@@ -1,0 +1,88 @@
+format: 1
+kind: module
+name: c2960s-stack
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  The Cisco C2960S-STACK FlexStack module of the Catalyst 2960-S switches. It slides into the FlexStack module slot on
+  the rear panel in place of the blank cover and has two stacking ports, STACK 1 and STACK 2, that take the FlexStack
+  cables. It is hot-swappable and held by a captive screw on each side. A teal-blue frame with the stepped outline of
+  the slot round a dark face, the maker's mark at the top left and the model name at the top right.
+size: {w: 103.3, h: 39.0, d: 3.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+part-numbers:
+  C2960S-STACK: {part: C2960S-STACK}
+attrs:
+  role: 'flexstack-module'
+  hot-swappable: 'yes (the guide: inserted while the switch is powered on)'
+  stack-cables: 'CAB-STK-E-0.5M=, CAB-STK-E-1M=, CAB-STK-E-3M= (the guide, PDF p29, printed 1-5)'
+provenance:
+  part-number: >-
+    datasheet. The Catalyst 2960-S Switch Hardware Installation Guide (OL-19732-04) says "Install the FlexStack module
+    and the FlexStack cable. You can order them from your Cisco sales representative: C2960S-STACK=." (PDF p29, printed
+    1-5; the trailing "=" is Cisco's mark for an ordered spare), and the photographed module prints "C2960S-STACK". The
+    part number carried is the printed one. The guide states no weight, depth or power draw for the module, so none is
+    carried. URL https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst2960/hardware/installation/guide_stack/2960SHIG.pdf
+  stacking: >-
+    datasheet. Table 1-1 (PDF p3, printed 1-1) marks the WS-C2960S-48FPD-L, -48LPD-L, -24PD-L, -48TD-L and -24TD-L
+    with footnote 1, "Support Cisco FlexStack technology", so each of the five has the slot and accepts the module.
+    "FlexStack Ports" (PDF p21, printed 1-19): the stacking-capable models support stacking with the optional stack
+    kit, the hot-swappable module and a 0.5-meter FlexStack cable. "Installing the FlexStack Module" (PDF p31, printed
+    1-7): remove the blank cover with a flat-blade screwdriver, push the module in until it snaps, and tighten the
+    screws on each side finger-tight.
+  size: >-
+    estimated. The module fills the slot, so it has the outline and the size of the blank cover, which is the frame of
+    this module as measured off the community NetBox rear elevation of the WS-C2960S-48LPD-L (a photograph, 1516 x 150
+    px, 3.41 px per mm from the 444.5 mm width: 1516 / 444.5 = 3.41): 103.3 x 39.0 mm with the eight corners (0, 0),
+    (92.4, 0), (92.7, 21.1), (103.3, 31.7), (103.3, 39.0), (10.9, 39.0), (10.9, 19.3) and (0, 10.6). The depth is a
+    guess for the 3D view. Every position below is in mm from that box's top left, read off the same photograph at 3.41
+    px per mm from its pixel (9, 6): the pocket 19.0 x 26.7 at (40.8, 12.0), the two ports 16.5 x 9.0 at (41.9, 15.2)
+    and (41.9, 25.0), the two boxed legends 17.0 x 5.6 at (61.3, 15.5) and (61.3, 26.4), the model name at (74.5, 6.7),
+    and the three captive screws at the cover's own places (the same photograph).
+  colour: >-
+    estimated, each the median of plain pixels of the NetBox WS-C2960S-48LPD-L rear photograph
+    (cisco-ws-c2960s-48lpd-l.rear.png). Face #393e41: 3600 px, box (80,60,140,120). Frame #344a54, as the cover reads it
+    (a lit bevel reads lighter: the top rim, box (30,5,360,12), 2310 px, reads #3e535c). Port openings #171615: the
+    pixels darker than 60 in box (152,58,208,124), 2478 px. Port shell and divider #a29886: the pixels of 110 or more in
+    the same box, 960 px. Pocket frame #2b3f45: the pixels between 30 and 90 in box (148,45,215,56), 606 px. Legend ink
+    #b3b8bb: the pixels over 150 in box (215,60,275,75), 240 px. Model-name ink #a1a5a8: the pixels over 150 in box
+    (260,20,310,30), 83 px. A photograph's colour depends on its lighting, and this photograph is another model's rear.
+  logo: >-
+    The maker's mark at the top left of the face is a logo and is NOT DRAWN. Its box, 19.7 x 10.8 mm at (15.8, 5.0), is
+    reserved as the `logo-zone` element and left empty, as the library's rule for every vendor mark. The plain model text
+    "C2960S-STACK" and the legends "STACK 1" and "STACK 2" are printed on the metal and are drawn.
+  ports: >-
+    estimated. The guide names two FlexStack ports on the module and no connector type, and the library has no part for
+    the FlexStack port, so the two ports are the contract's own `class: port` elements (the pattern the Juniper EX4500
+    Virtual Chassis module uses) and are drawn as the photograph shows them: a dark opening in a light shell.
+  relief: >-
+    The 3D body extrudes the skin's own `plate` outline (`shape: true`), as the blank cover does, so the slope and the
+    chamfer stand in 3D as they are drawn in 2D. The depth, 3.0 mm, is the same guess as the cover's.
+elements:
+  stack-1:
+    at: [41.9, 15.2]
+    size: [16.5, 9.0]
+    class: port
+    description: the FlexStack port printed STACK 1
+  stack-2:
+    at: [41.9, 25.0]
+    size: [16.5, 9.0]
+    class: port
+    description: the FlexStack port printed STACK 2
+  logo-zone: {at: [15.8, 5.0], size: [19.7, 10.8], class: logo-zone}
+relief:
+  wall: '#344a54'
+  features:
+    - node: plate
+      out: 3.0
+      shape: true
+      color: '#393e41'
+      confidence: estimated
+      source: >-
+        the module's thickness is a guess (provenance.size); the outline is the module frame's as photographed
+body:
+  depth: 3.0
+  color: '#393e41'
+skins: [default]
