@@ -275,6 +275,10 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # each is seated and each @1 stays for a saved rack, `superseded-by` the @2.
     for fan in ("jnp10004-fan2", "jnp10008-fan", "jnp10008-fan2", "jnp10008-fan3", "jnp10016-fan", "jnp10016-fan2"):
         kept[f"juniper/{fan}"] = [1, 2]
+    # common/led-rect and common/led-rect-sm: v1 stays for the devices that seat it; v2 rests
+    # unlit (lamps whose photographs show them dark).
+    kept["common/led-rect"] = [1, 2]
+    kept["common/led-rect-sm"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
         if name.startswith(("juniper/", "cisco/")):
