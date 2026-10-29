@@ -12,6 +12,7 @@ description: >-
   at the left end. Four of these fill one tray. Drawn once, in the horizontal attitude the ASR
   9910 shows; the ASR 9906's vertical shelf turns it.
 size: {w: 104.7, h: 40.6}
+size-confidence: {w: drawing, h: drawing}
 attrs:
   model: 'PWR-4.4KW-DC-V3'
   role: 'power-module'
@@ -61,8 +62,11 @@ provenance:
     p213), the same three-lamp legend as the AC module: Input ON continuously when the input voltage
     is present and within the correct range, BLINKING when out of range, OFF when none; Output ON
     when the module output voltage is present, BLINKING in a power limit or overcurrent condition;
-    Fault ON when a module failure has occurred. NO COLOUR IS STATED FOR ANY OF THE THREE, and none is
-    asserted. Positions are the stencil's lamp column at the module's left end (Input, Output,
+    Fault ON when a module failure has occurred. THE TEXT STATES ONE COLOUR: a note under the Input
+    row says that on the DC power tray the Power Input LED is solid green when both DC feeds are
+    valid and blinks green when only one is (so the tray has two DC feeds). It is written about the tray, so it is recorded and not set as this lamp's state colour.
+    The FIGURE draws the Input and Output lamps green and the Fault lamp red; that is a picture,
+    not a statement, and is recorded in the pull request's gaps. Positions are the stencil's lamp column at the module's left end (Input, Output,
     Fault from the top).
   colour: >-
     estimated - from the stencil master "ASR-9910 Rear", sampled on the module plate away from the
@@ -85,8 +89,9 @@ provenance:
     tray give 17,600 W (ASR 9906 only; no ASR 9910 figure). CONFLICTS, DECLARED: (a) Table 18 gives
     the input range as -40 to -72 VDC and Table 16 gives -40.5 to -72 VDC (-75 VDC for 5 ms); both
     are kept. (b) The tray's rear shows "A" and "B" feed connectors (Figure 70, PDF pp104-105), and
-    4730 W at -48 V is about 98.5 A against "49 A maximum", so the 49 A reads as per feed; no
-    sentence says so, and both readings are kept without choosing.
+    4730 W at -48 V is about 98.5 A against "49 A maximum", so the 49 A reads as per feed; the
+    Figure 204 note's "both DC feeds" supports two feeds but no sentence puts the 49 A on one, and
+    both readings are kept without choosing.
   body: >-
     NO `body:` BLOCK, AND NO `size.d`: no document gives a depth or a weight for this module, the
     same record the version 2 modules and the tray hold. Searched: the whole intake tree, the PDFs'
