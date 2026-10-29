@@ -1,0 +1,71 @@
+format: 1
+kind: component
+name: led-rect-sm
+version: 2.0.0
+class: led
+profile: networking
+description: >-
+  Small rectangular per-port LED - the rounded bar a dense port row carries one
+  of beside each cage, at roughly half the area of common/led-rect. The
+  proportions are led-rect's; only the size differs, the same way led-arrow-sm
+  is led-arrow at a port row's scale. Rests unlit grey where version 1 rested dark green.
+  In every other respect it is version 1, so a device moves from @1 to @2 by changing its ref.
+size: {w: 2.8, h: 1.6}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  measured off Cisco's Visio master "ASR-9903 Front", where the fixed board's
+  thirty-six per-port lamps are drawn as one rounded rectangle each, all
+  identical: the thirty-six read 2.80 or 2.81 by 1.60 mm in a chassis face
+  calibrated on the ASR 9903 data sheet's body. That is thirty-six readings of
+  one shape rather than one reading, which is why the figure is carried here as
+  a shared part instead of stretching common/led-rect's 4.6 x 2.6 to fit.
+provenance:
+  size: >-
+    drawing - see size-notes. The part is generic because the SHAPE is generic:
+    what the ASR 9903 contributes is a measured size for a bar lamp that several
+    dense port rows in this library already draw at a guess.
+  lamp-inset: >-
+    BORROWED FROM common/led-rect@1, in proportion rather than in millimetres.
+    That part insets its lamp 0.4 mm inside a 4.6 x 2.6 bezel - 8.7 percent of
+    the width and 15.4 of the height - and the same fractions on 2.8 x 1.6 give
+    0.24 and 0.25, rounded to 0.25 here. The ASR 9903 master draws the lamp as a
+    single rounded rectangle with no bezel around it, so the inset is NOT
+    measured; it is the library's existing lamp convention applied at a new size,
+    and it is flagged as such rather than presented as a reading of the artwork.
+  rest-colour: >-
+    #3a3938, the colour the lamp is drawn in when no state lights it (the fallback in
+    var(--led-color, ...)), confidence estimated. It is common/led-rect@2's rest colour, so a
+    face's bar lamps rest alike, and it was sampled from lamps of that part's size class in
+    two MikroTik product photographs, not from a lamp of this size. Median of the medians of 27
+    unlit lamps, taken in the middle of each lamp away from its bezel and highlights.
+    CCR2004-1G-12S+2XS, file 1937_hi_res.png: the 24 SFP+ ACT and 10G lamps, a 6 x 7 pixel box
+    each, 42 pixels per lamp and 1008 in all, median (58, 57, 56) with lamp medians from
+    (55, 54, 52) to (61, 60, 59). CRS510-8XS-2XQ-IN, file 2232_hi_res.png: the USER, FAULT and
+    POWER lamps, a 17 x 7 pixel box each, 119 pixels per lamp and 357 in all, median
+    (135, 134, 134) with lamp medians from (134, 133, 133) to (137, 136, 136). The median of all
+    27 lamp medians is (58, 57, 56). THE TWO PHOTOGRAPHS DISAGREE: the lamp medians span 55 to
+    137 in red, 54 to 136 in green and 52 to 136 in blue, and the two photographs' medians
+    differ by 77, and a photograph's colour depends on its lighting and white balance; it should
+    be looked at. common/led-dot@1 rests in #3a3f44 and is unchanged, and there is no
+    led-dot@2: the median differs from it by 0, 6 and 12 of 255, which with the photographs in
+    disagreement is not taken as evidence that it is wrong. A rest colour is not a lit colour:
+    version 2 names none, and every lit colour comes from a state class as in version 1.
+elements:
+  lamp:
+    at: [0.25, 0.25]
+    size: [2.3, 1.1]
+    class: led
+    states: ['off', 'on']
+relief:
+  features:
+    - node: lamp
+      dome: 0.2
+      confidence: estimated
+      source: >-
+        common/led-rect-sm@1's dome, unchanged: a version 2 changes the resting colour of the
+        lamp and nothing of its shape. That dome is common/led-rect@1's 0.3 scaled by this lamp's
+        0.6 of its area - a guess scaled from a guess, as that part says of its own.
+unplaced: >-
+  no device seats this major yet: it waits for a device whose photograph shows its small bar
+  lamps unlit.
+skins: [default]
