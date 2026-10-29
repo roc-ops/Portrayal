@@ -1,0 +1,967 @@
+format: 1
+kind: device
+name: ws-c2960s-24td
+version: 1.0.0
+maturity: modelled
+manufacturer: Cisco
+model: WS-C2960S-24TD-L
+aliases:
+- {name: Catalyst 2960S-24TD-L, kind: marketing}
+portfolio: {line: Catalyst, family: Catalyst 2960-S, series: Catalyst 2960-S FlexStack}
+description: >-
+  24x 10/100/1000 RJ-45 and 2x SFP+ uplink 1RU stackable access switch running LAN Base, without PoE.
+  The front carries the mode button and switch lamps at the left, two blocks of twelve jacks in two rows
+  at the right of the face, then the USB Type A port, the USB mini-Type B and RJ-45 console ports, the
+  Ethernet management port and the two SFP+ slots. The rear carries the FlexStack module slot with its
+  blank cover, the fan exhaust, the RPS connector and the AC inlet of the built-in supply. Ports number
+  1-24 and run DOWN each column - odd on the top row, even beneath it. The SFP+ pair follows the copper
+  ports.
+profile: networking
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      Catalyst 2960-S Switch Hardware Installation Guide, OL-19732-04, 82 pages (the PDF prints its number
+      and no date; Cisco URL https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst2960/hardware/installation/guide_stack/2960SHIG.pdf).
+      Pages below are PDF pages with the printed page after them. Table 1-1 (PDF p3-4, printed 1-1 to
+      1-2) lists the model; the appendix's Table 1-3 (PDF p64-65, printed 1-4 to 1-5) gives this model's
+      row; Figure 1-10 "Catalyst 2960-S Switch Rear Panel with Stacking Module Slot and RPS connector"
+      (PDF p19, printed 1-17) is the rear of the stacking models. The guide draws no front of this model:
+      Figure 1-1 "Catalyst 2960S-48FPD-L Front Panel" (PDF p4, printed 1-2) and Figure 1-2 "Catalyst 2960S-48TS-L
+      Front Panel" (PDF p5, printed 1-3) are 48-port siblings'. Community NetBox (second opinion only,
+      not Cisco's): the WS-C2960S-24TD-L device type. Its front elevation is not used: it prints "PoE+
+      10G" and a PoE lamp, which Table 1-1 does not give a model without PoE. No data sheet, no vendor
+      3D model, no photograph and no rear elevation of this model is held. The pages were read through
+      the PDF's text layer and the converted figures were viewed.
+  gate-1-front:
+    confidence: estimated
+    note: >-
+      No held document draws this model's front. Its jacks are the 24-port face of cisco/ws-c2960s-24pd
+      (two blocks of twelve at the right of the face, read from that model's own NetBox stencil at 11.345
+      px per mm) and its non-PoE lamps and legend are cisco/ws-c2960s-48td's (seven switch lamps and no
+      PoE lamp, read from that model's stencil), so the face joins two readings of siblings and carries
+      nothing PoE. The right-hand cluster (USB, console, management, SFP+) is the same on every stencil
+      checked. Every position is `estimated`: it is another model's reading, used because this model's
+      own Table 1-1 row names the same parts.
+  colour:
+    confidence: estimated
+    note: >-
+      No face of this model has a colour source of its own, so no housing colour is claimed. Front: the
+      NetBox front elevation of this model (cisco-ws-c2960s-24td-l.front.png, 5475 x 503 px) shows "PoE+
+      10G" and a PoE lamp that Table 1-1's non-PoE model lacks, and it is not byte-identical to the 24PD-L's
+      (it draws the jack blocks in white outlines where the 24PD-L's are yellow), so it is not read. Rear:
+      the NetBox rear photograph held is the WS-C2960S-48LPD-L's (cisco-ws-c2960s-48lpd-l.rear.png), whose
+      printed ratings, AC "8-4A" and RPS "+12V @11.25A, -48V @7.8A", match none of the five rows of spec
+      Tables 1-2 and 1-3, so it is another model's rear; its plain plate reads #3f4447 (median of 2000
+      px, box (440,15,520,40)), and a photograph's colour depends on its lighting. The nearest siblings'
+      stencils read a charcoal panel #404040 with a teal edge #255e6d, in a community artist's palette.
+      The guide names no housing colour and says nothing of a shared finish ("All the 24- and 48-port
+      switches have similar components", PDF p4, printed 1-2, is about components). So `chassis.color`
+      is left unset, which draws the library's default housing, and the `faceplate-colour` gap says so.
+      The silkscreen is inked white so that it reads on that housing; the teal edge is not drawn.
+  numbering:
+    confidence: drawing
+    note: >-
+      Ports run left to right from the far left, port 1 above port 2 in each pair (the note under Figure
+      1-3, PDF p5, printed 1-3, which is written for the 48-port models). The guide states the module
+      slot numbers (49 and 50) only for the 48-port models; this model's slots are numbered 25 and 26
+      after the copper ports and the number is a gap. Interface names are in the community NetBox device
+      type only: GigabitEthernet1/0/1 to 1/0/24 and FastEthernet0 for the management port.
+  jacks:
+    confidence: estimated
+    note: >-
+      Row 1 starts 11.72 mm down the face and row 2 at 26.71, 15.0 apart; the first jack at 202.86 mm
+      from the chassis side and the blocks 89.4 mm apart (6 x 13.97 plus a 5.58 gutter), as on the 24PD-L.
+      Upper-row jacks take the 180-degree rotation the 4948E's upper row takes.
+  controls-and-lamps:
+    confidence: estimated
+    note: >-
+      Seven switch lamps (SYST, RPS, MSTR, STAT, DPLX, SPED, STCK) stand in a column at 7.1 mm, pitched
+      2.53 mm, the Mode button below them (Figure 1-7, PDF p13, printed 1-11). The PoE lamp is "only on
+      switch models that support PoE", so none is placed. Port lamps are the two small arrows above each
+      column pair; their meaning depends on the selected mode (Table 1-9). The arrows by the console jacks
+      are the USB and RJ-45 console lamps (Table 1-10, PDF p18, printed 1-16).
+  legend:
+    confidence: estimated
+    note: >-
+      The legend "Catalyst 2960-S Series 10G" is the NetBox stencil text of the WS-C2960S-48TD-L, a non-PoE
+      model with two SFP+ slots. Figure 1-1 shows only "2960-S" under the console callout. It is carried
+      for this model from that stencil, which is community art and not this model's own document.
+  console:
+    confidence: drawing
+    note: >-
+      Figure 1-1 callouts 5 and 6 and "Management Ports" (Figure 1-5, PDF p9): the USB mini-Type B console
+      port and the RJ-45 console port are one console, and the USB port has priority when both are cabled
+      (Table 1-10). The management port is its own (callout 7).
+  power:
+    confidence: datasheet
+    note: >-
+      Spec Table 1-3, row Catalyst 2960S-24TD-L: AC input 100 to 240 VAC autoranging, 1 to 0.5 A, 50 to
+      60 Hz; DC input for the RPS 2300 +12 V @3 A (no -52 V line); power consumption 40 W, 136 BTUs per
+      hour (footnote 1: the power consumed internally by the switch at 120 VAC, 60 Hz); power rating 0.09
+      KVA. The switch has no PoE. The supply is built in: "The switch is powered through the internal
+      power supply" (AC Power Connector, PDF p22, printed 1-20), so it is part of the chassis and not
+      a bay.
+  inlet:
+    confidence: estimated
+    note: >-
+      The inlet is an IEC C14 appliance inlet, read from Figures 1-10 and 1-11 and from the serial-number
+      figure for this model (Figure 1-2 of the appendix, PDF p56), which draw a three-pin keyed inlet
+      at the right of the rear. The guide does not name the connector type; it says "Use the supplied
+      AC power cord" (PWR-CLP=, PDF p42, printed 1-18). Position: the figures agree with the PoE rear
+      to within the reading of an isometric drawing, so cisco/ws-c2960s-48fpd's position, read from the
+      NetBox 48LPD-L rear photograph, is used.
+  rear:
+    confidence: estimated
+    note: >-
+      The guide's rear of the stacking models is Figure 1-10 (callouts 1 FlexStack module slot and cover,
+      2 fan exhaust, 3 RPS connector, 4 AC power connector). This model's serial-number figure (Figure
+      1-2 of the appendix, PDF p56, printed 1-6) groups it with the 48TD-L and the TS models and draws
+      the rear with the fan exhaust, the RPS connector and the inlet where Figure 1-1's PoE group has
+      them, to within the reading of an isometric drawing (the fan reads a little further right), but
+      shows no cover or slot outline at the left. Table 1-1 footnote 1 says the model supports FlexStack,
+      and Figures 1-10 and 1-11 are the guide's rear for the stacking-capable switches, so the slot is
+      drawn with its blank cover at the PoE rear's position; the conflict is a gap. Positions are the
+      48FPD-L's, from the NetBox 48LPD-L rear photograph (a PoE model, 3.41 px per mm); the depth difference
+      does not change the rear face. Spec Table 1-3 lists a DC input for the RPS 2300 for this model,
+      so the RPS connector is present. The guide says "If you are not using an RPS with your switch, use
+      the two Phillips pan-head screws to attach the RPS connector cover" (Figure 1-15, PDF p39, printed
+      1-15), so the connector is drawn open, as the photograph shows it. It is chassis art and not a part:
+      no RPS 2300 connector is a registry part, and no `std/` header names it (the EPS12V, PCIe 8-pin
+      and 12V-2x6 headers are other connectors). Measured on the photograph at 3.41 px per mm: a metal
+      plate 72.8 x 22.6 mm at (285.0, 21.4) with a raised rating strip above it (49.2 x 3.8 mm at 297.7,
+      17.9), a black shroud 48.2 x 11.3 mm at (298.4, 24.0) holding a cream housing 46.9 x 9.7 mm, and
+      in it two rows of eleven cavities, 3.5 x 3.7 mm each, on a 4.17 mm pitch across and 4.03 mm between
+      the rows, with a screw hole at each end of the plate. Eleven across is what this model's serial-number
+      figure draws (PDF p56, printed 1-6, Figure 1-2) and the PoE figure too (PDF p55, printed 1-5); Figure
+      1-10 (PDF p19, printed 1-17) draws seven across in a smaller figure, and the photograph and the
+      two larger figures are followed. Measured along the rear's long edge in Figure 1-2, the fan reads
+      39 to 52 percent of the way across, the RPS plate 64 to 81 and the inlet 87 to 95; the PoE figure
+      reads 36 to 48, 64 to 81 and 88 to 96. The fan differs by about 3 percent (13 mm), which is inside
+      the reading of an isometric figure, so the PoE positions stand and no TD-only position is drawn.
+      The warning label above the plate ("DC inputs for remote power supply specified in manual", with
+      a triangle) is printed on the metal at (294.0, 5.9), 45.2 x 9.7 mm, and is drawn as an outline with
+      no text; the rating label beside the inlet is a plate 32.7 x 13.4 mm at (351.0, 6.1) whose text
+      is another model's and is not carried. The inlet sits in a moulded black surround 29.3 x 22.5 mm
+      at (387.6, 8.3). The fan exhaust is a honeycomb of hexagons about 9.7 x 8.5 mm on an 8.8 mm column
+      pitch (21 cells, flat-topped); the library's `vent` pattern is hexagonal and is the nearest of the
+      schema's patterns, scaled by 2.0 with `pattern-pitch` to that pitch. Three more pan-head screws,
+      6.8 mm across, stand at 111.4, 274.2 and 436.4 mm along and 28.7 mm down, centres (the fourth, at
+      7.3 mm, is on the cover). The FlexStack slot is the fitted module's stepped frame, 103.3 x 39.0
+      mm at (2.6, 1.8) (see the blank cover's contract). The faint stamped corner marks round the fan
+      and one small drilled hole are not drawn.
+  airflow:
+    confidence: estimated
+    note: >-
+      The guide names a fan exhaust on the rear panel, counts no fans and gives no direction; no airflow
+      is set and no fan redundancy is claimed.
+  ears-and-kits:
+    confidence: drawing
+    note: >-
+      Figure 1-12 (PDF p36, printed 1-12) "Attaching Brackets for 19-inch Racks": front-mounting, mid-mounting
+      and rear-mounting positions, with number-8 Phillips flat-head screws (48-0655-01); Figure 1-13 (PDF
+      p37, printed 1-13): number-12 Phillips pan-head screws (48-0523-01) for the rack and a black Phillips
+      machine screw (48-0654-01) for the cable guide. The text says four screws attach each bracket's
+      long side to the switch. The 19-inch brackets are in the box, so they are not a kit. No position
+      is dimensioned, so none carries an `at`. The ETSI bracket is printed "700-19781XX" (PDF p34, printed
+      1-10), with its revision digits unread: it is a gap and not a kit.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      No lifecycle date is carried. The end-of-sale notices are not held; only titles and list dates would
+      be, and this model's is not among them.
+attrs:
+  physical: {weight-note: '9.5 lb (4.30 kg), spec Table 1-3 row Catalyst 2960S-24TD-L'}
+  power: {power-input-ac: '100 to 240 VAC (autoranging), 1 to 0.5 A, 50 to 60 Hz', rps-input: +12 V @
+      3 A (RPS 2300), power-consumption-w: 40, heat-dissipation-btu-hr: 136, power-rating-kva: 0.09, power-envelope: unstated}
+  features:
+    sfp-plus-slots: >-
+      2 SFP+ module slots (numbered 25 and 26 here; the guide states no numbers for this model), 10 Gigabit;
+      the SFP+ slots also take 1 Gigabit SFP modules
+    optics-sfp-plus: >-
+      Table 1-3 Supported SFP+ Modules (PDF p12, printed 1-10), the row listing this model: SFP-10G-LR=,
+      SFP-10G-SR=, SFP-10G-LRM=, and SFP-H10GB-CU1M=, -CU3M= and -CU5M= twinax cables.
+    stacking: FlexStack, optional C2960S-STACK module in the rear slot
+  management:
+    console: >-
+      USB mini-Type B and RJ-45; the USB port has priority when both are connected (Table 1-10)
+chassis:
+  width: 444.5
+  height: 44.45
+  depth: 299.0
+  ru: 1
+  weight-kg: 4.3
+  silk: '#ffffff'
+  power: ac
+  ears:
+    positions:
+    - {name: flush, label: front-mounting position (Figures 1-12 and 1-13), default: true}
+    - {name: mid, label: mid-mounting position}
+    - {name: rear, label: rear-mounting position}
+gaps:
+- what: the-four-undrawn-faces
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    A flat drawing of the lid, the underside and the two side walls. The guide's figures show the lid
+    and one side isometrically (bracket screw holes and slots on the side); none can be measured. Each
+    carries an `empty:` sentence saying where I looked.
+- what: rps-connector-part
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    A part for the RPS connector. No registry part exists for an RPS 2300 connector and no `std/` header
+    names it, so it is drawn as chassis art: a plate, a shroud, a housing with two rows of eleven cavities,
+    two screw holes and a rating strip. It is drawn open. The guide says the cover (two Phillips pan-head
+    screws, Figure 1-15) goes on when no RPS is connected.
+- what: faceplate-colour
+  scope:
+  - front
+  - rear
+  reason: needs-photo
+  wanted: >-
+    This model's own front and rear in colour. Its NetBox front shows "PoE+ 10G" and a PoE lamp that Table
+    1-1's non-PoE model lacks, and the only NetBox rear photograph is another model's by its printed ratings
+    ("8-4A", "+12V @11.25A, -48V @7.8A" match none of the five rows of spec Tables 1-2 and 1-3). The guide
+    gives no housing colour and says nothing of a shared finish ("All the 24- and 48-port switches have
+    similar components" is about parts). The nearest siblings' stencils read a charcoal panel #404040
+    and a teal edge #255e6d. No colour is claimed: `chassis.color` is unset, so the library's default
+    housing is drawn on both faces, a stand-in the owner may accept or replace with a sibling's sample.
+- what: etsi-bracket
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    The ETSI mounting bracket, printed "700-19781XX" (PDF p34, printed 1-10). Its revision digits are
+    not read, and the guide gives no contents or install steps beyond Figure 1-10, so no kit contract
+    is written.
+- what: sfp-slot-numbers
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    The numbers of the two SFP+ slots on this 24-port model. The guide says "Module slot numbers are 49
+    and 50" under the 48-port figure only. They are numbered 25 and 26 here, after the copper ports.
+- what: flexstack-slot-on-the-td-rear
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    A drawing of this model's own rear. Table 1-1 footnote 1 says it supports FlexStack and Figures 1-10
+    and 1-11 give the stacking rear a cover, but its serial-number figure (Figure 1-2 of the appendix,
+    PDF p56, printed 1-6) draws no cover. That figure is captioned for models that do not stack too (the
+    2960S-48TS-S and -24TS-S), so it is not read as this model's own. The fan, RPS connector and inlet
+    read within 3 percent of the PoE rear's positions along the long edge, which is inside the reading
+    of an isometric figure, so they are placed as on the PoE rear, with the slot and its cover.
+- what: front-of-the-24td-itself
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    A flat drawing or photograph of this model's own front. Its only NetBox front shows a PoE legend and
+    lamp that Table 1-1 does not give it, so the face is two siblings' readings joined.
+- what: mode-button-part
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    The Mode button is drawn as plain panel art. No library part is a flush push button of this shape.
+- what: rear-label-text
+  scope:
+  - rear
+  reason: needs-photo
+  wanted: >-
+    The rating label text beside the inlet. The guide's drawings show "12-6A" and this model's row of
+    Table 1-3 reads 1 to 0.5 A, so no text is carried.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  mode-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the four port-mode lamps; the one lit says what each port lamp shows (Table 1-7)
+  leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the RJ-45 console port and the 10/100/1000 Ethernet management port at the right of the front: two
+      jobs, one purpose, reaching the switch when the data plane cannot
+  usb-console: {term: Port, role: management, index-origin: 1}
+  usb-storage: {term: Port, role: management, index-origin: 1}
+  power-input: {term: Inlet, role: service, index-origin: 0}
+  stack-slot: {term: Slot, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 444.5, h: 44.45}
+    panel:
+      decor:
+      - {id: number-strip-1, at: [202.86, 2.4], size: [83.82, 3.7], fill: '#f1e6a8'}
+      - {id: number-strip-2, at: [292.26, 2.4], size: [83.82, 3.7], fill: '#f1e6a8'}
+      - {id: mode-button, at: [9.6, 37.5], size: [6.4, 3.8], fill: '#2b2e31'}
+      cutouts:
+      - {id: port-1, at: [202.86, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-1, at: [205.31, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-2, at: [202.86, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-2, at: [211.01, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-3, at: [216.83, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-3, at: [219.28, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-4, at: [216.83, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-4, at: [224.98, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-5, at: [230.8, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-5, at: [233.25, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-6, at: [230.8, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-6, at: [238.95, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-7, at: [244.77, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-7, at: [247.22, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-8, at: [244.77, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-8, at: [252.92, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-9, at: [258.74, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-9, at: [261.19, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-10, at: [258.74, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-10, at: [266.89, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-11, at: [272.71, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-11, at: [275.16, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-12, at: [272.71, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-12, at: [280.86, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-13, at: [292.26, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-13, at: [294.71, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-14, at: [292.26, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-14, at: [300.41, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-15, at: [306.23, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-15, at: [308.68, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-16, at: [306.23, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-16, at: [314.38, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-17, at: [320.2, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-17, at: [322.65, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-18, at: [320.2, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-18, at: [328.35, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-19, at: [334.17, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-19, at: [336.62, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-20, at: [334.17, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-20, at: [342.32, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-21, at: [348.14, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-21, at: [350.59, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-22, at: [348.14, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-22, at: [356.29, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-23, at: [362.11, 11.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-23, at: [364.56, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: port-24, at: [362.11, 26.72], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-24, at: [370.26, 7.32], size: [2.25, 2.0], shape: circle}
+      - {id: usb-a, at: [381.25, 7.6], size: [4.5, 12.0], shape: rect}
+      - {id: console-usb, at: [390.65, 17.0], size: [7.7, 3.9], shape: rect}
+      - {id: led-port-25, at: [384.2, 23.0], size: [2.25, 2.0], shape: circle}
+      - {id: led-port-26, at: [413.9, 23.0], size: [2.25, 2.0], shape: circle}
+      - {id: led-console-usb, at: [391.4, 10.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-console-rj45, at: [396.0, 10.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-mgmt, at: [428.5, 23.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-system, at: [6.1, 12.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-rps, at: [6.1, 14.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-master, at: [6.1, 17.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-stat, at: [6.1, 19.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-duplx, at: [6.1, 22.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-speed, at: [6.1, 25.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-stack, at: [6.1, 27.6], size: [2.0, 2.0], shape: circle}
+      - {id: console, at: [404.05, 8.8], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt, at: [423.15, 8.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-25, at: [380.4, 27.4], size: [14.5, 10.0], shape: rect}
+      - {id: port-26, at: [410.5, 27.4], size: [14.5, 10.0], shape: rect}
+    silkscreen:
+    - {at: [206.46, 5.82], text: '1', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-1}
+    - {at: [211.86, 5.82], text: '2', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-2}
+    - {at: [220.43, 5.82], text: '3', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-3}
+    - {at: [225.83, 5.82], text: '4', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-4}
+    - {at: [234.4, 5.82], text: '5', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-5}
+    - {at: [239.8, 5.82], text: '6', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-6}
+    - {at: [248.37, 5.82], text: '7', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-7}
+    - {at: [253.77, 5.82], text: '8', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-8}
+    - {at: [262.34, 5.82], text: '9', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-9}
+    - {at: [267.74, 5.82], text: '10', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-10}
+    - {at: [276.31, 5.82], text: '11', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-11}
+    - {at: [281.71, 5.82], text: '12', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-12}
+    - {at: [295.86, 5.82], text: '13', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-13}
+    - {at: [301.26, 5.82], text: '14', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-14}
+    - {at: [309.83, 5.82], text: '15', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-15}
+    - {at: [315.23, 5.82], text: '16', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-16}
+    - {at: [323.8, 5.82], text: '17', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-17}
+    - {at: [329.2, 5.82], text: '18', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-18}
+    - {at: [337.77, 5.82], text: '19', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-19}
+    - {at: [343.17, 5.82], text: '20', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-20}
+    - {at: [351.74, 5.82], text: '21', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-21}
+    - {at: [357.14, 5.82], text: '22', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-22}
+    - {at: [365.71, 5.82], text: '23', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-23}
+    - {at: [371.11, 5.82], text: '24', font-size: 1.8, anchor: middle, fill: '#2b2e31', for: port-24}
+    - {id: silk-model, at: [416.0, 4.5], text: Catalyst 2960-S Series 10G, font-size: 2.9, anchor: middle,
+      fill: '#ffffff', for: chassis}
+    - {id: silk-console, at: [400.4, 7.4], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#ffffff',
+      for: console}
+    - {id: silk-sfp, at: [402.5, 41.1], text: SFP+, font-size: 1.9, anchor: middle, fill: '#ffffff', for: chassis}
+    - {id: silk-25, at: [387.65, 42.6], text: '1', font-size: 1.9, anchor: middle, fill: '#ffffff', for: port-25}
+    - {id: silk-26, at: [417.75, 42.6], text: '2', font-size: 1.9, anchor: middle, fill: '#ffffff', for: port-26}
+    - {id: silk-mode, at: [5.9, 40.0], text: MODE, font-size: 1.5, anchor: middle, fill: '#ffffff', for: chassis}
+    - {id: silk-syst, at: [10.0, 13.83], text: SYST, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-system}
+    - {id: silk-rps, at: [10.0, 16.43], text: RPS, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-rps}
+    - {id: silk-mstr, at: [10.0, 18.93], text: MSTR, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-master}
+    - {id: silk-stat, at: [10.0, 21.43], text: STAT, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-stat}
+    - {id: silk-dplx, at: [10.0, 23.93], text: DPLX, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-duplx}
+    - {id: silk-sped, at: [10.0, 26.53], text: SPED, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-speed}
+    - {id: silk-stck, at: [10.0, 29.13], text: STCK, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-stack}
+    components:
+      placements:
+      - {ref: std/rj45-ganged@2, id: port-1, at: [202.86, 11.72], rotate: 180, group: rj45, rel-pos: 1}
+      - {ref: std/rj45-ganged@2, id: port-2, at: [202.86, 26.72], group: rj45, rel-pos: 2}
+      - {ref: std/rj45-ganged@2, id: port-3, at: [216.83, 11.72], rotate: 180, group: rj45, rel-pos: 3}
+      - {ref: std/rj45-ganged@2, id: port-4, at: [216.83, 26.72], group: rj45, rel-pos: 4}
+      - {ref: std/rj45-ganged@2, id: port-5, at: [230.8, 11.72], rotate: 180, group: rj45, rel-pos: 5}
+      - {ref: std/rj45-ganged@2, id: port-6, at: [230.8, 26.72], group: rj45, rel-pos: 6}
+      - {ref: std/rj45-ganged@2, id: port-7, at: [244.77, 11.72], rotate: 180, group: rj45, rel-pos: 7}
+      - {ref: std/rj45-ganged@2, id: port-8, at: [244.77, 26.72], group: rj45, rel-pos: 8}
+      - {ref: std/rj45-ganged@2, id: port-9, at: [258.74, 11.72], rotate: 180, group: rj45, rel-pos: 9}
+      - {ref: std/rj45-ganged@2, id: port-10, at: [258.74, 26.72], group: rj45, rel-pos: 10}
+      - {ref: std/rj45-ganged@2, id: port-11, at: [272.71, 11.72], rotate: 180, group: rj45, rel-pos: 11}
+      - {ref: std/rj45-ganged@2, id: port-12, at: [272.71, 26.72], group: rj45, rel-pos: 12}
+      - {ref: std/rj45-ganged@2, id: port-13, at: [292.26, 11.72], rotate: 180, group: rj45, rel-pos: 13}
+      - {ref: std/rj45-ganged@2, id: port-14, at: [292.26, 26.72], group: rj45, rel-pos: 14}
+      - {ref: std/rj45-ganged@2, id: port-15, at: [306.23, 11.72], rotate: 180, group: rj45, rel-pos: 15}
+      - {ref: std/rj45-ganged@2, id: port-16, at: [306.23, 26.72], group: rj45, rel-pos: 16}
+      - {ref: std/rj45-ganged@2, id: port-17, at: [320.2, 11.72], rotate: 180, group: rj45, rel-pos: 17}
+      - {ref: std/rj45-ganged@2, id: port-18, at: [320.2, 26.72], group: rj45, rel-pos: 18}
+      - {ref: std/rj45-ganged@2, id: port-19, at: [334.17, 11.72], rotate: 180, group: rj45, rel-pos: 19}
+      - {ref: std/rj45-ganged@2, id: port-20, at: [334.17, 26.72], group: rj45, rel-pos: 20}
+      - {ref: std/rj45-ganged@2, id: port-21, at: [348.14, 11.72], rotate: 180, group: rj45, rel-pos: 21}
+      - {ref: std/rj45-ganged@2, id: port-22, at: [348.14, 26.72], group: rj45, rel-pos: 22}
+      - {ref: std/rj45-ganged@2, id: port-23, at: [362.11, 11.72], rotate: 180, group: rj45, rel-pos: 23}
+      - {ref: std/rj45-ganged@2, id: port-24, at: [362.11, 26.72], group: rj45, rel-pos: 24}
+      - ref: common/led-arrow-sm@1
+        id: led-port-1
+        at: [205.31, 7.32]
+        skin: up
+        states: &id001
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: activity, color: '#22c55e', behavior: blinking}
+        - {name: blocked, color: '#f59e0b'}
+        - {name: fault, color: '#f59e0b', behavior: blinking}
+        for: port-1
+        group: port-leds
+        rel-pos: 1
+      - ref: common/led-arrow-sm@1
+        id: led-port-2
+        at: [211.01, 7.32]
+        skin: down
+        states: *id001
+        for: port-2
+        group: port-leds
+        rel-pos: 2
+      - ref: common/led-arrow-sm@1
+        id: led-port-3
+        at: [219.28, 7.32]
+        skin: up
+        states: *id001
+        for: port-3
+        group: port-leds
+        rel-pos: 3
+      - ref: common/led-arrow-sm@1
+        id: led-port-4
+        at: [224.98, 7.32]
+        skin: down
+        states: *id001
+        for: port-4
+        group: port-leds
+        rel-pos: 4
+      - ref: common/led-arrow-sm@1
+        id: led-port-5
+        at: [233.25, 7.32]
+        skin: up
+        states: *id001
+        for: port-5
+        group: port-leds
+        rel-pos: 5
+      - ref: common/led-arrow-sm@1
+        id: led-port-6
+        at: [238.95, 7.32]
+        skin: down
+        states: *id001
+        for: port-6
+        group: port-leds
+        rel-pos: 6
+      - ref: common/led-arrow-sm@1
+        id: led-port-7
+        at: [247.22, 7.32]
+        skin: up
+        states: *id001
+        for: port-7
+        group: port-leds
+        rel-pos: 7
+      - ref: common/led-arrow-sm@1
+        id: led-port-8
+        at: [252.92, 7.32]
+        skin: down
+        states: *id001
+        for: port-8
+        group: port-leds
+        rel-pos: 8
+      - ref: common/led-arrow-sm@1
+        id: led-port-9
+        at: [261.19, 7.32]
+        skin: up
+        states: *id001
+        for: port-9
+        group: port-leds
+        rel-pos: 9
+      - ref: common/led-arrow-sm@1
+        id: led-port-10
+        at: [266.89, 7.32]
+        skin: down
+        states: *id001
+        for: port-10
+        group: port-leds
+        rel-pos: 10
+      - ref: common/led-arrow-sm@1
+        id: led-port-11
+        at: [275.16, 7.32]
+        skin: up
+        states: *id001
+        for: port-11
+        group: port-leds
+        rel-pos: 11
+      - ref: common/led-arrow-sm@1
+        id: led-port-12
+        at: [280.86, 7.32]
+        skin: down
+        states: *id001
+        for: port-12
+        group: port-leds
+        rel-pos: 12
+      - ref: common/led-arrow-sm@1
+        id: led-port-13
+        at: [294.71, 7.32]
+        skin: up
+        states: *id001
+        for: port-13
+        group: port-leds
+        rel-pos: 13
+      - ref: common/led-arrow-sm@1
+        id: led-port-14
+        at: [300.41, 7.32]
+        skin: down
+        states: *id001
+        for: port-14
+        group: port-leds
+        rel-pos: 14
+      - ref: common/led-arrow-sm@1
+        id: led-port-15
+        at: [308.68, 7.32]
+        skin: up
+        states: *id001
+        for: port-15
+        group: port-leds
+        rel-pos: 15
+      - ref: common/led-arrow-sm@1
+        id: led-port-16
+        at: [314.38, 7.32]
+        skin: down
+        states: *id001
+        for: port-16
+        group: port-leds
+        rel-pos: 16
+      - ref: common/led-arrow-sm@1
+        id: led-port-17
+        at: [322.65, 7.32]
+        skin: up
+        states: *id001
+        for: port-17
+        group: port-leds
+        rel-pos: 17
+      - ref: common/led-arrow-sm@1
+        id: led-port-18
+        at: [328.35, 7.32]
+        skin: down
+        states: *id001
+        for: port-18
+        group: port-leds
+        rel-pos: 18
+      - ref: common/led-arrow-sm@1
+        id: led-port-19
+        at: [336.62, 7.32]
+        skin: up
+        states: *id001
+        for: port-19
+        group: port-leds
+        rel-pos: 19
+      - ref: common/led-arrow-sm@1
+        id: led-port-20
+        at: [342.32, 7.32]
+        skin: down
+        states: *id001
+        for: port-20
+        group: port-leds
+        rel-pos: 20
+      - ref: common/led-arrow-sm@1
+        id: led-port-21
+        at: [350.59, 7.32]
+        skin: up
+        states: *id001
+        for: port-21
+        group: port-leds
+        rel-pos: 21
+      - ref: common/led-arrow-sm@1
+        id: led-port-22
+        at: [356.29, 7.32]
+        skin: down
+        states: *id001
+        for: port-22
+        group: port-leds
+        rel-pos: 22
+      - ref: common/led-arrow-sm@1
+        id: led-port-23
+        at: [364.56, 7.32]
+        skin: up
+        states: *id001
+        for: port-23
+        group: port-leds
+        rel-pos: 23
+      - ref: common/led-arrow-sm@1
+        id: led-port-24
+        at: [370.26, 7.32]
+        skin: down
+        states: *id001
+        for: port-24
+        group: port-leds
+        rel-pos: 24
+      - {ref: std/sfp@1, id: port-25, at: [380.4, 27.4], group: sfp-plus, rel-pos: 1}
+      - {ref: std/sfp@1, id: port-26, at: [410.5, 27.4], group: sfp-plus, rel-pos: 2}
+      - ref: common/led-arrow-sm@1
+        id: led-port-25
+        at: [384.2, 23.0]
+        skin: down
+        group: port-leds
+        rel-pos: 25
+        for: port-25
+        states:
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: blocked, color: '#f59e0b'}
+      - ref: common/led-arrow-sm@1
+        id: led-port-26
+        at: [413.9, 23.0]
+        skin: down
+        group: port-leds
+        rel-pos: 26
+        for: port-26
+        states:
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: blocked, color: '#f59e0b'}
+      - ref: std/usb-a@1
+        id: usb-a
+        at: [377.5, 11.35]
+        rotate: 90
+        skin: usb2
+        group: usb-storage
+        rel-pos: 1
+        attrs: {role: storage}
+      - ref: std/mini-usb@1
+        id: console-usb
+        at: [390.65, 17.0]
+        group: usb-console
+        rel-pos: 1
+        attrs: {role: console}
+      - ref: std/rj45-ganged@2
+        id: console
+        at: [404.05, 8.8]
+        rotate: 180
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: std/rj45-ganged@2
+        id: mgmt
+        at: [423.15, 8.8]
+        rotate: 180
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+      - ref: common/led-dot@1
+        id: led-console-usb
+        at: [391.4, 10.1]
+        group: leds
+        rel-pos: 6
+        for: console-usb
+        states:
+        - 'off'
+        - {name: active, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-console-rj45
+        at: [396.0, 10.1]
+        group: leds
+        rel-pos: 7
+        for: console
+        states:
+        - 'off'
+        - {name: active, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-mgmt
+        at: [428.5, 23.4]
+        group: leds
+        rel-pos: 8
+        for: mgmt
+        states:
+        - 'off'
+        - {name: link, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-system
+        at: [6.1, 12.3]
+        group: leds
+        rel-pos: 1
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-rps
+        at: [6.1, 14.9]
+        group: leds
+        rel-pos: 2
+        for: chassis
+        states:
+        - 'off'
+        - {name: backup-ready, color: '#22c55e'}
+        - {name: unavailable, color: '#22c55e', behavior: blinking}
+        - {name: standby-or-fault, color: '#f59e0b'}
+        - {name: powering-switch, color: '#f59e0b', behavior: blinking}
+      - ref: common/led-dot@1
+        id: led-master
+        at: [6.1, 17.4]
+        group: leds
+        rel-pos: 3
+        for: chassis
+        states:
+        - 'off'
+        - {name: master, color: '#22c55e'}
+        - {name: stack-error, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-stat
+        at: [6.1, 19.9]
+        group: mode-leds
+        rel-pos: 1
+        for: chassis
+        states:
+        - 'off'
+        - {name: selected, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-duplx
+        at: [6.1, 22.4]
+        group: mode-leds
+        rel-pos: 2
+        for: chassis
+        states:
+        - 'off'
+        - {name: selected, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-speed
+        at: [6.1, 25.0]
+        group: mode-leds
+        rel-pos: 3
+        for: chassis
+        states:
+        - 'off'
+        - {name: selected, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-stack
+        at: [6.1, 27.6]
+        group: mode-leds
+        rel-pos: 4
+        for: chassis
+        states:
+        - 'off'
+        - {name: selected, color: '#22c55e'}
+    regions:
+    - id: logo-zone
+      at: [4.7, 4.2]
+      size: {w: 9.8, h: 6.0}
+      label: Vendor logo; not drawn
+    - id: downlinks
+      at: [201.0, 2.0]
+      size: {w: 175.0, h: 36.5}
+      label: 24 x 10/100/1000 RJ-45
+      members:
+      - port-1
+      - port-2
+      - port-3
+      - port-4
+      - port-5
+      - port-6
+      - port-7
+      - port-8
+      - port-9
+      - port-10
+      - port-11
+      - port-12
+      - port-13
+      - port-14
+      - port-15
+      - port-16
+      - port-17
+      - port-18
+      - port-19
+      - port-20
+      - port-21
+      - port-22
+      - port-23
+      - port-24
+    - id: uplinks
+      at: [379.4, 22.0]
+      size: {w: 46.5, h: 16.0}
+      label: 2 x SFP+
+      members:
+      - port-25
+      - port-26
+    - id: out-of-band
+      at: [376.8, 6.6]
+      size: {w: 60.0, h: 18.0}
+      label: USB, console and management
+      members:
+      - usb-a
+      - console-usb
+      - console
+      - mgmt
+    - id: switch-leds
+      at: [5.0, 11.5]
+      size: {w: 12.0, h: 18.5}
+      label: Switch lamps and port-mode lamps
+      members:
+      - led-system
+      - led-rps
+      - led-master
+      - led-stat
+      - led-duplx
+      - led-speed
+      - led-stack
+  rear:
+    size: {w: 444.5, h: 44.45}
+    panel:
+      decor:
+      - {id: fan-exhaust, kind: fan-grille, at: [158.1, 13.2], size: [52.5, 27.3], pattern: vent, vent: 1.0,
+        pattern-pitch: [17.72, 10.22], pattern-offset: [161.8, 21.9]}
+      - {id: rps-plate, kind: bracket, at: [285.0, 21.4], size: [72.8, 22.6], rx: 0.6, fill: '#b3b7b4'}
+      - {id: rps-rating-strip, kind: label-plate, at: [297.7, 17.9], size: [49.2, 3.8], rx: 0.4, fill: '#b3b7b4'}
+      - {id: rps-shroud, kind: shroud, at: [298.4, 24.0], size: [48.2, 11.3], rx: 0.5, fill: '#141717'}
+      - {id: rps-housing, kind: housing, at: [299.1, 25.1], size: [46.9, 9.7], rx: 0.3, fill: '#e9ebe1'}
+      - {id: rps-pin-1-1, kind: pin-cavity, at: [299.85, 26.1], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-2, kind: pin-cavity, at: [304.02, 26.1], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-3, kind: pin-cavity, at: [308.19, 26.1], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-4, kind: pin-cavity, at: [312.36, 26.1], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-5, kind: pin-cavity, at: [316.53, 26.1], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-6, kind: pin-cavity, at: [320.7, 26.1], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-7, kind: pin-cavity, at: [324.87, 26.1], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-8, kind: pin-cavity, at: [329.04, 26.1], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-9, kind: pin-cavity, at: [333.21, 26.1], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-10, kind: pin-cavity, at: [337.38, 26.1], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-1-11, kind: pin-cavity, at: [341.55, 26.1], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-1, kind: pin-cavity, at: [299.85, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-2, kind: pin-cavity, at: [304.02, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-3, kind: pin-cavity, at: [308.19, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-4, kind: pin-cavity, at: [312.36, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-5, kind: pin-cavity, at: [316.53, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-6, kind: pin-cavity, at: [320.7, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-7, kind: pin-cavity, at: [324.87, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-8, kind: pin-cavity, at: [329.04, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-9, kind: pin-cavity, at: [333.21, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-10, kind: pin-cavity, at: [337.38, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-pin-2-11, kind: pin-cavity, at: [341.55, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-screw-l, kind: screw-hole, at: [293.3, 28.4], size: [2.8, 2.8], shape: slot, fill: '#141717'}
+      - {id: rps-screw-r, kind: screw-hole, at: [348.8, 28.4], size: [2.8, 2.8], shape: slot, fill: '#141717'}
+      - {id: warning-label, kind: label-print, at: [294.0, 5.9], size: [45.2, 9.7], rx: 0.4, stroke: '#ffffff',
+        stroke-width: 0.2}
+      - {id: rating-label, kind: label-plate, at: [351.0, 6.1], size: [32.7, 13.4], rx: 0.6, fill: '#a5aba7'}
+      - {id: inlet-surround, kind: moulding, at: [387.6, 8.3], size: [29.3, 22.5], rx: 3.5, fill: '#111113'}
+      - {id: rear-screw-1, kind: screw, at: [108.0, 25.3], size: [6.8, 6.8], shape: slot, fill: '#c2cfce'}
+      - {id: rear-screw-2, kind: screw, at: [270.8, 25.3], size: [6.8, 6.8], shape: slot, fill: '#c2cfce'}
+      - {id: rear-screw-3, kind: screw, at: [433.0, 25.3], size: [6.8, 6.8], shape: slot, fill: '#c2cfce'}
+      cutouts:
+      - {id: ac-inlet, at: [388.4, 9.1], size: [28.0, 20.0], shape: rect}
+    components:
+      bays:
+      - id: flexstack-slot
+        at: [2.6, 1.8]
+        size: {w: 103.3, h: 39.0}
+        group: stack-slot
+        rel-pos: 1
+        accepts:
+        - cisco/c2960s-flexstack-blank@1
+        default: cisco/c2960s-flexstack-blank@1
+      placements:
+      - {ref: std/c14-inlet@1, id: ac-inlet, at: [388.4, 9.1], group: power-input, rel-pos: 0}
+    regions:
+    - id: stacking
+      at: [1.8, 1.0]
+      size: {w: 104.9, h: 40.6}
+      label: FlexStack module slot
+      members:
+      - flexstack-slot
+    - id: power
+      at: [387.0, 8.0]
+      size: {w: 31.0, h: 22.0}
+      label: AC power connector
+      members:
+      - ac-inlet
+  top:
+    size: {w: 444.5, h: 299.0}
+    empty: >-
+      Not drawn flat by any held source. The guide's figures show the lid only isometrically, plain, and
+      the NetBox elevations are front and rear only.
+  bottom:
+    size: {w: 444.5, h: 299.0}
+    empty: >-
+      Not drawn by any held source. Neither the guide nor the NetBox elevations picture the underside.
+  left:
+    size: {w: 299.0, h: 44.45}
+    empty: >-
+      Not drawn flat by any held source. The guide's figures show one side wall isometrically with bracket
+      screw holes and slots and say nothing of the other.
+  right:
+    size: {w: 299.0, h: 44.45}
+    empty: >-
+      Not drawn flat by any held source. The guide's figures show one side wall isometrically; none can
+      be measured.
+interfaces:
+- {physical: 'port-{n}', name: 'GigabitEthernet1/0/{n}', range: 1-24}
+- {physical: port-25, name: TenGigabitEthernet1/0/1}
+- {physical: port-26, name: TenGigabitEthernet1/0/2}
+- {physical: mgmt, name: FastEthernet0}
+configurations:
+  ac:
+    kind: base
+    description: >-
+      The switch as it runs: the built-in AC supply and the blank cover over the FlexStack module slot.
+      The C2960S-STACK module is optional (PDF p21, printed 1-19) and is not seated here.
+    default: true
+  ws-c2960s-24td-l:
+    kind: orderable
+    description: >-
+      WS-C2960S-24TD-L, the model's only SKU (Table 1-1, LAN Base, no PoE). It seats the blank cover in
+      the FlexStack slot: the stack kit is a separate, optional part (PDF p21, printed 1-19) and the cover
+      is removed only to fit the module (PDF p31).
+    part-numbers:
+      WS-C2960S-24TD-L: {}
+    bays: {flexstack-slot: cisco/c2960s-flexstack-blank@1}
+references:
+- title: Catalyst 2960-S Switch Hardware Installation Guide (OL-19732-04)
+- title: 'NetBox community device-type library: Cisco WS-C2960S-24TD-L device type'
