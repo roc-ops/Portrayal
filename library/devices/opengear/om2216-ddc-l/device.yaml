@@ -1,0 +1,186 @@
+format: 1
+kind: device
+name: om2216-ddc-l
+version: 0.1.0
+maturity: modelled
+manufacturer: Opengear
+model: OM2216-DDC-L
+description: >-
+  Opengear OM2216-DDC-L Operations Manager. A 1RU network management
+  appliance with 16 RJ45 RS-232 managed serial ports, cellular connectivity,
+  and dual DC power inputs.
+
+profile: networking
+lint:
+  waive:
+    L61: >-
+      The serial-port numerals 1 through 16 retain their measured positions from
+      the text-bearing shapes in the official Opengear OM2216-L Visio front master.
+      The numerals are printed across the two-row RJ45 block rather than centred on
+      individual Portrayal jack components. Moving them to component centres would
+      no longer match the vendor reference.
+
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Opengear OM2200 Data Sheet and OM2200 Quick Start Guide. The data
+      sheet provides the OM2216 port count, physical dimensions, form factor,
+      network interfaces, USB interfaces and dual DC power specifications.
+      The Quick Start Guide identifies the hardware arrangement for the OM2200
+      family, states that DDC models use dual DC power, describes the cellular
+      interfaces on -L models, and lists the separate OM2200 rack ears.
+
+  chassis:
+    confidence: datasheet
+    note: >-
+      OM2200 Data Sheet: physical dimensions are 17.25 x 10.25 x 1.75 in
+      and form factor is 1RU. Converted dimensions are 438.15 x 260.35 x
+      44.45 mm. The data sheet separately lists Rack Mount Kit 590037 and
+      the Quick Start Guide lists two OM2200 rack ears, so the published
+      17.25 inch width is used here as the appliance body width. No
+      dimensioned mechanical drawing is held.
+
+  serial-ports:
+    confidence: datasheet
+    note: >-
+      OM2200 Data Sheet: OM2216 has 16 RJ45 RS-232 software-selectable
+      straight or rollover pinout console management ports.
+
+  power:
+    confidence: datasheet
+    note: >-
+      OM2200 Data Sheet: dual DC power inputs are +/-40 V to 72 V DC,
+      1.5 A to 0.75 A x2, with 48 V nominal. The OM2200 Quick Start Guide
+      states that DDC models have a dual DC power supply.
+
+  cellular:
+    confidence: datasheet
+    note: >-
+      The OM2200 Data Sheet lists OM2216-L with Global 4G LTE. The Quick
+      Start Guide states that -L models connect antennas to CELL (MAIN)
+      and CELL (AUX), and describes the SIM card slots.
+
+  front-ports:
+    confidence: estimated
+    note: >-
+      Official Opengear OM2216 and OM2216-L Visio stencils show sixteen RJ45 ports in two rows of eight. Positions use stencil proportions applied to the datasheet body dimensions. The stencil aspect differs from the datasheet by about 1.8 percent, so absolute stencil scale is not used. Column pitch measured approximately 13.89 to 14.11 mm and Portrayal std/rj45-ganged@2 uses 13.97 mm. Port numbering 1 through 16 is verified from the text-bearing shapes in the official Opengear OM2216-L Visio front master.
+  front-usb:
+    confidence: estimated
+    note: >-
+      Official Opengear OM2216-L Visio stencil shows two vertically arranged USB-A features. The Quick Start Guide identifies two front USB ports and states the front USB slots are USB 3.0. Positions use stencil proportions applied to the datasheet body dimensions.
+
+chassis:
+  width: 438.15
+  height: 44.45
+  depth: 260.35
+  ru: 1
+  power: dc
+
+
+gaps:
+- what: rack-ears
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    Rack Mount Kit 590037 and two OM2200 rack ears are documented, but
+    the held sources do not dimension their geometry or mounting position.
+  wanted: A dimensioned drawing of the OM2200 rack ears and mounting position.
+
+
+groups:
+  serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial}
+    description: 16 RJ45 RS-232 managed serial ports arranged as a 2 x 8 block.
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: 'the front-panel management interfaces: RJ45 console, Ethernet network-management ports and USB-A host ports'
+    description: front-panel local console, network-management and USB host interfaces.
+
+views:
+  front:
+    size: {w: 438.15, h: 44.45}
+    silkscreen:
+      - {at: [10.13, 4.84], text: '1', font-size: 1.4, anchor: middle, for: serial-upper-1}
+      - {at: [15.36, 4.84], text: '2', font-size: 1.4, anchor: middle, for: serial-lower-1}
+      - {at: [24.95, 4.84], text: '3', font-size: 1.4, anchor: middle, for: serial-upper-2}
+      - {at: [30.30, 4.84], text: '4', font-size: 1.4, anchor: middle, for: serial-lower-2}
+      - {at: [38.91, 4.84], text: '5', font-size: 1.4, anchor: middle, for: serial-upper-3}
+      - {at: [44.26, 4.84], text: '6', font-size: 1.4, anchor: middle, for: serial-lower-3}
+      - {at: [53.11, 4.84], text: '7', font-size: 1.4, anchor: middle, for: serial-upper-4}
+      - {at: [58.10, 4.84], text: '8', font-size: 1.4, anchor: middle, for: serial-lower-4}
+      - {at: [66.74, 4.84], text: '9', font-size: 1.4, anchor: middle, for: serial-upper-5}
+      - {at: [71.86, 4.84], text: '10', font-size: 1.4, anchor: middle, for: serial-lower-5}
+      - {at: [80.22, 4.84], text: '11', font-size: 1.4, anchor: middle, for: serial-upper-6}
+      - {at: [85.97, 4.84], text: '12', font-size: 1.4, anchor: middle, for: serial-lower-6}
+      - {at: [94.59, 4.84], text: '13', font-size: 1.4, anchor: middle, for: serial-upper-7}
+      - {at: [100.33, 4.84], text: '14', font-size: 1.4, anchor: middle, for: serial-lower-7}
+      - {at: [109.24, 4.84], text: '15', font-size: 1.4, anchor: middle, for: serial-upper-8}
+      - {at: [114.99, 4.84], text: '16', font-size: 1.4, anchor: middle, for: serial-lower-8}
+      - {at: [369.92, 2.73], text: CONSOLE, font-size: 1.4, anchor: middle, for: console-rj45}
+      - {at: [358.25, 4.36], text: RJ45, font-size: 1.4, anchor: middle, for: console-rj45}
+      - {at: [380.32, 4.36], text: USB, font-size: 1.4, anchor: middle, for: [usb-front-upper, usb-front-lower]}
+      - {at: [387.99, 8.04], text: "NET 1 (S)", font-size: 1.2, anchor: middle, for: net-1-s}
+      - {at: [387.97, 38.22], text: "NET 2 (S)", font-size: 1.2, anchor: middle, for: net-2-s}
+      - {at: [406.05, 8.12], text: "NET 1 (C)", font-size: 1.2, anchor: middle, for: net-1-c}
+      - {at: [406.05, 38.31], text: "NET 2 (C)", font-size: 1.2, anchor: middle, for: net-2-c}
+      - {at: [433.36, 38.22], text: ERASE, font-size: 1.2, anchor: middle, for: erase}
+    components:
+      placements:
+      - {ref: 'std/rj45@2', id: console-rj45, at: [362.02, 5.47], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+      - {ref: 'std/usb-a@1', id: usb-front-upper, at: [363.81, 22.09], group: mgmt, rel-pos: 2, attrs: {media: usb-a}}
+      - {ref: 'std/usb-a@1', id: usb-front-lower, at: [363.81, 30.64], group: mgmt, rel-pos: 3, attrs: {media: usb-a}}
+      - {ref: 'common/rj45-eth@1', id: net-1-s, at: [380.09, 9.27], rotate: 180, group: mgmt, rel-pos: 4, attrs: {media: rj45, speed: 1g}}
+      - {ref: 'common/rj45-eth@1', id: net-2-s, at: [380.07, 23.49], group: mgmt, rel-pos: 5, attrs: {media: rj45, speed: 1g}}
+      - {ref: 'common/rj45-eth@1', id: net-1-c, at: [398.20, 8.91], rotate: 180, group: mgmt, rel-pos: 6, attrs: {media: rj45, speed: 1g}}
+      - {ref: 'common/rj45-eth@1', id: net-2-c, at: [398.20, 23.94], group: mgmt, rel-pos: 7, attrs: {media: rj45, speed: 1g}}
+      - {ref: 'common/reset-button@1', id: erase, at: [431.30, 32.61], group: mgmt, rel-pos: 8, for: chassis}
+      - {ref: 'std/rj45-ganged@2', id: serial-upper-1, at: [4.33, 9.27], rotate: 180, group: serial, rel-pos: 1, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-lower-1, at: [4.33, 26.83], group: serial, rel-pos: 2, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-upper-2, at: [18.34, 9.27], rotate: 180, group: serial, rel-pos: 3, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-lower-2, at: [18.34, 26.83], group: serial, rel-pos: 4, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-upper-3, at: [32.50, 9.27], rotate: 180, group: serial, rel-pos: 5, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-lower-3, at: [32.50, 26.83], group: serial, rel-pos: 6, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-upper-4, at: [46.46, 9.27], rotate: 180, group: serial, rel-pos: 7, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-lower-4, at: [46.46, 26.83], group: serial, rel-pos: 8, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-upper-5, at: [60.43, 9.27], rotate: 180, group: serial, rel-pos: 9, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-lower-5, at: [60.43, 26.83], group: serial, rel-pos: 10, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-upper-6, at: [74.39, 9.27], rotate: 180, group: serial, rel-pos: 11, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-lower-6, at: [74.39, 26.83], group: serial, rel-pos: 12, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-upper-7, at: [88.55, 9.27], rotate: 180, group: serial, rel-pos: 13, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-lower-7, at: [88.55, 26.83], group: serial, rel-pos: 14, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-upper-8, at: [102.56, 9.27], rotate: 180, group: serial, rel-pos: 15, attrs: {media: rj45-serial}}
+      - {ref: 'std/rj45-ganged@2', id: serial-lower-8, at: [102.56, 26.83], group: serial, rel-pos: 16, attrs: {media: rj45-serial}}
+  rear:
+    size: {w: 438.15, h: 44.45}
+    empty: >-
+      The rear is not drawn in this draft. The Quick Start Guide documents
+      the DDC and cellular hardware for OM2200 variants, but the held sources
+      do not provide sufficient dimensioned geometry for the exact
+      OM2216-DDC-L rear-panel placement.
+
+  top:
+    size: {w: 438.15, h: 260.35}
+    empty: >-
+      No held source provides a dimensioned straight-on top view.
+
+  bottom:
+    size: {w: 438.15, h: 260.35}
+    empty: >-
+      No held source provides a dimensioned straight-on bottom view.
+
+  left:
+    size: {w: 260.35, h: 44.45}
+    empty: >-
+      No held source provides a dimensioned straight-on left-side view.
+
+  right:
+    size: {w: 260.35, h: 44.45}
+    empty: >-
+      No held source provides a dimensioned straight-on right-side view.
