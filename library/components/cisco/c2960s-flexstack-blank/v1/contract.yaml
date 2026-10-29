@@ -7,9 +7,9 @@ behaviour: fills
 profile: networking
 description: >-
   The blank cover over the FlexStack module slot on the rear of a stacking-capable Catalyst 2960-S. A
-  plain plate with a captive screw at two opposite corners, removed only to fit the FlexStack module
-  (C2960S-STACK).
-size: {w: 96.8, h: 39.4, d: 3.0}
+  plate with the module's stepped outline (a slope at the lower right and a chamfer at the left) and a
+  captive screw at the top left and the bottom right, removed only to fit the FlexStack module (C2960S-STACK).
+size: {w: 103.3, h: 39.0, d: 3.0}
 size-confidence: {w: estimated, h: estimated, d: estimated}
 attrs:
   model: 'FlexStack slot blank cover'
@@ -21,14 +21,40 @@ provenance:
     shows it removed in "Removing the Blank Cover" (PDF p31, printed 1-7). No part number is held for it,
     so it carries none.
   size: >-
-    estimated. The plate fills the slot the FlexStack module sits in. The slot's outline is read off the
-    community NetBox rear elevation of the WS-C2960S-48LPD-L (a photograph with a C2960S-STACK module
-    fitted, 1516 x 150 px, 3.41 px per mm from the 444.5 mm width): 96.8 x 39.4 mm, left edge 4.4 mm
-    from the chassis side. The guide's Figure 1-10 shows the cover over the same opening but gives no
-    dimension. The thickness is a guess for the 3D view.
+    estimated. The outline is the frame of the C2960S-STACK module fitted in the slot, measured off the community
+    NetBox rear elevation of the WS-C2960S-48LPD-L (a photograph, 1516 x 150 px, 3.41 px per mm from the 444.5 mm
+    width) by finding the teal frame's pixels row by row: the frame runs from x 9 to 361 px and y 6 to 139 px, so
+    103.3 x 39.0 mm with its left edge 2.6 mm from the chassis side and its top 1.8 mm down. Its eight corners, in
+    mm from the top left of that box, are (0, 0), (92.4, 0), (92.7, 21.1), (103.3, 31.7), (103.3, 39.0), (10.9, 39.0),
+    (10.9, 19.3) and (0, 10.6): the lower right edge slopes at 45 degrees from 21.1 to 31.7 mm down, and the left
+    edge is chamfered from 10.6 to 19.3 mm down. Figure 1-10 (PDF p19, printed 1-17) draws the cover with the same
+    slope at its lower right, starting 46 percent of the way down against the photograph's 54 and ending at 77
+    against 81; the figure is isometric, so only these proportions are compared. The photograph shows the fitted
+    module, not the blank, so the cover's own outline is taken to be the slot's. Two captive screws, at the top left
+    (7.1, 7.6 mm) and the bottom right (94.8, 32.5 mm) of the box, are read off the same photograph, 3.0 mm in
+    radius, and a third on the module's flange at (4.7, 26.9 mm), 3.4 mm in radius. A bay is a rectangle, so the
+    two corners of its box that lie outside the outline are filled in the skin (`rear-plate-fill`, #404040, the
+    chassis colour the three stencil-sourced models measure) and are not part of the 3D outline. The thickness is
+    a guess for the 3D view.
+  colour: >-
+    A stand-in, with no source claimed. No held picture shows the cover in colour: the photograph has the module
+    fitted, and Figures 1-10 and 1-11 are line art. The plate takes the fitted module's face (#393e41, the median
+    of 3600 px, box (80,60)-(140,120) of that photograph) and its frame (#344a54) only so that the slot does not
+    read as a different part. It is not a reading of the cover.
+  relief: >-
+    The 3D body extrudes the skin's own `plate` outline (`shape: true`), so the slope and the chamfer stand in 3D as
+    they are drawn in 2D. The depth, 3.0 mm, is the same guess as the thickness above.
 relief:
-  wall: '#6b7077'
+  wall: '#344a54'
+  features:
+    - node: plate
+      out: 3.0
+      shape: true
+      color: '#393e41'
+      confidence: estimated
+      source: >-
+        the cover's thickness is a guess (provenance.size); the outline is the module frame's as photographed
 body:
   depth: 3.0
-  color: '#b9bec4'
+  color: '#393e41'
 skins: [default]
