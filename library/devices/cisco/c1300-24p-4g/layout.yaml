@@ -1,0 +1,381 @@
+format: 1
+kind: device
+name: c1300-24p-4g
+version: 1.0.0
+maturity: modelled
+manufacturer: Cisco
+model: C1300-24P-4G
+portfolio: {line: Catalyst, family: Catalyst 1300}
+description: >-
+  Fixed 1RU Catalyst 1300 switch with 24 10/100/1000 PoE+ ports and four 1 Gigabit SFP uplink cages. The 195 W PoE budget
+  and the AC supply are built in and the switch has no fan. The front carries the 24 jacks in two blocks of six columns by
+  two rows, a row of arrow lamps under them on a yellow strip numbered 1 to 12 and 13 to 24, the four SFP cages numbered 25
+  to 28, and at the left a RESET button, a USB Type-C port, a stacked USB Type-A over RJ-45 pair and a blue console strip.
+  The 19-inch brackets ship in the box. No held document shows the rear, so it is not drawn and no AC inlet is placed.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      "Cisco Catalyst 1300 and 1300X Series Switches" data sheet, Cisco public, (c) 2026, document 3659554-09, 41 pages
+      (https://www.cisco.com/c/en/us/products/collateral/switches/catalyst-1300-series-switches/nb-06-cat1300-ser-data-sheet-cte-en.pdf):
+      the physical table (p25), the PoE table (p20), power use (p21), dimensions (p30-31), weights (p32), power, operating
+      temperature and certifications (p33), fans and MTBF (p34), package contents (p35) and the ordering table (p36-37).
+      The NetBox device type C1300-24P-4G and its front elevation cisco-c1300-24p-4g.front.png, community files and not
+      Cisco's, for the front. No Catalyst 1300 installation guide, no photograph of a single SKU and no 3D model is held, and
+      no NetBox rear elevation exists for this model. The data sheet's family photograph is unlabelled and is not used.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      The elevation is 2499 x 255 px, aspect 9.80, against 444.3 / 43.94 = 10.11 for the body. The picture is not the body
+      alone: it carries a margin of about 6 px at the left and 10 px at the right, and a 9 px band of shadow and lip at
+      the top and 5 px at the bottom, so the metal runs from x 5.5 to 2483 (2477 px) and from y 9 to 250 (241 px) and the
+      body alone reads 10.28, 1.7% out the other way. Across, the 2477 px are the printed 444.3 mm: 5.58 px per mm. That
+      is checked on a quantity the scale never saw: the RJ-45 jacks step 78.0 px over five steps, 13.98 mm against the
+      registry's 13.97. Down, 241 px for the printed 43.94 mm is 5.48 px per mm, 1.8% under the horizontal, and the
+      two jack rows centre 22.2 mm down against the face's 22.0. Every x below is (px - 5.5) / 5.58 and every y is
+      (px - 9) / 5.48. Across the figures are good to about 0.2 mm; down to about 0.5 mm, because the vertical scale is
+      taken from the lip lines and not from a feature of known size.
+  chassis:
+    confidence: datasheet
+    note: >-
+      444.3 x 299 x 43.94 mm (17.49 x 11.77 x 1.73 in), data sheet p30, in its W x D x H order. 444.3 is the body: the
+      elevation shows no ears and the jack pitch closes on the registry at that width. 1RU. Weight 3.53 kg (7.78 lb), p32.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      From the NetBox front elevation at 5.58 px per mm across and 5.48 down. Two beige jack plates 87.6 and 87.3 mm wide at
+      168.2 and 272.2 mm, top 8.7 mm, 26.5 mm tall. Six columns of two jacks in each on the registry's 13.97 mm pitch, the
+      first jack at 170.3 mm and the seventh at 274.5 mm, a 20.28 mm gutter beyond the pitch. The upper row's jack openings
+      read 61 to 117 px and the lower row's 142.7 to 199.3 px, which puts the cell tops at 9.5 and 23.9 mm, a 14.4 mm row
+      step. The upper jacks show their keyway up and the lower their keyway down. The four SFP cages are 14.0 mm wide at a
+      19.0 mm step, centres 372.3, 391.3, 410.3 and 429.3 mm, and read 142 to 200 px down, centred 29.6 mm, so the 14.5 x 10.0
+      registry cage is placed on those centres. The stacked housing at the left is 16.8 x 21.7 mm at 30.8, 13.0 mm.
+      Its USB Type-A opening is 13.7 x 6.1 mm centred 39.2, 17.2 mm and its RJ-45 opening 13.2 x 10.6 mm centred 39.2, 29.3 mm;
+      the registry parts are centred on those. The USB Type-C port reads 9.6 x 3.3 mm centred 23.1, 33.2 mm. The reset
+      button is 4.1 mm across, centred 12.0, 31.0 mm. The colours are medians of the elevation: face #e5e5e4, plates #c8bfb5,
+      console strip #b2d3e1, PoE strip #ead55f.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      The elevation prints 1 and 12 at the ends of the first strip and 13 and 24 at the ends of the second, and 25 and 28
+      at the ends of the uplinks, with an arrow for each port: an up arrow under its column for the upper jack and a down
+      arrow for the lower. So the upper jack of a column takes the odd number and the lower the even, as on
+      cisco/ws-c4948e, and the numbers run along the columns from the left, 1 to 24, then the four cages 25 to 28. Only those
+      six numerals are printed, and only those six are drawn. NetBox names the interfaces GigabitEthernet1 to 28 and types
+      the four cages 1000base-x-sfp and the 24 jacks 1000base-t with PoE type 2 (802.3at); no Cisco document held gives
+      interface names, so none is written as an `interfaces:` block.
+  poe-strip:
+    confidence: photo-measured
+    note: >-
+      A yellow strip under each jack block, 87.8 and 87.5 mm wide at 168.3 and 272.3 mm, 2.9 mm tall at 38.0 mm, with the arrows and
+      the end numerals on it. Over the blocks a bracket line runs from 168.1 to 359.6 mm at 4.65 mm down, with rounded
+      ends, broken in the middle for two small pictograms and the legend "-54VDC,0.55A FOR EACH PORT" starting at 246.0 mm.
+      The pictograms (a PoE symbol and a second symbol beyond the legend) and the dots beside the legend are not drawn.
+      A second bracket over the four cages, 364.6 to 436.8 mm at 20.25 mm, is broken in the middle for one pictogram that is not
+      drawn either.
+  lamps:
+    confidence: estimated
+    note: >-
+      estimated - the elevation shows no lamp except the arrows. The data sheet's LED row (p25) lists "System, Link/Act, PoE,
+      Speed" and no held document says where they are or what they show. The 28 grey arrows by the ports are drawn as the
+      library's arrow lamps, the one thing on the face that sits by each port as a lamp does, and the faint two-gear
+      pictogram under the reset button as the System lamp. Where the PoE and Speed lamps are is not shown. The arrows are at
+      3.4 mm and 10.4 mm from the left of each column and 39.2 mm down, read off the elevation; the cage arrows are centred
+      under their cages.
+  console-and-usb:
+    confidence: photo-measured
+    note: >-
+      The data sheet (p25) lists "Cisco standard RJ-45 console port and USB Type C port", the USB port as the USB Type C
+      port "on the front panel of the switch for easy file and image management as well as console port", and one reset
+      button; its text on the Bluetooth dongle (p4) says the dongle "plugs into the USB port on the switch". THE ELEVATION
+      SHOWS A USB TYPE-A PORT as well: the upper half of the stacked housing is a Type-A opening under a USB symbol, the lower
+      half the RJ-45, and the USB Type-C port stands to their left. NetBox lists three console ports for the model: RJ-45,
+      USB-C and USB-A. The data sheet names no Type-A port, so it is drawn from the elevation only, as a USB port and not as a
+      console, and the data sheet's USB Type-C port is the console. The blue strip under the three ports carries a console
+      pictogram, and is drawn as that strip. The Type-A port's generation is not stated, so the white (USB 2.0) skin is
+      used, which claims less than the blue one; the elevation shows a dark tongue.
+  buttons:
+    confidence: photo-measured
+    note: >-
+      One recessed round button with a reset pictogram above it (data sheet: "Reset button"), drawn with the library's
+      reset-button part.
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      "100-240V 50-60 Hz, internal, universal" (p33): the supply is built into the chassis, part of it and not a bay. The
+      C1300-24P-4G is fanless (p34), so no fan is drawn and no fan bay is declared. The data sheet states no fan redundancy.
+  poe:
+    confidence: datasheet
+    note: >-
+      PoE table (p20): "C1300-24P-4G, 195W, 24 ports"; ordering table (p36): "24x 10/100/1000 30W PoE+ ports with 195W power
+      budget". The two agree. The PoE standards are "802.3at PoE+, 802.3af, and Cisco pre-standard (legacy) PoE" (p20).
+  power-use:
+    confidence: datasheet
+    note: >-
+      Power consumption (worst case), p21: system 27.1 W at 110 V and 27.5 W at 220 V; with PoE 233.2 W at 110 V and 230.5 W
+      at 220 V; 795.2 BTU/hr; idle 13.9 W at 110 V and 12.9 W at 220 V. The with-PoE figure is carried as the maximum.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      No held document shows this model's rear: NetBox holds a rear elevation for the C1300-24T-4G only, and a relative is
+      not evidence. The rear is left empty and no AC inlet is placed, so the DCIM export carries no power port. The 24T's
+      rear is not used.
+  ears:
+    confidence: estimated
+    note: >-
+      "Only 24-and 48-port models include the 19-in mounting brackets with the switch" (p35, again p40) and the ordering
+      table reads "Rack-mountable" (p36). No held document draws the brackets, gives their positions or a part number, so
+      the shipped position is declared as the default with no `at`, no kit is listed and the ears are not drawn. The
+      accessory table's RCKMNT-CMPCT-1K= is for the 8, 12 and 16 port models and is not this device's.
+  logo:
+    confidence: photo-measured
+    note: >-
+      The Cisco logo and wordmark at 9.4 to 22.5 mm and 4.7 to 11.5 mm are not drawn; a logo-zone reserves the place. The
+      printed "Catalyst 1300 Series" is drawn as plain text.
+attrs:
+  physical:
+    weight-note: '3.53 kg (7.78 lb), data sheet p32'
+  performance:
+    switching-capacity: '56 Gbps'
+    forwarding-rate: '41.67 Mpps (64-byte packets)'
+  power:
+    power-max-w: 233.2
+    power-envelope: fully-configured
+    power-without-poe: '27.1 W at 110 V, 27.5 W at 220 V (system power consumption, worst case)'
+    power-idle: '13.9 W at 110 V, 12.9 W at 220 V'
+    power-with-poe: '233.2 W at 110 V, 230.5 W at 220 V (worst case)'
+    heat-dissipation-btu-hr: 795.2
+    poe-budget-w: 195
+    poe-standard: 'IEEE 802.3at PoE+, 802.3af, and Cisco pre-standard (legacy) PoE; 30 W per port'
+    power-input-ac: '100-240 V, 50-60 Hz, internal, universal'
+  thermal:
+    cooling: 'fanless'
+  environmental:
+    operating-temp: '-5 to 50 C (23 to 122 F); cold start from 0 C (32 F)'
+    storage-temp: '-25 to 70 C (-13 to 158 F)'
+    humidity: '10 to 90%, relative, noncondensing'
+    mtbf-hours: '396,413 at 25 C'
+  platform:
+    processor: 'ARM dual-core at 1.5 GHz'
+    memory: '1 GB DDR4'
+    flash: '1 GB SLC'
+  features:
+    optics-sfp: >-
+      The ordering table calls the four uplinks "4x Gigabit SFP" (p36). The data sheet's supported-optics table (p27-29) is
+      not keyed by model; its 1000 Mbps SFPs are MGBSX1, MGBLX1, MGBLH1, MGBT1, GLC-SX-MMD, GLC-EX-SMD, GLC-ZX-SMD,
+      GLC-LH-SMD, GLC-BX-U, GLC-BX-D, GLC-TE and the CWDM-SFP-1470 to -1610 series.
+  management:
+    reset: 'recessed button on the front panel'
+  compliance:
+    certifications: 'UL (UL 62368), CSA (CSA 22.2), CE mark, FCC Part 15 (CFR 47) Class A'
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 444.3
+  height: 43.94
+  depth: 299.0
+  ru: 1
+  weight-kg: 3.53
+  color: '#e5e5e4'
+  ears:
+    positions:
+    - {name: flush, default: true}
+  power: ac
+gaps:
+- what: rear-face
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    No held document shows the C1300-24P-4G's rear. The rear is left empty and no AC inlet is placed, so the DCIM export
+    carries no power port. The 24T's rear is a reading of the 24T and is not used.
+  wanted: A rear elevation or photograph of the C1300-24P-4G showing its AC inlet.
+- what: ears
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    The data sheet says the 19-inch brackets ship with the switch and holds no figure of them, no position and no part
+    number. No Catalyst 1300 installation guide is held. The ears are declared with the default position and no `at`,
+    and no kit is listed.
+  wanted: The Catalyst 1300 hardware installation guide's rack-mounting section.
+- what: led-states
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The data sheet lists the LEDs "System, Link/Act, PoE, Speed" and nothing more; no document held says which lamp shows
+    what, where the PoE and Speed lamps are, or whether the arrows by the ports are the Link/Act lamps. The arrows and the System
+    lamp carry the component's own vocabulary and no meaning is stated.
+  wanted: The installation guide's LED table.
+- what: usb-type-a
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    The data sheet names a USB Type-C port and no Type-A; the NetBox elevation shows a Type-A port above the RJ-45 jack and NetBox
+    lists a USB-A console. The Type-A port is drawn from the elevation as a USB port, not a console. Its generation is not stated.
+  wanted: The installation guide's front-panel figure.
+- what: pictograms
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    Three small pictograms on the bracket lines and the dots by the PoE legend are too small in the elevation to draw;
+    what they mean is not stated in any held document.
+  wanted: A close-up of the front panel.
+- what: eol
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    Cisco's series page lists the model with no end-of-sale notice when the sources were gathered; no end-of-life page was
+    held, so none is quoted.
+  wanted: none
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g, poe: 802.3at}
+    description: >-
+      the 24 10/100/1000 PoE+ ports; rel-pos is the number the front prints, the upper jack of a column takes the odd number
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the four 1 Gigabit SFP uplink cages, numbered 25 to 28
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one arrow lamp by each of the 28 ports
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the console and USB group at the left of the front: an RJ-45 console, the USB Type-C console and a USB Type-A
+      port, with the reset button; one job, reaching and restarting the switch when the data plane cannot.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the System lamp
+views:
+  front:
+    size: {w: 444.3, h: 43.94}
+    panel:
+      decor:
+      - {id: plate-1, kind: jack-plate, at: [168.2, 8.7], size: [87.6, 26.5], fill: '#c8bfb5'}
+      - {id: plate-2, kind: jack-plate, at: [272.2, 8.7], size: [87.3, 26.5], fill: '#c8bfb5'}
+      - {id: stack-housing, kind: jack-plate, at: [30.8, 13.0], size: [16.8, 21.7], fill: '#c8bfb5'}
+      - {id: poe-strip-1, kind: poe-strip, at: [168.3, 38.0], size: [87.8, 2.9], fill: '#ead55f'}
+      - {id: poe-strip-2, kind: poe-strip, at: [272.3, 38.0], size: [87.5, 2.9], fill: '#ead55f'}
+      - {id: console-strip, kind: console-strip, at: [18.3, 38.0], size: [29.5, 2.9], fill: '#b2d3e1'}
+      cutouts:
+      - {block: rj45}
+      - {block: sfp}
+      - {id: console, at: [32.85, 23.8], size: [12.7, 11.0], shape: rect}
+      - {id: usb, at: [33.2, 14.95], size: [12.0, 4.5], shape: rect}
+      - {id: usb-c, at: [18.9, 31.9], size: [8.34, 2.56], shape: rect}
+      - {id: btn-reset, at: [10.0, 29.0], size: [4.0, 4.0], shape: circle}
+      - {id: led-system, at: [11.2, 35.9], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {id: bracket-poe-left, at: [168.1, 4.65], path: M 0 2.3 Q 0 0 2.3 0 L 66.2 0, stroke-width: 0.28, fill: '#4a4d50', for: chassis}
+    - {id: bracket-poe-right, at: [293.5, 4.65], path: M 0 0 L 63.8 0 Q 66.1 0 66.1 2.3, stroke-width: 0.28, fill: '#4a4d50', for: chassis}
+    - {at: [246.0, 5.5], text: '-54VDC,0.55A FOR EACH PORT', font-size: 2.3, anchor: start, fill: '#4a4d50', for: chassis}
+    - {id: bracket-sfp-left, at: [364.6, 20.25], path: M 0 2.8 Q 0 0 2.8 0 L 32.6 0, stroke-width: 0.28, fill: '#4a4d50', for: chassis}
+    - {id: bracket-sfp-right, at: [404.0, 20.25], path: M 0 0 L 30.0 0 Q 32.8 0 32.8 2.8, stroke-width: 0.28, fill: '#4a4d50', for: chassis}
+    - {block: rj45}
+    - {block: sfp}
+    - {at: [171.2, 40.3], text: '1', font-size: 2.4, anchor: middle, fill: '#4a4d50', for: port-1}
+    - {at: [253.6, 40.3], text: '12', font-size: 2.4, anchor: middle, fill: '#4a4d50', for: port-12}
+    - {at: [274.3, 40.3], text: '13', font-size: 2.4, anchor: middle, fill: '#4a4d50', for: port-13}
+    - {at: [357.0, 40.3], text: '24', font-size: 2.4, anchor: middle, fill: '#4a4d50', for: port-24}
+    - {at: [368.4, 40.3], text: '25', font-size: 2.4, anchor: middle, fill: '#4a4d50', for: port-25}
+    - {at: [433.0, 40.3], text: '28', font-size: 2.4, anchor: middle, fill: '#4a4d50', for: port-28}
+    - {at: [39.2, 10.5], mark: usb, size: 4.0, fill: '#4a4d50', for: usb}
+    - {id: reset-mark, at: [12.0, 26.6], path: M -2.0 -0.8 L -1.0 0 L -2.0 0.8 M 2.0 -0.8 L 1.0 0 L 2.0 0.8 M -0.2 0 L 0.2 0, stroke-width: 0.3, fill: '#4a4d50', for: btn-reset}
+    - {at: [33.0, 40.2], text: '>_', font-size: 2.0, anchor: middle, fill: '#2f4b5a', for: console}
+    - {at: [435.6, 5.2], text: Catalyst 1300 Series, font-size: 2.6, anchor: end, fill: '#4a4d50', for: chassis}
+    components:
+      blocks:
+      - id: rj45
+        ref: common/rj45-ganged-eth-plain@1
+        at: [170.3, 9.5]
+        count: 24
+        rows: 2
+        pitch: 13.97
+        row-pitch: 14.4
+        gang: 6
+        gutter: 20.28
+        number-from: 1
+        cutouts: true
+        rotate: {top: 180}
+        attrs: {media: rj45, speed: 1g, poe: 802.3at}
+        led:
+          ref: common/led-arrow-sm@1
+          id-format: 'led-port-{n}'
+          dx-by-row: [2.3, 9.3]
+          dy-top: 28.7
+          dy-bottom: 14.3
+          skin-top: up
+          skin-bottom: down
+          group: port-leds
+      - id: sfp
+        ref: std/sfp@1
+        at: [365.05, 24.6]
+        count: 4
+        rows: 1
+        pitch: 19.0
+        number-from: 25
+        cutouts: true
+        attrs: {media: sfp, speed: 1g}
+        led:
+          ref: common/led-arrow-sm@1
+          id-format: 'led-port-{n}'
+          dx: 6.1
+          dy: 13.6
+          skin-top: down
+          group: port-leds
+      placements:
+      - {block: rj45}
+      - {block: sfp}
+      - {ref: std/rj45-ganged@2, id: console, at: [32.85, 23.8], group: mgmt, rel-pos: 1,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: std/usb-c@1, id: usb-c, at: [18.9, 31.9], group: mgmt, rel-pos: 2, attrs: {role: console, media: usb-c}}
+      - {ref: std/usb-a@1, id: usb, at: [33.2, 14.95], skin: usb2, group: mgmt, rel-pos: 3, attrs: {media: usb-a}}
+      - {ref: common/reset-button@1, id: btn-reset, at: [10.0, 29.0], for: chassis, group: mgmt, rel-pos: 4,
+         attrs: {function: reset}}
+      - {ref: common/led-dot@1, id: led-system, at: [11.2, 35.9], for: chassis, group: status-leds, rel-pos: 1}
+    regions:
+    - {id: logo-zone, at: [9.0, 4.4], size: {w: 14.2, h: 7.6}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 444.3, h: 43.94}
+    empty: >-
+      No held document shows this model's rear: the data sheet has no rear view and NetBox holds a rear elevation for the
+      C1300-24T-4G only. It is not drawn from the 24T, and the AC inlet is not placed.
+  top:
+    size: {w: 444.3, h: 299.0}
+    empty: >-
+      No held document shows the lid: the data sheet carries no drawing of it and NetBox no elevation of it.
+  bottom:
+    size: {w: 444.3, h: 299.0}
+    empty: >-
+      No held document shows the underside: the data sheet carries no drawing of it and NetBox no elevation of it.
+  left:
+    size: {w: 299.0, h: 43.94}
+    empty: >-
+      No held document shows the left wall: the data sheet carries no drawing of it and NetBox no elevation of it.
+  right:
+    size: {w: 299.0, h: 43.94}
+    empty: >-
+      No held document shows the right wall: the data sheet carries no drawing of it and NetBox no elevation of it.
+configurations:
+  base:
+    kind: base
+    description: >-
+      C1300-24P-4G - 24 10/100/1000 PoE+ ports with a 195 W budget and four 1 Gigabit SFP uplink cages, a built-in AC supply
+      and no fan. The box holds the 19-inch brackets, the power cord (unless the NO-POWER-CORD option is ordered) and a
+      pointer card.
+    default: true
+    part-numbers:
+      C1300-24P-4G: {}
+references:
+- {title: 'Cisco Catalyst 1300 and 1300X Series Switches data sheet (Cisco public, (c) 2026, document 3659554-09; https://www.cisco.com/c/en/us/products/collateral/switches/catalyst-1300-series-switches/nb-06-cat1300-ser-data-sheet-cte-en.pdf)', sha256: d59b3ea79a12f9e7d0c2a06c7ee4fa49a74e820cd41c1da0d08c2d81c66c9dd1}
