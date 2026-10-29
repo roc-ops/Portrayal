@@ -90,13 +90,37 @@ provenance:
       `hot-swap-fans`). No document says what covers an empty slot. The brochure's optional PW48V-12V150W is not the supply that
       ships and no document draws it (gap `optional-dc-supply`). The legend between the supplies and the fans reads "POWER 1 /
       POWER 2" and "100-240 V ~2,5 A MAX, 50/60Hz".
+  vents:
+    confidence: photo-measured
+    note: >-
+      The front's top strip is two rows of rectangular slots and its bottom strip a row of slots cut into the bottom edge
+      (photograph 2354, the drawing's front view and the brochure's close view), drawn as `motif` tiles because the slots are
+      square-cut 4.0 mm rectangles with a corner radius of about 0.15 mm and two stacked rows, which `slots-h` (rounded ends,
+      one row) does not draw. Read off photograph 2354 at 5.33 px per mm (the face's 2365 px at y 700 for 443 mm; the
+      photograph looks down, the face reads 0.93 of that vertically): the slot pitch is 27.15 px (17 pitches, 461.5 px), 5.09
+      mm, and every slot is the same width, 21.7 px, 4.07 mm. The top strip is 5.5 mm tall (the drawing's two rows over 14.4 px
+      at 2.614 px per mm, and 27 px on the photograph) with rows 2.0 mm tall 3.5 mm apart; its tile is 5.09 x 5.5 mm. The
+      bottom strip is 2.2 mm tall in the drawing (6 px). The strips start 4.1 mm from the left and run 434.0 and 278.0 mm, the
+      drawing's extents (the photograph puts the first slot 3.0 mm in; the drawing's body edge is a double line). The rear
+      fields are hexagon honeycombs as the photograph shows: see `rear-layout`.
   rear-layout:
     confidence: photo-measured
     note: >-
       From photograph 2353 (the rear, from slightly above), x across the 443 mm at 4.0 px per mm and y estimated (the photograph
       looks down, 3.8 px per mm). Two supply modules about 63 mm wide at 2.5 and 65.9 mm with their inlets centred 54.0 and 117.4
-      mm and 22.5 mm down; four fan modules 60.4 mm wide at 158.5, 227.6, 296.2 and 364.0 mm with a round guard 36 mm across
-      centred in each. Read to about 2 mm, as seen from behind.
+      mm and 22.5 mm down; four fan modules 60.4 mm wide at 158.5, 227.6, 296.2 and 364.0 mm. Read to about 2 mm, as seen
+      from behind. Measured again on the photograph at 5.36 px per mm (the face's 2360 px for 443 mm): each fan's honeycomb ring
+      is 204 px, 38.0 mm across the hole tips (drawn 37.5, estimated), centred 37.4 mm from its module's left edge, so right of
+      the handle and not in the middle of the plate, round a solid hub 20.0 mm across (107 px); the guard's holes are 25 x 21.5
+      px, 4.7 mm across the corners and 4.0 across the flats, in columns 23.3 px (4.37 mm) apart and rows 24.9 px (4.67 mm), nine
+      columns across the ring. The renderer's honeycomb tile is 8.86 x 5.11 mm with holes 5.1 mm across the corners: the tile is
+      scaled by 0.914 on both axes to 8.1 x 4.67 mm, which draws the hole as read and the rows as read and the columns 7 per
+      cent closer than read (4.05 mm against 4.37); a regular hexagon cannot be both. The tile's phase puts a hole on each ring's
+      centre. The supply vents' holes are larger, 29 x 24 px, 5.4 mm across the corners, columns 28.2 px (5.27 mm) and rows 29.9
+      px (5.6 mm, not corrected for the look from above): the tile is scaled by 1.06 to 9.39 x 5.42 mm, with a hole at 10.6 mm
+      and 10.3 mm down in the first supply and 63.4 mm further in the second; the field is the honeycomb's extent left of the
+      handle, 27.0 x 28.4 mm. The earlier fields drew the base tile and a 36 mm guard in the middle of the plate. The photograph
+      shows no honeycomb under the hub.
   side-layout:
     confidence: estimated
     note: >-
@@ -112,7 +136,20 @@ provenance:
   colour:
     confidence: estimated
     note: >-
-      The median of photograph 2354's face is #e6e5e4; the face is drawn #dddddd so it reads on the light stage.
+      Photograph 2354, medians of plain patches: the front face #e0dcd5 over three unlit, unshaded patches (boxes 1850,760 to
+      2200,860 with 35000 pixels and a spread of 4.1; 2000,700 to 2300,740 with 12000 pixels; 1780,840 to 2100,870 with 9600
+      pixels, all #e0dcd5), drawn #e0dcd5; the lid reads #e3e4e3 and is a different surface. The jack plates #e6e3df (box
+      1475,718 to 1483,770, 416 pixels, spread 8.5), drawn #e6e3df. The lamps rest unlit grey in the photograph, #767675 and
+      #6c6d67 (boxes 1640,724 to 1645,730 and 1640,746 to 1645,752, 30 pixels each); the render draws them with the lamp
+      component's own resting colour (gap `led-states`). Photograph 2353 (the rear, from above) shades the rear: its flat
+      chassis patch (box 880,800 to 990,850, 5500 pixels, spread 3.1) reads #bbbbb7, 0.84 of the front's luminance. The fan
+      modules read #4e3d33 on eight plain patches, one to the left of the handle and one to the right on each module, all
+      between #4b3c34 and #53443b with spreads of 3 to 6 (for example box 1027,692 to 1068,740, 1968 pixels, #4e3f36; box
+      1322,715 to 1336,830, 1610 pixels, #4d3b2f): the colour is the modules', not a shading gradient, and it is drawn lightened
+      by the 0.84 the rear's shading takes, #5d493d. The supply modules are polished metal with no plain patch (spreads 34 to 43
+      over boxes 172,715 to 192,820, 400,690 to 450,700 and 760,690 to 800,700: #5f5a4f, #7c8c7e, #615d52): the median of the
+      two plainest, #615d52, lightened the same way, #736f62, estimated. The earlier #b9b9b9 and #a89c94 were not the
+      photograph's colours.
 attrs:
   power:
     power-max-w: 150
@@ -139,7 +176,7 @@ chassis:
   height: 44.0
   depth: 367.0
   ru: 1
-  color: '#dddddd'
+  color: '#e0dcd5'
   ears:
     positions:
     - {name: flush, default: true}
@@ -182,6 +219,8 @@ gaps:
   note: >-
     Searched the brochure, the page and the safety book for an LED table: none. The four lamps of each QSFP28 cage, the two of
     each SFP28 cage and the USER, POWER 2, POWER 1 and FAULT lamps carry the component's own vocabulary and no meaning is stated.
+    The lamps' resting colour comes from the lamp component and is not changed here: the photographs show the lamps unlit grey
+    and the render draws them with the component's own colour.
   wanted: MikroTik's LED description for the CRS520-4XS-16XQ-RM.
 - what: rack-rail-kit
   scope: [front]
@@ -279,10 +318,27 @@ views:
     size: {w: 443.0, h: 44.0}
     panel:
       decor:
-      - {id: top-vent, kind: vent-field, at: [4.1, 1.0], size: [434.0, 4.5], pattern: vent, vent: 1.0}
-      - {id: bottom-vent, kind: vent-field, at: [4.1, 42.4], size: [278.0, 1.4], pattern: vent, vent: 1.0}
-      - {id: console-block, kind: jack-plate, at: [247.4, 9.4], size: [17.8, 14.3], fill: '#c9c5c5'}
-      - {id: mgmt-block, kind: jack-plate, at: [247.4, 25.6], size: [33.8, 15.1], fill: '#c9c5c5'}
+      - id: top-vent
+        kind: vent-field
+        at: [4.1, 0.9]
+        size: [434.0, 5.5]
+        pattern: motif
+        vent: 1.0
+        pattern-pitch: [5.09, 5.5]
+        pattern-cells:
+        - [[0.7, 0.0], [4.4, 0.0], [4.55, 0.15], [4.55, 1.85], [4.4, 2.0], [0.7, 2.0], [0.55, 1.85], [0.55, 0.15]]
+        - [[0.7, 3.5], [4.4, 3.5], [4.55, 3.65], [4.55, 5.35], [4.4, 5.5], [0.7, 5.5], [0.55, 5.35], [0.55, 3.65]]
+      - id: bottom-vent
+        kind: vent-field
+        at: [4.1, 41.8]
+        size: [278.0, 2.2]
+        pattern: motif
+        vent: 1.0
+        pattern-pitch: [5.09, 2.2]
+        pattern-cells:
+        - [[0.55, 2.2], [0.55, 0.15], [0.7, 0.0], [4.4, 0.0], [4.55, 0.15], [4.55, 2.2]]
+      - {id: console-block, kind: jack-plate, at: [247.4, 9.4], size: [17.8, 14.3], fill: '#e6e3df'}
+      - {id: mgmt-block, kind: jack-plate, at: [247.4, 25.6], size: [33.8, 15.1], fill: '#e6e3df'}
       cutouts:
       - {block: qsfp28}
       - {block: sfp28}
@@ -361,18 +417,28 @@ views:
     size: {w: 443.0, h: 44.0}
     panel:
       decor:
-      - {id: psu-1-module, kind: module-plate, at: [2.5, 2.2], size: [63.2, 39.6], fill: '#b9b9b9'}
-      - {id: psu-2-module, kind: module-plate, at: [65.9, 2.2], size: [64.0, 39.6], fill: '#b9b9b9'}
-      - {id: psu-1-vent, kind: vent-field, at: [9.0, 6.5], size: [25.0, 31.0], pattern: vent, vent: 1.0}
-      - {id: psu-2-vent, kind: vent-field, at: [72.4, 6.5], size: [25.0, 31.0], pattern: vent, vent: 1.0}
-      - {id: fan-1-module, kind: module-plate, at: [158.5, 2.2], size: [60.4, 39.6], fill: '#a89c94'}
-      - {id: fan-2-module, kind: module-plate, at: [227.6, 2.2], size: [60.4, 39.6], fill: '#a89c94'}
-      - {id: fan-3-module, kind: module-plate, at: [296.2, 2.2], size: [60.4, 39.6], fill: '#a89c94'}
-      - {id: fan-4-module, kind: module-plate, at: [364.0, 2.2], size: [60.4, 39.6], fill: '#a89c94'}
-      - {id: fan-0, kind: fan-grille, at: [170.7, 4.5], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0}
-      - {id: fan-1, kind: fan-grille, at: [239.8, 4.5], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0}
-      - {id: fan-2, kind: fan-grille, at: [308.4, 4.5], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0}
-      - {id: fan-3, kind: fan-grille, at: [376.2, 4.5], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0}
+      - {id: psu-1-module, kind: module-plate, at: [2.5, 2.2], size: [63.2, 39.6], fill: '#736f62'}
+      - {id: psu-2-module, kind: module-plate, at: [65.9, 2.2], size: [64.0, 39.6], fill: '#736f62'}
+      - {id: psu-1-vent, kind: vent-field, at: [7.8, 8.0], size: [27.0, 28.4], pattern: vent, vent: 1.0,
+         pattern-pitch: [9.39, 5.42], pattern-offset: [10.6, 10.3]}
+      - {id: psu-2-vent, kind: vent-field, at: [71.2, 8.0], size: [27.0, 28.4], pattern: vent, vent: 1.0,
+         pattern-pitch: [9.39, 5.42], pattern-offset: [74.0, 10.3]}
+      - {id: fan-1-module, kind: module-plate, at: [158.5, 2.2], size: [60.4, 39.6], fill: '#5d493d'}
+      - {id: fan-2-module, kind: module-plate, at: [227.6, 2.2], size: [60.4, 39.6], fill: '#5d493d'}
+      - {id: fan-3-module, kind: module-plate, at: [296.2, 2.2], size: [60.4, 39.6], fill: '#5d493d'}
+      - {id: fan-4-module, kind: module-plate, at: [364.0, 2.2], size: [60.4, 39.6], fill: '#5d493d'}
+      - {id: fan-0, kind: fan-grille, at: [177.15, 3.25], size: [37.5, 37.5], rx: 18.75, pattern: vent, vent: 1.0,
+         pattern-pitch: [8.1, 4.67], pattern-offset: [195.9, 22.0]}
+      - {id: fan-1, kind: fan-grille, at: [246.25, 3.25], size: [37.5, 37.5], rx: 18.75, pattern: vent, vent: 1.0,
+         pattern-pitch: [8.1, 4.67], pattern-offset: [265.0, 22.0]}
+      - {id: fan-2, kind: fan-grille, at: [314.85, 3.25], size: [37.5, 37.5], rx: 18.75, pattern: vent, vent: 1.0,
+         pattern-pitch: [8.1, 4.67], pattern-offset: [333.6, 22.0]}
+      - {id: fan-3, kind: fan-grille, at: [382.65, 3.25], size: [37.5, 37.5], rx: 18.75, pattern: vent, vent: 1.0,
+         pattern-pitch: [8.1, 4.67], pattern-offset: [401.4, 22.0]}
+      - {id: fan-hub-0, kind: fan-hub, at: [185.9, 12.0], size: [20.0, 20.0], rx: 10.0, fill: '#5d493d'}
+      - {id: fan-hub-1, kind: fan-hub, at: [255.0, 12.0], size: [20.0, 20.0], rx: 10.0, fill: '#5d493d'}
+      - {id: fan-hub-2, kind: fan-hub, at: [323.6, 12.0], size: [20.0, 20.0], rx: 10.0, fill: '#5d493d'}
+      - {id: fan-hub-3, kind: fan-hub, at: [391.4, 12.0], size: [20.0, 20.0], rx: 10.0, fill: '#5d493d'}
       cutouts:
       - {id: ac-inlet-1, at: [44.0, 8.5], size: [20.0, 28.0], shape: rect}
       - {id: ac-inlet-2, at: [107.4, 8.5], size: [20.0, 28.0], shape: rect}
@@ -405,7 +471,7 @@ views:
     size: {w: 367.0, h: 44.0}
     panel:
       decor:
-      - {id: side-vent, kind: vent-field, at: [28.0, 9.0], size: [36.0, 14.0], pattern: vent, vent: 1.0}
+      - {id: side-vent, kind: vent-field, at: [28.0, 9.0], size: [36.0, 14.0], pattern: holes, vent: 1.0}
 configurations:
   base:
     kind: base

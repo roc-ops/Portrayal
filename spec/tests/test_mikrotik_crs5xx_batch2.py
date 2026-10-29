@@ -110,8 +110,11 @@ def test_crs504_front_carries_console_management_reset_dc_jack_and_three_lamps()
     assert [p["id"] for p in refs(d, "front", "common/reset-button@1")] == ["btn-reset"]
     assert not refs(d, "front", "common/dc-barrel@1")  # drawn as chassis art: the barrel census wants a current
     assert [x["id"] for x in d["views"]["front"]["panel"]["decor"] if x.get("kind") == "dc-jack-art"] == [
-        "dc-jack-housing", "dc-jack-bore"]
+        "dc-jack-housing", "dc-jack-rim", "dc-jack-bore", "dc-jack-pin"]
+    assert [x["id"] for x in d["views"]["front"]["panel"]["decor"] if x.get("kind") == "dc-terminal-art"] == [
+        "dc-terminal-cap", "dc-terminal-housing", "dc-terminal-entry-1", "dc-terminal-entry-2"]
     assert len([p for p in placements(d, "front") if p.get("group") == "status-leds"]) == 5  # 3 bars, 2 supply lamps
+    assert len(refs(d, "front", "common/led-rect@1")) == 11 and len(refs(d, "front", "common/led-dot@1")) == 2
     assert {"CONSOLE", "MGMT/PoE in", "RESET", "USER", "FAULT", "POWER", "36 - 60 V", "CRS504-4XQ-IN",
             "ACT", "100G", "1", "2", "3", "4"} <= text_of(d, "front")
     gaps = {g["what"] for g in d["gaps"]}
@@ -137,10 +140,103 @@ def test_crs504_fans_are_on_the_right_wall_and_the_other_faces_are_empty():
     d = load(CRS504)
     fans = [x["id"] for x in d["views"]["right"]["panel"]["decor"] if x.get("kind") == "fan-grille"]
     assert fans == ["fan-0", "fan-1"]
-    for view in ("rear", "left", "top", "bottom"):
+    for view in ("left", "top", "bottom"):
         assert d["views"][view].get("empty"), view
     gaps = {g["what"] for g in d["gaps"]}
     assert {"fan-count", "left-wall", "rear-face", "top-and-bottom"} <= gaps
+
+
+def decor(d, view, id_):
+    return next(x for x in d["views"][view]["panel"]["decor"] if x.get("id") == id_)
+
+
+def test_crs504_cage_vent_is_a_motif_tile_of_the_measured_weave():
+    d = load(CRS504)
+    v = decor(d, "front", "cage-vent")
+    assert v["pattern"] == "motif" and v["at"] == [144.7, 10.4] and v["size"] == [97.7, 11.5]
+    assert v["pattern-pitch"] == [16.9, 11.5]
+    assert len(v["pattern-cells"]) == 9
+    pts = [p for cell in v["pattern-cells"] for p in cell]
+    assert all(0 <= x <= 16.9 and 0 <= y <= 11.5 for x, y in pts)
+    assert any(x == 0 for x, _ in pts) and any(x == 16.9 for x, _ in pts)  # cells flush with the tile's sides
+    assert any(y == 11.5 for _, y in pts)
+    assert "pattern-offset" not in v
+    for x in d["views"]["front"]["panel"]["decor"]:
+        assert x.get("pattern") != "vent", x["id"]
+
+
+def test_crs504_supply_vents_are_rects_of_slots_measured_on_the_drawing():
+    d = load(CRS504)
+    slots = {x["id"]: x for x in d["views"]["front"]["panel"]["decor"] if "-slot-" in x["id"]}
+    assert len(slots) == 20
+    assert all(s["fill"] == "#17191c" and s["vent"] == 1.0 and "pattern" not in s for s in slots.values())
+    assert slots["psu-1-slot-a1"]["at"] == [16.3, 20.6] and slots["psu-1-slot-a1"]["size"] == [3.9, 7.8]
+    assert slots["psu-1-slot-top-1"]["at"] == [23.6, 5.7] and slots["psu-1-slot-top-1"]["size"] == [6.4, 2.8]
+    for k in ("a1", "a2", "a3", "b1", "b2", "b3", "top-1", "top-2", "top-3", "top-4"):
+        first, second = slots[f"psu-1-slot-{k}"], slots[f"psu-2-slot-{k}"]
+        assert second["at"][0] - first["at"][0] == pytest.approx(59.9, abs=0.01)
+        assert second["at"][1] == first["at"][1] and second["size"] == first["size"]
+
+
+def test_crs504_dc_terminal_and_jack_are_drawn_at_their_measured_places():
+    d = load(CRS504)
+    cap, housing, e1, e2 = (decor(d, "front", i) for i in (
+        "dc-terminal-cap", "dc-terminal-housing", "dc-terminal-entry-1", "dc-terminal-entry-2"))
+    assert (cap["at"], cap["size"]) == ([276.0, 25.1], [10.0, 4.1])
+    assert (housing["at"], housing["size"]) == ([275.1, 29.2], [11.4, 8.2])
+    assert cap["fill"] == housing["fill"] == "#90cc90" and e1["fill"] == e2["fill"] == "#405a40"
+    assert e1["at"][0] < e2["at"][0] and e1["at"][1] == e2["at"][1] == 30.7
+    jack = {i: decor(d, "front", i) for i in ("dc-jack-housing", "dc-jack-rim", "dc-jack-bore", "dc-jack-pin")}
+    assert (jack["dc-jack-housing"]["at"], jack["dc-jack-housing"]["size"]) == ([289.8, 25.4], [10.3, 11.9])
+    assert [jack[i]["fill"] for i in jack] == ["#464646", "#222222", "#141312", "#a49478"]
+    # the rim and the bore are concentric on the pin
+    centre = lambda x: (x["at"][0] + x["size"][0] / 2, x["at"][1] + x["size"][1] / 2)
+    assert centre(jack["dc-jack-rim"]) == pytest.approx(centre(jack["dc-jack-bore"]))
+    assert centre(jack["dc-jack-pin"])[0] == pytest.approx(centre(jack["dc-jack-bore"])[0])
+    assert not [p for p in placements(d, "front") if p["ref"].startswith("common/dc-")]
+    assert not [p for p in d["views"]["front"]["components"]["placements"] if p.get("id", "").startswith("dc-")]
+
+
+def test_crs504_dc_legends_bracket_and_polarity_marks_are_drawn_for_the_chassis():
+    d = load(CRS504)
+    silk = {s.get("id"): s for s in d["views"]["front"]["silkscreen"] if s.get("id")}
+    assert {"dc-bracket", "dc-terminal-polarity", "dc-jack-polarity"} <= set(silk)
+    assert all(silk[i]["for"] == "chassis" and silk[i]["filled"] is False and silk[i]["stroke-width"] == 0.25
+               for i in ("dc-bracket", "dc-terminal-polarity", "dc-jack-polarity"))
+    assert silk["dc-bracket"]["at"] == [275.4, 20.8]
+    assert silk["dc-terminal-polarity"]["at"] == [278.7, 23.5] and silk["dc-jack-polarity"]["at"] == [291.9, 23.5]
+    legend = [s for s in d["views"]["front"]["silkscreen"] if s.get("text") == "36 - 60 V"]
+    assert len(legend) == 1 and legend[0]["at"] == [288.6, 20.0] and legend[0]["for"] == "chassis"
+    assert "36 - 60 V" in d["attrs"]["power"]["power-rating-label"] and "36 - 57 V" in d["attrs"]["power"]["power-dc-input"]
+    assert "dc-terminal" in {g["what"] for g in d["gaps"]}
+
+
+def test_crs504_rear_draws_only_the_earthing_stud_and_declares_the_rest():
+    d = load(CRS504)
+    rear = d["views"]["rear"]
+    assert not rear.get("empty") and not rear.get("components")
+    assert [x["id"] for x in rear["panel"]["decor"]] == ["rear-stud"]
+    stud = rear["panel"]["decor"][0]
+    assert stud["size"] == [4.3, 4.3] and stud["at"] == [8.85, 7.05]  # centred 11.0 mm from the right edge, 9.2 down
+    gap = next(g for g in d["gaps"] if g["what"] == "rear-face")
+    assert "4.3 mm" in gap["note"] and "11.0 mm" in gap["note"] and "9.2 mm" in gap["note"]
+
+
+def test_crs504_colours_are_the_photographs_medians():
+    d = load(CRS504)
+    assert d["chassis"]["color"] == "#d4d4d4"
+    assert decor(d, "front", "psu-1-module")["fill"] == decor(d, "front", "psu-2-module")["fill"] == "#9a9c9d"
+    assert decor(d, "front", "mgmt-block")["fill"] == "#9a9c9c"
+    note = d["provenance"]["colour"]["note"]
+    for value in ("#d4d4d4", "#9a9c9d", "#9a9c9c", "#90cc90", "#405a40", "#464646", "#222222", "#141312", "#a49478"):
+        assert value in note, value
+
+
+def test_lamps_rest_with_the_lamp_components_colour_and_the_gap_says_so():
+    for name in NAMES:
+        d = load(name)
+        note = next(g for g in d["gaps"] if g["what"] == "led-states")["note"]
+        assert "resting colour comes from the lamp component and is not changed here" in note
 
 
 # --- CRS520-4XS-16XQ-RM ------------------------------------------------------------------------------------------
@@ -223,8 +319,62 @@ def test_crs520_ears_and_the_rail_kit_are_declared_not_modelled():
 def test_crs520_walls():
     d = load(CRS520)
     assert [x["id"] for x in d["views"]["right"]["panel"]["decor"]] == ["side-vent"]
+    assert decor(d, "right", "side-vent")["pattern"] == "holes"  # photograph 2352 shows round perforations
     assert d["views"]["left"].get("empty")
     assert d["views"]["top"].get("empty") and d["views"]["bottom"].get("empty")
+
+
+def test_crs520_front_strips_are_motif_tiles_of_the_measured_slots():
+    d = load(CRS520)
+    top, bottom = decor(d, "front", "top-vent"), decor(d, "front", "bottom-vent")
+    assert (top["pattern"], top["at"], top["size"], top["pattern-pitch"]) == ("motif", [4.1, 0.9], [434.0, 5.5], [5.09, 5.5])
+    assert (bottom["pattern"], bottom["at"], bottom["size"], bottom["pattern-pitch"]) == (
+        "motif", [4.1, 41.8], [278.0, 2.2], [5.09, 2.2])
+    assert len(top["pattern-cells"]) == 2 and len(bottom["pattern-cells"]) == 1  # two rows, one row of notches
+    rows = sorted((min(y for _, y in c), max(y for _, y in c)) for c in top["pattern-cells"])
+    assert rows == [(0.0, 2.0), (3.5, 5.5)]
+    for cell in top["pattern-cells"] + bottom["pattern-cells"]:
+        assert (min(x for x, _ in cell), max(x for x, _ in cell)) == (0.55, 4.55)  # 4.0 mm slots, all one width
+    assert max(y for _, y in bottom["pattern-cells"][0]) == 2.2  # the notches reach the bottom edge
+    for x in d["views"]["front"]["panel"]["decor"]:
+        assert x.get("pattern") != "vent", x["id"]
+
+
+def test_crs520_rear_honeycombs_are_scaled_to_the_photographs_hexagons():
+    d = load(CRS520)
+    for i in ("fan-0", "fan-1", "fan-2", "fan-3"):
+        f = decor(d, "rear", i)
+        assert f["pattern"] == "vent" and f["size"] == [37.5, 37.5] and f["rx"] == 18.75
+        assert f["pattern-pitch"] == [8.1, 4.67]
+        # a hole sits on the ring's centre: the lattice phase is the ring centre
+        assert f["pattern-offset"] == [f["at"][0] + 18.75, f["at"][1] + 18.75]
+    assert [decor(d, "rear", f"fan-{i}")["pattern-offset"][0] for i in range(4)] == [195.9, 265.0, 333.6, 401.4]
+    # ratio of the scaled tile to the renderer's 8.86 x 5.11 tile is the same on both axes
+    assert 8.1 / 8.86 == pytest.approx(4.67 / 5.11, abs=0.001)
+    for i in range(4):
+        h = decor(d, "rear", f"fan-hub-{i}")
+        assert h["kind"] == "fan-hub" and h["size"] == [20.0, 20.0] and h["rx"] == 10.0 and h["fill"] == "#5d493d"
+        g = decor(d, "rear", f"fan-{i}")
+        assert (h["at"][0] + 10.0, h["at"][1] + 10.0) == pytest.approx(g["pattern-offset"])
+    p1, p2 = decor(d, "rear", "psu-1-vent"), decor(d, "rear", "psu-2-vent")
+    assert (p1["pattern-pitch"], p1["pattern-offset"], p1["at"], p1["size"]) == (
+        [9.39, 5.42], [10.6, 10.3], [7.8, 8.0], [27.0, 28.4])
+    assert p2["pattern-pitch"] == [9.39, 5.42] and p2["pattern-offset"] == [74.0, 10.3] and p2["at"] == [71.2, 8.0]
+    assert 9.39 / 8.86 == pytest.approx(5.42 / 5.11, abs=0.001)
+
+
+def test_crs520_colours_are_the_photographs_medians():
+    d = load(CRS520)
+    assert d["chassis"]["color"] == "#e0dcd5"
+    for i in ("console-block", "mgmt-block"):
+        assert decor(d, "front", i)["fill"] == "#e6e3df"
+    for i in ("fan-1-module", "fan-2-module", "fan-3-module", "fan-4-module"):
+        assert decor(d, "rear", i)["fill"] == "#5d493d"
+    for i in ("psu-1-module", "psu-2-module"):
+        assert decor(d, "rear", i)["fill"] == "#736f62"
+    note = d["provenance"]["colour"]["note"]
+    for value in ("#e0dcd5", "#e6e3df", "#4e3d33", "#5d493d", "#615d52", "#736f62", "#bbbbb7"):
+        assert value in note, value
 
 
 # --- every device ---------------------------------------------------------------------------------------------
