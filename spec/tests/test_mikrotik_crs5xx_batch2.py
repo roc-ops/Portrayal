@@ -160,7 +160,7 @@ def test_crs504_cage_vent_is_a_motif_tile_of_the_measured_weave():
     assert all(0 <= x <= 16.9 and 0 <= y <= 11.5 for x, y in pts)
     assert any(x == 0 for x, _ in pts) and any(x == 16.9 for x, _ in pts)  # cells flush with the tile's sides
     assert any(y == 11.5 for _, y in pts)
-    assert "pattern-offset" not in v
+    assert v["pattern-offset"] == v["at"]  # the tile's phase starts at the field's left and top edges
     for x in d["views"]["front"]["panel"]["decor"]:
         assert x.get("pattern") != "vent", x["id"]
 
@@ -330,6 +330,7 @@ def test_crs520_front_strips_are_motif_tiles_of_the_measured_slots():
     assert (top["pattern"], top["at"], top["size"], top["pattern-pitch"]) == ("motif", [4.1, 0.9], [434.0, 5.5], [5.09, 5.5])
     assert (bottom["pattern"], bottom["at"], bottom["size"], bottom["pattern-pitch"]) == (
         "motif", [4.1, 41.8], [278.0, 2.2], [5.09, 2.2])
+    assert top["pattern-offset"] == top["at"] and bottom["pattern-offset"] == bottom["at"]  # phase starts at the field
     assert len(top["pattern-cells"]) == 2 and len(bottom["pattern-cells"]) == 1  # two rows, one row of notches
     rows = sorted((min(y for _, y in c), max(y for _, y in c)) for c in top["pattern-cells"])
     assert rows == [(0.0, 2.0), (3.5, 5.5)]
