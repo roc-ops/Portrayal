@@ -16,7 +16,7 @@ rack at all.
 |---|---|
 | `chassis.mount` | `rack` (default), `din-rail`, `wall`, `desktop`. Anything but `rack` states no `ru` and exports `u_height: 0` (L125) |
 | the 3D body | a box sized from `chassis`, with each view painted on a side and relief built on it ([DEPTH-AND-3D.md](../spec/DEPTH-AND-3D.md) section 4) |
-| panel decoration patterns | `vent`, `holes`, `grille`, `slots`, `slots-h`, `chevrons`, `ribs` |
+| panel decoration patterns | `vent`, `holes`, `grille`, `slots`, `slots-h`, `ribs` |
 | a lab placement | `{id, ref, ru, label}`. No face, no schema, no checks; `labs_index.py` passes the file through |
 | the rack drawing | in the site repository, from `labs.json` |
 

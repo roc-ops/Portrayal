@@ -3282,18 +3282,6 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             op.set("x", "0.9"); op.set("y", "0.9")
             op.set("width", "10.2"); op.set("height", "10.2")
             op.set("rx", "1.2"); op.set("fill", "#15181b")
-        if "chevrons" in used_patterns:
-            # A zigzag of V shapes, as a cloud switch's top-edge vent is drawn: one
-            # stroke up and one down per tile, so the tile is one V and one peak.
-            # The stroke is drawn past both ends so the joins at the tile edge are
-            # whole; the tile clips what overruns.
-            pat = ET.SubElement(defs, f"{{{SVG_NS}}}pattern")
-            pat.set("id", "portrayal-chevrons"); pat.set("width", "16.7"); pat.set("height", "6.8")
-            pat.set("patternUnits", "userSpaceOnUse")
-            zig = ET.SubElement(pat, f"{{{SVG_NS}}}path")
-            zig.set("d", "M -8.35 1.1 L 0 5.7 L 8.35 1.1 L 16.7 5.7 L 25.05 1.1")
-            zig.set("fill", "none"); zig.set("stroke", "#17191c"); zig.set("stroke-width", "2")
-            zig.set("stroke-linejoin", "bevel")
         if "slots-h" in used_patterns:
             pat = ET.SubElement(defs, f"{{{SVG_NS}}}pattern")
             pat.set("id", "portrayal-slots-h"); pat.set("width", "14"); pat.set("height", "8")
