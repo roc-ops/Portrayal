@@ -1,0 +1,1053 @@
+format: 1
+kind: device
+name: c9300-24u
+version: 1.0.0
+maturity: modelled
+manufacturer: Cisco
+model: C9300-24U
+aliases:
+- {name: Catalyst 9300-24U, kind: marketing}
+portfolio: {line: Catalyst, family: Catalyst 9300, series: Catalyst 9300}
+description: >-
+  24x 10/100/1000 Cisco UPOE RJ-45 1RU stackable access switch running Cisco IOS XE, the C9300-24U of
+  the Catalyst 9300 family. The 24 ports, the mode button, the status lamps, the USB mini-Type B console
+  port, the USB Type A storage port and the beacon button are on the front, with a bay for an uplink network
+  module at the right, shipped with a blank in it. The rear holds three fan modules, two StackWise-480
+  stacking ports, two StackPower connectors, two power supply bays, the RJ-45 console and management ports,
+  a USB 3.0 SSD slot and the ground connectors. The default supply is the 1100 W AC Platinum PWR-C1-1100WAC-P
+  in one bay with the power supply slot cover in the other. The -A and -E suffixes of the part number
+  are software licences and not hardware, so there is one device.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Cisco Catalyst 9300 Series Switches Hardware Installation Guide, first published 2017-06-20, last
+      modified 2026-05-15, https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig.pdf
+      (sha256 c1db6738...441b). Table 1 (models), Table 42 (dimensions), Table 43 (weight), Table 18 (default
+      supply and PoE), Table 35 (the supplies), Figures 1, 8 and 10 (the front, the lamps and the rear),
+      the Fan Module section and Table 48. COMMUNITY NETBOX DEVICETYPE-LIBRARY ELEVATIONS (cisco-c9300-24u.front.png
+      and cisco-c9300-24u.rear.png, each 2289 x 219) are a second opinion and the only flat drawings held,
+      not Cisco's. No data sheet, no photograph, no 3D model and no stencil is held for the Catalyst 9300.
+  the-licence-suffix:
+    confidence: datasheet
+    note: >-
+      C9300-24U-A (Network Advantage) and C9300-24U-E (Network Essentials) differ in software licence
+      only; the guide lists the hardware as C9300-24U throughout. One device, and the suffixed ordering
+      codes are not part numbers of a configuration.
+  the-rear-figure:
+    confidence: drawing
+    note: >-
+      THE GUIDE'S PDF PAGE 41 REAR FIGURE IS FIGURE 14, THE CATALYST 9300X, AND IS NOT USED. Figure 10
+      of the guide, "Rear Panel of a Cisco Catalyst 9300 Series Switch" (PDF page 39), is isometric, one
+      rear for the series. Its callouts name, in order, the ground connectors, the USB 3.0 SSD port, the
+      BEACON LED, the RJ-45 CONSOLE port, the RJ-45 MGMT port, the fan modules, the StackPower connectors,
+      the AC OK and PS OK lamps, the StackWise-480 port connectors and the power supply modules.
+  the-envelope:
+    confidence: datasheet
+    note: >-
+      Table 42: 1.73 x 17.5 x 19.2 in (4.4 x 44.5 x 48.8 cm), with the fan modules and the default supplies
+      installed. Width 444.5 (17.5 in; the 44.5 cm agrees). Depth 487.7 (19.2 in; 48.8 cm is 488). HEIGHT
+      44.45, THE RACK UNIT, NOT THE PRINTED 1.73 IN (43.9 mm): the guide prints 1.73 in for every 1RU
+      model and both are nominal, so the unit is carried and the printed height is one millimetre under
+      it. The 17.5 in is the body between the ear fold lines (the NetBox elevation draws ears outside
+      it).
+  rack-positions:
+    confidence: drawing
+    note: >-
+      Figures 32 to 35 of the guide draw the front-mounting, mid-mounting, rear-mounting and four-point
+      mounting positions, isometrically, with no dimension. Front-mounting is the first and the guide's
+      Mounting the Switch in a Rack step 1 attaches the brackets for "the front or rear mounting positions";
+      it is taken as the shipped default. No setback is printed and none is written.
+  front-scale:
+    confidence: estimated
+    note: >-
+      EVERY FRONT POSITION IS READ OFF THIS MODEL'S OWN NETBOX ELEVATION, NOT THE GUIDE'S FIGURE 1, WHICH
+      IS ISOMETRIC. The elevation is 2289 px wide for the 482.6 mm rack face, 4.743 px per mm; it is cropped
+      to the centre 444.5 mm (the body between the ear fold lines), which starts at 90.4 px. The jack
+      cavities measure 12.4 to 12.65 mm across on a 14.13 to 14.17 mm column step and a 13.92 mm row step,
+      and the second block starts 18.55 mm after the first block's last cavity. Good to about a millimetre.
+      The merged C9300-48P was read from the same kind of picture, and this picture's two port blocks
+      sit at the x positions of that picture's third and fourth blocks to 0.4 mm, so the ports are placed
+      on the 48P's pitch, 14.19 mm. This picture differs from the C9300-24P's only in the name plate (zero
+      differing pixels elsewhere), and from the C9300-48P's only where the 48P has jacks, the seated module
+      and the name plate.
+  ports:
+    confidence: estimated
+    note: >-
+      12 columns of two jacks in two blocks of six at the right of the port area, numbered DOWN each column
+      (odd on the top row, even beneath) as the 48P's blocks are; the NetBox elevation prints 1X and 12X
+      under the first block and 13X and 24X under the second. The column step is 14.19 mm and the second
+      block starts 89.4 mm after the first. The area to the left of the first block, from the left cluster
+      to 99 mm, has no jacks and is bare chassis in the elevation. The jack cell is the registry's 12.7
+      x 11.0. The elevation draws no marking that tells UPOE from PoE+ on a jack; the model is told by
+      Table 1 and the name plate.
+  port-lamps:
+    confidence: estimated
+    note: >-
+      One lamp per port in a strip along the bottom edge, an up triangle for the odd (upper) port and
+      a down triangle for the even, as the elevation draws them. THE ELEVATION DRAWS SEVEN PAIRS OF TRIANGLES
+      ACROSS EACH BLOCK OF SIX COLUMNS, at an 11.7 mm step, which cannot be one lamp per port. The pairs
+      are placed under their own columns, the two triangles 5.17 mm apart as the elevation draws them,
+      and the strip's height is its 40.5 mm below the top. The meaning of each colour is the guide's Table
+      15 (green link, blinking green activity, amber blocked) and the mode decides which Table 14 reading
+      the lamps show.
+  numbering:
+    confidence: estimated
+    note: >-
+      The legends under the strip are the NetBox elevation's: 1X and 12X, 13X and 24X, one pair at the
+      ends of each block. The elevation prints 1X without a leading zero; it is carried as drawn. Port
+      numbering is as printed, and the interface names are not on the metal and are left out.
+  left-cluster:
+    confidence: estimated
+    note: >-
+      The beacon button (Figure 1 callout 1, "Beacon LED (UID button)", a lit square), the maker's mark,
+      the Mode button, the status lamps, the USB mini-Type B console port (callout 3) and the USB Type
+      A storage port (callout 4) are read off this model's NetBox elevation at the scale of front-scale.
+      The guide's Figure 8 names the lamps in two rows, Status, Duplex, Speed, Stack and PoE above, then
+      System, Active, XPS and S-PWR, and the Console lamp beside the mini-USB port; the metal prints pictograms
+      and not words, so no legend is drawn and each lamp is named by its id. THE FRONT USB TYPE A PORT'S
+      GENERATION IS NOT STATED: the rear port is "USB3.0-SSD" and the front is only "USB Type A storage
+      port", so it is drawn with the 2.0 tongue.
+  vents:
+    confidence: estimated
+    note: >-
+      Three vent strips and the name plate, at the x positions the elevation draws them. The first strip,
+      over the area with no jacks, is drawn in the elevation as an open crenellated vent and is carried
+      as a vent of the same extent.
+  network-module-bay:
+    confidence: estimated
+    note: >-
+      Figure 1 callout 6, "Network module slots". The bay is read off the NetBox elevation, which draws
+      a C9300-NM-2Q seated in it: 364.8 to 440.8 mm across and 42.5 mm high, 4.3 mm beyond the last block.
+      The guide's Table 5 and the Installing a Network Module chapter say the blank C9300-NM-BLANK is
+      fitted "when the switch has no uplink ports (this is required for sufficient air flow)". The blank
+      is the default. THE NETWORK MODULES THEMSELVES, C9300-NM-2Q, -4G, -4M, -2Y and -8X, ARE NOT MODELLED
+      here and are left for a later 9300 batch; the bay accepts only the blank until they are.
+  rear-scale:
+    confidence: estimated
+    note: >-
+      The rear is this model's own NetBox rear elevation, 2289 x 219 px, 4.743 px per mm, the body 444.5
+      mm from 90.4 px. THE ELEVATION LABELS ITS SUPPLIES PWR-C1-715WAC, NOT THE 1100 W THIS MODEL SHIPS
+      WITH; IT IS NOT SKU PROOF AND IS THE SAME PICTURE AS THE C9300-24P'S. Its column-brightness profile
+      over the supply and fan band, resampled to millimetres, agrees with the 48T elevation the merged
+      rear was read from (mean difference 3.4 of 255, every step edge at the same position to a millimetre),
+      and with Figure 10 in its order from the left: ground connectors, SSD slot, console and management
+      ports, fan, StackWise, fan, StackWise, fan, StackPower, two supplies. The positions of the merged
+      C9300-48P rear are therefore kept. The supplies are the dark honeycomb faces the components use.
+  rear-fans:
+    confidence: estimated
+    note: >-
+      Three FAN-T2 modules (the guide: "support three internal hot-swappable 12-V fan modules (FAN-T2=)")
+      at a 63.0 mm step, each 43.9 x 41.1 by Table 48, centred 70.5, 133.5 and 196.5 mm from the left.
+      The StackWise-480 carriers lie between them (92.5 to 111.1 and 156.2 to 174.8 mm) and hold three
+      stacked connectors each, as the elevation draws them, at a 9.3 mm pitch; the guide's Figure 10 points
+      at two ports in all, so each carrier is one port.
+  rear-power:
+    confidence: estimated
+    note: >-
+      The StackPower connectors (callout 7), S-PWR 1 over S-PWR 2, with XPS under the first, at 233.0
+      mm, and the two supply bays 258.5 and 348.4 mm from the left, each the supplies' 82.55 x 40.1 by
+      the guide's physical table. A 13.5 mm strip of bare chassis closes the right. The guide does not
+      number the supply slots; psu-1 is the left.
+  rear-left:
+    confidence: estimated
+    note: >-
+      The ground connectors (callout 1) as two ground screws, the USB 3.0 SSD slot (callout 2) under a
+      cover the guide calls the "blank cover on the USB 3.0 SSD slot", the RJ-45 CONSOLE port (callout
+      4) on the left and the RJ-45 MGMT port (callout 5) on the right, each 14.2 mm from the next, and
+      the lamps for the console and the beacon (callout 3) in the icon row beneath. The jacks' keyways
+      point down.
+  console-over-management:
+    confidence: drawing
+    note: >-
+      The guide's Ethernet Management Port text says the switch is reached "through the 10/100/1000 Ethernet
+      management port or one of the console ports" and the RJ-45 Console Port LED table says the RJ-45
+      console is disabled while the USB console is active, so the front mini-USB and the rear RJ-45 are
+      one console, and the management port is its own.
+  power:
+    confidence: datasheet
+    note: >-
+      Table 1 and Table 18: PoE budget 830 W with the 1100 W supply, "Available PoE" of the C9300-24U.
+      The guide holds no table of the switch's own draw, and none is written. Table 35 lists the supplies
+      for the series and gives no per-model restriction, so every bay takes all of them; the available
+      PoE with a smaller supply is not printed for this model.
+  colour:
+    confidence: estimated
+    note: >-
+      #cccccc, the median of the pale bar between the two jack rows in the NetBox front elevation.
+  airflow:
+    confidence: datasheet
+    note: >-
+      The Fan Module section: "The airflow direction is from front-to-rear and side-to-rear." One airflow
+      for every build, so there are no airflow configurations.
+attrs:
+  physical:
+    weight-note: >-
+      16.63 lb (7.54 kg) with the fan modules and the default power supplies installed (Table 43)
+  power:
+    poe-budget-w: 830
+    poe-budget-note: 830 W with the default PWR-C1-1100WAC-P (Tables 1 and 18)
+    power-supply-options: >-
+      PWR-C1-350WAC, PWR-C1-350WAC-P, PWR-C1-715WAC, PWR-C1-715WAC-P, PWR-C1-1100WAC, PWR-C1-1100WAC-P,
+      PWR-C1-1900WAC-P, PWR-C1-1900WHV-T, PWR-C1-715WDC (Tables 18 and 35)
+  environmental:
+    operating-temp: -5 to 45 C (23 to 113 F), Table 37
+    storage-temp: -40 to 70 C (-40 to 158 F), Table 37
+    humidity: 5 to 90 percent, noncondensing
+    altitude: operating up to 3000 m (10,000 ft); storage up to 4500 m (15,000 ft)
+  features:
+    stacking: StackWise-480 data stacking, up to nine switches, and StackPower, up to four switches
+    uplink-modules: >-
+      one network module slot; C9300-NM-2Q, -4G, -4M, -2Y, -8X and the 3850 uplink modules (Table 5);
+      a blank when none is fitted
+    poe: >-
+      10/100/1000 Cisco UPOE on all 24 ports, up to 60 W per port (PoE, PoE+, Cisco UPOE and Cisco UPOE+
+      Ports)
+  management:
+    console: USB mini-Type B on the front and RJ-45 on the rear; the USB console takes precedence
+    oob: RJ-45 10/100/1000 management port on the rear
+    usb: USB Type A storage port on the front; USB 3.0 SSD slot on the rear
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 444.5
+  height: 44.45
+  depth: 487.7
+  ru: 1
+  weight-kg: 7.54
+  color: '#cccccc'
+  airflow: front-to-back
+  power: ac
+  ears:
+    positions:
+    - {name: flush, label: front-mounting, default: true}
+    - {name: mid, label: mid-mounting}
+    - {name: rear, label: rear-mounting}
+gaps:
+- what: rack-kit
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    The rack depth the bracket kits span. The guide's Figure 29 and its table name the 19-inch brackets
+    ACC-KIT-T1=, the four-point extension rails and five brackets 4PT-KIT-T2=, and the 23-inch, 24-inch
+    and ETSI brackets RACK-KIT-T1=, and print no range of rack depth, no setback and no part dimension.
+    A kind: kit contract needs a depth or a factory preset, so no kit is written and chassis.kits is left
+    out; the three positions above are named without a number.
+- what: front-usb-generation
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    Whether the front USB Type A storage port is USB 2.0 or 3.0. The guide says only "USB Type A storage
+    port".
+- what: network-modules
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    The faces of C9300-NM-2Q, C9300-NM-4G, C9300-NM-4M, C9300-NM-2Y and C9300-NM-8X. The guide draws them
+    isometrically and prints no dimension. Left for a later 9300 batch.
+- what: lamp-pictograms
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    The pictograms under the status lamps and beside the mini-USB port. The guide's Figure 8 gives their
+    names and the NetBox elevation draws them at a few pixels each; no legend is drawn.
+- what: sides-top-bottom
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    A flat drawing of the lid, the underside and the sides. The guide's Figure 1 and Figure 10 show them
+    isometrically with a vent on the side and labels on the lid.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+  nm-bay: {term: Slot, role: traffic, index-origin: 1}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  mode-leds: {term: LED, role: indicator, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+    mixed: >-
+      the beacon (UID) button and the Mode button at the left of the front: two buttons that identify
+      the switch and step its lamps, both used from the front panel.
+  usb-console:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: mini-usb-b}
+  usb-storage:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the rear RJ-45 console port beside the rear 10/100/1000 RJ-45 management port: two jobs, one purpose,
+      reaching the switch when the data plane cannot.
+  stackwise:
+    term: Port
+    role: fabric
+    index-origin: 1
+    attrs: {media: stackwise-480}
+  stackpower:
+    term: Port
+    role: service
+    index-origin: 1
+    attrs: {media: stackpower}
+  grounding: {term: Stud, role: furniture, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        The guide: "The switch has two internal power supply module slots. You can use two AC modules
+        or one power supply module and a blank module."
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 2+1
+      redundancy-note: >-
+        Three fan modules, and the Fan Module section of the guide says the switch can operate with two
+        operational fans while the failed one is replaced.
+views:
+  front:
+    size: {w: 444.5, h: 44.45}
+    panel:
+      decor:
+      - {id: vent-1, at: [99.1, 2.0], size: [83.5, 6.0], vent: 1}
+      - {id: vent-2, at: [188.0, 2.0], size: [83.6, 6.0], vent: 1}
+      - {id: vent-3, at: [277.1, 2.0], size: [49.1, 6.0], vent: 1}
+      - {id: name-plate, at: [327.2, 2.0], size: [32.8, 5.8], fill: '#2a2c30'}
+      cutouts:
+      - {id: port-1, at: [187.45, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-1, at: [190.1, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-2, at: [187.45, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-2, at: [195.27, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-3, at: [201.64, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-3, at: [204.29, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-4, at: [201.64, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-4, at: [209.46, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-5, at: [215.83, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-5, at: [218.48, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-6, at: [215.83, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-6, at: [223.65, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-7, at: [230.02, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-7, at: [232.67, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-8, at: [230.02, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-8, at: [237.84, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-9, at: [244.21, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-9, at: [246.86, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-10, at: [244.21, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-10, at: [252.03, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-11, at: [258.4, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-11, at: [261.05, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-12, at: [258.4, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-12, at: [266.22, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-13, at: [276.85, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-13, at: [279.5, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-14, at: [276.85, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-14, at: [284.67, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-15, at: [291.04, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-15, at: [293.69, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-16, at: [291.04, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-16, at: [298.86, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-17, at: [305.23, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-17, at: [307.88, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-18, at: [305.23, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-18, at: [313.05, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-19, at: [319.42, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-19, at: [322.07, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-20, at: [319.42, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-20, at: [327.24, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-21, at: [333.61, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-21, at: [336.26, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-22, at: [333.61, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-22, at: [341.43, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-23, at: [347.8, 9.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-23, at: [350.45, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: port-24, at: [347.8, 23.77], size: [12.7, 11.0], shape: rect}
+      - {id: led-port-24, at: [355.62, 39.5], size: [2.25, 2.0], shape: circle}
+      - {id: uid-button, at: [3.95, 2.4], size: [4.0, 4.0], shape: rect}
+      - {id: mode-button, at: [21.0, 2.5], size: [4.8, 4.8], shape: circle}
+      - {id: led-stat, at: [32.0, 2.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-duplx, at: [39.2, 2.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-speed, at: [46.1, 2.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-stack, at: [53.2, 2.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-poe, at: [60.1, 2.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-system, at: [32.0, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-active, at: [39.2, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-xps, at: [46.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-spwr, at: [53.2, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-console, at: [61.7, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: console-usb, at: [66.05, 2.15], size: [7.7, 3.9], shape: rect}
+      - {id: usb-a, at: [79.0, 3.0], size: [12.0, 4.5], shape: rect}
+    silkscreen:
+    - {id: silk-1x, at: [187.7, 41.4], text: 1X, font-size: 2.0, anchor: middle, fill: '#2b2e31', for: chassis}
+    - {id: silk-12x, at: [272.6, 41.4], text: 12X, font-size: 2.0, anchor: middle, fill: '#2b2e31', for: chassis}
+    - {id: silk-13x, at: [277.1, 41.4], text: 13X, font-size: 2.0, anchor: middle, fill: '#2b2e31', for: chassis}
+    - {id: silk-24x, at: [360.0, 41.4], text: 24X, font-size: 2.0, anchor: middle, fill: '#2b2e31', for: chassis}
+    - {id: silk-model, at: [343.6, 5.9], text: Catalyst 9300 24 UPOE, font-size: 1.8, anchor: middle,
+      fill: '#e4e7ea', for: chassis}
+    components:
+      bays:
+      - id: nm-bay
+        at: [364.8, 1.0]
+        size: {w: 76.0, h: 42.5}
+        group: nm-bay
+        rel-pos: 1
+        accepts:
+        - cisco/c9300-nm-blank@1
+        default: cisco/c9300-nm-blank@1
+      placements:
+      - {ref: std/rj45-ganged@2, id: port-1, at: [187.45, 9.77], rotate: 180, group: rj45, rel-pos: 1}
+      - {ref: std/rj45-ganged@2, id: port-2, at: [187.45, 23.77], group: rj45, rel-pos: 2}
+      - {ref: std/rj45-ganged@2, id: port-3, at: [201.64, 9.77], rotate: 180, group: rj45, rel-pos: 3}
+      - {ref: std/rj45-ganged@2, id: port-4, at: [201.64, 23.77], group: rj45, rel-pos: 4}
+      - {ref: std/rj45-ganged@2, id: port-5, at: [215.83, 9.77], rotate: 180, group: rj45, rel-pos: 5}
+      - {ref: std/rj45-ganged@2, id: port-6, at: [215.83, 23.77], group: rj45, rel-pos: 6}
+      - {ref: std/rj45-ganged@2, id: port-7, at: [230.02, 9.77], rotate: 180, group: rj45, rel-pos: 7}
+      - {ref: std/rj45-ganged@2, id: port-8, at: [230.02, 23.77], group: rj45, rel-pos: 8}
+      - {ref: std/rj45-ganged@2, id: port-9, at: [244.21, 9.77], rotate: 180, group: rj45, rel-pos: 9}
+      - {ref: std/rj45-ganged@2, id: port-10, at: [244.21, 23.77], group: rj45, rel-pos: 10}
+      - {ref: std/rj45-ganged@2, id: port-11, at: [258.4, 9.77], rotate: 180, group: rj45, rel-pos: 11}
+      - {ref: std/rj45-ganged@2, id: port-12, at: [258.4, 23.77], group: rj45, rel-pos: 12}
+      - {ref: std/rj45-ganged@2, id: port-13, at: [276.85, 9.77], rotate: 180, group: rj45, rel-pos: 13}
+      - {ref: std/rj45-ganged@2, id: port-14, at: [276.85, 23.77], group: rj45, rel-pos: 14}
+      - {ref: std/rj45-ganged@2, id: port-15, at: [291.04, 9.77], rotate: 180, group: rj45, rel-pos: 15}
+      - {ref: std/rj45-ganged@2, id: port-16, at: [291.04, 23.77], group: rj45, rel-pos: 16}
+      - {ref: std/rj45-ganged@2, id: port-17, at: [305.23, 9.77], rotate: 180, group: rj45, rel-pos: 17}
+      - {ref: std/rj45-ganged@2, id: port-18, at: [305.23, 23.77], group: rj45, rel-pos: 18}
+      - {ref: std/rj45-ganged@2, id: port-19, at: [319.42, 9.77], rotate: 180, group: rj45, rel-pos: 19}
+      - {ref: std/rj45-ganged@2, id: port-20, at: [319.42, 23.77], group: rj45, rel-pos: 20}
+      - {ref: std/rj45-ganged@2, id: port-21, at: [333.61, 9.77], rotate: 180, group: rj45, rel-pos: 21}
+      - {ref: std/rj45-ganged@2, id: port-22, at: [333.61, 23.77], group: rj45, rel-pos: 22}
+      - {ref: std/rj45-ganged@2, id: port-23, at: [347.8, 9.77], rotate: 180, group: rj45, rel-pos: 23}
+      - {ref: std/rj45-ganged@2, id: port-24, at: [347.8, 23.77], group: rj45, rel-pos: 24}
+      - ref: common/led-arrow-sm@1
+        id: led-port-1
+        at: [190.1, 39.5]
+        skin: up
+        states: &id001
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: blocked, color: '#f59e0b'}
+        - {name: fault, color: '#f59e0b'}
+        for: port-1
+        group: port-leds
+        rel-pos: 1
+      - ref: common/led-arrow-sm@1
+        id: led-port-2
+        at: [195.27, 39.5]
+        skin: down
+        states: *id001
+        for: port-2
+        group: port-leds
+        rel-pos: 2
+      - ref: common/led-arrow-sm@1
+        id: led-port-3
+        at: [204.29, 39.5]
+        skin: up
+        states: *id001
+        for: port-3
+        group: port-leds
+        rel-pos: 3
+      - ref: common/led-arrow-sm@1
+        id: led-port-4
+        at: [209.46, 39.5]
+        skin: down
+        states: *id001
+        for: port-4
+        group: port-leds
+        rel-pos: 4
+      - ref: common/led-arrow-sm@1
+        id: led-port-5
+        at: [218.48, 39.5]
+        skin: up
+        states: *id001
+        for: port-5
+        group: port-leds
+        rel-pos: 5
+      - ref: common/led-arrow-sm@1
+        id: led-port-6
+        at: [223.65, 39.5]
+        skin: down
+        states: *id001
+        for: port-6
+        group: port-leds
+        rel-pos: 6
+      - ref: common/led-arrow-sm@1
+        id: led-port-7
+        at: [232.67, 39.5]
+        skin: up
+        states: *id001
+        for: port-7
+        group: port-leds
+        rel-pos: 7
+      - ref: common/led-arrow-sm@1
+        id: led-port-8
+        at: [237.84, 39.5]
+        skin: down
+        states: *id001
+        for: port-8
+        group: port-leds
+        rel-pos: 8
+      - ref: common/led-arrow-sm@1
+        id: led-port-9
+        at: [246.86, 39.5]
+        skin: up
+        states: *id001
+        for: port-9
+        group: port-leds
+        rel-pos: 9
+      - ref: common/led-arrow-sm@1
+        id: led-port-10
+        at: [252.03, 39.5]
+        skin: down
+        states: *id001
+        for: port-10
+        group: port-leds
+        rel-pos: 10
+      - ref: common/led-arrow-sm@1
+        id: led-port-11
+        at: [261.05, 39.5]
+        skin: up
+        states: *id001
+        for: port-11
+        group: port-leds
+        rel-pos: 11
+      - ref: common/led-arrow-sm@1
+        id: led-port-12
+        at: [266.22, 39.5]
+        skin: down
+        states: *id001
+        for: port-12
+        group: port-leds
+        rel-pos: 12
+      - ref: common/led-arrow-sm@1
+        id: led-port-13
+        at: [279.5, 39.5]
+        skin: up
+        states: *id001
+        for: port-13
+        group: port-leds
+        rel-pos: 13
+      - ref: common/led-arrow-sm@1
+        id: led-port-14
+        at: [284.67, 39.5]
+        skin: down
+        states: *id001
+        for: port-14
+        group: port-leds
+        rel-pos: 14
+      - ref: common/led-arrow-sm@1
+        id: led-port-15
+        at: [293.69, 39.5]
+        skin: up
+        states: *id001
+        for: port-15
+        group: port-leds
+        rel-pos: 15
+      - ref: common/led-arrow-sm@1
+        id: led-port-16
+        at: [298.86, 39.5]
+        skin: down
+        states: *id001
+        for: port-16
+        group: port-leds
+        rel-pos: 16
+      - ref: common/led-arrow-sm@1
+        id: led-port-17
+        at: [307.88, 39.5]
+        skin: up
+        states: *id001
+        for: port-17
+        group: port-leds
+        rel-pos: 17
+      - ref: common/led-arrow-sm@1
+        id: led-port-18
+        at: [313.05, 39.5]
+        skin: down
+        states: *id001
+        for: port-18
+        group: port-leds
+        rel-pos: 18
+      - ref: common/led-arrow-sm@1
+        id: led-port-19
+        at: [322.07, 39.5]
+        skin: up
+        states: *id001
+        for: port-19
+        group: port-leds
+        rel-pos: 19
+      - ref: common/led-arrow-sm@1
+        id: led-port-20
+        at: [327.24, 39.5]
+        skin: down
+        states: *id001
+        for: port-20
+        group: port-leds
+        rel-pos: 20
+      - ref: common/led-arrow-sm@1
+        id: led-port-21
+        at: [336.26, 39.5]
+        skin: up
+        states: *id001
+        for: port-21
+        group: port-leds
+        rel-pos: 21
+      - ref: common/led-arrow-sm@1
+        id: led-port-22
+        at: [341.43, 39.5]
+        skin: down
+        states: *id001
+        for: port-22
+        group: port-leds
+        rel-pos: 22
+      - ref: common/led-arrow-sm@1
+        id: led-port-23
+        at: [350.45, 39.5]
+        skin: up
+        states: *id001
+        for: port-23
+        group: port-leds
+        rel-pos: 23
+      - ref: common/led-arrow-sm@1
+        id: led-port-24
+        at: [355.62, 39.5]
+        skin: down
+        states: *id001
+        for: port-24
+        group: port-leds
+        rel-pos: 24
+      - {ref: common/button-led-sq@1, id: uid-button, at: [3.95, 2.4], group: controls, rel-pos: 1, for: chassis}
+      - {ref: cisco/c9300-mode-button@1, id: mode-button, at: [21.0, 2.5], group: controls, rel-pos: 2,
+        for: chassis}
+      - ref: common/led-dot@1
+        id: led-stat
+        at: [32.0, 2.7]
+        group: mode-leds
+        rel-pos: 1
+        for: chassis
+        states:
+        - 'off'
+        - {name: lit, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-duplx
+        at: [39.2, 2.7]
+        group: mode-leds
+        rel-pos: 2
+        for: chassis
+        states:
+        - 'off'
+        - {name: lit, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-speed
+        at: [46.1, 2.7]
+        group: mode-leds
+        rel-pos: 3
+        for: chassis
+        states:
+        - 'off'
+        - {name: lit, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-stack
+        at: [53.2, 2.7]
+        group: mode-leds
+        rel-pos: 4
+        for: chassis
+        states:
+        - 'off'
+        - {name: lit, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-poe
+        at: [60.1, 2.7]
+        group: mode-leds
+        rel-pos: 5
+        for: chassis
+        states:
+        - 'off'
+        - {name: poe, color: '#22c55e'}
+        - {name: denied, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-system
+        at: [32.0, 6.5]
+        group: leds
+        rel-pos: 1
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-active
+        at: [39.2, 6.5]
+        group: leds
+        rel-pos: 2
+        for: chassis
+        states:
+        - 'off'
+        - {name: active, color: '#22c55e'}
+        - {name: error, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-xps
+        at: [46.1, 6.5]
+        group: leds
+        rel-pos: 3
+        for: chassis
+        states:
+        - 'off'
+        - {name: ready, color: '#22c55e'}
+        - {name: standby, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-spwr
+        at: [53.2, 6.5]
+        group: leds
+        rel-pos: 4
+        for: chassis
+        states:
+        - 'off'
+        - {name: connected, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-console
+        at: [61.7, 6.5]
+        group: leds
+        rel-pos: 5
+        for: console-usb
+        states:
+        - 'off'
+        - {name: active, color: '#22c55e'}
+      - ref: std/mini-usb@1
+        id: console-usb
+        at: [66.05, 2.15]
+        group: usb-console
+        rel-pos: 1
+        attrs: {role: console}
+      - ref: std/usb-a@1
+        id: usb-a
+        at: [79.0, 3.0]
+        skin: usb2
+        group: usb-storage
+        rel-pos: 1
+        attrs: {role: storage}
+    regions:
+    - id: logo-zone
+      at: [9.0, 2.4]
+      size: {w: 10.5, h: 5.6}
+      label: Vendor logo; not drawn
+    - id: downlinks
+      at: [186.5, 8.8]
+      size: {w: 175.0, h: 34.0}
+      label: 24 x 10/100/1000 UPOE RJ-45
+      members:
+      - port-1
+      - port-2
+      - port-3
+      - port-4
+      - port-5
+      - port-6
+      - port-7
+      - port-8
+      - port-9
+      - port-10
+      - port-11
+      - port-12
+      - port-13
+      - port-14
+      - port-15
+      - port-16
+      - port-17
+      - port-18
+      - port-19
+      - port-20
+      - port-21
+      - port-22
+      - port-23
+      - port-24
+    - id: panel-controls
+      at: [3.5, 1.8]
+      size: {w: 62.0, h: 8.2}
+      label: Beacon and Mode buttons, status lamps
+      members:
+      - uid-button
+      - mode-button
+      - led-stat
+      - led-duplx
+      - led-speed
+      - led-stack
+      - led-poe
+      - led-system
+      - led-active
+      - led-xps
+      - led-spwr
+      - led-console
+    - id: usb-ports
+      at: [65.5, 1.8]
+      size: {w: 26.0, h: 5.5}
+      label: Mini-USB console and USB Type A
+      members:
+      - console-usb
+      - usb-a
+    - id: uplink-module
+      at: [364.8, 1.0]
+      size: {w: 76.0, h: 42.5}
+      label: Network module bay
+      members:
+      - nm-bay
+  rear:
+    size: {w: 444.5, h: 44.45}
+    panel:
+      decor:
+      - {id: stackwise-carrier-1, at: [92.5, 2.0], size: [18.6, 40.4], fill: '#b4b6b9'}
+      - {id: stackwise-carrier-2, at: [156.2, 2.0], size: [18.6, 40.4], fill: '#b4b6b9'}
+      - {id: stackpower-plate, at: [218.5, 2.0], size: [39.0, 40.4], fill: '#b4b6b9'}
+      - {id: ssd-cover, at: [20.4, 2.0], size: [22.0, 14.0], fill: '#b4b6b9'}
+      cutouts:
+      - {id: ground-1, at: [7.5, 6.7], size: [5.6, 5.6], shape: circle}
+      - {id: ground-2, at: [7.5, 22.5], size: [5.6, 5.6], shape: circle}
+      - {id: usb-ssd, at: [25.8, 6.35], size: [12.0, 4.5], shape: rect}
+      - {id: console, at: [18.95, 22.7], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt, at: [33.15, 22.7], size: [12.7, 11.0], shape: rect}
+      - {id: stack-1, at: [94.35, 10.2], size: [14.9, 23.8], shape: rect}
+      - {id: stack-2, at: [158.05, 10.2], size: [14.9, 23.8], shape: rect}
+      - {id: spwr-1, at: [233.0, 3.9], size: [23.6, 18.5], shape: rect}
+      - {id: spwr-2, at: [233.0, 24.0], size: [23.6, 18.5], shape: rect}
+      - {id: led-rear-console, at: [26.6, 37.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-beacon, at: [43.7, 37.9], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {id: silk-spwr-1, at: [219.5, 6.6], text: S-PWR 1, font-size: 2.0, anchor: start, fill: '#2b2e31',
+      for: spwr-1}
+    - {id: silk-xps, at: [219.5, 9.2], text: XPS, font-size: 2.0, anchor: start, fill: '#2b2e31', for: spwr-1}
+    - {id: silk-spwr-2, at: [219.5, 26.8], text: S-PWR 2, font-size: 2.0, anchor: start, fill: '#2b2e31',
+      for: spwr-2}
+    components:
+      bays:
+      - id: fan-1
+        at: [48.55, 1.65]
+        size: {w: 43.9, h: 41.1}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - cisco/fan-t2@1
+        default: cisco/fan-t2@1
+      - id: fan-2
+        at: [111.55, 1.65]
+        size: {w: 43.9, h: 41.1}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - cisco/fan-t2@1
+        default: cisco/fan-t2@1
+      - id: fan-3
+        at: [174.55, 1.65]
+        size: {w: 43.9, h: 41.1}
+        group: fans
+        rel-pos: 3
+        accepts:
+        - cisco/fan-t2@1
+        default: cisco/fan-t2@1
+      - id: psu-1
+        at: [258.5, 2.3]
+        size: {w: 82.55, h: 40.1}
+        group: psus
+        rel-pos: 1
+        accepts: &id002
+        - cisco/pwr-c1-350wac@1
+        - cisco/pwr-c1-350wac-p@1
+        - cisco/pwr-c1-715wac@1
+        - cisco/pwr-c1-715wac-p@1
+        - cisco/pwr-c1-1100wac@1
+        - cisco/pwr-c1-1100wac-p@1
+        - cisco/pwr-c1-1900wac-p@1
+        - cisco/pwr-c1-1900whv-t@1
+        - cisco/pwr-c1-715wdc@1
+        - cisco/c9300-psu-blank@1
+        default: cisco/pwr-c1-1100wac-p@1
+      - id: psu-2
+        at: [348.4, 2.3]
+        size: {w: 82.55, h: 40.1}
+        group: psus
+        rel-pos: 2
+        accepts: *id002
+        default: cisco/c9300-psu-blank@1
+      placements:
+      - {ref: common/ground-screw@1, id: ground-1, at: [7.5, 6.7], group: grounding, rel-pos: 1}
+      - {ref: common/ground-screw@1, id: ground-2, at: [7.5, 22.5], group: grounding, rel-pos: 2}
+      - ref: std/usb-a@1
+        id: usb-ssd
+        at: [25.8, 6.35]
+        group: usb-storage
+        rel-pos: 2
+        attrs: {role: storage, usb: '3.0'}
+      - ref: std/rj45-ganged@2
+        id: console
+        at: [18.95, 22.7]
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: common/rj45-ganged-eth@1
+        id: mgmt
+        at: [33.15, 22.7]
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+      - ref: common/led-dot@1
+        id: led-rear-console
+        at: [26.6, 37.4]
+        group: leds
+        rel-pos: 6
+        for: console
+        states:
+        - 'off'
+        - {name: active, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-beacon
+        at: [43.7, 37.9]
+        group: leds
+        rel-pos: 7
+        for: chassis
+        states:
+        - 'off'
+        - {name: lit, color: '#3b82f6'}
+      - {ref: cisco/stackwise-480-port@1, id: stack-1, at: [94.35, 10.2], group: stackwise, rel-pos: 1}
+      - {ref: cisco/stackwise-480-port@1, id: stack-2, at: [158.05, 10.2], group: stackwise, rel-pos: 2}
+      - {ref: cisco/stackpower-port@1, id: spwr-1, at: [233.0, 3.9], group: stackpower, rel-pos: 1}
+      - {ref: cisco/stackpower-port@1, id: spwr-2, at: [233.0, 24.0], group: stackpower, rel-pos: 2}
+    regions:
+    - id: fan-modules
+      at: [48.0, 1.2]
+      size: {w: 171.0, h: 42.0}
+      label: Fan modules
+      members:
+      - fan-1
+      - fan-2
+      - fan-3
+    - id: stack-ports
+      at: [92.0, 1.5]
+      size: {w: 83.0, h: 41.5}
+      label: StackWise-480 ports
+      members:
+      - stack-1
+      - stack-2
+    - id: stackpower
+      at: [218.0, 1.5]
+      size: {w: 40.0, h: 41.5}
+      label: StackPower connectors
+      members:
+      - spwr-1
+      - spwr-2
+    - id: power
+      at: [258.0, 1.8]
+      size: {w: 173.5, h: 41.0}
+      label: Power supplies
+      members:
+      - psu-1
+      - psu-2
+    - id: out-of-band
+      at: [18.0, 22.0]
+      size: {w: 28.5, h: 13.0}
+      label: Console and management
+      members:
+      - console
+      - mgmt
+  top:
+    size: {w: 444.5, h: 487.7}
+    empty: >-
+      Not drawn flat by any source held. Figure 1 and Figure 10 of the guide show the lid isometrically
+      with the maker's logo and labels on it; no flat drawing or photograph is held.
+  bottom:
+    size: {w: 444.5, h: 487.7}
+    empty: >-
+      Not drawn by any source held. The guide's rack-mounting section says only that the four circular
+      etches on the bottom take the rubber feet for a table or shelf.
+  left:
+    size: {w: 487.7, h: 44.45}
+    empty: >-
+      Not drawn flat by any source held. Figure 1 shows the side isometrically with screw holes and a
+      vent; the guide's Figure 31 shows the airflow label for the NEBS kit on each side.
+  right:
+    size: {w: 487.7, h: 44.45}
+    empty: >-
+      Not drawn flat by any source held. Figure 1 shows the side isometrically with a vent grille.
+configurations:
+  c9300-24u:
+    kind: orderable
+    description: >-
+      The switch as shipped: one PWR-C1-1100WAC-P in the first power supply slot with the slot cover in
+      the second, three FAN-T2 fan modules and the network module bay blank. Table 18 gives the 1100 W
+      Platinum supply as the default of the C9300-24U and the Power Supply Modules text says every switch
+      ships with a blank in the second slot.
+    default: true
+    part-numbers:
+      C9300-24U: {}
+  dual-1100wac-p:
+    kind: example
+    description: Two PWR-C1-1100WAC-P supplies, as a switch with its second supply ordered.
+    bays: {psu-2: cisco/pwr-c1-1100wac-p@1}
+  psu-350wac:
+    kind: example
+    description: A PWR-C1-350WAC in the first slot.
+    bays: {psu-1: cisco/pwr-c1-350wac@1}
+  psu-350wac-p:
+    kind: example
+    description: A PWR-C1-350WAC-P in the first slot.
+    bays: {psu-1: cisco/pwr-c1-350wac-p@1}
+  psu-715wac:
+    kind: example
+    description: A PWR-C1-715WAC in the first slot.
+    bays: {psu-1: cisco/pwr-c1-715wac@1}
+  psu-715wac-p:
+    kind: example
+    description: A PWR-C1-715WAC-P in the first slot.
+    bays: {psu-1: cisco/pwr-c1-715wac-p@1}
+  psu-1100wac:
+    kind: example
+    description: A PWR-C1-1100WAC in the first slot.
+    bays: {psu-1: cisco/pwr-c1-1100wac@1}
+  psu-1900wac-p:
+    kind: example
+    description: A PWR-C1-1900WAC-P in the first slot.
+    bays: {psu-1: cisco/pwr-c1-1900wac-p@1}
+  psu-1900whv-t:
+    kind: example
+    description: A PWR-C1-1900WHV-T in the first slot.
+    bays: {psu-1: cisco/pwr-c1-1900whv-t@1}
+  psu-715wdc:
+    kind: example
+    description: A PWR-C1-715WDC in the first slot, a DC-powered switch.
+    power: dc
+    bays: {psu-1: cisco/pwr-c1-715wdc@1}
+  empty-supply-bay:
+    kind: example
+    description: The second power supply slot left empty, which the guide says not to do.
+    bays: {psu-2: ''}
+datasheet:
+  title: >-
+    Cisco Catalyst 9300 Series Switches Hardware Installation Guide (b_c9300_hig), last modified 2026-05-15
+  sha256: c1db673858fbde4aceb692e24b9d15edc4fd1f5d35f095bf5ee6b943e053441b
+references:
+- title: >-
+    Cisco Catalyst 9300 Series Switches Hardware Installation Guide, first published 2017-06-20, last
+    modified 2026-05-15
+- title: >-
+    NetBox devicetype-library, Cisco C9300-24U front and rear elevation images (community drawings, not
+    Cisco's)
