@@ -94,11 +94,13 @@ provenance:
       is the speed lamp and which the activity lamp is not stated by a document, and the QSFP28's two
       round lamps name no cage that a document states (gap `led-states`); they are drawn for the chassis.
       The three bar lamps are printed USER, FAULT and POWER (photograph 2232), and show unlit grey there
-      (#868685, median of 171 pixels). The render draws them in the lamp component's resting colour, a
-      dark green: common/led-rect@1 fills its lamp from var(--led-color, #2a6b3f), no placement can change
-      that resting value, and a component on main is not edited here, so the colour is left. Their place
-      and size agree with the drawing. The green lamp on each supply module is drawn as the photograph
-      shows it, with no meaning stated.
+      (#878686, #858584 and #898888: medians of 225, 225 and 207 pixels, boxes 2565,1028 to 2590,1037,
+      2625,1028 to 2650,1037 and 2750,1028 to 2773,1037). The render draws them in the lamp component's
+      resting colour, a dark green: common/led-rect@1 fills its lamp from var(--led-color, #2a6b3f), no
+      placement can change that resting value, and a component on main is not edited here, so the colour
+      is left. Their place and size agree with the drawing. The green lamp on each supply module is lit
+      in the photograph (#5e6d52, median of 193 pixels within 8 px of 484,831) and drawn here in the resting
+      colour of common/led-dot@1, which is a dark grey, also left as the component draws it.
   port-numbering:
     confidence: photo-measured
     note: >-
@@ -131,7 +133,14 @@ provenance:
       circled minus, the barrel symbol with its centre pin dot joined to the circled plus: the centre
       pin is the positive pole. The legend positions are read off photograph 2232 at 34.96 px per mm across
       and 30.7 px per mm down (the jack housing is 358 px for 11.8 mm), anchored on the jack's and the
-      terminal's lower edge, to about 0.4 mm across and 0.8 mm down.
+      terminal's lower edge, to about 0.4 mm across and 0.8 mm down. The jack is a barrel socket drawn
+      flat as four entries on photograph 2232 (the face is 2790 px across the printed 320 mm, 8.77 px
+      per mm, estimated): the housing 10.3 x 11.8 mm, a rim ring 6.5 mm across (#292929, the median of
+      506 pixels between 25 and 28 px from the bore's centre at 2825.5,960), the bore 5.7 mm across (#030303,
+      1954 pixels under 25 px) and the centre pin 1.1 mm across (#b0b0af, 27 pixels brighter than 120
+      in box 2815,944 to 2831,958), which the photograph shows 0.3 mm left of and 1.2 mm above the bore's
+      centre because it looks down on the pin's tip. The housing's #3e3e3d is the earlier sample. The
+      earlier 3.6 mm bore was too small.
   built-in-power-and-fans:
     confidence: datasheet
     note: >-
@@ -150,7 +159,13 @@ provenance:
       From photograph 2233 (the rear, from above), x across the 320 mm at 5.3 px per mm and y estimated
       (the photograph looks down). Two fan openings 36 mm across, centred 117.0 and 158.5 mm and 23.0
       mm down; an earthing stud at 12.3 mm and 33.7 mm with its earth mark above it. Read to about 2 mm,
-      as seen from behind.
+      as seen from behind. The hexagon field is measured on 2233 at 8.84 px per mm (the face is 2830 px
+      across the printed 320 mm), estimated: on a fan guard (box 1125,805 to 1465,1080; 21 whole openings)
+      an opening is 5.32 mm across its corners and 4.07 mm across its flats, the column step 4.71 mm and
+      the same-column pitch 5.31 mm. The renderer's base tile (8.86 x 5.11 mm, column step 4.43) is scaled
+      by the column step's ratio, 1.063, on both axes, so `pattern-pitch` is 9.42 x 5.43 mm (it was the
+      base tile, with no pitch), and the lattice starts on a hexagon centred under each hub, as the photograph
+      shows.
   side-layout:
     confidence: estimated
     note: >-
@@ -174,8 +189,8 @@ provenance:
       to 562,1042 (2035 pixels). The jack plate is #949290: 2232, box 2558,845 to 2572,930 (1190 pixels;
       box 2428,830 to 2438,910, 800 pixels, gives #93918f). The DC jack housing is #3e3e3d: 2232, box
       2790,930 to 2800,990 (600 pixels). The terminal's green is #82967a (the dc-inputs note gives its
-      box). The unlit lamps read #868685 (2232, box 2626,1028 to 2645,1037, 171 pixels). The rear's face
-      reads #bebcbc in 2233 (box 2180,870 to 2910,1020, 109500 pixels).
+      box). The unlit lamps read #878686, #858584 and #898888 (2232, the lamps note gives the boxes).
+      The rear's face reads #bebcbc in 2233 (box 2180,870 to 2910,1020, 109500 pixels).
 attrs:
   power:
     power-max-w: 51
@@ -367,7 +382,9 @@ views:
       - {id: dc-terminal-entry-1, kind: dc-terminal-art, at: [276.85, 30.2], size: [3.6, 5.1], fill: '#051203'}
       - {id: dc-terminal-entry-2, kind: dc-terminal-art, at: [281.9, 30.2], size: [3.6, 5.1], fill: '#051203'}
       - {id: dc-jack-housing, kind: dc-jack-art, at: [290.1, 24.8], size: [10.3, 11.8], rx: 0.8, fill: '#3e3e3d'}
-      - {id: dc-jack-bore, kind: dc-jack-art, at: [293.45, 28.15], size: [3.6, 3.6], rx: 1.8, fill: '#111111'}
+      - {id: dc-jack-rim, kind: dc-jack-art, at: [291.9, 26.25], size: [6.5, 6.5], rx: 3.25, fill: '#292929'}
+      - {id: dc-jack-bore, kind: dc-jack-art, at: [292.3, 26.65], size: [5.7, 5.7], rx: 2.85, fill: '#030303'}
+      - {id: dc-jack-pin, kind: dc-jack-art, at: [294.25, 27.75], size: [1.1, 1.1], rx: 0.55, fill: '#b0b0af'}
       cutouts:
       - {id: ac-inlet-1, at: [39.45, 9.5], size: [20.0, 28.0], shape: rect}
       - {id: ac-inlet-2, at: [98.85, 9.5], size: [20.0, 28.0], shape: rect}
@@ -620,8 +637,10 @@ views:
     size: {w: 320.0, h: 44.0}
     panel:
       decor:
-      - {id: fan-0, kind: fan-grille, at: [99.0, 5.0], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0}
-      - {id: fan-1, kind: fan-grille, at: [140.5, 5.0], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0}
+      - {id: fan-0, kind: fan-grille, at: [99.0, 5.0], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0,
+        pattern-pitch: [9.42, 5.43], pattern-offset: [117.0, 23.0]}
+      - {id: fan-1, kind: fan-grille, at: [140.5, 5.0], size: [36.0, 36.0], rx: 18.0, pattern: vent, vent: 1.0,
+        pattern-pitch: [9.42, 5.43], pattern-offset: [158.5, 23.0]}
       - {id: fan-hub-0, kind: fan-hub, at: [107.5, 13.5], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
       - {id: fan-hub-1, kind: fan-hub, at: [149.0, 13.5], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
       - {id: earth-stud-base, kind: earth-stud, at: [8.3, 29.7], size: [8.0, 8.0], rx: 4.0, fill: '#b4b8bc'}

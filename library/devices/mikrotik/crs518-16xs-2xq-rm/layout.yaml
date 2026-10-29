@@ -63,14 +63,21 @@ provenance:
       The four status lamps are a column of rings at 290.6 mm, 17.6, 22.5, 27.5 and 32.4 mm. The vent along the top edge
       is a row of separate solid openings, a lambda then a V, alternating, each with its feet and top ends cut level and
       a small step on one edge (photograph 2196, brochure figure 1, and the drawing's front view). No fixed pattern draws
-      them, so the band is `pattern: motif` and the tile is stated once, as `pattern-pitch`: 16.5 x 5.7 mm. Drawn from
-      photograph 2196 (estimated), whose face is 2490 px across at the band for the printed 443, so 5.62 px per mm across
-      and 5.29 px per mm down (the photograph looks slightly from above; the face reads 0.94 of its height); the shape
-      is the mean of 20 periods of the dark mask (threshold 70 of 255), 92.8 px apart. The tile starts at a lambda's left
-      foot and holds the lambda, the V that follows it and the part of that V's right arm that runs past the tile's right
-      edge (three cells, the third a 1.2 mm piece at the tile's left). The band is 27 lambdas and 26 Vs, from a lambda to a
-      lambda: 26 periods in the first rect (430.3 mm, the extra 1.3 mm carrying the 26th V's arm) and the 27th lambda in a
-      second rect at 431.3 mm, 9.5 mm wide, so no half V shows past the last lambda. The drawing's front view, at 2.6275
+      them, so the band is `pattern: motif` and the tile is stated once, as `pattern-pitch`: 16.5 x 6.07 mm,
+      the cells' 5.67 mm extent (the feet and tops level with each other, 2.4 to 8.07 mm down the face) with 0.2 mm clear
+      above and below: a tile edge that touches ink is filtered against the ink on its opposite edge and drew a faint
+      dashed line along the band's top and bottom edges. Drawn from photograph 2196 (estimated), whose face is 2490 px across at the band for the printed 443, so
+      5.62 px per mm across and 5.29 px per mm down (the photograph looks slightly from above; the face reads 0.94 of its
+      height); the shape is the mean of 20 periods of the dark mask (threshold 70 of 255), 92.8 px apart. The tile
+      starts at a lambda's left foot and holds the lambda, the V that follows it and the part of that V's right arm that
+      runs past the tile's right edge (the third cell, a 1.2 mm piece at the tile's left). The band is 27 lambdas and 26
+      Vs, from a lambda to a lambda, in three rects: the first period at 2.1 mm (its own 18.4 mm tile: the lambda, the
+      V and the V's arm tip, with 0.2 mm clear at the left, so the band's first mark is the lambda), 25 periods and the
+      26th V's arm (413.8 mm) from 18.8 mm, and the 27th lambda in a rect at 431.3 mm, 9.5 mm wide, so no half V shows
+      past the last lambda. Photograph 2196 shows no V
+      before the first lambda: its left foot is cut off by the wall, so the lower part of that leg reads grey (about
+      #5e5e5e, median of 64 pixels in 2196, box 169,450 to 177,458) and not black; a motif cell has one dark fill, so the foot
+      is drawn black like every other. The drawing's front view, at 2.6275
       px per mm (the 443 mm body is 1164 px across, 542 to 1706), puts the first lambda's foot 2.1 mm from the left edge,
       the last lambda's foot 1.6 mm from the right and the period at 16.5 mm (ink span 1154 px less one lambda, over 26);
       the band is drawn 2.3 mm in from the left and 2.4 mm down. The rear's four fan
@@ -122,7 +129,19 @@ provenance:
       From photograph 2197 (the rear, from slightly above), x across the 443 mm at 4.04 px per mm and y estimated (the
       photograph looks down). Supply modules 62.9 mm wide at 3.2 and 66.1 mm, with inlets centred at 50.2 and 113.1 mm and
       21.5 mm down; fan modules 60.5 mm wide at 156.3, 226.5, 296.6 and 363.0 mm, each grille about 38 mm across,
-      centred 191.8, 261.9, 332.5 and 393.8 mm and 20.5 mm down. Read to about 2 mm.
+      centred 191.8, 261.9, 332.5 and 393.8 mm and 20.5 mm down. Read to about 2 mm. The hexagon fields are measured
+      on 2197 at 5.80 px per mm (the face is 2570 px across the printed 443 mm), estimated: on a fan guard (box 1165,440
+      to 1395,665; 42 whole openings) an opening is 4.31 mm across its corners and 3.62 mm across its flats, the column
+      step 4.23 mm and the same-column pitch 4.70 mm (the photograph looks down, so the vertical figure reads short);
+      on a supply grille (box 200,455 to 360,635; 14 whole openings) 5.34 across corners, 4.66 across flats, a column
+      step of 5.09 mm and a pitch of 5.82 mm. The renderer's base tile (8.86 x 5.11 mm, column step 4.43) is scaled by
+      the column step's ratio on both axes (0.955 for a fan, 1.15 for a supply grille), so `pattern-pitch` is 8.46 x
+      4.88 mm and 10.19 x 5.88 mm, and was the base tile (no pitch) before. A fan's lattice starts on a hexagon
+      centred under the hub, as the photograph shows (a column of hexagons runs through the hub), and a supply
+      grille's at a whole column 5.3 mm in and 5.1 mm down; each ring holds two to three hexagons between the hub and
+      the edge, cut by the guard's circle. The plain pattern's opening is wider against its pitch than the metal's
+      (5.1 mm across corners on a 4.43 mm column step, against 4.31 on 4.23): the webs are thinner than the metal's,
+      which no `pattern-pitch` changes.
   side-layout:
     confidence: estimated
     note: >-
@@ -139,8 +158,13 @@ provenance:
     confidence: estimated
     note: >-
       Each value is the median of a plain area, away from ports, lamps, labels and text, taken with a script over the
-      photograph's pixels. The face is #bbbbbb: photograph 2196, box 200,475 to 480,520 (12600 pixels), and the
-      straight-on brochure figure 1, box 20,42 to 180,58 (2560 pixels), both #bbbbbb. The jack plate is #63625f: 2196,
+      photograph's pixels. Neither source holds an unshaded patch: both are lit from left to right, from #bbbbbb at the
+      left end to #c9c9c9 at the right (the lit photograph reads about #c7c7c7 on its right half). The face is drawn
+      #c0bfbf, the channel-wise median of three plain patches of photograph 2196 (face pixels only, ink left out):
+      box 200,470 to 480,500 #bbbbbb (8398 pixels), box 1260,625 to 1560,640 #c0bfbf (4254 pixels), box 1660,470 to
+      2360,500 #c7c7c7 (20980 pixels), a spread of 12 levels. The brochure's straight-on figure 1 (fig-0001) agrees on its three
+      patches: box 0,42 to 200,58 #bbbbbb (3112 pixels), box 600,125 to 800,140 #bfbfbf (2673 pixels), box 1000,42 to
+      1300,58 #c7c7c7 (4800 pixels). The earlier #bbbbbb was the left patch alone. The jack plate is #63625f: 2196,
       box 1563,490 to 1569,590 (600 pixels; box 1580,536 to 1635,546, 550 pixels, gives #62605e). The supply modules are
       #6f6d68: photograph 2197, box 225,460 to 320,468 (760 pixels). The fan modules are #878682: 2197, box 1393,530 to
       1413,620 (1800 pixels), and their hubs #817f7c: box 1255,535 to 1305,565 (1500 pixels). The rear's own face reads
@@ -173,7 +197,7 @@ chassis:
   height: 44.0
   depth: 268.0
   ru: 1
-  color: '#bbbbbb'
+  color: '#c0bfbf'
   ears:
     positions:
     - {name: flush, at: 0, default: true}
@@ -290,31 +314,48 @@ views:
       decor:
       - {id: mgmt-block, kind: jack-plate, at: [250.2, 10.2], size: [18.0, 26.7], fill: '#63625f'}
       - {id: usb-bezel, kind: usb-bezel, at: [277.3, 21.2], size: [8.5, 15.8], rx: 1.6, fill: '#2b2b2b'}
+      - id: vent-band-start
+        kind: vent-field
+        at: [2.1, 2.2]
+        size: [18.4, 6.07]
+        rx: 0
+        pattern: motif
+        vent: 1.0
+        pattern-offset: [2.1, 2.2]
+        pattern-pitch: [18.4, 6.07]
+        pattern-cells:
+        - [[0.2, 5.87], [0.2, 5.49], [4.29, 0.2], [5.53, 0.2], [7.84, 3.79], [8.55, 3.79], [8.55, 4.17], [9.62, 5.49],
+           [9.62, 5.87], [7.67, 5.87], [5.35, 2.09], [4.64, 2.09], [1.98, 5.87]]
+        - [[8.35, 0.2], [10.3, 0.2], [12.79, 3.98], [13.68, 3.98], [15.99, 0.2], [16.7, 0.2], [16.7, 2.0], [16.17, 2.28],
+           [13.68, 5.87], [12.61, 5.87], [11.01, 3.41], [10.12, 3.04], [8.35, 0.58]]
+        - [[16.5, 0.2], [17.94, 0.2], [17.94, 0.77], [16.88, 1.9], [16.7, 2.0], [16.5, 2.0]]
       - id: vent-band
         kind: vent-field
-        at: [2.3, 2.4]
-        size: [430.3, 5.7]
+        at: [18.8, 2.2]
+        size: [413.8, 6.07]
+        rx: 0
         pattern: motif
         vent: 1.0
-        pattern-offset: [2.3, 2.4]
-        pattern-pitch: [16.5, 5.7]
+        pattern-offset: [18.8, 2.2]
+        pattern-pitch: [16.5, 6.07]
         pattern-cells:
-        - [[0.0, 5.67], [0.0, 5.29], [4.09, 0.0], [5.33, 0.0], [7.64, 3.59], [8.35, 3.59], [8.35, 3.97], [9.42, 5.29],
-           [9.42, 5.67], [7.47, 5.67], [5.15, 1.89], [4.44, 1.89], [1.78, 5.67]]
-        - [[8.15, 0.0], [10.1, 0.0], [12.59, 3.78], [13.48, 3.78], [15.79, 0.0], [16.5, 0.0], [16.5, 1.8], [15.97, 2.08],
-           [13.48, 5.67], [12.41, 5.67], [10.81, 3.21], [9.92, 2.84], [8.15, 0.38]]
-        - [[0.0, 0.0], [1.24, 0.0], [1.24, 0.57], [0.18, 1.7], [0.0, 1.8]]
+        - [[0.0, 5.87], [0.0, 5.49], [4.09, 0.2], [5.33, 0.2], [7.64, 3.79], [8.35, 3.79], [8.35, 4.17], [9.42, 5.49],
+           [9.42, 5.87], [7.47, 5.87], [5.15, 2.09], [4.44, 2.09], [1.78, 5.87]]
+        - [[8.15, 0.2], [10.1, 0.2], [12.59, 3.98], [13.48, 3.98], [15.79, 0.2], [16.5, 0.2], [16.5, 2.0], [15.97, 2.28],
+           [13.48, 5.87], [12.41, 5.87], [10.81, 3.41], [9.92, 3.04], [8.15, 0.58]]
+        - [[0.0, 0.2], [1.24, 0.2], [1.24, 0.77], [0.18, 1.9], [0.0, 2.0]]
       - id: vent-band-end
         kind: vent-field
-        at: [431.3, 2.4]
-        size: [9.5, 5.7]
+        at: [431.3, 2.2]
+        size: [9.5, 6.07]
+        rx: 0
         pattern: motif
         vent: 1.0
-        pattern-offset: [431.3, 2.4]
-        pattern-pitch: [16.5, 5.7]
+        pattern-offset: [431.3, 2.2]
+        pattern-pitch: [16.5, 6.07]
         pattern-cells:
-        - [[0.0, 5.67], [0.0, 5.29], [4.09, 0.0], [5.33, 0.0], [7.64, 3.59], [8.35, 3.59], [8.35, 3.97], [9.42, 5.29],
-           [9.42, 5.67], [7.47, 5.67], [5.15, 1.89], [4.44, 1.89], [1.78, 5.67]]
+        - [[0.0, 5.87], [0.0, 5.49], [4.09, 0.2], [5.33, 0.2], [7.64, 3.79], [8.35, 3.79], [8.35, 4.17], [9.42, 5.49],
+           [9.42, 5.87], [7.47, 5.87], [5.15, 2.09], [4.44, 2.09], [1.78, 5.87]]
       cutouts:
       - {block: qsfp28}
       - {block: sfp28}
@@ -476,16 +517,22 @@ views:
       decor:
       - {id: psu-1-module, kind: module-plate, at: [3.2, 2.0], size: [62.9, 38.0], fill: '#6f6d68'}
       - {id: psu-2-module, kind: module-plate, at: [66.1, 2.0], size: [62.9, 38.0], fill: '#6f6d68'}
-      - {id: psu-1-vent, kind: vent-field, at: [8.7, 5.5], size: [27.0, 31.0], pattern: vent, vent: 1.0}
-      - {id: psu-2-vent, kind: vent-field, at: [74.3, 5.5], size: [24.5, 31.0], pattern: vent, vent: 1.0}
+      - {id: psu-1-vent, kind: vent-field, at: [8.7, 5.5], size: [27.0, 31.0], pattern: vent, vent: 1.0,
+         pattern-pitch: [10.19, 5.88], pattern-offset: [14.0, 10.6]}
+      - {id: psu-2-vent, kind: vent-field, at: [74.3, 5.5], size: [24.5, 31.0], pattern: vent, vent: 1.0,
+         pattern-pitch: [10.19, 5.88], pattern-offset: [79.6, 10.6]}
       - {id: fan-module-0, kind: module-plate, at: [156.3, 2.0], size: [61.5, 38.0], fill: '#878682'}
       - {id: fan-module-1, kind: module-plate, at: [226.5, 2.0], size: [60.0, 38.0], fill: '#878682'}
       - {id: fan-module-2, kind: module-plate, at: [296.6, 2.0], size: [60.4, 38.0], fill: '#878682'}
       - {id: fan-module-3, kind: module-plate, at: [363.0, 2.0], size: [60.0, 38.0], fill: '#878682'}
-      - {id: fan-0, kind: fan-grille, at: [172.8, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0}
-      - {id: fan-1, kind: fan-grille, at: [242.9, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0}
-      - {id: fan-2, kind: fan-grille, at: [313.5, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0}
-      - {id: fan-3, kind: fan-grille, at: [374.8, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0}
+      - {id: fan-0, kind: fan-grille, at: [172.8, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0,
+         pattern-pitch: [8.46, 4.88], pattern-offset: [191.8, 20.5]}
+      - {id: fan-1, kind: fan-grille, at: [242.9, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0,
+         pattern-pitch: [8.46, 4.88], pattern-offset: [261.9, 20.5]}
+      - {id: fan-2, kind: fan-grille, at: [313.5, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0,
+         pattern-pitch: [8.46, 4.88], pattern-offset: [332.5, 20.5]}
+      - {id: fan-3, kind: fan-grille, at: [374.8, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0,
+         pattern-pitch: [8.46, 4.88], pattern-offset: [393.8, 20.5]}
       - {id: fan-hub-0, kind: fan-hub, at: [182.3, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
       - {id: fan-hub-1, kind: fan-hub, at: [252.4, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
       - {id: fan-hub-2, kind: fan-hub, at: [323.0, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}

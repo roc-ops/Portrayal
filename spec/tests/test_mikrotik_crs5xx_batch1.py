@@ -151,7 +151,7 @@ def _render_decor(decor, w=443.0, h=44.0):
     return out if isinstance(out, str) else render.ET.tostring(out, encoding="unicode")
 
 
-BAND_PITCH = [16.5, 5.7]
+BAND_PITCH = [16.5, 6.07]
 
 
 def _pattern_of(svg, rect_id):
@@ -170,28 +170,48 @@ def test_crs518_front_vent_band_is_alternating_v_and_lambda_openings_drawn_as_a_
     d = load(CRS518)
     decor = _decor(d, "front")
     assert "vent-field" not in decor
-    band = decor["vent-band"]
-    assert band["pattern"] == "motif" and band["vent"]
-    assert band["at"] == [2.3, 2.4] and band["pattern-offset"] == band["at"]
-    assert band["pattern-pitch"] == BAND_PITCH and band["size"][1] == BAND_PITCH[1]
+    start, band, end = decor["vent-band-start"], decor["vent-band"], decor["vent-band-end"]
+    for rect in (start, band, end):
+        assert rect["pattern"] == "motif" and rect["vent"] and rect.get("rx") == 0  # square-cornered
+        assert rect["pattern-offset"] == rect["at"] and rect["at"][1] == 2.2
+        assert rect["size"][1] == BAND_PITCH[1] == rect["pattern-pitch"][1]  # the rect is as tall as the tile
+        assert all(0 <= x <= rect["pattern-pitch"][0] and 0 <= y <= BAND_PITCH[1]
+                   for c in rect["pattern-cells"] for x, y in c)  # no cell runs outside its tile
+    for rect in (band, end):
+        assert rect["pattern-pitch"] == BAND_PITCH
+    # The seam: a tile edge that touches ink is filtered against the ink on the opposite edge, which drew a hairline
+    # dash along the band's top and bottom edges. The tile is the 5.67 mm the cells span plus 0.2 mm clear each
+    # side, so no cell touches the tile's top or foot; the rect is 0.2 mm taller than the ink and the ink stays at
+    # 2.4 to 8.07 mm.
+    for rect in (start, band, end):
+        ys = [y for c in rect["pattern-cells"] for _, y in c]
+        assert min(ys) == pytest.approx(0.2) and max(ys) == pytest.approx(BAND_PITCH[1] - 0.2)
+        assert max(ys) - min(ys) == pytest.approx(5.67)
+        assert rect["at"][1] + min(ys) == pytest.approx(2.4) and rect["at"][1] + max(ys) == pytest.approx(8.07)
     assert len(band["pattern-cells"]) == 3  # the lambda, the V, and the V's right arm that runs into the next tile
-    for cell in band["pattern-cells"]:
-        assert all(0 <= x <= BAND_PITCH[0] and 0 <= y <= BAND_PITCH[1] for x, y in cell)
-    # every point of the lambda starts at the tile's left edge and its apex is up; the V's top ends are level
     lam, v, wrap = band["pattern-cells"]
-    assert min(x for x, _ in lam) == 0.0 and min(y for _, y in lam) == 0.0
-    assert sorted({y for _, y in v if y == 0.0}) == [0.0] and max(y for _, y in v) > 5.0
-    # the band's width is 26 whole periods and the part of the 27th the V's arm needs
-    assert (band["size"][0] - 1.3) / BAND_PITCH[0] == pytest.approx(26, abs=0.001)
-    end = decor["vent-band-end"]
-    assert end["pattern"] == "motif" and end["vent"] and end["pattern-pitch"] == BAND_PITCH
-    assert end["at"][0] == pytest.approx(band["at"][0] + 26 * BAND_PITCH[0], abs=0.001)
-    assert end["pattern-offset"] == end["at"] and len(end["pattern-cells"]) == 1
-    assert end["pattern-cells"][0] == lam  # the lambda the 27th period ends with
+    assert min(x for x, _ in lam) == 0.0 and min(y for _, y in lam) == 0.2
+    assert sorted({y for _, y in v if y == 0.2}) == [0.2] and max(y for _, y in v) > 5.0
+    # the left end: the first mark is the lambda (photograph 2196 shows no V before it), so no 1.2 mm sliver. The
+    # first rect has its own tile, 18.4 mm wide: 0.2 mm clear at the left, the lambda, the V, and the V's arm tip
+    # carried to 17.94 mm so that the next rect, which starts where the arm does, joins it without a seam.
+    assert start["at"] == [2.1, 2.2] and start["size"] == [18.4, 6.07] and start["pattern-pitch"] == [18.4, 6.07]
+    s_lam, s_v, s_arm = start["pattern-cells"]
+    shift = lambda cell: [[round(x + 0.2, 2), y] for x, y in cell]
+    assert s_lam == shift(lam) and s_v == shift(v)
+    assert max(x for x, _ in s_arm) == 17.94 and min(x for x, _ in s_lam) == 0.2
+    assert all(max(x for x, _ in c) - min(x for x, _ in c) > 5 for c in (s_lam, s_v))
+    assert min(x for c in start["pattern-cells"] for x, _ in c) > 0.0  # no cell touches the tile's left edge
+    assert band["at"][0] == pytest.approx(start["at"][0] + 16.7, abs=0.001)
+    # the band runs on from the end of the first period: 25 whole periods and the V's arm of the 26th
+    assert (band["size"][0] - 1.3) / 16.5 == pytest.approx(25, abs=0.001)
+    assert end["at"][0] == pytest.approx(band["at"][0] + 25 * 16.5, abs=0.001)
+    assert len(end["pattern-cells"]) == 1 and end["pattern-cells"][0] == lam  # the 27th lambda
+    assert end["size"][0] >= max(x for x, _ in lam)  # no cell runs outside the rect
     assert end["at"][0] + end["size"][0] == pytest.approx(440.7, abs=0.2)  # 2.3 mm in from the right edge
-    svg = _render_decor([band, end])
+    svg = _render_decor([start, band, end])
     pid, pat = _pattern_of(svg, "vent-band")
-    assert 'width="16.5"' in pat and 'height="5.7"' in pat and pat.count("<path") == 3
+    assert 'width="16.5"' in pat and 'height="6.07"' in pat and pat.count("<path") == 3
     assert 'data-aperture="air"' in svg  # still an opening, not paint
     assert "chevrons" not in svg
 
@@ -200,6 +220,37 @@ def test_the_motif_band_states_its_tile_once_in_provenance():
     note = load(CRS518)["provenance"]["front-layout"]["note"]
     assert "16.5" in note and "estimated" in note and "5.62" in note and "motif" in note
     assert "16.7" not in note and "chevrons" not in note
+    assert "no V before the first lambda" in note and "grey" in note and "5.67" in note
+
+
+HEX_BASE = (8.86, 5.11)  # the renderer's base vent tile, mm
+
+
+def _centre(x):
+    return [round(x["at"][0] + x["size"][0] / 2, 2), round(x["at"][1] + x["size"][1] / 2, 2)]
+
+
+@pytest.mark.parametrize("name, ids, scale", [
+    (CRS518, [f"fan-{i}" for i in range(4)], 0.955),
+    (CRS518, ["psu-1-vent", "psu-2-vent"], 1.15),
+    (CRS510, ["fan-0", "fan-1"], 1.063),
+])
+def test_rear_hexagon_fields_state_the_photographs_pitch_and_a_lattice_that_starts_at_a_hexagon(name, ids, scale):
+    """The renderer's base tile is 8.86 x 5.11 mm. Photograph 2197 (5.80 px per mm) reads a column step of 4.23 mm on
+    the CRS518's fans and 5.09 mm on its supply grilles, and photograph 2233 (8.84 px per mm) 4.71 mm on the CRS510's
+    fans, against the base's 4.43: the tile is the base times that ratio on both axes, so the hexagons stay regular."""
+    decor = _decor(load(name), "rear")
+    for i in ids:
+        d = decor[i]
+        assert d["pattern"] == "vent"
+        assert d["pattern-pitch"] == [round(HEX_BASE[0] * scale, 2), round(HEX_BASE[1] * scale, 2)], i
+        assert d["pattern-pitch"][0] / d["pattern-pitch"][1] == pytest.approx(HEX_BASE[0] / HEX_BASE[1], rel=0.01)
+        if d["kind"] == "fan-grille":
+            assert d["pattern-offset"] == _centre(d), i  # a hexagon is centred under the hub, as the photographs show
+        else:  # a supply grille: a whole column of hexagons starts 5.3 mm in from the left and 5.1 mm down
+            assert d["pattern-offset"] == [round(d["at"][0] + 5.3, 2), round(d["at"][1] + 5.1, 2)], i
+    note = load(name)["provenance"]["rear-layout"]["note"]
+    assert "column step" in note and "estimated" in note and "pattern-pitch" in note
 
 
 @pytest.mark.parametrize("name, fans", [(CRS518, 4), (CRS510, 2)])
@@ -289,7 +340,7 @@ def test_crs510_front_carries_console_management_reset_dc_jack_and_three_lamps()
     assert [p["id"] for p in refs(d, "front", "common/reset-button@1")] == ["btn-reset"]
     assert not refs(d, "front", "common/dc-barrel@1")  # drawn as chassis art: the barrel census wants a current
     assert [x["id"] for x in d["views"]["front"]["panel"]["decor"] if x.get("kind") == "dc-jack-art"] == [
-        "dc-jack-housing", "dc-jack-bore"]
+        "dc-jack-housing", "dc-jack-rim", "dc-jack-bore", "dc-jack-pin"]
     assert len([p for p in placements(d, "front") if p.get("group") == "status-leds"]) == 5  # 3 bars, 2 supply lamps
     assert {"CONSOLE", "MGMT/PoE in", "RESET", "USER", "FAULT", "POWER", "36-57 V", "CRS510-8XS-2XQ-IN"} <= text_of(d, "front")
     gaps = {g["what"] for g in d["gaps"]}
@@ -327,6 +378,28 @@ def test_crs510_two_pin_terminal_is_chassis_art_at_the_drawings_place_and_size()
     assert "polarity marks above the terminal are not drawn" not in prov
 
 
+def test_crs510_barrel_jack_is_a_rimmed_socket_with_a_centre_pin_and_no_part():
+    """Photograph 2232 (8.77 px per mm across the 320 mm face): a dark housing 10.3 x 11.8 mm, a round bore 5.7 mm
+    across inside a 6.5 mm rim ring, and a small bright centre pin. Fills are the medians of the pixels: the rim
+    ring is #292929 (506 pixels, radius 25 to 28 px about 2825.5,960), the bore #030303 (1954 pixels, radius under
+    25 px) and the pin #b0b0af (27 pixels brighter than 120 in box 2815,944 to 2831,958)."""
+    d = load(CRS510)
+    art = {k: v for k, v in _decor(d, "front").items() if v.get("kind") == "dc-jack-art"}
+    assert sorted(art) == ["dc-jack-bore", "dc-jack-housing", "dc-jack-pin", "dc-jack-rim"]
+    want = {"dc-jack-housing": ([290.1, 24.8], [10.3, 11.8], "#3e3e3d"),
+            "dc-jack-rim": ([291.9, 26.25], [6.5, 6.5], "#292929"),
+            "dc-jack-bore": ([292.3, 26.65], [5.7, 5.7], "#030303"),
+            "dc-jack-pin": ([294.25, 27.75], [1.1, 1.1], "#b0b0af")}
+    for key, (at, size, fill) in want.items():
+        assert (art[key]["at"], art[key]["size"], art[key]["fill"]) == (at, size, fill), key
+    for key in ("dc-jack-rim", "dc-jack-bore", "dc-jack-pin"):
+        assert art[key]["rx"] == art[key]["size"][0] / 2  # round
+    assert _centre(art["dc-jack-rim"]) == _centre(art["dc-jack-bore"])
+    assert not [p for p in placements(d, "front") if "dc-" in p["ref"] or p["id"].startswith("dc-jack")]
+    note = d["provenance"]["dc-inputs"]["note"]
+    assert all(v in note for v in ("#292929", "#030303", "#b0b0af", "1954", "506"))
+
+
 def _paths(d):
     return {s["id"]: s for s in d["views"]["front"]["silkscreen"] if s.get("path")}
 
@@ -360,10 +433,15 @@ def test_crs510_dc_legends_are_the_bracket_the_voltage_and_the_polarity_marks():
 
 def test_crs510_unlit_lamps_are_left_as_the_component_draws_them():
     """common/led-rect fills its lamp from var(--led-color, #2a6b3f); a placement cannot set that variable's
-    resting value, and a component on main is not edited here. The photograph shows unlit grey (#868685)."""
+    resting value, and a component on main is not edited here. The photograph shows unlit grey (#878686, #858584 and
+    #898888 for USER, FAULT and POWER)."""
     d = load(CRS510)
     note = d["provenance"]["lamps"]["note"]
-    assert "#868685" in note and "common/led-rect" in note and "left" in note
+    assert all(v in note for v in ("#878686", "#858584", "#898888", "#5e6d52"))
+    assert "common/led-rect" in note and "left" in note and "#2a6b3f" in note
+    leds = {p["id"]: p for p in refs(d, "front", "common/led-rect@1")}
+    assert sorted(leds) == ["led-fault", "led-power", "led-user"]
+    assert not [p for p in placements(d, "front") if p["ref"] == "common/led-rect@1" and "color" in str(p)]
 
 
 CRS510_COLOURS = {  # drawn value -> where it sits
@@ -377,7 +455,7 @@ CRS518_COLOURS = {
 }
 
 
-@pytest.mark.parametrize("name, colours, face", [(CRS510, CRS510_COLOURS, "#dddddd"), (CRS518, CRS518_COLOURS, "#bbbbbb")])
+@pytest.mark.parametrize("name, colours, face", [(CRS510, CRS510_COLOURS, "#dddddd"), (CRS518, CRS518_COLOURS, "#c0bfbf")])
 def test_every_painted_part_is_the_colour_sampled_from_its_photograph(name, colours, face):
     d = load(name)
     assert d["chassis"]["color"] == face
@@ -388,6 +466,16 @@ def test_every_painted_part_is_the_colour_sampled_from_its_photograph(name, colo
         decor = front if part in front else rear  # the CRS518's supplies and fans are on its rear
         assert decor[part]["fill"] == hexval, part
         assert hexval in note, f"{part}: {hexval} has no sample in the colour note"
+
+
+def test_crs518_face_colour_is_the_median_of_three_plain_patches_across_the_lit_gradient():
+    """Photograph 2196 and the brochure's straight-on figure are lit left to right (#bbbbbb to #c9c9c9): three plain
+    patches each, the face being the channel-wise median of the photograph's three patch medians."""
+    d = load(CRS518)
+    assert d["chassis"]["color"] == "#c0bfbf"
+    note = d["provenance"]["colour"]["note"]
+    for token in ("#bbbbbb", "#c0bfbf", "#c7c7c7", "8398", "4254", "20980", "3112", "2673", "4800", "fig-0001"):
+        assert token in note, token
 
 
 def test_crs510_supplies_are_two_front_modules_with_c14_inlets_and_no_bays():
