@@ -259,12 +259,15 @@ def test_no_front_vent_is_drawn_with_the_hexagon_pattern(name):
 
 def test_ccr2116_front_band_is_one_motif_period_of_v_and_lambda_strokes():
     band = decor(load(CCR2116), "front")["vent-field"]
-    assert band["pattern"] == "motif" and band["pattern-pitch"] == [31.2, 6.8]
-    assert band["at"] == [44.3, 11.6] and band["pattern-offset"] == band["at"]
-    assert band["size"][1] == 6.8  # the tile's height: one row of strokes
+    assert band["pattern"] == "motif" and band["pattern-pitch"] == [31.2, 7.0]
+    # the tile is 0.2 mm taller than the strokes and begun 0.1 mm above the field, so no cell lies on its
+    # top or bottom edge (a cell on the edge left a faint 1 px seam between the strokes along it)
+    assert band["at"] == [44.3, 11.6] and band["pattern-offset"] == [44.3, 11.5]
+    assert band["size"][1] == 6.8  # the field's height: one row of strokes
     cells = band["pattern-cells"]
     assert [len(c) for c in cells] == [4, 6, 4, 6, 4]  # "\", V, "/", lambda (cut at the tile's edge), its foot
-    assert all(0 <= x <= 31.2 and 0 <= y <= 6.8 for c in cells for x, y in c)
+    assert all(0 <= x <= 31.2 and 0.1 <= y <= 6.9 for c in cells for x, y in c)
+    assert min(y for c in cells for _, y in c) == 0.1 and max(y for c in cells for _, y in c) == 6.9
     slants = {a for c in cells for a in slant_degrees(c)}
     assert slants == {45.0}  # every slanted edge, the V's and the lambda's too, at 45 degrees
 
@@ -273,8 +276,8 @@ def test_ccr2116_front_band_meets_in_a_v_and_a_lambda_and_runs_six_and_seven_ten
     band = decor(load(CCR2116), "front")["vent-field"]
     v, lam = band["pattern-cells"][1], band["pattern-cells"][3]
     # the V's two strokes meet at the foot (its lowest point), the lambda's at the head
-    assert max(y for _, y in v) > 6.7 and min(y for x, y in v if 0 < x < 31) == 0
-    assert min(y for x, y in lam if 20 < x < 31) < 0.1 and max(y for _, y in lam) == 6.8
+    assert max(y for _, y in v) > 6.8 and min(y for x, y in v if 0 < x < 31) == 0.1
+    assert min(y for x, y in lam if 20 < x < 31) < 0.2 and max(y for _, y in lam) == 6.9
     assert abs(band["size"][0] / band["pattern-pitch"][0] - 6.75) < 0.05  # six periods and 0.7 of a seventh
     assert int(band["size"][0] // band["pattern-pitch"][0]) == 6
     assert -(-band["size"][0] // band["pattern-pitch"][0]) == 7  # seven V points are cut or whole across it
@@ -334,7 +337,7 @@ def test_ccr2004_front_band_is_sixty_slanted_slots_in_five_drawings():
     f = decor(d, "front")
     main = f["vent-field"]
     pitch = main["pattern-pitch"][0]
-    assert pitch == 4.736 and main["pattern-pitch"][1] == 9.3 and main["pattern-offset"] == main["at"]
+    assert pitch == 4.736 and main["pattern-pitch"][1] == 9.5 and main["pattern-offset"] == [main["at"][0], 4.8]
     assert main["at"][1] == 4.9 and main["size"][1] == 9.3
     full = round((main["size"][0] - 2.4 - 2.70) / pitch) + 1
     assert full == 41  # slots 11 to 51
@@ -352,7 +355,24 @@ def test_ccr2004_front_band_is_sixty_slanted_slots_in_five_drawings():
     # each shortened slot starts one pitch after the last, on the same row of slots
     xs = [x["at"][0] + 0.0 for x in left] + [main["at"][0]]
     assert all(abs((b - a) - pitch) < 0.7 for a, b in zip(xs, xs[1:])), xs
-    assert all(x["pattern"] == "motif" and x["pattern-pitch"] == x["size"] for x in left + right)
+    for x in left + right:  # a tile 0.2 mm taller than the field, begun 0.1 mm above it
+        assert x["pattern"] == "motif" and x["pattern-pitch"][0] == x["size"][0]
+        assert x["pattern-pitch"][1] == pytest.approx(x["size"][1] + 0.2, abs=0.001)
+
+
+def test_ccr2004_front_band_cells_keep_clear_of_the_tiles_top_and_bottom_edges():
+    # A cell on the tile's top or bottom edge left a faint 1 px seam between the slots along it. Every
+    # cell sits 0.1 mm inside both, and the tile is begun 0.1 mm above the field so the slots still
+    # start where the photograph has them. (A slot is 4.93 mm across, wider than the 4.736 mm pitch, so
+    # the main field's one slot is still cut where it crosses the tile's side edge.)
+    f = decor(load(CCR2004), "front")
+    fields = [x for x in f.values() if x.get("pattern") == "motif"]
+    assert len(fields) == 12
+    for x in fields:
+        th = x["pattern-pitch"][1]
+        ys = [p[1] for c in x["pattern-cells"] for p in c]
+        assert min(ys) == pytest.approx(0.1, abs=0.001) and max(ys) == pytest.approx(th - 0.1, abs=0.001), x["id"]
+        assert x["pattern-offset"][1] == pytest.approx(x["at"][1] - 0.1, abs=0.001), x["id"]
 
 
 def test_ccr2004_vent_gap_names_the_curved_edge_and_no_chevrons_are_asked_for():
@@ -416,6 +436,92 @@ def test_ccr2004_heatsink_is_a_grey_base_with_twenty_one_silver_fins_and_two_rim
     assert sk["heatsink-rim-right"]["at"][0] == 365.9 and sk["heatsink-rim-right"]["fill"] == "#9a9a98"
     note = d["provenance"]["rear-layout"]["note"] + d["provenance"]["colour"]["note"]
     assert "7.31" in note and "21 fins" in note and "1.4 mm" in note and "121688" in note and "13356" in note
+
+
+def test_ccr2116_rear_has_two_dark_round_holes_at_the_fifth_openings_corners():
+    d = load(CCR2116)
+    r = decor(d, "rear")
+    opening = r["psu-opening"]
+    holes = [r["psu-hole-upper-left"], r["psu-hole-lower-right"]]
+    assert [h["kind"] for h in holes] == ["rear-hole", "rear-hole"]
+    assert all(h["size"] == [3.9, 3.9] and h["rx"] == 1.95 and h["fill"] == "#1b1b1a" for h in holes)  # 3.9 mm across
+    centres = [[h["at"][i] + h["size"][i] / 2 for i in (0, 1)] for h in holes]
+    middle = [opening["at"][i] + opening["size"][i] / 2 for i in (0, 1)]
+    assert centres[0] == pytest.approx([middle[0] - 16.5, middle[1] - 16.7], abs=0.01)
+    assert centres[1] == pytest.approx([middle[0] + 16.5, middle[1] + 16.7], abs=0.01)
+    for c in centres:  # in the corner of the opening's square, outside its circle, inside the face
+        assert ((c[0] - middle[0]) ** 2 + (c[1] - middle[1]) ** 2) ** 0.5 > opening["rx"] + 1.95
+        assert 2.0 <= c[0] <= 441.0 and 2.0 <= c[1] <= 42.0
+    note = d["provenance"]["rear-holes"]["note"]
+    for word in ("3.9 mm", "#1b1b1a", "photograph 2116", "NetBox"):
+        assert word in note
+
+
+def test_ccr2116_jack_blocks_have_a_black_outline_round_them_and_each_jack_its_own_plate():
+    d = load(CCR2116)
+    f = decor(d, "front")
+    backs = [f[f"jack-backing-{n}"] for n in (1, 2, 3)]
+    assert {b["fill"] for b in backs} == {"#010101"} and {b["size"][1] for b in backs} == {13.6}
+    assert [b["at"][0] for b in backs] == [42.9, 115.0, 187.3]
+    plates = [f[f"jack-plate-{n:02d}"] for n in range(1, 13)]
+    assert {p["fill"] for p in plates} == {"#bbbec3"} and {tuple(p["size"]) for p in plates} == {(15.5, 12.4)}
+    for n, p in enumerate(plates):  # each plate is centred on its jack, 17 mm apart inside a block
+        block = backs[n // 4]
+        assert block["at"][0] < p["at"][0] and p["at"][0] + 15.5 < block["at"][0] + block["size"][0]
+        assert p["at"][1] - block["at"][1] == pytest.approx(0.7) and block["size"][1] - 12.4 == pytest.approx(1.2)
+    centres = [p["at"][0] + 7.75 for p in plates]
+    assert centres == pytest.approx([c + 17.0 * k for c in (51.4, 123.5, 195.8) for k in range(4)], abs=0.01)
+    outline, inner = f["mgmt-backing"], f["mgmt-block"]
+    assert outline["fill"] == "#040404" and inner["fill"] == "#dedddf"
+    assert inner["at"][0] > outline["at"][0] and inner["at"][0] + inner["size"][0] < outline["at"][0] + outline["size"][0]
+    assert inner["at"][1] > outline["at"][1] and inner["at"][1] + inner["size"][1] < outline["at"][1] + outline["size"][1]
+    assert not [k for k, x in f.items() if x.get("kind") == "jack-plate" and x["fill"] == "#c4c4c4"]  # the grey plate is gone
+    note = d["provenance"]["front-outlines"]["note"]
+    for word in ("#010101", "#bbbec3", "#040404", "#dedddf", "photograph 2625"):
+        assert word in note
+
+
+def test_ccr2116_sfp_plus_block_is_one_black_backing_with_its_bracket():
+    d = load(CCR2116)
+    f = decor(d, "front")
+    back = f["sfp-backing"]
+    assert back["fill"] == "#010101" and back["kind"] == "sfp-backing"
+    cages = [p for p in d["views"]["front"]["panel"]["cutouts"] if str(p.get("id", "")).startswith("cage-")]
+    assert len(cages) == 4
+    for c in cages:  # the backing holds all four cages, with a margin
+        assert back["at"][0] < c["at"][0] and c["at"][0] + c["size"][0] < back["at"][0] + back["size"][0]
+        assert back["at"][1] < c["at"][1] and c["at"][1] + c["size"][1] < back["at"][1] + back["size"][1]
+    strip = f["sfp-strip"]  # the light strip between the two rows of cages, over the backing
+    rows = sorted({c["at"][1] for c in cages})
+    assert strip["fill"] == "#b9b9bd" and strip["at"][1] == rows[0] + 10.4 and strip["at"][1] + strip["size"][1] == rows[1]
+    assert list(f).index("sfp-strip") > list(f).index("sfp-backing")
+    assert "#b9b9bd" in d["provenance"]["front-outlines"]["note"]
+    sk = {s["id"]: s for s in d["views"]["front"]["silkscreen"] if s.get("id")}
+    upper, lower = sk["sfp-bracket-upper"], sk["sfp-bracket-lower"]
+    assert upper["at"][1] == back["at"][1] and lower["at"][1] + 11.5 == back["at"][1] + back["size"][1]
+    assert upper["at"][0] < back["at"][0] and lower["at"][0] < back["at"][0]
+
+
+LEGENDS = {  # the cap height read on each photograph, 1.65 to 1.9 mm, set in the face's own letter shapes
+    CCR2116: {"front": 2.2, "rear": 2.2},
+    CCR2004: {"front": 2.3, "rear": 2.2},
+}
+MODEL_TEXT = {"CCR2116-12G-4S+": 2.8, "CCR2004-1G-12S+2XS": 2.8, "Cloud Core Router": 5.3}
+SFP28_LABELS = {"1▼": 1.9, "▲2": 1.9, "25G SFP28": 1.9}
+
+
+@pytest.mark.parametrize("name", NAMES)
+def test_every_legend_is_set_at_the_height_its_photograph_shows(name):
+    d = load(name)
+    for view in ("front", "rear"):
+        for s in d["views"][view]["silkscreen"]:
+            if not s.get("text"):
+                continue
+            want = MODEL_TEXT.get(s["text"]) or SFP28_LABELS.get(s["text"]) or LEGENDS[name][view]
+            assert s["font-size"] == want, (view, s["text"])
+    note = d["provenance"]["legends"]["note"]
+    for word in (str(LEGENDS[name]["front"]), str(LEGENDS[name]["rear"]), "cap height", "px per mm"):
+        assert word in note
 
 
 @pytest.mark.parametrize("name", NAMES)

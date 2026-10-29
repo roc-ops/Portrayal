@@ -76,9 +76,11 @@ provenance:
       210.7 mm: six periods and 0.7 of a seventh, so seven V points and six lambdas. The left end is cut
       vertically through the foot of the lambda's right stroke (2.95 mm of it is left), and the right
       end through the head of a single stroke. The V and the lambda come to a point here; the metal rounds
-      each point to about 1.3 mm. Drawn as one `motif` field, tile 31.2 x 6.8 mm, five cells (the lambda
+      each point to about 1.3 mm. Drawn as one `motif` field, tile 31.2 x 7.0 mm, five cells (the lambda
       is cut where it crosses the tile's right edge and its foot reappears at the left), the tile's origin
-      at the field's left edge. No existing pattern draws slanted strokes.
+      at the field's left edge. The tile is 7.0 mm tall, 0.2 mm more than the strokes, with every cell
+      0.1 mm inside its top and bottom edges and the tile begun 0.1 mm above the field: a cell on a tile
+      edge left a faint 1 px seam between the strokes along it. No existing pattern draws slanted strokes.
   colour-sample:
     confidence: photo-measured
     note: >-
@@ -88,7 +90,42 @@ provenance:
       jack plates #c4c4c4: the median of 540 pixels of photograph 2625 over x 1010 to 1100, y 998 to 1004
       (the plate's top strip) is #bec0c8, within 6 levels. The rear is lit less and reads darker, so it
       is painted its own colour (see colour). The lamps' colours belong to the component skins and are
-      not changed here.
+      not changed here. The jack plates and the outlines round them are under front-outlines.
+  front-outlines:
+    confidence: photo-measured
+    note: >-
+      Read on photograph 2625 at 7.092 px per mm. Each block of four jacks and the console and management
+      pair are ringed in black and each jack's own frame is light: the black is a rectangle of the block's
+      extent (#010101, the median of 300 pixels between two frames at x 608 to 613, y 1015 to 1075), and
+      a light plate 15.5 x 12.4 mm sits over it behind each jack, #bbbec3 (the median of 720 pixels of
+      the plate's top strip at x 515 to 595, y 999 to 1008), which leaves the black 0.75 mm round a block
+      and 1.6 mm between two jacks. The console and management pair has a 17.2 mm black outline (#040404,
+      the median of 140 pixels at x 2007 to 2009, y 1010 to 1080) round a plain plate of the face's own
+      colour, #dedddf (900 pixels at x 2040 to 2100, y 995 to 1010). The jack component's own face is
+      narrower than the photograph's frame, so the plate behind it carries the frame's width. The four
+      SFP+ cages stand on one black backing of their block's extent with a margin of 0.6 mm (#010101),
+      with the light strip between the two rows of cages, #b9b9bd (the median of 160 pixels at x 275 to
+      285, y 984 to 1000), over it; the bracket printed at its left is two 0.2 mm strokes with a gap for
+      the SFP+ label.
+  legends:
+    confidence: photo-measured
+    note: >-
+      The legends are set at 2.2 mm. Each cap height was read on its photograph: USER, CONSOLE, ETH/BOOT
+      and MODE on photograph 2625 are 11 to 14 px tall at 7.092 px per mm, 1.6 to 1.9 mm of cap (a 2.2
+      to 2.6 mm font), and the face's wider letter shapes fix the size by width: USER is 41 px, 5.8 mm,
+      the same as DejaVu at 2.2 mm. The rear's POWER and rating lines on photograph 2116 are 11 to 12
+      px tall at 7.16 px per mm and the rating line 247 px, 34.5 mm, across, which 2.2 mm also draws.
+      The model text keeps 2.8 mm.
+  rear-holes:
+    confidence: estimated
+    note: >-
+      estimated - photograph 2116 shows two dark round holes at the upper-left and lower-right corners
+      of the fifth opening, and the NetBox rear elevation shows them too. Read on a 3x crop at 7.16 px
+      per mm: each is 28 px, 3.9 mm, across (606 and 589 dark pixels, centres at x 563 and 799, y 891
+      and 1113), 16.5 mm left or right and 16.7 mm above or below the opening's centre (the camera looks
+      down, so the vertical figure is estimated at 6.65 px per mm). Drawn as two round decor rects filled
+      #1b1b1a, the median of 200 pixels over both holes; the photograph's lighter countersink ring is
+      not drawn.
   lamps:
     confidence: photo-measured
     note: >-
@@ -319,38 +356,53 @@ views:
         at: [44.3, 11.6]
         size: [210.7, 6.8]
         pattern: motif
-        pattern-pitch: [31.2, 6.8]
-        pattern-offset: [44.3, 11.6]
+        pattern-pitch: [31.2, 7.0]
+        pattern-offset: [44.3, 11.5]
         pattern-cells:
-        - - [0.0, 0.0]
-          - [2.0, 0.0]
-          - [8.8, 6.8]
-          - [6.8, 6.8]
-        - - [5.1, 0.0]
-          - [7.1, 0.0]
-          - [11.85, 4.75]
-          - [16.6, 0.0]
-          - [18.6, 0.0]
-          - [11.85, 6.75]
-        - - [21.6, 0.0]
-          - [23.6, 0.0]
-          - [16.8, 6.8]
-          - [14.8, 6.8]
-        - - [20.65, 6.8]
-          - [22.65, 6.8]
-          - [27.4, 2.05]
-          - [31.2, 5.85]
-          - [31.2, 3.85]
-          - [27.4, 0.05]
-        - - [0.0, 5.85]
-          - [0.95, 6.8]
-          - [2.95, 6.8]
-          - [0.0, 3.85]
+        - - [0.0, 0.1]
+          - [2.0, 0.1]
+          - [8.8, 6.9]
+          - [6.8, 6.9]
+        - - [5.1, 0.1]
+          - [7.1, 0.1]
+          - [11.85, 4.85]
+          - [16.6, 0.1]
+          - [18.6, 0.1]
+          - [11.85, 6.85]
+        - - [21.6, 0.1]
+          - [23.6, 0.1]
+          - [16.8, 6.9]
+          - [14.8, 6.9]
+        - - [20.65, 6.9]
+          - [22.65, 6.9]
+          - [27.4, 2.15]
+          - [31.2, 5.95]
+          - [31.2, 3.95]
+          - [27.4, 0.15]
+        - - [0.0, 5.95]
+          - [0.95, 6.9]
+          - [2.95, 6.9]
+          - [0.0, 3.95]
         vent: 1.0
-      - {id: jack-plate-1, kind: jack-plate, at: [42.9, 23.8], size: [67.9, 13.0], fill: '#c4c4c4'}
-      - {id: jack-plate-2, kind: jack-plate, at: [115.0, 23.8], size: [68.1, 13.0], fill: '#c4c4c4'}
-      - {id: jack-plate-3, kind: jack-plate, at: [187.3, 23.8], size: [68.0, 13.0], fill: '#c4c4c4'}
-      - {id: mgmt-block, kind: jack-plate, at: [258.9, 10.4], size: [17.2, 27.4], fill: '#c4c4c4'}
+      - {id: sfp-backing, kind: sfp-backing, at: [7.5, 11.1], size: [30.65, 27.2], fill: '#010101'}
+      - {id: sfp-strip, kind: module-plate, at: [8.1, 22.1], size: [29.45, 5.2], fill: '#b9b9bd'}
+      - {id: jack-backing-1, kind: jack-backing, at: [42.9, 23.8], size: [67.9, 13.6], fill: '#010101'}
+      - {id: jack-backing-2, kind: jack-backing, at: [115.0, 23.8], size: [68.1, 13.6], fill: '#010101'}
+      - {id: jack-backing-3, kind: jack-backing, at: [187.3, 23.8], size: [68.0, 13.6], fill: '#010101'}
+      - {id: jack-plate-01, kind: jack-plate, at: [43.65, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: jack-plate-02, kind: jack-plate, at: [60.65, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: jack-plate-03, kind: jack-plate, at: [77.65, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: jack-plate-04, kind: jack-plate, at: [94.65, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: jack-plate-05, kind: jack-plate, at: [115.75, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: jack-plate-06, kind: jack-plate, at: [132.75, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: jack-plate-07, kind: jack-plate, at: [149.75, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: jack-plate-08, kind: jack-plate, at: [166.75, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: jack-plate-09, kind: jack-plate, at: [188.05, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: jack-plate-10, kind: jack-plate, at: [205.05, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: jack-plate-11, kind: jack-plate, at: [222.05, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: jack-plate-12, kind: jack-plate, at: [239.05, 24.5], size: [15.5, 12.4], fill: '#bbbec3'}
+      - {id: mgmt-backing, kind: jack-backing, at: [258.9, 10.4], size: [17.2, 28.2], fill: '#040404'}
+      - {id: mgmt-block, kind: jack-plate, at: [259.3, 10.8], size: [16.4, 27.4], fill: '#dedddf'}
       - {id: usb-bezel, kind: usb-bezel, at: [278.25, 22.0], size: [8.5, 15.8], rx: 1.6, fill: '#2b2b2b'}
       cutouts:
       - {id: port-1, at: [45.05, 25.6], size: [12.7, 11.0], shape: rect}
@@ -387,37 +439,41 @@ views:
       - {id: led-pwr2, at: [308.7, 27.8], size: [2.0, 2.0], shape: circle}
       - {id: led-pwr1, at: [308.7, 32.5], size: [2.0, 2.0], shape: circle}
     silkscreen:
-    - {at: [15.23, 9.1], text: '2', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-2}
-    - {at: [30.42, 9.1], text: '4', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-4}
-    - {at: [15.23, 40.8], text: '1', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-1}
-    - {at: [30.42, 40.8], text: '3', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-3}
-    - {at: [6.0, 23.1], text: SFP+, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
-    - {at: [149.1, 21.9], text: GIGABIT ETHERNET, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [15.23, 9.1], text: '2', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: cage-2}
+    - {at: [30.42, 9.1], text: '4', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: cage-4}
+    - {at: [15.23, 40.8], text: '1', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [30.42, 40.8], text: '3', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: cage-3}
+    - {at: [6.0, 23.1], text: SFP+, font-size: 2.2, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [149.1, 22.0], text: GIGABIT ETHERNET, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {id: sfp-bracket-upper, at: [6.0, 11.1], path: M 1.5 0 L 0 0 L 0 8.3, filled: false, stroke-width: 0.2,
+      fill: '#2b2b2b', for: chassis}
+    - {id: sfp-bracket-lower, at: [6.0, 26.8], path: M 0 0 L 0 11.5 L 1.5 11.5, filled: false, stroke-width: 0.2,
+      fill: '#2b2b2b', for: chassis}
     - {id: gbe-bracket-left, at: [42.9, 21.2], path: M 0 1.2 V 0 H 93.1, filled: false, stroke-width: 0.2,
       fill: '#2b2b2b', for: chassis}
     - {id: gbe-bracket-right, at: [162.4, 21.2], path: M 0 0 H 93.1 V 1.2, filled: false, stroke-width: 0.2,
       fill: '#2b2b2b', for: chassis}
-    - {at: [51.4, 40.8], text: '1', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-1}
-    - {at: [68.4, 40.8], text: '2', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-2}
-    - {at: [85.4, 40.8], text: '3', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-3}
-    - {at: [102.4, 40.8], text: '4', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-4}
-    - {at: [123.6, 40.8], text: '5', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-5}
-    - {at: [140.6, 40.8], text: '6', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-6}
-    - {at: [157.6, 40.8], text: '7', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-7}
-    - {at: [174.6, 40.8], text: '8', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-8}
-    - {at: [195.8, 40.8], text: '9', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-9}
-    - {at: [212.8, 40.8], text: '10', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-10}
-    - {at: [229.8, 40.8], text: '11', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-11}
-    - {at: [246.8, 40.8], text: '12', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: port-12}
-    - {at: [267.5, 9.3], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: console}
-    - {at: [267.5, 40.8], text: ETH/BOOT, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: mgmt}
-    - {at: [282.6, 40.8], text: USB, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: usb}
-    - {at: [291.4, 40.8], text: MODE, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: btn-mode}
-    - {at: [301.4, 40.8], text: RESET, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: btn-reset}
-    - {at: [313.2, 19.26], text: USER, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-user}
-    - {at: [313.2, 24.26], text: FAULT, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-fault}
-    - {at: [313.2, 29.26], text: PWR 2, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-pwr2}
-    - {at: [313.2, 33.96], text: PWR 1, font-size: 1.5, anchor: start, fill: '#2b2b2b', for: led-pwr1}
+    - {at: [51.4, 40.8], text: '1', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-1}
+    - {at: [68.4, 40.8], text: '2', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-2}
+    - {at: [85.4, 40.8], text: '3', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-3}
+    - {at: [102.4, 40.8], text: '4', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-4}
+    - {at: [123.6, 40.8], text: '5', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-5}
+    - {at: [140.6, 40.8], text: '6', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-6}
+    - {at: [157.6, 40.8], text: '7', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-7}
+    - {at: [174.6, 40.8], text: '8', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-8}
+    - {at: [195.8, 40.8], text: '9', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-9}
+    - {at: [212.8, 40.8], text: '10', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-10}
+    - {at: [229.8, 40.8], text: '11', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-11}
+    - {at: [246.8, 40.8], text: '12', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: port-12}
+    - {at: [267.5, 9.3], text: CONSOLE, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: console}
+    - {at: [267.5, 40.8], text: ETH/BOOT, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: mgmt}
+    - {at: [282.6, 40.8], text: USB, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: usb}
+    - {at: [291.4, 40.8], text: MODE, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: btn-mode}
+    - {at: [301.4, 40.8], text: RESET, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: btn-reset}
+    - {at: [313.2, 19.48], text: USER, font-size: 2.2, anchor: start, fill: '#2b2b2b', for: led-user}
+    - {at: [313.2, 24.48], text: FAULT, font-size: 2.2, anchor: start, fill: '#2b2b2b', for: led-fault}
+    - {at: [313.2, 29.48], text: PWR 2, font-size: 2.2, anchor: start, fill: '#2b2b2b', for: led-pwr2}
+    - {at: [313.2, 34.18], text: PWR 1, font-size: 2.2, anchor: start, fill: '#2b2b2b', for: led-pwr1}
     - {at: [439.0, 15.3], text: CCR2116-12G-4S+, font-size: 2.8, anchor: end, fill: '#2b2b2b', for: chassis}
     components:
       placements:
@@ -617,6 +673,8 @@ views:
           - [7.504, 5.88]
         vent: 1.0
       - {id: psu-opening-hub, kind: fan-hub, at: [62.9, 11.4], size: [19.0, 19.0], rx: 9.5, fill: '#c1c1c0'}
+      - {id: psu-hole-upper-left, kind: rear-hole, at: [53.95, 2.25], size: [3.9, 3.9], rx: 1.95, fill: '#1b1b1a'}
+      - {id: psu-hole-lower-right, kind: rear-hole, at: [86.95, 35.65], size: [3.9, 3.9], rx: 1.95, fill: '#1b1b1a'}
       - id: fan-0
         kind: fan-grille
         at: [205.2, 3.1]
@@ -665,11 +723,11 @@ views:
       - {id: ac-inlet-1, at: [16.9, 15.6], size: [28.0, 20.0], shape: rect}
       - {id: ac-inlet-2, at: [102.3, 15.6], size: [28.0, 20.0], shape: rect}
     silkscreen:
-    - {at: [30.9, 38.6], text: POWER 1, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
-    - {at: [30.9, 41.6], text: '100-240 V ~2 A MAX, 50/60 Hz', font-size: 1.5, anchor: middle, fill: '#2b2b2b',
+    - {at: [30.9, 38.6], text: POWER 1, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [30.9, 41.6], text: '100-240 V ~2 A MAX, 50/60 Hz', font-size: 2.2, anchor: middle, fill: '#2b2b2b',
       for: ac-inlet-1}
-    - {at: [116.3, 38.6], text: POWER 2, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
-    - {at: [116.3, 41.6], text: '100-240 V ~2 A MAX, 50/60 Hz', font-size: 1.5, anchor: middle, fill: '#2b2b2b',
+    - {at: [116.3, 38.6], text: POWER 2, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
+    - {at: [116.3, 41.6], text: '100-240 V ~2 A MAX, 50/60 Hz', font-size: 2.2, anchor: middle, fill: '#2b2b2b',
       for: ac-inlet-2}
     components:
       placements:
