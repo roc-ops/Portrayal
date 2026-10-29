@@ -10,9 +10,10 @@ description: >-
   MikroTik CRS518-16XS-2XQ-RM is a fixed 1U Cloud Router Switch with sixteen 25 Gigabit SFP28 cages and two 100 Gigabit
   QSFP28 cages, a 100 Megabit management port, an RJ45 serial console and a USB type A port, and runs RouterOS v7. The
   front carries the two QSFP28 cages, the eight stacked pairs of SFP28 cages with four arrow lamps each, the console over
-  the management port, RESET, the USB port, four status lamps and a chevron vent along the top edge. Two AC inlets, each
-  with its supply built in, and four fan openings are on the rear. The brochure calls the supplies and fans hot-swap but
-  prints no part number for either, so they are part of the chassis and there are no bays.
+  the management port, RESET, the USB port, four status lamps and a vent band of lambda and V openings along the top
+  edge. Two AC inlets, each with its supply built in, and four fan openings are on the rear. The brochure calls the
+  supplies and fans hot-swap but prints no part number for either, so they are part of the chassis and there are no
+  bays.
 profile: networking
 provenance:
   sources:
@@ -87,9 +88,12 @@ provenance:
     note: >-
       The four arrow lamps of a stack: an arrow points at the cage it belongs to, so a down arrow is the lower cage (the one
       numbered 1 of the pair, printed 1 with a down arrow under the stack) and an up arrow the upper one (printed with an up
-      arrow before the 2). Which of the two pairs of a stack is the speed lamp and which the activity lamp is read from
-      the legend photograph 2196 prints beside the first stack, and is not stated by a document (gap `led-states`), so the
-      two pairs are not named. The two lamps over each QSFP28 cage are printed ACT and 100G, left to right. The four status
+      arrow before the 2). The lamp key printed left of the first stack, drawn as silkscreen, is read from photograph 2196
+      and brochure fig-0001 (straight on, 3.34 px/mm): four triangles at 59.1, 62.5, 66.0 and 69.3 mm and 15 mm down,
+      left to right a down arrow with ACT under it, an up arrow with 25G over it, a down arrow with 25G under it and an
+      up arrow with ACT over it, and a leader line from the last triangle to the stack's left edge at 75.4 mm and 23.1 mm
+      down. The key names the lamps only as printed; no document states which lamp is which (gap `led-states`), so the
+      lamps themselves are not named. The two lamps over each QSFP28 cage are printed ACT and 100G, left to right. The four status
       lamps are printed USER, FAULT, PWR 2 and PWR 1 from the top; the photograph shows them as small lenses, green, red,
       blue and blue. No document says what a lamp shows.
   port-numbering:
@@ -106,8 +110,11 @@ provenance:
   usb:
     confidence: photo-measured
     note: >-
-      One USB type A port standing upright (page: "1 (type A)", no generation printed). Photograph 2196 shows a white
-      tongue, drawn with the registry's white-tongue skin as on the CRS418.
+      One USB type A port standing upright (page: "1 (type A)", no generation printed). Photograph 2196 and brochure
+      fig-0001 show a white tongue at the left of the opening, drawn with the registry's white-tongue skin as on the
+      CRS418, turned a quarter turn anticlockwise (rotate -90) because the skin draws the tongue at the top of a
+      landscape opening. The USB symbol printed under the port (photograph 2196, a trident about 3.0 mm wide at 5.62
+      px/mm, centred at 281.2 mm and 38.8 mm down) is drawn as two printed paths, its stroked lines and its filled dots.
   buttons:
     confidence: photo-measured
     note: One recessed round button printed RESET, drawn with the library's reset-button part.
@@ -127,9 +134,20 @@ provenance:
     confidence: photo-measured
     note: >-
       From photograph 2197 (the rear, from slightly above), x across the 443 mm at 4.04 px per mm and y estimated (the
-      photograph looks down). Supply modules 62.9 mm wide at 3.2 and 66.1 mm, with inlets centred at 50.2 and 113.1 mm and
-      21.5 mm down; fan modules 60.5 mm wide at 156.3, 226.5, 296.6 and 363.0 mm, each grille about 38 mm across,
-      centred 191.8, 261.9, 332.5 and 393.8 mm and 20.5 mm down. Read to about 2 mm. The hexagon fields are measured
+      photograph looks down). Supply modules 62.9 mm wide at 3.2 and 66.1 mm; fan modules 60.5 mm wide at 156.3, 226.5,
+      296.6 and 363.0 mm, each grille about 38 mm across, centred 191.8, 261.9, 332.5 and 393.8 mm and 20.5 mm down. Read
+      to about 2 mm. Each inlet housing stands upright (the line pins stacked at the left, the earth pin at the right as
+      seen from behind), read again on photograph 2197 at 5.80 px/mm (the face is 2570 px across the printed 443 mm, from
+      x 152): housing 1 spans x 374 to 519 and y 469 to 647 px in the photograph's own pixels, housing 2 x 742 to 884, so
+      each is 24.9 x 30.7 mm (the height as the photograph shows it, before the 0.94 foreshortening), centred at 50.7
+      and 114.0 mm and 21.5 mm down; brochure figure 5 (2.78 px/mm, housings 69 x 83 px) gives 24.8 x 29.9 mm and the
+      same upright pose. The registry's C14 is 28 x 20 mm with the earth pin at the top, so it is turned a quarter turn
+      clockwise (rotate 90) about its centre and its cutout is the 20 x 28 portrait opening at the same centre; the
+      housing's bezel is wider than that opening and is not drawn. Each fan module also has a small round dark hole at
+      its upper left between the handle and the guard: on photograph 2197 a blob 13 x 12 px (130 pixels below luma 90)
+      on each of the four modules, so about 2.4 mm across, at 178.5, 247.9, 316.9 and 386.1 mm and about 6.1 mm down
+      (the y at the photograph's 5.45 px/mm down); drawn as chassis art (`fan-module-hole`, #3a3a3a, the median of a 6
+      x 6 pixel patch inside each: #393939, #393939, #3b3b3b and #3d3d3d). The hexagon fields are measured
       on 2197 at 5.80 px per mm (the face is 2570 px across the printed 443 mm), estimated: on a fan guard (box 1165,440
       to 1395,665; 42 whole openings) an opening is 4.31 mm across its corners and 3.62 mm across its flats, the column
       step 4.23 mm and the same-column pitch 4.70 mm (the photograph looks down, so the vertical figure reads short);
@@ -166,8 +184,15 @@ provenance:
       patches: box 0,42 to 200,58 #bbbbbb (3112 pixels), box 600,125 to 800,140 #bfbfbf (2673 pixels), box 1000,42 to
       1300,58 #c7c7c7 (4800 pixels). The earlier #bbbbbb was the left patch alone. The jack plate is #63625f: 2196,
       box 1563,490 to 1569,590 (600 pixels; box 1580,536 to 1635,546, 550 pixels, gives #62605e). The supply modules are
-      #6f6d68: photograph 2197, box 225,460 to 320,468 (760 pixels). The fan modules are #878682: 2197, box 1393,530 to
-      1413,620 (1800 pixels), and their hubs #817f7c: box 1255,535 to 1305,565 (1500 pixels). The rear's own face reads
+      #6f6d68: photograph 2197, box 225,460 to 320,468 (760 pixels). The fan modules are #92918e, the channel-wise
+      median of four plain strips of 2197, one right of each guard (rows 446 to 656): box 1392,446 to 1414,656 #878682
+      (4620 pixels, spread 61), box 1793,446 to 1813,656 #8e8d8a (4200 pixels, spread 34), box 2192,446 to 2211,656
+      #969592 (3990 pixels, spread 28) and box 2593,446 to 2609,656 #9d9b98 (3360 pixels, spread 63); the photograph is
+      lit left to right, as the face is. The plate pixels do not read lighter than that anywhere clean: the brighter
+      values in the photograph are the handles and the module's lit edge. Their hubs are #817f7c: box 1255,535 to 1305,565
+      (1500 pixels). The small holes on the fan modules are #3a3a3a, the median of the four 6 x 6 pixel patches at their
+      centres (36 pixels each, spread 10 or less), boxes 1185,460 to 1191,466, 1587,460 to 1593,466, 1987,460 to 1993,466
+      and 2389,460 to 2395,466 of 2197. The rear's own face reads
       #cacaca in 2197 (box 2660,520 to 2700,640, 4800 pixels); a device carries one chassis colour and the front's is
       drawn. Photograph 2196's pixels are 8-bit sRGB from a studio render; no lighting is corrected.
 attrs:
@@ -230,8 +255,9 @@ gaps:
   reason: vendor-silent
   note: >-
     Searched the brochure, the page and the quick guide page for an LED table: none. The arrow lamps, the ACT and 100G
-    lamps and the four status lamps carry the component's own vocabulary and no meaning is stated; which pair of a stack
-    is speed and which activity is not stated, so the lamps are not named.
+    lamps and the four status lamps carry the component's own vocabulary and no document states a meaning in words. The
+    lamp key printed beside the first stack (photograph 2196 and brochure fig-0001) is drawn as printed, but it is a
+    picture and no LED table, so the lamps themselves are not named.
   wanted: MikroTik's LED description for the CRS518-16XS-2XQ-RM.
 - what: top-and-bottom
   scope: [top, bottom]
@@ -428,6 +454,21 @@ views:
     - {at: [227.7, 39.4], text: 15▼, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-15}
     - {at: [236.2, 39.4], text: ▲16, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-16}
     - {at: [157.5, 42.4], text: 1G/10G/25G, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [59.1, 15.6], text: ▼, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [62.5, 15.6], text: ▲, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [66.0, 15.6], text: ▼, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [69.3, 15.6], text: ▲, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [59.1, 17.8], text: ACT, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [62.5, 13.35], text: 25G, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [66.0, 17.8], text: 25G, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [69.3, 13.35], text: ACT, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {id: lamp-key-leader, at: [70.8, 15.1], path: M 0 0 h 2.2 v 8 h 2.4, filled: false, stroke-width: 0.2,
+       fill: '#2b2b2b', for: cage-1}
+    - {id: usb-symbol-lines, at: [279.9, 38.8], path: M 0 0 h 2.75 M 1.0 0 v -0.6 h 0.62 M 1.3 0 v 0.48 h 0.59,
+       filled: false, stroke-width: 0.14, fill: '#2b2b2b', for: usb}
+    - {id: usb-symbol-dots, at: [279.9, 38.8], path: M -0.25 0 a 0.25 0.25 0 1 0 0.5 0 a 0.25 0.25 0 1 0 -0.5 0
+       M 1.42 -0.6 a 0.2 0.2 0 1 0 0.4 0 a 0.2 0.2 0 1 0 -0.4 0 M 1.69 0.48 a 0.2 0.2 0 1 0 0.4 0 a 0.2 0.2 0 1 0 -0.4 0
+       M 2.55 -0.25 L 2.95 0 L 2.55 0.25 Z, filled: true, fill: '#2b2b2b', for: usb}
     - {at: [248.4, 16.8], text: CONSOLE, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: console}
     - {at: [248.4, 30.5], text: ETH / BOOT, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: mgmt}
     - {at: [259.1, 39.4], text: MANAGEMENT, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: mgmt}
@@ -464,7 +505,7 @@ views:
       placements:
       - {block: qsfp28}
       - {block: sfp28}
-      - {ref: std/usb-a@1, id: usb, at: [275.65, 27.0], rotate: 90, skin: usb2, group: usb, rel-pos: 1, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb, at: [275.65, 27.0], rotate: -90, skin: usb2, group: usb, rel-pos: 1, attrs: {media: usb-a}}
       - {ref: std/rj45@2, id: console, at: [251.2, 10.2], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
       - {ref: common/rj45-eth@1, id: mgmt, at: [251.2, 23.9], group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 100m}}
       - {ref: common/led-dot@1, id: led-q1-act, at: [25.45, 22.4], for: qsfp-1, group: qsfp-leds, rel-pos: 1, states: ['off', 'on']}
@@ -545,10 +586,10 @@ views:
         - [[10.18, 0], [10.18, 2.31], [8.84, 2.31], [7.51, 0]]
         - [[0, 5.88], [0, 3.57], [1.33, 3.57], [2.67, 5.88]]
         - [[10.18, 5.88], [7.51, 5.88], [8.84, 3.57], [10.18, 3.57]]
-      - {id: fan-module-0, kind: module-plate, at: [156.3, 2.0], size: [61.5, 38.0], fill: '#878682'}
-      - {id: fan-module-1, kind: module-plate, at: [226.5, 2.0], size: [60.0, 38.0], fill: '#878682'}
-      - {id: fan-module-2, kind: module-plate, at: [296.6, 2.0], size: [60.4, 38.0], fill: '#878682'}
-      - {id: fan-module-3, kind: module-plate, at: [363.0, 2.0], size: [60.0, 38.0], fill: '#878682'}
+      - {id: fan-module-0, kind: module-plate, at: [156.3, 2.0], size: [61.5, 38.0], fill: '#92918e'}
+      - {id: fan-module-1, kind: module-plate, at: [226.5, 2.0], size: [60.0, 38.0], fill: '#92918e'}
+      - {id: fan-module-2, kind: module-plate, at: [296.6, 2.0], size: [60.4, 38.0], fill: '#92918e'}
+      - {id: fan-module-3, kind: module-plate, at: [363.0, 2.0], size: [60.0, 38.0], fill: '#92918e'}
       - id: fan-0
         kind: fan-grille
         at: [172.8, 1.5]
@@ -613,16 +654,20 @@ views:
       - {id: fan-hub-1, kind: fan-hub, at: [252.4, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
       - {id: fan-hub-2, kind: fan-hub, at: [323.0, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
       - {id: fan-hub-3, kind: fan-hub, at: [384.3, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
+      - {id: fan-module-hole-0, kind: fan-module-hole, at: [177.3, 4.9], size: [2.4, 2.4], rx: 1.2, fill: '#3a3a3a'}
+      - {id: fan-module-hole-1, kind: fan-module-hole, at: [246.7, 4.9], size: [2.4, 2.4], rx: 1.2, fill: '#3a3a3a'}
+      - {id: fan-module-hole-2, kind: fan-module-hole, at: [315.7, 4.9], size: [2.4, 2.4], rx: 1.2, fill: '#3a3a3a'}
+      - {id: fan-module-hole-3, kind: fan-module-hole, at: [384.9, 4.9], size: [2.4, 2.4], rx: 1.2, fill: '#3a3a3a'}
       cutouts:
-      - {id: ac-inlet-1, at: [36.2, 11.5], size: [28.0, 20.0], shape: rect}
-      - {id: ac-inlet-2, at: [99.1, 11.5], size: [28.0, 20.0], shape: rect}
+      - {id: ac-inlet-1, at: [40.7, 7.5], size: [20.0, 28.0], shape: rect}
+      - {id: ac-inlet-2, at: [104.0, 7.5], size: [20.0, 28.0], shape: rect}
     silkscreen:
     - {at: [145.0, 11.5], text: POWER 1 / POWER 2, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: chassis}
     - {at: [145.0, 15.5], text: '100-240 V ~2.5 A MAX, 50/60 Hz', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
     components:
       placements:
-      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [36.2, 11.5], group: inlets, rel-pos: 1}
-      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [99.1, 11.5], group: inlets, rel-pos: 2}
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [36.7, 11.5], rotate: 90, group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [100.0, 11.5], rotate: 90, group: inlets, rel-pos: 2}
   top:
     size: {w: 443.0, h: 268.0}
     empty: >-

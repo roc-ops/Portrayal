@@ -455,10 +455,13 @@ def test_crs510_unlit_lamps_are_left_as_the_component_draws_them():
 CRS510_COLOURS = {  # drawn value -> where it sits
     "psu-1-module": "#a3a5a7", "psu-2-module": "#a3a5a7", "mgmt-block": "#949290", "dc-jack-housing": "#3e3e3d",
     "dc-terminal-housing": TERMINAL_GREEN, "dc-terminal-cap": TERMINAL_GREEN,
+    "bar-25g": "#938ac6", "bar-100g": "#8e85c3",
 }
 CRS518_COLOURS = {
     "psu-1-module": "#6f6d68", "psu-2-module": "#6f6d68", "mgmt-block": "#63625f",
-    "fan-module-0": "#878682", "fan-module-1": "#878682", "fan-module-2": "#878682", "fan-module-3": "#878682",
+    "fan-module-0": "#92918e", "fan-module-1": "#92918e", "fan-module-2": "#92918e", "fan-module-3": "#92918e",
+    "fan-module-hole-0": "#3a3a3a", "fan-module-hole-1": "#3a3a3a", "fan-module-hole-2": "#3a3a3a",
+    "fan-module-hole-3": "#3a3a3a",
     "fan-hub-0": "#817f7c", "fan-hub-1": "#817f7c", "fan-hub-2": "#817f7c", "fan-hub-3": "#817f7c",
 }
 
@@ -497,6 +500,114 @@ def test_crs510_supplies_are_two_front_modules_with_c14_inlets_and_no_bays():
     fans = [x["id"] for x in d["views"]["rear"]["panel"]["decor"] if x.get("kind") == "fan-grille"]
     assert fans == ["fan-0", "fan-1"]
     assert d["views"]["right"]["panel"]["decor"] and d["views"]["left"].get("empty")
+
+
+def _cutout(d, view, cutout_id):
+    return next(c for c in d["views"][view]["panel"]["cutouts"] if c.get("id") == cutout_id)
+
+
+def _silk(d, view, **match):
+    return [s for s in d["views"][view]["silkscreen"] if all(s.get(k) == v for k, v in match.items())]
+
+
+def test_crs518_rear_inlets_stand_upright_with_the_earth_pin_at_the_right_under_portrait_cutouts():
+    """Photograph 2197 (5.80 px/mm across) and brochure figure 5 (2.78 px/mm) show each inlet housing standing upright,
+    about 24.9 x 30.7 mm: the line pins stacked at the left and the earth pin at the right as seen from behind. The
+    part draws its earth pin at the top, so a quarter turn clockwise (rotate 90) puts it at the right. A part turns about
+    its centre, so the placement and its portrait cutout share one centre."""
+    d = load(CRS518)
+    inlets = {p["id"]: p for p in refs(d, "rear", "std/c14-inlet@1")}
+    for inlet_id, centre_x in (("ac-inlet-1", 50.7), ("ac-inlet-2", 114.0)):
+        p, cut = inlets[inlet_id], _cutout(d, "rear", inlet_id)
+        assert p["rotate"] == 90, inlet_id
+        assert cut["size"] == [20.0, 28.0], inlet_id
+        assert (p["at"][0] + 14.0, p["at"][1] + 10.0) == pytest.approx((centre_x, 21.5), abs=0.05), inlet_id
+        assert (cut["at"][0] + 10.0, cut["at"][1] + 14.0) == pytest.approx((centre_x, 21.5), abs=0.05), inlet_id
+    note = d["provenance"]["rear-layout"]["note"]
+    assert all(token in note for token in ("24.9 x 30.7", "50.7", "114.0", "earth pin", "figure 5"))
+
+
+def test_crs518_usb_tongue_is_at_the_left_of_the_opening():
+    """Photograph 2196 and brochure figure 1 show the white tongue at the left of the upright opening. The skin draws
+    the tongue at the top of a landscape opening, so a quarter turn anticlockwise (rotate -90) puts it at the left."""
+    d = load(CRS518)
+    (usb,) = refs(d, "front", "std/usb-a@1")
+    assert usb["rotate"] in (-90, 270) and usb["skin"] == "usb2"
+    cut = _cutout(d, "front", "usb")
+    assert cut["size"] == [4.5, 12.0]
+    assert (usb["at"][0] + 6.0, usb["at"][1] + 2.25) == pytest.approx((cut["at"][0] + 2.25, cut["at"][1] + 6.0), abs=0.05)
+
+
+FAN_HOLE_CENTRES = {0: 178.5, 1: 247.9, 2: 316.9, 3: 386.1}
+
+
+def test_crs518_each_fan_module_has_its_small_round_hole_at_the_upper_left():
+    """Photograph 2197 (5.80 px/mm across): a dark hole 13 x 12 px, about 2.4 mm across, on each of the four modules,
+    between the handle and the guard. Chassis art, as the DC terminal is."""
+    d = load(CRS518)
+    decor = _decor(d, "rear")
+    for i, centre_x in FAN_HOLE_CENTRES.items():
+        hole, plate, guard = decor[f"fan-module-hole-{i}"], decor[f"fan-module-{i}"], decor[f"fan-{i}"]
+        assert hole["kind"] == "fan-module-hole" and hole["size"] == [2.4, 2.4] and hole["rx"] == 1.2
+        cx, cy = hole["at"][0] + 1.2, hole["at"][1] + 1.2
+        assert (cx, cy) == pytest.approx((centre_x, 6.1), abs=0.05)
+        assert plate["at"][0] < cx < plate["at"][0] + plate["size"][0]
+        assert plate["at"][1] < cy < plate["at"][1] + plate["size"][1]
+        assert cx < guard["at"][0] + 19.0 and cy < guard["at"][1] + 19.0  # left of and above the guard's centre
+    note = d["provenance"]["rear-layout"]["note"]
+    assert all(token in note for token in ("fan-module-hole", "2.4 mm", "#3a3a3a"))
+
+
+def test_crs518_front_prints_the_lamp_key_beside_the_first_stack_and_the_usb_symbol():
+    """Photograph 2196 and brochure figure 1 print, left of the first SFP28 stack, a key of four triangles with a
+    label each (down ACT, up 25G, down 25G, up ACT) and a leader line running to the stack; the USB trident is printed
+    under the USB port."""
+    d = load(CRS518)
+    key = [s for s in d["views"]["front"]["silkscreen"] if s.get("for") == "cage-1" and s["at"][0] < 72 and s["at"][1] < 19]
+    glyphs = sorted((s["at"][0], s["text"]) for s in key if s.get("text") in ("▼", "▲"))
+    assert glyphs == [(59.1, "▼"), (62.5, "▲"), (66.0, "▼"), (69.3, "▲")]
+    labels = sorted((s["at"][0], s["at"][1], s["text"]) for s in key if s.get("text") in ("ACT", "25G"))
+    assert labels == [(59.1, 17.8, "ACT"), (62.5, 13.35, "25G"), (66.0, 17.8, "25G"), (69.3, 13.35, "ACT")]
+    (leader,) = _silk(d, "front", id="lamp-key-leader")
+    assert leader["filled"] is False and leader["at"] == [70.8, 15.1] and leader["path"] == "M 0 0 h 2.2 v 8 h 2.4"
+    lines, dots = _silk(d, "front", id="usb-symbol-lines")[0], _silk(d, "front", id="usb-symbol-dots")[0]
+    assert lines["at"] == dots["at"] == [279.9, 38.8] and lines["filled"] is False and dots["filled"] is True
+    usb = _cutout(d, "front", "usb")
+    assert abs(lines["at"][0] + 1.4 - (usb["at"][0] + usb["size"][0] / 2)) < 1.0  # centred under the port
+    note = d["provenance"]["lamps"]["note"]
+    assert all(token in note for token in ("lamp key", "photograph 2196", "fig-0001", "down arrow", "ACT"))
+
+
+def test_crs518_fan_plates_are_the_median_of_four_plain_patches_across_the_lit_gradient():
+    """Photograph 2197 is lit left to right: each fan module's plain strip right of its guard, the plate being the
+    channel-wise median of the four patch medians."""
+    d = load(CRS518)
+    note = d["provenance"]["colour"]["note"]
+    for token in ("#878682", "#8e8d8a", "#969592", "#9d9b98", "4620", "4200", "3990", "3360", "#92918e"):
+        assert token in note, token
+
+
+def test_crs510_group_bars_are_the_photographs_purple_with_light_legends_sampled_on_them():
+    """Photograph 2232: bar-25g box 1505,810 to 1513,855 (360 pixels) and bar-100g box 2160,960 to 2175,1012 (780
+    pixels); the lettering is the light pixels inside each lettering box."""
+    d = load(CRS510)
+    decor = _decor(d, "front")
+    assert decor["bar-25g"]["fill"] == "#938ac6" and decor["bar-100g"]["fill"] == "#8e85c3"
+    for text, fill in (("25G SFP28", "#d5d4d7"), ("100G QSFP28", "#d2d1d4")):
+        (legend,) = _silk(d, "front", text=text)
+        assert legend["fill"] == fill and legend["font-size"] == 1.5, text
+    note = d["provenance"]["colour"]["note"]
+    for token in ("#938ac6", "#8e85c3", "#d5d4d7", "#d2d1d4", "1505,810", "2160,960", "780 pixels", "149 pixels", "318 pixels"):
+        assert token in note, token
+
+
+def test_crs510_supply_plate_is_the_median_of_three_plain_patches():
+    """Photograph 2232 lights the plate from above (#abafb1 at the top, #a2a5a7 at the bottom); with the earlier
+    patch the channel-wise median is the colour drawn."""
+    d = load(CRS510)
+    note = d["provenance"]["colour"]["note"]
+    for token in ("#abafb1", "1056 pixels", "#a2a5a7", "1440 pixels", "#a3a5a7"):
+        assert token in note, token
 
 
 # --- every device ---------------------------------------------------------------------------------------------

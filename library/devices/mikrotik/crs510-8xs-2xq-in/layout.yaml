@@ -167,7 +167,14 @@ provenance:
       Each value is the median of a plain area, away from ports, lamps, labels and text, taken with a script over the
       photograph's pixels. The face is #e7e6e9: photograph 2232, box 1500,520 to 1700,560 (8000 pixels). It is drawn
       #dddddd, the library's light-stage value for a face that sample reads lighter than, and kept with this sample beside
-      it. The supply modules are #a3a5a7: 2232, box 377,1031 to 562,1042 (2035 pixels). The jack plate is #949290: 2232, box
+      it. The supply modules are #a3a5a7, the channel-wise median of three plain patches of 2232, which lights the plate from
+      above: box 377,1031 to 562,1042 #a3a5a7 (2035 pixels), box 448,856 to 496,878 #abafb1 (1056 pixels, spread 22) and
+      box 440,1016 to 500,1040 #a2a5a7 (1440 pixels, spread 59); no clean patch of the plate reads lighter (the brighter
+      pixels in the photograph are the handle and the module's lit edge). The group bars are the photograph's purple:
+      bar-25g #938ac6 (2232, box 1505,810 to 1513,855, 360 pixels, spread 26; box 1505,965 to 1513,1005 gives #9289c6)
+      and bar-100g #8e85c3 (box 2160,960 to 2175,1012, 780 pixels, spread 12). Their lettering is light, as the
+      photograph prints it: #d5d4d7 on the 25G bar (the pixels above 205 in box 1505,865 to 1522,955, 149 pixels, spread
+      15) and #d2d1d4 on the 100G bar (box 2160,845 to 2175,950, 318 pixels, spread 11). The jack plate is #949290: 2232, box
       2558,845 to 2572,930 (1190 pixels; box 2428,830 to 2438,910, 800 pixels, gives #93918f). The DC jack housing is
       #3e3e3d: 2232, box 2790,930 to 2800,990 (600 pixels). The terminal's green is #82967a (the dc-inputs note gives its box). The unlit lamps
       read #878686, #858584 and #898888 (2232, the lamps note gives the boxes). The rear's face reads #bebcbc in 2233 (box 2180,870
@@ -359,8 +366,8 @@ views:
       - {id: psu-2-slot-top-2, kind: vent-field, at: [99.1, 5.2], size: [6.1, 2.5], fill: '#17191c', vent: 1.0}
       - {id: psu-2-slot-top-3, kind: vent-field, at: [106.6, 5.2], size: [6.1, 2.5], fill: '#17191c', vent: 1.0}
       - {id: psu-2-slot-top-4, kind: vent-field, at: [113.9, 5.2], size: [6.3, 2.5], fill: '#17191c', vent: 1.0}
-      - {id: bar-25g, kind: group-bar, at: [142.6, 9.5], size: [2.0, 27.0], fill: '#c9c3e6'}
-      - {id: bar-100g, kind: group-bar, at: [217.8, 9.5], size: [2.0, 27.0], fill: '#c9c3e6'}
+      - {id: bar-25g, kind: group-bar, at: [142.6, 9.5], size: [2.0, 27.0], fill: '#938ac6'}
+      - {id: bar-100g, kind: group-bar, at: [217.8, 9.5], size: [2.0, 27.0], fill: '#8e85c3'}
       - {id: mgmt-block, kind: jack-plate, at: [248.2, 10.0], size: [17.6, 26.6], fill: '#949290'}
       - {id: dc-terminal-cap, kind: dc-terminal-art, at: [275.9, 24.8], size: [10.4, 3.9], rx: 0.3, fill: '#82967a'}
       - {id: dc-terminal-housing, kind: dc-terminal-art, at: [275.4, 28.7], size: [11.4, 7.9], rx: 0.3, fill: '#82967a'}
@@ -409,8 +416,8 @@ views:
     - {at: [10.9, 20.0], text: PSU 1, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: ac-inlet-1}
     - {at: [70.3, 20.0], text: PSU 2, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: ac-inlet-2}
     - {at: [5.0, 22.0], text: 100-240 V 50/60 Hz, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
-    - {at: [143.6, 23.0], text: 25G SFP28, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
-    - {at: [218.8, 23.0], text: 100G QSFP28, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [143.6, 23.0], text: 25G SFP28, font-size: 1.5, anchor: middle, rotate: -90, fill: '#d5d4d7', for: chassis}
+    - {at: [218.8, 23.0], text: 100G QSFP28, font-size: 1.5, anchor: middle, rotate: -90, fill: '#d2d1d4', for: chassis}
     - {at: [153.6, 8.9], text: '2', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-2}
     - {at: [153.6, 39.3], text: '1', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-1}
     - {at: [171.0, 8.9], text: '4', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-4}
