@@ -553,6 +553,21 @@ def test_asr_chassis_versions_and_locks(slug):
 ASR_VERSIONS = {"cisco/asr-9912": "2.2.0", "cisco/asr-9922": "2.2.0"}
 
 
+@pytest.mark.parametrize("slug", ASR)
+def test_the_asr_chassis_says_fabric_generation_pairing_is_not_enforced(slug):
+    gap = [g for g in device(slug)["gaps"] if g["what"] == "fabric-card-generations"]
+    assert len(gap) == 1
+    note = " ".join(gap[0]["note"].split())
+    assert "NOT ENFORCED" in note and "A99-SFC2" in note and "A99-SFC3" in note
+
+
+def test_the_sfc2_and_sfc3_still_take_the_old_fc_cards_so_nothing_was_removed():
+    for slug in ASR:
+        for b in bays(device(slug).get("views", device(slug))):
+            if b["id"] in FC_IDS:
+                assert f"cisco/{slug.split('/')[1]}-sfc110@1" in b["accepts"] and "cisco/a99-sfc3@1" in b["accepts"]
+
+
 @pytest.mark.parametrize("tree", ["netbox", "nautobot"])
 def test_one_module_type_for_the_sfc2(tree):
     f = EXPORTS / tree / "module-types/Cisco" / "A99-SFC2.yaml"
