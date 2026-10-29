@@ -1543,12 +1543,22 @@ one-way.
 
 ## 12. Left for version 5, or later with no version
 
+**Not a rack file version: the site file** (proposed 2026-10-28, to be
+decided with [site-file-design.md](site-file-design.md)). The rack file stays
+one rack. What needs two racks or a room belongs to a separate document above
+it, `portrayal-site`, which places each rack by reference to its rack file
+and never rewrites it:
+
+- **Rows of racks**, baying checked between two products, and `between: true`
+  resolved to two racks (rack products, 10): between two placements in a
+  space of the site file, and not as `rows` on the rack document.
+- **A room**: rows in plan, aisles, anchors, walls and what is fixed to them.
+- **Cables between racks, and slack across racks**: a cable whose two ends
+  are not in one rack is stored in the site file, at the lowest level that
+  holds both ends. A cable inside one rack stays in its rack file.
+
 **Needs a later version:**
 
-- **Rows of racks** (`rows` on the document), baying checked between two
-  products, and `between: true` resolved to two racks (rack products, 10).
-- **A room**: rows in plan, aisles, anchors.
-- **Slack across racks**, which needs rows first.
 - **A stored position for a channel that slides** (`moves`, rack products 3),
   if a product needs one.
 

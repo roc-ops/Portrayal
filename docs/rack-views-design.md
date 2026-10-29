@@ -61,12 +61,12 @@ const view2d = mountRack2d(container, {
   surface: null,            // §2.5; null means "the rack named by rackId"
   face: 'front',            // 'front' or 'rear'
   chassisOf, ctx,           // the catalogue lookup and loadSlots' context
-  dist: 'assets/dist/',     // where the compiled faces are
+  distAt: flatDist('assets/dist/'),   // required: the library, a path in the build to its URL
   stage: '#101214', ears: true, metal: true, cables: true,
 });
 
 const view3d = mountRack3d(container, {
-  document, doc, rackId, surface: null, chassisOf, ctx, dist,
+  document, doc, rackId, surface: null, chassisOf, ctx, distAt,
   three: {THREE, OrbitControls},          // required for 3D
   share: {toGLB, toUSDZ},                 // optional: kit/share.js's writers
   guard: (build, onFail) => build(),      // optional: a WebGL check (§4.3)
@@ -74,6 +74,13 @@ const view3d = mountRack3d(container, {
   stage: '#101214', covers: 'see', camera: null,
 });
 ```
+
+`distAt` is a function from a path in the build to its URL, as `kit/dist.js` makes
+one (`flatDist(base)`, `packageDist()`, `layeredDist([...])`). It has no default,
+and the option `dist` is refused. A view keeps nothing about a library outside the
+function it was given, so two views of two libraries on one page each read their
+own, and two views given one function share what was read from it (decided
+2026-10-29).
 
 A mount returns at once. `view.ready` is a promise that settles when the first
 draw is complete (in 3D: devices, cables, then detail, as now).
