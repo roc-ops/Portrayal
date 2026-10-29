@@ -14334,6 +14334,9 @@ def main():
                     help="with --list-rules: the table docs/lint-rules.md is generated from")
     ap.add_argument("--json", action="store_true",
                     help="with --list-rules: the table as data, lint-rules.json in the dist")
+    ap.add_argument("--out", metavar="PATH",
+                    help="with --list-rules: write the listing to this file, creating its folder, "
+                         "instead of standard output; the bytes are the same")
     ap.add_argument("--schemas")
     ap.add_argument("--library", action="append")
     # LINT ONE DEVICE WHILE YOU ARE WORKING ON IT. A full pass reads every
@@ -14383,11 +14386,19 @@ def main():
                     help="allow an `audience` other than `public` (L192 is off); "
                          "for a library of private entries")
     args = ap.parse_args()
+    if args.out and not args.list_rules:
+        ap.error("--out goes with --list-rules")
     if args.list_rules:
         if args.json:
-            sys.stdout.write(json.dumps(rules_json(), indent=1, ensure_ascii=False) + "\n")
+            text = json.dumps(rules_json(), indent=1, ensure_ascii=False) + "\n"
         else:
-            sys.stdout.write(rules_text(markdown=args.markdown) + ("" if args.markdown else "\n"))
+            text = rules_text(markdown=args.markdown) + ("" if args.markdown else "\n")
+        if args.out:
+            out = Path(args.out)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(text, encoding="utf-8")
+        else:
+            sys.stdout.write(text)
         return 0
     if not args.schemas or not args.library:
         ap.error("--schemas and --library are required (or use --list-rules)")

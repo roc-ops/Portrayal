@@ -272,6 +272,24 @@ compared, and a difference throws ("New in 0.25.0" below).
 | `rack/resting.js` | internal, not exported: how a cable rests, for `route.js` (`DRAPE`, the free span's hang and landing, laid only where it leaves every corner its bend radius, the held face) |
 | `rack/slots.js` | internal, not exported: what a placed device holds, read without a drawing, for `commands.js` and `queries.js` |
 
+### Views
+
+The `rack/view/` modules draw. Unlike the rest of `rack/` they make DOM nodes,
+and they make every one through the `document` they are given and parse a
+drawing through that document's window: none reads `document`, `window` or
+`DOMParser` as a global. Each is imported as `@portrayal/kit/rack/view/<module>`.
+The design is in `docs/rack-views-design.md`.
+
+| module | what it does |
+|---|---|
+| `rack/view/elevation.js` | `mountRack2d(container, {document, doc, rackId, face, chassisOf, ctx, dist})`: one face of one rack as SVG, and the handle `{ready, update, select, on, dispose}`; `drawElevation`, the pane it mounts; `uAtY` and `halfAtY`; `elevationBox`; `zeroUDrawn`; `rackSurface`, the rails, placement and ear holes of a rack behind the one seam a surface of another kind will plug into |
+| `rack/view/view.js` | the handle every view returns (`createView`), and the paths a pick names: `joinPath(key, path)` and `splitPath(text)` for `item:`, `zeroU:`, `cable:`, `bundle:`, `tie:` and `u:` keys |
+| `rack/view/face.js` | `configuredFace`: one device face as configured, its swaps seated and its fields painted, read through the document it is given; `loadSkin`, `components`, `earPlanFor`, `zeroUModuleEnds`, and `setDist`, the place the compiled faces are read from |
+| `rack/view/faces.js` | `faceUrl`: the file that draws a face, from the device's `configs.json` |
+| `rack/view/ear-holes.js` | `earHoles(lo, hi)`: the rail holes an ear over a span is screwed at |
+| `rack/view/settable.js` | what a rack entry is set to and shows: `paints`, `paintMaps`, and `paintFace`, which paints a lamp, a digit or a display into a drawing |
+| `rack/view/dom.js` | `dom(document)`: the element builders (`el`, `svgEl`, `importDrawingNode`) bound to a document; `svgY` |
+
 ### Heights, spans and half units
 
 A position (`ru` on an item) is a whole unit or a half, counted bottom-up

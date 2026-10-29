@@ -82,6 +82,15 @@ def test_every_schema_id_names_its_published_home(path):
         assert doc["properties"]["version"]["const"] == 4
         assert "(v%d)" % doc["properties"]["version"]["const"] in doc["title"], doc["title"]
         return
+    if path.name == "site.schema.json":
+        # The site file is a document of its own, as the rack file is: named by
+        # `format: "portrayal-site"`, counting its own `version` from 0, and
+        # published under /v1/, its first label (docs/site-file-design.md).
+        assert doc["$id"] == f"https://portrayal.dev/schemas/v1/{path.name}", doc["$id"]
+        assert doc["properties"]["format"]["const"] == "portrayal-site"
+        assert doc["properties"]["version"]["const"] == 0
+        assert "(v0)" in doc["title"], doc["title"]
+        return
     assert doc["$id"] == f"https://portrayal.dev/schemas/v1/{path.name}", doc["$id"]
     assert "(v1)" in doc["title"], doc["title"]
     if path.name in VERSION_KEY:

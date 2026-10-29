@@ -1,0 +1,845 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://portrayal.dev/schemas/v1/site.schema.json",
+ "title": "Portrayal site file (v0)",
+ "description": "A site: its buildings, floors and spaces, the racks placed in those spaces by reference to their rack files, surfaces such as a plywood backboard, devices that are not in a rack, the pathways cables run along, and the cables whose two ends are not in one rack. Lengths are millimetres throughout. Every id and every guid is unique across the whole file. A cable is stored at the lowest level that holds both its ends; that rule and the uniqueness of ids are checked beside the schema, since a schema cannot state them. A reader keeps a key it does not know, at every level.",
+ "type": "object",
+ "required": [
+  "format",
+  "version",
+  "name",
+  "site"
+ ],
+ "properties": {
+  "format": {
+   "const": "portrayal-site",
+   "description": "Always portrayal-site."
+  },
+  "version": {
+   "const": 0,
+   "description": "The file version. A reader given a newer version refuses the whole file, naming both versions, and reads none of it."
+  },
+  "name": {
+   "type": "string",
+   "description": "What the file is called."
+  },
+  "site": {
+   "$ref": "#/$defs/site"
+  },
+  "ext": {
+   "$ref": "#/$defs/ext"
+  }
+ },
+ "$defs": {
+  "id": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+   "maxLength": 64,
+   "description": "Unique across the whole file, never changed once written, and never given to another object after this one is removed, so that a log of edits can name it."
+  },
+  "guid": {
+   "type": "string",
+   "pattern": "^[0-3][0-9A-Za-z_$]{21}$",
+   "description": "The object's IFC GlobalId: a 128-bit identifier written as 22 characters from 0-9, A-Z, a-z, _ and $. Unique across the whole file and never changed once written."
+  },
+  "ref": {
+   "type": "string",
+   "minLength": 1,
+   "description": "The device, by its catalogue ref, as a rack item names one. A ref the reader's catalogue does not have, such as a private device from a library it was not given, is kept as written."
+  },
+  "mm": {
+   "type": "number",
+   "description": "Millimetres."
+  },
+  "length": {
+   "type": "number",
+   "exclusiveMinimum": 0,
+   "description": "Millimetres, above 0."
+  },
+  "point": {
+   "type": "object",
+   "required": [
+    "x",
+    "y"
+   ],
+   "description": "A point in the plan of a floor, in millimetres from the floor's origin: x to the right and y up the plan.",
+   "properties": {
+    "x": {
+     "$ref": "#/$defs/mm"
+    },
+    "y": {
+     "$ref": "#/$defs/mm"
+    }
+   }
+  },
+  "ext": {
+   "type": "object",
+   "description": "Extension blocks: data that belongs to someone other than this format. Each key is a namespace and a version, as example.namespace@1, and each value is an object its owner describes in a JSON Schema of their own. A reader keeps a block it does not know and writes it back unchanged.",
+   "propertyNames": {
+    "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+@[1-9][0-9]*$"
+   },
+   "additionalProperties": {
+    "type": "object"
+   }
+  },
+  "site": {
+   "type": "object",
+   "description": "The site, IFC's IfcSite: the land and everything on it. It holds its buildings, the points outside it that cables end at, and the cables between buildings.",
+   "required": [
+    "id",
+    "guid",
+    "name",
+    "buildings"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "name": {
+     "type": "string",
+     "description": "What the site is called."
+    },
+    "buildings": {
+     "type": "array",
+     "description": "The buildings on the site.",
+     "items": {
+      "$ref": "#/$defs/building"
+     }
+    },
+    "points": {
+     "type": "array",
+     "description": "Named points outside the site that a cable may end at, such as a provider's demarcation point.",
+     "items": {
+      "$ref": "#/$defs/outsidePoint"
+     }
+    },
+    "cables": {
+     "type": "array",
+     "description": "Cables whose ends are in two buildings, or at a point outside the site.",
+     "items": {
+      "$ref": "#/$defs/cable"
+     }
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "outsidePoint": {
+   "type": "object",
+   "description": "A point outside the site that a cable ends at, named and not drawn.",
+   "required": [
+    "id",
+    "guid",
+    "name"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "name": {
+     "type": "string",
+     "description": "What the point is called."
+    },
+    "provider": {
+     "type": "string",
+     "description": "Whose point it is, such as the carrier that hands a circuit over there."
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "building": {
+   "type": "object",
+   "description": "A building, IFC's IfcBuilding. It holds its floors, the pathways in it, and the cables between two of its spaces.",
+   "required": [
+    "id",
+    "guid",
+    "name",
+    "floors"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "name": {
+     "type": "string",
+     "description": "What the building is called."
+    },
+    "floors": {
+     "type": "array",
+     "description": "The floors of the building.",
+     "items": {
+      "$ref": "#/$defs/floor"
+     }
+    },
+    "pathways": {
+     "$ref": "#/$defs/pathways"
+    },
+    "cables": {
+     "type": "array",
+     "description": "Cables whose ends are in two spaces of this building, on one floor or on two.",
+     "items": {
+      "$ref": "#/$defs/cable"
+     }
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "floor": {
+   "type": "object",
+   "description": "A floor, IFC's IfcBuildingStorey. Every position on it is in its own plan, in millimetres from its origin, and every height is above its finished floor.",
+   "required": [
+    "id",
+    "guid",
+    "name",
+    "elevation",
+    "spaces"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "name": {
+     "type": "string",
+     "description": "What the floor is called."
+    },
+    "elevation": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres from the building's datum up to this floor's finished floor."
+    },
+    "spaces": {
+     "type": "array",
+     "description": "The spaces on the floor.",
+     "items": {
+      "$ref": "#/$defs/space"
+     }
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "space": {
+   "type": "object",
+   "description": "A room or other bounded space, IFC's IfcSpace. It holds what is placed in it and the cables whose two ends are both in it.",
+   "required": [
+    "id",
+    "guid",
+    "name",
+    "outline"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "name": {
+     "type": "string",
+     "description": "What the space is called."
+    },
+    "outline": {
+     "type": "array",
+     "minItems": 3,
+     "description": "The space's outline in the floor plan, as a closed polygon: the last point joins the first.",
+     "items": {
+      "$ref": "#/$defs/point"
+     }
+    },
+    "height": {
+     "$ref": "#/$defs/length",
+     "description": "Millimetres from the finished floor to the ceiling."
+    },
+    "walls": {
+     "type": "array",
+     "description": "The walls a surface or a device is fixed to.",
+     "items": {
+      "$ref": "#/$defs/wall"
+     }
+    },
+    "racks": {
+     "type": "array",
+     "description": "The racks standing in the space, each by reference to its rack file.",
+     "items": {
+      "$ref": "#/$defs/rackPlacement"
+     }
+    },
+    "surfaces": {
+     "type": "array",
+     "description": "Surfaces fixed to a wall that devices are mounted on, such as a plywood backboard.",
+     "items": {
+      "$ref": "#/$defs/surface"
+     }
+    },
+    "devices": {
+     "type": "array",
+     "description": "Devices placed in the space and not in a rack or on a surface: an outlet or faceplate, an access point, an adapter.",
+     "items": {
+      "$ref": "#/$defs/placedDevice"
+     }
+    },
+    "cables": {
+     "type": "array",
+     "description": "Cables whose two ends are both in this space and not both in one rack.",
+     "items": {
+      "$ref": "#/$defs/cable"
+     }
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "wall": {
+   "type": "object",
+   "description": "The face of a wall, seen from inside the space, as a line in the floor plan. Facing it from inside, a is its left end and b its right end.",
+   "required": [
+    "id",
+    "guid",
+    "a",
+    "b"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "name": {
+     "type": "string",
+     "description": "What the wall is called."
+    },
+    "a": {
+     "$ref": "#/$defs/point"
+    },
+    "b": {
+     "$ref": "#/$defs/point"
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "rackPlacement": {
+   "type": "object",
+   "description": "A rack standing in the space. The rack itself, its devices and the cables inside it stay in its rack file, which is read and never rewritten by being placed.",
+   "required": [
+    "id",
+    "guid",
+    "file",
+    "rack",
+    "x",
+    "y",
+    "rotation"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "file": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The rack file, as a path relative to this file."
+    },
+    "rack": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The id of the rack in that file."
+    },
+    "x": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres across the floor plan to the middle of the front of the rack's footprint."
+    },
+    "y": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres up the floor plan to the middle of the front of the rack's footprint."
+    },
+    "rotation": {
+     "type": "number",
+     "minimum": 0,
+     "exclusiveMaximum": 360,
+     "description": "Degrees the rack is turned clockwise, seen from above, about its x and y. At 0 its front faces down the plan."
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "surface": {
+   "type": "object",
+   "description": "A board fixed flat to a wall, with devices mounted on it.",
+   "required": [
+    "id",
+    "guid",
+    "kind",
+    "material",
+    "wall",
+    "along",
+    "bottom",
+    "width",
+    "height",
+    "thickness",
+    "devices"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "kind": {
+     "enum": [
+      "backboard"
+     ],
+     "description": "What the surface is. backboard is a sheet, usually plywood, that wall-mounted equipment screws to."
+    },
+    "material": {
+     "type": "string",
+     "minLength": 1,
+     "description": "What it is made of, as written, such as fire-rated plywood."
+    },
+    "wall": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The id of the wall of this space it is fixed to."
+    },
+    "along": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres along the wall from its a end to the left edge of the board."
+    },
+    "bottom": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres from the finished floor up to the bottom edge of the board."
+    },
+    "width": {
+     "$ref": "#/$defs/length",
+     "description": "Millimetres across the board, along the wall."
+    },
+    "height": {
+     "$ref": "#/$defs/length",
+     "description": "Millimetres up the board."
+    },
+    "thickness": {
+     "$ref": "#/$defs/length",
+     "description": "Millimetres the board stands out from the wall."
+    },
+    "devices": {
+     "type": "array",
+     "description": "The devices mounted on the board.",
+     "items": {
+      "$ref": "#/$defs/surfaceDevice"
+     }
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "surfaceDevice": {
+   "type": "object",
+   "description": "A device mounted on a surface. How it mounts is its device's own mount.",
+   "required": [
+    "id",
+    "guid",
+    "ref",
+    "x",
+    "y"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "ref": {
+     "$ref": "#/$defs/ref"
+    },
+    "cfg": {
+     "type": "string",
+     "description": "Which of the device's configurations."
+    },
+    "label": {
+     "type": "string",
+     "description": "The name shown on the drawing."
+    },
+    "x": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres from the left edge of the surface, facing it, to the middle of the device."
+    },
+    "y": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres from the bottom edge of the surface to the middle of the device."
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "placedDevice": {
+   "type": "object",
+   "description": "A device placed in a space and not in a rack or on a surface. How it mounts is its device's own mount; the placement says only where it is.",
+   "required": [
+    "id",
+    "guid",
+    "ref",
+    "x",
+    "y",
+    "height"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "ref": {
+     "$ref": "#/$defs/ref"
+    },
+    "cfg": {
+     "type": "string",
+     "description": "Which of the device's configurations."
+    },
+    "label": {
+     "type": "string",
+     "description": "The name shown on the drawing, such as an outlet's number."
+    },
+    "wall": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The id of the wall of this space it is fixed to, if it is fixed to one."
+    },
+    "x": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres across the floor plan to the middle of the device."
+    },
+    "y": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres up the floor plan to the middle of the device."
+    },
+    "height": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres from the finished floor up to the middle of the device."
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "pathways": {
+   "type": "object",
+   "description": "The cable pathways of a building, as a graph: nodes where segments meet, and segments between two nodes.",
+   "properties": {
+    "nodes": {
+     "type": "array",
+     "description": "The points where pathway segments end or meet.",
+     "items": {
+      "$ref": "#/$defs/pathwayNode"
+     }
+    },
+    "segments": {
+     "type": "array",
+     "description": "The pathway segments, each between two nodes.",
+     "items": {
+      "$ref": "#/$defs/pathwaySegment"
+     }
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "pathwayNode": {
+   "type": "object",
+   "description": "A point on a floor where pathway segments end or meet.",
+   "required": [
+    "id",
+    "guid",
+    "floor",
+    "x",
+    "y",
+    "height"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "floor": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The id of the floor whose plan x and y are in."
+    },
+    "x": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres across that floor's plan."
+    },
+    "y": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres up that floor's plan."
+    },
+    "height": {
+     "$ref": "#/$defs/mm",
+     "description": "Millimetres from that floor's finished floor up to where a cable lies in the pathway."
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "pathwaySegment": {
+   "type": "object",
+   "description": "A straight run of one kind of cable carrier between two nodes. Its height is that of its two ends; a segment whose ends differ in height rises or drops.",
+   "required": [
+    "id",
+    "guid",
+    "kind",
+    "a",
+    "b"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "kind": {
+     "enum": [
+      "j-hook",
+      "basket-tray",
+      "ladder-rack",
+      "conduit",
+      "surface-raceway"
+     ],
+     "description": "The carrier: j-hook is a run of J-hooks, basket-tray a wire basket tray, ladder-rack a ladder rack, conduit a closed tube, surface-raceway a channel fixed along a wall."
+    },
+    "a": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The id of the node at one end."
+    },
+    "b": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The id of the node at the other end."
+    },
+    "width": {
+     "$ref": "#/$defs/length",
+     "description": "Millimetres across the carrier, or its inside diameter for a conduit, where stated."
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  },
+  "end": {
+   "description": "One end of a cable: a port of a device in a placed rack (rack, item, path, view), a port of a placed device (device, port), or a point outside the site (point). An end is whole: a port with nothing to be a port of is refused.",
+   "oneOf": [
+    {
+     "$ref": "#/$defs/rackEnd"
+    },
+    {
+     "$ref": "#/$defs/deviceEnd"
+    },
+    {
+     "$ref": "#/$defs/pointEnd"
+    }
+   ]
+  },
+  "rackEnd": {
+   "type": "object",
+   "description": "A port of a device in a placed rack, named as the rack file names it.",
+   "required": [
+    "rack",
+    "item",
+    "path",
+    "view"
+   ],
+   "not": {
+    "anyOf": [
+     {
+      "required": [
+       "device"
+      ]
+     },
+     {
+      "required": [
+       "point"
+      ]
+     }
+    ]
+   },
+   "properties": {
+    "rack": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The id of the rack placement in this file."
+    },
+    "item": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The id of the device in that rack, as its rack file gives it."
+    },
+    "path": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The port's path on the device, as a rack file cable end names it."
+    },
+    "view": {
+     "enum": [
+      "front",
+      "rear"
+     ],
+     "description": "Which of the device's own panels the port is on."
+    },
+    "plug": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The plug the cable has at this end, as a component ref, where the port takes more than one."
+    }
+   }
+  },
+  "deviceEnd": {
+   "type": "object",
+   "description": "A port of a device placed in a space or on a surface.",
+   "required": [
+    "device",
+    "port"
+   ],
+   "not": {
+    "anyOf": [
+     {
+      "required": [
+       "rack"
+      ]
+     },
+     {
+      "required": [
+       "point"
+      ]
+     }
+    ]
+   },
+   "properties": {
+    "device": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The id of the placed device in this file."
+    },
+    "port": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The port's path on the device."
+    },
+    "plug": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The plug the cable has at this end, as a component ref, where the port takes more than one."
+    }
+   }
+  },
+  "pointEnd": {
+   "type": "object",
+   "description": "A point outside the site, such as a provider's demarcation point.",
+   "required": [
+    "point"
+   ],
+   "not": {
+    "anyOf": [
+     {
+      "required": [
+       "rack"
+      ]
+     },
+     {
+      "required": [
+       "device"
+      ]
+     }
+    ]
+   },
+   "properties": {
+    "point": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The id of the point in the site's points."
+    },
+    "port": {
+     "type": "string",
+     "minLength": 1,
+     "description": "What the point's owner calls the port or circuit there, as written."
+    }
+   }
+  },
+  "cable": {
+   "type": "object",
+   "description": "A cable whose two ends are not in one rack. It is stored at the lowest level that holds both ends: a space, a building, or the site.",
+   "required": [
+    "id",
+    "guid",
+    "a",
+    "b"
+   ],
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/id"
+    },
+    "guid": {
+     "$ref": "#/$defs/guid"
+    },
+    "a": {
+     "$ref": "#/$defs/end"
+    },
+    "b": {
+     "$ref": "#/$defs/end"
+    },
+    "media": {
+     "type": "string",
+     "description": "The cable's media, as a rack file cable names it: os2, om3, om4, om5, cat6, cat6a, dac, aoc, power or ground, or empty."
+    },
+    "type": {
+     "type": "string",
+     "minLength": 1,
+     "description": "A named cable type from the published cable types table, where one is chosen."
+    },
+    "label": {
+     "type": "string",
+     "description": "The text on its tags."
+    },
+    "purpose": {
+     "type": "string",
+     "description": "What it is for."
+    },
+    "ext": {
+     "$ref": "#/$defs/ext"
+    }
+   }
+  }
+ }
+}
