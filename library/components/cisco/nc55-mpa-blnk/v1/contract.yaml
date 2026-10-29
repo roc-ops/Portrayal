@@ -1,0 +1,37 @@
+format: 1
+kind: module
+name: nc55-mpa-blnk
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Blank filler for an unpopulated Modular Port Adapter bay of the Cisco NCS-57C3-MOD, with the part number its label prints,
+  NC55-MPA-BLNK. A plain grey plate with a hex-vented field, a thumbscrew at each end and its name printed at the lower right.
+size: {w: 111.5, h: 37.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+part-numbers:
+  NC55-MPA-BLNK: {part: NC55-MPA-BLNK}
+attrs:
+  role: airflow-blank
+provenance:
+  model: >-
+    photo-measured - the part number is read off the label printed on the blank in Figure 1 of the Hardware Installation Guide
+    for Cisco NCS 5700 Series Fixed-Port Routers (first published 2021-06-23, last modified 2026-05-15), upper front view,
+    which shows two MPA blanks at the top left and one at the bottom; the label is small and reads "NC55-MPA-BLNK". NO TEXT IN
+    THE GUIDE NAMES THE PART. The router has three MPA bays.
+  size: >-
+    photo-measured - Figure 1's front view at 1.225 px/mm taken from the 438.4 mm chassis width: each blank reads about 111.5 mm
+    wide and 37.5 mm high. The guide prints no dimension of the blank.
+  elements: >-
+    photo-measured - the vent field and the two thumbscrews are read from Figure 1. The blank is unpunched.
+  depth: >-
+    estimated - not stated in any held document; 15 mm is a round figure for a blank plate.
+states: [absent]
+elements:
+  vent: {at: [30.0, 6.0], size: [52.0, 22.0], class: bezel}
+skins: [default]
+body:
+  depth: 15
+  color: '#b9bec4'
+  footprint: {at: [0, 0], size: [111.5, 37.5]}

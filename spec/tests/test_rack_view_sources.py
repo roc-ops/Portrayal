@@ -171,3 +171,39 @@ def test_the_goldens_are_present_one_per_fixture_and_face_each_naming_both_commi
         assert re.fullmatch(r"[0-9a-f]{40}", keyed.get("portrayal-commit", "")), f"{p.name} does not name the Portrayal commit"
         assert keyed.get("recorded-by"), f"{p.name} does not say how it was recorded"
         assert "<svg" in p.read_text(), p.name
+
+
+# A view holds nothing about a library outside the function it was given
+# (`distAt`, docs/rack-views-design.md §2.1): no module-wide place to read, no
+# setter for it, no option that sets it.
+LIBRARY_SETTING = re.compile(r"\bsetDist\b|\bDIST\b|\bopts\.dist\b")
+
+
+def library_setting_uses(src):
+    """[(name, line)] for each use of the removed setting, in code only."""
+    code = code_of(src)
+    return [(m.group(), code.count("\n", 0, m.start()) + 1) for m in LIBRARY_SETTING.finditer(code)]
+
+
+def test_no_view_module_holds_a_library_setting():
+    for p in modules():
+        uses = library_setting_uses(p.read_text())
+        assert not uses, f"{p.relative_to(ROOT)} holds {uses}: a view reads the `distAt` it is given and sets nothing shared"
+
+
+def test_the_scan_sees_a_library_setting_and_ignores_a_sentence():
+    assert library_setting_uses("export let DIST = '';") == [("DIST", 1)]
+    assert library_setting_uses("import {setDist} from './face.js';\nsetDist(opts.dist);") == [
+        ("setDist", 1), ("setDist", 2), ("opts.dist", 2)]
+    assert library_setting_uses("// setDist and DIST are gone\nconst s = 'opts.dist'; const d = distAt;") == []
+
+
+def test_the_docs_name_the_option_the_view_takes():
+    readme = (KIT / "README.md").read_text()
+    assert "setDist" not in readme
+    views = re.search(r"^### Views\n(.*?)(?=^#{1,3} )", readme, re.M | re.S)
+    assert views and "distAt" in views.group(1), "the Views section does not name distAt"
+    design = (ROOT / "docs/rack-views-design.md").read_text()
+    assert not re.search(r"^\s*dist: 'assets/dist/'", design, re.M), "the design note lists the removed option"
+    assert "distAt" in design
+    assert "ctx, dist}" not in (ROOT / "changelog.d/rack-view-2d.md").read_text()

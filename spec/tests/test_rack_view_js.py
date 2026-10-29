@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 JS = Path(__file__).resolve().parent / "js"
-SCRIPTS = ["view-skin-fetch", "view-ear-holes", "view-settable", "view-mount"]
+SCRIPTS = ["view-skin-fetch", "view-ear-holes", "view-settable", "view-mount", "view-dist-at"]
 pytestmark = pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
 
 

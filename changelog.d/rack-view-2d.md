@@ -1,7 +1,7 @@
 ### Added
 - The 2D rack elevation is in the kit, under `kit/rack/view/` (#1298, order 1 of
   `docs/rack-views-design.md`): `mountRack2d(container, {document, doc, rackId,
-  face, chassisOf, ctx, dist})` draws one face of one rack as SVG and returns the
+  face, chassisOf, ctx, distAt})` draws one face of one rack as SVG and returns the
   handle `{ready, update, select, on, dispose}`, with a `pick` event that names
   what was clicked as a path (`joinPath` and `splitPath`: `item:`, `zeroU:`,
   `cable:`, `bundle:`, `tie:` and `u:` keys). A document of several racks draws any

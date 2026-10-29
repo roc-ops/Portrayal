@@ -282,13 +282,24 @@ The design is in `docs/rack-views-design.md`.
 
 | module | what it does |
 |---|---|
-| `rack/view/elevation.js` | `mountRack2d(container, {document, doc, rackId, face, chassisOf, ctx, dist})`: one face of one rack as SVG, and the handle `{ready, update, select, on, dispose}`; `drawElevation`, the pane it mounts; `uAtY` and `halfAtY`; `elevationBox`; `zeroUDrawn`; `rackSurface`, the rails, placement and ear holes of a rack behind the one seam a surface of another kind will plug into |
+| `rack/view/elevation.js` | `mountRack2d(container, {document, doc, rackId, face, chassisOf, ctx, distAt})`: one face of one rack as SVG, and the handle `{ready, update, select, on, dispose}`; `drawElevation`, the pane it mounts; `uAtY` and `halfAtY`; `elevationBox`; `zeroUDrawn`; `rackSurface`, the rails, placement and ear holes of a rack behind the one seam a surface of another kind will plug into |
 | `rack/view/view.js` | the handle every view returns (`createView`), and the paths a pick names: `joinPath(key, path)` and `splitPath(text)` for `item:`, `zeroU:`, `cable:`, `bundle:`, `tie:` and `u:` keys |
-| `rack/view/face.js` | `configuredFace`: one device face as configured, its swaps seated and its fields painted, read through the document it is given; `loadSkin`, `components`, `earPlanFor`, `zeroUModuleEnds`, and `setDist`, the place the compiled faces are read from |
-| `rack/view/faces.js` | `faceUrl`: the file that draws a face, from the device's `configs.json` |
+| `rack/view/face.js` | `configuredFace`: one device face as configured, its swaps seated and its fields painted, read through the document it is given and the `distAt` it is given; `loadSkin`, `components`, `earPlanFor` and `zeroUModuleEnds`, each read through a `distAt` too |
+| `rack/view/faces.js` | `faceUrl(distAt, ref, config, view)`: the URL of the file that draws a face, from the device's `configs.json` |
 | `rack/view/ear-holes.js` | `earHoles(lo, hi)`: the rail holes an ear over a span is screwed at |
 | `rack/view/settable.js` | what a rack entry is set to and shows: `paints`, `paintMaps`, and `paintFace`, which paints a lamp, a digit or a display into a drawing |
 | `rack/view/dom.js` | `dom(document)`: the element builders (`el`, `svgEl`, `importDrawingNode`) bound to a document; `svgY` |
+
+`distAt` is the library a view draws from: a function from a path in the build
+(`components.json`, `<device>.configs.json`, a face file, `components/<skin>.svg`)
+to its URL. `flatDist(base)` from `@portrayal/kit/dist` makes one for a build
+directory, `packageDist()` for the npm packages, and `layeredDist([...])` for
+several builds read as one library. It has no default, and a view keeps nothing
+about a library outside the function it was given: two views of two libraries on
+one page each read their own. Make one `distAt` per library and pass it to every
+view of that library, as the views that share it share what was read from it. The
+loaders in this README that name this option `dist` take a string, a function or
+a list; the view's `distAt` takes a function only.
 
 ### Heights, spans and half units
 

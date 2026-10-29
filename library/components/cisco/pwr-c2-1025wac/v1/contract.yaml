@@ -1,0 +1,67 @@
+format: 1
+kind: module
+name: pwr-c2-1025wac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1025 W AC-input power supply of the Cisco Catalyst 3650 and 2960-X/XR families, PWR-C2-1025WAC - the
+  default supply of the 48-port Full PoE Catalyst 3650, and 1.5 in deeper than the other PWR-C2 supplies.
+  A light grey face, 1.58 x 3.75 in, with the AC OK and PS OK lamps at the upper left over a honeycomb vent,
+  the part number printed at the top, an AC power cord receptacle with a cord retainer clip below it and a
+  release latch at the right.
+size: {w: 95.25, h: 40.13}
+size-confidence: {w: datasheet, h: datasheet}
+attrs:
+  model: 'PWR-C2-1025WAC'
+  power-output-w: 1025
+  input: ac
+  inlet: c14
+  input-voltage: '115 to 240 VAC, autoranging'
+  input-current-max: '12 to 6 A'
+  input-frequency: '50 to 60 Hz'
+  output: '+12 V at 20.83 A and -54 V at 14.6 A'
+  weight-kg: 1.61
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 3650 Switches Hardware Installation Guide, September 2016, OL-29734-01,
+    Table 4-1: "PWR-C2-1025WAC, 1025-W AC power supply module". Table 1-13 makes it the default supply of the
+    48-port Full PoE switch, with 775 W of PoE power available.
+  power: >-
+    datasheet - spec Table 1-3: "Maximum output power PWR-C2-1025WAC: 1025W", 115 to 240 VAC (autoranging)
+    50 to 60 Hz, input current 12-6 A, output "+12 V @20.83 A, -54 V@14.6 A", total input 3801 BTUs per hour
+    (1114 W), total output 3497 BTUs per hour (1025 W). An OUTPUT rating, so `power-output-w`.
+  size: >-
+    datasheet - spec Table 1-2: "PWR-C2-1025WAC 1.58 x 3.75 x 13.25 in. (4.0 x 9.5 x 33.7 cm)", H x W x D,
+    weight 3.55 lb (1.61 kg). 40.13 and 95.25 mm are the face's inches converted.
+  elements: >-
+    estimated - read off the guide's Figure 4-3 "1025-W AC Power Supply", an isometric line drawing, as
+    fractions of the face. Callouts from Figure 4-3's table: AC OK LED, PS OK LED, AC power cord retainer, AC
+    power cord connector, release latch. Its face prints PWR-C2-1025WAC.
+  lamps: >-
+    datasheet - the guide's Table 1-21 and Table 4-2: AC OK off with no AC input power, green with AC input
+    present; PS OK off when the output is disabled or the input is out of range, green when power output to
+    the switch is active, red when the output has failed.
+  inlet: >-
+    estimated - an IEC receptacle drawn as std/c14-inlet@1; the guide does not name its IEC type.
+  colour: >-
+    estimated - the guide's illustrations are "not intended to depict any particular color scheme"
+    (Front Panel, PDF p21). A neutral light grey is drawn.
+  depth: >-
+    datasheet - 13.25 in, 336.55 mm, from spec Table 1-2. The 48-port Full PoE switch's own depth, 19.125 in,
+    is 1.5 in more than the other models' (spec Table 1-1), which is this supply's extra depth.
+states: [absent]
+elements:
+  ac-ok: {at: [8.4, 7.0], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
+  ps-ok: {at: [21.4, 7.0], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  retainer: {at: [3.0, 34.4], size: [42.0, 4.6], class: handle}
+  latch: {at: [75.0, 15.0], size: [9.0, 12.0], class: handle}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [42.0, 10.5]}
+skins: [default]
+body:
+  depth: 336.55
+  color: '#c4c7ca'
+  footprint: {at: [0, 0], size: [95.25, 40.13]}

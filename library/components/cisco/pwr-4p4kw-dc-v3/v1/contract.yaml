@@ -1,0 +1,168 @@
+format: 1
+kind: module
+name: pwr-4p4kw-dc-v3
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Cisco ASR 9000 version 3 DC power module, 4400 W, PWR-4.4KW-DC-V3 ("ASR 9000 4.4kW DC Power
+  Module Version 3"), for the ASR 9906 and ASR 9910 power trays (ASR9K-DC-PEM-V3). Two axial fans
+  behind finger guards, a door latch and ejector between them, and Input, Output and Fault lamps
+  at the left end. Four of these fill one tray. Drawn once, in the horizontal attitude the ASR
+  9910 shows; the ASR 9906's vertical shelf turns it.
+size: {w: 104.7, h: 40.6}
+size-confidence: {w: drawing, h: drawing}
+attrs:
+  model: 'PWR-4.4KW-DC-V3'
+  role: 'power-module'
+  generation: '3'
+  input: 'dc'
+  inlet: none
+  fans: '2'
+  power-output-w: 4400
+  eol: 'none-announced'
+provenance:
+  seated: >-
+    Overview and Reference Guide (2019-01-31), "Cisco ASR 9922 Router Power Modules":
+    "ASR9K-DC-PEM-V3 power entry modules and PWR-4.4KW-DC-V3 power supplies"; "Cisco ASR 9906
+    Router Power Modules" and "Cisco ASR 9910 Router Power Modules" (PDF pp73-74, printed pp61-62)
+    give up to four DC version 3 modules per tray, one tray on the 9906 and two on the 9910.
+    Hardware Installation Guide (2021-03-30), "Changing Between Version 1, Version 2, Version 3, AC,
+    and DC Power Modules" (PDF pp251-252): "DC power supply version 3, fits 4 across in single
+    power shelf". Data Sheet Table 1 (p6): "DC power supply, 4400W PWR-4.4KW-DC-V3 /
+    PWR-4.4KW-DC-V3=" - the "=" spare form is the same part, not a second component. Data Sheet
+    p5: mixing AC and DC supplies is not supported. Release notes: first supported in Release
+    6.1.2. The ASR 9904, 9006, 9010, 9912 and 9922 are not seated here.
+  size: >-
+    drawing - MEASURED, NOT STATED: no document gives this module's dimensions, and the reseller
+    figure the tray contract refused is not used. Width 104.7 is the module PITCH read off the
+    stencil master "ASR-9910 Rear" (Cisco's masters for this chassis are swapped: this one is the
+    FRONT; 36.75 in tall; its two populated shelves each draw four modules with eight fan wheels):
+    fan-wheel centres at 522.5, 953.2, 1434.1, 1865.0, 2345.9, 2776.8, 3257.4 and 3688.2 px on a
+    4200 px render, so the pair centres sit 911.7, 911.8 and 911.5 px apart. Scale is the master's
+    frame: the render's width is the 19.0 in rack face (482.6 mm, 0.1149 mm/px), checked against
+    Table 13's 932.18 mm for the height (0.1150 mm/px), which agree to 0.1 percent. 911.6 x 0.1149
+    = 104.7 mm. The plate is about 100.8 mm and the rest of the pitch is the divider. Height 40.6
+    is the plate's extent across the shelf (353 px). Cross-check, Figure 45 (ASR 9910, V3 DC trays,
+    PDF p78 / printed p66, a straight-on callout): four modules and eight fan wheels per tray, a
+    pitch of about 106 mm against the 19.0 in rack face, good to about 2 mm; it agrees with the
+    stencil and the stencil is carried. An earlier reading of 104.2 mm was not reproduced. Figure 43
+    (ASR 9906, V3 DC tray, PDF p74 / printed p62) shows four modules and eight fans in a
+    perspective view and settles arrangement only; the ASR 9906's own master ("ASR-9906 Front")
+    draws the AC column, so it gives no DC reading. One part number is one size: the ASR 9906
+    seats this module at this size too. Depth is absent, see `body`.
+  fans: >-
+    drawing - two fan wheels per module, 49.5 mm apart (module-local x 26.4 and 75.9), outer guard
+    diameter about 36 mm, each with four corner screws at 16 mm, read off the same master. The
+    stencil draws each wheel as four dark arcs round a light ring and a yellow hub; the skin draws
+    that arrangement and no more.
+  lamps: >-
+    install guide - Hardware Installation Guide Figure 204 (V3 DC status indicators, PDF p227 /
+    p213), the same three-lamp legend as the AC module: Input ON continuously when the input voltage
+    is present and within the correct range, BLINKING when out of range, OFF when none; Output ON
+    when the module output voltage is present, BLINKING in a power limit or overcurrent condition;
+    Fault ON when a module failure has occurred. THE TEXT STATES ONE COLOUR: a note under the Input
+    row says that on the DC power tray the Power Input LED is solid green when both DC feeds are
+    valid and blinks green when only one is (so the tray has two DC feeds). It is written about the tray, so it is recorded and not set as this lamp's state colour.
+    The FIGURE draws the Input and Output lamps green and the Fault lamp red; that is a picture,
+    not a statement, and is recorded in the pull request's gaps. Positions are the stencil's lamp column at the module's left end (Input, Output,
+    Fault from the top).
+  colour: >-
+    estimated - from the stencil master "ASR-9910 Rear", sampled on the module plate away from the
+    fans and lamps: plate #bfbfbf, fan guard #404040, latch #a6a6a6, hub #ffb900. That is the same
+    value the master family uses for its version 2 module and the version 3 tray. The library's
+    a9k-power-module-v2 skin is a lighter grey than that, so beside it this module looks darker; the
+    guides are line art and carry no colour, and no photograph or 3D model of a version 3 module is
+    held.
+  handle: >-
+    drawing - the door latch and ejector, a grey block at the top edge between the two fans
+    (module-local x 44 to 68), from the stencil; Overview Figure 61 says "The version 3 power module
+    is similar" to the version 2 face. No Cisco logo or wordmark is drawn, and the stencil's module
+    carries none, so no `logo-zone` is reserved.
+  power: >-
+    datasheet - output: Data Sheet Table 1, "DC power supply, 4400W". Input, Overview Table 16 (PDF
+    pp146-147, printed pp134-135), per module: "4730 W (4400 W output module)" total DC input power;
+    -48 VDC nominal in North America, -60 VDC in the European Community; "Range: -40.5 to -72 VDC
+    [-75 VDC for 5 ms]"; "49 A maximum at -48 VDC nominal", "39 A maximum at -60 VDC nominal".
+    Output bus, Table 21: -54.0 VDC nominal, -55.5 maximum, -52.5 minimum; four 4400 W modules per
+    tray give 17,600 W (ASR 9906 only; no ASR 9910 figure). CONFLICTS, DECLARED: (a) Table 18 gives
+    the input range as -40 to -72 VDC and Table 16 gives -40.5 to -72 VDC (-75 VDC for 5 ms); both
+    are kept. (b) The tray's rear shows "A" and "B" feed connectors (Figure 70, PDF pp104-105), and
+    4730 W at -48 V is about 98.5 A against "49 A maximum", so the 49 A reads as per feed; the
+    Figure 204 note's "both DC feeds" supports two feeds but no sentence puts the 49 A on one, and
+    both readings are kept without choosing.
+  body: >-
+    NO `body:` BLOCK, AND NO `size.d`: no document gives a depth or a weight for this module, the
+    same record the version 2 modules and the tray hold. Searched: the whole intake tree, the PDFs'
+    text and the html folder, for "PWR-6KW-AC-V3" and "PWR-4.4KW-DC-V3"; the hits name the part and
+    its output and nothing else.
+  relief: >-
+    Relief is declared, ESTIMATED throughout, and is a handful of pooled numbers: the pull handle
+    at uhandle 8.0 (edgecore/agr-fan@1) and three panel lamps at dome 0.3 (common/led-dot@1), the
+    figures the version 2 modules carry. They are an interpolation for a realistic view, not a claim
+    about the hardware.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  input:
+    at: [2.3, 5.3]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Input LED. ON continuously when the input voltage is present and within the correct range;
+      BLINKING when the input voltage is out of acceptable range; OFF when no input voltage is
+      present. Cisco states no colour for it.
+    states:
+    - 'off'
+    - 'on'
+    - {name: blinking, behavior: blinking}
+  output:
+    at: [2.3, 11.7]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Output LED. ON when the power module output voltage is present; BLINKING when the power
+      module is in a power limit or overcurrent condition. Cisco states no colour for it.
+    states:
+    - 'off'
+    - 'on'
+    - {name: blinking, behavior: blinking}
+  fault:
+    at: [2.3, 18.1]
+    size: [2.6, 2.6]
+    class: led
+    description: >-
+      Fault LED. ON indicates that a power module failure has occurred. Cisco states no colour for
+      it, and gives no off-state sentence.
+    states:
+    - 'off'
+    - 'on'
+relief:
+  wall: '#4a4f55'
+  features:
+    - node: handle
+      uhandle: 8.0
+      confidence: estimated
+      source: >-
+        edgecore/agr-fan@1 handle - the library's one pull-handle figure. Its provenance
+        describes the handle's appearance from a photograph, not its proudness
+    - node: input
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
+    - node: output
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
+    - node: fault
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
+skins: [default]

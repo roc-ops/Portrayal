@@ -15,8 +15,10 @@
 import {jdist, faceFile} from '../../dist.js';
 export {faceFile} from '../../dist.js';
 
-/** The URL of `view` of `ref` in configuration `config`, reading ref's configs.json. */
-export async function faceUrl(dist, ref, config, view) {
-  const index = await jdist(`${dist}${ref}.configs.json`).catch(() => null);
-  return dist + faceFile(index || {device: ref}, config, view);
+/** The URL of `view` of `ref` in configuration `config`, reading ref's configs.json.
+ *  `distAt` is the library's: a function from a path in the build to its URL. */
+export async function faceUrl(distAt, ref, config, view) {
+  await Promise.resolve(distAt.ready).catch(() => {});   // a layered library knows its roots first
+  const index = await jdist(distAt(`${ref}.configs.json`)).catch(() => null);
+  return distAt(faceFile(index || {device: ref}, config, view));
 }
