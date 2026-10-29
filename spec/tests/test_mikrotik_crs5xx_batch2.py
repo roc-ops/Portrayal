@@ -114,7 +114,7 @@ def test_crs504_front_carries_console_management_reset_dc_jack_and_three_lamps()
     assert [x["id"] for x in d["views"]["front"]["panel"]["decor"] if x.get("kind") == "dc-terminal-art"] == [
         "dc-terminal-cap", "dc-terminal-housing", "dc-terminal-entry-1", "dc-terminal-entry-2"]
     assert len([p for p in placements(d, "front") if p.get("group") == "status-leds"]) == 5  # 3 bars, 2 supply lamps
-    assert len(refs(d, "front", "common/led-rect@1")) == 11 and len(refs(d, "front", "common/led-dot@1")) == 2
+    assert len(refs(d, "front", "common/led-rect@2")) == 11 and len(refs(d, "front", "common/led-dot@1")) == 2
     assert {"CONSOLE", "MGMT/PoE in", "RESET", "USER", "FAULT", "POWER", "36 - 60 V", "CRS504-4XQ-IN",
             "ACT", "100G", "1", "2", "3", "4"} <= text_of(d, "front")
     gaps = {g["what"] for g in d["gaps"]}
@@ -336,6 +336,19 @@ def test_crs504_colours_are_the_photographs_medians():
         assert value in note, value
 
 
+@pytest.mark.parametrize("name", NAMES)
+def test_every_rectangular_lamp_seats_the_unlit_major(name):
+    # led-rect@2 and led-rect-sm@2 rest unlit grey; the @1 rests green where the photographs show the lamp dark
+    d = load(name)
+    for view in d["views"].values():
+        for p in (view.get("components") or {}).get("placements") or []:
+            if p["ref"].startswith(("common/led-rect@", "common/led-rect-sm@")):
+                assert p["ref"].endswith("@2"), p
+    seated = [p["ref"] for v in d["views"].values() for p in (v.get("components") or {}).get("placements") or []]
+    assert seated.count("common/led-rect@2") == (11 if name == CRS504 else 0)
+    assert "common/led-rect-sm@2" not in seated
+
+
 def test_lamps_rest_with_the_lamp_components_colour_and_the_gap_says_so():
     for name in NAMES:
         d = load(name)
@@ -468,7 +481,14 @@ def test_crs520_ears_and_the_rail_kit_are_declared_not_modelled():
 
 def test_crs520_walls():
     d = load(CRS520)
-    assert [x["id"] for x in d["views"]["right"]["panel"]["decor"]] == ["side-vent"]
+    assert [x["id"] for x in d["views"]["right"]["panel"]["decor"]] == [
+        "side-vent", "side-hole-front-upper", "side-hole-front-lower", "side-hole-rear-front", "side-hole-rear-rear"]
+    # photograph 2352 unwarped to 367 x 44 mm at 5.45 px per mm: four round holes 2.2 mm across (estimated)
+    holes = {h: decor(d, "right", h) for h in ("side-hole-front-upper", "side-hole-front-lower",
+                                                "side-hole-rear-front", "side-hole-rear-rear")}
+    assert all(h["kind"] == "screw-hole" and h["size"] == [2.2, 2.2] and h["rx"] == 1.1 for h in holes.values())
+    assert [h["at"] for h in holes.values()] == [[60.7, 13.7], [60.4, 28.2], [313.4, 18.8], [340.9, 18.4]]
+    assert [h["fill"] for h in holes.values()] == ["#867267", "#7f6f62", "#867468", "#8a756a"]
     v = decor(d, "right", "side-vent")
     assert v["pattern"] == "holes"  # photograph 2352 shows round perforations
     assert (v["at"], v["size"]) == ([11.0, 14.0], [35.0, 17.0])  # unwarped from the photograph's wall quad
@@ -576,9 +596,11 @@ def test_crs520_colours_are_the_photographs_medians():
     for i in ("fan-1-module", "fan-2-module", "fan-3-module", "fan-4-module"):
         assert decor(d, "rear", i)["fill"] == "#5d493d"
     for i in ("psu-1-module", "psu-2-module"):
-        assert decor(d, "rear", i)["fill"] == "#736f62"
+        # the median of four plain patches of photograph 2353 (#564e43, #4a3a30, #4e3e33, #483629 = #4c3c31),
+        # lightened by the rear's 0.84 shading
+        assert decor(d, "rear", i)["fill"] == "#5a473b"
     note = d["provenance"]["colour"]["note"]
-    for value in ("#e0dcd5", "#e6e3df", "#4e3d33", "#5d493d", "#615d52", "#736f62", "#bbbbb7"):
+    for value in ("#e0dcd5", "#e6e3df", "#4e3d33", "#5d493d", "#564e43", "#4c3c31", "#5a473b", "#bbbbb7"):
         assert value in note, value
 
 

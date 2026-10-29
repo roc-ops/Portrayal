@@ -167,8 +167,12 @@ provenance:
       wall's four corners in the photograph (a perspective transform of the quad onto 367 x 44 mm, 5 px
       per mm) put the field 35 x 17 mm, 11 mm from the front and 14 mm down, good to about 3 mm; it is
       drawn so, as the `holes` tile scaled to 3.6 x 3.0 mm (the photograph's 10 columns and 6 rows; the
-      photograph staggers the rows, which the tile does not). No held document shows the left wall. The
-      drawing has no wall view.
+      photograph staggers the rows, which the tile does not). The same unwarp (5.45 px per mm, good to
+      about 1 mm along the wall) shows four small round holes 2.2 mm across, drawn as screw holes: two
+      beside the field at 61.8 mm from the front, 14.8 and 29.3 mm down, and two near the rear at 314.5
+      and 342.0 mm, 19.9 and 19.5 mm down; each fill is the median of its own dark pixels (about 70 to
+      107 pixels each, spreads 15 to 27), estimated. No held document shows the left wall. The drawing
+      has no wall view.
   ears:
     confidence: drawing
     note: >-
@@ -191,19 +195,21 @@ provenance:
       and one to the right on each module, all between #4b3c34 and #53443b with spreads of 3 to 6 (for
       example box 1027,692 to 1068,740, 1968 pixels, #4e3f36; box 1322,715 to 1336,830, 1610 pixels, #4d3b2f):
       the colour is the modules', not a shading gradient, and it is drawn lightened by the 0.84 the rear's
-      shading takes, #5d493d. The supply modules are polished metal with no plain patch (spreads 34 to
-      43 over boxes 172,715 to 192,820, 400,690 to 450,700 and 760,690 to 800,700: #5f5a4f, #7c8c7e, #615d52):
-      the median of the two plainest, #615d52, lightened the same way, #736f62, estimated. The earlier
-      #b9b9b9 and #a89c94 were not the photograph's colours. The rear's handles, thumbscrews, latches
-      and screws (photograph 2353): fan handle rim #776d64 (box 1075,760 to 1078,880, 360 pixels, spread
-      37.9) and core #524339 (box 1076,760 to 1098,870, 2420 pixels, spread 40.8), fan thumbscrew #6d635c
-      (box 1016,788 to 1054,822, 1292 pixels, spread 46.6), supply handle core #504137 (box 320,700 to
-      330,880, 1800 pixels, spread 52.1), supply thumbscrew #737268 (box 165,770 to 190,800, 750 pixels,
-      spread 38.4), supply latches #89978e (box 405,695 to 430,715, 500 pixels, spread 30.8) and chassis
-      screws #51453b (box 862,704 to 876,716, 168 pixels, spread 33.0); the chrome handles reflect the
-      bronze modules, so their medians are dark and unlit values are unknown (estimated). The front's
-      bottom notches #d3cac3 (box 194,872 to 211,877 of photograph 2354, 85 pixels, spread 8.7; 80 and
-      70 pixels on two more boxes).
+      shading takes, #5d493d. The supply modules' polished surfaces vary, but four plain patches of photograph
+      2353 (spreads 6.5 to 14.0) read #564e43 (box 175,715 to 205,745, 900 pixels, spread 9.6), #4a3a30
+      (box 512,715 to 545,745, 990 pixels, spread 14.0), #4e3e33 (box 230,860 to 310,872, 960 pixels,
+      spread 8.1) and #483629 (box 530,860 to 640,872, 1320 pixels, spread 6.5): their per-channel median
+      is #4c3c31, lightened the same way, #5a473b, estimated. The first plate's left margin reads greyer
+      than the rest. The earlier #b9b9b9, #a89c94 and #736f62 were not the photograph's colours. The rear's
+      handles, thumbscrews, latches and screws (photograph 2353): fan handle rim #776d64 (box 1075,760
+      to 1078,880, 360 pixels, spread 37.9) and core #524339 (box 1076,760 to 1098,870, 2420 pixels, spread
+      40.8), fan thumbscrew #6d635c (box 1016,788 to 1054,822, 1292 pixels, spread 46.6), supply handle
+      core #504137 (box 320,700 to 330,880, 1800 pixels, spread 52.1), supply thumbscrew #737268 (box
+      165,770 to 190,800, 750 pixels, spread 38.4), supply latches #89978e (box 405,695 to 430,715, 500
+      pixels, spread 30.8) and chassis screws #51453b (box 862,704 to 876,716, 168 pixels, spread 33.0);
+      the chrome handles reflect the bronze modules, so their medians are dark and unlit values are unknown
+      (estimated). The front's bottom notches #d3cac3 (box 194,872 to 211,877 of photograph 2354, 85 pixels,
+      spread 8.7; 80 and 70 pixels on two more boxes).
 attrs:
   power:
     power-max-w: 150
@@ -933,8 +939,8 @@ views:
     size: {w: 443.0, h: 44.0}
     panel:
       decor:
-      - {id: psu-1-module, kind: module-plate, at: [2.5, 2.2], size: [63.2, 39.6], fill: '#736f62'}
-      - {id: psu-2-module, kind: module-plate, at: [65.9, 2.2], size: [64.0, 39.6], fill: '#736f62'}
+      - {id: psu-1-module, kind: module-plate, at: [2.5, 2.2], size: [63.2, 39.6], fill: '#5a473b'}
+      - {id: psu-2-module, kind: module-plate, at: [65.9, 2.2], size: [64.0, 39.6], fill: '#5a473b'}
       - {id: psu-1-vent, kind: vent-field, at: [7.8, 8.0], size: [27.0, 28.4], pattern: vent, vent: 1.0,
         pattern-pitch: [9.39, 5.42], pattern-offset: [10.6, 10.3]}
       - {id: psu-2-vent, kind: vent-field, at: [71.2, 8.0], size: [27.0, 28.4], pattern: vent, vent: 1.0,
@@ -1038,6 +1044,10 @@ views:
       decor:
       - {id: side-vent, kind: vent-field, at: [11.0, 14.0], size: [35.0, 17.0], pattern: holes, vent: 1.0,
         pattern-pitch: [3.6, 3.0], pattern-offset: [11.0, 14.0]}
+      - {id: side-hole-front-upper, kind: screw-hole, at: [60.7, 13.7], size: [2.2, 2.2], rx: 1.1, fill: '#867267'}
+      - {id: side-hole-front-lower, kind: screw-hole, at: [60.4, 28.2], size: [2.2, 2.2], rx: 1.1, fill: '#7f6f62'}
+      - {id: side-hole-rear-front, kind: screw-hole, at: [313.4, 18.8], size: [2.2, 2.2], rx: 1.1, fill: '#867468'}
+      - {id: side-hole-rear-rear, kind: screw-hole, at: [340.9, 18.4], size: [2.2, 2.2], rx: 1.1, fill: '#8a756a'}
 configurations:
   base:
     kind: base
