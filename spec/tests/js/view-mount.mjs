@@ -5,7 +5,15 @@ import assert from 'node:assert/strict';
 import {test, finish} from './view-cases.mjs';
 import {joinPath, splitPath} from '../../../kit/rack/view/view.js';
 import {mountRack2d} from '../../../kit/rack/view/elevation.js';
-import {newDoc, newRack} from '../../../kit/rack/model.js';
+import {newDoc, newRack, withItem} from '../../../kit/rack/model.js';
+import {flatDist} from '../../../kit/dist.js';
+
+// (kit/dist.js resolves a url against the page's location.) Every file is missing,
+// and every request is logged.
+globalThis.location = new URL('http://localhost/rack.html');
+const log = [];
+globalThis.fetch = async url => { log.push(String(url)); return {ok: false, status: 404}; };
+const distAt = flatDist('http://lib.test/main/');
 
 // ---- paths (docs/rack-views-design.md §2.4) ----------------------------------
 
@@ -62,7 +70,7 @@ const viewBoxHeight = c => Number(c.children[0].getAttribute('viewBox').split(' 
 test('mountRack2d wants a document, and draws racks[0] without a rackId', async () => {
   assert.throws(() => mountRack2d(fakeContainer(), {doc: newDoc()}), /needs the document/);
   const c = fakeContainer();
-  const view = mountRack2d(c, {document: fakeDocument(), doc: twoRacks()});
+  const view = mountRack2d(c, {document: fakeDocument(), doc: twoRacks(), distAt});
   await view.ready;
   assert.equal(c.children.length, 1);
   assert.equal(c.children[0].getAttribute('data-pane'), 'front');
@@ -72,11 +80,11 @@ test('mountRack2d wants a document, and draws racks[0] without a rackId', async 
 test('racks[1] draws when rackId names it; an unknown id is refused naming it, for ready and for update', async () => {
   const doc = twoRacks();
   const first = fakeContainer(), second = fakeContainer();
-  const a = mountRack2d(first, {document: fakeDocument(), doc});
-  const b = mountRack2d(second, {document: fakeDocument(), doc, rackId: 'r2'});
+  const a = mountRack2d(first, {document: fakeDocument(), doc, distAt});
+  const b = mountRack2d(second, {document: fakeDocument(), doc, rackId: 'r2', distAt});
   await Promise.all([a.ready, b.ready]);
   assert.notEqual(viewBoxHeight(first), viewBoxHeight(second), 'the second rack is a different height');
-  const lost = mountRack2d(fakeContainer(), {document: fakeDocument(), doc, rackId: 'r9'});
+  const lost = mountRack2d(fakeContainer(), {document: fakeDocument(), doc, rackId: 'r9', distAt});
   await assert.rejects(lost.ready, /There is no rack r9 in this document/);
   await assert.rejects(a.update(doc, {rackId: 'r9'}), /There is no rack r9 in this document/);
   // without a rackId the view keeps the rack it has, and that rack gone from the document is named
@@ -88,15 +96,48 @@ test('racks[1] draws when rackId names it; an unknown id is refused naming it, f
 });
 
 test('a backboard surface is refused with a sentence, and no other kind is added', () => {
-  assert.throws(() => mountRack2d(fakeContainer(), {document: fakeDocument(), doc: newDoc(), surface: {kind: 'backboard', id: 'b1'}}),
+  assert.throws(() => mountRack2d(fakeContainer(), {document: fakeDocument(), doc: newDoc(), distAt, surface: {kind: 'backboard', id: 'b1'}}),
     /backboard is not a surface a view can draw yet/);
-  assert.throws(() => mountRack2d(fakeContainer(), {document: fakeDocument(), doc: newDoc(), surface: {kind: 'wall', id: 'w1'}}), /There is no "wall" surface/);
-  assert.throws(() => mountRack2d(fakeContainer(), {document: fakeDocument(), doc: newDoc(), rackId: 'r1', surface: {kind: 'rack', id: 'r2'}}), /different racks/);
+  assert.throws(() => mountRack2d(fakeContainer(), {document: fakeDocument(), doc: newDoc(), distAt, surface: {kind: 'wall', id: 'w1'}}), /There is no "wall" surface/);
+  assert.throws(() => mountRack2d(fakeContainer(), {document: fakeDocument(), doc: newDoc(), distAt, rackId: 'r1', surface: {kind: 'rack', id: 'r2'}}), /different racks/);
+});
+
+test('mountRack2d refuses a missing library, the removed dist option and a distAt that is no function', () => {
+  const mount = extra => () => mountRack2d(fakeContainer(), {document: fakeDocument(), doc: newDoc(), ...extra});
+  assert.throws(mount({}), /distAt/);
+  assert.throws(mount({dist: 'x/'}), /takes \{distAt\}, not \{dist\}/);
+  assert.throws(mount({dist: 'x/', distAt}), /takes \{distAt\}, not \{dist\}/);
+  assert.throws(mount({distAt: 'x/'}), /distAt must be a function from a path in the build to its URL/);
+  assert.throws(mount({distAt: 'x/'}), /flatDist/);
+});
+
+test('two views of two libraries on one page each read their own, early and late', async () => {
+  const oneItem = ref => {
+    const doc = newDoc();
+    return {...doc, racks: [withItem(doc.racks[0], {ref, cfg: 'c1', ru: 1}).rack]};
+  };
+  const [A, B] = ['http://lib.test/va/', 'http://lib.test/vb/'];
+  const [ca, cb] = [fakeContainer(), fakeContainer()];
+  const from = log.length;
+  const a = mountRack2d(ca, {document: fakeDocument(), doc: oneItem('x'), distAt: flatDist(A)});
+  const b = mountRack2d(cb, {document: fakeDocument(), doc: oneItem('x'), distAt: flatDist(B)});
+  await Promise.all([a.ready, b.ready]);
+  const mine = log.slice(from);
+  const under = base => mine.filter(u => u.startsWith(base));
+  assert.ok(under(A).length > 0 && under(B).length > 0, 'each library was asked');
+  assert.equal(under(A).length + under(B).length, mine.length, 'nothing was asked of another place');
+  assert.ok(under(A).every(u => u.startsWith(A)));
+  // the late read: A is drawn again after B was mounted, with a device it has not read
+  const later = log.length;
+  await a.update(oneItem('y'));
+  const lateAsks = log.slice(later);
+  assert.ok(lateAsks.length > 0 && lateAsks.every(u => u.startsWith(A)), `late reads: ${lateAsks}`);
+  for (const v of [a, b]) v.dispose();
 });
 
 test('a second call to dispose does nothing, and the first removes the drawing and the listener it added', async () => {
   const c = fakeContainer();
-  const view = mountRack2d(c, {document: fakeDocument(), doc: newDoc()});
+  const view = mountRack2d(c, {document: fakeDocument(), doc: newDoc(), distAt});
   await view.ready;
   assert.equal(c.added.length, 1);
   assert.equal(c.children.length, 1);
@@ -110,8 +151,8 @@ test('a second call to dispose does nothing, and the first removes the drawing a
 
 test('on("pick") returns its own remover, and an unknown event name throws', () => {
   const c = fakeContainer();
-  const view = mountRack2d(c, {document: fakeDocument(), doc: newDoc()});
-  const off = view.on('pick', () => {});
+  const view = mountRack2d(c, {document: fakeDocument(), doc: newDoc(), distAt});
+  const off =view.on('pick', () => {});
   assert.equal(typeof off, 'function');
   assert.throws(() => view.on('hover', () => {}), /no "hover" event/);
   off();

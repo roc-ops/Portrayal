@@ -24,27 +24,29 @@ globalThis.fetch = async url => {
   return {ok: true, text: async () => `<svg id="${u}"/>`};
 };
 
+const {flatDist} = await import('../../../kit/dist.js');
 const {loadSkin, findComp, components} = await import('../../../kit/rack/view/face.js');
+const lib = flatDist('http://lib.test/');
 
 test('devices sharing a skin fetch it once', async () => {
-  const rs = await Promise.all(Array.from({length: 40}, () => loadSkin('a/sfp@1:slot')));
+  const rs = await Promise.all(Array.from({length: 40}, () => loadSkin('a/sfp@1:slot', lib)));
   assert.equal(calls.filter(u => u.includes('--sfp--')).length, 1);
   assert.ok(rs.every(r => r.text === rs[0].text && r.comp.skins[0] === 'default'));
-  await loadSkin('b/card@2');
+  await loadSkin('b/card@2', lib);
   assert.equal(calls.filter(u => u.includes('--card--')).length, 1);
-  assert.equal(await loadSkin('nope/none@1'), null);
+  assert.equal(await loadSkin('nope/none@1', lib), null);
 });
 
 test('a failed skin fetch is not kept', async () => {
   failSkin = 1;
-  await assert.rejects(loadSkin('c/late@3'), /network/);
-  const r = await loadSkin('c/late@3');
+  await assert.rejects(loadSkin('c/late@3', lib), /network/);
+  const r = await loadSkin('c/late@3', lib);
   assert.match(r.text, /--late--/);
   assert.equal(calls.filter(u => u.includes('--late--')).length, 2);
 });
 
 test('findComp finds the first match by ref key', async () => {
-  const list = await components();
+  const list = await components(lib);
   assert.equal(findComp(list, 'a/sfp@1:port').skins[0], 'default');
   assert.equal(findComp(list, 'b/card@2').ns, 'b');
   assert.equal(findComp(list, 'z/z@9'), undefined);
