@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs202
-version: 1.0.8
+version: 1.0.9
 maturity: modelled
 manufacturer: Edgecore
 model: AS5835-54T
@@ -531,8 +531,8 @@ configurations:
     airflow: back-to-front
     region-context: {exhaust: Intake}
     component-attrs:
-      dcs201-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F}
-      dcs201-psu-ac: {latch-finish: '#3d7bd6', latch-edge: '#234b8c'}
+      dcs201-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F, airflow: back-to-front}
+      dcs201-psu-ac: {latch-finish: '#3d7bd6', latch-edge: '#234b8c', airflow: back-to-front}
   dc-f2b:
     kind: orderable
     power: dc
@@ -546,8 +546,8 @@ configurations:
     region-context: {exhaust: Intake}
     bays: {psu-1: 'edgecore/dcs201-psu-dc@1', psu-2: 'edgecore/dcs201-psu-dc@1'}
     component-attrs:
-      dcs201-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F}
-      dcs201-psu-dc: {latch-finish: '#3d7bd6', latch-edge: '#234b8c'}
+      dcs201-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F, airflow: back-to-front}
+      dcs201-psu-dc: {latch-finish: '#3d7bd6', latch-edge: '#234b8c', airflow: back-to-front}
 references:
 - {title: 'Edgecore DCS202 / AS5835-54T 48x10GBASE-T + 6x100G QSFP28 Data Center Switch Data Sheet'}
 - {title: 'Edgecore AS5835-54T 54-Port 10G/100G Ethernet Switch Quick Start Guide'}

@@ -799,6 +799,27 @@ profiles in `spec/schemas/profiles.yaml` and follows that file. It is a new
 field, so `contract` stays 2: a reader that does not know it still finds every
 field it read before.
 
+### What a compiled face says about airflow
+
+A page that filters by airflow reads these attributes of the compiled faces, so
+they are part of the format too:
+
+- The root `<svg>` carries `data-airflow`, the configuration's airflow, where
+  the configuration states one (`configs[].airflow` is the same value).
+- A fan or supply `<g>` (`data-class` `fan` or `psu`) carries `data-airflow`
+  when the part or the build states one: the part's own word, which a
+  configuration's `component-attrs` can restate for that build. The word may be
+  a vendor's (`exhaust`, `intake`); `library/components/README.md`, "Airflow",
+  says how to read them.
+- The same `<g>` carries `data-config-airflow`, always the configuration's
+  airflow, and nothing where the configuration states none. Nothing else
+  carries it.
+
+`data-config-airflow` is a new field, so `contract` stays 2: a reader that does
+not know it still finds every field it read before. It says what the
+configuration is, not that a unit's art was checked: a build that draws like
+its default carries the default's art, with the gap its device declares.
+
 ### What a compiled face says about rings and trays
 
 rack.json is derived from these attributes of the compiled faces, and a page

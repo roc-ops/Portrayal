@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-32d
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-32D
@@ -754,8 +754,8 @@ configurations:
     airflow: back-to-front
     region-context: {exhaust: Intake}
     component-attrs:
-      ais800-fan: {handle-finish: '#3d7bd6'}
-      ais800-psu-ac: {handle-finish: '#3d7bd6', latch-finish: '#8fb4e8'}
+      ais800-fan: {handle-finish: '#3d7bd6', airflow: back-to-front}
+      ais800-psu-ac: {handle-finish: '#3d7bd6', latch-finish: '#8fb4e8', airflow: back-to-front}
     part-numbers:
       AIS800-32D-AB-US: {part: FP6EC9632401Z, power-cord: US}
       AIS800-32D-AB-EU: {part: FP6EC9632202Z, power-cord: EU}
@@ -779,8 +779,8 @@ configurations:
     region-context: {exhaust: Intake}
     bays: {psu-1: 'edgecore/ais800-psu-dc@2', psu-2: 'edgecore/ais800-psu-dc@2'}
     component-attrs:
-      ais800-fan: {handle-finish: '#3d7bd6'}
-      ais800-psu-dc: {handle-finish: '#3d7bd6', latch-finish: '#8fb4e8'}
+      ais800-fan: {handle-finish: '#3d7bd6', airflow: back-to-front}
+      ais800-psu-dc: {handle-finish: '#3d7bd6', latch-finish: '#8fb4e8', airflow: back-to-front}
     part-numbers:
       AIS800-32D-DB: {part: FP6EC9632001Z}
 references:
