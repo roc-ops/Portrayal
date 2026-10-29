@@ -9,8 +9,8 @@ portfolio: {line: Switches, family: Cloud Router Switch, series: CRS510}
 description: >-
   MikroTik CRS510-8XS-2XQ-IN is a fixed 1U indoor Cloud Router Switch, 320 mm wide with rack ears in the
   box, with eight 25 Gigabit SFP28 cages and two 100 Gigabit QSFP28 cages, a 100 Megabit management port
-  that also takes PoE in, an RJ45 serial console, a DC jack and a two-pin DC terminal (both drawn or left
-  out, see the gaps), and runs RouterOS v7. Everything is on the front: two hot-swap AC supply modules
+  that also takes PoE in, an RJ45 serial console, a DC jack and a two-pin DC terminal (both drawn as chassis
+  art, see the gaps), and runs RouterOS v7. Everything is on the front: two hot-swap AC supply modules
   with their C14 inlets at the left, four stacks of two SFP28 cages, the QSFP28 stack, the console over
   the management port, RESET, the two DC inputs and three status lamps. Two fan openings and an earthing
   stud are on the rear. The brochure prints no part number for the supplies, so they are part of the chassis
@@ -93,8 +93,12 @@ provenance:
       at -7.4, -5.1, +5.1 and +7.4 mm with its two round lamps at -2.1 and +2.1 mm. Which pair of a stack
       is the speed lamp and which the activity lamp is not stated by a document, and the QSFP28's two
       round lamps name no cage that a document states (gap `led-states`); they are drawn for the chassis.
-      The three bar lamps are printed USER, FAULT and POWER (photograph 2232). The green lamp on each
-      supply module is drawn as the photograph shows it, with no meaning stated.
+      The three bar lamps are printed USER, FAULT and POWER (photograph 2232), and show unlit grey there
+      (#868685, median of 171 pixels). The render draws them in the lamp component's resting colour, a
+      dark green: common/led-rect@1 fills its lamp from var(--led-color, #2a6b3f), no placement can change
+      that resting value, and a component on main is not edited here, so the colour is left. Their place
+      and size agree with the drawing. The green lamp on each supply module is drawn as the photograph
+      shows it, with no meaning stated.
   port-numbering:
     confidence: photo-measured
     note: >-
@@ -113,9 +117,21 @@ provenance:
     note: >-
       The DC jack is drawn at the drawn housing as chassis art and not placed (gap `dc-jack`: the barrel
       census wants a current no document states); the photograph prints "36-57 V" over both DC inputs.
-      The two-pin pluggable terminal block beside it is 11.4 x 11.8 mm; the registry's common/dc-terminal-plug-2
-      is a 32.1 x 17.6 mm part drawn for another maker's box, so it is not placed and the terminal is
-      left out with a gap (`dc-terminal`). The polarity marks above the terminal are not drawn.
+      The two-pin pluggable terminal block beside it is 11.4 x 11.8 mm at 275.4 mm, 24.8 mm down, read
+      off the drawing's front view at 3.9375 px per mm (outer extent 317 x 330 px at 7 times enlargement,
+      less the line weight). The drawing dimensions it 9 mm proud of the front; it is drawn flat, as the
+      jack is: a cap 10.4 x 3.9 over a body 11.4 x 7.9 (the part the photograph shows from above, whose
+      bottom lines up with the jack's) and two wire entries 3.6 x 5.1 mm on a 5.05 mm pitch. The photograph
+      shows no clamp screws, so none are drawn. The registry's common/dc-terminal-plug-2 is a 32.1 x 17.6
+      mm part drawn for another maker's box, so it is not placed (gap `dc-terminal`). The green is #82967a,
+      the median of photograph 2232 over box 2660,955 to 2740,961 (480 pixels) on the terminal's front
+      top strip; the entries #051203 (box 2672,975 to 2686,995, 280 pixels). The legends are as the photograph
+      prints them: one bracket over both inputs, "36-57 V" centred over it (the earlier drawing put it
+      over the jack alone), a circled minus then a circled plus over the terminal, and over the jack a
+      circled minus, the barrel symbol with its centre pin dot joined to the circled plus: the centre
+      pin is the positive pole. The legend positions are read off photograph 2232 at 34.96 px per mm across
+      and 30.7 px per mm down (the jack housing is 358 px for 11.8 mm), anchored on the jack's and the
+      terminal's lower edge, to about 0.4 mm across and 0.8 mm down.
   built-in-power-and-fans:
     confidence: datasheet
     note: >-
@@ -151,8 +167,15 @@ provenance:
   colour:
     confidence: estimated
     note: >-
-      The median of photograph 2232's face is #e7e6ea; the face is drawn #dddddd so it reads on the light
-      stage.
+      Each value is the median of a plain area, away from ports, lamps, labels and text, taken with a
+      script over the photograph's pixels. The face is #e7e6e9: photograph 2232, box 1500,520 to 1700,560
+      (8000 pixels). It is drawn #dddddd, the library's light-stage value for a face that sample reads
+      lighter than, and kept with this sample beside it. The supply modules are #a3a5a7: 2232, box 377,1031
+      to 562,1042 (2035 pixels). The jack plate is #949290: 2232, box 2558,845 to 2572,930 (1190 pixels;
+      box 2428,830 to 2438,910, 800 pixels, gives #93918f). The DC jack housing is #3e3e3d: 2232, box
+      2790,930 to 2800,990 (600 pixels). The terminal's green is #82967a (the dc-inputs note gives its
+      box). The unlit lamps read #868685 (2232, box 2626,1028 to 2645,1037, 171 pixels). The rear's face
+      reads #bebcbc in 2233 (box 2180,870 to 2910,1020, 109500 pixels).
 attrs:
   power:
     power-max-w: 51
@@ -220,10 +243,11 @@ gaps:
   note: >-
     The reason is the nearest the schema has: the part itself is what is missing, and the library has
     no needs-part reason. The drawing and photograph 2232 show a two-pin pluggable DC terminal block,
-    11.4 x 11.8 mm, beside the DC jack. The registry's only part, common/dc-terminal-plug-2@1, is 32.1
-    x 17.6 mm and belongs to another box, so the terminal is not placed and the device exports no power
-    port for it. The brochure lists it as a DC input (36-57 V).
-  wanted: A small two-pole pluggable terminal block part.
+    11.4 x 11.8 mm, beside the DC jack. It is drawn as chassis art at its measured place, with its legends,
+    the bracket and the polarity marks; no part is placed, and no power port is exported, because no held
+    document names the part. The registry's only two-pole parts belong to other makers' boxes (common/dc-terminal-plug-2@1
+    is 32.1 x 17.6 mm). The brochure lists it as a DC input (36-57 V).
+  wanted: The terminal block's part number and its current rating.
 - what: led-states
   scope:
   - front
@@ -310,8 +334,8 @@ views:
     size: {w: 320.0, h: 44.0}
     panel:
       decor:
-      - {id: psu-1-module, kind: module-plate, at: [12.6, 2.1], size: [52.1, 38.5], fill: '#b9b9b9'}
-      - {id: psu-2-module, kind: module-plate, at: [72.0, 2.1], size: [52.1, 38.5], fill: '#b9b9b9'}
+      - {id: psu-1-module, kind: module-plate, at: [12.6, 2.1], size: [52.1, 38.5], fill: '#a3a5a7'}
+      - {id: psu-2-module, kind: module-plate, at: [72.0, 2.1], size: [52.1, 38.5], fill: '#a3a5a7'}
       - {id: psu-1-slot-a1, kind: vent-field, at: [16.3, 20.0], size: [3.8, 7.6], fill: '#17191c', vent: 1.0}
       - {id: psu-1-slot-a2, kind: vent-field, at: [21.3, 20.0], size: [3.8, 7.6], fill: '#17191c', vent: 1.0}
       - {id: psu-1-slot-a3, kind: vent-field, at: [26.3, 20.0], size: [3.8, 7.6], fill: '#17191c', vent: 1.0}
@@ -336,8 +360,13 @@ views:
         vent: 1.0}
       - {id: bar-25g, kind: group-bar, at: [142.6, 9.5], size: [2.0, 27.0], fill: '#c9c3e6'}
       - {id: bar-100g, kind: group-bar, at: [217.8, 9.5], size: [2.0, 27.0], fill: '#c9c3e6'}
-      - {id: mgmt-block, kind: jack-plate, at: [248.2, 10.0], size: [17.6, 26.6], fill: '#c9c5c5'}
-      - {id: dc-jack-housing, kind: dc-jack-art, at: [290.1, 24.8], size: [10.3, 11.8], rx: 0.8, fill: '#2b2b2b'}
+      - {id: mgmt-block, kind: jack-plate, at: [248.2, 10.0], size: [17.6, 26.6], fill: '#949290'}
+      - {id: dc-terminal-cap, kind: dc-terminal-art, at: [275.9, 24.8], size: [10.4, 3.9], rx: 0.3, fill: '#82967a'}
+      - {id: dc-terminal-housing, kind: dc-terminal-art, at: [275.4, 28.7], size: [11.4, 7.9], rx: 0.3,
+        fill: '#82967a'}
+      - {id: dc-terminal-entry-1, kind: dc-terminal-art, at: [276.85, 30.2], size: [3.6, 5.1], fill: '#051203'}
+      - {id: dc-terminal-entry-2, kind: dc-terminal-art, at: [281.9, 30.2], size: [3.6, 5.1], fill: '#051203'}
+      - {id: dc-jack-housing, kind: dc-jack-art, at: [290.1, 24.8], size: [10.3, 11.8], rx: 0.8, fill: '#3e3e3d'}
       - {id: dc-jack-bore, kind: dc-jack-art, at: [293.45, 28.15], size: [3.6, 3.6], rx: 1.8, fill: '#111111'}
       cutouts:
       - {id: ac-inlet-1, at: [39.45, 9.5], size: [20.0, 28.0], shape: rect}
@@ -404,7 +433,28 @@ views:
     - {at: [257.0, 8.6], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: console}
     - {at: [257.0, 39.3], text: MGMT/PoE in, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: mgmt}
     - {at: [270.7, 28.4], text: RESET, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: btn-reset}
-    - {at: [295.2, 21.8], text: 36-57 V, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [288.0, 19.0], text: 36-57 V, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {id: dc-bracket, at: [275.7, 19.7], path: M 0 6.4 L 0 1 Q 0 0 1 0 L 23.7 0 Q 24.7 0 24.7 1 L 24.7
+        2.1, filled: false, stroke-width: 0.25, fill: '#2b2b2b', for: chassis}
+    - id: dc-terminal-polarity
+      at: [278.9, 22.4]
+      path: >-
+        M -1.2 0 a 1.2 1.2 0 1 0 2.4 0 a 1.2 1.2 0 1 0 -2.4 0 M -0.6 0 h 1.2 M 3.7 0 a 1.2 1.2 0 1 0 2.4
+        0 a 1.2 1.2 0 1 0 -2.4 0 M 4.3 0 h 1.2 M 4.9 -0.6 v 1.2
+      filled: false
+      stroke-width: 0.25
+      fill: '#2b2b2b'
+      for: chassis
+    - id: dc-jack-polarity
+      at: [292.6, 22.4]
+      path: >-
+        M -1.2 0 a 1.2 1.2 0 1 0 2.4 0 a 1.2 1.2 0 1 0 -2.4 0 M -0.6 0 h 1.2 M 1.2 0 h 0.4 M 2.62 -0.42
+        a 0.6 0.6 0 1 0 0 0.84 M 2.5 0 a 0.2 0.2 0 1 0 0.4 0 a 0.2 0.2 0 1 0 -0.4 0 M 2.9 0 h 1.4 M 4.3
+        0 a 1.2 1.2 0 1 0 2.4 0 a 1.2 1.2 0 1 0 -2.4 0 M 4.9 0 h 1.2 M 5.5 -0.6 v 1.2
+      filled: false
+      stroke-width: 0.25
+      fill: '#2b2b2b'
+      for: chassis
     - {at: [267.1, 42.4], text: USER, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: led-user}
     - {at: [274.0, 42.4], text: FAULT, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: led-fault}
     - {at: [288.2, 42.4], text: POWER, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: led-power}

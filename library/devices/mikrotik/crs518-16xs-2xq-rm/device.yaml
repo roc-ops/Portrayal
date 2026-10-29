@@ -67,13 +67,23 @@ provenance:
       and management jacks share a plate 18.0 x 26.7 at 250.2 mm, 10.2 mm, the console above. The RESET
       button is a ring at 272.7 mm, 32.1 mm. The USB bezel is 8.5 x 15.8 at 277.3 mm, 21.2 mm, standing
       upright. The four status lamps are a column of rings at 290.6 mm, 17.6, 22.5, 27.5 and 32.4 mm.
-      The vent along the top edge is the zigzag of V shapes the drawing and photograph 2196 show. Measured
-      on the drawing page at 2.6275 px per mm (the 443 mm body is 1164 px across, 542 to 1706): ink from
-      2.3 to 440.3 mm across and 2.7 to 9.5 mm down from the top edge, one V every 16.7 mm (the ink profile
-      repeats every 44 px, with a peak between each pair of Vs), so 26 V shapes across the band, each
-      stroke about 2 mm wide. The first stroke rises from the bottom at the left end. The rear's four
-      fan openings each show a plain hub about half the opening's width, read off photograph 2197 (about
-      19 mm).
+      The vent along the top edge is a row of separate solid openings, a lambda then a V, alternating,
+      each with its feet and top ends cut level and a small step on one edge (photograph 2196, brochure
+      figure 1, and the drawing's front view). No fixed pattern draws them, so the band is `pattern: motif`
+      and the tile is stated once, as `pattern-pitch`: 16.5 x 5.7 mm. Drawn from photograph 2196 (estimated),
+      whose face is 2490 px across at the band for the printed 443, so 5.62 px per mm across and 5.29
+      px per mm down (the photograph looks slightly from above; the face reads 0.94 of its height); the
+      shape is the mean of 20 periods of the dark mask (threshold 70 of 255), 92.8 px apart. The tile
+      starts at a lambda's left foot and holds the lambda, the V that follows it and the part of that
+      V's right arm that runs past the tile's right edge (three cells, the third a 1.2 mm piece at the
+      tile's left). The band is 27 lambdas and 26 Vs, from a lambda to a lambda: 26 periods in the first
+      rect (430.3 mm, the extra 1.3 mm carrying the 26th V's arm) and the 27th lambda in a second rect
+      at 431.3 mm, 9.5 mm wide, so no half V shows past the last lambda. The drawing's front view, at
+      2.6275 px per mm (the 443 mm body is 1164 px across, 542 to 1706), puts the first lambda's foot
+      2.1 mm from the left edge, the last lambda's foot 1.6 mm from the right and the period at 16.5 mm
+      (ink span 1154 px less one lambda, over 26); the band is drawn 2.3 mm in from the left and 2.4 mm
+      down. The rear's four fan openings each show a plain hub about half the opening's width, read off
+      photograph 2197 (about 19 mm).
   lamps:
     confidence: estimated
     note: >-
@@ -143,8 +153,15 @@ provenance:
   colour:
     confidence: estimated
     note: >-
-      The median of photograph 2196's face is #ececed; the face is drawn #dddddd so it reads on the light
-      stage.
+      Each value is the median of a plain area, away from ports, lamps, labels and text, taken with a
+      script over the photograph's pixels. The face is #bbbbbb: photograph 2196, box 200,475 to 480,520
+      (12600 pixels), and the straight-on brochure figure 1, box 20,42 to 180,58 (2560 pixels), both #bbbbbb.
+      The jack plate is #63625f: 2196, box 1563,490 to 1569,590 (600 pixels; box 1580,536 to 1635,546,
+      550 pixels, gives #62605e). The supply modules are #6f6d68: photograph 2197, box 225,460 to 320,468
+      (760 pixels). The fan modules are #878682: 2197, box 1393,530 to 1413,620 (1800 pixels), and their
+      hubs #817f7c: box 1255,535 to 1305,565 (1500 pixels). The rear's own face reads #cacaca in 2197
+      (box 2660,520 to 2700,640, 4800 pixels); a device carries one chassis colour and the front's is
+      drawn. Photograph 2196's pixels are 8-bit sRGB from a studio render; no lighting is corrected.
 attrs:
   power:
     power-max-w: 77
@@ -167,7 +184,7 @@ chassis:
   height: 44.0
   depth: 268.0
   ru: 1
-  color: '#dddddd'
+  color: '#bbbbbb'
   ears:
     positions:
     - {name: flush, at: 0, default: true}
@@ -278,10 +295,70 @@ views:
     size: {w: 443.0, h: 44.0}
     panel:
       decor:
-      - {id: mgmt-block, kind: jack-plate, at: [250.2, 10.2], size: [18.0, 26.7], fill: '#c9c5c5'}
+      - {id: mgmt-block, kind: jack-plate, at: [250.2, 10.2], size: [18.0, 26.7], fill: '#63625f'}
       - {id: usb-bezel, kind: usb-bezel, at: [277.3, 21.2], size: [8.5, 15.8], rx: 1.6, fill: '#2b2b2b'}
-      - {id: vent-field, kind: vent-field, at: [2.3, 2.7], size: [438.0, 6.8], pattern: chevrons, vent: 1.0,
-        pattern-offset: [2.3, 2.7], pattern-pitch: [16.7, 6.8]}
+      - id: vent-band
+        kind: vent-field
+        at: [2.3, 2.4]
+        size: [430.3, 5.7]
+        pattern: motif
+        vent: 1.0
+        pattern-offset: [2.3, 2.4]
+        pattern-pitch: [16.5, 5.7]
+        pattern-cells:
+        - - [0.0, 5.67]
+          - [0.0, 5.29]
+          - [4.09, 0.0]
+          - [5.33, 0.0]
+          - [7.64, 3.59]
+          - [8.35, 3.59]
+          - [8.35, 3.97]
+          - [9.42, 5.29]
+          - [9.42, 5.67]
+          - [7.47, 5.67]
+          - [5.15, 1.89]
+          - [4.44, 1.89]
+          - [1.78, 5.67]
+        - - [8.15, 0.0]
+          - [10.1, 0.0]
+          - [12.59, 3.78]
+          - [13.48, 3.78]
+          - [15.79, 0.0]
+          - [16.5, 0.0]
+          - [16.5, 1.8]
+          - [15.97, 2.08]
+          - [13.48, 5.67]
+          - [12.41, 5.67]
+          - [10.81, 3.21]
+          - [9.92, 2.84]
+          - [8.15, 0.38]
+        - - [0.0, 0.0]
+          - [1.24, 0.0]
+          - [1.24, 0.57]
+          - [0.18, 1.7]
+          - [0.0, 1.8]
+      - id: vent-band-end
+        kind: vent-field
+        at: [431.3, 2.4]
+        size: [9.5, 5.7]
+        pattern: motif
+        vent: 1.0
+        pattern-offset: [431.3, 2.4]
+        pattern-pitch: [16.5, 5.7]
+        pattern-cells:
+        - - [0.0, 5.67]
+          - [0.0, 5.29]
+          - [4.09, 0.0]
+          - [5.33, 0.0]
+          - [7.64, 3.59]
+          - [8.35, 3.59]
+          - [8.35, 3.97]
+          - [9.42, 5.29]
+          - [9.42, 5.67]
+          - [7.47, 5.67]
+          - [5.15, 1.89]
+          - [4.44, 1.89]
+          - [1.78, 5.67]
       cutouts:
       - {id: qsfp-1, at: [18.5, 26.2], size: [20.0, 10.15], shape: rect}
       - {id: qsfp-2, at: [44.5, 26.2], size: [20.0, 10.15], shape: rect}
@@ -612,22 +689,22 @@ views:
     size: {w: 443.0, h: 44.0}
     panel:
       decor:
-      - {id: psu-1-module, kind: module-plate, at: [3.2, 2.0], size: [62.9, 38.0], fill: '#b9b9b9'}
-      - {id: psu-2-module, kind: module-plate, at: [66.1, 2.0], size: [62.9, 38.0], fill: '#b9b9b9'}
+      - {id: psu-1-module, kind: module-plate, at: [3.2, 2.0], size: [62.9, 38.0], fill: '#6f6d68'}
+      - {id: psu-2-module, kind: module-plate, at: [66.1, 2.0], size: [62.9, 38.0], fill: '#6f6d68'}
       - {id: psu-1-vent, kind: vent-field, at: [8.7, 5.5], size: [27.0, 31.0], pattern: vent, vent: 1.0}
       - {id: psu-2-vent, kind: vent-field, at: [74.3, 5.5], size: [24.5, 31.0], pattern: vent, vent: 1.0}
-      - {id: fan-module-0, kind: module-plate, at: [156.3, 2.0], size: [61.5, 38.0], fill: '#b9b9b9'}
-      - {id: fan-module-1, kind: module-plate, at: [226.5, 2.0], size: [60.0, 38.0], fill: '#b9b9b9'}
-      - {id: fan-module-2, kind: module-plate, at: [296.6, 2.0], size: [60.4, 38.0], fill: '#b9b9b9'}
-      - {id: fan-module-3, kind: module-plate, at: [363.0, 2.0], size: [60.0, 38.0], fill: '#b9b9b9'}
+      - {id: fan-module-0, kind: module-plate, at: [156.3, 2.0], size: [61.5, 38.0], fill: '#878682'}
+      - {id: fan-module-1, kind: module-plate, at: [226.5, 2.0], size: [60.0, 38.0], fill: '#878682'}
+      - {id: fan-module-2, kind: module-plate, at: [296.6, 2.0], size: [60.4, 38.0], fill: '#878682'}
+      - {id: fan-module-3, kind: module-plate, at: [363.0, 2.0], size: [60.0, 38.0], fill: '#878682'}
       - {id: fan-0, kind: fan-grille, at: [172.8, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0}
       - {id: fan-1, kind: fan-grille, at: [242.9, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0}
       - {id: fan-2, kind: fan-grille, at: [313.5, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0}
       - {id: fan-3, kind: fan-grille, at: [374.8, 1.5], size: [38.0, 38.0], rx: 19.0, pattern: vent, vent: 1.0}
-      - {id: fan-hub-0, kind: fan-hub, at: [182.3, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#b9b9b9'}
-      - {id: fan-hub-1, kind: fan-hub, at: [252.4, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#b9b9b9'}
-      - {id: fan-hub-2, kind: fan-hub, at: [323.0, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#b9b9b9'}
-      - {id: fan-hub-3, kind: fan-hub, at: [384.3, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#b9b9b9'}
+      - {id: fan-hub-0, kind: fan-hub, at: [182.3, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
+      - {id: fan-hub-1, kind: fan-hub, at: [252.4, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
+      - {id: fan-hub-2, kind: fan-hub, at: [323.0, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
+      - {id: fan-hub-3, kind: fan-hub, at: [384.3, 11.0], size: [19.0, 19.0], rx: 9.5, fill: '#817f7c'}
       cutouts:
       - {id: ac-inlet-1, at: [36.2, 11.5], size: [28.0, 20.0], shape: rect}
       - {id: ac-inlet-2, at: [99.1, 11.5], size: [28.0, 20.0], shape: rect}

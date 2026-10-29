@@ -151,24 +151,55 @@ def _render_decor(decor, w=443.0, h=44.0):
     return out if isinstance(out, str) else render.ET.tostring(out, encoding="unicode")
 
 
-def test_crs518_front_vent_band_is_chevrons_along_the_top_edge():
-    """The drawing and photograph 2196 show a zigzag of V shapes, not perforations. Read off the drawing at 2.63 px
-    per mm (the 443 mm body is 1164 px): the band runs 2.3 to 440.3 mm, 2.7 to 9.5 mm down, one V every 16.7 mm
-    (autocorrelation of the ink, peak at 44 px), so 26 V shapes with a peak between each pair."""
-    d = load(CRS518)
-    band = _decor(d, "front")["vent-field"]
-    assert band["pattern"] == "chevrons" and band["vent"]
-    assert band["at"] == [2.3, 2.7] and band["size"] == [438.0, 6.8]
-    assert band["pattern-offset"] == band["at"]  # the first stroke starts at the band's left end, at the bottom
-    assert band["pattern-pitch"][0] == 16.7
-    assert round(band["size"][0] / band["pattern-pitch"][0]) == 26
-    svg = _render_decor([band])
+BAND_PITCH = [16.5, 5.7]
+
+
+def _pattern_of(svg, rect_id):
     import re
-    m = re.search(r'<rect id="vent-field"[^>]*fill="url\(#([^)]+)\)"', svg)
-    assert m and "chevrons" in m.group(1), svg[:600]
-    pat = re.search(rf'<pattern[^>]*id="{re.escape(m.group(1))}"[^>]*>(.*?)</pattern>', svg, re.S)
-    assert pat and "<path" in pat.group(1) and 'fill="none"' in pat.group(1)
+    m = re.search(rf'<rect id="{rect_id}"[^>]*fill="url\(#([^)]+)\)"', svg)
+    assert m, svg[:600]
+    pat = re.search(rf'<pattern [^>]*id="{re.escape(m.group(1))}"[^>]*>(.*?)</pattern>', svg, re.S)
+    assert pat
+    return m.group(1), pat.group(0)
+
+
+def test_crs518_front_vent_band_is_alternating_v_and_lambda_openings_drawn_as_a_motif():
+    """The drawing and photograph 2196 show separate solid V and lambda openings, alternating, each end cut level.
+    One period is 16.5 mm (the lambdas, 27 of them, run from the band's left end to its right; the 26 Vs sit between
+    them), so the band is 26 periods and the 27th lambda is drawn by its own rect."""
+    d = load(CRS518)
+    decor = _decor(d, "front")
+    assert "vent-field" not in decor
+    band = decor["vent-band"]
+    assert band["pattern"] == "motif" and band["vent"]
+    assert band["at"] == [2.3, 2.4] and band["pattern-offset"] == band["at"]
+    assert band["pattern-pitch"] == BAND_PITCH and band["size"][1] == BAND_PITCH[1]
+    assert len(band["pattern-cells"]) == 3  # the lambda, the V, and the V's right arm that runs into the next tile
+    for cell in band["pattern-cells"]:
+        assert all(0 <= x <= BAND_PITCH[0] and 0 <= y <= BAND_PITCH[1] for x, y in cell)
+    # every point of the lambda starts at the tile's left edge and its apex is up; the V's top ends are level
+    lam, v, wrap = band["pattern-cells"]
+    assert min(x for x, _ in lam) == 0.0 and min(y for _, y in lam) == 0.0
+    assert sorted({y for _, y in v if y == 0.0}) == [0.0] and max(y for _, y in v) > 5.0
+    # the band's width is 26 whole periods and the part of the 27th the V's arm needs
+    assert (band["size"][0] - 1.3) / BAND_PITCH[0] == pytest.approx(26, abs=0.001)
+    end = decor["vent-band-end"]
+    assert end["pattern"] == "motif" and end["vent"] and end["pattern-pitch"] == BAND_PITCH
+    assert end["at"][0] == pytest.approx(band["at"][0] + 26 * BAND_PITCH[0], abs=0.001)
+    assert end["pattern-offset"] == end["at"] and len(end["pattern-cells"]) == 1
+    assert end["pattern-cells"][0] == lam  # the lambda the 27th period ends with
+    assert end["at"][0] + end["size"][0] == pytest.approx(440.7, abs=0.2)  # 2.3 mm in from the right edge
+    svg = _render_decor([band, end])
+    pid, pat = _pattern_of(svg, "vent-band")
+    assert 'width="16.5"' in pat and 'height="5.7"' in pat and pat.count("<path") == 3
     assert 'data-aperture="air"' in svg  # still an opening, not paint
+    assert "chevrons" not in svg
+
+
+def test_the_motif_band_states_its_tile_once_in_provenance():
+    note = load(CRS518)["provenance"]["front-layout"]["note"]
+    assert "16.5" in note and "estimated" in note and "5.62" in note and "motif" in note
+    assert "16.7" not in note and "chevrons" not in note
 
 
 @pytest.mark.parametrize("name, fans", [(CRS518, 4), (CRS510, 2)])
@@ -264,6 +295,99 @@ def test_crs510_front_carries_console_management_reset_dc_jack_and_three_lamps()
     gaps = {g["what"] for g in d["gaps"]}
     assert {"dc-jack", "dc-terminal", "hot-swap-supplies", "led-states", "left-wall"} <= gaps  # neither DC input is placed
     assert not [p for p in placements(d, "front") if p["ref"].startswith("common/dc-terminal")]
+
+
+TERMINAL_GREEN = "#82967a"
+
+
+def test_crs510_two_pin_terminal_is_chassis_art_at_the_drawings_place_and_size():
+    """The drawing's front view: 11.4 x 11.8 mm at 275.4 mm, 24.8 mm down, a cap 10.4 mm wide over a body 11.4 x 7.9
+    with two wire entries on a 5.08 mm pitch. It stands 9 mm proud of the front in the drawing and is drawn flat."""
+    d = load(CRS510)
+    decor = _decor(d, "front")
+    art = {k: v for k, v in decor.items() if v.get("kind") == "dc-terminal-art"}
+    assert sorted(art) == ["dc-terminal-cap", "dc-terminal-entry-1", "dc-terminal-entry-2", "dc-terminal-housing"]
+    cap, body = art["dc-terminal-cap"], art["dc-terminal-housing"]
+    assert cap["at"] == [275.9, 24.8] and cap["size"] == [10.4, 3.9]
+    assert body["at"] == [275.4, 28.7] and body["size"] == [11.4, 7.9]
+    assert body["at"][1] + body["size"][1] == pytest.approx(24.8 + 11.8)  # the overall 11.8
+    assert cap["fill"] == body["fill"] == TERMINAL_GREEN
+    e1, e2 = art["dc-terminal-entry-1"], art["dc-terminal-entry-2"]
+    assert e2["at"][0] - e1["at"][0] == pytest.approx(5.05, abs=0.05)
+    for e in (e1, e2):
+        assert body["at"][0] <= e["at"][0] and e["at"][0] + e["size"][0] <= body["at"][0] + body["size"][0]
+        assert e["fill"] == "#051203"
+    assert not [p for p in placements(d, "front") if "terminal" in p["ref"]]  # no part is placed
+    gaps = {g["what"]: g for g in d["gaps"]}
+    note = gaps["dc-terminal"]["note"]
+    assert "chassis art" in note and "no power port" in note and "no held document names the part" in note
+    assert "left out" not in note and "not drawn" not in note
+    prov = d["provenance"]["dc-inputs"]["note"]
+    assert "9 mm" in prov and "flat" in prov and "11.4 x 11.8" in prov and TERMINAL_GREEN in prov
+    assert "polarity marks above the terminal are not drawn" not in prov
+
+
+def _paths(d):
+    return {s["id"]: s for s in d["views"]["front"]["silkscreen"] if s.get("path")}
+
+
+def test_crs510_dc_legends_are_the_bracket_the_voltage_and_the_polarity_marks():
+    """Photograph 2232: one bracket over both inputs, "36-57 V" centred over it, a circled minus and plus over the
+    terminal (left to right) and a circled minus, the barrel symbol with its centre pin dot, and a circled plus over
+    the jack: the centre pin is the positive pole."""
+    d = load(CRS510)
+    paths = _paths(d)
+    assert {"dc-bracket", "dc-terminal-polarity", "dc-jack-polarity"} <= set(paths)
+    for s in paths.values():
+        assert s["filled"] is False and s["stroke-width"] == 0.25 and s["for"] == "chassis"
+    bracket = paths["dc-bracket"]
+    left, right = bracket["at"][0], bracket["at"][0] + 24.7  # the path runs 24.7 mm across
+    assert "L 23.7 0" in bracket["path"] and "L 24.7 2.1" in bracket["path"]  # 24.7 across, the right leg 2.1 down
+    volt = [s for s in d["views"]["front"]["silkscreen"] if s.get("text") == "36-57 V"]
+    assert len(volt) == 1 and volt[0]["for"] == "chassis"
+    assert volt[0]["at"][0] == pytest.approx((left + right) / 2, abs=0.5)  # centred on the bracket, not on the jack
+    assert volt[0]["at"][1] < bracket["at"][1]  # printed above it
+    term, jack = paths["dc-terminal-polarity"], paths["dc-jack-polarity"]
+    assert term["at"][0] < jack["at"][0] < right
+    # two circles of two arcs each, and one vertical stroke: one minus and one plus
+    assert term["path"].count(" a 1.2 1.2 ") == 4 and term["path"].count("v 1.2") == 1
+    assert jack["path"].count(" a 1.2 1.2 ") == 4 and jack["path"].count("v 1.2") == 1
+    # the centre pin dot sits on the plus side of the barrel symbol: its line runs to the plus circle at the right
+    assert "M 2.9 0 h 1.4" in jack["path"]
+    prov = d["provenance"]["dc-inputs"]["note"]
+    assert "centre pin" in prov and "positive" in prov
+
+
+def test_crs510_unlit_lamps_are_left_as_the_component_draws_them():
+    """common/led-rect fills its lamp from var(--led-color, #2a6b3f); a placement cannot set that variable's
+    resting value, and a component on main is not edited here. The photograph shows unlit grey (#868685)."""
+    d = load(CRS510)
+    note = d["provenance"]["lamps"]["note"]
+    assert "#868685" in note and "common/led-rect" in note and "left" in note
+
+
+CRS510_COLOURS = {  # drawn value -> where it sits
+    "psu-1-module": "#a3a5a7", "psu-2-module": "#a3a5a7", "mgmt-block": "#949290", "dc-jack-housing": "#3e3e3d",
+    "dc-terminal-housing": TERMINAL_GREEN, "dc-terminal-cap": TERMINAL_GREEN,
+}
+CRS518_COLOURS = {
+    "psu-1-module": "#6f6d68", "psu-2-module": "#6f6d68", "mgmt-block": "#63625f",
+    "fan-module-0": "#878682", "fan-module-1": "#878682", "fan-module-2": "#878682", "fan-module-3": "#878682",
+    "fan-hub-0": "#817f7c", "fan-hub-1": "#817f7c", "fan-hub-2": "#817f7c", "fan-hub-3": "#817f7c",
+}
+
+
+@pytest.mark.parametrize("name, colours, face", [(CRS510, CRS510_COLOURS, "#dddddd"), (CRS518, CRS518_COLOURS, "#bbbbbb")])
+def test_every_painted_part_is_the_colour_sampled_from_its_photograph(name, colours, face):
+    d = load(name)
+    assert d["chassis"]["color"] == face
+    note = d["provenance"]["colour"]["note"]
+    assert face in note and "median" in note and "pixel" in note
+    front, rear = _decor(d, "front"), _decor(d, "rear")
+    for part, hexval in colours.items():
+        decor = front if part in front else rear  # the CRS518's supplies and fans are on its rear
+        assert decor[part]["fill"] == hexval, part
+        assert hexval in note, f"{part}: {hexval} has no sample in the colour note"
 
 
 def test_crs510_supplies_are_two_front_modules_with_c14_inlets_and_no_bays():
