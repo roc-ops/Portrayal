@@ -280,11 +280,48 @@ def test_ccr2116_front_band_meets_in_a_v_and_a_lambda_and_runs_six_and_seven_ten
     assert -(-band["size"][0] // band["pattern-pitch"][0]) == 7  # seven V points are cut or whole across it
 
 
-def test_ccr2116_has_no_vent_pattern_gap_and_its_rear_guards_keep_the_honeycomb():
-    d = load(CCR2116)
-    assert "vent-pattern" not in gaps(d)
+HEX_TILE = [10.184, 5.88]  # two columns of a honeycomb whose hexagons repeat every 5.88 mm down: photographs 2116 and 1936
+HEX_ACROSS_CORNERS = 5.36
+GUARDS = {
+    CCR2116: {"psu-opening": [72.4, 20.9], "fan-0": [223.7, 21.6], "fan-1": [264.4, 21.6],
+              "fan-2": [304.4, 21.6], "fan-3": [345.0, 21.6]},
+    CCR2004: {"fan-0": [170.2, 23.9], "fan-1": [385.5, 23.0]},
+}
+
+
+def tile_area(cells):
+    total = 0.0
+    for c in cells:
+        total += abs(sum(c[i][0] * c[(i + 1) % len(c)][1] - c[(i + 1) % len(c)][0] * c[i][1]
+                         for i in range(len(c)))) / 2
+    return total
+
+
+@pytest.mark.parametrize("name", NAMES)
+def test_rear_guards_are_hexagons_at_the_photographed_pitch_centred_on_their_fans(name):
+    d = load(name)
     r = decor(d, "rear")
-    assert [r[k]["pattern"] for k in ("psu-opening", "fan-0", "fan-1", "fan-2", "fan-3")] == ["vent"] * 5
+    assert [k for k, x in r.items() if x.get("pattern")] == list(GUARDS[name])
+    for k, centre in GUARDS[name].items():
+        g = r[k]
+        assert g["pattern"] == "motif" and g["pattern-pitch"] == HEX_TILE and g["pattern-offset"] == centre
+        assert [g["at"][i] + g["size"][i] / 2 for i in (0, 1)] == pytest.approx(centre)  # a hexagon at the hub's centre
+        assert g["size"] == [37.0, 37.0] and g["rx"] == 18.5 and g["vent"] == 1.0
+        widths = sorted(max(p[0] for p in c) - min(p[0] for p in c) for c in g["pattern-cells"])
+        assert widths[-1] == pytest.approx(HEX_ACROSS_CORNERS, abs=0.01)  # the one whole hexagon of the tile
+        # two hexagons of 5.36 mm across corners fill 2 x 3/2 x 3^0.5 x 2.68^2 mm of the tile: the pieces sum to it
+        assert tile_area(g["pattern-cells"]) == pytest.approx(2 * 1.5 * 3 ** 0.5 * 2.68 ** 2, abs=0.05)
+
+
+def test_the_hexagon_tile_is_a_regular_lattice_at_the_photographs_column_spacing():
+    g = decor(load(CCR2004), "rear")["fan-0"]
+    w, h = g["pattern-pitch"]
+    assert w / 2 == pytest.approx(h * 3 ** 0.5 / 2, abs=0.002)  # columns 5.09 mm apart: photograph 1936 read 5.06, 2116 5.1
+    assert decor(load(CCR2004), "rear")["fan-1"]["pattern-cells"] == g["pattern-cells"]
+
+
+def test_ccr2116_has_no_vent_pattern_gap():
+    assert "vent-pattern" not in gaps(load(CCR2116))
 
 
 def test_ccr2116_right_wall_vent_is_round_holes_not_hexagons():
@@ -331,32 +368,63 @@ def test_ccr2004_face_and_plates_are_the_photographs_medians():
     r = decor(d, "rear")
     assert all(r[k]["fill"] == "#c4c4c4" for k in ("fan-hub-0", "fan-hub-1"))
     note = d["provenance"]["colour"]["note"] + d["provenance"]["colour-sample"]["note"]
-    for value in ("#c4c4c4", "#787674", "#898784", "#373737", "#a8a8a8"):
+    for value in ("#c4c4c4", "#787674", "#898784", "#414142", "#a6a5a5", "#d9d9d9", "#9a9a98"):
         assert value in note
 
 
-def test_ccr2116_colours_state_the_sample_beside_the_face():
+def test_ccr2116_front_face_is_the_front_median_and_the_rear_is_painted_from_unshaded_patches():
     d = load(CCR2116)
     assert d["chassis"]["color"] == "#dddddd"
-    note = d["provenance"]["colour-sample"]["note"]
-    assert "#dbdbde" in note and "#dddddd" in note and "68600" in note
+    prov = d["provenance"]["colour-sample"]["note"] + d["provenance"]["colour"]["note"]
+    assert "#dbdbde" in prov and "#dddddd" in prov and "68600" in prov
+    r = decor(d, "rear")
+    plate = r["rear-plate"]
+    assert plate["kind"] == "rear-plate" and plate["at"] == [0.0, 0.0] and plate["size"] == [443.0, 44.0]
+    assert plate["fill"] == "#c1c1c0"
+    assert list(r)[0] == "rear-plate"  # painted first: under the grilles and the inlets
+    hubs = [k for k, x in r.items() if x["kind"] == "fan-hub"]
+    assert hubs == ["psu-opening-hub", "fan-hub-0", "fan-hub-1", "fan-hub-2", "fan-hub-3"]
+    assert all(r[k]["fill"] == plate["fill"] for k in hubs)
+    for sample in ("#c1c1c0", "#c0bfbf", "#c4c4c4", "78750", "35000", "8750", "#c0c0c0"):
+        assert sample in prov  # the rear's three patches, their median, and the NetBox rear's median
 
 
-def test_ccr2004_heatsink_is_dark_base_with_twenty_one_fin_edges_and_two_rims():
+def test_ccr2004_rear_face_agrees_with_the_front_and_keeps_its_sample():
+    d = load(CCR2004)
+    assert d["chassis"]["color"] == "#c4c4c4"
+    assert "rear-plate" not in decor(d, "rear")
+    assert "#c5c5c5" in d["provenance"]["colour"]["note"] and "26855" in d["provenance"]["colour"]["note"]
+
+
+def test_ccr2004_heatsink_is_a_grey_base_with_twenty_one_silver_fins_and_two_rims():
     d = load(CCR2004)
     rear = d["views"]["rear"]
-    block = decor(d, "rear")["heatsink"]
-    assert block["at"] == [200.0, 7.5] and block["size"] == [166.9, 36.5] and block["fill"] == "#373737"
+    r = decor(d, "rear")
+    block = r["heatsink"]
+    assert block["at"] == [200.0, 7.5] and block["size"] == [166.9, 36.5] and block["fill"] == "#414142"
+    fins = [x for x in r.values() if x["kind"] == "heatsink-fin"]
+    assert [x["id"] for x in fins] == [f"heatsink-fin-{n:02d}" for n in range(1, 22)]
+    assert {x["fill"] for x in fins} == {"#a6a5a5"} and {x["size"][0] for x in fins} == {1.4}
+    xs = [x["at"][0] for x in fins]
+    assert xs == pytest.approx([211.25 + 7.31 * k for k in range(21)], abs=0.006)  # a fin every 7.31 mm
+    for x in fins:  # the fins stand inside the block: depth is not held, so none is drawn past it
+        assert x["at"][1] == block["at"][1] and x["size"][1] == block["size"][1]
+        assert block["at"][0] <= x["at"][0] and x["at"][0] + x["size"][0] <= block["at"][0] + block["size"][0]
     sk = {s["id"]: s for s in rear["silkscreen"] if s.get("id")}
-    fins = sk["heatsink-fins"]
-    assert fins["path"].count("V 33") == 21 and fins["fill"] == "#a8a8a8"
-    assert sk["heatsink-rim-left"]["at"][0] == 202.5 and sk["heatsink-rim-right"]["at"][0] == 365.9
-    assert "7.31" in fins["path"]
+    assert "heatsink-fins" not in sk
+    assert sk["heatsink-rim-left"]["at"][0] == 202.5 and sk["heatsink-rim-left"]["fill"] == "#d9d9d9"
+    assert sk["heatsink-rim-right"]["at"][0] == 365.9 and sk["heatsink-rim-right"]["fill"] == "#9a9a98"
+    note = d["provenance"]["rear-layout"]["note"] + d["provenance"]["colour"]["note"]
+    assert "7.31" in note and "21 fins" in note and "1.4 mm" in note and "121688" in note and "13356" in note
 
 
-def test_ccr2004_rear_guards_keep_the_honeycomb():
-    r = decor(load(CCR2004), "rear")
-    assert [r[k]["pattern"] for k in ("fan-0", "fan-1")] == ["vent", "vent"]
+@pytest.mark.parametrize("name", NAMES)
+def test_the_lamps_resting_colour_is_the_components_and_the_gap_says_so(name):
+    d = load(name)
+    note = gaps(d)["led-states"]["note"]
+    assert "resting colour" in note and "lamp component" in note
+    lamps = [p for p in placements(d, "front") if p["ref"].startswith("common/led-")]
+    assert lamps and not [p for p in lamps if "states" in p or "color" in p]  # no placement can state a resting colour
 
 
 @pytest.mark.parametrize("name", NAMES)

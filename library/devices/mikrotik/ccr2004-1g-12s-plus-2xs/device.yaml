@@ -113,12 +113,21 @@ provenance:
       edge, to about 2.5 mm. Inlets at 31.0 and 111.6 mm with POWER 1 or 2 and the rating line under each;
       fan openings 37 mm across at 170.2 and 385.5 mm. The heatsink block, re-read on photograph 1936
       at 6.124 px per mm (the body's 2713 px at the fins, left edge 515 px): a thick rim 200.0 to 205.0
-      mm, 21 fin edges every 7.31 mm (44.75 px) from 211.9 mm, and a thin rim at 365.0 to 366.9 mm, so
-      the block is 166.9 mm wide from 200.0 mm. Photograph 1936 and the brochure's rear figure (fig. 3)
-      show the fins reaching past the box's lower edge: the camera looks down and the block stands out
-      of the rear plane, so it is the block's depth, not a lower edge; the depth is not held and the block
-      is drawn inside the rear face. The guards are honeycombs (hexagonal holes round a hub) and keep
-      `vent`. The inlets' wire retaining clips and the screws are not drawn (no registry part).
+      mm, 21 fins every 7.31 mm (44.75 px), the first centred at 211.95 mm, each 1.4 mm wide (the run
+      of the fin's bright face is 8 to 10 px, 1.3 to 1.6 mm), and a thin rim at 365.0 to 366.9 mm, so
+      the block is 166.9 mm wide from 200.0 mm. Drawn as a grey base with one silver rectangle per fin,
+      full height. Photograph 1936 and the brochure's rear figure (fig. 3) show the fins reaching past
+      the box's lower edge: the camera looks down and the block stands out of the rear plane, so it is
+      the block's depth, not a lower edge; the depth is not held and the block is drawn flat inside the
+      rear face. The guards are honeycombs (hexagonal holes round a hub), read on photograph 1936 at 18.37
+      px per mm in a 3x crop: hexagons 5.3 mm across corners (the camera looks down, so its flats read
+      4.1 mm where a regular hexagon of that width is 4.6), 5.06 mm between columns, so a lattice of 5.88
+      mm centre to centre down a column, with a hexagon at the hub's centre and the one whole ring of
+      hexagons round it cut by the opening's circle. Drawn as `motif`, one tile of two columns (10.184
+      x 5.88 mm) holding hexagons 5.36 mm across corners, with the tile's origin at the fan's centre.
+      The plain `vent` pattern ties the hexagon to its pitch: scaled to this 5.88 mm pitch its web is
+      0.8 mm where the photograph's is about 1.3, so it draws the metal too fat. The inlets' wire retaining
+      clips and the screws are not drawn (no registry part).
   built-in-power-and-fans:
     confidence: datasheet
     note: >-
@@ -145,9 +154,13 @@ provenance:
       The face and the fan hubs are drawn #c4c4c4, the samples listed under colour-sample: photograph
       1937's median is #c5c3c3 and the brochure's front figure is #c4c4c4. The rear photograph 1936 reads
       #c5c5c5 over x 1215 to 1420, y 972 to 1103 (26855 pixels); the brochure's rear figure reads lighter
-      (#d1d1d1), so the rear's colour is the more lit of the two and not taken. The heatsink's base is
-      #373737 (the median of 4250 pixels of photograph 1936 over x 1870 to 1895, y 930 to 1100, between
-      two fins) and its fin edges and rims #a8a8a8 (850 pixels over x 1856 to 1861, y 930 to 1100).
+      (#d1d1d1), so the rear's colour is the more lit of the two and not taken. The heatsink, all on photograph
+      1936, y 888 to 1100 (the block's top edge to the face's bottom edge): the base between the fins
+      is #414142, the median of 121688 pixels over the twenty gaps (x from 8 px after one fin's centre
+      to 8 px before the next, 1865 to 2699 across the block); the gap is a gradient from #676769 at the
+      top to #303030 at the bottom and the median of the whole is drawn. The fin face is #a6a5a5, the
+      median of 13356 pixels in 3 px columns at the 21 fin centres. The left rim is #d9d9d9 (6996 pixels
+      over x 1740 to 1773) and the right rim #9a9a98 (2120 pixels over x 2751 to 2761).
 attrs:
   power: {power-max-w: 49, power-max-w-page: 60, power-without-attachments-w: 31, power-input: '100 -
       240 V AC, two inputs', power-rating-label: 100-240 V ~1 A MAX 50/60 Hz (printed under each inlet)}
@@ -187,7 +200,8 @@ gaps:
   reason: needs-drawing
   note: >-
     No rear view is held (NetBox has no rear elevation for this model); the rear is read off studio photograph
-    1936, which looks down on it, so the y positions are estimated.
+    1936, which looks down on it, so the y positions are estimated. The heatsink block and its fins stand
+    out of the rear plane; their depth is not held, so the block is drawn flat inside the face.
   wanted: A dimensioned rear view.
 - what: power-figures
   scope:
@@ -233,7 +247,10 @@ gaps:
   reason: vendor-silent
   note: >-
     Searched the brochure, the page and both quick guides for an LED table: none. The lamps carry the
-    component's own vocabulary and no meaning is stated.
+    component's own vocabulary and no meaning is stated. The lamps' resting colour comes from the lamp
+    component, not from this device: the photograph shows the 24 SFP+ lamps unlit and the four status
+    lamps dim green, red and blue, and a still render draws the component's own resting colour. It is
+    not changed here.
   wanted: MikroTik's LED description for the CCR2004-1G-12S+2XS.
 - what: right-wall
   scope:
@@ -789,30 +806,80 @@ views:
     size: {w: 443.0, h: 44.0}
     panel:
       decor:
-      - {id: fan-0, kind: fan-grille, at: [151.7, 5.4], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
+      - id: fan-0
+        kind: fan-grille
+        at: [151.7, 5.4]
+        size: [37.0, 37.0]
+        rx: 18.5
+        pattern: motif
+        pattern-pitch: [10.184, 5.88]
+        pattern-offset: [170.2, 23.9]
+        pattern-cells: &id001
+        - - [0.0, 0.0]
+          - [2.68, 0.0]
+          - [1.34, 2.321]
+          - [0.0, 2.321]
+        - - [0.0, 3.559]
+          - [1.34, 3.559]
+          - [2.68, 5.88]
+          - [0.0, 5.88]
+        - - [2.412, 2.94]
+          - [3.752, 0.619]
+          - [6.432, 0.619]
+          - [7.772, 2.94]
+          - [6.432, 5.261]
+          - [3.752, 5.261]
+        - - [7.504, 0.0]
+          - [10.184, 0.0]
+          - [10.184, 2.321]
+          - [8.844, 2.321]
+        - - [8.844, 3.559]
+          - [10.184, 3.559]
+          - [10.184, 5.88]
+          - [7.504, 5.88]
+        vent: 1.0
       - {id: fan-hub-0, kind: fan-hub, at: [160.7, 14.4], size: [19.0, 19.0], rx: 9.5, fill: '#c4c4c4'}
-      - {id: heatsink, kind: heatsink, at: [200.0, 7.5], size: [166.9, 36.5], fill: '#373737'}
-      - {id: fan-1, kind: fan-grille, at: [367.0, 4.5], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
+      - {id: heatsink, kind: heatsink, at: [200.0, 7.5], size: [166.9, 36.5], fill: '#414142'}
+      - {id: heatsink-fin-01, kind: heatsink-fin, at: [211.25, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-02, kind: heatsink-fin, at: [218.56, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-03, kind: heatsink-fin, at: [225.87, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-04, kind: heatsink-fin, at: [233.18, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-05, kind: heatsink-fin, at: [240.49, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-06, kind: heatsink-fin, at: [247.8, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-07, kind: heatsink-fin, at: [255.11, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-08, kind: heatsink-fin, at: [262.42, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-09, kind: heatsink-fin, at: [269.73, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-10, kind: heatsink-fin, at: [277.04, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-11, kind: heatsink-fin, at: [284.35, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-12, kind: heatsink-fin, at: [291.66, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-13, kind: heatsink-fin, at: [298.97, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-14, kind: heatsink-fin, at: [306.28, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-15, kind: heatsink-fin, at: [313.59, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-16, kind: heatsink-fin, at: [320.9, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-17, kind: heatsink-fin, at: [328.21, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-18, kind: heatsink-fin, at: [335.52, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-19, kind: heatsink-fin, at: [342.83, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-20, kind: heatsink-fin, at: [350.14, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-21, kind: heatsink-fin, at: [357.45, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - id: fan-1
+        kind: fan-grille
+        at: [367.0, 4.5]
+        size: [37.0, 37.0]
+        rx: 18.5
+        pattern: motif
+        pattern-pitch: [10.184, 5.88]
+        pattern-offset: [385.5, 23.0]
+        pattern-cells: *id001
+        vent: 1.0
       - {id: fan-hub-1, kind: fan-hub, at: [376.0, 13.5], size: [19.0, 19.0], rx: 9.5, fill: '#c4c4c4'}
       cutouts:
       - {id: ac-inlet-1, at: [17.0, 13.0], size: [28.0, 20.0], shape: rect}
       - {id: ac-inlet-2, at: [97.6, 13.0], size: [28.0, 20.0], shape: rect}
     silkscreen:
-    - id: heatsink-fins
-      at: [211.9, 9.5]
-      path: >-
-        M 0 0 V 33 M 7.31 0 V 33 M 14.62 0 V 33 M 21.93 0 V 33 M 29.24 0 V 33 M 36.55 0 V 33 M 43.86 0
-        V 33 M 51.17 0 V 33 M 58.48 0 V 33 M 65.79 0 V 33 M 73.1 0 V 33 M 80.41 0 V 33 M 87.72 0 V 33
-        M 95.03 0 V 33 M 102.34 0 V 33 M 109.65 0 V 33 M 116.96 0 V 33 M 124.27 0 V 33 M 131.58 0 V 33
-        M 138.89 0 V 33 M 146.2 0 V 33
-      filled: false
-      stroke-width: 1.2
-      fill: '#a8a8a8'
-      for: chassis
     - {id: heatsink-rim-left, at: [202.5, 7.5], path: M 0 0 V 36.5, filled: false, stroke-width: 4.8,
-      fill: '#a8a8a8', for: chassis}
+      fill: '#d9d9d9', for: chassis}
     - {id: heatsink-rim-right, at: [365.9, 7.5], path: M 0 0 V 36.5, filled: false, stroke-width: 2.0,
-      fill: '#a8a8a8', for: chassis}
+      fill: '#9a9a98', for: chassis}
     - {at: [31.0, 38.7], text: POWER 1, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
     - {at: [31.0, 41.7], text: 100-240 V ~1 A MAX 50/60 Hz, font-size: 1.5, anchor: middle, fill: '#2b2b2b',
       for: ac-inlet-1}

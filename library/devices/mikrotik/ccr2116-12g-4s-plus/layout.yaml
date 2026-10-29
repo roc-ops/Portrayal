@@ -81,9 +81,8 @@ provenance:
       of the lamp legends) is #dbdbde, and of 17000 pixels of the brochure's front figure (fig. 5) over x 1010 to
       1210, y 130 to 215 is #dbdbde: within 2 levels of #dddddd, which is kept. The jack plates #c4c4c4: the median
       of 540 pixels of photograph 2625 over x 1010 to 1100, y 998 to 1004 (the plate's top strip) is #bec0c8, within
-      6 levels. The rear photograph 2116 reads darker (#c0bfbf, 39200 pixels over x 1225 to 1505, y 980 to 1120)
-      because the rear face is lit less; the one chassis colour is the front's. The lamps' colours belong to the
-      component skins and are not changed here.
+      6 levels. The rear is lit less and reads darker, so it is painted its own colour (see colour). The lamps'
+      colours belong to the component skins and are not changed here.
   lamps:
     confidence: photo-measured
     note: >-
@@ -106,8 +105,14 @@ provenance:
       rear, so x is good to about 1.5 mm and y, from the face's bottom edge, to about 2.5 mm. Inlets at 30.9 and 116.3
       mm, each with POWER 1 or 2 and the rating line under it; round openings at 72.4, 223.7, 264.4, 304.4 and 345.0
       mm, 37 mm across. The five guards are honeycombs, hexagonal holes round a plain hub in photograph 2116 and the
-      NetBox rear elevation, so they keep `vent`. The inlets' wire retaining clips and the screws are not drawn (no
-      registry part).
+      NetBox rear elevation. Read on photograph 2116 at 7.16 px per mm (the body's 3172 px at 3500 px width) in a
+      3x crop of the fourth fan: hexagons 5.4 mm across corners and 4.56 across flats, 5.1 mm between columns and
+      5.86 mm centre to centre down one, with a hexagon at the hub's centre and one whole ring cut by the opening's
+      circle (the fifth guard is read as the same lattice, estimated). Drawn as `motif`, one tile of two columns
+      (10.184 x 5.88 mm) holding hexagons 5.36 mm across corners, the tile's origin at each guard's centre. The
+      plain `vent` pattern ties the hexagon to its pitch: scaled to this 5.88 mm pitch its web is 0.8 mm where the
+      photograph's is about 1.3, so it draws the metal too fat. The inlets' wire retaining clips and the screws
+      are not drawn (no registry part).
   built-in-power-and-fans:
     confidence: datasheet
     note: >-
@@ -132,8 +137,15 @@ provenance:
   colour:
     confidence: estimated
     note: >-
-      The face is drawn #dddddd, the median of photograph 2625 and the brochure's front figure within 2 levels (the
-      samples are under colour-sample).
+      The front face is drawn #dddddd, the median of photograph 2625 and the brochure's front figure within 2 levels
+      (the samples are under colour-sample). The rear is one device with the front's colour, but it reads darker
+      in the rear photograph, so a panel rect paints the whole rear face #c1c1c0 under the inlets and grilles, and
+      the five hubs match it. Chosen from three plain patches of photograph 2116 away from the inlets, fans, text,
+      screws and the shaded edges: x 1150 to 1500, y 960 to 1060 (35000 pixels, median #c0bfbf), x 2850 to 3200, y
+      960 to 1060 (35000 pixels, #c4c4c4) and x 2850 to 3200, y 930 to 955 (8750 pixels, #c1c1c0), whose joint
+      median over 78750 pixels is #c1c1c0 (the patches' medians span #c0bfbf to #c4c4c4: the photograph is lit
+      from the right). The community NetBox rear elevation, an artist's flat render in the artist's own palette,
+      reads #c0c0c0 over 48000 pixels of three plain patches, and is not used.
 attrs:
   power:
     power-max-w: 72
@@ -219,7 +231,9 @@ gaps:
   reason: vendor-silent
   note: >-
     Searched the brochure, the page and the quick guide page for an LED table: none. The lamps carry the component's
-    own vocabulary and no meaning is stated.
+    own vocabulary and no meaning is stated. The lamps' resting colour comes from the lamp component, not from this
+    device: the photograph shows the jack lamps lit green and amber and the four status lamps lit green, red and
+    blue, and a still render draws the component's own resting colour. It is not changed here.
   wanted: MikroTik's LED description for the CCR2116-12G-4S+.
 - what: top-and-bottom
   scope: [top, bottom]
@@ -417,16 +431,67 @@ views:
     size: {w: 443.0, h: 44.0}
     panel:
       decor:
-      - {id: psu-opening, kind: round-vent, at: [53.9, 2.4], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
-      - {id: psu-opening-hub, kind: fan-hub, at: [62.9, 11.4], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
-      - {id: fan-0, kind: fan-grille, at: [205.2, 3.1], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
-      - {id: fan-1, kind: fan-grille, at: [245.9, 3.1], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
-      - {id: fan-2, kind: fan-grille, at: [285.9, 3.1], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
-      - {id: fan-3, kind: fan-grille, at: [326.5, 3.1], size: [37.0, 37.0], rx: 18.5, pattern: vent, vent: 1.0}
-      - {id: fan-hub-0, kind: fan-hub, at: [214.2, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
-      - {id: fan-hub-1, kind: fan-hub, at: [254.9, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
-      - {id: fan-hub-2, kind: fan-hub, at: [294.9, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
-      - {id: fan-hub-3, kind: fan-hub, at: [335.5, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
+      - {id: rear-plate, kind: rear-plate, at: [0.0, 0.0], size: [443.0, 44.0], fill: '#c1c1c0'}
+      - id: psu-opening
+        kind: round-vent
+        at: [53.9, 2.4]
+        size: [37.0, 37.0]
+        rx: 18.5
+        pattern: motif
+        pattern-pitch: [10.184, 5.88]
+        pattern-offset: [72.4, 20.9]
+        pattern-cells: &hex-ring
+        - [[0.0, 0.0], [2.68, 0.0], [1.34, 2.321], [0.0, 2.321]]
+        - [[0.0, 3.559], [1.34, 3.559], [2.68, 5.88], [0.0, 5.88]]
+        - [[2.412, 2.94], [3.752, 0.619], [6.432, 0.619], [7.772, 2.94], [6.432, 5.261], [3.752, 5.261]]
+        - [[7.504, 0.0], [10.184, 0.0], [10.184, 2.321], [8.844, 2.321]]
+        - [[8.844, 3.559], [10.184, 3.559], [10.184, 5.88], [7.504, 5.88]]
+        vent: 1.0
+      - {id: psu-opening-hub, kind: fan-hub, at: [62.9, 11.4], size: [19.0, 19.0], rx: 9.5, fill: '#c1c1c0'}
+      - id: fan-0
+        kind: fan-grille
+        at: [205.2, 3.1]
+        size: [37.0, 37.0]
+        rx: 18.5
+        pattern: motif
+        pattern-pitch: [10.184, 5.88]
+        pattern-offset: [223.7, 21.6]
+        pattern-cells: *hex-ring
+        vent: 1.0
+      - id: fan-1
+        kind: fan-grille
+        at: [245.9, 3.1]
+        size: [37.0, 37.0]
+        rx: 18.5
+        pattern: motif
+        pattern-pitch: [10.184, 5.88]
+        pattern-offset: [264.4, 21.6]
+        pattern-cells: *hex-ring
+        vent: 1.0
+      - id: fan-2
+        kind: fan-grille
+        at: [285.9, 3.1]
+        size: [37.0, 37.0]
+        rx: 18.5
+        pattern: motif
+        pattern-pitch: [10.184, 5.88]
+        pattern-offset: [304.4, 21.6]
+        pattern-cells: *hex-ring
+        vent: 1.0
+      - id: fan-3
+        kind: fan-grille
+        at: [326.5, 3.1]
+        size: [37.0, 37.0]
+        rx: 18.5
+        pattern: motif
+        pattern-pitch: [10.184, 5.88]
+        pattern-offset: [345.0, 21.6]
+        pattern-cells: *hex-ring
+        vent: 1.0
+      - {id: fan-hub-0, kind: fan-hub, at: [214.2, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#c1c1c0'}
+      - {id: fan-hub-1, kind: fan-hub, at: [254.9, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#c1c1c0'}
+      - {id: fan-hub-2, kind: fan-hub, at: [294.9, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#c1c1c0'}
+      - {id: fan-hub-3, kind: fan-hub, at: [335.5, 12.1], size: [19.0, 19.0], rx: 9.5, fill: '#c1c1c0'}
       cutouts:
       - {id: ac-inlet-1, at: [16.9, 15.6], size: [28.0, 20.0], shape: rect}
       - {id: ac-inlet-2, at: [102.3, 15.6], size: [28.0, 20.0], shape: rect}
