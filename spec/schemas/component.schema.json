@@ -615,6 +615,11 @@
    "minLength": 40,
    "description": "WHY NOTHING SEATS THIS PART. A component nothing references is either work in progress or dead weight, and from the outside the two look identical. Saying which, here, is what lets L89 fail on an unreferenced part that carries no `unplaced`. The sentence is for a reader who has just found the part and is deciding whether to use it, extend it or delete it: say what would seat it and what is missing, and name the issue if the work is tracked. Not a waiver and not a silence - a part that IS seated must not carry this."
   },
+  "unmated": {
+   "type": "string",
+   "minLength": 40,
+   "description": "WHY NOTHING PLUGS INTO THIS PART. A drawn inlet, terminal, stud or port is a place a cable, cord, lug or plug could go, and the port checks (C19, C20 and C22) ask of each one that it presents a registered connector interface and that the library holds something that mates it. A part that is only a marking, such as a printed earth symbol or a port the source draws and says nothing more about, answers those checks with this sentence instead: say what the part is and why no cable, cord or lug can land on it. A reader who finds the part later should learn from the sentence whether to model a connector or leave it. Not a waiver and not a silence - a part that takes a cable, cord, plug, lug or pluggable must not carry this; it presents an interface and the library holds its mate."
+  },
   "part-numbers": {
    "type": "object",
    "minProperties": 1,

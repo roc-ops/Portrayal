@@ -691,6 +691,9 @@ RULES = {
     "L196": ("device", "every id in a placement's `hides` names another placement or a bay on the same face, and the cover's box overlaps that part's box (error)", "name the part by its id on this face, or move the cover over it; a part on another face is that face's cover to name",
              "`hides` becomes `data-hides`, which a consumer reads as \"remove this cover to see these\". An id that names nothing, or a part elsewhere on the face, makes the consumer hide a part the cover does not cover.",
              ERROR),
+    "L197": ("device", "a device's decor `kind` does not name a connector: the names are the list in spec/schemas/connector-decor-names.yaml (a floor of names, not a proof) (warning)", "model the connector as a part that presents its interface; a decor that is not a connector is renamed for what it is, such as `case-screw` for `earth-screw`",
+             "A connector drawn as panel decor is a picture of a port that nothing can plug into, so a cable laid to the device has no end to land on and a reader takes the port for a usable one.",
+             WARNING),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -1883,6 +1886,23 @@ def _load_port_speeds(schemas):
 
 
 PORT_SPEEDS = _load_port_speeds(Path(__file__).resolve().parents[2] / "schemas")
+
+
+def _load_connector_decor_names(schemas):
+    """The decor kinds L197 reads as a connector, {name: reason}, or {} if the
+    checkout has no list. Loaded at import like the registries above; an empty
+    list makes L197 say nothing, which is the quiet way to be wrong, so the
+    names file has a test that holds its shape."""
+    path = Path(schemas) / "connector-decor-names.yaml"
+    try:
+        doc = yaml.safe_load(path.read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        return {}
+    return {str(k): str(v) for k, v in (doc.get("names") or {}).items()}
+
+
+CONNECTOR_DECOR_NAMES = _load_connector_decor_names(
+    Path(__file__).resolve().parents[2] / "schemas")
 # THE LIBRARY A RULE RESOLVES REFS IN when its caller names none - a test that
 # hands a rule one document, as test_power_outlet_lint does.
 DEFAULT_LIBRARY = Path(__file__).resolve().parents[3] / "library"
@@ -6966,6 +6986,25 @@ def lint_device_hides(path, data, lib_roots):
                     if ox <= 0 or oy <= 0:
                         err(path, "L196", f"{where}, which the cover does not overlap; "
                             "move the cover over it or drop the id")
+
+
+def lint_device_connector_decor(path, data):
+    """L197: a decor `kind` does not name a connector (a warning).
+
+    Anything that takes a cable, cord, plug, lug or pluggable is a part that
+    presents an interface; a decor entry is a drawing, and a drawing has no
+    mate. The names are CONNECTOR_DECOR_NAMES, a floor and not a proof: decor
+    kinds are free text, so this finds names and not things. A decor that only
+    frames a part placed beside it is not on the list, and a decor that is not
+    a connector but has a listed name is renamed for what it is.
+    """
+    for vname, view in (data.get("views") or {}).items():
+        for i, d in enumerate(view_parts(view or {})["decor"]):
+            kind = d.get("kind") if isinstance(d, dict) else None
+            if kind in CONNECTOR_DECOR_NAMES:
+                warn(path, "L197", f"{vname}: decor {d.get('id') or i!r} has kind {kind!r}, "
+                     f"which names a connector ({CONNECTOR_DECOR_NAMES[kind]}). Model it as a "
+                     "part that presents its interface, or rename the decor for what it is")
 
 
 def _decor_box(d):
@@ -13159,6 +13198,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_ear_span(path, data)
     lint_device_overhang(path, data, lib_roots)
     lint_device_hides(path, data, lib_roots)
+    lint_device_connector_decor(path, data)
     lint_device_bay_pitch(path, data)
     lint_device_empty_views(path, data)
     lint_device_occupants(path, data, lib_roots)
@@ -14414,6 +14454,9 @@ def main():
     if (schemas / "speeds.yaml").exists():
         global PORT_SPEEDS
         PORT_SPEEDS = _load_port_speeds(schemas)
+    if (schemas / "connector-decor-names.yaml").exists():
+        global CONNECTOR_DECOR_NAMES
+        CONNECTOR_DECOR_NAMES = _load_connector_decor_names(schemas)
     # the schemas are YAML too where they are YAML, and a duplicate in the
     # registry would be as silent there as anywhere else
     for f in sorted(schemas.glob("*.yaml")):

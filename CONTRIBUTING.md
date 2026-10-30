@@ -197,6 +197,15 @@ the guide covers both, and the
 [components README](library/components/README.md) says which namespace it goes
 in and how it is named.
 
+**Every port on a device must be usable: anything that takes a cable, cord,
+plug, lug or pluggable is modelled as a connector part, and the library holds
+something that plugs into it. The change that adds a connector adds its mate.
+If no mate can exist, the connector says why in a sentence.**
+
+The guide's [worked example](docs/modelling-a-device.md#every-port-is-usable)
+shows a ground stud, its ring lug and the wire between them, and Gate 4b there
+is the check.
+
 ### 4. Look at it
 
 ```sh
