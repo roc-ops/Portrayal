@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor550
-version: 3.0.3
+version: 3.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS7926-40XKFB
@@ -249,6 +249,15 @@ provenance:
       this turned out to be: it is a 1RU 438.4 x 536 fabric switch and shares no dimension with this machine.
       What was taken from it is the shape of this file - the block-and-numerals idiom, the management-cluster
       region, the furniture group - and not a number.
+  dc-supply-figure:
+    confidence: estimated
+    note: >-
+      THE DC BUILD SEATS ITS OWN SUPPLY, edgecore/cor550-psu-dc@1, read from the Quick Start Guide's page
+      3 illustration of the supply's terminal end (Connect Power, DC Power; a colour render with no scale)
+      and drawn on edgecore/cor550-psu-ac@1's measured 54.5 x 40.8 envelope. Nothing is measured from
+      the illustration: each position is a fraction of the visible face and estimated. The dc-f2b configuration
+      used to seat the AC part with a component-attrs override; it seats the new part through its bays
+      and the override is gone.
 attrs:
   performance:
     throughput: 4.0 Tbps (non-blocking)
@@ -329,12 +338,15 @@ gaps:
   - rear
   reason: needs-drawing
   wanted: >-
-    THE FACEPLATE OF THE 48 VDC SUPPLY. The datasheet offers '48 VDC Power Supply: Input Voltage: 40 to
-    72 VDC' beside the AC one, but both staged documents draw and photograph only the AC machine - the
-    guide's Overview calls out '8. 2 x AC PSUs' and both rear elevations show C14 inlets. There is no
-    DC face to model, so no cor550-psu-dc part was written, and the dc-f2b configuration seats the AC
-    part - wrong at the connector, which is what this gap and lint L120 keep in view until a DC face turns
-    up.
+    A MEASURED FACE OF THE 48 VDC SUPPLY. edgecore/cor550-psu-dc@1 is drawn from the quick start's angled
+    illustration of the supply's terminal end (Connect Power, page 3), which has no scale: the envelope
+    is borrowed from the AC supply, every position on the face is read from the illustration and estimated,
+    the colours are sampled from a render, and which way the wires leave the two screws is not stated.
+    THE TWO DOCUMENTS STATE DIFFERENT INPUT RANGES: the quick start prints '-48 - -60 VDC, 40 A max' and
+    the data sheet '40 to 72 VDC', recorded on the part and not resolved. The AC supply's face is dark
+    and the illustration's is light grey, also not resolved, and the diamond mark on the illustration
+    is not drawn. No photograph or 3D model of this supply is held. A rear photograph or an elevation
+    of the DC build, and the supply's ordering code, settle all of it.
 - what: psu-and-fan-ordering-codes
   scope:
   - rear
@@ -1106,6 +1118,7 @@ views:
         size: {w: 54.5, h: 40.8}
         accepts:
         - edgecore/cor550-psu-ac@1
+        - edgecore/cor550-psu-dc@1
         group: psus
         rel-pos: 1
         default: edgecore/cor550-psu-ac@1
@@ -1114,6 +1127,7 @@ views:
         size: {w: 54.5, h: 40.8}
         accepts:
         - edgecore/cor550-psu-ac@1
+        - edgecore/cor550-psu-dc@1
         group: psus
         rel-pos: 0
         default: edgecore/cor550-psu-ac@1
@@ -1222,12 +1236,11 @@ configurations:
     power: dc
     description: >-
       Dual 48 VDC supplies (datasheet: input 40 to 72 VDC; the quick start wires -48 to -60 VDC on #10
-      AWG) and the same five front-to-back fan trays - the datasheet's one DC ordering row. DRAWN WITH
-      THE AC SUPPLY'S FACE, C14 inlet and all, because neither document pictures the DC unit: the build
-      is real and orderable, and what it is fed with is a field a tool filters on, so it is declared rather
-      than left out, and the wrong connector is the dc-supply-face gap.
-    component-attrs:
-      cor550-psu-ac: {input: dc, inlet: dc-terminal}
+      AWG) and the same five front-to-back fan trays - the datasheet's one DC ordering row. Each bay seats
+      edgecore/cor550-psu-dc@1, the supply's own part with a two-screw terminal block, drawn from the
+      quick start's angled illustration of the supply's terminal end on the AC supply's envelope; what
+      remains open is the dc-supply-face gap.
+    bays: {psu-0: edgecore/cor550-psu-dc@1, psu-1: edgecore/cor550-psu-dc@1}
     part-numbers:
       7926-40XKFB-O-48V-F: {part: FNPZZ7640003A, power-cord: none}
 datasheet:

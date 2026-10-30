@@ -166,10 +166,10 @@ module-bays:
     description: 'Accepts: cor550-fan'
   - name: PSU 0
     position: psu-0
-    description: 'Accepts: cor550-psu-ac'
+    description: 'Accepts: cor550-psu-ac, cor550-psu-dc'
   - name: PSU 1
     position: psu-1
-    description: 'Accepts: cor550-psu-ac'
+    description: 'Accepts: cor550-psu-ac, cor550-psu-dc'
 comments: '40x 100G QSFP28 and 13x 400G QSFP-DD 2RU cell-based core router (sold as the COR550), Broadcom
   BCM88690 Jericho2 with a BCM16K external TCAM and an Intel Xeon D-1548, ONIE-preloaded. Every port is
   on the front, along with a carrier-grade air filter that covers most of the faceplate that is not a
@@ -179,9 +179,9 @@ comments: '40x 100G QSFP28 and 13x 400G QSFP-DD 2RU cell-based core router (sold
 
   Configuration `dc-f2b`: Dual 48 VDC supplies (datasheet: input 40 to 72 VDC; the quick start wires -48
   to -60 VDC on #10 AWG) and the same five front-to-back fan trays - the datasheet''s one DC ordering
-  row. DRAWN WITH THE AC SUPPLY''S FACE, C14 inlet and all, because neither document pictures the DC unit:
-  the build is real and orderable, and what it is fed with is a field a tool filters on, so it is declared
-  rather than left out, and the wrong connector is the dc-supply-face gap.
+  row. Each bay seats edgecore/cor550-psu-dc@1, the supply''s own part with a two-screw terminal block,
+  drawn from the quick start''s angled illustration of the supply''s terminal end on the AC supply''s
+  envelope; what remains open is the dc-supply-face gap.
 
 
   Also sold or listed as: COR550
@@ -252,7 +252,7 @@ comments: '40x 100G QSFP28 and 13x 400G QSFP-DD 2RU cell-based core router (sold
   - thermal.cooling: 4+1 redundant hot-swappable fan modules, behind a carrier-grade air filter
 
 
-  Drawing version 3.0.3. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 3.1.0. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.
 
   Model maturity: modelled. Every dimension in the source records where it came from.'

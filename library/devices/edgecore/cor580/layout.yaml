@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor580
-version: 3.0.4
+version: 3.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS9926-24D
@@ -336,6 +336,15 @@ provenance:
       (cor580-datasheet/doc.md:196-197), and AS9926-24D/24DB-FAN as the single fan tray SKU.
       Different part numbers from the sibling's, which is why they are recorded here rather than
       inherited.
+  dc-supply-figure:
+    confidence: estimated
+    note: >-
+      THE DC BUILD SEATS ITS OWN SUPPLY, edgecore/fsj033-610g@1 (the data sheet's FRU FSJ033-610G, EC-DS-0222-R04
+      page 4), read from the quick start's page 3 illustration of the supply's terminal end (Connect Power; a
+      colour render with no scale) and drawn on common/psu-ac-1300@1's 57.0 x 40.0 envelope. Nothing is measured
+      from the illustration: each position is a fraction of the visible face and estimated. The dc48-f2b
+      configuration used to seat the AC part with a component-attrs override; it seats the new part through its
+      bays and the override is gone.
   airflow:
     confidence: datasheet
     note: >-
@@ -420,11 +429,15 @@ gaps:
   - rear
   reason: needs-hardware
   wanted: >-
-    The dc48-f2b configuration orders FSJ033-610G, a 1300 W -48 VDC supply with a terminal block rather
-    than a C14 inlet. The library has common/psu-dc-650 but no 1300 W DC module, and neither COR580 document
-    photographs the DC PSU's face - both rear elevations show the AC unit. The DC configuration therefore
-    draws the AC part, which is wrong at the connector. A photograph or drawing of FSJ033-610G's face
-    is what it needs.
+    The dc48-f2b configuration orders FSJ033-610G, a 1300 W -48 VDC supply, and seats edgecore/fsj033-610g@1,
+    which is drawn from the quick start's angled illustration of the supply's terminal end (Connect Power,
+    page 3; no scale). The envelope is borrowed from common/psu-ac-1300@1, every position on the face is read
+    from the illustration and estimated, the colours are sampled from a render, and which way the wires
+    leave the two screws is not stated. The illustration puts the handle at the left and the latch at the
+    lower right where the AC part has its latch at the left; the two are not reconciled, and no photograph
+    or 3D model of FSJ033-610G is held. The quick start gives the supply's input as -40 V to -75 V and the
+    data sheet the system's as -36 to -72 VDC, recorded on the part and not resolved. A photograph or
+    elevation of the DC build's rear is what it needs.
 - what: sibling-fan-bay-width
   scope:
   - rear
@@ -648,14 +661,14 @@ views:
       - {at: [369.0, 39.5], text: PS1, font-size: 3.6, anchor: middle, fill: '#d8dcdf', for: psu-1}
     components:
       bays:
-        - {id: psu-2, at: [9.0, 1.5], size: {w: 57.0, h: 40.0}, accepts: [common/psu-ac-1300@1], group: psus, rel-pos: 2, default: common/psu-ac-1300@1}
+        - {id: psu-2, at: [9.0, 1.5], size: {w: 57.0, h: 40.0}, accepts: [common/psu-ac-1300@1, edgecore/fsj033-610g@1], group: psus, rel-pos: 2, default: common/psu-ac-1300@1}
         - {id: fan-6, at: [75.20, 1.5], size: {w: 40.9, h: 40.0}, accepts: [common/fan-module-41@1], group: fans, rel-pos: 6, default: common/fan-module-41@1}
         - {id: fan-5, at: [123.99, 1.5], size: {w: 40.9, h: 40.0}, accepts: [common/fan-module-41@1], group: fans, rel-pos: 5, default: common/fan-module-41@1}
         - {id: fan-4, at: [172.78, 1.5], size: {w: 40.9, h: 40.0}, accepts: [common/fan-module-41@1], group: fans, rel-pos: 4, default: common/fan-module-41@1}
         - {id: fan-3, at: [221.57, 1.5], size: {w: 40.9, h: 40.0}, accepts: [common/fan-module-41@1], group: fans, rel-pos: 3, default: common/fan-module-41@1}
         - {id: fan-2, at: [270.36, 1.5], size: {w: 40.9, h: 40.0}, accepts: [common/fan-module-41@1], group: fans, rel-pos: 2, default: common/fan-module-41@1}
         - {id: fan-1, at: [319.15, 1.5], size: {w: 40.9, h: 40.0}, accepts: [common/fan-module-41@1], group: fans, rel-pos: 1, default: common/fan-module-41@1}
-        - {id: psu-1, at: [372.4, 1.5], size: {w: 57.0, h: 40.0}, accepts: [common/psu-ac-1300@1], group: psus, rel-pos: 1, default: common/psu-ac-1300@1}
+        - {id: psu-1, at: [372.4, 1.5], size: {w: 57.0, h: 40.0}, accepts: [common/psu-ac-1300@1, edgecore/fsj033-610g@1], group: psus, rel-pos: 1, default: common/psu-ac-1300@1}
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, -0.2], skin: left, optional: ears, group: furniture, rel-pos: 5}
         - {ref: common/rack-ear@1, id: ear-right, at: [438.4, -0.2], skin: right, optional: ears, group: furniture, rel-pos: 6}
@@ -722,10 +735,11 @@ configurations:
     description: >-
       Dual -48 VDC PSUs (FRU FSJ033-610G, rated 48 VDC 1300 W, input -40 V to -75 V at 40 A maximum) and
       the same six fan trays, front-to-back airflow. The DC SKUs ship four ring lugs that the AC SKUs
-      do not (cor580-qsg package contents, item 4). The bay geometry is identical; the supply is drawn
-      as the AC part because the library holds no 1300 W DC module yet, which is registered as a gap.
-    component-attrs:
-      psu-ac-1300: {input: dc}
+      do not (cor580-qsg package contents, item 4). The bay geometry is identical, and each bay seats
+      edgecore/fsj033-610g@1, the DC supply's own part with a two-screw terminal block and a ground
+      stud, drawn from the quick start's angled illustration of the supply's terminal end; what remains
+      open is the dc-psu-module gap.
+    bays: {psu-1: edgecore/fsj033-610g@1, psu-2: edgecore/fsj033-610g@1}
     part-numbers:
       AS9926-24D-O-48V-F: {part: FP5EC9524001Z, power-cord: none}
       AS9926-24DB-O-48V-F: {part: FP5EC9524003Z, power-cord: none}

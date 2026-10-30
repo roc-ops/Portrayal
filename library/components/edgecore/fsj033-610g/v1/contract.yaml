@@ -1,0 +1,129 @@
+format: 1
+kind: module
+name: fsj033-610g
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1300 W 48 VDC power supply of the Edgecore COR580 (AS9926-24D), field replaceable unit
+  FSJ033-610G - the AC unit's 57.0 x 40.0 CRPS envelope with a TWO-SCREW BARRIER TERMINAL BLOCK
+  where that one has its C14 inlet, a black U-handle at the left, a silver ground stud at the
+  right and a red release latch at the lower right. TWO sit side by side on the rear face, PS2 at
+  the left and PS1 at the right. Named for its FRU, as the data sheet's FRU table does.
+size: {w: 57.0, h: 40.0}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  model: 'FSJ033-610G'
+  part: 'F0OEC9524003Z'
+  power-output-w: 1300
+  input: dc
+  inlet: dc-terminal
+  input-note: '-40 V - -75 V, 40 A maximum'
+provenance:
+  model: >-
+    The COR580 data sheet (Core Router data sheet EC-DS-0222-R04, page 4) prints the FRU table
+    "FSH082-610G | F0TZZ8632002A | AC PSU" and "FSJ033-610G | F0OEC9524003Z | DC 48 V PSU". The
+    model is the first column and `part` the second. The AC unit is FSH082-610G, which
+    common/psu-ac-1300@1 draws without a model number; this part is named for its FRU because the
+    data sheet prints it. No other vendor's device seats this supply, so it lives under edgecore/.
+  size: >-
+    BORROWED FROM common/psu-ac-1300@1, WHICH PHOTO-MEASURED IT on the DCS510 data sheet's rear
+    elevation at 3.2801 px/mm (the module spans 9.0-66.0 mm of the rear face; 40 mm high is the
+    chassis interior between the folds) and on the DCS510 quick start's rear. The COR580's two
+    bays are 57.0 x 40.0 and take that part, and this supply fills the same bays. This variant is
+    drawn only in the COR580 quick start's angled illustration of the supply's terminal end
+    (Connect Power, page 3), which carries no scale and is not a face to measure. The shared part
+    is not edited, and the DCS510 is not touched.
+  the-face: >-
+    READ FROM AN ILLUSTRATION, NOT AN ELEVATION, and every position below is estimated. The
+    quick start's page 3 figure (embedded original 431 x 398 px, a colour render; Quick Start
+    Guide, "Connect Power", step 3) shows the supply's terminal end three-quarter from the right
+    and above: a black U-handle loop at the left, two dark barrier plates with a screw between
+    each pair under flaps in the middle, a silver ground stud with a washer at the right, and a
+    red latch with a slot below it. Positions are fractions of the face, which the angle
+    foreshortens, so the mm are the envelope times the fraction and are not measurements: handle
+    x 0.03-0.22, y 0.12-0.82; terminal block x 0.26-0.68, y 0.14-0.76, screws at x 0.38 and
+    0.54, y 0.45; ground stud centre x 0.77, y 0.35; latch x 0.68-0.88, y 0.65-0.97. No
+    photograph of this supply is held, and the Edgecore intake has no 3d-models folder. A small
+    perforated patch beside the ground stud is not drawn. Faint + and - marks above the block
+    are at the edge of legibility and are not relied on.
+  connector-direction: >-
+    Read from the figure and filed as estimated. The screws face out of the face: seen from the
+    front-right the heads are turned toward the viewer, so the screw axes are perpendicular to
+    the face. Which way the wires leave is not stated: the ring lugs are drawn separately
+    (callout 1) and no wire is shown, so none is drawn. Pole order, as the legend and the
+    callouts give it (2 is the left screw, 3 the right): left DC return (callout 2, "DC return"),
+    right -40 - -75 VDC (callout 3); the legend and the callouts agree. The ground stud is
+    callout 4, "Ground", at the right of the block. The figure shows the supply on its own, so its
+    attitude in the bay is worked out against the AC part: common/psu-ac-1300@1 puts its red
+    latch at the LEFT of the module, with the bail beside it and the inlet to the right, whereas
+    the figure puts the handle at the left and the latch at the lower right. The two cannot be
+    made to match by a mirror, so the face is drawn as the figure shows it, upright, and is not
+    a rotation or mirror of the AC part; which attitude the real supply takes in each bay is not
+    stated. Both bays take the same drawing, as the AC part is drawn the same in both (it has no
+    mirrored field).
+  colour: >-
+    Each value is estimated from the figure, which is a colour render (illustration, not the
+    device), by script on the embedded original; each is the median of the middle 80% of the
+    pixels of a region by luminance, away from labels and outlines. Housing (x 330-400, y 20-110;
+    5799 of 6300 pixels kept): #b7c0c9. Handle (x 58-80, y 135-220; darkest quarter, because the
+    loop is glossy and the median, #797979, is lifted by highlights): #2a2a2a. Terminal barrier
+    plates (x 118-150, y 130-215; 2207 of 2720): #2b2b2b. Screw heads (x 150-175, y 160-175; 300
+    of 375): #7f7f7f. Ground stud (x 272-305, y 140-165; 660 of 825): #b4b4b4. Latch (x 238-305,
+    y 300-325; 1339 of 1675): #c48484, shadow #5f3535 (darkest quarter). The AC part's latch is
+    #c22f2f and its face #b9bec4; the latch reads rosier in the render than in the AC part and the
+    difference is not resolved.
+  body: >-
+    borrowed from common/psu-ac-1300@1 - depth 240 and colour #b9bec4, the AC part's own, not
+    read from the illustration.
+  input: >-
+    THE TWO DOCUMENTS DISAGREE ABOUT THE RANGE and the conflict is declared. The quick start's
+    specification table (page 4) prints, for the 48 VDC PSU, "Power Rating / 48 VDC, 1300 Watts"
+    and "DC Input / -40 V - -75 V, 40 A maximum", which is this part's own rating and is recorded
+    in `input-note`. The data sheet (EC-DS-0222-R04, page 3) prints "Input Voltage: 90 to 240 VAC at 50~60 Hz,
+    -36 to-72 VDC" for the SYSTEM, a wider lower bound, and the quick start's AC block adds
+    190-310 VDC for the AC unit. The data sheet's range is not recorded as an attribute.
+  power: >-
+    datasheet and quick start, which agree: the quick start's "48 VDC PSU / Power Rating / 48 VDC,
+    1300 Watts" and the data sheet's "Max PSU power: 1300 W".
+  logo-zone: >-
+    none reserved - the figure prints no vendor mark on the supply, and no logo or wordmark is
+    drawn.
+elements:
+  handle: {at: [1.50, 5.00], size: [11.00, 28.00], class: handle}
+  terminal: {at: [14.50, 5.50], size: [24.00, 24.50], class: terminal}
+  latch: {at: [38.50, 26.00], size: [11.50, 12.50], class: latch}
+fields:
+  latch-finish: {label: Latch colour, type: text, default: '#c48484'}
+  latch-edge: {label: Latch edge colour, type: text, default: '#5f3535'}
+parts:
+  - {ref: common/screw-head@1, id: ground-stud, at: [42.40, 12.20]}
+relief:
+  wall: '#15181b'
+  features:
+    - node: terminal
+      out: 9.5
+      confidence: estimated
+      source: >-
+        edgecore/fsj033-610g@1's own terminal key. The figure shows the barrier plates standing
+        proud of the face; how far is not stated, and 9.5 matches edgecore/csr310-psu-dc@1's
+        estimate for a barrier strip of this kind.
+    - node: handle
+      uhandle: 27
+      dia: 6.0
+      confidence: estimated
+      source: >-
+        27 is the Edgecore supply figure this library carries on every other member of the
+        family, resting on UfiSpace's published 1.06 inch for the same CRPS handle. NOT MEASURED
+        HERE: the figure dimensions nothing.
+    - node: latch
+      out: 1.5
+      confidence: estimated
+      source: >-
+        unsourced. The figure does not dimension the latch; 1.5 is the library's common latch
+        stand-off.
+skins: [default]
+body:
+  depth: 240
+  color: '#b9bec4'

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcs500-psu-ac
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -43,10 +43,11 @@ provenance:
     bottom edge. The cord retainer and the hanging cord drawn in the elevation are not
     the module and are not drawn.
   dc-build: >-
-    THE 48 V DC SUPPLY EXISTS - the guide draws its terminal block and lists 'DC power
-    cable included with 48VDC PSU only' - but the ordering table offers it only in the
-    one-based O series (7816-64X-O-48V-F-R / -B-R), and this library's DCS500 is the
-    zero-based OZ base model, which is AC only. See the device's o-series-numbering gap.
+    THE 48 V DC SUPPLY IS MODELLED AS edgecore/dcs500-psu-dc@1 - the guide draws its terminal
+    block and lists 'DC power cable included with 48VDC PSU only' - and the ordering table
+    offers it only in the one-based O series (7816-64X-O-48V-F-R / -B-R). This library's
+    DCS500 is the zero-based OZ base model, which is AC only, so its two DC configurations are
+    drawn on the OZ silkscreen as a declared stand-in. See the device's o-series-numbering gap.
 states: [absent]
 elements:
   inlet: {at: [6.20, 4.60], size: [17.20, 27.40], class: connector}

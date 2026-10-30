@@ -1,0 +1,141 @@
+format: 1
+kind: module
+name: cor550-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 48 VDC supply of the Edgecore COR550 (AS7926-40XKFB) - the AC supply's 54.5 x 40.8
+  envelope with a TWO-SCREW BARRIER TERMINAL BLOCK at the lower left where that one has its C14
+  inlet, a vent field above it, a black U-handle in the middle, three small hex fasteners and a
+  red release latch at the right. TWO stack in one column at the left of the rear face, PSU1
+  above PSU0. Named for the chassis because no staged COR550 document prints an ordering code
+  for the supply, as edgecore/cor550-psu-ac@1 is.
+size: {w: 54.5, h: 40.8}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  input: dc
+  inlet: dc-terminal
+  input-note: '-48 - -60 VDC, 40 A max'
+  power-absent: not-published
+provenance:
+  size: >-
+    BORROWED FROM edgecore/cor550-psu-ac@1, WHICH PHOTO-MEASURED IT on the quick start guide's
+    rear elevation (native 1123 x 233 px, 2.5318 px/mm) and the data sheet's rear (998 x 194
+    px), the two agreeing, and the two supplies fill the same two bays of the same rear face.
+    This variant is drawn only in the quick start's angled illustration of the supply's
+    terminal end (Connect Power, DC Power, page 3), which carries no scale and is not a face
+    to measure, so no size is taken from it.
+  the-face: >-
+    READ FROM AN ILLUSTRATION, NOT AN ELEVATION, and every position below is estimated. The
+    quick start's page 3 figure (embedded original 444 x 485 px, a colour render; Quick Start
+    Guide, "Connect Power", step 3, DC Power) shows the supply's terminal end seen nearly
+    head-on from slightly above: a wire-grid vent field with a diamond mark at the upper left,
+    a two-screw barrier block below it, a black U-handle in the middle, a column of three small
+    hex fasteners at the upper right and a red latch with a slot at the lower right. Positions
+    are fractions of the visible face (about 368 x 300 px in the figure, foreshortened, so the
+    mm below are the envelope times the fraction and are not measurements): vent x 0.02-0.58,
+    y 0.04-0.45; terminal block x 0.00-0.58, y 0.41-0.97 with its screws at x 0.18 and 0.40,
+    y 0.66; handle x 0.58-0.74; fasteners at x 0.85, y 0.19, 0.33 and 0.46; latch x 0.86-1.00,
+    y 0.60-1.00 (the render's latch stands nearer the viewer and reads wider than the face; it
+    is clamped to the envelope). No photograph of this supply is held, and the Edgecore intake
+    has no 3d-models folder, so nothing here is better than an illustration. The three small
+    hex fasteners are not named in the figure's legend and their function is not stated.
+  connector-direction: >-
+    Read from the figure and filed as estimated. The screws face out of the face, toward a
+    viewer in front of the rear panel: the figure shows both screw heads and the barrier
+    block's open front, so the screw axes are perpendicular to the face. Which way the wires
+    leave is not stated: the figure draws the ring lugs separately (callout 1), not fitted, and
+    no wire is drawn, so none is drawn here. Pole order, as the figure's callouts give it (2 is
+    the left screw, 3 the right): left DC return (callout 2, "DC return"), right -48 - -60 VDC
+    (callout 3). No legend is printed on the block in the figure. The figure shows the supply
+    on its own, so its attitude in the bay is worked out from its latch: the red latch sits at
+    the lower right, as the AC sibling's red latch sits at the lower right of its face
+    (latch at [38.7, 18.8] running to the face's lower edge), so the supply is drawn upright
+    and unmirrored, the AC sibling's attitude. The AC sibling's handle is at the left across
+    the vent and the figure's is in the middle; that difference is drawn as the figure shows
+    it and is not resolved. Both bays take the same attitude, as the AC part does (it has no
+    mirrored field).
+  colour: >-
+    Each value is estimated from the figure, which is a colour render (illustration, not the device), by
+    script on the embedded original; each value is the median of the middle 80% of the pixels
+    of a region by luminance, away from labels and outlines. Housing face (x 22-52, y 150-190;
+    1032 of 1200 pixels kept): #b5b5b5. Vent backing (x 130-230, y 20-60; 3466 of 4000):
+    #dddddd. Handle (x 232-262, y 150-380; darkest quarter, because the loop is glossy and the
+    median, #6c6c6c, is lifted by highlights): #333333. Terminal barrier (x 14-40, y 245-350;
+    2189 of 2730): #535353, darkest quarter #404040, which is drawn. Screw heads (x 60-100, y
+    280-305; median): #d2d2d2. Latch: the lit faces clip to #fe7777 and the shadowed face is
+    #883a3b (x 352-372, y 330-395; 1040 of 1300), so the base red is the mid-tone of the two,
+    #c05856, and the latch-edge #863a3a is the shadow sample. The AC sibling's face is dark
+    (#33373c) where this one is light grey: that disagreement between two documents is not
+    resolved and is a gap on the device.
+  body: >-
+    borrowed from edgecore/cor550-psu-ac@1 - depth 250 and colour #2b2f34, which is the AC
+    sibling's own estimate and not read from the illustration.
+  input: >-
+    THE TWO DOCUMENTS DISAGREE and the conflict is declared, not chosen silently. The quick
+    start's specification table (page 4) prints "48VDC PSU / Input Rating / -48 - -60 VDC,
+    40 A max", and its wiring note says "#10 AWG / 4 mm2 copper wire (for a -48 to -60 VDC
+    PSU)"; that sentence is recorded in `input-note`. The data sheet (page 3) prints "48 VDC
+    Power Supply: Input Voltage: 40 to 72 VDC", a wider range with no current. Both are
+    published by Edgecore for this supply; the data sheet's is not recorded as an attribute.
+  power-absent: >-
+    NOT PUBLISHED. As edgecore/cor550-psu-ac@1: the data sheet gives the system figure,
+    "Power Consumption: 1400 W (Max), 1100 W (Typical)", and the quick start "1400 Watts
+    maximum", and neither states a per-supply output. Nothing is claimed.
+  logo-zone: >-
+    reserved at the diamond mark the figure shows at the upper left of the vent, x 0.11-0.22,
+    y 0.17-0.30 of the face; the mark is not drawn and no vendor logo or wordmark is drawn.
+  the-name-is-the-chassis: >-
+    As edgecore/cor550-psu-ac@1: no staged COR550 document prints an ordering code for the
+    supply (the data sheet has no FRU table), so the name is the chassis's. If one is printed
+    later, both parts are renamed and the device takes the major that costs.
+elements:
+  vent: {at: [1.20, 1.60], size: [29.50, 14.60], class: vent}
+  logo-zone: {at: [6.00, 6.00], size: [6.00, 5.50], class: label}
+  terminal: {at: [1.00, 17.20], size: [30.00, 22.60], class: terminal}
+  handle: {at: [31.80, 3.00], size: [8.60, 35.50], class: handle}
+  latch: {at: [46.00, 24.50], size: [7.50, 15.50], class: latch}
+fields:
+  latch-finish: {label: Latch colour, type: text, default: '#c05856'}
+  latch-edge: {label: Latch edge colour, type: text, default: '#863a3a'}
+parts:
+  - {ref: common/screw-head@1, id: hex-stud-1, at: [44.50, 6.00]}
+  - {ref: common/screw-head@1, id: hex-stud-2, at: [44.50, 11.70]}
+  - {ref: common/screw-head@1, id: hex-stud-3, at: [44.50, 17.00]}
+relief:
+  wall: '#15181b'
+  features:
+    - node: vent
+      vent: 40
+      confidence: estimated
+      source: >-
+        edgecore/cor550-psu-ac@1's own vent key, carried: the figure draws a wire grid over the
+        supply's fan and the depth behind it is not stated by any document.
+    - node: terminal
+      out: 9.5
+      confidence: estimated
+      source: >-
+        edgecore/cor550-psu-dc@1's own terminal key. The figure shows the barrier block
+        standing proud of the face with the screws on its front; how far is not stated, and 9.5
+        matches edgecore/csr310-psu-dc@1's estimate for a barrier strip of this kind.
+    - node: handle
+      uhandle: 27
+      dia: 6.0
+      confidence: estimated
+      source: >-
+        27 is the Edgecore supply figure this library carries on every other member of the
+        family (edgecore/cor550-psu-ac@1 and common/psu-ac-650@3), resting on UfiSpace's
+        published 1.06 inch for the same CRPS handle. NOT MEASURED HERE: the figure dimensions
+        nothing.
+    - node: latch
+      out: 1.5
+      confidence: estimated
+      source: >-
+        unsourced. The figure does not dimension the latch; 1.5 is the library's common latch
+        stand-off, as edgecore/cor550-psu-ac@1.
+skins: [default]
+body:
+  depth: 250
+  color: '#2b2f34'

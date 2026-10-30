@@ -1,0 +1,127 @@
+format: 1
+kind: module
+name: dcs500-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 850 W -36 to -72 VDC supply of the Edgecore DCS500 (AS7816-64X). It has the AC
+  supply's 50.9 x 39.4 housing, handle and red release latch. A THREE-POLE BARRIER TERMINAL
+  BLOCK takes the place of the IEC C14 inlet. The quick start wires it RTN, -36 - -72 VDC,
+  chassis ground. Two seat in the rear's lower corners, one either side of the fan trays.
+size: {w: 50.9, h: 39.4}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  input: dc
+  inlet: dc-terminal
+  input-note: '-36 - -72 VDC, 28-14 A'
+  power-output-w: 850
+provenance:
+  naming: >-
+    NO SINGLE MODEL NUMBER, AS edgecore/dcs500-psu-ac@1. The data sheet's FRU table lists two
+    DC supplies, 'YM-2851J ER' (F0TAT7664000A, DC front-to-back) and 'YM-2851J FR'
+    (F0TAT7664002A, DC back-to-front). They differ only in airflow, which this contract does
+    not carry (the airflow is the configuration's), so one part stands for both and neither
+    code is the part's model. Both codes and both part numbers are recorded here instead.
+  size: >-
+    BORROWED FROM edgecore/dcs500-psu-ac@1, WHICH MEASURED IT on the data sheet's rear
+    elevation at 2.279 px/mm (housings x 18.9-69.8 and 367.7-418.6, y 45.8-85.1). The two
+    supplies fill the same two bays; the quick start offers 'one or two AC or DC PSUs' in
+    one sentence. Nothing held draws the DC supply's whole face: the data sheet's rear shows
+    the AC pair and the quick start's picture is a close-up of the terminal end only.
+  input: >-
+    QUICK START page 3 (printed -3-), Hardware Specifications, as printed: 'DC Power Rating
+    -36 - -72 VDC, 28-14 A, 850 Watts'. THE DATA SHEET DISAGREES IN WORDING, NOT IN KIND: its
+    Power line reads 'PSUs: 2 redundant, load-sharing, hot-swappable AC or -48 VDC'. -48 VDC
+    is a nominal inside the quick start's range; the range is recorded as the input, because
+    it is the document that also gives the current.
+  power-output-w: >-
+    DATA SHEET '850 W PSUs' and the quick start's '-36 - -72 VDC, 28-14 A, 850 Watts'.
+  o-series: >-
+    DATA SHEET page 4, ordering: the DC supply is sold only in the O series, as
+    7816-64X-O-48V-F-R (FP3ZZ7664024A) and 7816-64X-O-48V-B-R (FP3ZZ7664026A). The DCS500
+    here is the zero-based OZ base model, which is AC only; see the device's
+    o-series-numbering gap.
+  the-face: >-
+    READ FROM ONE PHOTOGRAPH OF THE TERMINAL END, NOT AN ELEVATION. Quick start page 2, step 4
+    Connect Power, the third picture (980 x 422 px, no scale). It shows a barrier block of
+    three screw poles stacked vertically behind a clear cover, three yellow ring lugs on the
+    red, black and green-yellow wires leaving to the right, a red release latch at the far
+    left and a black U-handle between the latch and the block. THE PHOTOGRAPH IS NOT THE
+    WHOLE FACE. The block's size and place (x 6.2-23.4, y 4.6-34.0, the poles at x 14.8) are
+    ESTIMATED by fitting the photograph's block, in its aspect (0.59 wide to tall), into the
+    AC part's inlet footprint; the vent lattice, the handle and the latch are the AC part's
+    measured geometry, because the photograph is of a supply on its own with no scale.
+    Wires, ring lugs and the mating cable are not the supply and are not drawn. No ground
+    stud is drawn: the ground is the chassis'.
+  connector-direction: >-
+    IN THE CHASSIS' FRAME, as the supply sits in the bay. The terminal screws face OUT OF THE
+    REAR FACE toward a viewer standing at the rear (the screws' axes are normal to the
+    photograph and the lugs lie flat against the block). The wires leave to the LEFT in the
+    bay, away from the latch and toward the housing's end (the photograph shows them to the
+    right). POLE ORDER, from the wires and the quick start's legend (1 RTN return, red wire;
+    2 -36 - -72 VDC, black wire; 3 chassis ground, yellow-green wire): in the photograph
+    the poles run RTN, -36 - -72 VDC, chassis ground from top to bottom. THE PHOTOGRAPHED
+    SUPPLY IS TURNED A HALF TURN FROM ITS ATTITUDE IN THE BAY. Its latch is at the left; the
+    AC part's latch is at the right end and in the lower part of its face, and the photograph's
+    latch sits in the upper part. A half turn in the face's plane carries both to the AC
+    sibling's places and carries the block to the left, where the AC inlet is. In the bay the
+    poles therefore run chassis ground, -36 - -72 VDC, RTN from top to bottom. The half turn is
+    an inference from where the latch and handle sit, not a statement; the document states
+    neither the photograph's attitude nor the bay's. Which pole is which is read from the
+    wire colours and the legend; the screws' own marking is not stated.
+  colour: >-
+    ESTIMATED: every value here is estimated, each a median over a pixel block on the photograph's original
+    (980 x 422 image, away from wires and labels): the latch #b13933 (x 15-110, y 100-140, 3800
+    pixels), the handle #242725 (x 200-222, y 130-290, 3520 pixels), the block's body
+    #53534e (x 335-500, y 350-385, 5775 pixels) and its dividers #1d2121 (x 335-500, y 148-162,
+    2310 pixels). THE PHOTOGRAPH IS OF THE TERMINAL END ONLY (a photograph of the terminal end,
+    not of the whole supply): the housing in it is shaded
+    galvanised steel (#8f8d88, x 135-190, y 18-32, 770 pixels), darker than the AC part's
+    bright #c9cdd1, which was read from a well-lit elevation and is kept, declared borrowed.
+  latch-colour: >-
+    The photograph's front-to-back supply has a red latch, #b13933. The back-to-front DC
+    supply's latch colour is not shown: no held document draws a back-to-front unit (the
+    device's fan-handle-colour-by-airflow gap says the same of the AC), so the field is left at
+    the red, as the AC part does.
+  frus: >-
+    DATA SHEET page 4 FRU table: YM-2851J ER, F0TAT7664000A, DC front-to-back; YM-2851J FR,
+    F0TAT7664002A, DC back-to-front.
+  body: >-
+    BORROWED from edgecore/dcs500-psu-ac@1 (depth 220, colour #2b2f34).
+states: [absent]
+elements:
+  terminal: {at: [6.20, 4.60], size: [17.20, 29.40], class: terminal}
+  pole-1: {at: [11.30, 8.70], size: [7.00, 6.00], class: terminal}
+  pole-2: {at: [11.30, 18.00], size: [7.00, 6.00], class: terminal}
+  pole-3: {at: [11.30, 26.40], size: [7.00, 6.00], class: terminal}
+  handle: {at: [25.60, 1.20], size: [4.60, 36.00], class: handle}
+  vent: {at: [32.60, 4.40], size: [12.40, 26.20], class: vent}
+  latch: {at: [39.50, 16.80], size: [10.40, 21.60], class: latch}
+fields:
+  latch-finish: {label: Latch colour, type: text, default: '#b13933'}
+relief:
+  wall: '#15181b'
+  features:
+    - node: handle
+      uhandle: 27
+      dia: 4.6
+      confidence: estimated
+      source: >-
+        27 is the Edgecore supply figure carried across this line, as edgecore/dcs500-psu-ac@1
+        does; not measured here.
+    - node: latch
+      out: 1.5
+      confidence: estimated
+      source: unsourced; the library's common latch stand-off.
+    - node: terminal
+      out: 5.0
+      confidence: estimated
+      source: >-
+        A barrier block stands proud of the face and the photograph shows it so, but how far is
+        not stated; 5.0 is edgecore/dcs201-psu-dc@1's figure for its terminal header.
+skins: [default]
+body:
+  depth: 220
+  color: '#2b2f34'

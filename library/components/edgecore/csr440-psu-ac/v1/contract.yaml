@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: csr440-psu-ac
-version: 1.1.1
+version: 1.1.2
 class: psu
 behaviour: fills
 profile: networking
@@ -17,7 +17,8 @@ attrs:
   model: 'AS7535-28XB AC PSU'
   power-absent: not-published
   inlet: c14
-  input: '100V-240V, 6.0-2.4 A per PS'
+  input: ac
+  input-note: '100V-240V, 6.0-2.4 A per PS'
 provenance:
   size: >-
     photo-measured - CSR440 datasheet front elevation, page 2 at 600 dpi scaled by the
@@ -48,10 +49,14 @@ provenance:
     consumption and no output rating for a supply. The AC input range is stated per supply -
     100V-240V, 6.0-2.4 A - and is carried in attrs; the wattage is not, so L27 stands on it.
   the-dc-variant: >-
-    NOT DRAWN AND NOT MODELLED. Both documents say the device takes "2 x DC or AC PSUs" and
-    the datasheet gives a DC input range, but the only elevation shows AC modules and the
-    quick start's DC section pictures wiring rather than a module face. The device records
-    this as a gap rather than inventing a face for the bay to accept.
+    A SEPARATE PART. Both documents say the device takes "2 x DC or AC PSUs" and the
+    datasheet gives a DC input range. The only elevation shows AC modules, but the quick
+    start's DC Power figures picture the DC module's terminal end in angled illustrations, and
+    `edgecore/csr440-psu-dc@1` is drawn from them with this part's envelope. The DC supply has
+    a different connector, so this part keeps its AC face and the DC build seats the other one.
+  input: >-
+    The attribute is the token `ac`, which is what a consumer that picks a build's picture
+    reads; the datasheet's sentence, unchanged, is `input-note`.
 elements:
   handle: {at: [30.5, 12.0], size: [6.0, 16.0], class: handle}
   latch: {at: [4.5, 1.6], size: [10.5, 4.6], class: latch}
