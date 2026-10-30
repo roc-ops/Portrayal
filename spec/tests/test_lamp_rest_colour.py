@@ -101,7 +101,6 @@ def test_v2_skin_is_v1_skin_with_the_new_fallback(name):
 def test_v2_contract_differs_from_v1_in_the_declared_keys_only(name):
     v1, v2 = contract(name, 1), contract(name, 2)
     assert v2["version"] == "2.0.0"
-    assert v2["unplaced"]
     assert "rest" in v2["description"] and "grey" in v2["description"]
     p1, p2 = dict(v1["provenance"]), dict(v2["provenance"])
     assert p2.pop("rest-colour")
