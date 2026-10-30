@@ -4902,6 +4902,119 @@ def config_slots(device, cfg_name, cfg, lib):
     return _mounts(device, cfg_name, cfg, lib, "interface")
 
 
+# --- DC ports in components.json and configs.json (docs/dc-power-design.md 5.2) ----
+
+def _dc_join(base, tail):
+    """A path from a part's own path and what is under it; either may be empty,
+    which is how a component's frame (the part itself is `""`) is written."""
+    return f"{base}/{tail}" if base and tail else (base or tail)
+
+
+def published_dc_port(port, base, override=None):
+    """ONE DC PORT AS THE BUILD PUBLISHES IT, the shape components.json and
+    configs.json share: `{id, path, direction, voltage, rating-a, awg, side,
+    poles}`, each pole `{role, slot}` and a `stand-in` where the part states one.
+
+    `base` is the part's own path in the frame the entry is written in: `""` in
+    components.json, where the part is the frame, and the path a drawing
+    addresses the part by in configs.json (`feed-a`, `psu-0/module`). THE PATH
+    OF A PORT IS THE PART'S AND ITS ID, whether the part has one port or
+    several (`feed-a/input`, `psu-0/module/input`), so adding a port to a part
+    never moves another's path: the rule the component schema states. A pole's
+    `slot` is always under the part, never under the port.
+
+    `override` is the placement's `dc` entry for this port, applied over what the
+    part states: `side`, `voltage`, `rating-a` and the role of a pole by its
+    slot. An unstated figure is `null`, so "the part does not say" is tellable
+    from a key that is not a question this entry answers. `source` is not
+    published: it names a `provenance` note, which components-detail.json holds.
+    """
+    o = override or {}
+    roles = o.get("poles") or {}
+    poles = []
+    for pole in port.get("poles") or []:
+        role = roles.get(pole["slot"], pole["role"])
+        out = {"role": role, "slot": _dc_join(base, pole["slot"])}
+        # a stand-in goes with the role it stands in for: it is kept for a pole
+        # the placement leaves alone, and for one it sets back to unstated, and
+        # dropped for a role a placement states
+        if pole.get("stand-in") and role in (pole["role"], "unstated"):
+            out["stand-in"] = copy.deepcopy(pole["stand-in"])
+        poles.append(out)
+
+    def figure(key):
+        value = o[key] if key in o else port.get(key)
+        return copy.deepcopy(value) if value is not None else None
+
+    return {"id": port["id"], "path": _dc_join(base, port["id"]),
+            "direction": port["direction"], "voltage": figure("voltage"),
+            "rating-a": figure("rating-a"), "awg": figure("awg"),
+            "side": figure("side"), "poles": poles}
+
+
+def component_dc_ports(contract):
+    """A component's `dc-ports` for components.json, in the order the part
+    states them; `[]` for a part with no `dc` block, which the index leaves
+    out, as it does `cages`."""
+    ports = (contract.get("dc") or {}).get("ports") or []
+    return [published_dc_port(p, "") for p in ports]
+
+
+def config_dc_ports(device, cfg_name, cfg, contract_of):
+    """`configs[].dc-ports` (docs/dc-power-design.md 5.2): every DC port the
+    parts one configuration draws present, ascending by path, `[]` when it
+    draws none.
+
+    A PORT BELONGS TO THE CONFIGURATION THAT SEATS ITS PART. A placed part is in
+    every configuration its `only-in` allows; a part in a bay is whatever the
+    configuration's `bays` seats there, else the bay's `default`
+    (manifest.seated_ref), and a nested bay is keyed without its `module` steps
+    as the build keys it. So a configuration that seats another part, or none,
+    does not carry the port - the same reason `configs[].slots` and
+    `configs[].states` are per configuration, and `cages` per view, which holds
+    only what is true of every build.
+
+    PATHS ARE THE DRAWING'S. A placed part is at its placement id; a part in a
+    bay at `<bay>/module`; a part in a seated part's bay at
+    `<bay>/module/<bay>/module`. The placement's `dc` override is applied to a
+    placed part only, as lint reads it. `contract_of(ref)` answers the contract,
+    or None where the ref names nothing (lint reports it)."""
+    out = []
+    seats = cfg.get("bays")
+
+    def seat(ref, path, key, override, depth):
+        ref = ref.split(":")[0]
+        contract = contract_of(ref)
+        if not isinstance(contract, dict):
+            return
+        ports = (contract.get("dc") or {}).get("ports") or []
+        for port in ports:
+            out.append({**published_dc_port(port, path, (override or {}).get(port["id"])),
+                        "ref": ref})
+        if depth >= MAX_BAY_DEPTH:
+            return
+        for bid, bay in sorted((contract.get("bays") or {}).items()):
+            held = seated_ref(seats, f"{key}/{bid}", bay if isinstance(bay, dict) else None)
+            held = held.get("ref") if isinstance(held, dict) else held
+            if held:
+                seat(held, f"{path}/{bid}/module", f"{key}/{bid}", None, depth + 1)
+
+    for _face, (_name, view) in resolve_views(device, cfg).items():
+        parts = view_parts(view)
+        for p in parts["placements"]:
+            if p.get("id") and p.get("ref") and not (p.get("only-in") and cfg_name not in p["only-in"]):
+                override = p["dc"] if isinstance(p.get("dc"), dict) else None
+                seat(p["ref"], p["id"], p["id"], override, 0)
+        for b in parts["bays"]:
+            if b.get("only-in") and cfg_name not in b["only-in"]:
+                continue
+            held = seated_ref(seats, b["id"], b)
+            held = held.get("ref") if isinstance(held, dict) else held
+            if held:
+                seat(held, f"{b['id']}/module", b["id"], None, 0)
+    return sorted(out, key=lambda p: (p["path"], p["id"]))
+
+
 def config_states(device, cfg_name, cfg, lib):
     """`configs[].states` (#934, docs/rack-file-v4-design.md section 4): what
     each placed part of one configuration can be set to, `{<path>: [names]}`.
@@ -6054,6 +6167,13 @@ def main():
     _connectors = _connector_registry()
     _candidates = _pluggable_candidates(args.library)
     _default_occupants = (configs.get(default_cfg) or {}).get("occupants") or {}
+
+    def _contract_of(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None          # L5 reports the broken ref
+
     cfg_states = {n: drawn_states(config_states(device, n, c, lib),
                                   [faces[f] for f in files.get(n, {}).values() if f in faces])
                   for n, c in configs.items()}
@@ -6210,6 +6330,14 @@ def main():
                               # it draws, `{interface, at}`, the other side of
                               # a mount point; `[]` on a device with none
                               "slots": config_slots(device, n, c, lib),
+                              # THE DC PORTS THIS BUILD PRESENTS, each with
+                              # its placement's `dc` override applied and the
+                              # path a feed lands on (docs/dc-power-design.md
+                              # 5.2). Per configuration because a part in a
+                              # bay is only in the builds that seat it. Only
+                              # on a configuration that presents one.
+                              **({"dc-ports": dc_ports}
+                                 if (dc_ports := config_dc_ports(device, n, c, _contract_of)) else {}),
                               # WHAT EACH PLACED PART CAN BE SET TO (#934):
                               # `{<placement id>: [state names]}`, the parts
                               # that declare any; `{}` on a device with none
