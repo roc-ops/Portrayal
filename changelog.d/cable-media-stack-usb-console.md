@@ -1,7 +1,8 @@
 ### Added
 - A cable's `media` has three more values, `stack`, `usb` and `console`, so a
-  stack, USB or console cable no longer shows a mismatch warning in the Rack
-  Builder. A rack file that saves one holds a value an older kit does not know.
+  stack or USB cable is no longer a mismatch for its own ends. A console cable
+  is told from a USB one by the port's role, which the Rack Builder's port
+  readers do not pass yet, so it still reads as its connector there. A rack file that saves one holds a value an older kit does not know.
   **A reader that does not know a media must keep it** and draw the cable as one
   with no media, as for any media it does not know. The kit (`kit/rack`) gives
   each of them a label, a family, a plug reach, an end allowance, a diameter, a
@@ -24,7 +25,7 @@
 - The DCIM cables file writes the three new media with the `CABLE_TYPE` row the
   kit holds for each, which is blank: the cable-type choices of the two tools
   were not read, so no value is written. Such a cable is in the file with its
-  type blank, and the notes say so.
+  type blank.
 
 ### Changed
 - A ground wire that names no type is judged by the bare `ground` type's bend

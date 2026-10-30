@@ -764,9 +764,8 @@ and `ex4200-vcp` interfaces are stack ends; the `stackpower`, `cisco-rps2300` an
 interfaces are `power`. A page that reads a port passes its `role`; until it does, a console port
 reads as its connector. `proposeMedia` offers the new media for ends of their family, and a mismatch
 names a family as `stacking`, `USB` or `console`. **A reader that does not know a media keeps it.**
-The DCIM cables file writes `CABLE_TYPE` for the three as a blank (`CABLE_TYPE_NOTES` says the
-choices of the two tools were not read); a cable of one is in the file with its type blank, and the
-notes say so. `cable-types.json` (table version 1.2.0) gains the DC feed, ground-wire, stack, USB,
+The DCIM cables file writes `CABLE_TYPE` for the three as a blank (`CABLE_TYPE_NOTES` records that the
+choices of the two tools were not read); a cable of one is in the file with its type blank. `cable-types.json` (table version 1.2.0) gains the DC feed, ground-wire, stack, USB,
 console, RPS, StackPower and FlexStack types, and the keys `dc`, `conductors`, `ampacity-a`,
 `ampacity-sources`, `sources` and `note`.
 

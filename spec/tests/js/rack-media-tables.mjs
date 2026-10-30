@@ -1,4 +1,4 @@
-// One guard for every table that holds a row per cable media, so that the next media cannot be added to some of
+// One check for every table that holds a row per cable media, so that the next media cannot be added to some of
 // them and not the others: each media of cable-rules.js MEDIA is in each table below. A table keyed by family
 // (DRAPE, the export's FAMILY) holds the family of each media.
 import test from 'node:test';
