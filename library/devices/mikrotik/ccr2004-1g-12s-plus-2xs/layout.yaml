@@ -1,0 +1,717 @@
+format: 1
+kind: device
+name: ccr2004-1g-12s-plus-2xs
+version: 1.0.0
+maturity: modelled
+manufacturer: MikroTik
+model: CCR2004-1G-12S+2XS
+portfolio: {line: Routers, family: Cloud Core Router, series: CCR2004}
+description: >-
+  MikroTik CCR2004-1G-12S+2XS is a fixed 1U Cloud Core Router with twelve 10 Gigabit SFP+ cages, two 25 Gigabit SFP28
+  cages, a gigabit management jack and an RJ45 serial console, and runs RouterOS v7. The front carries the stacked pair
+  of SFP28 cages at the left with four arrow lamps, the twelve SFP+ cages each with an ACT and a 10G lamp above it,
+  the console over the management jack, RESET and four status lamps. Two AC inlets, each with its supply built in,
+  two fan openings and a finned heatsink block are on the rear. The brochure says the supply is dual redundant but
+  prints no part number and the rear photograph shows no removable module, so the supplies are part of the chassis
+  and there are no bays.
+profile: networking
+provenance:
+  sources:
+    confidence: photo-measured
+    note: >-
+      CCR2004-1G-12S+2XS brochure, MikroTik (file CCR2004-1G-12S2XS_250452.pdf; no date is printed, the file name
+      carries a revision stamp): specifications and included parts. Its page 2 holds a product photograph that the
+      conversion dropped; the PDF page could not be rendered on the host that drew this device (no PDF page
+      renderer), so the studio photographs below are the faces' evidence. Product page, MikroTik (saved 2026-10-26):
+      dimensions, AC inputs, power, cooling type. Quick guide (PDF CCR2004-1G-12Splus2XS-qg_200432.pdf and the saved
+      help page, pageId 23396389): first steps, safety and the reset button, no LED table. Block diagram
+      CCR2004-1G-12Splus2XS_200459.png (held, not used for geometry). Studio photographs, each opened: 1937 (straight
+      front, from above; measured), 1936 (straight rear, from above; measured) and 1935 (front left three-quarter,
+      shows the left wall). NetBox's device type and its front elevation image as a second opinion only (no rear
+      elevation is held). No figure numbers: MikroTik prints none. The hardware manual page is not held.
+  datasheet:
+    confidence: datasheet
+    note: >-
+      Brochure specifications: product code CCR2004-1G-12S+2XS, AL32400 1700 MHz, 4 cores, 4 GB DDR4, 128 MB NAND,
+      1 gigabit Ethernet port, 12 SFP+ ports, 2 SFP28 ports (25G), RouterOS v7 license level 6, AC power supply 100 -
+      240 V, 2 AC inputs, 443 x 224 x 44 mm, -20 to +60 C tested, 49 W maximum; included: 2 IEC cords, rackmount
+      bracket white, fastening set for rackmount case. The page adds 60 W maximum, 31 W without attachments and
+      2 fans.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      No drawing is held. Photograph 1937's body is 1462 px across at the displayed 2000 px width for the printed 443
+      (3.30 px per mm); x is taken at that scale from the body's left edge, measured on crops at 9.8 px per mm. The
+      photograph looks down on the chassis, so the face is foreshortened by about 8 percent (the face is 133 px for
+      44 mm, 3.02 px per mm): y is measured up from the face's bottom edge and is estimated. The SFP+ pitch reads
+      19.81 mm across eleven steps (43.0 to 260.9 mm), on a quantity the scale never saw.
+  chassis:
+    confidence: datasheet
+    note: >-
+      443 x 224 x 44 mm: the brochure and the product page print the same figures. The width is the full ear-to-ear
+      width as printed (the ears ship flush). No drawing is held, so it cannot be checked whether the 224 includes
+      what stands off the rear: the wire retaining clips of the inlets stand off the rear edge in photographs 1935 and
+      1937, and the depth is carried as printed, taken as the body with the retaining clips not counted (assumed, not
+      measured).
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      From photograph 1937 at 3.30 px per mm in x. SFP28 stack: cage left at 15.4 mm, upper cage top at 11.5 mm and
+      lower at 27.5 mm (a 16.0 mm row pitch), with a grey strip between the cages that carries four printed arrows.
+      SFP+ cages: 15.2 mm wide, first centre at 43.0 mm, 19.8 mm pitch, top at 27.4 mm. The console and management
+      jacks sit in one 17.6 x 27.0 mm plate at 277.7 mm; RESET at 299.7 mm. The plates are drawn at the photograph's
+      median over each (see colour).
+  vent-band:
+    confidence: estimated
+    note: >-
+      estimated - measured on photograph 1937 at 6.106 px per mm across (the body's 2705 px at the band for the
+      printed 443 mm; the body's left edge at 507.5 px) and 5.59 px per mm up the face (the face is 246 px for 44 mm
+      because the camera looks down). The band is 60 parallel slots leaning right, one every 4.736 mm (28.92 px, 59
+      steps from 589 px to 2295 px), the first slot's top-left corner at 13.35 mm. A full slot is 2.4 mm wide across
+      and 9.3 mm tall, its foot 2.70 mm left of its top, with corners cut 0.3 mm for the rounded ends. The slots'
+      tops are at 4.9 mm; the lower edge of the band sweeps down from the left end and back up at the right end.
+      Drawn as: the 41 full slots 11 to 51 as one `motif` field with a 4.736 x 9.3 mm tile holding one slot (it is
+      2.4 + 2.70 = 5.1 mm across, so its corner wraps into the next tile and is cut in two); five dashes at each end
+      (slots 1 to 5 and 56 to 60, 2.5 mm tall) as one `motif` field each with a 4.736 x 2.5 mm tile; and the slots the
+      sweep shortens, 6 to 10 and 52 to 55, each as its own one-tile `motif` rect at the height measured at its foot
+      (2.9, 4.1, 5.9, 7.7 and 8.8 mm on the left; 8.9, 7.7, 5.4 and 3.2 mm on the right). No source draws the
+      sweep's outline, and the foot of each shortened slot is cut square: the metal cuts it along the curve, up to
+      about 0.8 mm off. The `vent` hexagons do not draw any of it. Every tile is 0.2 mm taller than the slot it
+      holds, with the cells 0.1 mm inside its top and bottom edges and the tile begun 0.1 mm above the field: a
+      cell on a tile edge left a faint 1 px seam between the slots along it. The one slot of the main field is
+      4.93 mm across, wider than the 4.736 mm pitch, so it is still cut where it crosses the tile's side edge.
+  legends:
+    confidence: photo-measured
+    note: >-
+      The front legends are set at 2.3 mm. Each cap height was read on photograph 1937: USER, SFP+ 1, CONSOLE and
+      MGMT/BOOT are 10 to 12 px tall at 5.59 px per mm up the face (1.8 to 2.1 mm of cap), and the face's wider
+      letter shapes fix the size by width: USER is 38 px and MGMT/BOOT 92 px across at 6.106 px per mm, 6.2 and
+      15.1 mm, which DejaVu draws at 2.3 mm. The SFP28 labels (1, 2 and 25G SFP28) are set at 1.9 mm, their width
+      in the photograph. The rear's rating line on photograph 1936 is 207 px, 33.4 mm, across at 6.19 px per mm,
+      which 2.2 mm draws, so the rear legends are 2.2 mm. The model text keeps its size.
+  colour-sample:
+    confidence: photo-measured
+    note: >-
+      Face #c4c4c4: the median of 52220 pixels of photograph 1937 over x 2492 to 2865, y 995 to 1135 (plain face, right
+      of the lamp legends) is #c5c3c3, and of 11400 pixels of the brochure's front figure (fig. 2) over x 1130 to
+      1320, y 285 to 345 is #c4c4c4. The management plate #787674 is the median of 1040 pixels of photograph 1937 over
+      x 2215 to 2295, y 1037 to 1050 (between the two jacks); the SFP28 strip #898784 is the median of 92 pixels over
+      x 597 to 620, y 1054 to 1058. The lamps' colours belong to the component skins and are not changed here.
+  lamps:
+    confidence: photo-measured
+    note: >-
+      Each SFP+ cage has an ACT lamp 5.2 mm left of its centre and a 10G lamp 4.4 mm right of it, both 4.6 x 2.6 mm
+      as drawn on the metal, with ACT and 10G printed above. The SFP28 stack has four arrows (down, up, down, up)
+      in its strip, printed with 1 and 2 beneath. The four chassis lamps (USER, FAULT, PWR 2, PWR 1) are at 307.3
+      mm. No held document says what a lamp shows.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      SFP+ 1 to SFP+ 12 are printed under the cages, left to right. The SFP28 stack prints 1 with a down arrow and 2
+      with an up arrow under it, as the CRS518 prints its stacks, so the lower cage is 1 and the upper 2. MGMT/BOOT is
+      printed under the lower of the two stacked jacks and CONSOLE, with an arrow, beside the upper, so the
+      management jack (the brochure's one gigabit port) is the lower one and the console the upper.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      estimated - no rear elevation is held; the positions are read off photograph 1936 (crop at 4.33 px per mm).
+      It looks down on the rear, so x is good to about 1.5 mm and y, from the face's bottom edge, to about 2.5 mm.
+      Inlets at 31.0 and 111.6 mm with POWER 1 or 2 and the rating line under each; fan openings 37 mm across at
+      170.2 and 385.5 mm. The heatsink block, re-read on photograph 1936 at 6.124 px per mm (the body's 2713 px at the
+      fins, left edge 515 px): a thick rim 200.0 to 205.0 mm, 21 fins every 7.31 mm (44.75 px), the first centred
+      at 211.95 mm, each 1.4 mm wide (the run of the fin's bright face is 8 to 10 px, 1.3 to 1.6 mm), and a thin
+      rim at 365.0 to 366.9 mm, so the block is 166.9 mm wide from 200.0 mm. Drawn as a grey base with one silver
+      rectangle per fin, full height. Photograph 1936 and the brochure's rear figure (fig. 3) show the fins reaching
+      past the box's lower edge: the camera looks down and the block stands out of the rear plane, so it is the
+      block's depth, not a lower edge; the depth is not held and the block is drawn flat inside the rear face.
+      The guards are honeycombs (hexagonal holes round a hub), read on photograph 1936 at 18.37 px per mm in a 3x
+      crop: hexagons 5.3 mm across corners (the camera looks down, so its flats read 4.1 mm where a regular
+      hexagon of that width is 4.6), 5.06 mm between columns, so a lattice of 5.88 mm centre to centre down a
+      column, with a hexagon at the hub's centre and the one whole ring of hexagons round it cut by the opening's
+      circle. Drawn as `motif`, one tile of two columns (10.184 x 5.88 mm) holding hexagons 5.36 mm across
+      corners, with the tile's origin at the fan's centre. The plain `vent` pattern ties the hexagon to its
+      pitch: scaled to this 5.88 mm pitch its web is 0.8 mm where the photograph's is about 1.3, so it draws
+      the metal too fat. The inlets' wire retaining clips and the screws are not drawn (no registry part).
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      The brochure says "dual redundant power supply" and "Number of AC inputs 2"; the page says "Number of AC
+      inputs 2" and lists no PSU slots. No held document prints a supply part number and photograph 1936 shows two
+      plain C14 inlets with wire clips and no module, handle or latch, so the supplies are part of the chassis with
+      their inlets and no bay is drawn. The page says "Cooling type 2 fans" and the photograph shows two round fan
+      openings, one after the second inlet and one at the right of the heatsink; the finned heatsink block between
+      them is chassis art, not a third fan (as the CRS309's is).
+  side-layout:
+    confidence: estimated
+    note: >-
+      Photograph 1935 shows the left wall plain: a screw and a few holes, no vent or grille. No held photograph shows
+      the right wall.
+  ears:
+    confidence: datasheet
+    note: >-
+      Rack ears are in the box (brochure: Rackmount bracket white). They ship flush with the face and are not drawn.
+  colour:
+    confidence: estimated
+    note: >-
+      The face and the fan hubs are drawn #c4c4c4, the samples listed under colour-sample: photograph 1937's
+      median is #c5c3c3 and the brochure's front figure is #c4c4c4. The rear photograph 1936 reads #c5c5c5 over
+      x 1215 to 1420, y 972 to 1103 (26855 pixels); the brochure's rear figure reads lighter (#d1d1d1), so the rear's
+      colour is the more lit of the two and not taken. The heatsink, all on photograph 1936, y 888 to 1100 (the block's
+      top edge to the face's bottom edge): the base between the fins is #414142, the median of 121688 pixels over the
+      twenty gaps (x from 8 px after one fin's centre to 8 px before the next, 1865 to 2699 across the block); the
+      gap is a gradient from #676769 at the top to #303030 at the bottom and the median of the whole is drawn. The
+      fin face is #a6a5a5, the median of 13356 pixels in 3 px columns at the 21 fin centres. The left rim is
+      #d9d9d9 (6996 pixels over x 1740 to 1773) and the right rim #9a9a98 (2120 pixels over x 2751 to 2761).
+attrs:
+  power:
+    power-max-w: 49
+    power-max-w-page: 60
+    power-without-attachments-w: 31
+    power-input: '100 - 240 V AC, two inputs'
+    power-rating-label: 100-240 V ~1 A MAX 50/60 Hz (printed under each inlet)
+  thermal:
+    cooling: 2 fans (page), plus a finned heatsink block
+  environmental:
+    operating-temp-c: -20 to 60 (tested)
+  platform:
+    cpu: AL32400, 1700 MHz, 4 cores, ARM 64 bit
+    ram: 4 GB DDR4
+    storage: 128 MB NAND
+    os: RouterOS v7, license level 6
+  features:
+    optics-sfp-plus: >-
+      brochure: twelve 10G SFP+ ports; the brochure prints no list of optics, so none is claimed beyond the cage
+    optics-sfp28: >-
+      brochure: two 25G SFP28 ports; the brochure prints no list of optics, so none is claimed beyond the cage
+chassis:
+  width: 443.0
+  height: 44.0
+  depth: 224.0
+  ru: 1
+  color: '#c4c4c4'
+  ears:
+    positions:
+    - {name: flush, default: true}
+  power: ac
+gaps:
+- what: front-elevation
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    No dimensions drawing is held; the front is read off studio photograph 1937, which looks down on it, so x is
+    photo-measured and y is estimated.
+  wanted: A dimensioned front view.
+- what: rear-elevation
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    No rear view is held (NetBox has no rear elevation for this model); the rear is read off studio photograph 1936,
+    which looks down on it, so the y positions are estimated. The heatsink block and its fins stand out of the rear
+    plane; their depth is not held, so the block is drawn flat inside the face.
+  wanted: A dimensioned rear view.
+- what: power-figures
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    The brochure gives 49 W maximum; the product page gives 60 W maximum and 31 W without attachments. The brochure's
+    49 W is carried as the maximum, the page's 60 W is kept as power-max-w-page, and the 31 W is the page's figure
+    without attachments and is not a maximum.
+  wanted: MikroTik's statement of the maximum consumption.
+- what: psu-slots
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    The brochure says a dual redundant power supply is included and "Number of AC inputs 2"; the page lists no PSU
+    slots; no held document prints a supply part number or shows a module. The two supplies are part of the chassis
+    with their inlets and no bay is added; the base configuration exports two power ports.
+  wanted: The supply's part number and a statement of what is replaceable.
+- what: fan-count
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    The page says 2 fans and the rear photograph shows two round fan openings and a finned heatsink block. The block
+    is drawn as chassis art and not counted as a fan; no document says whether it is cooled by either fan, and none
+    states a fan redundancy form.
+  wanted: MikroTik's fan count and cooling description.
+- what: vent-pattern
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The slots are drawn as measured, but the metal's band is a recess whose lower edge sweeps down from the left end
+    and back up at the right end, and the slots the sweep shortens are cut along that curve. No decor draws a curved
+    edge, so the shortened slots are cut square and the curve is not drawn: they are up to about 0.8 mm off.
+  wanted: A dimensioned front view, or a decor edge that follows a curve.
+- what: led-states
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    Searched the brochure, the page and both quick guides for an LED table: none. The lamps carry the component's own
+    vocabulary and no meaning is stated. The lamps' resting colour comes from the lamp component, not from this
+    device: the photograph shows the 24 SFP+ lamps unlit and the four status lamps dim green, red and blue, and a
+    still render draws the component's own resting colour. It is not changed here.
+  wanted: MikroTik's LED description for the CCR2004-1G-12S+2XS.
+- what: right-wall
+  scope: [right]
+  reason: needs-drawing
+  note: >-
+    No held photograph shows the right wall (1935 shows the left, 1936 and 1937 are straight rear and front), so it is
+    left empty.
+  wanted: A photograph or drawing of the right wall.
+- what: top-and-bottom
+  scope: [top, bottom]
+  reason: needs-drawing
+  note: >-
+    Photographs 1935 and 1937 show a plain lid with embossed lettering and shallow grooves; no document shows the
+    underside.
+  wanted: A top and a bottom view.
+- what: weight
+  scope: [front]
+  reason: vendor-silent
+  note: Neither the brochure nor the page gives a weight.
+  wanted: MikroTik's weight.
+- what: eol
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The saved product page carries no Discontinued badge and MikroTik publishes no end-of-life page, so no lifecycle
+    is written.
+  wanted: none
+groups:
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g}
+    description: the two SFP28 cages in a stack, printed 1 and 2 under 25G SFP28, the lower cage 1
+  sfp28-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the four arrow lamps in the strip between the two SFP28 cages (two per cage)
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the twelve SFP+ cages printed SFP+ 1 to SFP+ 12
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: an ACT and a 10G lamp over each SFP+ cage
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the gigabit management jack printed MGMT/BOOT
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the RJ45 serial console
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+    description: the RESET button
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the USER, FAULT, PWR 2 and PWR 1 lamps
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the two AC inlets, POWER 1 and POWER 2, as seen from the rear
+views:
+  front:
+    size: {w: 443.0, h: 44.0}
+    panel:
+      decor:
+      - id: vent-field
+        kind: vent-field
+        at: [58.01, 4.9]
+        size: [194.54, 9.3]
+        pattern: motif
+        pattern-pitch: [4.736, 9.5]
+        pattern-offset: [58.01, 4.8]
+        pattern-cells:
+        - [[0.0, 0.1], [0.064, 0.1], [0.28, 0.388], [0.0, 1.354]]
+        - [[2.616, 0.388], [3.0, 0.1], [4.736, 0.1], [4.736, 1.354], [2.484, 9.112], [2.1, 9.4], [0.3, 9.4],
+           [0.084, 9.112]]
+        vent: 1.0
+      - id: vent-dashes-left
+        kind: vent-field
+        at: [12.62, 4.9]
+        size: [22.07, 2.5]
+        pattern: motif
+        pattern-pitch: [4.736, 2.7]
+        pattern-offset: [12.62, 4.8]
+        pattern-cells:
+        - [[0.642, 0.388], [1.026, 0.1], [2.826, 0.1], [3.042, 0.388], [2.484, 2.312], [2.1, 2.6], [0.3, 2.6],
+           [0.084, 2.312]]
+        vent: 1.0
+      - id: vent-dashes-right
+        kind: vent-field
+        at: [273.1, 4.9]
+        size: [22.07, 2.5]
+        pattern: motif
+        pattern-pitch: [4.736, 2.7]
+        pattern-offset: [273.1, 4.8]
+        pattern-cells:
+        - [[0.642, 0.388], [1.026, 0.1], [2.826, 0.1], [3.042, 0.388], [2.484, 2.312], [2.1, 2.6], [0.3, 2.6],
+           [0.084, 2.312]]
+        vent: 1.0
+      - id: vent-ramp-left-1
+        kind: vent-field
+        at: [36.2, 4.9]
+        size: [3.23, 2.862]
+        pattern: motif
+        pattern-pitch: [3.23, 3.062]
+        pattern-offset: [36.2, 4.8]
+        pattern-cells:
+        - [[0.747, 0.388], [1.131, 0.1], [2.931, 0.1], [3.147, 0.388], [2.484, 2.674], [2.1, 2.962],
+           [0.3, 2.962], [0.084, 2.674]]
+        vent: 1.0
+      - id: vent-ramp-left-2
+        kind: vent-field
+        at: [40.57, 4.9]
+        size: [3.59, 4.114]
+        pattern: motif
+        pattern-pitch: [3.59, 4.314]
+        pattern-offset: [40.57, 4.8]
+        pattern-cells:
+        - [[1.111, 0.388], [1.495, 0.1], [3.295, 0.1], [3.511, 0.388], [2.484, 3.926], [2.1, 4.214],
+           [0.3, 4.214], [0.084, 3.926]]
+        vent: 1.0
+      - id: vent-ramp-left-3
+        kind: vent-field
+        at: [44.79, 4.9]
+        size: [4.11, 5.903]
+        pattern: motif
+        pattern-pitch: [4.11, 6.103]
+        pattern-offset: [44.79, 4.8]
+        pattern-cells:
+        - [[1.63, 0.388], [2.014, 0.1], [3.814, 0.1], [4.03, 0.388], [2.484, 5.715], [2.1, 6.003],
+           [0.3, 6.003], [0.084, 5.715]]
+        vent: 1.0
+      - id: vent-ramp-left-4
+        kind: vent-field
+        at: [49.0, 4.9]
+        size: [4.63, 7.692]
+        pattern: motif
+        pattern-pitch: [4.63, 7.892]
+        pattern-offset: [49.0, 4.8]
+        pattern-cells:
+        - [[2.15, 0.388], [2.533, 0.1], [4.333, 0.1], [4.55, 0.388], [2.484, 7.504], [2.1, 7.792],
+           [0.3, 7.792], [0.084, 7.504]]
+        vent: 1.0
+      - id: vent-ramp-left-5
+        kind: vent-field
+        at: [53.43, 4.9]
+        size: [4.94, 8.766]
+        pattern: motif
+        pattern-pitch: [4.94, 8.966]
+        pattern-offset: [53.43, 4.8]
+        pattern-cells:
+        - [[2.461, 0.388], [2.845, 0.1], [4.645, 0.1], [4.861, 0.388], [2.484, 8.578], [2.1, 8.866],
+           [0.3, 8.866], [0.084, 8.578]]
+        vent: 1.0
+      - id: vent-ramp-right-1
+        kind: vent-field
+        at: [252.29, 4.9]
+        size: [5.0, 8.945]
+        pattern: motif
+        pattern-pitch: [5.0, 9.145]
+        pattern-offset: [252.29, 4.8]
+        pattern-cells:
+        - [[2.513, 0.388], [2.897, 0.1], [4.697, 0.1], [4.913, 0.388], [2.484, 8.756], [2.1, 9.045],
+           [0.3, 9.045], [0.084, 8.756]]
+        vent: 1.0
+      - id: vent-ramp-right-2
+        kind: vent-field
+        at: [257.39, 4.9]
+        size: [4.63, 7.692]
+        pattern: motif
+        pattern-pitch: [4.63, 7.892]
+        pattern-offset: [257.39, 4.8]
+        pattern-cells:
+        - [[2.15, 0.388], [2.533, 0.1], [4.333, 0.1], [4.55, 0.388], [2.484, 7.504], [2.1, 7.792],
+           [0.3, 7.792], [0.084, 7.504]]
+        vent: 1.0
+      - id: vent-ramp-right-3
+        kind: vent-field
+        at: [262.8, 4.9]
+        size: [3.96, 5.367]
+        pattern: motif
+        pattern-pitch: [3.96, 5.567]
+        pattern-offset: [262.8, 4.8]
+        pattern-cells:
+        - [[1.474, 0.388], [1.858, 0.1], [3.658, 0.1], [3.874, 0.388], [2.484, 5.179], [2.1, 5.467],
+           [0.3, 5.467], [0.084, 5.179]]
+        vent: 1.0
+      - id: vent-ramp-right-4
+        kind: vent-field
+        at: [268.16, 4.9]
+        size: [3.33, 3.22]
+        pattern: motif
+        pattern-pitch: [3.33, 3.42]
+        pattern-offset: [268.16, 4.8]
+        pattern-cells:
+        - [[0.851, 0.388], [1.235, 0.1], [3.035, 0.1], [3.251, 0.388], [2.484, 3.032], [2.1, 3.32],
+           [0.3, 3.32], [0.084, 3.032]]
+        vent: 1.0
+      - {id: sfp28-strip, kind: module-plate, at: [15.4, 21.9], size: [14.25, 5.6], fill: '#898784'}
+      - {id: mgmt-block, kind: jack-plate, at: [277.7, 10.5], size: [17.6, 27.0], fill: '#787674'}
+      cutouts:
+      - {block: sfp28}
+      - {block: sfp-plus}
+      - {id: console, at: [278.6, 11.3], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt, at: [278.6, 24.9], size: [15.8, 13.2], shape: rect}
+      - {id: btn-reset, at: [297.7, 31.2], size: [4.0, 4.0], shape: circle}
+      - {id: led-28-1, at: [15.9, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-28-2, at: [18.9, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-28-3, at: [23.9, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-28-4, at: [26.9, 23.7], size: [2.25, 2.0], shape: rect}
+      - {id: led-user, at: [306.3, 17.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-fault, at: [306.3, 22.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr2, at: [306.3, 27.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr1, at: [306.3, 32.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-sfp-1-act, at: [35.525, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-1-10g, at: [45.125, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-2-act, at: [55.325, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-2-10g, at: [64.925, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-3-act, at: [75.125, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-3-10g, at: [84.725, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-4-act, at: [94.925, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-4-10g, at: [104.525, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-5-act, at: [114.725, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-5-10g, at: [124.325, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-6-act, at: [134.525, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-6-10g, at: [144.125, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-7-act, at: [154.325, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-7-10g, at: [163.925, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-8-act, at: [174.125, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-8-10g, at: [183.725, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-9-act, at: [193.925, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-9-10g, at: [203.525, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-10-act, at: [213.725, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-10-10g, at: [223.325, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-11-act, at: [233.525, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-11-10g, at: [243.125, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-12-act, at: [253.325, 21.8], size: [4.6, 2.6], shape: rect}
+      - {id: led-sfp-12-10g, at: [262.925, 21.8], size: [4.6, 2.6], shape: rect}
+    silkscreen:
+    - {at: [18.525, 40.1], text: 1▼, font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: cage-28-1}
+    - {at: [26.525, 40.1], text: ▲2, font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: cage-28-2}
+    - {at: [22.525, 42.3], text: 25G SFP28, font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [37.825, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-1-act}
+    - {at: [47.425, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-1-10g}
+    - {at: [43.025, 41.6], text: 'SFP+ 1', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-1}
+    - {at: [57.625, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-2-act}
+    - {at: [67.225, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-2-10g}
+    - {at: [62.825, 41.6], text: 'SFP+ 2', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-2}
+    - {at: [77.425, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-3-act}
+    - {at: [87.025, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-3-10g}
+    - {at: [82.625, 41.6], text: 'SFP+ 3', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-3}
+    - {at: [97.225, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-4-act}
+    - {at: [106.825, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-4-10g}
+    - {at: [102.425, 41.6], text: 'SFP+ 4', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-4}
+    - {at: [117.025, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-5-act}
+    - {at: [126.625, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-5-10g}
+    - {at: [122.225, 41.6], text: 'SFP+ 5', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-5}
+    - {at: [136.825, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-6-act}
+    - {at: [146.425, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-6-10g}
+    - {at: [142.025, 41.6], text: 'SFP+ 6', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-6}
+    - {at: [156.625, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-7-act}
+    - {at: [166.225, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-7-10g}
+    - {at: [161.825, 41.6], text: 'SFP+ 7', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-7}
+    - {at: [176.425, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-8-act}
+    - {at: [186.025, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-8-10g}
+    - {at: [181.625, 41.6], text: 'SFP+ 8', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-8}
+    - {at: [196.225, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-9-act}
+    - {at: [205.825, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-9-10g}
+    - {at: [201.425, 41.6], text: 'SFP+ 9', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-9}
+    - {at: [216.025, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-10-act}
+    - {at: [225.625, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-10-10g}
+    - {at: [221.225, 41.6], text: 'SFP+ 10', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-10}
+    - {at: [235.825, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-11-act}
+    - {at: [245.425, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-11-10g}
+    - {at: [241.025, 41.6], text: 'SFP+ 11', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-11}
+    - {at: [255.625, 20.2], text: ACT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-12-act}
+    - {at: [265.225, 20.2], text: 10G, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: led-sfp-12-10g}
+    - {at: [260.825, 41.6], text: 'SFP+ 12', font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: cage-12}
+    - {id: console-arrow, at: [296.4, 14.0], path: 'M 1.0 -0.9 L 0 0 L 1.0 0.9 Z', filled: true, stroke-width: 0.1, fill: '#2b2b2b', for: console}
+    - {at: [297.8, 14.5], text: CONSOLE, font-size: 2.3, anchor: start, fill: '#2b2b2b', for: console}
+    - {at: [286.5, 41.6], text: MGMT/BOOT, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: mgmt}
+    - {at: [299.7, 41.6], text: RESET, font-size: 2.3, anchor: middle, fill: '#2b2b2b', for: btn-reset}
+    - {at: [312.0, 19.21], text: USER, font-size: 2.3, anchor: start, fill: '#2b2b2b', for: led-user}
+    - {at: [312.0, 24.11], text: FAULT, font-size: 2.3, anchor: start, fill: '#2b2b2b', for: led-fault}
+    - {at: [312.0, 29.21], text: PWR 2, font-size: 2.3, anchor: start, fill: '#2b2b2b', for: led-pwr2}
+    - {at: [312.0, 34.11], text: PWR 1, font-size: 2.3, anchor: start, fill: '#2b2b2b', for: led-pwr1}
+    - {at: [437.3, 9.0], text: Cloud Core Router, font-size: 5.3, anchor: end, fill: '#2b2b2b', for: chassis}
+    - {at: [437.1, 13.5], text: CCR2004-1G-12S+2XS, font-size: 2.8, anchor: end, fill: '#2b2b2b', for: chassis}
+    components:
+      blocks:
+      - id: sfp28
+        ref: std/sfp-ganged@1
+        at: [15.4, 27.5]
+        count: 2
+        rows: 2
+        pitch: 14.25
+        row-pitch: -16.0
+        number-from: 1
+        id-format: 'cage-28-{n}'
+        cutouts: true
+        rotate: {top: 180}
+        attrs: {media: sfp28, speed: 25g}
+      - id: sfp-plus
+        ref: std/sfp-ganged@1
+        at: [35.9, 27.4]
+        count: 12
+        rows: 1
+        pitch: 19.8
+        number-from: 1
+        id-format: 'cage-{n}'
+        cutouts: true
+        attrs: {media: sfp-plus, speed: 10g}
+      placements:
+      - {block: sfp28}
+      - {block: sfp-plus}
+      - {ref: std/rj45@2, id: console, at: [278.6, 11.3], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+      - {ref: common/rj45-eth@1, id: mgmt, at: [278.6, 24.9], group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 1g}}
+      - {ref: common/led-arrow-sm@1, id: led-28-1, skin: down, at: [15.9, 23.7], group: sfp28-leds, rel-pos: 1, for: cage-28-1}
+      - {ref: common/led-arrow-sm@1, id: led-28-2, skin: up, at: [18.9, 23.7], group: sfp28-leds, rel-pos: 2, for: cage-28-2}
+      - {ref: common/led-arrow-sm@1, id: led-28-3, skin: down, at: [23.9, 23.7], group: sfp28-leds, rel-pos: 3, for: cage-28-1}
+      - {ref: common/led-arrow-sm@1, id: led-28-4, skin: up, at: [26.9, 23.7], group: sfp28-leds, rel-pos: 4, for: cage-28-2}
+      - {ref: common/reset-button@1, id: btn-reset, at: [297.7, 31.2], for: chassis, group: controls, rel-pos: 1,
+         attrs: {function: reset}}
+      - {ref: common/led-dot@1, id: led-user, at: [306.3, 17.5], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-fault, at: [306.3, 22.4], for: chassis, group: status-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-pwr2, at: [306.3, 27.5], for: chassis, group: status-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-pwr1, at: [306.3, 32.4], for: chassis, group: status-leds, rel-pos: 4}
+      - {ref: common/led-rect@1, id: led-sfp-1-act, at: [35.525, 21.8], for: cage-1, group: sfp-leds, rel-pos: 1}
+      - {ref: common/led-rect@1, id: led-sfp-1-10g, at: [45.125, 21.8], for: cage-1, group: sfp-leds, rel-pos: 2}
+      - {ref: common/led-rect@1, id: led-sfp-2-act, at: [55.325, 21.8], for: cage-2, group: sfp-leds, rel-pos: 3}
+      - {ref: common/led-rect@1, id: led-sfp-2-10g, at: [64.925, 21.8], for: cage-2, group: sfp-leds, rel-pos: 4}
+      - {ref: common/led-rect@1, id: led-sfp-3-act, at: [75.125, 21.8], for: cage-3, group: sfp-leds, rel-pos: 5}
+      - {ref: common/led-rect@1, id: led-sfp-3-10g, at: [84.725, 21.8], for: cage-3, group: sfp-leds, rel-pos: 6}
+      - {ref: common/led-rect@1, id: led-sfp-4-act, at: [94.925, 21.8], for: cage-4, group: sfp-leds, rel-pos: 7}
+      - {ref: common/led-rect@1, id: led-sfp-4-10g, at: [104.525, 21.8], for: cage-4, group: sfp-leds, rel-pos: 8}
+      - {ref: common/led-rect@1, id: led-sfp-5-act, at: [114.725, 21.8], for: cage-5, group: sfp-leds, rel-pos: 9}
+      - {ref: common/led-rect@1, id: led-sfp-5-10g, at: [124.325, 21.8], for: cage-5, group: sfp-leds, rel-pos: 10}
+      - {ref: common/led-rect@1, id: led-sfp-6-act, at: [134.525, 21.8], for: cage-6, group: sfp-leds, rel-pos: 11}
+      - {ref: common/led-rect@1, id: led-sfp-6-10g, at: [144.125, 21.8], for: cage-6, group: sfp-leds, rel-pos: 12}
+      - {ref: common/led-rect@1, id: led-sfp-7-act, at: [154.325, 21.8], for: cage-7, group: sfp-leds, rel-pos: 13}
+      - {ref: common/led-rect@1, id: led-sfp-7-10g, at: [163.925, 21.8], for: cage-7, group: sfp-leds, rel-pos: 14}
+      - {ref: common/led-rect@1, id: led-sfp-8-act, at: [174.125, 21.8], for: cage-8, group: sfp-leds, rel-pos: 15}
+      - {ref: common/led-rect@1, id: led-sfp-8-10g, at: [183.725, 21.8], for: cage-8, group: sfp-leds, rel-pos: 16}
+      - {ref: common/led-rect@1, id: led-sfp-9-act, at: [193.925, 21.8], for: cage-9, group: sfp-leds, rel-pos: 17}
+      - {ref: common/led-rect@1, id: led-sfp-9-10g, at: [203.525, 21.8], for: cage-9, group: sfp-leds, rel-pos: 18}
+      - {ref: common/led-rect@1, id: led-sfp-10-act, at: [213.725, 21.8], for: cage-10, group: sfp-leds, rel-pos: 19}
+      - {ref: common/led-rect@1, id: led-sfp-10-10g, at: [223.325, 21.8], for: cage-10, group: sfp-leds, rel-pos: 20}
+      - {ref: common/led-rect@1, id: led-sfp-11-act, at: [233.525, 21.8], for: cage-11, group: sfp-leds, rel-pos: 21}
+      - {ref: common/led-rect@1, id: led-sfp-11-10g, at: [243.125, 21.8], for: cage-11, group: sfp-leds, rel-pos: 22}
+      - {ref: common/led-rect@1, id: led-sfp-12-act, at: [253.325, 21.8], for: cage-12, group: sfp-leds, rel-pos: 23}
+      - {ref: common/led-rect@1, id: led-sfp-12-10g, at: [262.925, 21.8], for: cage-12, group: sfp-leds, rel-pos: 24}
+    regions:
+      - {id: logo-zone, at: [405.0, 31.0], size: {w: 31.0, h: 9.5}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 443.0, h: 44.0}
+    panel:
+      decor:
+      - id: fan-0
+        kind: fan-grille
+        at: [151.7, 5.4]
+        size: [37.0, 37.0]
+        rx: 18.5
+        pattern: motif
+        pattern-pitch: [10.184, 5.88]
+        pattern-offset: [170.2, 23.9]
+        pattern-cells: &hex-ring
+        - [[0.0, 0.0], [2.68, 0.0], [1.34, 2.321], [0.0, 2.321]]
+        - [[0.0, 3.559], [1.34, 3.559], [2.68, 5.88], [0.0, 5.88]]
+        - [[2.412, 2.94], [3.752, 0.619], [6.432, 0.619], [7.772, 2.94], [6.432, 5.261], [3.752, 5.261]]
+        - [[7.504, 0.0], [10.184, 0.0], [10.184, 2.321], [8.844, 2.321]]
+        - [[8.844, 3.559], [10.184, 3.559], [10.184, 5.88], [7.504, 5.88]]
+        vent: 1.0
+      - {id: fan-hub-0, kind: fan-hub, at: [160.7, 14.4], size: [19.0, 19.0], rx: 9.5, fill: '#c4c4c4'}
+      - {id: heatsink, kind: heatsink, at: [200.0, 7.5], size: [166.9, 36.5], fill: '#414142'}
+      - {id: heatsink-fin-01, kind: heatsink-fin, at: [211.25, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-02, kind: heatsink-fin, at: [218.56, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-03, kind: heatsink-fin, at: [225.87, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-04, kind: heatsink-fin, at: [233.18, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-05, kind: heatsink-fin, at: [240.49, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-06, kind: heatsink-fin, at: [247.8, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-07, kind: heatsink-fin, at: [255.11, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-08, kind: heatsink-fin, at: [262.42, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-09, kind: heatsink-fin, at: [269.73, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-10, kind: heatsink-fin, at: [277.04, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-11, kind: heatsink-fin, at: [284.35, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-12, kind: heatsink-fin, at: [291.66, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-13, kind: heatsink-fin, at: [298.97, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-14, kind: heatsink-fin, at: [306.28, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-15, kind: heatsink-fin, at: [313.59, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-16, kind: heatsink-fin, at: [320.9, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-17, kind: heatsink-fin, at: [328.21, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-18, kind: heatsink-fin, at: [335.52, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-19, kind: heatsink-fin, at: [342.83, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-20, kind: heatsink-fin, at: [350.14, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - {id: heatsink-fin-21, kind: heatsink-fin, at: [357.45, 7.5], size: [1.4, 36.5], fill: '#a6a5a5'}
+      - id: fan-1
+        kind: fan-grille
+        at: [367.0, 4.5]
+        size: [37.0, 37.0]
+        rx: 18.5
+        pattern: motif
+        pattern-pitch: [10.184, 5.88]
+        pattern-offset: [385.5, 23.0]
+        pattern-cells: *hex-ring
+        vent: 1.0
+      - {id: fan-hub-1, kind: fan-hub, at: [376.0, 13.5], size: [19.0, 19.0], rx: 9.5, fill: '#c4c4c4'}
+      cutouts:
+      - {id: ac-inlet-1, at: [17.0, 13.0], size: [28.0, 20.0], shape: rect}
+      - {id: ac-inlet-2, at: [97.6, 13.0], size: [28.0, 20.0], shape: rect}
+    silkscreen:
+    - {id: heatsink-rim-left, at: [202.5, 7.5], path: 'M 0 0 V 36.5', filled: false, stroke-width: 4.8, fill: '#d9d9d9', for: chassis}
+    - {id: heatsink-rim-right, at: [365.9, 7.5], path: 'M 0 0 V 36.5', filled: false, stroke-width: 2.0, fill: '#9a9a98', for: chassis}
+    - {at: [31.0, 38.7], text: POWER 1, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [31.0, 41.7], text: '100-240 V ~1 A MAX 50/60 Hz', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [111.6, 38.7], text: POWER 2, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
+    - {at: [111.6, 41.7], text: '100-240 V ~1 A MAX 50/60 Hz', font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [17.0, 13.0], group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [97.6, 13.0], group: inlets, rel-pos: 2}
+  top:
+    size: {w: 443.0, h: 224.0}
+    empty: >-
+      Photographs 1935 and 1937 show a plain lid with embossed lettering and shallow grooves, and no opening.
+  bottom:
+    size: {w: 443.0, h: 224.0}
+    empty: >-
+      Not drawn by any source held: neither the brochure nor the studio photographs picture the underside.
+  left:
+    size: {w: 224.0, h: 44.0}
+    empty: >-
+      Photograph 1935 shows the left wall plain: a screw and a few holes, no vent or grille.
+  right:
+    size: {w: 224.0, h: 44.0}
+    empty: >-
+      No held photograph shows the right wall (gap `right-wall`); it is left empty and not drawn from another model.
+configurations:
+  base:
+    kind: base
+    description: >-
+      CCR2004-1G-12S+2XS - twelve SFP+ cages, two SFP28 cages, a gigabit management jack and an RJ45 console, with
+      two AC supplies and two fans (all part of the chassis in this model). The box holds two IEC cords, rack ears
+      and a fastening set.
+    default: true
+    part-numbers:
+      CCR2004-1G-12S+2XS: {}
+references:
+- {title: 'CCR2004-1G-12S+2XS brochure (MikroTik; revision stamp 250452, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CCR2004-1G-12S2XS_250452.pdf)', sha256: 07d8d1dddeb34622f6f7149764a7782d9af0691ef077b5a561043817b10ac2b9}
+- {title: 'CCR2004-1G-12S+2XS product page (MikroTik; saved 2026-10-26; https://mikrotik.com/product/ccr2004_1g_12s_2xs)', sha256: 0334a77cb57f26f8b9a1848a530e26668fe6266b53af5495af23fdfb76429570}
+- {title: 'Quick Guide - CCR2004-1G-12S+2XS (MikroTik help page, saved 2026-10-26; https://help.mikrotik.com/docs/pages/viewpage.action?pageId=23396389)', sha256: fd2532c56730a3da9b2e3cc8f0082e58e1d6537f3845829d2b4bb3f6b5f697a8}

@@ -1,0 +1,58 @@
+format: 1
+kind: component
+name: led-rect
+version: 2.0.0
+class: led
+profile: networking
+description: >-
+  Rectangular system LED (cell-site style green bar), resting unlit grey where version 1 rested
+  dark green. In every other respect it is version 1: size, lamp, states, dome and every lit
+  colour. A device moves from @1 to @2 by changing its ref and nothing else.
+size: {w: 4.6, h: 2.6}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  common/led-rect@1's size, unchanged: inferred from a figure in the S9510-28DC hardware
+  installation guide, not read from a dimensioned drawing.
+provenance:
+  size: drawing-inferred (S9510-28DC HIG Fig 26)
+  rest-colour: >-
+    #3a3938, the colour the lamp is drawn in when no state lights it (the fallback in
+    var(--led-color, ...)), confidence estimated. Median of the medians of 27 unlit lamps in two
+    MikroTik product photographs, taken in the middle of each lamp away from its bezel and
+    highlights. CCR2004-1G-12S+2XS, file 1937_hi_res.png: the 24 SFP+ ACT and 10G lamps, a 6 x 7
+    pixel box each, 42 pixels per lamp and 1008 in all, median (58, 57, 56) with lamp medians
+    from (55, 54, 52) to (61, 60, 59). CRS510-8XS-2XQ-IN, file 2232_hi_res.png: the USER, FAULT
+    and POWER lamps, a 17 x 7 pixel box each, 119 pixels per lamp and 357 in all, median
+    (135, 134, 134) with lamp medians from (134, 133, 133) to (137, 136, 136). The median of all
+    27 lamp medians is (58, 57, 56). THE TWO PHOTOGRAPHS DISAGREE: the lamp medians span 55 to 137
+    in red, 54 to 136 in green and 52 to 136 in blue, and the two photographs' medians differ by
+    77. The CCR2004 lamps are dark recessed squares and the CRS510 lamps are light grey bars, and
+    a photograph's colour depends on its lighting and white balance. The value is the median of
+    medians and is not a reading any one lamp gave a better claim to; it should be looked at.
+    Common/led-dot@1 rests in #3a3f44 and is unchanged; the median differs from it by 0, 6 and 12
+    of 255 in red, green and blue, and with the photographs in disagreement that is not taken as
+    evidence that the led-dot grey is wrong, so there is no led-dot@2. A rest colour is not a
+    lit colour: version 2 names none, and every lit colour comes from a state class as in
+    version 1.
+elements:
+  lamp:
+    at: [0.4, 0.4]
+    size: [3.8, 1.8]
+    class: led
+    states: ['off', 'on']
+relief:
+  features:
+    - node: lamp
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-rect@1's dome, unchanged: a version 2 changes the resting colour of the lamp
+        and nothing of its shape. That dome is unsourced and is one of the library's five
+        panel-lamp domes - led-arrow-sm 0.16, led-arrow 0.25, led-dot 0.3, led-rect 0.3,
+        led-indicator 0.45 - which scale with each lamp's drawn diameter rather than with any
+        measurement. led-dot's 0.3 is the one hundreds of features across casa/ and cisco/ point at.
+unplaced: >-
+  no device seats this major yet: mikrotik/crs510-8xs-2xq-in, mikrotik/crs504-4xq-in and
+  mikrotik/ccr2004-1g-12s-plus-2xs will name it, once their photographs' unlit lamps are drawn
+  unlit.
+skins: [default]
