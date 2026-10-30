@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: cor550-psu-ac
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -88,12 +88,14 @@ provenance:
     should take the major that costs; edgecore/fan-2u-1x1sn@1's
     `the-name-is-the-fru-because-the-tray-outlived-the-chassis` is the precedent for both
     the rename and its price.
-  the-dc-build-is-not-drawn: >-
+  the-dc-build-is-a-separate-part: >-
     The datasheet offers "48 VDC Power Supply: Input Voltage: 40 to 72 VDC" beside the AC
-    one, and BOTH staged documents draw the AC machine - the quick start guide's Overview
-    calls out "8. 2 x AC PSUs" and both rear elevations show C14 inlets. There is
-    therefore no DC face to model, and no `cor550-psu-dc` is written rather than one being
-    invented from a sibling's terminal block. The device records this as a gap.
+    one. Both rear elevations draw the AC machine - the quick start guide's Overview calls
+    out "8. 2 x AC PSUs" and both show C14 inlets - but the quick start's Connect Power page
+    pictures the DC supply's terminal end in an angled illustration, and
+    `edgecore/cor550-psu-dc@1` is drawn from it with this part's envelope. The DC supply is
+    a different part with a different connector, so this part keeps its AC face and the DC
+    build seats the other one.
 states: [absent]
 elements:
   vent: {at: [3.00, 2.50], size: [23.00, 35.60], class: vent}

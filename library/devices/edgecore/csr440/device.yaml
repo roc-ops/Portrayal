@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr440
-version: 2.0.0
+version: 2.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS7535-28XB
@@ -113,6 +113,16 @@ provenance:
       says "Hot-swappable 5+1 redundant fans" and the rear elevation draws six modules numbered 1 to 6,
       so the form and the bay count agree and the group can state `5+1` - which the CSR430's could not,
       its five fans being inside one tray.
+  dc-supply-figure:
+    confidence: estimated
+    note: >-
+      THE DC BUILD SEATS ITS OWN SUPPLY, edgecore/csr440-psu-dc@1, read from the quick start's two angled
+      illustrations of the module (page 2 "b. DC Power" and page 3 "Connect Power"; colour renders with
+      no scale) and drawn on edgecore/csr440-psu-ac@1's measured 53.8 x 39.4 envelope. Nothing is measured
+      from the illustrations: each position is a fraction of the visible module and estimated. The `dc`
+      configuration used to seat the AC part with a component-attrs override; it seats the new part through
+      its bays and the override is gone. The AC part now states `input: ac`, and its sentence is `input-note`,
+      so a build's supply type reads `ac` or `dc`.
   airflow:
     confidence: datasheet
     note: >-
@@ -166,13 +176,17 @@ gaps:
   - front
   reason: needs-photo
   wanted: >-
-    A picture of the DC supply's face. Both documents say the device takes "2 x DC or AC PSUs" and the
-    datasheet publishes a DC input range of -44 to -60 V at 15.5-9.6 A per supply, so the variant certainly
-    exists - but the only elevation draws AC modules, and the quick start's DC section pictures wiring
-    and ring lugs rather than a module face. The bay therefore accepts edgecore/csr440-psu-ac@1 alone,
-    and the `dc` configuration seats it - wrong at the connector, which this gap and lint L120 keep in
-    view. Borrowing the CSR310's terminal-block module would be wrong twice over: that is a different
-    kind of supply, and this chassis is a different chassis.
+    A measured face of the DC supply. Both documents say the device takes "2 x DC or AC PSUs" and the
+    datasheet publishes a DC input range of -44 to -60 V at 15.5-9.6 A per supply. The `dc` configuration
+    seats edgecore/csr440-psu-dc@1, drawn from the quick start's two angled illustrations of the module
+    (page 2 "b. DC Power" and page 3 "Connect Power"; no scale): the envelope is borrowed from edgecore/csr440-psu-ac@1,
+    every position on the face is read from an illustration and estimated, the colours are sampled from
+    renders, and which way the wires leave the two openings is not stated. The illustrations print the
+    label "RTN - 48V" upside down and the module reads dark where the AC part's face is bright; neither
+    is resolved, and the label is not drawn. No photograph or 3D model of this supply is held. Borrowing
+    the CSR310's terminal-block module would be wrong twice over: that is a different kind of supply,
+    and this chassis is a different chassis. An elevation or a photograph of the DC build's front is what
+    it needs.
 - what: fan-bay-numerals
   scope:
   - rear
@@ -541,6 +555,7 @@ views:
         size: {w: 53.8, h: 39.4}
         accepts:
         - edgecore/csr440-psu-ac@1
+        - edgecore/csr440-psu-dc@1
         default: edgecore/csr440-psu-ac@1
         group: psus
         rel-pos: 1
@@ -549,6 +564,7 @@ views:
         size: {w: 53.8, h: 39.4}
         accepts:
         - edgecore/csr440-psu-ac@1
+        - edgecore/csr440-psu-dc@1
         default: edgecore/csr440-psu-ac@1
         group: psus
         rel-pos: 2
@@ -1236,11 +1252,10 @@ configurations:
     power: dc
     description: >-
       Two hot-swappable DC supplies (-44 to -60 V, 15.5-9.6 A each) and the same six rear fan modules
-      - the datasheet's one DC ordering row. DRAWN WITH THE AC SUPPLY'S FACE, because neither document
-      pictures the DC module; the build is declared so a tool filtering by feed finds it, and the wrong
-      face is the dc-power-supply gap.
-    component-attrs:
-      csr440-psu-ac: {model: AS7535-28XB DC PSU, input: '-44 to -60 V, 15.5-9.6 A per PS', inlet: dc-terminal}
+      - the datasheet's one DC ordering row. Each bay seats edgecore/csr440-psu-dc@1, the supply's own
+      part with a grey two-opening terminal cover and a ground stud, drawn from the quick start's angled
+      illustrations of the module; what remains open is the dc-power-supply gap.
+    bays: {psu-1: edgecore/csr440-psu-dc@1, psu-2: edgecore/csr440-psu-dc@1}
     part-numbers:
       AS7535-28XB-O-48V-F V2: {part: F0PEC7332006A, power-cord: none}
 references:
