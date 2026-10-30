@@ -10,6 +10,7 @@ import functools
 import hashlib
 import json
 import pathlib
+import xml.etree.ElementTree as ET
 
 import pytest
 import yaml
@@ -193,6 +194,22 @@ def test_no_attr_states_which_cage_of_a_pair_runs_800g_beyond_the_figure_reading
         text = " ".join(str(d["attrs"][section][key]).split())
         assert "Figure 9" in text, key
     assert "is not stated in its text" in " ".join(d["groups"]["qsfpdd-800g-service"]["description"].split())
+
+
+def test_the_built_fronts_publish_data_speeds_on_the_36_service_cages_only():
+    """Each built front carries `data-speeds` on port-0 to port-35 and on no other element."""
+    dist = LIB / "dist"
+    if not (dist / "devices.json").exists():
+        pytest.skip("library/dist not built - run ./build.sh")
+    fronts = sorted(dist.glob("s9720-56ed.*front.svg"))
+    assert [f.name for f in fronts] == ["s9720-56ed.ac.front.svg", "s9720-56ed.dc.front.svg", "s9720-56ed.front.svg"]
+    for svg in fronts:
+        carriers = [el for el in ET.parse(svg).getroot().iter() if el.get("data-speeds") is not None]
+        assert sorted(el.get("id") for el in carriers) == sorted(f"port-{n}" for n in range(36)), svg.name
+        for el in carriers:
+            n = int(el.get("id").split("-")[1])
+            want = " ".join(HIGH_SPEEDS if n in HIGHLIGHTED else LOW_SPEEDS)
+            assert el.get("data-speeds") == want, (svg.name, el.get("id"))
 
 
 def test_the_committed_device_types_say_what_the_placements_say():
