@@ -8,7 +8,9 @@
   present with each placement's `dc` override applied and the path a feed lands
   on. Each entry holds `id`, `path`, `direction`, `voltage`, `rating-a`, `awg`,
   `side` and `poles` (`role`, `slot`, and `stand-in` where stated), and
-  `configs.json` adds `ref`. Both are omitted when there is nothing to
+  `configs.json` adds `ref`. A port's `path` is always the part's path and the
+  port's id (`feed-a/input`), whether the part has one port or several, so a
+  port added later moves no other port's path. Both are omitted when there is nothing to
   publish. A part in a bay is in the configurations that seat it, which is why
   the list is per configuration. `docs/format-stability.md` records the shape.
   Neither key raises `contract`, which is still 2.

@@ -178,7 +178,7 @@ def _ports(entry):
 def test_a_component_with_a_two_pole_port_publishes_it_with_its_figures_and_poles(built):
     comps, _ = built
     assert comps[SUPPLY]["dc-ports"] == [{
-        "id": "input", "path": "", "direction": "input",
+        "id": "input", "path": "input", "direction": "input",
         "voltage": {"nominal": -48, "range": [-44, -65]}, "rating-a": 18, "awg": [12], "side": "a",
         "poles": [{"role": "rtn", "slot": "terminal-rtn"}, {"role": "batt", "slot": "terminal-48v"}]}]
 
@@ -215,7 +215,7 @@ def test_the_source_of_a_port_is_not_published(built):
 
 def test_a_placed_part_publishes_its_port_with_the_placements_override_applied(built):
     _, configs = built
-    port = _ports(_config(configs, "placed-box", "base"))["feed-a"]
+    port = _ports(_config(configs, "placed-box", "base"))["feed-a/input"]
     assert port["id"] == "input" and port["ref"] == SUPPLY
     assert (port["side"], port["rating-a"]) == ("b", 30)
     assert port["voltage"] == {"nominal": -60, "range": [-40.5, -72]}
@@ -227,7 +227,7 @@ def test_a_placed_part_publishes_its_port_with_the_placements_override_applied(b
 def test_a_placement_with_no_override_publishes_what_its_part_states(built):
     _, configs = built
     ports = _ports(_config(configs, "placed-box", "base"))
-    assert sorted(ports) == ["feed-a", "feed-t/a", "feed-t/b", "feed-u"]
+    assert sorted(ports) == ["feed-a/input", "feed-t/a", "feed-t/b", "feed-u/input"]
     assert ports["feed-t/b"]["side"] == "b"
     assert [p["slot"] for p in ports["feed-t/b"]["poles"]] == ["feed-t/b-rtn", "feed-t/b-batt"]
 
@@ -241,9 +241,9 @@ def test_the_ports_are_ascending_by_path(built):
 def test_a_part_seated_in_a_bay_publishes_under_the_configurations_that_seat_it(built):
     _, configs = built
     fitted = _ports(_config(configs, "bayed-box", "fitted"))
-    assert list(fitted) == ["psu-0/module"]
-    assert fitted["psu-0/module"]["poles"][1]["slot"] == "psu-0/module/terminal-48v"
-    assert fitted["psu-0/module"]["ref"] == SUPPLY
+    assert list(fitted) == ["psu-0/module/input"]
+    assert fitted["psu-0/module/input"]["poles"][1]["slot"] == "psu-0/module/terminal-48v"
+    assert fitted["psu-0/module/input"]["ref"] == SUPPLY
     twin = _ports(_config(configs, "bayed-box", "twin"))
     assert sorted(twin) == ["psu-0/module/a", "psu-0/module/b"]
     assert {p["ref"] for p in twin.values()} == {TWIN}
@@ -265,7 +265,7 @@ def test_an_unstated_pole_publishes_unstated_and_its_stand_in(built):
     want = [{"role": "unstated", "slot": "terminal-1", "stand-in": {"order": "left-to-right"}},
             {"role": "unstated", "slot": "terminal-2", "stand-in": {"order": "left-to-right"}}]
     assert comps[UNSTATED]["dc-ports"][0]["poles"] == want
-    got = _ports(_config(configs, "placed-box", "base"))["feed-u"]["poles"]
+    got = _ports(_config(configs, "placed-box", "base"))["feed-u/input"]["poles"]
     assert got == [{**q, "slot": f"feed-u/{q['slot']}"} for q in want]
 
 
@@ -277,8 +277,8 @@ def test_a_pole_with_a_stated_role_carries_no_stand_in(built):
 def test_a_part_in_a_seated_parts_bay_is_addressed_through_both_modules(built):
     _, configs = built
     seated = _ports(_config(configs, "nested-box", "seated"))
-    assert list(seated) == ["riser-1/module/slot-1/module"]
-    port = seated["riser-1/module/slot-1/module"]
+    assert list(seated) == ["riser-1/module/slot-1/module/input"]
+    port = seated["riser-1/module/slot-1/module/input"]
     assert port["ref"] == SUPPLY
     assert port["poles"][1]["slot"] == "riser-1/module/slot-1/module/terminal-48v"
 
@@ -291,20 +291,20 @@ def test_a_nested_bay_is_seated_by_the_configuration_key_without_its_module_step
 
 def test_a_placement_with_only_in_is_published_for_those_configurations_only(built):
     _, configs = built
-    assert sorted(_ports(_config(configs, "only-box", "with"))) == ["feed-a", "feed-t/a", "feed-t/b"]
+    assert sorted(_ports(_config(configs, "only-box", "with"))) == ["feed-a/input", "feed-t/a", "feed-t/b"]
     assert sorted(_ports(_config(configs, "only-box", "without"))) == ["feed-t/a", "feed-t/b"]
 
 
 def test_an_override_that_states_a_role_drops_the_stand_in_and_leaves_the_others(built):
     _, configs = built
-    poles = _ports(_config(configs, "override-box", "base"))["feed-u"]["poles"]
+    poles = _ports(_config(configs, "override-box", "base"))["feed-u/input"]["poles"]
     assert poles[0] == {"role": "batt", "slot": "feed-u/terminal-1"}
     assert poles[1] == {"role": "unstated", "slot": "feed-u/terminal-2", "stand-in": {"order": "left-to-right"}}
 
 
 def test_a_dc_override_a_bay_states_is_not_applied_to_its_occupant(built):
     _, configs = built
-    assert _ports(_config(configs, "override-box", "base"))["psu-0/module"]["side"] == "a"
+    assert _ports(_config(configs, "override-box", "base"))["psu-0/module/input"]["side"] == "a"
 
 
 # --- the real library ---------------------------------------------------------------------------------

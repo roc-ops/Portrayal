@@ -374,7 +374,7 @@ Both lists hold the same entry:
 | key | holds |
 |---|---|
 | `id` | the port's id on its part (`input`) |
-| `path` | the end a feed lands on. The part's own path while the part has one port, the part's path and the id when it has several. In `components.json` the part is the frame, so the path is `""` for one port and the id (`a`) for several; in `configs.json` it is the path the drawing gives the part: the placement id (`feed-a`) or `<bay>/module` for a part in a bay (`psu-0/module`, and `psu-0/module/a` when it has several) |
+| `path` | the end a feed lands on. Always `<part path>/<port id>`, whether the part has one port or several, so a port added later moves no other's path. In `components.json` the part is the frame, so the path is the id alone (`input`); in `configs.json` it is the path the drawing gives the part with the id after it: the placement id (`feed-a/input`) or `<bay>/module` for a part in a bay (`psu-0/module/input`) |
 | `ref` | `configs.json` only: the component that presents it, so a reader can fetch its entry |
 | `direction` | `input` or `output` |
 | `voltage` | `{nominal, range?}`, signed (a -48 V plant is `-48`), or `null` where neither the part nor the placement states one |
@@ -405,8 +405,8 @@ The lock reads a published port as an export fact, as it reads `fed-by` and
   is a minor;
 - a port that **goes**, or loses a configuration, or whose `id` (and so its
   `path`), `direction`, poles, a pole's `slot` or `role` change, is a major.
-  So is a second port on a part that had one: the first port's path was the
-  part's own, and is now the part's and its id;
+  A second port on a part that had one is only a minor: the first port's path
+  is the part's and its id, and does not move;
 - a figure (`voltage`, `rating-a`, `awg`, `side`) stated where there was none
   is a minor, and one that is changed or dropped is a major. The figures are
   what a feed is judged by, and the placement `dc` override that sets the same

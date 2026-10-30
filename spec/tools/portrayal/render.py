@@ -4910,7 +4910,7 @@ def _dc_join(base, tail):
     return f"{base}/{tail}" if base and tail else (base or tail)
 
 
-def published_dc_port(port, base, many, override=None):
+def published_dc_port(port, base, override=None):
     """ONE DC PORT AS THE BUILD PUBLISHES IT, the shape components.json and
     configs.json share: `{id, path, direction, voltage, rating-a, awg, side,
     poles}`, each pole `{role, slot}` and a `stand-in` where the part states one.
@@ -4918,9 +4918,10 @@ def published_dc_port(port, base, many, override=None):
     `base` is the part's own path in the frame the entry is written in: `""` in
     components.json, where the part is the frame, and the path a drawing
     addresses the part by in configs.json (`feed-a`, `psu-0/module`). THE PATH
-    OF A PORT IS THE PART'S OWN WHILE IT IS THE ONLY ONE, and the part's and
-    its id once there are several (`many`): the rule the component schema
-    states. A pole's `slot` is always under the part, never under the port.
+    OF A PORT IS THE PART'S AND ITS ID, whether the part has one port or
+    several (`feed-a/input`, `psu-0/module/input`), so adding a port to a part
+    never moves another's path: the rule the component schema states. A pole's
+    `slot` is always under the part, never under the port.
 
     `override` is the placement's `dc` entry for this port, applied over what the
     part states: `side`, `voltage`, `rating-a` and the role of a pole by its
@@ -4945,7 +4946,7 @@ def published_dc_port(port, base, many, override=None):
         value = o[key] if key in o else port.get(key)
         return copy.deepcopy(value) if value is not None else None
 
-    return {"id": port["id"], "path": _dc_join(base, port["id"]) if many else base,
+    return {"id": port["id"], "path": _dc_join(base, port["id"]),
             "direction": port["direction"], "voltage": figure("voltage"),
             "rating-a": figure("rating-a"), "awg": figure("awg"),
             "side": figure("side"), "poles": poles}
@@ -4956,7 +4957,7 @@ def component_dc_ports(contract):
     states them; `[]` for a part with no `dc` block, which the index leaves
     out, as it does `cages`."""
     ports = (contract.get("dc") or {}).get("ports") or []
-    return [published_dc_port(p, "", len(ports) > 1) for p in ports]
+    return [published_dc_port(p, "") for p in ports]
 
 
 def config_dc_ports(device, cfg_name, cfg, contract_of):
@@ -4988,7 +4989,7 @@ def config_dc_ports(device, cfg_name, cfg, contract_of):
             return
         ports = (contract.get("dc") or {}).get("ports") or []
         for port in ports:
-            out.append({**published_dc_port(port, path, len(ports) > 1, (override or {}).get(port["id"])),
+            out.append({**published_dc_port(port, path, (override or {}).get(port["id"])),
                         "ref": ref})
         if depth >= MAX_BAY_DEPTH:
             return

@@ -519,8 +519,8 @@ def main():
             if cages:
                 entry["cages"] = cages
             # ITS DC PORTS (docs/dc-power-design.md 5.2), in the order the
-            # contract states them and in the part's own frame: a path of ""
-            # is the part itself. A device's configs.json carries the same
+            # contract states them and in the part's own frame: a path is the
+            # port's id, under the part. A device's configs.json carries the same
             # ports with the placement's override applied and a path a
             # drawing addresses. Omitted when the contract states none, like
             # `cages`.

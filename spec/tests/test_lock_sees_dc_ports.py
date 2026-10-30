@@ -66,13 +66,17 @@ def test_a_device_that_gains_a_port_in_a_bay_configuration_is_asked_for_a_minor(
     assert bump(tmp_path, no_dc(), PARTS, device="bayed-box") == "minor"
 
 
-def test_a_second_port_moves_the_first_ones_path_and_is_a_major(tmp_path):
-    """A port's path is the part's own while it is the only one and the part's
-    and its id once there are several (section 5.2), so a feed addressed to the
-    first is addressed to nothing after."""
+def test_a_second_port_leaves_the_first_ones_path_and_asks_no_major(tmp_path):
+    """A port's path is the part's path and its id, whether it is the only one
+    or not (section 5.2), so a feed addressed to the first still lands on it
+    after a second is added. The added port is a minor, as any port gained."""
     def add(part):
         part["dc"]["ports"].append(_port("extra", [("rtn", "terminal-rtn"), ("batt", "terminal-48v")]))
-    assert bump(tmp_path, PARTS, edited(add)) == "major"
+    before = locked(tmp_path / "before", PARTS)
+    after = locked(tmp_path / "after", edited(add))
+    assert set(before["dc-ports"]) == {"feed-a/input"}
+    assert set(after["dc-ports"]) == {"feed-a/input", "feed-a/extra"}
+    assert dl.required_bump(before, after) == "minor"
 
 
 def test_a_port_added_beside_others_that_keep_their_paths_is_a_minor(tmp_path):
