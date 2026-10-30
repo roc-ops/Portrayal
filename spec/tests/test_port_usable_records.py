@@ -116,7 +116,9 @@ def sentences(w, out):
     """Rules 2 and 4: a sentence beside a mate (L89's two-way honesty), and a registry sentence too short."""
     comps = {ref_of(c): c for c in w["components"]}
     is_mate = lambda ref: comps.get(ref, {}).get("class") in MATE_CLASSES
-    for ref in w["part-unmated"]:
+    for ref, sentence in w["part-unmated"].items():
+        if not long_enough(sentence):
+            out.append(f"{ref}: `unmated` is under {MIN_SENTENCE} characters")
         c = comps.get(ref)
         slots = [*((c or {}).get("cages") or []), *([c["presents"]] if (c or {}).get("presents") else [])]
         for slot in slots:
@@ -132,6 +134,9 @@ def sentences(w, out):
         if mates:
             out.append(f"connectors.yaml {iface} carries `unmated` and {mates[0]} mates it: remove the sentence")
     for name, fam in w["families"].items():
+        if "unmated" in fam and not isinstance(fam["unmated"], dict):
+            out.append(f"pluggables.yaml {name}: `unmated` must map a rate to its sentence")
+            continue
         for rate, sentence in (fam.get("unmated") or {}).items():
             if not long_enough(sentence):
                 out.append(f"pluggables.yaml {name} {rate}: `unmated` is under {MIN_SENTENCE} characters")
@@ -284,6 +289,20 @@ def test_a_registry_sentence_under_forty_characters_fails():
     assert len(verdict(report_of(), doc, world(families=families)).always) == 1
     families["cfp2"]["unmated"]["cfp2"] = SENTENCE
     assert verdict(report_of(), doc, world(families=families)).always == []
+
+
+def test_an_empty_registry_sentence_is_read_and_fails(tmp_path):
+    """The reader keeps a sentence that is present and empty, so the shape rule can fail it."""
+    schemas = tmp_path / "schemas"
+    schemas.mkdir()
+    (schemas / "connectors.yaml").write_text(yaml.safe_dump({"format": 1, "interfaces": {"rj45": {"unmated": ""}}}))
+    (schemas / "pluggables.yaml").write_text(yaml.safe_dump({"format": 1, "families": {"cfp2": {"interface": "cfp2", "rates": ["cfp2"], "unmated": {"cfp2": ""}}}}))
+    read = _tool().read_registries(schemas)
+    assert len(verdict(report_of(), {"format": 1, "rows": []}, world(**read)).always) == 2
+    library = tmp_path / "library" / "components" / "acme" / "p" / "v1"
+    library.mkdir(parents=True)
+    (library / "contract.yaml").write_text("format: 1\nname: p\nunmated: ''\n")
+    assert _tool().load_unmated(tmp_path / "library") == {"acme/p@1": ""}
 
 
 def test_a_part_with_both_a_row_and_a_sentence_for_one_code_fails():

@@ -531,8 +531,13 @@ On a cage C21 counts the slot as mated when its `accepts` holds any part of clas
 its family's `unmated` map has a sentence for the cage's rate (its `media`). The scan's summary also
 prints, and does not count as a finding, how many cage slots accept modules and none at their own
 rate: a module states its rate as `attrs.rate`, and a module that states none is a generic, which
-fits every rung, so it counts as at the cage's own rate. A cage whose modules are all of a lower rung
-of the ladder is counted.
+fits every rung, so it counts as at the cage's own rate. A cage is counted only when every module it
+accepts states a rate on the family's ladder below the cage's own.
+
+`cages[]` lists the slots of every configuration of a device, so a slot is judged in a configuration
+only when that configuration draws an element at the slot's path; one it does not draw is not on the
+device as built. A drawn port whose part the build does not hold is a C22 cause, since it presents
+nothing registered.
 
 C19 to C22 read the drawing, not a route, so they judge **every configuration** of a device. The
 cabling sample keeps its own limits (three configurations a device by default). In the cabling run

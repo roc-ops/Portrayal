@@ -109,9 +109,9 @@ def load_unmated(library):
     for path in sorted(pathlib.Path(library).glob("components/*/*/v*/contract.yaml")):
         text = path.read_text()
         if _UNMATED.search(text):
-            value = (yaml.safe_load(text) or {}).get("unmated")
-            if value:
-                out[contract_ref(path)] = value
+            doc = yaml.safe_load(text) or {}
+            if "unmated" in doc:                      # kept even when empty, so the records test can fail it
+                out[contract_ref(path)] = doc["unmated"]
     return out
 
 
@@ -121,9 +121,9 @@ def read_registries(schemas):
     schemas = pathlib.Path(schemas)
     interfaces = (yaml.safe_load((schemas / "connectors.yaml").read_text()) or {}).get("interfaces") or {}
     families = (yaml.safe_load((schemas / "pluggables.yaml").read_text()) or {}).get("families") or {}
-    connectors = {k: {"cover": bool((v or {}).get("cover")), **({"unmated": v["unmated"]} if (v or {}).get("unmated") else {})}
+    connectors = {k: {"cover": bool((v or {}).get("cover")), **({"unmated": v["unmated"]} if "unmated" in (v or {}) else {})}
                   for k, v in interfaces.items()}
-    fams = {k: {"interface": v.get("interface"), "rates": v.get("rates") or [], **({"unmated": v["unmated"]} if v.get("unmated") else {})}
+    fams = {k: {"interface": v.get("interface"), "rates": v.get("rates") or [], **({"unmated": v["unmated"]} if "unmated" in v else {})}
             for k, v in families.items()}
     return {"connectors": connectors, "families": fams}
 

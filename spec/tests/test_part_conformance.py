@@ -274,6 +274,7 @@ def test_c21_lets_off_a_plug_a_cover_mount_and_an_interface_with_a_sentence(tmp_
 def test_c21_on_a_cage_finds_no_module_unless_the_family_has_a_sentence_for_the_rate(tmp_path):
     cage_part = comp("std/cfp2@1", interface="cfp2")
     module = comp("generic/cfp2-lc@1", **{"class": "transceiver"}, mates="cfp2")
+    cable = comp("generic/cfp2-cable@1", mates="cfp2")                                  # a cable end is class port
     cage = lambda accepts: {"id": "port-1", "kind": "cage", "interface": "cfp2", "media": "cfp2", "bores": [], "accepts": accepts,
                             "default": None, "at": [0, 0], "mate": [1, 1], "rotate": None}
     drawn = [element("port-1", "port", ref="std/cfp2@1:1.0.0")]
@@ -281,12 +282,13 @@ def test_c21_on_a_cage_finds_no_module_unless_the_family_has_a_sentence_for_the_
     for name, accepts, families in (("empty", [], {"cfp2": CFP2}),
                                     ("sentence", [], {"cfp2": {**CFP2, "unmated": {"cfp2": SENTENCE}}}),
                                     ("other-rate", [], {"cfp2": {**CFP2, "rates": ["cfp", "cfp2"], "unmated": {"cfp": SENTENCE}}}),
-                                    ("module", ["generic/cfp2-lc@1"], {"cfp2": CFP2})):
+                                    ("module", ["generic/cfp2-lc@1"], {"cfp2": CFP2}),
+                                    ("cable", ["generic/cfp2-cable@1"], {"cfp2": CFP2})):
         folder = tmp_path / name
         folder.mkdir()
-        dist = world(folder, comps=[cage_part, module], front=drawn, cages=[cage(accepts)])
+        dist = world(folder, comps=[cage_part, module, cable], front=drawn, cages=[cage(accepts)])
         results[name] = sorted(usable(scan(dist, folder, schemas=registries(folder, families=families))))
-    assert results == {"empty": ["C21"], "sentence": [], "other-rate": ["C21"], "module": []}, results
+    assert results == {"empty": ["C21"], "sentence": [], "other-rate": ["C21"], "module": [], "cable": []}, results
 
 
 def test_the_scan_counts_the_cages_that_accept_no_module_at_their_own_rate(tmp_path):
@@ -294,6 +296,9 @@ def test_the_scan_counts_the_cages_that_accept_no_module_at_their_own_rate(tmp_p
     cage = {"id": "port-1", "kind": "cage", "interface": "sfp", "media": "sfp28", "bores": [], "default": None, "at": [0, 0], "mate": [1, 1], "rotate": None}
     counts = {}
     for name, module in (("lower", comp("acme/sfp-plus-sr@1", **{"class": "transceiver"}, mates="sfp", attrs={"rate": "sfp-plus"})),
+                         ("lower-port", comp("acme/sfp-plus-dac@1", mates="sfp", attrs={"rate": "sfp-plus"})),
+                         ("off-ladder", comp("acme/qsfp-sr@1", **{"class": "transceiver"}, mates="sfp", attrs={"rate": "qsfp"})),
+                         ("higher", comp("acme/sfp56-sr@1", **{"class": "transceiver"}, mates="sfp", attrs={"rate": "sfp56"})),
                          ("own", comp("acme/sfp28-sr@1", **{"class": "transceiver"}, mates="sfp", attrs={"rate": "sfp28"})),
                          ("generic", comp("generic/sfp-lc@1", **{"class": "transceiver"}, mates="sfp"))):
         folder = tmp_path / name
@@ -303,7 +308,7 @@ def test_the_scan_counts_the_cages_that_accept_no_module_at_their_own_rate(tmp_p
         report = scan(dist, folder)
         assert usable(report) == {}, (name, usable(report))
         counts[name] = report["scan"]["cages-below-own-rate"]
-    assert counts == {"lower": 1, "own": 0, "generic": 0}, counts
+    assert counts == {"lower": 1, "lower-port": 1, "off-ladder": 0, "higher": 0, "own": 0, "generic": 0}, counts
 
 
 def test_c22_finds_a_port_part_that_presents_no_interface_unless_it_composes_one(tmp_path):
@@ -363,6 +368,31 @@ def test_every_finding_lists_every_cause_uncapped_with_the_part_that_draws_it(tm
     assert all(set(c) == {"part", "device", "cfg", "view", "path"} for c in got), got
     assert sorted((c["part"], c["path"]) for c in got) == sorted([("acme/lug@1", f"in-{i}") for i in range(5)] + [("", "own")])
     assert {(c["device"], c["cfg"], c["view"]) for c in got} == {("dev", "base", "front")}
+
+
+def test_the_part_of_a_skin_art_element_is_the_component_whose_skin_draws_it(tmp_path):
+    inlet = comp("acme/art-inlet@1", **{"class": "inlet"})
+    port = comp("acme/art-port@1")
+    art = [element("panel/art-1", "inlet", ref="acme/art-inlet@1:1.0.0"), element("panel/art-2", "port", ref="acme/art-port@1:1.0.0")]
+    report = scan(world(tmp_path, comps=[inlet, port], front=art), tmp_path)
+    assert [(c["part"], c["path"]) for c in causes(report, "C20")] == [("acme/art-inlet@1", "panel/art-1")]
+    assert [(c["part"], c["path"]) for c in causes(report, "C22")] == [("acme/art-port@1", "panel/art-2")]
+
+
+def test_a_published_slot_the_configuration_does_not_draw_is_not_judged(tmp_path):
+    jack = comp("std/rj45@2", interface="rj45")
+    drawn = [element("port-1", "port", ref=DEV_REF)]
+    slots = [slot("port-1", []), slot("port-2", [])]                         # cages[] lists a slot of any configuration
+    bad = scan(world(tmp_path / "a", comps=[jack], front=drawn, cages=slots), tmp_path / "a")
+    assert [c["path"] for c in causes(bad, "C21")] == ["port-1"], "only the drawn slot is on this device as built"
+    both = [element("port-1", "port", ref=DEV_REF), element("port-2", "port", ref=DEV_REF)]
+    assert [c["path"] for c in causes(scan(world(tmp_path / "b", comps=[jack], front=both, cages=slots), tmp_path / "b"), "C21")] == ["port-1", "port-2"]
+
+
+def test_c22_finds_a_drawn_port_whose_part_the_build_does_not_hold(tmp_path):
+    drawn = [element("port-1", "port", ref="acme/missing@1:1.0.0")]
+    report = scan(world(tmp_path, comps=[], front=drawn), tmp_path)
+    assert [c["part"] for c in causes(report, "C22")] == ["acme/missing@1"]
 
 
 def test_the_scan_judges_every_configuration_and_lays_no_cable(tmp_path):

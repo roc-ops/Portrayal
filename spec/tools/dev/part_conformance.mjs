@@ -363,8 +363,10 @@ function judgeSlot(W, slot, U) {
     const fam = familyOfSlot(U, slot);
     if (mated) {
       const mods = (slot.accepts || []).map(r => W.compByRef(r)).filter(c => MATE_CLASSES.has(c?.class));
-      const own = mods.some(c => { const rate = c.attrs?.rate; return !rate || rate === slot.media; });   // a generic fits every rung
-      return {verdict: 'mated', belowOwnRate: !!fam && !!slot.media && (fam.rates || []).includes(slot.media) && !own};
+      // every module is rated, on this family's ladder, below the cage's rate (a module that states no rate is a generic and fits every rung)
+      const rates = fam?.rates || [], at = rates.indexOf(slot.media);
+      const lowerOnly = at >= 0 && mods.every(c => { const rate = c.attrs?.rate; return !!rate && rates.indexOf(rate) >= 0 && rates.indexOf(rate) < at; });
+      return {verdict: 'mated', belowOwnRate: lowerOnly};
     }
     return {verdict: fam?.unmated?.[slot.media] ? 'excused' : 'bare'};
   }
@@ -419,6 +421,7 @@ function usableCodes(W, ref, cfgName, cfg, slots, offered, zero, flag, counts, U
     };
     for (const view of FACES) {
       const drawn = new Map(faceOf(view).filter(e => e.path && !e.inner).map(e => [e.path, e]));
+      // `cages` lists a slot of any configuration; one this configuration does not draw is not on this device as built
       for (const slot of slots.cages[view] || []) if (drawn.has(slot.id)) take(slot, refOf(drawn.get(slot.id)), view, slot.id);
     }
     for (const [bayPath, r] of Object.entries(cfg.bays || {})) {            // a card's own cages, which no configuration of the host lists
@@ -445,7 +448,8 @@ function usableCodes(W, ref, cfgName, cfg, slots, offered, zero, flag, counts, U
           continue;
         }
         const part = W.compByRef(refOf(e));
-        if (!part || NOT_A_CONNECTOR.has(part.class) || isPlug(part) || sentenceOf(U, refOf(e))) continue;
+        if (!part) { bare.push(cause(refOf(e), view, e.path)); continue; }       // a part the build does not hold presents nothing
+        if (NOT_A_CONNECTOR.has(part.class) || isPlug(part) || sentenceOf(U, refOf(e))) continue;
         if (!presentsRegistered(W, part, U, new Set([refOf(e)]))) bare.push(cause(refOf(e), view, e.path));
       }
     }
