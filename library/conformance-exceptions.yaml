@@ -1,0 +1,33 @@
+# library/conformance-exceptions.yaml
+# The records of the port-usable codes of the part-conformance runner (docs/part-conformance-design.md,
+# section 10): C19, C20, C21 and C22. Every port on a device must be usable, so a connector in the library
+# has a mate, or says why none can exist. There are two records, and a finding is covered by one of them.
+#
+# A ROW is a gap a mate or a part can close: {part, code, why, order, since}.
+#   part   a component ref (`ns/name@major`), or a device name for a finding in the device's own drawing
+#   code   C19, C20, C21 or C22
+#   why    what is missing, in a sentence
+#   order  the change that closes it, as an issue or pull request number such as "#1234"; no order, no row
+#   since  the date the row was written
+# A row covers its part on every device that places it, so a new device that places a listed part adds no
+# row. A row for a device covers only that device's own drawing. A row whose finding no longer occurs is
+# stale, and a stale row fails once `cap:` is present.
+#
+# AN `unmated` SENTENCE is the other record, for "no mate can exist": a component contract's (the part
+# takes nothing), a `spec/schemas/connectors.yaml` entry's (no plug of that interface exists) or a
+# `spec/schemas/pluggables.yaml` family's, as a map from a rate to its sentence (no module is made at
+# that rate). A sentence is at least 40 characters. A part, an interface or a rate that does have a mate
+# must not carry one, and a part with a sentence for a code needs no row for it.
+#
+# Rows are grouped by the change that closes them, one block each, with a comment line between blocks.
+#
+# THE SWITCHES are this file's, and the test reads them here:
+#   cap:     an integer. While it is absent the test reports what it finds and passes. Once it is present
+#            the rules fail a pull request: a finding no record covers, a stale row, more rows than the
+#            cap, a row for a closed code, and a runner that crashes or times out.
+#   closed:  a list of codes from C19, C20, C21, C22 whose findings can no longer be recorded by a row.
+#            A row for a closed code fails once `cap:` is present.
+# The shape of this file, a sentence beside a mate, and a registry sentence under 40 characters fail
+# whatever the switches say.
+format: 1
+rows: []

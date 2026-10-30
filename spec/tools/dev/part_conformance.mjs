@@ -326,6 +326,138 @@ function sampleEnds(ends, max) {
   return ends.filter(e => pick.has(e));
 }
 
+// ── PORT-USABLE: C19 to C22 ─────────────────────────────────────────────
+// Every place the drawing shows a cable, cord, plug, lug or pluggable could go is usable: it presents a
+// registered interface, and its slot accepts a mate (a part of class port or transceiver). `unmated` is
+// the sentence that says no mate can exist, read from the contract (a part), `connectors.yaml` (an
+// interface) or `pluggables.yaml` (a rate of a family); the front door hands all three in `opts.usable`.
+const MATE_CLASSES = new Set(['port', 'transceiver']);
+const NOT_A_CONNECTOR = new Set(['cap', 'boot', 'mechanical']);    // a dust cap, a boot, a bracket: not a place a cable ends
+const refOf = e => (e?.ref ? String(e.ref).split(':')[0] : '');
+const matesOf = c => [c?.mates].flat().filter(Boolean);
+const isPlug = c => matesOf(c).length > 0 || c?.behaviour === 'occupies';      // a plug or a cable end is not itself a connector
+const sentenceOf = (U, ref) => U?.parts?.[ref] ?? null;
+const familyOfSlot = (U, slot) => Object.values(U?.families || {}).find(f => f.interface === slot.interface) ?? null;
+const registered = (U, iface) => !!iface && (Object.hasOwn(U?.connectors || {}, iface) || Object.values(U?.families || {}).some(f => f.interface === iface));
+
+// does the part present a registered interface, itself or through a part it composes?
+function presentsRegistered(W, comp, U, seen = new Set()) {
+  if (!comp) return false;
+  if (registered(U, comp.interface)) return true;
+  for (const p of comp.parts || []) {
+    const ref = String(p.ref || '').split(':')[0];
+    if (seen.has(ref)) continue;
+    seen.add(ref);
+    if (presentsRegistered(W, W.compByRef(ref), U, seen)) return true;
+  }
+  return false;
+}
+const hasMate = (W, accepts) => (accepts || []).some(r => MATE_CLASSES.has(W.compByRef(r)?.class));
+
+// C21 on one published slot: 'mated' | 'excused' | 'bare', and for a cage with modules whether one is at the cage's own rate
+function judgeSlot(W, slot, U) {
+  const entry = (U?.connectors || {})[slot.interface];
+  if (entry?.cover) return {verdict: 'excused'};                                 // a cover mount is not a connector
+  const mated = hasMate(W, slot.accepts);
+  if (slot.kind === 'cage') {
+    const fam = familyOfSlot(U, slot);
+    if (mated) {
+      const mods = (slot.accepts || []).map(r => W.compByRef(r)).filter(c => MATE_CLASSES.has(c?.class));
+      // every module is rated, on this family's ladder, below the cage's rate (a module that states no rate is a generic and fits every rung)
+      const rates = fam?.rates || [], at = rates.indexOf(slot.media);
+      const lowerOnly = at >= 0 && mods.every(c => { const rate = c.attrs?.rate; return !!rate && rates.indexOf(rate) >= 0 && rates.indexOf(rate) < at; });
+      return {verdict: 'mated', belowOwnRate: lowerOnly};
+    }
+    return {verdict: fam?.unmated?.[slot.media] ? 'excused' : 'bare'};
+  }
+  if (mated) return {verdict: 'mated'};
+  return {verdict: entry?.unmated ? 'excused' : 'bare'};
+}
+
+// C19 to C22 for one configuration, from what the drawing shows and what an agent is offered. `flag` is the caller's.
+function usableCodes(W, ref, cfgName, cfg, slots, offered, zero, flag, counts, U) {
+  const cause = (part, view, path) => ({part, device: ref, cfg: cfgName, view, path});
+  const faceOf = view => W.face(cfg.files?.[view])?.elements || [];
+  // a supply the drawing shows presents a way to power it (an inlet, a terminal, a lug), or says it is a fixed cord
+  if (!zero) {
+    const supplies = [];
+    for (const view of FACES) for (const e of faceOf(view))
+      if (e.class === 'psu' && e.path && !e.inner && !supplies.some(s => s.path === e.path)) supplies.push({...e, view});
+    const bare = supplies.filter(s => !offered.some(o => o.path === s.path || o.path.startsWith(`${s.path}/`)))
+      .filter(s => !/fixed|cord/i.test(W.compByRef(refOf(s))?.attrs?.inlet ?? ''))
+      .filter(s => !sentenceOf(U, refOf(s)));
+    counts.supplies = supplies.length;
+    if (bare.length) flag('C19', `${bare.length} of ${supplies.length} supplies drawn present no cable end an agent is offered (no inlet, terminal or lug)`, bare.length,
+      {examples: bare.slice(0, 3).map(s => `${s.view}:${s.path} ${modelOf(W.compByRef(refOf(s)), s.ref)}`), causes: bare.map(s => cause(refOf(s), s.view, s.path))});
+    if ((cfg.power || []).length && !offered.some(o => o.kind === 'power') && !bare.length && !supplies.length)
+      flag('C19', `the configuration says it is powered (${cfg.power.join(', ')}) and no power end is offered`, 1, {causes: [cause('', 'front', '')]});
+  }
+  // an inlet, terminal or stud the drawing shows (outside a supply, which is judged above) is a place to land a cord or a lug
+  {
+    const seen = new Set(), lone = [], landable = new Set(['inlet', 'terminal', 'ground', 'screw']);
+    for (const view of FACES) {
+      const els = faceOf(view).filter(e => e.path && landable.has(e.class) && !e.inner);
+      for (const e of els) {
+        if (seen.has(e.path) || e.path.includes('/module/')) continue;     // under a seated supply or card: judged with it
+        if (els.some(o => o !== e && e.path.startsWith(`${o.path}/`))) continue;   // a part of a larger inlet
+        seen.add(e.path);
+        const part = e.ref ? W.compByRef(refOf(e)) : null;
+        if (part && (NOT_A_CONNECTOR.has(part.class) || isPlug(part) || sentenceOf(U, refOf(e)))) continue;   // by data: not a place, or said so
+        if (!offered.some(o => o.path === e.path || o.path.startsWith(`${e.path}/`))) lone.push({...e, view});
+      }
+    }
+    if (lone.length) flag('C20', `${lone.length} drawn inlets, terminals or studs are not offered as a place to land a cord or lug`, lone.length,
+      {examples: lone.slice(0, 4).map(e => `${e.view}:${e.path} (${e.class}${e.ref ? ` ${refOf(e)}` : ''})`), causes: lone.map(e => cause(refOf(e), e.view, e.path))});
+  }
+  // every published slot has a mate in its accepts, or an interface or a rate that says none exists
+  {
+    const bare = [], below = [], judged = [];
+    const take = (slot, part, view, path) => {
+      if (slot.kind !== 'connector' && slot.kind !== 'cage') return;
+      judged.push(path);
+      const j = judgeSlot(W, slot, U);
+      if (j.verdict === 'bare') bare.push(cause(part, view, path));
+      if (j.belowOwnRate) below.push({part, view, path});
+    };
+    for (const view of FACES) {
+      const drawn = new Map(faceOf(view).filter(e => e.path && !e.inner).map(e => [e.path, e]));
+      // `cages` lists a slot of any configuration; one this configuration does not draw is not on this device as built
+      for (const slot of slots.cages[view] || []) if (drawn.has(slot.id)) take(slot, refOf(drawn.get(slot.id)), view, slot.id);
+    }
+    for (const [bayPath, r] of Object.entries(cfg.bays || {})) {            // a card's own cages, which no configuration of the host lists
+      const view = Object.entries(slots.bays).find(([, list]) => list.some(b => b.id === bayPath.split('/')[0]))?.[0];
+      for (const slot of W.compByRef(r)?.cages || []) take(slot, r.split(':')[0], view ?? 'front', `${bayPath.split('/').join('/module/')}/module/${slot.id}`);
+    }
+    counts.slots = judged.length;
+    counts.belowOwnRate = below;
+    if (bare.length) flag('C21', `${bare.length} connector or cage slots have no mate in their accepts (a plug, a cord end, a lug or a module)`, bare.length,
+      {examples: bare.slice(0, 4).map(c => `${c.view}:${c.path}${c.part ? ` (${c.part})` : ''}`), causes: bare});
+  }
+  // a drawn port presents a registered interface, itself or through what it composes
+  {
+    const seen = new Set(), bare = [];
+    for (const view of FACES) {
+      const els = faceOf(view).filter(e => e.path && e.class === 'port' && !e.inner);
+      for (const e of els) {
+        if (seen.has(e.path)) continue;
+        if (els.some(o => o !== e && e.path.startsWith(`${o.path}/`) && !o.path.includes('/module/'))) continue;   // an inner port is part of its outer one
+        seen.add(e.path);
+        if (!e.ref) {                                                        // the device's own drawing: its slot says what it presents
+          const slot = (slots.cages[view] || []).find(c => c.id === e.path);
+          if (!registered(U, slot?.interface)) bare.push(cause('', view, e.path));
+          continue;
+        }
+        const part = W.compByRef(refOf(e));
+        if (!part) { bare.push(cause(refOf(e), view, e.path)); continue; }       // a part the build does not hold presents nothing
+        if (NOT_A_CONNECTOR.has(part.class) || isPlug(part) || sentenceOf(U, refOf(e))) continue;
+        if (!presentsRegistered(W, part, U, new Set([refOf(e)]))) bare.push(cause(refOf(e), view, e.path));
+      }
+    }
+    if (bare.length) flag('C22', `${bare.length} drawn ports present no registered interface, themselves or through what they compose`, bare.length,
+      {examples: bare.slice(0, 4).map(c => `${c.view}:${c.path}${c.part ? ` (${c.part})` : ''}`), causes: bare});
+  }
+}
+
 // The legs of a laid cable at one end, judged against that end's point and axis.
 function landing(side, rack, cable, path, rc, W, out, solids) {
   const end = cable[side], pts = side === 'a' ? path.points : [...path.points].reverse();
@@ -354,8 +486,13 @@ export async function checkCabling(W, ref, cfgName, opts = {}) {
   const base = ctxOf(W);
   const tilt = tiltedPaths(W, cfg);
   const variants = zero ? [{name: 'beside-rack'}] : opts.variants ?? [{name: 'front rail', face: 'front', setback: 0}, {name: 'rear rail, 30 mm setback', face: 'rear', setback: 30}];
-  const flag = (code, text, n = 1, extra = {}) => { const f = found.find(x => x.code === code && x.text === text); if (f) f.n += n; else found.push({code, text, n, ...extra}); };
+  const flag = (code, text, n = 1, extra = {}) => {
+    const f = found.find(x => x.code === code && x.text === text);
+    if (!f) found.push({code, text, n, ...extra});
+    else { f.n += n; if (extra.causes) f.causes.push(...extra.causes); }
+  };
   for (const [vi, variant] of variants.entries()) {
+    if (opts.usableOnly && vi > 0) break;                                // the scan reads the drawing, not a route: one placement is enough
     const at = placed(W, ref, cfgName, variant);
     if (at.error) { flag('C0', `could not place: ${at.error}`); continue; }
     let {rack, id} = at;
@@ -365,7 +502,7 @@ export async function checkCabling(W, ref, cfgName, opts = {}) {
     const inletDev = zero && W.slotsOf(INLET_DEV) ? addFar(INLET_DEV) : null;
     const reader = readerFor(W, rack), pageCtx = {...base, portsOf: reader.portsOf};
     // the side panes' drawing of the device (the site's pure side-geometry, when a checkout of it is given): its faceplate where the kit puts the panel
-    if (opts.side && !zero && (!chassis.mount || chassis.mount === 'rack')) {   // a part on the rack's face stands out from its rail by its depth
+    if (opts.side && !zero && !opts.usableOnly && (!chassis.mount || chassis.mount === 'rack')) {   // a part on the rack's face stands out from its rail by its depth
       const it = rack.items.find(i => i.id === id), set = setbackOf(rack, it, W.chassisOf);
       const want = it.face === 'front' ? -set : -RAIL_DEPTH + set;
       const d = opts.side.itemDepth(rack, it, chassis);
@@ -396,39 +533,11 @@ export async function checkCabling(W, ref, cfgName, opts = {}) {
           if (!known.has(`${e.view}|${e.path}`)) { hidden.push(e); offered.push(e); }
         }
       }
-      if (vi === 0 && hidden.length) flag('C18', `${hidden.length} ends on the back of seated parts are in the catalogue and not on the host's ${uniq(hidden.map(e => e.view)).join('/')} drawing: a cable is accepted there and has no point to be drawn to`, hidden.length, {examples: hidden.slice(0, 3).map(e => `${e.view}:${e.path}`)});
+      if (vi === 0 && hidden.length && !opts.usableOnly) flag('C18', `${hidden.length} ends on the back of seated parts are in the catalogue and not on the host's ${uniq(hidden.map(e => e.view)).join('/')} drawing: a cable is accepted there and has no point to be drawn to`, hidden.length, {examples: hidden.slice(0, 3).map(e => `${e.view}:${e.path}`)});
     }
-    // a supply the drawing shows presents a way to power it (an inlet, a terminal, a lug), or says it is a fixed cord
-    if (vi === 0 && !zero) {
-      const supplies = [];
-      for (const view of FACES) for (const e of W.face(cfg.files?.[view])?.elements || [])
-        if (e.class === 'psu' && e.path && !e.inner && !supplies.some(s => s.path === e.path)) supplies.push({...e, view});
-      const bare = supplies.filter(s => !offered.some(o => o.path === s.path || o.path.startsWith(`${s.path}/`)))
-        .filter(s => !/fixed|cord/i.test(W.compByRef((s.ref || '').split(':')[0])?.attrs?.inlet ?? ''));
-      counts.supplies = supplies.length;
-      if (bare.length) flag('C19', `${bare.length} of ${supplies.length} supplies drawn present no cable end an agent is offered (no inlet, terminal or lug)`, bare.length,
-        {examples: bare.slice(0, 3).map(s => `${s.view}:${s.path} ${modelOf(W.compByRef((s.ref || '').split(':')[0]), s.ref)}`)});
-      if ((cfg.power || []).length && !offered.some(o => o.kind === 'power') && !bare.length && !supplies.length)
-        flag('C19', `the configuration says it is powered (${cfg.power.join(', ')}) and no power end is offered`, 1);
-    }
-    // an inlet, terminal or stud the drawing shows (outside a supply, which is judged above) is a place to land a cord or a lug
-    if (vi === 0) {
-      const seen = new Set(), lone = [], landable = new Set(['inlet', 'terminal', 'ground', 'screw']);
-      // a place a cord or lug lands is a part that is a registered connector (it presents a slot), outermost of its kind
-      const isSlot = e => { const c = e.ref ? W.compByRef(e.ref.split(':')[0]) : null; return !c || c.interface || c.presents?.kind === 'connector' || (c.cages || []).length > 0 || (c.parts || []).length > 0; };
-      for (const view of FACES) {
-        const els = (W.face(cfg.files?.[view])?.elements || []).filter(e => e.path && landable.has(e.class) && !e.inner);
-        for (const e of els) {
-          if (seen.has(e.path) || e.path.includes('/module/')) continue;     // under a seated supply or card: judged with it
-          if (els.some(o => o !== e && e.path.startsWith(`${o.path}/`))) continue;   // a part of a larger inlet
-          seen.add(e.path);
-          if (!isSlot(e)) continue;                                           // a marking, not a connector
-          if (!offered.some(o => o.path === e.path || o.path.startsWith(`${e.path}/`))) lone.push({...e, view});
-        }
-      }
-      if (lone.length) flag('C20', `${lone.length} drawn inlets, terminals or studs are not offered as a place to land a cord or lug`, lone.length,
-        {examples: lone.slice(0, 4).map(e => `${e.view}:${e.path} (${e.class}${e.ref ? ` ${e.ref.split(':')[0]}` : ''})`)});
-    }
+    // C19 to C22: what the drawing shows is a place a cord, lug, plug or module can go (usableCodes)
+    if (vi === 0) usableCodes(W, ref, cfgName, cfg, slots, offered, zero, flag, counts, opts.usable);
+    if (opts.usableOnly) return {found, counts, ends};
     if (vi === 0) {
       counts.drawn = drawn.length; counts.offered = offered.length;
       const key = e => `${e.view}|${e.path}`;
@@ -642,5 +751,8 @@ function factsFor(W, rack, item, cfg, end, slots) {
     holder: bay ? {path: bay, part: ref ? modelOf(W.compByRef(ref), ref) : null} : null};
   return {facts, reason: looseReason(end, facts)};
 }
+
+// C19 to C22 alone for one configuration: the drawing and what is offered, with no cable laid (the front door's --scan)
+export const checkUsable = (W, ref, cfgName, opts = {}) => checkCabling(W, ref, cfgName, {...opts, usableOnly: true});
 
 export const _internal = {sampleEnds, drawnEnds, tiltedPaths};

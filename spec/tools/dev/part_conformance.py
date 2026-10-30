@@ -8,11 +8,16 @@ Runs the two checks over a sample of devices in a built library:
   settings  every state the drawings declare is a state the agent's tools take,
             and gives the document and the drawing the page does.
 
+and, in its scan mode, the four codes that ask whether every port is usable
+(C19 to C22) over every configuration, with no cable laid.
+
 The kit does the work (part_conformance.mjs, under node); this is the front
 door: the sample, the timing, the summary and the report file.
 
     python3 spec/tools/dev/part_conformance.py --dist library/dist \\
         --sample spec/tools/dev/part_conformance_sample.json --out report.json
+    python3 spec/tools/dev/part_conformance.py --dist library/dist --scan --all --out scan.json
+    python3 spec/tools/dev/part_conformance.py --by-family scan.json --out families.json
 
 The report is written to --out, never to a redirect. Exit status 1 when a
 BLOCKING finding exists and --strict is given; a finding marked gap, standin,
@@ -22,14 +27,20 @@ import argparse
 import json
 import os
 import pathlib
+import re
+import resource
 import shutil
 import subprocess
 import sys
 import time
 
+import yaml
+
 HERE = pathlib.Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
 RUNNER = HERE / "part_conformance_run.mjs"
 SAMPLE = HERE / "part_conformance_sample.json"
+FAMILIES = HERE / "port_families.yaml"
 
 # What each code says, and whether it blocks a merge (design section 5).
 CODES = {
@@ -62,10 +73,13 @@ CODES = {
     "C18": ("cabling", "block", "the back of a seated part has ends the host draws no point for"),
     "C19": ("cabling", "block", "a powered part presents no power end an agent is offered"),
     "C20": ("cabling", "block", "a drawn inlet, terminal or stud is not a place a cord or lug can land"),
+    "C21": ("cabling", "block", "a connector or cage slot has no mate in the library and says no mate can exist"),
+    "C22": ("cabling", "block", "a drawn port presents no registered interface, itself or through what it composes"),
     "C16": ("cabling", "gap", "the catalogue alone does not answer for an end of a listed part"),
     "C17": ("cabling", "block", "a part a cage lists cannot be fitted to it"),
     "O1": ("cabling", "block", "a bay lists a part the library does not hold"),
 }
+CHECKS = ("settings", "cabling", "usable")
 
 
 def node():
@@ -80,10 +94,49 @@ def load_sample(path):
     return data["parts"] if isinstance(data, dict) else data
 
 
-def run(dist, refs, max_configs=3, max_ends=12, max_states=400, skip=(), site=None):
+# ── the sentences that say no mate can exist ─────────────────────────────────────────────────────────
+_UNMATED = re.compile(r"^unmated:", re.M)
+
+
+def contract_ref(path):
+    """`ns/name@major` of library/components/<ns>/<name>/v<major>/contract.yaml."""
+    return f"{path.parents[2].name}/{path.parents[1].name}@{path.parent.name[1:]}"
+
+
+def load_unmated(library):
+    """{ref: sentence} for every contract that carries `unmated`. Only a file with the key is parsed."""
+    out = {}
+    for path in sorted(pathlib.Path(library).glob("components/*/*/v*/contract.yaml")):
+        text = path.read_text()
+        if _UNMATED.search(text):
+            doc = yaml.safe_load(text) or {}
+            if "unmated" in doc:                      # kept even when empty, so the records test can fail it
+                out[contract_ref(path)] = doc["unmated"]
+    return out
+
+
+def read_registries(schemas):
+    """The two registries as the scan reads them: connectors {interface: {cover, unmated?}} and
+    families {name: {interface, rates, unmated?}}. `unmated` is kept as written, so a test can judge it."""
+    schemas = pathlib.Path(schemas)
+    interfaces = (yaml.safe_load((schemas / "connectors.yaml").read_text()) or {}).get("interfaces") or {}
+    families = (yaml.safe_load((schemas / "pluggables.yaml").read_text()) or {}).get("families") or {}
+    connectors = {k: {"cover": bool((v or {}).get("cover")), **({"unmated": v["unmated"]} if "unmated" in (v or {}) else {})}
+                  for k, v in interfaces.items()}
+    fams = {k: {"interface": v.get("interface"), "rates": v.get("rates") or [], **({"unmated": v["unmated"]} if "unmated" in v else {})}
+            for k, v in families.items()}
+    return {"connectors": connectors, "families": fams}
+
+
+def usable_options(library, schemas):
+    return {"parts": load_unmated(library), **read_registries(schemas)}
+
+
+# ── running ──────────────────────────────────────────────────────────────────────────────────────────
+def run(dist, refs, max_configs=3, max_ends=12, max_states=400, skip=(), site=None, scan=False, usable=None):
     """Run the node half over `refs`; returns (report dict, seconds)."""
     opts = json.dumps({"refs": list(refs), "maxConfigs": max_configs, "maxEnds": max_ends,
-                       "maxStates": max_states, "skip": list(skip), "site": site})
+                       "maxStates": max_states, "skip": list(skip), "site": site, "scan": scan, "usable": usable or {}})
     t = time.monotonic()
     p = subprocess.run([node(), str(RUNNER), str(dist), opts], capture_output=True, text=True, cwd=str(HERE))
     took = time.monotonic() - t
@@ -101,7 +154,7 @@ def findings(report):
         for f in (part.get("occupants") or {}).get("found", []):
             out.append((part["ref"], "(every listed part)", "occupants", f))
         for row in part["configs"]:
-            for check in ("settings", "cabling"):
+            for check in CHECKS:
                 for f in (row.get(check) or {}).get("found", []):
                     out.append((part["ref"], row["cfg"], check, f))
     return out
@@ -114,23 +167,33 @@ def level_of(f):
 def summarise(report):
     by_code = {}
     for ref, cfg, check, f in findings(report):
-        row = by_code.setdefault(f["code"], {"parts": set(), "configs": 0, "n": 0, "level": level_of(f)})
+        row = by_code.setdefault(f["code"], {"parts": set(), "configs": 0, "n": 0, "level": level_of(f), "causes": 0, "keys": set()})
         row["parts"].add(ref)
         row["configs"] += 1
         row["n"] += f.get("n", 1)
+        for c in f.get("causes") or []:
+            row["causes"] += 1
+            row["keys"].add(c["part"] or c["device"])
     return {c: {"level": r["level"], "parts": sorted(r["parts"]), "configs": r["configs"], "n": r["n"],
+                **({"causes": r["causes"], "cause-parts": len(r["keys"])} if r["causes"] else {}),
                 "says": CODES.get(c, ("", "", ""))[2]} for c, r in sorted(by_code.items())}
 
 
 def seconds(report):
-    out = {"settings": 0.0, "cabling": 0.0, "occupants": 0.0, "configs": 0}
+    out = {"settings": 0.0, "cabling": 0.0, "usable": 0.0, "occupants": 0.0, "configs": 0}
     for part in report["parts"]:
         out["occupants"] += (part.get("occupants") or {}).get("seconds", 0.0)
         for row in part["configs"]:
             out["configs"] += 1
-            for check in ("settings", "cabling"):
+            for check in CHECKS:
                 out[check] += (row.get(check) or {}).get("seconds", 0.0)
     return {k: round(v, 2) if isinstance(v, float) else v for k, v in out.items()}
+
+
+def below_own_rate(report):
+    """The cage slots that accept modules and none at the cage's own rate: distinct (device, path)."""
+    return sorted({(part["ref"], b["path"]) for part in report["parts"] for row in part["configs"]
+                   for b in ((row.get("usable") or {}).get("counts") or {}).get("belowOwnRate", [])})
 
 
 def text(report, took, verbose=False):
@@ -143,8 +206,76 @@ def text(report, took, verbose=False):
         lines.append(f"  {level_of(f):7} {f['code']:4} {ref}{'/' + cfg if cfg else ''}: {f['text']}")
     lines.append("")
     for code, row in summarise(report).items():
-        lines.append(f"  {code:4} {row['level']:7} {len(row['parts']):3} parts {row['configs']:4} configs: {row['says']}")
+        extra = f" {row['causes']:5} causes over {row['cause-parts']} parts or devices" if "causes" in row else ""
+        lines.append(f"  {code:4} {row['level']:7} {len(row['parts']):3} parts {row['configs']:4} configs{extra}: {row['says']}")
+    if report.get("scan"):
+        s = report["scan"]
+        lines.append(f"  cage slots that accept modules and none at their own rate: {s['cages-below-own-rate']}")
+        lines.append(f"  scan: {s['wall-seconds']} s wall, {s['node-cpu-seconds']} s node CPU, load {s['load-start']} to {s['load-end']}")
     return "\n".join(lines)
+
+
+# ── the family of a part ─────────────────────────────────────────────────────────────────────────────
+def contract_of(library, ref):
+    ns, tail = ref.split("/")
+    name, major = tail.split("@")
+    path = pathlib.Path(library) / "components" / ns / name / f"v{major}" / "contract.yaml"
+    return (yaml.safe_load(path.read_text()) or {}) if path.exists() else {}
+
+
+def family_of(spec, contract, name):
+    """The family of a part by the five rules of port_families.yaml, in order. `name` is the part's name (or, for a
+    cause with no part, the drawn path)."""
+    entry = (spec.get("interfaces") or {}).get(contract.get("interface"))
+    if entry:                                                                   # 1. its own registered interface
+        if isinstance(entry, str):
+            return entry
+        return (entry.get("by-class") or {}).get(contract.get("class"), entry["family"])
+    attrs = contract.get("attrs") or {}
+    if contract.get("class") == "psu":                                          # 2. a supply, by its attrs
+        psu = spec["psu"]
+        dc = any(str(attrs.get(k)) in vals for k, vals in (psu.get("dc-when") or {}).items())
+        return psu["dc"] if dc else psu["ac"]
+    if contract.get("class") in (spec.get("classes") or {}):                    # 3. a ground part
+        return spec["classes"][contract["class"]]
+    low = name.lower()
+    for pattern in spec.get("name-patterns") or []:                             # 4. a name
+        if any(s in low for s in pattern["contains"]):
+            return pattern["family"]
+    return spec["other"]                                                        # 5. otherwise
+
+
+def first_words(value, n=12):
+    words = str(value).split()
+    return " ".join(words[:n]) + (" ..." if len(words) > n else "")
+
+
+def by_family(report, library, spec, dist=None):
+    """Every cause of a scan report sorted into a family: {families: {name: {parts, devices, vendors, causes}}, totals}."""
+    makers = {}
+    rack = pathlib.Path(dist or report.get("dist") or "") / "rack.json"
+    if rack.is_file():
+        makers = {k: v.get("manufacturer") for k, v in (json.loads(rack.read_text()).get("devices") or {}).items()}
+    fams = {name: {"parts": {}, "devices": set(), "vendors": set(), "causes": 0} for name in spec["families"]}
+    for _ref, _cfg, _check, f in findings(report):
+        for c in f.get("causes") or []:
+            if c["part"]:
+                contract = contract_of(library, c["part"])
+                fam = fams[family_of(spec, contract, c["part"].split("/")[1].split("@")[0])]
+                if c["part"] not in fam["parts"]:
+                    fam["parts"][c["part"]] = {"ref": c["part"], "class": contract.get("class"),
+                                               "provenance": {k: first_words(v) for k, v in (contract.get("provenance") or {}).items()}}
+                vendor = makers.get(c["device"]) or c["part"].split("/")[0]
+            else:
+                fam = fams[family_of(spec, {}, c["path"])]
+                vendor = makers.get(c["device"]) or ""
+            fam["devices"].add(c["device"])
+            if vendor:
+                fam["vendors"].add(vendor)
+            fam["causes"] += 1
+    out = {name: {"parts": sorted(f["parts"].values(), key=lambda p: p["ref"]), "devices": sorted(f["devices"]),
+                  "vendors": sorted(f["vendors"]), "causes": f["causes"]} for name, f in fams.items()}
+    return {"families": out, "totals": {name: {"parts": len(f["parts"]), "devices": len(f["devices"])} for name, f in out.items()}}
 
 
 def main(argv=None):
@@ -161,7 +292,20 @@ def main(argv=None):
     ap.add_argument("--site", help="a checkout of the site: its side-pane geometry is asked where the faceplate stands (C7)")
     ap.add_argument("--strict", action="store_true", help="exit 1 on a blocking finding")
     ap.add_argument("--verbose", action="store_true", help="print every finding, not the first of each code")
+    ap.add_argument("--scan", action="store_true", help="C19 to C22 only, every configuration, no cable laid")
+    ap.add_argument("--library", default=str(ROOT / "library"), help="the library whose contracts carry `unmated`")
+    ap.add_argument("--schemas", default=str(ROOT / "spec" / "schemas"), help="the folder of connectors.yaml and pluggables.yaml")
+    ap.add_argument("--by-family", metavar="REPORT", help="sort the causes of a scan report into families (port_families.yaml) and write them to --out")
+    ap.add_argument("--families", default=str(FAMILIES), help="the family rules, for --by-family")
     a = ap.parse_args(argv)
+    if a.by_family:
+        report = json.loads(pathlib.Path(a.by_family).read_text())
+        spec = yaml.safe_load(pathlib.Path(a.families).read_text())
+        result = by_family(report, a.library, spec, a.dist if pathlib.Path(a.dist, "rack.json").is_file() else None)
+        pathlib.Path(a.out).write_text(json.dumps(result, indent=1) + "\n")
+        for name, t in result["totals"].items():
+            print(f"  {name:40} {t['parts']:4} parts {t['devices']:4} devices")
+        return 0
     dist = pathlib.Path(a.dist).resolve()
     if a.all:
         refs = sorted(p.name[: -len(".configs.json")] for p in dist.glob("*.configs.json"))
@@ -172,12 +316,20 @@ def main(argv=None):
         parts = load_sample(a.sample)
         refs = [p["ref"] if isinstance(p, dict) else p for p in parts]
         why = {p["ref"]: p.get("why", "") for p in parts if isinstance(p, dict)}
-    report, took = run(dist, refs, a.max_configs, a.max_ends, a.max_states, a.skip, a.site)
+    usable = usable_options(a.library, a.schemas)
+    load_start, cpu_start = os.getloadavg(), resource.getrusage(resource.RUSAGE_CHILDREN)
+    report, took = run(dist, refs, a.max_configs, a.max_ends, a.max_states, a.skip, a.site, scan=a.scan, usable=usable)
+    cpu_end, load_end = resource.getrusage(resource.RUSAGE_CHILDREN), os.getloadavg()
     for part in report["parts"]:
         part["why"] = why.get(part["ref"], "")
     report["dist"] = a.dist            # as given: the report names no path of this machine
     report["seconds"] = round(took, 2)
     report["timing"] = seconds(report)
+    if a.scan:
+        report["scan"] = {"wall-seconds": round(took, 1),
+                          "node-cpu-seconds": round((cpu_end.ru_utime + cpu_end.ru_stime) - (cpu_start.ru_utime + cpu_start.ru_stime), 1),
+                          "load-start": [round(x, 2) for x in load_start], "load-end": [round(x, 2) for x in load_end],
+                          "cages-below-own-rate": len(below_own_rate(report)), "devices": len(report["parts"])}
     report["summary"] = summarise(report)
     pathlib.Path(a.out).write_text(json.dumps(report, indent=1, sort_keys=True) + "\n")
     print(text(report, took, a.verbose))
