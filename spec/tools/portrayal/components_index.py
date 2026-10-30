@@ -31,7 +31,7 @@ from portrayal.faces import BODY_SIDES, DIRECTIONS, face_ref, side_viewbox  # no
 from portrayal.render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
                     seq_css_name, state_rule, component_cages, component_presents,
                     _pluggable_families, _pluggable_candidates,
-                    _connector_registry, display_elements)
+                    _connector_registry, display_elements, component_dc_ports)
 from portrayal import libwalk  # noqa: E402
 from portrayal import redirects  # noqa: E402
 from portrayal import optical, optical_ports  # noqa: E402
@@ -518,6 +518,15 @@ def main():
                                     face=ref in faces_named, module=ref in in_bays)
             if cages:
                 entry["cages"] = cages
+            # ITS DC PORTS (docs/dc-power-design.md 5.2), in the order the
+            # contract states them and in the part's own frame: a path of ""
+            # is the part itself. A device's configs.json carries the same
+            # ports with the placement's override applied and a path a
+            # drawing addresses. Omitted when the contract states none, like
+            # `cages`.
+            ports = component_dc_ports(data)
+            if ports:
+                entry["dc-ports"] = ports
             # WHAT IT PRESENTS WHEN SEATED (#611): a plug's boot point, a
             # single-bore optic's bore - the slot at its own key that the build
             # seats a chained tier in. Omitted when it presents nothing.
