@@ -10,5 +10,6 @@
   guides name its form, so the console of the eight EX4300 and EX4550 devices that place it is a connector
   slot that accepts the new plug. Its size, elements, skin and mate point do not change. The eight devices
   (`ex4300-24p`, `-24t`, `-32f`, `-48mp`, `-48p`, `-48t`, `ex4550-32f`, `-32t`) are re-locked, a minor each.
-  No drawing, position or id changes, and no export changes. The `std/mini-usb@1` slot of the six Catalyst
+  No drawing, position or id changes, and no port name or interface type changes in any export; the 50 DCIM
+  export files differ only in the version number in their description text. The `std/mini-usb@1` slot of the six Catalyst
   9300 and 3650 switches that place it now accepts the plug too.
