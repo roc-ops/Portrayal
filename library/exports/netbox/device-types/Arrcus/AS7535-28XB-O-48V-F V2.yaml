@@ -113,10 +113,10 @@ module-bays:
     description: 'Accepts: csr440-fan'
   - name: PSU 1
     position: psu-1
-    description: 'Accepts: csr440-psu-ac'
+    description: 'Accepts: csr440-psu-ac, csr440-psu-dc'
   - name: PSU 2
     position: psu-2
-    description: 'Accepts: csr440-psu-ac'
+    description: 'Accepts: csr440-psu-ac, csr440-psu-dc'
 comments: 'Arrcus lists Edgecore AS7535-28XB-O-48V-F V2 (NOS: arcos).
 
   Listed per: Arrcus Hardware Compatibility List (External), June 2026, for ArcOS 8.5 - page 3, under
@@ -131,9 +131,9 @@ comments: 'Arrcus lists Edgecore AS7535-28XB-O-48V-F V2 (NOS: arcos).
 
 
   Configuration `dc`: Two hot-swappable DC supplies (-44 to -60 V, 15.5-9.6 A each) and the same six rear
-  fan modules - the datasheet''s one DC ordering row. DRAWN WITH THE AC SUPPLY''S FACE, because neither
-  document pictures the DC module; the build is declared so a tool filtering by feed finds it, and the
-  wrong face is the dc-power-supply gap.
+  fan modules - the datasheet''s one DC ordering row. Each bay seats edgecore/csr440-psu-dc@1, the supply''s
+  own part with a grey two-opening terminal cover and a ground stud, drawn from the quick start''s angled
+  illustrations of the module; what remains open is the dc-power-supply gap.
 
 
   Also sold or listed as: CSR440, AS7535-28XBE
@@ -210,7 +210,7 @@ comments: 'Arrcus lists Edgecore AS7535-28XB-O-48V-F V2 (NOS: arcos).
   - thermal.cooling: six hot-swappable rear fan modules, 5+1 redundant
 
 
-  Drawing version 2.0.0. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 2.1.0. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.
 
   Model maturity: modelled. Every dimension in the source records where it came from.'
