@@ -1,0 +1,79 @@
+format: 1
+kind: component
+name: ex3300-rps-plug
+version: 1.0.0
+class: port
+mates: ex3300-rps
+profile: power
+description: >-
+  The cable end of an external redundant power system for a Juniper EX3300, seen from the cable end
+  as a front elevation sees it seated: a long moulded plug as wide as the port's connector opening
+  and a short straight stub of cable. It seats in the RPS port (`ex3300-rps`) at its own mate point.
+  No drawing of the plug is held, so every figure is estimated from the port's opening.
+size: {w: 44.4, h: 8.8}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  estimated - the plug is drawn to the 44.4 by 8.8 of the connector opening of
+  juniper/ex3300-rps-port@1; no source gives a dimension of the plug
+attrs: {media: rps, connector: ex3300-rps}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 6.0}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - the face is the port's connector opening, 44.4 by 8.8 (juniper/ex3300-rps-port@1,
+    itself read off the vector Figure 3 of the EX3300 Switch Hardware Guide, published 2020-12-15),
+    with the opening's full-round ends. A plug has to pass the opening, so it cannot be larger; how
+    much smaller it is no held source says.
+  needs-drawing: >-
+    NEEDS A DRAWING - the connector drawing of the cable of the redundant power system the EX3300
+    takes. The guide names the port and nothing else: no cable, no connector type, no contact count
+    and no external power system. Until that drawing is held every figure here is a reading.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/c13-plug@1: a `size.d` on a component with no
+    `behaviour` compiles to `data-depth`, which the kit builds as a pit behind the part. The depth is
+    carried by the relief instead.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, as generic/c13-plug@1's is.
+    juniper/ex3300-rps-port@1 presents at its own face, so 0 is the panel plane the opening is cut in.
+    What lies inside the port is not built.
+  stands: >-
+    estimated - the body stands 30.0 in front of the panel. No source gives the plug's length or how
+    far it seats into the port's modelled 20.0 depth; 30.0 is a reading, to be replaced by the drawing
+    named under needs-drawing.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a straight run of cable 30
+    long from the plug's rear face. The cable's bend is the installation's.
+  cable-od: >-
+    estimated - 6.0 is a reading that fits inside the plug's 8.8 height. No source gives the cable's
+    diameter; a placement or a wrapper sets the cable it carries, at its own `cable-od`.
+  jacket-colour: >-
+    a FIELD. Black is the default because no held source states a colour.
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the face (22.2, 4.4): the cable runs
+    straight through the plug, so its front and its rear are one axis seen from two directions.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE. The contacts are on the plug's front face, which is in the port; a front
+    elevation of a seated plug looks at the cable end. Their number is not published.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port plug.
+elements: {}
+relief:
+  features:
+    - node: body
+      out: 30.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        no source - the plug's length is a reading (provenance.stands)
+    - node: stub
+      lift: 30.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [22.2, 4.4], direction: front}
+  cable: {at: [22.2, 4.4], direction: front, 'on': stub}
+skins: [default]

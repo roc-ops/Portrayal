@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2200-24p
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2200-24P
@@ -109,10 +109,11 @@ provenance:
   rps-port:
     confidence: estimated
     note: >-
-      estimated - the RPS port (Figure 5 callout, guide list of rear panel components) is drawn as chassis
-      art: the plate and its opening at 50.1 to 118.0 mm and four screws. It is not a component: the library
-      has no RPS connector and its DCIM export has no row for one. The guide names no RPS part number and no
-      document of the RPS is held.
+      estimated - the RPS port (Figure 5 callout, guide list of rear panel components) is the part
+      juniper/ex2200-rps-port@1, placed at 50.1 mm with its four screws placed beside it; the plate and its
+      opening are read off Figure 5 as gate-1 describes. The part presents no interface: the guide names no
+      RPS connector type and the registered key ex3300-rps covers the EX3300 only, so nothing mates the port
+      and it is not usable yet. The guide names no RPS part number and no document of the RPS is held.
   built-in-power-and-fans:
     confidence: datasheet
     note: >-
@@ -202,6 +203,14 @@ gaps:
     The jack lamps carry the component's link and activity vocabulary; the guide's Status lamp switches
     meaning with the mode button and no per-lamp state list fits the component.
   wanted: none beyond the component's own vocabulary.
+- what: rps-port-connector
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The connector type and pinout of the redundant power system port, and the model of the external
+    power system. The guide labels the port and says nothing else, so the part presents no interface
+    and nothing mates it.
+
 groups:
   rj45:
     term: Port
@@ -227,8 +236,8 @@ groups:
     role: management
     index-origin: 0
     mixed: >-
-      how the switch is reached out of band - the management Ethernet port, the USB port and the RJ-45
-      console port on the rear
+      the management corner of the rear - how the switch is reached out of band (the management Ethernet
+      port, the USB port and the RJ-45 console port), with the RPS port beside them
   controls:
     term: Button
     role: management
@@ -368,8 +377,6 @@ views:
       - {id: earth-terminal, kind: earth-plate, at: [33.9, 4.4], size: [45.1, 13.0], rx: 0.3, fill: '#c9cbcd'}
       - {id: earth-hole-1, kind: earth-hole, at: [44.05, 8.35], size: [4.7, 4.7], rx: 2.35, fill: '#2a2d31'}
       - {id: earth-hole-2, kind: earth-hole, at: [63.85, 8.35], size: [4.7, 4.7], rx: 2.35, fill: '#2a2d31'}
-      - {id: rps-plate, kind: rps-plate, at: [50.1, 25.1], size: [67.9, 14.6], rx: 1.0, fill: '#c9cbcd'}
-      - {id: rps-opening, kind: rps-opening, at: [61.8, 28.0], size: [44.5, 8.9], rx: 4.0, fill: '#1d2024'}
       - {id: fan-0, kind: fan-grille, at: [122.55, 3.55], size: [38.9, 38.9], rx: 19.45, pattern: vent, vent: 1.0}
       - {id: fan-1, kind: fan-grille, at: [172.75, 3.55], size: [38.9, 38.9], rx: 19.45, pattern: vent, vent: 1.0}
       - {id: exhaust-psu, kind: exhaust-grille, at: [217.45, 3.55], size: [38.9, 38.9], rx: 19.45, pattern: vent, vent: 1.0}
@@ -393,13 +400,14 @@ views:
          description: 'Tables 7 and 8 - Link/Activity green blinking with activity, steady without; Status green, one blink a second at 10 Mbps and two at 100 Mbps'}
       - {ref: std/usb-a@1, id: usb, at: [12.5, 31.85], group: mgmt, rel-pos: 2}
       - {ref: std/rj45@2, id: console-rj45, at: [31.5, 24.7], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+      - {ref: juniper/ex2200-rps-port@1, id: rps, at: [50.1, 25.1], group: mgmt, rel-pos: 4}
       - {ref: common/ground-symbol@1, id: earth-mark, at: [85.4, 8.3], for: chassis, group: furniture, rel-pos: 1}
       - {ref: common/esd-jack@1, id: esd-rear-jack, at: [106.6, 8.6], for: chassis, group: esd, rel-pos: 0}
       - {ref: std/c14-inlet@1, id: ac-inlet, at: [405.2, 11.1], group: power-input, rel-pos: 0}
-      - {ref: common/screw-head@1, id: rps-screw-0, at: [53.0, 31.0], group: furniture, rel-pos: 2}
-      - {ref: common/screw-head@1, id: rps-screw-1, at: [110.7, 31.0], group: furniture, rel-pos: 3}
-      - {ref: common/screw-head@1, id: rps-screw-2, at: [55.1, 38.5], group: furniture, rel-pos: 4}
-      - {ref: common/screw-head@1, id: rps-screw-3, at: [109.6, 38.5], group: furniture, rel-pos: 5}
+      - {ref: common/screw-head@1, id: rps-screw-0, at: [53.0, 31.0], for: rps, group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: rps-screw-1, at: [110.7, 31.0], for: rps, group: furniture, rel-pos: 3}
+      - {ref: common/screw-head@1, id: rps-screw-2, at: [55.1, 38.5], for: rps, group: furniture, rel-pos: 4}
+      - {ref: common/screw-head@1, id: rps-screw-3, at: [109.6, 38.5], for: rps, group: furniture, rel-pos: 5}
       - {ref: common/screw-head@1, id: rear-screw-0, at: [165.3, 6.5], group: furniture, rel-pos: 6}
       - {ref: common/screw-head@1, id: rear-screw-1, at: [165.3, 38.6], group: furniture, rel-pos: 7}
       - {ref: common/screw-head@1, id: rear-screw-2, at: [213.6, 38.5], group: furniture, rel-pos: 8}
