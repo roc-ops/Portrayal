@@ -52,10 +52,8 @@ def layout(name, text=None):
     return yaml.safe_load(text)
 
 
-def origin_layout(name):
-    out = subprocess.run(["git", "show", f"origin/main:library/devices/juniper/{name}/layout.yaml"],
-                         cwd=ROOT, capture_output=True, text=True, check=True).stdout
-    return layout(name, out)
+BASE = Path(__file__).resolve().parent / "fixtures/rps-base-placements.json"
+FIELDS = ("ref", "id", "group", "rel-pos", "at", "rotate", "for")
 
 
 def placements(doc):
@@ -65,6 +63,17 @@ def placements(doc):
         for n, p in enumerate(((v or {}).get("components") or {}).get("placements") or []):
             got[(view, p.get("id") or f"#{n}")] = p     # a placement with no id is held by its place in the list
     return got
+
+
+def base_placements(name):
+    """{(view, id): placement} of the eight devices before this change, from the committed record.
+
+    A record rather than `git show origin/main:`: a checkout in CI holds no such ref. Re-record with
+    `python3 spec/tests/test_rps_interfaces.py --update <rev>`, where <rev> is the commit the
+    layouts are read from.
+    """
+    rec = json.loads(BASE.read_text())[name]
+    return {tuple(k.split("|", 1)): p for k, p in rec.items()}
 
 
 def decor(doc):
@@ -221,12 +230,12 @@ def test_the_ex2200_part_presents_no_interface_and_is_not_the_ex3300_part():
 
 @pytest.mark.parametrize("name", EX2200)
 def test_the_ex2200_screws_stay_placed_as_they_were(name):
-    new, old = placements(layout(name)), placements(origin_layout(name))
+    new, old = placements(layout(name)), base_placements(name)
     for key, p in old.items():
         if key[1].startswith("rps-screw-"):
             # the only change is `for: rps`, which says the screw belongs to the plate it stands on
             # (the overlap rule, L13, skips a part and the part it is for)
-            assert new[key] == {**p, "for": "rps"}
+            assert {f: new[key][f] for f in FIELDS if f in new[key]} == {**p, "for": "rps"}
 
 
 # --- 6. nothing else moved ----------------------------------------------------------------------
@@ -234,7 +243,7 @@ def test_the_ex2200_screws_stay_placed_as_they_were(name):
 @pytest.mark.parametrize("name", EIGHT)
 def test_no_other_placement_changed_its_id_group_position_or_turn(name):
     """A guard: it passes before the change and after it."""
-    new, old = placements(layout(name)), placements(origin_layout(name))
+    new, old = placements(layout(name)), base_placements(name)
     added = set(new) - set(old)
     assert added <= {(v, "rps") for v in ("rear", "rear-dc")} if name in EX2200 else not added
     assert not set(old) - set(new)
@@ -242,3 +251,25 @@ def test_no_other_placement_changed_its_id_group_position_or_turn(name):
         q = new[key]
         for field in ("ref", "group", "rel-pos", "at", "rotate"):
             assert q.get(field) == p.get(field), (key, field)
+
+
+def _record(rev):
+    rec = {}
+    for name in EIGHT:
+        text = subprocess.run(["git", "show", f"{rev}:library/devices/juniper/{name}/layout.yaml"],
+                              cwd=ROOT, capture_output=True, text=True, check=True).stdout
+        rec[name] = {"|".join(k): {f: p[f] for f in FIELDS if f in p}
+                     for k, p in placements(layout(name, text)).items()}
+    return rec
+
+
+def layout_text_record(rev):
+    return json.dumps(_record(rev), indent=1) + "\n"
+
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 3 or sys.argv[1] != "--update":
+        sys.exit("usage: test_rps_interfaces.py --update <rev>")
+    BASE.parent.mkdir(exist_ok=True)
+    BASE.write_text(layout_text_record(sys.argv[2]))
