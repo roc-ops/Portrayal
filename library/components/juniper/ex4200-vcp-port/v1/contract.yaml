@@ -1,9 +1,10 @@
 format: 1
 kind: component
 name: ex4200-vcp-port
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: networking
+interface: ex4200-vcp
 description: >-
   Virtual Chassis port (VCP) of the Juniper EX4200 switches: a wide flat 68-pin receptacle on the
   rear panel. Two of them, VCP-0 and VCP-1, join up to ten switches over the 128 Gbps Virtual
@@ -24,10 +25,17 @@ provenance:
   face: >-
     drawing - Figure 4 draws a long rounded-rectangle shroud with a smaller rectangle inside and
     the legend VCP-0 or VCP-1 under it; no photograph of the rear is held
+  interface: >-
+    datasheet - the `ex4200-vcp` key of spec/schemas/connectors.yaml. EX4200 Switch Hardware
+    Guide, Connecting a Virtual Chassis Cable to an EX4200 Switch and Figure 68: the cable
+    connector is placed in the port and slid in until it is fully seated, and a retainer is
+    slid over it and screwed down. The mate point is the centre of the opening, facing out.
 size: {w: 36.2, h: 8.3}
 size-confidence: {w: estimated, h: estimated}
 elements:
   opening: {at: [1.6, 1.4], size: [33.0, 5.5], class: window}
+connection-points:
+  mate: {at: [18.1, 4.15], direction: front}
 relief:
   wall: '#6b7078'
   features:
