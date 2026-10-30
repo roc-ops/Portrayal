@@ -52,8 +52,9 @@ def test_the_connector_registry_is_not_vacuous():
     # generic/c14-plug@1 is the cord end that mates it
     # iec-c19: the C19 outlet of a PDU, a slot for a C20 jumper end (#933)
     # usb-a/micro-usb-b/usb-c: the USB receptacles, made slots for their cable plugs (#786)
-    # mini-usb-b: the Mini-B receptacle, registered from Molex
-    # 54819-0519; no part presents it yet and no plug mates it, so it is in no slot below
+    # mini-usb-b: the Mini-B receptacle, registered from Molex 54819-0519;
+    # std/mini-usb@1 presents it (the Catalyst 9300 and 3650 console) and no cable
+    # plug mates it yet
     # db9/hd15/da15/db25: the D-sub and VGA connectors, made slots for their hooded plugs (#787)
     # terminal-508-2/-5/-6: the pluggable 5.08 mm terminal headers, made slots for their
     # screw-clamp plugs (#789)
@@ -78,6 +79,11 @@ def test_the_connector_registry_is_not_vacuous():
     # Eaton combination outlet, made slots for a cord end (#1045). std/nema-5-20r@1
     # and eaton/c39-outlet@1 present two of them. No part presents nema-5-15r yet:
     # it is registered because a 5-15P names it in `mates`, and it is in no slot below
+    # flexstack/stackwise-480/stackpower: the Cisco stacking and power-stacking
+    # connectors; ex4200-vcp: the Juniper EX4200 Virtual Chassis port;
+    # cisco-rps2300/ex3300-rps: the two redundant-power connectors. Vendor connectors
+    # citing no standard; no part presents any of them yet, so the later change that
+    # gives a part its interface and its mate never edits this list
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
@@ -96,7 +102,11 @@ def test_the_connector_registry_is_not_vacuous():
                          # the two PCIe slot forms (docs/cards-by-interface-design.md):
                          # a riser bay states one as its `interface`, so no part
                          # presents either and neither is a slot below
-                         "pcie-fh", "pcie-lp"}
+                         "pcie-fh", "pcie-lp",
+                         # stack, virtual-chassis and redundant-power connectors:
+                         # presented by no part yet
+                         "flexstack", "stackwise-480", "stackpower", "ex4200-vcp",
+                         "cisco-rps2300", "ex3300-rps"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -122,10 +132,56 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    # the H100 PCIe's, H100 NVL's and L40S's east ends
                                    "pcie-12vhpwr", "pcie-12v-2x6",
                                    # the A10's east end
-                                   "pcie-8pin"}
+                                   "pcie-8pin",
+                                   # the Mini-B console of the Catalyst 9300 and 3650,
+                                   # so a part composing std/mini-usb@1 never edits this
+                                   "mini-usb-b",
+                                   # registered ahead of the parts that present them,
+                                   # so those changes never edit this list
+                                   "flexstack", "stackwise-480", "stackpower",
+                                   "ex4200-vcp", "cisco-rps2300", "ex3300-rps"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
+
+
+STACK_AND_RPS_KEYS = ("flexstack", "stackwise-480", "stackpower", "ex4200-vcp",
+                      "cisco-rps2300", "ex3300-rps")
+
+
+@pytest.mark.parametrize("key", STACK_AND_RPS_KEYS)
+def test_a_stack_or_rps_connector_key_has_a_note_and_no_standard(key):
+    entry = render_mod._connector_registry().get(key)
+    assert entry is not None, f"{key} is not registered"
+    assert str(entry.get("note") or "").strip(), f"{key} has no note"
+    assert "standard" not in entry, f"{key} cites a standard; these are vendor connectors"
+
+
+def _header(name):
+    text = (ROOT / "spec/schemas" / name).read_text()
+    return text.split("\nformat: 1", 1)[0]
+
+
+def test_the_connectors_header_documents_unmated_and_turns():
+    head = _header("connectors.yaml")
+    keys = head.split("AN ENTRY is", 1)[1]
+    for word in ("unmated", "turns", "40 characters", "C21"):
+        assert word in keys, f"the entry-key list does not mention {word}"
+
+
+def test_the_pluggables_header_documents_unmated_as_a_map_from_a_rate():
+    head = _header("pluggables.yaml")
+    assert "unmated" in head
+    tail = head.split("unmated", 1)[1]
+    for word in ("map", "rate", "sentence", "40 characters", "C21"):
+        assert word in tail, f"the unmated paragraph does not mention {word}"
+
+
+def test_the_mini_usb_b_note_says_what_presents_it():
+    note = render_mod._connector_registry()["mini-usb-b"]["note"]
+    assert "No part presents it" not in note
+    assert "std/mini-usb@1" in note
+    assert "no cable plug mates it yet" in note
 
 
 def test_an_lc_slot_accepts_the_plug_and_no_boot(comps):

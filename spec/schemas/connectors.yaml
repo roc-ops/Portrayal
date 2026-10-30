@@ -4,11 +4,20 @@
 # names the interface - dust caps and plugs alike. No ladder: a connector
 # either intermates or it does not.
 #
-# AN ENTRY is {standard, note, spans, cover}, every key optional:
+# AN ENTRY is {standard, note, spans, turns, unmated, cover}, every key optional:
 #   standard  the standards.yaml entry that holds the interface's figures
 #   note      what the interface is, for a reader
 #   spans     {interface, count}: this connector fills `count` slots of
 #             `interface` at once (a duplex over two bores; see lc-duplex)
+#   turns     the turns, in degrees, relative to the seat, at which an occupant
+#             may be seated on a slot presenting the interface (see
+#             terminal-stud); an interface that names none allows 0 alone, and a
+#             part's own `mate` point may narrow the list
+#   unmated   a sentence of at least 40 characters saying why no plug of this
+#             interface can exist. The part-conformance runner's check that
+#             every published connector slot has a mate (C21) does not report a
+#             slot of this interface. A sentence on an interface some part
+#             `mates` is an error. Nothing reads it yet.
 #   cover     true for an entry that is NOT a connector but a COVER MOUNT: the
 #             place on a part where a cover that ships on it and comes off is
 #             fixed (a breaker's touch guard). It seats as a connector slot
@@ -67,7 +76,7 @@ interfaces:
   # generation.
   usb-a: {standard: usb-a, note: 'USB Standard-A receptacle (USB 2.0 specification, figure 6-7); generic/usb-a-plug@1 mates it. A USB 3.x Standard-A plug mates the same opening'}
   micro-usb-b: {standard: micro-usb-b, note: 'USB 2.0 Micro-B receptacle (Micro-USB Cables and Connectors Specification 1.01, figure 4-10); generic/micro-usb-b-plug@1 mates it. Micro-AB and the wider USB 3.x Micro-B are different interfaces'}
-  mini-usb-b: {standard: mini-usb-b, note: 'USB 2.0 Mini-B receptacle (shell from Molex sales drawing SD-54819-026, part 54819-0519). No part presents it and no cable plug mates it yet. Micro-B and Mini-AB are different interfaces'}
+  mini-usb-b: {standard: mini-usb-b, note: 'USB 2.0 Mini-B receptacle (shell from Molex sales drawing SD-54819-026, part 54819-0519). std/mini-usb@1 presents it (the console of the Catalyst 9300 and 3650) and no cable plug mates it yet. Micro-B and Mini-AB are different interfaces'}
   usb-c: {standard: usb-c, note: 'USB Type-C receptacle (USB Type-C Cable and Connector Specification, figure 3-1); generic/usb-c-plug@1 mates it, either way up'}
   # D-subminiature and VGA connectors (#787, docs/connectors-dsub-design.md).
   # The hooded cable plug that mates each is a generic plug; the far end of
@@ -159,4 +168,17 @@ interfaces:
   # states either yet.
   pcie-fh: {standard: pcie-bracket-fh, note: 'a PCIe slot whose opening takes a full-height add-in card bracket (PCI Express CEM 5.0, figure 11-5); a two-slot card mates it too and states slot-width: 2'}
   pcie-lp: {standard: pcie-bracket-lp, note: 'a PCIe slot whose opening takes a low-profile add-in card bracket (PCI Express CEM 5.0, figure 11-9)'}
+  # Stacking, Virtual Chassis and redundant-power connectors. VENDOR CONNECTORS: each is
+  # the maker's own, no standard is held for any, and the entries cite none. THE KEY IS
+  # THE RECEPTACLE ON THE SWITCH, as `p40` is, and not the cable or the use. Two
+  # connectors that the held guides do not show to intermate are two keys, so each
+  # key is the narrowest the guides settle and its note says what they leave open.
+  # No part presents any of them yet: the change that gives a part its interface
+  # adds the plug that mates it in the same change.
+  flexstack: {note: 'the stack port of the Cisco FlexStack module (C2960S-STACK) of the Catalyst 2960-S, printed STACK 1 and STACK 2 (Catalyst 2960-S Switch Hardware Installation Guide, OL-19732-04, "FlexStack Ports" and "Connecting the FlexStack Cables", Figure 1-17). The guide names the ports and the cables CAB-STK-E-0.5M, -1M and -3M and gives no connector type or contact count. It does not say that the two ports are one receptacle, only that the cable tab sits above the connector at STACK 1 and below it at STACK 2, so this key covers the connector as the module draws it and no other Cisco stacking port. A vendor connector: no standard is held for it. No part in the library presents it yet; the plug that mates it is added separately'}
+  stackwise-480: {note: 'the StackWise-480 port connector on the rear of a Catalyst 9300, a modular-uplink model (Catalyst 9300 Series Switches Hardware Installation Guide, Figure 10 callout 10, "StackWise-480 port connectors", and "StackWise Ports"). The cable is fastened by finger-tightened screws, and the guide lists the cables STACK-T1-50CM, -1M and -3M in Table 51. The guide prints no connector dimension or contact count. It lists the same cables for StackWise-1T (Catalyst 9300X) and does not say that the 1T port connector is this receptacle, so that connector is not this key; the StackWise-320 port of the 9300L takes an adapter and is a different connector. A vendor connector: no standard is held for it. cisco/stackwise-480-port@1 draws it; no part presents it yet; the plug that mates it is added separately'}
+  stackpower: {note: 'the StackPower connector on the rear of a Catalyst 9300 (Catalyst 9300 Series Switches Hardware Installation Guide, Figure 10 callout 7, "StackPower connectors", and "StackPower Connector"), for the cables CAB-SPWR-30CM and CAB-SPWR-150CM. The guide says the ports are keyed and have colored bands that match the cable connectors, and prints no connector dimension or contact count. The Catalyst 9300X rear panel names "StackPower+ connectors" (Figure 14) and the guide does not say they are this receptacle, so they are not this key. A vendor connector: no standard is held for it. cisco/stackpower-port@1 draws it; no part presents it yet; the plug that mates it is added separately'}
+  ex4200-vcp: {note: 'the Virtual Chassis port (VCP) on the rear panel of a Juniper EX4200, two per switch (EX4200 Switch Hardware Guide, published 2022-01-16, "Rear Panel of an EX4200 Switch", Figure 4, and the pinout topic: "EX4200 switches use a 68-pin connector cable to interconnect switches"). Table 30 lists the pins and the cable ships with the switch. The guide names no connector type and gives no dimension, and it does not say that the VCP of any other Juniper switch is this connector. A vendor connector: no standard is held for it. juniper/ex4200-vcp-port@1 draws it; no part presents it yet; the cable plug that mates it is added separately'}
+  cisco-rps2300: {note: 'the RPS connector on the rear of a Catalyst 2960-S that supports the Cisco RPS 2300 (Catalyst 2960-S Switch Hardware Installation Guide, OL-19732-04, Figure 1-10 callout 3 and Figure 1-12, "RPS Connector": "Attach only the following Cisco RPS model to the RPS receptacle: RPS2300"). The cable is CAB-RPS2300-E. The guide names no connector type and gives no contact count or dimension, and a cover closes the connector when no RPS is attached (Figure 1-15). A vendor connector: no standard is held for it. No part in the library presents it yet; the plug that mates it is added separately'}
+  ex3300-rps: {note: 'the redundant power system (RPS) port on the rear panel of a Juniper EX3300 (EX3300 Switch Hardware Guide, published 2020-12-15, "Rear Panel of an EX3300 Switch": "Redundant power system (RPS) port", Figures 3 and 4). The guide names no connector type, contact count, dimension or cable. The EX2200 Switch Hardware Guide lists an "RPS port" in the same words and gives no connector type either, so the two guides do not settle that the EX2200 port is this connector, and this key covers the EX3300 only. A vendor connector: no standard is held for it. juniper/ex3300-rps-port@1 draws it; no part presents it yet; the plug that mates it is added separately'}
   breaker-1ru-guard: {cover: true, note: 'NOT A CONNECTOR - A COVER MOUNT. The face of a 1RU plug-in breaker, where its touch guard screws on; amphenol-ns/touch-guard-1ru@1 mates it. Registered here because a cover that ships on a part and comes off is the same mechanism as a dust cap in a port: one slot, one occupant, a default'}
