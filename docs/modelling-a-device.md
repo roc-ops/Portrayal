@@ -578,6 +578,14 @@ present, spelled as printed, next to its cutout. Make L14 pass before moving on.
 
 Now populate. Reuse before building.
 
+**Every port on a device must be usable: anything that takes a cable, cord,
+plug, lug or pluggable is modelled as a connector part, and the library holds
+something that plugs into it. The change that adds a connector adds its mate.
+If no mate can exist, the connector says why in a sentence.** The worked
+example and the three ways to meet it are under
+[Every port is usable](#every-port-is-usable), after the placements below;
+Gate 4b checks it.
+
 1. **Search `library/components/` first.** `std/` and `common/` hold cages,
    jacks, lamps, PSUs and fans that conform to registry standards. A port is
    `std/sfp@1`, not a new rectangle. The
@@ -800,6 +808,41 @@ element's or bay's id. L105 checks both. The worked example in the library is
 the FELT-B, which numbers the ports of its 18 cages 1 to 36: a CSFP takes both
 ports of a cage and an SFP only the odd one, and the module type exports 36.
 
+### Every port is usable
+
+A connector is a part that presents an interface, and the part that plugs into
+it is another part that names the same interface in `mates:`. Take a chassis
+ground. `common/ground-stud@1` is class `ground` and presents `terminal-stud`.
+Its mate is `generic/ring-lug@1`, class `port` with `mates: terminal-stud`: the
+lug that clamps to the stud. The cable that joins them is a ground wire, a
+cable of media `ground` in the Rack Builder. The stud, the lug and the wire are
+three things the library holds, so a modeller who lays a ground wire to the
+stud finds an end to land on at each side. A stud drawn as a grey circle in
+`panel.decor` is none of the three, and nothing can be laid to it.
+
+A new connector meets the rule in one of three ways:
+
+1. **Its mate is in the library.** Say nothing more; place the connector and
+   the check finds the mate.
+2. **The change adds the mate.** Draw it from a source. Where no source gives
+   its size, set `size-confidence: estimated` and write a `provenance` sentence
+   that names the drawing wanted, because a component has no `gaps` list to say
+   it in.
+3. **No mate can exist.** The part, or the interface's entry in
+   `spec/schemas/connectors.yaml`, or a pluggable family's rate in
+   `spec/schemas/pluggables.yaml`, says why in an `unmated:` sentence of at
+   least 40 characters. A sentence where a mate could exist is a gap, not a
+   sentence: it hides a missing part behind words, and it is a reviewer's call
+   to refuse it.
+
+A connector that cannot be modelled as a part in this change is not drawn as
+decor to get past it. L197 warns on a decor `kind` that names a connector
+(`console-opening`, `earth-hole`, `inlet-housing`; the list is
+`spec/schemas/connector-decor-names.yaml`). The list is a floor of names, not a
+proof: decor kinds are free text, and a connector under another name passes it.
+A decor that is not a connector is renamed for what it is, `case-screw` and not
+`earth-screw`; a connector becomes a part.
+
 ### Power figures
 
 Every module you place or build gets its power figure, and the key says which
@@ -867,6 +910,29 @@ after every structural addition, not just at the end: rules see what is
 declared, so a collision is only visible once both sides exist. Adding the rear
 bays to one router immediately surfaced fifteen rivets sitting on the fan
 modules.
+
+## Gate 4b: every port is usable
+
+After the build, run the scan over the devices the change touches. It asks the
+four port-usable codes of the part-conformance runner, C19 to C22, in every
+configuration, with no cable laid:
+
+```sh
+python3 spec/tools/dev/part_conformance.py --dist library/dist --scan --refs <model> --out scan.json
+python3 -m pytest spec/tests/test_port_usable_records.py -q
+```
+
+- **Every finding has a record.** The record is a mate in the library, an
+  `unmated:` sentence (the part's, the interface's or the family's rate), or a
+  row in `library/conformance-exceptions.yaml` that names the change closing
+  it. A row also raises `cap:` there, so it is a reviewer's call and not a way
+  to pass.
+- **`test_port_usable_records.py` passes.**
+- **The pull request states the scan's counts**: the findings per code before
+  the records and after.
+
+This gate covers C19 to C22 and their records only. The runner's other codes
+are not part of it, and a device that passes here is not thereby audited.
 
 ## Gate 5: audit against the source, twice
 

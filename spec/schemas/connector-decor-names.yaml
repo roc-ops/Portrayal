@@ -1,0 +1,51 @@
+# spec/schemas/connector-decor-names.yaml
+# The decor kinds that name a connector. Lint L197 warns when a device's
+# `panel.decor` entry has one of these as its `kind`: anything that takes a
+# cable, cord, plug, lug or pluggable is a part that presents an interface, not
+# a drawing on the panel, and a drawing has nothing for a plug to mate.
+#
+# A FLOOR OF NAMES, NOT A PROOF. A decor kind is free text, so the rule finds
+# names and not things: a connector drawn under a name that is not listed here
+# passes, and a name listed here that is not a connector is a false positive.
+# Reviewers still look for the connector the list does not know.
+#
+# TO CLEAR A WARNING, model the connector as a part that presents its
+# interface (see "Every port is usable" in docs/modelling-a-device.md). Where
+# the decor is not a connector, name it for what it is: a screw that holds the
+# case is `case-screw`, not `earth-screw`. Do not add a name to this file to
+# silence a device; add one when a connector turns up under a name the list
+# missed. A kind that only frames a part placed beside it (`port-shell`,
+# `jack-shell`, `jack-plate`, `outlet-moulding`, `port-housing`, `port-rim`,
+# `jack-backing`) is not listed, and neither is a bare pad (`earth-plate`,
+# `ground-plate`), whose holes carry the name.
+#
+# EACH NAME has a one-line reason, in the style of connectors.yaml.
+format: 1
+names:
+  # remote power supply input (the plate holding the connector and its opening)
+  rps-plate: the plate of a redundant power supply connector, drawn as a box
+  rps-opening: the opening of a redundant power supply connector, drawn as a hole
+  # console and USB ports
+  console-shell: the metal shell of a console port, drawn instead of a placed jack
+  console-opening: the opening of a console port, drawn instead of a placed jack
+  console-pins: the pins of a console port, drawn instead of a placed jack
+  usb-shell: the shell of a USB port, drawn instead of a placed receptacle
+  usb-bezel: the bezel of a USB port, drawn instead of a placed receptacle
+  # DC power terminals
+  dc-terminal-screw: the screw of a DC power terminal, which takes a lug
+  dc-terminal-pole: a pole of a DC power terminal, which takes a lug or a wire
+  dc-terminal-strip: the strip of a DC power terminal block
+  dc-terminal-plate: the body of a DC power terminal block with its poles
+  terminal-post: the post of a terminal block, which takes a lug
+  terminal-nut: the nut that clamps a lug to a terminal post
+  terminal-block: a terminal block, drawn as one box
+  # earth and ground
+  earth-stud: an earthing stud, which takes a ring lug
+  ground-stud: a grounding stud, which takes a ring lug
+  earthing-terminal: an earthing terminal, which takes a lug
+  earth-ring: the ring of an earthing point, which takes a lug
+  ground-nut: the nut that clamps a lug to a grounding stud
+  earth-hole: the hole a lug screw goes through at an earthing point
+  # AC inlets
+  inlet-housing: the housing of an AC inlet, drawn instead of a placed inlet
+  inlet-flange: the flange of an AC inlet, drawn instead of a placed inlet

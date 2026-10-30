@@ -87,6 +87,7 @@ the detail; this is the order and the question each gate answers.
 | 2 | the cutouts | Is every hole there, on the right pitch? | Overlay again and count. L39 checks fit, overlap and empty openings. |
 | 3 | the silkscreen | Is every printed legend present, spelled as printed, beside what it names? | Render with silkscreen and compare. L14 passes. |
 | 4 | the components | Does the whole file hold together? | Lint clean (below) with `./build.sh --device <model>`; render with and without silkscreen; open the viewer and read the tree; set the `maturity` the sources earn and lint again; read the capability level and its `blocked:` reason. |
+| 4b | the build | Does every connector the change adds have a mate, or a sentence saying none can exist? | `part_conformance.py --scan --refs <model>` finds nothing without a record (a mate, an `unmated:` sentence, or a row in `library/conformance-exceptions.yaml`), and `spec/tests/test_port_usable_records.py` passes. Only C19 to C22 and their records; state the scan's counts in the pull request. |
 | 5 | everything | Is it the device, and is it finished? | Walk the callouts and the spec table by name, walk the L27 and L29 warnings, then put the render beside the reference at matched scale, for every face that has one. |
 | Submit | the branch | Can a maintainer merge it on green? | The eight steps below, each with its check. |
 
