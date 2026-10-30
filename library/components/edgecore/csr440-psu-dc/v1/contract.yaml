@@ -1,0 +1,133 @@
+format: 1
+kind: module
+name: csr440-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 48 VDC power supply of the Edgecore CSR440 (AS7535-28XB) - the AC supply's 53.8 x 39.4
+  envelope, a dark wire-grid housing with a GREY TWO-OPENING TERMINAL COVER standing out of the
+  face where that one has its C14 inlet, a ground stud on a bracket at the lower left, a black
+  U-handle at the right and a maroon latch at the upper left. TWO sit side by side on the front
+  face. Nothing like the dark three-pole barrier supply of the CSR310 and CSR430.
+size: {w: 53.8, h: 39.4, d: 300.0}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs:
+  model: 'AS7535-28XB DC PSU'
+  power-absent: not-published
+  input: dc
+  inlet: dc-terminal
+  input-note: '-44 - -60V, 15.5-9.6 A, per PS'
+provenance:
+  size: >-
+    BORROWED FROM edgecore/csr440-psu-ac@1, WHICH PHOTO-MEASURED IT on the data sheet's front
+    elevation, page 2 at 600 dpi scaled by the stated 438.4 mm body width to 8.9713 px/mm (its
+    modules read 6.0-59.8 and 68.7-122.5). The two supplies fill the same two front bays. This
+    variant is drawn only in the quick start's angled illustrations of the supply's terminal end
+    (page 2, "b. DC Power", and page 3, "Connect Power"), which carry no scale and are not a face
+    to measure. The depth is the AC sibling's own estimate.
+  the-face: >-
+    READ FROM AN ILLUSTRATION, NOT AN ELEVATION, and every position below is estimated. Two
+    colour renders of the supply (Quick Start Guide, page 2 "b. DC Power", embedded original 812
+    x 346 px, the pair seated; and page 3 "Connect Power", step 3, embedded original 769 x 460
+    px, one module close up) show the module on the front, seen from the front-left and slightly
+    above: a dark wire-grid housing with pale frame lines, a maroon latch at the upper left, a
+    grey terminal cover with two rectangular openings standing out of the lower middle, a ground
+    stud on a pale bracket at the lower left and a black U-handle at the right. Positions are
+    fractions of the visible module (about 380 x 295 px on page 3, foreshortened), so the mm are
+    the envelope times the fraction and are not measurements: latch x 0.01-0.30, y 0.08-0.29 (the
+    AC sibling's position, which it matches); terminal cover x 0.39-0.86, y 0.32-1.00, openings
+    at x 0.57-0.64 and 0.74-0.82, y 0.49-0.73; ground bracket x 0.12-0.40, y 0.65-0.85; handle
+    x 0.89-1.00, y 0.02-0.75. The AC sibling's handle is in the middle of its face and this one is
+    at the right edge; that difference is drawn as the figure shows it and not resolved. A printed
+    label above the cover (below) is not drawn. No photograph of this supply is held, and the
+    Edgecore intake has no 3d-models folder.
+  connector-direction: >-
+    Read from the figures and filed as estimated. The terminal cover's two openings face out of the
+    face, toward a viewer in front of the panel: the openings are drawn square-on in both figures.
+    Which way the wires leave is not stated: no wire is drawn, and the ring lugs are not shown on
+    this supply, so none is drawn. THE LEGEND AND THE CALLOUTS: the figure prints "RTN - 48V" on the
+    housing above the cover, and it is printed upside down in the render (read after a half turn:
+    "RTN" at the right end, "-48V" at the left). Read as it sits on the face, the left opening is
+    therefore -48V and the right is RTN. The callouts on page 3 agree: callout 2 ("Connect the -44
+    - -60 VDC wire") points at the left opening and callout 3 ("Connect the DC return wire") at the
+    right. So the legend and the callouts agree: left -48V (-44 - -60 VDC), right RTN (DC return).
+    The quick start's note two lines below names the -44 - -60 VDC wire "Input+" and the return
+    "Input-", which is the opposite sign sense to RTN/-48V; it is recorded and not resolved. The
+    ground stud is callout 1 ("Connect the ground wire / protective earth"). The figure shows the
+    supply on its own, so its attitude in the bay is worked out from its latch: the maroon latch is
+    at the upper left, as in the AC sibling's drawing (latch at [4.5, 1.6]), so the supply is drawn
+    upright and unmirrored, the AC sibling's attitude, in both bays (the AC part has no mirrored
+    field). Why the label prints upside down in the render is not stated.
+  colour: >-
+    Each value is estimated from the page 3 figure, which is a colour render (illustration, not
+    the device), by script on the embedded original; each is the median of the middle 80% of the
+    pixels of a region by luminance, away from labels and outlines. Terminal cover (x 360-500, y
+    205-235; 3433 of 4200 pixels kept): #888d91. Latch (x 205-295, y 130-150; 1469 of 1800):
+    #6f585b, shadow #4e3b3d (darkest quarter). Handle (x 545-575, y 130-200; 1686 of 2100):
+    #474747. Ground bracket (x 245-335, y 295-320; 1808 of 2250): #9f9f9e. The face around them
+    (x 120-190, y 150-330; 10086 of 12600): #525252. The AC sibling's face is bright (#b9bec4)
+    and its latch magenta (#7f1d4b); this supply reads dark with a browner latch in the render, a
+    difference between two documents that is not resolved.
+  body: >-
+    borrowed from edgecore/csr440-psu-ac@1, which states no body colour; the depth is its 300.0
+    estimate.
+  input: >-
+    "DC Input: -44 - -60V, 15.5-9.6 A, per PS" - the data sheet (EC-DS-0824-R05, page 3), recorded
+    in `input-note`. The quick start's specification table (page 4) gives "DC Input: -44 - -60
+    VDC, 15.5-9.6 A" for the system, which agrees.
+  model: >-
+    `AS7535-28XB DC PSU`, the string the device's DC configuration already carried; no document
+    prints a supply FRU code, so it is the chassis's, as edgecore/csr440-psu-ac@1's is.
+  power-absent: >-
+    NOT PUBLISHED. As the AC sibling: the data sheet gives the chassis "Max: 383.6 W" and no
+    output rating for a supply.
+  logo-zone: >-
+    none reserved - the figures print no vendor mark on the supply, and no logo or wordmark is
+    drawn.
+elements:
+  latch: {at: [4.50, 1.60], size: [10.50, 4.60], class: latch}
+  vent-field: {at: [2.00, 7.00], size: [44.00, 30.50], class: vent}
+  terminal: {at: [21.00, 13.50], size: [26.00, 25.00], class: terminal}
+  ground-stud: {at: [6.00, 24.00], size: [15.00, 8.00], class: terminal}
+  handle: {at: [47.00, 3.00], size: [5.80, 26.00], class: handle}
+fields:
+  latch-finish: {label: Latch colour, type: text, default: '#6f585b'}
+  latch-edge: {label: Latch edge colour, type: text, default: '#4e3b3d'}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: vent-field
+      vent: 28
+      confidence: estimated
+      source: >-
+        edgecore/csr440-psu-ac@1's own vent key, carried: the figures show a wire grid and no
+        document states how deep the cavity behind it runs.
+    - node: terminal
+      out: 9.5
+      confidence: estimated
+      source: >-
+        edgecore/csr440-psu-dc@1's own terminal key. The figures show the cover standing out of the
+        face; how far is not stated, and 9.5 matches edgecore/csr310-psu-dc@1's estimate for a
+        terminal block of this kind.
+    - node: ground-stud
+      out: 3.0
+      confidence: estimated
+      source: >-
+        edgecore/csr440-psu-dc@1's own ground-stud key. The stud stands up off its bracket in the
+        figures; how far is not stated.
+    - node: handle
+      uhandle: 27.0
+      dia: 5.0
+      confidence: estimated
+      source: >-
+        27 is borrowed, not measured, as edgecore/csr440-psu-ac@1's handle: the nearest published
+        figure for a CRPS-class supply is UfiSpace's "1.06 inches". The figures dimension nothing.
+    - node: latch
+      out: 2.5
+      confidence: estimated
+      source: >-
+        edgecore/csr440-psu-ac@1's own latch key, carried: the outline is read off the figure and
+        its projection is not stated.
+skins: [default]
