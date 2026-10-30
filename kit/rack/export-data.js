@@ -1189,7 +1189,8 @@ export function hardwareNotes(frame) {
 // cable-plugs.js read it (`ends`, as for cableFindings); the two ends are
 // said in one order, so A-to-B and B-to-A are one line. The plugs a cable is
 // drawn with are part of the cable: they are never lines of their own.
-const FAMILY = {fiber: 'fiber', copper: 'copper', dac: 'DAC', aoc: 'AOC', power: 'power', ground: 'ground'};
+const FAMILY = {fiber: 'fiber', copper: 'copper', dac: 'DAC', aoc: 'AOC', power: 'power', ground: 'ground',
+  stack: 'stack', usb: 'USB', console: 'console'};
 const familyOf = info => (info && Object.hasOwn(FAMILY, info.family ?? '') ? FAMILY[info.family] : null);
 // WHAT THE LAY FINDS FOR ONE CABLE, as sentences for a notes cell (#1007):
 // its tight bends in one sentence (route.js bendFindings: the one finding's

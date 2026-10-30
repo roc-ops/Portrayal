@@ -221,28 +221,50 @@ export function sameCables3d(a, b) {
 // ── media ───────────────────────────────────────────────────────────────
 // `power` is a conductor that carries power: an AC cord and a DC feed, told
 // apart by the cable's type and by its ends. `ground` is a bonding conductor
-// (docs/cable-ends-design.md section 4).
-export const MEDIA = ['os2', 'om3', 'om4', 'om5', 'cat6', 'cat6a', 'dac', 'aoc', 'power', 'ground'];
+// (docs/cable-ends-design.md section 4). `stack` joins the stacking ports of
+// two switches, `usb` is a USB link and `console` a console link.
+export const MEDIA = ['os2', 'om3', 'om4', 'om5', 'cat6', 'cat6a', 'dac', 'aoc', 'power', 'ground', 'stack', 'usb', 'console'];
 export const MEDIA_LABELS = {
   os2: 'OS2 single-mode fiber', om3: 'OM3 multimode fiber', om4: 'OM4 multimode fiber',
   om5: 'OM5 multimode fiber', cat6: 'Cat 6 copper', cat6a: 'Cat 6A copper',
-  dac: 'DAC (twinax)', aoc: 'AOC (active optical)', power: 'Power cable', ground: 'Ground wire'};
+  dac: 'DAC (twinax)', aoc: 'AOC (active optical)', power: 'Power cable', ground: 'Ground wire',
+  stack: 'Stack cable', usb: 'USB cable', console: 'Console cable'};
 
 const FIBER_SM = {family: 'fiber', mode: 'single-mode'}, FIBER_MM = {family: 'fiber', mode: 'multimode'};
 const KIND = {os2: FIBER_SM, om3: FIBER_MM, om4: FIBER_MM, om5: FIBER_MM,
               cat6: {family: 'copper', mode: null}, cat6a: {family: 'copper', mode: null},
               dac: {family: 'dac', mode: null}, aoc: {family: 'aoc', mode: null},
-              power: {family: 'power', mode: null}, ground: {family: 'ground', mode: null}};
+              power: {family: 'power', mode: null}, ground: {family: 'ground', mode: null},
+              stack: {family: 'stack', mode: null}, usb: {family: 'usb', mode: null}, console: {family: 'console', mode: null}};
 const UNKNOWN = {family: null, mode: null};
 // What a media IS: its connector family (`fiber`, copper, dac, aoc, power,
-// ground) and, for fibre, its mode. A media this page does not know has neither.
+// ground, stack, usb, console) and, for fibre, its mode. A media this page
+// does not know has neither.
 export const mediaKind = media => (typeof media === 'string' && Object.hasOwn(KIND, media) ? KIND[media] : UNKNOWN);
+
+// The interfaces (spec/schemas/connectors.yaml) whose cable is a stack, a USB
+// or a power cable that is none of an AC cord: a stacking port, a USB
+// receptacle, and the StackPower and redundant-power ports.
+const STACK_IFACES = ['flexstack', 'stackwise-480', 'ex4200-vcp'];
+const USB_IFACES = ['usb-a', 'micro-usb-b', 'mini-usb-b', 'usb-c'];
+const POWER_IFACES = ['stackpower', 'cisco-rps2300', 'ex3300-rps'];
 
 // What an END's connector is, from what is known about it: the attrs of the
 // part seated in the port (an optic, a DAC end - null when nothing is), the
-// port's own data-media, and its slot's interface. Same shape as mediaKind.
-export function connectorOf({attrs = null, portMedia = '', iface = ''} = {}) {
+// port's own data-media, its slot's interface, and its `role`. Same shape as
+// mediaKind.
+// A USB END IS TOLD FROM A CONSOLE END BY THE PORT'S ROLE. A USB receptacle
+// serves a data link and a console alike, so its interface cannot say which,
+// and the port's `role: console` is what the library states for a console.
+// An end whose `role` (or whose seated part's `role`) is `console` is a
+// console end whatever its connector, so an RJ45 console is one too. Else the
+// interface, the port's media or the seated plug's media is read: a stacking
+// interface is a stack end, one of the four USB keys a USB end, and the
+// StackPower and redundant-power interfaces are power. A console port whose
+// role the page does not pass reads as its connector does, as it did before.
+export function connectorOf({attrs = null, portMedia = '', iface = '', role = ''} = {}) {
   const a = attrs || {};
+  if (role === 'console' || a.role === 'console') return {family: 'console', mode: null};
   const kind = String(a['cable-kind'] || '');
   if (kind === 'aoc') return {family: 'aoc', mode: null};
   if (kind || a.face === 'cable') return {family: 'dac', mode: null};
@@ -250,27 +272,33 @@ export function connectorOf({attrs = null, portMedia = '', iface = ''} = {}) {
   const face = String(a.face || a.connector || '');      // an optic states `face`, a plug `connector`
   if (a.media === 'fiber' || mode || /^(lc|sc|mpo)/.test(face)) return {family: 'fiber', mode};
   if (a.media === 'copper' || face === 'rj45') return {family: 'copper', mode: null};
+  // a seated plug, and a port, name the interface they mate by the same key
+  const words = attrs ? [a.media, a.connector, a.face].map(String) : [portMedia, iface];
+  if (words.some(w => STACK_IFACES.includes(w))) return {family: 'stack', mode: null};
+  if (words.some(w => USB_IFACES.includes(w))) return {family: 'usb', mode: null};
   if (attrs) return UNKNOWN;                    // something is seated, and it does not say
   if (/^rj45/.test(portMedia) || iface === 'rj45') return {family: 'copper', mode: null};
   if (/^(lc|sc|mpo)/.test(iface) || portMedia === 'fiber') return {family: 'fiber', mode: null};
+  if (POWER_IFACES.includes(iface) || POWER_IFACES.includes(portMedia)) return {family: 'power', mode: null};
   return UNKNOWN;
 }
 
 // THE MEDIA A NEW CABLE IS OFFERED, from its two ends: single-mode fibre ->
 // os2; multimode -> om4; fibre that states no mode -> os2; copper -> cat6a;
-// a DAC or AOC end -> itself; a power end -> power; a ground end -> ground;
-// nothing known -> '', and the user picks. The
-// first end that knows decides, unless it is fibre of no stated mode and the
-// other is fibre that states one.
+// a DAC or AOC end -> itself; a power end -> power; a ground end -> ground; a
+// stack, USB or console end -> itself; nothing known -> '', and the user
+// picks. The first end that knows decides, unless it is fibre of no stated
+// mode and the other is fibre that states one.
 export function proposeMedia(a, b) {
   const known = [a, b].filter(e => e && e.family);
   if (!known.length) return '';
   const pick = known.find(e => e.family === 'fiber' && e.mode && known[0].family === 'fiber') || known[0];
   if (pick.family === 'fiber') return pick.mode === 'multimode' ? 'om4' : 'os2';
-  return {copper: 'cat6a', dac: 'dac', aoc: 'aoc', power: 'power', ground: 'ground'}[pick.family] || '';
+  return {copper: 'cat6a', dac: 'dac', aoc: 'aoc', power: 'power', ground: 'ground', stack: 'stack', usb: 'usb', console: 'console'}[pick.family] || '';
 }
 
-const NAMED = {fiber: 'fiber', copper: 'copper', dac: 'a DAC', aoc: 'an AOC', power: 'power', ground: 'ground'};
+const NAMED = {fiber: 'fiber', copper: 'copper', dac: 'a DAC', aoc: 'an AOC', power: 'power', ground: 'ground',
+               stack: 'stacking', usb: 'USB', console: 'console'};
 const ACDC = {ac: 'AC', dc: 'DC'};
 // A MISMATCH IS A WARNING, never a refusal: the sentences to show
 // beside the media field, or [] when nothing is known to be wrong.

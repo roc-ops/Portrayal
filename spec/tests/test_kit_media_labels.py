@@ -184,3 +184,26 @@ def test_each_small_connector_plug_medium_is_its_jacks_and_has_its_label():
             assert stated and stated.group(1) == key, (ref, stated and stated.group(1))
         assert table.get(key) == label == key.upper(), (
             f"kit MEDIA[{key!r}] is {table.get(key)!r}, expected {label!r}")
+
+
+# The Rack Builder's cable media (kit/rack/cable-rules.js MEDIA) are a second
+# table of words, saved on a cable and not on a port. Each has a label there,
+# and stack, usb and console are not keys of the port table above: a port
+# states the connector it is (`usb-a`, `rj45-serial`), and a cable states what
+# it carries.
+CABLE_LABELS = {"stack": "Stack cable", "usb": "USB cable", "console": "Console cable"}
+
+
+def cable_media():
+    src = (ROOT / "kit" / "rack" / "cable-rules.js").read_text()
+    media = re.search(r"export const MEDIA = \[([^\]]*)\]", src).group(1)
+    labels = re.search(r"export const MEDIA_LABELS = \{(.*?)\};", src, re.S).group(1)
+    return re.findall(r"'([^']+)'", media), dict(re.findall(r"(\w+): '([^']*)'", labels))
+
+
+def test_every_cable_media_has_a_label_and_the_new_three_say_what_they_carry():
+    media, labels = cable_media()
+    assert [m for m in media if m not in labels] == []
+    for key, label in CABLE_LABELS.items():
+        assert key in media and labels[key] == label, key
+    assert not set(CABLE_LABELS) & set(media_table()), "a cable media is not a port's data-media"

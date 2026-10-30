@@ -30,7 +30,7 @@ import {statesFor} from '../../../kit/rack/states.js';
 import {freePorts} from '../../../kit/rack/queries.js';
 import {settleEnd, zeroUEnds, cableEndPaths} from '../../../kit/rack/ports.js';
 import {routePath, portPoint, endPane, PLUG_REACH} from '../../../kit/rack/route.js';
-import {portPathOf, looseReason} from '../../../kit/rack/cable-rules.js';
+import {portPathOf, looseReason, connectorOf, proposeMedia} from '../../../kit/rack/cable-rules.js';
 import {itemBox, setbackOf} from '../../../kit/rack/fit.js';
 import {solidsOf, legCrossings} from '../../../kit/rack/solids.js';
 import {redirectsOf} from '../../../kit/redirects.js';
@@ -284,9 +284,12 @@ function readerFor(W, rack) {
 const POWER_FAR = 'pdu12iec';             // a rack PDU: its outlets are the far end of an inlet
 const INLET_DEV = 'n9k-c93180yc-ex';      // a switch with supplies: its inlets are the far end of an outlet
 // the cable type a matching far end suggests, from what the end is
-function mediaOfEnd(end, optic) {
+export function mediaOfEnd(end, optic) {
   if (end.kind === 'power') return 'power';
   if (end.kind === 'ground') return 'ground';
+  // a stack, USB or console end offers what connectorOf reads it as (the port's `role` tells a console from a USB link)
+  const read = connectorOf({portMedia: end.media || '', iface: end.iface || end.connector || '', role: end.role || ''});
+  if (['stack', 'usb', 'console'].includes(read.family)) return proposeMedia(read, read);
   if (optic?.kind === 'dac') return 'dac';
   if (optic) return 'os2';
   if (/^rj45/.test(end.media || '')) return 'cat6';
