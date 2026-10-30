@@ -1,4 +1,4 @@
-"""DC power, step 2: the build publishes each DC port a part states.
+"""The build publishes each DC port a part states.
 
 A part states its DC ports in a `dc` block (spec/schemas/component.schema.json),
 and a device placement may override what differs. The build publishes them as
@@ -30,8 +30,9 @@ LIB = ROOT / "library"
 DIST = LIB / "dist"
 
 POST = "fixture/dc-post@1"
-SUPPLY, TWIN, UNSTATED, PLAIN = ("fixture/dc-supply@1", "fixture/dc-twin@1",
-                                 "fixture/dc-unstated@1", "fixture/dc-plain@1")
+SUPPLY, TWIN, UNSTATED, PLAIN, CARRIER = ("fixture/dc-supply@1", "fixture/dc-twin@1",
+                                          "fixture/dc-unstated@1", "fixture/dc-plain@1",
+                                          "fixture/dc-carrier@1")
 
 SKIN = ('<svg xmlns="http://www.w3.org/2000/svg" width="{w}mm" height="{h}mm" '
         'viewBox="0 0 {w} {h}"><rect id="body" x="0" y="0" width="{w}" height="{h}" fill="#ccc"/></svg>\n')
@@ -64,6 +65,8 @@ PARTS = {
                      [("a-rtn", 5), ("a-batt", 20), ("b-rtn", 40), ("b-batt", 55)], {"ports": [
         _port("a", [("rtn", "a-rtn"), ("batt", "a-batt")], voltage={"nominal": -48}, side="a"),
         _port("b", [("rtn", "b-rtn"), ("batt", "b-batt")], voltage={"nominal": -48}, side="b")]}),
+    "dc-carrier": {**_part("dc-carrier", 120, 60),
+                   "bays": {"slot-1": {"at": [5, 5], "size": {"w": 50, "h": 40}, "accepts": [SUPPLY, PLAIN]}}},
     "dc-unstated": _part("dc-unstated", 50, 40, [("terminal-1", 10), ("terminal-2", 30)], {"ports": [{
         "id": "input", "direction": "input", "voltage": {"nominal": -48},
         "poles": [{"role": "unstated", "slot": "terminal-1", "stand-in": {"order": "left-to-right"}},
@@ -101,6 +104,23 @@ DEVICES = {
                         "twin": {"kind": "orderable", "bays": {"psu-0": TWIN}},
                         "bare": {"kind": "orderable", "bays": {"psu-0": PLAIN}}}),
     "plain-box": _device("plain-box", [_place("feed-p", PLAIN, 10)]),
+    # a part in a bay of a part in a bay, seated by a key without its `module` step
+    "nested-box": _device(
+        "nested-box", bays=[{"id": "riser-1", "at": [10, 2], "size": {"w": 120, "h": 40},
+                             "accepts": [CARRIER], "default": CARRIER}],
+        configurations={"seated": {"default": True, "kind": "base", "bays": {"riser-1/slot-1": SUPPLY}},
+                        "empty": {"kind": "orderable", "bays": {"riser-1/slot-1": ""}},
+                        "plain": {"kind": "orderable", "bays": {"riser-1/slot-1": PLAIN}}}),
+    # a placement that exists in one configuration only
+    "only-box": _device(
+        "only-box", [_place("feed-a", SUPPLY, 10, **{"only-in": ["with"]}), _place("feed-t", TWIN, 70)],
+        configurations={"with": {"default": True, "kind": "base"}, "without": {"kind": "orderable"}}),
+    # an override on a placed part, and one a bay states, which nothing reads
+    "override-box": _device(
+        "override-box",
+        [_place("feed-u", UNSTATED, 10, dc={"input": {"poles": {"terminal-1": "batt"}, "source": "a test"}})],
+        bays=[{"id": "psu-0", "at": [100, 2], "size": {"w": 80, "h": 40}, "accepts": [SUPPLY],
+               "default": SUPPLY, "dc": {"input": {"side": "b"}}}]),
     # one part each and no override, so a change to the part is the whole change
     "supply-box": _device("supply-box", [_place("feed-a", SUPPLY, 10)]),
     "twin-box": _device("twin-box", [_place("feed-t", TWIN, 10)]),
@@ -252,6 +272,39 @@ def test_an_unstated_pole_publishes_unstated_and_its_stand_in(built):
 def test_a_pole_with_a_stated_role_carries_no_stand_in(built):
     comps, _ = built
     assert all("stand-in" not in q for q in comps[SUPPLY]["dc-ports"][0]["poles"])
+
+
+def test_a_part_in_a_seated_parts_bay_is_addressed_through_both_modules(built):
+    _, configs = built
+    seated = _ports(_config(configs, "nested-box", "seated"))
+    assert list(seated) == ["riser-1/module/slot-1/module"]
+    port = seated["riser-1/module/slot-1/module"]
+    assert port["ref"] == SUPPLY
+    assert port["poles"][1]["slot"] == "riser-1/module/slot-1/module/terminal-48v"
+
+
+def test_a_nested_bay_is_seated_by_the_configuration_key_without_its_module_step(built):
+    _, configs = built
+    assert "dc-ports" not in _config(configs, "nested-box", "empty")
+    assert "dc-ports" not in _config(configs, "nested-box", "plain")
+
+
+def test_a_placement_with_only_in_is_published_for_those_configurations_only(built):
+    _, configs = built
+    assert sorted(_ports(_config(configs, "only-box", "with"))) == ["feed-a", "feed-t/a", "feed-t/b"]
+    assert sorted(_ports(_config(configs, "only-box", "without"))) == ["feed-t/a", "feed-t/b"]
+
+
+def test_an_override_that_states_a_role_drops_the_stand_in_and_leaves_the_others(built):
+    _, configs = built
+    poles = _ports(_config(configs, "override-box", "base"))["feed-u"]["poles"]
+    assert poles[0] == {"role": "batt", "slot": "feed-u/terminal-1"}
+    assert poles[1] == {"role": "unstated", "slot": "feed-u/terminal-2", "stand-in": {"order": "left-to-right"}}
+
+
+def test_a_dc_override_a_bay_states_is_not_applied_to_its_occupant(built):
+    _, configs = built
+    assert _ports(_config(configs, "override-box", "base"))["psu-0/module"]["side"] == "a"
 
 
 # --- the real library ---------------------------------------------------------------------------------

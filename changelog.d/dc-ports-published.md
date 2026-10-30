@@ -1,7 +1,7 @@
 ### Added
 
-- **`dc-ports` in the published build** (step 2 of
-  `docs/dc-power-design.md` section 10). A part that states DC ports in its
+- **`dc-ports` in the published build** (`docs/dc-power-design.md` section
+  5.2). A part that states DC ports in its
   `dc` block now has them on its entry in `components.json`, one per port in the
   order it states them, beside `cages`; and each configuration in a device's
   `<device>.configs.json` carries `configs[].dc-ports`, the ports its parts

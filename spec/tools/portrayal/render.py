@@ -6172,7 +6172,8 @@ def main():
             return lib.resolve(ref)[0]
         except Exception:
             return None          # L5 reports the broken ref
-    cfg_states ={n: drawn_states(config_states(device, n, c, lib),
+
+    cfg_states = {n: drawn_states(config_states(device, n, c, lib),
                                   [faces[f] for f in files.get(n, {}).values() if f in faces])
                   for n, c in configs.items()}
     cfg_index = {"device": device["name"], "model": device.get("model", ""),
