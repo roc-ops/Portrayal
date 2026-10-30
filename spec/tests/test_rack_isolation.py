@@ -22,8 +22,10 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 DIST = LIB / "dist"
 
-# sha256 of spec/schemas/rack.schema.json, the Rack Builder's file, version 3
-RACK_FILE_SCHEMA_SHA256 = "c21f51c7db3d5b5b9bfb8347e357511ca7d421f0def7df3ff02cda4d24b5436f"
+# sha256 of spec/schemas/rack.schema.json, the Rack Builder's file, version 3.
+# It moved when the cable media description gained `stack`, `usb` and `console`
+# (a description only; the site takes the new schema when it re-vendors the kit).
+RACK_FILE_SCHEMA_SHA256 = "91212329da56d966431af2b534e2d032fb6505855aeaca94cfe7116c12d2784c"
 
 
 def sha(path):
