@@ -496,6 +496,10 @@ class _Versions(dict):
     def __init__(self):
         super().__init__()
         self.candidates = {}
+        # every contract by ref, and the refs among them that state a DC
+        # port; `_dc_ports` reads nothing when the second is empty
+        self.contracts = {}
+        self.dc_refs = set()
 
 
 def _collect_versions(out, library: pathlib.Path):
@@ -513,8 +517,12 @@ def _collect_versions(out, library: pathlib.Path):
         # `acme/widget@1 1.0.0+a1b2c3d4 -> 1.0.0+9f8e7d6c`, which says in one
         # line that the contents moved and the version did not.
         ver = str(doc.get("version") or "")
-        out[f"{vendor}/{name}@{major[1:]}"] = (
-            ver + "+" + _component_digest(ct.parent, doc))
+        ref = f"{vendor}/{name}@{major[1:]}"
+        out[ref] = ver + "+" + _component_digest(ct.parent, doc)
+        if hasattr(out, "contracts"):
+            out.contracts[ref] = doc
+            if isinstance(doc, dict) and (doc.get("dc") or {}).get("ports"):
+                out.dc_refs.add(ref)
         # what this major draws: its parts, the defaults they ship holding,
         # its faces (manifest.drawn_refs), and what its own bays seat or take
         out.setdefault(f"{vendor}/{name}", {})[major] = _children(
@@ -826,6 +834,90 @@ def buckets(doc, versions=None):
     }
 
 
+def _dc_ports(doc, versions):
+    """The DC ports this device presents, as configs.json publishes them
+    (render.config_dc_ports), folded across its configurations:
+    `{path: {ref: {id, direction, voltage, rating-a, awg, side, poles,
+    configs}}}`, `configs` the sorted names of the configurations that carry it.
+    `{}` for a device that presents none.
+
+    A PORT IS AN EXPORT FACT, like `fed-by` and `through`: whatever lands a feed
+    on a published port holds its path, its direction, its poles and their
+    roles, and judges the feed by its voltage, rating, awg and side.
+
+    READ ONLY WHERE THE LIBRARY HAS A PORT. A part states its ports in its own
+    contract, not in the device, so this needs the contracts `component_versions`
+    read; when none of them states a `dc` block - the whole library today - the
+    answer is `{}` without a configuration being resolved, and the entry
+    records no key, so no device is rehashed for the lock learning the field.
+    """
+    if not getattr(versions, "dc_refs", None):
+        return {}
+    from portrayal import render
+    contracts = versions.contracts
+
+    def contract_of(ref):
+        return contracts.get(ref)
+
+    out = {}
+    configs = doc.get("configurations") or {"default": {"default": True}}
+    for name, cfg in sorted(configs.items()):
+        for port in render.config_dc_ports(doc, name, cfg or {}, contract_of):
+            fact = out.setdefault(port["path"], {}).setdefault(
+                port["ref"], {k: v for k, v in port.items() if k not in ("path", "ref")} | {"configs": []})
+            fact["configs"].append(name)
+    return out
+
+
+# WHAT A CHANGE TO A PUBLISHED DC PORT COSTS (docs/format-stability.md).
+# IDENTITY is what a feed is addressed by and lands on: the port's id (its
+# path), its direction, and its poles - how many, which slot each is, and the
+# role each carries. Any change is a major. FIGURES are what a feed is judged
+# by: voltage, rating, awg and side. Stating one where there was none is a minor
+# (nothing could be holding a value that was not there); changing or dropping
+# one is a major, as the placement `dc` override that sets the same figures
+# already is - a feed passed the polarity or voltage check on the value it held.
+# That is the strict side to be wrong on: a major can be relaxed to a minor for
+# one figure later, and a published promise cannot be tightened.
+DC_PORT_IDENTITY = ("id", "direction", "poles")
+DC_PORT_FIGURES = ("voltage", "rating-a", "awg", "side")
+
+
+def _dc_ports_bump(old, new):
+    """What the DC ports demand: major when a port went, or lost a configuration,
+    or changed identity, or a figure changed or was dropped; minor when a port
+    was gained, reached another configuration, or a figure was stated.
+
+    NOTHING IS READ WHERE NEITHER SIDE HAS THE KEY, which is every device whose
+    parts state no port: the test `composed` and `placement-attrs` use for the
+    same migration, so a lock written before the field existed reports no
+    device for it. An old lock
+    without the key reads as presenting none, so the first port a device gains
+    is a minor, never a major."""
+    was_all, now_all = old.get("dc-ports") or {}, new.get("dc-ports") or {}
+    if not was_all and not now_all:
+        return None
+    need = None
+    for path, refs in was_all.items():
+        for ref, was in refs.items():
+            now = (now_all.get(path) or {}).get(ref)
+            if now is None or any(was.get(k) != now.get(k) for k in DC_PORT_IDENTITY):
+                return "major"          # gone, renamed, or its poles are not what they were
+            if set(was["configs"]) - set(now["configs"]):
+                return "major"          # a build that had it no longer does
+            if set(now["configs"]) - set(was["configs"]):
+                need = "minor"
+            for k in DC_PORT_FIGURES:
+                if was.get(k) != now.get(k):
+                    if was.get(k) is not None:
+                        return "major"  # a figure held before is changed or gone
+                    need = "minor"      # stated where it was not
+    for path, refs in now_all.items():
+        if set(refs) - set(was_all.get(path) or {}):
+            need = "minor"              # a port gained
+    return need
+
+
 def entry(doc, versions=None):
     # The three NAME SETS are recorded separately, not only hashed, because
     # `required_bump` has to tell an addition from a removal and a hash cannot.
@@ -862,6 +954,10 @@ def entry(doc, versions=None):
     # device declares any, so no other lock learns a key.
     if _adjust.declared(doc):
         e["adjustments"] = _adjustments(doc)
+    # THE DC PORTS IT PRESENTS, recorded and not only hashed, because a port
+    # gained is a minor and a port lost a major. Only where there is one.
+    if ports := _dc_ports(doc, versions):
+        e["dc-ports"] = ports
     e.update(buckets(doc, versions))
     out = _Entry(e)
     placed = _placements(doc)
@@ -967,7 +1063,7 @@ def required_bump(old, new):
     if old is None:
         return None
     need = [b for b in (_bucket_bump(old, new), _placement_keys_bump(old, new),
-                        _adjustments_bump(old, new))
+                        _adjustments_bump(old, new), _dc_ports_bump(old, new))
             if b]
     return max(need, key=RANK.get) if need else None
 
@@ -1545,6 +1641,8 @@ def check(library: pathlib.Path, below=()):
                             "provenance, physical-context, frames, positions)")
             if was.get("gaps") != now["gaps"]:
                 what.append("gaps")
+            if _dc_ports_bump(was, now) is not None:
+                what.append("DC ports")
             # NAME THE COMPOSED CHANGE. The one bucket whose cause is not in
             # this file is the one that most needs saying out loud - without
             # this the report is "changed ()" and the reader has nowhere to go.

@@ -151,7 +151,7 @@ A part that takes or hands on DC states its **DC ports**, a new optional block o
 ```yaml
 dc:
   ports:
-    - id: input                              # the end; its path is the part's path + id when the part has several
+    - id: input                              # the end; its path is always the part's path + id, one port or several
       direction: input                       # input | output
       voltage: {nominal: -48, range: [-44, -65]}
       rating-a: 18                           # a supply's input current, a panel output's breaker comes from the bay
