@@ -1,8 +1,10 @@
 // spec/tools/dev/part_conformance_run.mjs
 // The node half of part_conformance.py: runs both checks over the devices it is
 // given and prints one line of JSON. Run: node <this> <dist> '<options json>'
-//   options: {refs: [...], maxConfigs, maxEnds, maxStates, skip: ['cabling'|'settings']}
-import {openDist, checkSettings, checkCabling, checkOccupants} from './part_conformance.mjs';
+//   options: {refs: [...], maxConfigs, maxEnds, maxStates, skip: ['cabling'|'settings'],
+//             scan: true (C19 to C22 only, every configuration),
+//             usable: {parts: {ref: unmated}, connectors: {interface: {cover, unmated}}, families: {name: {interface, rates, unmated}}}}
+import {openDist, checkSettings, checkCabling, checkOccupants, checkUsable} from './part_conformance.mjs';
 
 const dist = process.argv[2];
 const opts = JSON.parse(process.argv[3] || '{}');
@@ -35,6 +37,17 @@ function configsOf(ref) {
 for (const ref of opts.refs) {
   const part = {ref, kind: W.chassisOf(ref)?.kind ?? null, mount: W.chassisOf(ref)?.mount ?? null, configs: []};
   if (!W.slotsOf(ref)) { part.error = 'not in the build'; out.parts.push(part); continue; }
+  if (opts.scan) {
+    // the scan: C19 to C22 only, every configuration, no cable laid
+    for (const cfg of W.slotsOf(ref).configs.map(c => c.name)) {
+      const t = now(), row = {cfg};
+      try { row.usable = await checkUsable(W, ref, cfg, {usable: opts.usable}); } catch (e) { row.usable = {found: [{code: 'C0', text: `the check threw: ${e.message}`, stack: String(e.stack).split('\n').slice(0, 3).join(' | ')}], counts: {}}; }
+      row.usable.seconds = Math.round((now() - t) * 1000) / 1000;
+      part.configs.push(row);
+    }
+    out.parts.push(part);
+    continue;
+  }
   if (!(opts.skip || []).includes('occupants')) {
     const t = now();
     try { part.occupants = checkOccupants(W, ref, {perBay: opts.perBay, perCage: opts.perCage}); } catch (e) { part.occupants = {found: [{code: 'C0', text: `the occupants check threw: ${e.message}`, stack: String(e.stack).split('\n').slice(0, 3).join(' | ')}], counts: {}}; }
@@ -49,7 +62,7 @@ for (const ref of opts.refs) {
     }
     if (!(opts.skip || []).includes('cabling')) {
       const t = now();
-      try { row.cabling = await checkCabling(W, ref, cfg, {maxEnds: opts.maxEnds, side}); } catch (e) { row.cabling = {found: [{code: 'C0', text: `the check threw: ${e.message}`, stack: String(e.stack).split('\n').slice(0, 3).join(' | ')}], counts: {}, ends: []}; }
+      try { row.cabling = await checkCabling(W, ref, cfg, {maxEnds: opts.maxEnds, side, usable: opts.usable}); } catch (e) { row.cabling = {found: [{code: 'C0', text: `the check threw: ${e.message}`, stack: String(e.stack).split('\n').slice(0, 3).join(' | ')}], counts: {}, ends: []}; }
       row.cabling.seconds = Math.round((now() - t) * 1000) / 1000;
     }
     part.configs.push(row);
