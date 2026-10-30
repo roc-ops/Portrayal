@@ -104,6 +104,8 @@ def test_a_stack_or_vcp_port_kept_its_size_and_elements(ref):
 def test_a_stack_or_vcp_port_records_where_its_interface_comes_from(ref):
     c = _contract(ref)
     text = c["provenance"]["interface"]
+    key = _contract(ref)["interface"]
+    assert f"`{key}` key of spec/schemas/connectors.yaml" in text, text
     assert "Guide" in text, text
 
 
@@ -203,7 +205,7 @@ def test_the_ex4500_module_records_that_the_port_is_borrowed():
     prov = _contract("juniper/ex4500-vc1@1")["provenance"]
     text = prov["ports"]
     assert "borrowed" in text and "36.2" in text and "24.0" in text
-    assert all(page in text for page in ("27", "129", "137"))
+    assert all(f"PDF p.{page}" in text for page in ("27", "129", "137"))
 
 
 # --- 5. the FlexStack port -----------------------------------------------------
