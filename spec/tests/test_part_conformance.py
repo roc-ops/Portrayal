@@ -400,7 +400,8 @@ def test_by_family_assigns_by_the_five_rules_in_order(tmp_path):
         "acme/dc-psu@1": {"class": "psu", "attrs": {"input": "dc"}},
         "acme/stud@1": {"class": "ground"},                                                           # 3: a ground part
         "acme/vcp-port@1": {"class": "port"},                                                         # 4: a name
-        "acme/odd@1": {"class": "port"},                                                              # 5: none of them
+        "acme/console-jack@1": {"class": "port"},                                                     # 4: a name whose family has commas in it
+        "acme/odd@1": {"class": "port"},                                                           # 5: none of them
         "acme/dc-both@1": {"class": "psu", "interface": "iec-c14", "attrs": {"input": "dc"}},        # rules 1 and 2 match: 1 wins
         "acme/dc-ground@1": {"class": "ground"},                                                      # rules 3 and 4 match: 3 wins
         "acme/pole@1": {"class": "screw", "interface": "terminal-stud"},                              # the interface's own exception for a class
@@ -418,10 +419,10 @@ def test_by_family_assigns_by_the_five_rules_in_order(tmp_path):
     assert where == {"acme/mini@1": "console (RJ45, USB, Mini-B, DB9)", "acme/ac-psu@1": "power inlets (AC)", "acme/dc-psu@1": "DC terminals and barrels",
                      "acme/stud@1": "ground and earth studs", "acme/vcp-port@1": "stack and virtual chassis", "acme/odd@1": "other",
                      "acme/dc-both@1": "power inlets (AC)", "acme/dc-ground@1": "ground and earth studs",
-                     "acme/pole@1": "DC terminals and barrels"}, where
+                     "acme/pole@1": "DC terminals and barrels", "acme/console-jack@1": "console (RJ45, USB, Mini-B, DB9)"}, where
     first = next(p for p in got["other"]["parts"] if p["ref"] == "acme/odd@1")
     assert first["provenance"]["existence"].startswith("datasheet - the guide lists") and first["class"] == "port"
-    assert got["other"]["vendors"] == ["acme"] and got["other"]["devices"] == ["dev-5"]
+    assert got["other"]["vendors"] == ["acme"] and got["other"]["devices"] == ["dev-6"]
 
 
 @pytest.mark.skipif(not (DIST / "devices.json").exists(), reason="library/dist not built - run ./build.sh")

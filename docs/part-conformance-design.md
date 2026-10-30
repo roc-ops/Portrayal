@@ -602,4 +602,29 @@ lint baseline line and no device `lint.waive` is used for these four codes.
 
 ### 10.8 Cost
 
-MEASURED_COSTS
+**The scan.** Over the whole build (505 devices, 1 746 configurations), at `nice -n 19` under a load
+average of about 17: **18.7 s wall-clock**, 27.5 s of CPU in the node child
+(it runs more than one thread), load 17.06 to 16.46. That is well inside the budget of section 6.4
+("the whole library under 2 minutes"), so the records test scans the whole build on every pull
+request, and a row can be judged stale. What it found, with no `unmated` sentence and no row
+anywhere:
+
+| code | findings (configurations) | distinct parts or devices among the causes |
+|---|---|---|
+| C19 | 439 | 173 |
+| C20 | 825 | 35 |
+| C21 | 60 | 1 (`std/mini-usb@1`, on six devices) |
+| C22 | 154 | 20 |
+
+Cage slots that accept modules and none at their own rate: 0. The causes sort into families as
+(parts, devices): power inlets (AC) 27, 40; DC terminals and barrels 85, 162; ground and earth studs
+8, 181; RPS 1, 4; stack and virtual chassis 3, 13; console 2, 14; USB 2, 5; optics cages 0, 0; other
+13, 184.
+
+**The lock cost of a sentence.** The device lock hashes a component's whole contract except
+`supersedes`, and a changed composed part is a patch on each device that places it. Adding an
+`unmated` line to `common/ground-symbol@1` asks a **patch** bump of 109 devices, and of no device
+more than a patch. All 109 place the part themselves; none reaches it only through another part
+(`common/ground-stud@1` names it in its description and does not compose it). A sentence on a widely
+placed part is therefore a patch on every device that places it, and a sentence on a part few devices
+place is cheap.
