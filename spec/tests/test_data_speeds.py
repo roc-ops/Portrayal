@@ -20,6 +20,8 @@ LIB = ROOT / "library"
 DIST = LIB / "dist"
 
 DEVICES_WITH_SPEEDS = {"s9600-72xc"}
+# devices whose placements, not their groups, state `speeds`
+DEVICES_WITH_PORT_SPEEDS = {"s9720-56ed"}
 
 
 @pytest.fixture
@@ -165,7 +167,7 @@ def test_no_other_port_in_the_library_carries_data_speeds():
     for svg in _built_faces():
         if any(True for e in _ports(svg) if e.get("data-speeds") is not None):
             carrying[svg.name] = True
-    stray = [n for n in carrying if n.split(".")[0] not in DEVICES_WITH_SPEEDS]
+    stray = [n for n in carrying if n.split(".")[0] not in DEVICES_WITH_SPEEDS | DEVICES_WITH_PORT_SPEEDS]
     assert not stray, stray
     # and on the device itself, only the two groups carry it
     for svg in _built_faces():

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9720-56ed
-version: 3.0.4
+version: 3.0.5
 maturity: modelled
 manufacturer: UfiSpace
 model: S9720-56ED
@@ -43,7 +43,10 @@ provenance:
       grounding section and the maximum system power with its test conditions - 41 kept figures
       across 35 pages; (3) the three photos staged as s9720-56ed-1-view / -2-front / -3-rear,
       which are the vendor's own 520 x 150 renders of the same artwork the guide embeds, so they
-      are NOT an independent second reading of the front and are used here only as a coarse check.
+      are NOT an independent second reading of the front. They are the paint, where the guide's
+      figures carry annotation: the front render is the source of which service cages carry a blue
+      label patch (18 of 36, agreeing with Figure 9's 18 highlights) and of the patch blue, which
+      is estimated (see front-figures-carry-baked-in-annotation).
       Unlike the S9620 family this platform HAS a hardware installation guide, and almost every
       number below rests on it rather than on inference.
   extraction:
@@ -86,13 +89,20 @@ provenance:
       HIG Port Overview table plus the elevation, and the two agree. The table gives '00 ~ 35
       (Blue) QSFP-DD, 100/200/400/800G', '36 ~ 37 SFP28, 1/10/25G' and '00 ~ 19 (Red) QSFP-DD,
       800G', with the sentence 'The ports labelled in blue function as service ports. The ports
-      labelled in red function as fabric ports.' Counting cages on Figure 9 gives exactly that: 36
-      blue and 20 red QSFP-DD, which is the 56 in the model name, plus the two SFP28. The
-      datasheet's '18 x 100/200/400/800G or 36 x 100/200/400G QSFP-DD service ports' is the same
-      36 cages counted as pairs - HIG Figure 9: 'each blue-labeled port represents an 800G port,
-      which can be individually reconfigured into two 400G ports'. THIRTY-SIX CAGES ARE MODELLED,
-      not eighteen; the pairing is a configuration of the same metal and is recorded in the group
-      description rather than drawn.
+      labelled in red function as fabric ports.' Counting cages on Figure 8 gives exactly that: 36
+      service and 20 fabric QSFP-DD, which is the 56 in the model name, plus the two SFP28. The
+      datasheet's '18 x 100/200/400/800G or 36 x 100/200/400G QSFP-DD service ports' (page 2) is
+      the same 36 cages counted as pairs - HIG page 12: the service ports 'can be configured in
+      pairs to operate either as a single 800G port or as two separate 400G ports' and, in Figure
+      9, 'each blue-labeled port represents an 800G port, which can be individually reconfigured
+      into two 400G ports, as indicated by the red lines'. THIRTY-SIX CAGES ARE MODELLED, not
+      eighteen; the pairing is a configuration of the same metal and is stated, not drawn, on
+      each service placement's speed and speeds (800G, up to 800G, on the 18 cages Figure 9
+      highlights in blue; 400G, up to 400G, on the 18 it does not), in the group description
+      and in attrs.performance.port-modes-qsfp-dd. Figure 9's highlight (ports 1, 3 ... 19 and 20,
+      22 ... 34) and its red lines (0-1, 2-3 ... 18-19 and 20-21 ... 34-35, 18 pairs) are read
+      off the raster against the numbering, and the guide's text does not say which cage of a
+      pair runs the 800G port, so that reading is estimated.
   port-grid:
     confidence: measured
     note: >-
@@ -140,9 +150,13 @@ provenance:
       of its band, so a service column j of the upper band is ports 2j and 2j+1 (0-19) and the
       lower band continues 20-35 across its eight columns; the fabric columns run 0-9 in the upper
       band and 10-19 in the lower. The fabric ports restart at 00 in their own namespace, which is
-      why they are modelled as fabric-N rather than folded into the service range. The patch
-      measures 3.3 x 9.9 and its right edge abuts the cage; its left edge is 13.1 mm inboard of
-      the column centre.
+      why they are modelled as fabric-N rather than folded into the service range. The vendor's
+      front render (s9720-56ed-2-front, the paint) shows the blue patch on the 18
+      service cages Figure 9 highlights, the second row of the upper band (1, 3 ... 19) and the
+      first row of the lower band (20, 22 ... 34), and none on the other 18, which have only a
+      numeral beside a lamp; all 20 fabric cages carry a magenta patch. The 20 fabric and 18
+      service patches measure 3.3 x 9.9 and each right edge abuts its cage; its left edge is
+      13.1 mm inboard of the column centre. The 18 blank cages are not drawn with a patch.
   port-leds:
     confidence: measured
     note: >-
@@ -363,6 +377,11 @@ attrs:
     packet-buffer: 16 GB deep buffer
     cluster-capacity: up to 921.6 Tbps as a DDC cluster of S9720-56ED line-card elements
       with an S9705-48D or S9725-64E fabric
+    port-modes-qsfp-dd: the 36 service cages are 18 pairs (0-1, 2-3 to 34-35), each pair
+      one 800G port or two ports at 100, 200 or 400G, and the 20 fabric cages (00-19) are
+      800G only (datasheet page 2, HIG page 12). Which cage of a pair runs the 800G port is
+      read from the guide's Figure 9 - the blue-highlighted cage, its partner joined by a
+      red line - and is not stated in its text
   power:
     power-typical-w: 887
     power-max-w: 2339
@@ -404,6 +423,11 @@ attrs:
       SMPTE ST 2059-2), T-BC/OC, T-TC; timing synchronization over fabric. The datasheet
       footnotes the whole row 'NOS integration is necessary to activate the specific
       feature' and marks SMPTE ST 2059-2 'Additional license is required'
+    zr-ports: 'OpenZR+ and ZR run at 800G and 400G on the ports HIG Figure 9 highlights in
+      blue - 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 20, 22, 24, 26, 28, 30, 32 and 34, the 18
+      that state 800G. The list is read off the figure against the numbering, which is the
+      only place it appears: the datasheet says only ''with ZR/ZR+ support'' without
+      naming which'
     forwarding: full Segment Routing over IPv6 (SRv6), flexibly configured fabric pipes
       for upstream connectivity, automatic fault detection and recovery, nonstop routing
       for control and data plane (datasheet KEY BENEFITS and KEY FEATURES)
@@ -536,23 +560,64 @@ gaps:
     neither front figure is a clean panel. Figure 8 lays translucent grey boxes with large
     numerals over every cage; Figure 9 paints a blue highlight over one cage row per band
     and a red dot-and-line overlay on every service column, and both are baked into the
-    embedded raster rather than drawn as PDF vector over it. The consequence recorded here
-    is specific: the SERVICE port label patches could not be colour-sampled anywhere,
-    because a red dot sits on every one of them. Their fill is taken as the vendor blue the
-    S9620-32E's unobstructed patches sample, and their GEOMETRY - which the overlay does
-    not move - is taken from the fabric patches, which nothing covers.
+    embedded raster rather than drawn as PDF vector over it. The highlight and the red dots
+    are the vendor's annotation, not paint, and are read for which cages are paired and
+    which carry a patch, never for colour. The patch blue is sampled from the paint: the
+    unobstructed interior pixels of the 18 patches in the vendor front render (164 core
+    pixels, median RGB 43, 79, 132), of the patches visible beside the cages in Figure 8's
+    raster (712 pixels, median 45, 78, 128) and of the S9620-32E's front render (159
+    pixels, median 42, 75, 142). The three agree within 14 per channel, so the 18 kept
+    patches keep the library's vendor blue #2e54ac, ESTIMATED: all three samples are
+    darker than that value, by about 40 on the blue channel, so it is the nearest held
+    value rather than a match. The GEOMETRY - which the overlay does not move - is taken
+    from the fabric patches, which nothing covers.
   wanted: an unannotated front elevation, or a straight-on photograph of a real faceplate.
+- what: port-pair-exclusion-not-statable
+  scope: [qsfpdd-800g-service]
+  reason: nos-dependent
+  note: >-
+    the guide says the service ports 'can be configured in pairs' to run as one 800G port
+    or as two 400G ports, so the NOS chooses per pair. Portrayal's format has no field that
+    says a port at 800G disables its partner or that a pair is selectable, so it is carried
+    in attrs.performance.port-modes-qsfp-dd and in these placements' speeds: the 18 cages
+    marked in blue state up to 800G and their 18 partners up to 400G, which counts the
+    ports of the 36 x 400G mode and the 18 x 800G mode but not that the two are exclusive.
+    No NOS document is held that tabulates the modes.
+  wanted: the NOS's own per-pair port-mode table, or UfiSpace's statement of which port
+    modes a pair allows.
+- what: which-cage-of-a-pair-runs-800g
+  scope: [port-0, port-1, port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9,
+    port-10, port-11, port-12, port-13, port-14, port-15, port-16, port-17, port-18,
+    port-19, port-20, port-21, port-22, port-23, port-24, port-25, port-26, port-27,
+    port-28, port-29, port-30, port-31, port-32, port-33, port-34, port-35]
+  reason: vendor-silent
+  note: >-
+    the guide's text does not say which cage of a pair carries the 800G port, nor which
+    port number the network OS calls the 800G member. It is read from Figure 9, where the
+    cage with the blue highlight and the red line to its column neighbour is taken as the
+    800G port (1, 3 ... 19 and 20, 22 ... 34) and its neighbour as the second 400G port.
+    The highlight and the lines are the vendor's annotation, and the vendor's front render
+    agrees on which 18 cages carry a blue label patch. That is a reading of a figure, not
+    a statement, so it is estimated.
+  wanted: UfiSpace's statement of which port of each pair is the 800G member, or the
+    NOS's per-pair table.
 groups:
   qsfpdd-800g-service:
     term: Port
     role: traffic
     index-origin: 0
-    attrs: {media: qsfp-dd, speed: 800g}
-    description: the 36 service QSFP-DD cages, numbered 00-35 on blue label patches, in
-      ten columns of two rows across the upper band and eight columns of two rows across
-      the lower one; the even port of each column is the upper one. The vendor pairs them
-      in the NOS - each pair runs as one 800G port or as two 400G ports - which is why the
-      datasheet says '18 x 800G or 36 x 400G' for the same 36 cages
+    attrs: {media: qsfp-dd}
+    mixed: the 36 service cages - 18 pairs, each run as one 800G port or as two ports at 400G or lower
+      (installation guide page 12)
+    description: the 36 service QSFP-DD cages, numbered 00-35, in ten columns of two rows
+      across the upper band and eight columns of two rows across the lower one; the even
+      port of each column is the upper one. They are 18 pairs, one column each, and a
+      pair runs as one 800G port or as two ports at 100, 200 or 400G, which is why the
+      datasheet says '18 x 800G or 36 x 400G' for the same 36 cages. The group holds 36
+      cages, 18 stating up to 800G (1, 3 ... 19 and 20, 22 ... 34, the cages the vendor
+      marks with a blue label patch) and 18 stating up to 400G, so it declares no speed
+      of its own; which cage of a pair runs the 800G port is read from the guide's
+      Figure 9 and is not stated in its text
   qsfpdd-800g-fabric:
     term: Port
     role: fabric
@@ -649,25 +714,15 @@ views:
         - {at: [430.38, 20.60], size: [2.40, 2.40], fill: '#0d0f11', rx: 1.20}
         - {at: [430.38, 70.50], size: [2.40, 2.40], fill: '#0d0f11', rx: 1.20}
         - {at: [432.69, 35.28], size: [2.65, 31.30], fill: '#17191c', rx: 1.00}
-        - {at: [20.93, 9.40], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [20.93, 22.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [47.75, 9.40], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [47.75, 22.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [74.57, 9.40], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [74.57, 22.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [101.39, 9.40], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [101.39, 22.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [128.21, 9.40], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [128.21, 22.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [155.03, 9.40], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [155.03, 22.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [181.84, 9.40], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [181.84, 22.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [208.66, 9.40], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [208.66, 22.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [235.48, 9.40], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [235.48, 22.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [262.30, 9.40], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [262.30, 22.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [289.83, 9.40], size: [3.30, 9.90], fill: '#b0246b', rx: 0.30}
         - {at: [289.83, 22.30], size: [3.30, 9.90], fill: '#b0246b', rx: 0.30}
@@ -680,21 +735,13 @@ views:
         - {at: [401.75, 9.40], size: [3.30, 9.90], fill: '#b0246b', rx: 0.30}
         - {at: [401.75, 22.30], size: [3.30, 9.90], fill: '#b0246b', rx: 0.30}
         - {at: [74.57, 51.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [74.57, 66.10], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [101.39, 51.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [101.39, 66.10], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [128.21, 51.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [128.21, 66.10], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [155.03, 51.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [155.03, 66.10], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [181.84, 51.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [181.84, 66.10], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [208.66, 51.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [208.66, 66.10], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [235.48, 51.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [235.48, 66.10], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [262.30, 51.30], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
-        - {at: [262.30, 66.10], size: [3.30, 9.90], fill: '#2e54ac', rx: 0.30}
         - {at: [289.83, 51.30], size: [3.30, 9.90], fill: '#b0246b', rx: 0.30}
         - {at: [289.83, 66.10], size: [3.30, 9.90], fill: '#b0246b', rx: 0.30}
         - {at: [317.81, 51.30], size: [3.30, 9.90], fill: '#b0246b', rx: 0.30}
@@ -986,45 +1033,45 @@ views:
         - {ref: common/led-dot@1, id: led-mgmt-sfp-1, at: [51.80, 47.90], for: mgmt-sfp-1, group: port-leds, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-port-36, at: [60.30, 47.90], for: port-36, group: port-leds, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-port-37, at: [66.00, 47.90], for: port-37, group: port-leds, rel-pos: 4}
-        - {ref: std/qsfp-dd@1, id: port-0, at: [24.53, 9.51], group: qsfpdd-800g-service, rel-pos: 0}
+        - {ref: std/qsfp-dd@1, id: port-0, at: [24.53, 9.51], attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 0}
         - {ref: common/led-dot@1, id: led-port-0, at: [21.58, 14.10], for: port-0, group: port-leds, rel-pos: 5}
-        - {ref: std/qsfp-dd@1, id: port-1, at: [24.53, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 1}
+        - {ref: std/qsfp-dd@1, id: port-1, at: [24.53, 22.37], rotate: 180, attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-port-1, at: [21.58, 27.00], for: port-1, group: port-leds, rel-pos: 6}
-        - {ref: std/qsfp-dd@1, id: port-2, at: [51.35, 9.51], group: qsfpdd-800g-service, rel-pos: 2}
+        - {ref: std/qsfp-dd@1, id: port-2, at: [51.35, 9.51], attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-port-2, at: [48.40, 14.10], for: port-2, group: port-leds, rel-pos: 7}
-        - {ref: std/qsfp-dd@1, id: port-3, at: [51.35, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 3}
+        - {ref: std/qsfp-dd@1, id: port-3, at: [51.35, 22.37], rotate: 180, attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-port-3, at: [48.40, 27.00], for: port-3, group: port-leds, rel-pos: 8}
-        - {ref: std/qsfp-dd@1, id: port-4, at: [78.17, 9.51], group: qsfpdd-800g-service, rel-pos: 4}
+        - {ref: std/qsfp-dd@1, id: port-4, at: [78.17, 9.51], attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 4}
         - {ref: common/led-dot@1, id: led-port-4, at: [75.22, 14.10], for: port-4, group: port-leds, rel-pos: 9}
-        - {ref: std/qsfp-dd@1, id: port-5, at: [78.17, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 5}
+        - {ref: std/qsfp-dd@1, id: port-5, at: [78.17, 22.37], rotate: 180, attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-port-5, at: [75.22, 27.00], for: port-5, group: port-leds, rel-pos: 10}
-        - {ref: std/qsfp-dd@1, id: port-6, at: [104.99, 9.51], group: qsfpdd-800g-service, rel-pos: 6}
+        - {ref: std/qsfp-dd@1, id: port-6, at: [104.99, 9.51], attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 6}
         - {ref: common/led-dot@1, id: led-port-6, at: [102.04, 14.10], for: port-6, group: port-leds, rel-pos: 11}
-        - {ref: std/qsfp-dd@1, id: port-7, at: [104.99, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 7}
+        - {ref: std/qsfp-dd@1, id: port-7, at: [104.99, 22.37], rotate: 180, attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 7}
         - {ref: common/led-dot@1, id: led-port-7, at: [102.04, 27.00], for: port-7, group: port-leds, rel-pos: 12}
-        - {ref: std/qsfp-dd@1, id: port-8, at: [131.81, 9.51], group: qsfpdd-800g-service, rel-pos: 8}
+        - {ref: std/qsfp-dd@1, id: port-8, at: [131.81, 9.51], attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 8}
         - {ref: common/led-dot@1, id: led-port-8, at: [128.86, 14.10], for: port-8, group: port-leds, rel-pos: 13}
-        - {ref: std/qsfp-dd@1, id: port-9, at: [131.81, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 9}
+        - {ref: std/qsfp-dd@1, id: port-9, at: [131.81, 22.37], rotate: 180, attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 9}
         - {ref: common/led-dot@1, id: led-port-9, at: [128.86, 27.00], for: port-9, group: port-leds, rel-pos: 14}
-        - {ref: std/qsfp-dd@1, id: port-10, at: [158.62, 9.51], group: qsfpdd-800g-service, rel-pos: 10}
+        - {ref: std/qsfp-dd@1, id: port-10, at: [158.62, 9.51], attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 10}
         - {ref: common/led-dot@1, id: led-port-10, at: [155.68, 14.10], for: port-10, group: port-leds, rel-pos: 15}
-        - {ref: std/qsfp-dd@1, id: port-11, at: [158.62, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 11}
+        - {ref: std/qsfp-dd@1, id: port-11, at: [158.62, 22.37], rotate: 180, attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 11}
         - {ref: common/led-dot@1, id: led-port-11, at: [155.68, 27.00], for: port-11, group: port-leds, rel-pos: 16}
-        - {ref: std/qsfp-dd@1, id: port-12, at: [185.44, 9.51], group: qsfpdd-800g-service, rel-pos: 12}
+        - {ref: std/qsfp-dd@1, id: port-12, at: [185.44, 9.51], attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 12}
         - {ref: common/led-dot@1, id: led-port-12, at: [182.49, 14.10], for: port-12, group: port-leds, rel-pos: 17}
-        - {ref: std/qsfp-dd@1, id: port-13, at: [185.44, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 13}
+        - {ref: std/qsfp-dd@1, id: port-13, at: [185.44, 22.37], rotate: 180, attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 13}
         - {ref: common/led-dot@1, id: led-port-13, at: [182.49, 27.00], for: port-13, group: port-leds, rel-pos: 18}
-        - {ref: std/qsfp-dd@1, id: port-14, at: [212.26, 9.51], group: qsfpdd-800g-service, rel-pos: 14}
+        - {ref: std/qsfp-dd@1, id: port-14, at: [212.26, 9.51], attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 14}
         - {ref: common/led-dot@1, id: led-port-14, at: [209.31, 14.10], for: port-14, group: port-leds, rel-pos: 19}
-        - {ref: std/qsfp-dd@1, id: port-15, at: [212.26, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 15}
+        - {ref: std/qsfp-dd@1, id: port-15, at: [212.26, 22.37], rotate: 180, attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 15}
         - {ref: common/led-dot@1, id: led-port-15, at: [209.31, 27.00], for: port-15, group: port-leds, rel-pos: 20}
-        - {ref: std/qsfp-dd@1, id: port-16, at: [239.08, 9.51], group: qsfpdd-800g-service, rel-pos: 16}
+        - {ref: std/qsfp-dd@1, id: port-16, at: [239.08, 9.51], attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 16}
         - {ref: common/led-dot@1, id: led-port-16, at: [236.13, 14.10], for: port-16, group: port-leds, rel-pos: 21}
-        - {ref: std/qsfp-dd@1, id: port-17, at: [239.08, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 17}
+        - {ref: std/qsfp-dd@1, id: port-17, at: [239.08, 22.37], rotate: 180, attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 17}
         - {ref: common/led-dot@1, id: led-port-17, at: [236.13, 27.00], for: port-17, group: port-leds, rel-pos: 22}
-        - {ref: std/qsfp-dd@1, id: port-18, at: [265.90, 9.51], group: qsfpdd-800g-service, rel-pos: 18}
+        - {ref: std/qsfp-dd@1, id: port-18, at: [265.90, 9.51], attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 18}
         - {ref: common/led-dot@1, id: led-port-18, at: [262.95, 14.10], for: port-18, group: port-leds, rel-pos: 23}
-        - {ref: std/qsfp-dd@1, id: port-19, at: [265.90, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 19}
+        - {ref: std/qsfp-dd@1, id: port-19, at: [265.90, 22.37], rotate: 180, attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 19}
         - {ref: common/led-dot@1, id: led-port-19, at: [262.95, 27.00], for: port-19, group: port-leds, rel-pos: 24}
         - {ref: std/qsfp-dd@1, id: fabric-0, at: [293.43, 9.51], group: qsfpdd-800g-fabric, rel-pos: 0}
         - {ref: common/led-dot@1, id: led-fabric-0, at: [290.48, 14.10], for: fabric-0, group: port-leds, rel-pos: 25}
@@ -1046,37 +1093,37 @@ views:
         - {ref: common/led-dot@1, id: led-fabric-8, at: [402.40, 14.10], for: fabric-8, group: port-leds, rel-pos: 33}
         - {ref: std/qsfp-dd@1, id: fabric-9, at: [405.35, 22.37], rotate: 180, group: qsfpdd-800g-fabric, rel-pos: 9}
         - {ref: common/led-dot@1, id: led-fabric-9, at: [402.40, 27.00], for: fabric-9, group: port-leds, rel-pos: 34}
-        - {ref: std/qsfp-dd@1, id: port-20, at: [78.17, 51.38], group: qsfpdd-800g-service, rel-pos: 20}
+        - {ref: std/qsfp-dd@1, id: port-20, at: [78.17, 51.38], attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 20}
         - {ref: common/led-dot@1, id: led-port-20, at: [75.22, 56.00], for: port-20, group: port-leds, rel-pos: 35}
-        - {ref: std/qsfp-dd@1, id: port-21, at: [78.17, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 21}
+        - {ref: std/qsfp-dd@1, id: port-21, at: [78.17, 66.22], rotate: 180, attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 21}
         - {ref: common/led-dot@1, id: led-port-21, at: [75.22, 70.80], for: port-21, group: port-leds, rel-pos: 36}
-        - {ref: std/qsfp-dd@1, id: port-22, at: [104.99, 51.38], group: qsfpdd-800g-service, rel-pos: 22}
+        - {ref: std/qsfp-dd@1, id: port-22, at: [104.99, 51.38], attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 22}
         - {ref: common/led-dot@1, id: led-port-22, at: [102.04, 56.00], for: port-22, group: port-leds, rel-pos: 37}
-        - {ref: std/qsfp-dd@1, id: port-23, at: [104.99, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 23}
+        - {ref: std/qsfp-dd@1, id: port-23, at: [104.99, 66.22], rotate: 180, attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 23}
         - {ref: common/led-dot@1, id: led-port-23, at: [102.04, 70.80], for: port-23, group: port-leds, rel-pos: 38}
-        - {ref: std/qsfp-dd@1, id: port-24, at: [131.81, 51.38], group: qsfpdd-800g-service, rel-pos: 24}
+        - {ref: std/qsfp-dd@1, id: port-24, at: [131.81, 51.38], attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 24}
         - {ref: common/led-dot@1, id: led-port-24, at: [128.86, 56.00], for: port-24, group: port-leds, rel-pos: 39}
-        - {ref: std/qsfp-dd@1, id: port-25, at: [131.81, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 25}
+        - {ref: std/qsfp-dd@1, id: port-25, at: [131.81, 66.22], rotate: 180, attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 25}
         - {ref: common/led-dot@1, id: led-port-25, at: [128.86, 70.80], for: port-25, group: port-leds, rel-pos: 40}
-        - {ref: std/qsfp-dd@1, id: port-26, at: [158.62, 51.38], group: qsfpdd-800g-service, rel-pos: 26}
+        - {ref: std/qsfp-dd@1, id: port-26, at: [158.62, 51.38], attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 26}
         - {ref: common/led-dot@1, id: led-port-26, at: [155.68, 56.00], for: port-26, group: port-leds, rel-pos: 41}
-        - {ref: std/qsfp-dd@1, id: port-27, at: [158.62, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 27}
+        - {ref: std/qsfp-dd@1, id: port-27, at: [158.62, 66.22], rotate: 180, attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 27}
         - {ref: common/led-dot@1, id: led-port-27, at: [155.68, 70.80], for: port-27, group: port-leds, rel-pos: 42}
-        - {ref: std/qsfp-dd@1, id: port-28, at: [185.44, 51.38], group: qsfpdd-800g-service, rel-pos: 28}
+        - {ref: std/qsfp-dd@1, id: port-28, at: [185.44, 51.38], attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 28}
         - {ref: common/led-dot@1, id: led-port-28, at: [182.49, 56.00], for: port-28, group: port-leds, rel-pos: 43}
-        - {ref: std/qsfp-dd@1, id: port-29, at: [185.44, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 29}
+        - {ref: std/qsfp-dd@1, id: port-29, at: [185.44, 66.22], rotate: 180, attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 29}
         - {ref: common/led-dot@1, id: led-port-29, at: [182.49, 70.80], for: port-29, group: port-leds, rel-pos: 44}
-        - {ref: std/qsfp-dd@1, id: port-30, at: [212.26, 51.38], group: qsfpdd-800g-service, rel-pos: 30}
+        - {ref: std/qsfp-dd@1, id: port-30, at: [212.26, 51.38], attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 30}
         - {ref: common/led-dot@1, id: led-port-30, at: [209.31, 56.00], for: port-30, group: port-leds, rel-pos: 45}
-        - {ref: std/qsfp-dd@1, id: port-31, at: [212.26, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 31}
+        - {ref: std/qsfp-dd@1, id: port-31, at: [212.26, 66.22], rotate: 180, attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 31}
         - {ref: common/led-dot@1, id: led-port-31, at: [209.31, 70.80], for: port-31, group: port-leds, rel-pos: 46}
-        - {ref: std/qsfp-dd@1, id: port-32, at: [239.08, 51.38], group: qsfpdd-800g-service, rel-pos: 32}
+        - {ref: std/qsfp-dd@1, id: port-32, at: [239.08, 51.38], attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 32}
         - {ref: common/led-dot@1, id: led-port-32, at: [236.13, 56.00], for: port-32, group: port-leds, rel-pos: 47}
-        - {ref: std/qsfp-dd@1, id: port-33, at: [239.08, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 33}
+        - {ref: std/qsfp-dd@1, id: port-33, at: [239.08, 66.22], rotate: 180, attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 33}
         - {ref: common/led-dot@1, id: led-port-33, at: [236.13, 70.80], for: port-33, group: port-leds, rel-pos: 48}
-        - {ref: std/qsfp-dd@1, id: port-34, at: [265.90, 51.38], group: qsfpdd-800g-service, rel-pos: 34}
+        - {ref: std/qsfp-dd@1, id: port-34, at: [265.90, 51.38], attrs: {speed: 800g, speeds: [100g, 200g, 400g, 800g]}, group: qsfpdd-800g-service, rel-pos: 34}
         - {ref: common/led-dot@1, id: led-port-34, at: [262.95, 56.00], for: port-34, group: port-leds, rel-pos: 49}
-        - {ref: std/qsfp-dd@1, id: port-35, at: [265.90, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 35}
+        - {ref: std/qsfp-dd@1, id: port-35, at: [265.90, 66.22], rotate: 180, attrs: {speed: 400g, speeds: [100g, 200g, 400g]}, group: qsfpdd-800g-service, rel-pos: 35}
         - {ref: common/led-dot@1, id: led-port-35, at: [262.95, 70.80], for: port-35, group: port-leds, rel-pos: 50}
         - {ref: std/qsfp-dd@1, id: fabric-10, at: [293.43, 51.38], group: qsfpdd-800g-fabric, rel-pos: 10}
         - {ref: common/led-dot@1, id: led-fabric-10, at: [290.48, 56.00], for: fabric-10, group: port-leds, rel-pos: 51}
