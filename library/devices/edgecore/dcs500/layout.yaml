@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs500
-version: 4.0.0
+version: 4.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS7816-64X
@@ -248,9 +248,14 @@ gaps:
       from zero; it also offers the 48 V DC supply only in the O series. The datasheet's
       elevations are the O, the guide's front enlargement is the OZ, and the guide's rear
       prints fans 4..1 beside a front that says PSU 0. This device is the OZ and prints fans
-      3..0 on the datasheet's word. A second device, or a silkscreen that can vary by
-      configuration, would carry the O; a photograph of a real OZ rear settles its fan
-      legend.
+      3..0 on the datasheet's word. THE DC BUILDS EXIST ONLY IN THE O SERIES (dc-f2b and
+      dc-b2f, 7816-64X-O-48V-F-R and -B-R), so the DC builds wear the OZ labels as a declared
+      stand-in, not a second device. The O series prints ports 1 to 64, fans 4 to 1 and, read
+      on the data sheet's rear photograph (page 2), PSU 2 at the left supply and PSU 1 at the
+      right; this device prints PSU 1 at the left, PSU 0 at the right and fans 3 to 0. Views
+      per configuration (front-o and rear-o, as arista/7010tx-48's rear-dc does) would draw the
+      O labels, and the AC O-series SKUs would then want configurations too; that is the
+      owner's decision. A photograph of a real OZ rear settles its fan legend.
   - what: inner-row-port-leds
     scope: [front]
     reason: needs-photo
@@ -510,12 +515,12 @@ views:
       - {at: [325.04, 18.40], text: '0', font-size: 2.6, anchor: middle, fill: '#d8dcdf', for: fan-0}
     components:
       bays:
-        - {id: psu-1, at: [18.87, 45.80], size: {w: 50.9, h: 39.4}, accepts: [edgecore/dcs500-psu-ac@1], group: psus, rel-pos: 1, default: edgecore/dcs500-psu-ac@1}
+        - {id: psu-1, at: [18.87, 45.80], size: {w: 50.9, h: 39.4}, accepts: [edgecore/dcs500-psu-ac@1, edgecore/dcs500-psu-dc@1], group: psus, rel-pos: 1, default: edgecore/dcs500-psu-ac@1}
         - {id: fan-3, at: [88.58, 22.90], size: {w: 63.0, h: 62.6}, accepts: [edgecore/dcs500-fan@1], group: fans, rel-pos: 3, default: edgecore/dcs500-fan@1}
         - {id: fan-2, at: [156.90, 22.90], size: {w: 63.0, h: 62.6}, accepts: [edgecore/dcs500-fan@1], group: fans, rel-pos: 2, default: edgecore/dcs500-fan@1}
         - {id: fan-1, at: [225.22, 22.90], size: {w: 63.0, h: 62.6}, accepts: [edgecore/dcs500-fan@1], group: fans, rel-pos: 1, default: edgecore/dcs500-fan@1}
         - {id: fan-0, at: [293.54, 22.90], size: {w: 63.0, h: 62.6}, accepts: [edgecore/dcs500-fan@1], group: fans, rel-pos: 0, default: edgecore/dcs500-fan@1}
-        - {id: psu-0, at: [367.70, 45.80], size: {w: 50.9, h: 39.4}, accepts: [edgecore/dcs500-psu-ac@1], group: psus, rel-pos: 0, default: edgecore/dcs500-psu-ac@1}
+        - {id: psu-0, at: [367.70, 45.80], size: {w: 50.9, h: 39.4}, accepts: [edgecore/dcs500-psu-ac@1, edgecore/dcs500-psu-dc@1], group: psus, rel-pos: 0, default: edgecore/dcs500-psu-ac@1}
       placements:
         - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.1], skin: left, optional: ears, group: furniture, rel-pos: 4}
         - {ref: common/rack-ear@1, id: rear-ear-right, at: [438.4, 0.1], skin: right, optional: ears, group: furniture, rel-pos: 5}
@@ -582,6 +587,29 @@ configurations:
       7816-64X-OZ-AC-B-UK: {part: FP3AT7664301A, power-cord: UK}
       7816-64X-OZ-AC-B-JP: {part: FP3AT7664501A, power-cord: JP}
       7816-64X-OZ-AC-B-UN: {part: FP3AT7664005A, power-cord: UN}
+  dc-f2b:
+    kind: orderable
+    power: dc
+    description: >-
+      Dual 850 W -36 to -72 VDC supplies, front-to-back airflow - the O-series 48 V DC build,
+      7816-64X-O-48V-F-R. The DC supply is sold only in the O series. It is drawn on this
+      device's OZ silkscreen (PSU 1 and PSU 0, fans 3 to 0); see the o-series-numbering gap.
+    part-numbers:
+      7816-64X-O-48V-F-R: {part: FP3ZZ7664024A}
+    bays: {psu-1: edgecore/dcs500-psu-dc@1, psu-0: edgecore/dcs500-psu-dc@1}
+  dc-b2f:
+    kind: orderable
+    power: dc
+    airflow: back-to-front
+    region-context: {intake: Exhaust, exhaust: Intake}
+    description: >-
+      Dual 850 W -36 to -72 VDC supplies, back-to-front airflow - the O-series 48 V DC build,
+      7816-64X-O-48V-B-R. BOTH faces' airflow regions swap, as ac-b2f's do. Drawn on this
+      device's OZ silkscreen like dc-f2b; the back-to-front supply's latch colour is not shown
+      by any held document and stays red.
+    part-numbers:
+      7816-64X-O-48V-B-R: {part: FP3ZZ7664026A}
+    bays: {psu-1: edgecore/dcs500-psu-dc@1, psu-0: edgecore/dcs500-psu-dc@1}
 datasheet:
   title: Edgecore DCS500 (AS7816-64X) Data Center Switch data sheet
   sha256: 0f768fc126651d01ea6821a55abe8ee61a26040d40704952ddbfe710d1f57c43
