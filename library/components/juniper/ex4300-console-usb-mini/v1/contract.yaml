@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: ex4300-console-usb-mini
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: networking
 description: >-
@@ -10,6 +10,7 @@ description: >-
   It carries a serial console over USB, so it is a management port and not a data port.
 size: {w: 7.9, h: 4.6}
 size-confidence: {w: estimated, h: estimated}
+interface: mini-usb-b
 attrs: {media: mini-usb-b, role: console}
 provenance:
   existence: >-
@@ -20,9 +21,17 @@ provenance:
   size: >-
     estimated - read off Juniper's straight-on studio photograph of the EX4300-48P front
     (ex4300-48p-front-high.jpg): the shell spans about 26 px across and 15 px down at 3.29 px per mm,
-    7.9 x 4.6 mm, good to about half a millimetre. The registry has no mini-USB entry (it holds
-    micro-USB Type-B and the other USB receptacles), so this part states no standard and no mating
-    interface, and a shared mini-USB part would replace it
+    7.9 x 4.6 mm, good to about half a millimetre. The part now presents the registered `mini-usb-b`
+    interface, but its size stays this photograph's estimate: it is not replaced by std/mini-usb@1,
+    whose Molex shell is a different size and whose use here would change the part's ref on every
+    device that places it
+  interface: >-
+    datasheet - the EX4300 Switch Hardware Guide (published 2025-08-12), Table 60 (PDF pp.165-166) and the
+    console connection procedure (PDF p.218): "Mini-USB Type-B console port" and a cable with a
+    "Mini-USB Type-B (5-pin)" connector; the EX4550 Switch Hardware Guide (published 2020-12-15), Table 35
+    (PDF p.96) and PDF p.153: "Mini-USB Type-B console port" that "accepts a cable with a Mini-USB
+    Type-B plug (5-pin)". That is the USB Mini-B form, `mini-usb-b`, whose cable plug is
+    generic/mini-usb-b-plug@1
   face: >-
     photo-measured - the photograph shows a dark trapezoid opening inside a light shell with a pin
     row. Drawn as the shell, a chamfered opening and a pin bar
