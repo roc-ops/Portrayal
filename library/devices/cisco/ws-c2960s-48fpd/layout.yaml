@@ -60,7 +60,8 @@ provenance:
       of them yellow, and the 48TD-L stencil draws the blocks yellow too, so the blocks are drawn yellow here and
       the white is the stencil artist's choice. Rear: no held rear carries this model's colour. The only rear in
       colour is the WS-C2960S-48LPD-L NetBox photograph, whose plain rear plate reads #3f4447 (median of 2000 px, box
-      (440,15,520,40)) and whose fitted module's frame reads #344a54; a photograph's colour depends on its lighting. Its
+      (440,15,520,40)) and whose fitted module's plain frame reads #3f565d (500 px, box (230,137,330,142)); a
+      photograph's colour depends on its lighting. Its
       printed ratings (AC "8-4A", RPS "+12V @11.25A, -48V @7.8A") match none of the five rows of spec Tables 1-2 and 1-3,
       so it is not proof of the 48LPD-L's own rear. The guide names no housing colour and says nothing of a shared
       finish. The rear is therefore drawn in the chassis colour and the `faceplate-colour` gap says so. The rear reads
@@ -96,6 +97,47 @@ provenance:
       the earlier measured #b3b7b4 and #a5aba7 and are not changed. The text is drawn as the photograph prints it:
       "DC INPUTS FOR REMOTE POWER SUPPLY SPECIFIED IN MANUAL" under a warning triangle, "+12V ... @11.25A, -48V ...
       @7.8A" with two direct-current symbols, and "RATING 100-240V~ 8-4A, 50-60Hz".
+  front-marks:
+    confidence: estimated
+    note: >-
+      The arrows, the console label, the jack plates, the SFP+ tabs, the PoE tags and the USB symbol are read from the
+      NetBox WS-C2960S-48FPD-L stencil (cisco-ws-c2960s-48fpd-l.front.png) at 11.345 px per mm, the chassis starting
+      216 px in, each colour the median of the plain pixels of its box; the stencil is a community artist's palette
+      and no photograph from Cisco of the front is held, and a photograph's colours would depend on its lighting.
+      Arrows: light grey #808080 (120 px, box (520,96,535,104), a port arrow; 155 px, box (4660,118,4676,128), the
+      console arrow), each 2.38 x 2.12 mm, no circle; the lamps already stand within 0.2 mm of the stencil's arrows,
+      so none moves, except the management lamp, 1.3 mm left of the jack's centre on the stencil, which does. The
+      stencil's lamp-by-lamp order is up above odd ports and down above even ones, down under the USB-A and under the
+      console surround, a down and a right arrow beside CONSOLE and an up arrow under the management jack. The
+      console label CONSOLE is #bbd5d8 (578 px, box (4648,85,4746,101)), one level from the surround's #bad4d7, cap
+      height 1.23 mm from baseline 8.81 mm, centred at 395.02 mm, inside the surround. The two jack plates are #efefef
+      (10086 px each), 15.6 x 12.34 mm at (402.47, 7.58) and (421.51, 7.58) mm. Each SFP+ numeral tab is #f2f2f2 (2112
+      px, box (4570,450,4652,477)), 7.49 x 2.73 mm at (383.61, 39.49) and (413.75, 39.49) mm, its numeral #595959 (70
+      px, box (4600,456,4624,474)) 1.5 mm tall; the pull tab #c1c5cb (240 px, box (4588,416,4636,421)) and its black
+      projection #000000 (861 px, box (4570,427,4652,441)). The PoE tags are 24, one for each pair of ports, 13.18 x
+      3.44 mm at y 2.64 mm, #ffff99 (240 px, box (490,32,530,38), the same as the earlier strip's value), measured by
+      the runs of yellow along one pixel row: 23.89, 37.81, 51.74, 65.76, 79.68 and 93.61 mm in the first block and the
+      same pitch in the other three. Figure 1-1 (PDF p4, printed 1-2) read at 4x also draws separate yellow tags, one
+      for each pair, above the lamps, and a yellow bar at the end of each block; the earlier note that it draws one
+      bar for each block of twelve was wrong. The USB symbol is white (#ffffff, 25 px, box (4497,93,4502,98)), 2.8 x
+      5.2 mm, drawn as strokes and discs. Figure 1-9 (PDF p18, printed 1-16) shows the same arrows beside CONSOLE and
+      under the jacks and calls the first two the console LEDs.
+  rear-colours:
+    confidence: estimated
+    note: >-
+      Read from the NetBox WS-C2960S-48LPD-L rear photograph (cisco-ws-c2960s-48lpd-l.rear.png, 1516 x 150 px, 3.41 px
+      per mm), another model's rear, each colour a median. The three pan-head screws: heads #bdc8c5 (360 px, box
+      (926,88,946,109); the other two read #c4d0d0, 370 px, and #afbbb9, 256 px, so the median of the three is used),
+      7.0, 7.0 and 6.7 to 7.3 mm across against the 6.8 mm drawn, and centred within 0.4 mm of the drawn places; the
+      slots read #667572 (85 px darker than 130, box (1478,88,1496,106)) and are drawn as the cross the module's own
+      screws use. The RPS connector: the housing's walls are #f4f5ee (905 px of 215 or more, box (1022,88,1178,120)),
+      the cells' bodies #7d7464 and the bronze contacts #887555 (594 and 198 px pooled over the 22 cells, a 9 x 3 strip
+      below each pin and a 3 x 3 box on it, cell pitch 14.22 px), and the dark edge #0e1010 (420 px, box
+      (1030,82,1170,85)) runs along the top; the bottom edge is a lighter strip #656c66 (420 px, box
+      (1030,120,1170,123)), the left edge one dark pixel and the right edge a thin grey line, so the black outlined
+      box of the earlier drawing is the shadowed opening of the plate that the housing sits in, dark on top and
+      lighter on the other three sides. The counts, rows, places and sizes of the cells, the plate and the screws did
+      not change. The three screw heads, the housing and the cells are another model's.
   numbering:
     confidence: drawing
     note: >-
@@ -120,8 +162,10 @@ provenance:
       lamps "only on switch models that support stacking", the PoE lamp "only on switch models that support PoE").
       The two small arrows above each column pair are the port lamps; the stencil shows them as triangles, up for
       the upper port and down for the lower, so the library's up and down arrow skins are used. The port lamp's
-      meaning depends on the selected mode (Table 1-9). The arrows by the console jacks are read as the USB and
-      RJ-45 console lamps (Table 1-10, PDF p18, printed 1-16); their text is not on the metal.
+      meaning depends on the selected mode (Table 1-9). The arrows by the console jacks are the USB and RJ-45
+      console lamps (Figure 1-9 and Table 1-10, PDF p18, printed 1-16: "Console LEDs"), a down arrow and a right
+      arrow beside CONSOLE, and the arrow under the management jack is its lamp (Table 1-11, PDF p19, printed 1-17);
+      all three are arrow lamps, as the stencil and Figure 1-9 draw them.
   legend:
     confidence: estimated
     note: >-
@@ -178,7 +222,7 @@ provenance:
       library's `vent` pattern is hexagonal and is the nearest of the schema's patterns, scaled by 2.0 with
       `pattern-pitch` to that pitch, and its tile is crisp (a filled hexagon, no stroke and no filter), so `motif` is
       not needed. The faintness in the earlier comparison was the cairosvg rasteriser, which resamples a scaled
-      pattern tile; in Chromium, the viewer's own rasteriser, the holes are sharp. The web between the holes is the
+      pattern tile; in Chromium, the viewer's own rasteriser, the holes are sharp. The three screws along the rear carry the cross the module's own screws use (see `rear-colours`). The web between the holes is the
       chassis colour, not bright metal: the photograph's web reads #404345 (3999 px of the pixels between 40 and 130,
       box (540,44,705,140)) against the plate's #3f4447, and the holes #040507 (256 px, box (572,52,588,68)); only the
       cut edges above and below the field are light, #b9bcba (517 px, box (533,40,712,46)), drawn as two thin strips.
@@ -260,12 +304,21 @@ gaps:
   scope: [rear]
   reason: needs-photo
   wanted: >-
-    This model's own rear in colour. The only held rear in colour is the NetBox photograph of the WS-C2960S-48LPD-L,
-    whose plain plate reads #3f4447 and whose fitted module's frame reads #344a54; its printed ratings ("8-4A",
-    "+12V @11.25A, -48V @7.8A") match none of the five rows of spec Tables 1-2 and 1-3, so it is another model's
-    rear. The guide gives no housing colour and says nothing of a shared finish ("All the 24- and 48-port switches
-    have similar components" is about parts). The rear is drawn in the chassis colour, #404040, which is the front's
-    own measured panel colour: a stand-in the owner may accept or replace.
+    This model's own rear in colour. The only held rear in colour with the FlexStack slot is the NetBox photograph of
+    the WS-C2960S-48LPD-L, whose plain plate reads #3f4447 (median of 2000 px, box (440,15,520,40)) and whose fitted
+    module's plain frame reads #3f565d; its printed ratings ("8-4A", "+12V @11.25A, -48V @7.8A") match none of the
+    five rows of spec Tables 1-2 and 1-3, so it is another model's rear. The NetBox photograph of the WS-C2960S-24TS-L
+    rear (1102 x 97 px, a model with no FlexStack slot, used only as a cross-check and never drawn from) reads #404145
+    (1120 px, box (520,8,590,24)) and #44464a (1800 px, box (880,30,940,60)): the two photographs agree to within 5
+    levels of 255 in each channel. The drawn #404040 is 1 level above, 4 below and 7 below the 48LPD-L median in
+    red, green and blue, so it is a stand-in within a few levels of the photographs and is kept. The guide's own
+    drawing of the rear (Figure 1-10, PDF p19, printed 1-17) is pale grey: its rear face reads #d4d6d8 (3500 px, box
+    (330,150,430,185) of the converted figure), its top face #bebdbb (15000 px, box (400,50,700,100)) and its side
+    face #8f908f (1250 px, box (940,215,990,240)), three different greys, so the figure shades one pale finish by
+    the light on each face and does not draw the rear charcoal. The guide gives no housing colour and says nothing of
+    a shared finish ("All the 24- and 48-port switches have similar components" is about parts). The rear is drawn in
+    the chassis colour, #404040, which is the front's own measured panel colour: a stand-in, in conflict with Figure
+    1-10, that the owner may accept or replace.
 - what: etsi-bracket
   scope: [front]
   reason: vendor-silent
@@ -276,13 +329,18 @@ gaps:
   scope: [front]
   reason: needs-photo
   wanted: >-
-    Two things on the NetBox stencil are not drawn. The USB symbol beside the USB Type A port is a small glyph of
-    about 3 x 9 mm that no held source draws larger. The "740 W" after "POWER over ETHERNET" under the first jack
-    block is printed near-black over the dark panel and the yellow ticks, so it cannot be read on either stage. The
-    corner marks 1X to 48X are on the stencil, printed over each block's corner shoulders; the jack part's own skin
-    paints those shoulders and a silkscreen line lies under the parts, so a mark would be half hidden and is not
-    drawn. The strip's "POWER over ETHERNET" and the yellow ticks are drawn from the stencil. The
-    ticks are a motif whose gaps take the renderer's own dark (#17191c), a shade under the panel's #404040.
+    Three things on the NetBox stencil are not drawn; the USB symbol is, from the stencil, as white strokes and discs
+    2.8 x 5.2 mm (#ffffff, 25 px, box (4497,93,4502,98)). The Cisco logo is never drawn (the region `logo-zone`
+    stays). The "740 W" after "POWER over ETHERNET" under the first jack block reads on the stencil at 10x as the
+    digits 7, 4, 0 and a W, but it is printed black on the dark panel and across the yellow ticks (contrast about 2 to
+    1), so it cannot be read at the page's scale on either stage and is not drawn. The guide prints "740 W" only as the
+    PoE budget (Table 1-1, PDF p4, printed 1-2) and in Table 1-2 (PDF p62, printed 1-2), never as a mark on the front.
+    The corner marks (16 of them: 1X, 11X, 2X, 12X; 13X, 23X, 14X, 24X; 25X, 35X, 26X, 36X; 37X, 47X, 38X and 48X, at
+    the corners of the four blocks, cap height 1.23 mm) read clearly on the stencil, but "corner marks 1X to 48X" sit
+    where the jack part's box begins: each mark's inner 0.6 to 1.0 mm lies under the part, and a silkscreen line lies
+    under the parts, so a mark would be half hidden and is not drawn. The strip's "POWER over ETHERNET" and the
+    yellow ticks are drawn from the stencil. The ticks are a motif whose gaps take the renderer's own dark (#17191c),
+    a shade under the panel's #404040.
 - what: front-of-the-48fpd-itself
   scope: [front]
   reason: needs-photo
@@ -298,23 +356,104 @@ gaps:
   scope: [rear]
   reason: needs-photo
   wanted: >-
-    This model's own rear label text. The rear labels (the warning above the RPS plate, the ratings line over its
-    pins and the rating plate beside the inlet) are drawn as the NetBox photograph of the WS-C2960S-48LPD-L rear
-    prints them, and that photograph is another model's rear: its figures are stand-ins, every one `estimated`. It
-    prints "8-4A, 50-60Hz" and "+12V ... @11.25A, -48V ... @7.8A", which match none of the five models' rows of the
-    guide's tables, and the guide's own drawing of the rear without an RPS connector (Figure 1-13, PDF p21, printed
-    1-19) prints "12-6A", so the guide's drawing is not followed either. What each model's own label should read, from
-    its own row of Table 1-2 (PDF p62-63, printed 1-2 to 1-3) and Table 1-3 (PDF p64-65, printed 1-4 to 1-5): the
-    WS-C2960S-48FPD-L, AC 9 to 4 A and +12 V @ 4 A, -52 V @ 15 A; the 48LPD-L, 5 to 2 A and +12 V @ 4 A, -52 V @ 8
-    A; the 24PD-L, 5 to 2 A and +12 V @ 3 A, -52 V @ 8 A; the 48TD-L, 1 to 0.5 A and +12 V @ 4 A; the 24TD-L, 1 to
-    0.5 A and +12 V @ 3 A. All five: 100 to 240 VAC, 50 to 60 Hz.
+    Label figures are another model's, kept as stand-ins. This model's own rear label text is not held. The rear
+    labels (the warning above the RPS plate, the ratings line over its pins and the rating plate beside the inlet)
+    are drawn as the NetBox photograph of the WS-C2960S-48LPD-L rear prints them, and that photograph is another
+    model's rear: its figures are stand-ins, every one `estimated`. It prints "8-4A, 50-60Hz" and "+12V ...
+    @11.25A, -48V ... @7.8A", which match none of the five models' rows of the guide's tables, and the guide's own
+    drawings of the rear (Figure 1-10, PDF p19, printed 1-17, and Figure 1-13, PDF p21, printed 1-19) print "12-6A",
+    so the guide's drawing is not followed either. What each model's own label should read, from its own row of
+    Table 1-2 (PDF p62, printed 1-2) and Table 1-3 (PDF p64, printed 1-4): the WS-C2960S-48FPD-L, AC 9 to 4 A and
+    +12 V @ 4 A, -52 V @ 15 A; the 48LPD-L, 5 to 2 A and +12 V @ 4 A, -52 V @ 8 A; the 24PD-L, 5 to 2 A and +12 V @ 3
+    A, -52 V @ 8 A; the 48TD-L, 1 to 0.5 A and +12 V @ 4 A; the 24TD-L, 1 to 0.5 A and +12 V @ 3 A. All five: 100 to
+    240 VAC, 50 to 60 Hz. Which figures the label should show is the owner's decision: keep the photograph's as
+    stand-ins, or show this model's own row.
 - what: sfp-collar-silver
   scope: [front]
   reason: needs-drawing
   wanted: >-
-    A version of the SFP+ cage part with the stencil's silver frame (#cfcfcf, 1423 px of each cage). The part's own
-    skin paints a grey collar (#9aa0a8) round a dark opening and its skin is not edited here, so the silver is drawn
-    only as the surround the part leaves visible (about 0.5 mm each side) and the part's collar stays its own grey.
+    A version of the SFP+ cage part with the stencil's silver frame (#cfcfcf, 1423 px of each cage), its two clips on
+    the right side (#bdbdbd with black edges), its two small squares near the top (#707070), its gold contacts at the
+    lower left and its pull tab inside the opening. The part's own skin paints a grey collar (#9aa0a8) round a dark
+    opening and its skin is not edited here. Drawn outside or under the part's box: the silver as the surround the
+    part leaves visible (about 0.5 mm each side), the black projection at each cage's foot (#000000, 861 px, box
+    (4570,427,4652,441)), the silver pull tab (#c1c5cb, 240 px, box (4588,416,4636,421); all but about 0.2 mm of it
+    lies under the part's box and is hidden) and the white numeral tab under each cage (#f2f2f2, 2112 px, box
+    (4570,450,4652,477)) with its numeral in #595959 (70 px, box (4600,456,4624,474)). Not drawn: the clips, the
+    squares and the gold contacts, because they lie inside the cage's own opening and would paint over the part's
+    skin. Request: `std/sfp` with the clips, squares, contacts and pull tab in its opening.
+- what: port-arrow-fill
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    A `common/led-arrow-sm` skin whose off fill is the stencil's solid light grey (#808080: 120 px, box
+    (520,96,535,104) of a port arrow and 155 px, box (4660,118,4676,128) of the console arrow; each arrow 2.38 x
+    2.12 mm) without the dark fill and the #5b6167 edge. The part is on `main` and its skin is not edited, and a
+    lamp's colour in the static drawing is the part's own (a lamp state paints only when a state is set), so each
+    lamp keeps its dark triangle; a light grey triangle of the stencil's size is drawn under it, which leaves a
+    light rim of about 0.25 mm, and the black disc the punched lamp opening drew is covered in the panel's colour.
+    The three lamps by the console and management jacks are arrows too (Figure 1-9, PDF p18, printed 1-16, "Console
+    LEDs": 1 USB console LED, 2 RJ-45 console LED; Table 1-10 gives their colours): they were round dots and are
+    arrow lamps now, down for the USB console LED, right for the RJ-45 console LED (the up skin turned 90 degrees:
+    a lamp, not a connector) and up under the management jack.
+- what: rj45-white-body-skin
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    A white or silver body for the RJ-45 part. The console jack, the management jack and the 48 jack-block jacks are
+    `std/rj45-ganged@2`, whose only skin paints a near-black body with light grey shoulders. The stencil draws the
+    console and management jacks on a white plate (#efefef, 10086 px of each, boxes (4782,86,4959,226) and
+    (4998,86,5175,226)) round a dark opening, so a plate of that colour and outline (15.6 x 12.34 mm) is drawn under
+    each of the two jacks and the part keeps its own body. On the 48 block jacks the stencil draws charcoal bodies
+    with white shoulders, where the render has near-black bodies with light grey shoulders; left: the part's skin.
+    Request: an `std/rj45` skin with a white body or white shoulders. The latch stays up and the contacts down, as
+    the stencil shows them.
+- what: usb-a-interior
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    A USB-A skin with a silver interior and the tongue at the left, as the stencil shows. `std/usb-a@1` is placed
+    with `skin: usb2` and rotated 90 degrees, and draws a black opening (#17191c) with a pale tongue (#d5d9de) to
+    the right of the middle of the vertical opening; the stencil draws a silver-grey shell with the tongue at the
+    left. Neither skin of the part draws a silver interior (`default` draws a blue tongue, `usb2` a white one, in
+    the same place), so the part stays as it is. The only way to bring the tongue to the left with this skin is a
+    270 degree turn of the placed part, which is a rotation and is the owner's to decide. Figure 1-1 (PDF p4,
+    printed 1-2) is too small at this port to say more. The shell around the part is drawn silver (#7b7b7b).
+- what: mini-usb-contact-side
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    A mini-B skin with the five contacts in the lower half of the opening. `std/mini-usb@1` draws the flat edge at
+    the top, bevelled corners at the bottom and the five contacts (#7a8087) in the upper half; the stencil has the
+    same flat edge and bevel and the contacts in the lower half. The stencil is the only source of the contact side:
+    Figure 1-5 (USB Mini-Type B Port, PDF p9, printed 1-7) draws a mini-B port with the bevelled corners at the top
+    and contacts both on its tongue and in a row below it, which does not settle the side for this connector as it
+    is mounted, and Figure 1-1 (PDF p4, printed 1-2) is too small. The part's skin is not edited and the connector is
+    not turned: turning it would put the bevel on top, and a rotation after merge is a major version.
+- what: mgmt-base-t-legend
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    The "MGMT" and "BASET" legend right of the management jack. The stencil prints it vertically in yellow
+    (#ffff99, 341 px, box (5190,95,5215,212)): the letters M, G, M, T, then a gap, then B, A, S, E, T, one above the
+    other and upright, each 0.78 mm tall, 10.3 mm in all (it reads "BASET", with no hyphen, at 6x). A legend 0.78 mm
+    tall is under the 1.5 mm font size the library's legend test asks for, so it is not drawn. Wanted: a
+    photograph or a dimensioned front that gives the legend at a size that reads.
+- what: rear-undrawn-details
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    A dimensioned view of this model's rear. The NetBox photograph of the WS-C2960S-48LPD-L (3.41 px per mm) shows
+    these things that the render does not, each looked at at 4x: the chassis' own diagonal edge at the far right,
+    running from about (422.6, 18) up to (443.7, 1.5) mm with two small steps below it, which is the chassis outline
+    and is not drawn over the face; two small oval tabs above and below the AC inlet, about 9 x 3 mm at (386 to 396,
+    3 to 6) and (386 to 396, 33 to 36) mm, whose interior (#323637, 110 px, box (1322,12,1344,17)) is 5 levels of 255
+    from the plate round it (#373b3e, 200 px, box (1360,12,1400,17)), too faint for an outline to be placed, so they
+    are not drawn; faint rectangular outline marks stamped in the rear plate between the module and the fan and
+    beside the RPS plate; a small round hole at the left of the fan, near (149.6, 28.7) mm; a small dark notch in the
+    RPS plate's left edge, near (285 to 288, 25 to 33) mm; and the AC inlet's three pins, which are light grey blocks
+    in the render and dark pockets with a small light mark in the photograph. All are drawn from one model's
+    photograph and none from the guide, whose Figure 1-10 (PDF p19, printed 1-17) is too small to show them.
 groups:
   rj45:
     term: Port
@@ -401,17 +540,45 @@ views:
       - {id: tick-gaps-4, at: [291.56, 39.13], size: [83.2, 2.37], pattern: motif, pattern-pitch: [1.8, 2.37],
          pattern-cells: [[[0.44, 0.0], [1.8, 0.0], [1.8, 2.37], [0.44, 2.37]]]}
       - {id: poe-label-box, kind: label-plate, at: [26.97, 38.17], size: [39.53, 2.64], rx: 0.2, fill: '#ffffff'}
-      - {id: poe-strip-1, at: [24.06, 2.40], size: [83.82, 3.70], fill: '#ffff99'}
-      - {id: poe-strip-2, at: [113.46, 2.40], size: [83.82, 3.70], fill: '#ffff99'}
-      - {id: poe-strip-3, at: [202.86, 2.40], size: [83.82, 3.70], fill: '#ffff99'}
-      - {id: poe-strip-4, at: [292.26, 2.40], size: [83.82, 3.70], fill: '#ffff99'}
+      - {id: poe-tag-1, at: [23.89, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-2, at: [37.81, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-3, at: [51.74, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-4, at: [65.76, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-5, at: [79.68, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-6, at: [93.61, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-7, at: [113.27, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-8, at: [127.19, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-9, at: [141.12, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-10, at: [155.13, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-11, at: [169.06, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-12, at: [182.99, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-13, at: [202.64, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-14, at: [216.57, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-15, at: [230.5, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-16, at: [244.51, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-17, at: [258.44, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-18, at: [272.37, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-19, at: [292.02, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-20, at: [305.95, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-21, at: [319.88, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-22, at: [333.89, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-23, at: [347.82, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
+      - {id: poe-tag-24, at: [361.75, 2.64], size: [13.18, 3.44], rx: 0, fill: '#ffff99'}
       - {id: jack-block-outline-1, at: [20.66, 10.9], size: [89.2, 27.6], rx: 2.5, stroke: '#ffff99', stroke-width: 1.0}
       - {id: jack-block-outline-2, at: [110.06, 10.9], size: [89.2, 27.6], rx: 2.5, stroke: '#ffff99', stroke-width: 1.0}
       - {id: jack-block-outline-3, at: [199.46, 10.9], size: [89.2, 27.6], rx: 2.5, stroke: '#ffff99', stroke-width: 1.0}
       - {id: jack-block-outline-4, at: [288.86, 10.9], size: [89.2, 27.6], rx: 2.5, stroke: '#ffff99', stroke-width: 1.0}
+      - {id: console-jack-plate, kind: jack-plate, at: [402.47, 7.58], size: [15.6, 12.34], rx: 1.0, fill: '#efefef'}
+      - {id: mgmt-jack-plate, kind: jack-plate, at: [421.51, 7.58], size: [15.6, 12.34], rx: 1.0, fill: '#efefef'}
       - {id: usb-shell, kind: shell, at: [380.96, 6.52], size: [5.14, 14.1], rx: 0.6, fill: '#7b7b7b'}
       - {id: sfp-frame-1, kind: shell, at: [379.9, 27.3], size: [15.1, 11.6], rx: 1.2, fill: '#cfcfcf'}
       - {id: sfp-frame-2, kind: shell, at: [409.87, 27.3], size: [15.1, 11.6], rx: 1.2, fill: '#cfcfcf'}
+      - {id: sfp-pull-tab-shadow-1, at: [383.74, 37.64], size: [7.23, 1.23], fill: '#000000'}
+      - {id: sfp-pull-tab-shadow-2, at: [413.88, 37.64], size: [7.23, 1.23], fill: '#000000'}
+      - {id: sfp-pull-tab-1, kind: shell, at: [384.6, 36.3], size: [5.5, 1.35], rx: 0.5, fill: '#c1c5cb'}
+      - {id: sfp-pull-tab-2, kind: shell, at: [414.75, 36.3], size: [5.5, 1.35], rx: 0.5, fill: '#c1c5cb'}
+      - {id: sfp-number-tab-1, kind: label-plate, at: [383.61, 39.49], size: [7.49, 2.73], fill: '#f2f2f2'}
+      - {id: sfp-number-tab-2, kind: label-plate, at: [413.75, 39.49], size: [7.49, 2.73], fill: '#f2f2f2'}
       - {id: sfp-outline-1, at: [379.1, 26.7], size: [16.3, 11.6], rx: 1.8, stroke: '#ffff99', stroke-width: 1.0}
       - {id: sfp-outline-2, at: [409.5, 26.7], size: [16.3, 11.6], rx: 1.8, stroke: '#ffff99', stroke-width: 1.0}
       - {id: mgmt-outline, at: [420.5, 6.5], size: [17.7, 14.3], rx: 2.0, stroke: '#ffff99', stroke-width: 1.0}
@@ -423,9 +590,9 @@ views:
       - {id: console-usb, at: [390.65, 17.00], size: [7.7, 3.9], shape: rect}
       - {id: led-port-49, at: [384.20, 23.00], size: [2.25, 2.0], shape: circle}
       - {id: led-port-50, at: [413.90, 23.00], size: [2.25, 2.0], shape: circle}
-      - {id: led-console-usb, at: [391.40, 10.10], size: [2.0, 2.0], shape: circle}
-      - {id: led-console-rj45, at: [396.00, 10.10], size: [2.0, 2.0], shape: circle}
-      - {id: led-mgmt, at: [428.50, 23.40], size: [2.0, 2.0], shape: circle}
+      - {id: led-console-usb, at: [391.26, 10.15], size: [2.25, 2.0], shape: circle}
+      - {id: led-console-rj45, at: [396.09, 10.03], size: [2.0, 2.25], shape: circle}
+      - {id: led-mgmt, at: [427.03, 23.11], size: [2.25, 2.0], shape: circle}
       - {id: led-system, at: [6.10, 12.30], size: [2.0, 2.0], shape: circle}
       - {id: led-rps, at: [6.10, 14.90], size: [2.0, 2.0], shape: circle}
       - {id: led-master, at: [6.10, 17.40], size: [2.0, 2.0], shape: circle}
@@ -441,10 +608,91 @@ views:
     silkscreen:
     - {block: rj45}
     - {id: silk-model, at: [416.00, 4.50], text: 'Catalyst 2960-S Series PoE+ 10G', font-size: 2.9, anchor: middle, fill: '#f2f2f2', for: chassis}
-    - {id: silk-console, at: [400.40, 7.40], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#bbd5d8', for: console}
+    - {id: silk-console, at: [395.02, 8.81], text: CONSOLE, font-size: 1.72, anchor: middle, fill: '#bbd5d8', for: console}
+    - {id: usb-symbol-lines, at: [377.8, 3.75], path: 'M 0 0.7 V 4.66 M -0.77 2.72 Q -0.7 3.5 0 3.53 M 0.8 2.06 Q 0.7 2.83 0 2.83',
+       filled: false, stroke-width: 0.2, fill: '#ffffff', for: chassis}
+    - {id: usb-symbol-heads, at: [377.8, 3.75], path: 'M 0 0 L 0.43 0.7 H -0.44 Z M -0.5 4.66 a 0.5 0.5 0 1 0 1 0 a 0.5 0.5 0 1 0 -1 0 Z M -1.41 2.28 a 0.53 0.53 0 1 0 1.06 0 a 0.53 0.53 0 1 0 -1.06 0 Z M 0.36 1.58 a 0.51 0.51 0 1 0 1.02 0 a 0.51 0.51 0 1 0 -1.02 0 Z',
+       fill: '#ffffff', for: chassis}
+    - id: lamp-hole-cover
+      at: [0, 0]
+      path: >-
+        M 26.54 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 32.24 8.32 a 1.1 0.975 0 1 0 2.2 0
+        a 1.1 0.975 0 1 0 -2.2 0 Z M 40.5 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 46.2
+        8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 54.48 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1
+        0.975 0 1 0 -2.2 0 Z M 60.17 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 68.45 8.32 a
+        1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 74.15 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0
+        1 0 -2.2 0 Z M 82.42 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 88.12 8.32 a 1.1
+        0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 96.38 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0
+        -2.2 0 Z M 102.09 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 115.93 8.32 a 1.1 0.975
+        0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 121.63 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2
+        0 Z M 129.9 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 135.61 8.32 a 1.1 0.975 0 1 0
+        2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 143.87 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M
+        149.58 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 157.84 8.32 a 1.1 0.975 0 1 0 2.2 0
+        a 1.1 0.975 0 1 0 -2.2 0 Z M 163.55 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 171.81
+        8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 177.52 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1
+        0.975 0 1 0 -2.2 0 Z M 185.78 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 191.49 8.32
+        a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 205.34 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975
+        0 1 0 -2.2 0 Z M 211.03 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 219.31 8.32 a 1.1
+        0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 225 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0
+        -2.2 0 Z M 233.28 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 238.97 8.32 a 1.1 0.975
+        0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 247.24 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2
+        0 Z M 252.94 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 261.21 8.32 a 1.1 0.975 0 1 0
+        2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 266.91 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M
+        275.19 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 280.89 8.32 a 1.1 0.975 0 1 0 2.2 0
+        a 1.1 0.975 0 1 0 -2.2 0 Z M 294.73 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 300.44
+        8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 308.71 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1
+        0.975 0 1 0 -2.2 0 Z M 314.4 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 322.67 8.32 a
+        1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 328.38 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0
+        1 0 -2.2 0 Z M 336.65 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 342.34 8.32 a 1.1
+        0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 350.61 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0
+        -2.2 0 Z M 356.32 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 364.59 8.32 a 1.1 0.975
+        0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 370.28 8.32 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2
+        0 Z M 384.22 24 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M 413.92 24 a 1.1 0.975 0 1 0 2.2
+        0 a 1.1 0.975 0 1 0 -2.2 0 Z M 391.28 11.15 a 1.1 0.975 0 1 0 2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z M
+        396.105 11.15 a 0.975 1.1 0 1 0 1.95 0 a 0.975 1.1 0 1 0 -1.95 0 Z M 427.05 24.11 a 1.1 0.975 0 1 0
+        2.2 0 a 1.1 0.975 0 1 0 -2.2 0 Z
+      fill: '#404040'
+      for: chassis
+    - id: lamp-arrows-up
+      at: [0, 0]
+      path: >-
+        M 27.64 7.26 L 28.83 9.38 H 26.45 Z M 41.6 7.26 L 42.79 9.38 H 40.41 Z M 55.58 7.26 L 56.77 9.38 H
+        54.39 Z M 69.55 7.26 L 70.74 9.38 H 68.36 Z M 83.52 7.26 L 84.71 9.38 H 82.33 Z M 97.48 7.26 L 98.67
+        9.38 H 96.29 Z M 117.03 7.26 L 118.22 9.38 H 115.84 Z M 131 7.26 L 132.19 9.38 H 129.81 Z M 144.97
+        7.26 L 146.16 9.38 H 143.78 Z M 158.94 7.26 L 160.13 9.38 H 157.75 Z M 172.91 7.26 L 174.1 9.38 H
+        171.72 Z M 186.88 7.26 L 188.07 9.38 H 185.69 Z M 206.44 7.26 L 207.63 9.38 H 205.25 Z M 220.41 7.26
+        L 221.6 9.38 H 219.22 Z M 234.38 7.26 L 235.57 9.38 H 233.19 Z M 248.34 7.26 L 249.53 9.38 H 247.15
+        Z M 262.31 7.26 L 263.5 9.38 H 261.12 Z M 276.29 7.26 L 277.48 9.38 H 275.1 Z M 295.83 7.26 L 297.02
+        9.38 H 294.64 Z M 309.81 7.26 L 311 9.38 H 308.62 Z M 323.77 7.26 L 324.96 9.38 H 322.58 Z M 337.75
+        7.26 L 338.94 9.38 H 336.56 Z M 351.71 7.26 L 352.9 9.38 H 350.52 Z M 365.69 7.26 L 366.88 9.38 H
+        364.5 Z M 428.15 23.05 L 429.34 25.17 H 426.96 Z
+      fill: '#808080'
+      for: chassis
+    - id: lamp-arrows-down
+      at: [0, 0]
+      path: >-
+        M 33.34 9.38 L 34.53 7.26 H 32.15 Z M 47.3 9.38 L 48.49 7.26 H 46.11 Z M 61.27 9.38 L 62.46 7.26 H
+        60.08 Z M 75.25 9.38 L 76.44 7.26 H 74.06 Z M 89.22 9.38 L 90.41 7.26 H 88.03 Z M 103.19 9.38 L
+        104.38 7.26 H 102 Z M 122.73 9.38 L 123.92 7.26 H 121.54 Z M 136.71 9.38 L 137.9 7.26 H 135.52 Z M
+        150.68 9.38 L 151.87 7.26 H 149.49 Z M 164.65 9.38 L 165.84 7.26 H 163.46 Z M 178.62 9.38 L 179.81
+        7.26 H 177.43 Z M 192.59 9.38 L 193.78 7.26 H 191.4 Z M 212.13 9.38 L 213.32 7.26 H 210.94 Z M 226.1
+        9.38 L 227.29 7.26 H 224.91 Z M 240.07 9.38 L 241.26 7.26 H 238.88 Z M 254.04 9.38 L 255.23 7.26 H
+        252.85 Z M 268.01 9.38 L 269.2 7.26 H 266.82 Z M 281.99 9.38 L 283.18 7.26 H 280.8 Z M 301.54 9.38 L
+        302.73 7.26 H 300.35 Z M 315.5 9.38 L 316.69 7.26 H 314.31 Z M 329.48 9.38 L 330.67 7.26 H 328.29 Z
+        M 343.44 9.38 L 344.63 7.26 H 342.25 Z M 357.42 9.38 L 358.61 7.26 H 356.23 Z M 371.38 9.38 L 372.57
+        7.26 H 370.19 Z M 385.32 25.06 L 386.51 22.94 H 384.13 Z M 415.02 25.06 L 416.21 22.94 H 413.83 Z M
+        392.38 12.21 L 393.57 10.09 H 391.19 Z
+      fill: '#808080'
+      for: chassis
+    - id: lamp-arrows-right
+      at: [0, 0]
+      path: >-
+        M 398.14 11.15 L 396.02 9.96 V 12.34 Z
+      fill: '#808080'
+      for: chassis
     - {id: silk-sfp, at: [402.50, 41.10], text: 'SFP+', font-size: 1.9, anchor: middle, fill: '#f2f2f2', for: chassis}
-    - {id: silk-49, at: [387.65, 42.60], text: '1', font-size: 1.9, anchor: middle, fill: '#ffffff', for: port-49}
-    - {id: silk-50, at: [417.75, 42.60], text: '2', font-size: 1.9, anchor: middle, fill: '#ffffff', for: port-50}
+    - {id: silk-49, at: [387.40, 41.52], text: '1', font-size: 2.1, anchor: middle, fill: '#595959', for: port-49}
+    - {id: silk-50, at: [417.50, 41.52], text: '2', font-size: 2.1, anchor: middle, fill: '#595959', for: port-50}
     - {id: silk-mode, at: [5.90, 40.00], text: MODE, font-size: 1.5, anchor: middle, fill: '#ffffff', for: chassis}
     - {id: silk-syst, at: [10.00, 13.83], text: SYST, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-system}
     - {id: silk-rps, at: [10.00, 16.43], text: RPS, font-size: 1.7, anchor: start, fill: '#ffffff', for: led-rps}
@@ -498,11 +746,11 @@ views:
          attrs: {media: rj45-serial, role: console}}
       - {ref: std/rj45-ganged@2, id: mgmt, at: [423.15, 8.80], rotate: 180, group: mgmt, rel-pos: 2,
          attrs: {media: rj45, speed: 1g, role: mgmt}}
-      - {ref: common/led-dot@1, id: led-console-usb, at: [391.40, 10.10], group: leds, rel-pos: 6, for: console-usb,
-         states: ['off', {name: active, color: '#22c55e'}]}
-      - {ref: common/led-dot@1, id: led-console-rj45, at: [396.00, 10.10], group: leds, rel-pos: 7, for: console,
-         states: ['off', {name: active, color: '#22c55e'}]}
-      - {ref: common/led-dot@1, id: led-mgmt, at: [428.50, 23.40], group: leds, rel-pos: 8, for: mgmt,
+      - {ref: common/led-arrow-sm@1, id: led-console-usb, at: [391.26, 10.15], skin: down, group: leds, rel-pos: 6,
+         for: console-usb, states: ['off', {name: active, color: '#22c55e'}]}
+      - {ref: common/led-arrow-sm@1, id: led-console-rj45, at: [395.96, 10.15], skin: up, rotate: 90, group: leds,
+         rel-pos: 7, for: console, states: ['off', {name: active, color: '#22c55e'}]}
+      - {ref: common/led-arrow-sm@1, id: led-mgmt, at: [427.03, 23.11], skin: up, group: leds, rel-pos: 8, for: mgmt,
          states: ['off', {name: link, color: '#22c55e'}]}
       - {ref: common/led-dot@1, id: led-system, at: [6.10, 12.30], group: leds, rel-pos: 1, for: chassis,
          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
@@ -541,41 +789,70 @@ views:
          pattern-pitch: [17.72, 10.22], pattern-offset: [161.8, 21.9]}
       - {id: rps-plate, kind: bracket, at: [285.0, 21.4], size: [72.8, 22.6], rx: 0.6, fill: '#b3b7b4'}
       - {id: rps-rating-strip, kind: label-plate, at: [297.7, 17.9], size: [49.2, 3.8], rx: 0.4, fill: '#b3b7b4'}
-      - {id: rps-shroud, kind: shroud, at: [298.4, 24.0], size: [48.2, 11.3], rx: 0.5, fill: '#141717'}
-      - {id: rps-housing, kind: housing, at: [299.1, 25.1], size: [46.9, 9.7], rx: 0.3, fill: '#e9ebe1'}
-      - {id: rps-pin-1-1, kind: pin-cavity, at: [299.85, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-1-2, kind: pin-cavity, at: [304.02, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-1-3, kind: pin-cavity, at: [308.19, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-1-4, kind: pin-cavity, at: [312.36, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-1-5, kind: pin-cavity, at: [316.53, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-1-6, kind: pin-cavity, at: [320.70, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-1-7, kind: pin-cavity, at: [324.87, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-1-8, kind: pin-cavity, at: [329.04, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-1-9, kind: pin-cavity, at: [333.21, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-1-10, kind: pin-cavity, at: [337.38, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-1-11, kind: pin-cavity, at: [341.55, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-2-1, kind: pin-cavity, at: [299.85, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-2-2, kind: pin-cavity, at: [304.02, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-2-3, kind: pin-cavity, at: [308.19, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-2-4, kind: pin-cavity, at: [312.36, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-2-5, kind: pin-cavity, at: [316.53, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-2-6, kind: pin-cavity, at: [320.70, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-2-7, kind: pin-cavity, at: [324.87, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-2-8, kind: pin-cavity, at: [329.04, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-2-9, kind: pin-cavity, at: [333.21, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-2-10, kind: pin-cavity, at: [337.38, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
-      - {id: rps-pin-2-11, kind: pin-cavity, at: [341.55, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#625945'}
+      - {id: rps-shroud, kind: shroud, at: [298.4, 24.0], size: [48.2, 11.3], rx: 0.5, fill: '#656c66'}
+      - {id: rps-housing, kind: housing, at: [299.1, 25.1], size: [46.9, 9.7], rx: 0.3, fill: '#f4f5ee'}
+      - {id: rps-housing-top-edge, kind: shroud, at: [298.4, 24.0], size: [48.2, 1.1], rx: 0.3, fill: '#0e1010'}
+      - {id: rps-pin-1-1, kind: pin-cavity, at: [299.85, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-1-2, kind: pin-cavity, at: [304.02, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-1-3, kind: pin-cavity, at: [308.19, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-1-4, kind: pin-cavity, at: [312.36, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-1-5, kind: pin-cavity, at: [316.53, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-1-6, kind: pin-cavity, at: [320.70, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-1-7, kind: pin-cavity, at: [324.87, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-1-8, kind: pin-cavity, at: [329.04, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-1-9, kind: pin-cavity, at: [333.21, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-1-10, kind: pin-cavity, at: [337.38, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-1-11, kind: pin-cavity, at: [341.55, 26.10], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-2-1, kind: pin-cavity, at: [299.85, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-2-2, kind: pin-cavity, at: [304.02, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-2-3, kind: pin-cavity, at: [308.19, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-2-4, kind: pin-cavity, at: [312.36, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-2-5, kind: pin-cavity, at: [316.53, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-2-6, kind: pin-cavity, at: [320.70, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-2-7, kind: pin-cavity, at: [324.87, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-2-8, kind: pin-cavity, at: [329.04, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-2-9, kind: pin-cavity, at: [333.21, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-2-10, kind: pin-cavity, at: [337.38, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-pin-2-11, kind: pin-cavity, at: [341.55, 30.13], size: [3.5, 3.7], rx: 0.3, fill: '#7d7464'}
+      - {id: rps-contact-1-1, kind: pin-contact, at: [301.00, 27.35], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-1-2, kind: pin-contact, at: [305.17, 27.35], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-1-3, kind: pin-contact, at: [309.34, 27.35], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-1-4, kind: pin-contact, at: [313.51, 27.35], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-1-5, kind: pin-contact, at: [317.68, 27.35], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-1-6, kind: pin-contact, at: [321.85, 27.35], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-1-7, kind: pin-contact, at: [326.02, 27.35], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-1-8, kind: pin-contact, at: [330.19, 27.35], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-1-9, kind: pin-contact, at: [334.36, 27.35], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-1-10, kind: pin-contact, at: [338.53, 27.35], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-1-11, kind: pin-contact, at: [342.70, 27.35], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-2-1, kind: pin-contact, at: [301.00, 31.38], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-2-2, kind: pin-contact, at: [305.17, 31.38], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-2-3, kind: pin-contact, at: [309.34, 31.38], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-2-4, kind: pin-contact, at: [313.51, 31.38], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-2-5, kind: pin-contact, at: [317.68, 31.38], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-2-6, kind: pin-contact, at: [321.85, 31.38], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-2-7, kind: pin-contact, at: [326.02, 31.38], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-2-8, kind: pin-contact, at: [330.19, 31.38], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-2-9, kind: pin-contact, at: [334.36, 31.38], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-2-10, kind: pin-contact, at: [338.53, 31.38], size: [1.2, 1.2], fill: '#887555'}
+      - {id: rps-contact-2-11, kind: pin-contact, at: [342.70, 31.38], size: [1.2, 1.2], fill: '#887555'}
       - {id: rps-screw-l, kind: screw-hole, at: [293.3, 28.4], size: [2.8, 2.8], shape: slot, fill: '#141717'}
       - {id: rps-screw-r, kind: screw-hole, at: [348.8, 28.4], size: [2.8, 2.8], shape: slot, fill: '#141717'}
       - {id: warning-label, kind: label-print, at: [294.0, 5.9], size: [45.2, 9.7], rx: 0.4, fill: '#404040'}
       - {id: rating-label, kind: label-plate, at: [351.0, 6.1], size: [32.7, 13.4], rx: 0.6, fill: '#a5aba7'}
       - {id: inlet-surround, kind: moulding, at: [387.6, 8.3], size: [29.3, 22.5], rx: 3.5, fill: '#111113'}
-      - {id: rear-screw-1, kind: screw, at: [108.0, 25.3], size: [6.8, 6.8], shape: slot, fill: '#c2cfce'}
-      - {id: rear-screw-2, kind: screw, at: [270.8, 25.3], size: [6.8, 6.8], shape: slot, fill: '#c2cfce'}
-      - {id: rear-screw-3, kind: screw, at: [433.0, 25.3], size: [6.8, 6.8], shape: slot, fill: '#c2cfce'}
+      - {id: rear-screw-1, kind: screw, at: [108.0, 25.3], size: [6.8, 6.8], shape: slot, fill: '#bdc8c5'}
+      - {id: rear-screw-2, kind: screw, at: [270.8, 25.3], size: [6.8, 6.8], shape: slot, fill: '#bdc8c5'}
+      - {id: rear-screw-3, kind: screw, at: [433.0, 25.3], size: [6.8, 6.8], shape: slot, fill: '#bdc8c5'}
       cutouts:
       - {id: ac-inlet, at: [388.4, 9.1], size: [28.0, 20.0], shape: rect}
     silkscreen:
+    - {id: rear-screw-cross-1, at: [111.4, 28.7], path: 'M -2.15 0 H 2.15 M 0 -2.15 V 2.15', filled: false, stroke-width: 0.35,
+       fill: '#667572', for: chassis}
+    - {id: rear-screw-cross-2, at: [274.2, 28.7], path: 'M -2.15 0 H 2.15 M 0 -2.15 V 2.15', filled: false, stroke-width: 0.35,
+       fill: '#667572', for: chassis}
+    - {id: rear-screw-cross-3, at: [436.4, 28.7], path: 'M -2.15 0 H 2.15 M 0 -2.15 V 2.15', filled: false, stroke-width: 0.35,
+       fill: '#667572', for: chassis}
     - {id: warning-triangle, at: [298.15, 7.6], path: 'M 0 0 L 4.05 7.1 H -4.05 Z M 0 2.6 V 4.9 M 0 5.9 V 6.2', filled: false,
        stroke-width: 0.35, fill: '#dce0e0', for: chassis}
     - {id: silk-warning-1, at: [322.2, 8.42], text: 'DC INPUTS FOR REMOTE', font-size: 2.6, anchor: middle, fill: '#cfd3d1', for: chassis}

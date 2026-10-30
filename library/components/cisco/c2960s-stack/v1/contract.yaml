@@ -43,11 +43,20 @@ provenance:
     and the three captive screws at the cover's own places (the same photograph).
   colour: >-
     estimated, each the median of plain pixels of the NetBox WS-C2960S-48LPD-L rear photograph
-    (cisco-ws-c2960s-48lpd-l.rear.png). Face #393e41: 3600 px, box (80,60,140,120). Frame #344a54, as the cover reads it
-    (a lit bevel reads lighter: the top rim, box (30,5,360,12), 2310 px, reads #3e535c). Port openings #171615: the
-    pixels darker than 60 in box (152,58,208,124), 2478 px. Port shell and divider #a29886: the pixels of 110 or more in
-    the same box, 960 px. Pocket frame #2b3f45: the pixels between 30 and 90 in box (148,45,215,56), 606 px. Legend ink
-    #b3b8bb: the pixels over 150 in box (215,60,275,75), 240 px. Model-name ink #a1a5a8: the pixels over 150 in box
+    (cisco-ws-c2960s-48lpd-l.rear.png). Face #393e41: 3600 px, box (80,60,140,120). Frame #3f565d: 500 px, box
+    (230,137,330,142), the bottom band, which the light does not reach; the top band's lit bevel reads #536a6f (1350 px,
+    box (60,5,330,10)). The cover's frame #344a54 (read earlier) is 11 levels darker in red and 12 in green than this
+    plain band, so the two do not agree; the cover is not edited here and keeps its own value. Frame band thickness:
+    the run of teal-blue pixels (blue over red by 14 or more) down seven columns of the photograph, at x 100, 140,
+    180, 230, 250, 280 and 300, measured 9, 8, 7, 8, 8, 9 and 9 px along the top edge (median 8 px) and 10 px along the
+    bottom edge in six of them (17 in the seventh, where the lit step meets it), a mean of 9 px, which is 2.64 mm at
+    3.41 px per mm; the skin draws the band as the outline offset inward by 2.64 mm, so the face polygon's eight
+    corners are the outline's, mitred. Port openings #171615: the pixels darker than 60 in box (152,58,208,124), 2483
+    px. Cage silver #aea699: the pixels of 150 or more in the same box, 447 px (the earlier #a29886 took the pixels of
+    110 or more, 960 px, and drew the cage as an olive outline). Pocket border (the recess round the two cages)
+    #2b3f45: the pixels between 30 and 90 in box (148,45,215,56), 606 px; its width, measured along row 70 from the
+    pocket's edge to the cage's, is 6 px, 1.76 mm, and the skin keeps the pocket box as measured. Legend ink #b3b8bb:
+    the pixels over 150 in box (215,60,275,75), 240 px. Model-name ink #a1a5a8: the pixels over 150 in box
     (260,20,310,30), 83 px. A photograph's colour depends on its lighting, and this photograph is another model's rear.
   logo: >-
     The maker's mark at the top left of the face is a logo and is NOT DRAWN. Its box, 19.7 x 10.8 mm at (15.8, 5.0), is
@@ -56,10 +65,18 @@ provenance:
   ports: >-
     estimated. The guide names two FlexStack ports on the module and no connector type, and the library has no part for
     the FlexStack port, so the two ports are the contract's own `class: port` elements (the pattern the Juniper EX4500
-    Virtual Chassis module uses) and are drawn as the photograph shows them: a dark opening in a light shell.
+    Virtual Chassis module uses) and are drawn as the photograph shows them: two stacked silver cages (#aea699) with a
+    dark opening (#171615) facing out, in a recess whose border is teal-blue (#2b3f45). Each cage keeps the place and
+    the size first measured (16.5 x 9.0 mm at (41.9, 15.2) and (41.9, 25.0)); the opening is the cage inset 0.6 mm at
+    the sides and 0.7 mm at the top and bottom, which is the 2 and 2.5 px wall the photograph shows at 3.41 px per mm.
+    The cages are not rotated.
   relief: >-
     The 3D body extrudes the skin's own `plate` outline (`shape: true`), as the blank cover does, so the slope and the
-    chamfer stand in 3D as they are drawn in 2D. The depth, 3.0 mm, is the same guess as the cover's.
+    chamfer stand in 3D as they are drawn in 2D. The depth, 3.0 mm, is the same guess as the cover's. The frame band
+    is a colour on the 2D face and the relief is one slab: its wall takes the frame's colour and its top the face's, so
+    the band is not stepped in 3D. A component contract carries no `gaps` list, so this is the declaration. Wanted: a
+    dimensioned view or a photograph of the module's edge, to say whether the face stands proud of the frame or sits
+    below it; until then the relief is one slab.
 elements:
   stack-1:
     at: [41.9, 15.2]
@@ -73,7 +90,7 @@ elements:
     description: the FlexStack port printed STACK 2
   logo-zone: {at: [15.8, 5.0], size: [19.7, 10.8], class: logo-zone}
 relief:
-  wall: '#344a54'
+  wall: '#3f565d'
   features:
     - node: plate
       out: 3.0

@@ -6,6 +6,9 @@
   `cisco/c2960s-flexstack-blank`, which has no part number because none is printed, and `cisco/c2960s-stack`, the
   C2960S-STACK FlexStack module with its STACK 1 and STACK 2 ports. The device has three configurations: the `ac` base
   build, the orderable WS-C2960S-48FPD-L and an example with the module fitted. The front draws the jack plates, bar,
-  MODE button and yellow ticks; the rear prints its labels as a stand-in from another model's photograph. The DCIM
+  MODE button, yellow ticks, one yellow tag for each pair of ports, light grey arrows under the port lamps, the
+  console label inside its surround, white plates under the console and management jacks, numeral tabs under the
+  SFP+ cages and the USB symbol; the rear draws crossed screws and a cream RPS housing, prints its labels as a
+  stand-in from another model's photograph, and the module has a teal-blue frame band and silver cages. The DCIM
   exports gain one device type per tool for WS-C2960S-48FPD-L and a module type per tool for each new component. The
   WS-C2960S-48LPD-L, -48TD-L, -24PD-L and -24TD-L follow in later batches.

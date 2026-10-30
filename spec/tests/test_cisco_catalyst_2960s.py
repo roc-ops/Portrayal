@@ -147,7 +147,7 @@ def test_48fpd_front_paints_the_teal_bezel_and_surrounds_with_their_sampled_fill
         assert dc[i]["fill"] == teal, i
     assert dc["console-surround"]["fill"] == "#bad4d7"
     assert dc["lamp-block"]["fill"] == "#404040"
-    assert {dc[f"poe-strip-{n}"]["fill"] for n in range(1, 5)} == {"#ffff99"}
+    assert {dc[f"poe-tag-{n}"]["fill"] for n in range(1, 25)} == {"#ffff99"}
 
 
 def test_48fpd_front_outlines_each_block_of_twelve_each_sfp_cage_and_the_management_jack_in_yellow():
@@ -164,8 +164,8 @@ def test_48fpd_silkscreen_on_the_dark_face_is_inked_light_from_the_chassis_silk_
     silk = {s["id"]: s for s in d["views"]["front"]["silkscreen"] if s.get("id")}
     for i in ("silk-model", "silk-console", "silk-sfp", "silk-mode", "silk-syst", "silk-poe"):
         assert "fill" not in silk[i] or silk[i]["fill"] in ("#ffffff", "#f2f2f2", "#bbd5d8"), i
-    # the port numerals above the jacks stand on yellow tags and stay dark; the SFP+ numbers stand on the panel
-    assert silk["silk-49"]["fill"] == "#ffffff" and silk["silk-50"]["fill"] == "#ffffff"
+    # the port numerals above the jacks stand on yellow tags and stay dark; the SFP+ numbers stand on white tabs
+    assert silk["silk-49"]["fill"] == "#595959" and silk["silk-50"]["fill"] == "#595959"
 
 
 def test_48fpd_colour_provenance_names_the_file_box_count_and_method():
@@ -496,11 +496,11 @@ def test_flexstack_module_logo_is_a_reserved_region_and_not_drawn():
 def test_flexstack_module_colours_equal_their_photograph_samples():
     c = component("c2960s-stack")
     skin = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
-    for colour in ("#393e41", "#344a54", "#171615", "#a29886", "#2b3f45", "#b3b8bb", "#a1a5a8"):
+    for colour in ("#393e41", "#3f565d", "#171615", "#aea699", "#2b3f45", "#b3b8bb", "#a1a5a8"):
         assert colour in skin, colour
     note = c["provenance"]["colour"]
-    for needle in ("(80,60,140,120)", "3600", "#393e41", "2478", "#171615", "960", "#a29886", "606", "#2b3f45",
-                   "median", "estimated"):
+    for needle in ("(80,60,140,120)", "3600", "#393e41", "2483", "#171615", "447", "#aea699", "606", "#2b3f45",
+                   "(230,137,330,142)", "500 px", "#3f565d", "median", "estimated"):
         assert needle in note, needle
 
 
@@ -525,3 +525,308 @@ def test_48fpd_exports_one_device_type_per_orderable_part_number():
         doc = yaml.safe_load(path.read_text())
         assert doc["u_height"] == 1
         assert doc["model"] == "WS-C2960S-48FPD-L"
+
+
+# --- the third look: the owner's fourteen notes on the preview ---------------------------------------------
+#
+# Front figures are read from the NetBox 48FPD-L stencil at 11.345 px per mm (the chassis 216 px in), rear
+# figures from the NetBox 48LPD-L rear photograph at 3.41 px per mm. Each colour below is the median of the
+# pixels of the box its provenance names.
+
+LAMP = "common/led-arrow-sm@1"
+
+
+def lamps(d):
+    return [p for p in placements(d, "front") if p.get("ref") == LAMP]
+
+
+def subpaths(path):
+    return path.count("M ")
+
+
+def centre(p):
+    return (p["at"][0] + 1.125, p["at"][1] + 1.0)
+
+
+def test_48fpd_port_arrows_are_up_for_odd_ports_and_down_for_even_with_no_dark_disc_left():
+    """Stencil arrows: light grey #808080 (120 px, box 520,96,535,104), no circle, 2.38 x 2.12 mm."""
+    d = device("ws-c2960s-48fpd")
+    p = by_id(d, "front")
+    for n in range(1, 49):
+        assert p[f"led-port-{n}"]["ref"] == LAMP
+        assert p[f"led-port-{n}"]["skin"] == ("up" if n % 2 else "down"), n
+    assert p["led-port-49"]["skin"] == "down" and p["led-port-50"]["skin"] == "down"
+    s = silk_ids(d, "front")
+    ups = [x for x in lamps(d) if x["skin"] == "up" and not x.get("rotate")]
+    downs = [x for x in lamps(d) if x["skin"] == "down"]
+    assert (len(ups), len(downs)) == (25, 27)
+    assert s["lamp-arrows-up"]["fill"] == s["lamp-arrows-down"]["fill"] == s["lamp-arrows-right"]["fill"] == "#808080"
+    assert subpaths(s["lamp-arrows-up"]["path"]) == len(ups)
+    assert subpaths(s["lamp-arrows-down"]["path"]) == len(downs)
+    assert subpaths(s["lamp-arrows-right"]["path"]) == 1
+    # the disc each punched lamp opening draws is covered in the panel colour, one cover for each opening
+    cuts = [c for c in d["views"]["front"]["panel"]["cutouts"] if c["id"].startswith(("led-port-", "led-console-", "led-mgmt"))]
+    assert len(cuts) == len(lamps(d)) == 53
+    assert s["lamp-hole-cover"]["fill"] == d["chassis"]["color"] == "#404040"
+    assert subpaths(s["lamp-hole-cover"]["path"]) == len(cuts)
+    order = [x["id"] for x in d["views"]["front"]["silkscreen"] if x.get("id")]
+    assert order.index("lamp-hole-cover") < order.index("lamp-arrows-up")
+
+
+def test_48fpd_port_arrow_fill_gap_says_the_lamp_part_keeps_its_dark_fill():
+    g = gaps(device("ws-c2960s-48fpd"))["port-arrow-fill"]["wanted"]
+    for needle in ("#808080", "led-arrow-sm", "2.38 x 2.12", "not edited", "Figure 1-9", "PDF p18", "printed 1-16"):
+        assert needle in g, needle
+
+
+def test_48fpd_console_and_management_lamps_are_arrows_where_the_stencil_has_them():
+    """Stencil arrow centres (392.38, 11.15), (397.09, 11.15) and (428.16, 24.11) mm; Figure 1-9 calls two of them LEDs."""
+    d = device("ws-c2960s-48fpd")
+    p = by_id(d, "front")
+    want = {"led-console-usb": ((392.38, 11.15), "down", None), "led-console-rj45": ((397.09, 11.15), "up", 90),
+            "led-mgmt": ((428.16, 24.11), "up", None)}
+    for i, ((x, y), skin, rot) in want.items():
+        assert p[i]["ref"] == LAMP and p[i]["skin"] == skin and p[i].get("rotate") == rot, i
+        cx, cy = centre(p[i])
+        assert abs(cx - x) < 0.05 and abs(cy - y) < 0.05, i
+        assert p[i]["group"] == "leds"
+    assert p["led-console-usb"]["for"] == "console-usb" and p["led-console-rj45"]["for"] == "console"
+    assert "Figure 1-9" in d["provenance"]["controls-and-lamps"]["note"]
+
+
+def test_48fpd_console_label_stands_inside_the_surround_and_clears_the_arrow_row():
+    """Stencil label #bbd5d8 (578 px, box 4648,85,4746,101), cap height 1.23 mm, baseline 8.81 mm, centre 395.02 mm."""
+    d = device("ws-c2960s-48fpd")
+    lab = silk_ids(d, "front")["silk-console"]
+    assert lab["text"] == "CONSOLE" and lab["fill"] == "#bbd5d8" and lab["at"] == [395.02, 8.81]
+    assert lab["font-size"] >= 1.5
+    panel = decor(d, "front")["console-panel"]
+    top = lab["at"][1] - 0.716 * lab["font-size"]
+    assert top >= panel["at"][1] and lab["at"][1] < p_arrow_top(d), "the label sits under the panel's top edge, above the arrows"
+    half = 4.9 * lab["font-size"] / 2
+    assert lab["at"][0] - half > panel["at"][0] and lab["at"][0] + half < panel["at"][0] + panel["size"][0]
+
+
+def p_arrow_top(d):
+    p = by_id(d, "front")
+    return min(p[i]["at"][1] for i in ("led-console-usb", "led-console-rj45"))
+
+
+def test_48fpd_console_and_management_jacks_stand_on_the_stencils_white_plates():
+    """Plate #efefef (10086 px each, boxes 4782,86,4959,226 and 4998,86,5175,226), 15.6 x 12.34 mm."""
+    d = device("ws-c2960s-48fpd")
+    dc = decor(d, "front")
+    for i, x in (("console-jack-plate", 402.47), ("mgmt-jack-plate", 421.51)):
+        assert dc[i]["at"] == [x, 7.58] and dc[i]["size"] == [15.6, 12.34] and dc[i]["fill"] == "#efefef"
+    o = order(d, "front")
+    assert o.index("console-panel") < o.index("console-jack-plate") < o.index("mgmt-outline")
+    out = dc["mgmt-outline"]
+    assert out["at"][0] + 0.5 < dc["mgmt-jack-plate"]["at"][0]
+    assert dc["mgmt-jack-plate"]["at"][0] + 15.6 < out["at"][0] + out["size"][0] - 0.5
+    p = by_id(d, "front")
+    assert p["console"]["rotate"] == 180 and p["mgmt"]["rotate"] == 180 and p["console"]["ref"] == "std/rj45-ganged@2"
+    g = gaps(d)["rj45-white-body-skin"]["wanted"]
+    assert "std/rj45-ganged@2" in g and "left: the part's skin" in g and "latch stays up" in g
+
+
+def test_48fpd_usb_a_keeps_its_part_its_skin_and_its_rotation_and_declares_the_interior():
+    d = device("ws-c2960s-48fpd")
+    u = by_id(d, "front")["usb-a"]
+    assert u["ref"] == "std/usb-a@1" and u["skin"] == "usb2" and u["rotate"] == 90
+    g = gaps(d)["usb-a-interior"]["wanted"]
+    for needle in ("silver interior", "tongue at the left", "270 degree", "owner", "Figure 1-1", "#7b7b7b"):
+        assert needle in g, needle
+
+
+def test_48fpd_mini_b_connector_is_the_placed_part_unturned_and_the_contact_side_is_declared():
+    d = device("ws-c2960s-48fpd")
+    m = by_id(d, "front")["console-usb"]
+    assert m["ref"] == "std/mini-usb@1" and "rotate" not in m and m["at"] == [390.65, 17.0]
+    cut = [c for c in d["views"]["front"]["panel"]["cutouts"] if c["id"] == "console-usb"][0]
+    assert cut["size"] == [7.7, 3.9]
+    g = gaps(d)["mini-usb-contact-side"]["wanted"]
+    for needle in ("lower half", "only source", "Figure 1-5", "PDF p9", "printed 1-7", "not turned"):
+        assert needle in g, needle
+
+
+def test_48fpd_sfp_cages_have_the_stencils_numeral_tabs_pull_tabs_and_dark_numerals_on_them():
+    """Tab #f2f2f2 (2112 px), numeral #595959 (70 px), pull tab #c1c5cb (240 px), projection #000000 (861 px)."""
+    d = device("ws-c2960s-48fpd")
+    dc = decor(d, "front")
+    s = silk_ids(d, "front")
+    for n, (tx, nx) in ((1, (383.61, 387.40)), (2, (413.75, 417.50))):
+        tab = dc[f"sfp-number-tab-{n}"]
+        assert tab["at"] == [tx, 39.49] and tab["size"] == [7.49, 2.73] and tab["fill"] == "#f2f2f2"
+        num = s[f"silk-{48 + n}"]
+        assert num["text"] == str(n) and num["fill"] == "#595959" and num["at"] == [nx, 41.52]
+        assert tab["at"][0] < num["at"][0] < tab["at"][0] + tab["size"][0]
+        assert tab["at"][1] < num["at"][1] - 0.716 * num["font-size"] and num["at"][1] < tab["at"][1] + tab["size"][1]
+        assert dc[f"sfp-pull-tab-{n}"]["fill"] == "#c1c5cb" and dc[f"sfp-pull-tab-shadow-{n}"]["fill"] == "#000000"
+    assert s["silk-sfp"]["text"] == "SFP+" and s["silk-sfp"]["at"] == [402.5, 41.1]
+    o = order(d, "front")
+    assert o.index("sfp-frame-1") < o.index("sfp-pull-tab-shadow-1") < o.index("sfp-pull-tab-1") < o.index("sfp-outline-1")
+    g = gaps(d)["sfp-collar-silver"]["wanted"]
+    for needle in ("clips", "gold contacts", "Not drawn", "std/sfp", "#c1c5cb", "#f2f2f2", "#595959"):
+        assert needle in g, needle
+
+
+def test_48fpd_mgmt_base_t_legend_is_declared_because_it_is_under_the_legend_size():
+    d = device("ws-c2960s-48fpd")
+    assert not [x for x in silk_ids(d, "front").values() if "MGMT" in str(x.get("text", ""))]
+    g = gaps(d)["mgmt-base-t-legend"]["wanted"]
+    for needle in ("BASET", "0.78 mm", "1.5 mm", "#ffff99", "not drawn"):
+        assert needle in g, needle
+
+
+def test_48fpd_poe_tags_are_one_yellow_tag_for_each_pair_under_the_numerals():
+    """24 tags, #ffff99 (240 px, box 490,32,530,38), 13.18 x 3.44 mm at y 2.64, at the runs measured on the stencil."""
+    d = device("ws-c2960s-48fpd")
+    dc = decor(d, "front")
+    xs = [23.89, 37.81, 51.74, 65.76, 79.68, 93.61, 113.27, 127.19, 141.12, 155.13, 169.06, 182.99,
+          202.64, 216.57, 230.5, 244.51, 258.44, 272.37, 292.02, 305.95, 319.88, 333.89, 347.82, 361.75]
+    tags = [dc[f"poe-tag-{n}"] for n in range(1, 25)]
+    assert [t["at"] for t in tags] == [[x, 2.64] for x in xs]
+    assert {tuple(t["size"]) for t in tags} == {(13.18, 3.44)} and {t["fill"] for t in tags} == {"#ffff99"}
+    assert not [k for k in dc if k.startswith("poe-strip")]
+    for a, b in zip(tags, tags[1:]):  # the tags do not touch
+        assert a["at"][0] + a["size"][0] < b["at"][0]
+    o = order(d, "front")
+    assert o.index("poe-tag-24") < o.index("jack-block-outline-1"), "the tags are decor, under the numerals' silkscreen"
+    assert "wrong" in d["provenance"]["front-marks"]["note"] and "Figure 1-1" in d["provenance"]["front-marks"]["note"]
+
+
+def test_48fpd_usb_symbol_is_drawn_white_and_the_logo_stays_a_region():
+    d = device("ws-c2960s-48fpd")
+    s = silk_ids(d, "front")
+    assert s["usb-symbol-lines"]["fill"] == s["usb-symbol-heads"]["fill"] == "#ffffff"
+    assert subpaths(s["usb-symbol-heads"]["path"]) == 4  # the arrowhead and the three discs
+    assert s["usb-symbol-lines"]["at"][0] + 1.5 < decor(d, "front")["usb-surround"]["at"][0]
+    assert [r["id"] for r in d["views"]["front"]["regions"] if r["id"] == "logo-zone"] == ["logo-zone"]
+    assert not [x for x in s.values() if "cisco" in str(x.get("text", "")).lower()]
+    g = gaps(d)["front-text-and-corner-marks"]["wanted"]
+    assert "740 W" in g and "PDF p62" in g and "never drawn" in g and "16 of them" in g
+
+
+def test_48fpd_rear_label_gap_opens_with_the_stand_in_line_and_asks_the_owner_to_choose():
+    d = device("ws-c2960s-48fpd")
+    g = gaps(d)["rear-label-text"]["wanted"]
+    assert g.startswith("Label figures are another model's, kept as stand-ins.")
+    for needle in ("9 to 4 A", "+12 V @ 4 A, -52 V @ 15 A", "5 to 2 A", "1 to 0.5 A", "PDF p62, printed 1-2",
+                   "PDF p64, printed 1-4", "Figure 1-10", "12-6A", "owner's decision"):
+        assert needle in g, needle
+    assert d["provenance"]["rear-labels"]["confidence"] == "estimated"
+
+
+def test_48fpd_rear_screws_have_the_cross_the_modules_screws_use_at_the_measured_places():
+    """Heads #bdc8c5 (360 px, box 926,88,946,109; the median of three), slot ink #667572 (85 px, box 1478,88,1496,106)."""
+    d = device("ws-c2960s-48fpd")
+    dc, s = decor(d, "rear"), silk_ids(d, "rear")
+    for n, x in ((1, 108.0), (2, 270.8), (3, 433.0)):
+        scr = dc[f"rear-screw-{n}"]
+        assert scr["at"] == [x, 25.3] and scr["size"] == [6.8, 6.8] and scr["fill"] == "#bdc8c5"
+        cross = s[f"rear-screw-cross-{n}"]
+        assert cross["fill"] == "#667572" and cross["filled"] is False
+        assert cross["at"] == [round(x + 3.4, 2), 28.7]
+        assert cross["path"] == "M -2.15 0 H 2.15 M 0 -2.15 V 2.15"
+    module = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
+    assert module.count('stroke-width="0.35" fill="none"/></g>') >= 3, "the module's own screws are crossed"
+
+
+def test_48fpd_rear_undrawn_details_gap_lists_what_the_photograph_shows_and_the_render_does_not():
+    d = device("ws-c2960s-48fpd")
+    g = gaps(d)["rear-undrawn-details"]
+    assert g["scope"] == ["rear"]
+    for needle in ("diagonal edge", "two small oval tabs", "#323637", "#373b3e", "rectangular outline marks",
+                   "round hole", "notch", "three pins", "dimensioned view"):
+        assert needle in g["wanted"], needle
+    assert not [k for k in decor(d, "rear") if "tab" in k], "the tabs are too faint to place and are not drawn"
+
+
+def test_48fpd_rps_connector_fills_equal_their_photograph_samples_and_the_counts_are_unchanged():
+    """Housing #f4f5ee (905 px), cells #7d7464 (594 px), contacts #887555 (198 px), top edge #0e1010 (420 px)."""
+    d = device("ws-c2960s-48fpd")
+    dc = decor(d, "rear")
+    assert dc["rps-housing"]["fill"] == "#f4f5ee" and dc["rps-housing"]["at"] == [299.1, 25.1]
+    cells = [v for k, v in dc.items() if k.startswith("rps-pin-")]
+    contacts = [v for k, v in dc.items() if k.startswith("rps-contact-")]
+    assert len(cells) == 22 and {c["fill"] for c in cells} == {"#7d7464"}
+    assert len(contacts) == 22 and {c["fill"] for c in contacts} == {"#887555"}
+    for c in cells:  # a contact sits in the middle of its cell
+        mid = [v for v in contacts if abs(v["at"][0] - (c["at"][0] + 1.15)) < 0.01 and abs(v["at"][1] - (c["at"][1] + 1.25)) < 0.01]
+        assert len(mid) == 1
+    assert dc["rps-shroud"]["fill"] == "#656c66" and dc["rps-housing-top-edge"]["fill"] == "#0e1010"
+    assert dc["rps-housing-top-edge"]["at"][1] == dc["rps-shroud"]["at"][1]
+    o = order(d, "rear")
+    assert o.index("rps-shroud") < o.index("rps-housing") < o.index("rps-pin-1-1") < o.index("rps-contact-1-1")
+    assert o.index("rps-shroud") < o.index("rps-housing-top-edge")
+    top = dc["rps-housing-top-edge"]
+    assert top["at"][1] + top["size"][1] <= dc["rps-housing"]["at"][1] + 0.001, "the edge lies above the housing"
+    assert "rps-connector-part" in gaps(d)
+
+
+def test_48fpd_rear_colour_gap_adds_the_second_photograph_and_the_guides_three_faces():
+    g = gaps(device("ws-c2960s-48fpd"))["faceplate-colour"]["wanted"]
+    for needle in ("#3f4447", "2000 px", "#404145", "1120 px", "#44464a", "1800 px", "#d4d6d8", "3500 px", "#bebdbb",
+                   "15000 px", "#8f908f", "1250 px", "Figure 1-10", "PDF p19", "printed 1-17", "#404040"):
+        assert needle in g, needle
+    assert device("ws-c2960s-48fpd")["chassis"]["color"] == "#404040"
+
+
+# --- the FlexStack module's frame band and its two silver cages -------------------------------------------
+
+
+def inset(points, t):
+    n = len(points)
+    lines = []
+    for i in range(n):
+        a, b = points[i], points[(i + 1) % n]
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        ln = (dx * dx + dy * dy) ** 0.5
+        lines.append(((a[0] - dy / ln * t, a[1] + dx / ln * t), (dx, dy)))
+    out = []
+    for i in range(n):
+        (p1, d1), (p2, d2) = lines[i - 1], lines[i]
+        den = d1[0] * d2[1] - d1[1] * d2[0]
+        k = ((p2[0] - p1[0]) * d2[1] - (p2[1] - p1[1]) * d2[0]) / den
+        out.append((p1[0] + d1[0] * k, p1[1] + d1[1] * k))
+    return out
+
+
+def test_flexstack_module_frame_is_a_band_of_the_measured_thickness_inside_the_unchanged_outline():
+    """Band 9 px (8 top, 10 bottom) at 3.41 px per mm = 2.64 mm; frame #3f565d (500 px, box 230,137,330,142)."""
+    skin = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
+    assert path_points(skin, "plate") == BLANK_OUTLINE
+    face = path_points(skin, "face")
+    want = inset(BLANK_OUTLINE, 2.64)
+    assert len(face) == 8
+    assert all(abs(a[0] - b[0]) < 0.02 and abs(a[1] - b[1]) < 0.02 for a, b in zip(face, want))
+    import re
+    assert re.search(r'<path id="plate"[^>]*fill="#3f565d"', skin) and re.search(r'<path id="face"[^>]*fill="#393e41"', skin)
+    assert skin.index('id="plate"') < skin.index('id="face"') < skin.index('id="pocket"')
+    c = component("c2960s-stack")
+    assert c["size"] == {"w": 103.3, "h": 39.0, "d": 3.0} and c["relief"]["wall"] == "#3f565d"
+    assert "2.64 mm" in c["provenance"]["colour"] and "gaps" not in c
+    rel = c["provenance"]["relief"]
+    assert "one slab" in rel and "not stepped in 3D" in rel and "Wanted:" in rel and c["relief"]["features"][0]["color"] == "#393e41"
+    blank = (COMPONENTS / "c2960s-flexstack-blank/v1/skins/default.svg").read_text()
+    assert path_points(blank, "plate") == path_points(skin, "plate"), "the cover's outline is the owner's answer A"
+
+
+def test_flexstack_module_ports_are_two_silver_cages_with_dark_openings_in_a_blue_recess_and_no_olive_outline():
+    """Cage #aea699 (447 px, box 152,58,208,124), opening #171615 (2483 px), recess border #2b3f45 (606 px)."""
+    import re
+    skin = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
+    assert "#a29886" not in skin
+    c = component("c2960s-stack")
+    for i, y in (("stack-1", 15.2), ("stack-2", 25.0)):
+        g = re.search(r'<g id="%s">(.*?)</g>' % i, skin, re.S).group(1)
+        rects = re.findall(r'<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"[^>]*fill="(#[0-9a-f]+)"', g)
+        (sx, sy, sw, sh, sf), (ox, oy, ow, oh, of) = rects
+        assert (float(sx), float(sy), float(sw), float(sh), sf) == (41.9, y, 16.5, 9.0, "#aea699")
+        assert of == "#171615" and float(ox) > float(sx) and float(oy) > float(sy)
+        assert float(ox) + float(ow) < float(sx) + float(sw) and float(oy) + float(oh) < float(sy) + float(sh)
+        assert c["elements"][i]["at"] == [41.9, y] and c["elements"][i]["size"] == [16.5, 9.0]
+    assert re.search(r'<rect id="pocket"[^>]*fill="#2b3f45"', skin)
+    assert set(k for k, v in c["elements"].items() if v["class"] == "port") == {"stack-1", "stack-2"}
+    assert ">STACK 1<" in skin and ">STACK 2<" in skin and ">C2960S-STACK<" in skin
+    assert "rotate" not in skin and c["elements"]["logo-zone"]["class"] == "logo-zone"
