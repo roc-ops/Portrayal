@@ -1,0 +1,90 @@
+# spec/tools/dev/port_families.yaml
+# Which family of port a part belongs to, for `part_conformance.py --by-family`: the findings of a scan
+# (C19 to C22) sorted into the groups a person triages them in. A part gets the first family that
+# any of these rules gives it, in this order:
+#
+#   1. its own `interface` is listed under `interfaces` below (a part composing a part that presents one
+#      is not given a family by it: only the part that presents the interface is)
+#   2. its class is `psu`: `psu.dc` when its `attrs` match `psu.dc-when`, else `psu.ac`
+#   3. its class is listed under `classes`
+#   4. a pattern of `name-patterns` matches its name (the text after the namespace, before the major),
+#      the first pattern that matches winning; a cause with no part is matched on its drawn path
+#   5. `other`
+#
+# `by-class` on an interface overrides the family for a part of that class: the interface alone cannot
+# tell a ground stud from a pole of a DC terminal block.
+format: 1
+families:
+  - power inlets (AC)
+  - DC terminals and barrels
+  - ground and earth studs
+  - RPS
+  - stack and virtual chassis
+  - console (RJ45, USB, Mini-B, DB9)
+  - USB
+  - optics cages
+  - other
+other: other
+interfaces:
+  # AC appliance inlets and outlets
+  iec-c14: power inlets (AC)
+  iec-c20: power inlets (AC)
+  iec-c13: power inlets (AC)
+  iec-c19: power inlets (AC)
+  nema-5-15r: power inlets (AC)
+  nema-5-20r: power inlets (AC)
+  eaton-c39: power inlets (AC)
+  saf-d-grid: power inlets (AC)
+  # pluggable terminal headers, the barrel jack and the vendor output connector
+  terminal-508-2: DC terminals and barrels
+  terminal-508-5: DC terminals and barrels
+  terminal-508-6: DC terminals and barrels
+  dc-barrel: DC terminals and barrels
+  p40: DC terminals and barrels
+  # A stud a lug lands on is, in nearly every part that presents the interface, a ground stud (class
+  # ground). The poles of a DC terminal block present it too, as class screw or inlet, so those two
+  # classes go to the DC family.
+  terminal-stud:
+    family: ground and earth studs
+    by-class: {screw: DC terminals and barrels, inlet: DC terminals and barrels}
+  stud-pair-5-8:
+    family: ground and earth studs
+    by-class: {screw: DC terminals and barrels, inlet: DC terminals and barrels}
+  stud-pair-3-4:
+    family: ground and earth studs
+    by-class: {screw: DC terminals and barrels, inlet: DC terminals and barrels}
+  stud-pair-1:
+    family: ground and earth studs
+    by-class: {screw: DC terminals and barrels, inlet: DC terminals and barrels}
+  # console and management connectors
+  mini-usb-b: console (RJ45, USB, Mini-B, DB9)
+  db9: console (RJ45, USB, Mini-B, DB9)
+  # USB
+  usb-a: USB
+  micro-usb-b: USB
+  usb-c: USB
+  # every pluggable family of pluggables.yaml is a cage for optics
+  sfp: optics cages
+  sfp-dd: optics cages
+  qsfp: optics cages
+  qsfp-dd: optics cages
+  osfp: optics cages
+  xfp: optics cages
+  cfp: optics cages
+  cfp2: optics cages
+  cfp4: optics cages
+  cxp: optics cages
+psu:
+  ac: power inlets (AC)
+  dc: DC terminals and barrels
+  dc-when:
+    input: [dc]
+    inlet: [dc-terminal, dc-barrel, terminal, barrel]
+classes:
+  ground: ground and earth studs
+name-patterns:
+  - {family: stack and virtual chassis, contains: [stack, flexstack, stackwise, vcp, -vc]}
+  - {family: RPS, contains: [rps]}
+  - {family: console (RJ45, USB, Mini-B, DB9), contains: [console, mini-usb]}
+  - {family: USB, contains: [usb]}
+  - {family: DC terminals and barrels, contains: [dc, terminal, barrel, lug]}

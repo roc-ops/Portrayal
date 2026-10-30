@@ -3,8 +3,10 @@
 Status: **approved** (D-0034), 2026-10-15 (P-0049, request R-0027); the open questions are
 answered in section 9 (D-0035). Built so far: the runner,
 `spec/tools/dev/part_conformance.py` with its node half, its test, and the report-only test over
-`library/dist` (section 8, step 1). The rule, skill, schema and workflow changes follow section
-8's order.
+`library/dist` (section 8, step 1); and the port-usable codes of section 10 (C21 and C22, C19 and
+C20 widened, the scan mode, the family file and the records file with its test), which report and
+block nothing until the records file gains a `cap:`. The rule, skill, schema and workflow changes
+follow section 8's order.
 
 The request, in its own words:
 
@@ -488,3 +490,116 @@ The proposal was approved (D-0034) and its three questions answered (D-0035):
 3. **The Rack Builder page gets no control for lamps and outlets.** A person sets them through
    the Explorer, opened from the frame tab; an agent sets them through its tools (`state.set`).
    The settings parity the runner checks is between those two paths.
+
+## 10. Every port is usable: C21, C22, the scan and the records
+
+Decided 2026-10-30: **every port on a device must be usable.** Anything that takes a cable, cord,
+plug, lug or pluggable is modelled as a connector part, and the library holds something that plugs
+into it. The change that adds a connector adds its mate. If no mate can exist, the connector says
+why in a sentence. The rule holds only if a check stops a change that breaks it, so the checks are
+codes of this runner (one judge per part, reading what the build publishes), and their records go in
+their own file, not in the lint baseline.
+
+### 10.1 The words
+
+- **A connector** is any place the built drawing shows where a cable, cord, plug, lug or pluggable
+  could go. One of three: a *published slot* (an entry of `cages[]`, kind `connector` or `cage`); a
+  *drawn element of class `port`, `inlet`, `ground`, `terminal` or `screw`*, outermost of its kind, on
+  any face of any configuration, whether a placed part or art in a part's skin; or a *drawn supply*,
+  class `psu`.
+- **A connector is usable** when it presents a registered `interface`, itself or through a part it
+  composes, and its slot's `accepts` holds a mate. A supply is usable when it offers a power end (an
+  inlet, a terminal or a lug), as C19 asks.
+- **A mate** is a library part whose `mates` names the interface and whose class is `port` (a plug,
+  a cord end, a lug) or `transceiver` (an optic, a DAC or an AOC end). A dust cap is not a mate.
+- **Not a connector, by data**, and so no finding and no record: a part that is itself a plug or
+  cable end (it states `mates`, or `behaviour: occupies`); a slot whose interface is a
+  `connectors.yaml` entry with `cover: true`; a bay; a part of class `cap`, `boot` or `mechanical`;
+  and a supply whose `attrs.inlet` says it has a fixed cord.
+
+### 10.2 The codes
+
+| Code | What it asks | The `part` of each cause |
+|---|---|---|
+| **C21** | every published slot (connector or cage, not a `cover` entry) has a mate in its `accepts` | the part that presents the slot |
+| **C19** | a drawn supply offers a power end; a supply part carrying `unmated` is not reported | the supply's part |
+| **C20** | a drawn inlet, terminal, ground stud or screw is a place a cord or lug lands. A placed part that presents nothing is reported unless it carries `unmated` (it used to be skipped as "a marking") | the element's part, or the component whose skin draws it |
+| **C22** | a drawn element of class `port` presents a registered interface, itself or through what it composes | the same |
+
+On a cage C21 counts the slot as mated when its `accepts` holds any part of class `transceiver` or
+`port`, which is what `opticFor` already takes. A cage whose `accepts` holds none is a finding unless
+its family's `unmated` map has a sentence for the cage's rate (its `media`). The scan's summary also
+prints, and does not count as a finding, how many cage slots accept modules and none at their own
+rate: a module states its rate as `attrs.rate`, and a module that states none is a generic, which
+fits every rung, so it counts as at the cage's own rate. A cage whose modules are all of a lower rung
+of the ladder is counted.
+
+C19 to C22 read the drawing, not a route, so they judge **every configuration** of a device. The
+cabling sample keeps its own limits (three configurations a device by default). In the cabling run
+the four codes still run, over the configurations it picks, in the first rail variant.
+
+### 10.3 Every cause
+
+Each C19 to C22 finding carries `causes`: the full list, never capped, each
+`{part, device, cfg, view, path}`. `part` is the component ref of the element (`ns/name@major`), or
+of the component whose skin draws it, or of the supply for C19; for a slot it is the part of the drawn
+element at the slot's path, or for a card's cage the component whose `cages` list it. It is empty
+only for the device's own drawing, and then `device` (the name `devices.json` lists) is the record's
+key. The finding still carries a short text and at most four examples. The report grows with the
+causes, so it is written with `--out` and never printed in full.
+
+### 10.4 The scan mode
+
+`part_conformance.py --scan` runs C19 to C22 alone, over every configuration of every device it is
+given (`--all` is the whole build), with no cable laid. Its report records the wall-clock seconds,
+the CPU seconds of the node child (`getrusage` of the children, before and after) and the load
+average at the start and the end, under `scan`.
+
+### 10.5 The family file and `--by-family`
+
+`spec/tools/dev/port_families.yaml` gives a part its family by rules applied in order: a registered
+interface names its family (a cage's interface gives "optics cages"); a supply is "power inlets (AC)"
+or "DC terminals and barrels" by its `attrs`; a ground part is "ground and earth studs"; a name
+pattern (`stack`, `flexstack`, `stackwise`, `vcp`, `-vc` give stack; `rps` gives RPS; `console` and
+`mini-usb` give console; `usb` gives USB; `dc`, `terminal`, `barrel` and `lug` give DC); otherwise
+"other". The studs a lug lands on (`terminal-stud` and `stud-pair-*`) are ground studs in nearly
+every part that presents them, so the file maps them there, and sends the class `screw` and `inlet`
+parts that present them (the poles of a DC terminal block) to DC. `--by-family REPORT --out FILE`
+reads a scan report and writes, for each family, its parts (ref and class), its devices, its vendors,
+and for each part its `provenance` keys with the first words of each, which is what a held source can
+draw.
+
+### 10.6 Two records, and where each lives
+
+| Record | For | Lives in | Read by |
+|---|---|---|---|
+| a **row** `{part, code, why, order, since}` | a gap a mate or a part can close | `library/conformance-exceptions.yaml` | the records test |
+| an **`unmated` sentence**, at least 40 characters | "no mate can exist" | a component contract (the part takes nothing: C19, C20, C22); a `connectors.yaml` entry (no plug of that interface exists: C21 for a connector slot); a `pluggables.yaml` family, as a map from a rate to its sentence (no module is made at that rate: C21 for a cage of that rate) | the runner, which hands them to its node half |
+
+A rate that has modules in the world and none in the library is a gap, not a sentence. A row covers
+its cause on every device: its `code` is the finding's and its `part` is the cause's `part`, or the
+cause's `device` when it has no part, so a new device that places an already-listed part adds no row.
+`order` is the change that closes the row, as `"#1234"`; no order, no row. Rows are grouped by the
+change that closes them. The component schema's `unmated` is the contract's sentence; a registry's is
+read by the runner, not validated by a schema.
+
+### 10.7 The test and its switches
+
+`spec/tests/test_port_usable_records.py` runs the scan over the whole build and holds the records.
+Nothing in it turns a failure into a warning, and it skips only when node or `library/dist` is
+missing. These fail from the merge, whatever the file says: the file is malformed (an unknown
+top-level key, a row missing a key or with an empty `order`, a `cap` that is not a non-negative
+integer, a `closed` naming a code outside C19 to C22); a sentence beside a mate (a part carrying
+`unmated` that presents a slot whose `accepts` holds a mate, a `connectors.yaml` entry carrying
+`unmated` whose interface some part `mates`, a pluggables rate sentence that some module fills, which
+is the two-way honesty of L89's `unplaced`); a part with both a row and a sentence for one code; a
+registry sentence under 40 characters. These fail only once the file has `cap:`, and before that are
+printed: a finding no record covers; a stale row (judged over the whole build); more rows than `cap`;
+a row for a code listed under `closed`; a crash or a timeout of the runner. The switches are the
+file's: no `cap:` reports and passes; `cap:` present makes the rules fail a pull request; `closed:
+[C21]`, and later `closed: [C21, C19, C20, C22]`, make those codes errors that no row can excuse. No
+lint baseline line and no device `lint.waive` is used for these four codes.
+
+### 10.8 Cost
+
+MEASURED_COSTS
