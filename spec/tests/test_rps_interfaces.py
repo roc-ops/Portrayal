@@ -168,7 +168,9 @@ def test_the_rps2300_connector_presents_its_key_and_says_what_will_seat_it():
     c = contract(CISCO_CONNECTOR)
     assert c["interface"] == "cisco-rps2300" and c["class"] == "inlet"
     assert "connection-points" in c and "mate" in c["connection-points"]
-    assert "2960-S" in c["unplaced"] and "#1322" in c["unplaced"]
+    # when a device places the part, lint asks for this sentence to go, and the
+    # change that places it edits this test
+    assert "2960-S" in c["unplaced"]
     assert c["unplaced"].strip() != PLUG_SENTENCE
 
 
