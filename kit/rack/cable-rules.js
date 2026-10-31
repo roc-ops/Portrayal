@@ -57,13 +57,36 @@ export function tagText(rack, end) {
 
 // ── one cable per port ──────────────────────────────────────────────────
 // `uOf` is endName's: how tall a device is, for the U in the refusal.
-export function portFree(rack, end, {ignoreId = null, uOf} = {}) {
+// `dc` is the DC reader (ports.js dcReader), optional: end -> {key, pole, name}
+// for an end on a DC port, a pole or the connector of a points port, else null.
+// With it a port, each of its poles and its connector are one place
+// (docs/dc-power-design.md section 5.4): a cable on the port takes every pole,
+// a cable on one pole makes the port partly used, and two poles are two places.
+// Without it, a port is its path alone, as it was.
+export function portFree(rack, end, {ignoreId = null, uOf, dc = null} = {}) {
   const k = portKey(end);
   const other = (rack.cables || []).find(c => c.id !== ignoreId && (portKey(c.a) === k || portKey(c.b) === k));
-  return other ? {ok: false, reason: `${endName(rack, end, uOf)} already has a cable (${cableName(other)}).`} : {ok: true};
+  if (other) return {ok: false, reason: `${endName(rack, end, uOf)} already has a cable (${cableName(other)}).`};
+  const mine = typeof dc === 'function' ? dc(end) : null;
+  if (mine) for (const c of rack.cables || []) {
+    if (c.id === ignoreId) continue;
+    for (const e of [c.a, c.b]) {
+      const o = dc(e);
+      if (!o || o.key !== mine.key || !(o.pole === null || mine.pole === null || o.pole === mine.pole)) continue;
+      // (naming the pole it is on where this end asks for the whole port)
+      const where = o.pole !== null && mine.pole === null ? ` on its ${o.name}` : '';
+      return {ok: false, reason: `${endName(rack, end, uOf)} already has a cable (${cableName(c)}${where}).`};
+    }
+  }
+  return {ok: true};
 }
 export function canCable(rack, a, b, opts = {}) {
   if (sameEnd(a, b)) return {ok: false, reason: 'A cable needs two different ports.'};
+  // a port and one of its own poles are the same place
+  if (typeof opts.dc === 'function') {
+    const x = opts.dc(a), y = opts.dc(b);
+    if (x && y && x.key === y.key) return {ok: false, reason: 'A cable needs two different ports.'};
+  }
   for (const e of [a, b]) { const f = portFree(rack, e, opts); if (!f.ok) return f; }
   return {ok: true};
 }
@@ -300,10 +323,170 @@ export function proposeMedia(a, b) {
 const NAMED = {fiber: 'fiber', copper: 'copper', dac: 'a DAC', aoc: 'an AOC', power: 'power', ground: 'ground',
                stack: 'stacking', usb: 'USB', console: 'console'};
 const ACDC = {ac: 'AC', dc: 'DC'};
+
+// ── the DC feed checks (docs/dc-power-design.md sections 5.1, 5.4 and 6) ──
+// THE KIT'S COPY OF spec/schemas/dc.yaml: the role list and the pairs of roles a
+// feed may join, each pair unordered, with its `when`. The kit never reads YAML,
+// so spec/tests/test_kit_dc_matches.py holds both tables to the registry's. A pair
+// that is absent is not a match: `batt` against `rtn` is a crossed feed. A pair
+// `when: 'negative-voltage'` holds only where the end whose pole is `neg` or `pos`
+// states a negative nominal voltage.
+export const DC_ROLES = ['batt', 'rtn', 'pos', 'neg', 'gnd', 'unstated'];
+export const DC_MATCHES = [
+  {a: 'batt', b: 'batt'},
+  {a: 'rtn', b: 'rtn'},
+  {a: 'pos', b: 'pos'},
+  {a: 'neg', b: 'neg'},
+  {a: 'batt', b: 'neg', when: 'negative-voltage'},
+  {a: 'rtn', b: 'pos', when: 'negative-voltage'},
+];
+// A pole's role as the registry has it; anything else reads as not stated
+const roleOf = q => (DC_ROLES.includes(q?.role) ? q.role : 'unstated');
+const roleWord = r => String(r).toUpperCase();
+const nominalOf = d => (typeof d?.voltage?.nominal === 'number' ? d.voltage.nominal : null);
+const volts = n => `${n > 0 ? '+' : ''}${n} V`;
+const NUMBER_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const numberWord = n => NUMBER_WORDS[n] ?? String(n);
+// The poles a cable's conductors land on at an end, in order: a port's poles,
+// a pole end's one pole. Conductor k lands on pole k (section 5.4).
+const polesOf = d => (d?.end === 'pole' ? [d.poles?.[d.pole]].filter(Boolean) : Array.isArray(d?.poles) ? d.poles : []);
+// How a pole is named for a person: "the BATT pole", else "pole terminal-48v".
+export const dcPoleWord = (d, i) => { const q = d.poles?.[i]; return roleOf(q) !== 'unstated' ? `${roleWord(q.role)} pole` : `pole ${String(q?.path ?? i).split('/').pop()}`; };
+
+// POLARITY, END TO END, BY POSITION. Every DC feed type states its conductors'
+// roles as `unstated`, so only the order says which conductor lands where:
+// conductor k lands on pole k at each end. Each pair of poles is compared by the
+// registry's pairs. A pole whose role is unstated, on either side, is never
+// called crossed; it is said once, as a note. A ground pole is no pole of a feed.
+function polarity(a, b) {
+  const warnings = [], notes = [], said = new Set();
+  const pa = polesOf(a), pb = polesOf(b);
+  for (let k = 0; k < Math.min(pa.length, pb.length); k++) {
+    const ra = roleOf(pa[k]), rb = roleOf(pb[k]);
+    if (ra === 'unstated' || rb === 'unstated') {
+      for (const [q, r] of [[pa[k], ra], [pb[k], rb]])
+        if (r === 'unstated' && !said.has(q.path)) { said.add(q.path); notes.push(`Polarity of ${q.path} is not stated; checked by position.`); }
+      continue;
+    }
+    if (ra === 'gnd' || rb === 'gnd') continue;
+    const pair = DC_MATCHES.find(m => (m.a === ra && m.b === rb) || (m.a === rb && m.b === ra));
+    let ok = !!pair && !pair.when;
+    if (pair?.when === 'negative-voltage') {
+      // the sign of the end whose pole is neg or pos; not stated: neither matched nor crossed
+      const n = nominalOf(ra === 'neg' || ra === 'pos' ? a : b);
+      if (n === null || n === 0) continue;
+      ok = n < 0;
+    } else if (pair?.when) continue;
+    if (!ok) warnings.push(`A is ${roleWord(ra)} where B is ${roleWord(rb)}: the feed is crossed.`);
+  }
+  return {warnings, notes};
+}
+
+// THE FEED IS TO THE RIGHT VOLTAGE: the signs of the two nominals, and the
+// source's nominal against the load's range. The source is the end whose
+// direction is `output` (and the other an input); with no one source, the signs only.
+function voltage(a, b, source, load) {
+  const warnings = [], notes = [];
+  for (const d of [a, b]) if (nominalOf(d) === null) notes.push(`${d.path} states no voltage; the feed's voltage is not checked.`);
+  if (notes.length) return {warnings, notes};
+  const na = nominalOf(a), nb = nominalOf(b);
+  if (source && load) {
+    const ns = nominalOf(source), nl = nominalOf(load), range = load.voltage?.range;
+    if (Math.sign(ns) !== Math.sign(nl)) warnings.push(`${volts(ns)} into a ${volts(nl)} input.`);
+    else if (Array.isArray(range) && range.length === 2 && range.every(Number.isFinite) && (ns < Math.min(...range) || ns > Math.max(...range)))
+      warnings.push(`Source nominal ${volts(ns)} is outside the load's ${range[0]} to ${range[1]}.`);
+  } else if (Math.sign(na) !== Math.sign(nb)) warnings.push(`The ends differ in sign: A is ${volts(na)}, B is ${volts(nb)}.`);
+  return {warnings, notes};
+}
+
+// CONDUCTORS AGAINST POLES, for one end and only with a type that states them
+function conductors(d, k, type) {
+  const list = type.conductors, poles = polesOf(d).length, out = [];
+  if (list.length !== poles)
+    out.push(`A ${numberWord(list.length)}-conductor feed to ${d.end === 'pole' ? 'one pole' : `a ${numberWord(poles)}-pole port`} (end ${k}).`);
+  if (Array.isArray(d.awg) && d.awg.length)
+    for (const g of [...new Set(list.map(c => c?.awg).filter(Number.isFinite))])
+      if (!d.awg.includes(g)) out.push(`${g} AWG where the end takes ${d.awg.join(', ')} (end ${k}).`);
+  return out;
+}
+
+// The checks of section 6 for one cable, from its two ends' info (the `dc` key
+// of ports.js) and, where the caller has it, the cable's type: {warnings, notes}.
+//   a type    undefined: not read, so nothing of it is checked or said;
+//             null (or one that states no `conductors`): the cable names no DC feed type;
+//             an object: the conductors and the ampacity it states.
+// A WARNING IS SAID ONLY WHERE BOTH SIDES STATE WHAT IT READS. A fact a check
+// needs and an end does not state is a note, after the warnings, and these are
+// all of them: an unstated pole, a port with no voltage, a cable with no type.
+// Warnings in this order: polarity, voltage, conductors, sides, protector.
+// Direction and AC against DC are mismatch's own. Nothing here refuses.
+export function dcFeedChecks(a, b, {type} = {}) {
+  const da = a?.dc, db = b?.dc, ends = [['A', da], ['B', db]].filter(([, d]) => d);
+  if (!ends.length) return {warnings: [], notes: []};
+  const warnings = [], notes = [], typed = Array.isArray(type?.conductors) && type.conductors.length;
+  if (da && db) {
+    const outs = [da, db].filter(d => d.direction === 'output'), ins = [da, db].filter(d => d.direction === 'input');
+    const [source, load] = outs.length === 1 && ins.length === 1 ? [outs[0], ins[0]] : [null, null];
+    const p = polarity(da, db), v = voltage(da, db, source, load);
+    warnings.push(...p.warnings, ...v.warnings);
+    notes.push(...p.notes, ...v.notes);
+    if (typed) for (const [k, d] of ends) warnings.push(...conductors(d, k, type));
+    if (source && load) {
+      if (/^[ab]$/.test(source.side) && /^[ab]$/.test(load.side) && source.side !== load.side)
+        warnings.push(`Feed ${source.side.toUpperCase()} lands on a ${load.side.toUpperCase()} terminal.`);
+      const rs = source['rating-a'], rl = load['rating-a'], amp = type?.['ampacity-a'];
+      if (Number.isFinite(rs) && Number.isFinite(rl) && rs < rl) warnings.push(`${rs} A breaker on a ${rl} A load.`);
+      if (typed && Number.isFinite(rs) && Number.isFinite(amp) && rs > amp) {
+        const gauge = Math.max(...type.conductors.map(c => c?.awg).filter(Number.isFinite));
+        warnings.push(`${rs} A breaker on a ${Number.isFinite(gauge) ? `${gauge} AWG` : `${amp} A`} feed (ampacity ${amp} A${type.unverified ? ', an estimate' : ''}).`);
+      }
+    }
+  } else if (typed) for (const [k, d] of ends) warnings.push(...conductors(d, k, type));
+  if (type !== undefined && !typed) notes.push('The cable names no DC feed type; its conductors are not checked against the poles.');
+  return {warnings, notes};
+}
+// The type to hand dcFeedChecks for a cable: the one its `type`, else its media,
+// names in the cable types table (the lookup of cable-types.js cableTypeOf, which
+// this file does not import: it stays free of fetches), `null` when the cable has
+// none, and `undefined` when the cable names a type and no table was given, since
+// that is not read.
+export function dcTypeOf(types, cable) {
+  if (!types || typeof types !== 'object') return cable?.type ? undefined : null;
+  const own = id => (typeof id === 'string' && Object.hasOwn(types, id) ? types[id] : null);
+  return own(cable?.type) ?? own(cable?.media) ?? null;
+}
+
+// A and B KEPT TO THEIR SIDES, ON A DEVICE (section 6): an item with two or
+// more DC input ports, each cabled to a DC output that states its side, all of
+// one side. `dcOf(end)` is the end's `dc` facts or null. Quiet where any of them
+// states no side, and for a port with no cable. {item, name, side, ports, cables, text} or null.
+export function feedSides(rack, item, dcOf) {
+  const seen = new Map();
+  for (const c of rack.cables || []) for (const [mine, far] of [[c.a, c.b], [c.b, c.a]]) {
+    if (mine.item !== item.id) continue;
+    const d = dcOf(mine);
+    if (d?.direction !== 'input') continue;
+    const o = dcOf(far);
+    const row = seen.get(d.path) ?? {sides: [], cables: []};
+    row.sides.push(o?.direction === 'output' && /^[ab]$/.test(o.side) ? o.side : null);
+    row.cables.push(c.id);
+    seen.set(d.path, row);
+  }
+  const rows = [...seen.values()];
+  const sides = new Set(rows.flatMap(r => r.sides));
+  if (rows.length < 2 || sides.size !== 1 || sides.has(null)) return null;
+  const side = [...sides][0], name = item.label || item.id;
+  return {item: item.id, name, side, ports: [...seen.keys()], cables: rows.flatMap(r => r.cables),
+          text: `${rows.length === 2 ? 'Both' : `All ${rows.length}`} supplies of ${name} are fed from side ${side.toUpperCase()}.`};
+}
+
 // A MISMATCH IS A WARNING, never a refusal: the sentences to show
 // beside the media field, or [] when nothing is known to be wrong.
-export function mismatch(media, a, b) {
-  const out = [];
+// A cable whose ends are DC ports or poles says the DC feed checks first,
+// polarity first among them (dcFeedChecks); `type` is the cable's, where the
+// caller has it, and without it the checks that need none are said.
+export function mismatch(media, a, b, {type} = {}) {
+  const out = [...dcFeedChecks(a, b, {type}).warnings];
   const fa = a?.family, fb = b?.family;
   if (fa && fb && fa !== fb) out.push(`The ends differ: A is ${NAMED[fa]}, B is ${NAMED[fb]}.`);
   if (fa === 'fiber' && fb === 'fiber' && a.mode && b.mode && a.mode !== b.mode)
@@ -460,10 +643,22 @@ export function endPlug(slot, compByRef, stated = null, far = null) {
 // {cls, compByRef, plug}, the class of the part at the path, the catalogue's
 // lookup and the plug the end states) seats the plug endPlug derives. A port
 // of class `port` is read as it always was, whatever its slot accepts.
+//
+// AN END AT A DC PORT'S PATH (`landed.dc`, the `dc` ports.js gives the end's
+// info, with `end: 'port'`) seats the plug each pole derived on its slot (a
+// slots port), or the connector's plug on the connector (a points port).
 export function plugSeats(path, slots, swaps = {}, landed = null) {
   const own = k => Object.hasOwn(swaps || {}, k);
   const free = s => !own(s.id) && !(s.bores || []).some(b => own(`${s.id}/${b}`));
   const seat = list => Object.fromEntries(list.filter(s => plugFor(s) && free(s)).map(s => [s.id, plugFor(s)]));
+  const dc = landed?.dc;
+  if (dc?.end === 'port' && dc.path === path) {
+    const seats = dc.kind === 'points' ? [[dc.connector, dc.poles[0]?.plug]] : dc.poles.map(q => [q.path, q.plug]);
+    return Object.fromEntries(seats.flatMap(([id, plug]) => {
+      const s = slots.find(x => x.id === id);
+      return s && plug && free(s) ? [[id, plug]] : [];
+    }));
+  }
   const exact = slots.filter(s => s.id === path);
   if (exact.some(plugFor)) return seat(exact);
   if (landed && landed.cls !== 'port') {
@@ -516,22 +711,41 @@ export function elementIdReason(path) {
 // under: where that part is no slot and its own parts are (a DC terminal,
 // whose screws take the lugs), the paths of those with no cable, the one to
 // take first; empty when every one has a cable;
-// side: where the path is a slot on a side, top or bottom view, that view.
+// side: where the path is a slot on a side, top or bottom view, that view;
+// dcGive: where that part's own parts are the poles of DC ports, the paths of
+// the ports with no cable, the one to give (empty when every one has a cable);
+// dcContact: {part, plug, port}, where the path is a contact of a pluggable
+// connector that states a DC port; dcPanel: where the path is a DC port on the
+// other panel, that panel;
+// dcDrawn: true where the path is an element of the part the bay holds (not a
+// part of it), and that part is a power part (class inlet, psu or power) that
+// states no DC port (ports.js dcDrawnOnly); the reason names the leaf and the
+// part, in place of "has no port".
 export function looseReason(end, facts) {
   if (!facts || !facts.item) return 'the device was removed';
   if (isElementId(end.path)) return elementIdReason(end.path);
   if (!facts.drawing) return 'this panel has no drawing';
   if (!facts.port) {
     const h = facts.holder;
+    // a DC port (ports.js dcPortsOf): a contact is no end, and a port is on one panel
+    if (facts.dcContact) return `${end.path} is a contact of ${facts.dcContact.part}, whose connector takes ${facts.dcContact.plug}; give the path ${facts.dcContact.port}`;
+    if (facts.dcPanel) return `${end.path} is on the ${facts.dcPanel} panel; give view "${facts.dcPanel}"`;
     if (facts.side) return `${end.path} is on the ${facts.side} of the device, and a cable end can be given on the front or rear only`;
     if (!h) return facts.part ? `${end.path} is ${facts.part}, which takes no plug or lug the library knows` : `${end.path} is not on this panel`;
     const leaf = end.path.slice(h.path.length + '/module/'.length);
+    // a part whose poles are a DC port's: the port is the end to give
+    if (h.part && facts.part && !facts.onView && facts.dcGive)
+      return facts.dcGive.length
+        ? `${h.path} holds ${h.part}, whose ${leaf} takes a cable on the ${facts.dcGive.length > 1 ? 'ports' : 'port'} ${facts.dcGive.join(', ')} and not on itself; give the path ${facts.dcGive[0]}`
+        : `${h.path} holds ${h.part}, whose ${leaf} takes a cable on its ports and not on itself, and every port of its ${leaf} has a cable`;
     if (h.part && facts.part && !facts.onView && facts.under && !facts.under.length)
       return `${h.path} holds ${h.part}, whose ${leaf} takes a cable on its screws and not on itself, and every screw of its ${leaf} has a cable`;
     if (h.part && facts.part && !facts.onView && facts.under?.length)
       return `${h.path} holds ${h.part}, whose ${leaf} takes a cable on ${facts.under.map(x => x.slice(x.lastIndexOf('/') + 1)).join(', ')} and not on itself; give the path ${facts.under[0]}`;
     if (h.part && facts.part && !facts.onView) return `${h.path} holds ${h.part}, whose ${leaf} takes no plug or lug the library knows`;
     if (h.part && facts.onView) return `${h.path} holds ${h.part}, whose port ${leaf} is on the ${facts.onView} panel; give view "${facts.onView}"`;
+    // a terminal the part draws as an element, on a power part that states no DC port
+    if (h.part && facts.dcDrawn) return `${leaf} is drawn on ${h.part}, which declares no DC port`;
     return h.part ? `${h.path} holds ${h.part}, which has no port ${leaf}` : `${h.path} is empty`;
   }
   if (facts.cage && !facts.occupied) return `${end.path} holds no optic`;

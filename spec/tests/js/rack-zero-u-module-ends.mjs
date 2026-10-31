@@ -66,8 +66,8 @@ test('the module in the bay lists its ports, named as a rack device\'s are, each
   assert.ok(Math.abs(eth0.x - (1.45 + 16.3)) < 1e-9 && Math.abs(eth0.y - (H - (761.65 + 126.65))) < 1e-9, `${eth0.x} ${eth0.y}`);
   // PDU+1 and the probe jack are not Ethernet, and say so
   assert.deepEqual([ends[2], ends[3]].map(e => [e.kind, e.media]), [['data', 'rj45-telemetry'], ['data', 'rj45-telemetry']]);
-  // the USB-C ports, the first the configuration port the console runs over
-  assert.deepEqual([ends[4], ends[5]].map(e => [e.connector, e.plug, e.info.family, e.kind]), [['USB-C port', USB, 'usb', 'data'], ['USB-C port', USB, 'usb', 'data']]);
+  // the USB-C ports, the first the configuration port the console runs over: its placement states `role: console`
+  assert.deepEqual([ends[4], ends[5]].map(e => [e.connector, e.plug, e.info.family, e.kind]), [['USB-C port', USB, 'console', 'data'], ['USB-C port', USB, 'usb', 'data']]);
   // the part's own outlets are unchanged
   assert.deepEqual(ends.slice(6).map(e => [e.path, e.type, e.kind, e.connector]), [['outlet-a1', 'C13', 'power', 'C13 outlet'], ['outlet-f42', 'C13', 'power', 'C13 outlet']]);
   // a button, and a part with no ports, add none
