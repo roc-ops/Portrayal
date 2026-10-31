@@ -680,6 +680,14 @@ or a new optional key and nothing that was valid reads differently
 A device's `attrs.performance.cable-capacity-media` does not take the two new
 words: a capacity is a count of data cords.
 
+Three more values of a cable's `media` are added the same way (no new key, no
+raised version): `stack`, the cable between two switches' stacking ports;
+`usb`; and `console`. A cable of a StackPower or redundant-power link is `power`,
+a type of it. A reader that does not know one of the three keeps it, and draws
+the cable as one with no media, as for any media it does not know.
+`cable-capacity-media` does not take them. The DCIM cables file writes the three
+with a blank `CABLE_TYPE`, and says so in its notes.
+
 ## The cable types file
 
 `cable-types.json` names the cable types a rack tool can lay: each one's
@@ -706,14 +714,15 @@ type or a changed id is a major.
 Each type, keyed by its `id`, always carries:
 
 - `id`, `label`, and `media`: the Rack Builder cable media it is a kind of.
-  The bare ids `os2`, `om3`, `om4`, `om5`, `cat6`, `cat6a`, `dac` and `aoc` are
-  those media values themselves, so a rack cable's media names its type. A
-  refinement (`cat6a-ftp`, `os2-g657a2`, `dac-26awg`) has its own id and
-  names the media it refines. `power` is the media of the power cords, and
-  since kit 0.30.0 a Rack Builder media too; it has no bare type, so a cable
-  of media `power` that names no type is drawn and measured as the
-  `power-c13` cord.
-- `family`: `fiber`, `copper`, `dac`, `aoc` or `power`.
+  The bare ids `os2`, `om3`, `om4`, `om5`, `cat6`, `cat6a`, `dac`, `aoc`,
+  `ground`, `stack`, `usb` and `console` are those media values themselves, so
+  a rack cable's media names its type. A refinement (`cat6a-ftp`,
+  `os2-g657a2`, `dac-26awg`, `ground-12awg`) has its own id and names the media
+  it refines. `power` is the media of the power cords, and since kit 0.30.0 a
+  Rack Builder media too; it has no bare type, so a cable of media `power` that
+  names no type is drawn and measured as the `power-c13` cord.
+- `family`: `fiber`, `copper`, `dac`, `aoc`, `power`, `ground`, `stack`, `usb`
+  or `console`.
 - `od_mm` and `od_sources`: a typical outside diameter, a sketch and not a
   measurement of any one cable.
 - `min_bend_radius`: `{installed, loaded}`. Installed is the radius once the
@@ -736,7 +745,23 @@ A type may also carry `fiber` (`mode`, `grade`, `core_um`, and for a named
 class `class` and its own `min_bend`), `shield` or `awg`. A `power` type
 always carries `conductor`, the cord it is made of (`H05VV-F 3G1.0`), so the
 same connector pair on another cord (a North American SJT) is a type of its
-own. A fibre type's installed radius is the cord's cable rule;
+own; a DC feed carries `conductors` instead.
+
+A type may carry `sources` (table version 1.2.0): the documents that name the
+cable, as keys of `sources`. It says nothing of a figure, which has its own
+sources. A type may carry `note`, which says what is not known of it.
+
+A DC feed (table version 1.2.0) is a `power` type with three more keys. `dc`
+is `true`. `conductors` lists the conductors in the order they land on a
+port's poles, each `{role, awg}`: `role` is a role of `dc.yaml` (`unstated`
+where no source gives a polarity, and never `gnd`), `awg` a positive number.
+`ampacity-a` is the current in amperes the conductors carry, with
+`ampacity-sources` beside it, keys of `sources`; where it is Portrayal's own
+estimate the source is `portrayal-estimate` and the type states
+`unverified: true`. A reader that does not know a key ignores it. The build
+refuses a `dc` that is not a boolean, a `conductors` that is not a list of
+mappings or whose role is not `dc.yaml`'s, an `ampacity-a` that is not a
+positive number, and a DC feed that lacks `conductors` or `ampacity-a`. A fibre type's installed radius is the cord's cable rule;
 `fiber.min_bend` is the fibre class's macrobend test radius, kept as data
 for a consumer that knows the cord allows the tighter figure.
 

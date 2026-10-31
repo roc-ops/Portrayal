@@ -676,7 +676,7 @@ the frame of the part, and the tray has tie slots along the stretch),
 strapped under the plate at the plate less its radius, sagging between two
 straps no lower than the strap line. Every other leg that is not held is a
 **free span**: it hangs by the catenary the 3D drawing uses, scaled by the
-`DRAPE` of its family (fibre and AOC 1, twisted pair 0.5, DAC and power 0.35)
+`DRAPE` of its family (fibre and AOC 1, twisted pair, USB and console 0.5, DAC, power, ground and stack 0.35)
 and no tighter than its installed bend radius over its drape
 (`ctx.bendOf(cable)` when given, else its media's; the family is its type's
 when the page gives the cable types lookup as `ctx.typeOf`, else its
@@ -751,6 +751,23 @@ cables that have one on its `Findings:` line and names the worst, and
 cable's notes; `layNotes(rack, { bends, covers })` gives the same as one line
 a cable, for a file with no row for one. Corners at one point, to a tenth of
 a millimetre, are one finding.
+
+**Next release: a cable's `media` has three more values, `stack`, `usb` and `console`.** `MEDIA` in
+`cable-rules.js` lists thirteen, each with a label (`MEDIA_LABELS`), a kind (`mediaKind`: its family
+is its own word) and a row in `PLUG_REACH`, `PLUG_SPLIT`, `END_ALLOWANCE_BY_MEDIA`, `DIAMETERS`
+(`route.js`), `FAMILY`, `BEND` and, by family, `DRAPE` (`resting.js`), and `COLORS`
+(`cable-geometry.js`: orange, purple, pink). Every figure of the three, and `ground`'s in the
+resting tables, is an estimate that the cable types table says is one. `connectorOf` takes a `role`:
+an end whose role is `console` is a console end whatever its connector, else a USB receptacle
+(`usb-a`, `micro-usb-b`, `mini-usb-b`, `usb-c`) is a USB end and the `flexstack`, `stackwise-480`
+and `ex4200-vcp` interfaces are stack ends; the `stackpower`, `cisco-rps2300` and `ex3300-rps`
+interfaces are `power`. A page that reads a port passes its `role`; until it does, a console port
+reads as its connector. `proposeMedia` offers the new media for ends of their family, and a mismatch
+names a family as `stacking`, `USB` or `console`. **A reader that does not know a media keeps it.**
+The DCIM cables file writes `CABLE_TYPE` for the three as a blank (`CABLE_TYPE_NOTES` records that the
+choices of the two tools were not read); a cable of one is in the file with its type blank. `cable-types.json` (table version 1.2.0) gains the DC feed, ground-wire, stack, USB,
+console, RPS, StackPower and FlexStack types, and the keys `dc`, `conductors`, `ampacity-a`,
+`ampacity-sources`, `sources` and `note`.
 
 **New in 0.51.0: the relief detail pass asks for each raster once.** `rasterKey` rewrites a face's
 shared `<style>` and `<defs>` once and keys a node by that and its own art (`rasterKeyText` is the

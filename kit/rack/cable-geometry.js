@@ -46,7 +46,10 @@ export const COLORS = {os2: '#e8c547', copper: {server: '#5aa7ff', management: '
   // A power cable is the black every cord end of the library is drawn in
   // (`jacket-color`, #1c1c1c), so the cable carries on from its plug's stub.
   // A ground wire is green; the shade is an estimate, no source is held.
-  power: '#1c1c1c', ground: '#3f9b4b'};
+  // A stack cable is orange, a USB cable purple and a console cable pink: each
+  // shade is an estimate chosen to read apart from every other media's on the
+  // dark stage and on white, and states nothing of any maker's cable.
+  power: '#1c1c1c', ground: '#3f9b4b', stack: '#d9702a', usb: '#8e6bd1', console: '#c9588a'};
 // Own keys only: a hand-edited media or purpose named like something every
 // object has (toString, constructor, __proto__) is unknown, not a colour.
 const own = (o, k) => (Object.hasOwn(o, k) ? o[k] : undefined);

@@ -343,6 +343,20 @@ test('a version 4 file with no power in it loads and saves as it was', () => {
   assert.equal(/plug|power|ground/.test(JSON.stringify(JSON.parse(text).racks[0].cables)), false);
 });
 
+test('a stackpower end and an RPS end are power, and a cable between two of them raises no mismatch as a power cable', () => {
+  for (const iface of ['stackpower', 'cisco-rps2300', 'ex3300-rps']) {
+    const e = CR.connectorOf({iface});
+    assert.deepEqual(e, {family: 'power', mode: null}, iface);
+    assert.equal(CR.proposeMedia(e, e), 'power', iface);
+    assert.deepEqual(CR.mismatch('power', e, e), [], iface);
+  }
+  // an RPS port against a mains outlet is nothing this change judges: a direction or a mode one end does not state is not judged
+  assert.deepEqual(CR.mismatch('power', CR.connectorOf({iface: 'cisco-rps2300'}), {family: 'power', mode: null, role: 'outlet'}), []);
+  // and it is not copper or stacking: a stack cable on it says so
+  assert.deepEqual(CR.mismatch('stack', CR.connectorOf({iface: 'stackpower'}), CR.connectorOf({iface: 'stackpower'})),
+    ['Stack cable does not suit end A, which is power.', 'Stack cable does not suit end B, which is power.']);
+});
+
 test('the tables every lay reads have a row for power, and a ground wire is marked where it is estimated', () => {
   assert.deepEqual([R.DIAMETERS.power, R.DIAMETERS.ground], [7.1, 6.3]);
   assert.deepEqual([R.PLUG_REACH.power, R.END_ALLOWANCE_BY_MEDIA.power, R.END_ALLOWANCE_BY_MEDIA.ground], [77.0, 0.017, 0]);
