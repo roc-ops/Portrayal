@@ -73,7 +73,7 @@ CODES = {
     "C18": ("cabling", "block", "the back of a seated part has ends the host draws no point for"),
     "C19": ("cabling", "block", "a powered part presents no power end an agent is offered"),
     "C20": ("cabling", "block", "a drawn inlet, terminal or stud is not a place a cord or lug can land"),
-    "C21": ("cabling", "block", "a connector or cage slot has no mate in the library and says no mate can exist"),
+    "C21": ("cabling", "block", "a connector or cage slot has no mate in its accepts and no sentence says none can exist"),
     "C22": ("cabling", "block", "a drawn port presents no registered interface, itself or through what it composes"),
     "C16": ("cabling", "gap", "the catalogue alone does not answer for an end of a listed part"),
     "C17": ("cabling", "block", "a part a cage lists cannot be fitted to it"),
@@ -226,7 +226,7 @@ def contract_of(library, ref):
 def family_of(spec, contract, name):
     """The family of a part by the five rules of port_families.yaml, in order. `name` is the part's name (or, for a
     cause with no part, the drawn path)."""
-    entry = (spec.get("interfaces") or {}).get(contract.get("interface"))
+    entry =(spec.get("interfaces") or {}).get(contract.get("interface"))
     if entry:                                                                   # 1. its own registered interface
         if isinstance(entry, str):
             return entry
@@ -235,6 +235,7 @@ def family_of(spec, contract, name):
     if contract.get("class") == "psu":                                          # 2. a supply, by its attrs
         psu = spec["psu"]
         dc = any(str(attrs.get(k)) in vals for k, vals in (psu.get("dc-when") or {}).items())
+        dc = dc or any(word in (psu.get("dc-named") or []) for word in name.lower().split("-"))
         return psu["dc"] if dc else psu["ac"]
     if contract.get("class") in (spec.get("classes") or {}):                    # 3. a ground part
         return spec["classes"][contract["class"]]

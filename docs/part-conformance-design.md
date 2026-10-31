@@ -564,9 +564,11 @@ average at the start and the end, under `scan`.
 
 `spec/tools/dev/port_families.yaml` gives a part its family by rules applied in order: a registered
 interface names its family (a cage's interface gives "optics cages"); a supply is "power inlets (AC)"
-or "DC terminals and barrels" by its `attrs`; a ground part is "ground and earth studs"; a name
+or "DC terminals and barrels", DC when its `attrs` say so or when `dc` is a hyphen-delimited word of
+its name; a ground part is "ground and earth studs"; a name
 pattern (`stack`, `flexstack`, `stackwise`, `vcp`, `-vc` give stack; `rps` gives RPS; `console` and
-`mini-usb` give console; `usb` gives USB; `dc`, `terminal`, `barrel` and `lug` give DC); otherwise
+`mini-usb` give console; `busbar` and `bus-bar` give DC, and are tried before `usb`, which they
+contain; `usb` gives USB; `dc`, `terminal`, `barrel` and `lug` give DC); otherwise
 "other". The studs a lug lands on (`terminal-stud` and `stud-pair-*`) are ground studs in nearly
 every part that presents them, so the file maps them there, and sends the class `screw` and `inlet`
 parts that present them (the poles of a DC terminal block) to DC. `--by-family REPORT --out FILE`
