@@ -5,7 +5,8 @@
 #
 #   1. its own `interface` is listed under `interfaces` below (a part composing a part that presents one
 #      is not given a family by it: only the part that presents the interface is)
-#   2. its class is `psu`: `psu.dc` when its `attrs` match `psu.dc-when`, else `psu.ac`
+#   2. its class is `psu`: `psu.dc` when its `attrs` match `psu.dc-when` or when a hyphen-delimited
+#      word of its name is listed under `psu.dc-named`, else `psu.ac`
 #   3. its class is listed under `classes`
 #   4. a pattern of `name-patterns` matches its name (the text after the namespace, before the major),
 #      the first pattern that matches winning; a cause with no part is matched on its drawn path
@@ -41,6 +42,14 @@ interfaces:
   terminal-508-6: DC terminals and barrels
   dc-barrel: DC terminals and barrels
   p40: DC terminals and barrels
+  screw-terminal-2: DC terminals and barrels
+  screw-terminal-4: DC terminals and barrels
+  terminal-381-5: DC terminals and barrels
+  orv3-busbar: DC terminals and barrels
+  # alarm and management headers have no family of their own: naming them keeps a name pattern from taking them
+  wire-wrap-3: other
+  screw-terminal-5: other
+  terminal-350-6: other
   # A stud a lug lands on is, in nearly every part that presents the interface, a ground stud (class
   # ground). The poles of a DC terminal block present it too, as class screw or inlet, so those two
   # classes go to the DC family.
@@ -56,7 +65,15 @@ interfaces:
   stud-pair-1:
     family: ground and earth studs
     by-class: {screw: DC terminals and barrels, inlet: DC terminals and barrels}
+  # stacking, Virtual Chassis and redundant-power connectors
+  flexstack: stack and virtual chassis
+  stackwise-480: stack and virtual chassis
+  stackpower: stack and virtual chassis
+  ex4200-vcp: stack and virtual chassis
+  cisco-rps2300: RPS
+  ex3300-rps: RPS
   # console and management connectors
+  rj45: console (RJ45, USB, Mini-B, DB9)
   mini-usb-b: console (RJ45, USB, Mini-B, DB9)
   db9: console (RJ45, USB, Mini-B, DB9)
   # USB
@@ -80,11 +97,17 @@ psu:
   dc-when:
     input: [dc]
     inlet: [dc-terminal, dc-barrel, terminal, barrel]
+    role: [dc-power-supply]
+  # a supply whose attrs do not say DC but whose name does: a word of the name, not a substring,
+  # so `hvacdc` (an HVDC supply on its AC inlet) and `dcs201` do not match
+  dc-named: [dc]
 classes:
   ground: ground and earth studs
 name-patterns:
   - {family: stack and virtual chassis, contains: [stack, flexstack, stackwise, vcp, -vc]}
   - {family: RPS, contains: [rps]}
   - {family: "console (RJ45, USB, Mini-B, DB9)", contains: [console, mini-usb]}
+  # before USB: order matters, because "busbar" contains "usb"
+  - {family: DC terminals and barrels, contains: [busbar, bus-bar]}
   - {family: USB, contains: [usb]}
   - {family: DC terminals and barrels, contains: [dc, terminal, barrel, lug]}

@@ -25,6 +25,10 @@ ends. Four parts showed it; the library's data for each:
 
 The parts DO state their terminals. They state them as art and as prose, which no tool reads as a cable end.
 
+The port-usable checks (section 10 of [part-conformance-design.md](part-conformance-design.md)) judge a
+supply of class `psu` and a drawn terminal outside a seated module. `nokia/lpwr-f@1` is class `power`,
+and its terminal block sits inside the module it fills, so those checks name no cause on it.
+
 ## 2. The inventory
 
 `python3 spec/tools/dev/dc_inventory.py --out docs/dc-power-inventory.md` reads the source files (no

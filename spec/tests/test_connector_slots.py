@@ -8,6 +8,7 @@ These run against the real library and a components.json built here by the
 indexer the build runs, never a fixture and never a possibly stale dist.
 """
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -85,6 +86,15 @@ def test_the_connector_registry_is_not_vacuous():
     # cisco-rps2300/ex3300-rps: the two redundant-power connectors. Vendor connectors
     # citing no standard; the stack, StackPower, Virtual Chassis and RPS port parts
     # present them and a plug mates each, so this list holds all six
+    # wire-wrap-3: the three-pin wire-wrap alarm header drawn by amphenol-ns/alarm-card-307608@1
+    # screw-terminal-5: the nrgNET removable 5-pin screw-down block, amphenol-ns/nrg-rear-block@1
+    # screw-terminal-2: the two-pole pluggable DC block, common/dc-terminal-plug-2@1
+    # terminal-381-5/terminal-350-6: the EX4100-H 5-position 3.81 mm PSU header and 6-position
+    # 3.5 mm alarm header, juniper/ex4100-h-psu-connector@1 and juniper/ex4100-h-alarm-connector@1
+    # screw-terminal-4: the four-pole DC feed header, telco-systems/tm-7124s-dc-feed@1
+    # orv3-busbar: the Open Rack v3 48 V bus-bar connector, common/orv3-busbar-connector@1.
+    # Vendor connectors citing no standard; each names the header or connector on the device
+    # and never the plug that enters it
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
@@ -107,7 +117,11 @@ def test_the_connector_registry_is_not_vacuous():
                          # stack, virtual-chassis and redundant-power connectors,
                          # each presented by a port part
                          "flexstack", "stackwise-480", "stackpower", "ex4200-vcp",
-                         "cisco-rps2300", "ex3300-rps"}
+                         "cisco-rps2300", "ex3300-rps",
+                         # alarm, terminal and bus-bar connectors
+                         "wire-wrap-3", "screw-terminal-5", "screw-terminal-2",
+                         "terminal-381-5", "terminal-350-6", "screw-terminal-4",
+                         "orv3-busbar"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -141,7 +155,11 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    # parts; a superset, so an interface no placed part
                                    # presents yet does no harm
                                    "flexstack", "stackwise-480", "stackpower",
-                                   "ex4200-vcp", "cisco-rps2300", "ex3300-rps"}
+                                   "ex4200-vcp", "cisco-rps2300", "ex3300-rps",
+                                   # the alarm, terminal and bus-bar connectors
+                                   "wire-wrap-3", "screw-terminal-5", "screw-terminal-2",
+                                   "terminal-381-5", "terminal-350-6", "screw-terminal-4",
+                                   "orv3-busbar"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
@@ -216,6 +234,51 @@ def test_a_stack_or_rps_note_names_the_part_that_presents_it_and_the_plug_that_m
     assert f"{presenter}@1 presents it" in note and f"{plug}@1 mates it" in note
     for stale in ("presents it yet", "added separately", "no part presents"):
         assert stale not in note.lower(), f"{key} still says {stale!r}"
+
+
+ALARM_TERMINAL_BUSBAR_PARTS = {
+    "wire-wrap-3": ("amphenol-ns/alarm-card-307608@1", "amphenol-ns/nrg-rear-block@1"),
+    "screw-terminal-5": ("amphenol-ns/nrg-rear-block@1",),
+    "screw-terminal-2": ("common/dc-terminal-plug-2@1",),
+    "terminal-381-5": ("juniper/ex4100-h-psu-connector@1",),
+    "terminal-350-6": ("juniper/ex4100-h-alarm-connector@1",),
+    "screw-terminal-4": ("telco-systems/tm-7124s-dc-feed@1",),
+    "orv3-busbar": ("common/orv3-busbar-connector@1",),
+}
+
+
+def _contract_at(ref):
+    """The contract of `ns/name@major`, opened at its own major."""
+    ns, tail = ref.split("/")
+    name, major = tail.split("@")
+    return yaml.safe_load((LIB / "components" / ns / name / f"v{major}" / "contract.yaml").read_text())
+
+
+@pytest.mark.parametrize("key", ALARM_TERMINAL_BUSBAR_PARTS)
+def test_an_alarm_terminal_or_busbar_key_has_a_note_and_no_standard(key):
+    entry = render_mod._connector_registry().get(key)
+    assert entry is not None, f"{key} is not registered"
+    assert str(entry.get("note") or "").strip(), f"{key} has no note"
+    assert "standard" not in entry, f"{key} cites a standard; these are vendor connectors"
+
+
+@pytest.mark.parametrize("key", ALARM_TERMINAL_BUSBAR_PARTS)
+def test_an_alarm_terminal_or_busbar_note_names_the_part_that_draws_it(key):
+    note = render_mod._connector_registry()[key]["note"]
+    for ref in ALARM_TERMINAL_BUSBAR_PARTS[key]:
+        assert _contract_at(ref), f"{ref} has no contract in the library"
+        assert ref in note, f"the note of {key} does not name {ref}"
+    low = note.lower()
+    assert not re.search(r"\byet\b", low), f"{key} still says 'yet'"
+    for stale in ("added separately", "no part presents"):
+        assert stale not in low, f"{key} still says {stale!r}"
+
+
+def test_no_nema_plug_is_a_connector_key():
+    reg = render_mod._connector_registry()
+    for plug in ("nema-5-15p", "nema-l5-20p"):
+        assert plug not in reg, "a NEMA plug mates a receptacle key"
+    assert "nema-5-15r" in reg
 
 
 def test_an_lc_slot_accepts_the_plug_and_no_boot(comps):

@@ -11,6 +11,7 @@ on what a live device lacks the day this runs:
   check that passes because it looked at nothing.
 """
 import copy
+import importlib.util
 import json
 import pathlib
 import shutil
@@ -453,6 +454,112 @@ def test_by_family_assigns_by_the_five_rules_in_order(tmp_path):
     first = next(p for p in got["other"]["parts"] if p["ref"] == "acme/odd@1")
     assert first["provenance"]["existence"].startswith("datasheet - the guide lists") and first["class"] == "port"
     assert got["other"]["vendors"] == ["acme"] and got["other"]["devices"] == ["dev-6"]
+
+
+def by_family_where(tmp_path, spec):
+    """`--by-family` over one C20 cause per part of `spec` ({ref: contract fields}), with the real family file:
+    {ref: family name}."""
+    for ref, fields in spec.items():
+        contract(tmp_path, ref, **fields)
+    report = tmp_path / "scan.json"
+    report.write_text(json.dumps(families_report([(ref, f"dev-{i}") for i, ref in enumerate(spec)])))
+    out = tmp_path / "families.json"
+    p = subprocess.run([sys.executable, str(TOOL), "--by-family", str(report), "--library", str(tmp_path / "library"), "--out", str(out)],
+                       capture_output=True, text=True)
+    assert p.returncode == 0, p.stderr[-1500:]
+    got = json.loads(out.read_text())["families"]
+    return {part["ref"]: name for name, fam in got.items() for part in fam["parts"]}
+
+
+KEY_FAMILIES = {
+    "flexstack": "stack and virtual chassis", "stackwise-480": "stack and virtual chassis",
+    "stackpower": "stack and virtual chassis", "ex4200-vcp": "stack and virtual chassis",
+    "cisco-rps2300": "RPS", "ex3300-rps": "RPS",
+    "rj45": "console (RJ45, USB, Mini-B, DB9)",
+    "screw-terminal-2": "DC terminals and barrels", "screw-terminal-4": "DC terminals and barrels",
+    "terminal-381-5": "DC terminals and barrels", "orv3-busbar": "DC terminals and barrels",
+    "wire-wrap-3": "other", "screw-terminal-5": "other", "terminal-350-6": "other",
+}
+
+
+def test_by_family_places_each_stack_rps_console_terminal_and_alarm_key_in_its_family(tmp_path):
+    spec, want = {}, {}
+    for i, (key, family) in enumerate(KEY_FAMILIES.items()):
+        # a key mapped to "other" gets a name the DC pattern would take, so only the key can keep it out of DC
+        ref = f"acme/terminal-x{i}@1" if family == "other" else f"acme/p-{i}@1"
+        spec[ref] = {"class": "port", "interface": key}
+        want[ref] = family
+    assert by_family_where(tmp_path, spec) == want
+
+
+def test_by_family_keeps_a_busbar_out_of_usb_and_a_usb_port_in_it(tmp_path):
+    # "busbar" contains "usb"
+    where = by_family_where(tmp_path, {"acme/input-feed-busbar@1": {"class": "port"},
+                                       "acme/some-bus-bar@1": {"class": "port"},
+                                       "acme/usb-a-port@1": {"class": "port"}})
+    assert where == {"acme/input-feed-busbar@1": "DC terminals and barrels",
+                     "acme/some-bus-bar@1": "DC terminals and barrels",
+                     "acme/usb-a-port@1": "USB"}
+
+
+def test_by_family_sends_a_supply_to_dc_by_its_role_or_a_dc_word_of_its_name(tmp_path):
+    where = by_family_where(tmp_path, {
+        "acme/pwr-do@1": {"class": "psu", "attrs": {"role": "dc-power-supply"}},          # DC by its role, no dc in the name
+        "acme/a9k-pwr-2kw-dc@1": {"class": "psu", "attrs": {"role": "power-module"}},     # DC by a word of its name
+        "acme/x-hvacdc@1": {"class": "psu", "attrs": {"role": "hvac-dc-power-supply"}},  # dc is not a word of it
+        "acme/dcs201-psu-ac@1": {"class": "psu", "attrs": {"role": "power-supply"}},      # nor of this
+        "acme/plain-psu@1": {"class": "psu", "attrs": {"input": "ac"}},
+    })
+    assert where == {"acme/pwr-do@1": "DC terminals and barrels", "acme/a9k-pwr-2kw-dc@1": "DC terminals and barrels",
+                     "acme/x-hvacdc@1": "power inlets (AC)", "acme/dcs201-psu-ac@1": "power inlets (AC)",
+                     "acme/plain-psu@1": "power inlets (AC)"}
+
+
+DC_NAMED_SUPPLIES = ("cisco/a9k-pwr-2kw-dc@1", "juniper/jpsu-550-c-dc-afi@1", "juniper/jpsu-550-c-dc-afo@1",
+                     "juniper/ex4100-h-24f-dc-psu@1", "juniper/ex4100-h-24mp-dc-psu@1", "juniper/mx2000-psm-dc-v@1",
+                     "juniper/qfx10002-jpsu-1600w-dc-afo@1", "juniper/qfx524x-2ru-pwr-do@1")
+
+
+def test_every_dc_supply_of_the_real_library_is_in_the_dc_family_and_the_hvdc_one_is_not():
+    loader = importlib.util.spec_from_file_location("part_conformance", TOOL)
+    module = importlib.util.module_from_spec(loader)
+    loader.loader.exec_module(module)
+    families = yaml.safe_load(module.FAMILIES.read_text())
+    got, says_dc = {}, []
+    for path in sorted((ROOT / "library/components").glob("*/*/v*/contract.yaml")):
+        text = path.read_text()
+        if "class: psu" not in text:
+            continue
+        c = yaml.safe_load(text)
+        if c.get("class") != "psu":
+            continue
+        name = path.parts[-3]
+        ref = f"{path.parts[-4]}/{name}@{path.parts[-2][1:]}"
+        got[ref] = module.family_of(families, c, name)
+        if c.get("interface") in families["interfaces"]:
+            continue            # placed by rule 1, not by the supply rule
+        if (c.get("attrs") or {}).get("role") == "dc-power-supply" or "dc" in name.split("-"):
+            says_dc.append(ref)
+    dc = families["psu"]["dc"]
+    stray = [ref for ref in says_dc if got[ref] != dc]
+    print("supplies that say DC and are not in the DC family:", stray)
+    assert not stray, f"supplies that say DC and are not in the DC family: {stray}"
+    for ref in DC_NAMED_SUPPLIES:
+        assert got[ref] == dc, f"{ref} is in {got[ref]}"
+    assert got["juniper/mx304-psu-hvacdc@1"] == families["psu"]["ac"]
+
+
+def test_every_family_the_family_file_names_is_one_of_its_families():
+    families = yaml.safe_load((ROOT / "spec/tools/dev/port_families.yaml").read_text())
+    known, named = set(families["families"]), set()
+    for entry in families["interfaces"].values():
+        named.add(entry if isinstance(entry, str) else entry["family"])
+        if isinstance(entry, dict):
+            named.update((entry.get("by-class") or {}).values())
+    named.update(families["classes"].values())
+    named.update(p["family"] for p in families["name-patterns"])
+    named.update([families["psu"]["ac"], families["psu"]["dc"], families["other"]])
+    assert named <= known, f"not in `families`: {sorted(named - known)}"
 
 
 @pytest.mark.skipif(not (DIST / "devices.json").exists(), reason="library/dist not built - run ./build.sh")
