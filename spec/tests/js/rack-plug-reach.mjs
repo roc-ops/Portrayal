@@ -20,7 +20,9 @@ const QSFP_LC = 20.0 + R.PLUG_REACH.om4;
 const optics = ctx => ({...ctx, plugReachOf: e => (e.item === 'i2' ? null : QSFP_LC)});
 
 test('the defaults are the library\'s plug and boot, per media', () => {
-  assert.deepEqual(R.PLUG_REACH, {os2: 27.6, om3: 27.6, om4: 27.6, om5: 27.6, cat6: 39.4, cat6a: 39.4, dac: 64.8, aoc: 64.8, power: 77.0});
+  assert.deepEqual(R.PLUG_REACH, {os2: 27.6, om3: 27.6, om4: 27.6, om5: 27.6, cat6: 39.4, cat6a: 39.4, dac: 64.8, aoc: 64.8, power: 77.0,
+    // no plug of these is modelled in the library: each takes the copper figure, an estimate, and says so by having its own row
+    ground: 39.4, stack: 39.4, usb: 39.4, console: 39.4});
   // the reach of end a, read off routePath: its reach point's distance out
   // of the face, or 0 when it has none
   const r = F.rack(), base = F.ctxOf(r), c1 = r.cables[0];
@@ -31,6 +33,7 @@ test('the defaults are the library\'s plug and boot, per media', () => {
   assert.equal(reachOf(c1), 27.6);
   assert.equal(reachOf({...c1, media: 'cat6a'}), 39.4);
   assert.equal(reachOf({...c1, media: 'dac'}), 64.8);
+  for (const media of ['stack', 'usb', 'console']) assert.equal(reachOf({...c1, media}), R.PLUG_REACH[media], media);
   // no media, or one named like something every object has: the copper figure
   for (const media of [undefined, 'constructor', '__proto__', 'nope']) assert.equal(reachOf({...c1, media}), 39.4, String(media));
   // the page's own figure wins, 0 included; one it cannot give falls back
@@ -91,7 +94,9 @@ test('the reach point is out of the face the port is seen from: +z at the front,
 // figure a routed length was before, for every media, at every length to 5 m.
 test('the table is the plug inside the port alone; the short tolerance and the end play are their own', () => {
   assert.deepEqual(R.END_ALLOWANCE_BY_MEDIA, {os2: 0.0131, om3: 0.0131, om4: 0.0131, om5: 0.0131,
-    cat6: 0.0095, cat6a: 0.0095, dac: 0, aoc: 0.0524, power: 0.017, ground: 0});
+    cat6: 0.0095, cat6a: 0.0095, dac: 0, aoc: 0.0524, power: 0.017, ground: 0,
+    // stack, usb and console: no maker's figure is held, so each takes the copper cord's, an estimate
+    stack: 0.0095, usb: 0.0095, console: 0.0095});
   assert.deepEqual([R.END_PLAY_M, R.BREAK_TOL_M, R.UNPLACED_WARN_M], [0.1, 0.01, 0.3]);
   const r = F.rack(), ctx = F.ctxOf(r), c1 = r.cables[0];
   const per = media => {

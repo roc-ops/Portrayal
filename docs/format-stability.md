@@ -345,6 +345,79 @@ one a major. `pdu-button` is a mounting interface in
 `spec/schemas/connectors.yaml`; a slot that presents it and the fit check are
 #939's and #935's.
 
+## DC ports
+
+A part that takes or hands on direct current states its DC ports in a `dc`
+block ([`dc-power-design.md`](dc-power-design.md) section 5.2), and a device
+placement may override what differs. The build publishes them under one key,
+`dc-ports`, in two files. It is a new key and did not raise `contract`, which
+is still 2: a reader that does not know it finds every field it read before.
+No library part states a port yet, so today no published file carries the key.
+
+**`dc-ports` in `components.json`**, on the component's entry beside `cages`: a
+list with one entry per port, in the order the part states them. Omitted when
+the part states none. It is the part as it is stated, in the part's own frame.
+
+**`configs[].dc-ports` in `<device>.configs.json`**: the ports one
+configuration presents, ascending by `path`, with each placement's `dc`
+override applied. Omitted on a configuration that presents none, and so absent
+from the whole file for a device with none. It is not a view-level list like
+`cages`: a part in a bay is in the configurations that seat it and in no other,
+so a list on the file or on a view would be true of one build and false of
+another. A reader holding a configuration reads that configuration's list, as
+it reads `slots` and `states`. A part in a bay's nested bay is found the same
+way; the placement override applies to a placed part and not to a bay's
+occupant, which is what lint reads.
+
+Both lists hold the same entry:
+
+| key | holds |
+|---|---|
+| `id` | the port's id on its part (`input`) |
+| `path` | the end a feed lands on. Always `<part path>/<port id>`, whether the part has one port or several, so a port added later moves no other's path. In `components.json` the part is the frame, so the path is the id alone (`input`); in `configs.json` it is the path the drawing gives the part with the id after it: the placement id (`feed-a/input`) or `<bay>/module` for a part in a bay (`psu-0/module/input`) |
+| `ref` | `configs.json` only: the component that presents it, so a reader can fetch its entry |
+| `direction` | `input` or `output` |
+| `voltage` | `{nominal, range?}`, signed (a -48 V plant is `-48`), or `null` where neither the part nor the placement states one |
+| `rating-a` | amperes, or `null` |
+| `awg` | the conductor sizes the end takes, a list, or `null` |
+| `side` | `a` or `b`, or `null` |
+| `poles` | one per conductor, in the order the cable lists its conductors: `{role, slot}`, and `stand-in` (`{order}`) where the part states one |
+
+A pole's `role` is one of the closed list in `spec/schemas/dc.yaml`, or
+`unstated` where no source says; an `unstated` pole is published as it is and
+never as a guess. A pole's `slot` is what the conductor lands on: in
+`components.json` its id inside the part (`terminal-48v`), in `configs.json`
+the full path (`psu-0/module/terminal-48v`). It is always under the part, not
+under the port, so a feed to one conductor addresses the pole's slot. A figure
+the part and the placement leave unstated is `null`, not absent, so "the part
+does not say" can be told from a key that is not a question the entry answers.
+The part's `source`, which names a `provenance` note, is not published: the
+note is in `components-detail.json`, no check reads where a figure came from,
+and a key added later is additive where one removed is not.
+
+**What is promised, and what a change costs.** Renaming `dc-ports`, a key of an
+entry, or a role, or changing what a `path` or a `slot` refers to, is a format
+change, and so is moving the poles' order. Adding a key to an entry is not.
+The lock reads a published port as an export fact, as it reads `fed-by` and
+`through`, because whatever lands a feed on it holds what is above:
+
+- a device that **gains** a port, or whose port reaches another configuration,
+  is a minor;
+- a port that **goes**, or loses a configuration, or whose `id` (and so its
+  `path`), `direction`, poles, a pole's `slot` or `role` change, is a major.
+  A second port on a part that had one is only a minor: the first port's path
+  is the part's and its id, and does not move;
+- a figure (`voltage`, `rating-a`, `awg`, `side`) stated where there was none
+  is a minor, and one that is changed or dropped is a major. The figures are
+  what a feed is judged by, and the placement `dc` override that sets the same
+  four already takes a major to change. Choosing the strict side is deliberate:
+  a major can be relaxed to a minor for one figure later, and a promise a
+  consumer holds cannot be tightened;
+- a device that presents no port records nothing: no key is added to its lock,
+  and a lock written before the field existed reads as presenting none, so the
+  first port a device gains is a minor and no device is reported for the lock
+  learning the key.
+
 ## The kits file
 
 `kits.json` is every rail, bracket and slide kit in the library: each
@@ -607,6 +680,14 @@ or a new optional key and nothing that was valid reads differently
 A device's `attrs.performance.cable-capacity-media` does not take the two new
 words: a capacity is a count of data cords.
 
+Three more values of a cable's `media` are added the same way (no new key, no
+raised version): `stack`, the cable between two switches' stacking ports;
+`usb`; and `console`. A cable of a StackPower or redundant-power link is `power`,
+a type of it. A reader that does not know one of the three keeps it, and draws
+the cable as one with no media, as for any media it does not know.
+`cable-capacity-media` does not take them. The DCIM cables file writes the three
+with a blank `CABLE_TYPE`, and says so in its notes.
+
 ## The cable types file
 
 `cable-types.json` names the cable types a rack tool can lay: each one's
@@ -633,14 +714,15 @@ type or a changed id is a major.
 Each type, keyed by its `id`, always carries:
 
 - `id`, `label`, and `media`: the Rack Builder cable media it is a kind of.
-  The bare ids `os2`, `om3`, `om4`, `om5`, `cat6`, `cat6a`, `dac` and `aoc` are
-  those media values themselves, so a rack cable's media names its type. A
-  refinement (`cat6a-ftp`, `os2-g657a2`, `dac-26awg`) has its own id and
-  names the media it refines. `power` is the media of the power cords, and
-  since kit 0.30.0 a Rack Builder media too; it has no bare type, so a cable
-  of media `power` that names no type is drawn and measured as the
-  `power-c13` cord.
-- `family`: `fiber`, `copper`, `dac`, `aoc` or `power`.
+  The bare ids `os2`, `om3`, `om4`, `om5`, `cat6`, `cat6a`, `dac`, `aoc`,
+  `ground`, `stack`, `usb` and `console` are those media values themselves, so
+  a rack cable's media names its type. A refinement (`cat6a-ftp`,
+  `os2-g657a2`, `dac-26awg`, `ground-12awg`) has its own id and names the media
+  it refines. `power` is the media of the power cords, and since kit 0.30.0 a
+  Rack Builder media too; it has no bare type, so a cable of media `power` that
+  names no type is drawn and measured as the `power-c13` cord.
+- `family`: `fiber`, `copper`, `dac`, `aoc`, `power`, `ground`, `stack`, `usb`
+  or `console`.
 - `od_mm` and `od_sources`: a typical outside diameter, a sketch and not a
   measurement of any one cable.
 - `min_bend_radius`: `{installed, loaded}`. Installed is the radius once the
@@ -663,7 +745,23 @@ A type may also carry `fiber` (`mode`, `grade`, `core_um`, and for a named
 class `class` and its own `min_bend`), `shield` or `awg`. A `power` type
 always carries `conductor`, the cord it is made of (`H05VV-F 3G1.0`), so the
 same connector pair on another cord (a North American SJT) is a type of its
-own. A fibre type's installed radius is the cord's cable rule;
+own; a DC feed carries `conductors` instead.
+
+A type may carry `sources` (table version 1.2.0): the documents that name the
+cable, as keys of `sources`. It says nothing of a figure, which has its own
+sources. A type may carry `note`, which says what is not known of it.
+
+A DC feed (table version 1.2.0) is a `power` type with three more keys. `dc`
+is `true`. `conductors` lists the conductors in the order they land on a
+port's poles, each `{role, awg}`: `role` is a role of `dc.yaml` (`unstated`
+where no source gives a polarity, and never `gnd`), `awg` a positive number.
+`ampacity-a` is the current in amperes the conductors carry, with
+`ampacity-sources` beside it, keys of `sources`; where it is Portrayal's own
+estimate the source is `portrayal-estimate` and the type states
+`unverified: true`. A reader that does not know a key ignores it. The build
+refuses a `dc` that is not a boolean, a `conductors` that is not a list of
+mappings or whose role is not `dc.yaml`'s, an `ampacity-a` that is not a
+positive number, and a DC feed that lacks `conductors` or `ampacity-a`. A fibre type's installed radius is the cord's cable rule;
 `fiber.min_bend` is the fibre class's macrobend test radius, kept as data
 for a consumer that knows the cord allows the tighter figure.
 

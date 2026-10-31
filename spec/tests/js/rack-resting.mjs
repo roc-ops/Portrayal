@@ -283,7 +283,7 @@ test('a held face is offered only with tie slots: without them the cable lies on
 // ── drape and the bend radius ────────────────────────────────────────────
 
 test('DRAPE: fibre and AOC limp, twisted pair half, DAC and power stiff; the family is the media\'s', () => {
-  assert.deepEqual(Rest.DRAPE, {fiber: 1, aoc: 1, copper: 0.5, dac: 0.35, power: 0.35});
+  assert.deepEqual(Rest.DRAPE, {fiber: 1, aoc: 1, copper: 0.5, dac: 0.35, power: 0.35, ground: 0.35, stack: 0.35, usb: 0.5, console: 0.5});
   assert.deepEqual(['om4', 'os2', 'cat6', 'cat6a', 'dac', 'aoc', 'power', undefined, 'constructor'].map(m => Rest.familyOf({media: m})),
     ['fiber', 'fiber', 'copper', 'copper', 'dac', 'aoc', 'power', 'copper', 'copper']);
   assert.equal(Rest.drapeOf({media: 'power'}), 0.35);
