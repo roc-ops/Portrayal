@@ -9,7 +9,7 @@ import {placement, managersOf} from './managers.js';
 import {uLabel, zeroUOf, zeroUBottom, firstU, holderOf, rollOf, uText} from './model.js';
 import {whereText, carriesLane} from './zero-u.js';
 import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches, lengthText, isElementId, addressFor, portLabel,
-        takesCableEnd, receptacleOf, endKind, connectorName, endPlug, couplerRole} from './cable-rules.js';
+        takesCableEnd, receptacleOf, endKind, connectorName, endPlug, couplerRole, dcTypeOf, feedSides} from './cable-rules.js';
 import {seatedPort, settleEnds, shownEnv, cableEndPaths, zeroUEnds, backEnds, dcPortsOf, dcReader, dcEntryOf, dcCovered} from './ports.js';
 import {zeroUById, zeroUBottomMm} from './model.js';
 import {RU} from './rails.js';
@@ -19,7 +19,7 @@ import {waypointLanesOf, pathwaysOf, resolveRoute, pathLength, routePath, routeT
   zeroUPathways, pathwaysAt, windowsOf} from './route.js';
 import {catalogEntries} from './catalog.js';
 import {slackOf, slackFindings, sparePlaces, holdsSpare, spareExports, trayText, mText, labelOf} from './slack.js';
-import {GONE, CABLE_GONE, ZERO_GONE, BUNDLE_GONE} from './commands.js';
+import {GONE, CABLE_GONE, ZERO_GONE, BUNDLE_GONE, dcFactsReader} from './commands.js';
 import {bundlesOf, bundleName} from './model.js';
 import {bundleCheck, bundleOfCable, membersText, spacingText, strapSpacing, straps as strapsOf, trunkLength, straightText, fewText,
         layoutOf, isTie, ridersOf, waypointText} from './bundles.js';
@@ -105,8 +105,21 @@ function bundleLine(rack, b, ctx) {
 // than their route needs (a pinned length under the need, the worst named
 // with its shortfall): a cable counts once, as one row of the page's Warnings
 // panel does. Each cable's path is read once (slackOf reads the same kept path).
+// A and B KEPT TO THEIR SIDES, ON A DEVICE (docs/dc-power-design.md section 6): every
+// item whose DC supplies are all fed from outputs of one side (cable-rules.js
+// feedSides), {item, side, ports, cables, text}; [] without the catalogue, and
+// where a side is not stated. It is counted on the `Findings:` line of describe
+// and carried by inspect of the item as `feed_side`.
+export function sideFindings(rack, ctx) {
+  if (!dcReader(rack, ctx)) return [];
+  const read = dcFactsReader(rack, ctx), cabled = new Set((rack.cables || []).flatMap(c => [c.a.item, c.b.item]));
+  return (rack.items || []).filter(i => cabled.has(i.id)).flatMap(i => feedSides(rack, i, read) ?? []);
+}
 function findingsText(rack, ctx) {
-  if (!ctx?.route) return null;
+  const sided = sideFindings(rack, ctx);
+  const sides = sided.length ? [`${count(sided.length, 'device')} ${sided.length === 1 ? 'has' : 'have'} every DC supply fed from one side (${
+    sided.slice(0, 3).map(f => `${f.item}${f.name !== f.item ? ` ${f.name}` : ''}, side ${f.side.toUpperCase()}`).join('; ')}${sided.length > 3 ? ` and ${sided.length - 3} more` : ''})`] : [];
+  if (!ctx?.route) return sides.length ? `Findings: ${sides.join('; ')}.` : null;
   let bodies = 0, bends = 0, covers = 0, worst = null, most = null, cabled = false;
   const rings = [], cords = [];
   try {
@@ -132,7 +145,7 @@ function findingsText(rack, ctx) {
         if (!most || path.covers.length > most.n) most = {id: c.id, n: path.covers.length};
       }
     }
-  } catch { return null; }
+  } catch { return sides.length ? `Findings: ${sides.join('; ')}.` : null; }
   const worstCord = cords.reduce((m, x) => (!m || x.short > m.short ? x : m), null);
   const parts = [
     ...(bodies ? [`${count(bodies, 'cable')} cross${bodies === 1 ? 'es' : ''} a body`] : []),
@@ -140,7 +153,8 @@ function findingsText(rack, ctx) {
       rings.length > 3 ? `${rings.slice(0, 3).join(', ')} and ${rings.length - 3} more` : rings.join(', ')})`] : []),
     ...(bends ?[`${count(bends, 'cable')} ${bends === 1 ? 'has' : 'have'} a tight bend (${bends === 1 ? '' : 'the worst '}${worst.id}, ${worst.short} mm short)`] : []),
     ...(covers ? [`${count(covers, 'cable')} cross${covers === 1 ? 'es' : ''} in front of other ports (${covers === 1 ? '' : 'the most '}${most.id}, ${count(most.n, 'port')}${cabled ? '; only ports that hold a cable were judged' : ''})`] : []),
-    ...(cords.length ? [`${count(cords.length, 'cord')} ${cords.length === 1 ? 'is' : 'are'} shorter than ${cords.length === 1 ? 'its' : 'their'} route needs (${cords.length === 1 ? '' : 'the worst '}${worstCord.id}, ${mText(worstCord.short)} short)`] : [])];
+    ...(cords.length ? [`${count(cords.length, 'cord')} ${cords.length === 1 ? 'is' : 'are'} shorter than ${cords.length === 1 ? 'its' : 'their'} route needs (${cords.length === 1 ? '' : 'the worst '}${worstCord.id}, ${mText(worstCord.short)} short)`] : []),
+    ...sides];
   return parts.length ? `Findings: ${parts.join('; ')}.` : null;
 }
 
@@ -540,6 +554,9 @@ function itemFacts(rack, item, ctx) {
   // the free-port answer's, which reads its drawing
   const ends = slotEnds(item, ctx);
   if (ends.length) out.ends = ends.map(e => ({...e, cable: cableAt(rack, item.id, e)}));
+  // its supplies all fed from one side of an A/B pair (cable-rules.js feedSides), when they are
+  const sided = feedSides(rack, item, dcFactsReader(rack, ctx));
+  if (sided) out.feed_side = {side: sided.side, ports: sided.ports, cables: sided.cables, text: sided.text};
   return out;
 }
 // The id of the cable on an end, or null.
@@ -690,7 +707,8 @@ async function cableInfo(rack, cable, ctx) {
     if (!facts.unchecked) {
       const at = e => facts.ends.get(endKey(e)) || {};
       loose = [['a', cable.a], ['b', cable.b]].map(([side, e]) => ({end: side, reason: at(e).reason ?? null})).filter(x => x.reason);
-      warn = mismatch(cable.media, at(cable.a).info || null, at(cable.b).info || null);
+      // (a DC feed's checks that read the cable's type read it from `ctx.cableTypes`, the cable types table, when given)
+      warn = mismatch(cable.media, at(cable.a).info || null, at(cable.b).info || null, {type: dcTypeOf(ctx.cableTypes, cable)});
     }
   }
   return {kind: 'cable', id: cable.id, a: end(cable.a), b: end(cable.b), media: cable.media, purpose: cable.purpose, label: cable.label,

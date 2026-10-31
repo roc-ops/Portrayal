@@ -595,6 +595,12 @@ export function settleEnd(rack, end, got, ctx) {
     return {...got, facts, ...(mine.info ? {info: mine.info.family || !got.info?.family ? mine.info : {...got.info, plug: mine.info.plug, ...(mine.info.note ? {note: mine.info.note} : {})}} : {}),
             reason: looseReason(end, facts)};
   }
+  // a terminal the part draws as an element, where the part states no DC port: the reason says so
+  const gf = got?.facts;
+  if (!own && gf?.drawing === true && gf.port === false && gf.holder?.part && !gf.part && !gf.onView && !gf.under && !gf.side && dcDrawnOnly(item, end, ctx)) {
+    const facts = {...gf, dcDrawn: true};
+    return {...got, facts, reason: looseReason(end, facts)};
+  }
   if (!own || got?.facts?.drawing === false) return got ?? null;
   const {info, ...facts} = own;
   // the screws to name for an end on a terminal: those no other cable is on
@@ -609,6 +615,24 @@ export function settleEnd(rack, end, got, ctx) {
   // an end that lands by its slot is what its part says it is; a port, what the page read of it
   return {...got, facts: {...got?.facts, ...facts}, info: facts.slot ? info : got?.info?.family ? got.info : info ?? got?.info, reason: looseReason(end, facts)};
 }
+// IS THE END A TERMINAL THE SEATED PART DRAWS AS AN ELEMENT, on a power part that
+// states no DC port: the part the bay holds is of class inlet, psu or power, lists
+// the path's one step among its `elements` (components.json), composes no part of
+// that id, and states no `dc-ports`. Read from what seatedBase reads; nothing else
+// about the end is answered.
+export function dcDrawnOnly(item, end, ctx) {
+  if (!item || !loaded(ctx)) return false;
+  const p = portPathOf(end?.path ?? ''), cut = p.lastIndexOf(MODULE);
+  if (cut < 0 || isElementId(p)) return false;
+  const slots = ctx.slotsOf(item.ref);
+  if (!slots || slots.error) return false;
+  const R = resolverFor(slotEnv(item, slots, ctx.compByRef, ctx.redirects), item.swaps || {});
+  const ref = R.refAt(`${p.slice(0, cut)}/module`), comp = ref ? partOf(ctx.compByRef, ref) : null;
+  const leaf = p.slice(cut + MODULE.length);
+  return !!comp && ['inlet', 'psu', 'power'].includes(comp.class) && !list(comp['dc-ports']).length
+    && !leaf.includes('/') && list(comp.elements).includes(leaf) && !list(comp.parts).some(q => q.id === leaf);
+}
+
 // The page's `cableFacts(rack).ends` settled: every cabled end of the rack,
 // and `extra` ends (the two of a cable still being made), as cableFacts takes
 // them. Map(endKey -> {facts?, info?, reason}); an end neither the page nor
