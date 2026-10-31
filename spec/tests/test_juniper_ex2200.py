@@ -266,9 +266,10 @@ def test_the_full_width_rear_has_the_management_console_usb_and_esd_ports(name):
     assert pl["esd-rear-jack"]["ref"] == "common/esd-jack@1"
     assert pl["console-rj45"]["attrs"]["role"] == "console"
     decor = {x.get("id"): x for x in d["views"]["rear"]["panel"]["decor"]}
-    assert {"earth-terminal", "earth-hole-1", "earth-hole-2", "rps-plate", "rps-opening"} <= set(decor)
-    # the RPS port is chassis art: the library has no connector for it
-    assert not [p for p in pl.values() if "rps" in p["ref"]]
+    assert {"earth-terminal", "earth-hole-1", "earth-hole-2"} <= set(decor)
+    # the RPS port is a placed part, no longer panel art (test_rps_interfaces.py holds the detail)
+    assert not {"rps-plate", "rps-opening"} & set(decor)
+    assert pl["rps"]["ref"] == "juniper/ex2200-rps-port@1"
 
 
 @pytest.mark.parametrize("name", FULL)
@@ -461,8 +462,9 @@ def test_the_device_is_generated_from_its_layout(name):
 
 # --- the components ----------------------------------------------------------
 
-def test_this_slice_adds_no_component():
-    """Every part is a registry or common one: the guide's supply and fans are built in, and the pieces of
-    metalwork no library part covers (the mini-USB console, the RPS port, the four-pole DC terminal block)
-    are chassis art, because the DCIM export has no row that could carry a part of any of those kinds."""
-    assert not list(COMP.glob("ex2200-*"))
+def test_this_slice_adds_only_the_rps_port_component():
+    """Every part but one is a registry or common one: the guide's supply and fans are built in, and the
+    pieces of metalwork no library part covers (the mini-USB console, the four-pole DC terminal block) are
+    chassis art, because the DCIM export has no row that could carry a part of either kind. The RPS port is
+    the one component, a placed part that presents no interface."""
+    assert sorted(p.name for p in COMP.glob("ex2200-*")) == ["ex2200-rps-port"]
