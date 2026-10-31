@@ -53,8 +53,9 @@ def test_the_connector_registry_is_not_vacuous():
     # iec-c19: the C19 outlet of a PDU, a slot for a C20 jumper end (#933)
     # usb-a/micro-usb-b/usb-c: the USB receptacles, made slots for their cable plugs (#786)
     # mini-usb-b: the Mini-B receptacle, registered from Molex 54819-0519;
-    # std/mini-usb@1 presents it (the Catalyst 9300 and 3650 console) and no cable
-    # plug mates it yet
+    # std/mini-usb@1 presents it (the Catalyst 9300 and 3650 console), so does
+    # juniper/ex4300-console-usb-mini@1 (the EX4300 and EX4550 console), and
+    # generic/mini-usb-b-plug@1 mates it
     # db9/hd15/da15/db25: the D-sub and VGA connectors, made slots for their hooded plugs (#787)
     # terminal-508-2/-5/-6: the pluggable 5.08 mm terminal headers, made slots for their
     # screw-clamp plugs (#789)
@@ -82,8 +83,8 @@ def test_the_connector_registry_is_not_vacuous():
     # flexstack/stackwise-480/stackpower: the Cisco stacking and power-stacking
     # connectors; ex4200-vcp: the Juniper EX4200 Virtual Chassis port;
     # cisco-rps2300/ex3300-rps: the two redundant-power connectors. Vendor connectors
-    # citing no standard; no part presents any of them yet, so the later change that
-    # gives a part its interface and its mate never edits this list
+    # citing no standard; the stack, StackPower, Virtual Chassis and RPS port parts
+    # present them and a plug mates each, so this list holds all six
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
@@ -103,8 +104,8 @@ def test_the_connector_registry_is_not_vacuous():
                          # a riser bay states one as its `interface`, so no part
                          # presents either and neither is a slot below
                          "pcie-fh", "pcie-lp",
-                         # stack, virtual-chassis and redundant-power connectors:
-                         # presented by no part yet
+                         # stack, virtual-chassis and redundant-power connectors,
+                         # each presented by a port part
                          "flexstack", "stackwise-480", "stackpower", "ex4200-vcp",
                          "cisco-rps2300", "ex3300-rps"}
     # No connector interface is also a cage family's: one core, two registries,
@@ -133,11 +134,12 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "pcie-12vhpwr", "pcie-12v-2x6",
                                    # the A10's east end
                                    "pcie-8pin",
-                                   # the Mini-B console of the Catalyst 9300 and 3650,
-                                   # so a part composing std/mini-usb@1 never edits this
+                                   # the Mini-B console of the Catalyst 9300 and 3650
+                                   # and of the EX4300 and EX4550
                                    "mini-usb-b",
-                                   # registered ahead of the parts that present them,
-                                   # so those changes never edit this list
+                                   # the stack, StackPower, Virtual Chassis and RPS port
+                                   # parts; a superset, so an interface no placed part
+                                   # presents yet does no harm
                                    "flexstack", "stackwise-480", "stackpower",
                                    "ex4200-vcp", "cisco-rps2300", "ex3300-rps"}
                for c in entries)
@@ -167,6 +169,8 @@ def test_the_connectors_header_documents_unmated_and_turns():
     keys = head.split("AN ENTRY is", 1)[1]
     for word in ("unmated", "turns", "40 characters", "C21"):
         assert word in keys, f"the entry-key list does not mention {word}"
+    for stale in ("is to gain", "stops at C20"):
+        assert stale not in head, f"the header still says {stale!r}"
 
 
 def test_the_pluggables_header_documents_unmated_as_a_map_from_a_rate():
@@ -175,13 +179,43 @@ def test_the_pluggables_header_documents_unmated_as_a_map_from_a_rate():
     tail = head.split("unmated", 1)[1]
     for word in ("map", "rate", "sentence", "40 characters", "C21"):
         assert word in tail, f"the unmated paragraph does not mention {word}"
+    for stale in ("is to gain", "stops at C20"):
+        assert stale not in head, f"the header still says {stale!r}"
 
 
-def test_the_mini_usb_b_note_says_what_presents_it():
+def test_the_mini_usb_b_note_says_what_presents_and_mates_it():
     note = render_mod._connector_registry()["mini-usb-b"]["note"]
+    for ref in ("std/mini-usb@1", "juniper/ex4300-console-usb-mini@1",
+                "generic/mini-usb-b-plug@1"):
+        assert ref in note, f"the note does not name {ref}"
     assert "No part presents it" not in note
-    assert "std/mini-usb@1" in note
-    assert "no cable plug mates it yet" in note
+    assert "mates it yet" not in note
+
+
+STACK_AND_RPS_PARTS = {
+    "flexstack": ("cisco/flexstack-port", "cisco/flexstack-plug"),
+    "stackwise-480": ("cisco/stackwise-480-port", "cisco/stackwise-480-plug"),
+    "stackpower": ("cisco/stackpower-port", "cisco/stackpower-plug"),
+    "ex4200-vcp": ("juniper/ex4200-vcp-port", "juniper/ex4200-vcp-plug"),
+    "cisco-rps2300": ("cisco/rps2300-connector", "cisco/rps2300-plug"),
+    "ex3300-rps": ("juniper/ex3300-rps-port", "juniper/ex3300-rps-plug"),
+}
+
+
+def _contract_of(name):
+    return yaml.safe_load((LIB / "components" / name / "v1/contract.yaml").read_text())
+
+
+@pytest.mark.parametrize("key", STACK_AND_RPS_KEYS)
+def test_a_stack_or_rps_note_names_the_part_that_presents_it_and_the_plug_that_mates_it(key):
+    presenter, plug = STACK_AND_RPS_PARTS[key]
+    assert _contract_of(presenter)["interface"] == key
+    mates = _contract_of(plug)["mates"]
+    assert key in (mates if isinstance(mates, list) else [mates])
+    note = render_mod._connector_registry()[key]["note"]
+    assert f"{presenter}@1 presents it" in note and f"{plug}@1 mates it" in note
+    for stale in ("presents it yet", "added separately", "no part presents"):
+        assert stale not in note.lower(), f"{key} still says {stale!r}"
 
 
 def test_an_lc_slot_accepts_the_plug_and_no_boot(comps):

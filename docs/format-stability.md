@@ -686,7 +686,8 @@ raised version): `stack`, the cable between two switches' stacking ports;
 a type of it. A reader that does not know one of the three keeps it, and draws
 the cable as one with no media, as for any media it does not know.
 `cable-capacity-media` does not take them. The DCIM cables file writes the three
-with a blank `CABLE_TYPE`, and says so in its notes.
+with a blank `CABLE_TYPE`, and its generic note for a blank type says so ("its
+media (stack) has no ... cable type, so its type is blank").
 
 ## The cable types file
 
@@ -745,7 +746,10 @@ A type may also carry `fiber` (`mode`, `grade`, `core_um`, and for a named
 class `class` and its own `min_bend`), `shield` or `awg`. A `power` type
 always carries `conductor`, the cord it is made of (`H05VV-F 3G1.0`), so the
 same connector pair on another cord (a North American SJT) is a type of its
-own; a DC feed carries `conductors` instead.
+own; a DC feed carries `conductors` instead. A fibre type's installed radius is
+the cord's cable rule; `fiber.min_bend` is the fibre class's macrobend test
+radius, kept as data for a consumer that knows the cord allows the tighter
+figure.
 
 A type may carry `sources` (table version 1.2.0): the documents that name the
 cable, as keys of `sources`. It says nothing of a figure, which has its own
@@ -761,9 +765,7 @@ estimate the source is `portrayal-estimate` and the type states
 `unverified: true`. A reader that does not know a key ignores it. The build
 refuses a `dc` that is not a boolean, a `conductors` that is not a list of
 mappings or whose role is not `dc.yaml`'s, an `ampacity-a` that is not a
-positive number, and a DC feed that lacks `conductors` or `ampacity-a`. A fibre type's installed radius is the cord's cable rule;
-`fiber.min_bend` is the fibre class's macrobend test radius, kept as data
-for a consumer that knows the cord allows the tighter figure.
+positive number, and a DC feed that lacks `conductors` or `ampacity-a`.
 
 The kit's `rack/cable-types.js` reads it: `radiusMm(type)` turns a radius into
 millimetres, `bendLookup(types)` gives a cable's installed radius from its

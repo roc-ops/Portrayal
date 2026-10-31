@@ -215,7 +215,9 @@ def test_the_flexstack_port_presents_its_key_and_says_what_will_seat_it():
     assert c["class"] == "port" and c["interface"] == "flexstack"
     assert c["connection-points"]["mate"]["direction"] == "front"
     assert c["unplaced"].startswith("seated by")
-    assert "c2960s-stack" in c["unplaced"] and "#1322" in c["unplaced"]
+    # when a device places the part, lint asks for this sentence to go, and the
+    # change that places it edits this test
+    assert "c2960s-stack" in c["unplaced"]
 
 
 def test_the_flexstack_ports_figures_equal_what_its_provenance_says_it_read():
