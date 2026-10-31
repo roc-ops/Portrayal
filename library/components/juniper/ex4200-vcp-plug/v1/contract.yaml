@@ -1,0 +1,92 @@
+format: 1
+kind: component
+name: ex4200-vcp-plug
+version: 1.0.0
+class: port
+mates: ex4200-vcp
+profile: networking
+description: >-
+  The 68-pin cable end of the Juniper Virtual Chassis cable, seen from the cable end as a front
+  elevation sees it seated: a wide flat connector body with a screwed retainer slid over it, the round
+  strain relief and a short straight stub of cable whose diameter is the cable-od field. Seats in an
+  `ex4200-vcp` port at its own mate point; the cable leaves from the far end of the stub. The cable that
+  ships with an EX4200 is also the one that joins an EX4500's Virtual Chassis ports.
+size: {w: 36.2, h: 8.3}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: ex4200-vcp, connector: ex4200-vcp}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 7.0}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    datasheet - Juniper EX4200 Switch Hardware Guide (published 2022-01-16), Connecting a Virtual
+    Chassis Cable to an EX4200 Switch and Figures 67 and 68: the connector is slid into the port until it
+    is fully seated, a release pull tab unlocks it, and a cable connector retainer is slid over it and
+    screwed down with a cross-head screwdriver. The pinout topic: "EX4200 switches use a 68-pin connector
+    cable". EX4500 Switch Hardware Guide, PDF pp.27, 129 and 137: the same cable joins the EX4500's VCPs.
+  size: >-
+    estimated - NO MAKER DRAWING OF THE PLUG IS HELD, and the guide's Figures 67 and 68 are isometric and
+    carry no scale. It is drawn as large as the collar of juniper/ex4200-vcp-port@1 (36.2 x 8.3, itself
+    estimated off the guide's Figure 4), with the retainer's two screws at its ends. Every figure is a
+    reading.
+  needs-drawing: >-
+    a maker's drawing of the Virtual Chassis cable connector with its retainer (the cable that ships with
+    an EX4200, and the 1, 3 and 5 meter cables of the EX4500 guide's Table 58), giving the body outline,
+    the retainer and its screw positions, the pull tab and the strain relief.
+  shell: >-
+    estimated - the nose that goes into the port, 32.6 x 5.3, the receptacle's opening (33.0 x 5.5) less
+    0.2 clear on each side. The 68 contacts are not drawn.
+  retainer: >-
+    estimated - Figure 67 draws the retainer as a bracket round the connector with a screw at each end.
+    It is built as the strain relief's box, 24.2 x 6.7, and the two screws are drawn as 2.6 knobs on the
+    ends of the body, not built in 3D. The release pull tab sits above the connector and is not drawn.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a straight run of cable 30 long
+    starting where the strain relief ends. The bend is the installation.
+  cable-od: >-
+    estimated - the guide gives no cable dimension. Figure 67 draws a flat cable of several conductors;
+    7.0 is a round stand-in of about its width.
+  jacket-colour: >-
+    a FIELD. Black is the default as on the library's other cable ends; the guide gives no colour.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame the house plugs use.
+    juniper/ex4200-vcp-port@1 presents at its own face, so 0 is the panel plane. The nose stands 2.0 in
+    front of it (estimated, no insertion depth is held).
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the body (18.1, 4.15): the cable runs
+    straight through the connector.
+elements: {}
+relief:
+  features:
+    - node: shell
+      out: 2.0
+      shape: true
+      color: '#c9cdd1'
+      confidence: estimated
+      source: provenance.shell - the nose, 2.0 in front of the port face (estimated)
+    - node: body
+      lift: 2.0
+      out: 27.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: provenance.size - the body, 25.0 long (estimated)
+    - node: relief-boot
+      lift: 27.0
+      out: 42.0
+      shape: true
+      color: '#202225'
+      confidence: estimated
+      source: provenance.retainer - the strain relief, 15.0 long (estimated)
+    - node: stub
+      lift: 42.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [18.1, 4.15], direction: front}
+  cable: {at: [18.1, 4.15], direction: front, 'on': stub}
+skins: [default]

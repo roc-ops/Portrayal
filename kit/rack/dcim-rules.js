@@ -368,8 +368,13 @@ export function moduleImportRows({target = 'netbox', parts, names, kept, deviceO
 // whose two ends the type files name is written with a blank type, and one
 // whose ends they do not name is left out with that reason, as any cable is
 // (docs/cable-ends-design.md section 7).
+// `stack`, `usb` and `console` have a row, and it is BLANK. The cable-type
+// choices of NetBox v4.7.2 and Nautobot v3.2.6 (the pins this file cites) were
+// not read when these rows were written, so no value is written for them: a
+// value is filled in only from those lists. CABLE_TYPE_NOTES says so.
 export const CABLE_TYPE = {os2: 'smf-os2', om3: 'mmf-om3', om4: 'mmf-om4', om5: 'mmf-om5', cat6: 'cat6', cat6a: 'cat6a',
-                           dac: 'dac-passive', aoc: 'aoc'};
+                           dac: 'dac-passive', aoc: 'aoc', stack: '', usb: '', console: ''};
+export const CABLE_TYPE_NOTES = Object.fromEntries(['stack', 'usb', 'console'].map(m => [m, 'the DCIM cable-type choices were not read']));
 export const cableType = media => (Object.hasOwn(CABLE_TYPE, media ?? '') ? CABLE_TYPE[media] : '');
 
 // Which kinds of end a DCIM lets one cable join (NetBox and Nautobot share the

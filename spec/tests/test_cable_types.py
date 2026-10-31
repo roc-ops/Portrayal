@@ -70,14 +70,14 @@ def test_every_rack_builder_media_is_a_type_of_its_own(built):
     # So a rack cable's media names its type with no mapping.
     # The bare types (id == media) are exactly the Rack Builder's media: a new
     # media without a type, or a bare type no media names, fails here.
-    # `power` and `ground` (#1045) are the two media with no bare type: a power
-    # type is one connector pair on one cord, so no cord is "power" and nothing
-    # more, and no ground wire has a type yet. The kit gives a cable of either
-    # media that names no type the power-c13 cord's figures and an estimate.
+    # `power` (#1045) is the one media with no bare type: a power type is one
+    # connector pair on one cord, so no cord is "power" and nothing more. The
+    # kit gives a cable of that media that names no type the power-c13 cord's
+    # figures. `ground`, `stack`, `usb` and `console` each have a bare type.
     media = _kit_list("kit/rack/cable-rules.js", "MEDIA")
     bare = {tid for tid, t in built["types"].items() if t["media"] == tid}
-    assert media and bare == set(media) - {"power", "ground"}
-    assert {"power", "ground"} <= set(media)
+    assert media and bare == set(media) - {"power"}
+    assert {"power", "ground", "stack", "usb", "console"} <= set(media)
     assert {t["media"] for t in built["types"].values()} <= set(media)
 
 
@@ -86,8 +86,6 @@ def test_the_bare_types_agree_with_the_kit_s_fill_diameters(built):
     body = re.search(r"export const DIAMETERS = \{([^}]*)\}", text).group(1)
     fill = {k: float(v) for k, v in re.findall(r"(\w+): ([\d.]+)", body)}
     assert fill
-    # a ground wire has no type: its diameter is the kit's estimate alone
-    assert "ground" not in built["types"] and fill.pop("ground") > 0
     # `power` has no bare type; the kit takes the power-c13 cord for it
     assert fill.pop("power") == built["types"]["power-c13"]["od_mm"]
     for k, d in fill.items():
@@ -157,7 +155,7 @@ def test_no_bare_media_type_states_a_jacket(built):
     # type with a jacket would be a second, and would recolour every drawing
     # of that media the day a consumer read it.
     bare = [tid for tid, t in built["types"].items() if t["media"] == tid]
-    assert len(bare) == 8
+    assert len(bare) == 12
     assert [tid for tid in bare if "jacket" in built["types"][tid]] == []
     stated = sorted(tid for tid, t in built["types"].items() if "jacket" in t)
     assert stated == ["aoc-siemon-q1q28f"], "a new jacket colour comes with its source and its own check"
@@ -260,3 +258,116 @@ def test_the_kit_resolves_the_published_table(built, tmp_path):
     out = subprocess.run(["node", str(tmp_path / "probe.mjs"), str(tmp_path / "cable-types.json")],
                          capture_output=True, text=True, check=True)
     assert json.loads(out.stdout) == [25, 25, 24, 30, 30, 23, 42.6, None]
+
+
+# --- DC feeds, ground wires, stack, USB, console, RPS and StackPower ---------------------
+
+DC_FEEDS = ["dc-feed-2x14awg", "dc-feed-2x12awg", "dc-feed-2x10awg", "dc-feed-2x6awg"]
+GROUND_WIRES = ["ground", "ground-14awg", "ground-12awg", "ground-8awg", "ground-6awg"]
+NEW_BARE = ["stack", "usb", "console"]
+POWER_CABLES = ["cab-rps2300-e", "cab-spwr-30cm", "cab-spwr-150cm"]
+FLEXSTACK = ["cab-stk-e-0-5m", "cab-stk-e-1m", "cab-stk-e-3m"]
+ESTIMATE = "portrayal-estimate"
+
+
+def test_the_dc_ground_stack_usb_console_rps_and_stackpower_types_are_published(built):
+    types = built["types"]
+    for tid in DC_FEEDS + GROUND_WIRES + NEW_BARE + POWER_CABLES + FLEXSTACK:
+        assert tid in types, tid
+    assert {types[t]["media"] for t in DC_FEEDS + POWER_CABLES} == {"power"}
+    assert {types[t]["family"] for t in DC_FEEDS + POWER_CABLES} == {"power"}
+    assert {(types[t]["media"], types[t]["family"]) for t in GROUND_WIRES} == {("ground", "ground")}
+    assert [(types[t]["media"], types[t]["family"]) for t in NEW_BARE] == [(t, t) for t in NEW_BARE]
+    assert {(types[t]["media"], types[t]["family"]) for t in FLEXSTACK} == {("stack", "stack")}
+    for tid in GROUND_WIRES[1:] + FLEXSTACK:
+        assert types[tid]["media"] != tid, f"{tid} is a refinement: only the bare type has the media's id"
+    assert types["ground"]["media"] == "ground" and types["stack"]["media"] == "stack"
+
+
+def _figures(t):
+    """Every figure of a type as (name, sources, marked unverified)."""
+    out = [("od_mm", t["od_sources"], False)]
+    for which in ("installed", "loaded"):
+        r = t["min_bend_radius"][which]
+        if r:
+            out.append((which, r["sources"], r.get("unverified") is True))
+    if "ampacity-a" in t:
+        out.append(("ampacity-a", t["ampacity-sources"], t.get("unverified") is True))
+    return out
+
+
+def test_each_new_figure_is_sourced_or_marked_an_estimate(built):
+    # a figure whose only source is Portrayal's own estimate says so: the radius is `unverified`, the type
+    # is `unverified` where one is the ampacity, and a `note` says what is not known. A figure that cites a
+    # maker's document does not need the mark.
+    for tid in DC_FEEDS + GROUND_WIRES + NEW_BARE + POWER_CABLES + FLEXSTACK:
+        t = built["types"][tid]
+        for name, sources, marked in _figures(t):
+            assert sources and all(s in built["sources"] for s in sources), (tid, name)
+            if set(sources) == {ESTIMATE} and name != "od_mm":
+                assert marked, f"{tid} {name}: an estimate alone is marked unverified"
+        if any(set(s) == {ESTIMATE} for _, s, _ in _figures(t)):
+            assert isinstance(t.get("note"), str) and t["note"].strip(), f"{tid}: an estimated figure says so in a note"
+
+
+def test_a_dc_feed_names_its_conductors_by_the_roles_of_dc_yaml(built):
+    from portrayal.manifest import load_yaml
+    roles = set(load_yaml(cti.SCHEMAS / "dc.yaml")["roles"])
+    for tid in DC_FEEDS:
+        t = built["types"][tid]
+        assert t["dc"] is True and t["media"] == "power"
+        assert len(t["conductors"]) == 2, tid
+        for c in t["conductors"]:
+            assert set(c) == {"role", "awg"} and c["role"] in roles - {"gnd"} and c["awg"] > 0, (tid, c)
+        assert t["ampacity-a"] > 0 and t["ampacity-sources"], tid
+    # the gauges of the library's DC ends, one type each
+    assert sorted(t["conductors"][0]["awg"] for t in (built["types"][x] for x in DC_FEEDS)) == [6, 10, 12, 14]
+    # the AC cords are not DC feeds
+    assert not any(t.get("dc") for tid, t in built["types"].items() if tid not in DC_FEEDS)
+
+
+def test_the_new_sources_are_cited_by_their_makers_title_and_url(built):
+    src = built["sources"]
+    assert src["cisco-2960s-hig"]["url"] == "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst2960/hardware/installation/guide_stack/2960SHIG.pdf"
+    assert "OL-19732-04" in src["cisco-2960s-hig"]["title"]
+    assert src["cisco-c9300-hig"]["url"] == "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig.pdf"
+    assert src["waskoenig-h07v-k"]["url"].startswith("https://www.waskoenig.de/")
+    for tid in FLEXSTACK + ["cab-rps2300-e"]:
+        assert "cisco-2960s-hig" in built["types"][tid].get("sources", []), tid
+    for tid in ("cab-spwr-30cm", "cab-spwr-150cm"):
+        assert "cisco-c9300-hig" in built["types"][tid].get("sources", []), tid
+
+
+@pytest.mark.parametrize("break_it,says", [
+    (lambda t: t["conductors"][0].update(role="minus48"), "role 'minus48' is not one of dc.yaml's roles"),
+    (lambda t: t["conductors"][0].update(role="gnd"), "ground wire"),
+    (lambda t: t["conductors"][0].update(awg=0), "awg must be a positive number"),
+    (lambda t: t["conductors"][0].pop("awg"), "awg must be a positive number"),
+    (lambda t: t["conductors"][0].update(colour="red"), "unknown key 'colour'"),
+    (lambda t: t.update(conductors=[]), "conductors is a list of one or more"),
+    (lambda t: t.update(conductors="batt"), "conductors is a list of one or more"),
+    (lambda t: t.update({"ampacity-a": 0}), "ampacity-a must be a positive number"),
+    (lambda t: t.update({"ampacity-a": True}), "ampacity-a must be a positive number"),
+    (lambda t: t.update({"ampacity-sources": []}), "ampacity-a has no ampacity-sources"),
+    (lambda t: t.update({"ampacity-sources": ["nope"]}), "unknown source 'nope'"),
+    (lambda t: t.pop("ampacity-a"), "a DC feed states its ampacity-a"),
+    (lambda t: t.update(dc="yes"), "dc must be true or false"),
+    (lambda t: t.update(dc=False), "conductors belong to a DC feed"),
+    (lambda t: t.pop("conductors"), "a DC feed names its conductors"),
+    (lambda t: t.update(family="copper"), "a DC feed is of the family power"),
+])
+def test_a_bad_dc_feed_is_refused_with_a_sentence(break_it, says):
+    d = _doc()
+    break_it(d["types"]["dc-feed-2x14awg"])
+    assert any(says in p for p in cti.problems(d)), cti.problems(d)
+
+
+def test_the_new_families_are_known_and_the_bare_rule_holds_for_the_new_media():
+    assert {"ground", "stack", "usb", "console"} <= set(cti.FAMILIES)
+    for media in ("ground", "stack", "usb", "console"):
+        d = _doc()
+        d["types"][f"{media}-refined"] = copy.deepcopy(d["types"].pop(media))
+        assert any(f"media {media}: no type has the id {media}" in p for p in cti.problems(d)), media
+    d = _doc()
+    d["types"]["usb"]["jacket"] = {"color": "#8e6bd1", "basis": "convention", "sources": ["foa-tia568"]}
+    assert any("a bare media type states no jacket" in p for p in cti.problems(d))

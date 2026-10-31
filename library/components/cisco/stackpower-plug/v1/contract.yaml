@@ -1,0 +1,98 @@
+format: 1
+kind: component
+name: stackpower-plug
+version: 1.0.0
+class: port
+mates: stackpower
+profile: networking
+description: >-
+  A Cisco StackPower cable end on its cable, seen from the cable end as a front elevation sees it
+  seated: a keyed body, a captive screw at each side, a coloured band round the strain relief and a
+  short straight stub of cable whose diameter is the cable-od field. The cable has a green band at one
+  end, which connects only to a switch, and a yellow band at the other, which connects to a switch or
+  an XPS; the band-color field sets which end this is. Seats in a `stackpower` port at its own mate
+  point; the cable leaves from the far end of the stub.
+size: {w: 23.6, h: 18.5}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: stackpower, connector: stackpower}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 6.0}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+  band-color: {label: Band colour (green or yellow), type: text, default: '#3f9b4b'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 9300 Series Switches Hardware Installation Guide, StackPower Cabling
+    Configurations (Figure 24) and Connecting to the StackPower Ports: the cable ends have colour bands
+    that match the keying and the bands of the ports; the end with a green band connects only to a
+    switch and the end with a yellow band to a switch or an XPS; the captive screws are hand-tightened.
+    Cables CAB-SPWR-30CM and CAB-SPWR-150CM.
+  size: >-
+    estimated - NO MAKER DRAWING OF THE PLUG IS HELD. It is drawn as large as the recess of
+    cisco/stackpower-port@1 (23.6 x 18.5, itself estimated off the community NetBox device-type
+    library's rear elevation), the smallest a plug that fills the recess can be. Every figure is a
+    reading.
+  needs-drawing: >-
+    a maker's drawing of the StackPower cable connector (CAB-SPWR-30CM, CAB-SPWR-150CM) with its body
+    outline, the keying, the screw positions, the band and the strain relief; or a dimensioned
+    photograph of the connector next to a scale.
+  keying: >-
+    estimated - the guide says the ports are keyed and does not say where. One corner of the body is
+    cut, at the top right, 3.0 each way, which is the side the receptacle's shroud is drawn on.
+  screws: >-
+    estimated - the guide says "captive screws" and gives no position or dimension; Figure 24 shows one
+    thumbscrew on a connector. Two 3.2 knobs, one at each side of the body's centre line, are a reading,
+    not built in 3D.
+  band: >-
+    datasheet and estimated - the guide names the green band and the yellow band; the colours are the
+    names' own reading, green #3f9b4b (the library's ground-cable green) and yellow #d8c850 (the port's
+    blade colour). The band is a ring 1.0 wide round the strain relief, 5.2 in radius; it is drawn in the
+    face and not built in 3D.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a straight run of cable 30 long
+    starting where the strain relief ends. The bend is the installation.
+  cable-od: >-
+    estimated - the guide gives no cable diameter. 6.0 is a reading off Figure 24.
+  jacket-colour: >-
+    a FIELD. Black is the default because Figure 24 draws the cable dark. The Cisco logo on the body is
+    a logo and is not drawn.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame the house plugs use.
+    cisco/stackpower-port@1 presents at its own face, so 0 is the panel plane. The nose stands 2.0 in
+    front of it (estimated, no insertion depth is held).
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the body (11.8, 9.25): the cable runs
+    straight through the connector.
+elements: {}
+relief:
+  features:
+    - node: shell
+      out: 2.0
+      shape: true
+      color: '#c9cdd1'
+      confidence: estimated
+      source: provenance.size - the nose in the recess, 2.0 in front of the face (estimated)
+    - node: body
+      lift: 2.0
+      out: 27.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: provenance.size - the body, 25.0 long (estimated)
+    - node: relief-boot
+      lift: 27.0
+      cyl: 15.0
+      color: '#202225'
+      confidence: estimated
+      source: provenance.band - the strain relief, 15.0 long and 8.4 across (estimated)
+    - node: stub
+      lift: 42.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [11.8, 9.25], direction: front}
+  cable: {at: [11.8, 9.25], direction: front, 'on': stub}
+skins: [default]

@@ -7,12 +7,13 @@
 # under library/components/, and no manifest names it yet.
 #
 # THE ID. A type's id is lower case. The bare ids `os2`, `om3`, `om4`, `om5`,
-# `cat6`, `cat6a`, `dac` and `aoc` are exactly the Rack Builder's cable
-# `media` values (kit/rack/cable-rules.js MEDIA), so a rack cable's media names
-# its type with no mapping. A refinement of one of them (`cat6a-ftp`,
-# `os2-g657a2`) names the bare media it refines in `media`. #897's later named
-# types (pickers, colours, mismatch checks) join this table under new ids and
-# new optional keys.
+# `cat6`, `cat6a`, `dac`, `aoc`, `ground`, `stack`, `usb` and `console` are
+# exactly the Rack Builder's cable `media` values (kit/rack/cable-rules.js
+# MEDIA), so a rack cable's media names its type with no mapping. `power` is
+# the one media with no bare type: a power type is one cord or one feed. A
+# refinement of a bare media (`cat6a-ftp`, `os2-g657a2`, `ground-12awg`) names
+# the media it refines in `media`. #897's later named types (pickers, colours,
+# mismatch checks) join this table under new ids and new optional keys.
 #
 # THE RULE, NOT ONE NUMBER. `min_bend_radius` is `{installed, loaded}`:
 # installed is the radius once a cable is in place and unloaded, the one a
@@ -51,11 +52,27 @@
 # rack cable is drawn in a type's jacket colour when its own `type` names
 # that type (kit/rack/cable-types.js jacketLookup).
 #
+# DC FEEDS (docs/dc-power-design.md section 5.5). A type of `power` that is a DC
+# feed states `dc: true`, `conductors` and `ampacity-a`. `conductors` lists each
+# conductor as `{role, awg}`, in the order they land on the poles of a port; a
+# `role` is one of spec/schemas/dc.yaml's, `unstated` where no source gives the
+# polarity of a cable, and never `gnd`, which is a ground wire of its own.
+# `ampacity-a` is the current in amperes the conductors carry, and
+# `ampacity-sources` says where it comes from, as `od_sources` does: an
+# estimate names `portrayal-estimate` and marks the type `unverified: true`.
+#
+# A TYPE MAY NAME WHERE ITS NAME IS FOUND. `sources` is a list of entries of
+# the table below: the documents that name the cable. It says nothing of a
+# figure; each figure has its own sources.
+#
+# A TYPE'S `note` SAYS WHAT IS NOT KNOWN of it, wherever a figure is Portrayal's
+# estimate and not a maker's.
+#
 # VERSION. `version` is the table's own: a corrected value or a new type is a
 # minor, a removed type or a changed id is a major. `format` is the shape of
 # the published file, and only a removed or renamed key raises it.
 format: 1
-version: 1.1.0
+version: 1.2.0
 
 sources:
   foa-tia568:
@@ -88,8 +105,17 @@ sources:
   siemon-qsfp28-aoc:
     title: Siemon spec sheet, Active Optical Cables QSFP28 100G (Q1Q28F), SS_QSFP28 100G Rev. E 09/19, marked preliminary
     url: https://files.siemon.com/en/specsheet/sis-active-optical-cables-qsfp28-100g_specsheet.pdf
+  cisco-2960s-hig:
+    title: Cisco, Catalyst 2960-S Switch Hardware Installation Guide, OL-19732-04 (the FlexStack cables CAB-STK-E and the RPS cable CAB-RPS2300-E)
+    url: https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst2960/hardware/installation/guide_stack/2960SHIG.pdf
+  cisco-c9300-hig:
+    title: Cisco, Catalyst 9300 Series Switches Hardware Installation Guide (the StackPower cables CAB-SPWR-30CM and CAB-SPWR-150CM)
+    url: https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig.pdf
+  waskoenig-h07v-k:
+    title: Waskoenig+Walter, H07V-K single-core flexible wire data sheet (outer diameters of 1.5 mm2 and 2.5 mm2)
+    url: https://www.waskoenig.de/download/0060?locale=en
   portrayal-estimate:
-    title: Portrayal's own estimate of a typical diameter, a sketch and not a measurement; for a bare media type it is the fill figure in kit/rack/route.js DIAMETERS
+    title: Portrayal's own estimate of a typical diameter, a bend radius or an ampacity, a sketch and not a measurement; for a bare media type the diameter is the fill figure in kit/rack/route.js DIAMETERS
     url: https://github.com/roc-ops/Portrayal/blob/main/kit/rack/route.js
 
 types:
@@ -313,3 +339,268 @@ types:
       installed: {xOD: 6, basis: convention, sources: [oznur-h05vv-f], unverified: true,
                   note: "one maker's figure, not yet confirmed by a second"}
       loaded: null
+
+  # RPS AND STACKPOWER CABLES, types of `power`. The two Cisco guides name each
+  # cable and its length and print no diameter, no bend radius and no
+  # conductor, so each takes the figures of the untyped power cable: 7.1 mm
+  # (the kit's fill figure for `power`) and six times that, both estimates.
+  cab-rps2300-e:
+    label: Cisco RPS 2300 cable CAB-RPS2300-E
+    media: power
+    family: power
+    conductor: not stated by the guide
+    sources: [cisco-2960s-hig]
+    od_mm: 7.1
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 6, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "the power cord's rule, applied by analogy; the guide prints no radius"}
+      loaded: null
+    note: the guide names the cable for the redundant power system of a Catalyst 2960-S and prints no length, diameter, bend radius or conductor
+  cab-spwr-30cm:
+    label: Cisco StackPower cable CAB-SPWR-30CM, 0.3 m
+    media: power
+    family: power
+    conductor: not stated by the guide
+    sources: [cisco-c9300-hig]
+    od_mm: 7.1
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 6, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "the power cord's rule, applied by analogy; the guide prints no radius"}
+      loaded: null
+    note: the guide gives the length and prints no diameter, bend radius or conductor
+  cab-spwr-150cm:
+    label: Cisco StackPower cable CAB-SPWR-150CM, 1.5 m
+    media: power
+    family: power
+    conductor: not stated by the guide
+    sources: [cisco-c9300-hig]
+    od_mm: 7.1
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 6, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "the power cord's rule, applied by analogy; the guide prints no radius"}
+      loaded: null
+    note: the guide gives the length and prints no diameter, bend radius or conductor
+
+  # ── DC feeds ───────────────────────────────────────────────────────────
+  # One cable of two conductors for a DC port, one type to a gauge of the
+  # library's DC ends. No source gives a polarity or a colour for a cable in
+  # general, so each conductor's role is `unstated` and no colour is stated.
+  # The diameter of the 14 and 12 AWG feeds is twice the single-core H07V-K
+  # outside diameter that Waskoenig+Walter lists for 1.5 mm2 (about 3 mm) and
+  # 2.5 mm2 (about 4 mm), the nearest sizes to those gauges; the 10 AWG feed is
+  # an estimate, and the 6 AWG feed twice the kit's 6.3 mm for a 6 AWG
+  # insulated wire. The ampacity is the 60 degree column of the US National
+  # Electrical Code ampacity table as commonly published, which was not read
+  # for this table, so it is an estimate. The radius is eight times the
+  # diameter, the figure published for unscreened building wire, which no
+  # source held here confirms.
+  dc-feed-2x14awg:
+    label: DC power feed, 2 x 14 AWG
+    media: power
+    family: power
+    dc: true
+    conductors: [{role: unstated, awg: 14}, {role: unstated, awg: 14}]
+    ampacity-a: 15
+    ampacity-sources: [portrayal-estimate]
+    od_mm: 6.0
+    od_sources: [waskoenig-h07v-k, portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 8, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "unscreened building wire's published rule; not confirmed by a source held"}
+      loaded: null
+    unverified: true
+    note: the diameter is twice a 1.5 mm2 core, a nearby size and not a 14 AWG; the ampacity and the radius are estimates; no polarity or colour is known
+  dc-feed-2x12awg:
+    label: DC power feed, 2 x 12 AWG
+    media: power
+    family: power
+    dc: true
+    conductors: [{role: unstated, awg: 12}, {role: unstated, awg: 12}]
+    ampacity-a: 20
+    ampacity-sources: [portrayal-estimate]
+    od_mm: 8.0
+    od_sources: [waskoenig-h07v-k, portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 8, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "unscreened building wire's published rule; not confirmed by a source held"}
+      loaded: null
+    unverified: true
+    note: the diameter is twice a 2.5 mm2 core, a nearby size and not a 12 AWG; the ampacity and the radius are estimates; no polarity or colour is known
+  dc-feed-2x10awg:
+    label: DC power feed, 2 x 10 AWG
+    media: power
+    family: power
+    dc: true
+    conductors: [{role: unstated, awg: 10}, {role: unstated, awg: 10}]
+    ampacity-a: 30
+    ampacity-sources: [portrayal-estimate]
+    od_mm: 10.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 8, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "unscreened building wire's published rule; not confirmed by a source held"}
+      loaded: null
+    unverified: true
+    note: no source held gives the diameter of a 10 AWG wire; the diameter, ampacity and radius are estimates; no polarity or colour is known
+  dc-feed-2x6awg:
+    label: DC power feed, 2 x 6 AWG
+    media: power
+    family: power
+    dc: true
+    conductors: [{role: unstated, awg: 6}, {role: unstated, awg: 6}]
+    ampacity-a: 55
+    ampacity-sources: [portrayal-estimate]
+    od_mm: 12.6
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 8, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "unscreened building wire's published rule; not confirmed by a source held"}
+      loaded: null
+    unverified: true
+    note: the diameter is twice the kit's 6.3 mm for a 6 AWG wire; the ampacity and the radius are estimates; no polarity or colour is known
+
+  # ── ground wires ───────────────────────────────────────────────────────
+  # A bonding conductor, drawn green by the kit (COLORS) and never a pole of a
+  # feed. The bare `ground` is the kit's fill figure, 6.3 mm, about a 6 AWG
+  # insulated wire and an estimate. The 14 and 12 AWG wires take the H07V-K
+  # single-core diameter of the nearest size (1.5 and 2.5 mm2) from
+  # Waskoenig+Walter; the 8 AWG wire is an estimate. The radius is eight times
+  # the diameter, as for a feed.
+  ground:
+    label: Ground wire, about 6 AWG
+    media: ground
+    family: ground
+    od_mm: 6.3
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 8, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "unscreened building wire's published rule; not confirmed by a source held"}
+      loaded: null
+    note: no source held gives the gauge or the diameter of a ground wire; the diameter and the radius are estimates
+  ground-14awg:
+    label: Ground wire, 14 AWG
+    media: ground
+    family: ground
+    od_mm: 3.0
+    od_sources: [waskoenig-h07v-k]
+    min_bend_radius:
+      installed: {xOD: 8, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "unscreened building wire's published rule; not confirmed by a source held"}
+      loaded: null
+    note: the diameter is that of a 1.5 mm2 core, a nearby size and not a 14 AWG; the radius is an estimate
+  ground-12awg:
+    label: Ground wire, 12 AWG
+    media: ground
+    family: ground
+    od_mm: 4.0
+    od_sources: [waskoenig-h07v-k]
+    min_bend_radius:
+      installed: {xOD: 8, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "unscreened building wire's published rule; not confirmed by a source held"}
+      loaded: null
+    note: the diameter is that of a 2.5 mm2 core, a nearby size and not a 12 AWG; the radius is an estimate
+  ground-8awg:
+    label: Ground wire, 8 AWG
+    media: ground
+    family: ground
+    od_mm: 5.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 8, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "unscreened building wire's published rule; not confirmed by a source held"}
+      loaded: null
+    note: no source held gives the diameter of an 8 AWG wire; the diameter and the radius are estimates
+  ground-6awg:
+    label: Ground wire, 6 AWG
+    media: ground
+    family: ground
+    od_mm: 6.3
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 8, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "unscreened building wire's published rule; not confirmed by a source held"}
+      loaded: null
+    note: no source held gives the diameter of a 6 AWG wire; the diameter and the radius are estimates
+
+  # ── stack, USB and console ─────────────────────────────────────────────
+  # Three media of cables that join two devices and carry neither a data
+  # network's traffic nor power. No source held prints a diameter or a bend
+  # radius for one, so each bare type's figures are estimates: the diameter
+  # near that of a copper patch cord, and the radius four times it, the
+  # patch cord's rule applied by analogy.
+  stack:
+    label: Stacking cable
+    media: stack
+    family: stack
+    od_mm: 6.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 4, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "the copper patch cord's rule, applied by analogy; no maker's figure is held"}
+      loaded: null
+    note: a maker's stacking cable differs from this one; the diameter and the radius are estimates
+  usb:
+    label: USB cable
+    media: usb
+    family: usb
+    od_mm: 4.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 4, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "the copper patch cord's rule, applied by analogy; no maker's figure is held"}
+      loaded: null
+    note: the diameter and the radius are estimates
+  console:
+    label: Console cable
+    media: console
+    family: console
+    od_mm: 6.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 4, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "the copper patch cord's rule, applied by analogy; no maker's figure is held"}
+      loaded: null
+    note: the diameter and the radius are estimates
+
+  # FLEXSTACK CABLES of the Catalyst 2960-S: the guide names three, by length,
+  # and prints neither a diameter nor a bend radius, so each is the bare
+  # stacking cable's estimate.
+  cab-stk-e-0-5m:
+    label: Cisco FlexStack cable CAB-STK-E-0.5M, 0.5 m
+    media: stack
+    family: stack
+    sources: [cisco-2960s-hig]
+    od_mm: 6.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 4, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "the copper patch cord's rule, applied by analogy; the guide prints no radius"}
+      loaded: null
+    note: the guide names the cable and its length and prints no diameter or bend radius
+  cab-stk-e-1m:
+    label: Cisco FlexStack cable CAB-STK-E-1M, 1 m
+    media: stack
+    family: stack
+    sources: [cisco-2960s-hig]
+    od_mm: 6.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 4, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "the copper patch cord's rule, applied by analogy; the guide prints no radius"}
+      loaded: null
+    note: the guide names the cable and its length and prints no diameter or bend radius
+  cab-stk-e-3m:
+    label: Cisco FlexStack cable CAB-STK-E-3M, 3 m
+    media: stack
+    family: stack
+    sources: [cisco-2960s-hig]
+    od_mm: 6.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 4, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "the copper patch cord's rule, applied by analogy; the guide prints no radius"}
+      loaded: null
+    note: the guide names the cable and its length and prints no diameter or bend radius
