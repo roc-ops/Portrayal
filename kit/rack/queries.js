@@ -10,7 +10,7 @@ import {uLabel, zeroUOf, zeroUBottom, firstU, holderOf, rollOf, uText} from './m
 import {whereText, carriesLane} from './zero-u.js';
 import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches, lengthText, isElementId, addressFor, portLabel,
         takesCableEnd, receptacleOf, endKind, connectorName, endPlug, couplerRole} from './cable-rules.js';
-import {seatedPort, settleEnds, shownEnv, cableEndPaths, zeroUEnds, backEnds} from './ports.js';
+import {seatedPort, settleEnds, shownEnv, cableEndPaths, zeroUEnds, backEnds, dcPortsOf, dcReader, dcEntryOf, dcCovered} from './ports.js';
 import {zeroUById, zeroUBottomMm} from './model.js';
 import {RU} from './rails.js';
 import {configFacts} from './catalog.js';
@@ -255,8 +255,17 @@ export function describe(rack, ctx, {section, offset, limit} = {}) {
 //   of, first  where the slot is one of several under one part that is no
 //              slot itself (the screws of a DC terminal), that part's path,
 //              and `first: true` on the one to take: a feed is one cable, and
-//              it lands on the first free screw of its terminal
+//              it lands on the first free screw of its terminal. A part that
+//              states a DC port has neither (below).
 // A PORT OF CLASS `port` IS LISTED EXACTLY AS BEFORE, with none of those keys.
+//
+// A DC PORT IS ONE ROW (docs/dc-power-design.md section 8), on its panel, with
+// `dc` {direction, voltage, rating-a, awg, side, poles: [{role, path, plug}]}
+// and the words and plug of the port (ports.js dcPortsOf). Its pole slots and a
+// points port's connector slot are not rows of their own while it is free. A
+// port is free when no cable is on it, on a pole or on its connector; a PARTLY
+// USED port is no row, and each free pole is a row of its own for a single
+// conductor, with `dc.pole` {port, role}. A DC row has no `of` or `first`.
 // `kinds` narrows the list: any of 'data' (the ports), 'power', 'ground',
 // 'other'. A picker for a data cable asks for ['data'].
 // THE CATALOGUE'S ENDS TOO (P-0019): a slot that takes a cable end on a panel
@@ -288,6 +297,8 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
   const ofType = e => type == null || String(e.type ?? '').toLowerCase() === type.toLowerCase();
   if (z) return zeroUFree(rack, z, ctx, {want, ofType, near});
   const out = [], seen = new Set();
+  // DC PORTS: the slots a port takes in its place are not rows of their own, and a cable is counted across them
+  const dcCtx = {slotsOf, compByRef, redirects}, dc = dcReader(rack, dcCtx), covered = dcCovered(item, dcCtx);
   // the catalogue's slots of this device, read once and only when a slot is asked about
   let seats;
   const seatAt = path => {
@@ -303,7 +314,7 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
     for (const p of await portsOf(item, view)) {
       if (p.cls !== 'port') {
         // a slot a cable lands on: only where the reader says so and the catalogue has it
-        const slot = p.end === true && !isElementId(p.path) && (seen.has(`${view}|${p.path}`) ? null : seatAt(p.path));
+        const slot = p.end === true && !isElementId(p.path) && !covered.has(p.path) && (seen.has(`${view}|${p.path}`) ? null : seatAt(p.path));
         if (!slot || (slot.view && slot.view !== view)) continue;
         seen.add(`${view}|${p.path}`);
         // what it is: its own part says, else the part it is one piece of (a terminal's screw)
@@ -341,13 +352,24 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
     for (const e of slotEnds(item, {slotsOf, compByRef, redirects}).filter(x => x.view === view)) {
       if (seen.has(`${view}|${e.path}`)) continue;
       seen.add(`${view}|${e.path}`);
-      if (!want(e.kind) || !portFree(rack, {item: itemId, path: e.path, view}).ok) continue;
-      out.push({path: e.path, view, label: portLabel(e.path), media: null, speed: null, kind: e.kind, connector: e.connector, plug: e.plug});
+      if (!want(e.kind) || !portFree(rack, {item: itemId, path: e.path, view}, {dc}).ok) continue;
+      out.push({path: e.path, view, label: portLabel(e.path), media: null, speed: null, kind: e.kind, connector: e.connector, plug: e.plug,
+                ...(e.dc ? {dc: e.dc} : {})});
+    }
+    // a PARTLY USED slots port: each pole no cable is on is a row, for a single conductor
+    if (want('power')) for (const port of dcPortsOf(item, dcCtx)) {
+      if (port.kind !== 'slots' || !port.lands || port.view !== view || portFree(rack, {item: itemId, path: port.path, view}, {dc}).ok) continue;
+      port.poles.forEach((q, i) => {
+        if (!portFree(rack, {item: itemId, path: q.path, view}, {dc}).ok) return;
+        const e = dcEntryOf(port, dcCtx, i);
+        out.push({path: e.path, view, label: portLabel(e.path), media: null, speed: null, kind: e.kind, connector: e.connector, plug: e.plug, dc: e.dc});
+      });
     }
   }
   // SEVERAL SLOTS UNDER ONE PART THAT IS NO SLOT ITSELF: grouped by that part,
-  // the first in natural order marked as the one a cable takes.
-  const under = e => { const cut = e.path.lastIndexOf('/'); return e.kind && cut > 0 && !e.path.slice(0, cut).endsWith('/module') ? e.path.slice(0, cut) : null; };
+  // the first in natural order marked as the one a cable takes. A DC port's own
+  // rows are not: a part that states a port has its poles under it already.
+  const under = e => { const cut = e.path.lastIndexOf('/'); return e.kind && !e.dc && cut > 0 && !e.path.slice(0, cut).endsWith('/module') ? e.path.slice(0, cut) : null; };
   const groups = new Map();
   for (const e of out) { const g = under(e); if (g) groups.set(`${e.view}|${g}`, [...(groups.get(`${e.view}|${g}`) || []), e]); }
   for (const [key, list] of groups) {
@@ -355,18 +377,24 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
     for (const e of list) { e.of = key.slice(key.indexOf('|') + 1); if (e === first) e.first = true; }
   }
   // a coupler asked for: an end whose connector is one ("C14 inlet")
-  return type == null ? out : out.filter(e => e.connector && ofType({type: String(e.connector).split(' ')[0]}));
+  // (a DC row is no coupler)
+  return type == null ? out : out.filter(e => !e.dc && e.connector && ofType({type: String(e.connector).split(' ')[0]}));
 }
 // THE SLOTS OF A RACK ITEM A CABLE LANDS ON, from the catalogue alone (ports.js
 // cableEndPaths) that are power or ground ends, front then rear: {path, view,
 // kind, connector, plug}. What each is comes from the part it is one piece of
 // (a supply says it is an AC inlet), else from the coupler it is; [] without
 // the catalogue.
+// A DC PORT IS ONE ENTRY, on its panel, with `dc` (ports.js dcEntryOf), after the
+// device's other ends; the pole slots under a port and a points port's
+// connector slot are not entries of their own.
 export function slotEnds(item, {slotsOf, compByRef, redirects = null} = {}) {
   const slots = typeof slotsOf === 'function' && typeof compByRef === 'function' ? slotsOf(item.ref) : null;
   if (!slots || slots.error) return [];
   const seats = resolverFor(shownEnv(item, slots, compByRef, redirects), item.swaps || {});
-  return ['front', 'rear'].flatMap(view => cableEndPaths(item, view, {slotsOf, compByRef, redirects}).flatMap(path => {
+  const dcCtx = {slotsOf, compByRef, redirects}, covered = dcCovered(item, dcCtx);
+  const dcPorts = dcPortsOf(item, dcCtx).filter(q => q.lands && q.view);
+  return ['front', 'rear'].flatMap(view => [...cableEndPaths(item, view, {slotsOf, compByRef, redirects}).filter(path => !covered.has(path)).flatMap(path => {
     const slot = seats.entryAt(path);
     if (!slot || !takesCableEnd(slot, compByRef) || (slot.view && slot.view !== view)) return [];
     let info = receptacleOf(null);
@@ -379,7 +407,7 @@ export function slotEnds(item, {slotsOf, compByRef, redirects = null} = {}) {
     // jack) is a data port, which the reader of the drawing lists
     if (endKind(info) === 'other') return [];
     return [{path, view, kind: endKind(info), connector: connectorName(slot, info), plug: endPlug(slot, compByRef).plug}];
-  }));
+  }), ...dcPorts.filter(q => q.view === view).map(q => dcEntryOf(q, dcCtx))]);
 }
 // The rack's unit a slot of a part beside the rack stands in, or null where
 // the catalogue does not place it.
