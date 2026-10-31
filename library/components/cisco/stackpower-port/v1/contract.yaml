@@ -1,9 +1,10 @@
 format: 1
 kind: component
 name: stackpower-port
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: networking
+interface: stackpower
 description: >-
   A Cisco StackPower connector of the Catalyst 9300 (labelled S-PWR 1 and S-PWR 2, the first
   also marked XPS) - a keyed two-blade power connector in a recess at the rear, for a
@@ -25,6 +26,13 @@ provenance:
   registry: >-
     There is no standard for it: no entry of spec/schemas/standards.yaml, and no other
     component in the library presents a StackPower connector.
+  interface: >-
+    datasheet - the `stackpower` key of spec/schemas/connectors.yaml. Cisco Catalyst 9300
+    Series Switches Hardware Installation Guide, Connecting to the StackPower Ports and
+    StackPower Cabling Configurations (Figure 24): the cable connector is inserted in the
+    port and held by captive screws. The mate point is the centre of the recess, facing out.
 elements:
   opening: {at: [0.0, 0.0], size: [23.6, 18.5], class: mechanical}
+connection-points:
+  mate: {at: [11.8, 9.25], direction: front}
 skins: [default]

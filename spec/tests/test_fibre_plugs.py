@@ -344,6 +344,16 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # spec/tests/test_small_connector_plugs.py.
         if any(m in copper_multipair for m in ms):
             continue
+        # NOR ARE THE STACK AND VIRTUAL CHASSIS CABLE ENDS.
+        # cisco/stackwise-480-plug@1, stackpower-plug@1, flexstack-plug@1 and
+        # juniper/ex4200-vcp-plug@1 mate `stackwise-480`, `stackpower`,
+        # `flexstack` and `ex4200-vcp`, which the registry holds so a stack
+        # port is a slot. Left out by what each IS - its `attrs.media` is the
+        # copper stack link it mates - and their census is
+        # spec/tests/test_stack_vc_interfaces.py.
+        if str((c.get("attrs") or {}).get("media") or "") in (
+                "stackwise-480", "stackpower", "flexstack", "ex4200-vcp"):
+            continue
         # NOR IS THE NVLINK BRIDGE (P-0028). nvidia/nvlink-bridge-a100-2slot@1
         # mates `nvlink-a100-pcie`, the bridge connector on an A100 card's top
         # edge. Left out by what it IS - its `attrs.media` is `nvlink`, a copper

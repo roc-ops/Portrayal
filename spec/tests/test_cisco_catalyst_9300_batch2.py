@@ -108,7 +108,7 @@ def test_the_device_is_named_as_the_pilot_names_its_devices(dev):
     _, d, m = dev
     assert d["manufacturer"] == "Cisco" and d["model"] == m["model"]
     assert d["portfolio"] == {"line": "Catalyst", "family": "Catalyst 9300", "series": "Catalyst 9300"}
-    assert d["version"] == "1.0.0"
+    assert d["version"] == "1.1.0"
 
 
 # ----------------------------------------------------------------------- ports
@@ -224,7 +224,7 @@ def test_the_stackwise_ports_reuse_the_three_connector_carrier(dev):
     assert {pl["stack-1"]["ref"], pl["stack-2"]["ref"]} == {"cisco/stackwise-480-port@1"}
     assert {pl["spwr-1"]["ref"], pl["spwr-2"]["ref"]} == {"cisco/stackpower-port@1"}
     c = contract("stackwise-480-port")
-    assert c["version"] == "1.1.0"
+    assert c["version"] == "1.2.0"
     openings = [e["size"] for e in c["elements"].values()]
     assert len(openings) == 3 and all(s == [14.9, 5.2] for s in openings)
 
@@ -378,11 +378,11 @@ def test_the_lock_agrees_with_the_device():
 
     for name in MODELS:
         lock = json.loads((DEVICES / name / "device.lock.json").read_text())
-        assert lock["version"] == "1.0.0"
+        assert lock["version"] == "1.1.0"
     mine = {f"cisco/{n}" for n in MODELS}
     assert [f for f in devicelock.check(LIB) if f[0] in mine] == []
 
 
-def test_the_pilot_devices_stay_at_1_0_0():
+def test_the_pilot_devices_are_at_1_1_0():
     for name in ("c9300-48p", "c9300-48t"):
-        assert load(name)["version"] == "1.0.0"
+        assert load(name)["version"] == "1.1.0"

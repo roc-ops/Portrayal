@@ -1,0 +1,85 @@
+format: 1
+kind: component
+name: flexstack-plug
+version: 1.0.0
+class: port
+mates: flexstack
+profile: networking
+description: >-
+  A Cisco FlexStack cable end on its cable, seen from the cable end as a front elevation sees it
+  seated: a flat connector body with a pull tab on its top side, the round strain relief and a short
+  straight stub of cable whose diameter is the cable-od field. Drawn tab up, as it seats at STACK 1;
+  at STACK 2 the tab is below the connector, which is the seat's turn of 180 degrees. Seats in a
+  `flexstack` port at its own mate point and snaps in; the cable leaves from the far end of the stub.
+size: {w: 16.5, h: 9.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: flexstack, connector: flexstack}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 5.0}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 2960-S Switch Hardware Installation Guide (OL-19732-04), Connecting the
+    FlexStack Cables (Figure 1-17, PDF p.41, and the steps on PDF p.42): the cable is inserted until it
+    snaps into place, its connector has a tab to pull it out, and the tab is above the connector at STACK
+    1 and below it at STACK 2. Cables CAB-STK-E-0.5M, -1M and -3M.
+  size: >-
+    estimated - NO MAKER DRAWING OF THE PLUG IS HELD. It is drawn as large as the cage of
+    cisco/flexstack-port@1 (16.5 x 9.0, itself estimated off the community NetBox device-type library's
+    rear elevation of the WS-C2960S-48LPD-L), with a nose 14.9 x 7.2, the port's opening (15.3 x 7.6)
+    less 0.2 clear on each side. Every figure is a reading.
+  needs-drawing: >-
+    a maker's drawing of the FlexStack cable connector (CAB-STK-E-0.5M, -1M, -3M) with its body outline,
+    the nose, the pull tab and the strain relief; or a dimensioned photograph of the connector next to a
+    scale.
+  tab: >-
+    estimated - the pull tab is 7.3 x 2.4 on the top side of the body, which is the side it is on at STACK
+    1. It is drawn in the face and not built in 3D.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a straight run of cable 30 long
+    starting where the strain relief ends. The bend is the installation.
+  cable-od: >-
+    estimated - the guide gives no cable diameter. 5.0 is a reading off Figure 1-17.
+  jacket-colour: >-
+    a FIELD. Black is the default as on the library's other cable ends; the guide gives no colour.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame the house plugs use.
+    cisco/flexstack-port@1 presents at its own face, so 0 is the panel plane. The nose stands 2.0 in
+    front of it (estimated, no insertion depth is held).
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the body (8.25, 4.5): the cable runs
+    straight through the connector.
+elements: {}
+relief:
+  features:
+    - node: shell
+      out: 2.0
+      shape: true
+      color: '#c9cdd1'
+      confidence: estimated
+      source: provenance.size - the nose, 2.0 in front of the port face (estimated)
+    - node: body
+      lift: 2.0
+      out: 22.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: provenance.size - the body, 20.0 long (estimated)
+    - node: relief-boot
+      lift: 22.0
+      cyl: 12.0
+      color: '#202225'
+      confidence: estimated
+      source: provenance.stub - the strain relief, 12.0 long and 6.8 across (estimated)
+    - node: stub
+      lift: 34.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [8.25, 4.5], direction: front}
+  cable: {at: [8.25, 4.5], direction: front, 'on': stub}
+skins: [default]
