@@ -226,7 +226,7 @@ def contract_of(library, ref):
 def family_of(spec, contract, name):
     """The family of a part by the five rules of port_families.yaml, in order. `name` is the part's name (or, for a
     cause with no part, the drawn path)."""
-    entry =(spec.get("interfaces") or {}).get(contract.get("interface"))
+    entry = (spec.get("interfaces") or {}).get(contract.get("interface"))
     if entry:                                                                   # 1. its own registered interface
         if isinstance(entry, str):
             return entry
