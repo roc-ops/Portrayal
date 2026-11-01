@@ -850,21 +850,23 @@ a cable with no DC end says and returns what it did.
   `unstated`, a port with `voltage: null`, and a cable with no DC feed type. `side: null` is a port
   that is no half of an A/B pair, and nothing is said of it. No role, rating or voltage is taken from
   a position, a colour or a name.
-- **Polarity, by position.** Every DC feed type states each conductor's role as `unstated`, so only
-  the order says which conductor lands where: conductor `k` lands on pole `k` at each end (a port's
-  poles in order, a pole end's one pole), and the two poles' roles are compared by the registry's
-  pairs (`DC_MATCHES`, the kit's copy of `spec/schemas/dc.yaml`, held to it by a test; `DC_ROLES`
-  likewise). A pair that is not a match reads "A is BATT where B is RTN: the feed is crossed." A
-  pair `when: negative-voltage` (`batt` with `neg`, `rtn` with `pos`) holds only where the end whose
-  pole is `neg` or `pos` states a negative nominal; where it states no voltage the pair is neither
-  matched nor crossed. Two ends that list the same poles in a different order therefore read as
-  crossed. A ground pole is compared with nothing.
-- **The stand-in rule.** A pole whose role is `unstated`, on either side, is never called crossed. A
+- **Polarity, by role.** Where both ends state a role for each pole the feed uses, the kit pairs
+  poles by role, whatever order either end lists them in: BATT with BATT, RTN with RTN, through the
+  registry's pairs (`DC_MATCHES`, the kit's copy of `spec/schemas/dc.yaml`, held to it by a test;
+  `DC_ROLES` likewise). Two ends that list the same roles in a different order say nothing. "A is
+  BATT where B is RTN: the feed is crossed." is said only when a cable lands pole by pole (both
+  ends name a pole) and so joins two poles whose roles do not match, or when the sign rule fails:
+  a pair `when: negative-voltage` (`batt` with `neg`, `rtn` with `pos`) holds only where the end
+  whose pole is `neg` or `pos` states a negative nominal, is crossed where that nominal is
+  positive, and is neither matched nor crossed where it states no voltage. A ground pole is
+  compared with nothing.
+- **The stand-in rule.** Where either side's roles are `unstated`, nothing is called crossed. A
   note says "Polarity of `<pole path>` is not stated; checked by position." once for each such pole.
 - **The other checks,** in this order after polarity (the source is the end whose `direction` is
   `output`): voltage ("-48 V into a +24 V input."; "Source nominal -48 V is outside the load's -40.5
-  to -57."; with no one source, the signs only; a port without a nominal: "`<port path>` states no
-  voltage; the feed's voltage is not checked."); conductors, only with a type that states them ("A
+  to -57."; with no one source, the signs only; a port without a voltage: "`<port path>` states no
+  voltage; the feed's voltage is not checked.", and with only a range: "states no nominal
+  voltage"); conductors, only with a type that states them, a ground pole not counted ("A
   two-conductor feed to a three-pole port (end B)."; "14 AWG where the end takes 12 (end B)."; a cable
   with no such type: "The cable names no DC feed type; its conductors are not checked against the
   poles."); sides ("Feed A lands on a B terminal."); and the protector ("30 A breaker on a 40 A
@@ -872,8 +874,8 @@ a cable with no DC end says and returns what it did.
   is `mismatch`'s own sentence, said once, and AC against DC is as it was.
 - **A and B kept to their sides, on a device.** `feedSides(rack, item, dcOf)` (`cable-rules.js`)
   finds an item with two or more DC input ports, each cabled to a DC output that states its side,
-  all of one side: "Both supplies of `<item>` are fed from side A." It is quiet where any of them
-  states no side. `sideFindings(rack, ctx)` (`queries.js`) lists them; `describe` counts them on its
+  all of one side: "Of the supplies of `<item>` with a cable, both are fed from side A." It counts
+  only the supplies with a cable, and is quiet where any of them states no side. `sideFindings(rack, ctx)` (`queries.js`) lists them; `describe` counts them on its
   `Findings:` line, and `inspect` of the item carries one as `feed_side`
   `{side, ports, cables, text}` only when there is one.
 - **The commands.** `cable.add` and `cable.update` say which DC port or pole an end landed on: "Added

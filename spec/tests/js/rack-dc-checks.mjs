@@ -30,20 +30,30 @@ test('the kit holds the pairs and the roles it compares by', () => {
 });
 
 // ── 2: polarity ──────────────────────────────────────────────────────────
-test('polarity: RTN / BATT to RTN / BATT says nothing; to BATT / RTN each conductor is crossed', () => {
+test('polarity: ends that list the same roles in either order are matched by role and say nothing', () => {
+  const none = checks(src(['batt', 'rtn']), dc(['rtn', 'batt']));
+  assert.deepEqual(none.warnings, []);
+  assert.deepEqual(none.notes.filter(n => /Polarity/.test(n)), [], 'and no note');
+  assert.deepEqual(checks(src(['rtn', 'batt']), dc(['batt', 'rtn'])).warnings, []);
   assert.deepEqual(checks(src(['rtn', 'batt']), dc(['rtn', 'batt'])).warnings, []);
-  assert.deepEqual(crossed(checks(src(['rtn', 'batt']), dc(['batt', 'rtn'])).warnings),
-    ['A is RTN where B is BATT: the feed is crossed.', 'A is BATT where B is RTN: the feed is crossed.']);
-  // the same pole by pole, with the other pairs of the registry
-  assert.deepEqual(crossed(checks(src(['pos', 'neg']), dc(['pos', 'neg'], {voltage: {nominal: 24}}), undefined).warnings), []);
-  assert.deepEqual(crossed(checks(src(['pos', 'neg'], {voltage: {nominal: 24}}), dc(['neg', 'pos'], {voltage: {nominal: 24}})).warnings),
-    ['A is POS where B is NEG: the feed is crossed.', 'A is NEG where B is POS: the feed is crossed.']);
+  assert.deepEqual(checks(src(['pos', 'neg'], {voltage: {nominal: 24}}), dc(['neg', 'pos'], {voltage: {nominal: 24}})).warnings, []);
+  // a batt, rtn feed to a neg, pos port on a negative end holds in either order
+  assert.deepEqual(checks(src(['batt', 'rtn']), dc(['pos', 'neg'])).warnings, []);
+});
+
+test('polarity: a conductor landed pole by pole on a BATT pole at one end and a RTN pole at the other is crossed', () => {
+  const pin = (roles, i, rest = {}) => src(roles, {end: 'pole', pole: i, ...rest});
+  const far = (roles, i, rest = {}) => dc(roles, {end: 'pole', pole: i, ...rest});
+  assert.deepEqual(checks(pin(['batt', 'rtn'], 0), far(['rtn', 'batt'], 0)).warnings, ['A is BATT where B is RTN: the feed is crossed.']);
+  assert.deepEqual(checks(pin(['batt', 'rtn'], 0), far(['rtn', 'batt'], 1)).warnings, []);
+  // the other order of the same two ends says the same of the other conductor
+  assert.deepEqual(crossed(checks(pin(['batt', 'rtn'], 1), far(['batt', 'rtn'], 0)).warnings), ['A is RTN where B is BATT: the feed is crossed.']);
 });
 
 test('polarity: the first sentence of the list is the polarity one, in mismatch too', () => {
-  const a = info(src(['rtn', 'batt'])), b = info(dc(['batt', 'rtn']));
+  const a = info(src(['rtn', 'batt'])), b = info(dc(['neg', 'pos'], {voltage: {nominal: 24}}));
   const said = CR.mismatch('power', a, b);
-  assert.equal(said[0], 'A is RTN where B is BATT: the feed is crossed.');
+  assert.equal(said[0], 'A is RTN where B is POS: the feed is crossed.');
   assert.deepEqual(said.slice(0, 2), CR.dcFeedChecks(a, b).warnings.slice(0, 2));
   const other = CR.mismatch('power', {...a, mode: 'ac'}, b);
   assert.ok(other.indexOf('The ends differ: A is AC power, B is DC power.') > 0, 'the existing sentences follow');
@@ -64,8 +74,9 @@ test('polarity: a single conductor from a BATT pole to a RTN pole is crossed, an
   const one = (role, i, rest = {}) => dc(['batt', 'rtn'], {end: 'pole', pole: i, role, ...rest});
   assert.deepEqual(crossed(checks(src(['batt', 'rtn'], {end: 'pole', pole: 0, role: 'batt'}), one('rtn', 1)).warnings), ['A is BATT where B is RTN: the feed is crossed.']);
   assert.deepEqual(crossed(checks(src(['batt', 'rtn'], {end: 'pole', pole: 0, role: 'batt'}), one('batt', 0)).warnings), []);
-  // a port to a pole compares conductor 0 with the pole, and says nothing of the conductor the pole has no end for
-  assert.deepEqual(crossed(checks(src(['batt', 'rtn']), one('rtn', 1)).warnings), ['A is BATT where B is RTN: the feed is crossed.']);
+  // a whole port to one pole is matched by role: the pole finds its own role in the port, and nothing is called crossed
+  assert.deepEqual(crossed(checks(src(['batt', 'rtn']), one('rtn', 1)).warnings), []);
+  assert.deepEqual(crossed(checks(src(['rtn', 'batt']), one('rtn', 1)).warnings), []);
 });
 
 test('polarity: a ground pole is no pole of a feed and is compared with nothing', () => {
@@ -78,9 +89,9 @@ test('an unstated pole is never called crossed, and the note of it is said once 
   const got = checks(a, b);
   assert.deepEqual(got.warnings, []);
   assert.deepEqual(got.notes.filter(n => /Polarity/.test(n)), ['Polarity of y/out-0 is not stated; checked by position.', 'Polarity of y/out-1 is not stated; checked by position.']);
-  // on either side, and the stated pole opposite one is not warned about
+  // on either side, and where either side is unstated nothing is called crossed, a stated pole opposite included
   const both = checks(dc(['unstated', 'batt'], {direction: 'output', path: 'y/out'}), dc(['unstated', 'rtn']));
-  assert.deepEqual(crossed(both.warnings), ['A is BATT where B is RTN: the feed is crossed.'], 'the stated pair is still compared');
+  assert.deepEqual(crossed(both.warnings), [], 'nothing is called crossed');
   assert.deepEqual(both.notes.filter(n => /Polarity/.test(n)), ['Polarity of x/in-0 is not stated; checked by position.']);
 });
 
@@ -105,14 +116,16 @@ test('voltage: with no output end the signs only, and a port that states none is
   assert.deepEqual(miss.warnings, []);
   assert.deepEqual(miss.notes.filter(n => /voltage/.test(n)),
     ['y/out states no voltage; the feed\'s voltage is not checked.', 'x/in states no voltage; the feed\'s voltage is not checked.']);
-  // a range alone is no nominal
-  assert.deepEqual(checks(src(rb), dc(rb, {voltage: {range: [-40, -57]}})).warnings, []);
+  // a range alone is no nominal, and the note says so
+  const ranged = checks(src(rb), dc(rb, {voltage: {range: [-40, -57]}}));
+  assert.deepEqual(ranged.warnings, []);
+  assert.deepEqual(ranged.notes, ['x/in states no nominal voltage; the feed\'s voltage is not checked.']);
 });
 
 // ── 5: conductors against poles ──────────────────────────────────────────
 test('conductors: the type\'s count against the end\'s poles, and its gauge against the end\'s awg', () => {
   const rb = ['batt', 'rtn'];
-  const three = checks(src(rb), dc(['batt', 'rtn', 'gnd']), TYPE2);
+  const three = checks(src(rb), dc(['batt', 'rtn', 'pos']), TYPE2);
   assert.deepEqual(three.warnings.filter(w => /conductor/.test(w)), ['A two-conductor feed to a three-pole port (end B).']);
   const pole1 = checks(src(rb), dc(rb, {end: 'pole', pole: 1, role: 'rtn'}), TYPE2);
   assert.deepEqual(pole1.warnings.filter(w => /conductor/.test(w)), ['A two-conductor feed to one pole (end B).']);
@@ -121,6 +134,16 @@ test('conductors: the type\'s count against the end\'s poles, and its gauge agai
   assert.deepEqual(checks(src(rb), dc(rb, {awg: [10, 12, 14]}), TYPE2).warnings, []);
   assert.deepEqual(checks(src(rb, {awg: [12]}), dc(rb, {awg: [12]}), TYPE2).warnings.filter(w => /AWG/.test(w)),
     ['14 AWG where the end takes 12 (end A).', '14 AWG where the end takes 12 (end B).']);
+});
+
+test('conductors: a ground pole is no feed conductor, so a two-conductor feed to a batt, rtn, gnd port says nothing', () => {
+  const rb = ['batt', 'rtn'];
+  assert.deepEqual(checks(src(rb), dc(['batt', 'rtn', 'gnd']), TYPE2).warnings, []);
+  assert.deepEqual(checks(src(rb), dc(['batt', 'gnd', 'rtn']), TYPE2).warnings, []);
+  assert.deepEqual(checks(src(['batt', 'rtn', 'gnd']), dc(rb), TYPE2).warnings, []);
+  const three = {...TYPE2, conductors: [...TYPE2.conductors, {role: 'unstated', awg: 14}]};
+  assert.deepEqual(checks(src(rb), dc(['batt', 'rtn', 'gnd']), three).warnings.filter(w => /ground/.test(w)),
+    ['A three-conductor feed to a two-pole port, ground not counted (end B).']);
 });
 
 test('conductors: with no type there is no warning and one note; a type that states no conductors reads as none', () => {
@@ -212,7 +235,7 @@ test('cable.add says which DC port or pole each end landed on, and returns the c
   assert.deepEqual(pole.findings.map(f => f.kind), ['note'], 'one BATT conductor to a BATT pole: nothing to warn of');
   // a feed to a +24 V supply: each conductor crossed, and the polarity first of everything said
   const wrong = run(RACK, [{op: 'cable.add', a: A2, b: PLUS0, media: 'power'}]);
-  assert.deepEqual(texts(wrong, 'warning'), ['A is BATT where B is POS: the feed is crossed.', 'A is RTN where B is NEG: the feed is crossed.', '-48 V into a +24 V input.']);
+  assert.deepEqual(texts(wrong, 'warning'), ['A is BATT where B is NEG: the feed is crossed.', 'A is RTN where B is POS: the feed is crossed.', '-48 V into a +24 V input.']);
   assert.equal(wrong.findings[0].kind, 'warning');
   assert.equal(wrong.findings.at(-1).kind, 'note', 'the notes follow the warnings');
 });
@@ -237,7 +260,7 @@ test('cable.update says where a moved DC end landed and checks it the same', () 
   const rack = cabled(RACK, {a: A2, b: L0});
   const moved = run(rack, [{op: 'cable.update', id: 'c1', b: PLUS0}]);
   assert.match(moved.summary, /^Moved end B of cable c1 to .*plus-1.*\. End B is on the DC port psu-0\/module\/input\.$/);
-  assert.deepEqual(texts(moved, 'warning').slice(0, 2), ['A is BATT where B is POS: the feed is crossed.', 'A is RTN where B is NEG: the feed is crossed.']);
+  assert.deepEqual(texts(moved, 'warning').slice(0, 2), ['A is BATT where B is NEG: the feed is crossed.', 'A is RTN where B is POS: the feed is crossed.']);
   const relabel = run(rack, [{op: 'cable.update', id: 'c1', label: 'feed'}]);
   assert.equal(relabel.summary, 'Edited cable feed.');
   assert.deepEqual(relabel.findings, [], 'an edit that moves no end is not checked again');
@@ -253,7 +276,7 @@ test('both supplies of a device fed from side A: inspect, describe and the cable
   const first = run(RACK, [{op: 'cable.add', a: A1, b: L0, media: 'power'}]);
   assert.equal(first.findings.some(f => /fed from side/.test(f.text)), false, 'one supply fed says nothing');
   const second = run(first.rack, [{op: 'cable.add', a: A2, b: L1, media: 'power'}]);
-  const SAID = 'Both supplies of load-1 are fed from side A.';
+  const SAID = 'Of the supplies of load-1 with a cable, both are fed from side A.';
   assert.deepEqual(texts(second, 'warning'), [SAID]);
   const item = await Q.inspect(second.rack, 'i2', full(second.rack));
   assert.equal(item.feed_side.text, SAID);
@@ -277,7 +300,7 @@ test('both supplies of a device fed from side A: inspect, describe and the cable
 test('inspect of a DC cable says the checks first, with the type when ctx gives the table', async () => {
   const rack = cabled(RACK, {a: A2, b: PLUS0});
   const got = await Q.inspect(rack, 'c1', full(rack));
-  assert.deepEqual(got.mismatch.slice(0, 3), ['A is BATT where B is POS: the feed is crossed.', 'A is RTN where B is NEG: the feed is crossed.', '-48 V into a +24 V input.']);
+  assert.deepEqual(got.mismatch.slice(0, 3), ['A is BATT where B is NEG: the feed is crossed.', 'A is RTN where B is POS: the feed is crossed.', '-48 V into a +24 V input.']);
   const heavy = typed(cabled(RACK, {a: B1, b: L1}), 'dc-feed-2x14awg');
   const t = await Q.inspect(heavy, 'c1', full(heavy));
   assert.ok(t.mismatch.includes('60 A breaker on a 14 AWG feed (ampacity 15 A, an estimate).'));
@@ -286,14 +309,14 @@ test('inspect of a DC cable says the checks first, with the type when ctx gives 
   // suggestMedia says the checks that need no type
   const said = await Q.suggestMedia(RACK, A2, PLUS0, full(RACK));
   assert.equal(said.media, 'power');
-  assert.equal(said.warnings[0], 'A is BATT where B is POS: the feed is crossed.');
+  assert.equal(said.warnings[0], 'A is BATT where B is NEG: the feed is crossed.');
 });
 
 // a three-pole port and a port of unstated poles, from the catalogue
 test('a three-pole port and a port of unstated poles, from the catalogue', () => {
   const moved = run(typed(cabled(RACK, {a: A1, b: L0}), 'dc-feed-2x12awg'), [{op: 'cable.update', id: 'c1', b: TRI0}]);
   assert.equal(moved.error, undefined);
-  assert.deepEqual(texts(moved, 'warning'), ['A two-conductor feed to a three-pole port (end B).', '30 A breaker on a 12 AWG feed (ampacity 20 A, an estimate).']);
+  assert.deepEqual(texts(moved, 'warning'), ['30 A breaker on a 12 AWG feed (ampacity 20 A, an estimate).'], 'the third pole is a ground: no conductor-count warning');
   const q = run(RACK, [{op: 'cable.add', a: A1, b: DCQ, media: 'power'}]);
   assert.ok(texts(q, 'note').includes('Polarity of psu-2/module/t1 is not stated; checked by position.'));
   assert.ok(texts(q, 'note').includes('psu-2/module/input states no voltage; the feed\'s voltage is not checked.'));

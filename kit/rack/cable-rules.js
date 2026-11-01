@@ -353,31 +353,44 @@ const polesOf = d => (d?.end === 'pole' ? [d.poles?.[d.pole]].filter(Boolean) : 
 // How a pole is named for a person: "the BATT pole", else "pole terminal-48v".
 export const dcPoleWord = (d, i) => { const q = d.poles?.[i]; return roleOf(q) !== 'unstated' ? `${roleWord(q.role)} pole` : `pole ${String(q?.path ?? i).split('/').pop()}`; };
 
-// POLARITY, END TO END, BY POSITION. Every DC feed type states its conductors'
-// roles as `unstated`, so only the order says which conductor lands where:
-// conductor k lands on pole k at each end. Each pair of poles is compared by the
-// registry's pairs. A pole whose role is unstated, on either side, is never
-// called crossed; it is said once, as a note. A ground pole is no pole of a feed.
+// POLARITY, END TO END, BY ROLE. Where both ends state a role for each pole the
+// feed uses, a pole of one end is paired with the pole of the other that has its
+// role (else the one the registry's pairs match it with), whatever order either
+// end lists its poles in. "Crossed" is said only for a cable that lands pole by
+// pole (both ends name a pole) and so joins two poles whose roles do not match,
+// and where the sign rule of a pair (`when: negative-voltage`) fails. A pole
+// whose role is unstated, on either side, is never called crossed: a note says
+// so once per pole and nothing else is said of polarity. A ground pole is no
+// pole of a feed.
+const pairOf = (x, y) => DC_MATCHES.find(m => (m.a === x && m.b === y) || (m.a === y && m.b === x));
+// true: matched; false: crossed; null: neither (the pair holds with a sign the end does not state)
+function judge(qa, qb, a, b) {
+  const ra = roleOf(qa), rb = roleOf(qb), pair = pairOf(ra, rb);
+  if (!pair) return false;
+  if (!pair.when) return true;
+  if (pair.when !== 'negative-voltage') return null;
+  const n = nominalOf(ra === 'neg' || ra === 'pos' ? a : b);
+  return n === null || n === 0 ? null : n < 0;
+}
 function polarity(a, b) {
   const warnings = [], notes = [], said = new Set();
   const pa = polesOf(a), pb = polesOf(b);
-  for (let k = 0; k < Math.min(pa.length, pb.length); k++) {
-    const ra = roleOf(pa[k]), rb = roleOf(pb[k]);
-    if (ra === 'unstated' || rb === 'unstated') {
-      for (const [q, r] of [[pa[k], ra], [pb[k], rb]])
-        if (r === 'unstated' && !said.has(q.path)) { said.add(q.path); notes.push(`Polarity of ${q.path} is not stated; checked by position.`); }
-      continue;
-    }
-    if (ra === 'gnd' || rb === 'gnd') continue;
-    const pair = DC_MATCHES.find(m => (m.a === ra && m.b === rb) || (m.a === rb && m.b === ra));
-    let ok = !!pair && !pair.when;
-    if (pair?.when === 'negative-voltage') {
-      // the sign of the end whose pole is neg or pos; not stated: neither matched nor crossed
-      const n = nominalOf(ra === 'neg' || ra === 'pos' ? a : b);
-      if (n === null || n === 0) continue;
-      ok = n < 0;
-    } else if (pair?.when) continue;
-    if (!ok) warnings.push(`A is ${roleWord(ra)} where B is ${roleWord(rb)}: the feed is crossed.`);
+  let unstated = false;
+  for (const q of [...pa, ...pb]) if (roleOf(q) === 'unstated') {
+    unstated = true;
+    if (!said.has(q.path)) { said.add(q.path); notes.push(`Polarity of ${q.path} is not stated; checked by position.`); }
+  }
+  if (unstated) return {warnings, notes};
+  const feed = poles => poles.filter(q => roleOf(q) !== 'gnd');
+  const say = (qa, qb) => warnings.push(`A is ${roleWord(roleOf(qa))} where B is ${roleWord(roleOf(qb))}: the feed is crossed.`);
+  if (a.end === 'pole' && b.end === 'pole') {
+    for (const qa of feed(pa)) for (const qb of feed(pb)) if (judge(qa, qb, a, b) === false) say(qa, qb);
+    return {warnings, notes};
+  }
+  const fb = feed(pb);
+  for (const qa of feed(pa)) {
+    const qb = fb.find(q => roleOf(q) === roleOf(qa)) ?? fb.find(q => pairOf(roleOf(qa), roleOf(q)));
+    if (qb && judge(qa, qb, a, b) === false) say(qa, qb);
   }
   return {warnings, notes};
 }
@@ -387,7 +400,8 @@ function polarity(a, b) {
 // direction is `output` (and the other an input); with no one source, the signs only.
 function voltage(a, b, source, load) {
   const warnings = [], notes = [];
-  for (const d of [a, b]) if (nominalOf(d) === null) notes.push(`${d.path} states no voltage; the feed's voltage is not checked.`);
+  for (const d of [a, b]) if (nominalOf(d) === null)
+    notes.push(`${d.path} states no ${d.voltage ? 'nominal ' : ''}voltage; the feed's voltage is not checked.`);
   if (notes.length) return {warnings, notes};
   const na = nominalOf(a), nb = nominalOf(b);
   if (source && load) {
@@ -399,11 +413,13 @@ function voltage(a, b, source, load) {
   return {warnings, notes};
 }
 
-// CONDUCTORS AGAINST POLES, for one end and only with a type that states them
+// CONDUCTORS AGAINST POLES, for one end and only with a type that states them.
+// A ground pole is no conductor of a feed, so a port's ground poles are not counted.
 function conductors(d, k, type) {
-  const list = type.conductors, poles = polesOf(d).length, out = [];
+  const list = type.conductors, all = polesOf(d), out = [];
+  const grounds = d.end === 'pole' ? 0 : all.filter(q => roleOf(q) === 'gnd').length, poles = all.length - grounds;
   if (list.length !== poles)
-    out.push(`A ${numberWord(list.length)}-conductor feed to ${d.end === 'pole' ? 'one pole' : `a ${numberWord(poles)}-pole port`} (end ${k}).`);
+    out.push(`A ${numberWord(list.length)}-conductor feed to ${d.end === 'pole' ? 'one pole' : `a ${numberWord(poles)}-pole port`}${grounds ? ', ground not counted' : ''} (end ${k}).`);
   if (Array.isArray(d.awg) && d.awg.length)
     for (const g of [...new Set(list.map(c => c?.awg).filter(Number.isFinite))])
       if (!d.awg.includes(g)) out.push(`${g} AWG where the end takes ${d.awg.join(', ')} (end ${k}).`);
@@ -458,8 +474,9 @@ export function dcTypeOf(types, cable) {
 
 // A and B KEPT TO THEIR SIDES, ON A DEVICE (section 6): an item with two or
 // more DC input ports, each cabled to a DC output that states its side, all of
-// one side. `dcOf(end)` is the end's `dc` facts or null. Quiet where any of them
-// states no side, and for a port with no cable. {item, name, side, ports, cables, text} or null.
+// one side. `dcOf(end)` is the end's `dc` facts or null. It counts only the
+// supplies with a cable: a supply with none is not in it. Quiet where any of
+// them states no side. {item, name, side, ports, cables, text} or null.
 export function feedSides(rack, item, dcOf) {
   const seen = new Map();
   for (const c of rack.cables || []) for (const [mine, far] of [[c.a, c.b], [c.b, c.a]]) {
@@ -477,7 +494,7 @@ export function feedSides(rack, item, dcOf) {
   if (rows.length < 2 || sides.size !== 1 || sides.has(null)) return null;
   const side = [...sides][0], name = item.label || item.id;
   return {item: item.id, name, side, ports: [...seen.keys()], cables: rows.flatMap(r => r.cables),
-          text: `${rows.length === 2 ? 'Both' : `All ${rows.length}`} supplies of ${name} are fed from side ${side.toUpperCase()}.`};
+          text: `Of the supplies of ${name} with a cable, ${rows.length === 2 ? 'both' : `all ${rows.length}`} are fed from side ${side.toUpperCase()}.`};
 }
 
 // A MISMATCH IS A WARNING, never a refusal: the sentences to show

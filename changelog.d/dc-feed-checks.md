@@ -6,10 +6,12 @@
   sides, and the protector against the load and the cable's ampacity. Each is
   said only where both sides state what it reads; what is missing is a note, and
   only three are: a pole whose role is `unstated`, a port with no voltage and a
-  cable with no DC feed type. Polarity is compared by position (conductor `k`
-  on pole `k`) with the pairs of `spec/schemas/dc.yaml`, which the kit now
-  holds as `DC_MATCHES` and `DC_ROLES`; no feed is called crossed on an
-  `unstated` pole.
+  cable with no DC feed type. Polarity is matched by role where both ends state
+  roles, in whatever order they list their poles, with the pairs of
+  `spec/schemas/dc.yaml`, which the kit now holds as `DC_MATCHES` and
+  `DC_ROLES`; a feed is called crossed only when a cable lands pole by pole on
+  poles whose roles do not match, or when the sign rule fails, and never on an
+  `unstated` pole. A ground pole is not counted as a feed conductor.
 - A consumer finds them in the cable's `mismatch` of `inspect`, in
   `suggestMedia`, and in the `findings` of `cable.add` and `cable.update`.
   `mismatch` takes an optional fourth argument `{type}` and `inspect` reads the
@@ -28,5 +30,5 @@
   with no DC end keeps its summary and its findings.
 - An end on a terminal that a supply, inlet or power part draws as an element
   and whose part declares no DC port is loose with "`terminal-48v` is drawn on
-  `PWS-601S`, which declares no DC port" in place of "holds `PWS-601S`, which
+  `PWS-601S-1R`, which declares no DC port" in place of "holds `PWS-601S-1R`, which
   has no port `terminal-48v`". Every other loose sentence is unchanged.
