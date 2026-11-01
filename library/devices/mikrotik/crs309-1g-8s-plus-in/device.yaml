@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: crs309-1g-8s-plus-in
-version: 1.0.1
+version: 1.1.0
 maturity: modelled
 manufacturer: MikroTik
 model: CRS309-1G-8S+IN
@@ -120,9 +120,10 @@ provenance:
   earth:
     confidence: estimated
     note: >-
-      The rear carries an earthing stud with a wing nut under an earth symbol (photograph 1731). common/ground-stud
-      draws a hex nut and a lug seat the stud does not have, so the stud is chassis art and the symbol
-      is placed; the gap earth-stud-part asks for a wing-nut stud part.
+      The rear carries an earthing stud with a wing nut under an earth symbol (photograph 1731). The stud
+      is the placed common/ground-stud, which draws a hex nut where the stud has a wing nut, so the drawn
+      nut is a stand-in; the symbol is placed too, and the gap earth-stud-part asks for a wing-nut stud
+      part.
   rear-layout:
     confidence: estimated
     note: >-
@@ -199,10 +200,10 @@ gaps:
   - rear
   reason: needs-drawing
   note: >-
-    The earthing stud has a wing nut (photograph 1731). common/ground-stud draws a hex nut and a lug seat,
-    so the stud is chassis art and exports no earth. The reason is the nearest the schema has: the part
-    itself is what is missing, and the library has no needs-part reason.
-  wanted: A wing-nut earth stud part, so the stud is placed and not drawn as chassis art.
+    The earthing stud has a wing nut (photograph 1731). The stud is placed as common/ground-stud, which
+    draws a hex nut where the stud has a wing nut, so the drawn nut is a stand-in. The reason is the nearest
+    the schema has: the part itself is what is missing, and the library has no `needs-part` reason.
+  wanted: A wing-nut earth stud part, so the drawn hex nut can be replaced by the wing nut.
 - what: led-states
   scope:
   - front
@@ -443,8 +444,6 @@ views:
       decor:
       - {id: cable-slot, kind: cable-slot, at: [8.1, 22.0], size: [32.2, 14.7], rx: 7.3, fill: '#a9acaf'}
       - {id: heatsink, kind: heatsink, at: [85.0, 3.0], size: [172.7, 41.0], fill: '#a9a39d'}
-      - {id: earth-stud-base, kind: earth-stud, at: [256.2, 32.7], size: [8.0, 8.0], rx: 4.0, fill: '#b4b8bc'}
-      - {id: earth-stud-nut, kind: earth-stud, at: [258.2, 34.7], size: [4.0, 4.0], rx: 2.0, fill: '#8d9298'}
     silkscreen:
     - {at: [65.0, 23.7], text: DC 12-57 V, font-size: 2.5, anchor: middle, fill: '#2b2b2b', for: chassis}
     - id: polarity
@@ -480,6 +479,7 @@ views:
         rel-pos: 1}
       - {ref: common/screw-head@1, id: rear-screw-1, at: [23.0, 3.4], group: furniture, rel-pos: 2}
       - {ref: common/screw-head@1, id: rear-screw-2, at: [260.4, 3.4], group: furniture, rel-pos: 3}
+      - {ref: common/ground-stud@1, id: earth-stud, at: [256.15, 32.65], group: furniture, rel-pos: 4}
   top:
     size: {w: 272.0, h: 191.0}
     empty: >-

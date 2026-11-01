@@ -23,7 +23,7 @@ MODELS = {
     "crs328-4c-20s-4s-plus-rm": ("CRS328-4C-20S-4S+RM", "CRS328"),
 }
 NAMES = sorted(MODELS)
-VERSIONS = {name: "1.0.1" for name in NAMES} | {"crs312-4c-plus-8xg-rm": "1.0.0"}
+VERSIONS = {name: "1.0.1" for name in NAMES} | {"crs312-4c-plus-8xg-rm": "1.0.0", "crs309-1g-8s-plus-in": "1.1.0"}
 ENVELOPE = {  # width, height, depth
     "crs317-1g-16s-plus-rm": (443.0, 44.0, 224.0),
     "crs309-1g-8s-plus-in": (272.0, 44.0, 191.0),
@@ -172,14 +172,14 @@ def test_crs309_de9_console_is_an_rs232_port_the_export_does_not_carry():
         assert not doc.get("console_ports"), target
 
 
-def test_crs309_is_passive_with_a_chassis_art_earth_stud_and_a_narrow_body():
+def test_crs309_is_passive_with_a_placed_stand_in_earth_stud_and_a_narrow_body():
     d = load("crs309-1g-8s-plus-in")
     rear = d["views"]["rear"]
     assert not [x for x in rear["panel"]["decor"] if x.get("kind") == "fan-grille"]
     assert d["attrs"]["thermal"]["cooling"].startswith("passive")
     assert [g["what"] for g in d["gaps"] if g["what"] == "earth-stud-part"] == ["earth-stud-part"]
     assert d["chassis"]["width"] == 272.0 < 443.0
-    assert not [p for p in placements(d, "rear") if "ground-stud" in p["ref"]]
+    assert [p["ref"] for p in placements(d, "rear") if "ground-stud" in p["ref"]] == ["common/ground-stud@1"]
 
 
 # --- CRS312 ---------------------------------------------------------------------------------------------------

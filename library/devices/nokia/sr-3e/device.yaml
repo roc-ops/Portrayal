@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: sr-3e
-version: 0.1.5
+version: 0.2.0
 maturity: modelled
 manufacturer: Nokia
 model: 7750 SR-3e
@@ -89,10 +89,15 @@ provenance:
     confidence: drawing
     note: >-
       p122: two 10-32 ground studs "located at the back of all 7750 SR-e chassis at the bottom-left";
-      p124 Figure 33 dimensions them 0.625 in (15.86 mm) apart; the drawn studs are 15.8 apart
-      at x 16.0, y 485.2 and 501, on a plate under an earth symbol. Drawn as panel decor (a
-      stud plate is chassis metalwork with no part number; no library part draws a two-stud earth
-      point without its own symbol).
+      p124 Figure 33 dimensions them 0.625 in (15.86 mm) apart. They are the placed
+      common/ground-stud-pair-5-8-10-32 (`ground-studs`), centred on the midpoint of the studs the figure
+      draws (x 16.0, y 493.1), on a plate under an earth symbol. The pair draws pan-head screws where
+      the chassis has studs, a stand-in (gap ground-stud-hardware).
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      p122 and p124 Figure 33: two 10-32 ground studs, and Table 46 key 2 (p124): two 10-32 Keps nuts for the
+      ground lug. This is the `stud-size` of ground-studs, the pair.
   esd:
     confidence: drawing
     note: >-
@@ -185,6 +190,16 @@ chassis:
   airflow: front-to-back
   color: '#3a3d42'
 gaps:
+  - what: ground-stud-hardware
+    scope: [ground-studs]
+    reason: needs-drawing
+    note: >-
+      The guide gives the thread of the two chassis ground studs, 10-32, and their spacing, 0.625 in. (p122, p124
+      Figure 33), and nothing of a stud's length or its nut. The pair is common/ground-stud-pair-5-8-10-32, which
+      draws two pan-head screws where the chassis has two studs, so the drawn heads are stand-ins. The lug the
+      guide supplies (p122, p123 Figure 32) is a two-hole lug with a 45-degree tongue; the library's two-hole lug
+      is straight and mates the same pair.
+    wanted: a Nokia drawing or photograph of the chassis ground studs that gives their length and the nut
   - what: photographs
     scope: [front, rear]
     reason: needs-photo
@@ -253,7 +268,7 @@ groups:
     term: Point
     role: furniture
     index-origin: 1
-    description: the rear ESD strap receptacle
+    description: the rear ESD strap receptacle and the chassis ground studs
 views:
   front:
     size: {w: 444.5, h: 577.9}
@@ -408,8 +423,6 @@ views:
         - {at: [43.8, 408.3], size: [256.1, 69.6], fill: '#474b51', rx: 2, kind: filler-plate, id: filler-plate-2, confidence: drawing, source: 'p52 key 7 "Non-removable chassis filler plate"; p49: IOM slots are "separated from one another by a non-removable cover plate"'}
         - {at: [43.8, 550.1], size: [256.1, 24.6], fill: '#474b51', rx: 1, kind: bottom-plate, confidence: drawing, source: 'p52: the plate under the last IOM slot carrying the ESD jack'}
         - {at: [9.4, 455], size: [13.2, 57], fill: '#474b51', rx: 0.6, kind: ground-plate, id: ground-plate, confidence: drawing, source: 'p52 key "Chassis ground point"; p124 Figure 33: two 10-32 studs, 0.625 in (15.9 mm) apart'}
-        - {at: [13.6, 482.8], size: [4.8, 4.8], fill: '#b8a06a', rx: 2.4, kind: ground-stud, out: 12, confidence: estimated, source: 'p122: #10 (10-32) studs; stud length not documented'}
-        - {at: [13.6, 498.6], size: [4.8, 4.8], fill: '#b8a06a', rx: 2.4, kind: ground-stud, out: 12, confidence: estimated, source: 'p122: #10 (10-32) studs; stud length not documented'}
       cutouts:
         - {id: esd-rear, at: [266.4, 560.2], size: [6.0, 6.0], shape: circle}
     silkscreen:
@@ -455,6 +468,7 @@ views:
         - {id: fan, at: [302.2, 58.3], size: {w: 137.2, h: 513.1}, accepts: [nokia/sr-3e-fan-tray@1], default: nokia/sr-3e-fan-tray@1, group: fans, rel-pos: 1}
       placements:
         - {id: esd-rear, ref: common/esd-jack@1, at: [266.4, 560.2], for: chassis, group: grounding, rel-pos: 1}
+        - {id: ground-studs, ref: common/ground-stud-pair-5-8-10-32@1, at: [3.3275, 488.365], rotate: 90, for: chassis, group: grounding, rel-pos: 2, attrs: {stud-size: 10-32}}
   left:
     size: {w: 538.5, h: 577.9}
     panel:

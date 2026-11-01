@@ -80,7 +80,7 @@ CASA, CASA_STUD = "casa/c40g-ground-studs@1", "casa/shelf-ground-stud@1"
 # the pair hosts a device places straight on a face (#828); test_two_hole_lugs.py
 # and test_grounding_devices.py hold them, and only their `stud-size` is read here
 PAIR_HOSTS = ("common/ground-stud-pair-5-8-m6@1", "common/ground-stud-pair-5-8-m4@1",
-              "common/ground-stud-pair-5-8-1-4@1",
+              "common/ground-stud-pair-5-8-1-4@1", "common/ground-stud-pair-5-8-10-32@1",
               "common/ground-stud-pair-3-4-1-4@1", "common/ground-stud-pair-1-1-4@1", M5)
 # the three studs of the Casa terminal: seat id -> stud axis in the terminal's frame
 CASA_SEATS = {"stud-tr": (21.45, 6.15), "stud-bl": (6.15, 21.45), "stud-br": (21.45, 21.45)}
@@ -132,7 +132,7 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 CENSUS = {
     "common/ground-lug@1": (31, 22),
     "common/ground-screw@1": (16, 8),
-    "common/ground-stud@1": (11, 11),
+    "common/ground-stud@1": (14, 14),
     CASA: (1, 1),
 }
 # juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
@@ -191,6 +191,10 @@ STUD_SIZE = {
     "nokia/nfxs-e-bb": {"ground": "1/4 in"},
     "nokia/nfxs-f-bb": {"ground": "1/4 in"},
     "nokia/lmfs-f": {"ground-studs": "M6"},
+    "nokia/sr-12": {"ground-studs": "1/4-20"},
+    "nokia/sr-1e": {"ground-studs": "10-32"},
+    "nokia/sr-2e": {"ground-studs": "10-32"},
+    "nokia/sr-3e": {"ground-studs": "10-32"},
     "ufispace/m3000-14xc": UFI_PAIR,
     "ufispace/s9500-22xst": UFI_PAIR,
     "ufispace/s9500-30xs": {"ground-lug": "M4"},
@@ -412,10 +416,11 @@ def test_the_census_of_ground_stud_placements(placed):
     got = {ref: (n, len(devs)) for ref, (n, devs) in counts.items()}
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
-    # 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
-    assert sum(n for n, _ in got.values()) == 59
-    # 39 -> 42 with the Cisco C9300-24P, C9300-24U and C9300-48U
-    assert len({where for where, _, _ in placed}) == 42
+    # 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each,
+    # 59 -> 62 with the earth stud of the MikroTik CRS309, CRS326 and CSS326
+    assert sum(n for n, _ in got.values()) == 62
+    # 39 -> 42 with the Cisco C9300-24P, C9300-24U and C9300-48U, 42 -> 45 with the three MikroTik switches
+    assert len({where for where, _, _ in placed}) == 45
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -458,7 +463,8 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         seen += 1
     # every placement of the census but the Casa terminal's one
     # 52 -> 58 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
-    assert seen == 58
+    # 58 -> 61 with the earth stud of the MikroTik CRS309-1G-8S+IN (crs309-1g-8s-plus-in), CRS326-24G-2S+RM (crs326-24g-2s-plus-rm) and CSS326-24G-2S+RM (css326-24g-2s-plus-rm)
+    assert seen == 61
 
 
 def test_the_only_turned_placements_are_turned_90(placed):
@@ -511,7 +517,7 @@ def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed)
         if size is not None:
             got.setdefault(device, {})[p["id"]] = size
     assert got == STUD_SIZE
-    assert sum(len(v) for v in got.values()) == 63 and len(got) == 34
+    assert sum(len(v) for v in got.values()) == 67 and len(got) == 38
     mx = {}
     for device, view, p in placements_of(MX_PAIR_HOSTS):
         mx.setdefault(device, {})[p["id"]] = (p.get("attrs") or {}).get("stud-size")

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: crs326-24g-2s-plus-rm
-version: 1.0.3
+version: 1.1.0
 maturity: modelled
 manufacturer: MikroTik
 model: CRS326-24G-2S+RM
@@ -105,9 +105,9 @@ provenance:
       vent, three screws) take that photograph's figures, which agree with the CRS's in x to 1.5 mm. They are good
       to about 1.5 mm in x and 2 mm in y. The CRS's cable slot runs on to hold the DC jack, 58 mm long against
       the CSS's 31 mm, and the CRS prints DC 10-28V where the CSS prints DC 8 - 30V. The earthing stud
-      has a wing nut (the drawing's 11 mm). It is drawn as chassis art at the stud's position from the
-      photograph, because the library's common/ground-stud draws a hex nut and a lug seat the stud does not
-      have; the gap `earth-stud-part` asks for a wing-nut stud part. The CRS prints an earth symbol above it;
+      has a wing nut (the drawing's 11 mm). It is the placed common/ground-stud (`earth-stud`) at the
+      stud's position from the photograph; that part draws a hex nut where the stud has a wing nut, so the
+      drawn nut is a stand-in and the gap `earth-stud-part` asks for a wing-nut stud part. The CRS prints an earth symbol above it;
       the CSS prints none. The DC jack is the placed common/dc-barrel (`dc-in`), its bore centred on the
       photograph's.
   dc-input:
@@ -189,10 +189,11 @@ gaps:
   scope: [rear]
   reason: needs-drawing
   note: >-
-    The earthing stud has a wing nut (photograph 1941; the drawing's 11 mm). common/ground-stud draws a hex
-    nut and a lug seat, so the stud is chassis art and exports no earth. The reason is the nearest the schema
-    has: the part itself is what is missing, and the library has no `needs-part` reason.
-  wanted: A wing-nut earth stud part, so the stud is placed and not drawn as chassis art.
+    The earthing stud has a wing nut (photograph 1941; the drawing's 11 mm). The stud is placed as
+    common/ground-stud, which draws a hex nut where the stud has a wing nut, so the drawn nut is a stand-in.
+    The reason is the nearest the schema has: the part itself is what is missing, and the library has no
+    `needs-part` reason.
+  wanted: A wing-nut earth stud part, so the drawn hex nut can be replaced by the wing nut.
 - what: led-states
   scope: [front]
   reason: vendor-silent
@@ -356,8 +357,6 @@ views:
       - {id: knockout-2, kind: knockout, at: [289.55, 14.9], size: [15.3, 16.6], rx: 7.0, fill: '#d0d0d0'}
       - {at: [311.3, 14.0], size: [44.9, 19.0], pattern: vent, vent: 1.0}
       - {id: cable-slot, kind: cable-slot, at: [363.4, 18.6], size: [58.3, 13.0], rx: 6.0, fill: '#a9acaf'}
-      - {id: earth-stud-base, kind: earth-stud, at: [427.0, 31.7], size: [8.0, 8.0], rx: 4.0, fill: '#b4b8bc'}
-      - {id: earth-stud-nut, kind: earth-stud, at: [429.0, 33.7], size: [4.0, 4.0], rx: 2.0, fill: '#8d9298'}
     silkscreen:
     - {at: [393.8, 41.4], text: DC 10-28V, font-size: 3.0, anchor: middle, fill: '#2b2b2b', for: chassis}
     - {id: polarity, at: [415.5, 40.0], path: 'M -7.5 0 a 1.5 1.5 0 1 0 3 0 a 1.5 1.5 0 1 0 -3 0 M -6.8 0 h 1.6 M -4.5 0 H -1 M -1 0 a 1 1 0 1 0 2 0 a 1 1 0 1 0 -2 0 M 1 0 H 4.5 M 4.5 0 a 1.5 1.5 0 1 0 3 0 a 1.5 1.5 0 1 0 -3 0 M 5.2 0 h 1.6 M 6 -0.8 v 1.6', filled: false, stroke-width: 0.25, fill: '#2b2b2b', for: chassis}
@@ -368,6 +367,7 @@ views:
       - {ref: common/screw-head@1, id: rear-screw-1, at: [47.2, 3.5], group: furniture, rel-pos: 2}
       - {ref: common/screw-head@1, id: rear-screw-2, at: [219.4, 3.5], group: furniture, rel-pos: 3}
       - {ref: common/screw-head@1, id: rear-screw-3, at: [392.2, 3.5], group: furniture, rel-pos: 4}
+      - {ref: common/ground-stud@1, id: earth-stud, at: [426.95, 31.65], group: furniture, rel-pos: 5}
   top:
     size: {w: 443.0, h: 144.6}
     empty: >-
