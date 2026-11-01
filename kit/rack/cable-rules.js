@@ -57,13 +57,36 @@ export function tagText(rack, end) {
 
 // ── one cable per port ──────────────────────────────────────────────────
 // `uOf` is endName's: how tall a device is, for the U in the refusal.
-export function portFree(rack, end, {ignoreId = null, uOf} = {}) {
+// `dc` is the DC reader (ports.js dcReader), optional: end -> {key, pole, name}
+// for an end on a DC port, a pole or the connector of a points port, else null.
+// With it a port, each of its poles and its connector are one place
+// (docs/dc-power-design.md section 5.4): a cable on the port takes every pole,
+// a cable on one pole makes the port partly used, and two poles are two places.
+// Without it, a port is its path alone, as it was.
+export function portFree(rack, end, {ignoreId = null, uOf, dc = null} = {}) {
   const k = portKey(end);
   const other = (rack.cables || []).find(c => c.id !== ignoreId && (portKey(c.a) === k || portKey(c.b) === k));
-  return other ? {ok: false, reason: `${endName(rack, end, uOf)} already has a cable (${cableName(other)}).`} : {ok: true};
+  if (other) return {ok: false, reason: `${endName(rack, end, uOf)} already has a cable (${cableName(other)}).`};
+  const mine = typeof dc === 'function' ? dc(end) : null;
+  if (mine) for (const c of rack.cables || []) {
+    if (c.id === ignoreId) continue;
+    for (const e of [c.a, c.b]) {
+      const o = dc(e);
+      if (!o || o.key !== mine.key || !(o.pole === null || mine.pole === null || o.pole === mine.pole)) continue;
+      // (naming the pole it is on where this end asks for the whole port)
+      const where = o.pole !== null && mine.pole === null ? ` on its ${o.name}` : '';
+      return {ok: false, reason: `${endName(rack, end, uOf)} already has a cable (${cableName(c)}${where}).`};
+    }
+  }
+  return {ok: true};
 }
 export function canCable(rack, a, b, opts = {}) {
   if (sameEnd(a, b)) return {ok: false, reason: 'A cable needs two different ports.'};
+  // a port and one of its own poles are the same place
+  if (typeof opts.dc === 'function') {
+    const x = opts.dc(a), y = opts.dc(b);
+    if (x && y && x.key === y.key) return {ok: false, reason: 'A cable needs two different ports.'};
+  }
   for (const e of [a, b]) { const f = portFree(rack, e, opts); if (!f.ok) return f; }
   return {ok: true};
 }
@@ -460,10 +483,22 @@ export function endPlug(slot, compByRef, stated = null, far = null) {
 // {cls, compByRef, plug}, the class of the part at the path, the catalogue's
 // lookup and the plug the end states) seats the plug endPlug derives. A port
 // of class `port` is read as it always was, whatever its slot accepts.
+//
+// AN END AT A DC PORT'S PATH (`landed.dc`, the `dc` ports.js gives the end's
+// info, with `end: 'port'`) seats the plug each pole derived on its slot (a
+// slots port), or the connector's plug on the connector (a points port).
 export function plugSeats(path, slots, swaps = {}, landed = null) {
   const own = k => Object.hasOwn(swaps || {}, k);
   const free = s => !own(s.id) && !(s.bores || []).some(b => own(`${s.id}/${b}`));
   const seat = list => Object.fromEntries(list.filter(s => plugFor(s) && free(s)).map(s => [s.id, plugFor(s)]));
+  const dc = landed?.dc;
+  if (dc?.end === 'port' && dc.path === path) {
+    const seats = dc.kind === 'points' ? [[dc.connector, dc.poles[0]?.plug]] : dc.poles.map(q => [q.path, q.plug]);
+    return Object.fromEntries(seats.flatMap(([id, plug]) => {
+      const s = slots.find(x => x.id === id);
+      return s && plug && free(s) ? [[id, plug]] : [];
+    }));
+  }
   const exact = slots.filter(s => s.id === path);
   if (exact.some(plugFor)) return seat(exact);
   if (landed && landed.cls !== 'port') {
@@ -516,16 +551,29 @@ export function elementIdReason(path) {
 // under: where that part is no slot and its own parts are (a DC terminal,
 // whose screws take the lugs), the paths of those with no cable, the one to
 // take first; empty when every one has a cable;
-// side: where the path is a slot on a side, top or bottom view, that view.
+// side: where the path is a slot on a side, top or bottom view, that view;
+// dcGive: where that part's own parts are the poles of DC ports, the paths of
+// the ports with no cable, the one to give (empty when every one has a cable);
+// dcContact: {part, plug, port}, where the path is a contact of a pluggable
+// connector that states a DC port; dcPanel: where the path is a DC port on the
+// other panel, that panel.
 export function looseReason(end, facts) {
   if (!facts || !facts.item) return 'the device was removed';
   if (isElementId(end.path)) return elementIdReason(end.path);
   if (!facts.drawing) return 'this panel has no drawing';
   if (!facts.port) {
     const h = facts.holder;
+    // a DC port (ports.js dcPortsOf): a contact is no end, and a port is on one panel
+    if (facts.dcContact) return `${end.path} is a contact of ${facts.dcContact.part}, whose connector takes ${facts.dcContact.plug}; give the path ${facts.dcContact.port}`;
+    if (facts.dcPanel) return `${end.path} is on the ${facts.dcPanel} panel; give view "${facts.dcPanel}"`;
     if (facts.side) return `${end.path} is on the ${facts.side} of the device, and a cable end can be given on the front or rear only`;
     if (!h) return facts.part ? `${end.path} is ${facts.part}, which takes no plug or lug the library knows` : `${end.path} is not on this panel`;
     const leaf = end.path.slice(h.path.length + '/module/'.length);
+    // a part whose poles are a DC port's: the port is the end to give
+    if (h.part && facts.part && !facts.onView && facts.dcGive)
+      return facts.dcGive.length
+        ? `${h.path} holds ${h.part}, whose ${leaf} takes a cable on the ${facts.dcGive.length > 1 ? 'ports' : 'port'} ${facts.dcGive.join(', ')} and not on itself; give the path ${facts.dcGive[0]}`
+        : `${h.path} holds ${h.part}, whose ${leaf} takes a cable on its ports and not on itself, and every port of its ${leaf} has a cable`;
     if (h.part && facts.part && !facts.onView && facts.under && !facts.under.length)
       return `${h.path} holds ${h.part}, whose ${leaf} takes a cable on its screws and not on itself, and every screw of its ${leaf} has a cable`;
     if (h.part && facts.part && !facts.onView && facts.under?.length)
