@@ -229,7 +229,10 @@ def test_the_terminal_header_interfaces_were_read():
                                              # the GPU power headers (P-0028) state
                                              # `input: dc` as the barrel jack does
                                              "eps12v-8pin", "pcie-8pin",
-                                             "pcie-12vhpwr", "pcie-12v-2x6"}
+                                             "pcie-12vhpwr", "pcie-12v-2x6",
+                                             # the Open Rack v3 bus-bar clip states
+                                             # `input: dc` too
+                                             "orv3-busbar"}
 
 
 def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
@@ -359,6 +362,23 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # edge. Left out by what it IS - its `attrs.media` is `nvlink`, a copper
         # card-to-card link - and its tests are spec/tests/test_gpu_power_nvlink.py.
         if str((c.get("attrs") or {}).get("media") or "") == "nvlink":
+            continue
+        # NOR ARE THE ALARM-HEADER AND nrgNET CONNECTOR MATES.
+        # generic/wire-wrap-3-plug@1 and generic/screw-terminal-5-plug@1 mate
+        # `wire-wrap-3` and `screw-terminal-5`, the three-pin wire-wrap alarm
+        # header and the five-way nrgNET connector of an Amphenol Network
+        # Solutions power panel. Left out by what each IS - its `attrs.media` is
+        # `wire-wrap` or `nrgnet`, a copper wire terminal - and the tests of the
+        # parts that present them are spec/tests/test_amphenol_every_port.py.
+        if str((c.get("attrs") or {}).get("media") or "") in ("wire-wrap", "nrgnet"):
+            continue
+        # NOR IS THE 50-PIN MICRO D-SUB CABLE PLUG. common/micro-dsub-50-plug@1
+        # mates `micro-dsub-50`, the CO alarm connector of the Nokia general
+        # facilities cards, which the registry holds so the connector is a slot.
+        # Left out by what it IS - its `attrs.media` is `micro-dsub-50`, a
+        # copper alarm cable - and its tests are
+        # spec/tests/test_nokia_gfc_connector_parts.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "micro-dsub-50":
             continue
         if any(m in connectors for m in ms) and c.get("class") != "cap":
             ns = f.parents[2].name
