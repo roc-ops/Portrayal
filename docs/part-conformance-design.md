@@ -4,9 +4,9 @@ Status: **approved** (D-0034), 2026-10-15 (P-0049, request R-0027); the open que
 answered in section 9 (D-0035). Built so far: the runner,
 `spec/tools/dev/part_conformance.py` with its node half, its test, and the report-only test over
 `library/dist` (section 8, step 1); and the port-usable codes of section 10 (C21 and C22, C19 and
-C20 widened, the scan mode, the family file and the records file with its test), which report and
-block nothing until the records file gains a `cap:`. The rule, skill, schema and workflow changes
-follow section 8's order.
+C20 widened, the scan mode, the family file and the records file with its test). The records file
+holds the starting list of findings and a `cap:`, so a finding no record covers fails a pull
+request. The rule, skill, schema and workflow changes follow section 8's order.
 
 The request, in its own words:
 
