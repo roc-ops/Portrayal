@@ -372,6 +372,14 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # parts that present them are spec/tests/test_amphenol_every_port.py.
         if str((c.get("attrs") or {}).get("media") or "") in ("wire-wrap", "nrgnet"):
             continue
+        # NOR IS THE 50-PIN MICRO D-SUB CABLE PLUG. common/micro-dsub-50-plug@1
+        # mates `micro-dsub-50`, the CO alarm connector of the Nokia general
+        # facilities cards, which the registry holds so the connector is a slot.
+        # Left out by what it IS - its `attrs.media` is `micro-dsub-50`, a
+        # copper alarm cable - and its tests are
+        # spec/tests/test_nokia_gfc_connector_parts.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "micro-dsub-50":
+            continue
         if any(m in connectors for m in ms) and c.get("class") != "cap":
             ns = f.parents[2].name
             found[f"{ns}/{c['name']}@{c['version'].split('.')[0]}"] = c
