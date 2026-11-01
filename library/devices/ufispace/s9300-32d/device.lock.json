@@ -27,7 +27,7 @@
    "ufispace/psu-132-dc@1"
   ]
  },
- "composed": "29c4a18e551011c4",
+ "composed": "a40f01431859c1a4",
  "composed-refs": {
   "common/compliance-sticker@1": "1.0.0+6b3c51b31c446689",
   "common/ground-symbol@1": "1.0.1+0018bfdfc1559185",
@@ -36,6 +36,7 @@
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
   "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "common/usb-a-bezel@1": "1.0.0+dbd65b62318759eb",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-dd@1": "1.3.1+c3cf5f2db67d8233",
@@ -44,7 +45,7 @@
   "std/usb-a@1": "1.3.0+3c77f06ea6794bfc",
   "ufispace/fan-405637@1": "1.1.0+8527a479399d4922",
   "ufispace/psu-132-ac@1": "1.1.0+ce45ad7b531ae933",
-  "ufispace/psu-132-dc@1": "1.1.0+c20313841c209303",
+  "ufispace/psu-132-dc@1": "1.2.0+765f1f5d1e83f1eb",
   "ufispace/qsfpdd-led-strip-2x4@1": "1.0.0+ce84b3c81db6933c"
  },
  "configs": [
@@ -53,6 +54,56 @@
   "dc",
   "dc-b2f"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "ufispace/psu-132-dc@1": {
+    "awg": null,
+    "configs": [
+     "dc",
+     "dc-b2f"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "neg",
+      "slot": "psu-0/module/pole-neg"
+     },
+     {
+      "role": "pos",
+      "slot": "psu-0/module/pole-pos"
+     }
+    ],
+    "rating-a": 40,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "ufispace/psu-132-dc@1": {
+    "awg": null,
+    "configs": [
+     "dc",
+     "dc-b2f"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "neg",
+      "slot": "psu-1/module/pole-neg"
+     },
+     {
+      "role": "pos",
+      "slot": "psu-1/module/pole-pos"
+     }
+    ],
+    "rating-a": 40,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "b41f66482ec5186d",
  "groups": [
@@ -450,5 +501,5 @@
  "placement-surface": "f4871a3bab1ddad9",
  "shape": "79230e91571ef88a",
  "surface": "72509d1d491ef19d",
- "version": "3.1.2"
+ "version": "3.2.0"
 }
