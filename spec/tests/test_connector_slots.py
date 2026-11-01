@@ -278,13 +278,13 @@ def test_an_alarm_terminal_or_busbar_note_names_the_part_that_draws_it(key):
         assert stale not in low, f"{key} still says {stale!r}"
 
 
-C16_AND_3W3_PARTS = {
+C16_PARTS = {
     "iec-c16": ("juniper/jpsu-1050-c-ac-afo@1", "juniper/jpsu-1600-c-ac-afo@1"),
 }
 
 
-@pytest.mark.parametrize("key", C16_AND_3W3_PARTS)
-def test_a_c16_or_3w3_key_has_a_note_and_no_standard(key):
+@pytest.mark.parametrize("key", C16_PARTS)
+def test_the_c16_key_has_a_note_and_no_standard(key):
     entry = render_mod._connector_registry().get(key)
     assert entry is not None, f"{key} is not registered"
     assert str(entry.get("note") or "").strip(), f"{key} has no note"
@@ -292,10 +292,10 @@ def test_a_c16_or_3w3_key_has_a_note_and_no_standard(key):
     assert "No standard is held for it" in entry["note"]
 
 
-@pytest.mark.parametrize("key", C16_AND_3W3_PARTS)
-def test_a_c16_or_3w3_note_names_the_parts_that_carry_it(key):
+@pytest.mark.parametrize("key", C16_PARTS)
+def test_the_c16_note_names_the_parts_that_carry_it(key):
     note = render_mod._connector_registry()[key]["note"]
-    for ref in C16_AND_3W3_PARTS[key]:
+    for ref in C16_PARTS[key]:
         assert _contract_at(ref), f"{ref} has no contract in the library"
         assert ref in note, f"the note of {key} does not name {ref}"
     low = note.lower()
@@ -307,7 +307,7 @@ def test_a_c16_or_3w3_note_names_the_parts_that_carry_it(key):
 def test_the_c16_note_quotes_what_the_two_supplies_print():
     note = render_mod._connector_registry()["iec-c16"]["note"]
     assert "IEC-320-C15" in note and "C15 cord" in note
-    for ref in C16_AND_3W3_PARTS["iec-c16"]:
+    for ref in C16_PARTS["iec-c16"]:
         inlet = _contract_at(ref)["provenance"]["inlet"]
         assert "IEC-320-C15" in inlet and "C16" in inlet, f"{ref} no longer prints what the note quotes"
 
