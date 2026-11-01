@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: wire-wrap-header-6
+version: 1.0.0
+class: port
+profile: networking
+interface: wire-wrap-6
+description: >-
+  A six-pin right-angle wire-wrap header, recessed, as the Nokia NGFC-H and NGFC-G general
+  facilities cards carry it for the BITS timing inputs: a rounded grey body with a row of six pin
+  slots. The two BITS cables connect to its pins by wire-wrap.
+size: {w: 31.0, h: 9.7}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: wire-wrap-6}
+provenance:
+  model: >-
+    datasheet - Lightspan Access Node FX Unit Data Sheet Guide 3HH-90279-AAAA-TQZZA issue 23,
+    sections 31.5.3.2 (p340) and 32.5.3.2 (p352): a 6-pin wire-wrap right angle header is accessible
+    through the front panel of the NGFC-H and the NGFC-G and carries the BITS signals (Tables 116
+    and 123). The guide gives no pitch, pin dimension or standard for it.
+  size: >-
+    estimated - THE GUIDE PRINTS NO DIMENSION OF THE HEADER. It is drawn as the NGFC-H front panel art
+    measured it (nokia/ngfc-h@1 provenance layout: the BITS opening 236.7 to 267.7 across, 29.3 to
+    39.0 down), 31.0 x 9.7, with the six pin slots 2.4 x 4.6 at the pitch that art shows. The NGFC-G
+    art draws the opening 27.5 x 6.65 with one slot, so the NGFC-G draws this part 3.5 wider and
+    3.05 taller than its own art did.
+  interface: >-
+    datasheet - the `wire-wrap-6` key of spec/schemas/connectors.yaml. The Hardware Installation
+    Manual 3HH-91853-AAAA-RJZZA issue 08, sections 18.7 (p324) and 24.7 (p466), has the BITS cables
+    connect to its six wire-wrappable pins, so the key carries the sentence that no plug seats on it.
+  colour: >-
+    estimated - the body #d4d7da and the slot outlines #2a2d31 are the NGFC-H skin's own.
+elements: {}
+connection-points:
+  mate: {at: [15.5, 4.85], direction: front}
+skins: [default]
