@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: nrgnet-header
+version: 1.0.0
+class: port
+interface: screw-terminal-5
+profile: power
+description: >-
+  The nrgNET connector of an Amphenol Network Solutions nrgSMART power panel,
+  seen from the rear: a removable 5-pin connector with screw-down terminals,
+  photographed as a green pluggable header, carrying the RS485 nrgNET bus. It
+  presents the `screw-terminal-5` interface at the top of its body. The
+  nrgSMART centre block composes one for IN and one for OUT.
+size: {w: 20.3, h: 6.9}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  read off a threefold enlargement of the 300CB08 installation guide 149722-2 A9 Fig. 3-7, good to a millimetre and no better
+attrs: {pins: 5, bus: RS485}
+provenance:
+  size: >-
+    estimated - the connector as amphenol-ns/nrg-rear-block@1 drew it before the connector became a part of its own,
+    moved here unchanged: 20.3 by 6.9, placed from a threefold enlargement of Fig. 3-7 (about 3.2 px/mm before enlarging).
+  pins: >-
+    datasheet and photo - a removable 5-pin connector with screw-down terminals (the nrgSMART controller datasheet),
+    RS485, pins COM+, COM-, S, PWR+, PWR- with the two power pins unused on these panels (the installation guide, table
+    2.9.2). The guide photographs it as a green pluggable header silkscreened IN on the upper and OUT on the lower
+    (Fig. 2-30), and sells it as a replacement, "nrgNET 5-pin connector (Term Block: RCPT, 1x5)", part 141431 (section
+    2.10.1, p36). ITS PITCH IS NOT STATED in any document held: the drawing gives five ways in about 20, so the art draws
+    3.81, and `screw-terminal-5` claims no pitch for that reason. generic/screw-terminal-5-plug@1 mates it.
+  seat: >-
+    estimated - `mate` sits `on: body`, midway along the five ways, so a part seated here starts where the body ends.
+    The body's 8.0 of height is by eye off the guide photograph.
+  behaviour: >-
+    DELIBERATELY OMITTED. The connector is part of the centre block and is never placed on its own.
+elements: {}
+relief:
+  features:
+    - node: body
+      out: 8.0
+      color: '#3f9d5a'
+      confidence: estimated
+      source: >-
+        a pluggable terminal header standing off the rear in the guide photograph, Fig. 2-30; height by eye
+connection-points:
+  mate: {at: [10.15, 3.45], direction: front, 'on': body}
+skins: [default]

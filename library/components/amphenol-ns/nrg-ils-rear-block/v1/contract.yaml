@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: nrg-ils-rear-block
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: power
 description: >-
@@ -27,49 +27,47 @@ provenance:
     ILS panels as a removable RJ45, IN from the controller or the upstream
     panel and OUT to the downstream one; the nrgILS datasheet calls it an
     Ethernet IN and OUT. The photograph shows two RJ45 jacks stacked under the
-    nrgNET legend, the upper taken to be IN as on the nrgSMART block. They are
-    drawn in this part's skin, not composed as std/rj45@2: nrgNET is a private
-    bus between panels, not a network interface a DCIM has a type for, and the
-    nrgSMART block draws its connectors the same way.
+    nrgNET legend, the upper taken to be IN as on the nrgSMART block. EACH JACK
+    IS A COMPOSED PART SINCE 1.1.0, amphenol-ns/nrgnet-jack@1, under the ids
+    `nrgnet-in` and `nrgnet-out` the elements carried before, at the places they
+    were drawn: the shell, the opening and the latch slot are that part's
+    drawing, moved out of this skin unchanged, and its 2.0 of height is that
+    part's relief. It presents the `rj45` interface and generic/rj45-plug@1
+    mates it. The jack is a serial link on an RJ45 (the datasheet's
+    "proprietary serial protocol"), so it states `rj45-serial` and no lamps. It
+    is not std/rj45@2, a housing drawn from a maker's drawing, and it is not a
+    network interface for a DCIM: nrgNET is a private bus between panels, and a
+    part composed here is no port of the device, so nothing is published for it.
   probe-jack: >-
     photo - a black square-bodied jack with a round hole at the top of the
     right-hand column, as the nrgSMART block's TEMP 1. The datasheet sells two
     probes, nrgTEMP (legacy analog) and nrgILSTEMP (I2C temperature and
     humidity), and the configuration guide 155376 names Temperature 1 analog
     and Temperature 2 digital. Which socket takes the digital probe is not
-    resolved.
+    resolved. THE JACK IS STILL AN ELEMENT OF THIS SKIN and presents no
+    interface, because its type is not stated.
   headers: >-
     photo - three small white rectangular headers stacked under the probe
     jack. NOTHING HELD NAMES THEM. The plain panel's two alarm headers are
     white three-way headers of about this size, and the I2C probe needs a
     socket, so they are probably the two alarm outputs and the digital probe,
-    in an order nobody states.
+    in an order nobody states. THEY ARE STILL ELEMENTS OF THIS SKIN and present
+    no interface, for that reason.
   legend: >-
     photo - nrgNET is printed in white at the top left of the plate, and a
     short legend sits over the right-hand column that the photograph does not
     resolve. Only nrgNET is drawn.
 attrs: {nrgnet-connector: rj45}
 elements:
-  nrgnet-in: {at: [2.2, 13.0], size: [16.0, 12.8], class: port}
-  nrgnet-out: {at: [2.2, 28.4], size: [16.0, 12.8], class: port}
   probe: {at: [26.0, 3.0], size: [11.0, 14.0], class: port}
   header-1: {at: [24.6, 19.4], size: [12.6, 5.0], class: port}
   header-2: {at: [24.6, 26.4], size: [12.6, 5.0], class: port}
   header-3: {at: [24.6, 33.4], size: [12.6, 5.0], class: port}
+parts:
+  - {ref: amphenol-ns/nrgnet-jack@1, id: nrgnet-in, at: [2.2, 13.0]}
+  - {ref: amphenol-ns/nrgnet-jack@1, id: nrgnet-out, at: [2.2, 28.4]}
 relief:
   features:
-    - node: nrgnet-in
-      out: 2.0
-      color: '#c9cbcd'
-      confidence: estimated
-      source: >-
-        a jack shell standing a little off the plate in the datasheet photograph; height by eye
-    - node: nrgnet-out
-      out: 2.0
-      color: '#c9cbcd'
-      confidence: estimated
-      source: >-
-        see nrgnet-in
     - node: probe
       out: 3.0
       color: '#1b1d20'
