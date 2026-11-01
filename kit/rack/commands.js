@@ -24,7 +24,7 @@ import {appliedFrame, editRefusal, frameName, unholdable} from './frames.js';
 import {placement, moveItem, managersOf} from './managers.js';
 import {canCable, withCable, updateCable, cablesOf, cableName, endName, endKey, parseColor,
         connectorOf, mediaKind, portPathOf, isElementId, elementIdReason, MEDIA, MEDIA_LABELS} from './cable-rules.js';
-import {portIdsOf, zeroUEnds, zeroUEndsText, seatedEndReason} from './ports.js';
+import {portIdsOf, zeroUEnds, zeroUEndsText, seatedEndReason, dcReader} from './ports.js';
 import {validate, same} from './validate.js';
 import {withRoutedLengths, pathwaysOf, waypointLanesOf, resolveRoute, pathwaysAt, zeroUPathways, pathwayId} from './route.js';
 import {slotsFor, slotEnv, resolverFor, holdsAt, partName, partOf} from './slots.js';
@@ -756,7 +756,7 @@ function cableAdd(rack, {a, b, media = '', purpose = '', label = '', length = nu
   if (refused) return refused;
   const tint = parseColor(color);
   if (!tint.ok) return {error: tint.reason};
-  const can = canCable(rack, a, b, {uOf: heightOf(chassisOf)});
+  const can = canCable(rack, a, b, {uOf: heightOf(chassisOf), dc: dcReader(rack, ctx)});
   if (!can.ok) return {error: can.reason};
   const {rack: next, cable} = withCable(rack, {a, b, media, purpose, label, length: lengthOf(length), color: tint.color});
   return done(next, `Added cable ${cableName(cable)}.`, {created: {id: cable.id}});
@@ -780,7 +780,7 @@ function cableUpdate(rack, {id, a, b, ...p}, ctx) {
   if (refused) return refused;
   const uOf = heightOf(chassisOf);
   if (moved.length) {
-    const can = canCable(rack, ends.a, ends.b, {ignoreId: id, uOf});
+    const can = canCable(rack, ends.a, ends.b, {ignoreId: id, uOf, dc: dcReader(rack, ctx)});
     if (!can.ok) return {error: can.reason};
   }
   const {straps: tie, ...fields} = p;
