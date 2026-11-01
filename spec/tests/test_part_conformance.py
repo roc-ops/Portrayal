@@ -497,6 +497,13 @@ def test_by_family_places_the_c16_inlet_key_in_the_ac_inlet_family(tmp_path):
     assert where == {"acme/p-0@1": "power inlets (AC)"}
 
 
+def test_by_family_places_the_nokia_alarm_and_bits_keys_in_other(tmp_path):
+    # a name the DC pattern would take, so only the key can keep each out of DC
+    where = by_family_where(tmp_path, {"acme/terminal-x0@1": {"class": "port", "interface": "micro-dsub-50"},
+                                       "acme/terminal-x1@1": {"class": "port", "interface": "wire-wrap-6"}})
+    assert where == {"acme/terminal-x0@1": "other", "acme/terminal-x1@1": "other"}
+
+
 def test_by_family_keeps_a_busbar_out_of_usb_and_a_usb_port_in_it(tmp_path):
     # "busbar" contains "usb"
     where = by_family_where(tmp_path, {"acme/input-feed-busbar@1": {"class": "port"},

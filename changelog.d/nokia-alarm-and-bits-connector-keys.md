@@ -1,0 +1,3 @@
+### Added
+- Two connector keys in `connectors.yaml`: `micro-dsub-50`, the 50-pin micro D-sub connector of the CO alarm interface of the Nokia NGFC-H and NGFC-G general facilities cards, female on the panel, and `wire-wrap-6`, their six-pin right-angle wire-wrap BITS header. Each names the connector on the card and never the cable end. The guides state no standard, shell size or pitch for either, so the entries cite none and claim none. `wire-wrap-6` carries the sentence that the BITS cables connect to its pins by wire-wrap, so no plug seats on it. No part presents either key, so no slot is published.
+- The family file of the part-conformance runner lists both keys under "other", so `--by-family` keeps a part presenting either in that family.
