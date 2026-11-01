@@ -56,6 +56,9 @@ interfaces:
   iec-c13: {standard: c13-outlet, note: 'IEC 60320 C13 outlet (a PDU socket); generic/c14-plug@1 mates it'}
   # The PDU side (#933): an outlet is a slot for the plug end of a jumper.
   iec-c19: {standard: c19-outlet, note: 'IEC 60320-3 sheet J C19 outlet, a PDU socket; generic/c20-plug@1 mates it. Eaton C39 also takes a C20 and is its own part'}
+  # The C16 appliance inlet. THE KEY IS THE INLET ON THE DEVICE, never the C15 coupler of the cord
+  # that mates it. No standard is held for it, so the entry cites none.
+  iec-c16: {note: 'the AC appliance inlet of the 1050 W and 1600 W supplies of the Juniper EX4400 switches, a C14 inlet with a raised rim, which a C15 cord mates (EX4400 Switch Hardware Guide, Juniper Networks, PDF created 2026-07-22: Table 53 prints the inlet type of each supply as IEC-320-C15, and the cord text says each ships with a C15 coupler cord). The guide types the inlet by its cord, so C16 is the reading of juniper/jpsu-1050-c-ac-afo@1 and juniper/jpsu-1600-c-ac-afo@1, which describe the inlet this key covers. No standard is held for it'}
   # NEMA straight-blade receptacles and the Eaton C39 (#1045,
   # docs/connectors-power-design.md section 9). THE KEY IS THE RECEPTACLE, as
   # `iec-c13` is the outlet and not the plug that enters it: `nema-5-15r` and

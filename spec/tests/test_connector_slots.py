@@ -121,7 +121,9 @@ def test_the_connector_registry_is_not_vacuous():
                          # alarm, terminal and bus-bar connectors
                          "wire-wrap-3", "screw-terminal-5", "screw-terminal-2",
                          "terminal-381-5", "terminal-350-6", "screw-terminal-4",
-                         "orv3-busbar"}
+                         "orv3-busbar",
+                         # the C16 appliance inlet of the EX4400 AC supplies
+                         "iec-c16"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -159,7 +161,9 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    # the alarm, terminal and bus-bar connectors
                                    "wire-wrap-3", "screw-terminal-5", "screw-terminal-2",
                                    "terminal-381-5", "terminal-350-6", "screw-terminal-4",
-                                   "orv3-busbar"}
+                                   "orv3-busbar",
+                                   # the C16 inlet of the EX4400 AC supplies
+                                   "iec-c16"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
@@ -272,6 +276,40 @@ def test_an_alarm_terminal_or_busbar_note_names_the_part_that_draws_it(key):
     assert not re.search(r"\byet\b", low), f"{key} still says 'yet'"
     for stale in ("added separately", "no part presents"):
         assert stale not in low, f"{key} still says {stale!r}"
+
+
+C16_AND_3W3_PARTS = {
+    "iec-c16": ("juniper/jpsu-1050-c-ac-afo@1", "juniper/jpsu-1600-c-ac-afo@1"),
+}
+
+
+@pytest.mark.parametrize("key", C16_AND_3W3_PARTS)
+def test_a_c16_or_3w3_key_has_a_note_and_no_standard(key):
+    entry = render_mod._connector_registry().get(key)
+    assert entry is not None, f"{key} is not registered"
+    assert str(entry.get("note") or "").strip(), f"{key} has no note"
+    assert "standard" not in entry, "the note says no standard is held for it"
+    assert "No standard is held for it" in entry["note"]
+
+
+@pytest.mark.parametrize("key", C16_AND_3W3_PARTS)
+def test_a_c16_or_3w3_note_names_the_parts_that_carry_it(key):
+    note = render_mod._connector_registry()[key]["note"]
+    for ref in C16_AND_3W3_PARTS[key]:
+        assert _contract_at(ref), f"{ref} has no contract in the library"
+        assert ref in note, f"the note of {key} does not name {ref}"
+    low = note.lower()
+    assert not re.search(r"\byet\b", low), f"{key} still says 'yet'"
+    for stale in ("added separately", "no part presents"):
+        assert stale not in low, f"{key} still says {stale!r}"
+
+
+def test_the_c16_note_quotes_what_the_two_supplies_print():
+    note = render_mod._connector_registry()["iec-c16"]["note"]
+    assert "IEC-320-C15" in note and "C15 cord" in note
+    for ref in C16_AND_3W3_PARTS["iec-c16"]:
+        inlet = _contract_at(ref)["provenance"]["inlet"]
+        assert "IEC-320-C15" in inlet and "C16" in inlet, f"{ref} no longer prints what the note quotes"
 
 
 def test_no_nema_plug_is_a_connector_key():

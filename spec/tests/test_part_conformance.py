@@ -492,6 +492,11 @@ def test_by_family_places_each_stack_rps_console_terminal_and_alarm_key_in_its_f
     assert by_family_where(tmp_path, spec) == want
 
 
+def test_by_family_places_the_c16_inlet_key_in_the_ac_inlet_family(tmp_path):
+    where = by_family_where(tmp_path, {"acme/p-0@1": {"class": "port", "interface": "iec-c16"}})
+    assert where == {"acme/p-0@1": "power inlets (AC)"}
+
+
 def test_by_family_keeps_a_busbar_out_of_usb_and_a_usb_port_in_it(tmp_path):
     # "busbar" contains "usb"
     where = by_family_where(tmp_path, {"acme/input-feed-busbar@1": {"class": "port"},
