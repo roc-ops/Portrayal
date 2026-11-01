@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ds6000
-version: 0.1.1
+version: 0.1.2
 maturity: modelled
 manufacturer: Celestica
 model: DS6000
@@ -177,6 +177,17 @@ provenance:
       shows that corner as a blank patch) and are placed by proportion from it. Two stud holes
       at (10.1, 109.2) and (10.1, 119.0) on ds6000-B take a two-hole lug, which ds6000-A-3
       shows fitted. A yellow two-symbol hazard label sits under the legends on each panel.
+  airflow:
+    confidence: datasheet
+    note: >-
+      Celestica "DS6000 3U 64-port 1.6TbE Data Center Switch" data sheet, revision 100725, page 2.
+      ORDER INFORMATION ends each order in its airflow word: R4087-F9013-A1 (AC) "B2F",
+      R4087-F9004-A1 (AC) "F2B", R4087-F9005-A1 (DC) "F2B"; POWER AND COOLING says "forward and
+      reverse airflow". The data sheet does not spell the letters out: the STORDIS distributor
+      page does ("F-Front-to-Back or B-Back-to-Front"), and B2F is read as back-to-front on the
+      same order line. The chassis states front-to-back; ac-b2f keeps its own key because it
+      differs. The data sheet lists no DC back-to-front order, so none is modelled, and it gives
+      no direction for the fan modules or the DC supply apart from the build's.
   airflow-colour:
     confidence: photo-measured
     note: >-
@@ -232,7 +243,7 @@ attrs:
     safety: 'IEC 62368-1:2014, :2018 and 2023 (CB Scheme, all country deviations); EN 62368-1:2014+A11:2017; EN IEC 62368-1:2020+A11:2020; EN IEC 62368-1:2024/A11:2024; UL 62368-1:2025; CSA C22.2 No. 62368-1:2025'
     green: 'WEEE 2012/19/EU; EU RoHS 2011/65/EU and 2015/863/EU; REACH (EC) 1907/2006; China RoHS'
   lifecycle: {eol: none-announced}
-chassis: {width: 438.0, height: 129.8, depth: 712.2, ru: 3, weight-kg: 35, color: '#c4c8cc', silk: '#f2f4f6'}
+chassis: {width: 438.0, height: 129.8, depth: 712.2, ru: 3, weight-kg: 35, color: '#c4c8cc', silk: '#f2f4f6', airflow: front-to-back}
 gaps:
 - what: install-guide
   scope: [front, rear]
