@@ -396,6 +396,29 @@ def test_c22_finds_a_drawn_port_whose_part_the_build_does_not_hold(tmp_path):
     assert [c["part"] for c in causes(report, "C22")] == ["acme/missing@1"]
 
 
+def test_c22_reads_the_back_of_a_seated_part_through_the_parts_of_its_rear_face(tmp_path):
+    """The back of a part seated in a bay is drawn on the host's other panel as a projection: it carries no `ref` and
+    its address is `of`. What it presents is what the part's rear face composes at that id."""
+    jack = comp("std/rj45@2", interface="rj45")
+    bare = comp("acme/bare-end@1")
+
+    def found(name, end_ref, back=True):
+        folder = tmp_path / name
+        folder.mkdir()
+        parts = panel(back)
+        if back and end_ref != "std/rj45@2":
+            parts[1] = comp("acme/pnl-rear@1", **{"class": "adapter-panel"}, parts=[{"id": i, "ref": end_ref} for i in ("b1", "b2")])
+        ends = [{"id": f"bay-1-rear--{i}", "class": "port", "parent": "bay-1/module", "of": f"bay-1/module/{i}", "seat": "bay-1",
+                 "box": {"x": 30 + 30 * n, "y": 5, "w": 12, "h": 10}} for n, i in enumerate(("b1", "b2"))]
+        dist = world(folder, comps=[jack, bare, *parts], rear=ends, bays={"bay-1": "acme/pnl@1:1.0.0"})
+        return sorted(c["path"] for c in causes(scan(dist, folder), "C22"))
+
+    assert found("composed", "std/rj45@2") == []                                        # the face composes a jack: it presents rj45
+    both = ["bay-1/module/b1", "bay-1/module/b2"]
+    assert found("bare", "acme/bare-end@1") == both                                     # the face composes a part that presents nothing
+    assert found("no-face", "std/rj45@2", back=False) == both                           # the seated part has no rear face to read
+
+
 def test_the_scan_judges_every_configuration_and_lays_no_cable(tmp_path):
     bare = comp("acme/lug@1", **{"class": "inlet"})
     clean = {"front": [], "rear": []}
