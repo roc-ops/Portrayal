@@ -357,6 +357,36 @@ def test_c19_lets_off_a_supply_whose_part_carries_a_sentence(tmp_path):
     assert usable(scan(world(tmp_path / "b", comps=[supply], front=drawn), tmp_path / "b", library=library)) == {}
 
 
+def test_c19_and_c20_let_off_a_fixed_cord_and_an_inlet_that_its_placement_presents(tmp_path):
+    """A device fed through a fixed cord, a plug of the part's own that its sentence says is no connector, offers no power end by
+    design (C19). A placed part that composes one connector part presents it as its own slot, at the placement's path (C20)."""
+    inlet = comp("acme/inl@1", **{"class": "inlet"}, interface="rj45")
+    supply = comp("acme/psu@1", **{"class": "psu"}, parts=[{"id": "inlet", "ref": "acme/inl@1"}])
+    cord = [element("cord", "inlet", ref="acme/cord@1:1.0.0")]
+    placed = [element("psu-1", "psu", ref="acme/psu@1:1.0.0"), element("psu-1/inlet", "inlet", x=40, ref="acme/inl@1:1.0.0")]
+
+    def codes(name, parts, drawn, sentence=False, cages=(), powered=False):
+        folder = tmp_path / name
+        folder.mkdir()
+        library = contract(folder, "acme/cord@1", unmated=SENTENCE) if sentence else None
+        dist = world(folder, comps=parts, front=drawn, cages=cages)
+        if powered:                                                             # the configuration says the device is powered
+            doc = json.loads((dist / "dev.configs.json").read_text())
+            doc["configs"][0]["power"] = ["ac"]
+            (dist / "dev.configs.json").write_text(json.dumps(doc))
+        return sorted(usable(scan(dist, folder, library=library)))
+
+    fixed = [comp("acme/cord@1", **{"class": "inlet"}, attrs={"plug": "nema-5-15p"})]
+    got = {"fixed cord": codes("a", fixed, cord, sentence=True, powered=True),
+           "cord with no sentence": codes("b", fixed, cord, powered=True),
+           "sentence on a part with no plug": codes("c", [comp("acme/cord@1", **{"class": "inlet"})], cord, sentence=True, powered=True),
+           "slot at the placement": codes("d", [supply, inlet], placed, cages=[slot("psu-1")]),
+           "slot of another interface": codes("e", [supply, inlet], placed, cages=[{**slot("psu-1"), "interface": "iec-c14"}]),
+           "no slot at the placement": codes("f", [supply, inlet], placed)}
+    assert got == {"fixed cord": [], "cord with no sentence": ["C19", "C20"], "sentence on a part with no plug": ["C19"],
+                   "slot at the placement": [], "slot of another interface": ["C20"], "no slot at the placement": ["C19", "C20"]}, got
+
+
 def test_every_finding_lists_every_cause_uncapped_with_the_part_that_draws_it(tmp_path):
     bare = comp("acme/lug@1", **{"class": "inlet"})
     five = [element(f"in-{i}", "inlet", x=20 + 30 * i, ref="acme/lug@1:1.0.0") for i in range(5)]
