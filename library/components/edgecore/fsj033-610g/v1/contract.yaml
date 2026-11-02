@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fsj033-610g
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -90,6 +90,39 @@ provenance:
   logo-zone: >-
     none reserved - the figure prints no vendor mark on the supply, and no logo or wordmark is
     drawn.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head 3.4
+    across (that part's own size is an estimate), standing at the centre of the disc this skin
+    already draws (centres 21.50 and 31.00 across, 18.00 down; each disc is 5.8 across) and
+    lifted 9.5 mm, this block's own estimated proudness (the `terminal` relief below). The head
+    is drawn smaller than the disc round it, so the drawing marks where a lug lands and does not
+    show the screw. The quick start guide shows the two screws and a ring lug for each and gives
+    no screw head, thread or stud; the places are the skin's own, which are themselves
+    estimated (`the-face`).
+  earth: >-
+    A DECLARED STAND-IN, and its place is the skin's own. The COR580 Quick Start Guide, "Connect
+    Power", page 3, the figure above the callouts, shows a cross-head screw with a star washer on
+    the supply at the upper right, beside the latch, and calls it "4. Ground". It is a screw
+    beside the two-screw terminal block, not on it, so it is a ground seat a lug lands on outside
+    the DC port, which keeps two poles (decided 2026-11-02). Until 1.1.0 it was drawn as
+    common/screw-head@1, a decorative head that takes no lug; it is now the library's
+    common/ground-screw@1, a screw that claims no stud size, at the same centre (44.20 across,
+    14.00 down), because no document held gives this screw's thread or head. The part keeps its
+    id, `ground-stud`.
+  poles: >-
+    Edgecore COR580 (AS9926-24D) Quick Start Guide, "Connect Power", page 3, the figure above
+    the callouts: two screws between dark barriers, "1. Use the ring lugs included with the DC
+    PSU.", "2. DC return" on the left screw and "3. -40 - -75 VDC" on the right one. The roles are the
+    callouts': `rtn` for DC return (spec/schemas/dc.yaml writes `rtn` as RTN and return) and
+    `batt` for the -40 - -75 VDC wire (it writes `batt` as negative (battery)), listed in the
+    callouts' order, which is the order `connector-direction` already records for this skin.
+    The port states no voltage: the guide gives a range and calls the supply "48 VDC", a name and
+    no nominal. It states no wire size: the guide gives none for this supply's DC wires (its
+    "#12 AWG" is the chassis ground wire).
+  rating: >-
+    Edgecore COR580 (AS9926-24D) Quick Start Guide, page 4, "48 VDC PSU", "DC Input -40 V - -75 V,
+    40 A maximum": the one current the documents held give for this supply (the data sheet gives
+    the system's range and no current), so the port states it as the supply's input current.
 elements:
   handle: {at: [1.50, 5.00], size: [11.00, 28.00], class: handle}
   terminal: {at: [14.50, 5.50], size: [24.00, 24.50], class: terminal}
@@ -98,7 +131,18 @@ fields:
   latch-finish: {label: Latch colour, type: text, default: '#c48484'}
   latch-edge: {label: Latch edge colour, type: text, default: '#5f3535'}
 parts:
-  - {ref: common/screw-head@1, id: ground-stud, at: [42.40, 12.20]}
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [19.8, 16.3], lift: 9.5}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [29.3, 16.3], lift: 9.5}
+  - {ref: common/ground-screw@1, id: ground-stud, at: [41.4, 11.2]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 40
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+      source: {poles: poles, rating-a: rating}
 relief:
   wall: '#15181b'
   features:

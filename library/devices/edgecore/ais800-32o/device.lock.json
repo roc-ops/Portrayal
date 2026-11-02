@@ -30,15 +30,17 @@
    "edgecore/ais800-psu-dc@2"
   ]
  },
- "composed": "ee43c30a1c564b25",
+ "composed": "284ae93250e6ced2",
  "composed-refs": {
+  "common/ground-screw@1": "1.0.0+c6ffaf7f04592a09",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/led-rect-sm@1": "1.0.0+9ebac9d739e4dcb6",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "edgecore/ais800-fan@1": "1.0.3+c6cf1678ecf359ca",
   "edgecore/ais800-psu-ac@1": "1.0.0+4fa141239888147d",
-  "edgecore/ais800-psu-dc@2": "2.0.0+c27bd3cbb5c045ca",
+  "edgecore/ais800-psu-dc@2": "2.1.0+940da536d00300e2",
   "std/osfp@1": "1.0.0+ba456f3b08fbea70",
   "std/rj45@2": "2.1.0+2c8fec73bdc493fb",
   "std/saf-d-grid@1": "1.1.1+51f6b5a49209e577",
@@ -51,6 +53,60 @@
   "dc-b2f",
   "dc-f2b"
  ],
+ "dc-ports": {
+  "psu-1/module/input": {
+   "edgecore/ais800-psu-dc@2": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "dc-b2f",
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     }
+    ],
+    "rating-a": 53,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-2/module/input": {
+   "edgecore/ais800-psu-dc@2": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "dc-b2f",
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-2/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-2/module/pole-rtn"
+     }
+    ],
+    "rating-a": 53,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "f2d01b73023fa2da",
  "groups": [
@@ -315,5 +371,5 @@
  "placement-surface": "ca5064b7f35b12a4",
  "shape": "2e4a4d1a7f40a5f4",
  "surface": "b265519b90135ded",
- "version": "3.0.2"
+ "version": "3.1.0"
 }
