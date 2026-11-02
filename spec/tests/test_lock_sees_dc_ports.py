@@ -24,7 +24,7 @@ import pytest
 from portrayal import devicelock as dl
 from portrayal import manifest
 
-from test_dc_ports_published import DEVICES, PARTS, _port, write_library
+from test_dc_ports_published import DEVICES, PARTS, _components_stating_a_dc_block, _port, write_library
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -185,7 +185,9 @@ def test_devicelock_names_no_device_of_the_real_library():
     assert (r.returncode, r.stdout.strip()) == (0, "devicelock: 0 finding(s)"), r.stdout + r.stderr
 
 
-def test_no_lock_of_the_real_library_records_a_port():
+def test_every_port_a_lock_of_the_real_library_records_belongs_to_a_component_that_states_a_dc_block():
+    """Before the first part stated a `dc` block no lock recorded a port."""
     locks = sorted((ROOT / "library/devices").glob("*/*/device.lock.json"))
     assert locks
-    assert [str(f) for f in locks if "dc-ports" in json.loads(f.read_text())] == []
+    named = {ref for f in locks for refs in json.loads(f.read_text()).get("dc-ports", {}).values() for ref in refs}
+    assert named <= set(_components_stating_a_dc_block())

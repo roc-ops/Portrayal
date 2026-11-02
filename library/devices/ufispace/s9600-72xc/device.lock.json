@@ -21,7 +21,7 @@
    "ufispace/psu-132-dc@1"
   ]
  },
- "composed": "fc15e2ab2741d792",
+ "composed": "129aec58a779d7b2",
  "composed-refs": {
   "common/compliance-sticker@1": "1.0.0+6b3c51b31c446689",
   "common/ground-symbol@1": "1.0.1+0018bfdfc1559185",
@@ -30,6 +30,7 @@
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
   "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/micro-usb@1": "1.0.1+623c203fe8667fd2",
   "std/qsfp28@1": "1.4.1+f836f540ce576bbc",
@@ -41,7 +42,7 @@
   "ufispace/fan-803816@1": "1.0.0+6f25428b8d43462e",
   "ufispace/lane-led-quad@1": "1.0.0+32cf79ec07a4520b",
   "ufispace/psu-132-ac@1": "1.1.0+ce45ad7b531ae933",
-  "ufispace/psu-132-dc@1": "1.1.0+c20313841c209303",
+  "ufispace/psu-132-dc@1": "1.2.0+765f1f5d1e83f1eb",
   "ufispace/seg7-status-2@1": "1.4.0+ba0c4a9d22c1f45c"
  },
  "configs": [
@@ -49,6 +50,54 @@
   "base",
   "dc"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "ufispace/psu-132-dc@1": {
+    "awg": null,
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "neg",
+      "slot": "psu-0/module/pole-neg"
+     },
+     {
+      "role": "pos",
+      "slot": "psu-0/module/pole-pos"
+     }
+    ],
+    "rating-a": 40,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "ufispace/psu-132-dc@1": {
+    "awg": null,
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "neg",
+      "slot": "psu-1/module/pole-neg"
+     },
+     {
+      "role": "pos",
+      "slot": "psu-1/module/pole-pos"
+     }
+    ],
+    "rating-a": 40,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "3ed6ec0937bcbaac",
  "groups": [
@@ -852,5 +901,5 @@
  "placement-surface": "0945871494a05cb3",
  "shape": "b502b3c3be65abed",
  "surface": "787fe0c19a66eef5",
- "version": "6.0.11"
+ "version": "6.1.0"
 }
