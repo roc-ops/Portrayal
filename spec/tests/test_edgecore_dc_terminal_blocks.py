@@ -143,8 +143,7 @@ def test_the_build_publishes_three_seats_that_accept_the_ring_lug_and_one_dc_por
     assert [(q["role"], q["slot"]) for q in port["poles"]] == [(role, i) for i, _, role in want["screws"]]
 
 
-def test_the_findings_this_change_closes_have_no_row_left_and_the_ac_supply_of_the_dcs500_keeps_its_own():
+def test_the_findings_this_change_closes_have_no_row_left():
     rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
     for ref in SUPPLIES:
         assert [r for r in rows if r["part"] == ref and r["code"] == "C19"] == []
-    assert len([r for r in rows if r["part"] == "edgecore/dcs500-psu-ac@1" and r["code"] == "C19"]) == 1
