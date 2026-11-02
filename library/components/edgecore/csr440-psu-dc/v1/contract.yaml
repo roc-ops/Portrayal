@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: csr440-psu-dc
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -86,6 +86,47 @@ provenance:
   logo-zone: >-
     none reserved - the figures print no vendor mark on the supply, and no logo or wordmark is
     drawn.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head 3.4
+    across (that part's own size is an estimate), standing at the centre of the opening this skin
+    already draws (`pole-1` and `pole-2`, centres 32.20 and 41.70 across, 24.00 down) and lifted
+    9.5 mm, the cover's own estimated proudness (the `terminal` relief below). The figures show the
+    two openings in the grey cover and no screw inside them, so where in the opening the screw
+    stands is not shown; the head is drawn at its centre. The guide gives a wire size and a torque
+    and no screw head, thread or stud; the places are the skin's own, which are themselves
+    estimated (`the-face`).
+  earth: >-
+    A DECLARED STAND-IN. The CSR440 Quick Start Guide, "Connect Power", page 3, the figure above
+    the callouts, shows a stud with a washer on a pale bracket at the lower left of the supply,
+    outside the grey cover, and calls it "1. Connect the ground wire / protective earth." It is a
+    stud beside the two-opening terminal cover, not on it, so it is a ground seat a lug lands on
+    outside the DC port, which keeps two poles (decided 2026-11-02). It is the library's
+    common/ground-stud@1, a hex nut on a stud, because no document held gives this stud's thread
+    or nut: the part's own size is that part's estimate. It stands at the centre of the stud this
+    skin already draws in `ground-stud` (12.70 across, 28.00 down) and lifted 3.0 mm, the
+    bracket's own estimated height (the `ground-stud` relief below), so the stud stands on its
+    bracket as the figure shows.
+  poles: >-
+    Edgecore CSR440 (AS7535-28XB) Quick Start Guide, "Connect Power", page 3, the figure above the
+    callouts: a grey cover with two openings, "2. Connect the -44 - -60 VDC wire." on the left one
+    and "3. Connect the DC return wire." on the right one, and "RTN - 48V" printed on the
+    housing above it, upside down in the render, which `connector-direction` reads as agreeing.
+    The roles are the callouts': `batt` for the -44 - -60 VDC wire (spec/schemas/dc.yaml writes
+    `batt` as negative (battery)) and `rtn` for the DC return (it writes `rtn` as RTN and
+    return), listed in the callouts' order. THE NOTE UNDER THE CALLOUTS PRINTS THE SIGNS THE OTHER
+    WAY ROUND ("-44VDC - -60VDC: Input+", "VDC return: Input-") from the legend; it is recorded and
+    not read, and the roles follow the callouts. The port states no voltage: the guide gives a
+    range and calls the supply "48 VDC", a name and no nominal.
+  rating: >-
+    NOT STATED. The CSR440 data sheet (page 3) and Quick Start Guide (page 4) print "DC Input:
+    -44 - -60V, 15.5-9.6 A, per PS": a pair of currents over the range and no maximum. A port's
+    `rating-a` is one figure and no document says which of the pair is the input rating, so the
+    port states none and a later change can state it once a source says so.
+  awg: >-
+    Edgecore CSR440 Quick Start Guide, page 3, the caution above the figure: a "#14 AWG/1.5 mm2"
+    wire for a -44 VDC to -60 VDC PSU. The note under the callouts suggests "UL 1015 AWG#10-14"
+    wire; that is recorded and not stated. The #14 is the one size the caution gives for this
+    supply's DC wires, so the port states it.
 elements:
   latch: {at: [4.50, 1.60], size: [10.50, 4.60], class: latch}
   vent-field: {at: [2.00, 7.00], size: [44.00, 30.50], class: vent}
@@ -104,6 +145,15 @@ relief:
       source: >-
         edgecore/csr440-psu-ac@1's own vent key, carried: the figures show a wire grid and no
         document states how deep the cavity behind it runs.
+    # The bracket is listed before the cover. A component that composes parts has its raised nodes
+    # moved to the end of their group in this order, and the bracket's edge has always been drawn
+    # under the cover's outline; listed after it, it would paint over it by 0.3 mm.
+    - node: ground-stud
+      out: 3.0
+      confidence: estimated
+      source: >-
+        edgecore/csr440-psu-dc@1's own ground-stud key. The stud stands up off its bracket in the
+        figures; how far is not stated.
     - node: terminal
       out: 9.5
       confidence: estimated
@@ -111,12 +161,6 @@ relief:
         edgecore/csr440-psu-dc@1's own terminal key. The figures show the cover standing out of the
         face; how far is not stated, and 9.5 matches edgecore/csr310-psu-dc@1's estimate for a
         terminal block of this kind.
-    - node: ground-stud
-      out: 3.0
-      confidence: estimated
-      source: >-
-        edgecore/csr440-psu-dc@1's own ground-stud key. The stud stands up off its bracket in the
-        figures; how far is not stated.
     - node: handle
       uhandle: 27.0
       dia: 5.0
@@ -130,4 +174,17 @@ relief:
       source: >-
         edgecore/csr440-psu-ac@1's own latch key, carried: the outline is read off the figure and
         its projection is not stated.
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [30.5, 22.3], lift: 9.5}
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [40.0, 22.3], lift: 9.5}
+  - {ref: common/ground-stud@1, id: earth, at: [8.65, 23.95], lift: 3.0}
+dc:
+  ports:
+    - id: input
+      direction: input
+      awg: [14]
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles, awg: awg}
 skins: [default]

@@ -403,20 +403,36 @@ def test_what_is_out_of_scope_is_still_not_a_seat():
 
 # --- 2. the census, and every placement is a slot ----------------------------------
 
+# THE ONE KIND OF COMPONENT THAT COMPOSES ONE OF THE FOUR: a DC supply module whose earth screw or stud stands beside its
+# terminal block, not on it. A supply is seated in a bay of a chassis and is not a placement on a chassis face, so its
+# earth seat is counted here and not in CENSUS. (component, id of its part) -> the part it composes.
+COMPOSED = {
+    ("edgecore/agr-psu-dc@1", "earth"): "common/ground-screw@1",
+    ("edgecore/ais800-psu-dc@2", "earth"): "common/ground-screw@1",
+    ("edgecore/csr440-psu-dc@1", "earth"): "common/ground-stud@1",
+    ("edgecore/fsj033-610g@1", "ground-stud"): "common/ground-screw@1",
+}
+
+
 @pytest.fixture(scope="module")
-def placed():
+def walked():
     got = placements_of(FOUR)
     assert got, "the walk found no placement of any ground stud part"
     return got
 
 
-def test_the_census_of_ground_stud_placements(placed):
+@pytest.fixture(scope="module")
+def placed(walked):
+    return [w for w in walked if w[1] is not None]
+
+
+def test_the_census_of_ground_stud_placements(placed, walked):
     """Counted by walking every device view and every component's `parts:`.
-    All four parts are placed straight on a chassis face and no component
-    composes one."""
+    All four parts are placed straight on a chassis face, except the earth
+    seats of four DC supply modules, which COMPOSED counts apart."""
+    assert {(where, p["id"]): p["ref"] for where, view, p in walked if view is None} == COMPOSED
     counts = {}
     for where, view, p in placed:
-        assert view is not None, f"{where} composes {p['ref']}: a seat this census does not count"
         n, devs = counts.setdefault(p["ref"], [0, set()])
         counts[p["ref"]][0] = n + 1
         devs.add(where)
