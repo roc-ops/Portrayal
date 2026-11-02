@@ -371,8 +371,10 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
             presents.append(ref)
         if c.get("mates") == IFACE:
             mates.append(ref)
+    # and the two bare tapped holes (M5 and 10-32) that the Juniper earthing pairs and the QFX5210 plate compose
+    bare_holes = ("common/ground-hole-m5@1", "common/ground-hole-10-32@1")
     assert sorted(presents) == sorted([*SINGLE, CASA_STUD, "common/terminal-screw-34@1",
-                                       "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD])
+                                       "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD, *bare_holes])
     assert mates == [LUG]
     lug = _contract(LUG)
     # 1.0.1: the provenance says it turns (#829); nothing it draws changed
@@ -851,13 +853,16 @@ def test_two_lugs_on_a_pair_drawn_one_above_the_other_overlap(built):
 @EACH_BUILT
 def test_the_device_index_publishes_the_slot(built, device):
     """A single stud is a cage of its device's view, id = the placement id.
-    The Casa terminal is not; its three studs are read off components.json."""
+    The Casa terminal's three studs are cages too, each under `<placement>/<part>`
+    (nested_seat_entries); the terminal itself is not one."""
     config, view, part, keys = BUILT[device]
     index = built[device][2]
     ids = {c["id"]: c for c in index["cages"][view]}
     for key in keys:
         if part == CASA:
-            assert key not in ids and key.split("/")[0] not in ids
+            c = ids[key]
+            assert key.split("/")[0] not in ids
+            assert c["kind"] == "connector" and c["interface"] == IFACE and c["accepts"] == [LUG]
             continue
         c = ids[key]
         assert c["kind"] == "connector" and c["interface"] == IFACE
@@ -1023,11 +1028,11 @@ def test_the_3d_pass_names_the_one_view_that_holds_a_ground_stud(kit, built):
 
 
 def test_the_3d_pass_seats_a_lug_on_a_stud_of_the_casa_terminal(kit):
-    """`ground-studs-rear/stud-tr` is claimed by no bay and no cage of any
-    view: the terminal is a plain placement that publishes slots. Every view
-    is named for such a key (#814) and the rear face seats the lug."""
+    """`ground-studs-rear/stud-tr` is a cage of the rear view only: the terminal
+    is a plain placement whose seats the device index lists (nested_seat_entries),
+    so the 3D pass names that one view, as it does for a single stud."""
     t = kit["casa/c40g"]["threeD"]
-    assert sorted(t["named"]) == sorted(t["views"]) and "rear" in t["named"]
+    assert t["named"] == ["rear"]
     assert t["viewsApplied"] == 1 and t["viewsSeated"] == 1
     assert t["faceApplied"] == 1 and t["faceSeated"] == 1
     assert not t["faceRefused"] and not t["faceFailed"]
