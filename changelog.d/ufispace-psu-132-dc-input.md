@@ -8,4 +8,4 @@
 - The eight devices that place it (the UfiSpace S9300-32D, S9301-32D, S9301-32DB, S9600-102XC, S9600-28DX, S9600-72XC,
   S9601-102XC and S9701-82DC) each take a minor, because the build now publishes a DC port for them, with their locks and the
   drawing version line of their exported device types; the supply's module type carries the new contract version. No port,
-  interface or id moves. One row of the records file is gone and its `cap:` is 203.
+  interface or id moves. One row of the records file is gone and its `cap:` is 192.
