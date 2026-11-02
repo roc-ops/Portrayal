@@ -27,8 +27,9 @@
    "edgecore/csr440-fan@1"
   ]
  },
- "composed": "c03c8ffd13f85030",
+ "composed": "f2b211b0cdf86b72",
  "composed-refs": {
+  "common/ground-stud@1": "1.0.1+8ee1c47866e993c9",
   "common/led-arrow-sm@1": "1.1.0+f6e565f48fbd46a4",
   "common/led-rect@1": "1.1.0+0314fb1739d8b11d",
   "common/rack-ear@1": "1.0.0+1682f189bae7936c",
@@ -38,9 +39,10 @@
   "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
   "common/sma-jack@1": "1.0.1+dde698c727778ba3",
   "common/smb-jack@1": "1.0.0+d68248050fc18e92",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "edgecore/csr440-fan@1": "1.0.0+5acfe0227c46fc72",
   "edgecore/csr440-psu-ac@1": "1.1.2+7078b9732f287074",
-  "edgecore/csr440-psu-dc@1": "1.0.0+81f6c10ff2e1b9f4",
+  "edgecore/csr440-psu-dc@1": "1.1.0+edc4796047b949e3",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/micro-usb@1": "1.0.1+623c203fe8667fd2",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
@@ -54,6 +56,58 @@
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-1/module/input": {
+   "edgecore/csr440-psu-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-2/module/input": {
+   "edgecore/csr440-psu-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-2/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-2/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "c161b39f696e0247",
  "groups": [
@@ -529,5 +583,5 @@
  "placement-surface": "24d016206d77b0de",
  "shape": "d683469493a00ec9",
  "surface": "0a15039faf7f38e6",
- "version": "2.1.1"
+ "version": "2.2.0"
 }
