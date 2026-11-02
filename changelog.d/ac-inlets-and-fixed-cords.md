@@ -10,4 +10,4 @@
   C20 inlet that the Eaton PDU12IEC and PDUMV20HVNETLX already place (`inlet-flange` is now `inlet-moulding`) and the strip of
   terminals at the cord end of the FS FANP3U3F's back (`terminal-block` is now `wiring-strip`). Nothing is drawn differently.
   The two Eaton devices take a patch for it, and the three warnings leave the lint baseline.
-- Three rows of the port-usable records file are gone and its `cap:` is 201.
+- Three rows of the port-usable records file are gone and its `cap:` is 194.
