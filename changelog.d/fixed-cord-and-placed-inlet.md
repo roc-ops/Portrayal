@@ -5,4 +5,4 @@
   placement publishes a slot of the inlet's interface at the placement's own path (C20), where the check looked only at the
   inlet's path. The three Smartoptics devices that place the 550 W supply and the three FS fan devices no longer report them.
   Nothing in the library, its exports or any lock changes.
-- Four rows of the port-usable records file are gone and its `cap:` is 183.
+- Four rows of the port-usable records file are gone and its `cap:` is 182.
