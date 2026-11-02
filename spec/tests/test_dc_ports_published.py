@@ -10,8 +10,8 @@ and a device placement may override what differs. The build publishes them as
 
 Both are omitted when there is nothing to say, as `cages` is. The tests build a
 temporary library of synthetic parts and devices and run the indexers the build
-runs over it, because no library part states a `dc` block yet; the last two
-tests hold that the real library still publishes nothing.
+runs over it; the last two tests hold that the real library publishes `dc-ports`
+for the components that state a `dc` block and for no others.
 """
 import json
 import os
@@ -309,19 +309,23 @@ def test_a_dc_override_a_bay_states_is_not_applied_to_its_occupant(built):
 
 # --- the real library ---------------------------------------------------------------------------------
 
-def test_no_component_of_the_real_library_publishes_dc_ports_today():
-    """Passes before this change as well as after: no part states a `dc` block."""
+def _components_stating_a_dc_block():
+    """`ns/name@major` of every component of the real library whose contract states a `dc` block."""
+    return sorted(f"{p.parts[-4]}/{p.parts[-3]}@{p.parts[-2].lstrip('v')}"
+                  for p in (LIB / "components").glob("*/*/v*/contract.yaml") if "\ndc:" in "\n" + p.read_text())
+
+
+def test_a_component_of_the_real_library_publishes_dc_ports_when_it_states_a_dc_block_and_not_otherwise():
+    """Before the first part stated a `dc` block this held the library to none."""
     doc = json.loads((onebuild.components_index() / "components.json").read_text())
     assert doc["components"]
-    assert [e["name"] for e in doc["components"] if "dc-ports" in e] == []
-    stating = [str(p.relative_to(LIB)) for p in (LIB / "components").glob("*/*/v*/contract.yaml")
-               if "\ndc:" in "\n" + p.read_text()]
-    assert stating == []
+    publishing = sorted(f"{e['ns']}/{e['name']}@{str(e['major']).lstrip('v')}" for e in doc["components"] if "dc-ports" in e)
+    assert publishing == _components_stating_a_dc_block()
 
 
-def test_no_configs_json_of_the_real_library_carries_dc_ports_today():
-    """Passes before this change as well as after. It reads library/dist, so it
-    holds after a build."""
+def test_every_dc_port_of_a_real_configs_json_names_a_component_that_states_a_dc_block():
+    """It reads library/dist, so it holds after a build."""
     files = sorted(DIST.glob("*.configs.json"))
     assert files, "build the library first: ./build.sh"
-    assert [f.name for f in files if "dc-ports" in f.read_text()] == []
+    named = {port["ref"] for f in files for cfg in json.loads(f.read_text())["configs"] for port in cfg.get("dc-ports") or []}
+    assert named <= set(_components_stating_a_dc_block())
