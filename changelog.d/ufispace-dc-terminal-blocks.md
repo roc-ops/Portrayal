@@ -9,4 +9,4 @@
   states no voltage, because the documents give a range without a nominal, and the earth pole is no conductor of a feed.
 - The eleven devices that place them each take a minor, because the build now publishes a DC port for them, with their locks and
   the drawing version line of their exported device types; the three supplies' module types carry the new contract version. No
-  port, interface or id moves. Three rows of the records file are gone and its `cap:` is 183.
+  port, interface or id moves. Three rows of the records file are gone and its `cap:` is 179.
