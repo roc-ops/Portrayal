@@ -113,8 +113,8 @@ provenance:
     confidence: estimated
     note: >-
       The rear carries an earthing stud with a wing nut under an earth symbol (photograph 1731). The stud is the placed
-      common/ground-stud, which draws a hex nut where the stud has a wing nut, so the drawn nut is a stand-in; the
-      symbol is placed too, and the gap earth-stud-part asks for a wing-nut stud part.
+      mikrotik/earth-stud-disc, a plain disc that stands in for the wing nut; the symbol is placed too, and the gap
+      earth-stud-part asks for a wing-nut stud part.
   rear-layout:
     confidence: estimated
     note: >-
@@ -196,10 +196,10 @@ gaps:
   scope: [rear]
   reason: needs-drawing
   note: >-
-    The earthing stud has a wing nut (photograph 1731). The stud is placed as common/ground-stud, which draws a hex
-    nut where the stud has a wing nut, so the drawn nut is a stand-in. The reason is the nearest the schema has: the
-    part itself is what is missing, and the library has no `needs-part` reason.
-  wanted: A wing-nut earth stud part, so the drawn hex nut can be replaced by the wing nut.
+    The earthing stud has a wing nut (photograph 1731). The stud is placed as mikrotik/earth-stud-disc, a plain disc
+    that stands in for the wing nut. The reason is the nearest the schema has: the part itself is what is missing, and
+    the library has no `needs-part` reason.
+  wanted: A wing-nut earth stud part, so the drawn disc can be replaced by the wing nut.
 - what: led-states
   scope: [front]
   reason: vendor-silent
@@ -384,7 +384,7 @@ views:
       - {ref: common/ground-symbol@1, id: earth-mark, at: [257.6, 22.7], for: chassis, group: furniture, rel-pos: 1}
       - {ref: common/screw-head@1, id: rear-screw-1, at: [23.0, 3.4], group: furniture, rel-pos: 2}
       - {ref: common/screw-head@1, id: rear-screw-2, at: [260.4, 3.4], group: furniture, rel-pos: 3}
-      - {ref: common/ground-stud@1, id: earth-stud, at: [256.15, 32.65], group: furniture, rel-pos: 4}
+      - {ref: mikrotik/earth-stud-disc@1, id: earth-stud, at: [256.2, 32.7], group: furniture, rel-pos: 4}
   top:
     size: {w: 272.0, h: 191.0}
     empty: >-

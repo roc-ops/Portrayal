@@ -156,7 +156,7 @@ def test_the_rear_opening_is_a_fan_guard_grille_with_no_fan(name):
 
 
 @pytest.mark.parametrize("name", NAMES)
-def test_the_earth_stud_is_a_placed_stand_in_with_a_gap_for_its_part(name):
+def test_the_earth_stud_is_a_placed_disc_with_a_gap_for_its_wing_nut_part(name):
     d = load(name)
     gap = [g for g in d["gaps"] if g["what"] == "earth-stud-part"]
     assert len(gap) == 1 and gap[0]["scope"] == ["rear"]
@@ -164,7 +164,7 @@ def test_the_earth_stud_is_a_placed_stand_in_with_a_gap_for_its_part(name):
     decor = {x.get("id") for x in d["views"]["rear"]["panel"]["decor"]}
     assert not {"earth-stud-base", "earth-stud-nut"} & decor
     (stud,) = [p for p in d["views"]["rear"]["components"]["placements"] if p["id"] == "earth-stud"]
-    assert stud["ref"] == "common/ground-stud@1"
+    assert stud["ref"] == "mikrotik/earth-stud-disc@1"
 
 
 def test_the_css_quick_guide_is_cited_with_its_document_number_and_date():

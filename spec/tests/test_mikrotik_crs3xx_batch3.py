@@ -172,14 +172,14 @@ def test_crs309_de9_console_is_an_rs232_port_the_export_does_not_carry():
         assert not doc.get("console_ports"), target
 
 
-def test_crs309_is_passive_with_a_placed_stand_in_earth_stud_and_a_narrow_body():
+def test_crs309_is_passive_with_a_placed_disc_for_its_earth_stud_and_a_narrow_body():
     d = load("crs309-1g-8s-plus-in")
     rear = d["views"]["rear"]
     assert not [x for x in rear["panel"]["decor"] if x.get("kind") == "fan-grille"]
     assert d["attrs"]["thermal"]["cooling"].startswith("passive")
     assert [g["what"] for g in d["gaps"] if g["what"] == "earth-stud-part"] == ["earth-stud-part"]
     assert d["chassis"]["width"] == 272.0 < 443.0
-    assert [p["ref"] for p in placements(d, "rear") if "ground-stud" in p["ref"]] == ["common/ground-stud@1"]
+    assert [p["ref"] for p in placements(d, "rear") if "earth-stud" in p["ref"]] == ["mikrotik/earth-stud-disc@1"]
 
 
 # --- CRS312 ---------------------------------------------------------------------------------------------------

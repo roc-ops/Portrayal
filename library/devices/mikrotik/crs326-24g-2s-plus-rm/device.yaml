@@ -110,10 +110,10 @@ provenance:
       the CRS's in x to 1.5 mm. They are good to about 1.5 mm in x and 2 mm in y. The CRS's cable slot
       runs on to hold the DC jack, 58 mm long against the CSS's 31 mm, and the CRS prints DC 10-28V where
       the CSS prints DC 8 - 30V. The earthing stud has a wing nut (the drawing's 11 mm). It is the placed
-      common/ground-stud (`earth-stud`) at the stud's position from the photograph; that part draws a
-      hex nut where the stud has a wing nut, so the drawn nut is a stand-in and the gap `earth-stud-part`
-      asks for a wing-nut stud part. The CRS prints an earth symbol above it; the CSS prints none. The
-      DC jack is the placed common/dc-barrel (`dc-in`), its bore centred on the photograph's.
+      mikrotik/earth-stud-disc (`earth-stud`) at the stud's position from the photograph; that part is
+      a plain disc that stands in for the wing nut, and the gap `earth-stud-part` asks for a wing-nut
+      stud part. The CRS prints an earth symbol above it; the CSS prints none. The DC jack is the placed
+      common/dc-barrel (`dc-in`), its bore centred on the photograph's.
   dc-input:
     confidence: photo-measured
     note: >-
@@ -188,11 +188,10 @@ gaps:
   - rear
   reason: needs-drawing
   note: >-
-    The earthing stud has a wing nut (photograph 1941; the drawing's 11 mm). The stud is placed as common/ground-stud,
-    which draws a hex nut where the stud has a wing nut, so the drawn nut is a stand-in. The reason is
-    the nearest the schema has: the part itself is what is missing, and the library has no `needs-part`
-    reason.
-  wanted: A wing-nut earth stud part, so the drawn hex nut can be replaced by the wing nut.
+    The earthing stud has a wing nut (photograph 1941; the drawing's 11 mm). The stud is placed as mikrotik/earth-stud-disc,
+    a plain disc that stands in for the wing nut. The reason is the nearest the schema has: the part itself
+    is what is missing, and the library has no `needs-part` reason.
+  wanted: A wing-nut earth stud part, so the drawn disc can be replaced by the wing nut.
 - what: led-states
   scope:
   - front
@@ -614,7 +613,7 @@ views:
       - {ref: common/screw-head@1, id: rear-screw-1, at: [47.2, 3.5], group: furniture, rel-pos: 2}
       - {ref: common/screw-head@1, id: rear-screw-2, at: [219.4, 3.5], group: furniture, rel-pos: 3}
       - {ref: common/screw-head@1, id: rear-screw-3, at: [392.2, 3.5], group: furniture, rel-pos: 4}
-      - {ref: common/ground-stud@1, id: earth-stud, at: [426.95, 31.65], group: furniture, rel-pos: 5}
+      - {ref: mikrotik/earth-stud-disc@1, id: earth-stud, at: [427, 31.7], group: furniture, rel-pos: 5}
   top:
     size: {w: 443.0, h: 144.6}
     empty: >-

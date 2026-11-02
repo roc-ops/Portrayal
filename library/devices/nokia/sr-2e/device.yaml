@@ -91,8 +91,9 @@ provenance:
       p122: two 10-32 ground studs "located at the back of all 7750 SR-e chassis at the bottom-left";
       p124 Figure 33 dimensions them 0.625 in (15.86 mm) apart. They are the placed
       common/ground-stud-pair-5-8-10-32 (`ground-studs`), centred on the midpoint of the studs the figure
-      draws (x 16.0, y 350.925), on a plate under an earth symbol. The pair draws pan-head screws where
-      the chassis has studs, a stand-in (gap ground-stud-hardware).
+      draws (x 16.0, y 350.925), on a plate under an earth symbol. Each stud is a brass-coloured end 4.826
+      across (the 10-32 thread's nominal size), 12 mm out of the plate and with no nut; the colour and the length
+      are estimates (gap ground-stud-appearance).
   ground-stud-size:
     confidence: datasheet
     note: >-
@@ -190,16 +191,17 @@ chassis:
   airflow: front-to-back
   color: '#3a3d42'
 gaps:
-  - what: ground-stud-hardware
+  - what: ground-stud-appearance
     scope: [ground-studs]
-    reason: needs-drawing
+    reason: needs-photo
     note: >-
       The guide gives the thread of the two chassis ground studs, 10-32, and their spacing, 0.625 in. (p122, p124
-      Figure 33), and nothing of a stud's length or its nut. The pair is common/ground-stud-pair-5-8-10-32, which
-      draws two pan-head screws where the chassis has two studs, so the drawn heads are stand-ins. The lug the
-      guide supplies (p122, p123 Figure 32) is a two-hole lug with a 45-degree tongue; the library's two-hole lug
-      is straight and mates the same pair.
-    wanted: a Nokia drawing or photograph of the chassis ground studs that gives their length and the nut
+      Figure 33), and nothing of a stud's length or colour: its figures are black and white line art and no photograph
+      of an SR-e rear is held. The pair is common/ground-stud-pair-5-8-10-32, two bare studs drawn brass-coloured,
+      4.826 across and 12 mm out, with no nut (the nuts ship with the lug, Table 46 key 2); the colour and the length
+      are estimates. The lug the guide supplies (p122, p123 Figure 32) is a two-hole lug with a 45-degree tongue; the
+      library's two-hole lug is straight and mates the same pair.
+    wanted: a photograph of the rear ground studs of an SR-e chassis, or a drawing that gives their length and finish
   - what: photographs
     scope: [front, rear]
     reason: needs-photo
@@ -429,7 +431,7 @@ views:
         - {id: fan, at: [302.2, 58.3], size: {w: 137.2, h: 381}, accepts: [nokia/sr-2e-fan-tray@1], default: nokia/sr-2e-fan-tray@1, group: fans, rel-pos: 1}
       placements:
         - {id: esd-rear, ref: common/esd-jack@1, at: [266.4, 422.05], for: chassis, group: grounding, rel-pos: 1}
-        - {id: ground-studs, ref: common/ground-stud-pair-5-8-10-32@1, at: [3.3275, 346.19], rotate: 90, for: chassis, group: grounding, rel-pos: 2, attrs: {stud-size: 10-32}}
+        - {id: ground-studs, ref: common/ground-stud-pair-5-8-10-32@1, at: [5.6495, 348.512], rotate: 90, for: chassis, group: grounding, rel-pos: 2, attrs: {stud-size: 10-32}}
   left:
     size: {w: 538.5, h: 444.5}
     panel:

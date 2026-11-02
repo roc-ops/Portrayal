@@ -1,0 +1,48 @@
+format: 1
+kind: component
+name: ground-stud-10-32
+version: 1.0.0
+class: ground
+interface: terminal-stud
+profile: networking
+description: >-
+  A bare 10-32 grounding stud, seen end on: a brass-coloured round stud end 4.826 across, the nominal diameter of the
+  thread, standing out of the panel with no nut and no washer on it. A lug is landed on it and held by the nut that is
+  fitted with the lug, so the part presents the nominal `terminal-stud` interface on its axis, at the end of the stud.
+  Composed by the parts that land a two-hole lug on a pair of studs; never placed alone. Generic: it carries no vendor's facts.
+size: {w: 4.826, h: 4.826}
+size-confidence: {w: registry, h: registry}
+size-notes: >-
+  the nominal major diameter of the 10-32 thread; the stud's length is drawn as relief and is estimated
+attrs: {connector: terminal-stud}
+provenance:
+  size: >-
+    registry - ASME B1.1, the No. 10-32 UNF thread: nominal (major) diameter 0.190 in. (4.826 mm). The chassis that place
+    this stud drew its end as panel art 4.8 across, read off no figure; the part is drawn at the thread's size.
+  colour: >-
+    ESTIMATED. The stud end is brass-coloured (#b8a06a), as the Nokia 7750 SR-1e, SR-2e and SR-3e drew it. No photograph of
+    the rear of an SR-e chassis is held, and the guide's figures (SR-1e, SR-2e, and SR-3e Chassis Installation Guide,
+    Figure 33) are black and white line art, so no source gives the colour: it is the drawn look of the studs, kept.
+  relief: >-
+    estimated - the stud stands 12 mm out of the panel, the length the three chassis drew; no document gives a stud's
+    length. It is built as a cylinder from the face of the panel; no nut, washer or lug is built on it.
+  seat: >-
+    THE LUG SEATS ON THE END OF THE STUD, NOT UNDER ITS NUT, for the reason every stud part in the library gives: `mate`
+    sits `on: stud`, so a lug seated here starts at the stud's end, 12 mm off the face, and no solid of it shares the
+    stud's volume. A real lug lies on the panel under the nut that holds it. See docs/connectors-dc-terminal-design.md,
+    sections 12.5 and 13.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on the sized screws. The stud is composed by the part that lands the lug and is never placed
+    on its own; that part states `mounts`.
+elements: {}
+relief:
+  features:
+    - node: stud
+      cyl: 12.0
+      color: '#b8a06a'
+      confidence: estimated
+      source: >-
+        the 12 mm the Nokia SR-1e, SR-2e and SR-3e drew their stud ends standing out of the plate; no document gives a stud's length
+connection-points:
+  mate: {at: [2.413, 2.413], direction: front, 'on': stud}
+skins: [default]

@@ -11,27 +11,28 @@ interface: stud-pair-5-8
 behaviour: mounts
 profile: networking
 description: >-
-  A pair of 10-32 pan-head screws in tapped grounding holes on 5/8 in. (15.875) centres, the landing one two-hole lug takes. Generic: it stands for any chassis whose documents give that pitch and that screw, and carries no vendor's facts.
-size: {w: 25.345, h: 9.47}
-size-confidence: {w: datasheet, h: borrowed}
+  A pair of bare 10-32 grounding studs on 5/8 in. (15.875) centres, the landing one two-hole lug takes: two brass-coloured
+  stud ends standing out of the panel, with no nuts on them. The nuts that hold the lug are fitted with it. Generic: it
+  stands for any chassis whose documents give that pitch and that stud and whose studs are drawn bare, and it carries no
+  vendor's facts.
+size: {w: 20.701, h: 4.826}
+size-confidence: {w: datasheet, h: registry}
 size-notes: >-
-  the two studs' own boxes, 15.875 apart centre to centre: the width is the
-  pitch and one stud, the height one stud
+  the two studs' own boxes, 15.875 apart centre to centre: the width is the pitch and one stud, the height one stud
 attrs: {connector: stud-pair-5-8}
 provenance:
   size: >-
-    datasheet and borrowed - the 5/8 in. pitch is the interface's
-    (spec/schemas/standards.yaml `two-hole-lug-5-8`, the lug that
-    mates the pair, 15.875); each stud is
-    common/ground-screw-10-32@1, whose own figures are borrowed unchanged.
+    datasheet and registry - the 5/8 in. pitch is the interface's (spec/schemas/standards.yaml `two-hole-lug-5-8`, the
+    lug that mates the pair, 15.875); each stud is common/ground-stud-10-32@1, whose own figure is the thread's nominal
+    diameter.
   pitch: >-
     THE PITCH IS THE INTERFACE, NOT A READING OF ANY ONE DEVICE. A two-hole lug
     is one stamping with its holes 5/8 in. apart, so this part composes its
     studs at exactly 15.875 and lint L116 holds it there to 0.01. A device
     whose documents state another spacing does not place it.
   seat: >-
-    THE PAIR PRESENTS AT THE TOP OF ITS STUDS. `mate` is the midpoint of the two
-    studs' own `mate` points and states `seat-out: 2.79`, the height each
+    THE PAIR PRESENTS AT THE END OF ITS STUDS. `mate` is the midpoint of the two
+    studs' own `mate` points and states `seat-out: 12`, the height each
     stud presents at (its own seat, `on:` the solid it builds), so a lug across
     the pair lies exactly where a one-hole lug on either stud would. L116 holds
     the two to one figure.
@@ -46,11 +47,11 @@ parts:
   # FIRST STUD, then second: the order is the axis (provenance.axis). Each is
   # a slot of its own, `<placement>/1` and `<placement>/2`, which the ring lug
   # still seats in.
-  - {ref: common/ground-screw-10-32@1, id: '1', at: [0, 0]}
-  - {ref: common/ground-screw-10-32@1, id: '2', at: [15.875, 0]}
+  - {ref: common/ground-stud-10-32@1, id: '1', at: [0, 0]}
+  - {ref: common/ground-stud-10-32@1, id: '2', at: [15.875, 0]}
 connection-points:
   # WHERE A TWO-HOLE LUG SEATS: the midpoint of the studs' own mate points,
-  # (4.735, 4.735) and (20.61, 4.735), at the height
+  # (2.413, 2.413) and (18.288, 2.413), at the height
   # they present.
-  mate: {at: [12.6725, 4.735], direction: front, seat-out: 2.79}
+  mate: {at: [10.3505, 2.413], direction: front, seat-out: 12}
 skins: [default]
