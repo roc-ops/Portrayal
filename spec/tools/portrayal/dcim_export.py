@@ -1073,6 +1073,13 @@ NOT_A_DCIM_PORT = {
     "amphenol-ns/alarm-card-307608": "Form C alarm relay contacts on wire-wrap headers - dry "
                                      "contacts for an external alarm loop; neither DCIM has a "
                                      "port type for an alarm contact",
+    "common/micro-dsub-50-receptacle": "the 50-pin micro D-sub CO alarm connector of the Nokia NGFC-H and "
+                                       "NGFC-G cards - external alarm inputs and relay contacts, not a "
+                                       "network port or a console; neither DCIM has a port type for an "
+                                       "alarm connector",
+    "common/wire-wrap-header-6": "the six-pin wire-wrap BITS timing header of the Nokia NGFC-H and NGFC-G "
+                                 "cards - the BITS cables are wrapped to bare pins, and neither DCIM has "
+                                 "a port type for such a header",
 
     # --- Virtual Chassis ---------------------------------------------------------
     "juniper/ex4200-vcp-port": "the 68-pin Virtual Chassis port of an EX4200: a proprietary stacking "
