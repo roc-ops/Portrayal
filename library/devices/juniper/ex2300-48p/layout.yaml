@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2300-48p
-version: 0.1.2
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2300-48P
@@ -89,10 +89,11 @@ provenance:
   front-console:
     confidence: estimated
     note: >-
-      estimated - the mini-USB console port (guide Figure 4, callout 5, printed CON) is drawn as chassis art, a
-      7.9 x 4.6 mm shell with its opening, read off the 24P and 48P photographs (25 x 14 px and 24 x 14 px at
-      3.27 px per mm). It is not a component: the library has no mini-USB receptacle and its DCIM export has no row
-      for one, so a placed part would export nothing. The rear RJ-45 console port is a component and exports.
+      estimated - the mini-USB console port (guide Figure 4, callout 5, printed CON) is the placed std/mini-usb
+      (`console-usb`), centred on the 7.9 x 4.6 mm shell this device was drawn with, which was read off the 24P
+      and 48P photographs (25 x 14 px and 24 x 14 px at 3.27 px per mm). The part draws the registry's 7.7 x 3.9 mm
+      Mini-B shell, which stands in for the maker's own (gap `mini-usb-console-shell`). The guide names the
+      connector: "Mini-USB Type-B (5-pin)" (Console Ports, p4; Mini-USB Port Pinout Specifications, p86).
   rear-layout:
     confidence: photo-measured
     note: >-
@@ -158,6 +159,14 @@ chassis:
   airflow: front-to-back
   power: ac
 gaps:
+- what: mini-usb-console-shell
+  scope: [console-usb]
+  reason: needs-photo
+  note: >-
+    The part is the registry's Mini-B receptacle (Molex drawing SD-54819-026, 7.7 x 3.9 mm). The front
+    photographs show the console shell at about 25 x 14 px at 3.27 px per mm, 7.6 x 4.3 mm, and no close-up is
+    held, so the drawn shell and its place are estimates and the maker's own shell may differ by a few tenths.
+  wanted: A straight-on close-up of the console port with a scale, or the maker's dimensioned drawing of it.
 - what: rack-ears
   scope: [front]
   reason: needs-drawing
@@ -241,9 +250,6 @@ views:
       decor:
       - {id: plate-top, kind: label-plate, at: [364.6, 1.0], size: [76.4, 15.3], fill: '#6e7276'}
       - {id: plate-right, kind: label-plate, at: [422.6, 1.0], size: [18.4, 42.6], fill: '#6e7276'}
-      - {id: console, kind: console-shell, at: [425.6, 39.0], size: [7.9, 4.6], rx: 0.6, fill: '#c9cbcd'}
-      - {id: console-opening, kind: console-opening, at: [426.3, 39.7], size: [6.5, 3.2], rx: 0.5, fill: '#1c2024'}
-      - {id: console-pins, kind: console-pins, at: [427.3, 41.2], size: [4.5, 0.7], fill: '#3a4046'}
       - {id: shell-1, kind: jack-shell, at: [7.31, 11.6], size: [86.9, 25.9], rx: 0.6, fill: '#b1b2b5'}
       - {id: shell-2, kind: jack-shell, at: [96.13, 11.6], size: [86.9, 25.9], rx: 0.6, fill: '#b1b2b5'}
       - {id: shell-3, kind: jack-shell, at: [184.95, 11.6], size: [86.9, 25.9], rx: 0.6, fill: '#b1b2b5'}
@@ -270,6 +276,7 @@ views:
       - {id: led-en, at: [431.3, 14.8], size: [2.0, 2.0], shape: circle}
       - {id: led-poe, at: [431.3, 19.4], size: [2.0, 2.0], shape: circle}
       - {id: btn-mode, at: [427.6, 32.3], size: [4.0, 4.0], shape: circle}
+      - {id: console-usb, at: [425.7, 39.35], size: [7.7, 3.9], shape: rect}
     silkscreen:
     - {block: rj45}
     - {block: uplink}
@@ -288,7 +295,7 @@ views:
     - {id: mode-bracket-top, at: [430.2, 3.7], path: 'M 0 0 H 2.7', filled: false, stroke-width: 0.2, fill: '#b8d4e6', for: btn-mode}
     - {id: mode-bracket-low, at: [430.2, 24.4], path: 'M 0 0 H 2.7', filled: false, stroke-width: 0.2, fill: '#b8d4e6', for: btn-mode}
     - {id: mode-icon, at: [434.6, 34.3], path: 'M 0 -1.4 H 0.5 M 1.2 -1.4 H 3.6 M 0 0 H 0.5 M 1.2 0 H 3.6 M 0 1.4 H 0.5 M 1.2 1.4 H 3.6', filled: false, stroke-width: 0.35, fill: '#e4e6e9', for: btn-mode}
-    - {at: [437.4, 41.8], text: CON, font-size: 1.6, anchor: middle, fill: '#e4e6e9', for: chassis}
+    - {at: [437.4, 41.8], text: CON, font-size: 1.6, anchor: middle, fill: '#e4e6e9', for: console-usb}
     components:
       blocks:
       - id: rj45
@@ -345,6 +352,7 @@ views:
          states: ['off', {name: selected, color: '#22c55e'}], description: 'Figure 27 - lit while the Status lamps show PoE status'}
       - {ref: common/reset-button@1, id: btn-mode, at: [427.6, 32.3], for: chassis, group: controls, rel-pos: 0,
          attrs: {function: Factory Reset/Mode}}
+      - {ref: std/mini-usb@1, id: console-usb, at: [425.7, 39.35], group: mgmt, rel-pos: 0, attrs: {role: console}}
     regions:
       - {id: logo-zone, at: [6.4, 2.6], size: {w: 23.5, h: 7.2}, label: 'Vendor logo; not drawn'}
   rear:
