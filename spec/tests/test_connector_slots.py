@@ -95,6 +95,8 @@ def test_the_connector_registry_is_not_vacuous():
     # orv3-busbar: the Open Rack v3 48 V bus-bar connector, common/orv3-busbar-connector@1.
     # Vendor connectors citing no standard; each names the header or connector on the device
     # and never the plug that enters it
+    # micro-dsub-50/wire-wrap-6: the 50-pin micro D-sub alarm connector (FEMALE on the panel)
+    # and the six-pin BITS wire-wrap header of nokia/ngfc-h@1 and nokia/ngfc-g@1
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
@@ -123,7 +125,9 @@ def test_the_connector_registry_is_not_vacuous():
                          "terminal-381-5", "terminal-350-6", "screw-terminal-4",
                          "orv3-busbar",
                          # the C16 appliance inlet of the EX4400 AC supplies
-                         "iec-c16"}
+                         "iec-c16",
+                         # the alarm and BITS connectors of the Nokia general facilities cards
+                         "micro-dsub-50", "wire-wrap-6"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -163,7 +167,10 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "terminal-381-5", "terminal-350-6", "screw-terminal-4",
                                    "orv3-busbar",
                                    # the C16 inlet of the EX4400 AC supplies
-                                   "iec-c16"}
+                                   "iec-c16",
+                                   # the alarm and BITS connectors of the Nokia general
+                                   # facilities cards
+                                   "micro-dsub-50", "wire-wrap-6"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
@@ -310,6 +317,48 @@ def test_the_c16_note_quotes_what_the_two_supplies_print():
     for ref in C16_PARTS["iec-c16"]:
         inlet = _contract_at(ref)["provenance"]["inlet"]
         assert "IEC-320-C15" in inlet and "C16" in inlet, f"{ref} no longer prints what the note quotes"
+
+
+NOKIA_ALARM_PARTS = {
+    "micro-dsub-50": ("nokia/ngfc-h@1", "nokia/ngfc-g@1"),
+    "wire-wrap-6": ("nokia/ngfc-h@1", "nokia/ngfc-g@1"),
+}
+
+
+@pytest.mark.parametrize("key", NOKIA_ALARM_PARTS)
+def test_a_nokia_alarm_or_bits_key_has_a_note_and_no_standard(key):
+    entry = render_mod._connector_registry().get(key)
+    assert entry is not None, f"{key} is not registered"
+    assert str(entry.get("note") or "").strip(), f"{key} has no note"
+    assert "standard" not in entry, "the note says no standard is held for it"
+    assert "No standard is held for it" in entry["note"]
+
+
+@pytest.mark.parametrize("key", NOKIA_ALARM_PARTS)
+def test_a_nokia_alarm_or_bits_note_names_the_cards_that_draw_it(key):
+    note = render_mod._connector_registry()[key]["note"]
+    for ref in NOKIA_ALARM_PARTS[key]:
+        assert _contract_at(ref), f"{ref} has no contract in the library"
+        assert ref in note, f"the note of {key} does not name {ref}"
+    low = note.lower()
+    assert not re.search(r"\byet\b", low), f"{key} still says 'yet'"
+    for stale in ("added separately", "no part presents"):
+        assert stale not in low, f"{key} still says {stale!r}"
+
+
+def test_the_micro_dsub_50_note_states_the_panel_gender():
+    note = render_mod._connector_registry()["micro-dsub-50"]["note"]
+    assert "FEMALE on the panel" in note
+    assert not re.search(r"(?<!FE)MALE on the panel", note), "a female note holds no male phrase of its own"
+    assert "would be a different interface" in note
+
+
+def test_the_wire_wrap_6_entry_says_why_no_plug_exists_and_the_micro_dsub_50_entry_does_not():
+    reg = render_mod._connector_registry()
+    sentence = " ".join(str(reg["wire-wrap-6"].get("unmated") or "").split())
+    assert len(sentence) >= 40, f"the sentence is under 40 characters: {sentence!r}"
+    assert "wire-wrap" in sentence and "no plug seats on it" in sentence
+    assert "unmated" not in reg["micro-dsub-50"], "a cable plug mates the micro D-sub, so it carries no such sentence"
 
 
 def test_no_nema_plug_is_a_connector_key():

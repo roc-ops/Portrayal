@@ -834,6 +834,66 @@ states no DC port is read exactly as before**, and the DC ports of a part beside
 (`zeroUEnds`) are not read yet. A port path is not an element of a drawing: `cableEndPaths` gives
 a page the pole slots it always did and no port path.
 
+**Next release: the checks of a DC feed.** A cable whose ends are DC ports or poles is checked end
+to end (`docs/dc-power-design.md`, section 6). All of it is warnings and none refuses a cable, and
+a cable with no DC end says and returns what it did.
+- **Where they are said.** `dcFeedChecks(a, b, {type})` (`cable-rules.js`) reads the `dc` key of the
+  two ends' info and returns `{warnings, notes}`. `mismatch(media, a, b, {type})` takes the type as
+  an optional fourth argument and puts the warnings first, polarity first among them; called with
+  three it says every sentence it said before and the checks that need no type. So `suggestMedia`,
+  `inspect` of a cable and the DCIM cables file's findings say them with no other change. `inspect`
+  reads the type from `ctx.cableTypes`, the cable types table (`loadCableTypes(dist).types`), when
+  `ctx` gives it: the cable's own `type`, else the type its media names (`dcTypeOf`). A cable type
+  the commands set is a later change; a rack file may already hold one, and it is read.
+- **A warning is said only where both sides state what it reads.** What a check needs and an end does
+  not state is a note, once, after the warnings, and these are all of them: a pole whose role is
+  `unstated`, a port with `voltage: null`, and a cable with no DC feed type. `side: null` is a port
+  that is no half of an A/B pair, and nothing is said of it. No role, rating or voltage is taken from
+  a position, a colour or a name.
+- **Polarity, by role.** Where both ends state a role for each pole the feed uses, the kit pairs
+  poles by role, whatever order either end lists them in: BATT with BATT, RTN with RTN, through the
+  registry's pairs (`DC_MATCHES`, the kit's copy of `spec/schemas/dc.yaml`, held to it by a test;
+  `DC_ROLES` likewise). Two ends that list the same roles in a different order say nothing. "A is
+  BATT where B is RTN: the feed is crossed." is said only when a cable lands pole by pole (both
+  ends name a pole) and so joins two poles whose roles do not match, or when the sign rule fails:
+  a pair `when: negative-voltage` (`batt` with `neg`, `rtn` with `pos`) holds only where the end
+  whose pole is `neg` or `pos` states a negative nominal, is crossed where that nominal is
+  positive, and is neither matched nor crossed where it states no voltage. A ground pole is
+  compared with nothing.
+- **The stand-in rule.** Where either side's roles are `unstated`, nothing is called crossed. A
+  note says "Polarity of `<pole path>` is not stated; checked by position." once for each such pole.
+- **The other checks,** in this order after polarity (the source is the end whose `direction` is
+  `output`): voltage ("-48 V into a +24 V input."; "Source nominal -48 V is outside the load's -40.5
+  to -57."; with no one source, the signs only; a port without a voltage: "`<port path>` states no
+  voltage; the feed's voltage is not checked.", and with only a range: "states no nominal
+  voltage"); conductors, only with a type that states them, a ground pole not counted ("A
+  two-conductor feed to a three-pole port (end B)."; "14 AWG where the end takes 12 (end B)."; a cable
+  with no such type: "The cable names no DC feed type; its conductors are not checked against the
+  poles."); sides ("Feed A lands on a B terminal."); and the protector ("30 A breaker on a 40 A
+  load."; "60 A breaker on a 14 AWG feed (ampacity 15 A, an estimate)."). Two outputs or two inputs
+  is `mismatch`'s own sentence, said once, and AC against DC is as it was.
+- **A and B kept to their sides, on a device.** `feedSides(rack, item, dcOf)` (`cable-rules.js`)
+  finds an item with two or more DC input ports, each cabled to a DC output that states its side,
+  all of one side: "Of the supplies of `<item>` with a cable, both are fed from side A." It counts
+  only the supplies with a cable, and is quiet where any of them states no side. `sideFindings(rack, ctx)` (`queries.js`) lists them; `describe` counts them on its
+  `Findings:` line, and `inspect` of the item carries one as `feed_side`
+  `{side, ports, cables, text}` only when there is one.
+- **The commands.** `cable.add` and `cable.update` say which DC port or pole an end landed on: "Added
+  cable c1: end A on the DC port output-a1/output, end B on the BATT pole of psu-0/module/input.",
+  and a moved end adds "End B is on the DC port psu-0/module/input." to its sentence. They return the
+  cable's checks in `findings`, polarity first, each warning `{kind: 'warning', text}`, then the
+  side finding the cable makes true, then each note `{kind: 'note', text}`. A cable with no DC end
+  keeps its summary and returns the findings it did. `dcFactsReader(rack, ctx)` (`commands.js`) reads
+  an end's DC facts from the catalogue alone, with no page. Neither command takes a `type`.
+  `END.path` names a DC port and a pole.
+- **A terminal the part draws as an element.** Where an end's last step under a bay is an element of
+  the seated part (listed in `elements` of `components.json`, and composing no part of that name), and
+  the part is of class `inlet`, `psu` or `power` and states no DC port, `looseReason` says
+  "`<leaf>` is drawn on `<model>`, which declares no DC port" in place of "holds `<model>`, which has
+  no port `<leaf>`" (`dcDrawnOnly` in `ports.js` reads the catalogue, `settleEnd` hands it on). The
+  poles the part's provenance lists are not named: the kit does not read provenance. Every other
+  loose sentence is unchanged.
+
 **New in 0.51.0: the relief detail pass asks for each raster once.** `rasterKey` rewrites a face's
 shared `<style>` and `<defs>` once and keys a node by that and its own art (`rasterKeyText` is the
 whole-text rewrite; no two texts it tells apart share a key), and `svgCanvas` returns the kept raster instead of a copy: draw on

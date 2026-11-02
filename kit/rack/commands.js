@@ -23,8 +23,9 @@ import {configFacts} from './catalog.js';
 import {appliedFrame, editRefusal, frameName, unholdable} from './frames.js';
 import {placement, moveItem, managersOf} from './managers.js';
 import {canCable, withCable, updateCable, cablesOf, cableName, endName, endKey, parseColor,
-        connectorOf, mediaKind, portPathOf, isElementId, elementIdReason, MEDIA, MEDIA_LABELS} from './cable-rules.js';
-import {portIdsOf, zeroUEnds, zeroUEndsText, seatedEndReason, dcReader} from './ports.js';
+        connectorOf, mediaKind, portPathOf, isElementId, elementIdReason, MEDIA, MEDIA_LABELS,
+        dcFeedChecks, dcTypeOf, dcPoleWord, feedSides} from './cable-rules.js';
+import {portIdsOf, zeroUEnds, zeroUEndsText, seatedEndReason, dcReader, dcEndOf} from './ports.js';
 import {validate, same} from './validate.js';
 import {withRoutedLengths, pathwaysOf, waypointLanesOf, resolveRoute, pathwaysAt, zeroUPathways, pathwayId} from './route.js';
 import {slotsFor, slotEnv, resolverFor, holdsAt, partName, partOf} from './slots.js';
@@ -749,6 +750,42 @@ function seatedEndRefused(rack, ends, ctx) {
   const why = seatedEndReason(rack, ends, ctx);
   return why ? {error: `${why}.`} : null;
 }
+// THE DC FACTS OF AN END, from the catalogue alone (no page): the port an end at
+// a DC port, a pole or a pluggable connector is on, as the `dc` key of an end's
+// info has them (ports.js): {path, end, pole?, role?, kind, connector, direction,
+// voltage, rating-a, awg, side, poles: [{role, path, stand-in?}]}; null for any
+// other end, and for every end without the catalogue. The poles carry no plug.
+export function dcFactsReader(rack, ctx) {
+  const read = dcReader(rack, ctx);
+  if (!read) return () => null;
+  return end => {
+    if (!end || !read(end)) return null;
+    const item = (rack.items || []).find(i => i.id === end.item);
+    const hit = item ? dcEndOf(item, portPathOf(end.path ?? ''), ctx) : null;
+    if (!hit || hit.end === 'contact') return null;
+    const q = hit.port;
+    return {path: q.path, end: hit.end, ...(hit.end === 'pole' ? {pole: hit.pole, role: q.poles[hit.pole].role} : {}), kind: q.kind, connector: q.connector,
+            direction: q.direction, voltage: q.voltage, 'rating-a': q['rating-a'], awg: q.awg, side: q.side,
+            poles: q.poles.map(x => ({role: x.role, path: x.path, ...(x['stand-in'] ? {'stand-in': x['stand-in']} : {})}))};
+  };
+}
+// Where a DC end landed, for the summary: "the DC port psu-0/module/input", "the BATT pole of psu-0/module/input"
+const dcWhere = d => (d.end === 'pole' ? `the ${dcPoleWord(d, d.pole)} of ${d.path}`
+  : `the DC port ${d.path}${d.end === 'connector' ? ', by its connector' : ''}`);
+// The findings of a cable that has a DC end: its checks (cable-rules.js dcFeedChecks),
+// the type read from `ctx.cableTypes` when it has the table, polarity first; then the
+// device sides it makes true; then the notes of what an end or the cable does not state.
+// [] for a cable with no DC end.
+function dcFindings(rack, cable, ctx) {
+  const read = dcFactsReader(rack, ctx), da = read(cable.a), db = read(cable.b);
+  if (!da && !db) return [];
+  const got = dcFeedChecks({dc: da}, {dc: db}, {type: dcTypeOf(ctx?.cableTypes, cable)});
+  const sided = [...new Set([cable.a.item, cable.b.item])].flatMap(id => {
+    const item = itemOf(rack, id), f = item ? feedSides(rack, item, read) : null;
+    return f && f.cables.includes(cable.id) ? [f.text] : [];
+  });
+  return [...got.warnings, ...sided].map(text => ({kind: 'warning', text})).concat(got.notes.map(note));
+}
 function cableAdd(rack, {a, b, media = '', purpose = '', label = '', length = null, color = null}, ctx) {
   const {chassisOf} = ctx;
   if (!hasEnd(rack, a.item) || !hasEnd(rack, b.item)) return {error: NOT_ADDED};
@@ -759,7 +796,11 @@ function cableAdd(rack, {a, b, media = '', purpose = '', label = '', length = nu
   const can = canCable(rack, a, b, {uOf: heightOf(chassisOf), dc: dcReader(rack, ctx)});
   if (!can.ok) return {error: can.reason};
   const {rack: next, cable} = withCable(rack, {a, b, media, purpose, label, length: lengthOf(length), color: tint.color});
-  return done(next, `Added cable ${cableName(cable)}.`, {created: {id: cable.id}});
+  // a DC end says which port or pole it landed on, and the cable's DC checks follow
+  const read = dcFactsReader(next, ctx);
+  const clauses = [['A', cable.a], ['B', cable.b]].flatMap(([k, e]) => { const d = read(e); return d ? [`end ${k} on ${dcWhere(d)}`] : []; });
+  const added = done(next, `Added cable ${cableName(cable)}${clauses.length ? `: ${clauses.join(', ')}` : ''}.`, {created: {id: cable.id}});
+  return clauses.length ? {...added, findings: dcFindings(next, cable, ctx)} : added;
 }
 
 // RE-POINTING AN END (`a`, `b`) keeps the cable - its id, media, purpose,
@@ -806,13 +847,16 @@ function cableUpdate(rack, {id, a, b, ...p}, ctx) {
   let next = updateCable(rack, id, {...want, ...Object.fromEntries([...moved, ...plugged].map(k => [k, ends[k]]))});
   if (untie) next = {...next, cables: next.cables.map(x => { if (x.id !== id) return x; const {straps: _s, ...rest} = x; return rest; })};
   const name = cableName(cableOf(next, id));
-  const said = moved.map(k => `Moved end ${k.toUpperCase()} of cable ${name} to ${endName(next, ends[k], uOf)}.`);
+  const read = dcFactsReader(next, ctx);
+  const landed = k => { const d = read(ends[k]); return d ? ` End ${k.toUpperCase()} is on ${dcWhere(d)}.` : ''; };
+  const said = moved.map(k => `Moved end ${k.toUpperCase()} of cable ${name} to ${endName(next, ends[k], uOf)}.${landed(k)}`);
   // A bundled cable stays in its bundle; an end now on another device is said.
   const bun = bundleOfCable(rack, id);
   const away = bun ? moved.filter(k => ends[k].item !== c[k].item) : [];
   return {rack: next, summary: said.length ? said.join(' ') : `Edited cable ${name}.`,
           findings: [...(moved.length && c.routeEdited === true ? [note(`${c.id}'s route was drawn for its old end.`)] : []),
-                     ...away.map(k => note(`${c.id} stays in ${bundleName(bun)}; its ${k} end is now on another device.`))]};
+                     ...away.map(k => note(`${c.id} stays in ${bundleName(bun)}; its ${k} end is now on another device.`)),
+                     ...(moved.length ? dcFindings(next, cableOf(next, id), ctx) : [])]};
 }
 
 // Through withoutCables: a cable leaves its bundle in the same step.
@@ -1353,7 +1397,7 @@ const RU = {type: 'number', minimum: 1, multipleOf: 0.5,
 const WHOLE_RU = {type: 'integer', minimum: 1, description: 'The U its bottom sits in, counted from 1 at the bottom of the rails.'};
 const END = {type: 'object', required: ['item', 'path', 'view'], additionalProperties: false,
   description: 'One end of a cable: a port on a device, or an outlet of a part beside the rack (a zero-U PDU).',
-  properties: {item: ID('device or part beside the rack'), path: {type: 'string', minLength: 1, description: "The port or outlet, as the free ports name it (e.g. port-1, outlet-a2)."},
+  properties: {item: ID('device or part beside the rack'), path: {type: 'string', minLength: 1, description: 'The port, outlet or DC port, as the free ports name it (port-1, outlet-a2, psu-0/module/input); a DC pole by its own path.'},
                view: {enum: ['front', 'rear'], description: "Which of the device's own panels the port is on: front or rear."},
                plug: {type: 'string', minLength: 1, description: 'The plug or lug at this end, as a component ref (e.g. generic/c14-plug@1). Only for a port that takes more than one.'}}};
 const LENGTH = {type: ['object', 'null'], required: ['value'], additionalProperties: false,
@@ -1480,9 +1524,9 @@ export const COMMANDS = {
                      image: {type: 'string', minLength: 1, description: 'A data URL of an SVG, PNG, JPEG or GIF up to 512 KiB, or a library asset path.'}}}})},
   'zerou.remove': {run: zeroURemove, description: 'Take a part away from beside the rack. Its cables (the cords on a PDU\'s outlets) are kept as loose ends, or removed with it.',
     args: args(['id'], {id: ID('part beside the rack'), cables: {enum: ['keep', 'remove'], description: 'keep its cables as loose ends, or remove them; keep when left out.'}})},
-  'cable.add': {run: cableAdd, description: 'Run a cable between two free ports. Refused when a port already has a cable or a device is gone.',
+  'cable.add': {run: cableAdd, description: 'Run a cable between two free ports. A DC feed lands on a DC port or on one pole of it; the summary says which, and the findings carry its DC checks, polarity first. Refused when a port already has a cable or a device is gone.',
     args: args(['a', 'b'], {a: END, b: END, ...CABLE_FIELDS, as: AS})},
-  'cable.update': {run: cableUpdate, description: "Change a cable's type, purpose, label, length or color, or move either end to another port. A moved end keeps the cable's id and everything else about it; refused when the new port already has a cable.",
+  'cable.update': {run: cableUpdate, description: "Change a cable's type, purpose, label, length or color, or move either end to another port. A moved end keeps the cable's id and everything else about it; refused when the new port already has a cable. A moved DC end is checked the same.",
     args: args(['id'], {id: ID('cable'), a: {...END, description: 'Move end A to this port; left where it is when left out.'},
       b: {...END, description: 'Move end B to this port; left where it is when left out.'}, ...CABLE_FIELDS, straps: CABLE_STRAPS})},
   'cable.remove': {run: cableRemove, description: 'Delete a cable.', args: args(['id'], {id: ID('cable')})},

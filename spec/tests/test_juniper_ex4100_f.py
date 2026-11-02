@@ -206,11 +206,10 @@ def test_the_rear_has_the_management_console_usb_and_esd_ports(name):
     assert pl["esd-rear-jack"]["ref"] == "common/esd-jack@1"
     assert pl["console-rj45"]["attrs"]["role"] == "console"
     decor = {x.get("id") for x in d["views"]["rear"]["panel"]["decor"]}
-    assert {"earth-terminal", "earth-hole-1", "earth-hole-2"} <= decor
+    assert "earth-terminal" in decor and not {"earth-hole-1", "earth-hole-2"} & decor
     plate = next(x for x in d["views"]["rear"]["panel"]["decor"] if x["id"] == "earth-terminal")
-    h1 = next(x for x in d["views"]["rear"]["panel"]["decor"] if x["id"] == "earth-hole-1")
-    h2 = next(x for x in d["views"]["rear"]["panel"]["decor"] if x["id"] == "earth-hole-2")
-    assert h2["at"][0] - h1["at"][0] == pytest.approx(15.7, abs=0.2)
+    # the two holes the figure reads 15.7 mm apart are a placed pair of bare M5 holes on the 5/8 in. pitch of the lug the guide names
+    assert pl["ground-pair"]["ref"] == "common/ground-hole-pair-5-8-m5@1"
     assert plate["size"][0] == pytest.approx(31.6, abs=0.3)
 
 

@@ -5815,6 +5815,68 @@ def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
     }
 
 
+def nested_seat_entries(p, lib, families, connectors, candidates, default_occupants,
+                        extra_lift=0.0):
+    """THE SEATS A PLACED PART COMPOSES, as the device's `cages[]` lists them,
+    for a placement that presents no slot of its own.
+
+    `slot_entry` answers for the placement itself: its own interface, or the one
+    aperture it forwards (`manifest.forwarded_part`). A placed part that composes
+    TWO OR MORE seats - the C40G's three studs, a DC terminal's lugs, an inlet
+    panel's four C14s - forwards none, so the device listed nothing for it, and
+    a reader that has only the catalogue (kit/rack/slots.js, ports.js
+    `cableEndPaths`) never knew the studs were there. The build knew: a key
+    `ground-studs-rear/stud-tr` seats an occupant (manifest.nested_key_host),
+    `seat_turns` publishes its turn, and the Explorer reads the part's own
+    `cages` off the drawing (swap.nestedSlots).
+
+    The entries are `component_cages` of the placed part - the same answer
+    components.json carries for the part - re-keyed `<placement>/<part>` and
+    carried into the device frame by the placement, exactly as `turnable_seats`
+    does for the seat's mate point. Only for a placement whose own slot_entry is
+    None: a cage wrapper that forwards its aperture, or a stud pair that spans
+    its two studs, already lists that opening once, and a second key for it is
+    what manifest.slot_in_slot refuses.
+    """
+    if "at" not in p or not p.get("ref"):
+        return []
+    contract, _skins = lib.resolve(p["ref"])
+    if not contract.get("size"):
+        return []
+    csize = _xy_size(contract["size"])
+    out = []
+    for e in component_cages(contract, lib, families, candidates, connectors):
+        part = next((q for q in contract.get("parts") or [] if q.get("id") == e["id"]), None)
+        core = lib.resolve(part["ref"])[0] if part else None
+        if core is None or not core.get("size") or not part.get("at"):
+            continue
+        psize = _xy_size(core["size"])
+        # the part's centre carried through the placement; the pair (at, rotate)
+        # that draws the part there alone is the placement's transform composed
+        # with the part's own, so `_slot_dict`'s seat_point agrees with the sum
+        # turnable_seats makes
+        mid = seat_point(p["at"], csize, p.get("rotate"),
+                         [part["at"][0] + psize["w"] / 2, part["at"][1] + psize["h"] / 2])
+        key = f"{p['id']}/{e['id']}"
+        held = default_occupants.get(key)
+        entry = dict(e)
+        entry.pop("tilt", None)
+        entry.update({
+            "id": key,
+            "at": [round(mid[0] - psize["w"] / 2, 4), round(mid[1] - psize["h"] / 2, 4)],
+            # the placement's turn on top of the seat's own (None stays None)
+            "rotate": summed_rotate(e.get("rotate"), p.get("rotate") or None),
+            "mate": (seat_point(p["at"], csize, p.get("rotate"), e["mate"])
+                     if e.get("mate") is not None else None),
+            "lift": float(e.get("lift") or 0.0) + float(extra_lift or 0.0),
+            "mirror": bool(e.get("mirror")) or bool(p.get("mirror")),
+            "group": p.get("group"), "rel-pos": None,
+            "occupant": (held.get("ref") if isinstance(held, dict) else held) if held else None,
+        })
+        out.append(entry)
+    return out
+
+
 def cage_entries(device, view_name, lib, families, candidates, default_occupants,
                  connectors=None):
     """`cages[]` for one view: one entry per placement that presents a
@@ -5859,7 +5921,12 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
         entry = slot_entry(p, lib, families, connectors, candidates,
                            group=groups.get(p.get("group")), extra_lift=extra,
                            occupant=default_occupants.get(p["id"]))
-        if entry is not None:
+        # A PLACED PART THAT PRESENTS NO SLOT BUT COMPOSES SEATS lists each seat
+        # under `<placement>/<part>` (nested_seat_entries)
+        entries = ([entry] if entry is not None
+                   else nested_seat_entries(p, lib, families, connectors, candidates,
+                                            default_occupants, extra_lift=extra))
+        for entry in entries:
             # the configurations that have this cage, as the placement states
             # them (#1022); the key is absent where it states none
             if p.get("only-in"):

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: alarm-card-307608
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: power
 description: >-
@@ -20,25 +20,18 @@ provenance:
     terminals that also mate with TE Connectivity 3-640428-3. WHICH HEADER IS
     SIDE A is not marked in the drawing; the rear photograph is of a
     controller panel, whose centre block differs. A is drawn on the right as
-    seen from the rear, the side its breakers and outputs are on.
+    seen from the rear, the side its breakers and outputs are on. EACH HEADER
+    IS A COMPOSED PART SINCE 1.1.0, amphenol-ns/alarm-header@1, under the ids
+    `alarm-b` and `alarm-a` the elements carried before: the shroud and its
+    pins are that part's drawing, moved out of this skin unchanged, and its 6.0
+    of height is that part's relief. It presents the `wire-wrap-3` interface;
+    this part states no interface of its own.
 attrs: {vendor-sku: '307608'}
-elements:
-  alarm-b: {at: [5.0, 6.5], size: [11.0, 5.5], class: port}
-  alarm-a: {at: [23.0, 6.5], size: [11.0, 5.5], class: port}
+parts:
+  - {ref: amphenol-ns/alarm-header@1, id: alarm-b, at: [5.0, 6.5]}
+  - {ref: amphenol-ns/alarm-header@1, id: alarm-a, at: [23.0, 6.5]}
 relief:
   features:
-    - node: alarm-b
-      out: 6.0
-      color: '#f1f0eb'
-      confidence: estimated
-      source: >-
-        a three-pin wire-wrap header shroud; its height is not in the documents held
-    - node: alarm-a
-      out: 6.0
-      color: '#f1f0eb'
-      confidence: estimated
-      source: >-
-        see alarm-b
     - node: screw
       cyl: 1.5
       color: '#b9bdc1'

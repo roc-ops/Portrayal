@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: wire-wrap-3-plug
+version: 1.0.0
+class: port
+mates: wire-wrap-3
+profile: power
+description: >-
+  A three-position housing that fits the three wire-wrap pins of an Amphenol
+  Network Solutions 300CB08 alarm header, seen from the wire side as a front
+  elevation sees it seated: a white body with a wire entry at each of the three
+  ways. It stands for the connector the 300CB08 datasheet names as a mate,
+  TE Connectivity 3-640428-3, and seats in a `wire-wrap-3` header at its own
+  mate point.
+size: {w: 11.0, h: 5.5}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  the outline of the header it seats on, amphenol-ns/alarm-header@1, 11.0 by 5.5; no drawing of the housing is held
+attrs: {media: wire-wrap, connector: wire-wrap-3, positions: 3}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - THE HOUSING IS DRAWN AT THE OUTLINE OF THE HEADER IT SEATS ON, 11.0 by 5.5. The 300CB08 datasheet
+    (Specifications, Alarms, Terminals: "Wire wrap or mates with TE Connectivity 3-640428-3") and the installation
+    guide (section 1.4: "Pins can also mate to a TE Connectivity 3-640428-3 connector") name the housing and give
+    no dimension of it. needs-drawing: TE Connectivity's customer drawing of 3-640428-3, for its real outline, its
+    pitch and the pitch of the pins it takes.
+  nominal: >-
+    A HOUSING OF THE HEADER'S OWN OUTLINE, NOT A READING OF THE TE PART. That 3-640428-3 has this outline is not
+    claimed, and the part carries no maker part number for that reason.
+  depth: >-
+    NOT STATED. No document held gives the housing's depth or how far it stands off the header; the part draws a
+    plan outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract (spec/tests/test_behaviour.py).
+elements: {}
+connection-points:
+  mate: {at: [5.5, 2.75], direction: front}
+  cable: {at: [5.5, 2.75], direction: front}
+skins: [default]

@@ -58,7 +58,7 @@ def test_the_device_is_named_as_the_maker_prints_it(name):
     assert d["model"] == model
     assert d["portfolio"] == {"line": "Switches", "family": "Cloud Router Switch", "series": series}
     assert "+" not in name
-    assert d["version"] == "1.0.0"
+    assert d["version"] == ("1.0.1" if name == CRS418 else "1.0.0")
     assert list(d["configurations"]["base"]["part-numbers"]) == [model]
 
 
@@ -327,6 +327,6 @@ def test_the_lock_files_match_the_devices():
     known = devicelock.load_lock(lib)["devices"]
     for name in NAMES:
         entry = known[f"mikrotik/{name}"]
-        assert entry["version"] == load(name)["version"] == "1.0.0"
+        assert entry["version"] == load(name)["version"] == ("1.0.1" if name == CRS418 else "1.0.0")
         per_device = json.loads((DEVICES / name / "device.lock.json").read_text())
         assert per_device["gaps"] == entry["gaps"]

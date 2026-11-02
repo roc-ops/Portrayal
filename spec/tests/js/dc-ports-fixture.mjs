@@ -104,6 +104,58 @@ export const SIZES = {...BASE_SIZES,
   split: {ru: 1, w: 438, h: 43.6, d: 200, model: 'SPLIT', manufacturer: 'Acme', kind: 'panel', configs: ['base'], default: 'base'},
   nest: {ru: 1, w: 438, h: 43.6, d: 200, model: 'NEST', manufacturer: 'Acme', kind: 'switch', configs: ['base'], default: 'base'},
   twin: {ru: 1, w: 438, h: 43.6, d: 200, model: 'TWIN', manufacturer: 'Acme', kind: 'panel', configs: ['base'], default: 'base'}};
+// ── for the feed checks (rack-dc-checks.mjs) ─────────────────────────────
+// `fuse`: a fuse panel whose outputs are side a (30 A, twice), side b (60 A) and no side (30 A); `load`: a device whose two supplies take -48 V
+// (range -40.5 to -57, 12 AWG) at 40 A and at 18 A; `plus`: a +24 V supply with pos and neg poles; `tri`: a supply whose one port has
+// three poles; `negpos`: a -48 V supply whose poles are neg and pos, and `bare`: a supply of neg and pos that states no voltage.
+// Every supply lists its poles BATT first, as the fuse panel's outputs do.
+export const PSU_L40 = 'acme/psu-l40@1', PSU_L18 = 'acme/psu-l18@1', PSU_24 = 'acme/psu-24@1', PSU_TRI = 'acme/psu-tri@1';
+export const PSU_NP = 'acme/psu-np@1', PSU_NV = 'acme/psu-nv@1';
+const supply = (ref, name, poles, rest) => comp(ref, {class: 'psu', kind: 'module', attrs: {model: name, input: 'dc'}, description: `Acme ${name}.`,
+  parts: [...poles.map(([, s]) => screw(s)), part('led', 'common/led-dot@1')], cages: poles.map(([, s]) => screwSlot(s)),
+  'dc-ports': [port('input', 'input', poles.map(([role, s]) => ({role, slot: s})), rest)]});
+const RANGE = {nominal: -48, range: [-40.5, -57]};
+COMPONENTS.push(
+  supply(PSU_L40, 'PSU-L40', [['batt', 'terminal-48v'], ['rtn', 'terminal-rtn']], {voltage: RANGE, 'rating-a': 40, awg: [12]}),
+  supply(PSU_L18, 'PSU-L18', [['batt', 'terminal-48v'], ['rtn', 'terminal-rtn']], {voltage: RANGE, 'rating-a': 18, awg: [12]}),
+  supply(PSU_24, 'PSU-24', [['pos', 'terminal-pos'], ['neg', 'terminal-neg']], {voltage: {nominal: 24, range: [20, 28]}, 'rating-a': 5, awg: [14]}),
+  supply(PSU_TRI, 'PSU-TRI', [['batt', 'a'], ['rtn', 'b'], ['gnd', 'c']], {voltage: RANGE, 'rating-a': 18, awg: [12]}),
+  supply(PSU_NP, 'PSU-NP', [['neg', 'terminal-neg'], ['pos', 'terminal-pos']], {voltage: {nominal: -48}, 'rating-a': 18, awg: [12]}),
+  supply(PSU_NV, 'PSU-NV', [['neg', 'terminal-neg'], ['pos', 'terminal-pos']], {voltage: null, 'rating-a': 18, awg: [12]}));
+const OUTR = (id, side, rating) => ({id: 'output', path: `${id}/output`, ref: OUTPUT_BLOCK, direction: 'output', voltage: {nominal: -48}, 'rating-a': rating, awg: null, side,
+  poles: [pole('batt', `${id}/wire-1`), pole('rtn', `${id}/wire-2`)]});
+const supplied = (...refs) => ({front: [], rear: refs.map((r, i) => bay(`psu-${i}`, [r], r))});
+Object.assign(SLOTS, {
+  fuse: {default: 'base', 'pdu-class': null, bays: {front: [], rear: []},
+         cages: {front: [], rear: ['output-a1', 'output-a2', 'output-b1', 'output-n1'].map(id => slot(id, 'p40', [P40_PLUG]))},
+         configs: [{name: 'base', description: '', airflow: 'passive', bays: {}, occupants: {},
+                    'dc-ports': [OUTR('output-a1', 'a', 30), OUTR('output-a2', 'a', 30), OUTR('output-b1', 'b', 60), OUTR('output-n1', null, 30)]}]},
+  load: {default: 'base', 'pdu-class': null, bays: supplied(PSU_L40, PSU_L18), cages: {front: [], rear: []},
+         configs: [{name: 'base', description: '', airflow: 'front-to-back', bays: {}, occupants: {}}]},
+  plus: {default: 'base', 'pdu-class': null, bays: supplied(PSU_24, PSU_NP, PSU_NV), cages: {front: [], rear: []},
+         configs: [{name: 'base', description: '', airflow: 'front-to-back', bays: {}, occupants: {}}]},
+  tri: {default: 'base', 'pdu-class': null, bays: supplied(PSU_TRI), cages: {front: [], rear: []},
+        configs: [{name: 'base', description: '', airflow: 'front-to-back', bays: {}, occupants: {}}]},
+});
+for (const [ref, model] of [['fuse', 'FUSE'], ['load', 'LOAD'], ['plus', 'PLUS'], ['tri', 'TRI']])
+  SIZES[ref] = {ru: 1, w: 438, h: 43.6, d: 200, model, manufacturer: 'Acme', kind: ref === 'fuse' ? 'panel' : 'switch', configs: ['base'], default: 'base'};
+// `elem`: parts that draw a terminal as an element of their skin and state no DC port: a supply, a line card with an element of the same
+// name, and a supply that states a DC port of its own and also lists an element
+export const PSU_EL = 'acme/psu-el@1', CARD_EL = 'acme/card-el@1', PSU_ELP = 'acme/psu-elp@1';
+COMPONENTS.push(
+  comp(PSU_EL, {class: 'psu', kind: 'module', attrs: {model: 'PSU-EL', input: 'dc'}, description: 'Acme PSU-EL - a terminal drawn as art.', elements: ['terminal-48v', 'terminal-rtn']}),
+  comp(CARD_EL, {class: 'line-card', kind: 'module', attrs: {model: 'CARD-EL'}, description: 'Acme CARD-EL - a card.', elements: ['terminal-48v']}),
+  {...supply(PSU_ELP, 'PSU-ELP', [['batt', 'terminal-48v'], ['rtn', 'terminal-rtn']], {voltage: RANGE, 'rating-a': 18, awg: [12]}), elements: ['led-art']});
+SLOTS.elem = {default: 'base', 'pdu-class': null, bays: {front: [], rear: [bay('psu-0', [PSU_EL], PSU_EL), bay('card-0', [CARD_EL], CARD_EL), bay('psu-1', [PSU_ELP], PSU_ELP)]},
+              cages: {front: [], rear: []}, configs: [{name: 'base', description: '', airflow: 'front-to-back', bays: {}, occupants: {}}]};
+SIZES.elem = {ru: 1, w: 438, h: 43.6, d: 200, model: 'ELEM', manufacturer: 'Acme', kind: 'switch', configs: ['base'], default: 'base'};
+// the DC feed types of the cable types table, as the kit reads them (cable-types.json), for the checks that read a type
+export const CABLE_TYPES = {
+  'dc-feed-2x14awg': {media: 'power', family: 'power', dc: true, conductors: [{role: 'unstated', awg: 14}, {role: 'unstated', awg: 14}], 'ampacity-a': 15, unverified: true},
+  'dc-feed-2x12awg': {media: 'power', family: 'power', dc: true, conductors: [{role: 'unstated', awg: 12}, {role: 'unstated', awg: 12}], 'ampacity-a': 20, unverified: true},
+  'dc-feed-3x12awg': {media: 'power', family: 'power', dc: true, conductors: [{role: 'unstated', awg: 12}, {role: 'unstated', awg: 12}, {role: 'unstated', awg: 12}], 'ampacity-a': 20},
+  'ac-cord': {media: 'power', family: 'power'},
+};
 const byRef = new Map(COMPONENTS.map(c => [`${c.ns}/${c.name}@${c.major.slice(1)}`, c]));
 export const chassisOf = ref => SIZES[ref] || null;
 export const compByRef = ref => (ref == null ? null : byRef.get(String(ref).split(':')[0]) ?? null);

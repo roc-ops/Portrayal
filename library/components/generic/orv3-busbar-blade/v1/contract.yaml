@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: orv3-busbar-blade
+version: 1.0.0
+class: port
+mates: orv3-busbar
+profile: networking
+description: >-
+  The blade of an Open Rack v3 rack's vertical 48 V bus bar, seen end on as the
+  clip on an IT tray's rear sees it: a flat bar standing in the clip's blade
+  slot as the tray slides home. It is the cable end a feed to a bus-bar clip is
+  drawn with, and it seats in an `orv3-busbar` clip at the clip's own mate
+  point.
+size: {w: 7.0, h: 23.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  the blade slot of common/orv3-busbar-connector@1, 7.0 by 23.0, which is itself
+  an estimate: the documents held give neither the width nor the thickness of the
+  bus bar
+attrs: {media: orv3-busbar, connector: orv3-busbar}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - THE BLADE IS DRAWN AT THE SIZE OF THE SLOT IT STANDS IN, the
+    clip's blade slot, 7.0 by 23.0 (common/orv3-busbar-connector@1, itself read
+    off a render and an estimate). The Juniper QFX5250 hardware guide calls the
+    bus bar "a power distribution rail running along the rear of the rack"
+    delivering 46 to 56 VDC; the Celestica DS6001 datasheet says only "48VDC Bus
+    bar input"; neither states a dimension of it. needs-drawing: the busbar
+    drawing of the Open Rack v3 base specification, for the real width,
+    thickness and the pitch of its rails.
+  nominal: >-
+    A BLADE OF THE CLIP'S OWN SLOT, NOT A READING OF ANY RACK. That a given rack's
+    bus bar is this size is not claimed.
+  depth: >-
+    NOT STATED. No document held gives how far the blade enters the clip or
+    stands out of the rack; the part draws a plan outline only and builds no
+    relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract
+    (spec/tests/test_behaviour.py).
+elements: {}
+connection-points:
+  mate: {at: [3.5, 11.5], direction: front}
+  cable: {at: [3.5, 11.5], direction: front}
+skins: [default]

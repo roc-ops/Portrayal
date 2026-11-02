@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex4100-f-24t
-version: 0.1.2
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX4100-F-24T
@@ -143,8 +143,9 @@ provenance:
     note: >-
       Table 46 and Figure 96 - a protective earthing terminal on the rear panel for a Panduit LCD10-14A-L
       lug on two M5 by 10 mm screws, which are separately orderable. The image shows two bare holes on
-      a lighter plate 15.7 mm apart (the 5/8 in lug pitch is 15.9) and no screws, so they are drawn as
-      holes on the plate and no two-hole seat is offered.
+      a lighter plate 15.7 mm apart (the 5/8 in lug pitch is 15.9) and no screws, so they were drawn as
+      holes on the plate. They are still drawn as bare holes, now parts: one two-hole seat on that lug's
+      5/8 in. pitch (`ground-stud-pitch` says how the pitch is read).
   mounting:
     confidence: datasheet
     note: >-
@@ -162,6 +163,17 @@ provenance:
     note: >-
       Tables 12, 21 and 27 - a 65 W AC supply, 100 to 240 V, 50/60 Hz; at most 55 W input. The model has
       no PoE. The rear legend prints 2.5A Max.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      INFERRED, NOT STATED. Table 46 names two M5 x 10 mm screws with washer (separately orderable) and
+      a Panduit LCD10-14A-L lug or equivalent (not provided) for the 24 and 48 port models, and gives
+      no spacing. The image puts the two holes 15.7 mm apart, which is the 5/8 in. (15.875) of the library's
+      two-hole lug for the same hole-spacing code (Panduit LCD6-10A-L: '.63 hole spacing'). The terminal
+      is `common/ground-hole-pair-5-8-m5@1`: two bare M5 holes on 5/8 in. centres, presenting `stud-pair-5-8`,
+      so one two-hole lug (`generic/two-hole-lug-5-8@1`) lands across them and a ring lug still lands
+      on either hole. The holes stay bare, as the EX4100-F-48T rear photograph shows them; the screws
+      are fitted with the lug. The holes were drawn 15.7 apart as decor and the pair stands on their midpoint.
 attrs:
   physical: {weight: '3.52 kg (3520 g), Table 13'}
   power: {power-max-w: 55, power-envelope: bare, power-input-ac: '100 through 240 VAC, 50/60 Hz (Table
@@ -232,14 +244,6 @@ gaps:
     The claim code, serial number and CLEI labels are stickers with no content in any figure; they are
     named regions and are not drawn.
   wanted: none; stickers
-- what: ground-hole-seat
-  scope:
-  - rear
-  reason: needs-drawing
-  note: >-
-    The earthing terminal is two bare holes for M5 screws. The library has no pair part for M5 holes on
-    a 5/8 in pitch, so they are drawn as holes and no lug seat is offered.
-  wanted: a two-hole M5 earth terminal part
 - what: studio-photograph
   scope:
   - front
@@ -267,6 +271,14 @@ gaps:
   - right
   reason: needs-drawing
   wanted: A flat drawing or photograph of the lid, the underside and the side panels.
+- what: ground-pair-pitch
+  scope:
+  - ground-pair
+  reason: vendor-silent
+  note: >-
+    The guide names the screws and the lug and gives no spacing for the two holes; `ground-stud-pitch`
+    says what the pair is drawn at and why.
+  wanted: a drawing that dimensions the two holes, or the lug's own datasheet
 groups:
   rj45:
     term: Port
@@ -315,6 +327,11 @@ groups:
   power-input: {term: Inlet, role: service, index-origin: 0}
   esd: {term: Point, role: furniture, index-origin: 0}
   furniture: {term: Item, role: furniture, index-origin: 0}
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the earthing terminal, two bare M5 holes for a two-hole lug (Table 46)
 views:
   front:
     size: {w: 440.9, h: 43.7}
@@ -801,8 +818,6 @@ views:
     panel:
       decor:
       - {id: earth-terminal, kind: earth-plate, at: [54.0, 2.4], size: [31.5, 11.0], rx: 0.3, fill: '#c9cbcd'}
-      - {id: earth-hole-1, kind: earth-hole, at: [59.1, 5.3], size: [5.8, 5.8], rx: 2.9, fill: '#2a2d31'}
-      - {id: earth-hole-2, kind: earth-hole, at: [74.8, 5.3], size: [5.8, 5.8], rx: 2.9, fill: '#2a2d31'}
       - {id: fan-0, kind: fan-grille, at: [96.7, 2.9], size: [37.0, 37.0], rx: 18.5, pattern: vent, pattern-pitch: [
           6.2, 5.6], vent: 1.0}
       - {id: inlet-housing, kind: inlet-housing, at: [386.5, 10.2], size: [31.4, 23.3], rx: 3.0, fill: '#2a2c30'}
@@ -819,6 +834,8 @@ views:
       for: ac-inlet}
     components:
       placements:
+      - {ref: common/ground-hole-pair-5-8-m5@1, id: ground-pair, at: [59.4125, 5.7], group: grounding,
+        rel-pos: 0}
       - ref: common/rj45-eth@1
         id: mgmt
         at: [17.75, 8.0]
