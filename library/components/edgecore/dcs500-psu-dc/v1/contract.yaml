@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcs500-psu-dc
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -90,6 +90,42 @@ provenance:
     F0TAT7664002A, DC back-to-front.
   body: >-
     BORROWED from edgecore/dcs500-psu-ac@1 (depth 220, colour #2b2f34).
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head
+    3.4 across (that part's own size is an estimate), standing at the centre of the disc this
+    skin already draws (centres 14.8 across, 11.7, 21.0 and 29.4 down; each disc is 4.2 across)
+    and lifted 5.0 mm, this block's own estimated proudness (the `terminal` relief below). The
+    head is drawn smaller than the disc round it, so the drawing marks where a lug lands and
+    does not show the screw. The quick start guide show the three screws and give a wire size
+    and a torque, and no screw head, thread or stud; the places of the screws are the skin's own
+    (the discs it already draws), which are themselves estimated (`the-face`).
+  poles: >-
+    Edgecore DCS500 (AS7816-64X) Quick Start Guide, step 4 "Connect Power", page 2, the figure
+    under the cautions: a barrier block of three screws one above the other with a red, a black
+    and a green-yellow wire, and the callouts "1. Connect the RTN return. (red wire).", "2.
+    Connect the -36 - -72 VDC (black wire)." and "3. Connect the Chassis Ground (yellow-green
+    wire).", top to bottom as the photograph stands. The roles are the callouts': `rtn` for the
+    RTN return (spec/schemas/dc.yaml writes `rtn` as RTN and return), `batt` for the -36 - -72
+    VDC wire (it writes `batt` as negative (battery)) and `gnd` for the chassis ground (it
+    writes `gnd` as the earth symbol and PE), listed in the callouts' order. The ground screw is
+    one of the block's three and is the port's pole `gnd`; it is not a conductor of a feed. THE
+    ROLES SIT ON THIS SKIN'S SCREWS BY THE HALF TURN `connector-direction` RECORDS: the
+    photograph is of the supply turned a half turn from its attitude in the bay, so the skin's
+    top screw (`pole-gnd`) carries the chassis ground and its bottom one (`pole-rtn`) the RTN.
+    That turn is an inference from where the latch and the handle sit, not a statement, and the
+    figure marks no screw itself. The data sheet calls the supplies "AC or -48 VDC" and the
+    guide gives the input as a range; the label is a name and no document gives a nominal for
+    the port, so the port states no voltage.
+  rating: >-
+    NOT STATED. The Edgecore DCS500 Quick Start Guide's hardware specification (page 3) prints
+    "DC Power Rating -36 - -72 VDC, 28-14 A, 850 Watts": a pair of currents over the range and
+    no maximum. The data sheet (page 3) gives the supplies as "AC or -48 VDC" and no current. A
+    port's `rating-a` is one figure and no document says which of the pair is the input rating,
+    so the port states none and a later change can state it once a source says so.
+  awg: >-
+    Edgecore DCS500 Quick Start Guide, page 2, the caution under "Connect Power": a "#10 AWG"
+    wire for a -36 to -72 VDC supply. It is the one size the documents held give for this
+    supply's DC wires, so the port states it.
 states: [absent]
 elements:
   terminal: {at: [6.20, 4.60], size: [17.20, 29.40], class: terminal}
@@ -121,6 +157,20 @@ relief:
       source: >-
         A barrier block stands proud of the face and the photograph shows it so, but how far is
         not stated; 5.0 is edgecore/dcs201-psu-dc@1's figure for its terminal header.
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [13.1, 27.7], lift: 5.0}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [13.1, 19.3], lift: 5.0}
+  - {ref: common/terminal-screw-34@1, id: pole-gnd, at: [13.1, 10.0], lift: 5.0}
+dc:
+  ports:
+    - id: input
+      direction: input
+      awg: [10]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+        - {role: gnd, slot: pole-gnd}
+      source: {poles: poles, awg: awg}
 skins: [default]
 body:
   depth: 220
