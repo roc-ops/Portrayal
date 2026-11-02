@@ -21,7 +21,7 @@
    "ufispace/psu-132-dc@1"
   ]
  },
- "composed": "b5a3e29adb8e8ef9",
+ "composed": "2993c1bcdc3633dc",
  "composed-refs": {
   "common/compliance-sticker@1": "1.0.0+6b3c51b31c446689",
   "common/ground-lug@1": "1.4.1+26b6835d39c39550",
@@ -32,6 +32,7 @@
   "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
   "common/sma-jack@1": "1.0.1+dde698c727778ba3",
   "common/smb-jack@1": "1.0.0+d68248050fc18e92",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
@@ -43,12 +44,60 @@
   "ufispace/fan-803816-hi@1": "1.0.0+f8dab21c7d2abbe3",
   "ufispace/lane-led-quad@1": "1.0.0+32cf79ec07a4520b",
   "ufispace/psu-132-ac@1": "1.1.0+ce45ad7b531ae933",
-  "ufispace/psu-132-dc@1": "1.1.0+c20313841c209303"
+  "ufispace/psu-132-dc@1": "1.2.0+765f1f5d1e83f1eb"
  },
  "configs": [
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "ufispace/psu-132-dc@1": {
+    "awg": null,
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "neg",
+      "slot": "psu-0/module/pole-neg"
+     },
+     {
+      "role": "pos",
+      "slot": "psu-0/module/pole-pos"
+     }
+    ],
+    "rating-a": 40,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "ufispace/psu-132-dc@1": {
+    "awg": null,
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "neg",
+      "slot": "psu-1/module/pole-neg"
+     },
+     {
+      "role": "pos",
+      "slot": "psu-1/module/pole-pos"
+     }
+    ],
+    "rating-a": 40,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "0c32f31e32c0c1d5",
  "groups": [
@@ -1148,5 +1197,5 @@
  "placement-surface": "e509037eef8a8eda",
  "shape": "4a11e22d39380b96",
  "surface": "412aa2aea57fad9e",
- "version": "3.0.9"
+ "version": "3.1.0"
 }
