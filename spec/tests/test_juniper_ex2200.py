@@ -237,11 +237,10 @@ def test_the_compact_front_has_the_management_ports_lamps_and_button(name):
     assert pl["mgmt"]["ref"] == "std/rj45@2" and pl["mgmt"]["attrs"]["role"] == "mgmt"
     assert pl["console-rj45"]["ref"] == "std/rj45@2" and pl["console-rj45"]["attrs"]["role"] == "console"
     assert pl["usb"]["ref"] == "std/usb-a@1" and pl["usb"]["rotate"] == 90
-    # the mini-USB console is chassis art with its own opening, not a placed part (nothing in the DCIM
-    # export could carry it)
-    decor = {x.get("id"): x for x in d["views"]["front"]["panel"]["decor"]}
-    assert decor["console"]["size"] == [8.6, 5.1]
-    assert "console" not in pl
+    # the mini-USB console is the placed registry receptacle, and no decor draws it any more
+    decor = {x.get("id") for x in d["views"]["front"]["panel"]["decor"]}
+    assert not {"console", "console-opening"} & decor
+    assert pl["console-usb"]["ref"] == "std/mini-usb@1" and pl["console-usb"]["attrs"]["role"] == "console"
     legends = set(silk_texts(d, "front"))
     assert {"SYS", "ALM", "SPD", "DX", "EN", "CON", "MGMT", "LINK", "ST", "0", "1"} <= legends
     assert ("PoE" in legends) == m["poe"] and ("PoE+" in legends) == m["poe"]

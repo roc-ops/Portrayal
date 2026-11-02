@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2300-c-12p
-version: 0.1.1
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2300-C-12P
@@ -110,10 +110,12 @@ provenance:
   front-console:
     confidence: estimated
     note: >-
-      estimated - the mini-USB console port (guide Figure 1, callout 7) is drawn as chassis art, a 7.9 x 4.6 mm
-      shell with its opening, the size the other EX2300 devices carry and the 12P photograph agrees with
-      (about 8 mm across, 4.5 mm high). It is not a component: the library has no mini-USB receptacle and its
-      DCIM export has no row for one.
+      estimated - the mini-USB console port (guide Figure 1, callout 7) is the placed std/mini-usb
+      (`console-usb`), centred on the 7.9 x 4.6 mm shell this device was drawn with, the size the other EX2300
+      devices carry and the 12P photograph agrees with (about 8 mm across, 4.5 mm high). The part draws the
+      registry's 7.7 x 3.9 mm Mini-B shell, which stands in for the maker's own (gap `mini-usb-console-shell`).
+      The guide names the connector: "Mini-USB Type-B (5-pin)" (Console Ports, p4; Mini-USB Port Pinout
+      Specifications, p86).
   esd-point:
     confidence: photo-measured
     note: >-
@@ -191,6 +193,14 @@ chassis:
   airflow: passive
   power: ac
 gaps:
+- what: mini-usb-console-shell
+  scope: [console-usb]
+  reason: needs-photo
+  note: >-
+    The part is the registry's Mini-B receptacle (Molex drawing SD-54819-026, 7.7 x 3.9 mm). The 12P front
+    photograph shows the console shell at about 8 mm across and 4.5 mm high, and no close-up is held, so the
+    drawn shell and its place are estimates and the maker's own shell may differ by a few tenths.
+  wanted: A straight-on close-up of the console port with a scale, or the maker's dimensioned drawing of it.
 - what: rack-ears
   scope: [front]
   reason: needs-drawing
@@ -245,8 +255,8 @@ groups:
     role: management
     index-origin: 0
     mixed: >-
-      how the switch is reached out of band - the management Ethernet port, the RJ-45 console port and the
-      USB port on the front (the mini-USB console port is chassis art)
+      how the switch is reached out of band - the management Ethernet port, the RJ-45 console port, the
+      mini-USB console port and the USB port on the front
   controls:
     term: Button
     role: management
@@ -283,10 +293,7 @@ views:
       - {id: ribs-right, kind: end-cap-ribs, at: [268.3, 9.5], size: [8.5, 23.5], pattern: vent, vent: 1.0}
       - {id: shell-1, kind: jack-shell, at: [36.2, 8.3], size: [86.9, 26.7], rx: 0.6, fill: '#b4ada6'}
       - {id: recess-mgmt, kind: recess, at: [211.4, 6.9], size: [18.2, 27.6], rx: 0.5, fill: '#b4b7ba'}
-      - {id: usb-shell, kind: usb-shell, at: [197.2, 19.7], size: [6.6, 14.1], rx: 0.5, fill: '#b9bcc0'}
-      - {id: console, kind: console-shell, at: [233.85, 29.2], size: [7.9, 4.6], rx: 0.6, fill: '#c9cbcd'}
-      - {id: console-opening, kind: console-opening, at: [234.55, 29.9], size: [6.5, 3.2], rx: 0.5, fill: '#1c2024'}
-      - {id: console-pins, kind: console-pins, at: [235.55, 31.4], size: [4.5, 0.7], fill: '#3a4046'}
+      - {id: usb-shell, kind: port-shell, at: [197.2, 19.7], size: [6.6, 14.1], rx: 0.5, fill: '#b9bcc0'}
       cutouts:
       - {block: rj45}
       - {block: uplink}
@@ -305,6 +312,7 @@ views:
       - {id: led-en, at: [249.6, 24.8], size: [2.0, 2.0], shape: circle}
       - {id: led-poe, at: [249.6, 29.8], size: [2.0, 2.0], shape: circle}
       - {id: btn-mode, at: [256.1, 27.6], size: [4.0, 4.0], shape: circle}
+      - {id: console-usb, at: [233.95, 29.55], size: [7.7, 3.9], shape: rect}
     silkscreen:
     - {block: rj45}
     - {block: uplink}
@@ -398,6 +406,7 @@ views:
          states: ['off', {name: selected, color: '#22c55e'}], description: 'Figure 27 - lit while the Status lamps show PoE status'}
       - {ref: common/reset-button@1, id: btn-mode, at: [256.1, 27.6], for: chassis, group: controls, rel-pos: 0,
          attrs: {function: Factory Reset/Mode}}
+      - {ref: std/mini-usb@1, id: console-usb, at: [233.95, 29.55], group: mgmt, rel-pos: 3, attrs: {role: console}}
     regions:
       - {id: logo-zone, at: [15.2, 9.0], size: {w: 19.0, h: 6.6}, label: 'Vendor logo; not drawn'}
   rear:

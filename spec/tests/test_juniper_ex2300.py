@@ -158,11 +158,10 @@ def test_the_front_has_the_guides_status_lamps_button_and_console(name):
     assert len(modes) == m["mode_leds"]
     assert ("led-poe" in modes) == m["poe"]
     assert pl["btn-mode"]["ref"] == "common/reset-button@1"
-    # the mini-USB console is chassis art with its own opening, not a placed part (nothing in the DCIM
-    # export could carry it)
-    decor = {x.get("id"): x for x in d["views"]["front"]["panel"]["decor"]}
-    assert decor["console"]["size"] == [7.9, 4.6]
-    assert "console" not in pl
+    # the mini-USB console is the placed registry receptacle, and no decor draws it any more
+    decor = {x.get("id") for x in d["views"]["front"]["panel"]["decor"]}
+    assert not {"console", "console-opening", "console-pins"} & decor
+    assert pl["console-usb"]["ref"] == "std/mini-usb@1" and pl["console-usb"]["attrs"]["role"] == "console"
     legends = {s["text"] for s in d["views"]["front"]["silkscreen"] if "text" in s}
     assert {"SYS", "ALM", "MST", "SPD", "DX", "EN", "CON", "0", "1", "2", "3"} <= legends
     assert ("POE" in legends) == m["poe"] and ("PoE+" in legends) == m["poe"]
@@ -355,9 +354,10 @@ def test_the_24t_ac_legend_discrepancy_and_the_top_face_photo_are_noted():
 # --- the components ----------------------------------------------------------
 
 def test_this_slice_adds_no_component():
-    """Every part is a registry or common one: the guide's supply and fans are built in, and the two
-    pieces of metalwork no library part covers (the mini-USB console, the DC terminal block) are chassis
-    art, because the DCIM export has no row that could carry a part of either kind."""
+    """Every part is a registry or common one: the guide's supply and fans are built in, the mini-USB
+    console is the registry's receptacle, and the one piece of metalwork no library part covers (the DC
+    terminal block) is chassis art, because the DCIM export has no row that could carry a part of that
+    kind."""
     assert not list(COMP.glob("ex2300-*"))
 
 
@@ -559,8 +559,9 @@ def test_the_compact_front_has_the_status_lamps_button_and_console(name):
     assert len(modes) == (4 if NEW[name]["poe"] else 3)
     assert pl["btn-mode"]["ref"] == "common/reset-button@1"
     assert pl["esd-jack"]["ref"] == "common/esd-jack@1"
-    decor = {x.get("id"): x for x in d["views"]["front"]["panel"]["decor"]}
-    assert decor["console"]["size"] == [7.9, 4.6] and "console" not in pl
+    decor = {x.get("id") for x in d["views"]["front"]["panel"]["decor"]}
+    assert not {"console", "console-opening", "console-pins"} & decor
+    assert pl["console-usb"]["ref"] == "std/mini-usb@1" and pl["console-usb"]["attrs"]["role"] == "console"
     legends = {s["text"] for s in d["views"]["front"]["silkscreen"] if "text" in s}
     assert {"SYS", "ALM", "MST", "SPD", "DX", "EN", "CON", "LINK", "ST", "EX2300-C"} <= legends
     # the photograph of the 12T prints the PoE legend with no lamp behind it: the legend, not the lamp
