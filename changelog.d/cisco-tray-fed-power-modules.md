@@ -9,4 +9,4 @@
   `cisco/asr-9906` and `cisco/asr-9910`, 2.0.1 to 2.0.2; `cisco/asr-9912` and `cisco/asr-9922`, 2.3.1 to 2.3.2) take a patch each, with
   their locks and the drawing version line of their exported device types (18 files in NetBox and Nautobot); the five modules' module
   types carry the new contract version (10 files). No port, interface or id moves, and nothing is drawn differently.
-- Five rows of the port-usable records file are gone and its `cap:` is 170.
+- Five rows of the port-usable records file are gone and its `cap:` is 167.
