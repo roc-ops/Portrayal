@@ -33,7 +33,7 @@ TOL = 0.06
 DEVICES = {
     "cor550": dict(view="rear", ac_cfg="ac-f2b", dc_cfg="dc-f2b", bays=["psu-0", "psu-1"],
                    ac="edgecore/cor550-psu-ac@1", dc="edgecore/cor550-psu-dc@1",
-                   gap="dc-supply-face", version="3.1.1"),
+                   gap="dc-supply-face", version="3.2.0"),
     "cor580": dict(view="rear", ac_cfg="ac-f2b", dc_cfg="dc48-f2b", bays=["psu-1", "psu-2"],
                    ac="common/psu-ac-1300@1", dc="edgecore/fsj033-610g@1",
                    gap="dc-psu-module", version="3.2.0"),
@@ -112,7 +112,7 @@ def _inside(inner, outer):
 @pytest.mark.parametrize("ref", PARTS)
 def test_a_new_dc_supply_is_a_1_0_0_module_with_a_contract_and_one_skin(ref):
     c = _contract(ref)
-    moved = ("edgecore/fsj033-610g@1", "edgecore/csr440-psu-dc@1")
+    moved = ("edgecore/cor550-psu-dc@1", "edgecore/fsj033-610g@1", "edgecore/csr440-psu-dc@1")
     assert c["version"] == ("1.1.0" if ref in moved else "1.0.0")
     assert c["kind"] == "module" and c["class"] == "psu"
     assert (_dir(ref) / "skins/default.svg").is_file()
