@@ -1317,7 +1317,11 @@ export function faceCages(rootEl, deviceCages = [], compByRef, {offered = false}
   const device = deviceCages || [];
   if (!rootEl) return [...device];
   const nested = nestedSlots(rootEl, compByRef, {deviceCages: device, all: true});
-  const every = [...device, ...nested];
+  // A SEAT THE INDEX LISTS AND THE DRAWING YIELDS TOO (a placed part's own seat,
+  // `ground-studs-rear/stud-tr`) IS ONE SLOT, AS THE DRAWING YIELDS IT: that entry
+  // carries the carrier, its group and its depth, which a swap seats through
+  const drawn = new Set(nested.map(e => e.id));
+  const every = [...device.filter(d => !drawn.has(d.id)), ...nested];
   if (!offered) return every;
   const hidden = freeLevel(rootEl, every);
   return every.filter(e => !hidden.has(e.id));
