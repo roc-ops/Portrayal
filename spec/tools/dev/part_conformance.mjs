@@ -447,7 +447,15 @@ function usableCodes(W, ref, cfgName, cfg, slots, offered, zero, flag, counts, U
         seen.add(e.path);
         if (!e.ref) {                                                        // the device's own drawing: its slot says what it presents
           const slot = (slots.cages[view] || []).find(c => c.id === e.path);
-          if (!registered(U, slot?.interface)) bare.push(cause('', view, e.path));
+          // the back of a part seated in a bay is drawn on this panel as a projection (`of`, and no `ref`): it presents what the
+          // part's rear face composes at that id, which is what the rack kit lists as the rear's ports
+          let ok = registered(U, slot?.interface);
+          if (!ok && e.projected && e.seat) {
+            const face = W.compByRef(W.compByRef(cfg.bays?.[e.seat])?.faces?.rear);
+            const end = (face?.parts || []).find(q => `${e.seat}/module/${q.id}` === e.path);
+            ok = !!end && presentsRegistered(W, W.compByRef(end.ref), U, new Set([refOf(end)]));
+          }
+          if (!ok) bare.push(cause('', view, e.path));
           continue;
         }
         const part = W.compByRef(refOf(e));
