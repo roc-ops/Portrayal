@@ -371,8 +371,10 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
             presents.append(ref)
         if c.get("mates") == IFACE:
             mates.append(ref)
+    # and the two bare tapped holes (M5 and 10-32) that the Juniper earthing pairs and the QFX5210 plate compose
+    bare_holes = ("common/ground-hole-m5@1", "common/ground-hole-10-32@1")
     assert sorted(presents) == sorted([*SINGLE, CASA_STUD, "common/terminal-screw-34@1",
-                                       "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD])
+                                       "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD, *bare_holes])
     assert mates == [LUG]
     lug = _contract(LUG)
     # 1.0.1: the provenance says it turns (#829); nothing it draws changed

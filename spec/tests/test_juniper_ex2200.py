@@ -265,7 +265,9 @@ def test_the_full_width_rear_has_the_management_console_usb_and_esd_ports(name):
     assert pl["esd-rear-jack"]["ref"] == "common/esd-jack@1"
     assert pl["console-rj45"]["attrs"]["role"] == "console"
     decor = {x.get("id"): x for x in d["views"]["rear"]["panel"]["decor"]}
-    assert {"earth-terminal", "earth-hole-1", "earth-hole-2"} <= set(decor)
+    # the earthing terminal is a placed pair of bare 10-32 holes on the 3/4 in. pitch of its lug; the plate behind it is still drawn
+    assert "earth-terminal" in decor and not {"earth-hole-1", "earth-hole-2"} & set(decor)
+    assert pl["ground-pair"]["ref"] == "common/ground-hole-pair-3-4-10-32@1"
     # the RPS port is a placed part, no longer panel art (test_rps_interfaces.py holds the detail)
     assert not {"rps-plate", "rps-opening"} & set(decor)
     assert pl["rps"]["ref"] == "juniper/ex2200-rps-port@1"
@@ -304,7 +306,7 @@ def test_the_compact_rear_is_fanless_with_a_heatsink_on_the_poe_model_only(name)
     pl = by_id(d, "rear")
     assert pl["ac-inlet"]["ref"] == "std/c14-inlet@1"
     assert pl["esd-rear-jack"]["ref"] == "common/esd-jack@1"
-    assert {"earth-hole-1", "earth-hole-2"} <= {x.get("id") for x in decor}
+    assert pl["ground-pair"]["ref"] == "common/ground-hole-pair-3-4-10-32@1" and not {"earth-hole-1", "earth-hole-2"} & {x.get("id") for x in decor}
     assert d["chassis"]["airflow"] == "passive"
 
 
@@ -316,9 +318,10 @@ def test_the_compact_rear_has_the_oblong_slotted_plate_above_the_first_earth_hol
     plate = decor["slotted-plate"]
     assert plate["kind"] == "slotted-plate"
     assert 20 <= plate["size"][0] <= 24 and 5 <= plate["size"][1] <= 8
-    hole = decor["earth-hole-1"]
-    assert plate["at"][0] < hole["at"][0] < plate["at"][0] + plate["size"][0]
-    assert plate["at"][1] + plate["size"][1] < hole["at"][1]
+    # the first hole is the first hole of the placed pair, whose box starts at the pair's own place (a 4.826 mm hole, centre +2.413)
+    first = by_id(d, "rear")["ground-pair"]["at"]
+    assert plate["at"][0] < first[0] + 2.413 < plate["at"][0] + plate["size"][0]
+    assert plate["at"][1] + plate["size"][1] < first[1]
 
 
 def test_the_dc_rear_has_the_four_terminals_and_no_inlet():

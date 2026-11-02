@@ -412,7 +412,8 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 # the Juniper EX9214's stud pair on its lower rear plate (guide Figure 5): two more seats (down)
 # the Cisco C9300-48P's and C9300-48T's two rear ground screws each: one more seat down and one left on each
 # the Cisco C9300-24P's, C9300-24U's and C9300-48U's two rear ground screws each: one more seat down and one left on each
-WANT = {"down": 143, "left": 46, "up": 13, "right": 31}   # the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's
+# the 23 Juniper earthing terminals of this change: 48 ring seats (down 25, left 3, up 14, right 6), the two holes of each pair and the QFX5210 plate's, and the one M4 screw of the EX2300-24MP and -48MP
+WANT = {"down": 168, "left": 49, "up": 27, "right": 37}   # the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's
 # THE TWO-HOLE LUG on a pair host: 59 seats on 33 devices - three on each of
 # the eleven Amphenol 300CB08 panels, one on each AIS800, the seven MX, the
 # LMFS-F, two on the FX-16, one on the FX-8 and FX-4, the SR-1-DC block's
@@ -430,7 +431,8 @@ WANT = {"down": 143, "left": 46, "up": 13, "right": 31}   # the Juniper EX9204 a
 # the two-stud M6 pad on the rear of the Juniper QFX5700 is one more pair seat, leading its wire up
 # the same pad on the rear of the QFX5241-64OD and -64QD: two more pair seats, leading their wires down
 # the Juniper EX9204, EX9208 and EX9214 stud pairs: two more seats leading down, one leading left
-WANT_PAIRS = {"down": 51, "left": 16, "up": 2, "right": 10}
+# the 23 Juniper earthing terminals of this change: 23 pair seats on 21 devices (down 3, left 5, right 15)
+WANT_PAIRS = {"down": 54, "left": 21, "up": 2, "right": 25}
 NAMES = {0: "right", 90: "down", 180: "left", 270: "up"}
 LEADS = {"right": 0, "down": 90, "left": 180, "up": 270}
 PAIR_IFACES = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
@@ -456,7 +458,21 @@ HARD_RESIDUAL = {("juniper/mx150", "rear", "ground-studs"): ("left", 1, 0),
                  ("juniper/ex3300-24p", "rear", "ground-pair"): ("right", 1, 0),
                  ("juniper/ex3300-24t", "rear", "ground-pair"): ("right", 1, 0),
                  ("juniper/ex3300-48p", "rear", "ground-pair"): ("right", 1, 0),
-                 ("juniper/ex3300-48t", "rear", "ground-pair"): ("right", 1, 0)}
+                 ("juniper/ex3300-48t", "rear", "ground-pair"): ("right", 1, 0),
+                 # the earthing pairs of the Juniper EX2200, EX2300 and EX4100-F are photograph geometry: the least bad
+                 # direction along the pair still crosses a neighbouring part (not the rule's doing)
+                 ("juniper/ex2200-24p", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex2200-24t", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex2200-24t", "rear-dc", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex2200-48p", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex2200-48t", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex2300-24p", "rear", "ground-pair"): ("right", 2, 0),
+                 ("juniper/ex2300-24t", "rear", "ground-pair"): ("right", 2, 0),
+                 ("juniper/ex2300-48p", "rear", "ground-pair"): ("right", 2, 0),
+                 ("juniper/ex4100-f-24p", "rear", "ground-pair"): ("right", 2, 0),
+                 ("juniper/ex4100-f-24t", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex4100-f-48p", "rear", "ground-pair"): ("right", 2, 0),
+                 ("juniper/ex4100-f-48t", "rear", "ground-pair"): ("right", 1, 0)}
 # the crossings the seat's own direction made, which the default must not.
 # The MX150's second stud is `ground-stud-1` of main, one level into its pair.
 CROSSED_BEFORE = {("supermicro/sys-111e-fwtr", "front", "ground-stud"),
@@ -504,9 +520,9 @@ def _pairs(census):
 def test_the_default_distribution_is_pinned(census):
     ring, pairs = _ring(census), _pairs(census)
     assert dict(collections.Counter(r["dir"] for r in ring.values())) == WANT
-    assert len({k[0] for k in ring}) == 103   # 63, the Cisco C9300-48P and C9300-48T, the Cisco C9300-24P, C9300-24U and C9300-48U, the Juniper EX9204, EX9208 and EX9214, the Arista 7280CR3A-48D6 and -72, the Juniper QFX5241-64OD and -64QD, the Arista 7050CX4M-48D8, the Arista 7280CR3-96 (as the DR3A-36), the Arista 7280DR3A-36, and the Eaton EVMI2130X, EVMA8365X and PDU12IEC, the seven ReadyLinks GL-x siblings, the four Juniper EX3400, the four Juniper EX3300, the Arista 7010TX-48, the Juniper QFX5200-48Y, the Juniper QFX5120-32C, the Juniper QFX5240-64OD and -64QD, the Juniper EX9251 and the Juniper QFX5700
+    assert len({k[0] for k in ring}) == 126   # the 23 Juniper earthing terminals of this change (21 pair devices and the EX2300-24MP and -48MP), and 103: 63, the Cisco C9300-48P and C9300-48T, the Cisco C9300-24P, C9300-24U and C9300-48U, the Juniper EX9204, EX9208 and EX9214, the Arista 7280CR3A-48D6 and -72, the Juniper QFX5241-64OD and -64QD, the Arista 7050CX4M-48D8, the Arista 7280CR3-96 (as the DR3A-36), the Arista 7280DR3A-36, and the Eaton EVMI2130X, EVMA8365X and PDU12IEC, the seven ReadyLinks GL-x siblings, the four Juniper EX3400, the four Juniper EX3300, the Arista 7010TX-48, the Juniper QFX5200-48Y, the Juniper QFX5120-32C, the Juniper QFX5240-64OD and -64QD, the Juniper EX9251 and the Juniper QFX5700
     assert dict(collections.Counter(r["dir"] for r in pairs.values())) == WANT_PAIRS
-    assert len({k[0] for k in pairs}) == 51   # the Juniper EX9204, EX9208 and EX9214 pair hosts, the four Juniper EX3300, the two Juniper QFX5240 earthing pads, the Juniper QFX5700's and the two on the QFX5241-64OD and -64QD
+    assert len({k[0] for k in pairs}) == 72   # the 21 Juniper earthing pairs of this change, and 51: the Juniper EX9204, EX9208 and EX9214 pair hosts, the four Juniper EX3300, the two Juniper QFX5240 earthing pads, the Juniper QFX5700's and the two on the QFX5241-64OD and -64QD
     # a pair is turned only along itself
     assert {r["turn"] for r in pairs.values()} == {0, 180}
 
@@ -560,7 +576,8 @@ def test_the_four_crossings_the_seat_gave_are_gone(census):
     # and both studs of each of the EX9204's and EX9208's pairs, the MX240's and MX480's pair host
     # and one of the two rear ground screws of each of the Cisco C9300-48P and C9300-48T, 15.8 away from its neighbour
     # and the same ground screw of each of the Cisco C9300-24P, C9300-24U and C9300-48U
-    assert len(crossed) == 47 and not [k for k in crossed if census[k]["hard"]]
+    # and the 23 Juniper earthing terminals of this change: 24 ring seats whose own direction crosses a part (ten holes of the EX2200, six seats of the EX2300, two of the EX4100-F, four of the EX4100-H and two of the QFX5210 plate), the default clearing every one
+    assert len(crossed) == 71 and not [k for k in crossed if census[k]["hard"]]
 
 
 def test_a_barrier_block_pole_is_no_turnable_seat():
