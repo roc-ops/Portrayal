@@ -392,7 +392,9 @@ function usableCodes(W, ref, cfgName, cfg, slots, offered, zero, flag, counts, U
     counts.supplies = supplies.length;
     if (bare.length) flag('C19', `${bare.length} of ${supplies.length} supplies drawn present no cable end an agent is offered (no inlet, terminal or lug)`, bare.length,
       {examples: bare.slice(0, 3).map(s => `${s.view}:${s.path} ${modelOf(W.compByRef(refOf(s)), s.ref)}`), causes: bare.map(s => cause(refOf(s), s.view, s.path))});
-    if ((cfg.power || []).length && !offered.some(o => o.kind === 'power') && !bare.length && !supplies.length)
+    // a device fed through a fixed cord (a placed part that ends in a plug of its own and says so in its `unmated` sentence) has no power end to offer
+    const fixedCord = FACES.some(view => faceOf(view).some(e => e.ref && e.class === 'inlet' && W.compByRef(refOf(e))?.attrs?.plug && sentenceOf(U, refOf(e))));
+    if ((cfg.power || []).length && !offered.some(o => o.kind === 'power') && !bare.length && !supplies.length && !fixedCord)
       flag('C19', `the configuration says it is powered (${cfg.power.join(', ')}) and no power end is offered`, 1, {causes: [cause('', 'front', '')]});
   }
   // an inlet, terminal or stud the drawing shows (outside a supply, which is judged above) is a place to land a cord or a lug
@@ -406,7 +408,9 @@ function usableCodes(W, ref, cfgName, cfg, slots, offered, zero, flag, counts, U
         seen.add(e.path);
         const part = e.ref ? W.compByRef(refOf(e)) : null;
         if (part && (NOT_A_CONNECTOR.has(part.class) || isPlug(part) || sentenceOf(U, refOf(e)))) continue;   // by data: not a place, or said so
-        if (!offered.some(o => o.path === e.path || o.path.startsWith(`${e.path}/`))) lone.push({...e, view});
+        // a placed part that composes this one connector part presents it as its own slot, at the placement's path (`psu-1` for `psu-1/inlet`)
+        const forwarded = !!part?.interface && offered.some(o => e.path.startsWith(`${o.path}/`) && (slots.cages[view] || []).some(s => s.id === o.path && s.interface === part.interface));
+        if (!forwarded && !offered.some(o => o.path === e.path || o.path.startsWith(`${e.path}/`))) lone.push({...e, view});
       }
     }
     if (lone.length) flag('C20', `${lone.length} drawn inlets, terminals or studs are not offered as a place to land a cord or lug`, lone.length,
