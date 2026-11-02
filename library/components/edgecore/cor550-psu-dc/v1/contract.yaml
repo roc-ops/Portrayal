@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: cor550-psu-dc
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -91,6 +91,34 @@ provenance:
     As edgecore/cor550-psu-ac@1: no staged COR550 document prints an ordering code for the
     supply (the data sheet has no FRU table), so the name is the chassis's. If one is printed
     later, both parts are renamed and the device takes the major that costs.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head 3.4
+    across (that part's own size is an estimate), standing at the centre of the screw this skin
+    already draws (centres 9.6 and 22.0 across, 28.0 down) and lifted 9.5 mm, this block's own
+    estimated proudness (the `terminal` relief below). The head is drawn smaller than the 6.6 mm
+    screw round it, so the drawing marks where a lug lands and does not show the screw. The quick
+    start guide shows the two lugs and a wire size and gives no screw head, thread or stud; the
+    places of the screws are the skin's own, which are fractions of an illustration and estimated
+    (`the-face`).
+  poles: >-
+    Edgecore COR550 (AS7926-40XKFB) Quick Start Guide, "Connect Power", "DC Power", the figure on
+    page 3: the supply's terminal end with three callouts, the ring lugs that come with the
+    supply, "DC return" on the left screw and "-48 - -60 VDC" on the right one, as this skin's
+    face stands, latch at the right. Nothing is printed on the block in the figure. The roles are
+    the callouts': `rtn` for the return and `batt` for the -48 - -60 VDC conductor
+    (spec/schemas/dc.yaml writes `rtn` as return and `batt` as -48V). The figure shows no earth
+    terminal on the supply: the guide's ground wire goes to the chassis's own grounding point
+    (page 2, "Attach Grounding Wire"), and the three small hex fasteners on the face are named by
+    no callout. No document held gives a nominal voltage.
+  rating: >-
+    Edgecore COR550 (AS7926-40XKFB) Quick Start Guide, page 4, specification table, "48VDC PSU":
+    "-48 - -60 VDC, 40 A max". The data sheet (page 3) prints another range for the supply, 40 to
+    72 VDC, and no current (`input`). The 40 A is the input current. Neither document gives a
+    nominal, and a port's `voltage` needs one, so the port states no voltage.
+  awg: >-
+    Edgecore COR550 (AS7926-40XKFB) Quick Start Guide, page 3, the note under "DC Power": copper
+    wire of #10 AWG (4 mm2) for a -48 to -60 VDC supply. It is the one cable size the documents
+    held give for this supply, so the port states it.
 elements:
   vent: {at: [1.20, 1.60], size: [29.50, 14.60], class: vent}
   logo-zone: {at: [6.00, 6.00], size: [6.00, 5.50], class: label}
@@ -104,6 +132,18 @@ parts:
   - {ref: common/screw-head@1, id: hex-stud-1, at: [44.50, 6.00]}
   - {ref: common/screw-head@1, id: hex-stud-2, at: [44.50, 11.70]}
   - {ref: common/screw-head@1, id: hex-stud-3, at: [44.50, 17.00]}
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [7.90, 26.30], lift: 9.5}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [20.30, 26.30], lift: 9.5}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 40
+      awg: [10]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+      source: {poles: poles, rating-a: rating, awg: awg}
 relief:
   wall: '#15181b'
   features:
