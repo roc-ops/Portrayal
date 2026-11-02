@@ -80,7 +80,8 @@ CASA, CASA_STUD = "casa/c40g-ground-studs@1", "casa/shelf-ground-stud@1"
 # the pair hosts a device places straight on a face (#828); test_two_hole_lugs.py
 # and test_grounding_devices.py hold them, and only their `stud-size` is read here
 PAIR_HOSTS = ("common/ground-stud-pair-5-8-m6@1", "common/ground-stud-pair-5-8-m4@1",
-              "common/ground-stud-pair-5-8-1-4@1",
+              "common/ground-stud-pair-5-8-1-4@1", "common/ground-stud-pair-5-8-10-32@1",
+              "common/ground-hole-pair-5-8-1-4@1",
               "common/ground-stud-pair-3-4-1-4@1", "common/ground-stud-pair-1-1-4@1", M5)
 # the three studs of the Casa terminal: seat id -> stud axis in the terminal's frame
 CASA_SEATS = {"stud-tr": (21.45, 6.15), "stud-bl": (6.15, 21.45), "stud-br": (21.45, 21.45)}
@@ -191,6 +192,10 @@ STUD_SIZE = {
     "nokia/nfxs-e-bb": {"ground": "1/4 in"},
     "nokia/nfxs-f-bb": {"ground": "1/4 in"},
     "nokia/lmfs-f": {"ground-studs": "M6"},
+    "nokia/sr-12": {"ground-studs": "1/4-20"},
+    "nokia/sr-1e": {"ground-studs": "10-32"},
+    "nokia/sr-2e": {"ground-studs": "10-32"},
+    "nokia/sr-3e": {"ground-studs": "10-32"},
     "ufispace/m3000-14xc": UFI_PAIR,
     "ufispace/s9500-22xst": UFI_PAIR,
     "ufispace/s9500-30xs": {"ground-lug": "M4"},
@@ -373,8 +378,12 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
             mates.append(ref)
     # and the two bare tapped holes (M5 and 10-32) that the Juniper earthing pairs and the QFX5210 plate compose
     bare_holes = ("common/ground-hole-m5@1", "common/ground-hole-10-32@1")
+    # and the bare 1/4-20 hole that the Nokia SR-12's pair composes, the bare 10-32 stud that the SR-1e, SR-2e and
+    # SR-3e's pair composes, and the disc that the three MikroTik switches place for their earth stud
+    earth_stud_parts = ("common/ground-hole-1-4@1", "common/ground-stud-10-32@1", "mikrotik/earth-stud-disc@1")
     assert sorted(presents) == sorted([*SINGLE, CASA_STUD, "common/terminal-screw-34@1",
-                                       "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD, *bare_holes])
+                                       "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD, *bare_holes,
+                                       *earth_stud_parts])
     assert mates == [LUG]
     lug = _contract(LUG)
     # 1.0.1: the provenance says it turns (#829); nothing it draws changed
@@ -513,7 +522,7 @@ def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed)
         if size is not None:
             got.setdefault(device, {})[p["id"]] = size
     assert got == STUD_SIZE
-    assert sum(len(v) for v in got.values()) == 63 and len(got) == 34
+    assert sum(len(v) for v in got.values()) == 67 and len(got) == 38
     mx = {}
     for device, view, p in placements_of(MX_PAIR_HOSTS):
         mx.setdefault(device, {})[p["id"]] = (p.get("attrs") or {}).get("stud-size")
