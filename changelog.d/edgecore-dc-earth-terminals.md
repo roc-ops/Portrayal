@@ -10,4 +10,4 @@
 - The CSR310 (`edgecore/csr310`, 1.0.7 to 1.1.0), the CSR430 (`edgecore/csr430`, 1.0.8 to 1.1.0) and the DCS500
   (`edgecore/dcs500`, 4.1.0 to 4.2.0) each take a minor, because the build now publishes a DC port for them, with their locks and
   the drawing version line of their exported device types (36 files in NetBox and Nautobot); the two supplies' module types carry
-  the new contract version. No port, interface or id moves. Two rows of the records file are gone and its `cap:` is 184.
+  the new contract version. No port, interface or id moves. Two rows of the records file are gone and its `cap:` is 180.
