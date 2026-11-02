@@ -15,4 +15,4 @@
   2.1.0) and the AIS800-32O (`edgecore/ais800-32o`, 3.0.2 to 3.1.0) each take a minor, because the build now publishes a DC port for
   them, with their locks and the drawing version line of their exported device types (56 files in NetBox and Nautobot); the four
   supplies' module types carry the new contract version (8 files). No port, interface or id moves. Four rows of the records file
-  are gone and its `cap:` is 178.
+  are gone and its `cap:` is 176.
