@@ -6,4 +6,4 @@
   centre of each screw. The port states no voltage, because the two documents give different ranges and no nominal.
 - The COR550 (`edgecore/cor550`, 3.1.1 to 3.2.0, a minor, because the build now publishes a DC port for it) takes its lock and
   the drawing version line of its six exported device types in each of NetBox and Nautobot; the supply's module type carries
-  the new contract version. No port, interface or id moves. One row of the records file is gone and its `cap:` is 185.
+  the new contract version. No port, interface or id moves. One row of the records file is gone and its `cap:` is 181.
