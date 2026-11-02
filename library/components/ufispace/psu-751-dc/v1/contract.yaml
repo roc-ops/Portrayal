@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-751-dc
-version: 1.0.1
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -37,6 +37,42 @@ provenance:
     lamp beside it, square vent field across the top, terminal block lower-left,
     tube handle at right, slot vents and a green spec label on the right margin.
   led-states: HIG section 10, PSU FRU LED table (page 21), transcribed in full.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head
+    3.4 across (that part's own size is an estimate), standing at the centre of the clamp screw
+    this skin already draws (centres 8.6, 18.2, 27.8 across, 27.1 down) and lifted 8.0 mm, this
+    block's own estimated proudness. The head is drawn smaller than the ring round it, and
+    smaller than the screw: the guides name M3.5 screws (the S9110-32X Hardware Installation
+    Guide, section 9 (DC version), Figure 24, the first of the two figures the guide numbers 24
+    (PDF page 19)), and an M3.5 thread is wider than that head, so the drawing marks where a lug
+    lands and does not show the screw. The same figure gives a lug hole over 3.5 mm and a lug no
+    wider than 8.2 mm (W < 8.2 mm). No document held gives the screw head, the stud length or
+    the spacing of the screws; the spacing is this skin's own.
+  poles: >-
+    UfiSpace S9110-32X Hardware Installation Guide, section 9 Connecting Power (DC version),
+    Figure 24, the second of the two figures the guide numbers 24 (PDF page 20): the supply's
+    face with the legend printed under its three terminal screws, 'RTN', a negative voltage
+    range (-36 to -75 V as the picture reads) and the earth symbol, a lug and wire under each,
+    and the label 'Green/Yellow Grounding Wire (min. size 10 AWG)' at the right-hand one. No
+    installation guide is held for the S9620-54DC, which places the same supply (its datasheet
+    orders 'PSU-751-DESR-1C'); its terminal block is not shown by any document held. The roles
+    are the legend's, left to right as this skin's face stands, latch on the left: `rtn` for
+    RTN, `batt` for the negative voltage range (spec/schemas/dc.yaml writes `batt` as -48V or
+    negative (battery)) and `gnd` for the earth symbol (it writes `gnd` as the earth symbol).
+    The earth terminal is the third pole of the port and is not a conductor of a feed. No
+    document held gives a nominal voltage.
+  rating: >-
+    datasheet - 'DC input: -36 to -75V, 28A' in the S9110-32X datasheet and 'DC input: -40 to
+    -75V, 28A' in the S9620-54DC datasheet (page 2). The 28 A is the input current. The range
+    has no nominal in any of them, and a port's `voltage` needs one, so the port states no
+    voltage. The S9110-32X guide's step 4 reads -40V to -75V and adds a built-in 30A fast acting
+    fuse, and the legend the guide's figure prints on the supply begins at -36: the documents
+    give this supply two ranges, as well as no nominal.
+  awg: >-
+    UfiSpace S9110-32X Hardware Installation Guide, section 9 step 2 (PDF page 19): a 'UL 1015,
+    10 AWG DC power cable' of stranded copper for the screw-type terminal block; the S9620-54DC
+    has no guide held; the earth wire of the legend figure is labelled 'min. size 10 AWG'. One
+    size in every guide held for this supply, so the port states it.
 elements:
   status-led:
     at: [11.2, 4.6]
@@ -98,6 +134,21 @@ relief:
         its open fraction is not documented.
 connection-points:
   power: {at: [18.2, 27.1], direction: front}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [6.9, 25.4], lift: 8.0}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [16.5, 25.4], lift: 8.0}
+  - {ref: common/terminal-screw-34@1, id: pole-gnd, at: [26.1, 25.4], lift: 8.0}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 28
+      awg: [10]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+        - {role: gnd, slot: pole-gnd}
+      source: {poles: poles, rating-a: rating, awg: awg}
 fields:
   latch-finish:
     label: Latch colour
