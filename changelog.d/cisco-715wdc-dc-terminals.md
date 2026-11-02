@@ -8,4 +8,4 @@
 - The five Catalyst 9300 switches that seat it (`cisco/c9300-24p`, `c9300-24u`, `c9300-48p`, `c9300-48t` and `c9300-48u`, each 1.1.0 to
   1.2.0) take a minor, because the build now publishes a DC port for them, with their locks and the drawing version line of their exported
   device types (10 files in NetBox and Nautobot); the supply's module type carries the new contract version (2 files). No port,
-  interface or id moves. One row of the records file is gone and its `cap:` is 174.
+  interface or id moves. One row of the records file is gone and its `cap:` is 171.
