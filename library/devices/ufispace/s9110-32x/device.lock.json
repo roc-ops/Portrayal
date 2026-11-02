@@ -18,13 +18,14 @@
    "ufispace/psu-751-dc@1"
   ]
  },
- "composed": "6366ca68641a8f70",
+ "composed": "62376d77857f2c8d",
  "composed-refs": {
   "common/ground-symbol@1": "1.0.1+0018bfdfc1559185",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/led-rect@1": "1.1.0+0314fb1739d8b11d",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
@@ -33,7 +34,7 @@
   "ufispace/fan-405637@1": "1.1.0+8527a479399d4922",
   "ufispace/lane-led-quad@1": "1.0.0+32cf79ec07a4520b",
   "ufispace/psu-751-ac@1": "1.0.0+bfd8274d54d19d3f",
-  "ufispace/psu-751-dc@1": "1.0.1+bbf2cc6866143193"
+  "ufispace/psu-751-dc@1": "1.1.0+9bbda9132eb8ae9d"
  },
  "configs": [
   "ac-b2f",
@@ -41,6 +42,68 @@
   "dc-b2f",
   "dc-f2b"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "ufispace/psu-751-dc@1": {
+    "awg": [
+     10
+    ],
+    "configs": [
+     "dc-b2f",
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     },
+     {
+      "role": "gnd",
+      "slot": "psu-0/module/pole-gnd"
+     }
+    ],
+    "rating-a": 28,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "ufispace/psu-751-dc@1": {
+    "awg": [
+     10
+    ],
+    "configs": [
+     "dc-b2f",
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "gnd",
+      "slot": "psu-1/module/pole-gnd"
+     }
+    ],
+    "rating-a": 28,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "3d8c398c3343fd2e",
  "groups": [
@@ -491,5 +554,5 @@
  "placement-surface": "48588f69809d639d",
  "shape": "8e42de767f9ffae1",
  "surface": "4b3cc80565537c9d",
- "version": "2.0.14"
+ "version": "2.1.0"
 }
