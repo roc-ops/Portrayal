@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2300-24mp
-version: 0.1.2
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2300-24MP
@@ -143,6 +143,16 @@ provenance:
     confidence: photo-measured
     note: >-
       median of the bare front plate in the photograph (#656d74); the strip along the lower edge #b4e0f0.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      Table 36 lists, for the EX2300-24MP and EX2300-48MP, a Panduit LCA10-10L lug or equivalent (not
+      provided) on one Pan Phillips M4 x 6 mm nickel plated screw (provided). The figure calls the ring
+      at the right of the rear the ESD point and prints the earth symbol under it, and the `rear-layout`
+      note draws it as the earthing terminal; it was drawn as a plain light disc, which is how a nickel
+      plated screw head looks. `common/ground-screw-m4@1` is placed on that ring, at the centre the ring
+      was drawn at: the one M4 screw that the guide says is provided, which a ring lug lands on. It is
+      a screw and not a bare hole because the guide says the screw ships with the switch.
 attrs:
   physical: {weight-note: '8.8 lb (4 kg), Table 3'}
   power: {power-max-w: 55, power-envelope: bare, poe-budget-w: 380, poe-standard: IEEE 802.3af/at, power-input: '100
@@ -190,6 +200,15 @@ gaps:
     The right panel carries the fans (drawn as grilles at the places read off Figure 33); no flat figure
     shows its mounting holes or the left panel's intake.
   wanted: A flat drawing of both side panels.
+- what: earthing-terminal-position
+  scope:
+  - earth-screw
+  reason: needs-photo
+  note: >-
+    The figure calls the ring at the right of the rear the ESD point and prints the earth symbol under
+    it; Table 36 lists an earthing terminal on the rear panel, one M4 screw. The screw is placed on that
+    ring.
+  wanted: a photograph of the rear that shows which feature is the earthing terminal
 groups:
   rj45-mgig:
     term: Port
@@ -228,6 +247,8 @@ groups:
       lamps'}
   power-input: {term: Inlet, role: service, index-origin: 0}
   furniture: {term: Item, role: furniture, index-origin: 0}
+  grounding: {term: Point, role: furniture, index-origin: 0, description: 'the earthing terminal, one
+      M4 screw for a lug (Table 36)'}
 views:
   front:
     size: {w: 440.9, h: 43.3}
@@ -777,15 +798,13 @@ views:
       label: Vendor logo; not drawn
   rear:
     size: {w: 440.9, h: 43.3}
-    panel:
-      decor:
-      - {id: earth-terminal, kind: earth-stud, at: [217.05, 13.15], size: [6.5, 6.5], rx: 3.25, fill: '#c9cbcd'}
-      cutouts: []
+    panel: {decor: [], cutouts: []}
     silkscreen:
     - {at: [392.0, 22.5], text: 'AC INPUT : 100-240V~; 5.4-2.5A; 50/60 Hz', font-size: 3.8, anchor: end,
       fill: '#f2f4f6', for: chassis}
     components:
       placements:
+      - {ref: common/ground-screw-m4@1, id: earth-screw, at: [216.3, 12.4], group: grounding, rel-pos: 0}
       - {ref: common/ground-symbol@1, id: earth-mark, at: [217.3, 22.2], for: chassis, group: furniture,
         rel-pos: 0}
       - {ref: std/c14-inlet@1, id: ac-inlet, at: [396.0, 11.5], group: power-input, rel-pos: 0}

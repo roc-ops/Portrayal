@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2200-c-12t
-version: 0.2.0
+version: 0.3.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2200-C-12T
@@ -149,6 +149,18 @@ provenance:
       borrowed - the chassis #919599 and the jack shell #b1b2b5 are the EX2300 front photograph's medians.
       The guide's figures are line drawings with no colour and no EX2200-C photograph is held, so these
       are a relative's and not a reading of this device.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      INFERRED, NOT STATED. Table 32 (parts for connecting an EX Series switch to earth ground) has a
+      row for the EX2200 (two 10-32 x .25 in. screws, a Panduit LCC10-14BWL lug or equivalent, not provided)
+      and none for the EX2200-C; its `EX2300-C` row names a Panduit LCC10-14AW-L. No spacing is given.
+      The compact rear's own figure reads the two holes 20.0 mm apart, which is the .75 in. (19.05) of
+      the LCC10-14BW-L pattern the library registers and not the 5/8 in. (15.875), so the EX2200 row is
+      taken for it. The terminal is `common/ground-hole-pair-3-4-10-32@1`: two bare 10-32 holes on 3/4
+      in. centres, presenting `stud-pair-3-4`, so one two-hole lug (`generic/two-hole-lug-3-4@1`) lands
+      across them and a ring lug still lands on either hole. The holes were drawn 20.0 apart as decor
+      and the pair stands on their midpoint.
 attrs:
   physical: {weight-note: '4.6 lb (2.1 kg), Table 5'}
   power: {power-max-w: 30, power-envelope: bare, power-input: '100 through 240 VAC, 50/60 Hz', power-current-max: 1.8
@@ -225,6 +237,14 @@ gaps:
     The guide shows the top (with vents), the sides (with security slots) and the underside (with its
     rubber feet) only in perspective.
   wanted: A flat drawing of the top and of the side panels.
+- what: ground-pair-pitch
+  scope:
+  - ground-pair
+  reason: vendor-silent
+  note: >-
+    The guide names the screws and the lug and gives no spacing for the two holes; `ground-stud-pitch`
+    says what the pair is drawn at and why.
+  wanted: a drawing that dimensions the two holes, or the lug's own datasheet
 groups:
   rj45:
     term: Port
@@ -275,6 +295,11 @@ groups:
   power-input: {term: Inlet, role: service, index-origin: 0}
   esd: {term: Point, role: furniture, index-origin: 0}
   furniture: {term: Item, role: furniture, index-origin: 0}
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the earthing terminal, two bare 10-32 holes for a two-hole lug (Table 32)
 views:
   front:
     size: {w: 269.2, h: 44.45}
@@ -695,13 +720,13 @@ views:
     panel:
       decor:
       - {id: slotted-plate, kind: slotted-plate, at: [5.8, 13.2], size: [22.2, 6.2], rx: 3.1, fill: '#4a4e53'}
-      - {id: earth-hole-1, kind: earth-hole, at: [16.25, 29.95], size: [3.9, 3.9], rx: 1.95, fill: '#2a2d31'}
-      - {id: earth-hole-2, kind: earth-hole, at: [36.25, 29.95], size: [3.9, 3.9], rx: 1.95, fill: '#2a2d31'}
       cutouts:
       - {id: esd-rear, at: [259.15, 28.35], size: [4.3, 4.3], shape: circle}
       - {id: ac-inlet, at: [224.4, 11.4], size: [28.0, 20.0], shape: rect}
     components:
       placements:
+      - {ref: common/ground-hole-pair-3-4-10-32@1, id: ground-pair, at: [16.262, 29.487], group: grounding,
+        rel-pos: 0}
       - {ref: common/ground-symbol@1, id: earth-mark, at: [35.4, 15.1], for: chassis, group: furniture,
         rel-pos: 0}
       - {ref: std/c14-inlet@1, id: ac-inlet, at: [224.4, 11.4], group: power-input, rel-pos: 0}

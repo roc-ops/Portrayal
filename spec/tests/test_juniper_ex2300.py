@@ -186,7 +186,9 @@ def test_the_rear_has_the_management_console_usb_and_esd_ports(name):
     assert pl["esd-rear-jack"]["ref"] == "common/esd-jack@1"
     assert pl["console-rj45"]["attrs"]["role"] == "console"
     decor = {x.get("id") for x in d["views"]["rear"]["panel"]["decor"]}
-    assert {"earth-terminal", "earth-hole-1", "earth-hole-2"} <= decor
+    # the earthing terminal is a placed pair of bare 10-32 holes on the 5/8 in. pitch of its lug; the plate behind it is still drawn
+    assert "earth-terminal" in decor and not {"earth-hole-1", "earth-hole-2"} & decor
+    assert pl["ground-pair"]["ref"] == "common/ground-hole-pair-5-8-10-32@1"
 
 
 @pytest.mark.parametrize("name", DEVICES)
@@ -589,8 +591,11 @@ def test_the_new_rear_has_the_ac_inlet_and_the_earthing_terminal(name):
     # part's skin is drawn light and would vanish on the silver plate the photograph shows)
     marks = [s for s in d["views"]["rear"].get("silkscreen") or [] if s.get("path", "").startswith("M 0 -")]
     assert "earth-mark" in pl or marks
-    decor = {x.get("id") for x in d["views"]["rear"]["panel"]["decor"]}
-    assert decor & {"earth-hole-1", "earth-terminal"}
+    # the earthing terminal is a placed part: one M4 screw on the MP rears, a pair of bare 10-32 holes on the compact rears
+    placed = {k: p["ref"] for k, p in pl.items() if k in ("earth-screw", "ground-pair")}
+    assert placed == ({"earth-screw": "common/ground-screw-m4@1"} if name in MP
+                      else {"ground-pair": "common/ground-hole-pair-5-8-10-32@1"})
+    assert not [x for x in d["views"]["rear"]["panel"]["decor"] if x.get("kind") in ("earth-hole", "earth-stud")]
     assert not any(x.get("kind") == "fan-grille" for x in d["views"]["rear"]["panel"]["decor"])
 
 

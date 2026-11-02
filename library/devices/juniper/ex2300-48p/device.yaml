@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2300-48p
-version: 0.2.0
+version: 0.3.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2300-48P
@@ -129,6 +129,18 @@ provenance:
     confidence: photo-measured
     note: >-
       median of the bare front plate in the 24P photograph (#919599); the plate at the top right #6e7276.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      INFERRED, NOT STATED. Table 36 names two 10-32 x .25 in. screws with #10 split-lock washers and
+      a Panduit LCC10-14AW-L lug or equivalent (not provided) for the EX2300 and EX2300-C, and gives no
+      spacing. The rear photograph puts the two holes 15.9 mm apart: 5/8 in. (15.875) and not 3/4 in.
+      (19.05). The lug's own code is not in the library's registry, so it is the photograph that carries
+      the pitch. The terminal is `common/ground-hole-pair-5-8-10-32@1`: two bare 10-32 holes on 5/8 in.
+      centres, presenting `stud-pair-5-8`, so one two-hole lug (`generic/two-hole-lug-5-8@1`) lands across
+      them and a ring lug still lands on either hole. The holes stay bare, as the photograph shows them;
+      the screws that hold the lug are not part of the switch. The holes were drawn 15.9 apart as decor
+      and the pair stands on their midpoint.
 attrs:
   physical: {weight-note: '11.06 lb (5.02 kg), Table 3'}
   power: {power-max-w: 100, power-envelope: bare, poe-budget-w: 740, poe-standard: IEEE 802.3af/at, power-input: '100
@@ -182,6 +194,14 @@ gaps:
     The jack lamps carry the component's link and activity vocabulary; the guide's Status lamp switches
     meaning with the mode button and no per-lamp state list fits the component.
   wanted: none beyond the component's own vocabulary.
+- what: ground-pair-pitch
+  scope:
+  - ground-pair
+  reason: vendor-silent
+  note: >-
+    The guide names the screws and the lug and gives no spacing for the two holes; `ground-stud-pitch`
+    says what the pair is drawn at and why.
+  wanted: a drawing that dimensions the two holes, or the lug's own datasheet
 groups:
   rj45:
     term: Port
@@ -220,6 +240,11 @@ groups:
   power-input: {term: Inlet, role: service, index-origin: 0}
   esd: {term: Point, role: furniture, index-origin: 0}
   furniture: {term: Item, role: furniture, index-origin: 0}
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the earthing terminal, two bare 10-32 holes for a two-hole lug (Table 36)
 views:
   front:
     size: {w: 441.9, h: 44.45}
@@ -819,8 +844,6 @@ views:
       decor:
       - {id: recess-mgmt, kind: recess, at: [16.9, 8.4], size: [17.3, 23.4], rx: 0.4, fill: '#1d2024'}
       - {id: earth-terminal, kind: earth-plate, at: [54.1, 2.0], size: [31.9, 11.8], rx: 0.3, fill: '#c9cbcd'}
-      - {id: earth-hole-1, kind: earth-hole, at: [58.85, 4.85], size: [5.9, 5.9], rx: 2.95, fill: '#2a2d31'}
-      - {id: earth-hole-2, kind: earth-hole, at: [74.75, 4.85], size: [5.9, 5.9], rx: 2.95, fill: '#2a2d31'}
       - {id: fan-0, kind: fan-grille, at: [116.45, 2.25], size: [38.7, 38.7], rx: 19.35, pattern: vent,
         vent: 1.0}
       - {id: fan-1, kind: fan-grille, at: [177.55, 2.25], size: [38.7, 38.7], rx: 19.35, pattern: vent,
@@ -838,6 +861,8 @@ views:
       fill: '#f2f4f6', for: ac-inlet}
     components:
       placements:
+      - {ref: common/ground-hole-pair-5-8-10-32@1, id: ground-pair, at: [59.3995, 5.387], group: grounding,
+        rel-pos: 0}
       - ref: common/rj45-eth@1
         id: mgmt
         at: [18.1, 8.4]
