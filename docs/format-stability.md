@@ -301,6 +301,12 @@ reader that does not know it finds every field it read before.
   a bay the configuration has, which then holds its `default`, and may name
   one it lacks.) The kit reads it so (`slotEnv`, `holdsAt`). Additive:
   `contract` is still 2.
+- **A slot `id` of the form `<placement id>/<part id>`** in `cages[view][]`
+  of `<device>.configs.json` (#1382): a part placed on a face that composes
+  two or more connector parts gives one entry for each of them, such as
+  `ground-studs-rear/stud-tr`. Until then a slot's `id` was always a
+  placement id, so a reader that takes an `id` for a placement id should
+  allow the `/`. Additive: `contract` is still 2.
 - **`configs[].names`** beside it: the name a DCIM knows each of those parts
   by, `{"outlet-a1": "A1"}`, where that is not the placement id. It is read
   from the device's own `interfaces:` through the function that names the
