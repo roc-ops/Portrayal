@@ -22,4 +22,4 @@
   two PSU bay descriptions of its exported device types (32 files in NetBox and Nautobot). No port, interface or id moves.
 - The exporter types the new connector's power port `other` with its label, as it does the bus-bar clip.
 - `common/psu-dc-650@2` is not edited: the AS5912-54X and AS7326-56X still seat it (no document held names the DCS203's DC supply),
-  and its record in the conformance records stays, so `cap:` is 160.
+  and its record in the conformance records stays, so `cap:` is 159.
