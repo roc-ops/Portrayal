@@ -13,7 +13,7 @@
   tests it ran.
 
 ### Added
-- `spec/test-budget.json` holds each tier to its summed seconds (light 2,190,
+- `spec/test-budget.json` holds each tier to its summed seconds (light 2,470,
   full 11,000), read in the units of the run each was set from
   (`spec/test-budget-reference.json`, file by file) so a slow runner is not a
   bigger suite, and a new light-tier test function to under five seconds.
