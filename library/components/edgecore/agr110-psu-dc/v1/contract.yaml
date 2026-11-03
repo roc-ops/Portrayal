@@ -1,0 +1,155 @@
+format: 1
+kind: module
+name: agr110-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The -36 to -72 VDC supply of the Edgecore AGR110 (AS5916-54XL) and AGR130 (AS5916-54XKS). It has a
+  red release latch and a black pull handle. A THREE-SCREW BARRIER TERMINAL BLOCK stands where the AC
+  supply has its inlet: the quick start wires DC return to the top screw and the -36 to -72 VDC feed
+  to the middle one, and prints an earth symbol beside the bottom one.
+size: {w: 54.0, h: 40.0}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  input: dc
+  inlet: dc-terminal
+  input-note: '-36 - -72 VDC'
+  power-absent: not-published
+provenance:
+  naming: >-
+    NO MAKER PART NUMBER IS HELD FOR THIS SUPPLY, so it is named for the two chassis that seat it, as
+    edgecore/dcs500-psu-dc@1 is, and states no model. The AGR110 data
+    sheet (EC-DS-0224-R06) and the AGR130 data sheet (EC-DS-0224-R07) list only the switches' part numbers
+    (page 4, ordering; the DC ones are FP1ZZ56540BEA and FP1ZZ56540BAA, "Dual 48 VDC PSUs") and no table of
+    supply FRUs; neither quick start guide gives a supply a number. The DCS204 data sheet (EC-DS-0726-R09,
+    page 4) does list DC supply FRUs, PSU-48V-650-F (F0TZZ7632004A) and PSU-48V-650-B (F0TZZ7632003A), but
+    that is the supply of a chassis whose guide draws a pluggable connector (Positronic PLA03F7000/AA), not
+    this block, so no number is borrowed from it. The AGR110 guide (AS5916-54XKS|AS5916-54XL,
+    E052020-AP-R03) and the AGR130 guide (E072023-AP-R05) carry one document number, 150200002011A, and
+    the same photograph of the DC supply on page 2, so one component stands for both. If a part number is
+    ever held, stating it as `model` or `part-numbers` renames the exported module type.
+  size: >-
+    BORROWED from common/psu-dc-650@2, which the AGR110 and AGR130 rear bays seat today (54.0 x 40.0 each,
+    `psu-0` and `psu-1`). The quick start gives no dimension for the supply: its page 2 photograph is of
+    the terminal end only and has no scale.
+  body: >-
+    BORROWED from common/psu-dc-650@2 (depth 195, colour #b9bec4, the vent mesh and the black handle's
+    place and size). The photograph shows a grille left of the block and a black U-handle; neither is
+    measured here.
+  the-face: >-
+    READ FROM ONE PHOTOGRAPH, NOT AN ELEVATION. AGR110 Quick Start Guide, step 5 "Connect Power" (printed
+    "English 2", PDF page 2), the figure in its upper right: a red latch at the far left, a black U-handle,
+    and a black barrier block of three silver screws one above the other, then two ring lugs. The AGR130
+    guide's figure is the same photograph. The block is drawn in the place common/psu-dc-650@2's terminal
+    frame occupies (x 24 to 45, y 4 to 36), in the photograph's aspect (0.59 wide to tall), so the block
+    is 18.9 x 32.0 at x 25.05, y 4.0; the screws stand at 0.20, 0.49 and 0.77 of the block's height, as
+    counted on the photograph (screw centres at y 242, 383 and 520 of a block spanning y 145 to 630, in a
+    1700 x 750 pixel crop of the figure at 500 dpi), and at its middle across. THE POSITIONS ARE
+    ESTIMATED: the photograph has no scale and is taken at an angle. The earth symbol is a circle round an earth glyph printed on
+    the bare metal at the right of the block, between the second and third screws, nearer the third; it
+    is drawn there. Of the two other legends the figure prints at the right of the block (one at the
+    top, one beside the middle screw), only a fragment of each is legible round the callout bubbles
+    ("-36" over "72V" beside the middle one), so neither is drawn. The ring lugs and the wires are not the
+    supply and are not drawn. No handle shape, latch size or grille is measured from this photograph.
+    The block's element keeps the id `dc-inlet` and the `power` connection point keeps its place (the
+    block's centre), as common/psu-dc-650@2 states them, so a face that seated that supply loses no
+    element path or connection point when it seats this one.
+  colour: >-
+    SAMPLED AND NOT ALL USED. Medians over pixel blocks of the same 1700 x 750 pixel crop, away from the
+    callouts: the latch #fe7060 (x 110 to 250, y 190 to 400, 29400 pixels), the handle #3b3734 (x 395
+    to 440, y 300 to 560, 11700 pixels), the block #373739 (x 590 to 640, y 300 to 330, 1500 pixels) and
+    its base #404141 (x 590 to 850, y 590 to 625, 9100 pixels), the bare metal at the right #cfcfcf (x 880
+    to 900, y 520 to 545, 500 pixels). The block is drawn #38383a and the handle #1c1f23, the library's
+    black for both. THE LATCH IS DRAWN #c22f2f, THE LIBRARY'S EDGECORE FRONT-TO-BACK RED
+    (common/psu-ac-650@3 and common/psu-dc-650@2 draw it so), NOT THE PHOTOGRAPH'S #fe7060: the
+    photograph is bright and its red is clipped, and the supply beside it in the AC build is drawn in
+    the library's red. The difference is a lighter red in the photograph and is said to the reader.
+  latch-colour: >-
+    Red is the front-to-back colour (edgecore's guides say so of the supplies and fan trays they
+    describe), and every ordering code the AGR110 and AGR130 data sheets list is front-to-back, so the field
+    stays at the red. No document held draws a back-to-front unit of this supply.
+  power: >-
+    NOT PUBLISHED. Searched the AGR110 Quick Start Guide (E052020-AP-R03), the AGR130 Quick Start Guide
+    (E072023-AP-R05) and both data sheets (AGR110 EC-DS-0224-R06; AGR130 EC-DS-0224-R07). The data sheets give the
+    switch's power draw (450 W maximum on the quick start's specification page) and "PSUs: 2 redundant,
+    load-sharing, hot-swappable AC or 48 VDC" and no output rating for a supply. The quick start's
+    "DC Input -36-72 VDC, 28-14 A" is printed under "System Input Power Rating", a pair of currents for the
+    switch, and is not read as this supply's.
+  input: >-
+    AGR110 Quick Start Guide page 3, Hardware Specifications, "DC Input -36 - -72 VDC, 28-14 A", and the
+    data sheet's "DC Input Range: -36 - -72 VDC" (page 3, Power): a range. Both documents call the supply a
+    "48 VDC" one, a name; no document gives a nominal for the port, so the port states no voltage.
+  states: >-
+    THE SAME AS THE AC SUPPLY BESIDE IT (common/psu-ac-650@3): no held document describes a status lamp on
+    the supply, so none is drawn. `absent` stays.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head 3.4 across
+    (that part's own size is an estimate), standing at the centre of the disc this skin draws (centres
+    34.3 across, and 10.4, 19.7 and 28.7 down; each disc is 4.2 across) and not lifted: this block states
+    no proud height, so it has no relief. The head is drawn smaller than the disc round it, so the drawing
+    marks where a lug lands and does not show the screw. The quick start gives no screw head, thread or
+    stud (the AGR130 guide, page 2, says only that "DC terminal screws should be tightened to a torque
+    of 6.6 in-lbs"); the places are this skin's own, themselves estimated (`the-face`).
+  poles: >-
+    Edgecore AGR110 Quick Start Guide (E052020-AP-R03) and AGR130 Quick Start Guide (E072023-AP-R05), step 5
+    "Connect Power", page 2, the photograph and its callouts: "2. Connect the DC return wire." on the top
+    screw and "3. Connect the -36 - -72 VDC wire." on the middle one (callout 1 is "Use the DC wire lugs
+    included with the grounding kit", for the two lugs beside the block). The bottom screw has no callout
+    and stands beside a printed earth symbol: it is the block's third screw, and an earth screw on a DC
+    terminal block is the port's third pole, `gnd`, not a ground seat outside the port (decided 2026-11-02).
+    The roles are the callouts' and the symbol's: `rtn` for the DC return (spec/schemas/dc.yaml writes
+    `rtn` as RTN and return), `batt` for the -36 - -72 VDC wire (it writes `batt` as negative
+    (battery)) and `gnd` for the earth symbol (it writes `gnd` as the earth symbol and PE), listed top to
+    bottom, as the photograph stands: the supply is photographed as it sits in the bay (latch at the
+    left, block at the right), so no turn is inferred. The guide never says to wire the earth to this
+    screw; the symbol is the only statement. The ground screw is one of the block's three and is the
+    port's pole `gnd`; it is not a conductor of a feed.
+  rating: >-
+    NOT STATED. Both quick start guides print "DC Input -36 - -72 VDC, 28-14 A" under the switch's "System
+    Input Power Rating": a pair of currents over the range, for a switch of two supplies, and no maximum for
+    one supply. A port's `rating-a` is one figure and no document says which of the pair is a supply's, so the
+    port states none and a later change can state it once a source says so.
+  awg: >-
+    Edgecore AGR110 Quick Start Guide (E052020-AP-R03), page 2, the caution under "Connect Power": "#10 AWG
+    (for -36 VDC to -72 VDC PSU)"; the AGR130 Quick Start Guide (E072023-AP-R05), page 2, the same caution
+    in English, and in its French line "AWG #10 (pour -36 VDC à -72 VDC)". THE
+    AGR110 GUIDE'S FRENCH LINE PRINTS "AWG #14" AND DISAGREES WITH ITS OWN ENGLISH. The port states [10]: it is
+    the English of both documents and the French of the later revision of the same document (R05, July 2023,
+    over R03, May 2020), so the one size in three of the four texts. The earth screw's own wire is not
+    given a size.
+states: [absent]
+elements:
+  latch: {at: [0.0, 8.0], size: [7.8, 24.0], class: latch}
+  handle: {at: [10.0, 8.0], size: [5.0, 24.0], class: handle}
+  dc-inlet: {at: [25.05, 4.0], size: [18.9, 32.0], class: inlet}
+connection-points:
+  power: {at: [34.5, 20.0], direction: rear}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#c22f2f'
+  latch-edge:
+    label: Latch edge
+    type: text
+    default: '#7a1a1a'
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [32.6, 8.7]}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [32.6, 18.0]}
+  - {ref: common/terminal-screw-34@1, id: pole-gnd, at: [32.6, 27.0]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      awg: [10]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+        - {role: gnd, slot: pole-gnd}
+      source: {poles: poles, awg: awg}
+skins: [default]
+body:
+  depth: 195
+  color: '#b9bec4'
