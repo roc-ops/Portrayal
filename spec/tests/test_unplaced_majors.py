@@ -284,6 +284,9 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # seated by both devices' DC configurations; @1, the face borrowed from the AC variant, is retired
     # (`superseded-by` @2) and stays because the two supply bays still accept it, for a saved rack.
     kept["edgecore/dcs240-psu-dc"] = [1, 2]
+    # The UfiSpace PSU-151 DC supply redrawn from its guide's figure: the S6301-56ST's DC builds seat
+    # the @2, and its supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
+    kept["ufispace/psu-151-dc"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
         if name.startswith(("juniper/", "cisco/")):

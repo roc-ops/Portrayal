@@ -23,4 +23,4 @@
   port, interface or id moves.
 - **`edgecore/dcs240-psu-dc@1` is retired, not deleted** (1.2.0 to 1.2.1): it says `superseded-by` `edgecore/dcs240-psu-dc@2` and
   is otherwise unchanged, so a rack or a contract that names it still draws what it drew, and it is no longer exported as a module
-  type. Nothing seats it in a configuration. One row of the records file is gone and its `cap:` is 155.
+  type. Nothing seats it in a configuration. One row of the records file is gone and its `cap:` is 153.
