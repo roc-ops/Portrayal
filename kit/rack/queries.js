@@ -10,7 +10,7 @@ import {uLabel, zeroUOf, zeroUBottom, firstU, holderOf, rollOf, uText} from './m
 import {whereText, carriesLane} from './zero-u.js';
 import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches, lengthText, isElementId, addressFor, portLabel,
         takesCableEnd, receptacleOf, endKind, connectorName, endPlug, couplerRole, dcTypeOf, feedSides} from './cable-rules.js';
-import {seatedPort, settleEnds, shownEnv, cableEndPaths, zeroUEnds, backEnds, dcPortsOf, dcReader, dcEntryOf, dcCovered} from './ports.js';
+import {seatedPort, settleEnds, shownEnv, cableEndPaths, zeroUEnds, backEnds, dcPortsOf, dcReader, dcEntryOf, dcCovered, PANELS} from './ports.js';
 import {zeroUById, zeroUBottomMm} from './model.js';
 import {RU} from './rails.js';
 import {configFacts} from './catalog.js';
@@ -324,8 +324,14 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
     const slot = seats?.entryAt(path) ?? null;
     return slot && takesCableEnd(slot, compByRef) ? slot : null;
   };
-  for (const view of ['front', 'rear']) {
+  // THE FRONT AND THE REAR are read as ever. The other four panels (left, right, top, bottom) offer only their
+  // power, ground and DC ends: the slot ends a page reads there (a page that reads no such panel hands in none),
+  // and the catalogue's own (slotEnds, DC ports). A data port of class `port` there is not offered, and the far
+  // ends of a passive panel's adapters are on the front and the rear.
+  for (const view of PANELS) {
+    const faced = view === 'front' || view === 'rear';
     for (const p of await portsOf(item, view)) {
+      if (!faced && (p.cls === 'port' || p.end !== true)) continue;
       if (p.cls !== 'port') {
         // a slot a cable lands on: only where the reader says so and the catalogue has it
         const slot = p.end === true && !isElementId(p.path) && !covered.has(p.path) && (seen.has(`${view}|${p.path}`) ? null : seatAt(p.path));
@@ -337,6 +343,7 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
           q = q.slice(0, q.lastIndexOf('/'));
           info = receptacleOf(partOf(compByRef, seats?.refAt(q)));
         }
+        if (!faced && endKind(info) === 'other') continue;
         if (!want(endKind(info)) || !portFree(rack, {item: itemId, path: p.path, view}).ok) continue;
         out.push({path: p.path, view, label: portLabel(p.path), media: p.media ?? null, speed: p.speed ?? null,
                   kind: endKind(info), connector: connectorName(slot, info), plug: endPlug(slot, compByRef).plug});
@@ -356,7 +363,7 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
     }
     // the far ends of a passive panel's adapters, which no panel of the device
     // draws when the panel sits in a drawer (ports.js backEnds)
-    if (want('data')) for (const e of backEnds(item, {slotsOf, compByRef, redirects}).filter(x => x.view === view)) {
+    if (faced && want('data')) for (const e of backEnds(item, {slotsOf, compByRef, redirects}).filter(x => x.view === view)) {
       if (seen.has(`${view}|${e.path}`) || !portFree(rack, {item: itemId, path: e.path, view}).ok) continue;
       seen.add(`${view}|${e.path}`);
       out.push({path: e.path, view, label: portLabel(e.path), media: e.media ?? null, speed: null});
@@ -395,7 +402,8 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
   return type == null ? out : out.filter(e => !e.dc && e.connector && ofType({type: String(e.connector).split(' ')[0]}));
 }
 // THE SLOTS OF A RACK ITEM A CABLE LANDS ON, from the catalogue alone (ports.js
-// cableEndPaths) that are power or ground ends, front then rear: {path, view,
+// cableEndPaths) that are power or ground ends, on each panel in the order of
+// ports.js PANELS (front, rear, left, right, top, bottom): {path, view,
 // kind, connector, plug}. What each is comes from the part it is one piece of
 // (a supply says it is an AC inlet), else from the coupler it is; [] without
 // the catalogue.
@@ -408,7 +416,7 @@ export function slotEnds(item, {slotsOf, compByRef, redirects = null} = {}) {
   const seats = resolverFor(shownEnv(item, slots, compByRef, redirects), item.swaps || {});
   const dcCtx = {slotsOf, compByRef, redirects}, covered = dcCovered(item, dcCtx);
   const dcPorts = dcPortsOf(item, dcCtx).filter(q => q.lands && q.view);
-  return ['front', 'rear'].flatMap(view => [...cableEndPaths(item, view, {slotsOf, compByRef, redirects}).filter(path => !covered.has(path)).flatMap(path => {
+  return PANELS.flatMap(view => [...cableEndPaths(item, view, {slotsOf, compByRef, redirects}).filter(path => !covered.has(path)).flatMap(path => {
     const slot = seats.entryAt(path);
     if (!slot || !takesCableEnd(slot, compByRef) || (slot.view && slot.view !== view)) return [];
     let info = receptacleOf(null);
