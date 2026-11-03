@@ -189,6 +189,7 @@ def seated(tmp_path_factory):
     return root, {c: p for p in root.iter() for c in p}, configs
 
 
+@pytest.mark.heavy
 @EACH
 def test_it_seats_in_a_cage_of_its_family(seated, ref):
     root, parents, _ = seated

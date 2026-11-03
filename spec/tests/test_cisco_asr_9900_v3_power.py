@@ -144,6 +144,7 @@ def test_no_other_component_carries_either_model():
 
 # --- which bays take them ------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_ac_module_is_accepted_in_the_ac_positions_of_the_two_chassis_and_nowhere_else():
     seen = {}
     for p, doc in _all_devices():

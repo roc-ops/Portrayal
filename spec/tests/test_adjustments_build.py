@@ -65,6 +65,7 @@ def rows(out, cfg, view):
 
 # --- the root map --------------------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_every_face_carries_the_map_and_where_it_was_built(built):
     for cfg, at in BUILT.items():
         for view in VIEWS:
@@ -95,6 +96,7 @@ MEMBERS = {
 }
 
 
+@pytest.mark.heavy
 def test_each_member_says_what_moves_it_and_by_how_much(built):
     """The table of section 5 for `axis: z`, read off the drawing."""
     for cfg in BUILT:
@@ -172,6 +174,7 @@ def _rect(root, nid):
     return [float(r.get(k)) for k in ("x", "y", "width", "height")]
 
 
+@pytest.mark.heavy
 def test_the_box_of_every_member_at_the_default_and_at_each_end(built):
     """`s` is the position. On a plan the rear is at y = 0, so the panel's
     front face is at y = 200 - s: its plate lies behind it and its rail in

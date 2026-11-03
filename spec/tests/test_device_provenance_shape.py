@@ -55,6 +55,7 @@ def entries(devices):
             yield slug, k, v
 
 
+@pytest.mark.heavy
 def test_there_are_entries_to_check(devices):
     """NON-VACUITY. Every sweep below iterates provenance and would pass over an
     empty one."""
@@ -67,6 +68,7 @@ def test_every_entry_is_an_object_with_a_note(devices):
     assert not bad, f"{len(bad)} entries are not {{confidence?, note}}: {bad[:5]}"
 
 
+@pytest.mark.heavy
 def test_a_stated_confidence_is_one_of_the_eight(devices):
     bad = {v["confidence"] for _, _, v in entries(devices)
            if isinstance(v, dict) and v.get("confidence") not in (None, *ENUM)}
@@ -83,6 +85,7 @@ def test_the_prose_survived_the_migration(devices):
     assert "confidence" not in p["numbering"], "nothing should have been invented here"
 
 
+@pytest.mark.heavy
 def test_the_unstated_confidences_are_counted_and_not_growing(devices):
     """744 at the migration. It may fall; it may not rise, because the only way
     to add one is to write a figure without saying how it is known."""

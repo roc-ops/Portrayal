@@ -518,6 +518,7 @@ def _pairs(census):
     return {k: r for k, r in census.items() if r["lug"] != LUG}
 
 
+@pytest.mark.heavy
 def test_the_default_distribution_is_pinned(census):
     ring, pairs = _ring(census), _pairs(census)
     assert dict(collections.Counter(r["dir"] for r in ring.values())) == WANT
@@ -553,6 +554,7 @@ def test_a_pairs_own_studs_are_not_in_its_lugs_way():
     assert len(stud["obstacles"]) == len(seat["obstacles"]) + 1
 
 
+@pytest.mark.heavy
 def test_the_four_crossings_the_seat_gave_are_gone(census):
     for k in CROSSED_BEFORE:
         assert census[k]["hard0"] >= 1, k

@@ -123,6 +123,7 @@ def slots(tmp_path_factory):
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", sorted(JUNIPER))
 def test_a_juniper_console_is_a_mini_usb_b_slot_that_offers_the_plug(slots, device):
     slot = slots[device][JUNIPER[device]]

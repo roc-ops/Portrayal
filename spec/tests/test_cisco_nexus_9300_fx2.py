@@ -322,6 +322,7 @@ def test_the_committed_export_is_what_the_exporter_writes_now(target, tmp_path, 
     assert (tmp_path / rel).read_text() == (ROOT / "library/exports" / rel).read_text()
 
 
+@pytest.mark.heavy
 def test_the_lock_file_agrees_with_the_device_and_its_components():
     lib = ROOT / "library"
     assert not [f for f in devicelock.check(lib) if f[0] in ("cisco/" + E,)]

@@ -123,6 +123,7 @@ def test_a_part_that_mates_two_interfaces_is_stored_and_read_back(cache_dir, mon
     assert [r for r, _c in again["eaton-c39"]] == ["generic/c14-plug@1", "generic/c20-plug@1"]
 
 
+@pytest.mark.heavy
 def test_changing_one_contracts_mates_misses_the_cache(lib, cache_dir):
     """The stale entry the cache must make impossible: a contract that stops
     mating one interface and starts mating another moves in the answer."""
@@ -138,6 +139,7 @@ def test_changing_one_contracts_mates_misses_the_cache(lib, cache_dir):
     assert len(entries(cache_dir)) == 2
 
 
+@pytest.mark.heavy
 def test_superseding_a_candidate_misses_the_cache(lib):
     before = fresh([lib])
     ref, _c = before["sfp"][0]
@@ -149,6 +151,7 @@ def test_superseding_a_candidate_misses_the_cache(lib):
     assert ref not in [r for r, _c in after.get("sfp", [])]
 
 
+@pytest.mark.heavy
 def test_a_shared_entry_still_answers_from_its_own_roots(lib, cache_dir):
     """The digest leaves absolute paths out, so a byte-identical copy shares
     the real library's entry - and the contracts handed back are still read
@@ -172,6 +175,7 @@ def test_a_shared_entry_still_answers_from_its_own_roots(lib, cache_dir):
     assert len(entries(cache_dir)) == 3
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("damage", [
     b"", b"{", b"[]", b'{"format": 1}',
     None,          # replaced below by a well-formed entry with a bad index

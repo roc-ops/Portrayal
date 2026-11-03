@@ -109,6 +109,7 @@ def test_a_name_listed_twice_on_one_device_fails():
                            {"name": "x", "kind": "marketing"}))])
 
 
+@pytest.mark.heavy
 def test_the_library_passes_l111_and_measures_something():
     docs = _all_devices()
     claimed = [a for _, d in docs for a in alias_names(d)]
@@ -129,6 +130,7 @@ def test_the_old_prose_keys_are_gone():
     assert left == []
 
 
+@pytest.mark.heavy
 def test_the_hcl_names_the_issue_asked_about_resolve():
     by = {}
     for man, d in _all_devices():

@@ -488,6 +488,7 @@ def _authored_bays(contract):
     return {bid: b for bid, b in (contract.get("bays") or {}).items() if isinstance(b, dict)}
 
 
+@pytest.mark.heavy
 def test_no_bay_in_the_library_states_an_interface_yet():
     """The slice publishes a key and builds a mechanism; it migrates nothing.
 

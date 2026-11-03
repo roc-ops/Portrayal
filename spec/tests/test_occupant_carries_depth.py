@@ -184,6 +184,7 @@ def _aperture_lift():
     return lift
 
 
+@pytest.mark.heavy
 def test_a_mate_to_occupant_carries_the_hosts_aperture_lift(tmp_path):
     lift = _aperture_lift()
     assert lift == 10.0, (

@@ -306,6 +306,7 @@ def parity(tmp_path_factory):
     return cases, stdin, node("parity", stdin)
 
 
+@pytest.mark.heavy
 @needs_node
 def test_every_case_is_a_lifted_slot_the_kit_used_to_refuse(parity):
     """The census, pinned: the cases this file is about are all LIFTED, the
@@ -350,6 +351,7 @@ def test_nestedSlots_is_the_slot_entry_on_every_carrier(parity):
     assert all(h["same"] for h in checked), checked
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_kit_seats_a_lifted_slot_exactly_as_the_build(parity):
     cases, _, got = parity

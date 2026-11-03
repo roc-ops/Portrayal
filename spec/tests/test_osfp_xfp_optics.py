@@ -575,6 +575,7 @@ def _turn(el):
         if "rotate(" in t else 0
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_it_seats_in_a_real_cage_with_its_plug_in_it(seated, seat):
     device, _, cpath, ref, chain, turn = seat

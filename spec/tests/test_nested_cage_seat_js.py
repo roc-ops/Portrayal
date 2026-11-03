@@ -228,6 +228,7 @@ def parity(tmp_path_factory):
     return cases, got
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_matrix_is_the_one_claimed(parity):
     """An upright cage, a turned one, and a card in a turned bay - a library

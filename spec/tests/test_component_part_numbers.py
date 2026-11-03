@@ -88,6 +88,7 @@ def _files(root, target, man):
 
 # ── the export ─────────────────────────────────────────────────────────────
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("target", ["netbox", "nautobot"])
 def test_a_component_with_two_part_numbers_exports_two_module_types(tmp_path, target):
     dist = _dist()

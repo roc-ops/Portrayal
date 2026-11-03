@@ -162,6 +162,7 @@ def parity(world, dev, face, key, have):
 
 # ---------------------------------------------------------------- the build
 
+@pytest.mark.heavy
 def test_the_build_chains_siblings_turned_with_their_host_on_summed_lifts(world):
     """The premise, read off the build: each tier `data-for` the one below,
     in the same group, with the host's turn, lifts stacking."""
@@ -176,6 +177,7 @@ def test_the_build_chains_siblings_turned_with_their_host_on_summed_lifts(world)
 
 # ---------------------------------------------------------------- the kit
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("name,dev,face", [
     ("cardPlug", "c100g", "plugged"), ("cardBoot", "c100g", "booted"),

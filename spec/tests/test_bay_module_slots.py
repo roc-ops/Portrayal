@@ -49,6 +49,7 @@ def comps(tmp_path_factory):
     return got
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref,jack,plug", CARD_JACKS)
 def test_a_cards_one_jack_is_its_own_slot(comps, ref, jack, plug):
     slot = next((c for c in comps[ref].get("cages") or [] if c["id"] == jack), None)

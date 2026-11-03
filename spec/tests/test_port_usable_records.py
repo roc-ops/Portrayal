@@ -382,6 +382,7 @@ def read_world(dist):
             "part-unmated": tool.load_unmated(LIBRARY)}
 
 
+@pytest.mark.heavy
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
 @pytest.mark.skipif(not (DIST / "devices.json").exists(), reason="library/dist not built - run ./build.sh")
 def test_the_port_records_hold_over_the_whole_library(tmp_path):

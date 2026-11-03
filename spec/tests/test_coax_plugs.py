@@ -183,6 +183,7 @@ def seated(tmp_path_factory):
     return out
 
 
+@pytest.mark.heavy
 @EACH
 def test_it_renders_seated_on_its_jack(seated, ref):
     root, parents, _ = seated[ref]

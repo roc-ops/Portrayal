@@ -423,6 +423,7 @@ def test_the_dc_device_types_are_exported(flavour):
         assert found, model
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("flavour", ["netbox", "nautobot"])
 def test_the_committed_module_exports_equal_the_exporters_own_output(flavour, tmp_path):
     dist = LIB / "dist"

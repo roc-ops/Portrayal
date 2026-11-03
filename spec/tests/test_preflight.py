@@ -317,6 +317,7 @@ def test_exports_fail_when_current_but_not_committed(tmp_path, monkeypatch):
     assert preflight.check_exports(ctx_of(tmp_path, base)).ok
 
 
+@pytest.mark.heavy
 @pytest.mark.skipif(not (DIST / "devices.json").exists(),
                     reason="library/dist not built - run ./build.sh")
 def test_the_stub_dist_carries_what_the_build_does(tmp_path):
@@ -344,6 +345,7 @@ def test_the_stub_dist_carries_what_the_build_does(tmp_path):
 
 # ---------------------------------------- lint planning, on the real tree, read-only ---
 
+@pytest.mark.heavy
 def test_a_touched_component_fans_out_to_every_device_that_places_it():
     ctx = preflight.Context(ROOT, None, [COMPONENT])
     devices, contracts, full, _ = preflight.lint_plan(ctx)

@@ -1135,6 +1135,7 @@ def _withheld_paths(ref, chain, seen=()):
     return out
 
 
+@pytest.mark.heavy
 def test_every_nautobot_device_reaches_the_ports_its_netbox_twin_does():
     """#834's sweep, over every device and every module any of its bays accepts:
     the port names Nautobot can install are NetBox's, less those under a

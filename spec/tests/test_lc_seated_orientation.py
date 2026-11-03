@@ -299,6 +299,7 @@ def duplex_latch_sides(pairs, parents):
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("which", ["fhd", "fhd-om", "fhd-36", "dcp"])
 def test_every_seated_lc_plug_faces_its_bores_keyway(tmp_path, which):
     svg, parents = build_lc(tmp_path, which)
@@ -360,6 +361,7 @@ def _free_latch(root):
     return _plug_copy(root, "free-plug", skin, free)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("which", ["fhd", "fhd-36", "dcp"])
 def test_a_latch_up_plug_is_caught_facing_away(tmp_path, which):
     """THE FAULT THIS TASK FIXES, found by the same code: a plug drawn latch
@@ -401,6 +403,7 @@ def test_a_duplex_plug_with_unturned_halves_is_caught(tmp_path):
 LC_BORES = ("std/lc-bulkhead-bore@", "std/lc-bore@")
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("which", ["fhd", "fhd-om", "fhd-36", "dcp"])
 def test_a_seated_plug_stays_inside_the_bulkhead_bores_outline(tmp_path, which):
     """On the FS cassettes and on the Smartoptics DCP, whose adapters compose
@@ -418,6 +421,7 @@ def test_a_seated_plug_stays_inside_the_bulkhead_bores_outline(tmp_path, which):
     assert landed == [BULKHEAD], landed
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("which", ["fhd", "dcp"])
 def test_a_free_latch_overruns_the_bulkhead_keyway(tmp_path, which):
     """Non-vacuity for (b): a plug drawn with its latch FREE reaches 7.605

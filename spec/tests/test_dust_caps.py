@@ -357,6 +357,7 @@ def front_of(parents, occ, node):
     return float(node.get("data-z-out")), effective_lift(parents, occ)
 
 
+@pytest.mark.heavy
 def test_the_lc_cap_stands_where_the_adapter_drew_it(tmp_path):
     """Both bores of the Smartoptics adapter, at the lift the bezel presents,
     with the cap's front back at the adapter's old absolute 9.525."""
@@ -389,6 +390,7 @@ def test_the_duplex_cap_stands_where_the_fhd_adapter_drew_it(tmp_path):
     assert out == pytest.approx(ABSOLUTE_OUT[LC_DUPLEX_CAP], abs=1e-6)
 
 
+@pytest.mark.heavy
 def test_the_sc_cap_and_its_grip_stand_where_the_adapter_drew_them(tmp_path):
     """The SC cap's raised grip is the one feature of the four that stands in
     FRONT of its cap rather than cutting into it: 3.8 against the cap's 3.3."""
@@ -445,6 +447,7 @@ def seat(tmp_path, root_lib, ref):
     return root, parents, occupant(root, parents, path, ref)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", [LC_CAP, LC_DUPLEX_CAP, SC_CAP, MPO_CAP])
 def test_a_pocket_inside_a_cap_never_stands_in_front_of_the_cap_face(tmp_path, lib, ref):
     """docs/pluggables-caps-design.md, "3D": a cap's inset or grip is a child of

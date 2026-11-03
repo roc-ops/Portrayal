@@ -151,6 +151,7 @@ def test_a_run_for_one_device_never_removes_a_module_type(tmp_path):
     assert [f.read_text() for f in planted] == ["planted\n"] * len(planted)
 
 
+@pytest.mark.heavy
 def test_a_modules_run_keeps_what_any_device_needs_and_removes_the_rest(tmp_path):
     """The whole build decides: BDM2M-W is written for the C100G and the C40G
     both, so it is rewritten, and the planted one nothing writes is gone."""

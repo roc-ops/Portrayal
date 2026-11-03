@@ -196,6 +196,7 @@ def test_power_stays_absent_and_the_tr_figure_is_not_copied(name):
 
 # ---- the lock
 
+@pytest.mark.heavy
 def test_each_chassis_is_at_the_minor_the_lock_asked_for_and_the_lock_agrees(chassis):
     assert device(chassis)["version"] == CHASSIS[chassis][3]
     mine = [f for f in devicelock.check(LIBRARY) if f[0] == f"cisco/asr-{chassis}"]

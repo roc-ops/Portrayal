@@ -402,6 +402,7 @@ def _faces(out, name, views=("front", "rear")):
                   if p.exists())
 
 
+@pytest.mark.heavy
 def test_every_device_that_reaches_an_adapter_ships_its_ports_capped(tmp_path):
     """Every configuration of every real device whose graph reaches one of these
     adapters, built for real, front and rear."""
@@ -501,6 +502,7 @@ def _chunks(xs, n):
 FHD_CASSETTES = _fhd_bays()
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("group", _chunks(FHD_CASSETTES, 4),
                          ids=lambda g: "+".join(r.split("/")[1] for r in g))
 def test_every_fhd_cassette_ships_capped_front_and_rear(tmp_path, group):
@@ -557,6 +559,7 @@ def _dcp2(tmp_path, bays, occupants=None):
     return dev
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("pair", _chunks(_a22_modules(), 2),
                          ids=lambda g: "+".join(r.split("/")[1] for r in g))
 def test_every_ppm_module_ships_capped_in_the_a22(tmp_path, pair):

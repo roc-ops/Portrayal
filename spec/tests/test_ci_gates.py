@@ -370,6 +370,7 @@ def test_a_tool_going_missing_is_caught(tmp_path):
     assert "does not list" in r.stdout
 
 
+@pytest.mark.heavy
 def test_the_allow_list_matches_what_the_suite_skips_today():
     """A list that has drifted from the suite is the same silence one level up:
     it passes because nothing matches it rather than because nothing is wrong."""

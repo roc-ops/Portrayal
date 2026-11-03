@@ -131,6 +131,7 @@ PSU = {
 }
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(CHASSIS))
 def test_a_chassis_inlet_publishes_a_slot_that_offers_its_plug(iface, tmp_path):
     device, view, pid = CHASSIS[iface]
@@ -151,6 +152,7 @@ def test_no_chassis_places_a_saf_d_grid_inlet():
     assert hits == []
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PSU))
 def test_a_psu_inlet_is_a_nested_slot_that_offers_its_plug(iface, comps):
     ref, part_id = PSU[iface]
@@ -186,6 +188,7 @@ def test_a_placed_supply_with_one_inlet_is_the_slot(tmp_path):
     assert "generic/c13-plug@1" in slot["accepts"], slot
 
 
+@pytest.mark.heavy
 def test_every_composed_inlet_is_a_slot_or_is_forwarded(comps):
     """The census: each `parts:` entry that is one of the three inlets is
     either published as a slot of the component that composes it, or is that
@@ -421,6 +424,7 @@ def _front(parents, el):
     return lift_of(parents, el) + float(el.get("data-z-cyl"))
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_it_seats_with_its_mate_on_the_inlets_mate(seated, seat):
     parents, host, occ, _ = _seat(seated, seat)

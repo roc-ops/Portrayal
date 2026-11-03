@@ -389,6 +389,7 @@ def test_the_chassis_says_pairing_and_no_mixing_are_not_enforced(slug):
     assert "SCBE3-MX" in note and "previous generation" in note and "SCBE2-MX" in note
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("slug", MX)
 def test_chassis_versions_and_locks(slug):
     d = device(slug)
@@ -538,6 +539,7 @@ def test_the_chassis_says_sfb_generations_cannot_be_mixed_and_it_is_not_enforced
     assert "SFB, SFB2 and SFB3" in note and "mixed" in note
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("slug", MX2K)
 def test_mx2k_chassis_versions_and_locks(slug):
     assert device(slug)["version"] == MX2K_VERSIONS[slug]

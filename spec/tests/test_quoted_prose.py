@@ -35,6 +35,7 @@ def test_the_walk_reads_the_library():
     assert sum(1 for _ in _manifests()) > 700
 
 
+@pytest.mark.heavy
 def test_no_contract_or_manifest_quotes_a_long_passage():
     runs = [(str(p.relative_to(LIB)), key, n)
             for p in _manifests()

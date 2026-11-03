@@ -173,6 +173,7 @@ def every_case(tmp_path_factory):
             + fitted_ports(tmp, dist, "s9501-28smt", [SFP], every=True))
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_kit_seats_every_optic_where_the_build_does(cases):
     # the matrix this is meant to cover must actually be in it - a device edit
@@ -203,6 +204,7 @@ def test_the_kit_seats_every_optic_where_the_build_does(cases):
             f"{sorted(k for k in set(g['attrs']) & set(built) if g['attrs'][k] != built[k])}")
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_kit_seated_optics_children_are_the_builds(every_case):
     """THE CHILDREN, NOT ONLY THE GROUP. seatOccupant renames the skin's own

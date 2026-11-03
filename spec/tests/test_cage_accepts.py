@@ -302,6 +302,7 @@ def test_a_non_default_configurations_occupants_reach_configs(tmp_path):
     assert _cage(idx, "front", "port-4")["occupant"] is None
 
 
+@pytest.mark.heavy
 def test_no_shipped_device_seats_an_occupant():
     """The corpus-wide fact `test_a_cage_entry_carries_the_documented_shape`
     pins one example of: after spec A, `occupants:` is empty on every
@@ -562,6 +563,7 @@ def _seat_and_build(src, tmp_path, port, occ, drop_group=False):
     return idx, dict(tag.attrib)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("src, port, occ", [
     (SFP_SRC, "port-0", "generic/qsfp-lc@1"),   # upright, qsfpdd-400g
     (SFP_SRC, "port-2", "generic/qsfp-lc@1"),   # rotate 180, qsfp28
@@ -619,6 +621,7 @@ def _part_lift(device, view_name, placement_id):
     return float(next(p for p in host["parts"] if p["id"] == part).get("lift") or 0.0)
 
 
+@pytest.mark.heavy
 def test_the_lift_census():
     """RECORDS the published lift across every slot in the library, computed
     by the same `cage_entries` main() writes. No PLUGGABLES CAGE presents a

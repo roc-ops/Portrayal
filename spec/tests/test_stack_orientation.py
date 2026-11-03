@@ -146,6 +146,7 @@ def test_an_osfp_pair_built_belly_to_belly_takes_an_exception_and_a_turned_alike
     assert "already follows the convention" in msg
 
 
+@pytest.mark.heavy
 def test_every_osfp_stack_in_the_library_is_turned_alike_or_excepted():
     """The census for the family L108 began checking in #799, so a vacuous
     walk cannot pass it: it has to find the OSFP stacks the library draws."""
@@ -256,6 +257,7 @@ def _census():
     return rows
 
 
+@pytest.mark.heavy
 def test_the_census_measured_something():
     """A walk that found nothing would pass every assertion below."""
     rows = _census()
@@ -274,6 +276,7 @@ def test_every_checked_stack_in_the_library_faces_the_convention_or_says_why():
     assert not bad, f"{len(bad)} stacks off the convention:\n" + "\n".join(bad[:40])
 
 
+@pytest.mark.heavy
 def test_every_exception_has_a_reason_worth_reading():
     for path, doc, _d in _owners():
         for e in doc.get("stack-exceptions") or []:
@@ -318,6 +321,7 @@ THREE_HIGH = {
 }
 
 
+@pytest.mark.heavy
 def test_a_stack_is_two_high_or_its_face_is_in_the_three_high_table():
     """Greedy pairing from the top is only right where the stack is the top
     two rows. A cage left over that would pair with a neighbour already taken

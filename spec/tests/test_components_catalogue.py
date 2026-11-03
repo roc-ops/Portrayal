@@ -59,6 +59,7 @@ def test_out_writes_the_page_build_returns(tmp_path):
     assert "\n1 component majors in " in page
 
 
+@pytest.mark.heavy
 def test_every_component_major_in_the_library_has_a_row(generated):
     """Every major on disk has a row, and the page's own summary line gives
     the real count.

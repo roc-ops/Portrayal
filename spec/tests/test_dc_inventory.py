@@ -204,6 +204,7 @@ def real():
     return D.inventory(D.ROOT / "library")
 
 
+@pytest.mark.heavy
 def test_the_parts_that_showed_the_problem_are_in_the_inventory(real):
     refs = {p["ref"] for p in real["parts"]}
     for ref in ("supermicro/psu-pws-601s-1r@1", "nokia/lpwr-f@1", "amphenol-ns/output-terminal@1",
@@ -224,6 +225,7 @@ def test_a_yes_names_a_registered_interface_and_a_plug(real):
             assert p["why_not"], p["ref"]
 
 
+@pytest.mark.heavy
 def test_every_stated_polarity_has_evidence_and_no_ground_is_listed_as_a_dc_end(real):
     for p in real["parts"]:
         pol = p["polarity"]

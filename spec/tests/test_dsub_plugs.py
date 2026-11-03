@@ -305,6 +305,7 @@ def test_every_composed_dsub_core_is_a_slot_or_is_forwarded(comps):
     assert sorted(forwarded) == sorted(WRAPPERS)
 
 
+@pytest.mark.heavy
 def test_every_dsub_connector_a_device_places_is_one_of_these_parts():
     """The other half of the census, on the device side: a device places a
     D-sub as one of the four bare cores or one of the two wrappers, and each
@@ -711,6 +712,7 @@ def _front(parents, el):
     return lift_of(parents, el) + float(el.get("data-z-cyl"))
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_it_seats_with_its_mate_on_the_connectors_mate(seated, seat):
     parents, host, occ, _ = _seat(seated, seat)

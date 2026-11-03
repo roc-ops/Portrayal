@@ -211,6 +211,7 @@ def test_the_block_publishes_exactly_its_three_poles_as_slots(comps, block):
         assert not c["rotate"] and c["media"] is None
 
 
+@pytest.mark.heavy
 def test_the_census_of_blocks_and_seats(comps):
     """Counted off the library, with non-zero counts: the devices that place
     a barrier block, the supply that composes one, and the seats they make."""
@@ -348,6 +349,7 @@ def _centre(parents, el, local):
     return device_point(parents, el, local)
 
 
+@pytest.mark.heavy
 @EACH_DEVICE
 def test_the_bare_block_compiles_to_the_screws_it_always_drew(built, device):
     """The compiled geometry of an empty block is what it was when the block

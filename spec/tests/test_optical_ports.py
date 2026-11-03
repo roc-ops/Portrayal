@@ -336,6 +336,7 @@ def test_saying_nothing_about_the_rear_kind_is_quiet():
                   "optical": {"paths": [{"from": "a.1", "to": "rear:b.1"}]}}) == []
 
 
+@pytest.mark.heavy
 def test_front_numbering_follows_at_x_not_id_order(tmp_path):
     """`_front_parts` orders adapters "across the face by `at.x`", by its own
     docstring - but until now nothing proved the BUILT index it actually reads

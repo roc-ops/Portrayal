@@ -288,6 +288,7 @@ def test_the_census_of_composed_jacks_and_every_one_is_a_slot(comps):
     assert seen == {"std/mrj21@1": 8, "common/vhdci-receptacle@1": 3, "common/rj11-jack@1": 0}
 
 
+@pytest.mark.heavy
 def test_the_census_of_placed_jacks_on_device_views():
     """The device side, walked off every view: the only one of the three a
     chassis places is the RJ11 jack, twice, both turned 180. A part that
@@ -667,6 +668,7 @@ def _front(parents, el):
     return lift_of(parents, el) + float(el.get("data-z-cyl"))
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_bare_build_leaves_the_jack_empty(seated, seat):
     (root, _parents), _s, _c, _ = seated[seat[1]]

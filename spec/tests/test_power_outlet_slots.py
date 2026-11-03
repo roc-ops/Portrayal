@@ -186,6 +186,7 @@ PDUS = {
 }
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", sorted(PDUS))
 def test_each_outlet_of_the_pdu_is_a_slot_that_offers_its_cord_ends(device, tmp_path):
     d = yaml.safe_load((LIB / "devices" / device / "device.yaml").read_text())
@@ -370,6 +371,7 @@ def _power_elements(svg_path, parts):
             yield ref, parts[ref], e.attrib
 
 
+@pytest.mark.heavy
 def test_every_built_ac_outlet_and_inlet_element_says_what_it_is():
     """THE BUILD, NOT THE CONTRACT: a reader of a drawing holds the element.
     Every element of an AC outlet part on every built face carries

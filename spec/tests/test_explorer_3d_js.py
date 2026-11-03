@@ -318,6 +318,7 @@ def roles(world):
     return sets, node("roles", {"sets": sets})
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_smartoptics_bore_cap_is_its_own_part(roles):
     """dcp-r-34d-cs ships 72 bore caps at `xcNN/1-occupant` / `2-occupant`
@@ -348,6 +349,7 @@ def test_every_fru_on_a_real_face_is_a_removable_part(roles):
         assert own <= set(g["frus"]), (name, sorted(own - set(g["frus"])))
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_plug_in_a_front_slot_is_its_own_part(roles):
     """A plug declares no behaviour (class `port`, by its own ruling), and was
@@ -366,6 +368,7 @@ def test_a_plug_in_a_front_slot_is_its_own_part(roles):
     assert "xc01/2-occupant" in got(out, "dcp:tx")["frus"]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_fhd_front_keeps_its_cassettes_and_its_caps_apart(roles):
     _, out = roles

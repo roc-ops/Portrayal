@@ -253,6 +253,7 @@ def test_no_elements_file_without_its_face():
     assert not orphans, f"elements files with no SVG beside them: {orphans[:5]}"
 
 
+@pytest.mark.heavy
 def test_each_file_is_what_its_svg_says():
     """Read every published face back with xml.etree and compare bytes. The
     build writes from the tree in memory; this proves the file a consumer

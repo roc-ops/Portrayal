@@ -189,6 +189,7 @@ def ver(world, ref):
 
 # ---------------------------------------------------------------- the census
 
+@pytest.mark.heavy
 @needs_node
 def test_nested_slots_reads_every_slot_off_a_real_fhd_face(world):
     c = scenario(world, "census")
@@ -221,6 +222,7 @@ def test_nested_slots_on_the_dcp_offers_the_capped_bores_not_the_adapter(world):
 
 # ------------------------------------------------------- the plug, swapped
 
+@pytest.mark.heavy
 @needs_node
 def test_a_duplex_plug_in_place_of_the_fhd_cap_is_the_builds(world):
     s = scenario(world, "fhdPlug")
@@ -259,6 +261,7 @@ def test_a_seated_plugs_own_slots_are_read_at_its_chained_path(world):
     assert s["insideNonSeat"] == []
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_click_on_the_plug_names_its_slot(world):
     s = scenario(world, "clickPlug")
@@ -544,6 +547,7 @@ def _occ_class(spec, slot):
     return next((c for c in (_occ_class(k, slot) for k in spec["c"]) if c), None)
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("label,old,new,scen,holds", MUTATIONS, ids=[m[0] for m in MUTATIONS])
 def test_a_mutated_fix_fails(world, tmp_path, label, old, new, scen, holds):
@@ -697,6 +701,7 @@ def test_l12_reports_a_key_on_a_wrappers_aperture(tmp_path, src, cfg, key, ref, 
 LIBRARY_NESTED_OCCUPANT_KEYS = 0
 
 
+@pytest.mark.heavy
 def test_no_library_configuration_keys_a_slot_inside_a_slot():
     """The census: every configuration in the library, every nested
     `occupants:` key walked by the build's resolver, none refused as a slot
@@ -768,6 +773,7 @@ def _occupant_values():
     return configs, out
 
 
+@pytest.mark.heavy
 def test_no_library_occupant_is_named_with_an_id():
     """The census the kit's name-based lookup rests on: see LIBRARY_ID_OCCUPANTS."""
     configs, values = _occupant_values()
@@ -928,6 +934,7 @@ BACKS_NOT_SEEN = {
 }
 
 
+@pytest.mark.heavy
 def test_every_bay_that_takes_a_module_with_a_back_says_where_it_is_seen():
     """THE KIT'S DRAWING-LESS READER ASSUMES IT. configs.json publishes no
     bay's `rear:`, so slotResolver accepts a slot on a module's back under any

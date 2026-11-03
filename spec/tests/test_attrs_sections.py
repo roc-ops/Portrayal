@@ -19,6 +19,7 @@ from portrayal import attrsections
 from portrayal import capability
 from portrayal import lint
 from portrayal import libwalk
+import pytest
 
 PROFILES = capability.load_profiles(SPEC / "schemas")
 MANIFESTS = list(libwalk.iter_devices([LIB]))
@@ -36,6 +37,7 @@ def rules(path, data):
     return got.errors, got.warnings
 
 
+@pytest.mark.heavy
 def test_every_attr_is_in_a_section():
     """`additionalProperties: false` on the schema says this too, but it says it
     as a validation error at the bottom of a build. A key sitting loose at the
@@ -45,6 +47,7 @@ def test_every_attr_is_in_a_section():
         assert not attrsections.unsectioned(d.get("attrs")), man
 
 
+@pytest.mark.heavy
 def test_one_key_belongs_to_one_section():
     """`attrs` flattens onto the SVG root as `data-<key>` and an attribute list
     has no nesting to disambiguate two claims on one name, so the second would
@@ -59,6 +62,7 @@ def test_one_key_belongs_to_one_section():
     assert len(errs) == 1 and "L25" in errs[0] and "'fans'" in errs[0]
 
 
+@pytest.mark.heavy
 def test_temperature_is_environmental_because_thermal_is_the_machinery():
     """`thermal` holds fans, cooling-path, fan-trays, air-filter-location. An
     operating range belongs with humidity and altitude, which is `environmental`.
@@ -135,6 +139,7 @@ def test_the_tail_is_counted_so_it_cannot_go_quiet(tmp_path):
     assert tail["count"] == 1 and tail["because"] == "L24"
 
 
+@pytest.mark.heavy
 def test_a_fact_the_structure_already_states_is_not_an_attr():
     """`rack: '13 RU'` sat beside `chassis.ru: 13`, and `form-factor: '1RU'`
     beside `chassis.ru: 1`, on four devices. Two sources for one fact, and the
@@ -149,6 +154,7 @@ def test_a_fact_the_structure_already_states_is_not_an_attr():
                            for v in flat.values()), man
 
 
+@pytest.mark.heavy
 def test_the_section_is_a_classification_and_not_part_of_the_key():
     """Keys are globally unique and keep their own prefix, because every one of
     them leaves the manifest as `data-<key>` on an SVG root and is read there

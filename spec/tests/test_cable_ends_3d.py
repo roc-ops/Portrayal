@@ -137,6 +137,7 @@ def resolve_cable_z(parents, mk):
     return lift_of(parents, host) + own + float(feat.get("data-z-cyl")), feat
 
 
+@pytest.mark.heavy
 @EVERY
 def test_the_cable_point_resolves_to_the_stubs_far_end(seated, ref):
     """ONE `cable` marker per cable end (a wrapper does not restate it), on the

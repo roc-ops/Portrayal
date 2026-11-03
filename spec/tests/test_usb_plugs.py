@@ -236,6 +236,7 @@ def test_every_composed_usb_receptacle_is_a_slot_or_is_forwarded(comps):
     assert sorted(forwarded) == sorted((w, "component") for w in WRAPPERS)
 
 
+@pytest.mark.heavy
 def test_every_usb_receptacle_a_device_places_is_one_of_these_parts():
     """The other half of the census, on the device side: a device places a USB
     receptacle as one of the three bare parts or one of the two bezels, and
@@ -490,6 +491,7 @@ def _front(parents, el):
     return lift_of(parents, el) + float(el.get("data-z-cyl"))
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_it_seats_with_its_mate_on_the_receptacles_mate(seated, seat):
     parents, host, occ, _ = _seat(seated, seat)

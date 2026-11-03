@@ -197,6 +197,7 @@ def test_no_tracked_file_carries_a_personal_email(tracked):
         "\n\nUse example.com for an example, a noreply address for attribution.")
 
 
+@pytest.mark.heavy
 def test_no_tracked_file_names_a_customer_employer_or_maintainer(tracked):
     hits = []
     for rel, text in tracked:

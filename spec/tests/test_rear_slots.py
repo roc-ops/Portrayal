@@ -296,6 +296,7 @@ def published(ref, slot_id):
     return next(s for s in _mpo_slots()[ref] if s["id"] == slot_id)
 
 
+@pytest.mark.heavy
 def test_the_cap_and_both_plugs_seat_on_a_real_cassette_back(tmp_path):
     dev = fhd_with(tmp_path, {"bay-1": CASSETTE, "bay-2": CASSETTE}, SEATS)
     rear, parents = drawn(dev, tmp_path / "o", "rear")

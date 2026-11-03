@@ -72,6 +72,7 @@ def built(tmp_path_factory):
     return svgs
 
 
+@pytest.mark.heavy
 def test_inner_ports_are_marked_and_top_level_ports_are_not(built):
     n_inner = n_top = 0
     for svg in built:
@@ -104,6 +105,7 @@ def test_the_marker_names_the_inner_part_only(built):
     assert checked > 0
 
 
+@pytest.mark.heavy
 def test_every_built_drawing_in_dist_follows_the_rule():
     """The whole library, when dist is built: the same two-sided rule over
     every compiled SVG. Skipped only when there is no dist at all, and then

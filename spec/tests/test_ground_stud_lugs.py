@@ -426,6 +426,7 @@ def placed(walked):
     return [w for w in walked if w[1] is not None]
 
 
+@pytest.mark.heavy
 def test_the_census_of_ground_stud_placements(placed, walked):
     """Counted by walking every device view and every component's `parts:`.
     All four parts are placed straight on a chassis face, except the earth
@@ -488,6 +489,7 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
     assert seen == 58
 
 
+@pytest.mark.heavy
 def test_the_only_turned_placements_are_turned_90(placed):
     turned = sorted((device, p["id"], p["rotate"])
                     for device, _, p in [*placed, *placements_of((M5,))] if p.get("rotate"))
@@ -524,6 +526,7 @@ def test_the_casa_terminal_publishes_exactly_its_three_studs_as_slots(comps, slo
 
 # --- 3. stud-size ------------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed):
     """65 placements on 34 devices state a size for a single stud or a common
     pair host (STUD_SIZE), and the seven MX pairs and plates state theirs on
@@ -619,6 +622,7 @@ def _geometry(el):
                      if k != "id" and not k.startswith("data-")})
 
 
+@pytest.mark.heavy
 @EACH_BUILT
 def test_with_nothing_seated_the_part_compiles_to_the_drawing_it_always_was(built, device):
     """No lug anywhere, and each stud's compiled nodes are its skin's nodes:

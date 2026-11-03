@@ -318,6 +318,7 @@ def built(tmp_path_factory):
     return out
 
 
+@pytest.mark.heavy
 def test_each_pair_is_a_slot_of_the_device_with_its_studs_as_bores(built):
     _, _, index = built["bare"]
     cages = {c["id"]: c for c in index["cages"][VIEW]}
@@ -351,6 +352,7 @@ def _lug(built, pid, name="seated"):
     return parents, host, occ
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("pid", sorted(PLACED))
 def test_the_lugs_holes_land_on_the_two_studs(built, pid):
     """Read off the drawing: each hole of the seated lug, carried into the

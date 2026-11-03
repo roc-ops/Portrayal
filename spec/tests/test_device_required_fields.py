@@ -50,6 +50,7 @@ def profiles():
     return yaml.safe_load((ROOT / "spec/schemas/profiles.yaml").read_text())["profiles"]
 
 
+@pytest.mark.heavy
 def test_there_are_devices_to_check(devices):
     """NON-VACUITY for every sweep below."""
     assert len(devices) > 80
@@ -61,6 +62,7 @@ def test_the_schema_requires_it(field):
     assert field in schema["required"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("field", ["maturity", "profile"])
 def test_every_device_states_it(devices, field):
     missing = sorted(s for s, d in devices.items() if not d.get(field))
@@ -93,6 +95,7 @@ def test_every_declared_profile_is_a_defined_one(devices, profiles):
     assert not bad, f"profile(s) no entry defines: {bad}"
 
 
+@pytest.mark.heavy
 def test_a_defined_profile_is_one_something_uses(devices, profiles):
     """The other direction, the way #173 asked it of `class`: a profile nothing
     declares is a class nobody can be measured against, and it reads as a

@@ -109,6 +109,7 @@ def seat_of(seated, ref):
 
 # --- 1. solids ------------------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH
 def test_the_seated_plug_builds_right_side_out(seated, ref):
     parents, occ = seat_of(seated, ref)

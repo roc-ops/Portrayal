@@ -85,6 +85,7 @@ def device_file(overlay):
     return overlay / "devices" / "example" / DEVICE / "device.yaml"
 
 
+@pytest.mark.heavy
 def test_the_fixture_overlay_builds_into_its_own_folder(built):
     r, out, _, _ = built
     assert r.returncode == 0, r.stdout[-3000:] + r.stderr[-3000:]
@@ -116,6 +117,7 @@ def test_the_public_dist_is_byte_identical_with_and_without_an_overlay(built):
     assert after == before, "an overlay build changed the public dist or the library tree"
 
 
+@pytest.mark.heavy
 def test_a_public_device_name_in_the_overlay_is_refused_naming_both(tmp_path):
     public = sorted((ROOT / "library" / "devices").glob("*/*/device.yaml"))[0]
     name = yaml.safe_load(public.read_text())["name"]
@@ -130,6 +132,7 @@ def test_a_public_device_name_in_the_overlay_is_refused_naming_both(tmp_path):
     assert not out.exists() or not list(out.glob("*.svg")), "a refused overlay was rendered"
 
 
+@pytest.mark.heavy
 def test_a_public_device_path_in_the_overlay_is_refused_naming_both(tmp_path):
     public = sorted((ROOT / "library" / "devices").glob("*/*/device.yaml"))[0]
     overlay = copy_overlay(tmp_path)
@@ -142,6 +145,7 @@ def test_a_public_device_path_in_the_overlay_is_refused_naming_both(tmp_path):
     assert str(clash / "device.yaml") in text and str(public.relative_to(ROOT)) in text, text[-2000:]
 
 
+@pytest.mark.heavy
 def test_a_public_component_ref_in_the_overlay_is_refused_naming_both(tmp_path):
     public = ROOT / "library" / "components" / "common" / "led-dot" / "v1" / "contract.yaml"
     overlay = copy_overlay(tmp_path)
@@ -181,6 +185,7 @@ def test_the_3d_viewer_reads_its_indexes_through_the_layered_reader():
     assert "readIndex(distAt, 'devices.json')" in shell and "readIndex(distAt, 'components.json')" in shell
 
 
+@pytest.mark.heavy
 def test_an_out_folder_that_is_not_an_earlier_overlay_build_is_not_emptied(tmp_path):
     out = tmp_path / "out"
     out.mkdir()
@@ -192,6 +197,7 @@ def test_an_out_folder_that_is_not_an_earlier_overlay_build_is_not_emptied(tmp_p
     assert (out / "devices.json").read_text() == "{}"
 
 
+@pytest.mark.heavy
 def test_a_device_naming_a_public_component_that_does_not_exist_is_refused(tmp_path):
     overlay = copy_overlay(tmp_path)
     f = device_file(overlay)
