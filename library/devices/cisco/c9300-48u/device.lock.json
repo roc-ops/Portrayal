@@ -37,7 +37,7 @@
    "cisco/pwr-c1-715wdc@1"
   ]
  },
- "composed": "c864115b6401c9bf",
+ "composed": "ff7383c7ed2f5f9c",
  "composed-refs": {
   "cisco/c9300-mode-button@1": "1.0.0+073ca76e0d3d3faf",
   "cisco/c9300-nm-blank@1": "1.0.0+56d1df7fee6e04f5",
@@ -51,7 +51,7 @@
   "cisco/pwr-c1-350wac@1": "1.0.0+1386419cebc4d12d",
   "cisco/pwr-c1-715wac-p@1": "1.0.0+01d5f2ad83924173",
   "cisco/pwr-c1-715wac@1": "1.0.0+92b81bbd666e4157",
-  "cisco/pwr-c1-715wdc@1": "1.0.0+e22ca0190e672b51",
+  "cisco/pwr-c1-715wdc@1": "1.1.0+302aeda1c5e284e7",
   "cisco/stackpower-port@1": "1.1.0+7d4b96daf42e562a",
   "cisco/stackwise-480-port@1": "1.2.0+3ec7b8210d4955fd",
   "common/button-led-sq@1": "1.0.0+014c982622647eba",
@@ -59,6 +59,7 @@
   "common/led-arrow-sm@1": "1.1.0+f6e565f48fbd46a4",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/c20-inlet@1": "1.4.0+618074a1c18c1faa",
   "std/mini-usb@1": "1.0.0+4396db4f4afdd75d",
@@ -79,6 +80,41 @@
   "psu-715wac-p",
   "psu-715wdc"
  ],
+ "dc-ports": {
+  "psu-1/module/input": {
+   "cisco/pwr-c1-715wdc@1": {
+    "awg": null,
+    "configs": [
+     "psu-715wdc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "pos",
+      "slot": "psu-1/module/pole-pos"
+     },
+     {
+      "role": "neg",
+      "slot": "psu-1/module/pole-neg"
+     },
+     {
+      "role": "gnd",
+      "slot": "psu-1/module/pole-gnd"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": {
+     "nominal": -48,
+     "range": [
+      -36,
+      -72
+     ]
+    }
+   }
+  }
+ },
  "format": 1,
  "gaps": "d91b41b1c5fe0da3",
  "groups": [
@@ -801,5 +837,5 @@
  "placement-surface": "30d45299c8daceeb",
  "shape": "79678e17eebbb104",
  "surface": "7368cdcf57915e40",
- "version": "1.1.0"
+ "version": "1.2.0"
 }
