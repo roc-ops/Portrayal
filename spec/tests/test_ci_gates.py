@@ -514,3 +514,14 @@ def test_a_dispatch_tests_the_pull_requests_merge_with_main(workflow):
         checkout = next(s for s in steps(workflow["jobs"][name])
                         if s.get("uses", "").startswith("actions/checkout@"))
         assert (checkout.get("with") or {}).get("ref") == MERGE_REF, name
+
+
+def test_the_budget_reads_the_pull_requests_files(workflow):
+    """A new slow test fails only the change whose files hold it (suite_budget.py,
+    NEW MEANS ABSENT FROM THE BASE). The list is read with the job's own token and
+    `pull-requests: read`; if it cannot be read, every file counts as touched."""
+    budget = next(s for s in steps(workflow["jobs"]["build"]) if s.get("name") == "test budget")
+    assert budget["env"]["PR"] == "${{ github.event.pull_request.number || inputs.pr }}"
+    assert budget["env"]["GH_TOKEN"] == "${{ github.token }}"
+    assert 'pulls/$PR/files' in budget["run"] and "--paginate" in budget["run"]
+    assert '"${touched[@]}"' in budget["run"]

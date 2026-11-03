@@ -21,10 +21,17 @@ each was - since the same tree measures up to twice as slow on a busy runner:
     what every pull request push runs; a slow test belongs in the heavy tier,
     where it still counts against the full budget.
 
+NEW MEANS ABSENT FROM THE BASE, AND THE BASE CAN LAG MAIN: a slow function
+merged since the base run was measured reads as new to every pull request
+after it. Given `--touched` (the pull request's changed files), a new slow
+function in a file the change did not touch is a warning, not a failure; only
+the change that holds it is failed for it.
+
 WITH NO BASE RUN there is no load to divide out, and an overrun cannot be told
-from a busy runner. The total is still measured and an overrun is said, as a
-warning, and the run is not failed on it. A run that cannot find a base is
-rare - every merge leaves one - and a rate limit must not hold a merge.
+from a busy runner. The total is still measured, the run is not failed, and a
+warning says what went unmeasured - also when the total is within budget,
+because the new-function ceiling was not checked. A run that cannot find a
+base is rare - every merge leaves one - and a rate limit must not hold a merge.
 
 Exit status: 0 within budget (or no base), 1 over budget or no record to read.
 """
@@ -60,18 +67,23 @@ def _growers(tests, base, load, n=3):
     return ", ".join(f"{f} +{g:,.0f} s" for g, f in grew[:n] if g > 0) or "no file grew"
 
 
-def check(tests, base, budget, tier):
-    """(failures, warnings), each a list of sentences; both empty is within budget."""
+def _test_file(stem):
+    return f"spec/tests/{stem}.py"
+
+
+def check(tests, base, budget, tier, touched=None):
+    """(failures, warnings), each a list of sentences; both empty is within budget.
+    `touched` is the change's files, or None to treat every file as touched."""
     entry = budget[tier]
     limit = entry["seconds"]
     total, load, _ = measure(tests, base)
     if base is None:
-        if total > limit:
-            return [], [f"{tier} tier: {total:,.0f} s summed against a budget of {limit:,} s, "
-                        "but there is no base run to divide the load out with, so this is "
-                        "not failed on; a run that finds one will measure it"]
-        return [], []
-    failures = []
+        unchecked = " and the new-function ceiling was not checked" if tier == "light" else ""
+        over = " - over, and not failed on" if total > limit else ""
+        return [], [f"{tier} tier: no base run, so the load is not divided out{unchecked}; "
+                    f"{total:,.0f} s summed against a budget of {limit:,} s{over}. A run that "
+                    "finds a base will measure it"]
+    failures, warnings = [], []
     if tier == "light":
         known = {fold_function(k) for k in base}
         new = {}
@@ -81,18 +93,23 @@ def check(tests, base, budget, tier):
                 new[f] = new.get(f, 0.0) + v / load
         ceiling = entry["new_function_seconds"]
         for (stem, name), s in sorted(new.items()):
-            if s >= ceiling:
-                failures.append(
-                    f"light tier: the new test function {stem}::{name} took {s:.1f} s (load "
+            if s < ceiling:
+                continue
+            line = (f"light tier: the new test function {stem}::{name} took {s:.1f} s (load "
                     f"divided out); a light-tier function may take less than {ceiling:g} s. "
                     "Make it cheaper, or mark it @pytest.mark.heavy - it then runs before a "
                     "merge and nightly, and counts against the full budget")
+            if touched is None or _test_file(stem) in touched:
+                failures.append(line)
+            else:
+                warnings.append(line + f". This change does not touch {_test_file(stem)}, "
+                                "so the base predates it and it is not failed on here")
     if total > limit:
         failures.append(
             f"{tier} tier: {total:,.0f} s summed (load {load:.2f} divided out) against a "
             f"budget of {limit:,} s in {BUDGET}. Grew most against the base: "
             f"{_growers(tests, base, load)}. {REMEDY[tier]}")
-    return failures, []
+    return failures, warnings
 
 
 def _read(paths):
@@ -116,6 +133,8 @@ def main(argv=None):
     ap.add_argument("--base", help="an earlier full run's times, as suite_times.py --out writes them")
     ap.add_argument("--fetch-base", metavar="OWNER/REPO",
                     help="the newest merged pull request's published full-run times")
+    ap.add_argument("--touched", help="the change's files, one path per line; a new slow "
+                    "function elsewhere warns instead of failing")
     a = ap.parse_args(argv)
     try:
         tests = _read(a.junit)
@@ -139,7 +158,10 @@ def main(argv=None):
                else f"no base: {label}; the load is not divided out")
     print(f"{a.tier} tier: {total:,.0f} s summed against a budget of "
           f"{budget[a.tier]['seconds']:,} s ({against})")
-    failures, warnings = check(tests, base, budget, a.tier)
+    touched = None
+    if a.touched and pathlib.Path(a.touched).is_file():
+        touched = {l.strip() for l in pathlib.Path(a.touched).read_text().splitlines() if l.strip()}
+    failures, warnings = check(tests, base, budget, a.tier, touched)
     for w in warnings:
         print(f"::warning title=test budget::{w}")
     for f in failures:

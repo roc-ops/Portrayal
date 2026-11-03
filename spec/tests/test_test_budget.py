@@ -118,3 +118,44 @@ def test_raising_the_budget_is_a_one_way_door():
     assert "spec/test-budget.json" in danger
     skill = (ROOT / ".claude/skills/portrayal-pr/SKILL.md").read_text()
     assert "spec/test-budget.json" in skill
+
+
+LIGHT = {**BUDGET, "light": {**BUDGET["light"], "seconds": 1700}}
+
+
+def test_a_new_slow_function_outside_the_change_warns_and_does_not_fail():
+    """NEW MEANS ABSENT FROM THE BASE, and the base can lag main: a slow function
+    merged since it was measured reads as new to every pull request after. Only
+    the pull request whose files hold the function is failed for it."""
+    tests = {**BASE, "test_x::f": 6.0}
+    failures, warnings = B.check(tests, BASE, LIGHT, "light", touched={"spec/tests/test_y.py"})
+    assert failures == [], failures
+    assert len(warnings) == 1 and "test_x::f" in warnings[0], warnings
+
+
+def test_a_new_slow_function_in_a_file_the_change_touched_fails():
+    tests = {**BASE, "test_x::f": 6.0}
+    failures, _ = B.check(tests, BASE, LIGHT, "light", touched={"spec/tests/test_x.py"})
+    assert len(failures) == 1 and "test_x::f" in failures[0], failures
+
+
+def test_no_base_always_warns_and_says_the_ceiling_went_unchecked():
+    """D3: with no base the run passes, and says so where it can be seen - also
+    when the total is under the budget, because the ceiling was not checked."""
+    failures, warnings = B.check(dict(BASE), None, LIGHT, "light")
+    assert failures == []
+    assert len(warnings) == 1 and "no base" in warnings[0], warnings
+    assert "not checked" in warnings[0], warnings[0]
+
+
+def test_the_command_reads_the_touched_list(tmp_path, capsys):
+    junit = _junit(tmp_path / "j.xml", {**BASE, "test_x::f": 6.0})
+    base = tmp_path / "base.json"
+    base.write_text(json.dumps({"tests": BASE}))
+    budget = tmp_path / "budget.json"
+    budget.write_text(json.dumps(LIGHT))
+    touched = tmp_path / "touched.txt"
+    touched.write_text("spec/tests/test_y.py\nREADME.md\n")
+    args = [junit, "--tier", "light", "--budget", str(budget), "--base", str(base)]
+    assert B.main(args + ["--touched", str(touched)]) == 0
+    assert B.main(args) == 1

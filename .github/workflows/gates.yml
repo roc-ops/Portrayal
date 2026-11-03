@@ -523,16 +523,27 @@ jobs:
       # door. With no base run it measures, warns, and does not fail (a rate
       # limit must not hold a merge). The job installs nothing, and the tool's
       # one import is the standard-library suite_times, hence PYTHONPATH.
+      #
+      # THE PULL REQUEST'S FILES, so a new slow test fails only the change that
+      # holds it: the base can predate a test merged since, which would then
+      # read as new to everybody. Unreadable, every file counts as touched.
       - name: test budget
         if: always()
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR: ${{ github.event.pull_request.number || inputs.pr }}
           TIER: ${{ needs.dist.outputs.tier }}
           PYTHONPATH: spec/tools
         run: |
           junits=("$RUNNER_TEMP"/shards/shard-*/junit.xml)
-          python3 spec/tools/portrayal/suite_budget.py "${junits[@]}" \
+          touched=()
+          if [ -n "$PR" ] && gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate \
+               --jq '.[].filename' > "$RUNNER_TEMP/touched.txt"; then
+            touched=(--touched "$RUNNER_TEMP/touched.txt")
+          fi
+          python3 spec/tools/portrayal/suite_budget.py "${junits[@]}" "${touched[@]}" \
             --tier "$TIER" --budget spec/test-budget.json --fetch-base "$GITHUB_REPOSITORY"
 
       # The record a LATER run compares against, and the weights a later run
