@@ -79,6 +79,7 @@ def skin(ref):
     return (LIB / f"components/{ns}/{name}/v{major}/skins/default.svg").read_text()
 
 
+@pytest.mark.heavy
 @EACH
 def test_it_is_a_plug_that_mates_its_interface(ref):
     d = doc(ref)
@@ -87,6 +88,7 @@ def test_it_is_a_plug_that_mates_its_interface(ref):
     assert d["conforms"] == f"{PLUGS[ref][0]}-plug"
 
 
+@pytest.mark.heavy
 @EACH
 def test_its_fields_are_the_cable(ref):
     f = doc(ref)["fields"]
@@ -94,6 +96,7 @@ def test_its_fields_are_the_cable(ref):
     assert f["cable-od"]["default"] == pytest.approx(PLUGS[ref][1], abs=0.1)
 
 
+@pytest.mark.heavy
 @EACH
 def test_a_generic_states_no_impedance(ref):
     if PLUGS[ref][0] == "f-type":
@@ -102,6 +105,7 @@ def test_a_generic_states_no_impedance(ref):
         assert "impedance" not in (doc(ref).get("attrs") or {})
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_is_30_long_from_the_end_of_the_relief(ref):
     feats = {f["node"]: f for f in doc(ref)["relief"]["features"]}
@@ -110,6 +114,7 @@ def test_the_stub_is_30_long_from_the_end_of_the_relief(ref):
     assert stub["lift"] == pytest.approx(boot["lift"] + boot["cyl"])
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_relief_boot_starts_where_the_coupling_ends(ref):
     """The coupling -> boot link of the chain the test above checks from boot
@@ -121,6 +126,7 @@ def test_the_relief_boot_starts_where_the_coupling_ends(ref):
     assert feats["relief-boot"]["lift"] == pytest.approx(rear)
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_cable_leaves_from_the_stub(ref):
     cps = doc(ref)["connection-points"]
@@ -128,6 +134,7 @@ def test_the_cable_leaves_from_the_stub(ref):
     assert "mate" in cps
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_circle_is_bound_to_the_fields(ref):
     s = skin(ref)
@@ -256,6 +263,7 @@ def _jack_group(host, ref):
     return hits[0]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", sorted(MATED_PLANE))
 def test_the_coupling_front_sits_on_the_jacks_mated_plane(seated, ref):
     root, parents, _ = seated[ref]

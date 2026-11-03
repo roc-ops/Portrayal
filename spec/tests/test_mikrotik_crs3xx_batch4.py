@@ -218,6 +218,7 @@ def test_the_committed_exports_are_what_the_exporter_writes_now(name, target, tm
     assert (tmp_path / rel).read_text() == (ROOT / "library/exports" / rel).read_text()
 
 
+@pytest.mark.heavy
 def test_the_lock_files_match_the_devices():
     lib = ROOT / "library"
     assert not [f for f in devicelock.check(lib) if f[0].startswith("mikrotik/")]

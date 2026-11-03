@@ -254,6 +254,7 @@ def test_the_mpo_caps_grip_is_a_thin_waisted_saddle_not_a_plank():
         assert f["confidence"] == "estimated" and "MODELLING CHOICE" in f["source"]
 
 
+@pytest.mark.heavy
 def test_a_seated_mpo_caps_plate_stands_on_its_saddle(tmp_path, lib):
     """The same stack ON A BUILD: the plate's back (its summed lift) is the
     saddle's front, and the saddle's back is the cap's face. Lifts are summed
@@ -379,6 +380,7 @@ def test_the_lc_cap_stands_where_the_adapter_drew_it(tmp_path):
         assert abs(hx - ox) < 1e-6 and abs(hy - oy) < 1e-6
 
 
+@pytest.mark.heavy
 def test_the_duplex_cap_stands_where_the_fhd_adapter_drew_it(tmp_path):
     """The FS cap spans BOTH stacked bores, so it seats on the adapter's own
     slot - one key, one occupant - at the bezel's 1.2."""

@@ -164,6 +164,7 @@ def test_the_cable_point_resolves_to_the_stubs_far_end(seated, ref):
 
 # --- (b) the stub's diameter ----------------------------------------------------
 
+@pytest.mark.heavy
 @EVERY
 def test_the_stub_builds_at_the_cable_od_in_force(seated, ref):
     """relief.js builds a cyl of radius min(w, h) / 2 from the node's face box

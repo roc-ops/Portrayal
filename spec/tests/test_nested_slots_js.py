@@ -207,6 +207,7 @@ def test_nested_slots_reads_every_slot_off_a_real_fhd_face(world):
     assert c["alias"], "nestedCages is no longer an alias of nestedSlots"
 
 
+@pytest.mark.heavy
 @needs_node
 def test_nested_slots_on_the_dcp_offers_the_capped_bores_not_the_adapter(world):
     c = scenario(world, "census")
@@ -231,6 +232,7 @@ def test_a_duplex_plug_in_place_of_the_fhd_cap_is_the_builds(world):
     assert not bad, "\n".join(bad[:8])
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_second_swap_takes_the_plug_out(world):
     """THE STACKING DEFECT. A plug carries no data-behaviour, so the kit took
@@ -274,6 +276,7 @@ def test_a_click_on_the_plug_names_its_slot(world):
         {"value": PLUG, "label": PLUG, "selected": True}]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_emptying_the_adapter_offers_its_bores_and_a_simplex_plug_is_the_builds(world):
     s = scenario(world, "fhdSimplex")
@@ -291,6 +294,7 @@ def test_emptying_the_adapter_offers_its_bores_and_a_simplex_plug_is_the_builds(
 
 # ------------------------------------------------------------ the DCP-R
 
+@pytest.mark.heavy
 @needs_node
 def test_a_plug_in_a_lifted_dcp_bore_is_the_builds(world):
     s = scenario(world, "dcpBore")
@@ -303,6 +307,7 @@ def test_a_plug_in_a_lifted_dcp_bore_is_the_builds(world):
     assert s["final"] == 1
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_duplex_plug_across_two_emptied_dcp_bores_is_the_builds(world):
     s = scenario(world, "dcpDuplex")
@@ -317,6 +322,7 @@ def test_a_duplex_plug_across_two_emptied_dcp_bores_is_the_builds(world):
 
 # --------------------------------------------------- a swapped-in module
 
+@pytest.mark.heavy
 @needs_node
 def test_a_module_swapped_in_carries_the_devices_keys(world):
     """THE RE-KEYING DEFECT. The compiled cassette face names its caps'
@@ -334,6 +340,7 @@ def test_a_module_swapped_in_carries_the_devices_keys(world):
     assert s["keys"] == [f"bay-2/lc{i:02d}" for i in range(1, 13)]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_swap_on_a_swapped_in_module_replaces_its_shipped_cap(world):
     s = scenario(world, "rekey")
@@ -346,6 +353,7 @@ def test_a_swap_on_a_swapped_in_module_replaces_its_shipped_cap(world):
 
 # ------------------------------------------------ the shuttered cassette
 
+@pytest.mark.heavy
 @needs_node
 def test_a_shuttered_cassette_offers_plugs_and_empty_and_ships_nothing(world):
     s = scenario(world, "shuttered")
@@ -361,6 +369,7 @@ def test_a_shuttered_cassette_offers_plugs_and_empty_and_ships_nothing(world):
     assert not bad, "\n".join(bad[:8])
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_select_marks_the_shipped_default(world):
     s = scenario(world, "options")
@@ -373,6 +382,7 @@ def test_the_select_marks_the_shipped_default(world):
 
 # ------------------------------------ the drawing and the index agree
 
+@pytest.mark.heavy
 @needs_node
 def test_the_resolver_reads_every_slot_the_drawing_shows(world):
     """TWO READINGS OF ONE QUESTION: nestedSlots reads the drawing, and
@@ -386,6 +396,7 @@ def test_the_resolver_reads_every_slot_the_drawing_shows(world):
 
 # --------------------------------------------------------- the reload
 
+@pytest.mark.heavy
 @needs_node
 def test_accept_swaps_resolves_slot_keys_after_their_carrier(world):
     a = scenario(world, "accept")
@@ -399,6 +410,7 @@ def test_accept_swaps_resolves_slot_keys_after_their_carrier(world):
     assert a["fhdOrderFree"]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_accept_swaps_on_the_dcp_needs_the_placement_and_holds_the_exclusion(world):
     a = scenario(world, "accept")
@@ -410,6 +422,7 @@ def test_accept_swaps_on_the_dcp_needs_the_placement_and_holds_the_exclusion(wor
 
 # ------------------------------------------- swap=, and the 3D map
 
+@pytest.mark.heavy
 @needs_node
 def test_the_delta_measures_a_slot_against_what_it_ships(world):
     d = scenario(world, "delta")
@@ -427,6 +440,7 @@ def test_the_delta_measures_a_slot_against_what_it_ships(world):
     assert d["dcpDuplex"] == {"xc01": PLUG, "xc01/2": None, "xc01/1": None}
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_cassette_swapped_out_takes_its_slot_keys_with_it(world):
     p = scenario(world, "prune")
@@ -436,6 +450,7 @@ def test_a_cassette_swapped_out_takes_its_slot_keys_with_it(world):
     assert "bay-1%2Fmodule%2Flc" not in p["swap"]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_builds_cassette_put_back_holds_what_it_ships(world):
     p = scenario(world, "prune")
@@ -443,12 +458,14 @@ def test_the_builds_cassette_put_back_holds_what_it_ships(world):
     assert p["back"] == {"bay-1/module/lc1": DCAP, "bay-1/module/lc2": DCAP}
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_face_not_on_screen_forgets_what_it_held_under_a_carrier_that_left(world):
     q = scenario(world, "queue")
     assert q["calls"] == [["bay-1/module/lc01"], ["bay-1"], ["bay-1"], ["bay-1/module/lc01"]]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_slot_on_a_device_placement_names_its_view(world):
     v = scenario(world, "views")
@@ -456,6 +473,7 @@ def test_a_slot_on_a_device_placement_names_its_view(world):
     assert v["fhd"] == ["front"]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_configurations_deep_keys_meet_the_drawings_paths(world):
     b = scenario(world, "builtKeys")
@@ -469,6 +487,7 @@ def test_a_configurations_deep_keys_meet_the_drawings_paths(world):
 S95_PSU_INLETS = ["psu-0/module/inlet", "psu-1/module/inlet"]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_cage_wrappers_own_aperture_is_not_a_second_slot(world):
     """A cage wrapper publishes the aperture it composes as its own cage
@@ -565,6 +584,7 @@ def test_a_mutated_fix_fails(world, tmp_path, label, old, new, scen, holds):
 
 # ------------------------------------ seatFace: detached faces and 3D
 
+@pytest.mark.heavy
 @needs_node
 def test_seat_face_seats_slot_keys_as_the_build_does(world):
     """The pass the merged tree's faces not on screen and the 3D scene run
@@ -606,6 +626,7 @@ def _resolve():
     return res
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_build_and_the_kit_answer_every_candidate_slot_alike(world):
     """ONE RULE, THREE READERS. For every slot a component publishes on a
@@ -679,6 +700,7 @@ def test_the_build_refuses_a_key_on_a_wrappers_aperture(tmp_path, src, cfg, key,
     assert r.returncode == 0, r.stderr[-600:]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("src,cfg,key,ref,instead", WRAPPED, ids=[w[0] for w in WRAPPED])
 def test_l12_reports_a_key_on_a_wrappers_aperture(tmp_path, src, cfg, key, ref, instead):
     from portrayal import lint
@@ -803,6 +825,7 @@ INSIDE_OCCUPANT = [
 ]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("occ,ok", INSIDE_OCCUPANT, ids=["the bore", "the occupant's own key"])
 def test_the_build_and_l12_answer_a_key_inside_an_occupant_alike(tmp_path, occ, ok):
     from portrayal import lint
@@ -907,6 +930,7 @@ def backs_match(world, face, got, bays):
     return bad
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_build_names_the_module_a_back_is_of(world):
     """A PROJECTION STRIPS `data-ref`, so a back alone cannot say whose it is.
@@ -968,6 +992,7 @@ def test_every_bay_that_takes_a_module_with_a_back_says_where_it_is_seen():
     assert missing == 0, missing
 
 
+@pytest.mark.heavy
 @needs_node
 def test_nested_slots_reads_every_mtp_on_the_rear_face(world):
     c = scenario(world, "rearCensus")
@@ -987,6 +1012,7 @@ def test_nested_slots_reads_every_mtp_on_the_rear_face(world):
     assert c["front"] == [], "the front face grew rear slots"
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_plug_on_a_built_back_is_the_builds(world):
     """cap -> plug, and emptying one: the three backs the kit swapped on the
@@ -997,6 +1023,7 @@ def test_a_plug_on_a_built_back_is_the_builds(world):
     assert not bad, "\n".join(bad[:12])
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_second_swap_on_a_back_takes_the_first_out(world):
     """A projected occupant has no `data-ref` and no `data-behaviour` - the
@@ -1007,6 +1034,7 @@ def test_a_second_swap_on_a_back_takes_the_first_out(world):
     assert s["occRef"] is None, "a projected occupant names no ref"
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_click_on_a_back_names_its_slot(world):
     c = scenario(world, "rearClick")
@@ -1020,6 +1048,7 @@ def test_a_click_on_a_back_names_its_slot(world):
         {"value": MPO24, "label": MPO24, "selected": False}]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_module_swapped_in_draws_the_builds_back_caps_and_all(world):
     """THE DEFAULTS ON A SWAPPED BACK. applyRearOverrides imports the back's
@@ -1041,6 +1070,7 @@ def _fors(spec):
     return own + [f for k in spec["c"] for f in _fors(k)]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_swapped_back_seats_its_keys_as_the_build_does(world):
     """The whole pass a face not on screen takes (seatFace, and the faceQueue
@@ -1053,6 +1083,7 @@ def test_a_swapped_back_seats_its_keys_as_the_build_does(world):
     assert s["res"]["refused"] == [] and s["res"]["failed"] == []
 
 
+@pytest.mark.heavy
 @needs_node
 def test_rear_keys_in_the_delta_the_codec_and_the_reload(world):
     d = scenario(world, "rearDelta")
@@ -1075,6 +1106,7 @@ def test_rear_keys_in_the_delta_the_codec_and_the_reload(world):
     assert sorted(a["cages"]) == ["bay-1/module/mtp2", "bay-4/module/mtp"]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_swapping_or_emptying_a_cassette_drops_its_rear_keys(world):
     p = scenario(world, "rearPrune")

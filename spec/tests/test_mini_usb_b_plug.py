@@ -72,6 +72,7 @@ def prov(key):
 
 # --- 1. the plug ---------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_plug_is_a_port_that_mates_mini_usb_b():
     d = _contract(PLUG)
     assert d["class"] == "port" and d["mates"] == "mini-usb-b"
@@ -80,6 +81,7 @@ def test_the_plug_is_a_port_that_mates_mini_usb_b():
     assert d["unplaced"] == _contract(USB_A_PLUG)["unplaced"]
 
 
+@pytest.mark.heavy
 def test_the_plug_states_no_standard_and_no_depth():
     """No `standards.yaml` entry is written for it, and a behaviour-less
     part's `size.d` would be built as a pit."""
@@ -91,6 +93,7 @@ def test_the_plug_states_no_standard_and_no_depth():
 
 # --- 2. the console part -------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_juniper_console_presents_mini_usb_b_and_kept_its_drawing():
     d = _contract(CONSOLE)
     assert d["version"] == "1.1.0"
@@ -131,6 +134,7 @@ def test_a_juniper_console_is_a_mini_usb_b_slot_that_offers_the_plug(slots, devi
     assert PLUG in slot["accepts"], slot
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", sorted(CISCO))
 def test_a_cisco_console_slot_offers_the_plug(slots, device):
     slot = slots[device][CISCO[device]]
@@ -138,6 +142,7 @@ def test_a_cisco_console_slot_offers_the_plug(slots, device):
     assert PLUG in slot["accepts"], slot
 
 
+@pytest.mark.heavy
 def test_the_plug_is_listed_by_the_indexer():
     doc = json.loads((onebuild.components_index() / "components.json").read_text())
     refs = {f"{e['ns']}/{e['name']}@{e['major'][1:]}" for e in doc["components"]}
@@ -146,6 +151,7 @@ def test_the_plug_is_listed_by_the_indexer():
 
 # --- 5. the figures, as the provenance says it read them ------------------------
 
+@pytest.mark.heavy
 def test_the_overmould_is_the_maximum_the_ecn_gives():
     d = _contract(PLUG)
     assert d["size"] == {"w": OVERMOULD_W, "h": OVERMOULD_H}
@@ -155,6 +161,7 @@ def test_the_overmould_is_the_maximum_the_ecn_gives():
     assert d["connection-points"]["mate"]["at"] == [OVERMOULD_W / 2, OVERMOULD_H / 2]
 
 
+@pytest.mark.heavy
 def test_the_shell_skin_is_the_figure_6_15_outline():
     """The path's points, read back: 6.8 x 3.0, straight for 1.08, cut to the
     1.65 line, a 5.67 flat, centred in the overmould."""
@@ -186,6 +193,7 @@ def test_the_shell_skin_is_the_figure_6_15_outline():
     assert max(flat) - min(flat) == pytest.approx(SHELL_FLAT)
 
 
+@pytest.mark.heavy
 def test_the_solids_chain_from_the_receptacle_face_to_the_stub():
     f = feats()
     assert set(f) == {"shell", "body", "relief-boot", "stub"}
@@ -199,6 +207,7 @@ def test_the_solids_chain_from_the_receptacle_face_to_the_stub():
     assert "color" not in f["stub"]    # L73: the node a field paints states no colour
 
 
+@pytest.mark.heavy
 def test_the_skin_draws_what_the_relief_builds():
     s = _skin_path(PLUG).read_text()
     for node in feats():
@@ -211,6 +220,7 @@ def test_the_skin_draws_what_the_relief_builds():
         _contract(PLUG)["fields"]["cable-od"]["default"] / 2, abs=0.005)
 
 
+@pytest.mark.heavy
 def test_every_figure_not_read_from_the_ecn_is_estimated_and_names_its_drawing():
     f = feats()
     assert f["shell"]["confidence"] == "drawing"
@@ -220,6 +230,7 @@ def test_every_figure_not_read_from_the_ecn_is_estimated_and_names_its_drawing()
         assert "needs-drawing" in prov(key), key
 
 
+@pytest.mark.heavy
 def test_the_seated_depth_ruling_is_recorded_with_its_arithmetic():
     text = prov("seated-depth")
     assert "MEASURED FROM THE FACE THE RECEPTACLE PRESENTS" in text
@@ -229,6 +240,7 @@ def test_the_seated_depth_ruling_is_recorded_with_its_arithmetic():
     assert INSERTED == pytest.approx(1.3)
 
 
+@pytest.mark.heavy
 def test_the_receptacle_still_models_the_depth_the_plug_quotes():
     """Fails by design when std/mini-usb@1's depth is revised: the plug's
     provenance quotes it, and is to be read again. Nothing the plug builds
@@ -237,6 +249,7 @@ def test_the_receptacle_still_models_the_depth_the_plug_quotes():
     assert MODELLED_DEPTH > RECEPTACLE_DEPTH + 0.25
 
 
+@pytest.mark.heavy
 def test_the_plug_names_which_way_is_up():
     text = prov("orientation")
     assert "CUT CORNERS" in text and "BOTTOM" in text and RECEPTACLE in text

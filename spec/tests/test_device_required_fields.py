@@ -56,6 +56,7 @@ def test_there_are_devices_to_check(devices):
     assert len(devices) > 80
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("field", ["maturity", "profile"])
 def test_the_schema_requires_it(field):
     schema = json.loads((ROOT / "spec/schemas/device.schema.json").read_text())
@@ -69,6 +70,7 @@ def test_every_device_states_it(devices, field):
     assert not missing, f"{len(missing)} device(s) state no {field}: {missing[:6]}"
 
 
+@pytest.mark.heavy
 def test_a_manifest_missing_one_is_actually_rejected():
     """The schema half, from the side a contributor meets it. Requiring a key in
     a file nothing validates against would be a comment."""
@@ -105,6 +107,7 @@ def test_a_defined_profile_is_one_something_uses(devices, profiles):
     assert not (set(profiles) - used), f"defined and unused: {sorted(set(profiles) - used)}"
 
 
+@pytest.mark.heavy
 def test_every_profile_says_what_it_requires(profiles):
     for name, spec in profiles.items():
         assert spec.get("description"), f"{name} has no description"
@@ -123,6 +126,7 @@ def test_changing_the_profile_asks_for_a_version(devices):
         "retyping the profile changed no fingerprint, so no bump would be asked for"
 
 
+@pytest.mark.heavy
 def test_maturity_still_asks_for_one_too(devices):
     """The sibling, so a later refactor cannot drop one while keeping the
     other - which is exactly the asymmetry this found."""
@@ -132,6 +136,7 @@ def test_maturity_still_asks_for_one_too(devices):
     assert before["surface"] != after["surface"]
 
 
+@pytest.mark.heavy
 def test_the_version_field_states_its_bump_rules():
     """The issue's fourth bullet: `version` ranged 0.2.7 to 3.0.5 with the bump
     policy written in DESIGN.md and CONTRIBUTING and nowhere the field itself

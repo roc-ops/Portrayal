@@ -207,6 +207,7 @@ def test_a_part_on_a_sunk_facet_projects_as_on_a_proud_one(tmp_path):
     assert sunk.get("data-tilt") == proud.get("data-tilt") == "30"
 
 
+@pytest.mark.heavy
 def test_a_part_on_a_facet_is_scaled_and_marked(tmp_path):
     root = plant_card(tmp_path)
     p = by_id(root, "--p1")
@@ -221,6 +222,7 @@ def test_the_scale_comes_before_the_parts_own_rotate(tmp_path):
     assert tf.index("scale(") < tf.index("rotate(")
 
 
+@pytest.mark.heavy
 def test_an_occupant_inherits_the_tilt(tmp_path):
     root = plant_card(tmp_path, occupant=True)
     o = next(e for e in root.iter() if (e.get("data-path") or e.get("id") or "").endswith("optic"))
@@ -260,6 +262,7 @@ def test_a_chained_seat_inherits_the_tilt(tmp_path):
     assert math.isclose(o_pt[1], cap_pt[1], abs_tol=0.01)
 
 
+@pytest.mark.heavy
 def test_a_card_rotated_90_still_seats_its_occupant_on_the_facet(tmp_path):
     """The host card itself at rotate: 90. p1 (nested inside the card's own
     rotated group, no rotate of its own) is turned by the CARD from

@@ -203,6 +203,7 @@ def test_each_chassis_is_at_the_minor_the_lock_asked_for_and_the_lock_agrees(cha
     assert mine == []
 
 
+@pytest.mark.heavy
 def test_the_two_components_are_locked_too():
     mine = [f for f in devicelock.check(LIBRARY) if f[0] in {f"cisco/{n}" for n in CARDS}]
     assert mine == []

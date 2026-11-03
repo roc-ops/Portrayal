@@ -675,6 +675,7 @@ def test_each_wire_is_over_its_own_contact(seated, seat):
         assert got == pytest.approx(want, abs=0.01), (w, got, want)
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_plug_stands_off_by_the_ruling(seated, seat):
     """The compiled depths, in the device frame: the body starts on the face

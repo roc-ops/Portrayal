@@ -106,11 +106,13 @@ def _mates(ref):
 
 # --- 1. the vocabulary -------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_registry_is_loaded():
     """Every pitch assertion below is vacuous on an empty registry."""
     assert lint.STANDARDS.get("two-hole-lug-5-8", {}).get("pitch")
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PAIRS))
 def test_a_pair_interface_spans_two_studs_at_its_pitch(iface):
     reg = _yaml(SPEC / "schemas/connectors.yaml")["interfaces"]
@@ -131,6 +133,7 @@ def test_a_pair_interface_spans_two_studs_at_its_pitch(iface):
 
 # --- 2. the sized screws -----------------------------------------------------------
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", sorted(SCREWS))
 def test_a_sized_screw_presents_a_stud_on_top_of_its_head(ref):
     dk, k = SCREWS[ref]
@@ -142,6 +145,7 @@ def test_a_sized_screw_presents_a_stud_on_top_of_its_head(ref):
     assert "behaviour" not in c and "registry" in c["provenance"]["size"]
 
 
+@pytest.mark.heavy
 def test_the_nominal_ground_screw_is_untouched():
     """#830 decided common/ground-lug@1 stays unsized; the sized parts sit
     beside it and nothing that placed it changed."""
@@ -151,6 +155,7 @@ def test_the_nominal_ground_screw_is_untouched():
 
 # --- 3. the pair hosts -------------------------------------------------------------
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", sorted(HOSTS))
 def test_a_pair_host_composes_two_studs_at_the_interface_pitch(ref):
     iface, stud, top = HOSTS[ref]
@@ -174,6 +179,7 @@ def test_a_pair_host_composes_two_studs_at_the_interface_pitch(ref):
         AXIS.get(ref, 0)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", sorted(HOSTS))
 def test_l116_is_clean_for_every_pair_host(ref):
     assert _errors(lint.lint_component_spanned_geometry, ref, "L116") == []
@@ -192,6 +198,7 @@ def _copy(root, ref, name, edit):
     return f"test/{name}@1"
 
 
+@pytest.mark.heavy
 def test_l116_refuses_a_pair_off_its_pitch(tmp_path):
     """The MX chassis were drawn at 13.2 and 14.0 against 5/8 in.: a host at
     such a pitch presents no pair a lug fits."""
@@ -203,6 +210,7 @@ def test_l116_refuses_a_pair_off_its_pitch(tmp_path):
     assert got and "13.2" in got[0] and "15.875" in got[0], got
 
 
+@pytest.mark.heavy
 def test_l116_refuses_a_pair_presenting_below_its_studs(tmp_path):
     """The depth arm reads what each stud PRESENTS, the top of the stud, not
     only where the stud is placed. A pair presenting at the panel would seat
@@ -214,6 +222,7 @@ def test_l116_refuses_a_pair_presenting_below_its_studs(tmp_path):
     assert len(got) == 2 and "presents at 8" in got[0], got
 
 
+@pytest.mark.heavy
 def test_l116_still_reads_an_lc_bore_at_its_placed_lift():
     """The LC adapters' bores present at their own face, so the generalised
     depth arm reads them exactly as before."""
@@ -223,6 +232,7 @@ def test_l116_still_reads_an_lc_bore_at_its_placed_lift():
 
 # --- 4. the lugs -------------------------------------------------------------------
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PAIRS))
 def test_a_two_hole_lug_mates_its_pair_drawn_across(iface):
     pitch, ref = PAIRS[iface]
@@ -249,6 +259,7 @@ def test_a_two_hole_lug_mates_its_pair_drawn_across(iface):
     assert feats["head-1"]["lift"] == feats["head-2"]["lift"] == T
 
 
+@pytest.mark.heavy
 def test_l116_refuses_a_lug_drawn_on_end():
     """The canonical axis is ACROSS; a lug stood on end would be wrong on
     every host, because each host's own axis arrives with the seat."""
@@ -333,6 +344,7 @@ def test_each_pair_is_a_slot_of_the_device_with_its_studs_as_bores(built):
         assert (c["rotate"] or 0) == (rot + AXIS.get(host, 0)) % 360
 
 
+@pytest.mark.heavy
 def test_the_ring_lug_is_still_offered_on_each_stud_of_a_pair():
     lib_ = render_mod.Library([str(LIB)])
     for host in HOSTS:
@@ -380,6 +392,7 @@ def _wire_box(parents, occ):
                      [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]))
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("pid", sorted(PLACED))
 def test_the_wire_leaves_along_the_pair_right_or_down(built, pid):
     """The wire leaves along the pair, past the second stud: the host's own
@@ -412,6 +425,7 @@ def _studs(built, name, pid):
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("pid", sorted(PLACED))
 def test_at_the_default_turn_the_holes_still_land_on_the_studs(built, pid):
     """#829: with no `turn:` the build computes one, and on a pair it is one of
@@ -437,6 +451,7 @@ def test_at_the_default_turn_the_holes_still_land_on_the_studs(built, pid):
     assert {0: x0 > lx, 90: y0 > ly, 180: x1 < lx, 270: y1 < ly}[lead]
 
 
+@pytest.mark.heavy
 def test_both_turns_of_a_pair_are_defaulted_in_this_build(built):
     """The test above is vacuous for 180 unless some pair takes it."""
     turns = {int(_lug(built, p, "defaulted")[2].get("data-seat-turn")) for p in PLACED}
@@ -452,6 +467,7 @@ def _pair_seat(x, rotate, obstacles=()):
             "face": {"w": 400.0, "h": 44.0}}
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("x", (50.0, 350.0))
 def test_a_pair_on_end_leads_its_wire_down_by_default_in_either_half(x):
     """Rule B names where the WIRE goes. A two-hole lug is drawn across, its
@@ -467,6 +483,7 @@ def test_a_pair_on_end_leads_its_wire_down_by_default_in_either_half(x):
     assert render_mod.default_seat_turn(_pair_seat(x, 90, [below]), lug) == 180
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("x, turn", ((50.0, 180), (350.0, 0)))
 def test_a_pair_side_by_side_leads_toward_the_nearer_edge(x, turn):
     """Down is across the pair, which it does not allow; the nearer side edge
@@ -475,6 +492,7 @@ def test_a_pair_side_by_side_leads_toward_the_nearer_edge(x, turn):
     assert render_mod.default_seat_turn(_pair_seat(x, 0), lug) == turn
 
 
+@pytest.mark.heavy
 def test_a_ring_lug_reads_the_directions_as_it_always_did():
     """The ring lug's wire leads down, so its directions are SEAT_DIRECTIONS
     unchanged: no seat of the census moves with the two-hole lug's reading."""
@@ -487,6 +505,7 @@ def test_a_ring_lug_reads_the_directions_as_it_always_did():
     assert render_mod.default_seat_turn(seat, ring) == 270
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("pid", sorted(PLACED))
 def test_the_lugs_solids_start_on_top_of_the_studs(built, pid):
     """3D: the occupant group is lifted to the height the studs present, and
@@ -520,6 +539,7 @@ def _inside(parents, el, anc):
 
 # --- 6. L115: a pair and its studs are one level or the other ----------------------
 
+@pytest.mark.heavy
 def test_l115_refuses_a_lug_on_a_pair_and_a_ring_lug_on_one_of_its_studs(tmp_path):
     pid = next(iter(PLACED))
     dev = _device_with(tmp_path, {pid: _lug_of(pid), f"{pid}/2": RING})
@@ -531,6 +551,7 @@ def test_l115_refuses_a_lug_on_a_pair_and_a_ring_lug_on_one_of_its_studs(tmp_pat
     assert r.returncode != 0 and f"occupants/{pid}:" in r.stderr, r.stderr[-600:]
 
 
+@pytest.mark.heavy
 def test_l115_is_clean_for_one_level_at_a_time(tmp_path):
     pid = next(iter(PLACED))
     for n, occ in enumerate(({pid: _lug_of(pid)}, {f"{pid}/1": RING, f"{pid}/2": RING})):
@@ -579,6 +600,7 @@ def test_the_kit_offers_the_pair_and_its_studs(kit, pid):
     assert entry["accepts"] == [_lug_of(pid)]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("pid", KIT_ASKS)
 def test_the_kit_seats_a_two_hole_lug_exactly_as_the_build_does(kit, built, pid):
     want = built_occupant(_root(built), pid)
@@ -621,6 +643,7 @@ def _placements(device):
                for p in ((b or {}).get("components") or {}).get("placements") or []}
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", sorted(MX))
 def test_each_mx_pair_is_one_placement_of_a_pair_host(device):
     view, pid, host, rot, size = MX[device]
@@ -637,6 +660,7 @@ def test_each_mx_pair_is_one_placement_of_a_pair_host(device):
     assert any(w in note for w in ("0.625-in.", "0.75-in.", "0.63-in.", "INFERRED"))
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", sorted(set(MX) - {"juniper/mx204", "juniper/mx304"}))
 def test_each_mx_stud_cutout_moved_with_its_stud(device):
     """MX cutouts are named for the studs and centred on them: each stud's
@@ -657,6 +681,7 @@ def test_each_mx_stud_cutout_moved_with_its_stud(device):
     assert math.dist(*centres) == pytest.approx(pitch, abs=1e-9)
 
 
+@pytest.mark.heavy
 def test_the_mx150_pitch_is_inferred_and_says_so():
     d = _yaml(LIB / "devices/juniper/mx150/device.yaml")
     e = d["provenance"]["ground-stud-pitch"]
@@ -664,6 +689,7 @@ def test_the_mx150_pitch_is_inferred_and_says_so():
     assert "ground-pair-pitch" in {g["what"] for g in d["gaps"]}
 
 
+@pytest.mark.heavy
 def test_the_mx304_plate_reads_its_guides_16_mm_as_five_eighths():
     """The guide writes "0.63-in. (16-mm)": the lug-table rounding of 0.625
     and the metric rounding of 15.875. The plate is a 5/8 in. pair of M6
@@ -678,6 +704,7 @@ def test_the_mx304_plate_reads_its_guides_16_mm_as_five_eighths():
     assert "0.63-in." in d["provenance"]["ground-stud-pitch"]["note"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", sorted(ESD))
 def test_esd_jacks_are_their_own_group(device):
     d, placed = _placements(device)
@@ -688,6 +715,7 @@ def test_esd_jacks_are_their_own_group(device):
     assert all(p["ref"] == "common/esd-jack@1" for (v, pid), p in placed.items() if pid in got)
 
 
+@pytest.mark.heavy
 def test_the_mx204_laser_label_is_furniture_and_its_empty_mark_is_gone():
     d, placed = _placements("juniper/mx204")
     p = placed[("front", "laser-warning")]
@@ -696,6 +724,7 @@ def test_the_mx204_laser_label_is_furniture_and_its_empty_mark_is_gone():
     assert not [m for m in d["views"]["front"]["silkscreen"] if m.get("for") == "laser-warning"]
 
 
+@pytest.mark.heavy
 def test_the_l144_baseline_holds_no_mx_entry_any_more():
     base = json.loads((LIB / "lint-baseline.json").read_text())
     for name in ("mx80", "mx150", "mx204", "mx240", "mx304", "mx480"):

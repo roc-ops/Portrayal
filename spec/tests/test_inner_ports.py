@@ -85,6 +85,7 @@ def test_inner_ports_are_marked_and_top_level_ports_are_not(built):
     assert n_top > n_inner, (n_top, n_inner)
 
 
+@pytest.mark.heavy
 def test_the_marker_names_the_inner_part_only(built):
     """An inner port's id ends in the core's part id (`--jack`, `--aperture`,
     `--cage`, ...) and its parent port is the element that carries the

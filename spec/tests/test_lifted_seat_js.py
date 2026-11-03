@@ -422,6 +422,7 @@ MUTATIONS = [
 ]
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("label,old,new,where", MUTATIONS, ids=[m[0] for m in MUTATIONS])
 def test_a_mutated_shift_fails_the_parity(parity, tmp_path, label, old, new, where):

@@ -114,3 +114,16 @@ def test_a_name_that_cannot_be_found_is_named(tmp_path):
                    "        def test_x(self):\n            pass\n")
     assert mark_heavy.unfound(src, {"Outer.Inner.test_x", "test_gone"}) == {
         "Outer.Inner.test_x", "test_gone"}
+
+
+def test_a_file_whose_light_tests_inherited_a_shared_cost_is_heavy_whole():
+    """DESELECTING A HEAVY TEST MOVES ITS FIXTURE, NOT ITS COST: in the light run
+    the module fixture a heavy test used to pay is billed to the next test in the
+    file. Marking that one test only moves it again. A file whose light tests took
+    `file_threshold` seconds or more beyond what the same tests took in a full
+    run is heavy whole."""
+    full = {"test_f::slow": 30.0, "test_f::a": 0.1, "test_f::b": 0.1,
+            "test_g::x": 0.1, "test_g::y": 0.2}
+    light = {"test_f::a": 25.0, "test_f::b": 0.1, "test_g::x": 0.1, "test_g::y": 0.3}
+    got = mark_heavy.heavy_functions([full], light=light, file_threshold=10.0)
+    assert got == {("test_f", "slow"), ("test_f", "a"), ("test_f", "b")}

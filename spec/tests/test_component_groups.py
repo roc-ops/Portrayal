@@ -148,6 +148,7 @@ def root_modules(svg):
             if el.get("data-path", "").endswith("/module") and el.get("data-ref")]
 
 
+@pytest.mark.heavy
 def test_the_timing_and_console_media_are_corrected(built):
     """The media correction rides with the groups: a console is rj45-serial,
     a ToD jack rj45-tod and a BITS jack rj48, where each used to inherit the

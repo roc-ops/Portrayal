@@ -605,6 +605,7 @@ def test_it_seats_in_a_real_cage_with_its_plug_in_it(seated, seat):
         assert float(occ.get("data-z-lift")) == pytest.approx(depth)
 
 
+@pytest.mark.heavy
 def test_the_lower_row_optic_is_the_upper_one_moved_down(seated):
     """A stacked OSFP column seats both modules heat sink up (OSFP MSA rev 5.22
     section 7.1, Figures 7-1 and 7-2), so since #799 the lower cage is drawn at
@@ -655,6 +656,7 @@ def test_the_stacked_noses_no_longer_meet_in_the_band(seated):
     assert upper_reach - lower_turned_reach == pytest.approx(1.66, abs=0.01)
 
 
+@pytest.mark.heavy
 def test_the_seated_mpo16_plug_keeps_its_key_toward_the_heat_sink(seated):
     root, parents = seated[AIS]
     optic = by_path(root, "port-1-occupant")
@@ -683,6 +685,7 @@ def _raised(optic):
             and any(e.get(k) for k in ("data-z-out", "data-z-bar"))}
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("cage", ["port-1", "port-2"])
 def test_the_seated_osfp_is_built_right_side_out_in_3d(seated, cage):
     """Read off the compiled relief, upright and turned: the heat sink front

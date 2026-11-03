@@ -20,8 +20,15 @@ the plain threshold:
     and the others 0.01 s. If any member is heavy, every member is, or the light
     tier runs the whole-library lint through a reader that measured cheap.
 
-A light run measures what the light tier really pays: give its record too, and
-re-mark until nothing new comes up.
+  - A FILE THAT INHERITED A SHARED COST IS HEAVY WHOLE. Deselecting a heavy
+    test moves its module fixture, not its cost: in a light run the next test in
+    the file pays it. Given a light run (`--light`), a file whose light tests
+    took `--file-threshold` seconds or more beyond what the same tests took in
+    the full runs has every function marked; marking only the one that paid
+    would move the fixture to its neighbour, one CI round at a time.
+
+A light run measures what the light tier really pays: give its record with
+`--light`, and re-mark until nothing new comes up.
 
 ONE-OFF AND ON REQUEST, not a gate. The budget (spec/test-budget.json,
 portrayal/suite_budget.py) is what holds the tiers to their size; this is how
@@ -42,14 +49,26 @@ from portrayal.suite_times import split_key
 MARK = "@pytest.mark.heavy"
 
 
-def heavy_functions(runs, threshold=5.0):
+def heavy_functions(runs, threshold=5.0, light=None, file_threshold=20.0):
     """{(module stem, function)} heavy in any of `runs` (one {key: seconds} or a
-    list of them): parameters summed to `threshold` or more, or in an xdist group
-    with a function that is."""
+    list of them, full runs) or in `light` (a light run): parameters summed to
+    `threshold` or more, in an xdist group with a function that is, or in a file
+    whose light tests inherited `file_threshold` seconds of shared cost."""
     if isinstance(runs, dict):
         runs = [runs]
     heavy, groups = set(), {}
-    for times in runs:
+    if light:
+        full = {}
+        for times in runs:
+            for key, seconds in times.items():
+                full[key] = max(full.get(key, 0.0), seconds)
+        moved = {}
+        for key, seconds in light.items():
+            stem = split_key(key)[0]
+            moved[stem] = moved.get(stem, 0.0) + seconds - full.get(key, 0.0)
+        heavy |= {split_key(k)[:2] for k in light
+                  if moved[split_key(k)[0]] >= file_threshold}
+    for times in runs + ([light] if light else []):
         summed = {}
         for key, seconds in times.items():
             stem, name, group = split_key(key)
@@ -137,6 +156,9 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("times", nargs="+", help="runs' test-times JSON; the heaviest counts")
     ap.add_argument("--threshold", type=float, default=5.0)
+    ap.add_argument("--light", help="a light run's test-times-light JSON")
+    ap.add_argument("--file-threshold", type=float, default=20.0,
+                    help="shared seconds a file's light tests may inherit before it is heavy whole")
     ap.add_argument("--tests", default="spec/tests")
     ap.add_argument("--write", action="store_true", help="edit the files; without it, only print")
     args = ap.parse_args(argv)
@@ -144,7 +166,11 @@ def main(argv=None):
     for path in args.times:
         doc = json.loads(pathlib.Path(path).read_text())
         runs.append(doc.get("tests", doc))
-    heavy = heavy_functions(runs, args.threshold)
+    light = None
+    if args.light:
+        doc = json.loads(pathlib.Path(args.light).read_text())
+        light = doc.get("tests", doc)
+    heavy = heavy_functions(runs, args.threshold, light, args.file_threshold)
     by_file = {}
     for stem, name in heavy:
         by_file.setdefault(stem, set()).add(name)

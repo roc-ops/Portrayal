@@ -51,12 +51,14 @@ def test_every_file_the_kit_can_ask_for_lands_in_the_package_that_holds_it(resul
     assert not result["unresolved"], result["unresolved"]
 
 
+@pytest.mark.heavy
 def test_a_build_directory_still_works_as_it_did(result):
     assert result["flat"] == ["../dist/a.svg", "../dist/a.svg"]
     assert result["resolverKeepsAFunction"] is True
     assert result["resolverFromString"] == "../dist/devices.json"
 
 
+@pytest.mark.heavy
 def test_an_index_version_npm_does_not_have_says_so(result):
     assert "HTTP 404" in result["pinnedMissing"]
 
@@ -67,6 +69,7 @@ def test_an_empty_dist_is_the_default_as_it_was(result):
     assert result["resolverFromEmpty"] == "../dist/devices.json"
 
 
+@pytest.mark.heavy
 def test_a_crafted_index_is_refused_before_any_request(result):
     """`?index=` goes into a URL, so it is held to a version or a dist-tag:
     with path segments it would walk off @portrayal/index onto other content
@@ -78,12 +81,14 @@ def test_a_crafted_index_is_refused_before_any_request(result):
         "0/../x": False, "1.2.3/x": False, "": False, "Latest?": False}
 
 
+@pytest.mark.heavy
 def test_a_skin_is_read_from_its_own_namespaces_package(result):
     got, want = result["skin"]
     assert got == want and "/@portrayal/components-" in got
     assert result["skinPackages"] > 10, "the skins are not split by namespace"
 
 
+@pytest.mark.heavy
 def test_a_rack_is_read_from_its_own_package_by_the_ref_a_saved_rack_carries(result):
     """#935: `readRack(distAt, 'apc/ar203a@1')` fetches the product from the
     `@portrayal/racks-<vendor>-<name>` package `packages.json` names."""
@@ -94,12 +99,14 @@ def test_a_rack_is_read_from_its_own_package_by_the_ref_a_saved_rack_carries(res
     assert all(r["package"] and r["held"] for r in result["racks"].values())
 
 
+@pytest.mark.heavy
 def test_a_rack_at_a_major_the_library_does_not_hold_says_so(result):
     """A saved file names `@1`; the library holds `@2` only. The product is
     not substituted: the page is told, and offers the product again."""
     assert "the library holds" in result["racks"]["apc/ar203a@1"]["wrongMajor"]
 
 
+@pytest.mark.heavy
 def test_a_rack_ref_is_checked_before_it_is_part_of_a_url(result):
     refs = dict(result["rackRefs"])
     assert refs["apc/ar203a@1"] == "racks/apc--ar203a.rack.json"
@@ -107,12 +114,14 @@ def test_a_rack_ref_is_checked_before_it_is_part_of_a_url(result):
         assert refs[bad].startswith("not a rack ref"), bad
 
 
+@pytest.mark.heavy
 def test_a_rack_name_every_object_inherits_is_nobodys_package(result):
     index = f"https://cdn.test/npm/@portrayal/index@{result['indexVersion']}/"
     assert result["rackInherited"] == [index + "racks/constructor--x.rack.json",
                                        index + "racks/__proto__--x.rack.json"]
 
 
+@pytest.mark.heavy
 def test_a_name_every_object_inherits_is_nobodys_package(result):
     """`pk.devices["constructor"]` is a function, and truthy: without the
     own-key test the URL was built from its `package` and `version`, both

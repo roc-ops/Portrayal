@@ -176,6 +176,7 @@ def test_the_cassettes_centred_body_is_centred_in_the_hole(built):
     assert (x + 99.0 / 2, y + 31.0 / 2) == pytest.approx(CENTRE)
 
 
+@pytest.mark.heavy
 def test_the_off_centre_body_stays_at_the_top_end(built):
     # the stand-in's body is at its plate's left end, turned to the top at the
     # front and still at the top from behind: its turned box meets the hole's

@@ -51,11 +51,13 @@ def _alias_errors(aliases):
     return list(v.iter_errors(aliases))
 
 
+@pytest.mark.heavy
 def test_the_object_form_validates():
     assert _alias_errors([{"name": "AS9716-32D", "kind": "vendor"},
                           {"name": "NCP-40C", "kind": "oem", "note": "x", "shared": True}]) == []
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("bad", [
     ["AS9716-32D"],                                   # a bare string loses its kind
     [{"name": "AS9716-32D"}],                         # kind is required
@@ -71,17 +73,20 @@ def test_the_schema_refuses(bad):
 
 # -------------------------------------------------------------------- L111 ---
 
+@pytest.mark.heavy
 def test_distinct_aliases_pass():
     assert l111([("a", dev("AS1", {"name": "DCS1", "kind": "marketing"})),
                  ("b", dev("AS2", {"name": "DCS2", "kind": "marketing"}))]) == []
 
 
+@pytest.mark.heavy
 def test_two_claimants_fail_and_it_is_case_insensitive():
     msgs = l111([("a", dev("AS1", {"name": "NCP-1", "kind": "oem"})),
                  ("b", dev("AS2", {"name": "ncp-1", "kind": "oem"}))])
     assert {p for p, _ in msgs} == {"a", "b"}
 
 
+@pytest.mark.heavy
 def test_shared_passes_only_when_every_claimant_says_so():
     shared = {"name": "NCP-1", "kind": "oem", "shared": True}
     assert l111([("a", dev("AS1", shared)), ("b", dev("AS2", shared))]) == []
@@ -90,20 +95,24 @@ def test_shared_passes_only_when_every_claimant_says_so():
     assert [p for p, _ in msgs] == ["b"]
 
 
+@pytest.mark.heavy
 def test_a_shared_flag_nothing_else_claims_is_stale():
     msgs = l111([("a", dev("AS1", {"name": "NCP-1", "kind": "oem", "shared": True}))])
     assert msgs and "no other" in msgs[0][1]
 
 
+@pytest.mark.heavy
 def test_an_alias_may_not_be_another_devices_model():
     msgs = l111([("a", dev("AS1", {"name": "as2", "kind": "vendor"})), ("b", dev("AS2"))])
     assert [p for p, _ in msgs] == ["a"]
 
 
+@pytest.mark.heavy
 def test_an_alias_may_not_repeat_its_own_model():
     assert l111([("a", dev("AS1", {"name": "AS1", "kind": "vendor"}))])
 
 
+@pytest.mark.heavy
 def test_a_name_listed_twice_on_one_device_fails():
     assert l111([("a", dev("AS1", {"name": "X", "kind": "vendor"},
                            {"name": "x", "kind": "marketing"}))])
@@ -119,6 +128,7 @@ def test_the_library_passes_l111_and_measures_something():
 
 # -------------------------------------------------------------- migration ---
 
+@pytest.mark.heavy
 def test_the_old_prose_keys_are_gone():
     left = []
     for man, d in _all_devices():
@@ -160,17 +170,20 @@ def test_the_hcl_names_the_issue_asked_about_resolve():
 
 # ---------------------------------------------------------------- outputs ---
 
+@pytest.mark.heavy
 def test_alias_names_reads_the_names_in_order():
     assert alias_names({"aliases": [{"name": "B", "kind": "vendor"},
                                     {"name": "A", "kind": "marketing"}]}) == ["B", "A"]
     assert alias_names({}) == []
 
 
+@pytest.mark.heavy
 def test_the_search_blob_carries_the_aliases():
     d = {"attrs": {}, "aliases": [{"name": "AS9716-32D", "kind": "vendor"}]}
     assert "as9716-32d" in devices_index.search_blob(d).split()
 
 
+@pytest.mark.heavy
 def test_devicelock_does_not_rehash_a_device_without_aliases():
     base = {"kind": "device", "model": "X", "description": "d"}
     assert devicelock.buckets(dict(base))["surface"] == \
@@ -200,6 +213,7 @@ def marketing_in_model(docs):
     return out
 
 
+@pytest.mark.heavy
 def test_a_series_name_in_model_beside_a_vendor_number_is_found():
     reversed_ = dict(dev("DCS500", {"name": "AS7816-64X", "kind": "vendor"}),
                      portfolio={"series": "DCS500"})
@@ -235,6 +249,7 @@ def vendor_alias_as_export_name(docs):
     return out
 
 
+@pytest.mark.heavy
 def test_a_vendor_alias_used_as_the_export_name_is_found():
     mnemonic = {"name": "LMFS-F", "kind": "vendor"}
     cfg = lambda *keys: {"configurations": {"c": {"part-numbers": {k: {} for k in keys}}}}
@@ -249,12 +264,14 @@ def test_a_vendor_alias_used_as_the_export_name_is_found():
     assert got == [("a", "LMFS-F"), ("a", "LMFS-F AA kit"), ("c", "LMFS-F")]
 
 
+@pytest.mark.heavy
 def test_no_device_exports_under_its_own_vendor_alias():
     docs = _all_devices()
     assert len(docs) > 200, "the library walk found too few devices"
     assert vendor_alias_as_export_name(docs) == []
 
 
+@pytest.mark.heavy
 def test_lmfs_f_exports_under_the_product_name():
     d = {d["name"]: d for _, d in _all_devices()}["lmfs-f"]
     keys = {k: v["part"] for c in d["configurations"].values()
@@ -267,6 +284,7 @@ def test_lmfs_f_exports_under_the_product_name():
         {k: a[k] for k in ("name", "kind")} for a in d["aliases"]]
 
 
+@pytest.mark.heavy
 def test_no_device_files_its_marketing_name_as_model():
     docs = _all_devices()
     edgecore = [d for _, d in docs if d.get("manufacturer") == "Edgecore"]

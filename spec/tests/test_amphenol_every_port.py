@@ -163,6 +163,7 @@ def seats(index, ref):
     return [(c["id"], c["kind"], c["interface"], c["accepts"]) for c in index[ref]["cages"]]
 
 
+@pytest.mark.heavy
 def test_the_alarm_card_publishes_two_seats_that_accept_the_wire_wrap_housing(index):
     assert seats(index, CARD) == [("alarm-b", "connector", "wire-wrap-3", [WIRE_WRAP_PLUG]),
                                   ("alarm-a", "connector", "wire-wrap-3", [WIRE_WRAP_PLUG])]

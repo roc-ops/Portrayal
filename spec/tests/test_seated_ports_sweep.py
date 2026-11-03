@@ -50,6 +50,7 @@ def test_the_sweep_read_the_library(sweep):
     assert sweep["asked"] > 10000, "almost no port of a seated part was asked about"
 
 
+@pytest.mark.heavy
 def test_no_drawn_port_is_denied(sweep):
     assert sweep["denied"] == [], sweep["denied"][:10]
     assert sweep["yes"] > 3000, f"the kit answered for {sweep['yes']} of {sweep['drawn']} drawn ports"

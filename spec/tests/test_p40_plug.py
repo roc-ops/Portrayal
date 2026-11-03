@@ -191,6 +191,7 @@ def test_it_seats_with_its_mate_on_the_receptacles_mate(seated, seat):
     assert_same_turn(parents, occ, host)
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_slot_offers_exactly_the_plug_and_ships_empty(seated, seat):
     _device, _config, view, pid = seat

@@ -32,6 +32,7 @@ def bays(d, view):
     return {b["id"]: b for b in d["views"][view]["components"]["bays"]}
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("name", DEVICES)
 def test_envelope_is_spec_table_1_1_for_48_port_poe_plus(name):
     ch = load(name)["chassis"]
@@ -42,11 +43,13 @@ def test_envelope_is_spec_table_1_1_for_48_port_poe_plus(name):
     assert ch["weight-kg"] == 7.6
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("name", DEVICES)
 def test_a_new_device_is_below_2_0_0(name):
     assert load(name)["version"].startswith("1.")
 
 
+@pytest.mark.heavy
 def test_48pd_has_48_rj45_numbered_1_to_48_odd_on_top():
     d = load("ws-c3650-48pd")
     p = placements(d, "front")
@@ -58,6 +61,7 @@ def test_48pd_has_48_rj45_numbered_1_to_48_odd_on_top():
         assert p[f"port-{n}"]["at"][1] < p[f"port-{n + 1}"]["at"][1]
 
 
+@pytest.mark.heavy
 def test_48pd_uplinks_are_two_sfp_and_two_sfp_plus_cages():
     d = load("ws-c3650-48pd")
     p = placements(d, "front")
@@ -68,6 +72,7 @@ def test_48pd_uplinks_are_two_sfp_and_two_sfp_plus_cages():
     assert d["groups"]["sfp-plus"]["attrs"] == {"media": "sfp-plus", "speed": "10g"}
 
 
+@pytest.mark.heavy
 def test_48pd_front_places_the_mini_b_console_between_its_lamp_and_the_usb_a():
     d = load("ws-c3650-48pd")
     p = placements(d, "front")
@@ -82,12 +87,14 @@ def test_48pd_front_places_the_mini_b_console_between_its_lamp_and_the_usb_a():
     assert "rack-kit" in gaps
 
 
+@pytest.mark.heavy
 def test_48pd_rear_has_console_and_management_jacks():
     p = placements(load("ws-c3650-48pd"), "rear")
     assert p["console"]["attrs"]["role"] == "console"
     assert p["mgmt"]["attrs"]["role"] == "mgmt"
 
 
+@pytest.mark.heavy
 def test_the_supply_bays_accept_exactly_the_four_supplies_and_the_blank():
     b = bays(load("ws-c3650-48pd"), "rear")
     for bay in ("psu-1", "psu-2"):
@@ -96,6 +103,7 @@ def test_the_supply_bays_accept_exactly_the_four_supplies_and_the_blank():
     assert b["psu-2"]["default"] == "cisco/pwr-c2-blank@1"
 
 
+@pytest.mark.heavy
 def test_three_fan_bays_each_accept_only_fan_t1_and_two_stackwise_bays_the_blank():
     b = bays(load("ws-c3650-48pd"), "rear")
     for n in (1, 2, 3):
@@ -105,6 +113,7 @@ def test_three_fan_bays_each_accept_only_fan_t1_and_two_stackwise_bays_the_blank
         assert b[f"stack-{n}"]["accepts"] == ["cisco/c3650-stackwise-blank@1"]
 
 
+@pytest.mark.heavy
 def test_the_base_build_is_the_shipped_one_and_carries_no_part_number():
     cfg = load("ws-c3650-48pd")["configurations"]
     assert cfg["ac"]["kind"] == "base" and cfg["ac"]["default"] is True
@@ -113,6 +122,7 @@ def test_the_base_build_is_the_shipped_one_and_carries_no_part_number():
         assert c["kind"] in ("base", "example")
 
 
+@pytest.mark.heavy
 def test_ears_default_is_the_front_mounting_position_and_no_ear_is_placed():
     d = load("ws-c3650-48pd")
     pos = d["chassis"]["ears"]["positions"]
@@ -122,6 +132,7 @@ def test_ears_default_is_the_front_mounting_position_and_no_ear_is_placed():
         assert "common/rack-ear@1" not in json.dumps(d["views"][view])
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("part,watts,depth_in", [
     ("pwr-c2-250wac", 250, 11.75), ("pwr-c2-640wac", 640, 11.75),
     ("pwr-c2-1025wac", 1025, 13.25), ("pwr-c2-640wdc", 640, 11.75)])
@@ -134,6 +145,7 @@ def test_supply_contracts_match_spec_tables_1_2_and_1_3(part, watts, depth_in):
     assert c["body"]["depth"] == pytest.approx(depth_in * IN, abs=0.1)
 
 
+@pytest.mark.heavy
 def test_the_blank_and_the_stackwise_blank_have_no_invented_part_number():
     for part in ("pwr-c2-blank", "c3650-stackwise-blank"):
         c = yaml.safe_load((LIB / f"components/cisco/{part}/v1/contract.yaml").read_text())
@@ -142,6 +154,7 @@ def test_the_blank_and_the_stackwise_blank_have_no_invented_part_number():
     assert sw["attrs"]["weight-kg"] == 0.05
 
 
+@pytest.mark.heavy
 def test_fan_t1_face_is_the_width_that_fits_three_fans_and_two_supplies():
     c = yaml.safe_load((LIB / "components/cisco/fan-t1/v1/contract.yaml").read_text())
     assert c["size"]["w"] == pytest.approx(1.73 * IN, abs=0.01)
@@ -150,6 +163,7 @@ def test_fan_t1_face_is_the_width_that_fits_three_fans_and_two_supplies():
     assert 3 * c["size"]["w"] + 2 * 95.25 < 444.5
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("name", DEVICES)
 def test_the_lock_agrees_with_the_device(name):
     from portrayal import devicelock
@@ -157,6 +171,7 @@ def test_the_lock_agrees_with_the_device(name):
     assert not [f for f in findings if name in str(f)]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("name", DEVICES)
 def test_dcim_exports_exist_for_the_device_with_u_height_1(name):
     found = []

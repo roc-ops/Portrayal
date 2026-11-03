@@ -192,6 +192,7 @@ def test_a_tier_the_kit_seats_is_the_builds(world, name, dev, face):
         assert not bad, "\n".join(bad[:8])
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_chained_slots_are_published_and_offered(world):
     s = scenario(world, "cardCensus")
@@ -204,6 +205,7 @@ def test_the_chained_slots_are_published_and_offered(world):
     assert {CARD["plug"], CARD["boot"]} <= set(s["offered"])
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_click_on_a_tier_names_the_slot_it_sits_in(world):
     """A chained slot's id is its seat's path, so a click on the plug must
@@ -215,6 +217,7 @@ def test_a_click_on_a_tier_names_the_slot_it_sits_in(world):
     assert c[CARD["boot"] + "-occupant"] == CARD["boot"]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_emptying_a_plug_takes_its_boot_with_it(world):
     """A boot is a sibling of its plug, so the plug going leaves it in the air
@@ -227,6 +230,7 @@ def test_emptying_a_plug_takes_its_boot_with_it(world):
 
 # ---------------------------------------------------------------- the index
 
+@pytest.mark.heavy
 def test_only_a_part_that_mates_publishes_what_it_presents(world):
     """components.json `presents` (render.component_presents): the slot at a
     seated part's own key, in its own frame. A plug and a single-bore optic
@@ -244,6 +248,7 @@ def test_only_a_part_that_mates_publishes_what_it_presents(world):
         assert not comps[r].get("presents"), r
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref,iface,accepts", [
     (LCPLUG, "lc-plug", [LCBOOT]),
     (RJPLUG, "rj45-plug", [RJBOOT]),
@@ -266,6 +271,7 @@ def test_what_a_part_presents_is_what_the_build_seats_on(world, ref, iface, acce
 
 # ---------------------------------------------------------------- a reload
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("name,want", [
     ("acceptFlat", {DEV["plug"]: RJPLUG, DEV["boot"]: RJBOOT}),
@@ -283,6 +289,7 @@ def test_a_shared_link_keeps_the_chained_tier(world, name, want):
     assert s["accepted"] == want and s["ignored"] == [], s
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("name", ["acceptNoPlug", "acceptWrongBoot"])
 def test_the_gate_still_refuses_a_tier_with_nothing_to_stand_on(world, name):

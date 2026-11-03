@@ -98,6 +98,7 @@ def reference(roots):
     return out
 
 
+@pytest.mark.heavy
 def test_a_hit_answers_exactly_what_a_computation_does(cache_dir, monkeypatch):
     first = fresh([LIB])
     assert shape(first) == shape(reference([LIB]))

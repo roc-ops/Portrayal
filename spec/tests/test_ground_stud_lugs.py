@@ -285,6 +285,7 @@ def placements_of(parts):
 
 # --- 1. the four parts ------------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH_SINGLE
 def test_a_single_stud_part_presents_terminal_stud_on_its_stud_axis(part):
     s = SINGLE[part]
@@ -300,6 +301,7 @@ def test_a_single_stud_part_presents_terminal_stud_on_its_stud_axis(part):
     assert "terminal-stud" in c["provenance"]["seat"]
 
 
+@pytest.mark.heavy
 @EACH_SINGLE
 def test_a_lug_lands_on_top_of_everything_the_part_builds(part):
     """`mate` sits `on:` the feature that stands highest, so the seat's lift
@@ -318,6 +320,7 @@ def test_a_lug_lands_on_top_of_everything_the_part_builds(part):
     assert (float(circle.get("cx")), float(circle.get("cy"))) == s["axis"]
 
 
+@pytest.mark.heavy
 def test_the_casa_terminal_composes_a_seat_on_each_of_its_three_studs():
     c = _contract(CASA)
     assert "interface" not in c and "mates" not in c and "connection-points" not in c
@@ -338,6 +341,7 @@ def test_the_casa_terminal_composes_a_seat_on_each_of_its_three_studs():
     assert "two M6 screws" in c["provenance"]["stud-count"]
 
 
+@pytest.mark.heavy
 def test_the_casa_stud_is_the_art_and_the_relief_the_terminal_drew():
     c = _contract(CASA_STUD)
     assert c["class"] == "ground" and c["interface"] == IFACE
@@ -364,6 +368,7 @@ def test_the_casa_stud_is_the_art_and_the_relief_the_terminal_drew():
     assert [float(top.get(k)) for k in ("cx", "cy", "r")] == [5.4, 5.4, 1.55]
 
 
+@pytest.mark.heavy
 def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
     """Read off the library: the two terminal screws of the barrier blocks,
     the three single ground studs and the Casa stud present the interface, and
@@ -391,6 +396,7 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
     assert sorted(lug["fields"]) == ["barrel-color", "wire-color"]
 
 
+@pytest.mark.heavy
 def test_what_is_out_of_scope_is_still_not_a_seat():
     for ref in ("cisco/a9k-ground-pad@1", "common/ground-screw-washer@1", "casa/ground-bolts@1",
                 "edgecore/agr-ground-plate@1", "common/ground-symbol@1",
@@ -466,6 +472,7 @@ def slots(placed):
     return got
 
 
+@pytest.mark.heavy
 def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(placed, slots):
     """A ground stud placed on a chassis face is a DEVICE cage, keyed by the
     placement's own id, and it offers exactly the ring lug and ships empty."""
@@ -506,6 +513,7 @@ def comps():
     return got
 
 
+@pytest.mark.heavy
 def test_the_casa_terminal_publishes_exactly_its_three_studs_as_slots(comps, slots, placed):
     cages = comps[CASA]["cages"]
     assert [c["id"] for c in cages] == list(CASA_SEATS)
@@ -557,6 +565,7 @@ def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed)
     assert sorted(f"{f.parents[1].name}/{f.parent.name}" for f in stated) == sorted({**STUD_SIZE, **PAIRED})
 
 
+@pytest.mark.heavy
 def test_stud_size_is_text_and_changes_no_part():
     """The interface claims no size and the lug is one nominal lug: a
     placement's `stud-size` is a fact carried beside the slot."""
@@ -658,6 +667,7 @@ def test_with_nothing_seated_the_part_compiles_to_the_drawing_it_always_was(buil
                 pytest.approx(hi - (0 if e.get("data-z-out") else lo)), node
 
 
+@pytest.mark.heavy
 def test_the_bare_casa_terminal_compiles_to_the_three_studs_it_always_drew(built):
     """Each stud's washer, nut and stud end land, in the terminal's frame,
     on exactly the points the terminal's own skin drew them at, painted after
@@ -740,6 +750,7 @@ def _wire_box(parents, occ):
                      [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]))
 
 
+@pytest.mark.heavy
 @EACH_BUILT
 def test_a_lug_seats_with_its_mate_on_the_stud_axis(built, device):
     keys = BUILT[device][3]
@@ -759,6 +770,7 @@ def test_a_lug_seats_with_its_mate_on_the_stud_axis(built, device):
         assert (_angle(parents, occ) - _angle(parents, host) - turn) % 360 == pytest.approx(0, abs=1e-6)
 
 
+@pytest.mark.heavy
 @EACH_BUILT
 def test_the_seated_lugs_solids_start_above_everything_its_stud_builds(built, device):
     """Read off the compiled depths. The top of what the stud builds is the
@@ -798,6 +810,7 @@ def test_the_seated_lugs_solids_start_above_everything_its_stud_builds(built, de
             assert e.get("data-depth") is None and e.get("data-cavity") is None, e.get("id")
 
 
+@pytest.mark.heavy
 def test_the_wire_leaves_downward_on_an_unturned_stud(built):
     """Where down crosses nothing, the default is down (#829, rule B)."""
     for device, key in (("edgecore/agr110", "ground-right"),
@@ -811,6 +824,7 @@ def test_the_wire_leaves_downward_on_an_unturned_stud(built):
         assert x1 - x0 == pytest.approx(3.0)
 
 
+@pytest.mark.heavy
 def test_the_casa_upper_stud_leads_its_wire_left_by_default(built):
     """THE DEFAULT TURNS A LUG OFF ANOTHER SEAT (#829, rule B). Down from the
     Casa terminal's upper right stud the lug would lie across the lower right
@@ -826,6 +840,7 @@ def test_the_casa_upper_stud_leads_its_wire_left_by_default(built):
     assert x1 == pytest.approx(hx - 14.65) and x0 == pytest.approx(hx - 24.65)
 
 
+@pytest.mark.heavy
 def test_on_a_1ru_rear_the_wire_runs_past_the_lower_edge_of_the_face(built):
     """Recorded, not wanted: the lug is 24.65 long below the stud axis and a
     1RU face is 44 high. On the AGR110 the wire ends 6.75 below the face."""
@@ -835,6 +850,7 @@ def test_on_a_1ru_rear_the_wire_runs_past_the_lower_edge_of_the_face(built):
     assert y1 - face["h"] == pytest.approx(6.75)
 
 
+@pytest.mark.heavy
 def test_a_stud_turned_90_turns_its_lug_and_the_wire_leaves_to_the_left(built):
     """A seat applies its host's turn, and a lug asked for at `turn: 0` takes
     nothing more (#829). The DCS500's two ground points are placed at
@@ -861,6 +877,7 @@ def _overlap(a, b):
     return min(a[2], b[2]) - max(a[0], b[0]) > EPS and min(a[3], b[3]) - max(a[1], b[1]) > EPS
 
 
+@pytest.mark.heavy
 def test_two_lugs_on_a_pair_drawn_one_above_the_other_overlap(built):
     """A RECORDED FACT, NOT A WANTED ONE, at `turn: 0` on both (#829). The UfiSpace S9600-102XC's two
     grounding holes take ONE two-hole lug; they are drawn 14.7 apart, one
@@ -879,6 +896,7 @@ def test_two_lugs_on_a_pair_drawn_one_above_the_other_overlap(built):
     assert a[3] - b[1] == pytest.approx(27.4 - 14.7)        # 12.7 of the upper lug's length
 
 
+@pytest.mark.heavy
 @EACH_BUILT
 def test_the_device_index_publishes_the_slot(built, device):
     """A single stud is a cage of its device's view, id = the placement id.
@@ -942,6 +960,7 @@ def kit(built, tmp_path_factory):
     return got
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", sorted(KIT_ASKS))
 def test_the_kit_offers_every_ground_stud_on_the_face(kit, built, device):
     config, view, part, keys = BUILT[device]
@@ -973,6 +992,7 @@ def test_the_kit_offers_every_ground_stud_on_the_face(kit, built, device):
         assert one["rotate"] == pub["rotate"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", sorted(KIT_ASKS))
 def test_the_kit_seats_a_lug_exactly_as_the_build_does(kit, built, device):
     slot = KIT_ASKS[device]
@@ -1005,6 +1025,7 @@ def _drawn(transform, size=(5.5, 27.4), mate=(2.75, 2.75)):
             y + cy + dx * math.sin(a) + dy * math.cos(a)), r % 360
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", sorted(KIT_ASKS))
 def test_a_turn_only_change_re_seats_the_lug_on_its_stud(kit, built, device):
     """#829: the reader turns a seated lug and swaps nothing. The kit takes
@@ -1021,6 +1042,7 @@ def test_a_turn_only_change_re_seats_the_lug_on_its_stud(kit, built, device):
     assert (r1 - r0 - (TURN_TO - turn0)) % 360 == pytest.approx(0, abs=1e-9)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", sorted(KIT_ASKS))
 def test_the_kit_seated_lug_is_lifted_to_the_top_of_its_stud(kit, built, device):
     slot = KIT_ASKS[device]
@@ -1039,6 +1061,7 @@ def test_the_kit_seated_lug_is_lifted_to_the_top_of_its_stud(kit, built, device)
     assert (float(z["wire"]["data-z-lift"]), float(z["wire"]["data-z-bar"])) == (0.75, 3.0)
 
 
+@pytest.mark.heavy
 def test_the_3d_pass_names_the_one_view_that_holds_a_ground_stud(kit, built):
     """A stud placed on the chassis is a device cage, so viewsToRewrite
     (kit/swap.js) names exactly the view whose `cages[]` holds it, and
@@ -1056,6 +1079,7 @@ def test_the_3d_pass_names_the_one_view_that_holds_a_ground_stud(kit, built):
         assert t["viewsTransform"] == t["faceTransform"] == kit[device]["lug"]["transform"]
 
 
+@pytest.mark.heavy
 def test_the_3d_pass_seats_a_lug_on_a_stud_of_the_casa_terminal(kit):
     """`ground-studs-rear/stud-tr` is a cage of the rear view only: the terminal
     is a plain placement whose seats the device index lists (nested_seat_entries),

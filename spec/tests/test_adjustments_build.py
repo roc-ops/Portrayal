@@ -143,17 +143,20 @@ TABLE = {
 }
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("axis, view", sorted(TABLE))
 def test_each_row_of_the_table_is_as_stated(axis, view):
     want, why = TABLE[(axis, view)]
     assert adj.moves_by(axis, view) == want, why
 
 
+@pytest.mark.heavy
 def test_the_stated_table_is_the_whole_table():
     assert {(a, f) for a, faces in adj.MOVES_BY.items() for f in faces} == set(TABLE)
     assert len(TABLE) == 18
 
 
+@pytest.mark.heavy
 def test_the_table_covers_every_axis_and_face():
     """Each axis moves a part in the plane of four faces and along the depth
     of two, and opposite faces show it opposite ways or alike, never askew."""
@@ -197,6 +200,7 @@ def test_the_box_of_every_member_at_the_default_and_at_each_end(built):
         assert front["rail"]["box"] == {"x": 20.0, "y": 15.0, "w": 80.0, "h": 10.0}
 
 
+@pytest.mark.heavy
 def test_what_does_not_move_is_drawn_the_same_in_every_configuration(built):
     for view, fixed in (("top", ["side-left", "side-right"]), ("right", [])):
         for nid in fixed:
@@ -205,6 +209,7 @@ def test_what_does_not_move_is_drawn_the_same_in_every_configuration(built):
     assert len({json.dumps(rows(built, cfg, "rear")) for cfg in BUILT}) == 1
 
 
+@pytest.mark.heavy
 def test_the_depth_of_the_well_and_of_what_stands_in_it(built):
     """Section 6. From the front the motion is depth: the well's floor is the
     position, the rail stands on that floor (a lift of minus the position),
@@ -219,12 +224,14 @@ def test_the_depth_of_the_well_and_of_what_stands_in_it(built):
         assert stud.get("data-z-lift") is None or float(stud.get("data-z-lift")) >= 0
 
 
+@pytest.mark.heavy
 def test_the_carrier_holds_the_value_only_where_a_configuration_set_it(built):
     """`data-<id>` on the carrier, in the one spelling: `front` is kept as 20."""
     got = {cfg: node(face(built, cfg, "front"), "panel").get(f"data-{AID}") for cfg in BUILT}
     assert got == {"base": None, "forward": "20", "back": "180"}
 
 
+@pytest.mark.heavy
 def test_the_elements_file_says_which_rows_move(built):
     for cfg in BUILT:
         front = rows(built, cfg, "front")
@@ -238,6 +245,7 @@ def test_the_elements_file_says_which_rows_move(built):
         assert rows(built, cfg, "left")["stud"]["moves-by"] == [-1.0, 0.0, 0.0]
 
 
+@pytest.mark.heavy
 def test_configs_json_carries_the_map_and_each_configuration_positions(built):
     cfg = json.loads((built / "slider.configs.json").read_text())
     assert {AID: cfg["adjustments"][AID]} == {AID: {
@@ -249,6 +257,7 @@ def test_configs_json_carries_the_map_and_each_configuration_positions(built):
          **{name: {aid: value} for name, (aid, value) in XY.items()}}
 
 
+@pytest.mark.heavy
 def test_every_face_names_the_manifest_as_written(built):
     """A moved configuration is drawn from a copy of the manifest; the digest a
     face carries is still that of the one source file."""
@@ -261,6 +270,7 @@ def test_every_face_names_the_manifest_as_written(built):
 
 # --- a value that is not a position fails the build -------------------------------------------
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("value, sentence", [
     ("300", "panel-setback on SLIDER takes 20 to 180 mm. 300 is outside it."),
     ("back", "panel-setback on SLIDER takes a number in mm, or one of: front, middle, rear."),
@@ -272,6 +282,7 @@ def test_a_configuration_that_sets_no_position_fails_the_build(tmp_path, value, 
     assert r.returncode != 0 and sentence in r.stderr, r.stderr[-600:]
 
 
+@pytest.mark.heavy
 def test_stops_alone_take_a_stop_and_refuse_the_space_between(tmp_path):
     def stops(value):
         def edit(d):
@@ -291,6 +302,7 @@ def test_stops_alone_take_a_stop_and_refuse_the_space_between(tmp_path):
 
 # --- a device that states none ---------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_a_device_with_no_adjustment_gains_no_attribute_and_no_key(tmp_path):
     def edit(d):
         del d["adjustments"], d["provenance"][AID]
@@ -330,6 +342,7 @@ def _translate(g):
     return [float(a) for a in args]
 
 
+@pytest.mark.heavy
 def test_the_plan_of_a_member_bay_moves_with_it(tmp_path):
     """NOT A MODEL OF THIS PANEL: its drawer is the smallest bay in the
     library with a `plan`, and that is all it is used for. A bay that moves
@@ -362,6 +375,7 @@ def test_the_plan_of_a_member_bay_moves_with_it(tmp_path):
     assert at["deep"][0] == at["base"][0] and at["deep"][1] == at["base"][1] - 20.0, at
 
 
+@pytest.mark.heavy
 def test_the_back_of_a_module_in_a_member_bay_moves_with_it(tmp_path):
     """NOT A MODEL OF THIS ENCLOSURE either: it is the smallest device whose
     bays show their occupant's back through a hole (`rear:`). That projection
@@ -393,6 +407,7 @@ def test_the_back_of_a_module_in_a_member_bay_moves_with_it(tmp_path):
 
 
 
+@pytest.mark.heavy
 def test_a_part_along_x_is_drawn_at_both_ends_on_every_view_that_shows_it(built):
     """`v` is the left edge of the block from the left of the frame. The front
     and the plan show it at x = v; the rear and the plan from below are seen
@@ -414,6 +429,7 @@ def test_a_part_along_x_is_drawn_at_both_ends_on_every_view_that_shows_it(built)
         assert _rect(face(built, cfg, "top"), "panel") == _rect(face(built, "base", "top"), "panel")
 
 
+@pytest.mark.heavy
 def test_a_part_along_y_is_drawn_at_both_ends_on_every_view_that_shows_it(built):
     """`v` is the centre of the shelf stud above the bottom of the frame. Up
     the device is up the page on the front, the rear and both sides: the top
@@ -433,6 +449,7 @@ def test_a_part_along_y_is_drawn_at_both_ends_on_every_view_that_shows_it(built)
         assert rows(built, cfg, "front")["block"]["box"] == rows(built, "base", "front")["block"]["box"]
 
 
+@pytest.mark.heavy
 def test_each_configuration_moves_only_its_own_adjustment(built):
     for cfg, (aid, value) in XY.items():
         got = json.loads(face(built, cfg, "front").get("data-adjustments"))
@@ -471,6 +488,7 @@ PARITY = [("forward", {"panel": {AID: "20"}}), ("back", {"panel": {AID: "rear"}}
           ("y-min", {"shelf": {"shelf-height": "5"}}), ("y-max", {"shelf": {"shelf-height": "35"}})]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("cfg, fields", PARITY, ids=[c for c, _ in PARITY])
 def test_the_kit_moves_the_default_build_to_where_the_build_draws_it(built, tmp_path, cfg, fields):
     """ONE MOVE, WRITTEN TWICE: `mark_member` in render.py draws a
@@ -509,6 +527,7 @@ def _svg(text):
     return ET.fromstring(f'<svg xmlns="http://www.w3.org/2000/svg">{text}</svg>')
 
 
+@pytest.mark.heavy
 def test_the_build_refuses_a_member_inside_a_member():
     from portrayal import render
     with pytest.raises(ValueError, match="would move twice"):
@@ -517,6 +536,7 @@ def test_the_build_refuses_a_member_inside_a_member():
             '<g id="inner" data-moves-with="a" data-moves-by="1 0 0"/></g>'))
 
 
+@pytest.mark.heavy
 def test_the_build_refuses_a_member_under_a_group_that_is_turned():
     from portrayal import render
     with pytest.raises(ValueError, match="not in the frame of the face"):
@@ -530,6 +550,7 @@ def test_the_build_refuses_a_member_under_a_group_that_is_turned():
         '<g id="p" transform="translate(1,2)" data-moves-with="a" data-moves-by="1 0 0"/>'))
 
 
+@pytest.mark.heavy
 def test_every_face_of_a_device_that_slides_is_checked(monkeypatch):
     """And the build asks: with the check made to refuse everything, drawing a
     face of the fixture stops; a device that declares no adjustment is not asked."""
@@ -551,6 +572,7 @@ def test_every_face_of_a_device_that_slides_is_checked(monkeypatch):
                        config=doc["configurations"]["base"])
 
 
+@pytest.mark.heavy
 def test_a_part_seated_on_a_member_moves_with_it(tmp_path):
     """NOT A MODEL OF THIS ROUTER: it has a cage a configuration can seat an
     optic in. The optic is a placement the build makes, with no entry to say

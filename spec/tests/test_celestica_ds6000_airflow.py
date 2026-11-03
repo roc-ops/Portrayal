@@ -49,11 +49,13 @@ def doc():
     return yaml.safe_load(DEVICE.read_text())
 
 
+@pytest.mark.heavy
 def test_each_build_resolves_to_the_direction_its_order_line_ends_in(doc):
     got = {name: config_airflow(doc, cfg) for name, cfg in doc["configurations"].items()}
     assert got == WANT
 
 
+@pytest.mark.heavy
 def test_airflow_is_stated_once_on_the_chassis(doc):
     assert doc["chassis"].get("airflow") == F2B
     stated = {n: c.get("airflow") for n, c in doc["configurations"].items() if c.get("airflow")}
@@ -63,10 +65,12 @@ def test_airflow_is_stated_once_on_the_chassis(doc):
     assert not [e for e in found.errors if "[L91]" in e], found.errors
 
 
+@pytest.mark.heavy
 def test_the_index_offers_both_directions(doc):
     assert device_options(doc)["airflow"] == [B2F, F2B]
 
 
+@pytest.mark.heavy
 def test_the_provenance_entry_says_what_the_data_sheet_prints_and_what_it_does_not(doc):
     entry = doc["provenance"]["airflow"]
     assert entry["confidence"] == "datasheet"
@@ -133,12 +137,14 @@ def export_airflow(vendor_dir, part):
     return yaml.safe_load((vendor_dir / f"{part}.yaml").read_text()).get("airflow")
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("dcim", ["netbox", "nautobot"])
 def test_the_committed_device_types_carry_the_direction(dcim):
     folder = EXPORTS / dcim / "device-types/Celestica"
     assert {p: export_airflow(folder, p) for p in EXPORTED} == EXPORTED
 
 
+@pytest.mark.heavy
 def test_the_lock_agrees_with_the_device():
     found = [f for f in devicelock.check(LIB) if f[0] == "celestica/ds6000"]
     assert found == []

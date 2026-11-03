@@ -201,6 +201,7 @@ def test_the_bytes_are_deterministic():
 
 # ---- --if-stale -------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_if_stale_writes_a_missing_elements_file(tmp_path):
     """A dist from before #727 has every SVG and no elements file. `--fast`
     must see that as stale, or the files never appear until a full build."""
@@ -228,6 +229,7 @@ def _indexes():
     return [json.loads(p.read_text()) for p in found]
 
 
+@pytest.mark.heavy
 def test_every_face_has_its_elements_file_and_the_default_copy_is_the_same_bytes():
     checked = 0
     for idx in _indexes():

@@ -128,6 +128,7 @@ def _long_runs_in(path):
     return [(n, q) for t in texts for _, n, q in lint.long_quotes(t)]
 
 
+@pytest.mark.heavy
 def test_no_doc_or_other_yaml_quotes_a_long_passage():
     md, ym = _prose_files()
     assert len(md) > 20 and len(ym) > 20, "the prose walk found almost nothing - it is broken"
