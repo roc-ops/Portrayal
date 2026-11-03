@@ -16,4 +16,4 @@
   accepting: a bay that stops accepting a part is a major bump). Each takes a minor, because the build now publishes a DC port for it,
   with their locks and the drawing version line and the two PSU bay descriptions of their exported device types (16 files in NetBox
   and Nautobot). No port, interface or id moves. `common/psu-dc-650@2` is not edited: the AS5912-54X, AS7326-56X and AS7726-32X still
-  seat it, and its record in the conformance records stays, so `cap:` is 172.
+  seat it, and its record in the conformance records stays, so `cap:` stays 167.
