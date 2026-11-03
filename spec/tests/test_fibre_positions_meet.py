@@ -30,6 +30,7 @@ import yaml
 
 from test_nested_occupants import LIB, device_point
 from test_slot_defaults import _copy, build
+import pytest
 
 FHD = "fs/fhd-1ufce"
 DCP = "smartoptics/dcp-r-34d-cs"
@@ -132,6 +133,7 @@ def test_an_mpo24_plug_meets_the_24_fibre_bulkhead_in_the_inner_sequence(tmp_pat
     assert misses(plug, adapter, INNER_SEQUENCE) == {}
 
 
+@pytest.mark.heavy
 def test_an_mpo12_plug_meets_the_panel_tiles_fibres_one_for_one(tmp_path):
     """common/mpo-adapter@2 is placed by nothing, so a throwaway cassette
     carries a tile on its front - the fixture test_fibre_plugs.py uses."""

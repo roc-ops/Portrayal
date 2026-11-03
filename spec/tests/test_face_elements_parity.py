@@ -79,6 +79,7 @@ def _published(rows):
     return [(r.get("path", r.get("of")), r["parent"]) for r in rows]
 
 
+@pytest.mark.heavy
 def test_parents_match_the_explorer(faces):
     assert len(faces) > 1000, f"only {len(faces)} faces; the build is not the library"
     differ, rows = [], 0
@@ -102,6 +103,7 @@ def test_the_explorer_tree_is_face_tree():
     assert "byPath" not in body, "shell.js buildTree nests rows itself again"
 
 
+@pytest.mark.heavy
 def test_every_fallback_fired_somewhere(faces):
     """A parity test over faces that never reach a rule proves nothing about
     that rule. Count each one on the published rows."""

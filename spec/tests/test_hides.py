@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from portrayal import lint
+import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
@@ -60,6 +61,7 @@ def test_the_r660_bezel_names_its_drives():
     assert any(len(v) == 16 and v[0] == "e3s-0" for v in hid.values())
 
 
+@pytest.mark.heavy
 def test_nothing_else_in_the_library_carries_data_hides():
     carriers = set()
     for svg in _built("*.svg"):

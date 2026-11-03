@@ -88,6 +88,7 @@ def test_the_module_says_where_its_cables_land(ref):
     assert not missing, f"{ref}: its sentence does not say {missing}: {sentence!r}"
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", PARTS)
 def test_the_module_offers_no_interface_slot_or_mate(ref, index):
     offered = [key for key in OFFERS if key in contract(ref)]

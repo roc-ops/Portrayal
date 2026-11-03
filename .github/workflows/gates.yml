@@ -17,13 +17,30 @@ on:
   # answers in two minutes. `ready_for_review` is listed because it is NOT among
   # the default types, and without it marking a draft ready would start nothing:
   # the suite would wait for the next push.
+  #
+  # `labeled` IS HOW A PULL REQUEST GETS ITS FULL RUN. A push runs the light
+  # tier (see THE TWO TIERS, below), whose verdict is not the required `build`;
+  # the `full-gates` label makes this and every later run on the pull request
+  # the whole suite, and before a merge that is what lands `build`
+  # (docs/merging.md). It has to be a pull request event: GitHub leaves a
+  # dispatched run out of a pull request's checks. On #1398 a dispatch passed
+  # `build` on the head (966146dea) and the pull request stayed blocked on it,
+  # still "expected", while the commit's own check list showed it green. Any
+  # other label starts a run too, of the tier the labels make; pull requests
+  # here carry none (not one on the last hundred), so that costs nothing.
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review, labeled]
   push:
     branches: [main]
-  # A FULL RUN ON MAIN, ON REQUEST. A push to main runs lint only (see `build`
-  # below); this is the button for the day somebody wants the whole thing.
+  # A FULL RUN ON A BRANCH, ON REQUEST: the merge train's (.github/merge-train.py)
+  # and, on main, the button for the day somebody wants the whole thing. NOT A
+  # PULL REQUEST'S: its checks never reach one (`labeled`, above).
   workflow_dispatch:
+  # THE WHOLE SUITE ON MAIN EVERY NIGHT. Every merge had its own full run, but
+  # not on the tree two merges made together, and a runner image or a
+  # dependency can move under a tree that did not. Off the hour, as GitHub asks.
+  schedule:
+    - cron: '17 8 * * *'
 
 # NO `paths-ignore`, AND THAT IS A DECISION (#183). The obvious saving is to
 # skip the run on a docs-only diff, and this repository cannot: four files under
@@ -58,8 +75,12 @@ permissions:
 # as passing: the pull request was mergeable on lint (#867). Keyed by draft, the
 # ready run always finishes and lands a real `build`; a later push to the ready
 # pull request still cancels it, as before.
+#
+# THE EVENT IS IN THE GROUP TOO, so the nightly and a dispatch on main are not
+# cancelled by the next merge's push to main, which only lints. Two dispatches
+# on one branch still share a group: the second is the head that will merge.
 concurrency:
-  group: gates-${{ github.workflow }}-${{ github.ref }}-${{ github.event.pull_request.draft == true }}
+  group: gates-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}-${{ github.event.pull_request.draft == true }}
   cancel-in-progress: true
 
 # WHERE THE JOBS RUN IS A REPOSITORY VARIABLE, NOT THIS FILE. While the
@@ -128,11 +149,22 @@ jobs:
   # was a minute of queue for the next pull request. The repository is public
   # and hosted minutes cost it nothing, so four runners do it side by side.
   #
-  # NOT ON A PUSH TO MAIN, any of the three. The merge train merges only heads
-  # that are green and were tested together, in the order they land, so `--merge`
-  # gives main the very tree the train built and tested - and the build on the
-  # push re-ran twenty minutes of work on a known answer. Lint still runs on the
-  # push (a minute), and `workflow_dispatch` runs everything on request.
+  # NOT ON A PUSH TO MAIN, any of the three. A merge lands a head whose full run
+  # passed, so `--merge` gives main a tree that was built and tested - and the
+  # build on the push re-ran twenty minutes of work on a known answer. Lint still
+  # runs on the push (a minute); the nightly and `workflow_dispatch` run the rest.
+  #
+  # THE TWO TIERS. A same-repository pull request push runs the LIGHT tier:
+  # `-m "not heavy"` on two shards, every test but the few hundred functions a
+  # full run measured at five seconds or more (`heavy`, spec/tools/dev/
+  # mark_heavy.py), in about a fifth of the suite's seconds. Its verdict is
+  # called `light suite`. Everything else - a pull request labelled
+  # `full-gates`, a fork's pull request, a dispatch, the nightly - is a FULL
+  # run on four shards, and only its verdict is called `build`. A head
+  # therefore has the required check only once the whole suite has passed on
+  # it, and the merge waits for that rather than for anybody remembering to
+  # ask. Both tiers answer to
+  # spec/test-budget.json. `dist` decides the tier, once, for the jobs after it.
   dist:
     if: github.event_name != 'push' && !github.event.pull_request.draft
     runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
@@ -144,7 +176,15 @@ jobs:
       contents: read
       actions: read
       pull-requests: read
+    outputs:
+      tier: ${{ steps.tier.outputs.tier }}
     steps:
+      # FIRST, so the tier is set whatever fails after it. A light verdict can
+      # never be called `build`; an empty tier reads as light.
+      - name: tier
+        id: tier
+        run: echo "tier=${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository || contains(github.event.pull_request.labels.*.name, 'full-gates')) && 'full' || 'light' }}" >> "$GITHUB_OUTPUT"
+
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
 
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
@@ -248,13 +288,12 @@ jobs:
           retention-days: 1
           compression-level: 0
 
-  # FOUR, FROM THE NUMBERS. The suite is about 4,100 summed seconds and ran in
-  # 1,103s on one hosted runner, so a quarter is about 280s of wall clock -
-  # which is near the floor: the slowest single test (a whole-library lint) is
-  # 200s on its own and no split can go under it. A fifth shard would buy
-  # seconds and pay another runner's setup; three would leave each one six
-  # minutes. The count is the length of this list and nothing else:
-  # `strategy.job-total` hands it to the split.
+  # FOUR FOR A FULL RUN, TWO FOR A LIGHT ONE, FROM THE NUMBERS. The full suite
+  # was about 8,400 summed seconds once the xdist groups worked again (pytest
+  # below 9.2), and its slowest single test - a whole-library lint, around 200s
+  # - is a floor no split goes under. The light tier is about 1,350 summed
+  # seconds, so two runners take a few minutes each. The count is the length of
+  # the list and nothing else: `strategy.job-total` hands it to the split.
   tests:
     name: tests ${{ matrix.shard }} of ${{ strategy.job-total }}
     needs: dist
@@ -266,7 +305,7 @@ jobs:
       # three, and stopping them would hide their failures until the next push.
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: ${{ fromJSON(needs.dist.outputs.tier == 'full' && '[1, 2, 3, 4]' || '[1, 2]') }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
 
@@ -333,14 +372,20 @@ jobs:
       # empties at start and the runner deletes after the job - cancelled jobs
       # included. TMPDIR does the same for mkdtemp() and for the subprocesses
       # the suite shells out to. A hosted runner is unaffected.
+      #
+      # THE LIGHT TIER DESELECTS `heavy` and the split comes after it
+      # (shards.py splits last), so each shard's record is of what it ran.
       - name: tests
         env:
           PORTRAYAL_LINT_ALREADY_RAN: '1'
+          TIER: ${{ needs.dist.outputs.tier }}
         run: |
           set -o pipefail
           export TMPDIR="$RUNNER_TEMP/tmp"
           mkdir -p "$TMPDIR" "$RUNNER_TEMP/out"
-          python3 -m pytest spec/tests -q -rs -n auto \
+          select=()
+          [ "$TIER" = full ] || select=(-m "not heavy")
+          python3 -m pytest spec/tests -q -rs -n auto "${select[@]}" \
             --shard "${{ matrix.shard }}/${{ strategy.job-total }}" \
             --shard-weights "$RUNNER_TEMP/bundle/shard-weights.json" \
             --shard-record "$RUNNER_TEMP/out/record.json" \
@@ -369,7 +414,13 @@ jobs:
   # ready starts a fresh run on the same head (`ready_for_review` above), whose
   # `build` is pending until the suite has run. Merge on that run's conclusion,
   # never on a `skipped` one.
+  #
+  # ITS NAME IS THE TIER'S. Only a full run's verdict is `build`; a light run's
+  # is `light suite`, skipped or not, so no pull request push can put a passing
+  # or a skipped `build` on a head. The job id stays `build` for the tests that
+  # read this file; the check is what the name evaluates to.
   build:
+    name: ${{ needs.dist.outputs.tier == 'full' && 'build' || 'light suite' }}
     needs: [dist, tests]
     if: ${{ !cancelled() && github.event_name != 'push' && !github.event.pull_request.draft }}
     runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
@@ -459,6 +510,42 @@ jobs:
             --out "$RUNNER_TEMP/test-times.json" \
             --fetch-base "$GITHUB_REPOSITORY" --summary "$GITHUB_STEP_SUMMARY"
 
+      # THE BUDGET, WHICH CAN FAIL THE RUN where the report above cannot. The
+      # tier's summed seconds against spec/test-budget.json, read in the units
+      # of the run each number was set from (spec/test-budget-reference.json,
+      # file by file), so a slow runner is not a bigger suite; on the light
+      # tier, a new test function of five seconds or more too, judged against
+      # the newest merged run. Raising a budget, or re-recording its reference,
+      # is a one-way door. With no base run the ceiling goes unchecked and the
+      # step says so (a rate limit must not hold a merge). The job installs nothing, and the tool's
+      # one import is the standard-library suite_times, hence PYTHONPATH.
+      #
+      # THE PULL REQUEST'S FILES, so a new slow test fails only the change that
+      # holds it: the base can predate a test merged since, which would then
+      # read as new to everybody. Unreadable, nothing counts as touched and a
+      # new slow test warns: a rate limit must not hold a merge.
+      - name: test budget
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR: ${{ github.event.pull_request.number }}
+          TIER: ${{ needs.dist.outputs.tier }}
+          PYTHONPATH: spec/tools
+        run: |
+          junits=("$RUNNER_TEMP"/shards/shard-*/junit.xml)
+          touched=()
+          if [ -n "$PR" ]; then
+            gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate \
+              --jq '.[].filename' > "$RUNNER_TEMP/touched.txt" \
+              || : > "$RUNNER_TEMP/touched.txt"
+            touched=(--touched "$RUNNER_TEMP/touched.txt")
+          fi
+          python3 spec/tools/portrayal/suite_budget.py "${junits[@]}" "${touched[@]}" \
+            --tier "$TIER" --budget spec/test-budget.json \
+            --reference spec/test-budget-reference.json --fetch-base "$GITHUB_REPOSITORY"
+
       # The record a LATER run compares against, and the weights a later run
       # splits by. Only a merged head's is ever read, but the run cannot know
       # yet whether it will merge.
@@ -471,7 +558,9 @@ jobs:
         continue-on-error: true
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
         with:
-          name: test-times
+          # ONLY A FULL RUN'S TIMES ARE `test-times`, the base every later run
+          # compares against and splits by. A light run's lack the heavy tier.
+          name: ${{ needs.dist.outputs.tier == 'full' && 'test-times' || 'test-times-light' }}
           path: ${{ runner.temp }}/test-times.json
           if-no-files-found: ignore
           overwrite: true

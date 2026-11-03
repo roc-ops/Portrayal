@@ -48,6 +48,7 @@ def _ancestor_with(parent, el, attr):
     return None
 
 
+@pytest.mark.heavy
 def test_no_sink_is_drawn_outside_a_cavity():
     if not DIST.exists():
         pytest.skip("library/dist not built")
@@ -78,6 +79,7 @@ def test_no_sink_is_drawn_outside_a_cavity():
             for i, fs in sorted(orphans.items())))
 
 
+@pytest.mark.heavy
 def test_a_pocket_does_not_swallow_the_cavity_it_sits_in():
     """The trap on the other side of the fix, which is why it is checked.
 

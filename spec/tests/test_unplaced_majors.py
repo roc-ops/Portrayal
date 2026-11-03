@@ -44,6 +44,7 @@ def run(root):
 
 # --- the live library ---------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_library_has_no_unexplained_majors():
     """The corpus, which is the only run that matters. Every major is reachable
     from a device, or carries the sentence saying what would seat it."""

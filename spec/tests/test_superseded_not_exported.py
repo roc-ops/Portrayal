@@ -97,6 +97,7 @@ def test_a_retired_module_alone_writes_nothing(tmp_path):
     assert not any("FIXTURE-RETIRED" in f for f in files), files
 
 
+@pytest.mark.heavy
 def test_a_retired_major_does_not_change_its_successors_export(tmp_path):
     """Sorted FIRST and identical in what a DCIM reads, so without the skip it
     would collapse into the successor's file and put its own stamp there."""
@@ -117,6 +118,7 @@ def test_a_retired_major_does_not_change_its_successors_export(tmp_path):
         assert "(juniper/fixture-a)" not in text, f
 
 
+@pytest.mark.heavy
 def test_a_retired_carrier_passes_no_depth_to_what_its_bays_accept():
     """`seating_depths` keys a carrier by its MODEL, so a retired major shares
     the depth of the live carrier it was replaced by. Read through its bays, it

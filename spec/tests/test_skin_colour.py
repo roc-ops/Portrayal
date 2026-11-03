@@ -187,6 +187,7 @@ def _usb_placements():
                     yield f"{p.parent.parent.name}/{p.parent.name}", vname, pl
 
 
+@pytest.mark.heavy
 def test_a_port_the_device_calls_usb_2_is_not_drawn_as_usb_3():
     """THE SWEEP, and it is structural: the placement's own declared USB
     generation against the skin it asks for. Reading the provenance prose instead would
@@ -202,6 +203,7 @@ def test_a_port_the_device_calls_usb_2_is_not_drawn_as_usb_3():
     assert not bad, "\n".join(bad)
 
 
+@pytest.mark.heavy
 def test_a_port_the_device_calls_usb_3_keeps_the_blue():
     """The other direction, which is what stops a sweep over-reaching. The
     R740xd is the case that proves the granularity is right: its FRONT pair is
@@ -213,6 +215,7 @@ def test_a_port_the_device_calls_usb_3_keeps_the_blue():
     assert not bad, bad
 
 
+@pytest.mark.heavy
 def test_the_usb_sweeps_measure_something():
     """Both sweeps above read `attrs.usb`, so a rename of the attr would leave
     them passing over nothing. They have to see both generations."""
@@ -220,6 +223,7 @@ def test_the_usb_sweeps_measure_something():
     assert USB_2 <= seen and USB_3 <= seen, seen
 
 
+@pytest.mark.heavy
 def test_the_r740xd_draws_its_two_usb_generations_apart():
     """Dell's own table: the front panel is two USB 2.0 and the rear is two 3.0."""
     seen = {}

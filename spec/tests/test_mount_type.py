@@ -125,6 +125,7 @@ def _devices():
             yield path, doc
 
 
+@pytest.mark.heavy
 def test_the_library_states_a_mount_for_every_box_that_is_not_racked():
     """Each device either has rack units, says how else it is installed, or
     waives L125 with its reason. The count guards against a vacuous pass."""
