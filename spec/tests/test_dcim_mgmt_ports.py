@@ -77,6 +77,7 @@ def _census():
     return heard, dropped, devices
 
 
+@pytest.mark.heavy
 def test_no_management_port_is_silently_dropped():
     """THE GUARD. A management-cluster port that exports nothing is either a
     part NOT_A_DCIM_PORT already explains, or a (part, role) the management
@@ -99,6 +100,7 @@ def test_a_mgmt_or_console_port_is_never_exempt():
     assert not leaked, f"role mgmt/console/aux placements that export nothing: {leaked}"
 
 
+@pytest.mark.heavy
 def test_the_management_register_carries_no_stale_entries():
     _heard, dropped, _devices = _census()
     stale = sorted((k for k in dx.MGMT_NOT_A_DCIM_PORT if k not in dropped), key=str)
@@ -112,6 +114,7 @@ def test_every_management_register_entry_gives_a_reason():
     assert not thin, thin
 
 
+@pytest.mark.heavy
 def test_the_census_is_not_vacuous():
     """An empty walk passes as quietly as the bug. Measured on #384: 1,795
     management placements heard across every configuration, on 154 devices, and

@@ -109,6 +109,7 @@ def test_the_two_terminal_mates_state_the_media_the_fibre_plug_census_leaves_out
     assert contract(ref)["attrs"]["media"] == media
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("key", ["wire-wrap-3", "screw-terminal-5", "orv3-busbar"])
 def test_each_new_key_has_exactly_one_mate_and_no_sentence(key):
     mates = []
@@ -162,6 +163,7 @@ def seats(index, ref):
     return [(c["id"], c["kind"], c["interface"], c["accepts"]) for c in index[ref]["cages"]]
 
 
+@pytest.mark.heavy
 def test_the_alarm_card_publishes_two_seats_that_accept_the_wire_wrap_housing(index):
     assert seats(index, CARD) == [("alarm-b", "connector", "wire-wrap-3", [WIRE_WRAP_PLUG]),
                                   ("alarm-a", "connector", "wire-wrap-3", [WIRE_WRAP_PLUG])]

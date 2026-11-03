@@ -59,6 +59,7 @@ def template_library(tmp_path_factory):
     return lib, schemas
 
 
+@pytest.mark.heavy
 def test_template_lints_with_no_errors_and_only_the_fan_modules_warnings(template_library):
     lib, schemas = template_library
     r = subprocess.run([sys.executable, str(TOOLS / "lint.py"), "--schemas", str(schemas),

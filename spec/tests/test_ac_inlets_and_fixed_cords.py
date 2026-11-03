@@ -64,6 +64,7 @@ def test_the_part_says_why_nothing_lands_on_it(ref):
     assert not missing, f"{ref}: its sentence does not say {missing}: {sentence!r}"
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", PARTS)
 def test_the_part_offers_no_interface_slot_or_mate(ref, index):
     offered = [key for key in OFFERS if key in contract(ref)]

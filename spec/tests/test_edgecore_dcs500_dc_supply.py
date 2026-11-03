@@ -241,6 +241,7 @@ def test_a_device_type_is_exported_for_each_dc_sku(flavour, model):
     assert (LIB / "exports" / flavour / "device-types" / "Edgecore" / f"{model}.yaml").exists()
 
 
+@pytest.mark.heavy
 def test_the_lock_agrees_with_the_device_and_the_two_supply_parts():
     from portrayal import devicelock
 

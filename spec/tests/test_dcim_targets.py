@@ -222,6 +222,7 @@ def test_the_half_u_boxes_differ_between_the_trees_only_in_height(vendor, model,
     assert {k for k in nb if nb[k] != nt.get(k)} == {"u_height", "comments"}
 
 
+@pytest.mark.heavy
 def test_the_trees_differ_nowhere_else():
     """Everything `for_target`, `nested_bays_for` and `seat_names` do not
     rewrite is still one document in both: the files that differ are the ones
@@ -257,6 +258,7 @@ def test_a_slash_in_a_manufacturer_is_not_a_directory():
     assert "/" not in dx.manufacturer_dir("a/b/c")
 
 
+@pytest.mark.heavy
 def test_every_export_sits_one_directory_below_its_tree_under_its_manufacturer():
     """The files, not the function: each device type and module type is at
     `<tree>/<kind>/<manufacturer directory>/<file>`, and the directory is its

@@ -151,6 +151,7 @@ def test_no_single_stud_is_left_where_a_pair_now_lands(device):
             assert p["ref"] not in ("common/ground-lug@1", "common/ground-stud@1"), (view, p["id"])
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device,view,pid", CASES)
 def test_each_pair_is_a_slot_offering_the_two_hole_lug_of_its_pitch(slots, device, view, pid):
     host = PAIRS[device][(view, pid)][0]

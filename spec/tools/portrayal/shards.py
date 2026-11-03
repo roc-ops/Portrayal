@@ -133,6 +133,19 @@ def _groups(item):
     return out
 
 
+try:
+    import pytest
+    _after_deselection = pytest.hookimpl(trylast=True)
+except ImportError:          # `check` and `fetch-weights` run where pytest is not installed
+    def _after_deselection(f):
+        return f
+
+
+# LAST, AFTER `-m` AND `-k` HAVE DESELECTED. The light tier is `-m "not heavy"`
+# under `--shard`; split before the deselection, a heavy test would be dealt to a
+# shard and recorded as kept by a shard that never ran it, and `check` would
+# prove a split that did not happen.
+@_after_deselection
 def pytest_collection_modifyitems(config, items):
     spec = config.getoption("--shard")
     if not spec:

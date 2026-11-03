@@ -64,6 +64,7 @@ def dev(request):
 # ---------------------------------------------------------------- the envelope
 
 
+@pytest.mark.heavy
 def test_envelope_is_table_42(dev):
     """1.73 x 17.5 x 19.2 in for every model. The height is the rack unit, 44.45 mm; the printed
     1.73 in (43.9 mm) is nominal and within a millimetre."""
@@ -76,16 +77,19 @@ def test_envelope_is_table_42(dev):
     assert ch["airflow"] == "front-to-back"
 
 
+@pytest.mark.heavy
 def test_weight_is_table_43(dev):
     _, d, m = dev
     assert d["chassis"]["weight-kg"] == m["weight"]
 
 
+@pytest.mark.heavy
 def test_poe_budget_is_table_18(dev):
     _, d, m = dev
     assert d["attrs"]["power"]["poe-budget-w"] == m["poe"]
 
 
+@pytest.mark.heavy
 def test_every_face_is_sized_from_the_chassis(dev):
     _, d, _ = dev
     ch = d["chassis"]
@@ -95,6 +99,7 @@ def test_every_face_is_sized_from_the_chassis(dev):
         assert d["views"][v]["size"] == {"w": ch["width"], "h": ch["depth"]}
 
 
+@pytest.mark.heavy
 def test_the_ears_name_the_shipped_position_and_no_kit_is_written(dev):
     _, d, _ = dev
     pos = d["chassis"]["ears"]["positions"]
@@ -104,6 +109,7 @@ def test_the_ears_name_the_shipped_position_and_no_kit_is_written(dev):
     assert "rack-kit" in {g["what"] for g in d["gaps"]}
 
 
+@pytest.mark.heavy
 def test_the_device_is_named_as_the_pilot_names_its_devices(dev):
     _, d, m = dev
     assert d["manufacturer"] == "Cisco" and d["model"] == m["model"]
@@ -114,6 +120,7 @@ def test_the_device_is_named_as_the_pilot_names_its_devices(dev):
 # ----------------------------------------------------------------------- ports
 
 
+@pytest.mark.heavy
 def test_front_has_the_numbered_rj45_ports_table_1_gives(dev):
     _, d, m = dev
     pl = placements(d, "front")
@@ -124,6 +131,7 @@ def test_front_has_the_numbered_rj45_ports_table_1_gives(dev):
     assert d["groups"]["rj45"]["attrs"] == {"media": "rj45", "speed": "1g"}
 
 
+@pytest.mark.heavy
 def test_ports_run_down_each_column_in_blocks_of_six(dev):
     _, d, m = dev
     pl = placements(d, "front")
@@ -138,6 +146,7 @@ def test_ports_run_down_each_column_in_blocks_of_six(dev):
     assert gutters == list(range(5, len(xs) - 1, 6)), "a gutter after every sixth column"
 
 
+@pytest.mark.heavy
 def test_a_24_port_face_has_its_two_blocks_where_the_merged_48p_has_its_last_two():
     """The 24-port elevations draw the jacks at the x positions of the 48-port picture's third and
     fourth blocks; the merged C9300-48P is the reference for those positions."""
@@ -149,12 +158,14 @@ def test_a_24_port_face_has_its_two_blocks_where_the_merged_48p_has_its_last_two
             assert pl[f"port-{n}"]["at"][1] == pytest.approx(ref[f"port-{n + 24}"]["at"][1], abs=0.01)
 
 
+@pytest.mark.heavy
 def test_the_48u_front_ports_sit_where_the_48p_front_ports_sit():
     ref, new = placements(load("c9300-48p"), "front"), placements(load("c9300-48u"), "front")
     for n in range(1, 49):
         assert new[f"port-{n}"]["at"] == ref[f"port-{n}"]["at"]
 
 
+@pytest.mark.heavy
 def test_every_port_has_a_lamp(dev):
     _, d, m = dev
     pl = placements(d, "front")
@@ -163,6 +174,7 @@ def test_every_port_has_a_lamp(dev):
     assert all(pl[f"led-port-{i}"]["for"] == f"port-{i}" for i in range(1, n + 1))
 
 
+@pytest.mark.heavy
 def test_the_legends_are_the_elevations_own(dev):
     _, d, m = dev
     texts = {s["text"] for s in d["views"]["front"]["silkscreen"]}
@@ -173,6 +185,7 @@ def test_the_legends_are_the_elevations_own(dev):
         assert {"01X", "12X", "13X", "24X", "25X", "36X", "37X", "48X"} <= texts
 
 
+@pytest.mark.heavy
 def test_each_name_plate_says_its_own_model():
     plates = {n: [s["text"] for s in load(n)["views"]["front"]["silkscreen"] if s["id"] == "silk-model"][0]
               for n in MODELS}
@@ -183,6 +196,7 @@ def test_each_name_plate_says_its_own_model():
     }
 
 
+@pytest.mark.heavy
 def test_no_logo_or_wordmark_is_drawn(dev):
     _, d, _ = dev
     for v in ("front", "rear"):
@@ -192,6 +206,7 @@ def test_no_logo_or_wordmark_is_drawn(dev):
     assert zone and "not drawn" in zone[0]["label"]
 
 
+@pytest.mark.heavy
 def test_front_console_is_the_registry_mini_usb_b_and_there_is_a_usb_a(dev):
     _, d, _ = dev
     pl = placements(d, "front")
@@ -200,6 +215,7 @@ def test_front_console_is_the_registry_mini_usb_b_and_there_is_a_usb_a(dev):
     assert d["groups"]["usb-console"]["attrs"] == {"media": "mini-usb-b"}
 
 
+@pytest.mark.heavy
 def test_the_buttons_and_the_mode_button_part_are_reused(dev):
     _, d, _ = dev
     pl = placements(d, "front")
@@ -207,6 +223,7 @@ def test_the_buttons_and_the_mode_button_part_are_reused(dev):
     assert pl["uid-button"]["ref"] == "common/button-led-sq@1"
 
 
+@pytest.mark.heavy
 def test_rear_console_management_stack_and_power_stack_connectors(dev):
     _, d, _ = dev
     pl = placements(d, "rear")
@@ -218,6 +235,7 @@ def test_rear_console_management_stack_and_power_stack_connectors(dev):
     assert pl["usb-ssd"]["attrs"]["usb"] == "3.0"
 
 
+@pytest.mark.heavy
 def test_the_stackwise_ports_reuse_the_three_connector_carrier(dev):
     _, d, _ = dev
     pl = placements(d, "rear")
@@ -229,6 +247,7 @@ def test_the_stackwise_ports_reuse_the_three_connector_carrier(dev):
     assert len(openings) == 3 and all(s == [14.9, 5.2] for s in openings)
 
 
+@pytest.mark.heavy
 def test_the_rear_is_the_merged_series_rear(dev):
     """Every model's rear is placed where the merged C9300-48P's rear is: the 24-port rears agree
     with it to a millimetre on their own elevations, and the 48U's is carried from it."""
@@ -239,6 +258,7 @@ def test_the_rear_is_the_merged_series_rear(dev):
         {k: (v["at"], v["size"]) for k, v in bays(ref, "rear").items()}
 
 
+@pytest.mark.heavy
 def test_the_48u_rear_is_marked_estimated_from_the_48p_and_figure_10():
     d = load("c9300-48u")
     note = d["provenance"]["rear-scale"]
@@ -247,6 +267,7 @@ def test_the_48u_rear_is_marked_estimated_from_the_48p_and_figure_10():
     assert "rear-drawing" in {g["what"] for g in d["gaps"]}
 
 
+@pytest.mark.heavy
 def test_the_poe_lamp_is_on_every_model(dev):
     _, d, _ = dev
     assert "led-poe" in placements(d, "front")
@@ -255,6 +276,7 @@ def test_the_poe_lamp_is_on_every_model(dev):
 # ------------------------------------------------- supplies, fans and the bays
 
 
+@pytest.mark.heavy
 def test_three_fan_modules_seat_fan_t2(dev):
     _, d, _ = dev
     fans = {k: v for k, v in bays(d, "rear").items() if k.startswith("fan-")}
@@ -263,6 +285,7 @@ def test_three_fan_modules_seat_fan_t2(dev):
                for b in fans.values())
 
 
+@pytest.mark.heavy
 def test_both_supply_bays_accept_what_the_guide_lists_and_the_cover(dev):
     _, d, _ = dev
     fb = bays(d, "rear")
@@ -271,6 +294,7 @@ def test_both_supply_bays_accept_what_the_guide_lists_and_the_cover(dev):
         assert set(fb[bid]["accepts"]) == want
 
 
+@pytest.mark.heavy
 def test_the_pwr_c6_supplies_are_not_accepted(dev):
     """Table 35 lists the PWR-C6 supplies for the C9300LM only."""
     _, d, _ = dev
@@ -278,6 +302,7 @@ def test_the_pwr_c6_supplies_are_not_accepted(dev):
         assert not [a for a in bays(d, "rear")[bid]["accepts"] if "pwr-c6" in a]
 
 
+@pytest.mark.heavy
 def test_default_supply_is_table_18_and_the_second_slot_has_the_cover(dev):
     _, d, m = dev
     fb = bays(d, "rear")
@@ -285,6 +310,7 @@ def test_default_supply_is_table_18_and_the_second_slot_has_the_cover(dev):
     assert fb["psu-2"]["default"] == "cisco/c9300-psu-blank@1"
 
 
+@pytest.mark.heavy
 def test_the_network_module_bay_takes_only_the_blank(dev):
     _, d, _ = dev
     bay = bays(d, "front")["nm-bay"]
@@ -294,6 +320,7 @@ def test_the_network_module_bay_takes_only_the_blank(dev):
 # ------------------------------------------------------------- configurations
 
 
+@pytest.mark.heavy
 def test_the_orderable_configuration_is_the_model_as_shipped(dev):
     name, d, m = dev
     cfgs = d["configurations"]
@@ -305,6 +332,7 @@ def test_the_orderable_configuration_is_the_model_as_shipped(dev):
     assert not [k for k, v in cfgs.items() if v["kind"] == "base"]
 
 
+@pytest.mark.heavy
 def test_every_supply_has_a_configuration_that_seats_it(dev):
     name, d, m = dev
     cfgs = d["configurations"]
@@ -318,6 +346,7 @@ def test_every_supply_has_a_configuration_that_seats_it(dev):
     assert dual[next(iter(dual))]["bays"] == {"psu-2": f"cisco/{m['psu']}@1"}
 
 
+@pytest.mark.heavy
 def test_the_dc_supply_feeds_a_dc_configuration(dev):
     _, d, _ = dev
     cfg = d["configurations"]["psu-715wdc"]
@@ -325,6 +354,7 @@ def test_the_dc_supply_feeds_a_dc_configuration(dev):
     assert d["chassis"]["power"] == "ac"
 
 
+@pytest.mark.heavy
 def test_licence_suffix_is_not_a_part_number(dev):
     _, d, m = dev
     pn = d["configurations"][m["model"].lower()]["part-numbers"]
@@ -335,6 +365,7 @@ def test_licence_suffix_is_not_a_part_number(dev):
 # ------------------------------------------------------- the DCIM device types
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("target", ["netbox", "nautobot"])
 def test_dcim_exports_one_type_per_device(target):
     for name, m in MODELS.items():
@@ -348,12 +379,14 @@ def test_dcim_exports_one_type_per_device(target):
         assert len(ports) == m["ports"]
 
 
+@pytest.mark.heavy
 def test_the_exported_types_carry_no_illustration():
     names = {f.name for f in (EXPORTS / "netbox/device-types/Cisco").glob("C9300*")}
     assert {f"{m['model']}.yaml" for m in MODELS.values()} <= names
     assert not [n for n in names if n.endswith(("-A.yaml", "-E.yaml"))]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("name", sorted(MODELS))
 def test_committed_exports_equal_the_exporters_own_output(name, tmp_path):
     """Reads library/dist, so it runs after a build."""
@@ -373,6 +406,7 @@ def test_committed_exports_equal_the_exporters_own_output(name, tmp_path):
 # ------------------------------------------------------------------- the lock
 
 
+@pytest.mark.heavy
 def test_the_lock_agrees_with_the_device():
     from portrayal import devicelock
 
@@ -383,6 +417,7 @@ def test_the_lock_agrees_with_the_device():
     assert [f for f in devicelock.check(LIB) if f[0] in mine] == []
 
 
+@pytest.mark.heavy
 def test_the_pilot_devices_are_at_1_1_0():
     for name in ("c9300-48p", "c9300-48t"):
         assert load(name)["version"] == "1.2.0"

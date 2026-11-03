@@ -153,6 +153,7 @@ def test_ports_and_part_ports_are_one_walk():
     assert seen >= 60
 
 
+@pytest.mark.heavy
 def test_the_kit_writes_the_committed_names():
     if shutil.which("node") is None:
         pytest.skip("node not installed")

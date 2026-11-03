@@ -177,6 +177,7 @@ def test_an_unchanged_port_asks_for_nothing(tmp_path):
 
 # --- the real library ---------------------------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_devicelock_names_no_device_of_the_real_library():
     """Passes before this change as well as after."""
     r = subprocess.run([sys.executable, str(ROOT / "spec/tools/portrayal/devicelock.py"),

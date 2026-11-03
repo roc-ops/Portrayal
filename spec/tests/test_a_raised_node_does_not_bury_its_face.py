@@ -32,6 +32,7 @@ import xml.etree.ElementTree as ET
 
 import yaml
 from portrayal.lint import _SVG_NS, _paint_box, _subpaths
+import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
@@ -124,6 +125,7 @@ def _burials():
     return found, compared
 
 
+@pytest.mark.heavy
 def test_no_raised_node_buries_art_drawn_inside_it():
     found, compared = _burials()
     assert compared > 2000, (
@@ -137,6 +139,7 @@ def test_no_raised_node_buries_art_drawn_inside_it():
         + "\n  ".join(f"{ref}: {over} buries {under}" for ref, over, under in unexpected))
 
 
+@pytest.mark.heavy
 def test_every_exemption_is_still_a_real_one():
     """An exemption that no longer describes anything is a lie the next reader
     inherits - and the whole point of naming these two is that they get fixed."""

@@ -171,6 +171,7 @@ def test_the_exported_module_type_names_its_power_ports_in_lower_case_and_says_t
     assert text.count("power-ports:") == 1
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", DEVICES)
 def test_the_device_that_seats_the_supplies_took_a_patch_and_its_lock_agrees(device):
     from portrayal import devicelock
