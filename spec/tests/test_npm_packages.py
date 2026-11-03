@@ -160,6 +160,7 @@ def test_a_package_over_the_limit_fails_the_run(tmp_path):
 
 # ---- the real build ----------------------------------------------------------
 
+@pytest.mark.heavy
 def test_every_device_in_the_library_fits_in_a_package(tmp_path):
     if not (DIST / "devices.json").exists():
         pytest.skip("library/dist not built - run ./build.sh")

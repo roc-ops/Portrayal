@@ -2,6 +2,7 @@
 import pathlib
 
 from portrayal import lint
+import pytest
 
 P = pathlib.Path("library/components/generic/example/v1/contract.yaml")
 
@@ -104,6 +105,7 @@ def test_a_placement_without_cable_od_is_not_asked():
     assert run_device(device({"media": "coax-bnc"})) == []
 
 
+@pytest.mark.heavy
 def test_the_real_library_has_no_device_cable_od_errors():
     import yaml
     root = pathlib.Path(__file__).resolve().parents[2]

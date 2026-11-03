@@ -316,6 +316,7 @@ def test_only_the_9504_and_9516_carry_the_fm5_note_and_the_9516_the_gx_note():
     assert "not compatible" in device("9516")["provenance"]["line-cards"]["note"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("chassis", sorted(CHASSIS))
 def test_each_chassis_is_at_the_minor_the_lock_asked_for_and_the_lock_agrees(chassis):
     assert device(chassis)["version"] == VERSIONS[chassis]

@@ -172,6 +172,7 @@ def _silent():
 
 # --- the register, held tight from both ends ---------------------------------
 
+@pytest.mark.heavy
 def test_every_silent_port_is_named():
     """THE GUARD. A port-class part that exports nothing, anywhere, must say why.
 

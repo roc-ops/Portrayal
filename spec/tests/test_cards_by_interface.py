@@ -488,6 +488,7 @@ def _authored_bays(contract):
     return {bid: b for bid, b in (contract.get("bays") or {}).items() if isinstance(b, dict)}
 
 
+@pytest.mark.heavy
 def test_no_bay_in_the_library_states_an_interface_yet():
     """The slice publishes a key and builds a mechanism; it migrates nothing.
 
@@ -533,6 +534,7 @@ def test_a_published_component_bay_list_is_the_list_the_contract_states():
     assert checked > 50, f"read {checked} bays"
 
 
+@pytest.mark.heavy
 def test_a_published_device_bay_list_is_the_list_the_manifest_states():
     if not (LIB / "dist" / "components.json").exists():
         pytest.skip("components.json not built")

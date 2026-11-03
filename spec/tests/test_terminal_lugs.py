@@ -90,6 +90,7 @@ def feats(ref):
 
 # --- 1. the registry -----------------------------------------------------------
 
+@pytest.mark.heavy
 def test_terminal_stud_is_one_nominal_connector_and_claims_no_size():
     reg = _yaml(ROOT / "spec/schemas/connectors.yaml")["interfaces"]
     std = _yaml(ROOT / "spec/schemas/standards.yaml")["standards"]
@@ -107,6 +108,7 @@ def test_terminal_stud_is_one_nominal_connector_and_claims_no_size():
     assert "FV2-MS3" in lug["source"] and "NOT A FIGURE FROM ANY PLACING DEVICE" in lug["notes"]
 
 
+@pytest.mark.heavy
 def test_no_barrier_block_states_a_stud_size():
     """No document held for a device that places a barrier block states the
     size of its terminal screws, so none of them carries `stud-size`. The
@@ -123,6 +125,7 @@ def test_no_barrier_block_states_a_stud_size():
 
 # --- 2. the seat parts -----------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH_BLOCK
 def test_the_seat_is_the_screw_itself(block):
     b = BLOCKS[block]
@@ -143,6 +146,7 @@ def test_the_seat_is_the_screw_itself(block):
     assert root.find(f"{SVG}path[@id='slot']") is not None
 
 
+@pytest.mark.heavy
 def test_the_screws_that_present_terminal_stud_are_these_two_and_one_lug_mates_it():
     """The `class: screw` parts that present the interface are the two
     terminal screws. The ground studs present it too (`class: ground`,
@@ -163,6 +167,7 @@ def test_the_screws_that_present_terminal_stud_are_these_two_and_one_lug_mates_i
 
 # --- 3. the blocks ---------------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH_BLOCK
 def test_the_block_composes_a_seat_on_each_screw_and_states_no_interface(block):
     b = BLOCKS[block]
@@ -196,6 +201,7 @@ def comps():
     return got
 
 
+@pytest.mark.heavy
 @EACH_BLOCK
 def test_the_block_publishes_exactly_its_three_poles_as_slots(comps, block):
     b = BLOCKS[block]
@@ -211,6 +217,7 @@ def test_the_block_publishes_exactly_its_three_poles_as_slots(comps, block):
         assert not c["rotate"] and c["media"] is None
 
 
+@pytest.mark.heavy
 def test_the_census_of_blocks_and_seats(comps):
     """Counted off the library, with non-zero counts: the devices that place
     a barrier block, the supply that composes one, and the seats they make."""
@@ -235,12 +242,14 @@ def test_the_census_of_blocks_and_seats(comps):
     assert sum(len(comps[b]["cages"]) for b in BLOCKS) == 6
 
 
+@pytest.mark.heavy
 def test_the_telco_supply_says_nothing_states_what_it_takes():
     c = _contract(PSU)
     assert "NOTHING HELD STATES" in c["provenance"]["terminals"]
     assert [p["id"] for p in c["parts"] if p["ref"] in BLOCKS] == ["terminal"]
 
 
+@pytest.mark.heavy
 def test_the_nokia_block_lands_a_two_hole_lug_on_each_pole():
     """Not one of these blocks: each pole is a pair of studs that one two-hole
     lug spans (#828), held in test_grounding_devices.py."""
@@ -251,6 +260,7 @@ def test_the_nokia_block_lands_a_two_hole_lug_on_each_pole():
 
 # --- 4. the lug ------------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_it_is_a_lug_that_mates_terminal_stud():
     c = _contract(LUG)
     assert c["kind"] == "component" and c["class"] == "port"
@@ -263,6 +273,7 @@ def test_it_is_a_lug_that_mates_terminal_stud():
                                       "cable": {"at": [2.75, 27.4], "direction": "down"}}
 
 
+@pytest.mark.heavy
 def test_its_fields_are_two_colours_and_no_wire_size():
     c = _contract(LUG)
     assert sorted(c["fields"]) == ["barrel-color", "wire-color"]
@@ -275,6 +286,7 @@ def test_its_fields_are_two_colours_and_no_wire_size():
     assert "10 LONG" in c["provenance"]["wire"] and "#805" in c["provenance"]["cable-point"]
 
 
+@pytest.mark.heavy
 def test_the_skin_is_a_tongue_a_sleeve_a_wire_and_a_head():
     root = ET.parse(_skin_path(LUG)).getroot()
     ids = [e.get("id") for e in root if e.get("id")]
@@ -292,6 +304,7 @@ def test_the_skin_is_a_tongue_a_sleeve_a_wire_and_a_head():
     assert num(head, "cx", "cy", "r") == [2.75, 2.75, 1.9]
 
 
+@pytest.mark.heavy
 def test_the_lugs_solids_stack_from_the_seat_and_nothing_is_below_it():
     f = feats(LUG)
     assert list(f) == ["tongue", "head", "sleeve", "wire"]
@@ -348,6 +361,7 @@ def _centre(parents, el, local):
     return device_point(parents, el, local)
 
 
+@pytest.mark.heavy
 @EACH_DEVICE
 def test_the_bare_block_compiles_to_the_screws_it_always_drew(built, device):
     """The compiled geometry of an empty block is what it was when the block
@@ -404,6 +418,7 @@ def _node(occ, name):
     return hits[0]
 
 
+@pytest.mark.heavy
 @EACH_DEVICE
 def test_one_pole_is_wired_and_its_neighbours_are_empty(built, device):
     root, parents, host, occ, b = _lug(built, device)
@@ -416,6 +431,7 @@ def test_one_pole_is_wired_and_its_neighbours_are_empty(built, device):
                 (f"{path}/lug-1", f"{path}/lug-3")]
 
 
+@pytest.mark.heavy
 @EACH_DEVICE
 def test_the_lug_seats_on_the_screw_axis_with_its_wire_leaving_downward(built, device):
     root, parents, host, occ, b = _lug(built, device)
@@ -443,6 +459,7 @@ def test_the_lug_seats_on_the_screw_axis_with_its_wire_leaving_downward(built, d
     assert cx == pytest.approx(hx, abs=EPS) and cy == pytest.approx(y1, abs=EPS)
 
 
+@pytest.mark.heavy
 @EACH_DEVICE
 def test_the_seated_solids_clear_the_host_screw_and_the_lips(built, device):
     """Read off the compiled depths. The host's head ends where the lug
@@ -482,6 +499,7 @@ def test_the_seated_solids_clear_the_host_screw_and_the_lips(built, device):
         assert e.get("data-depth") is None and e.get("data-cavity") is None, e.get("id")
 
 
+@pytest.mark.heavy
 def test_a_placements_colours_paint_the_wire_and_the_sleeve(tmp_path):
     device = "edgecore/csr200"
     config, view, path, block, key = SEATED[device]
@@ -541,6 +559,7 @@ def kit(built, tmp_path_factory):
     return got
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", KIT_FACES)
 def test_the_kits_slot_walk_offers_every_pole_of_every_block(kit, built, device):
     config, view, path, block, key = SEATED[device]
@@ -563,6 +582,7 @@ def test_the_kits_slot_walk_offers_every_pole_of_every_block(kit, built, device)
     assert one["mate"] == pytest.approx(list(b["axes"][POLES.index(WIRED)]))
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", KIT_FACES)
 def test_the_kit_seats_a_lug_exactly_as_the_build_does(kit, built, device):
     path = SEATED[device][2]
@@ -580,6 +600,7 @@ def test_the_kit_seats_a_lug_exactly_as_the_build_does(kit, built, device):
     assert g["left"] == 0, "emptying the pole left a lug"
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", KIT_FACES)
 def test_the_kit_seated_lug_carries_its_four_solids_at_their_depths(kit, built, device):
     """What relief.js is handed for the lug the kit seated: the tongue, the
@@ -606,6 +627,7 @@ def test_the_kit_seated_lug_carries_its_four_solids_at_their_depths(kit, built, 
     assert "data-z-color" not in z["sleeve"] and "data-z-color" not in z["wire"]
 
 
+@pytest.mark.heavy
 def test_the_3d_pass_seats_a_lug_on_a_supply_in_a_bay(kit):
     """The explorer's 3D scene is cut from faces rewritten by seatViews. A
     seat on a supply in a bay is named by its drawing path, which holds
@@ -616,6 +638,7 @@ def test_the_3d_pass_seats_a_lug_on_a_supply_in_a_bay(kit):
     assert t["faceApplied"] == 1 and t["faceSeated"] == 1
 
 
+@pytest.mark.heavy
 def test_the_3d_pass_seats_a_lug_on_a_block_placed_on_the_device(kit):
     """A pole of a block placed straight on the device, `psu1-input/lug-2`, is
     claimed by no bay and no cage of any view: the block is a plain placement

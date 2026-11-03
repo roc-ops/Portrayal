@@ -135,6 +135,7 @@ def box(el):
 
 # --- the registry ------------------------------------------------------------
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("key", sorted(ENVELOPES))
 def test_the_module_envelope_and_its_head_are_the_standards_figures(key):
     w, h, depth, head, longest = ENVELOPES[key]
@@ -147,6 +148,7 @@ def test_the_module_envelope_and_its_head_are_the_standards_figures(key):
     assert depth + head["length-max"] == pytest.approx(longest)
 
 
+@pytest.mark.heavy
 def test_the_cfp2_and_cfp4_heads_are_the_enlarged_section_plus_the_receptacle():
     """Both baseline drawings give the enlarged front section as the overall
     length less a minimum (16.0) and let the connector receptacle stand 4.10
@@ -169,6 +171,7 @@ CAGES = {
 }
 
 
+@pytest.mark.heavy
 def test_each_cage_is_the_panel_opening_with_the_module_behind_it():
     """The four cages draw what std/sfp@1 and std/qsfp28@1 draw: the box is the
     panel opening, `d` the bezel to the connector, `relief.size` the interior a
@@ -202,6 +205,7 @@ def test_each_cage_is_the_panel_opening_with_the_module_behind_it():
     assert std["cfp2"]["pitch"] == std["cfp2-module"]["head"]["w-max"] == 42.5 <= 86.35 / 2
 
 
+@pytest.mark.heavy
 def test_the_pluggables_rungs_name_what_they_rest_on():
     fam = yaml.safe_load((ROOT / "spec/schemas/pluggables.yaml").read_text())["families"]
     for name, needle in (("cfp", "Hardware Specification Rev 1.4"), ("cfp2", "Baseline Drawing Rev 1L"),
@@ -214,6 +218,7 @@ def test_the_pluggables_rungs_name_what_they_rest_on():
 
 # --- what each optic is ------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH
 def test_it_is_a_generic_transceiver_of_its_family(ref):
     d = doc(ref)
@@ -229,6 +234,7 @@ def test_it_is_a_generic_transceiver_of_its_family(ref):
     assert doc(f"std/{mates}@2")["interface"] == mates
 
 
+@pytest.mark.heavy
 @EACH
 def test_a_generic_states_no_rate_reach_wavelength_or_wattage(ref):
     d = doc(ref)
@@ -241,6 +247,7 @@ def test_a_generic_states_no_rate_reach_wavelength_or_wattage(ref):
     assert not got.errors, got.errors
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_head_fits_the_envelope(ref):
     """L121, and the figures it is run on: above, below, length and width as
@@ -266,6 +273,7 @@ def test_the_head_fits_the_envelope(ref):
     assert d["size"]["d"] + length == pytest.approx(whole)
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_head_node_is_the_skins_first_child_and_draws_the_head(ref):
     """`body` carries the box of the head and is the FIRST drawing child:
@@ -281,6 +289,7 @@ def test_the_head_node_is_the_skins_first_child_and_draws_the_head(ref):
     assert feats["body"]["out"] == d["head"]["size"]["d"] and feats["body"]["confidence"] == "drawing"
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("a,b", PAIRS + ((CFP_LC, CFP_SC),))
 def test_the_two_faces_of_a_form_differ_only_in_the_face(a, b):
     da, db = doc(a), doc(b)
@@ -297,6 +306,7 @@ def test_the_two_faces_of_a_form_differ_only_in_the_face(a, b):
 
 # --- the receptacles ---------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH
 def test_the_receptacles_are_the_right_parts_the_right_way_up(ref):
     want, iface = OPTICS[ref][2], OPTICS[ref][3]
@@ -311,6 +321,7 @@ def test_the_receptacles_are_the_right_parts_the_right_way_up(ref):
         assert q["lift"] == depth, (ref, q["id"])       # all of it stands on the head front
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", LC)
 def test_the_two_lc_bores_are_latch_up_transmit_left_at_the_registry_pitch(ref):
     d = doc(ref)
@@ -341,6 +352,7 @@ def test_the_two_lc_bores_are_latch_up_transmit_left_at_the_registry_pitch(ref):
     assert head["at"][1] <= y and y + h <= head["at"][1] + head["size"]["h"]
 
 
+@pytest.mark.heavy
 def test_the_two_sc_openings_lie_across_key_up_transmit_left_at_the_sc_duplex_pitch():
     """std/sc-bore@1 has its key slot on the left unrotated; at `rotate: 90`
     the 9.0 side lies across the module and the slot is in the top wall, as
@@ -384,6 +396,7 @@ def test_the_two_sc_openings_lie_across_key_up_transmit_left_at_the_sc_duplex_pi
     assert "ESTIMATED" in prov["bores"] and "ESTIMATED" in prov["optical-axis"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", MPO)
 def test_the_mpo_receptacle_is_key_up_and_centred_on_the_module(ref):
     """Unrotated, so the key notch is in the top wall, toward the module top,
@@ -410,6 +423,7 @@ def test_the_mpo_receptacle_is_key_up_and_centred_on_the_module(ref):
     assert "PINNED" in d["provenance"]["gender"] and "KEY UP" in d["provenance"]["key"]
 
 
+@pytest.mark.heavy
 def test_an_lc_and_an_mpo_face_of_one_form_share_an_optical_axis_height():
     for a, b in PAIRS:
         assert doc(a)["connection-points"]["optical-tx"]["at"][1] == \
@@ -420,6 +434,7 @@ def test_an_lc_and_an_mpo_face_of_one_form_share_an_optical_axis_height():
 
 # --- the two-row module receptacle --------------------------------------------
 
+@pytest.mark.heavy
 def test_the_mpo24_module_receptacle_is_the_mpo_mouth_with_a_two_row_ferrule():
     a, b = doc(REC12), doc(REC24)
     same = ("interface", "class", "conforms", "size", "size-confidence", "attrs", "connection-points")
@@ -450,6 +465,7 @@ def test_the_mpo24_module_receptacle_is_the_mpo_mouth_with_a_two_row_ferrule():
     assert MPO12 in b["provenance"]["slot"] and MPO24 in b["provenance"]["slot"]
 
 
+@pytest.mark.heavy
 def test_position_n_of_the_two_row_receptacle_is_under_fibre_n_of_the_seated_plug():
     """Mate point on mate point, unturned: each of the twenty-four fibres of
     generic/mpo24-plug@1 lands on the receptacle position with its number."""
@@ -464,6 +480,7 @@ def test_position_n_of_the_two_row_receptacle_is_under_fibre_n_of_the_seated_plu
 
 # --- thumbscrews, bails and the tab -------------------------------------------
 
+@pytest.mark.heavy
 def test_the_cfp_thumbscrew_is_a_knurled_knob_painted_by_a_field():
     d = doc(SCREW)
     assert d["class"] == "screw" and "behaviour" not in d and "mates" not in d
@@ -478,6 +495,7 @@ def test_the_cfp_thumbscrew_is_a_knurled_knob_painted_by_a_field():
     assert d["fields"]["latch-color"]["default"] == GREY and d["skins"] == ["default"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", CFP)
 def test_a_cfp_has_two_thumbscrews_72_apart_on_the_faceplate_and_no_tab(ref):
     d = doc(ref)
@@ -502,6 +520,7 @@ def test_a_cfp_has_two_thumbscrews_72_apart_on_the_faceplate_and_no_tab(ref):
     assert not got.warnings and not got.errors, got.warnings
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", BAILED)
 def test_the_bail_is_a_field_painted_bar_across_the_top_of_the_head(ref):
     d = doc(ref)
@@ -523,6 +542,7 @@ def test_the_bail_is_a_field_painted_bar_across_the_top_of_the_head(ref):
     assert "tab" not in [q["id"] for q in d["parts"]]
 
 
+@pytest.mark.heavy
 def test_the_cxp_tab_is_a_loop_from_the_body_top_ending_where_the_vendor_prints_it():
     """Two arms and an end bar, nodes of the optic's own skin: each starts at
     or past the head front, so L121 leaves it alone, and each box starts where
@@ -552,6 +572,7 @@ def test_the_cxp_tab_is_a_loop_from_the_body_top_ending_where_the_vendor_prints_
     assert [q["id"] for q in d["parts"]] == ["mpo"]
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_latch_colour_is_a_field_and_defaults_to_the_neutral_grey(ref):
     d = doc(ref)
@@ -581,6 +602,7 @@ def _slots(entry):
     return [s for s in [entry.get("presents")] + (entry.get("cages") or []) if s]
 
 
+@pytest.mark.heavy
 @EACH
 def test_each_receptacle_is_a_slot_offering_its_plugs_and_cap(comps, ref):
     want, iface, accepts = OPTICS[ref][2:]
@@ -604,6 +626,7 @@ def test_each_receptacle_is_a_slot_offering_its_plugs_and_cap(comps, ref):
     assert comps[ref]["head"]["size"]["d"] == d["head"]["size"]["d"]
 
 
+@pytest.mark.heavy
 def test_an_mpo_slot_offers_both_centre_key_plugs_and_no_sixteen_fibre_one(comps):
     """The accept list is the interface's, and `mpo` is the housing and its
     centred key: the twelve- and the twenty-four-fibre plug and the one dust
@@ -650,6 +673,7 @@ def device_cages():
     return got
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("family", sorted(OFFERS))
 def test_every_cage_of_the_family_offers_exactly_its_own_optics(device_cages, comps, family):
     """Every placement of these four cages is on a card, so the cages are
@@ -662,6 +686,7 @@ def test_every_cage_of_the_family_offers_exactly_its_own_optics(device_cages, co
         assert c["accepts"] == OFFERS[family], (c["id"], c["accepts"])
 
 
+@pytest.mark.heavy
 def test_no_other_family_offers_them_and_each_pool_is_its_family(device_cages, comps):
     others = [c for _, c in device_cages if c["interface"] not in OFFERS]
     others += [s for e in comps.values() for s in _slots(e) if s["interface"] not in OFFERS]
@@ -722,6 +747,7 @@ EACH_SEAT = pytest.mark.parametrize(
     "seat", SEATS, ids=[f"{s[0].split('/')[1]}:{s[1]}:{s[3].split('/')[1][:-2]}" for s in SEATS])
 
 
+@pytest.mark.heavy
 def test_every_optic_is_seated_upright_and_every_family_turned():
     upright = {s[3] for s in SEATS if s[5] == 0}
     turned = {doc(s[3])["mates"] for s in SEATS if s[5] == 90}
@@ -766,6 +792,7 @@ def _turn(el):
         if "rotate(" in t else 0
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_it_seats_in_a_real_cage_on_a_real_card_with_its_plug_or_cap(seated, seat):
     device, _, cpath, ref, chain, turn = seat
@@ -810,6 +837,7 @@ def test_it_seats_in_a_real_cage_on_a_real_card_with_its_plug_or_cap(seated, sea
         assert float(occ.get("data-z-lift")) == pytest.approx(depth)
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_head_is_centred_on_its_opening_and_near_its_width(seated, seat):
     """The head is centred on the cage, and since the cages became the panel
@@ -827,6 +855,7 @@ def test_the_seated_head_is_centred_on_its_opening_and_near_its_width(seated, se
     assert abs((right - left) - cage["w"]) <= 1.0
 
 
+@pytest.mark.heavy
 def test_a_quarter_turned_seat_keeps_transmit_at_the_same_end_as_the_latch_side(seated):
     """A card standing upright turns its cage 90, and the optic takes the
     turn from the cage: the module top is toward one side of the slot and
@@ -854,6 +883,7 @@ def test_a_quarter_turned_seat_keeps_transmit_at_the_same_end_as_the_latch_side(
         assert cross * cross0 > 0 and t0[1] < b0[1] and tx0[0] < rx0[0]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device,cpath,ref,plug", [
     (MX480, "dpc5/module/port-3-0", CFP_MPO, MPO24),
     (MX480, "dpc4/module/mic0/module/port-0-0", CXP_MPO, MPO24),
@@ -888,6 +918,7 @@ def _raised(optic):
             and any(e.get(k) for k in keys)}
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_optic_is_built_right_side_out_in_3d(seated, seat):
     """Read off the compiled relief, upright and turned: the head front the
@@ -937,6 +968,7 @@ def test_the_seated_optic_is_built_right_side_out_in_3d(seated, seat):
                    for n in ("arm-l", "arm-r", "grip"))
 
 
+@pytest.mark.heavy
 def test_a_set_latch_colour_repaints_the_knobs_the_bail_and_the_tab():
     """The field at work: instanced with `latch-color` set, as a vendor
     wrapper sets it, the composed thumbscrews take the colour from their

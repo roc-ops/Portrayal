@@ -148,6 +148,7 @@ def test_the_fixture_holds_every_fibre_and_every_ppm_body():
     assert len(want["dcp-2-ppm-bodies"]) > 0 and len(want["dcp-2-ppm-fibres"]) > 0
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("name,svg", FACES)
 def test_where_the_source_is_the_fibre_the_fibre_stays(built, name, svg):
     want = fixture()["fibres"][name]
@@ -167,6 +168,7 @@ def test_where_the_source_is_the_fibre_the_fibre_stays(built, name, svg):
         assert math.dist(got[k], got[f"optical {owner} #0"]) < 1e-6, k
 
 
+@pytest.mark.heavy
 def test_the_xc_rows_ferrule_lines_are_the_row_pitch_apart(built):
     """The two XC rows of the DCP-R-34D-CS stand 11.5 apart on the stencil,
     and so do their ferrule lines - the rows are turned 180 about the gap
@@ -186,6 +188,7 @@ def test_where_the_source_is_the_body_the_ppm_placements_are_at4s():
     assert {k: v for k, v in got.items() if v != want[k]} == {}
 
 
+@pytest.mark.heavy
 def test_on_dcp2_the_ppm_bodies_stay_and_their_fibres_move_inside_them(built):
     """The PPM seated in the dcp-2's A22: each adapter body's corner is where
     it was, and each fibre on it is exactly 0.32 further from the latch - down

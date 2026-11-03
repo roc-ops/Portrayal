@@ -106,6 +106,7 @@ def test_the_casa_studs_and_inlets_are_connector_slots_that_take_a_lug_and_a_plu
         assert c["only-in"] == ["ac-power"], "the placement's configurations reach its seats"
 
 
+@pytest.mark.heavy
 def test_every_seat_of_a_placed_part_with_no_slot_of_its_own_is_published_once(survey):
     checked = 0
     for r in survey:

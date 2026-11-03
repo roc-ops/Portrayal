@@ -492,6 +492,7 @@ def _refs(node, out):
     return out
 
 
+@pytest.mark.heavy
 def test_no_device_or_card_places_a_bare_bnc_or_din_core():
     """The BNC and 1.0/2.3 cores paint past their own box (the BNC collar over
     its D-flat, and neither draws the flange or nut a panel shows), so every

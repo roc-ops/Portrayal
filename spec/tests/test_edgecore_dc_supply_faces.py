@@ -423,6 +423,7 @@ def test_the_dc_device_types_are_exported(flavour):
         assert found, model
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("flavour", ["netbox", "nautobot"])
 def test_the_committed_module_exports_equal_the_exporters_own_output(flavour, tmp_path):
     dist = LIB / "dist"
@@ -437,6 +438,7 @@ def test_the_committed_module_exports_equal_the_exporters_own_output(flavour, tm
         assert made[0].read_text() == committed.read_text(), name
 
 
+@pytest.mark.heavy
 def test_the_lock_agrees_with_the_three_devices_and_the_five_parts():
     from portrayal import devicelock
 

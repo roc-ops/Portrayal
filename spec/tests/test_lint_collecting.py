@@ -195,6 +195,7 @@ def test_the_canonical_dance_is_the_one_it_must_never_miss():
     assert what.count("assignment to WARNINGS") == 1, what
 
 
+@pytest.mark.heavy
 def test_the_suite_no_longer_hand_rolls_the_dance():
     """Asserted over the tree, because the next copy will not be on a list.
 

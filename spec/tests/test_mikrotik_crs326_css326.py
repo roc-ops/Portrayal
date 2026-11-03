@@ -236,6 +236,7 @@ def test_the_committed_exports_are_what_the_exporter_writes_now(name, target, tm
     assert (tmp_path / rel).read_text() == (ROOT / "library/exports" / rel).read_text()
 
 
+@pytest.mark.heavy
 def test_the_lock_files_match_the_devices():
     """The lock entry of each device is what devicelock computes from it now, at its own version."""
     lib = ROOT / "library"

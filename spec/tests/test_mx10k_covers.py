@@ -118,6 +118,7 @@ def rear_rects(tmp_path_factory):
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("name", sorted(COUNTS))
 def test_pwr_cover_fills_its_bay_as_the_supply_does(name, rear_rects):
     """Read from the rendered rear view. The supply is the size of its bay, 91.4 x 88.9 mm; the
