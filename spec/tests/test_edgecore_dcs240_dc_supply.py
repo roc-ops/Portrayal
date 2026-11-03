@@ -1,23 +1,25 @@
-"""The Edgecore DCS240 and DCS511 DC supply is drawn from its photograph, and its DC input is a place a cable lands.
+"""The Edgecore DCS240 and DCS511 DC supply is drawn from its photograph, as a new major, and its DC input is a place a cable lands.
 
 The supply used to borrow the AC supply's face, with a three-slot green block that no document shows. Its face is now drawn from the
 photograph in the vendor's quick start guides (a black two-screw block with "-" and "+" under the screws, a black bail at the left, a
-perforated grille, a cross-head earth screw at the upper right and a red latch at the right), every position an estimate. It composes
-two terminal screws, each a seat that a ring lug lands on, and states one DC input port whose two poles are those seats, with the roles
-the guide calls out beside the screws: the negative voltage range (the left screw) and the DC return (the right one). The earth screw
-stands beside the block, not on it, so it is not a pole of the port: it is a ground part of its own, also a seat a lug lands on,
-outside the port (decided 2026-11-02):
+perforated grille, a cross-head earth screw at the upper right and a red latch at the right), every position an estimate. Drawing it
+moved three of the face's four boxes, and a moved box is a major of the part (decided 2026-11-03), so the redraw is
+edgecore/dcs240-psu-dc@2 and @1 keeps the face it had:
 
-  - edgecore/dcs240-psu-dc@1 composes common/terminal-screw-34@1 twice, as `pole-batt` and `pole-rtn`, and common/ground-screw@1 once,
+  - edgecore/dcs240-psu-dc@2 composes common/terminal-screw-34@1 twice, as `pole-batt` and `pole-rtn`, and common/ground-screw@1 once,
     as `earth`; the ground part is a declared stand-in, because no document held gives the thread of the earth screw;
-  - the contract's `dc` block has one input port, `input`, with the two roles the guide calls out, the wire size and the current the
-    guide gives, no voltage, and the entries of `provenance` that its `source` names;
-  - the four element ids of the supply stay, and so does the latch's box; the skin draws all four inside its 54.4 by 40.0 face;
-  - the supply's description stays word for word (the exported module type quotes it).
+  - its `dc` block has one input port, `input`, with the two roles the guide calls out, the wire size and the current the guide
+    gives, no voltage, and the entries of `provenance` that its `source` names; the earth screw stands beside the block, not on it,
+    so it is a ground part of its own, outside the port (decided 2026-11-02);
+  - its four element ids stay, and so does the latch's box; the skin draws all four inside its 54.4 by 40.0 face; its description
+    says what the face carries and no longer says it is the AC variant's;
+  - edgecore/dcs240-psu-dc@1 is main's part, unchanged but for its patch version and `superseded-by` the new major;
+  - the DCS240 and DCS511 seat @2 in their two DC configurations, and their supply bays accept both majors.
 
 These run against the real library, a components index built by the indexer the build runs, and the records file. They read no
 library/dist and render nothing.
 """
+import hashlib
 import json
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -30,27 +32,32 @@ import onebuild
 ROOT = Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 
-SUPPLY = "edgecore/dcs240-psu-dc@1"
+SUPPLY = "edgecore/dcs240-psu-dc@2"
+OLD = "edgecore/dcs240-psu-dc@1"
 SCREW = "common/terminal-screw-34@1"
 EARTH = "common/ground-screw@1"
 LUG = "generic/ring-lug@1"
 DEVICES = {"edgecore/dcs240": "1.2.0", "edgecore/dcs511": "2.1.0"}
-DESCRIPTION = ("The -48 VDC power supply of the Edgecore DCS240 (AS9726-32DB) - the same 54.4 x 40 CRPS face as the AC variant with a "
-               "DC terminal in place of the C14 inlet. Rated 1600 W.")
+DESCRIPTION = ("The -48 VDC power supply of the Edgecore DCS240 (AS9726-32DB) - a 54.4 x 40 CRPS face with a two-screw DC terminal "
+               "block and an earth screw beside it. Rated 1600 W.")
+OLD_DESCRIPTION = ("The -48 VDC power supply of the Edgecore DCS240 (AS9726-32DB) - the same 54.4 x 40 CRPS face as the AC variant "
+                   "with a DC terminal in place of the C14 inlet. Rated 1600 W.")
+# main's skin of @1, byte for byte
+OLD_SKIN_SHA = "f87e8c4efce4dc6ed4bf5b85edf8880205c45d99d2cdd3db0b38715f462115bd"
 
 
 def words(text):
     return " ".join(str(text).split())
 
 
-def contract():
-    return yaml.safe_load((LIB / "components/edgecore/dcs240-psu-dc/v1/contract.yaml").read_text())
-
-
 def other(ref):
     name, major = ref.split("@")
     ns, part = name.split("/")
     return yaml.safe_load((LIB / "components" / ns / part / f"v{major}" / "contract.yaml").read_text())
+
+
+def contract():
+    return other(SUPPLY)
 
 
 @pytest.fixture(scope="module")
@@ -73,18 +80,39 @@ def test_the_screw_and_the_ground_part_present_terminal_stud_and_the_ring_lug_ma
     assert other(LUG)["mates"] == "terminal-stud"
 
 
-def test_the_supply_is_a_minor_and_keeps_its_four_ids_its_latch_and_its_description():
+def test_the_supply_is_a_new_major_that_keeps_its_four_ids_its_latch_and_its_size():
     d = contract()
-    assert d["version"] == "1.3.0"
+    assert d["version"] == "2.0.0" and "superseded-by" not in d
     assert sorted(d["elements"]) == ["dc-inlet", "handle", "latch", "vent-field"]
     assert d["elements"]["latch"] == {"at": [45.40, 19.40], "size": [9.00, 20.60], "class": "latch"}
-    assert d["attrs"]["inlet"] == "dc-terminal" and d["attrs"]["input"] == "dc"
-    assert d["description"] == DESCRIPTION
+    assert d["attrs"] == other(OLD)["attrs"] and d["attrs"]["inlet"] == "dc-terminal" and d["attrs"]["input"] == "dc"
     assert d["size"] == {"w": 54.4, "h": 40.0}
+    assert "A NEW MAJOR, decided 2026-11-03" in words(d["provenance"]["major"])
+
+
+def test_the_description_says_what_the_face_carries_and_not_that_it_is_the_ac_variants():
+    d = contract()
+    assert words(d["description"]) == DESCRIPTION
+    assert "AC variant" not in d["description"]
+
+
+def test_the_old_major_is_mains_part_retired_in_favour_of_the_new_one():
+    d = other(OLD)
+    assert d["version"] == "1.2.1" and d["superseded-by"] == SUPPLY
+    assert "parts" not in d and "dc" not in d and "unplaced" not in d
+    assert words(d["description"]) == OLD_DESCRIPTION
+    assert d["elements"] == {
+        "handle": {"at": [17.70, 2.00], "size": [6.00, 37.70], "class": "handle"},
+        "latch": {"at": [45.40, 19.40], "size": [9.00, 20.60], "class": "latch"},
+        "vent-field": {"at": [4.20, 3.60], "size": [19.40, 32.40], "class": "vent"},
+        "dc-inlet": {"at": [30.0, 12.0], "size": [20.0, 16.0], "class": "inlet"},
+    }
+    skin = LIB / "components/edgecore/dcs240-psu-dc/v1/skins/default.svg"
+    assert hashlib.sha256(skin.read_bytes()).hexdigest() == OLD_SKIN_SHA
 
 
 def test_the_skin_draws_the_four_ids_and_the_two_screw_heads_and_the_earth_screw_inside_its_face():
-    svg = ET.parse(LIB / "components/edgecore/dcs240-psu-dc/v1/skins/default.svg").getroot()
+    svg = ET.parse(LIB / "components/edgecore/dcs240-psu-dc/v2/skins/default.svg").getroot()
     ids = {e.get("id") for e in svg.iter() if e.get("id")}
     assert {"handle", "latch", "vent-field", "dc-inlet", "body"} <= ids
     assert svg.get("viewBox") == "0 0 54.4 40"
@@ -146,17 +174,38 @@ def test_the_build_publishes_a_seat_for_each_screw_and_the_earth_and_one_dc_port
     assert [(q["role"], q["slot"]) for q in port["poles"]] == [("batt", "pole-batt"), ("rtn", "pole-rtn")]
 
 
+def test_the_index_says_the_old_major_is_retired_and_it_publishes_no_port(index):
+    old = index[OLD]
+    assert old["superseded-by"] == SUPPLY
+    assert not old.get("cages") and not old.get("dc-ports")
+
+
 @pytest.mark.parametrize("slug", DEVICES)
-def test_each_device_takes_one_minor_and_its_gap_no_longer_says_the_face_is_borrowed(slug):
+def test_each_device_takes_one_minor_and_its_gap_names_the_new_major_and_no_longer_says_the_face_is_borrowed(slug):
     for name in ("layout.yaml", "device.yaml"):
         doc = yaml.safe_load((LIB / "devices" / slug / name).read_text())
         assert doc["version"] == DEVICES[slug]
         gap = next(g for g in doc["gaps"] if g["what"] == "dc-supply-face")
         text = words(gap["wanted"])
         assert "borrows" not in text and "photograph of the supply" in text and "every position on it is an estimate" in text
+        assert SUPPLY in text and OLD not in text
+
+
+@pytest.mark.parametrize("slug", DEVICES)
+def test_each_device_seats_the_new_major_in_its_dc_configurations_and_its_supply_bays_accept_both(slug):
+    doc = yaml.safe_load((LIB / "devices" / slug / "device.yaml").read_text())
+    bays = {b["id"]: b for b in doc["views"]["rear"]["components"]["bays"] if b["id"] in ("psu-1", "psu-2")}
+    assert sorted(bays) == ["psu-1", "psu-2"]
+    for bay in bays.values():
+        assert bay["accepts"] == ["edgecore/dcs240-psu-ac@1", OLD, SUPPLY]
+        assert bay["default"] == "edgecore/dcs240-psu-ac@1"
+    configs = doc["configurations"]
+    for name in ("dc-f2b", "dc-b2f"):
+        assert configs[name]["bays"] == {"psu-1": SUPPLY, "psu-2": SUPPLY}, name
+    assert not [n for n, c in configs.items() if OLD in ((c or {}).get("bays") or {}).values()]
 
 
 def test_the_finding_this_change_closes_has_no_row_left():
     doc = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())
-    assert [r for r in doc["rows"] if r["part"] == SUPPLY and r["code"] == "C19"] == []
+    assert [r for r in doc["rows"] if r["part"] in (SUPPLY, OLD) and r["code"] == "C19"] == []
     assert doc["cap"] == len(doc["rows"])

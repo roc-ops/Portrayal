@@ -168,7 +168,7 @@ def test_the_build_publishes_a_seat_for_each_screw_and_the_earth_and_one_dc_port
 
 def test_the_dcs240_supply_is_not_part_of_this_change_and_has_a_module_of_its_own():
     d = contract(DCS240)
-    assert d["version"] == "1.3.0" and "dc" in d and "parts" in d
+    assert d["version"] == "1.2.1" and "dc" not in d and d["superseded-by"] == "edgecore/dcs240-psu-dc@2"
     rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
     assert [r for r in rows if r["part"] == DCS240 and r["code"] == "C19"] == []
 

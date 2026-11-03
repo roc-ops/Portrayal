@@ -279,6 +279,10 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # unlit (lamps whose photographs show them dark).
     kept["common/led-rect"] = [1, 2]
     kept["common/led-rect-sm"] = [1, 2]
+    # The Edgecore DCS240/DCS511 DC supply: @2 is its face drawn from the quick start guide's photograph,
+    # seated by both devices' DC configurations; @1, the face borrowed from the AC variant, is retired
+    # (`superseded-by` @2) and stays because the two supply bays still accept it, for a saved rack.
+    kept["edgecore/dcs240-psu-dc"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
         if name.startswith(("juniper/", "cisco/")):
