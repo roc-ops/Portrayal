@@ -1,7 +1,7 @@
 """The suite's two tiers: what makes a test `heavy`, and the tool that marks it.
 
-A pull request push runs the light tier (`-m "not heavy"`); a full run - the
-dispatch before a merge, the nightly, a fork's pull request - runs both. A test
+A pull request push runs the light tier (`-m "not heavy"`); a full run - a
+pull request labelled `full-gates`, the nightly, a fork's pull request - runs both. A test
 is heavy when it is marked, and it is marked from a measurement: the seconds a
 full run's `test-times` record gives every parameter of the function, summed.
 Per FUNCTION, because seventy-four parameters at four seconds each are one

@@ -17,26 +17,25 @@ on:
   # answers in two minutes. `ready_for_review` is listed because it is NOT among
   # the default types, and without it marking a draft ready would start nothing:
   # the suite would wait for the next push.
+  #
+  # `labeled` IS HOW A PULL REQUEST GETS ITS FULL RUN. A push runs the light
+  # tier (see THE TWO TIERS, below), whose verdict is not the required `build`;
+  # the `full-gates` label makes this and every later run on the pull request
+  # the whole suite, and before a merge that is what lands `build`
+  # (docs/merging.md). It has to be a pull request event: GitHub leaves a
+  # dispatched run out of a pull request's checks. On #1398 a dispatch passed
+  # `build` on the head (966146dea) and the pull request stayed blocked on it,
+  # still "expected", while the commit's own check list showed it green. Any
+  # other label starts a run too, of the tier the labels make; pull requests
+  # here carry none (not one on the last hundred), so that costs nothing.
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review, labeled]
   push:
     branches: [main]
-  # A FULL RUN, ON REQUEST, AND THE ONE A MERGE WAITS FOR. A pull request push
-  # runs the light tier (see THE TWO TIERS, below), whose verdict is not the
-  # required `build`; before a merge, `gh workflow run gates.yml --ref <branch>`
-  # runs the whole suite on the head and lands its `build` (docs/merging.md).
-  # On main it is the button for the day somebody wants the whole thing.
-  #
-  # `-f pr=<n>` TESTS THE PULL REQUEST'S MERGE WITH MAIN, as its own pull
-  # request runs do (`refs/pull/<n>/merge`), and the checks still land on the
-  # head the merge is of. Without it a dispatch tests the branch alone, and
-  # since main does not require a branch to be up to date, the heavy tests
-  # would never see the tree the merge makes.
+  # A FULL RUN ON A BRANCH, ON REQUEST: the merge train's (.github/merge-train.py)
+  # and, on main, the button for the day somebody wants the whole thing. NOT A
+  # PULL REQUEST'S: its checks never reach one (`labeled`, above).
   workflow_dispatch:
-    inputs:
-      pr:
-        description: 'Pull request number: test its merge with main, as its pull request runs do'
-        required: false
   # THE WHOLE SUITE ON MAIN EVERY NIGHT. Every merge had its own full run, but
   # not on the tree two merges made together, and a runner image or a
   # dependency can move under a tree that did not. Off the hour, as GitHub asks.
@@ -122,8 +121,6 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
-        with:
-          ref: ${{ inputs.pr && format('refs/pull/{0}/merge', inputs.pr) || '' }}
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
         with:
           python-version: '3.12'
@@ -161,11 +158,12 @@ jobs:
   # `-m "not heavy"` on two shards, every test but the few hundred functions a
   # full run measured at five seconds or more (`heavy`, spec/tools/dev/
   # mark_heavy.py), in about a fifth of the suite's seconds. Its verdict is
-  # called `light suite`. Everything else - a dispatch, the nightly, a fork's
-  # pull request (which cannot be dispatched on) - is a FULL run on four shards,
-  # and only its verdict is called `build`. A head therefore has the required
-  # check only once the whole suite has passed on it, and the merge waits for
-  # that rather than for anybody remembering to ask. Both tiers answer to
+  # called `light suite`. Everything else - a pull request labelled
+  # `full-gates`, a fork's pull request, a dispatch, the nightly - is a FULL
+  # run on four shards, and only its verdict is called `build`. A head
+  # therefore has the required check only once the whole suite has passed on
+  # it, and the merge waits for that rather than for anybody remembering to
+  # ask. Both tiers answer to
   # spec/test-budget.json. `dist` decides the tier, once, for the jobs after it.
   dist:
     if: github.event_name != 'push' && !github.event.pull_request.draft
@@ -185,35 +183,9 @@ jobs:
       # never be called `build`; an empty tier reads as light.
       - name: tier
         id: tier
-        run: echo "tier=${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository) && 'full' || 'light' }}" >> "$GITHUB_OUTPUT"
+        run: echo "tier=${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository || contains(github.event.pull_request.labels.*.name, 'full-gates')) && 'full' || 'light' }}" >> "$GITHUB_OUTPUT"
 
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
-        with:
-          ref: ${{ inputs.pr && format('refs/pull/{0}/merge', inputs.pr) || '' }}
-
-      # A DISPATCH PROVES ITS TREE IS THE HEAD'S. The `build` it reports lands on
-      # the dispatched head, so the tree must be that head's merge with main: a
-      # wrong `-f pr`, or a merge ref GitHub has not recomputed since a push,
-      # would put a passing `build` on a head whose heavy tests never ran. A
-      # merge's second parent is the pull request's head. A dispatch on a branch
-      # with no `-f pr` would test the branch without main, so it is refused
-      # too; on main there is nothing to merge. Nothing after `dist` runs without
-      # it, so checking here guards the whole run.
-      - name: the tree is the head's
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          PR: ${{ inputs.pr }}
-        run: |
-          if [ -z "$PR" ]; then
-            [ "$GITHUB_REF" = refs/heads/main ] && exit 0
-            echo "::error::a dispatch on a branch tests its pull request's merge with main: run it with -f pr=<number>"
-            exit 1
-          fi
-          second=$(git cat-file -p HEAD | awk '/^parent /{n++; if (n == 2) print $2}')
-          if [ "$second" != "$GITHUB_SHA" ]; then
-            echo "::error::refs/pull/$PR/merge merges ${second:-nothing}, not $GITHUB_SHA (the head of $GITHUB_REF): a wrong -f pr, or GitHub has not merged the newest push yet - dispatch again in a minute"
-            exit 1
-          fi
 
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
         with:
@@ -336,8 +308,6 @@ jobs:
         shard: ${{ fromJSON(needs.dist.outputs.tier == 'full' && '[1, 2, 3, 4]' || '[1, 2]') }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
-        with:
-          ref: ${{ inputs.pr && format('refs/pull/{0}/merge', inputs.pr) || '' }}
 
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
         with:
@@ -462,8 +432,6 @@ jobs:
       pull-requests: read
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
-        with:
-          ref: ${{ inputs.pr && format('refs/pull/{0}/merge', inputs.pr) || '' }}
 
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
         with:
@@ -562,7 +530,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           GH_TOKEN: ${{ github.token }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          PR: ${{ github.event.pull_request.number || inputs.pr }}
+          PR: ${{ github.event.pull_request.number }}
           TIER: ${{ needs.dist.outputs.tier }}
           PYTHONPATH: spec/tools
         run: |

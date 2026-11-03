@@ -47,23 +47,26 @@ REPO = "roc-ops/Portrayal"
 
 def gh_eval(expr, ctx):
     """A GitHub Actions expression, evaluated over a flat context: enough of the
-    language for the tier expressions here (`==`, `!=`, `&&`, `||`, `!` and
-    `fromJSON`). `&&` and `||` return an operand, as Python's `and` and `or` do.
-    A name the context lacks is the empty string, as a skipped job's output is."""
+    language for the tier expressions here (`==`, `!=`, `&&`, `||`, `!`,
+    `fromJSON` and `contains` over a list such as `labels.*.name`). `&&` and
+    `||` return an operand, as Python's `and` and `or` do. A name the context
+    lacks is the empty string, as a skipped job's output is."""
     body = expr.strip()
     if body.startswith("${{"):
         body = body[3:-2].strip()
-    py = re.sub(r"\b(?:github|needs|matrix)(?:\.[\w-]+)+",
+    py = re.sub(r"\b(?:github|needs|matrix)(?:\.(?:[\w-]+|\*))+",
                 lambda m: repr(ctx.get(m.group(0), "")), body)
     py = re.sub(r"!(?!=)", " not ", py.replace("&&", " and ").replace("||", " or "))
-    return eval(py.replace("fromJSON", "json.loads"), {"json": json})
+    return eval(py.replace("fromJSON", "json.loads"),
+                {"json": json, "contains": lambda seq, item: item in seq})
 
 
-def event(name, fork=False, draft=False):
+def event(name, fork=False, draft=False, labels=()):
     ctx = {"github.event_name": name, "github.repository": REPO}
     if name == "pull_request":
         ctx["github.event.pull_request.head.repo.full_name"] = "someone/Portrayal" if fork else REPO
         ctx["github.event.pull_request.draft"] = draft
+        ctx["github.event.pull_request.labels.*.name"] = list(labels)
     return ctx
 
 
@@ -436,33 +439,37 @@ def test_the_intake_extra_and_its_requirements_file_agree():
 
 # --- the two tiers ----------------------------------------------------------
 
-# (event, from a fork, draft) and the tier `dist` hands on - "" where `dist`
-# does not run at all, as on a draft, and its output is empty.
+# (event, from a fork, draft, labels) and the tier `dist` hands on - "" where
+# `dist` does not run at all, as on a draft, and its output is empty.
 TIERS = {
-    ("pull_request", False, False): "light",
-    ("pull_request", False, True): "",
-    ("pull_request", True, False): "full",
-    ("pull_request", True, True): "",
-    ("workflow_dispatch", False, False): "full",
-    ("schedule", False, False): "full",
+    ("pull_request", False, False, ()): "light",
+    ("pull_request", False, False, ("bug",)): "light",
+    ("pull_request", False, False, ("bug", "full-gates")): "full",
+    ("pull_request", False, True, ()): "",
+    ("pull_request", False, True, ("full-gates",)): "",
+    ("pull_request", True, False, ()): "full",
+    ("pull_request", True, True, ()): "",
+    ("workflow_dispatch", False, False, ()): "full",
+    ("schedule", False, False, ()): "full",
 }
 
 
-@pytest.mark.parametrize("case", list(TIERS), ids=lambda c: "-".join(map(str, c)))
+@pytest.mark.parametrize("case", list(TIERS), ids=lambda c: "-".join(map(str, c[:3]))
+                                                     + "-" + "+".join(c[3] or ("unlabelled",)))
 def test_only_a_full_run_reports_a_check_called_build(workflow, case):
     """THE REQUIRED CHECK IS THE GATE ON THE HEAVY TIER. A pull request push runs
     the light tier, and its verdict must not be called `build` - not even when
     it is skipped, because branch protection reads a skipped required check as
     passing (#867). So a head has a `build` only once a full run has reported:
-    the dispatch the merge agent starts before merging (docs/merging.md), the
-    nightly, or a fork's pull request, which cannot be dispatched on."""
-    name, fork, draft = case
+    a pull request labelled `full-gates` before merging (docs/merging.md), a
+    fork's pull request, a dispatch or the nightly."""
+    name, fork, draft, labels = case
     dist_runs = not draft
-    tier = gh_eval(tier_expression(workflow), event(name, fork, draft)) if dist_runs else ""
+    tier = gh_eval(tier_expression(workflow), event(name, fork, draft, labels)) if dist_runs else ""
     assert tier == TIERS[case], (case, tier)
     check = gh_eval(workflow["jobs"]["build"]["name"], {"needs.dist.outputs.tier": tier})
     assert check == ("build" if tier == "full" else "light suite"), (case, check)
-    if name == "pull_request" and not fork:
+    if name == "pull_request" and not fork and "full-gates" not in labels:
         assert check != "build"
 
 
@@ -499,22 +506,20 @@ def test_the_budget_step_can_fail_and_the_report_still_cannot(workflow):
     assert names.index("test budget") < names.index("every job passed") == len(names) - 1
 
 
-MERGE_REF = "${{ inputs.pr && format('refs/pull/{0}/merge', inputs.pr) || '' }}"
-
-
-def test_a_dispatch_tests_the_pull_requests_merge_with_main(workflow):
-    """A PULL REQUEST RUN TESTS THE BRANCH MERGED WITH MAIN (`refs/pull/N/merge`);
-    a dispatch on the branch would test the branch alone. Branch protection does
-    not require a branch to be up to date, so the full run before a merge is the
-    only full run of the merged tree - the #100/#101 case, for every heavy test.
-    Given `-f pr=<n>`, a dispatch checks out that merge, and its checks still land
-    on the head the merge is of. With no `pr` the ref is the run's own."""
+def test_a_label_gives_a_pull_request_its_full_run(workflow):
+    """THE FULL RUN BEFORE A MERGE IS A PULL REQUEST RUN, started by labelling it
+    `full-gates`. GitHub leaves a dispatched run out of a pull request's checks:
+    on #1398 a dispatch passed `build` on the head (966146dea) and branch
+    protection went on waiting for it. So `labeled` starts a run, and every
+    job checks out what the event gives it - for a pull request, its merge with
+    main, the tree the merge makes. No checkout names a ref of its own."""
     on = workflow.get("on", workflow.get(True))
-    assert "pr" in on["workflow_dispatch"]["inputs"], on["workflow_dispatch"]
+    assert "labeled" in on["pull_request"]["types"], on["pull_request"]
+    assert not (on["workflow_dispatch"] or {}).get("inputs"), on["workflow_dispatch"]
     for name in ("lint", "dist", "tests", "build"):
         checkout = next(s for s in steps(workflow["jobs"][name])
                         if s.get("uses", "").startswith("actions/checkout@"))
-        assert (checkout.get("with") or {}).get("ref") == MERGE_REF, name
+        assert "ref" not in (checkout.get("with") or {}), name
 
 
 def test_the_budget_reads_the_pull_requests_files(workflow):
@@ -522,27 +527,9 @@ def test_the_budget_reads_the_pull_requests_files(workflow):
     NEW MEANS ABSENT FROM THE BASE). The list is read with the job's own token and
     `pull-requests: read`; if it cannot be read, nothing counts as touched."""
     budget = next(s for s in steps(workflow["jobs"]["build"]) if s.get("name") == "test budget")
-    assert budget["env"]["PR"] == "${{ github.event.pull_request.number || inputs.pr }}"
+    assert budget["env"]["PR"] == "${{ github.event.pull_request.number }}"
     assert budget["env"]["GH_TOKEN"] == "${{ github.token }}"
     assert 'pulls/$PR/files' in budget["run"] and "--paginate" in budget["run"]
     assert '"${touched[@]}"' in budget["run"]
     # UNREADABLE MEANS NOTHING TOUCHED, so a rate limit warns and never fails
     assert ': > "$RUNNER_TEMP/touched.txt"' in budget["run"], budget["run"]
-
-
-def test_a_dispatch_proves_its_tree_is_the_heads_before_it_builds(workflow):
-    """THE `build` A DISPATCH REPORTS LANDS ON THE DISPATCHED HEAD, so the tree it
-    tested must be that head's merge. A wrong `-f pr`, or a merge ref GitHub has
-    not yet recomputed after a push, would put a passing `build` on a head whose
-    heavy tests never ran; and a dispatch on a branch with no `-f pr` would test
-    the branch without main. `dist` refuses all three before it builds, and
-    nothing after it runs without `dist`."""
-    dist = workflow["jobs"]["dist"]
-    names = [s.get("name") or s.get("uses", "") for s in steps(dist)]
-    guard = next(s for s in steps(dist) if s.get("name") == "the tree is the head's")
-    assert guard.get("if") == "github.event_name == 'workflow_dispatch'"
-    checkout = next(i for i, n in enumerate(names) if n.startswith("actions/checkout@"))
-    assert checkout < names.index("the tree is the head's") < names.index("build and publish")
-    run = guard["run"]
-    assert "git cat-file -p HEAD" in run and '"$GITHUB_SHA"' in run
-    assert "-f pr=<number>" in run and "refs/heads/main" in run

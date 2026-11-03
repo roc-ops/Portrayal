@@ -427,8 +427,8 @@ it proves the shards between them ran every collected test exactly once.
 every test not marked `heavy`, and its verdict is the check `light suite`.
 Heavy tests are the few hundred functions a full run measured at five seconds
 or more. The whole suite runs before a merge, when the maintainer or the
-merge agent starts it on the branch (`gh workflow run gates.yml --ref
-<branch> -f pr=<number>`, which tests the merge with main), and every night
+merge agent labels the pull request `full-gates` (`gh pr edit <number>
+--add-label full-gates`; every later push runs it too), and every night
 on `main`. Only that full run reports `build`,
 the check branch protection requires, so a pull request shows `build` as
 expected until it has had one. A pull request from a fork runs the whole

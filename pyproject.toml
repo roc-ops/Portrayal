@@ -93,8 +93,8 @@ testpaths = ["spec/tests"]
 # `loadgroup` is `load` for every test without an `xdist_group` mark, and does
 # nothing at all without `-n`.
 addopts = "--dist loadgroup"
-# THE TWO TIERS. A pull request push runs `-m "not heavy"`; a full run - the
-# dispatch before a merge, the nightly, a fork's pull request - runs everything.
+# THE TWO TIERS. A pull request push runs `-m "not heavy"`; a full run - a pull
+# request labelled `full-gates`, the nightly, a fork's pull request - runs everything.
 # A test is marked from a measurement (spec/tools/dev/mark_heavy.py), and both
 # tiers answer to spec/test-budget.json.
 markers = [

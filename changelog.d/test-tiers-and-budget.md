@@ -1,11 +1,10 @@
 ### Changed
 - A push to a pull request runs the light tier of the suite, every test not
   marked `heavy`, on two shards; its verdict is the check `light suite`. The
-  whole suite runs before a merge (`gh workflow run gates.yml --ref <branch>
-  -f pr=<number>`, which tests the pull request's merge with main) and every
-  night on `main`, and only that full run reports `build`, the check
-  branch protection requires. A pull request from a fork runs the whole suite
-  on every push.
+  whole suite runs before a merge, on a pull request labelled `full-gates`
+  (every push to it, from the label on), and every night on `main`, and only
+  that full run reports `build`, the check branch protection requires. A
+  pull request from a fork runs the whole suite on every push.
 - 973 test functions (2,320 tests) are marked `@pytest.mark.heavy`
   (`spec/tools/dev/mark_heavy.py`): five seconds or more in a full or a light
   run, every member of an xdist group with one that is, and every function of a
