@@ -56,6 +56,20 @@ LOAD_SUSPECT = 1.5  # a load this high is named: a busy runner, or everything sl
 ARTIFACT = "test-times"
 
 
+def fold_function(key):
+    """(module stem, function) for a test key: `stem::C.name[param]@group` is
+    `(stem, "C.name")`. Every parameter of a function is one cost, and the tier
+    and the budget are decided per function.
+
+    A GROUP SUFFIX COMES AFTER THE PARAMETER. Component refs put `@1` inside a
+    parameter, so an `@` counts as xdist's group suffix only when it follows the
+    last `]` - the rule xdist's own scheduler uses (`scheduler/loadgroup.py`)."""
+    stem, _, rest = key.partition("::")
+    if rest.rfind("@") > rest.rfind("]"):
+        rest = rest[:rest.rfind("@")]
+    return stem, rest.split("[", 1)[0]
+
+
 def read_junit(path):
     """{test id: seconds} from a junit file. The id is `file::name`, where the
     file is the classname up to its `test_` module - a class, when a test has
