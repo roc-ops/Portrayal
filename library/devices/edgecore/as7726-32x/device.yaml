@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7726-32x
-version: 2.0.8
+version: 2.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS7726-32X
@@ -341,14 +341,14 @@ views:
       - {at: [433.7, 23.3], text: PS1, font-size: 4.4, anchor: middle, for: ground-right}
     components:
       bays:
-        - {id: psu-2, at: [10, 2], size: {w: 54, h: 40}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2], group: psus, rel-pos: 2, default: common/psu-ac-650@3}
+        - {id: psu-2, at: [10, 2], size: {w: 54, h: 40}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2, edgecore/psu-48v-650-f@1, edgecore/psu-48v-650-b@1], group: psus, rel-pos: 2, default: common/psu-ac-650@3}
         - {id: fan-6, at: [71.1, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 6, default: common/fan-module@1}
         - {id: fan-5, at: [119.7, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 5, default: common/fan-module@1}
         - {id: fan-4, at: [168.3, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 4, default: common/fan-module@1}
         - {id: fan-3, at: [216.9, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 3, default: common/fan-module@1}
         - {id: fan-2, at: [265.5, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 2, default: common/fan-module@1}
         - {id: fan-1, at: [314.1, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 1, default: common/fan-module@1}
-        - {id: psu-1, at: [366.6, 2], size: {w: 54, h: 40}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2], group: psus, rel-pos: 1, default: common/psu-ac-650@3}
+        - {id: psu-1, at: [366.6, 2], size: {w: 54, h: 40}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2, edgecore/psu-48v-650-f@1, edgecore/psu-48v-650-b@1], group: psus, rel-pos: 1, default: common/psu-ac-650@3}
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears, group: furniture, rel-pos: 4}
         - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0], skin: right, optional: ears, group: furniture, rel-pos: 5}
@@ -505,16 +505,13 @@ configurations:
     description: Dual -48V DC PSUs, front-to-back airflow (7726-32X-O-48V-F)
     airflow: front-to-back
     bays:
-      psu-1: common/psu-dc-650@2
-      psu-2: common/psu-dc-650@2
+      psu-1: edgecore/psu-48v-650-f@1
+      psu-2: edgecore/psu-48v-650-f@1
     part-numbers:
       7726-32X-O-48V-F:
         part: FP3ZZ76320A0A
         power-cord: none
     component-attrs:
-      psu-dc-650:
-        model: PSU-48V-650-F
-        part-number: F0TZZ7632004A
       fan-module:
         model: FAN-1U-1x1C-F
         part-number: F0TAO6632000A
@@ -524,8 +521,8 @@ configurations:
     description: Dual -48V DC PSUs, back-to-front airflow (7726-32X-O-48V-B)
     airflow: back-to-front
     bays:
-      psu-1: common/psu-dc-650@2
-      psu-2: common/psu-dc-650@2
+      psu-1: edgecore/psu-48v-650-b@1
+      psu-2: edgecore/psu-48v-650-b@1
     region-context:
       intake: Exhaust
       exhaust: Intake
@@ -534,13 +531,6 @@ configurations:
         part: FP3ZZ76320A2A
         power-cord: none
     component-attrs:
-      psu-dc-650:
-        latch-finish: '#3d7bd6'
-        latch-edge: '#234b8c'
-        cover-edge: '#2a5aa8'
-        model: PSU-48V-650-B
-        part-number: F0TZZ7632003A
-        airflow: back-to-front
       fan-module:
         handle-finish: '#3d7bd6'
         airflow-legend: B2F

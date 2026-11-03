@@ -661,6 +661,12 @@ PART_POWER = {
     # netbox-community/netbox (netbox/dcim/choices.py at 9bcfd739) or nautobot/nautobot
     # (at f9cdca3d). A clip is not a screw terminal, so it is `other`, as the barrel is.
     "common/orv3-busbar-connector": "other",
+    # A POSITRONIC PCS POWER CONNECTOR IS A POWER INPUT NEITHER LIBRARY NAMES. The Edgecore
+    # PSU-48V-650-F and -B take their -48 V feed through a three-position PCS connector (PLA03)
+    # that a cable connector plugs into. PowerPortTypeChoices has no Positronic entry in either
+    # target, and a plug is not a screw terminal, so it is `other`, as the bus-bar clip is, and
+    # POWER_LABEL says which connector.
+    "common/pla03-receptacle": "other",
     # A RACK PDU'S FIXED INPUT CORD. The Eaton G4 EVMI2130X has no inlet: its feed
     # is a 10 ft cord ending in a NEMA L21-30P twist-lock plug, and the part that
     # stands for it is the cord leaving the end cap. `nema-l21-30p` is a
@@ -714,6 +720,7 @@ POWER_LABEL = {
     "std/pcie-8pin-header": "PCIe 8-pin (6+2)",
     "std/12vhpwr-header": "12VHPWR 16-pin",
     "std/12v-2x6-header": "12V-2x6 16-pin",
+    "common/pla03-receptacle": "Positronic PCS PLA03 (3-position)",
 }
 
 
