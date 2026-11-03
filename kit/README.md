@@ -817,7 +817,10 @@ connector, poles: [{role, path, stand-in?}]}`:
   rows of their own. A port is free when no cable is on it, on a pole or on its connector. A partly
   used port is no row, and each pole no cable is on is a row for a single conductor, with `dc.pole`:
   `{port, role}`. A DC row never has `of` or `first`, `kinds: ['data']` leaves it out, and `type`
-  (a coupler) never matches it. `slotEnds` lists the same ports.
+  (a coupler) never matches it. `slotEnds` lists the same ports. The panel is any of `front`, `rear`,
+  `left`, `right`, `top` and `bottom`: the last four offer power, ground and DC ends only (a slot end
+  where `portsOf` reads it there or the catalogue says what it is), after the front and the rear and in
+  that order, and a cable end is still given on the front or the rear only.
 - **`configFacts(slots, cfg).dcPorts`** is the configuration's `dc-ports`, and is absent for a
   configuration that states none.
 

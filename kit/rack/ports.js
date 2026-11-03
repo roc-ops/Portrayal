@@ -392,10 +392,10 @@ export const jacketsFor = (rack, facts = {}) => { const kept = new Map(); return
 // them. THIS keeps only the slots of the panels the item's configuration
 // shows, each with `view` as the face it is on, so that a slot of another
 // build of the device is never taken for one of this build.
-const SIX = ['front', 'rear', 'left', 'right', 'top', 'bottom'];
+export const PANELS = ['front', 'rear', 'left', 'right', 'top', 'bottom'];
 export function shownEnv(item, slots, compByRef = null, redirects = null) {
   const env = slotEnv(item, slots, compByRef, redirects);
-  const faceOf = new Map(SIX.map(face => [env.cfg?.views?.[face] ?? face, face]));
+  const faceOf = new Map(PANELS.map(face => [env.cfg?.views?.[face] ?? face, face]));
   const shown = s => (faceOf.has(s.view) ? [{...s, view: faceOf.get(s.view)}] : []);
   return {...env, bays: env.bays.flatMap(shown), cages: env.cages.flatMap(shown)};
 }
@@ -679,8 +679,9 @@ export function settleEnds(rack, ends, ctx, extra = []) {
 //             port is left out, as lint refuses it. Nothing is inferred.
 //   view      the panel of its poles' slots (slots), or of its connector
 //             slot (points); a part in a bay is on the bay's panel unless the
-//             slot is on the part's back. Poles on two panels, or a panel the
-//             catalogue does not say: null, and the port is neither offered nor landed
+//             slot is on the part's back. Any of the six panels (PANELS). Poles
+//             on two panels, or a panel the catalogue does not say: null, and the
+//             port is neither offered nor landed
 //   lands     every pole's slot (slots), or the connector (points), takes a
 //             cable end (takesCableEnd)
 //   connector the connector slot's path for a points port, else null
@@ -725,7 +726,7 @@ function dcPort(q, R, env, ctx) {
   const lands = kind === 'slots' ? entries.every(e => takesCableEnd(e, ctx.compByRef)) : takesCableEnd(connector, ctx.compByRef);
   // the panel: a slot of the device says its own; one on a part in a bay is on the bay's, or the other on the part's back
   const bay = env.bays.find(b => part.startsWith(`${b.id}/`));
-  const viewOf = e => { const v = e.view ?? (bay ? (e.back ? OTHER[bay.view] : bay.view) : null); return FACES.includes(v) ? v : null; };
+  const viewOf = e => { const v = e.view ?? (bay ? (e.back ? OTHER[bay.view] : bay.view) : null); return PANELS.includes(v) ? v : null; };
   const views = new Set((kind === 'slots' ? entries : [connector]).map(viewOf));
   const port = {id, path: q.path, part, ref: q.ref ?? null, direction: q.direction, voltage: copy(q.voltage ?? null), 'rating-a': q['rating-a'] ?? null,
                 awg: copy(q.awg ?? null), side: q.side ?? null, kind, view: views.size === 1 ? [...views][0] : null, lands, connector: connector ? part : null,
@@ -818,6 +819,11 @@ export function dcReader(rack, ctx) {
   };
 }
 
+// A DC PORT NAMED ON THE WRONG PANEL, as looseReason's fact: the other of front and rear is one a cable end can
+// be given on, so the reason names it (`dcPanel`); any other panel is a side of the device (`side`), where a cable
+// end cannot be given, so the reason says that and does not tell the person to give a view the kit refuses.
+const wrongPanel = view => (FACES.includes(view) ? {dcPanel: view} : {side: view});
+
 // WHAT IS LOOSE ABOUT AN END AT A DC PORT, in looseReason's facts, or null: a
 // contact of a connector that takes a plug, and a port named on the panel it is not on.
 function dcLoose(item, end, ctx) {
@@ -826,7 +832,7 @@ function dcLoose(item, end, ctx) {
   const view = end.view === 'rear' ? 'rear' : 'front';
   if (hit.end === 'contact')
     return {dcContact: {part: hit.port.part, plug: endPlug(dcSeats.get(hit.port).connector, ctx.compByRef).plug, port: hit.port.path}};
-  return hit.end === 'port' && hit.port.view && hit.port.view !== view ? {dcPanel: hit.port.view} : null;
+  return hit.end === 'port' && hit.port.view && hit.port.view !== view ? wrongPanel(hit.port.view) : null;
 }
 
 // THE LANDING OF A DC END ON A PART IN A BAY, over what seatedBase answered (own):
@@ -856,7 +862,7 @@ function withDcInBay(item, end, ctx, own) {
   const base = {item: true, drawing: true, port: false, cage: false, occupied: false, onView: null, back: false, holder};
   if (hit.end === 'contact') return {...base, ...dcLoose(item, end, ctx)};
   if (!port.view) return own;
-  if (port.view !== view) return {...base, dcPanel: port.view};
+  if (port.view !== view) return {...base, ...wrongPanel(port.view)};
   return {...base, port: true, slot: true, onView: view, info: portInfo(port, ctx, end.plug)};
 }
 // The same for a part placed on the device (ownBase answers `own`: a slot of the device).
@@ -872,6 +878,6 @@ function withDcOnPanel(item, end, ctx, own) {
   if (own?.facts?.port || !port.lands) return own;
   if (hit.end === 'contact') return {facts: dcLoose(item, end, ctx)};
   if (!port.view) return own;
-  if (port.view !== view) return {facts: {dcPanel: port.view}};
+  if (port.view !== view) return {facts: wrongPanel(port.view)};
   return {facts: {port: true, slot: true, cage: false, occupied: false, onView: view}, info: portInfo(port, ctx, end.plug)};
 }
