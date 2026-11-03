@@ -36,6 +36,12 @@ FIXTURE = ROOT / "spec" / "tests" / "fixtures" / "overlay-example"
 DIST = ROOT / "library" / "dist"
 DEVICE = "overlay-switch"
 
+# ONE WORKER WITH THE TEST THAT WRITES INTO library/dist. This hashes the public
+# dist across a build, and test_part_conformance_report writes its report there;
+# on two workers the report can land between the two hashes
+# (test_dist_writers_share_a_group.py).
+pytestmark = pytest.mark.xdist_group("public-dist")
+
 
 def build(overlay, out, timeout=900):
     return subprocess.run(

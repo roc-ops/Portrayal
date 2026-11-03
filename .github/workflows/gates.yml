@@ -260,7 +260,7 @@ jobs:
     needs: dist
     if: github.event_name != 'push' && !github.event.pull_request.draft
     runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
-    timeout-minutes: 20
+    timeout-minutes: 30
     strategy:
       # EVERY SHARD FINISHES. A failure in one says nothing about the other
       # three, and stopping them would hide their failures until the next push.

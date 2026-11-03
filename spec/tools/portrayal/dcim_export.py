@@ -993,6 +993,10 @@ NOT_A_DCIM_PORT = {
                                "guide names the port and gives no connector type or pinout, and no "
                                "DCIM has a power port type for an RPS connector, so it cannot be "
                                "typed honestly",
+    "juniper/ex2200-rps-port": "the redundant power system port of the Juniper EX2200 switches: the "
+                               "guide names the port and gives no connector type, and no DCIM has a "
+                               "port type for it, so it presents nothing and cannot be typed "
+                               "honestly",
 
     # --- USB: real ports, no device-type field to put them in ----------------
     # A DCIM device type has console ports, power ports and interfaces. A USB
@@ -1069,15 +1073,23 @@ NOT_A_DCIM_PORT = {
     "amphenol-ns/alarm-card-307608": "Form C alarm relay contacts on wire-wrap headers - dry "
                                      "contacts for an external alarm loop; neither DCIM has a "
                                      "port type for an alarm contact",
+    "common/micro-dsub-50-receptacle": "the 50-pin micro D-sub CO alarm connector of the Nokia NGFC-H and "
+                                       "NGFC-G cards - external alarm inputs and relay contacts, not a "
+                                       "network port or a console; neither DCIM has a port type for an "
+                                       "alarm connector",
+    "common/wire-wrap-header-6": "the six-pin wire-wrap BITS timing header of the Nokia NGFC-H and NGFC-G "
+                                 "cards - the BITS cables are wrapped to bare pins, and neither DCIM has "
+                                 "a port type for such a header",
 
     # --- Virtual Chassis ---------------------------------------------------------
     "juniper/ex4200-vcp-port": "the 68-pin Virtual Chassis port of an EX4200: a proprietary stacking "
-                               "connector with no registered interface and no port type in either "
-                               "DCIM; the guide names it only as a 68-pin connector",
+                               "connector that presents the registered interface ex4200-vcp, and "
+                               "neither DCIM has a port type for it; the guide names it only as a "
+                               "68-pin connector",
     "cisco/stackwise-480-port": "the StackWise-480 stacking port of the Catalyst 9300: Cisco's own "
-                                "stacking connector, with no registered interface and no port type "
-                                "in either DCIM; the guide names it only as a StackWise-480 port "
-                                "connector",
+                                "stacking connector, which presents the registered interface "
+                                "stackwise-480, and neither DCIM has a port type for it; the guide "
+                                "names it only as a StackWise-480 port connector",
     "cisco/stackpower-port": "the StackPower connector of the Catalyst 9300 (S-PWR 1 and 2): a "
                              "power-sharing link between switches, not a power input; neither DCIM "
                              "has a type for it and a power port would read as a feed",
@@ -1582,9 +1594,10 @@ def device_console_row(p, a):
     if (ref.split("@")[0] == MICRO_USB_REF
             and DB9_CONSOLE.search(db9_words({**p, "attrs": a}))):
         return {"name": "Console (Micro-USB)", "type": "usb-micro-b"}
-    # THE EX4300'S MINI-USB CONSOLE (CON1) has its own part because the registry holds
-    # no mini-USB receptacle; the part is a console by what it is, so it needs no role
-    # on the placement. `usb-mini-b` is a console-port type in both targets.
+    # THE EX4300'S MINI-USB CONSOLE (CON1) is its own part, juniper/ex4300-console-usb-mini,
+    # because it keeps the size its photograph gave; it presents `mini-usb-b`. The part is a
+    # console by what it is, so it needs no role on the placement. `usb-mini-b` is a
+    # console-port type in both targets.
     if ref.split("@")[0] == "juniper/ex4300-console-usb-mini":
         return {"name": "Console (mini-USB)", "type": "usb-mini-b"}
     # THE REGISTRY'S OWN MINI-B RECEPTACLE, std/mini-usb (the Catalyst 9300's console). It is a

@@ -1,12 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as C from '../../../kit/rack/cable-rules.js';
+import {mediaOfEnd} from '../../tools/dev/part_conformance.mjs';
 
 const end = (item, path, view = 'front') => ({item, path, view});
 
-test('the media enum is the eight data media, then power and ground (#1045), each with a label and a kind', () => {
-  assert.deepEqual(C.MEDIA, ['os2', 'om3', 'om4', 'om5', 'cat6', 'cat6a', 'dac', 'aoc', 'power', 'ground']);
+test('the media enum is the eight data media, then power and ground (#1045), then stack, usb and console, each with a label and a kind', () => {
+  assert.deepEqual(C.MEDIA, ['os2', 'om3', 'om4', 'om5', 'cat6', 'cat6a', 'dac', 'aoc', 'power', 'ground', 'stack', 'usb', 'console']);
   assert.deepEqual([C.mediaKind('power'), C.mediaKind('ground')], [{family: 'power', mode: null}, {family: 'ground', mode: null}]);
+  assert.deepEqual(['stack', 'usb', 'console'].map(C.mediaKind),
+    [{family: 'stack', mode: null}, {family: 'usb', mode: null}, {family: 'console', mode: null}]);
+  assert.deepEqual(['stack', 'usb', 'console'].map(m => C.MEDIA_LABELS[m]), ['Stack cable', 'USB cable', 'Console cable']);
   for (const m of C.MEDIA) { assert.ok(C.MEDIA_LABELS[m], m); assert.ok(C.mediaKind(m).family, m); }
   assert.deepEqual(C.mediaKind('os2'), {family: 'fiber', mode: 'single-mode'});
   assert.deepEqual(C.mediaKind('om5'), {family: 'fiber', mode: 'multimode'});
@@ -142,4 +146,71 @@ test('countsBy and matches drive the list\'s two filters', () => {
   assert.equal(n({purpose: 'uplink', media: 'os2'}), 1);
   assert.equal(n({purpose: '', media: null}), 1, 'the empty purpose is a value of its own');
   assert.equal(n(), 3);
+});
+
+// ── stack, usb and console ──────────────────────────────────────────────
+const STACK = {family: 'stack', mode: null}, USB = {family: 'usb', mode: null}, CONSOLE = {family: 'console', mode: null};
+
+test('a stack cable between two slots of one stacking interface is proposed stack and raises no mismatch', () => {
+  for (const iface of ['flexstack', 'stackwise-480', 'ex4200-vcp']) {
+    const e = C.connectorOf({iface});
+    assert.deepEqual(e, STACK, iface);
+    assert.equal(C.proposeMedia(e, e), 'stack', iface);
+    assert.deepEqual(C.mismatch('stack', e, e), [], iface);
+  }
+  // a plug the end seats states the same key (`media` or `connector`), and an end that states none stays unknown
+  assert.deepEqual(C.connectorOf({attrs: {media: 'flexstack'}}), STACK);
+  assert.deepEqual(C.connectorOf({attrs: {connector: 'stackwise-480'}}), STACK);
+  assert.deepEqual(C.connectorOf({attrs: {media: 'something-else'}}), {family: null, mode: null});
+  // a stack cable does not suit a copper end, and the sentence says what the end is
+  assert.deepEqual(C.mismatch('stack', STACK, {family: 'copper', mode: null}),
+    ['The ends differ: A is stacking, B is copper.', 'Stack cable does not suit end B, which is copper.']);
+  assert.deepEqual(C.mismatch('cat6a', STACK, STACK),
+    ['Cat 6A copper does not suit end A, which is stacking.', 'Cat 6A copper does not suit end B, which is stacking.']);
+});
+
+// THE RULE THAT TELLS A USB END FROM A CONSOLE END. A USB receptacle serves a data link and a console alike,
+// and its interface cannot tell them apart. The port's `role` can, so: an end is a console end when its
+// `role` is `console` (whatever its connector); else it is a USB end when its interface, its port media or the
+// seated plug's media is one of the four USB keys; a console port whose role is not passed stays what it was.
+test('a USB end and a console end are told apart by the port\'s role, and the interface decides only what the role leaves', () => {
+  for (const iface of ['usb-a', 'micro-usb-b', 'mini-usb-b', 'usb-c']) {
+    assert.deepEqual(C.connectorOf({iface}), USB, iface);
+    assert.deepEqual(C.connectorOf({portMedia: iface}), USB, `port media ${iface}`);
+    assert.deepEqual(C.connectorOf({iface, role: 'console'}), CONSOLE, `${iface} with the console role`);
+    assert.deepEqual(C.connectorOf({iface, role: 'data'}), USB, `${iface} with another role`);
+    assert.deepEqual(C.connectorOf({attrs: {media: iface}}), USB, `a ${iface} plug`);
+    assert.deepEqual(C.connectorOf({attrs: {media: iface}, role: 'console'}), CONSOLE, `a ${iface} plug on a console port`);
+  }
+  // the role wins over a connector that is not USB too: an RJ45 console is a console
+  assert.deepEqual(C.connectorOf({portMedia: 'rj45-serial', iface: 'rj45', role: 'console'}), CONSOLE);
+  assert.deepEqual(C.connectorOf({attrs: {role: 'console'}}), CONSOLE, 'a seated part that states the role');
+  // and without it nothing changes: an RJ45 serial port with no role passed is copper, as it was
+  assert.deepEqual(C.connectorOf({portMedia: 'rj45-serial'}), {family: 'copper', mode: null});
+  assert.deepEqual(C.connectorOf({iface: 'rj45', role: ''}), {family: 'copper', mode: null});
+  assert.equal(C.proposeMedia(USB, USB), 'usb');
+  assert.equal(C.proposeMedia(CONSOLE, CONSOLE), 'console');
+  assert.equal(C.proposeMedia(CONSOLE, USB), 'console', 'the first end that knows decides');
+  assert.deepEqual(C.mismatch('usb', USB, USB), []);
+  assert.deepEqual(C.mismatch('console', CONSOLE, CONSOLE), []);
+  assert.deepEqual(C.mismatch('usb', USB, CONSOLE),
+    ['The ends differ: A is USB, B is console.', 'USB cable does not suit end B, which is console.']);
+});
+
+test('mediaOfEnd offers stack, usb and console as connectorOf reads the end, and the media it offered before otherwise', () => {
+  assert.equal(mediaOfEnd({kind: 'data', media: 'flexstack'}, null), 'stack');
+  assert.equal(mediaOfEnd({kind: 'data', media: 'x', iface: 'ex4200-vcp'}, null), 'stack');
+  assert.equal(mediaOfEnd({kind: 'data', media: 'usb-a'}, null), 'usb');
+  assert.equal(mediaOfEnd({kind: 'data', media: 'mini-usb-b'}, null), 'usb');
+  assert.equal(mediaOfEnd({kind: 'data', media: 'mini-usb-b', role: 'console'}, null), 'console');
+  assert.equal(mediaOfEnd({kind: 'data', media: 'rj45-serial', role: 'console'}, null), 'console');
+  // nothing that was offered before moves
+  assert.equal(mediaOfEnd({kind: 'power'}, null), 'power');
+  assert.equal(mediaOfEnd({kind: 'ground'}, null), 'ground');
+  assert.equal(mediaOfEnd({kind: 'data', media: 'rj45'}, null), 'cat6');
+  assert.equal(mediaOfEnd({kind: 'data', media: 'rj45-serial'}, null), 'cat6');
+  assert.equal(mediaOfEnd({kind: 'data', media: 'lc'}, null), 'os2');
+  assert.equal(mediaOfEnd({kind: 'data', media: 'qsfp28'}, {kind: 'dac'}), 'dac');
+  assert.equal(mediaOfEnd({kind: 'data', media: 'qsfp28'}, {kind: 'optic'}), 'os2');
+  assert.equal(mediaOfEnd({kind: 'data', media: 'sma'}, null), '');
 });

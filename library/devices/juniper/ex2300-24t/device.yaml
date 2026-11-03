@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2300-24t
-version: 0.2.0
+version: 0.4.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2300-24T
@@ -97,11 +97,12 @@ provenance:
   front-console:
     confidence: estimated
     note: >-
-      estimated - the mini-USB console port (guide Figure 3, callout 5, printed CON) is drawn as chassis
-      art, a 7.9 x 4.6 mm shell with its opening, read off the 24P and 48P photographs (25 x 14 px and
-      24 x 14 px at 3.27 px per mm). It is not a component: the library has no mini-USB receptacle and
-      its DCIM export has no row for one, so a placed part would export nothing. The rear RJ-45 console
-      port is a component and exports.
+      estimated - the mini-USB console port (guide Figure 3, callout 5, printed CON) is the placed std/mini-usb
+      (`console-usb`), centred on the 7.9 x 4.6 mm shell this device was drawn with, which was read off
+      the 24P and 48P photographs (25 x 14 px and 24 x 14 px at 3.27 px per mm). The part draws the registry's
+      7.7 x 3.9 mm Mini-B shell, which stands in for the maker's own (gap `mini-usb-console-shell`). The
+      guide names the connector: "Mini-USB Type-B (5-pin)" (Console Ports, p4; Mini-USB Port Pinout Specifications,
+      p86).
   rear-layout:
     confidence: estimated
     note: >-
@@ -160,6 +161,18 @@ provenance:
     confidence: photo-measured
     note: >-
       median of the bare front plate in the 24P photograph (#919599); the plate at the top right #6e7276.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      INFERRED, NOT STATED. Table 36 names two 10-32 x .25 in. screws with #10 split-lock washers and
+      a Panduit LCC10-14AW-L lug or equivalent (not provided) for the EX2300 and EX2300-C, and gives no
+      spacing. The rear photograph puts the two holes 15.9 mm apart: 5/8 in. (15.875) and not 3/4 in.
+      (19.05). The lug's own code is not in the library's registry, so it is the photograph that carries
+      the pitch. The terminal is `common/ground-hole-pair-5-8-10-32@1`: two bare 10-32 holes on 5/8 in.
+      centres, presenting `stud-pair-5-8`, so one two-hole lug (`generic/two-hole-lug-5-8@1`) lands across
+      them and a ring lug still lands on either hole. The holes stay bare, as the photograph shows them;
+      the screws that hold the lug are not part of the switch. The holes were drawn 15.9 apart as decor
+      and the pair stands on their midpoint.
 attrs:
   physical:
     weight-note: 7.25 lb (3.29 kg); the EX2300-24T-DC 7.83 lb (3.55 kg), Table 3
@@ -181,6 +194,17 @@ attrs:
 chassis: {width: 441.9, height: 44.45, depth: 259.0, ru: 1, weight-kg: 3.29, color: '#919599', airflow: front-to-back,
   power: ac}
 gaps:
+- what: mini-usb-console-shell
+  scope:
+  - console-usb
+  reason: needs-photo
+  note: >-
+    The part is the registry's Mini-B receptacle (Molex drawing SD-54819-026, 7.7 x 3.9 mm). The front
+    photographs show the console shell at about 25 x 14 px at 3.27 px per mm, 7.6 x 4.3 mm, and no close-up
+    is held, so the drawn shell and its place are estimates and the maker's own shell may differ by a
+    few tenths.
+  wanted: >-
+    A straight-on close-up of the console port with a scale, or the maker's dimensioned drawing of it.
 - what: rack-ears
   scope:
   - front
@@ -222,6 +246,14 @@ gaps:
     The jack lamps carry the component's link and activity vocabulary; the guide's Status lamp switches
     meaning with the mode button and no per-lamp state list fits the component.
   wanted: none beyond the component's own vocabulary.
+- what: ground-pair-pitch
+  scope:
+  - ground-pair
+  reason: vendor-silent
+  note: >-
+    The guide names the screws and the lug and gives no spacing for the two holes; `ground-stud-pitch`
+    says what the pair is drawn at and why.
+  wanted: a drawing that dimensions the two holes, or the lug's own datasheet
 groups:
   rj45:
     term: Port
@@ -260,6 +292,11 @@ groups:
   power-input: {term: Inlet, role: service, index-origin: 0}
   esd: {term: Point, role: furniture, index-origin: 0}
   furniture: {term: Item, role: furniture, index-origin: 0}
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the earthing terminal, two bare 10-32 holes for a two-hole lug (Table 36)
 views:
   front:
     size: {w: 441.9, h: 44.45}
@@ -267,9 +304,6 @@ views:
       decor:
       - {id: plate-top, kind: label-plate, at: [364.6, 1.0], size: [76.4, 15.3], fill: '#6e7276'}
       - {id: plate-right, kind: label-plate, at: [422.6, 1.0], size: [18.4, 42.6], fill: '#6e7276'}
-      - {id: console, kind: console-shell, at: [425.6, 39.0], size: [7.9, 4.6], rx: 0.6, fill: '#c9cbcd'}
-      - {id: console-opening, kind: console-opening, at: [426.3, 39.7], size: [6.5, 3.2], rx: 0.5, fill: '#1c2024'}
-      - {id: console-pins, kind: console-pins, at: [427.3, 41.2], size: [4.5, 0.7], fill: '#3a4046'}
       - {id: shell-1, kind: jack-shell, at: [184.95, 11.6], size: [86.9, 25.9], rx: 0.6, fill: '#b1b2b5'}
       - {id: shell-2, kind: jack-shell, at: [273.77, 11.6], size: [86.9, 25.9], rx: 0.6, fill: '#b1b2b5'}
       - {at: [34.2, 0.8], size: [327.3, 6.6], pattern: vent, vent: 1.0}
@@ -319,6 +353,7 @@ views:
       - {id: led-dx, at: [431.3, 10.3], size: [2.0, 2.0], shape: circle}
       - {id: led-en, at: [431.3, 14.8], size: [2.0, 2.0], shape: circle}
       - {id: btn-mode, at: [427.6, 32.3], size: [4.0, 4.0], shape: circle}
+      - {id: console-usb, at: [425.7, 39.35], size: [7.7, 3.9], shape: rect}
     silkscreen:
     - {at: [193.35, 40.3], text: '0', font-size: 2.0, anchor: middle, fill: '#ea6a3c', for: port-0}
     - {at: [195.65, 41.4], text: '1', font-size: 2.0, anchor: middle, fill: '#ea6a3c', for: port-1}
@@ -369,7 +404,7 @@ views:
       stroke-width: 0.35
       fill: '#e4e6e9'
       for: btn-mode
-    - {at: [437.4, 41.8], text: CON, font-size: 1.6, anchor: middle, fill: '#e4e6e9', for: chassis}
+    - {at: [437.4, 41.8], text: CON, font-size: 1.6, anchor: middle, fill: '#e4e6e9', for: console-usb}
     components:
       placements:
       - ref: common/rj45-ganged-eth@1
@@ -624,6 +659,12 @@ views:
         group: controls
         rel-pos: 0
         attrs: {function: Factory Reset/Mode}
+      - ref: std/mini-usb@1
+        id: console-usb
+        at: [425.7, 39.35]
+        group: mgmt
+        rel-pos: 0
+        attrs: {role: console}
     regions:
     - id: logo-zone
       at: [6.4, 2.6]
@@ -635,8 +676,6 @@ views:
       decor:
       - {id: recess-mgmt, kind: recess, at: [16.9, 8.4], size: [17.3, 23.4], rx: 0.4, fill: '#1d2024'}
       - {id: earth-terminal, kind: earth-plate, at: [54.1, 2.0], size: [31.9, 11.8], rx: 0.3, fill: '#c9cbcd'}
-      - {id: earth-hole-1, kind: earth-hole, at: [58.85, 4.85], size: [5.9, 5.9], rx: 2.95, fill: '#2a2d31'}
-      - {id: earth-hole-2, kind: earth-hole, at: [74.75, 4.85], size: [5.9, 5.9], rx: 2.95, fill: '#2a2d31'}
       - {id: fan-0, kind: fan-grille, at: [116.75, 2.25], size: [38.7, 38.7], rx: 19.35, pattern: vent,
         vent: 1.0}
       cutouts:
@@ -652,6 +691,8 @@ views:
       fill: '#f2f4f6', for: ac-inlet}
     components:
       placements:
+      - {ref: common/ground-hole-pair-5-8-10-32@1, id: ground-pair, at: [59.3995, 5.387], group: grounding,
+        rel-pos: 0}
       - ref: common/rj45-eth@1
         id: mgmt
         at: [18.1, 8.4]
@@ -699,8 +740,6 @@ views:
       decor:
       - {id: recess-mgmt, kind: recess, at: [16.9, 8.4], size: [17.3, 23.4], rx: 0.4, fill: '#1d2024'}
       - {id: earth-terminal, kind: earth-plate, at: [54.1, 2.0], size: [31.9, 11.8], rx: 0.3, fill: '#c9cbcd'}
-      - {id: earth-hole-1, kind: earth-hole, at: [58.85, 4.85], size: [5.9, 5.9], rx: 2.95, fill: '#2a2d31'}
-      - {id: earth-hole-2, kind: earth-hole, at: [74.75, 4.85], size: [5.9, 5.9], rx: 2.95, fill: '#2a2d31'}
       - {id: fan-0, kind: fan-grille, at: [96.35, 1.75], size: [38.7, 38.7], rx: 19.35, pattern: vent,
         vent: 1.0}
       - {id: dc-terminal, kind: dc-terminal-plate, at: [377.3, 9.5], size: [52.6, 17.5], rx: 0.6, fill: '#6f7479'}
@@ -734,6 +773,8 @@ views:
       fill: '#f2f4f6', for: chassis}
     components:
       placements:
+      - {ref: common/ground-hole-pair-5-8-10-32@1, id: ground-pair, at: [59.3995, 5.387], group: grounding,
+        rel-pos: 0}
       - ref: common/rj45-eth@1
         id: mgmt
         at: [18.1, 8.4]

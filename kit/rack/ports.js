@@ -107,6 +107,10 @@ function slotInfo(slot, comps, end, compByRef) {
 //             cableLandsOn). `info` then carries `role`, `plug`, `connector`
 //             and, where the plug is in question, `note`
 //   part      a part is at the path that takes no cable end: its name
+//   dc facts  where the path is a DC port, a pole or a contact (dcPortsOf):
+//             `info.dc` on a port, pole or connector end; `dcPanel`,
+//             `dcContact` and `dcGive` on one that is loose (cable-rules.js
+//             looseReason)
 // `ctx` is {slotsOf, compByRef}.
 //
 // A PORT ON A BACK IS THE PART'S, WHETHER OR NOT THE HOST DRAWS IT. Whether a
@@ -118,6 +122,9 @@ function slotInfo(slot, comps, end, compByRef) {
 // A bay that neither the swaps nor the configuration names holds what it ships
 // with, when the configuration has the bay (its `only-in`, slots.js slotEnv).
 export function seatedPort(item, end, ctx) {
+  return withDcInBay(item, end, ctx, seatedBase(item, end, ctx));
+}
+function seatedBase(item, end, ctx) {
   if (!item || !loaded(ctx)) return null;
   const p = portPathOf(end?.path ?? ''), first = p.indexOf(MODULE), cut = p.lastIndexOf(MODULE);
   if (first < 0 || isElementId(p)) return null;
@@ -169,9 +176,15 @@ export function seatedPort(item, end, ctx) {
   // the slot at the path: the resolver's, which reads a back's slots where no
   // part of the face shares the id; a back that does share one answers itself
   const slot = back && face ? (steps.length === 1 ? list(rear.cages).find(g => g.id === steps[0]) ?? null : null) : R.entryAt(p);
+  // THE ROLE A PORT HAS is the one its placement in the module states (the
+  // `parts[]` entry of the last step, on the face or on the back it is read
+  // from), else the one its own component states: a console port is a console
+  // end whatever its connector (cable-rules.js connectorOf)
+  const above = steps.length > 1 ? chainIn(back ? rear : comp, steps.slice(0, -1), ctx.compByRef)?.at(-1)?.comp : back ? rear : comp;
+  const role = list(above?.parts).find(q => q.id === steps.at(-1))?.attrs?.role || drawn.attrs?.role || '';
   return {...base, port: true, onView: view, back, holder, cage: slot?.kind === 'cage',
           occupied: !!slot && holdsAt(env, swaps, p, {...slot, isCage: true}) != null,
-          info: connectorOf({portMedia: drawn.attrs?.media || '', iface: slot?.interface || drawn.attrs?.connector || ''})};
+          info: connectorOf({portMedia: drawn.attrs?.media || '', iface: slot?.interface || drawn.attrs?.connector || '', role})};
 }
 
 // AN END THE CATALOGUE KNOWS TO BE LOOSE, said when the cable is made and not
@@ -193,9 +206,15 @@ export function seatedEndReason(rack, ends, ctx) {
     const item = (rack.items || []).find(i => i.id === end.item);
     if (!item || isElementId(end.path)) continue;
     const own = seatedPort(item, end, ctx) ?? absentOnPanel(item, end, ctx);
+    if (!own) {
+      // a DC port named on the other panel, or a contact of a connector that states one, on the device's own panel
+      const dcFacts = dcLoose(item, end, ctx), why = dcFacts ? looseReason(end, {item: true, drawing: true, port: false, holder: null, ...dcFacts}) : null;
+      if (why) return why;
+      continue;
+    }
     // (a part at the path that takes no cable is the page's to call loose: a
     // rack file may hold such an end on purpose)
-    if (!own || own.port || !own.holder?.part || own.part) continue;
+    if (own.port || !own.holder?.part || own.part) continue;
     const reason = looseReason(end, own);
     if (reason) return reason;
   }
@@ -412,6 +431,9 @@ function drawnComp(end, ctx) {
   return comp ? {comp, ref: String(ref).split(':')[0]} : null;
 }
 export function ownSlot(item, end, ctx) {
+  return withDcOnPanel(item, end, ctx, ownBase(item, end, ctx));
+}
+function ownBase(item, end, ctx) {
   if (!item || !loaded(ctx)) return null;
   const p = portPathOf(end?.path ?? '');
   if (!p || p.includes(MODULE) || isElementId(p)) return null;
@@ -517,7 +539,7 @@ function moduleEnds(z, env, ctx, end, place) {
       let info = zeroUInfo(g, end?.path === path ? end : null, ctx.compByRef);
       const power = info.family === 'power' || info.family === 'ground';
       const connector = couplerType(g.interface) ? info.connector : `${String(g.interface || 'cable').toUpperCase()} port`;
-      if (!power) info = {...info, ...connectorOf({portMedia: attrs.media || '', iface: g.interface || ''}), connector};
+      if (!power) info = {...info, ...connectorOf({portMedia: attrs.media || '', iface: g.interface || '', role: attrs.role || ''}), connector};
       const p = Array.isArray(g.mate) ? g.mate : Array.isArray(g.at) ? g.at : null;
       out.push({path, view: bay.view, slot: g, module: true, type: couplerType(g.interface), connector: info.connector,
                 kind: power ? endKind(info) : 'data', plug: info.plug, info,
@@ -573,14 +595,44 @@ export function settleEnd(rack, end, got, ctx) {
     return {...got, facts, ...(mine.info ? {info: mine.info.family || !got.info?.family ? mine.info : {...got.info, plug: mine.info.plug, ...(mine.info.note ? {note: mine.info.note} : {})}} : {}),
             reason: looseReason(end, facts)};
   }
+  // a terminal the part draws as an element, where the part states no DC port: the reason says so
+  const gf = got?.facts;
+  if (!own && gf?.drawing === true && gf.port === false && gf.holder?.part && !gf.part && !gf.onView && !gf.under && !gf.side && dcDrawnOnly(item, end, ctx)) {
+    const facts = {...gf, dcDrawn: true};
+    return {...got, facts, reason: looseReason(end, facts)};
+  }
   if (!own || got?.facts?.drawing === false) return got ?? null;
   const {info, ...facts} = own;
   // the screws to name for an end on a terminal: those no other cable is on
   if (facts.under) facts.under = facts.under.filter(x => !(rack.cables || []).some(c => [c.a, c.b].some(e =>
     e.item === end.item && e.view === end.view && portPathOf(e.path) === x)));
+  // the same for the DC ports to give: those no cable is on, at the port or at any pole
+  if (facts.dcGive) {
+    const read = dcReader(rack, ctx), ports = dcPortsOf(item, ctx);
+    const used = new Set((rack.cables || []).flatMap(c => [c.a, c.b]).map(e => read(e)?.key).filter(Boolean));
+    facts.dcGive = facts.dcGive.filter(x => !used.has(`${item.id}|${ports.find(q => q.path === x)?.view}|${x}`));
+  }
   // an end that lands by its slot is what its part says it is; a port, what the page read of it
   return {...got, facts: {...got?.facts, ...facts}, info: facts.slot ? info : got?.info?.family ? got.info : info ?? got?.info, reason: looseReason(end, facts)};
 }
+// IS THE END A TERMINAL THE SEATED PART DRAWS AS AN ELEMENT, on a power part that
+// states no DC port: the part the bay holds is of class inlet, psu or power, lists
+// the path's one step among its `elements` (components.json), composes no part of
+// that id, and states no `dc-ports`. Read from what seatedBase reads; nothing else
+// about the end is answered.
+export function dcDrawnOnly(item, end, ctx) {
+  if (!item || !loaded(ctx)) return false;
+  const p = portPathOf(end?.path ?? ''), cut = p.lastIndexOf(MODULE);
+  if (cut < 0 || isElementId(p)) return false;
+  const slots = ctx.slotsOf(item.ref);
+  if (!slots || slots.error) return false;
+  const R = resolverFor(slotEnv(item, slots, ctx.compByRef, ctx.redirects), item.swaps || {});
+  const ref = R.refAt(`${p.slice(0, cut)}/module`), comp = ref ? partOf(ctx.compByRef, ref) : null;
+  const leaf = p.slice(cut + MODULE.length);
+  return !!comp && ['inlet', 'psu', 'power'].includes(comp.class) && !list(comp['dc-ports']).length
+    && !leaf.includes('/') && list(comp.elements).includes(leaf) && !list(comp.parts).some(q => q.id === leaf);
+}
+
 // The page's `cableFacts(rack).ends` settled: every cabled end of the rack,
 // and `extra` ends (the two of a cable still being made), as cableFacts takes
 // them. Map(endKey -> {facts?, info?, reason}); an end neither the page nor
@@ -603,4 +655,223 @@ export function settleEnds(rack, ends, ctx, extra = []) {
     if (again?.info?.plug && !again.info.note) out.set(k, again);
   }
   return out;
+}
+
+// ── DC ports (docs/dc-power-design.md sections 5.2 and 5.4) ─────────────
+// A DC PORT IS THE END A FEED LANDS ON, and its poles are taken together. The
+// build publishes the ports a part states as `dc-ports`: on the component in
+// the part's own frame (`input`, a pole's slot its id inside the part), and per
+// configuration with the drawing's paths for what the configuration places.
+// dcPortsOf reads them for one rack item:
+//   a part placed on the device   the configuration's entries (the placement's
+//                                 `dc` override is applied there), those whose
+//                                 path is not under a bay
+//   a part in a bay, at any depth the seat resolver reads (swaps over the
+//                                 configuration over the bay's default): the
+//                                 seated component's entries, joined under
+//                                 `<bay>/module`. The configuration's own
+//                                 entry for a bay is not read, since the item's
+//                                 swaps may seat another part there
+// A PORT IS ADDRESSED `<part path>/<port id>`, and a pole by its slot's path.
+//   kind      'slots' when every pole's slot is a connector slot (a screw, a
+//             stud, a stud pair), 'points' when none is and the part itself is
+//             the connector slot the contacts belong to (the P40). Neither: the
+//             port is left out, as lint refuses it. Nothing is inferred.
+//   view      the panel of its poles' slots (slots), or of its connector
+//             slot (points); a part in a bay is on the bay's panel unless the
+//             slot is on the part's back. Poles on two panels, or a panel the
+//             catalogue does not say: null, and the port is neither offered nor landed
+//   lands     every pole's slot (slots), or the connector (points), takes a
+//             cable end (takesCableEnd)
+//   connector the connector slot's path for a points port, else null
+//   poles     [{role, path, 'stand-in'?}], in the order the cable lists its conductors
+// [] without the catalogue. Cached per item, which the kit never mutates.
+const joinPath = (base, tail) => (base && tail ? `${base}/${tail}` : base || tail);
+const copy = v => (v == null ? v : structuredClone(v));
+const dcCache = new WeakMap();
+const dcSeats = new WeakMap();   // port -> {slots: [slot at each pole], connector}
+export function dcPortsOf(item, ctx) {
+  if (!item || typeof item !== 'object' || !loaded(ctx)) return [];
+  const slots = ctx.slotsOf(item.ref);
+  if (!slots || slots.error) return [];
+  const seen = dcCache.get(item);
+  if (seen && seen.slots === slots && seen.compByRef === ctx.compByRef && seen.redirects === (ctx.redirects ?? null)) return seen.ports;
+  const ports = readDcPorts(item, slots, ctx);
+  dcCache.set(item, {slots, compByRef: ctx.compByRef, redirects: ctx.redirects ?? null, ports});
+  return ports;
+}
+function readDcPorts(item, slots, ctx) {
+  const env = shownEnv(item, slots, ctx.compByRef, ctx.redirects), swaps = item.swaps || {};
+  const raw = list(env.cfg?.['dc-ports']).filter(q => typeof q?.path === 'string' && !q.path.includes(MODULE));
+  for (const b of slotTree(env, swaps).bays) {
+    const comp = b.holds ? partOf(ctx.compByRef, b.holds) : null;
+    const base = `${b.path}/module`, ref = b.holds ? String(b.holds).split(':')[0] : null;
+    for (const q of list(comp?.['dc-ports']))
+      raw.push({...q, ref, path: joinPath(base, q.path ?? q.id), poles: list(q.poles).map(o => ({...o, slot: joinPath(base, o.slot)}))});
+  }
+  const R = resolverFor(env, swaps);
+  return raw.flatMap(q => dcPort(q, R, env, ctx) ?? []).sort((a, b) => natural.compare(a.path, b.path));
+}
+function dcPort(q, R, env, ctx) {
+  const id = String(q.id ?? ''), poles = list(q.poles);
+  if (!id || !String(q.path).endsWith(`/${id}`) || !poles.length || !poles.every(o => o && typeof o.slot === 'string' && o.slot)) return null;
+  const part = q.path.slice(0, -(id.length + 1));
+  const entries = poles.map(o => R.entryAt(o.slot));
+  const isSlot = e => e?.kind === 'connector';
+  let kind = null, connector = null;
+  if (entries.every(isSlot)) kind = 'slots';
+  else if (!entries.some(isSlot) && isSlot(R.entryAt(part))) { kind = 'points'; connector = R.entryAt(part); }
+  if (!kind) return null;
+  const lands = kind === 'slots' ? entries.every(e => takesCableEnd(e, ctx.compByRef)) : takesCableEnd(connector, ctx.compByRef);
+  // the panel: a slot of the device says its own; one on a part in a bay is on the bay's, or the other on the part's back
+  const bay = env.bays.find(b => part.startsWith(`${b.id}/`));
+  const viewOf = e => { const v = e.view ?? (bay ? (e.back ? OTHER[bay.view] : bay.view) : null); return FACES.includes(v) ? v : null; };
+  const views = new Set((kind === 'slots' ? entries : [connector]).map(viewOf));
+  const port = {id, path: q.path, part, ref: q.ref ?? null, direction: q.direction, voltage: copy(q.voltage ?? null), 'rating-a': q['rating-a'] ?? null,
+                awg: copy(q.awg ?? null), side: q.side ?? null, kind, view: views.size === 1 ? [...views][0] : null, lands, connector: connector ? part : null,
+                poles: poles.map(o => ({role: o.role, path: o.slot, ...(o['stand-in'] ? {'stand-in': copy(o['stand-in'])} : {})}))};
+  dcSeats.set(port, {slots: kind === 'slots' ? entries : [], connector});
+  return port;
+}
+
+// WHAT AN END'S PATH NAMES among an item's DC ports: {port, end: 'port'},
+// {port, end: 'pole', pole} (a slots port's pole slot, `pole` its index),
+// {port, end: 'connector'} (a points port's connector slot, when it is the
+// only port on it: where several are, the end is a plain slot) or
+// {port, end: 'contact'} (a points port's contact, which is no end). null where
+// the path is none of these. THE PANEL IS NOT ASKED HERE.
+export function dcEndOf(item, path, ctx) {
+  const ports = dcPortsOf(item, ctx);
+  if (!ports.length) return null;
+  const port = ports.find(q => q.path === path);
+  if (port) return {port, end: 'port'};
+  for (const q of ports) {
+    const i = q.kind === 'slots' ? q.poles.findIndex(x => x.path === path) : -1;
+    if (i >= 0) return {port: q, end: 'pole', pole: i};
+  }
+  const here = ports.filter(q => q.connector === path);
+  if (here.length === 1) return {port: here[0], end: 'connector'};
+  if (here.length > 1) return null;
+  const contact = ports.find(q => q.kind === 'points' && q.poles.some(x => x.path === path));
+  return contact ? {port: contact, end: 'contact'} : null;
+}
+
+// How a pole is named for a person: "BATT pole", else "pole terminal-48v".
+const roleWord = r => (r === 'unstated' ? '?' : String(r).toUpperCase());
+const poleName = (port, i) => (port.poles[i].role !== 'unstated' ? `${roleWord(port.poles[i].role)} pole` : `pole ${port.poles[i].path.split('/').pop()}`);
+// A PORT FOR A PERSON, after docs/dc-power-design.md section 8: "input, RTN /
+// BATT, -48 V, 18 A, side A", each part only where the catalogue states it.
+const dcName = port => [port.id, port.poles.map(q => roleWord(q.role)).join(' / '), port.voltage?.nominal != null ? `${port.voltage.nominal} V` : null,
+  port['rating-a'] != null ? `${port['rating-a']} A` : null, port.side ? `side ${String(port.side).toUpperCase()}` : null].filter(Boolean).join(', ');
+// The plug each pole takes: its own slot's (endPlug), or the connector's for every contact. A plug the end
+// states is read for each pole (`only`: just that one, for a pole end).
+function polePlugs(port, ctx, stated, only = null) {
+  const seat = dcSeats.get(port);
+  return port.poles.map((_, i) => endPlug(port.kind === 'slots' ? seat.slots[i] : seat.connector, ctx.compByRef, only === null || only === i ? stated : null));
+}
+const figuresOf = port => ({direction: port.direction, voltage: copy(port.voltage), 'rating-a': port['rating-a'], awg: copy(port.awg), side: port.side});
+// The `dc` an end carries (see the README): the port's facts, the end it is and its poles with the plug each takes.
+function dcOf(port, end, pole, ctx, stated) {
+  const plugs = polePlugs(port, ctx, stated, end === 'pole' ? pole : null);
+  const dc = {path: port.path, end, ...(end === 'pole' ? {pole, role: port.poles[pole].role} : {}), kind: port.kind, connector: port.connector,
+              ...figuresOf(port),
+              poles: port.poles.map((q, i) => ({role: q.role, path: q.path, plug: plugs[i].plug, ...(q['stand-in'] ? {'stand-in': copy(q['stand-in'])} : {})}))};
+  return {dc, plugs};
+}
+// An end at a DC port's path: a power end, an inlet for an input and an outlet for an output.
+function portInfo(port, ctx, stated) {
+  const {dc, plugs} = dcOf(port, 'port', null, ctx, stated);
+  const notes = [...new Set(plugs.flatMap(x => x.note ?? []))];
+  return {family: 'power', mode: 'dc', role: port.direction === 'output' ? 'outlet' : 'inlet',
+          plug: plugs.every(x => x.plug === plugs[0].plug) ? plugs[0].plug : null, connector: dcName(port), ...(notes.length ? {note: notes.join('; ')} : {}), dc};
+}
+// A port, or one of its poles, as the entry freePorts and slotEnds list:
+// {path, view, kind, connector, plug, dc}. A pole's `dc` names its port.
+export function dcEntryOf(port, ctx, pole = null) {
+  const plugs = polePlugs(port, ctx, null);
+  const figures = {...figuresOf(port), poles: port.poles.map((q, i) => ({role: q.role, path: q.path, plug: plugs[i].plug}))};
+  if (pole === null) return {path: port.path, view: port.view, kind: 'power', connector: dcName(port),
+                             plug: plugs.every(x => x.plug === plugs[0].plug) ? plugs[0].plug : null, dc: figures};
+  return {path: port.poles[pole].path, view: port.view, kind: 'power', connector: `${port.id} ${poleName(port, pole)}`, plug: plugs[pole].plug,
+          dc: {...figures, pole: {port: port.path, role: port.poles[pole].role}}};
+}
+// The DC ports whose paths a free-port list shows instead of the slots under them: a slots port's pole slots
+// and the connector slot of a points port.
+export function dcCovered(item, ctx) {
+  return new Set(dcPortsOf(item, ctx).filter(q => q.lands && q.view).flatMap(q => (q.kind === 'slots' ? q.poles.map(x => x.path) : [q.connector])));
+}
+
+// ONE CABLE PER PORT, ACROSS A PORT AND ITS POLES (cable-rules.js portFree): the
+// reader of a rack, end -> {key, pole, name} for an end that is a DC port, a
+// pole or a connector with one port on it, on the panel the port is on; null
+// for any other end (a contact is none). `key` names the port, `pole` the
+// conductor (null: the whole port), `name` the pole for a person. null where
+// the catalogue is not loaded.
+export function dcReader(rack, ctx) {
+  if (!loaded(ctx)) return null;
+  return end => {
+    const item = (rack.items || []).find(i => i.id === end?.item);
+    const hit = item ? dcEndOf(item, portPathOf(end.path ?? ''), ctx) : null;
+    const view = end?.view === 'rear' ? 'rear' : 'front';
+    if (!hit || hit.end === 'contact' || !hit.port.lands || hit.port.view !== view) return null;
+    return {key: `${item.id}|${view}|${hit.port.path}`, pole: hit.end === 'pole' ? hit.pole : null, name: hit.end === 'pole' ? poleName(hit.port, hit.pole) : null};
+  };
+}
+
+// WHAT IS LOOSE ABOUT AN END AT A DC PORT, in looseReason's facts, or null: a
+// contact of a connector that takes a plug, and a port named on the panel it is not on.
+function dcLoose(item, end, ctx) {
+  const hit = dcEndOf(item, portPathOf(end?.path ?? ''), ctx);
+  if (!hit || !hit.port.lands) return null;
+  const view = end.view === 'rear' ? 'rear' : 'front';
+  if (hit.end === 'contact')
+    return {dcContact: {part: hit.port.part, plug: endPlug(dcSeats.get(hit.port).connector, ctx.compByRef).plug, port: hit.port.path}};
+  return hit.end === 'port' && hit.port.view && hit.port.view !== view ? {dcPanel: hit.port.view} : null;
+}
+
+// THE LANDING OF A DC END ON A PART IN A BAY, over what seatedBase answered (own):
+//   a port path lands when its panel is the port's; named on the other panel it is loose
+//   a pole slot and a lone connector slot land as they did (own), and gain `dc`
+//   a contact is loose
+//   the path of a part whose poles are a DC port's: the ports to give (dcGive)
+// An answer that already lands is never changed, and a path no DC port names is own.
+function withDcInBay(item, end, ctx, own) {
+  if (!item || !loaded(ctx)) return own;
+  const p = portPathOf(end?.path ?? '');
+  if (!p.includes(MODULE) || isElementId(p)) return own;
+  const ports = dcPortsOf(item, ctx);
+  if (!ports.length) return own;
+  const hit = dcEndOf(item, p, ctx), view = end.view === 'rear' ? 'rear' : 'front';
+  if (!hit) {
+    if (!own || own.port || !own.part || own.onView) return own;
+    const give = ports.filter(q => q.lands && q.view && q.poles.some(x => x.path.startsWith(`${p}/`))).map(q => q.path);
+    return give.length ? {...own, dcGive: give} : own;
+  }
+  const {port} = hit;
+  if (hit.end === 'pole' || hit.end === 'connector')
+    return own?.port && own.slot ? {...own, info: {...own.info, dc: dcOf(port, hit.end, hit.pole, ctx, end.plug).dc}} : own;
+  if (own?.port || !port.lands) return own;
+  const comp = partOf(ctx.compByRef, port.ref);
+  const holder = {path: port.part.slice(0, -'/module'.length), part: modelOf(comp, port.ref), ref: port.ref};
+  const base = {item: true, drawing: true, port: false, cage: false, occupied: false, onView: null, back: false, holder};
+  if (hit.end === 'contact') return {...base, ...dcLoose(item, end, ctx)};
+  if (!port.view) return own;
+  if (port.view !== view) return {...base, dcPanel: port.view};
+  return {...base, port: true, slot: true, onView: view, info: portInfo(port, ctx, end.plug)};
+}
+// The same for a part placed on the device (ownBase answers `own`: a slot of the device).
+function withDcOnPanel(item, end, ctx, own) {
+  if (!item || !loaded(ctx)) return own;
+  const p = portPathOf(end?.path ?? '');
+  if (!p || p.includes(MODULE) || isElementId(p)) return own;
+  const hit = dcEndOf(item, p, ctx), view = end.view === 'rear' ? 'rear' : 'front';
+  if (!hit) return own;
+  const {port} = hit;
+  if (hit.end === 'pole' || hit.end === 'connector')
+    return own?.facts?.port && own.info ? {...own, info: {...own.info, dc: dcOf(port, hit.end, hit.pole, ctx, end.plug).dc}} : own;
+  if (own?.facts?.port || !port.lands) return own;
+  if (hit.end === 'contact') return {facts: dcLoose(item, end, ctx)};
+  if (!port.view) return own;
+  if (port.view !== view) return {facts: {dcPanel: port.view}};
+  return {facts: {port: true, slot: true, cage: false, occupied: false, onView: view}, info: portInfo(port, ctx, end.plug)};
 }

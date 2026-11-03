@@ -1,0 +1,100 @@
+format: 1
+kind: module
+name: nxa-pac-750w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 750 W AC power supply of the Cisco Nexus 9336C-FX2-E fixed switch, ordered as
+  NXA-PAC-750W-PI (port-side intake, burgundy) or NXA-PAC-750W-PE (port-side exhaust, blue). A
+  narrow module with an IEC C14 inlet at its left, a tall handle slot, two small lamps and a
+  fan grille at its right.
+size: {w: 56.0, h: 41.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PAC-750W'
+  power-output-w: 750
+  input: ac
+  inlet: c14
+  input-voltage: '100 to 240 Vac'
+  efficiency: '80%'
+  weight-kg: 0.95
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N9336C-FX2-E NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2021-02-16, Last Modified 2026-07-27), Overview: "750-W port-side exhaust AC power
+    supply with blue coloring (NXA-PAC-750W-PE)" and the burgundy port-side intake twin. The
+    Cisco N9336C-FX2 guide (First Published 2018-03-12, Last Modified 2026-07-16) lists the same
+    two parts. THE AIRFLOW SUFFIX IS DROPPED from the model, as on cisco/nxa-pac-500w@1: the
+    two differ in the latch colour, which is this contract's `latch-finish`, and in the way the
+    fan turns, which the face does not show.
+  power: >-
+    datasheet - appendix B, "750-W AC Power Supply Specifications" of both guides: input 100 to
+    240 VAC, 50 to 60 Hz, efficiency 80%, "Output Power 750 W at rated input voltage" (an OUTPUT
+    rating, so `power-output-w`), n+1 and 1+1, hot swappable. The weight is the FX2-E guide's
+    weights table, 2.1 lb (0.95 kg), for this supply.
+  size: >-
+    estimated - THE GUIDES STATE NO DIMENSION. Read off the FX2-E guide's rear figure (art
+    number 503529, a 1298 px bitmap, the switch body 1274 px across for 439.4 mm, 2.90 px per
+    mm, and 126 px down for 43.7 mm): supply 1 runs 162 px across and about 119 px down, 55.9
+    by 41.0 mm. It is NOT the 84.7 mm of cisco/nxa-pac-1100w@1, which a different guide's
+    figure gave for another chassis. The figure shows AC supplies and does not say which
+    rating, so the 750 W AC supply takes the figure's size because it is the guide's first
+    listed AC supply and nothing contradicts it.
+  elements: >-
+    estimated - positions read off the same figure, measured from the supply's left edge and
+    top: the inlet window 3.8 to 34.1 mm across and 7.6 to 29.7 mm down, a grille strip above
+    and another below it, a tall rounded slot at 37.3 mm (5.8 wide, the full height but for 1.6
+    mm), two small diamond lamps above a ten-cell grille at its right, and a small latch box
+    at the foot of the right edge. The figure is a bitmap and the readings are good to about 1
+    mm. The legend text is not carried.
+  lamps: >-
+    datasheet - appendix C, "Power Supply LEDs", one table for every supply. The figure draws
+    two diamonds; the guide does not say which state belongs to which.
+  latch-colour: >-
+    datasheet for the convention - the guide's Overview gives burgundy for port-side intake and
+    blue for port-side exhaust coloring. Which part of the module carries the colour is not
+    shown by the uncoloured figure: the handle slot is chosen. The values are
+    cisco/nxa-pac-500w@1's.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-500w@1's round figure for a supply of this
+    class and nothing here measures it.
+states: [absent]
+elements:
+  lamp-1: {at: [44.4, 2.7], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  lamp-2: {at: [44.4, 7.8], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  fan: {at: [42.8, 12.0], size: [10.3, 17.4], class: rotor}
+  latch: {at: [37.3, 1.6], size: [5.8, 36.7], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [5.0, 8.6]}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-750w@1's own elements key - the grille's extent is read off the FX2-E rear
+        figure and the depth of the cavity behind it is not stated.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        Not stated in any guide held. cisco/nxa-pac-500w@1 carries 3.0 mm for a supply latch
+        and nothing here measures it.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [56.0, 41.0]}

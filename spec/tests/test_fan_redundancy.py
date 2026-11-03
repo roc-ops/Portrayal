@@ -283,7 +283,11 @@ def test_the_unstated_ones_are_the_ones_we_could_not_source():
     # at the rotor level (one failed rotor tolerated), which is not a count of modules the switch can
     # lose, so the group quotes that and states no form.
     assert "juniper/qfx5130-48c" in unstated
-    assert len(unstated) == 45, unstated
+    # THE CISCO NEXUS 9336C-FX2-E MADE IT FORTY-SIX: six fan modules and redundancy only at the rotor
+    # level (one failed rotor in any one module tolerated), no count of modules, so the group says
+    # so in its note and states no form.
+    assert "cisco/n9k-c9336c-fx2-e" in unstated
+    assert len(unstated) == 46, unstated
 
 
 def test_the_comparison_layer_can_now_reach_them():
@@ -707,4 +711,11 @@ def test_the_comparison_layer_can_now_reach_them():
     # 172 with the Cisco Nexus 9516: 2+1 over three fan trays (hardware guide, PDF p89, printed 83)
     # 174 with the Cisco Nexus 93108TC-FX3P (3+1 over four fan modules) and 9348GC-FX3 (2+1 over three):
     # installation guides, Overview
-    assert n == 174, n
+    # 177 with the Cisco C9300-24P, C9300-24U and C9300-48U, the same 2+1 over three fan modules
+    # 179 with the Cisco Nexus 9348GC-FX3PH and 92348GC-FX3 (2+1 over three fan modules each): installation
+    # guides, Overview
+    # 180 with the Cisco Catalyst 3650-48PD: 2+1 over three fan modules (3650 hardware installation guide,
+    # Fan Modules: "Three fans are required for proper cooling" and the switch "can operate with two operational fans")
+    # 183 with the Cisco NCS 5011 (3+1 over four fan modules; the NCS 5000 guide, Fan Modules) and the
+    # NCS-57C3-MOD-S and -MOD-HX (n+1 over six fan trays; the NCS 5700 guide, Fan Modules and Fan Trays)
+    assert n == 183, n

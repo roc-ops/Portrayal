@@ -1,0 +1,66 @@
+format: 1
+kind: module
+name: pwr-c2-640wdc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 640 W DC-input power supply of the Cisco Catalyst 3650 and 2960-X/XR families, PWR-C2-640WDC - the
+  only NEBS-compliant supply of the 3650. A light grey face, 1.58 x 3.75 in, with the DC OK and PS OK lamps
+  at the upper left, a five-position input terminal block under a safety cover (positive, negative, ground,
+  negative, positive: two feeds, A and B) at the lower left, a honeycomb vent, the part number printed at the
+  top, a release latch at the right and an extraction handle along the bottom.
+size: {w: 95.25, h: 40.13}
+size-confidence: {w: datasheet, h: datasheet}
+attrs:
+  model: 'PWR-C2-640WDC'
+  power-output-w: 640
+  input: dc
+  inlet: dc-terminal
+  input-voltage: '-36 to -72 VDC, dual input feeds A and B'
+  input-current-max: '21 to 10.5 A'
+  output: '+12 V at 20.83 A and -54 V at 7.36 A'
+  weight-kg: 1.25
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 3650 Switches Hardware Installation Guide, September 2016, OL-29734-01,
+    Table 4-1: "PWR-C2-640WDC, 640-W DC power supply module". The module has dual input feeds (A and B) and
+    takes input voltages between 36 and 72 VDC with an output of 51 to 57 V (Power Supply Module Overview).
+    "Only the DC power module is NEBS-compliant." Table 1-14 gives 390 W of PoE power with one and 780
+    W with two on a 24- or 48-port PoE switch.
+  power: >-
+    datasheet - spec Table 1-4: "Maximum output power PWR-C2-640WDC: 640W", input current 21-10.5 A, DC input
+    -36 to -72 VDC, output "+12 V @20.83 A, -54 V@7.36 A", total input 2444 BTUs per hour (719 W), total
+    output 2188 BTUs per hour (640 W). An OUTPUT rating, so `power-output-w`.
+  size: >-
+    datasheet - spec Table 1-2: "PWR-C2-640WDC 1.58 x 3.75 x 11.75 in. (4.0 x 9.5 x 29.8 cm)", H x W x D,
+    weight 2.75 lb (1.25 kg). 40.13 and 95.25 mm are the face's inches converted.
+  elements: >-
+    estimated - read off the guide's Figure 4-6 "640-W DC Power Supply Module", an isometric line drawing, as
+    fractions of the face. Callouts from Figure 4-6's table: DC OK LED, PS OK LED, input power terminals
+    (positive polarity), input power terminals (negative polarity), grounding terminal, release latch,
+    extraction handle, terminal block safety cover. The detail circle draws five screw terminals in the order
+    4, 5, 6, 5, 4: positive, negative, ground, negative, positive.
+  lamps: >-
+    datasheet - the guide's Table 1-21 and Table 4-2: DC OK off with no DC input power, green with DC input
+    present; PS OK off when the output is disabled or the input is out of range, green when power output to
+    the switch is active, red when the output has failed.
+  colour: >-
+    estimated - the guide's illustrations are "not intended to depict any particular color scheme"
+    (Front Panel, PDF p21). A neutral light grey is drawn.
+  depth: >-
+    datasheet - 11.75 in, 298.45 mm, from spec Table 1-2.
+states: [absent]
+elements:
+  dc-ok: {at: [8.4, 7.0], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
+  ps-ok: {at: [21.4, 7.0], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  terminals: {at: [3.0, 16.0], size: [40.0, 14.0], class: cover}
+  handle: {at: [3.0, 34.4], size: [60.0, 4.6], class: handle}
+  latch: {at: [75.0, 15.0], size: [9.0, 12.0], class: handle}
+skins: [default]
+body:
+  depth: 298.45
+  color: '#c4c7ca'
+  footprint: {at: [0, 0], size: [95.25, 40.13]}

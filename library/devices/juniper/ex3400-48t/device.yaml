@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex3400-48t
-version: 0.1.1
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX3400-48T
@@ -78,6 +78,14 @@ provenance:
       mode lamps SPD, DX, EN and PoE and the Factory Reset/Mode button that switches them. The lamps are
       read off the EX3400-48P photograph at the right end (x 426.1 and 432.2 mm, y 5.0 to 18.5 step 4.5),
       and the 48T photograph shows the same four mode legends.
+  front-console:
+    confidence: photo-measured
+    note: >-
+      Figures 1 and 2, callout 5, and Console Ports (p4): the front-panel Mini-USB Type-B console, printed
+      CON, which accepts a Mini-B plug (5-pin). It is the placed std/mini-usb (`console-usb`), centred
+      on the 7.6 x 3.0 mm shell this device was drawn with from the EX3400-48T front photograph (ex3400-48t-front-high).
+      The part draws the registry's 7.7 x 3.9 mm Mini-B shell, which stands in for the maker's own (gap
+      `mini-usb-console-shell`).
   drawing-vs-photo:
     confidence: photo-measured
     note: >-
@@ -188,15 +196,16 @@ chassis:
     - {name: recessed, label: 2-in. recess, at: 50.8}
     - {name: rear, label: rear-mount}
 gaps:
-- what: mini-usb-console-port
+- what: mini-usb-console-shell
   scope:
-  - front
-  reason: needs-drawing
+  - console-usb
+  reason: needs-photo
+  note: >-
+    The part is the registry's Mini-B receptacle (Molex drawing SD-54819-026, 7.7 x 3.9 mm). The EX3400-48T
+    front photograph shows the console at 3.3 px per mm, too small to give the maker's shell to better
+    than a few tenths of a millimetre, and no close-up is held, so the drawn shell and its place are estimates.
   wanted: >-
-    The front Mini-USB Type-B console, labelled CON, is drawn as decor and not placed as a port. The DCIM
-    exporter has no route for a Mini-USB console part, and the guard test that holds every port part to
-    the exporter fails until it has one. A change to dcim_export.py that exports a Mini-B console as a
-    usb-mini-b console port would let the port be placed.
+    A straight-on close-up of the console port with a scale, or the maker's dimensioned drawing of it.
 - what: dc-input-current
   scope:
   - psus
@@ -315,8 +324,8 @@ groups:
     role: management
     index-origin: 0
     mixed: >-
-      the management corner - the out-of-band RJ-45, the RJ-45 console, the USB port and the Factory Reset/Mode
-      button
+      the management corner - the out-of-band RJ-45, the RJ-45 console, the Mini-USB console, the USB
+      port and the Factory Reset/Mode button
   status-leds: {term: LED, role: indicator, index-origin: 0, description: 'SYS, ALM and MST chassis lamps
       (Table 4)'}
   mode-leds:
@@ -356,8 +365,6 @@ views:
       - {at: [34.3, 1.1], size: [326.0, 6.8], pattern: vent, vent: 1}
       - {at: [9.6, 41.6], size: [350.4, 1.6], pattern: vent, vent: 1}
       - {at: [363.4, 16.4], size: [53.8, 8.2], pattern: vent, vent: 1}
-      - {at: [424.6, 38.5], size: [7.6, 3.0], rx: 0.5, fill: '#8d949c'}
-      - {at: [425.05, 38.9], size: [6.7, 2.15], rx: 0.3, fill: '#15171a'}
       cutouts:
       - {id: port-0, at: [9.0, 10.74], size: [12.7, 11.0], shape: rect}
       - {id: port-1, at: [9.0, 24.74], size: [12.7, 11.0], shape: rect}
@@ -412,6 +419,7 @@ views:
       - {id: uplink-2, at: [392.2, 25.8], size: [14.25, 10.4], shape: rect}
       - {id: uplink-3, at: [406.45, 25.8], size: [14.25, 10.4], shape: rect}
       - {id: mode-btn, at: [426.9, 31.4], size: [4.0, 4.0], shape: circle}
+      - {id: console-usb, at: [424.55, 38.05], size: [7.7, 3.9], shape: rect}
       - {id: led-sys, at: [425.1, 5.0], size: [2.0, 2.0], shape: circle}
       - {id: led-alm, at: [425.1, 9.5], size: [2.0, 2.0], shape: circle}
       - {id: led-mst, at: [425.1, 14.0], size: [2.0, 2.0], shape: circle}
@@ -574,6 +582,12 @@ views:
           function: >-
             Factory Reset/Mode - switches the port mode lamps, and resets to the factory default when
             held
+      - ref: std/mini-usb@1
+        id: console-usb
+        at: [424.55, 38.05]
+        group: mgmt
+        rel-pos: 2
+        attrs: {role: console}
       - ref: common/led-dot@1
         id: led-sys
         at: [425.1, 5.0]

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: sr-12
-version: 2.0.3
+version: 2.1.0
 maturity: modelled
 manufacturer: Nokia
 model: 7750 SR-12
@@ -133,7 +133,18 @@ provenance:
       p49 key 1, "Grounding studs": two hex-nut studs on the plate across the top of the rear,
       centres (22.5, 27.9) and (37.6, 27.9), the nuts 12.4 across corners, with an earth
       symbol in a black box at x 48.5-55.9, y 23.8-31.1. The plate is y 0-49.1, x 4.4-440.1.
-      Drawn as decor (chassis metalwork with no part number). Stud length is not documented.
+      The two points are the placed common/ground-hole-pair-5-8-1-4 (`ground-studs`), centred on the midpoint
+      of the nuts the figure draws (x 30.05, y 27.9) at 15.875 apart, the 5/8 in. of the lug section 5.4 calls
+      for (p130, p132 Table 56). The pair is two bare 1/4-20 receptacles, dark openings at the thread's nominal
+      size, as the procedure calls them (p131, p132 Figure 25); the figure's hex nuts are not drawn. THE PITCH
+      AND THE THREAD ARE INFERRED, NOT STATED: the lug gives the pitch and the screws the thread (gap
+      ground-receptacle-size).
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      Section 5.4 (p130) and Table 56 key 3 (p132): two 1/4-20 x 5/8 in. screws with locking washers into the
+      ground receptacles, and a lug with two 1/4 in. holes on 5/8 in. spacing. This is the `stud-size` of
+      ground-studs, the pair.
   esd:
     confidence: drawing
     note: >-
@@ -235,6 +246,18 @@ chassis:
   power: dc
   color: '#34373c'
 gaps:
+  - what: ground-receptacle-size
+    scope: [ground-studs]
+    reason: vendor-silent
+    note: >-
+      The guide's rear figure (p49 key 1) calls the two ground points "Grounding studs" and draws a hex nut on
+      each, with centres 15.1 apart. Its grounding procedure (section 5.4, p130, Figure 25 and Table 56 on p132)
+      calls them ground receptacles that take two 1/4-20 x 5/8 in. screws with locking washers, and asks for a
+      lug with two 1/4 in. holes on 5/8 in. (15.875) spacing. No page gives the receptacles' own thread or
+      spacing, so the pair is drawn as two bare 1/4-20 receptacles on the lug's 5/8 in.: THE PITCH AND THE THREAD
+      ARE INFERRED, NOT STATED, from the lug and the screws. The figure's hex nuts are not drawn, and its 15.1
+      is not used.
+    wanted: a Nokia drawing or photograph of the SR-12 ground receptacles that gives their spacing and thread
   - what: rear-photographs
     scope: [rear]
     reason: needs-photo
@@ -318,7 +341,7 @@ groups:
     term: Point
     role: furniture
     index-origin: 1
-    description: the front ESD plug receptacle at the bottom right, on the air-filter vent faceplate (p47 key 9)
+    description: the front ESD plug receptacle at the bottom right, on the air-filter vent faceplate (p47 key 9), and the chassis ground studs across the top of the rear
   air-filters:
     term: Filter
     role: service
@@ -428,10 +451,6 @@ views:
     panel:
       decor:
         - {at: [4.4, 0.5], size: [435.7, 48.6], fill: '#3a3d42', kind: ground-plate, id: ground-plate, confidence: drawing, source: 'SR-12 guide p49 Figure 7 key 1: the plate across the top of the rear carrying the grounding studs, y 0-49.1'}
-        - {at: [17.1, 22.5], size: [10.8, 10.8], fill: '#b9bcc0', kind: ground-nut, confidence: drawing, source: 'SR-12 guide p49 Figure 7 key 1: grounding stud nut, centre (22.5, 27.9), 12.4 across corners', shape: octagon}
-        - {at: [20.1, 25.5], size: [4.8, 4.8], fill: '#d2d5d8', rx: 2.4, kind: ground-stud, out: 12, confidence: estimated, source: 'SR-12 guide p49 Figure 7 key 1: the stud through the nut; its length is not documented'}
-        - {at: [32.2, 22.5], size: [10.8, 10.8], fill: '#b9bcc0', kind: ground-nut, confidence: drawing, source: 'SR-12 guide p49 Figure 7 key 1: grounding stud nut, centre (37.6, 27.9), 12.4 across corners', shape: octagon}
-        - {at: [35.2, 25.5], size: [4.8, 4.8], fill: '#d2d5d8', rx: 2.4, kind: ground-stud, out: 12, confidence: estimated, source: 'SR-12 guide p49 Figure 7 key 1: the stud through the nut; its length is not documented'}
         - {at: [48.5, 23.8], size: [7.4, 7.3], fill: '#1c1c1c', rx: 0.8, kind: label-plate, confidence: drawing, source: 'SR-12 guide p49 Figure 7: the black box printing the earth symbol beside the studs'}
     silkscreen:
       - {at: [52.2, 24.9], path: 'M 0 0 L 0 2.4 M -2.4 2.4 L 2.4 2.4 M -1.6 3.6 L 1.6 3.6 M -0.8 4.8 L 0.8 4.8', fill: '#e6e6e6', stroke-width: 0.5, for: chassis}
@@ -442,6 +461,8 @@ views:
         - {id: fan-3, at: [293.4, 50.1], size: {w: 139.7, h: 447.0}, accepts: [nokia/sr-12-fan-tray@1], default: nokia/sr-12-fan-tray@1, group: fans, rel-pos: 3}
         - {id: pem-1, at: [11.1, 498.6], size: {w: 425.7, h: 51.6}, accepts: [nokia/sr-12-pem-3@1, nokia/sr-12-pem-blank@1], default: nokia/sr-12-pem-3@1, group: pems, rel-pos: 1}
         - {id: pem-2, at: [11.1, 551.2], size: {w: 425.7, h: 51.6}, accepts: [nokia/sr-12-pem-3@1, nokia/sr-12-pem-blank@1], default: nokia/sr-12-pem-3@1, group: pems, rel-pos: 2}
+      placements:
+        - {id: ground-studs, ref: common/ground-hole-pair-5-8-1-4@1, at: [18.9375, 24.725], for: chassis, group: grounding, rel-pos: 2, attrs: {stud-size: 1/4-20}}
   left:
     size: {w: 645.2, h: 622.3}
     empty: >-

@@ -1,0 +1,85 @@
+format: 1
+kind: module
+name: a99-sfc2
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Cisco ASR 9900 Series Switch Fabric Card 2 (A99-SFC2), the second-generation switch fabric card of the
+  ASR 9912 and ASR 9922 - the data sheet gives the same part number for both. A plain faceplate: a vent field,
+  an ejector lever and a captive screw at each end, and a single tri-colour Status LED. The Overview and
+  Reference Guide calls the card the FC2.
+size: {w: 41.4, h: 395.7}
+attrs:
+  model: 'A99-SFC2'
+  role: 'switch-fabric'
+  generation: '2nd'
+  chassis: 'ASR 9912, ASR 9922'
+  fabric-bandwidth: 230 Gbps per fabric card
+  power-draw-max-w: 165
+provenance:
+  size: >-
+    estimated - the card standard. Every ASR 9000 card bay is 41.4 x 395.7 with a 41.4 x 355.6 opening, 'the size
+    every full-size ASR 9000 card is now drawn at so that cards are interchangeable' (the asr9000-card-standard
+    note of cisco/asr-9922), and cisco/a99-sfc3@1 is drawn at it; no bay is moved. THE DATA SHEET'S OWN FIGURES DO
+    NOT MATCH IT: Cisco ASR 9900 Switch Fabric Card 2 Data Sheet (2015), Table 3 (PDF page 3, printed page 3 of 6)
+    prints Height 1.81 in (4.60 cm), Width 16.87 in (42.85 cm), Depth 24.74 in (62.89 cm), Weight 12 lb (5.44 kg).
+    1.81 in is 46.0 mm and 16.87 in is 428.5 mm against the standard's 41.4 and 395.7, and 24.74 in is the depth,
+    which this faceplate does not model. This corrects the cisco/a99-sfc3 note that says the SFC2 data sheet has
+    no physical row at all: it has one, on page 3, and it is stated here and not carried
+  weight: datasheet - 12 lb (5.44 kg), Switch Fabric Card 2 Data Sheet Table 3 (page 3 of 6)
+  part-number: >-
+    datasheet - the part number is A99-SFC2 (Table 3, page 3), introduced on Cisco IOS XR Release 5.3.0 and
+    supporting both the ASR 9912 and ASR 9922. The release notes' firmware tables list ASR-9912-SFC220 beside
+    A99-SFC2 with the same figures, but no held document says they are one part, so it is not written in as
+    this card's name and no twin is made: it is an open question for the owner
+  power: >-
+    install guide - Table 23 'RSP Cards, RP Cards, Fabric Cards Power Consumption Specifications' of the Cisco
+    ASR 9000 Series Aggregation Services Router Overview and Reference Guide (PDF p152, printed p140): 'FC2 Card
+    (ASR 9922)' 155 W at 27 C, 160 at 40 and 165 at 55; 'FC2 Card (ASR 9912)' 94 W at 27 C, 103 at 40 and 105 at
+    55. The table calls the card the FC2 and the data sheet calls it Switch Fabric Card 2 and prints A99-SFC2: the
+    join is by generation name, not by a part number the table prints. The two rows are two scopes, as for
+    cisco/a99-sfc3: the highest, 165 W, is carried as power-draw-max-w, and a 9912 budget built from it is
+    conservative by up to 60 W per card. Cisco states no typical
+  fabric: >-
+    datasheet - '230 Gbps per fabric card' (Switch Fabric Card 2 Data Sheet); six plus one redundancy with seven
+    cards in either chassis
+  face: >-
+    photograph and drawing, ESTIMATED where marked. Figure 1 of the data sheet (page 1, a 932 x 271 pixel
+    photograph of the card, three-quarter view) shows a dark perforated vent field along the faceplate between an
+    ejector lever at each end, a captive screw on a lever, and a yellow label near one end; the vent field and
+    the two levers are read from it (about 0.4 px/mm along the card, so positions are estimated to about 8 mm).
+    Figure 38 of the Overview and Reference Guide (PDF p69, printed p57), a straight front panel of the FC card
+    that the guide says the FC2 'is similar' to, shows a status LED, ejector levers, release buttons and mounting
+    screws, and the lamp, the screws and the label are placed from it as cisco/a99-sfc3@1 places them
+    (estimated). The photograph does not resolve the lamp or the release buttons; no release button is drawn.
+    No Cisco logo or wordmark is drawn
+  lamp: >-
+    install guide - Table 9, 'FC Card LED Display Definitions', of the Overview and Reference Guide: green - FC
+    card powered on and FPGA programmed; red - fault in power up or FPGA programming; amber - powered on but
+    fabric not active; off - powered off via CLI. The table is the FC card's and the guide says the FC2 is similar
+  logo-zone: >-
+    reserved - no vendor mark is resolved in the photograph; a zone is kept clear as the neighbours do and no logo
+    or wordmark is drawn
+elements:
+  status:
+    at: [34.4, 353.4]
+    size: [3.2, 3.2]
+    class: led
+    description: >-
+      the single tri-colour Status LED (Table 9, 'FC Card LED Display Definitions'): green powered on and FPGA
+      programmed; red fault; amber powered on but fabric not active; off powered off via CLI
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  logo-zone:
+    at: [8.0, 22.0]
+    size: [25.0, 8.0]
+    class: label
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The card standard of the ASR 9000 card bays (41.4 x 395.7), not the data sheet's 1.81 x 16.87 in.
+skins: [default]

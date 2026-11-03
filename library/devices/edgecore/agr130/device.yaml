@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr130
-version: 0.1.10
+version: 0.2.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XKS
@@ -478,8 +478,8 @@ provenance:
     confidence: datasheet
     note: >-
       the quick start guide's package contents list a grounding kit of one grounding lug, 2 M5 screws
-      and 2 washers: the `stud-size` of ground-right, the plate with two holes that the kit fits
-      (rear-grounding). ground-left states none: nothing held says what that opening takes.
+      and 2 washers: the `stud-size` of ground-right, the plate with two holes that the kit fits (rear-grounding).
+      ground-left states none: nothing held says what that opening takes.
 attrs:
   performance: {switching-capacity: 800 Gbps, processing-rate: 700 Mpps}
   power: {power-max-w: 450, power-envelope: unstated, input-ac: '100-240 VAC, 50-60 Hz, 6 A maximum',
@@ -1996,6 +1996,7 @@ views:
         accepts:
         - common/psu-ac-650@3
         - common/psu-dc-650@2
+        - edgecore/agr110-psu-dc@1
         default: common/psu-ac-650@3
         group: psus
         rel-pos: 0
@@ -2005,6 +2006,7 @@ views:
         accepts:
         - common/psu-ac-650@3
         - common/psu-dc-650@2
+        - edgecore/agr110-psu-dc@1
         default: common/psu-ac-650@3
         group: psus
         rel-pos: 1
@@ -2058,7 +2060,12 @@ views:
         rel-pos: 5
       placements:
       - {ref: common/ground-lug@1, id: ground-left, at: [4.4, 27.0], group: grounding, rel-pos: 1}
-      - {ref: common/ground-lug@1, id: ground-right, at: [426.9, 16.3], group: grounding, rel-pos: 2, attrs: {stud-size: M5}}
+      - ref: common/ground-lug@1
+        id: ground-right
+        at: [426.9, 16.3]
+        group: grounding
+        rel-pos: 2
+        attrs: {stud-size: M5}
     regions:
     - id: exhaust
       at: [0, 0]
@@ -2117,7 +2124,7 @@ configurations:
       and the grounding kit's ring lugs, and the datasheet's input range is -36 to -72 VDC.
     part-numbers:
       5916-54XKS-O-48V-F: {part: FP1ZZ56540BAA}
-    bays: {psu-0: common/psu-dc-650@2, psu-1: common/psu-dc-650@2}
+    bays: {psu-0: edgecore/agr110-psu-dc@1, psu-1: edgecore/agr110-psu-dc@1}
 references:
 - title: Edgecore AGR130 / AS5916-54XKS Data Sheet
   sha256: ce97c48ccc309404e9c72612d81ab50e302f834e18489a34562e84ae1530a7a0

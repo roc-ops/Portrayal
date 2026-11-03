@@ -272,6 +272,35 @@ compared, and a difference throws ("New in 0.25.0" below).
 | `rack/resting.js` | internal, not exported: how a cable rests, for `route.js` (`DRAPE`, the free span's hang and landing, laid only where it leaves every corner its bend radius, the held face) |
 | `rack/slots.js` | internal, not exported: what a placed device holds, read without a drawing, for `commands.js` and `queries.js` |
 
+### Views
+
+The `rack/view/` modules draw. Unlike the rest of `rack/` they make DOM nodes,
+and they make every one through the `document` they are given and parse a
+drawing through that document's window: none reads `document`, `window` or
+`DOMParser` as a global. Each is imported as `@portrayal/kit/rack/view/<module>`.
+The design is in `docs/rack-views-design.md`.
+
+| module | what it does |
+|---|---|
+| `rack/view/elevation.js` | `mountRack2d(container, {document, doc, rackId, face, chassisOf, ctx, distAt})`: one face of one rack as SVG, and the handle `{ready, update, select, on, dispose}`; `drawElevation`, the pane it mounts; `uAtY` and `halfAtY`; `elevationBox`; `zeroUDrawn`; `rackSurface`, the rails, placement and ear holes of a rack behind the one seam a surface of another kind will plug into |
+| `rack/view/view.js` | the handle every view returns (`createView`), and the paths a pick names: `joinPath(key, path)` and `splitPath(text)` for `item:`, `zeroU:`, `cable:`, `bundle:`, `tie:` and `u:` keys |
+| `rack/view/face.js` | `configuredFace`: one device face as configured, its swaps seated and its fields painted, read through the document it is given and the `distAt` it is given; `loadSkin`, `components`, `earPlanFor` and `zeroUModuleEnds`, each read through a `distAt` too |
+| `rack/view/faces.js` | `faceUrl(distAt, ref, config, view)`: the URL of the file that draws a face, from the device's `configs.json` |
+| `rack/view/ear-holes.js` | `earHoles(lo, hi)`: the rail holes an ear over a span is screwed at |
+| `rack/view/settable.js` | what a rack entry is set to and shows: `paints`, `paintMaps`, and `paintFace`, which paints a lamp, a digit or a display into a drawing |
+| `rack/view/dom.js` | `dom(document)`: the element builders (`el`, `svgEl`, `importDrawingNode`) bound to a document; `svgY` |
+
+`distAt` is the library a view draws from: a function from a path in the build
+(`components.json`, `<device>.configs.json`, a face file, `components/<skin>.svg`)
+to its URL. `flatDist(base)` from `@portrayal/kit/dist` makes one for a build
+directory, `packageDist()` for the npm packages, and `layeredDist([...])` for
+several builds read as one library. It has no default, and a view keeps nothing
+about a library outside the function it was given: two views of two libraries on
+one page each read their own. Make one `distAt` per library and pass it to every
+view of that library, as the views that share it share what was read from it. The
+loaders in this README that name this option `dist` take a string, a function or
+a list; the view's `distAt` takes a function only.
+
 ### Heights, spans and half units
 
 A position (`ru` on an item) is a whole unit or a half, counted bottom-up
@@ -647,7 +676,7 @@ the frame of the part, and the tray has tie slots along the stretch),
 strapped under the plate at the plate less its radius, sagging between two
 straps no lower than the strap line. Every other leg that is not held is a
 **free span**: it hangs by the catenary the 3D drawing uses, scaled by the
-`DRAPE` of its family (fibre and AOC 1, twisted pair 0.5, DAC and power 0.35)
+`DRAPE` of its family (fibre and AOC 1, twisted pair, USB and console 0.5, DAC, power, ground and stack 0.35)
 and no tighter than its installed bend radius over its drape
 (`ctx.bendOf(cable)` when given, else its media's; the family is its type's
 when the page gives the cable types lookup as `ctx.typeOf`, else its
@@ -722,6 +751,148 @@ cables that have one on its `Findings:` line and names the worst, and
 cable's notes; `layNotes(rack, { bends, covers })` gives the same as one line
 a cable, for a file with no row for one. Corners at one point, to a tenth of
 a millimetre, are one finding.
+
+**Next release: a cable's `media` has three more values, `stack`, `usb` and `console`.** `MEDIA` in
+`cable-rules.js` lists thirteen, each with a label (`MEDIA_LABELS`), a kind (`mediaKind`: its family
+is its own word) and a row in `PLUG_REACH`, `PLUG_SPLIT`, `END_ALLOWANCE_BY_MEDIA`, `DIAMETERS`
+(`route.js`), `FAMILY`, `BEND` and, by family, `DRAPE` (`resting.js`), and `COLORS`
+(`cable-geometry.js`: orange, purple, pink). Every figure of the three, and `ground`'s in the
+resting tables, is an estimate that the cable types table says is one. `connectorOf` takes a `role`:
+an end whose role is `console` is a console end whatever its connector, else a USB receptacle
+(`usb-a`, `micro-usb-b`, `mini-usb-b`, `usb-c`) is a USB end and the `flexstack`, `stackwise-480`
+and `ex4200-vcp` interfaces are stack ends; the `stackpower`, `cisco-rps2300` and `ex3300-rps`
+interfaces are `power`. The kit's own readers pass the `role` (`seatedPort` for a port of a module
+in a bay, `zeroUEnds` for the ports of a module in a bay of a part beside the rack); a page that
+reads a port passes it too, and a console port a reader does not pass it for reads as its connector.
+`proposeMedia` offers the new media for ends of their family, and a mismatch
+names a family as `stacking`, `USB` or `console`. **A reader that does not know a media keeps it.**
+The DCIM cables file writes `CABLE_TYPE` for the three as a blank (`CABLE_TYPE_NOTES` records that the
+choices of the two tools were not read); a cable of one is in the file with its type blank. `cable-types.json` (table version 1.2.0) gains the DC feed, ground-wire, stack, USB,
+console, RPS, StackPower and FlexStack types, and the keys `dc`, `conductors`, `ampacity-a`,
+`ampacity-sources`, `sources` and `note`.
+
+**Next release: a DC port is a cable end.** A part that takes or hands on DC states its DC ports
+(`dc-ports` in `components.json` and in each configuration of `<device>.configs.json`,
+`docs/format-stability.md`, "DC ports"), and the kit lands a feed on the port, not on a screw.
+`dcPortsOf(item, ctx)` (`ports.js`) lists the ports of a rack item, in natural order of path, `[]`
+without the catalogue: a part placed on the device from the item's configuration (the placement's
+`dc` override is already applied there), and a part in a bay, at any depth, from the component the
+item's swaps, configuration and bay default seat there, its `path` and each pole's slot joined under
+`<bay>/module`. The configuration's own entry for a bay is not read, since a swap may seat another
+part. An entry is `{id, path, part, ref, direction, voltage, rating-a, awg, side, kind, view, lands,
+connector, poles: [{role, path, stand-in?}]}`:
+- **`kind`** is `slots` when every pole's slot is a connector slot (a screw, a stud, a stud pair)
+  and `points` when none is and the part is itself the connector slot its contacts belong to (the
+  P40, a header, the barrel jack; `connector` is that slot's path). A port that is neither is left
+  out. **`view`** is the panel its poles' slots (or its connector) are on, among the panels the
+  item's configuration shows; poles on two panels, or a panel the catalogue does not say, give
+  `null`, and the port is neither offered nor landed. **`lands`** is true when every pole's slot
+  (slots) or the connector (points) takes a cable end. Nothing is inferred.
+- **An address.** A port is `<part path>/<port id>` and a single conductor is its pole's slot:
+  `psu-0/module/input` and `psu-0/module/terminal-48v`; `output-a1/output` for the P40 receptacle
+  `output-a1`. A contact of a points port (`output-a1/wire-1`) is no end: it is loose with "`output-a1/wire-1`
+  is a contact of `output-a1`, whose connector takes `<plug>`; give the path `output-a1/output`", and
+  `cable.add` refuses it with that sentence. A port named on the panel it is not on is loose with "`<port path>`
+  is on the `rear` panel; give view "rear"".
+- **What the end is.** `seatedPort`, `ownSlot` and `settleEnds` land an end at a port path with
+  `family: power`, `mode: dc`, `role` `inlet` (an input) or `outlet` (an output), a `plug` (the one
+  plug every pole takes, else `null`), a `connector` for a person ("input, RTN / BATT, -48 V, 18 A,
+  side A"), and `dc`: `{path, end, kind, connector, direction, voltage, rating-a, awg, side, poles:
+  [{role, path, plug, stand-in?}]}`. `end` is `port`, `pole` (with `pole`, the pole's index from 0,
+  and its `role`) or `connector`. Each pole takes the plug its own slot derives (`endPlug`: a ring lug
+  on a screw, a two-hole lug on a stud pair) or, on a points port, the connector's; a `plug` the end
+  states is read for every pole that takes it, and a pole that does not adds `endPlug`'s note.
+  `plugSeats(path, slots, swaps, {dc})` seats each pole's plug on its slot, or the connector's on the
+  connector, for an end at a port path.
+- **One cable per port.** `portFree` and `canCable` take `dc`, a reader from `dcReader(rack, ctx)`
+  (`end -> {key, pole, name}` for an end on a DC port, pole or connector, else `null`; `null` without
+  the catalogue). With it a port, each of its poles and its connector are one place: a cable on the
+  port takes every pole, a cable on one pole makes the port partly used and a feed to it is refused as
+  taken ("already has a cable (c1 on its RTN pole)"), two single-conductor runs to two poles of one
+  port are both accepted, and a cable from a port to one of its own poles is refused. Without `dc`
+  both answer as they did. `cable.add` and `cable.update` pass it.
+- **Free ports.** `freePorts` lists a free DC port as one row on its panel: `{path, view, label,
+  media: null, speed: null, kind: 'power', connector, plug, dc: {direction, voltage, rating-a, awg,
+  side, poles: [{role, path, plug}]}}`, and its pole slots and a points port's connector slot are not
+  rows of their own. A port is free when no cable is on it, on a pole or on its connector. A partly
+  used port is no row, and each pole no cable is on is a row for a single conductor, with `dc.pole`:
+  `{port, role}`. A DC row never has `of` or `first`, `kinds: ['data']` leaves it out, and `type`
+  (a coupler) never matches it. `slotEnds` lists the same ports.
+- **`configFacts(slots, cfg).dcPorts`** is the configuration's `dc-ports`, and is absent for a
+  configuration that states none.
+
+**What an end saved before a part states a DC port reads as.** Nothing a rack file holds is
+rewritten, and no key is added; an end keeps the path it was saved with. (1) An end on a screw or a
+stud (`<terminal>/lug-1`, saved by the first-free-screw rule) is an end on that pole: a feed of one
+conductor. It lands as it did and gains `dc` with `end: 'pole'`, and its port is partly used. (2) An
+end on the slot of a pluggable DC connector (`output-a1`) is the part's one DC port on that
+connector's contacts: it lands as it did, carries that port's facts (`end: 'connector'`) and shares
+its occupancy. Where the part states no DC port, or several on those contacts, it is a plain slot with
+no `dc`. (3) An end on the path of a terminal that is no slot stays loose, and for a part whose poles
+are under it the reason names the port path to give instead of the first free screw. **A part that
+states no DC port is read exactly as before**, and the DC ports of a part beside the rack
+(`zeroUEnds`) are not read yet. A port path is not an element of a drawing: `cableEndPaths` gives
+a page the pole slots it always did and no port path.
+
+**Next release: the checks of a DC feed.** A cable whose ends are DC ports or poles is checked end
+to end (`docs/dc-power-design.md`, section 6). All of it is warnings and none refuses a cable, and
+a cable with no DC end says and returns what it did.
+- **Where they are said.** `dcFeedChecks(a, b, {type})` (`cable-rules.js`) reads the `dc` key of the
+  two ends' info and returns `{warnings, notes}`. `mismatch(media, a, b, {type})` takes the type as
+  an optional fourth argument and puts the warnings first, polarity first among them; called with
+  three it says every sentence it said before and the checks that need no type. So `suggestMedia`,
+  `inspect` of a cable and the DCIM cables file's findings say them with no other change. `inspect`
+  reads the type from `ctx.cableTypes`, the cable types table (`loadCableTypes(dist).types`), when
+  `ctx` gives it: the cable's own `type`, else the type its media names (`dcTypeOf`). A cable type
+  the commands set is a later change; a rack file may already hold one, and it is read.
+- **A warning is said only where both sides state what it reads.** What a check needs and an end does
+  not state is a note, once, after the warnings, and these are all of them: a pole whose role is
+  `unstated`, a port with `voltage: null`, and a cable with no DC feed type. `side: null` is a port
+  that is no half of an A/B pair, and nothing is said of it. No role, rating or voltage is taken from
+  a position, a colour or a name.
+- **Polarity, by role.** Where both ends state a role for each pole the feed uses, the kit pairs
+  poles by role, whatever order either end lists them in: BATT with BATT, RTN with RTN, through the
+  registry's pairs (`DC_MATCHES`, the kit's copy of `spec/schemas/dc.yaml`, held to it by a test;
+  `DC_ROLES` likewise). Two ends that list the same roles in a different order say nothing. "A is
+  BATT where B is RTN: the feed is crossed." is said only when a cable lands pole by pole (both
+  ends name a pole) and so joins two poles whose roles do not match, or when the sign rule fails:
+  a pair `when: negative-voltage` (`batt` with `neg`, `rtn` with `pos`) holds only where the end
+  whose pole is `neg` or `pos` states a negative nominal, is crossed where that nominal is
+  positive, and is neither matched nor crossed where it states no voltage. A ground pole is
+  compared with nothing.
+- **The stand-in rule.** Where either side's roles are `unstated`, nothing is called crossed. A
+  note says "Polarity of `<pole path>` is not stated; checked by position." once for each such pole.
+- **The other checks,** in this order after polarity (the source is the end whose `direction` is
+  `output`): voltage ("-48 V into a +24 V input."; "Source nominal -48 V is outside the load's -40.5
+  to -57."; with no one source, the signs only; a port without a voltage: "`<port path>` states no
+  voltage; the feed's voltage is not checked.", and with only a range: "states no nominal
+  voltage"); conductors, only with a type that states them, a ground pole not counted ("A
+  two-conductor feed to a three-pole port (end B)."; "14 AWG where the end takes 12 (end B)."; a cable
+  with no such type: "The cable names no DC feed type; its conductors are not checked against the
+  poles."); sides ("Feed A lands on a B terminal."); and the protector ("30 A breaker on a 40 A
+  load."; "60 A breaker on a 14 AWG feed (ampacity 15 A, an estimate)."). Two outputs or two inputs
+  is `mismatch`'s own sentence, said once, and AC against DC is as it was.
+- **A and B kept to their sides, on a device.** `feedSides(rack, item, dcOf)` (`cable-rules.js`)
+  finds an item with two or more DC input ports, each cabled to a DC output that states its side,
+  all of one side: "Of the supplies of `<item>` with a cable, both are fed from side A." It counts
+  only the supplies with a cable, and is quiet where any of them states no side. `sideFindings(rack, ctx)` (`queries.js`) lists them; `describe` counts them on its
+  `Findings:` line, and `inspect` of the item carries one as `feed_side`
+  `{side, ports, cables, text}` only when there is one.
+- **The commands.** `cable.add` and `cable.update` say which DC port or pole an end landed on: "Added
+  cable c1: end A on the DC port output-a1/output, end B on the BATT pole of psu-0/module/input.",
+  and a moved end adds "End B is on the DC port psu-0/module/input." to its sentence. They return the
+  cable's checks in `findings`, polarity first, each warning `{kind: 'warning', text}`, then the
+  side finding the cable makes true, then each note `{kind: 'note', text}`. A cable with no DC end
+  keeps its summary and returns the findings it did. `dcFactsReader(rack, ctx)` (`commands.js`) reads
+  an end's DC facts from the catalogue alone, with no page. Neither command takes a `type`.
+  `END.path` names a DC port and a pole.
+- **A terminal the part draws as an element.** Where an end's last step under a bay is an element of
+  the seated part (listed in `elements` of `components.json`, and composing no part of that name), and
+  the part is of class `inlet`, `psu` or `power` and states no DC port, `looseReason` says
+  "`<leaf>` is drawn on `<model>`, which declares no DC port" in place of "holds `<model>`, which has
+  no port `<leaf>`" (`dcDrawnOnly` in `ports.js` reads the catalogue, `settleEnd` hands it on). The
+  poles the part's provenance lists are not named: the kit does not read provenance. Every other
+  loose sentence is unchanged.
 
 **New in 0.51.0: the relief detail pass asks for each raster once.** `rasterKey` rewrites a face's
 shared `<style>` and `<defs>` once and keys a node by that and its own art (`rasterKeyText` is the
@@ -1055,7 +1226,7 @@ module bay, a guard seat and a slot that accepts nothing do not land
 - **`freePorts(rack, id, ctx, { kinds })`** lists slot ends where the reader
   hands them in, each with `kind` (`power`, `ground`, `other`), `connector`
   and `plug`; the screws of one DC terminal carry `of` and the first
-  `first: true`. `kinds: ['data']` is the ports alone. A port of class `port`
+  `first: true` (for a part that states no DC port; a DC port is one row, below). `kinds: ['data']` is the ports alone. A port of class `port`
   is the same entry it was.
 - **`zones.js`**: `readSvg(text, { ends })` and `readDrawing(root, doc, { ends
   })` read the part at each path in `ends` as a zone with `end: true` and its

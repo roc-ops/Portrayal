@@ -21,7 +21,7 @@
    "ufispace/psu-132-dc@1"
   ]
  },
- "composed": "6e42eb5da1c5ccce",
+ "composed": "3b50139866aa29f7",
  "composed-refs": {
   "common/compliance-sticker@1": "1.0.0+6b3c51b31c446689",
   "common/ground-lug@1": "1.4.1+26b6835d39c39550",
@@ -29,9 +29,10 @@
   "common/led-rect@1": "1.1.0+0314fb1739d8b11d",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
-  "common/screw-head@1": "1.1.0+0f38d482bcc27ec9",
+  "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
   "common/sma-jack@1": "1.0.1+dde698c727778ba3",
   "common/smb-jack@1": "1.0.0+d68248050fc18e92",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
@@ -43,12 +44,60 @@
   "ufispace/fan-808012@1": "1.0.0+90a5595c03389564",
   "ufispace/lane-led-quad@1": "1.0.0+32cf79ec07a4520b",
   "ufispace/psu-132-ac@1": "1.1.0+ce45ad7b531ae933",
-  "ufispace/psu-132-dc@1": "1.1.0+c20313841c209303"
+  "ufispace/psu-132-dc@1": "1.2.0+765f1f5d1e83f1eb"
  },
  "configs": [
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "ufispace/psu-132-dc@1": {
+    "awg": null,
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "neg",
+      "slot": "psu-0/module/pole-neg"
+     },
+     {
+      "role": "pos",
+      "slot": "psu-0/module/pole-pos"
+     }
+    ],
+    "rating-a": 40,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "ufispace/psu-132-dc@1": {
+    "awg": null,
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "neg",
+      "slot": "psu-1/module/pole-neg"
+     },
+     {
+      "role": "pos",
+      "slot": "psu-1/module/pole-pos"
+     }
+    ],
+    "rating-a": 40,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "082f97906a6f8ffc",
  "groups": [
@@ -1139,5 +1188,5 @@
  "placement-surface": "fde98e325f62a8be",
  "shape": "ac04815269d07ff7",
  "surface": "47a5591d6bb7d567",
- "version": "3.0.8"
+ "version": "3.1.0"
 }

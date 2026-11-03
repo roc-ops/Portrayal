@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex4100-h-12mp
-version: 0.1.1
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX4100-H-12MP
@@ -116,8 +116,7 @@ provenance:
     note: >-
       Table 68 and Figure 98 - a two-hole protective earthing terminal on the front panel for a Panduit LCD6-14A-L lug on two M5 by 10 mm
       screws with washers (the grounding kit is JNP-GL-2H6-M5-RA, separately orderable). The figure shows two round threaded bosses 15.8 mm apart
-      (the 5/8 in lug pitch) in rings 11.2 mm across, at 100.5 mm across, under the earth symbol and above the ESD point. They are drawn as rings
-      and holes; the library has no pair part for M5 holes on that pitch, so no lug seat is offered.
+      (the 5/8 in lug pitch) in rings 11.2 mm across, at 100.5 mm across, under the earth symbol and above the ESD point. They are drawn as bare holes in rings, the holes now parts: one two-hole seat on that pitch (`ground-stud-pitch` says how the pitch is read).
   drawing-vs-photo:
     confidence: photo-measured
     note: >-
@@ -143,6 +142,17 @@ provenance:
       Tables 8, 9, 29 and the PoE sections - PoE++ (90 W by default) on all twelve ports. The PoE budget is 240 W with one supply and 360 W with two, on a
       66 W system budget, 306 W and 426 W in all against 340 W and 680 W of supply. The budgets are separate figures and the guide
       states no maximum input power for the chassis.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      INFERRED, NOT STATED. Table 68 names two M5 x 10 mm stainless steel screws with washer (separately orderable;
+      the grounding kit JNP-GL-2H6-M5-RA holds the lug and screws) and a Panduit LCD6-14A-L lug or equivalent (not
+      provided), and gives no spacing. The figure puts the two holes 15.8 mm apart, which is the 5/8 in. (15.875) of
+      the library's two-hole lug for the same hole-spacing code (Panduit LCD6-10A-L: '.63 hole spacing'). The terminal
+      is `common/ground-hole-pair-5-8-m5@1`: two bare M5 holes on 5/8 in. centres, presenting `stud-pair-5-8`, so one
+      two-hole lug (`generic/two-hole-lug-5-8@1`) lands across them and a ring lug still lands on either hole. The
+      holes stay bare, as the photograph shows them; the screws are fitted with the lug. The holes were drawn 15.8
+      apart as decor and the pair stands on their midpoint.
 attrs:
   physical:
     weight: 2.37 kg (5.22 lb), Table 9; the external AC supply is 2.05 kg (4.52 lb) and the DC supply 1.85 kg (4.07 lb), Table 15
@@ -195,13 +205,6 @@ gaps:
     value per device, so a box that also mounts on DIN rail, a wall or a rack has no way to say so. The kits are in provenance only and no kit contract is
     written.
   wanted: a way to list the other mounting forms of a desktop device
-- what: ground-hole-seat
-  scope: [front]
-  reason: needs-drawing
-  note: >-
-    The earthing terminal is two threaded holes for M5 screws on a 5/8 in pitch. The library has no pair part for M5 holes, so they are drawn as rings and
-    holes and no lug seat is offered.
-  wanted: a two-hole M5 earth terminal part
 - what: port-status-lamp-states
   scope: [rj45-mg, rj45-gbe, vcp, uplink]
   reason: vendor-silent
@@ -234,6 +237,13 @@ gaps:
   note: >-
     The four faces that are not the front and the rear are not drawn flat by any source held; the mounting figures show them in perspective only.
   wanted: a flat drawing or photograph of the top, the underside and the sides
+- what: ground-pair-pitch
+  scope: [ground-pair]
+  reason: vendor-silent
+  note: >-
+    The guide names the screws and the lug and gives no spacing for the two holes; `ground-stud-pitch` says what the
+    pair is drawn at and why.
+  wanted: a drawing that dimensions the two holes, or the lug's own datasheet
 groups:
   rj45-mg:
     term: Port
@@ -308,6 +318,11 @@ groups:
     term: Point
     role: furniture
     index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the earthing terminal, two bare M5 holes for a two-hole lug (Table 68)
 views:
   front:
     size: {w: 111.7, h: 152.4}
@@ -324,10 +339,8 @@ views:
       - {id: console-rim, kind: port-rim, at: [67.5, 12.3], size: [4.1, 9.9], rx: 2.0, fill: '#1b1e22'}
       - {id: box-uplink-leds, kind: lamp-box, at: [81.7, 74.9], size: [6.2, 25.8], stroke: '#cfd3d8', stroke-width: 0.25}
       - {id: box-vcp-leds, kind: lamp-box, at: [81.7, 103.2], size: [6.2, 25.8], fill: '#e3e5e8'}
-      - {id: earth-ring-1, kind: earth-ring, at: [94.9, 99.3], size: [11.2, 11.2], rx: 5.6, fill: '#c9cbcd'}
-      - {id: earth-hole-1, kind: earth-hole, at: [97.5, 101.9], size: [6.0, 6.0], rx: 3.0, fill: '#2a2d31'}
-      - {id: earth-ring-2, kind: earth-ring, at: [94.9, 115.1], size: [11.2, 11.2], rx: 5.6, fill: '#c9cbcd'}
-      - {id: earth-hole-2, kind: earth-hole, at: [97.5, 117.7], size: [6.0, 6.0], rx: 3.0, fill: '#2a2d31'}
+      - {id: earth-ring-1, kind: earth-boss, at: [94.9, 99.3], size: [11.2, 11.2], rx: 5.6, fill: '#c9cbcd'}
+      - {id: earth-ring-2, kind: earth-boss, at: [94.9, 115.1], size: [11.2, 11.2], rx: 5.6, fill: '#c9cbcd'}
       cutouts:
       - {id: port-0, at: [18.35, 43.55], size: [11.0, 12.7], shape: rect}
       - {id: port-1, at: [33.1, 43.55], size: [11.0, 12.7], shape: rect}
@@ -474,6 +487,7 @@ views:
     - {at: [78.3, 147.0], text: INSTRUMENTS CLASS 1M LASER PRODUCT, font-size: 1.2, anchor: middle, fill: '#1a1a1a', for: chassis}
     components:
       placements:
+      - {ref: common/ground-hole-pair-5-8-m5@1, id: ground-pair, at: [90.0625, 110.3], rotate: 90, group: grounding, rel-pos: 0}
       - {ref: common/rj45-ganged-eth@1, id: port-0, at: [17.5, 44.4], rotate: 90, group: rj45-mg, rel-pos: 0}
       - {ref: common/rj45-ganged-eth@1, id: port-1, at: [32.25, 44.4], rotate: 270, group: rj45-mg, rel-pos: 1}
       - {ref: common/rj45-ganged-eth@1, id: port-2, at: [17.5, 58.4], rotate: 90, group: rj45-mg, rel-pos: 2}

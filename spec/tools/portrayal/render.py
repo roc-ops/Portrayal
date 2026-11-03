@@ -1586,7 +1586,7 @@ def _tilt_offset(local_q, size, rotate, facet):
 
 def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                            occ_used, z_inset, z_group_lift, palette, inst_palette,
-                           skin_overrides, attr_overrides, resolved):
+                           skin_overrides, attr_overrides, resolved, build_airflow=None):
     """Seat the configuration's occupants keyed to THIS instance's slots - and,
     to a fixed point, to occupants already seated in them (a plug in the
     optic, a boot on the plug) - inside the instance group `g`.
@@ -1763,6 +1763,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 z_inset=z_inset - lift, z_group_lift=z_group_lift + lift,
                 skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                 path=f"{path}/{local}", resolved=resolved, tilt=tilt_facet,
+                build_airflow=build_airflow,
                 # AND A SLOT INSIDE WHAT WAS JUST SEATED, keyed under the
                 # occupant's own path - `bay-1/lc01-occupant/a`, half `a` of a
                 # duplex plug seated on the adapter `lc01`. The same widening
@@ -1854,7 +1855,7 @@ def _inherited_fields(lib, contract, merged, part):
     return out
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False, tilt=None, inherited_fields=None):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False, tilt=None, inherited_fields=None, build_airflow=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -2013,6 +2014,12 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     merged.update(attrs or {})
     for k, v in data_attrs(merged).items():
         g.set(k, v)
+    # THE DIRECTION OF THE BUILD, ON EVERY FAN AND SUPPLY DRAWN. `data-airflow`
+    # above is the part's own statement as the build adjusts it; this is the
+    # configuration's airflow, the value the root <svg> carries. Written after
+    # the merge so nothing overrides it, and nothing where the build states none.
+    if build_airflow and contract.get("class") in ("fan", "psu"):
+        g.set("data-config-airflow", build_airflow)
     if group:
         g.set("data-group", group)
     if rel_pos is not None:
@@ -2189,6 +2196,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                path=f"{path}/{part['id']}", resolved=resolved,
                                in_port=parts_in_port, tilt=tilt,
+                               build_airflow=build_airflow,
                                # a slot on a composed part, at any depth (B3)
                                occupants=occupants, occ_used=occ_used)
         if tilt:
@@ -2493,7 +2501,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
             path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1,
             z_inset=z_inset - occ_lift, z_group_lift=z_group_lift + occ_lift,
-            seated=seated, bay_attrs=bay_attrs,
+            seated=seated, bay_attrs=bay_attrs, build_airflow=build_airflow,
             occupants=occupants, occ_used=occ_used)
         # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
         # cage and wrong for a card in a riser: what shows of a PCIe bracket is
@@ -2563,7 +2571,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # published by component_cages as this cage's `mate`.
     _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                            occ_used, z_inset, z_group_lift, palette, inst_palette,
-                           skin_overrides, attr_overrides, resolved)
+                           skin_overrides, attr_overrides, resolved,
+                           build_airflow=build_airflow)
     # EVERY DECLARED CONNECTION POINT REACHES THE DRAWING, not just `mate`.
     # This function read `mate` to place an occupant and dropped the rest, so a
     # part's optical-tx, power or cable point existed in the contract and in no
@@ -3252,6 +3261,14 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     **({"moves-with": common["moves-with"]} if common.get("moves-with") else {}),
                     **({"in": common["in"]} if common.get("in") else {})})
 
+    def motif_id(d):
+        """The id of the tile a `motif` rect draws: its cells and its pitch, hashed, so two rects
+        that state the same tile share one."""
+        canon = json.dumps({"cells": [[[float(v) for v in pt] for pt in cell] for cell in d["pattern-cells"]],
+                            "pitch": [float(v) for v in d["pattern-pitch"]]},
+                           sort_keys=True, separators=(",", ":"))
+        return "portrayal-motif-" + hashlib.sha256(canon.encode()).hexdigest()[:10]
+
     used_patterns = {d.get("pattern") for d in parts["decor"] if d.get("pattern")}
     if used_patterns:
         defs = ET.SubElement(svg, f"{{{SVG_NS}}}defs")
@@ -3330,6 +3347,30 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             gap = ET.SubElement(pat, f"{{{SVG_NS}}}rect")
             gap.set("x", "5.4"); gap.set("y", "0"); gap.set("width", "1.8"); gap.set("height", "6")
             gap.set("fill", "#6a7075")
+        # A MOTIF IS A TILE THE FACE DRAWS ITSELF. The fixed tiles above are one vendor's
+        # lattice each; a vent whose openings are slanted slots or alternating chevrons has
+        # none to borrow. `pattern-pitch` is the tile - there is no base tile to scale - and
+        # `pattern-cells` are its dark cells, in mm from its top-left corner. The schema
+        # cannot say that a point lies inside the tile, so it is refused here.
+        for i, d in enumerate(parts["decor"]):
+            if d.get("pattern") != "motif" or svg.find(f".//*[@id='{motif_id(d)}']") is not None:
+                continue
+            who = d.get("id") or f"decor {i} on this face"
+            if not d.get("pattern-cells") or not d.get("pattern-pitch"):
+                raise ValueError(f"{who}: pattern motif needs pattern-cells and pattern-pitch")
+            tw, th = (float(v) for v in d["pattern-pitch"])
+            for cell in d["pattern-cells"]:
+                for x, y in cell:
+                    if not (0 <= x <= tw and 0 <= y <= th):
+                        raise ValueError(f"{who}: pattern-cells point [{x:g}, {y:g}] lies outside "
+                                         f"the {tw:g} x {th:g} mm tile that pattern-pitch states")
+            pat = ET.SubElement(defs, f"{{{SVG_NS}}}pattern")
+            pat.set("id", motif_id(d)); pat.set("width", f"{tw:g}"); pat.set("height", f"{th:g}")
+            pat.set("patternUnits", "userSpaceOnUse")
+            for cell in d["pattern-cells"]:
+                cp = ET.SubElement(pat, f"{{{SVG_NS}}}path")
+                cp.set("d", "M " + " L ".join(f"{x:g} {y:g}" for x, y in cell) + " Z")
+                cp.set("fill", "#17191c")
     # DECOR USED TO LAND AS LOOSE, UNNAMED RECTS ON THE ROOT. Opening a
     # faceplate in an XML editor showed twenty anonymous rectangles above
     # everything that IS named, and the only way to find out whether one was a
@@ -3410,7 +3451,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # to this rect" has to mean once the tile is no longer 14 x 8.
             tile = (f"brush-{d.get('bristle') or 'vertical'}" if d.get("pattern") == "brush"
                     else d.get("pattern"))
-            if d.get("pattern") and (d.get("pattern-offset") or d.get("pattern-pitch")):
+            if d.get("pattern") == "motif":
+                # a motif's tile is its pitch, so the clone only shifts the phase: no scale
+                mid = motif_id(d)
+                if d.get("pattern-offset"):
+                    ox, oy = d["pattern-offset"]
+                    pid = f"{mid}-o{ox:g}-{oy:g}".replace(".", "_")
+                    if svg.find(f".//*[@id='{pid}']") is None:
+                        clone = ET.fromstring(ET.tostring(svg.find(f".//*[@id='{mid}']")))
+                        clone.set("id", pid)
+                        clone.set("patternTransform", f"translate({ox:g} {oy:g})")
+                        svg.find(f".//{{{SVG_NS}}}defs").append(clone)
+                    r.set("fill", f"url(#{pid})")
+                else:
+                    r.set("fill", f"url(#{mid})")
+            elif d.get("pattern") and (d.get("pattern-offset") or d.get("pattern-pitch")):
                 base = svg.find(f".//*[@id='portrayal-{tile}']")
                 ox, oy = d.get("pattern-offset") or (0.0, 0.0)
                 pw, ph = d.get("pattern-pitch") or (float(base.get("width")),
@@ -4057,6 +4112,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      z_group_lift=seat_lift,
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
+                                     build_airflow=airflow,
                                      resolved=resolved,
                                      # A SLOT ON A PLACED PART (B3): `port-1510/1`,
                                      # an adapter placed directly - and, since
@@ -4448,6 +4504,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                          inst_palette=inst_palette,
                                          centre=bay_centre,
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
+                                         build_airflow=airflow,
                                          path=f"{b['id']}/module", resolved=resolved,
                                          seated=config.get("bays"),
                                          bay_attrs=config.get("bay-attrs"),
@@ -4843,6 +4900,119 @@ def config_slots(device, cfg_name, cfg, lib):
     whose two mounting options differ publishes each. `[]` on a device that
     offers none."""
     return _mounts(device, cfg_name, cfg, lib, "interface")
+
+
+# --- DC ports in components.json and configs.json (docs/dc-power-design.md 5.2) ----
+
+def _dc_join(base, tail):
+    """A path from a part's own path and what is under it; either may be empty,
+    which is how a component's frame (the part itself is `""`) is written."""
+    return f"{base}/{tail}" if base and tail else (base or tail)
+
+
+def published_dc_port(port, base, override=None):
+    """ONE DC PORT AS THE BUILD PUBLISHES IT, the shape components.json and
+    configs.json share: `{id, path, direction, voltage, rating-a, awg, side,
+    poles}`, each pole `{role, slot}` and a `stand-in` where the part states one.
+
+    `base` is the part's own path in the frame the entry is written in: `""` in
+    components.json, where the part is the frame, and the path a drawing
+    addresses the part by in configs.json (`feed-a`, `psu-0/module`). THE PATH
+    OF A PORT IS THE PART'S AND ITS ID, whether the part has one port or
+    several (`feed-a/input`, `psu-0/module/input`), so adding a port to a part
+    never moves another's path: the rule the component schema states. A pole's
+    `slot` is always under the part, never under the port.
+
+    `override` is the placement's `dc` entry for this port, applied over what the
+    part states: `side`, `voltage`, `rating-a` and the role of a pole by its
+    slot. An unstated figure is `null`, so "the part does not say" is tellable
+    from a key that is not a question this entry answers. `source` is not
+    published: it names a `provenance` note, which components-detail.json holds.
+    """
+    o = override or {}
+    roles = o.get("poles") or {}
+    poles = []
+    for pole in port.get("poles") or []:
+        role = roles.get(pole["slot"], pole["role"])
+        out = {"role": role, "slot": _dc_join(base, pole["slot"])}
+        # a stand-in goes with the role it stands in for: it is kept for a pole
+        # the placement leaves alone, and for one it sets back to unstated, and
+        # dropped for a role a placement states
+        if pole.get("stand-in") and role in (pole["role"], "unstated"):
+            out["stand-in"] = copy.deepcopy(pole["stand-in"])
+        poles.append(out)
+
+    def figure(key):
+        value = o[key] if key in o else port.get(key)
+        return copy.deepcopy(value) if value is not None else None
+
+    return {"id": port["id"], "path": _dc_join(base, port["id"]),
+            "direction": port["direction"], "voltage": figure("voltage"),
+            "rating-a": figure("rating-a"), "awg": figure("awg"),
+            "side": figure("side"), "poles": poles}
+
+
+def component_dc_ports(contract):
+    """A component's `dc-ports` for components.json, in the order the part
+    states them; `[]` for a part with no `dc` block, which the index leaves
+    out, as it does `cages`."""
+    ports = (contract.get("dc") or {}).get("ports") or []
+    return [published_dc_port(p, "") for p in ports]
+
+
+def config_dc_ports(device, cfg_name, cfg, contract_of):
+    """`configs[].dc-ports` (docs/dc-power-design.md 5.2): every DC port the
+    parts one configuration draws present, ascending by path, `[]` when it
+    draws none.
+
+    A PORT BELONGS TO THE CONFIGURATION THAT SEATS ITS PART. A placed part is in
+    every configuration its `only-in` allows; a part in a bay is whatever the
+    configuration's `bays` seats there, else the bay's `default`
+    (manifest.seated_ref), and a nested bay is keyed without its `module` steps
+    as the build keys it. So a configuration that seats another part, or none,
+    does not carry the port - the same reason `configs[].slots` and
+    `configs[].states` are per configuration, and `cages` per view, which holds
+    only what is true of every build.
+
+    PATHS ARE THE DRAWING'S. A placed part is at its placement id; a part in a
+    bay at `<bay>/module`; a part in a seated part's bay at
+    `<bay>/module/<bay>/module`. The placement's `dc` override is applied to a
+    placed part only, as lint reads it. `contract_of(ref)` answers the contract,
+    or None where the ref names nothing (lint reports it)."""
+    out = []
+    seats = cfg.get("bays")
+
+    def seat(ref, path, key, override, depth):
+        ref = ref.split(":")[0]
+        contract = contract_of(ref)
+        if not isinstance(contract, dict):
+            return
+        ports = (contract.get("dc") or {}).get("ports") or []
+        for port in ports:
+            out.append({**published_dc_port(port, path, (override or {}).get(port["id"])),
+                        "ref": ref})
+        if depth >= MAX_BAY_DEPTH:
+            return
+        for bid, bay in sorted((contract.get("bays") or {}).items()):
+            held = seated_ref(seats, f"{key}/{bid}", bay if isinstance(bay, dict) else None)
+            held = held.get("ref") if isinstance(held, dict) else held
+            if held:
+                seat(held, f"{path}/{bid}/module", f"{key}/{bid}", None, depth + 1)
+
+    for _face, (_name, view) in resolve_views(device, cfg).items():
+        parts = view_parts(view)
+        for p in parts["placements"]:
+            if p.get("id") and p.get("ref") and not (p.get("only-in") and cfg_name not in p["only-in"]):
+                override = p["dc"] if isinstance(p.get("dc"), dict) else None
+                seat(p["ref"], p["id"], p["id"], override, 0)
+        for b in parts["bays"]:
+            if b.get("only-in") and cfg_name not in b["only-in"]:
+                continue
+            held = seated_ref(seats, b["id"], b)
+            held = held.get("ref") if isinstance(held, dict) else held
+            if held:
+                seat(held, f"{b['id']}/module", b["id"], None, 0)
+    return sorted(out, key=lambda p: (p["path"], p["id"]))
 
 
 def config_states(device, cfg_name, cfg, lib):
@@ -5645,6 +5815,68 @@ def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
     }
 
 
+def nested_seat_entries(p, lib, families, connectors, candidates, default_occupants,
+                        extra_lift=0.0):
+    """THE SEATS A PLACED PART COMPOSES, as the device's `cages[]` lists them,
+    for a placement that presents no slot of its own.
+
+    `slot_entry` answers for the placement itself: its own interface, or the one
+    aperture it forwards (`manifest.forwarded_part`). A placed part that composes
+    TWO OR MORE seats - the C40G's three studs, a DC terminal's lugs, an inlet
+    panel's four C14s - forwards none, so the device listed nothing for it, and
+    a reader that has only the catalogue (kit/rack/slots.js, ports.js
+    `cableEndPaths`) never knew the studs were there. The build knew: a key
+    `ground-studs-rear/stud-tr` seats an occupant (manifest.nested_key_host),
+    `seat_turns` publishes its turn, and the Explorer reads the part's own
+    `cages` off the drawing (swap.nestedSlots).
+
+    The entries are `component_cages` of the placed part - the same answer
+    components.json carries for the part - re-keyed `<placement>/<part>` and
+    carried into the device frame by the placement, exactly as `turnable_seats`
+    does for the seat's mate point. Only for a placement whose own slot_entry is
+    None: a cage wrapper that forwards its aperture, or a stud pair that spans
+    its two studs, already lists that opening once, and a second key for it is
+    what manifest.slot_in_slot refuses.
+    """
+    if "at" not in p or not p.get("ref"):
+        return []
+    contract, _skins = lib.resolve(p["ref"])
+    if not contract.get("size"):
+        return []
+    csize = _xy_size(contract["size"])
+    out = []
+    for e in component_cages(contract, lib, families, candidates, connectors):
+        part = next((q for q in contract.get("parts") or [] if q.get("id") == e["id"]), None)
+        core = lib.resolve(part["ref"])[0] if part else None
+        if core is None or not core.get("size") or not part.get("at"):
+            continue
+        psize = _xy_size(core["size"])
+        # the part's centre carried through the placement; the pair (at, rotate)
+        # that draws the part there alone is the placement's transform composed
+        # with the part's own, so `_slot_dict`'s seat_point agrees with the sum
+        # turnable_seats makes
+        mid = seat_point(p["at"], csize, p.get("rotate"),
+                         [part["at"][0] + psize["w"] / 2, part["at"][1] + psize["h"] / 2])
+        key = f"{p['id']}/{e['id']}"
+        held = default_occupants.get(key)
+        entry = dict(e)
+        entry.pop("tilt", None)
+        entry.update({
+            "id": key,
+            "at": [round(mid[0] - psize["w"] / 2, 4), round(mid[1] - psize["h"] / 2, 4)],
+            # the placement's turn on top of the seat's own (None stays None)
+            "rotate": summed_rotate(e.get("rotate"), p.get("rotate") or None),
+            "mate": (seat_point(p["at"], csize, p.get("rotate"), e["mate"])
+                     if e.get("mate") is not None else None),
+            "lift": float(e.get("lift") or 0.0) + float(extra_lift or 0.0),
+            "mirror": bool(e.get("mirror")) or bool(p.get("mirror")),
+            "group": p.get("group"), "rel-pos": None,
+            "occupant": (held.get("ref") if isinstance(held, dict) else held) if held else None,
+        })
+        out.append(entry)
+    return out
+
+
 def cage_entries(device, view_name, lib, families, candidates, default_occupants,
                  connectors=None):
     """`cages[]` for one view: one entry per placement that presents a
@@ -5689,7 +5921,12 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
         entry = slot_entry(p, lib, families, connectors, candidates,
                            group=groups.get(p.get("group")), extra_lift=extra,
                            occupant=default_occupants.get(p["id"]))
-        if entry is not None:
+        # A PLACED PART THAT PRESENTS NO SLOT BUT COMPOSES SEATS lists each seat
+        # under `<placement>/<part>` (nested_seat_entries)
+        entries = ([entry] if entry is not None
+                   else nested_seat_entries(p, lib, families, connectors, candidates,
+                                            default_occupants, extra_lift=extra))
+        for entry in entries:
             # the configurations that have this cage, as the placement states
             # them (#1022); the key is absent where it states none
             if p.get("only-in"):
@@ -5997,6 +6234,13 @@ def main():
     _connectors = _connector_registry()
     _candidates = _pluggable_candidates(args.library)
     _default_occupants = (configs.get(default_cfg) or {}).get("occupants") or {}
+
+    def _contract_of(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None          # L5 reports the broken ref
+
     cfg_states = {n: drawn_states(config_states(device, n, c, lib),
                                   [faces[f] for f in files.get(n, {}).values() if f in faces])
                   for n, c in configs.items()}
@@ -6153,6 +6397,14 @@ def main():
                               # it draws, `{interface, at}`, the other side of
                               # a mount point; `[]` on a device with none
                               "slots": config_slots(device, n, c, lib),
+                              # THE DC PORTS THIS BUILD PRESENTS, each with
+                              # its placement's `dc` override applied and the
+                              # path a feed lands on (docs/dc-power-design.md
+                              # 5.2). Per configuration because a part in a
+                              # bay is only in the builds that seat it. Only
+                              # on a configuration that presents one.
+                              **({"dc-ports": dc_ports}
+                                 if (dc_ports := config_dc_ports(device, n, c, _contract_of)) else {}),
                               # WHAT EACH PLACED PART CAN BE SET TO (#934):
                               # `{<placement id>: [state names]}`, the parts
                               # that declare any; `{}` on a device with none

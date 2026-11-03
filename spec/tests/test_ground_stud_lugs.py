@@ -80,7 +80,8 @@ CASA, CASA_STUD = "casa/c40g-ground-studs@1", "casa/shelf-ground-stud@1"
 # the pair hosts a device places straight on a face (#828); test_two_hole_lugs.py
 # and test_grounding_devices.py hold them, and only their `stud-size` is read here
 PAIR_HOSTS = ("common/ground-stud-pair-5-8-m6@1", "common/ground-stud-pair-5-8-m4@1",
-              "common/ground-stud-pair-5-8-1-4@1",
+              "common/ground-stud-pair-5-8-1-4@1", "common/ground-stud-pair-5-8-10-32@1",
+              "common/ground-hole-pair-5-8-1-4@1",
               "common/ground-stud-pair-3-4-1-4@1", "common/ground-stud-pair-1-1-4@1", M5)
 # the three studs of the Casa terminal: seat id -> stud axis in the terminal's frame
 CASA_SEATS = {"stud-tr": (21.45, 6.15), "stud-bl": (6.15, 21.45), "stud-br": (21.45, 21.45)}
@@ -128,9 +129,10 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # stud again, 4 -> 11 on 4 -> 11 devices.
 # The Cisco C9300-48P and C9300-48T each place two common/ground-screw@1 on their rear
 # face, the guide's "ground connectors", 6 -> 10 on 3 -> 5 devices.
+# The Cisco C9300-24P, C9300-24U and C9300-48U each place the same two, 10 -> 16 on 5 -> 8 devices.
 CENSUS = {
     "common/ground-lug@1": (31, 22),
-    "common/ground-screw@1": (10, 5),
+    "common/ground-screw@1": (16, 8),
     "common/ground-stud@1": (11, 11),
     CASA: (1, 1),
 }
@@ -190,6 +192,10 @@ STUD_SIZE = {
     "nokia/nfxs-e-bb": {"ground": "1/4 in"},
     "nokia/nfxs-f-bb": {"ground": "1/4 in"},
     "nokia/lmfs-f": {"ground-studs": "M6"},
+    "nokia/sr-12": {"ground-studs": "1/4-20"},
+    "nokia/sr-1e": {"ground-studs": "10-32"},
+    "nokia/sr-2e": {"ground-studs": "10-32"},
+    "nokia/sr-3e": {"ground-studs": "10-32"},
     "ufispace/m3000-14xc": UFI_PAIR,
     "ufispace/s9500-22xst": UFI_PAIR,
     "ufispace/s9500-30xs": {"ground-lug": "M4"},
@@ -370,8 +376,14 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
             presents.append(ref)
         if c.get("mates") == IFACE:
             mates.append(ref)
+    # and the two bare tapped holes (M5 and 10-32) that the Juniper earthing pairs and the QFX5210 plate compose
+    bare_holes = ("common/ground-hole-m5@1", "common/ground-hole-10-32@1")
+    # and the bare 1/4-20 hole that the Nokia SR-12's pair composes, the bare 10-32 stud that the SR-1e, SR-2e and
+    # SR-3e's pair composes, and the disc that the three MikroTik switches place for their earth stud
+    earth_stud_parts = ("common/ground-hole-1-4@1", "common/ground-stud-10-32@1", "mikrotik/earth-stud-disc@1")
     assert sorted(presents) == sorted([*SINGLE, CASA_STUD, "common/terminal-screw-34@1",
-                                       "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD])
+                                       "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD, *bare_holes,
+                                       *earth_stud_parts])
     assert mates == [LUG]
     lug = _contract(LUG)
     # 1.0.1: the provenance says it turns (#829); nothing it draws changed
@@ -391,28 +403,46 @@ def test_what_is_out_of_scope_is_still_not_a_seat():
 
 # --- 2. the census, and every placement is a slot ----------------------------------
 
+# THE ONE KIND OF COMPONENT THAT COMPOSES ONE OF THE FOUR: a DC supply module whose earth screw or stud stands beside its
+# terminal block, not on it. A supply is seated in a bay of a chassis and is not a placement on a chassis face, so its
+# earth seat is counted here and not in CENSUS. (component, id of its part) -> the part it composes.
+COMPOSED = {
+    ("edgecore/agr-psu-dc@1", "earth"): "common/ground-screw@1",
+    ("edgecore/ais800-psu-dc@2", "earth"): "common/ground-screw@1",
+    ("edgecore/csr440-psu-dc@1", "earth"): "common/ground-stud@1",
+    ("edgecore/fsj033-610g@1", "ground-stud"): "common/ground-screw@1",
+}
+
+
 @pytest.fixture(scope="module")
-def placed():
+def walked():
     got = placements_of(FOUR)
     assert got, "the walk found no placement of any ground stud part"
     return got
 
 
-def test_the_census_of_ground_stud_placements(placed):
+@pytest.fixture(scope="module")
+def placed(walked):
+    return [w for w in walked if w[1] is not None]
+
+
+def test_the_census_of_ground_stud_placements(placed, walked):
     """Counted by walking every device view and every component's `parts:`.
-    All four parts are placed straight on a chassis face and no component
-    composes one."""
+    All four parts are placed straight on a chassis face, except the earth
+    seats of four DC supply modules, which COMPOSED counts apart."""
+    assert {(where, p["id"]): p["ref"] for where, view, p in walked if view is None} == COMPOSED
     counts = {}
     for where, view, p in placed:
-        assert view is not None, f"{where} composes {p['ref']}: a seat this census does not count"
         n, devs = counts.setdefault(p["ref"], [0, set()])
         counts[p["ref"]][0] = n + 1
         devs.add(where)
     got = {ref: (n, len(devs)) for ref, (n, devs) in counts.items()}
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
-    assert sum(n for n, _ in got.values()) == 53
-    assert len({where for where, _, _ in placed}) == 39
+    # 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
+    assert sum(n for n, _ in got.values()) == 59
+    # 39 -> 42 with the Cisco C9300-24P, C9300-24U and C9300-48U
+    assert len({where for where, _, _ in placed}) == 42
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -454,7 +484,8 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         assert c["mate"] == pytest.approx(want, abs=EPS)
         seen += 1
     # every placement of the census but the Casa terminal's one
-    assert seen == 52
+    # 52 -> 58 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
+    assert seen == 58
 
 
 def test_the_only_turned_placements_are_turned_90(placed):
@@ -507,7 +538,7 @@ def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed)
         if size is not None:
             got.setdefault(device, {})[p["id"]] = size
     assert got == STUD_SIZE
-    assert sum(len(v) for v in got.values()) == 63 and len(got) == 34
+    assert sum(len(v) for v in got.values()) == 67 and len(got) == 38
     mx = {}
     for device, view, p in placements_of(MX_PAIR_HOSTS):
         mx.setdefault(device, {})[p["id"]] = (p.get("attrs") or {}).get("stud-size")
@@ -847,13 +878,16 @@ def test_two_lugs_on_a_pair_drawn_one_above_the_other_overlap(built):
 @EACH_BUILT
 def test_the_device_index_publishes_the_slot(built, device):
     """A single stud is a cage of its device's view, id = the placement id.
-    The Casa terminal is not; its three studs are read off components.json."""
+    The Casa terminal's three studs are cages too, each under `<placement>/<part>`
+    (nested_seat_entries); the terminal itself is not one."""
     config, view, part, keys = BUILT[device]
     index = built[device][2]
     ids = {c["id"]: c for c in index["cages"][view]}
     for key in keys:
         if part == CASA:
-            assert key not in ids and key.split("/")[0] not in ids
+            c = ids[key]
+            assert key.split("/")[0] not in ids
+            assert c["kind"] == "connector" and c["interface"] == IFACE and c["accepts"] == [LUG]
             continue
         c = ids[key]
         assert c["kind"] == "connector" and c["interface"] == IFACE
@@ -1019,11 +1053,11 @@ def test_the_3d_pass_names_the_one_view_that_holds_a_ground_stud(kit, built):
 
 
 def test_the_3d_pass_seats_a_lug_on_a_stud_of_the_casa_terminal(kit):
-    """`ground-studs-rear/stud-tr` is claimed by no bay and no cage of any
-    view: the terminal is a plain placement that publishes slots. Every view
-    is named for such a key (#814) and the rear face seats the lug."""
+    """`ground-studs-rear/stud-tr` is a cage of the rear view only: the terminal
+    is a plain placement whose seats the device index lists (nested_seat_entries),
+    so the 3D pass names that one view, as it does for a single stud."""
     t = kit["casa/c40g"]["threeD"]
-    assert sorted(t["named"]) == sorted(t["views"]) and "rear" in t["named"]
+    assert t["named"] == ["rear"]
     assert t["viewsApplied"] == 1 and t["viewsSeated"] == 1
     assert t["faceApplied"] == 1 and t["faceSeated"] == 1
     assert not t["faceRefused"] and not t["faceFailed"]

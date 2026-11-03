@@ -24,12 +24,12 @@
    "ufispace/fan-402825@1"
   ]
  },
- "composed": "a085af85349ce0d4",
+ "composed": "19b41dca09683240",
  "composed-refs": {
   "common/compliance-sticker@1": "1.0.0+6b3c51b31c446689",
   "common/ground-screw-m4@1": "1.0.1+4793ba55a2d2f342",
   "common/ground-stud-pair-5-8-m4@1": "1.0.0+7c98b156dd47d5f3",
-  "common/ground-symbol@1": "1.0.0+938c617ba0a96a89",
+  "common/ground-symbol@1": "1.0.1+0018bfdfc1559185",
   "common/led-arrow@1": "1.1.0+bb17f3a6fc695571",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/led-rect@1": "1.1.0+0314fb1739d8b11d",
@@ -37,9 +37,10 @@
   "common/qsfp-lane-leds@1": "1.2.0+cd739dfd1d3d6169",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
-  "common/screw-head@1": "1.1.0+0f38d482bcc27ec9",
+  "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
   "common/sma-jack@1": "1.0.1+dde698c727778ba3",
   "common/smb-jack@1": "1.0.0+d68248050fc18e92",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "common/usb-a-bezel@1": "1.0.0+dbd65b62318759eb",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
@@ -50,12 +51,72 @@
   "std/usb-a@1": "1.3.0+3c77f06ea6794bfc",
   "ufispace/fan-402825@1": "1.2.0+7b69e930df2c4acc",
   "ufispace/psu-401-ac@1": "1.4.1+c3e502c3e4815abc",
-  "ufispace/psu-401-dc@1": "1.3.1+2e896232cfe5e70f"
+  "ufispace/psu-401-dc@1": "1.4.0+575c80a4c85f4b09"
  },
  "configs": [
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "ufispace/psu-401-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     },
+     {
+      "role": "gnd",
+      "slot": "psu-0/module/pole-gnd"
+     }
+    ],
+    "rating-a": 16,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "ufispace/psu-401-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "gnd",
+      "slot": "psu-1/module/pole-gnd"
+     }
+    ],
+    "rating-a": 16,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "52aaff3627b0fce6",
  "groups": [
@@ -533,5 +594,5 @@
  "placement-surface": "4f34d40cf171ccb7",
  "shape": "4cbb3383a74647f1",
  "surface": "55e524fdd5f76cf1",
- "version": "6.0.1"
+ "version": "6.1.0"
 }

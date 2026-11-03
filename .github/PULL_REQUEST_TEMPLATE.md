@@ -4,7 +4,8 @@
 ## What this changes
 
 <!-- One or two sentences. For a device: vendor and model, which faces, which
-     configurations. For a component: the part and what seats it. -->
+     configurations. For a component: the part, what seats it, and what
+     mates each connector. -->
 
 ## Sources
 

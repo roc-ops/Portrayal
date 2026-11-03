@@ -88,6 +88,12 @@ list of things to do.
   name. Every kit SKU in the accessory table is listed under `chassis.kits`.
 - **A thing at component scale is a component.** A cover, door or filler drawn
   as bare decor is an unexplained box in the tree.
+- **A connector drawn as decor is a defect,** the same fault as a cover drawn
+  as bare decor: a port that takes a cable, cord, plug, lug or pluggable is a
+  part, and a picture of one has nothing to mate. L197 finds the names it
+  knows; a connector under another name is the reviewer's to find. **A
+  sentence where a mate could exist is a gap, and a gap is a row** in
+  `library/conformance-exceptions.yaml`, not an `unmated:` sentence.
 - **A cutout is not left empty,** and a lamp that has states draws with the
   state colour, not a fixed fill.
 - **A rotated or stacked placement was rendered seated.** Stacked cages sit

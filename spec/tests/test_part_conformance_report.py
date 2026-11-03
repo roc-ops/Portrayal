@@ -34,6 +34,9 @@ RUN_TIMEOUT = 300             # seconds; a runner that hangs is a warning, not a
 TOUCHED_LIMIT = 40           # devices a change may add to the sample (the touched set under 60 s)
 
 pytestmark = [
+    # the report goes into library/dist, which test_overlay_library hashes across
+    # a build: one worker runs the two in turn (test_dist_writers_share_a_group.py)
+    pytest.mark.xdist_group("public-dist"),
     pytest.mark.skipif(shutil.which("node") is None, reason="node not installed"),
     pytest.mark.skipif(not (DIST / "devices.json").exists(), reason="library/dist not built - run ./build.sh"),
 ]

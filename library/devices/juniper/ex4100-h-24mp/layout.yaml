@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex4100-h-24mp
-version: 0.1.1
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX4100-H-24MP
@@ -112,7 +112,7 @@ provenance:
     note: >-
       Table 68 and Figure 99 - a two-hole protective earthing terminal on the rear panel for a Panduit LCD6-14A-L lug on two M5 by 10 mm screws with washers
       (the grounding kit is JNP-GL-2H6-M5-RA, separately orderable). The figure shows two holes 16.0 mm apart (the 5/8 in lug pitch) on a lighter plate at
-      32.3 mm across. They are drawn as holes on the plate; the library has no pair part for M5 holes on that pitch, so no lug seat is offered.
+      32.3 mm across. They are drawn as bare holes on the plate, now parts: one two-hole seat on that pitch (`ground-stud-pitch` says how the pitch is read).
   rear:
     confidence: photo-measured
     note: >-
@@ -145,6 +145,17 @@ provenance:
       Tables 10, 11, 27 and 30 - PoE++ (90 W by default) on all 24 ports; 340 W AC or DC supplies. The PoE budget is 240 W with one supply and 370 W with two, on an
       81 W system budget, 321 W and 451 W in all against 340 W and 680 W of supply. The budgets are separate figures and the guide states no maximum input power for
       the chassis.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      INFERRED, NOT STATED. Table 68 names two M5 x 10 mm stainless steel screws with washer (separately orderable;
+      the grounding kit JNP-GL-2H6-M5-RA holds the lug and screws) and a Panduit LCD6-14A-L lug or equivalent (not
+      provided), and gives no spacing. The figure puts the two holes 16.0 mm apart, which is the 5/8 in. (15.875) of
+      the library's two-hole lug for the same hole-spacing code (Panduit LCD6-10A-L: '.63 hole spacing'). The terminal
+      is `common/ground-hole-pair-5-8-m5@1`: two bare M5 holes on 5/8 in. centres, presenting `stud-pair-5-8`, so one
+      two-hole lug (`generic/two-hole-lug-5-8@1`) lands across them and a ring lug still lands on either hole. The
+      holes stay bare, as the photograph shows them; the screws are fitted with the lug. The holes were drawn 16.0
+      apart as decor and the pair stands on their midpoint.
 attrs:
   physical:
     weight: 6.92 kg (15.25 lb) with no supply; 8.35 kg with one AC supply and 8.37 kg with one DC supply, Table 11
@@ -207,13 +218,6 @@ gaps:
   reason: vendor-silent
   note: The guide names the CLD lamp and sends the reader to the cloud-ready blink patterns, which it does not hold.
   wanted: the cloud-ready LED blink patterns
-- what: ground-hole-seat
-  scope: [rear]
-  reason: needs-drawing
-  note: >-
-    The earthing terminal is two threaded holes for M5 screws on a 5/8 in pitch. The library has no pair part for M5 holes, so they are drawn as holes on the plate and no lug seat
-    is offered.
-  wanted: a two-hole M5 earth terminal part
 - what: label-plates
   scope: [front, rear]
   reason: needs-drawing
@@ -224,6 +228,13 @@ gaps:
   scope: [top, bottom, left, right]
   reason: needs-drawing
   wanted: A flat drawing or photograph of the lid, the underside and the side panels.
+- what: ground-pair-pitch
+  scope: [ground-pair]
+  reason: vendor-silent
+  note: >-
+    The guide names the screws and the lug and gives no spacing for the two holes; `ground-stud-pitch` says what the
+    pair is drawn at and why.
+  wanted: a drawing that dimensions the two holes, or the lug's own datasheet
 groups:
   rj45-mg:
     term: Port
@@ -304,6 +315,11 @@ groups:
     term: Point
     role: furniture
     index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the earthing terminal, two bare M5 holes for a two-hole lug (Table 68)
 views:
   front:
     size: {w: 439.0, h: 43.3}
@@ -533,8 +549,6 @@ views:
     panel:
       decor:
       - {id: earth-plate, kind: earth-plate, at: [24.9, 2.5], size: [14.9, 36.8], rx: 0.5, fill: '#c9cbcd'}
-      - {id: earth-hole-1, kind: earth-hole, at: [29.75, 4.85], size: [5.1, 5.1], rx: 2.55, fill: '#2a2d31'}
-      - {id: earth-hole-2, kind: earth-hole, at: [29.75, 20.85], size: [5.1, 5.1], rx: 2.55, fill: '#2a2d31'}
       - {id: lock-slot, kind: lock-slot, at: [10.5, 20.3], size: [7.2, 3.3], rx: 1.0, fill: '#101214'}
       - {id: bracket-plate, kind: bracket, at: [236.6, 0.0], size: [15.3, 17.1], rx: 0.6, fill: '#5d6471'}
       - {id: bracket-screw-ring, kind: screw, at: [240.45, 3.85], size: [9.5, 9.5], rx: 4.75, fill: '#2b2f36'}
@@ -556,6 +570,7 @@ views:
          accepts: [juniper/ex4100-h-jpsu-340w-ac@1, juniper/ex4100-h-24mp-dc-psu@1, juniper/ex4100-h-psu-blank@1],
          default: juniper/ex4100-h-psu-blank@1, group: psus, rel-pos: 1}
       placements:
+      - {ref: common/ground-hole-pair-5-8-m5@1, id: ground-pair, at: [21.8625, 12.9], rotate: 90, group: grounding, rel-pos: 0}
       - {ref: common/esd-jack@1, id: esd-rear, at: [13.0, 3.9], for: chassis, group: esd, rel-pos: 0}
     regions:
     - {id: label-serial, at: [1.0, 1.2], size: {w: 5.3, h: 20.3}, label: 'Serial number label; not drawn'}

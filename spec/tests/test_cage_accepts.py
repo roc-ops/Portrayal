@@ -597,10 +597,26 @@ def test_a_group_description_reaches_the_occupant(tmp_path):
 
 
 def _ref(device, view_name, placement_id):
-    """The ref of the placement `cage_entries` made an entry for."""
-    return next(q["ref"] for q in
-                render_mod.view_parts(device["views"][view_name] or {})["placements"]
-                if q.get("id") == placement_id)
+    """The ref of the placement `cage_entries` made an entry for; of the composed part, for a
+    seat listed under `<placement>/<part>` (nested_seat_entries)."""
+    head, _, part = placement_id.partition("/")
+    ref = next(q["ref"] for q in
+               render_mod.view_parts(device["views"][view_name] or {})["placements"]
+               if q.get("id") == head)
+    if not part:
+        return ref
+    host = render_mod.Library([str(LIB)]).resolve(ref)[0]
+    return next(p["ref"] for p in host["parts"] if p["id"] == part)
+
+
+def _part_lift(device, view_name, placement_id):
+    """How far the composed part stands off its host, for a seat listed under `<placement>/<part>`; 0 otherwise."""
+    head, _, part = placement_id.partition("/")
+    if not part:
+        return 0.0
+    ref = _ref(device, view_name, head)
+    host = render_mod.Library([str(LIB)]).resolve(ref)[0]
+    return float(next(p for p in host["parts"] if p["id"] == part).get("lift") or 0.0)
 
 
 def test_the_lift_census():
@@ -667,7 +683,9 @@ def test_the_lift_census():
                 if c["lift"]:
                     nonzero += 1
                     lifted_cages += c["kind"] == "cage"
-                    if c["interface"] in ("bnc", "din-1-0-2-3", "f-type",
+                    # A SEAT OF A PLACED PART (`<placement>/<part>`, nested_seat_entries) is
+                    # lifted by the composed part's own `lift:` too, whatever its interface
+                    if "/" in c["id"] or c["interface"] in ("bnc", "din-1-0-2-3", "f-type",
                                           "terminal-508-5", "terminal-508-2",
                                           "terminal-stud", "p40",
                                           # a pair of studs a two-hole lug spans
@@ -676,7 +694,7 @@ def test_the_lift_census():
                                           "stud-pair-1"):
                         doc = lib.resolve(_ref(d, v, c["id"]))[0]
                         want = manifest.presented_interface(
-                            doc, lambda r: lib.resolve(r)[0])[2]
+                            doc, lambda r: lib.resolve(r)[0])[2] + _part_lift(d, v, c["id"])
                         assert c["lift"] == pytest.approx(want), (c["id"], c["lift"], want)
                         continue
                     if c["interface"] == "pdu-button":

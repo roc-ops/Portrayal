@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="54.5mm" height="40.8mm" viewBox="0 0 54.5 40.8">
   <!-- The COR550's AC supply as both rear elevations draw it: a honeycomb vent over the
        supply's own fan at the inboard end with the black D-handle laid ACROSS it, the C14
-       inlet standing on end at the outboard end, and the red release latch beside it.
+       inlet standing on end at the outboard end (composed by the contract, not drawn here),
+       and the red release latch beside it.
        The mesh is drawn as holes over a lighter backing - pattern decor paints only its
        holes, so the webbing between them is whatever is underneath. -->
   <defs>
@@ -13,7 +14,12 @@
       <path d="M 4.345 5.400 L 2.504 6.463 L 2.504 8.587 L 4.345 9.651 L 6.186 8.587 L 6.186 6.463 Z" fill="#0b0d0f"/>
     </pattern>
   </defs>
-  <rect id="body" x="0" y="0" width="54.5" height="40.8" rx="0.4"
+  <!-- the body carries a knockout where the composed inlet stands (20.0 x 28.0, corners R3
+       as the inlet's own opening): `behind` puts that part under the whole skin, base plate
+       included, so the red latch, which hangs in front of the inlet's lower right in both
+       elevations, is drawn over it -->
+  <path id="body" fill-rule="evenodd"
+    d="M0.4 0 H54.1 a0.4 0.4 0 0 1 0.4 0.4 V40.4 a0.4 0.4 0 0 1 -0.4 0.4 H0.4 a0.4 0.4 0 0 1 -0.4 -0.4 V0.4 a0.4 0.4 0 0 1 0.4 -0.4 Z M33.10 4.15 H47.10 a3 3 0 0 1 3 3 V29.15 a3 3 0 0 1 -3 3 H33.10 a3 3 0 0 1 -3 -3 V7.15 a3 3 0 0 1 3 -3 Z"
     fill="#33373c" stroke="#1b1e22" stroke-width="0.35"/>
   <rect x="0.55" y="0.55" width="53.4" height="39.7" rx="0.3"
     fill="none" stroke="#52575d" stroke-width="0.22"/>
@@ -26,19 +32,6 @@
       fill="#1c1f23" stroke="#0e1013" stroke-width="0.3"/>
     <rect x="9.55" y="6.10" width="2.90" height="28.20" rx="1.40"
       fill="none" stroke="#6a6f75" stroke-width="0.45"/>
-  </g>
-  <g id="inlet">
-    <rect x="31.60" y="5.70" width="17.00" height="24.90" rx="0.6"
-      fill="#25282c" stroke="#14171a" stroke-width="0.3"/>
-    <path d="M 33.60 9.30 H 46.60 V 24.60 A 1.6 1.6 0 0 1 45.00 26.20 H 35.20
-             A 1.6 1.6 0 0 1 33.60 24.60 Z"
-      fill="#4d5258" stroke="#20242a" stroke-width="0.3"/>
-    <!-- only two of the three pins show: the latch hangs in front of the housing's
-         lower right, as the elevation draws it, and the third is behind it -->
-    <g fill="#e4e7ea">
-      <rect x="42.00" y="10.30" width="3.00" height="1.60" rx="0.3"/>
-      <rect x="37.20" y="16.90" width="3.00" height="1.60" rx="0.3"/>
-    </g>
   </g>
   <g id="latch">
     <rect x="38.70" y="18.80" width="11.40" height="22.00" rx="1.10"

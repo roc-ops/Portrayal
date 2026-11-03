@@ -8,6 +8,7 @@ These run against the real library and a components.json built here by the
 indexer the build runs, never a fixture and never a possibly stale dist.
 """
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -52,8 +53,10 @@ def test_the_connector_registry_is_not_vacuous():
     # generic/c14-plug@1 is the cord end that mates it
     # iec-c19: the C19 outlet of a PDU, a slot for a C20 jumper end (#933)
     # usb-a/micro-usb-b/usb-c: the USB receptacles, made slots for their cable plugs (#786)
-    # mini-usb-b: the Mini-B receptacle, registered from Molex
-    # 54819-0519; no part presents it yet and no plug mates it, so it is in no slot below
+    # mini-usb-b: the Mini-B receptacle, registered from Molex 54819-0519;
+    # std/mini-usb@1 presents it (the Catalyst 9300 and 3650 console), so does
+    # juniper/ex4300-console-usb-mini@1 (the EX4300 and EX4550 console), and
+    # generic/mini-usb-b-plug@1 mates it
     # db9/hd15/da15/db25: the D-sub and VGA connectors, made slots for their hooded plugs (#787)
     # terminal-508-2/-5/-6: the pluggable 5.08 mm terminal headers, made slots for their
     # screw-clamp plugs (#789)
@@ -78,6 +81,22 @@ def test_the_connector_registry_is_not_vacuous():
     # Eaton combination outlet, made slots for a cord end (#1045). std/nema-5-20r@1
     # and eaton/c39-outlet@1 present two of them. No part presents nema-5-15r yet:
     # it is registered because a 5-15P names it in `mates`, and it is in no slot below
+    # flexstack/stackwise-480/stackpower: the Cisco stacking and power-stacking
+    # connectors; ex4200-vcp: the Juniper EX4200 Virtual Chassis port;
+    # cisco-rps2300/ex3300-rps: the two redundant-power connectors. Vendor connectors
+    # citing no standard; the stack, StackPower, Virtual Chassis and RPS port parts
+    # present them and a plug mates each, so this list holds all six
+    # wire-wrap-3: the three-pin wire-wrap alarm header drawn by amphenol-ns/alarm-card-307608@1
+    # screw-terminal-5: the nrgNET removable 5-pin screw-down block, amphenol-ns/nrg-rear-block@1
+    # screw-terminal-2: the two-pole pluggable DC block, common/dc-terminal-plug-2@1
+    # terminal-381-5/terminal-350-6: the EX4100-H 5-position 3.81 mm PSU header and 6-position
+    # 3.5 mm alarm header, juniper/ex4100-h-psu-connector@1 and juniper/ex4100-h-alarm-connector@1
+    # screw-terminal-4: the four-pole DC feed header, telco-systems/tm-7124s-dc-feed@1
+    # orv3-busbar: the Open Rack v3 48 V bus-bar connector, common/orv3-busbar-connector@1.
+    # Vendor connectors citing no standard; each names the header or connector on the device
+    # and never the plug that enters it
+    # micro-dsub-50/wire-wrap-6: the 50-pin micro D-sub alarm connector (FEMALE on the panel)
+    # and the six-pin BITS wire-wrap header of nokia/ngfc-h@1 and nokia/ngfc-g@1
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
@@ -96,7 +115,19 @@ def test_the_connector_registry_is_not_vacuous():
                          # the two PCIe slot forms (docs/cards-by-interface-design.md):
                          # a riser bay states one as its `interface`, so no part
                          # presents either and neither is a slot below
-                         "pcie-fh", "pcie-lp"}
+                         "pcie-fh", "pcie-lp",
+                         # stack, virtual-chassis and redundant-power connectors,
+                         # each presented by a port part
+                         "flexstack", "stackwise-480", "stackpower", "ex4200-vcp",
+                         "cisco-rps2300", "ex3300-rps",
+                         # alarm, terminal and bus-bar connectors
+                         "wire-wrap-3", "screw-terminal-5", "screw-terminal-2",
+                         "terminal-381-5", "terminal-350-6", "screw-terminal-4",
+                         "orv3-busbar",
+                         # the C16 appliance inlet of the EX4400 AC supplies
+                         "iec-c16",
+                         # the alarm and BITS connectors of the Nokia general facilities cards
+                         "micro-dsub-50", "wire-wrap-6"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -122,10 +153,219 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    # the H100 PCIe's, H100 NVL's and L40S's east ends
                                    "pcie-12vhpwr", "pcie-12v-2x6",
                                    # the A10's east end
-                                   "pcie-8pin"}
+                                   "pcie-8pin",
+                                   # the Mini-B console of the Catalyst 9300 and 3650
+                                   # and of the EX4300 and EX4550
+                                   "mini-usb-b",
+                                   # the stack, StackPower, Virtual Chassis and RPS port
+                                   # parts; a superset, so an interface no placed part
+                                   # presents yet does no harm
+                                   "flexstack", "stackwise-480", "stackpower",
+                                   "ex4200-vcp", "cisco-rps2300", "ex3300-rps",
+                                   # the alarm, terminal and bus-bar connectors
+                                   "wire-wrap-3", "screw-terminal-5", "screw-terminal-2",
+                                   "terminal-381-5", "terminal-350-6", "screw-terminal-4",
+                                   "orv3-busbar",
+                                   # the C16 inlet of the EX4400 AC supplies
+                                   "iec-c16",
+                                   # the alarm and BITS connectors of the Nokia general
+                                   # facilities cards
+                                   "micro-dsub-50", "wire-wrap-6"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
+
+
+STACK_AND_RPS_KEYS = ("flexstack", "stackwise-480", "stackpower", "ex4200-vcp",
+                      "cisco-rps2300", "ex3300-rps")
+
+
+@pytest.mark.parametrize("key", STACK_AND_RPS_KEYS)
+def test_a_stack_or_rps_connector_key_has_a_note_and_no_standard(key):
+    entry = render_mod._connector_registry().get(key)
+    assert entry is not None, f"{key} is not registered"
+    assert str(entry.get("note") or "").strip(), f"{key} has no note"
+    assert "standard" not in entry, f"{key} cites a standard; these are vendor connectors"
+
+
+def _header(name):
+    text = (ROOT / "spec/schemas" / name).read_text()
+    return text.split("\nformat: 1", 1)[0]
+
+
+def test_the_connectors_header_documents_unmated_and_turns():
+    head = _header("connectors.yaml")
+    keys = head.split("AN ENTRY is", 1)[1]
+    for word in ("unmated", "turns", "40 characters", "C21"):
+        assert word in keys, f"the entry-key list does not mention {word}"
+    for stale in ("is to gain", "stops at C20"):
+        assert stale not in head, f"the header still says {stale!r}"
+
+
+def test_the_pluggables_header_documents_unmated_as_a_map_from_a_rate():
+    head = _header("pluggables.yaml")
+    assert "unmated" in head
+    tail = head.split("unmated", 1)[1]
+    for word in ("map", "rate", "sentence", "40 characters", "C21"):
+        assert word in tail, f"the unmated paragraph does not mention {word}"
+    for stale in ("is to gain", "stops at C20"):
+        assert stale not in head, f"the header still says {stale!r}"
+
+
+def test_the_mini_usb_b_note_says_what_presents_and_mates_it():
+    note = render_mod._connector_registry()["mini-usb-b"]["note"]
+    for ref in ("std/mini-usb@1", "juniper/ex4300-console-usb-mini@1",
+                "generic/mini-usb-b-plug@1"):
+        assert ref in note, f"the note does not name {ref}"
+    assert "No part presents it" not in note
+    assert "mates it yet" not in note
+
+
+STACK_AND_RPS_PARTS = {
+    "flexstack": ("cisco/flexstack-port", "cisco/flexstack-plug"),
+    "stackwise-480": ("cisco/stackwise-480-port", "cisco/stackwise-480-plug"),
+    "stackpower": ("cisco/stackpower-port", "cisco/stackpower-plug"),
+    "ex4200-vcp": ("juniper/ex4200-vcp-port", "juniper/ex4200-vcp-plug"),
+    "cisco-rps2300": ("cisco/rps2300-connector", "cisco/rps2300-plug"),
+    "ex3300-rps": ("juniper/ex3300-rps-port", "juniper/ex3300-rps-plug"),
+}
+
+
+def _contract_of(name):
+    return yaml.safe_load((LIB / "components" / name / "v1/contract.yaml").read_text())
+
+
+@pytest.mark.parametrize("key", STACK_AND_RPS_KEYS)
+def test_a_stack_or_rps_note_names_the_part_that_presents_it_and_the_plug_that_mates_it(key):
+    presenter, plug = STACK_AND_RPS_PARTS[key]
+    assert _contract_of(presenter)["interface"] == key
+    mates = _contract_of(plug)["mates"]
+    assert key in (mates if isinstance(mates, list) else [mates])
+    note = render_mod._connector_registry()[key]["note"]
+    assert f"{presenter}@1 presents it" in note and f"{plug}@1 mates it" in note
+    for stale in ("presents it yet", "added separately", "no part presents"):
+        assert stale not in note.lower(), f"{key} still says {stale!r}"
+
+
+ALARM_TERMINAL_BUSBAR_PARTS = {
+    "wire-wrap-3": ("amphenol-ns/alarm-card-307608@1", "amphenol-ns/nrg-rear-block@1"),
+    "screw-terminal-5": ("amphenol-ns/nrg-rear-block@1",),
+    "screw-terminal-2": ("common/dc-terminal-plug-2@1",),
+    "terminal-381-5": ("juniper/ex4100-h-psu-connector@1",),
+    "terminal-350-6": ("juniper/ex4100-h-alarm-connector@1",),
+    "screw-terminal-4": ("telco-systems/tm-7124s-dc-feed@1",),
+    "orv3-busbar": ("common/orv3-busbar-connector@1",),
+}
+
+
+def _contract_at(ref):
+    """The contract of `ns/name@major`, opened at its own major."""
+    ns, tail = ref.split("/")
+    name, major = tail.split("@")
+    return yaml.safe_load((LIB / "components" / ns / name / f"v{major}" / "contract.yaml").read_text())
+
+
+@pytest.mark.parametrize("key", ALARM_TERMINAL_BUSBAR_PARTS)
+def test_an_alarm_terminal_or_busbar_key_has_a_note_and_no_standard(key):
+    entry = render_mod._connector_registry().get(key)
+    assert entry is not None, f"{key} is not registered"
+    assert str(entry.get("note") or "").strip(), f"{key} has no note"
+    assert "standard" not in entry, f"{key} cites a standard; these are vendor connectors"
+
+
+@pytest.mark.parametrize("key", ALARM_TERMINAL_BUSBAR_PARTS)
+def test_an_alarm_terminal_or_busbar_note_names_the_part_that_draws_it(key):
+    note = render_mod._connector_registry()[key]["note"]
+    for ref in ALARM_TERMINAL_BUSBAR_PARTS[key]:
+        assert _contract_at(ref), f"{ref} has no contract in the library"
+        assert ref in note, f"the note of {key} does not name {ref}"
+    low = note.lower()
+    assert not re.search(r"\byet\b", low), f"{key} still says 'yet'"
+    for stale in ("added separately", "no part presents"):
+        assert stale not in low, f"{key} still says {stale!r}"
+
+
+C16_PARTS = {
+    "iec-c16": ("juniper/jpsu-1050-c-ac-afo@1", "juniper/jpsu-1600-c-ac-afo@1"),
+}
+
+
+@pytest.mark.parametrize("key", C16_PARTS)
+def test_the_c16_key_has_a_note_and_no_standard(key):
+    entry = render_mod._connector_registry().get(key)
+    assert entry is not None, f"{key} is not registered"
+    assert str(entry.get("note") or "").strip(), f"{key} has no note"
+    assert "standard" not in entry, "the note says no standard is held for it"
+    assert "No standard is held for it" in entry["note"]
+
+
+@pytest.mark.parametrize("key", C16_PARTS)
+def test_the_c16_note_names_the_parts_that_carry_it(key):
+    note = render_mod._connector_registry()[key]["note"]
+    for ref in C16_PARTS[key]:
+        assert _contract_at(ref), f"{ref} has no contract in the library"
+        assert ref in note, f"the note of {key} does not name {ref}"
+    low = note.lower()
+    assert not re.search(r"\byet\b", low), f"{key} still says 'yet'"
+    for stale in ("added separately", "no part presents"):
+        assert stale not in low, f"{key} still says {stale!r}"
+
+
+def test_the_c16_note_quotes_what_the_two_supplies_print():
+    note = render_mod._connector_registry()["iec-c16"]["note"]
+    assert "IEC-320-C15" in note and "C15 cord" in note
+    for ref in C16_PARTS["iec-c16"]:
+        inlet = _contract_at(ref)["provenance"]["inlet"]
+        assert "IEC-320-C15" in inlet and "C16" in inlet, f"{ref} no longer prints what the note quotes"
+
+
+NOKIA_ALARM_PARTS = {
+    "micro-dsub-50": ("nokia/ngfc-h@1", "nokia/ngfc-g@1"),
+    "wire-wrap-6": ("nokia/ngfc-h@1", "nokia/ngfc-g@1"),
+}
+
+
+@pytest.mark.parametrize("key", NOKIA_ALARM_PARTS)
+def test_a_nokia_alarm_or_bits_key_has_a_note_and_no_standard(key):
+    entry = render_mod._connector_registry().get(key)
+    assert entry is not None, f"{key} is not registered"
+    assert str(entry.get("note") or "").strip(), f"{key} has no note"
+    assert "standard" not in entry, "the note says no standard is held for it"
+    assert "No standard is held for it" in entry["note"]
+
+
+@pytest.mark.parametrize("key", NOKIA_ALARM_PARTS)
+def test_a_nokia_alarm_or_bits_note_names_the_cards_that_draw_it(key):
+    note = render_mod._connector_registry()[key]["note"]
+    for ref in NOKIA_ALARM_PARTS[key]:
+        assert _contract_at(ref), f"{ref} has no contract in the library"
+        assert ref in note, f"the note of {key} does not name {ref}"
+    low = note.lower()
+    assert not re.search(r"\byet\b", low), f"{key} still says 'yet'"
+    for stale in ("added separately", "no part presents"):
+        assert stale not in low, f"{key} still says {stale!r}"
+
+
+def test_the_micro_dsub_50_note_states_the_panel_gender():
+    note = render_mod._connector_registry()["micro-dsub-50"]["note"]
+    assert "FEMALE on the panel" in note
+    assert not re.search(r"(?<!FE)MALE on the panel", note), "a female note holds no male phrase of its own"
+    assert "would be a different interface" in note
+
+
+def test_the_wire_wrap_6_entry_says_why_no_plug_exists_and_the_micro_dsub_50_entry_does_not():
+    reg = render_mod._connector_registry()
+    sentence = " ".join(str(reg["wire-wrap-6"].get("unmated") or "").split())
+    assert len(sentence) >= 40, f"the sentence is under 40 characters: {sentence!r}"
+    assert "wire-wrap" in sentence and "no plug seats on it" in sentence
+    assert "unmated" not in reg["micro-dsub-50"], "a cable plug mates the micro D-sub, so it carries no such sentence"
+
+
+def test_no_nema_plug_is_a_connector_key():
+    reg = render_mod._connector_registry()
+    for plug in ("nema-5-15p", "nema-l5-20p"):
+        assert plug not in reg, "a NEMA plug mates a receptacle key"
+    assert "nema-5-15r" in reg
 
 
 def test_an_lc_slot_accepts_the_plug_and_no_boot(comps):

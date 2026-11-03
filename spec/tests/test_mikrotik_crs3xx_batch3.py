@@ -23,6 +23,7 @@ MODELS = {
     "crs328-4c-20s-4s-plus-rm": ("CRS328-4C-20S-4S+RM", "CRS328"),
 }
 NAMES = sorted(MODELS)
+VERSIONS = {name: "1.0.1" for name in NAMES} | {"crs312-4c-plus-8xg-rm": "1.0.0", "crs309-1g-8s-plus-in": "1.1.0"}
 ENVELOPE = {  # width, height, depth
     "crs317-1g-16s-plus-rm": (443.0, 44.0, 224.0),
     "crs309-1g-8s-plus-in": (272.0, 44.0, 191.0),
@@ -53,7 +54,7 @@ def test_the_device_is_named_as_the_maker_prints_it(name):
     assert d["model"] == model
     assert d["portfolio"] == {"line": "Switches", "family": "Cloud Router Switch", "series": series}
     assert "+" not in name
-    assert d["version"] == "1.0.0"
+    assert d["version"] == VERSIONS[name]
     assert list(d["configurations"]["base"]["part-numbers"]) == [model]
 
 
@@ -171,14 +172,14 @@ def test_crs309_de9_console_is_an_rs232_port_the_export_does_not_carry():
         assert not doc.get("console_ports"), target
 
 
-def test_crs309_is_passive_with_a_chassis_art_earth_stud_and_a_narrow_body():
+def test_crs309_is_passive_with_a_placed_disc_for_its_earth_stud_and_a_narrow_body():
     d = load("crs309-1g-8s-plus-in")
     rear = d["views"]["rear"]
     assert not [x for x in rear["panel"]["decor"] if x.get("kind") == "fan-grille"]
     assert d["attrs"]["thermal"]["cooling"].startswith("passive")
     assert [g["what"] for g in d["gaps"] if g["what"] == "earth-stud-part"] == ["earth-stud-part"]
     assert d["chassis"]["width"] == 272.0 < 443.0
-    assert not [p for p in placements(d, "rear") if "ground-stud" in p["ref"]]
+    assert [p["ref"] for p in placements(d, "rear") if "earth-stud" in p["ref"]] == ["mikrotik/earth-stud-disc@1"]
 
 
 # --- CRS312 ---------------------------------------------------------------------------------------------------
@@ -353,6 +354,6 @@ def test_the_lock_files_match_the_devices():
     known = devicelock.load_lock(lib)["devices"]
     for name in NAMES:
         entry = known[f"mikrotik/{name}"]
-        assert entry["version"] == load(name)["version"] == "1.0.0"
+        assert entry["version"] == load(name)["version"] == VERSIONS[name]
         per_device = json.loads((DEVICES / name / "device.lock.json").read_text())
         assert per_device["gaps"] == entry["gaps"]
