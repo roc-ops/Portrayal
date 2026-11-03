@@ -194,3 +194,25 @@ def test_the_junit_key_is_the_one_suite_times_writes():
     or every test weighs the median and the balance is by count."""
     assert S.junit_key("spec/tests/test_x.py::TestC::test_y[p]") == "test_x::TestC.test_y[p]"
     assert S.junit_key("spec/tests/test_x.py::test_y[bracket@2]") == "test_x::test_y[bracket@2]"
+
+
+def test_a_marker_selection_is_split_and_recorded_after_it_deselects(tmp_path):
+    """THE LIGHT TIER IS `-m "not heavy" --shard i/N`. The split and its record
+    have to be of what `-m` kept: a heavy test the shards were dealt and pytest
+    then deselected would be "kept" by a shard that never ran it, and the check
+    would prove a split that did not happen."""
+    suite = tmp_path / "tiered"
+    suite.mkdir()
+    (suite / "test_t.py").write_text(
+        "import pytest\n\n@pytest.mark.heavy\ndef test_slow():\n    pass\n\n"
+        + "".join(f"def test_l{i}():\n    pass\n\n" for i in range(6)))
+    (suite / "test_u.py").write_text("".join(f"def test_u{i}():\n    pass\n\n" for i in range(6)))
+    out = tmp_path / "records"
+    out.mkdir()
+    records = [shard(suite, out, i, 2, "-m", "not heavy") for i in (1, 2)]
+    for r in records:
+        assert "test_t.py::test_slow" not in r["collected"], r["collected"]
+    assert S.check(records) == []
+    kept = [t for r in records for t in r["kept"]]
+    assert "test_t.py::test_slow" not in kept
+    assert len(kept) == len(set(kept)) == 12, kept
