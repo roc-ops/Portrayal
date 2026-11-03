@@ -96,6 +96,7 @@ def test_the_plug_is_the_guides_cable_connector_and_mates_the_key():
     assert [d["fields"][f"wire-{n}-color"]["default"] for n in (1, 2, 3)] == ["#af3728", "#1c1c1c", "#5a9e3c"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", sorted(SUPPLIES))
 def test_each_supply_carries_its_one_part_number_and_no_other_part_carries_it(ref):
     model, part, airflow, latch = SUPPLIES[ref]
