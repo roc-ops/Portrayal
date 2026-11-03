@@ -427,7 +427,8 @@ every test not marked `heavy`, and its verdict is the check `light suite`.
 Heavy tests are the few hundred functions a full run measured at five seconds
 or more. The whole suite runs before a merge, when the maintainer or the
 merge agent starts it on the branch (`gh workflow run gates.yml --ref
-<branch>`), and every night on `main`. Only that full run reports `build`,
+<branch> -f pr=<number>`, which tests the merge with main), and every night
+on `main`. Only that full run reports `build`,
 the check branch protection requires, so a pull request shows `build` as
 expected until it has had one. A pull request from a fork runs the whole
 suite on every push, since nobody can start a run on a fork's branch. Both

@@ -26,7 +26,17 @@ on:
   # required `build`; before a merge, `gh workflow run gates.yml --ref <branch>`
   # runs the whole suite on the head and lands its `build` (docs/merging.md).
   # On main it is the button for the day somebody wants the whole thing.
+  #
+  # `-f pr=<n>` TESTS THE PULL REQUEST'S MERGE WITH MAIN, as its own pull
+  # request runs do (`refs/pull/<n>/merge`), and the checks still land on the
+  # head the merge is of. Without it a dispatch tests the branch alone, and
+  # since main does not require a branch to be up to date, the heavy tests
+  # would never see the tree the merge makes.
   workflow_dispatch:
+    inputs:
+      pr:
+        description: 'Pull request number: test its merge with main, as its pull request runs do'
+        required: false
   # THE WHOLE SUITE ON MAIN EVERY NIGHT. Every merge had its own full run, but
   # not on the tree two merges made together, and a runner image or a
   # dependency can move under a tree that did not. Off the hour, as GitHub asks.
@@ -112,6 +122,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          ref: ${{ inputs.pr && format('refs/pull/{0}/merge', inputs.pr) || '' }}
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
         with:
           python-version: '3.12'
@@ -176,6 +188,8 @@ jobs:
         run: echo "tier=${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository) && 'full' || 'light' }}" >> "$GITHUB_OUTPUT"
 
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          ref: ${{ inputs.pr && format('refs/pull/{0}/merge', inputs.pr) || '' }}
 
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
         with:
@@ -298,6 +312,8 @@ jobs:
         shard: ${{ fromJSON(needs.dist.outputs.tier == 'full' && '[1, 2, 3, 4]' || '[1, 2]') }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          ref: ${{ inputs.pr && format('refs/pull/{0}/merge', inputs.pr) || '' }}
 
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
         with:

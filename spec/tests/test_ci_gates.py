@@ -496,3 +496,21 @@ def test_the_budget_step_can_fail_and_the_report_still_cannot(workflow):
     assert build["test time"].get("continue-on-error") is True
     names = [s.get("name") for s in steps(workflow["jobs"]["build"])]
     assert names.index("test budget") < names.index("every job passed") == len(names) - 1
+
+
+MERGE_REF = "${{ inputs.pr && format('refs/pull/{0}/merge', inputs.pr) || '' }}"
+
+
+def test_a_dispatch_tests_the_pull_requests_merge_with_main(workflow):
+    """A PULL REQUEST RUN TESTS THE BRANCH MERGED WITH MAIN (`refs/pull/N/merge`);
+    a dispatch on the branch would test the branch alone. Branch protection does
+    not require a branch to be up to date, so the full run before a merge is the
+    only full run of the merged tree - the #100/#101 case, for every heavy test.
+    Given `-f pr=<n>`, a dispatch checks out that merge, and its checks still land
+    on the head the merge is of. With no `pr` the ref is the run's own."""
+    on = workflow.get("on", workflow.get(True))
+    assert "pr" in on["workflow_dispatch"]["inputs"], on["workflow_dispatch"]
+    for name in ("lint", "dist", "tests"):
+        checkout = next(s for s in steps(workflow["jobs"][name])
+                        if s.get("uses", "").startswith("actions/checkout@"))
+        assert (checkout.get("with") or {}).get("ref") == MERGE_REF, name

@@ -14,10 +14,13 @@ same way each time. This page says how, who does it, and why.
    protection requires (`gates.yml`, "THE TWO TIERS"). Start it on the branch:
 
    ```
-   gh workflow run gates.yml --repo roc-ops/Portrayal --ref <branch>
+   gh workflow run gates.yml --repo roc-ops/Portrayal --ref <branch> -f pr=<number>
    ```
 
-   Merge on that run's `build`, with `--match-head-commit <sha>`. A push after
+   `-f pr` tests the pull request's merge with main, as its own pull request
+   runs do; without it the run tests the branch alone, and main does not
+   require a branch to be up to date. Merge on that run's `build`, with
+   `--match-head-commit <sha>`. A push after
    it moves the head, and the new head needs a full run of its own. A pull
    request from a fork runs the whole suite on every push, so its `build` is
    already there.
