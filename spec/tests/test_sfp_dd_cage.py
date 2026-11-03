@@ -285,6 +285,7 @@ def test_a_face_that_declares_sfp_dd_media_over_an_sfp_cage_is_l104(tmp_path):
 
 # --- what the cages offer ------------------------------------------------------
 
+@pytest.mark.heavy
 def test_an_sfp_dd_cage_offers_the_sfp_generics_and_no_part_names_it(tmp_path):
     """No generic optic is added: no part states `mates: sfp-dd`, and the
     family's `also-accepts: [sfp]` is what seats the SFP generics. If an

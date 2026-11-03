@@ -82,6 +82,7 @@ def _placement(node, pid):
     return None
 
 
+@pytest.mark.heavy
 def test_a_cage_carries_only_in_where_its_placement_states_it(tmp_path):
     """No device in the library states `only-in` on a cage today, so one placement
     of a copy of the AS7726-32X is given it."""

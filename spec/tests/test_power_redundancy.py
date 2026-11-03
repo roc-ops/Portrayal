@@ -116,6 +116,7 @@ def test_every_multi_bay_power_group_in_the_library_is_stated(slug, path, doc):
         "provenance; see docs/modelling-a-device.md on power figures.")
 
 
+@pytest.mark.heavy
 def test_a_stated_form_is_one_the_vendors_actually_use():
     """Two things at once, and both were learned the hard way.
 
@@ -149,6 +150,7 @@ def test_a_stated_form_is_one_the_vendors_actually_use():
     assert not bad, bad
 
 
+@pytest.mark.heavy
 def test_a_stated_group_carries_the_sentence_it_was_read_from():
     """The form collapses detail the note keeps - active-active versus standby,
     and on a chassis sold in two power variants, which variant it belongs to."""

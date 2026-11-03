@@ -49,6 +49,7 @@ def test_a_sentence_ends_at_a_dot_and_a_space(text, want):
     assert dx.first_sentence(text) == want
 
 
+@pytest.mark.heavy
 def test_no_source_description_loses_its_decimal():
     """The sweep, over the corpus rather than over examples. 62 descriptions
     carry a decimal before their first full stop; not one of them may come back
@@ -136,6 +137,7 @@ def component_names():
     return {c.parts[-3] for c in LIB.glob("components/*/*/v*/contract.yaml")}
 
 
+@pytest.mark.heavy
 def test_nothing_exported_is_cut_mid_word(component_names):
     """A description is mid-word only if it was TRUNCATED and does not say so.
 
@@ -172,6 +174,7 @@ def test_nothing_exported_is_cut_mid_word(component_names):
     assert seen > 500, f"only {seen} descriptions reached the sweep"
 
 
+@pytest.mark.heavy
 def test_a_truncated_description_ends_with_the_marker():
     truncated = [t for _p, t in _exported() if t.endswith(dx.MORE)]
     listed = [t for _p, t in _exported() if re.search(r"\(\+\d+ more\)$", t)]

@@ -43,6 +43,7 @@ def test_there_are_layouts_to_check():
     assert LAYOUTS, "no layout.yaml found - the walk is broken or they were removed"
 
 
+@pytest.mark.heavy
 def test_every_layout_expands_to_the_device_beside_it():
     r = subprocess.run([sys.executable, str(TOOL), "--check",
                         "--library", str(LIB), "--schemas", str(ROOT / "spec/schemas")],
@@ -52,6 +53,7 @@ def test_every_layout_expands_to_the_device_beside_it():
     assert f"{len(LAYOUTS)}/{len(LAYOUTS)} in step" in tail, r.stdout
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("layout", LAYOUTS, ids=lambda p: f"{p.parts[-3]}/{p.parts[-2]}")
 def test_the_non_view_keys_are_the_same_in_both(layout):
     """The drift that would have been destructive, asserted directly rather than

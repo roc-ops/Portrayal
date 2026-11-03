@@ -21,6 +21,7 @@ import xml.etree.ElementTree as ET
 import yaml
 
 import warmrender
+import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SPEC, LIB = ROOT / "spec", ROOT / "library"
@@ -50,6 +51,7 @@ def _render(tmp_path, extra_placements, occupants):
         capture_output=True, text=True), out
 
 
+@pytest.mark.heavy
 def test_a_boot_seats_on_a_seated_plug(tmp_path):
     r, out = _render(
         tmp_path,

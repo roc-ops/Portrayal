@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pwr-c2-640wdc
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -52,6 +52,63 @@ provenance:
     (Front Panel, PDF p21). A neutral light grey is drawn.
   depth: >-
     datasheet - 11.75 in, 298.45 mm, from spec Table 1-2.
+  seats: >-
+    estimated - each of the four input terminal screws is the library's common/terminal-screw-34@1, a
+    slotted head 3.4 across (that part's own size is an estimate), standing at the centre of a screw this
+    skin already draws in its `terminals` group (the circles at 7.0, 15.0, 31.0 and 39.0 across, 23.0 down,
+    themselves read off the isometric Figure 4-6, so good to a few millimetres at best). They are not
+    lifted: the figure shows the block standing off the face and no document says how far, and this
+    contract draws no relief for it, so the seats are at the face's own level. The equipment list (page
+    4-9) asks for fork-type terminals sized "for M3 screws in a Dinkle DT-35-B25-style terminal block" and
+    step 4 of the wiring procedure (page 4-13) a torque of 11 lbf-in; no page gives a head or a pitch, and
+    the screw part claims no thread, so none is written.
+  earth: >-
+    A DECLARED STAND-IN. The middle screw of the five, between A- and B-, is callout 6, "Grounding
+    terminal", of Figure 4-6 (page 4-5). Figure 4-14 (page 4-13) leaves it unwired and Figure 4-15 (the
+    same page) wires it to a ground symbol where source A and source B share a common ground, and the
+    wiring procedure (page 4-12) says to connect the ground wire to a grounded metal rack or to earth
+    ground. It is common to both feeds and belongs to neither, so it is a ground seat a lug lands on,
+    outside both DC ports (decided 2026-11-03), and not a pole of either. It is the library's
+    common/ground-screw@1, a screw that claims no stud size, because no document held gives this
+    screw's head and no part draws a terminal block's earth screw; that part's size, 5.6 across, is its
+    own estimate. It stands at the centre of the middle screw this skin draws (23.0 across, 23.0 down)
+    and is not lifted, as the four terminal screws are not.
+  poles: >-
+    Cisco Catalyst 3650 Switch Hardware Installation Guide (OL-29734-01), Figure 4-6 "640-W DC Power
+    Supply Module" (page 4-5): five screw terminals in one row under one terminal block safety cover,
+    the callouts 4, 5, 6, 5 and 4 from the left, "Input power terminals (positive polarity)" (4), "Input
+    power terminals (negative polarity)" (5) and "Grounding terminal" (6); and Figures 4-14 and 4-15
+    (page 4-13), which draw the same block head on, labelled A+, A-, an unlabelled middle screw, B- and
+    B+ from the left, the left pair wired to one battery (source A) and the right pair to another
+    (source B). The block carries two feeds, so it has one DC port per feed (decided 2026-11-03):
+    `feed-a` on the A+ and A- screws and `feed-b` on the B- and B+ screws, the poles of each in the
+    order the figures print them from the left. The roles are the guide's words and signs: `pos` for a
+    positive polarity terminal and `neg` for a negative polarity terminal. The guide's words never say
+    return or battery, so the roles are not `rtn` and `batt`. The wiring procedure (page 4-12) asks for
+    the polarity to be matched, negative to negative and positive to positive.
+  side: >-
+    The Power Supply Module Overview (page 4-2) says the 640-W DC module "has dual input feeds (A and
+    B)", and Figures 4-14 and 4-15 (page 4-13) print A+ and A- over the left pair and B- and B+ over the
+    right pair and title the two sources Source A and Source B. So `feed-a` is side a and `feed-b` is
+    side b.
+  voltage: >-
+    NOT STATED. Appendix 1, Table 1-4 "Power Specifications for DC Power 24-Port and 48-Port Switches"
+    (page 1-5), prints two nominals for PWR-C2-640WDC: a domestic voltage range of -36 VDC (minimum), -48
+    VDC (nominal) and -72 VDC (maximum), and an international one of -36 VDC (minimum), -60 VDC (nominal)
+    and -72 VDC (maximum). A port states one nominal and no document says which is this supply's, so the
+    ports state none and a later change can state one once a source says so. `attrs` keeps the range as
+    printed.
+  rating: >-
+    NOT STATED. Table 1-4 (page 1-5) prints the input current as "21-10.5 A", a pair, and the branch
+    circuit protection of 25 A (page 1-6) is the circuit's and not the supply's. A port's `rating-a` is
+    one figure and no document says which of the pair is the input rating, so the ports state none.
+    `attrs` keeps the words as printed.
+  awg: >-
+    Cisco Catalyst 3650 Switch Hardware Installation Guide, the equipment list for a DC supply, "Four
+    leads of 12-gauge copper wire" (page 4-9), and step 2 of the wiring procedure, "12-AWG DC power input
+    wires" (page 4-12): one size for the four input wires, two to each feed, so each port states it. The
+    "12 AWG or 8 AWG" of the specification table (page 1-6) is for the ground connection, which the
+    grounding procedure (pages 4-10 and 4-11) ties to the switch's own ground lug; neither port states it.
 states: [absent]
 elements:
   dc-ok: {at: [8.4, 7.0], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
@@ -59,6 +116,30 @@ elements:
   terminals: {at: [3.0, 16.0], size: [40.0, 14.0], class: cover}
   handle: {at: [3.0, 34.4], size: [60.0, 4.6], class: handle}
   latch: {at: [75.0, 15.0], size: [9.0, 12.0], class: handle}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-a-pos, at: [5.3, 21.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-a-neg, at: [13.3, 21.3]}
+  - {ref: common/ground-screw@1, id: earth, at: [20.2, 20.2]}
+  - {ref: common/terminal-screw-34@1, id: pole-b-neg, at: [29.3, 21.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-b-pos, at: [37.3, 21.3]}
+dc:
+  ports:
+    - id: feed-a
+      direction: input
+      awg: [12]
+      side: a
+      poles:
+        - {role: pos, slot: pole-a-pos}
+        - {role: neg, slot: pole-a-neg}
+      source: {poles: poles, awg: awg, side: side}
+    - id: feed-b
+      direction: input
+      awg: [12]
+      side: b
+      poles:
+        - {role: neg, slot: pole-b-neg}
+        - {role: pos, slot: pole-b-pos}
+      source: {poles: poles, awg: awg, side: side}
 skins: [default]
 body:
   depth: 298.45

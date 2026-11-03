@@ -76,6 +76,7 @@ def test_the_node_keeps_the_colour_it_had(ref):
         assert re.search(r'\bstroke="[^"]+"', tag), f"{ref}: an outlined node lost its own stroke"
 
 
+@pytest.mark.heavy
 def test_nothing_selects_a_blue_skin_any_more():
     """The other end. A configuration naming a skin that no longer exists is a
     render-time crash, which is how the first pass of this was caught."""

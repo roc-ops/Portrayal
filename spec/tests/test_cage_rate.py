@@ -91,6 +91,7 @@ def test_declaring_the_rate_answers_the_question():
 
 # --- what was wrong, pinned so it cannot come back ---------------------------
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref,attr,count,expected", [
     # Each of these took a table default that its own description contradicts.
     ("juniper/dpce-r-40ge-sfp", "sfp", 40, "1000base-x-sfp"),     # "40x1GbE"

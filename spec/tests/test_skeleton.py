@@ -19,6 +19,7 @@ def run(*args):
     return subprocess.run([sys.executable, *args], capture_output=True, text=True)
 
 
+@pytest.mark.heavy
 @pytest.mark.xdist_group("full-lint")
 @pytest.mark.skipif(os.environ.get("PORTRAYAL_LINT_ALREADY_RAN") == "1",
                     reason="lint runs as its own CI job, and a merge needs it green")
@@ -36,6 +37,7 @@ def test_lint_green():
     assert r.returncode == 0, r.stdout + r.stderr
 
 
+@pytest.mark.heavy
 def test_render_deterministic(tmp_path):
     a, b = tmp_path / "a", tmp_path / "b"
     for out in (a, b):

@@ -259,6 +259,7 @@ def assert_seated(root, parents, holder_path, host_id, host_ref, root_lib):
 
 # --- a bore's default ----------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_an_unconfigured_bore_draws_its_default_in_every_configuration(tmp_path, lib):
     dev, configs = fhd(tmp_path, "test/capped-cassette@1")
     assert len(configs) > 1, "every configuration needs more than one"
@@ -269,6 +270,7 @@ def test_an_unconfigured_bore_draws_its_default_in_every_configuration(tmp_path,
         assert_seated(root, parents, "bay-1/module/lc01", "1", "std/lc-bore@3", lib)
 
 
+@pytest.mark.heavy
 def test_an_empty_string_empties_a_default(tmp_path, lib):
     dev, _ = fhd(tmp_path, "test/capped-cassette@1", {"bay-1/lc01/1": ""})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
@@ -276,6 +278,7 @@ def test_an_empty_string_empties_a_default(tmp_path, lib):
     assert occupants_drawn(root) == {}              # and nothing seated on it
 
 
+@pytest.mark.heavy
 def test_a_configured_occupant_replaces_a_default(tmp_path, lib):
     dev, _ = fhd(tmp_path, "test/capped-cassette@1", {"bay-1/lc01/1": OTHER})
     out = build(dev, tmp_path / "o", lib)
@@ -287,6 +290,7 @@ def test_a_configured_occupant_replaces_a_default(tmp_path, lib):
     assert occupants_drawn(root) == {"bay-1/module/lc01/1-occupant": PLUG}
 
 
+@pytest.mark.heavy
 def test_a_configured_chain_seats_on_a_default(tmp_path, lib):
     """A boot keyed on the default plug's produced id seats on it."""
     dev, _ = fhd(tmp_path, "test/capped-cassette@1",
@@ -312,6 +316,7 @@ EXPECTED_COMPOSED = {
 }
 
 
+@pytest.mark.heavy
 def test_a_composer_overrides_the_top_level_default_only(tmp_path, lib):
     dev, _ = fhd(tmp_path, "test/composer-cassette@1")
     root, parents = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
@@ -320,6 +325,7 @@ def test_a_composer_overrides_the_top_level_default_only(tmp_path, lib):
     assert_seated(root, parents, "bay-1/module/lc02", "2", "test/defaulted-bore@1", lib)
 
 
+@pytest.mark.heavy
 def test_a_configuration_overrides_a_composers_empty_default(tmp_path, lib):
     """The composer's `""` empties lc03 (P5); a configuration key on lc03 -
     a slot on the MODULE, so no slot inside a slot - seats there anyway, and
@@ -331,6 +337,7 @@ def test_a_configuration_overrides_a_composers_empty_default(tmp_path, lib):
     assert occupants_drawn(root) == want
 
 
+@pytest.mark.heavy
 def test_a_configuration_reaches_a_grandchild_default(tmp_path, lib):
     """A configuration empties a default two levels down - the bore's OWN
     top-level default (test/defaulted-bore@1 ships PLUG), on an adapter in the
@@ -345,6 +352,7 @@ def test_a_configuration_reaches_a_grandchild_default(tmp_path, lib):
     assert occupants_drawn(root) == want
 
 
+@pytest.mark.heavy
 def test_the_same_grandchild_on_real_parts(tmp_path, lib):
     """And on the library's own: the SC cassette's sc-duplex-adapter@4 ships
     a cap in each bore and presents no slot of its own. `bay-1/sc1/1: ""`
@@ -359,6 +367,7 @@ def test_the_same_grandchild_on_real_parts(tmp_path, lib):
     assert sum(ref == "common/sc-dust-cap@1" for ref in held.values()) == len(held) > 10
 
 
+@pytest.mark.heavy
 def test_a_key_on_a_bore_the_slot_does_not_span_is_refused(tmp_path, lib):
     """test/self-adapter@1 IS a slot (it presents `lc`) and composes two `lc`
     bores it does not span. Its bores' defaults still seat - they are the
@@ -373,6 +382,7 @@ def test_a_key_on_a_bore_the_slot_does_not_span_is_refused(tmp_path, lib):
 
 # --- device level -------------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_a_placed_slots_top_level_default_seats_at_device_level(tmp_path, lib):
     out = build(dcp(tmp_path), tmp_path / "o", lib)
     root, parents = face(out, "dcp-r-34d-cs", "default")
@@ -381,6 +391,7 @@ def test_a_placed_slots_top_level_default_seats_at_device_level(tmp_path, lib):
     assert occ.get("data-for") == "port-1510"
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("occ, want", [
     ({"port-1510": ""}, {}),
     ({"port-1510": OTHER}, {"port-1510-occupant": OTHER}),
@@ -401,6 +412,7 @@ def _cages(root, ref):
                                                   _connector_registry())}
 
 
+@pytest.mark.heavy
 def test_components_json_publishes_the_resolved_default(lib):
     capped = _cages(lib, "test/capped-adapter@1")
     assert {k: e["default"] for k, e in capped.items()} == {"1": PLUG, "2": None}
@@ -417,6 +429,7 @@ def test_components_json_publishes_the_resolved_default(lib):
                for k in comp if k not in got)
 
 
+@pytest.mark.heavy
 def test_configs_json_publishes_the_resolved_default(tmp_path, lib):
     out = build(dcp(tmp_path), tmp_path / "o", lib)
     idx = json.loads((out / "dcp-r-34d-cs.configs.json").read_text())
@@ -440,6 +453,7 @@ def l110(root, ref):
     return [e for e in got.errors if "[L114]" in e]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", ["test/capped-adapter@1", "test/defaulted-bore@1",
                                  "test/self-adapter@1", "test/composer-cassette@1",
                                  "test/self-hadapter@1"])
@@ -447,6 +461,7 @@ def test_lint_the_throwaway_defaults_are_clean(lib, ref):
     assert l110(lib, ref) == []
 
 
+@pytest.mark.heavy
 def test_lint_a_default_the_slot_does_not_accept(lib):
     def bad(c):
         _part(c, "1")["default"] = "common/lc-boot@1"      # mates lc-plug
@@ -455,12 +470,14 @@ def test_lint_a_default_the_slot_does_not_accept(lib):
     assert got and "parts/1:" in got[0] and "common/lc-boot@1" in got[0], got
 
 
+@pytest.mark.heavy
 def test_lint_a_top_level_default_the_slot_does_not_accept(lib):
     _copy(lib, "std/lc-bore", 3, "bad-bore", _set(default="common/lc-boot@1"))
     got = l110(lib, "test/bad-bore@1")
     assert got and "common/lc-boot@1" in got[0], got
 
 
+@pytest.mark.heavy
 def test_lint_a_default_on_a_part_that_is_no_slot(lib):
     def bad(c):
         # a splice tray presents no interface, so nothing can seat on it - the
@@ -473,6 +490,7 @@ def test_lint_a_default_on_a_part_that_is_no_slot(lib):
     assert got and "lc01" in got[0] and "no slot" in got[0], got
 
 
+@pytest.mark.heavy
 def test_lint_a_top_level_default_on_a_component_that_is_no_slot(lib):
     # the CASSETTE, which presents no interface of its own and composes twelve
     # apertures rather than one, so it forwards nothing either
@@ -500,6 +518,7 @@ def booted(lib):
     return lib
 
 
+@pytest.mark.heavy
 def test_a_configured_occupant_brings_its_own_default(tmp_path, booted):
     """The occupant path: a plug seated by a configuration ships its boot,
     whatever seated the plug (the nested seat, inside the cassette)."""
@@ -511,6 +530,7 @@ def test_a_configured_occupant_brings_its_own_default(tmp_path, booted):
         "bay-1/module/lc01/1-occupant-occupant": BOOT}
 
 
+@pytest.mark.heavy
 def test_a_default_occupant_brings_its_own_default(tmp_path, booted):
     """And a plug seated as the BORE's default ships the same boot: two
     defaults, one on the other, neither configured."""
@@ -521,6 +541,7 @@ def test_a_default_occupant_brings_its_own_default(tmp_path, booted):
         "bay-1/module/lc01/1-occupant-occupant": BOOT}
 
 
+@pytest.mark.heavy
 def test_a_configuration_empties_a_chained_default(tmp_path, booted):
     """The chained default stays addressable: the produced id empties it."""
     dev, _ = fhd(tmp_path, "test/booted-cassette@1",
@@ -530,6 +551,7 @@ def test_a_configuration_empties_a_chained_default(tmp_path, booted):
         "bay-1/module/lc01/1-occupant": "test/booted-plug@1"}
 
 
+@pytest.mark.heavy
 def test_a_device_level_occupant_brings_its_own_default(tmp_path, booted):
     """The same on the device-level path, where the occupant is expanded into
     a mate-to placement."""
@@ -540,6 +562,7 @@ def test_a_device_level_occupant_brings_its_own_default(tmp_path, booted):
                                      "port-1510-occupant-occupant": BOOT}
 
 
+@pytest.mark.heavy
 def test_a_device_level_chained_default_is_addressable(tmp_path, booted):
     out = build(dcp(tmp_path, {"port-1510": "test/booted-plug@1",
                                "port-1510-occupant": ""}),
@@ -548,6 +571,7 @@ def test_a_device_level_chained_default_is_addressable(tmp_path, booted):
     assert occupants_drawn(root) == {"port-1510-occupant": "test/booted-plug@1"}
 
 
+@pytest.mark.heavy
 def test_a_device_level_default_brings_its_own_default(tmp_path, booted):
     """The placed slot's own default ships its boot too: port-1510 defaults to
     the plug (test/self-hplug@1 below is the same adapter, defaulted)."""
@@ -571,6 +595,7 @@ def test_a_device_level_default_brings_its_own_default(tmp_path, booted):
 
 # --- a bay module's own default has no key, and is refused -----------------------------
 
+@pytest.mark.heavy
 def test_a_bay_module_shipping_a_default_is_an_error(tmp_path, lib):
     """A module seated in a BAY may not ship an occupant on its own slot: a
     bay module's slot has no `occupants:` key, so nothing could empty it.
@@ -582,6 +607,7 @@ def test_a_bay_module_shipping_a_default_is_an_error(tmp_path, lib):
     assert "bay-1" in r.stderr and "no slot key" in r.stderr
 
 
+@pytest.mark.heavy
 def test_a_module_in_a_nested_bay_is_refused_the_same_way(tmp_path, lib):
     """The same refusal one level down, where a card's own bay seats it."""
     dev = shutil.copytree(LIB / "devices/cisco/asr-9010",
@@ -597,6 +623,7 @@ def test_a_module_in_a_nested_bay_is_refused_the_same_way(tmp_path, lib):
     assert "slot-0/module/bay-0" in r.stderr
 
 
+@pytest.mark.heavy
 def test_a_bay_module_whose_parts_ship_defaults_is_fine(tmp_path, lib):
     """Only the module's OWN slot is refused: the defaults declared inside it,
     on its `parts:`, seat as they do anywhere else - which is the whole of the
@@ -608,6 +635,7 @@ def test_a_bay_module_whose_parts_ship_defaults_is_fine(tmp_path, lib):
 
 # --- two slots shipping the same part, and a real cycle ---------------------------------
 
+@pytest.mark.heavy
 def test_sibling_slots_shipping_the_same_default_each_ship_its_chain(tmp_path, booted):
     """THE GUARD IS THE CHAIN, NOT THE REF. Both bores of an adapter ship the
     same plug, and that plug ships a boot: two plugs and TWO boots. A guard
@@ -627,6 +655,7 @@ def test_sibling_slots_shipping_the_same_default_each_ship_its_chain(tmp_path, b
         "bay-1/module/lc01/2-occupant-occupant": BOOT}
 
 
+@pytest.mark.heavy
 def test_sibling_placements_shipping_the_same_default_each_ship_its_chain(tmp_path, booted):
     """The same on the device-level path: two ports shipping one plug."""
     def h_adapter(c):
@@ -664,6 +693,7 @@ def looping(lib):
     return lib
 
 
+@pytest.mark.heavy
 def test_a_default_that_loops_back_on_one_seat_is_an_error(tmp_path, looping):
     dev, _ = fhd(tmp_path, "test/looping-cassette@1")
     r = run(dev, tmp_path / "o", looping)
@@ -672,6 +702,7 @@ def test_a_default_that_loops_back_on_one_seat_is_an_error(tmp_path, looping):
     assert "bay-1/module/lc01/1" in r.stderr
 
 
+@pytest.mark.heavy
 def test_a_device_level_default_that_loops_is_an_error(tmp_path, looping):
     r = run(dcp(tmp_path, {"port-1510": "test/loop-plug@1"}), tmp_path / "o", looping)
     assert r.returncode != 0

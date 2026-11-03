@@ -48,23 +48,27 @@ def _pairs(items):
 
 # --- the pairing ------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_a_two_high_block_pairs_down_each_column_not_across_it():
     items = [_cage("a", (0, 0)), _cage("b", (0, 15)),
              _cage("c", (14.25, 0)), _cage("d", (14.25, 15))]
     assert sorted(_pairs(items)) == [("row", "a", "b"), ("row", "c", "d")]
 
 
+@pytest.mark.heavy
 def test_four_rows_pair_as_two_stacks_from_the_top():
     items = [_cage(f"r{i}", (0, y)) for i, y in enumerate((0, 15, 32, 47))]
     assert _pairs(items) == [("row", "r0", "r1"), ("row", "r2", "r3")]
 
 
+@pytest.mark.heavy
 def test_touching_columns_are_not_a_partial_overlap():
     """Adjacent ganged columns abut to within float noise; that is not a stack."""
     items = [_cage("a", (0, 0)), _cage("b", (14.2500001, 15.0))]
     assert _pairs(items) == []
 
 
+@pytest.mark.heavy
 def test_a_card_on_its_side_pairs_across_the_belly_not_down_the_column():
     # cisco/a9k-40ge-b's geometry: two columns of 90-turned cages, 2.4 mm apart
     items = [_cage("p0", (10.27, 43.17), 90), _cage("p1", (23.09, 43.17), 90),
@@ -72,32 +76,38 @@ def test_a_card_on_its_side_pairs_across_the_belly_not_down_the_column():
     assert sorted(_pairs(items)) == [("column", "p0", "p1"), ("column", "p2", "p3")]
 
 
+@pytest.mark.heavy
 def test_a_single_column_on_its_side_is_not_a_stack():
     items = [_cage(f"x{i}", (7.4, 60 + 14.25 * i), 90) for i in range(6)]
     assert _pairs(items) == []
 
 
+@pytest.mark.heavy
 def test_a_turned_cage_beside_an_upright_one_is_not_forced_into_a_pair():
     assert _pairs([_cage("a", (0, 0)), _cage("b", (0, 15), 90)]) == []
 
 
+@pytest.mark.heavy
 def test_qsfp_over_qsfp_dd_is_one_face_family():
     items = [_cage("a", (0, 0), ref="std/qsfp-ganged@1"),
              _cage("b", (0, 13), ref="std/qsfp-dd@1")]
     assert _pairs(items) == [("row", "a", "b")]
 
 
+@pytest.mark.heavy
 def test_sfp_over_qsfp_is_not_a_pair():
     items = [_cage("a", (0, 0)), _cage("b", (0, 13), ref="std/qsfp-ganged@1")]
     assert _pairs(items) == []
 
 
+@pytest.mark.heavy
 def test_osfp_pairs_and_is_checked():
     items = [_cage("a", (0, 0), ref="std/osfp@1"), _cage("b", (0, 15), ref="std/osfp@1")]
     (pr,) = stacks.pairs(stacks.cages(items, _resolve))
     assert stacks.checked(pr) and pr["first"]["family"] == "osfp"
 
 
+@pytest.mark.heavy
 def test_osfp_over_sfp_is_not_a_pair():
     items = [_cage("a", (0, 0), ref="std/osfp@1"), _cage("b", (0, 15))]
     assert _pairs(items) == []
@@ -112,11 +122,13 @@ def _osfp(id_, at, rotate=0):
     return _cage(id_, at, rotate, ref="std/osfp@1")
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("rots", [(0, 0), (180, 180)])
 def test_an_osfp_row_pair_turned_alike_is_the_convention(rots):
     assert _findings({"parts": [_osfp("a", (0, 0), rots[0]), _osfp("b", (0, 14.9), rots[1])]}) == []
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("rots", [(0, 180), (180, 0)])
 def test_an_osfp_row_pair_turned_belly_to_belly_is_a_finding(rots):
     (msg,) = _findings({"parts": [_osfp("a", (0, 0), rots[0]), _osfp("b", (0, 14.9), rots[1])]})
@@ -124,6 +136,7 @@ def test_an_osfp_row_pair_turned_belly_to_belly_is_a_finding(rots):
     assert "upper 0, lower 180" not in msg
 
 
+@pytest.mark.heavy
 def test_an_osfp_column_pair_on_its_side_is_turned_alike():
     for rots in ((90, 90), (270, 270)):
         assert _findings({"parts": [_osfp("l", (0, 0), rots[0]), _osfp("r", (14.9, 0), rots[1])]}) == []
@@ -131,12 +144,14 @@ def test_an_osfp_column_pair_on_its_side_is_turned_alike():
     assert "OSFP column pair" in msg
 
 
+@pytest.mark.heavy
 def test_the_sfp_convention_did_not_move_with_osfp():
     """(0, 0) is right for an OSFP stack and still wrong for an SFP one."""
     (msg,) = _findings({"parts": [_cage("a", (0, 0)), _cage("b", (0, 15))]})
     assert "belly-to-belly SFP row pair" in msg and "upper 0, lower 180" in msg
 
 
+@pytest.mark.heavy
 def test_an_osfp_pair_built_belly_to_belly_takes_an_exception_and_a_turned_alike_one_refuses_it():
     belly = [_osfp("a", (0, 0)), _osfp("b", (0, 18.86), 180)]
     doc = {"parts": belly, "stack-exceptions": [{"pair": ["a", "b"], "reason": "x" * 40}]}
@@ -146,6 +161,7 @@ def test_an_osfp_pair_built_belly_to_belly_takes_an_exception_and_a_turned_alike
     assert "already follows the convention" in msg
 
 
+@pytest.mark.heavy
 def test_every_osfp_stack_in_the_library_is_turned_alike_or_excepted():
     """The census for the family L108 began checking in #799, so a vacuous
     walk cannot pass it: it has to find the OSFP stacks the library draws."""
@@ -162,16 +178,19 @@ def _findings(doc, device=False):
     return stacks.findings(doc, _resolve, device)
 
 
+@pytest.mark.heavy
 def test_upper_upright_over_lower_turned_is_the_convention():
     assert _findings({"parts": [_cage("a", (0, 0)), _cage("b", (0, 15), 180)]}) == []
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("rots", [(0, 0), (180, 0), (180, 180)])
 def test_every_other_row_turn_is_a_finding(rots):
     (msg,) = _findings({"parts": [_cage("a", (0, 0), rots[0]), _cage("b", (0, 15), rots[1])]})
     assert "upper 0, lower 180" in msg
 
 
+@pytest.mark.heavy
 def test_left_270_beside_right_90_is_the_convention_on_its_side():
     good = [_cage("l", (0, 0), 270), _cage("r", (12.8, 0), 90)]
     bad = [_cage("l", (0, 0), 90), _cage("r", (12.8, 0), 90)]
@@ -180,6 +199,7 @@ def test_left_270_beside_right_90_is_the_convention_on_its_side():
     assert "left 270, right 90" in msg
 
 
+@pytest.mark.heavy
 def test_a_declared_exception_silences_its_pair_and_only_its_pair():
     parts = [_cage("a", (0, 0)), _cage("b", (0, 15)), _cage("c", (20, 0)), _cage("d", (20, 15))]
     doc = {"parts": parts, "stack-exceptions": [
@@ -190,6 +210,7 @@ def test_a_declared_exception_silences_its_pair_and_only_its_pair():
     assert _findings(doc) == []
 
 
+@pytest.mark.heavy
 def test_an_exception_that_names_no_pair_is_itself_a_finding():
     doc = {"parts": [_cage("a", (0, 0)), _cage("b", (0, 15), 180)],
            "stack-exceptions": [{"pair": ["a", "zz"], "reason": "x" * 40}]}
@@ -197,6 +218,7 @@ def test_an_exception_that_names_no_pair_is_itself_a_finding():
     assert "not a checked stacked pair" in msg
 
 
+@pytest.mark.heavy
 def test_an_exception_on_a_pair_that_already_conforms_is_a_finding():
     """An exception says the stack is built otherwise; a pair drawn upper 0 over
     lower 180 contradicts that, whatever the reason says."""
@@ -208,6 +230,7 @@ def test_an_exception_on_a_pair_that_already_conforms_is_a_finding():
     assert _findings(doc) == []
 
 
+@pytest.mark.heavy
 def test_the_device_form_reads_views_and_a_view_scoped_exception():
     view = {"components": {"placements": [_cage("a", (0, 0)), _cage("b", (0, 15))]}}
     doc = {"views": {"front": view}}
@@ -216,6 +239,7 @@ def test_the_device_form_reads_views_and_a_view_scoped_exception():
     assert _findings(doc, True) == []
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("schema", ["device", "component"])
 def test_the_schema_takes_a_pair_or_pairs_and_requires_a_reason(schema):
     s = yaml.safe_load((ROOT / f"spec/schemas/{schema}.schema.json").read_text())
@@ -228,6 +252,7 @@ def test_the_schema_takes_a_pair_or_pairs_and_requires_a_reason(schema):
     assert list(ok.iter_errors([{"pair": ["a"], "reason": "r" * 40}]))
 
 
+@pytest.mark.heavy
 def test_lint_reports_it_as_l108(tmp_path):
     doc = {"parts": [_cage("a", (0, 0), 180), _cage("b", (0, 15))]}
     with lint.collecting() as found:
@@ -256,6 +281,7 @@ def _census():
     return rows
 
 
+@pytest.mark.heavy
 def test_the_census_measured_something():
     """A walk that found nothing would pass every assertion below."""
     rows = _census()
@@ -267,6 +293,7 @@ def test_the_census_measured_something():
     assert sum(1 for r in rows if r[2]["kind"] == "column") > 500
 
 
+@pytest.mark.heavy
 def test_every_checked_stack_in_the_library_faces_the_convention_or_says_why():
     bad = [f"{p.relative_to(ROOT)}: {pr['first']['id']}/{pr['second']['id']} {stacks.state(pr)}"
            for p, _v, pr, e in _census()
@@ -274,6 +301,7 @@ def test_every_checked_stack_in_the_library_faces_the_convention_or_says_why():
     assert not bad, f"{len(bad)} stacks off the convention:\n" + "\n".join(bad[:40])
 
 
+@pytest.mark.heavy
 def test_every_exception_has_a_reason_worth_reading():
     for path, doc, _d in _owners():
         for e in doc.get("stack-exceptions") or []:
@@ -318,6 +346,7 @@ THREE_HIGH = {
 }
 
 
+@pytest.mark.heavy
 def test_a_stack_is_two_high_or_its_face_is_in_the_three_high_table():
     """Greedy pairing from the top is only right where the stack is the top
     two rows. A cage left over that would pair with a neighbour already taken
@@ -338,6 +367,7 @@ def test_a_stack_is_two_high_or_its_face_is_in_the_three_high_table():
     assert seen == THREE_HIGH
 
 
+@pytest.mark.heavy
 def test_two_real_cards_pair_the_way_the_hardware_stacks():
     """The proof the pairing was checked against before the sweep: an ASR 9000
     card on its side pairs its two columns across the band between them, and a

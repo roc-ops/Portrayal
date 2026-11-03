@@ -171,6 +171,7 @@ def _slots(name):
     return slots, drives
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("rc", REAR)
 def test_each_riser_configurations_rear_has_the_slots_the_isms_table_lists(rc):
     names = [n for n in _configs() if re.search(rf"-rc{rc}-", n) and _configs()[n]["kind"] == "orderable"]

@@ -9,6 +9,7 @@ import sys
 
 from portrayal import devicelock as dl
 from portrayal import libwalk
+import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
@@ -242,6 +243,7 @@ def _write(lib, doc):
 
 # ---- configurations say what kind of thing they are (#51) --------------------
 
+@pytest.mark.heavy
 def test_no_configuration_is_left_unclassified():
     """A consumer must be able to tell a SKU you can buy from a drawing."""
     import glob
@@ -255,6 +257,7 @@ def test_no_configuration_is_left_unclassified():
     assert not bad, f"unclassified configurations: {bad[:5]}"
 
 
+@pytest.mark.heavy
 def test_at_most_one_base_per_device():
     import glob, yaml as y
     for p in libwalk.iter_devices([ROOT / "library"]):
@@ -264,6 +267,7 @@ def test_at_most_one_base_per_device():
         assert len(bases) <= 1, f"{p}: {bases}"
 
 
+@pytest.mark.heavy
 def test_examples_never_become_device_types():
     """The C40G exported 'C40G bdm-3plus1' - a device type named after a
     redundancy drawing, chosen because it was listed second."""
@@ -323,6 +327,7 @@ def test_removing_a_group_is_major():
     assert dl.required_bump(dl.entry(a), dl.entry(b)) == "major"
 
 
+@pytest.mark.heavy
 def test_every_base_leaves_its_traffic_bays_empty():
     """The point of a base: a chassis you can log into, with nothing decided
     about traffic cards yet.
@@ -358,6 +363,7 @@ def test_every_base_leaves_its_traffic_bays_empty():
         assert not seated, f"{p}: base leaves {seated[:3]} functionally populated"
 
 
+@pytest.mark.heavy
 def test_a_base_is_always_the_default():
     import glob, yaml as y
     for p in libwalk.iter_devices([ROOT / "library"]):

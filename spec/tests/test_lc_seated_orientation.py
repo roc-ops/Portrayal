@@ -299,6 +299,7 @@ def duplex_latch_sides(pairs, parents):
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("which", ["fhd", "fhd-om", "fhd-36", "dcp"])
 def test_every_seated_lc_plug_faces_its_bores_keyway(tmp_path, which):
     svg, parents = build_lc(tmp_path, which)
@@ -360,6 +361,7 @@ def _free_latch(root):
     return _plug_copy(root, "free-plug", skin, free)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("which", ["fhd", "fhd-36", "dcp"])
 def test_a_latch_up_plug_is_caught_facing_away(tmp_path, which):
     """THE FAULT THIS TASK FIXES, found by the same code: a plug drawn latch
@@ -377,6 +379,7 @@ def test_a_latch_up_plug_is_caught_facing_away(tmp_path, which):
     assert all(p.endswith("-occupant") for p in bad), bad
 
 
+@pytest.mark.heavy
 def test_a_duplex_plug_with_unturned_halves_is_caught(tmp_path):
     """The duplex arm's own non-vacuity: `generic/lc-duplex-plug@2` with the
     `rotate: 180` taken off its halves draws both latches DOWN, off the
@@ -401,6 +404,7 @@ def test_a_duplex_plug_with_unturned_halves_is_caught(tmp_path):
 LC_BORES = ("std/lc-bulkhead-bore@", "std/lc-bore@")
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("which", ["fhd", "fhd-om", "fhd-36", "dcp"])
 def test_a_seated_plug_stays_inside_the_bulkhead_bores_outline(tmp_path, which):
     """On the FS cassettes and on the Smartoptics DCP, whose adapters compose
@@ -418,6 +422,7 @@ def test_a_seated_plug_stays_inside_the_bulkhead_bores_outline(tmp_path, which):
     assert landed == [BULKHEAD], landed
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("which", ["fhd", "dcp"])
 def test_a_free_latch_overruns_the_bulkhead_keyway(tmp_path, which):
     """Non-vacuity for (b): a plug drawn with its latch FREE reaches 7.605
@@ -433,6 +438,7 @@ def test_a_free_latch_overruns_the_bulkhead_keyway(tmp_path, which):
     assert all(v <= TOL for k, v in got.items() if k not in simplex), got
 
 
+@pytest.mark.heavy
 def test_the_seated_latch_reaches_exactly_the_bulkhead_keyway_end():
     """The contract-level half of (b): the plug is drawn compressed TO the
     keyway's end, not merely inside it. Both reaches are read from each
@@ -470,6 +476,7 @@ def _outline(ref):
     return (x, y, x + w, y + h), float(r.get("stroke-width"))
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", [H_ADAPTER, S_ADAPTER])
 def test_only_the_bezel_outline_is_stroked_not_its_keyed_holes(ref):
     """THE HOLES ARE FILL ONLY. The keyed openings are evenodd subpaths of the
@@ -491,6 +498,7 @@ def test_only_the_bezel_outline_is_stroked_not_its_keyed_holes(ref):
     assert sw > 0, ref
 
 
+@pytest.mark.heavy
 def test_the_smartoptics_adapters_keyway_fits_inside_its_outline():
     """THE FIT, pinned where the overrun used to be (B3, "The Smartoptics
     axis"). The adapter composes the bulkhead aperture, turned 180 so its
@@ -527,6 +535,7 @@ def test_the_smartoptics_adapters_keyway_fits_inside_its_outline():
 
 # --- (c) the SC guard --------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_sc_plugs_key_faces_its_bores_key_slot(tmp_path):
     made = fhd(tmp_path, SC_CASSETTE,
                {"bay-1/sc1/1": SC, "bay-1/sc1/2": SC, "bay-4/sc6/1": SC})
@@ -548,11 +557,13 @@ def l112(root, ref):
     return [e for e in got.errors if "[L116]" in e]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", [H_ADAPTER, V_ADAPTER, S_ADAPTER])
 def test_every_duplex_adapter_puts_the_latch_on_the_keyway_side(ref):
     assert l112(LIB, ref) == []
 
 
+@pytest.mark.heavy
 def test_the_v_adapter_with_its_bores_reversed_is_caught(tmp_path):
     """Main's pre-#496 polarity bug, caught from the geometry: compose the
     UPPER bore first and the derived axis is 90, which swings a duplex part's
@@ -566,6 +577,7 @@ def test_the_v_adapter_with_its_bores_reversed_is_caught(tmp_path):
     assert len(got) == 1 and "latch" in got[0], got
 
 
+@pytest.mark.heavy
 def test_bores_at_two_different_turns_are_caught(tmp_path):
     """The arm's other refusal: a duplex connector is one moulding, so bores
     whose keyways face different ways cannot take one whichever way it turns."""
@@ -580,6 +592,7 @@ def test_bores_at_two_different_turns_are_caught(tmp_path):
     assert sum("one `rotate`" in e for e in got) == 1, got
 
 
+@pytest.mark.heavy
 def test_the_arm_measures_a_side_on_both_library_adapters():
     """Non-vacuity at the rule's level: the helper the arm uses answers a
     direction for both hosts rather than skipping them, and the two hosts'
@@ -597,6 +610,7 @@ def test_the_arm_measures_a_side_on_both_library_adapters():
     assert got[S_ADAPTER] == got[H_ADAPTER], got
 
 
+@pytest.mark.heavy
 def test_both_lc_bores_are_drawn_tongue_down():
     """The convention the arm relies on, held on the parts themselves: each
     bore's outline runs further BELOW its mate than above it."""
@@ -652,6 +666,7 @@ def _shutter_cover(svg, parents, root=LIB):
     return out
 
 
+@pytest.mark.heavy
 def test_the_shuttered_adapter_is_a_duplex_slot_with_no_default():
     """It presents lc-duplex at its two bores' midpoint, so a duplex plug has
     a host, and nothing on it - adapter or bore - declares what it ships: FS
@@ -681,6 +696,7 @@ def occupants_on(svg, adapter_prefixes=(S_ADAPTER,)):
             or any((el.get("data-path") or "") == f"{h}-occupant" for h in hosts)}
 
 
+@pytest.mark.heavy
 def test_the_shuttered_cassette_ships_every_port_empty(tmp_path):
     """The unconfigured build: every bore of every shuttered adapter is drawn,
     and NOTHING is seated on the adapters or their bores, anywhere in the
@@ -697,6 +713,7 @@ def test_the_shuttered_cassette_ships_every_port_empty(tmp_path):
     assert len(cover) == 72 and all(plug is None for _b, plug, _ok in cover)
 
 
+@pytest.mark.heavy
 def test_the_occupant_search_sees_a_seat_on_the_duplex_slot(tmp_path):
     """The search is not vacuous: on the plugged build it finds the simplex
     plugs on the bores AND the duplex plugs, which sit in the cassette's group
@@ -713,6 +730,7 @@ def test_the_occupant_search_sees_a_seat_on_the_duplex_slot(tmp_path):
 CAP = "common/lc-duplex-dust-cap@2"
 
 
+@pytest.mark.heavy
 def test_a_cap_default_on_the_adapter_is_found(tmp_path):
     """Mutation (1): a copy of the shuttered adapter declaring a top-level
     duplex-cap default, in a copy of the 36-fibre cassette. The unconfigured
@@ -730,6 +748,7 @@ def test_a_cap_default_on_the_adapter_is_found(tmp_path):
     assert len(got) == 36 and set(got.values()) == {CAP}, got
 
 
+@pytest.mark.heavy
 def test_a_cap_default_on_the_cassettes_parts_entry_is_found(tmp_path):
     """Mutation (2): the real adapter, but a copy of the 36-fibre cassette
     whose `parts:` entry for lc01 ships a duplex cap - the composer override
@@ -745,6 +764,7 @@ def test_a_cap_default_on_the_cassettes_parts_entry_is_found(tmp_path):
                    "bay-4/module/lc01-occupant": CAP}, got
 
 
+@pytest.mark.heavy
 def test_a_seated_plug_covers_the_shutter_it_pushes_aside(tmp_path):
     """The shutter is the empty port's art; a plug seated in the bore is drawn
     over it. Each seated body - three simplex plugs and both halves of two
@@ -758,6 +778,7 @@ def test_a_seated_plug_covers_the_shutter_it_pushes_aside(tmp_path):
     assert len(cover) - len(plugged) == 72 - EXPECTED["fhd-36"] > 0
 
 
+@pytest.mark.heavy
 def test_a_plug_too_small_to_cover_the_shutter_is_caught(tmp_path):
     """Non-vacuity for the cover check: a copy of generic/lc-plug@2 whose body
     is cut to 3.0 square about the same mate seats in the same bores, and each
