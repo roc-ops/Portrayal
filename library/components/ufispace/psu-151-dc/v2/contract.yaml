@@ -1,0 +1,187 @@
+format: 1
+kind: module
+name: psu-151-dc
+version: 2.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-151-DESR 150W DC PSU (S6301-56ST family) - screw-terminal
+  block, red release latch (exhaust / front-to-back airflow; the intake sibling
+  PSU-151-DISB wears blue), black wire pull strap, status LED top-right
+size: {w: 50.5, h: 40.2}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  both axes from the S6301-56ST HIG's Figure 7, the DC supply's dimension drawing (provenance
+  `size`).
+attrs: {power-output-w: 150, input: dc, model: PSU-151-DESR, inlet: dc-terminal}
+provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'screw-terminal block', drawn here as
+    the `terminal-block` element. Nothing new was measured.
+  power: >-
+    datasheet - UfiSpace states the rating in the part number's own ordering line, in the
+    S6301-56ST datasheet's Available to Order section: 'PSU-151-DESR, 150W DC, exhaust air
+    flow', beside 'PSU-151-DISB, 150W DC, intake air flow' and the AC siblings at the same
+    150 W. No ambient is stated with it - a supply has a rating rather than a draw measured
+    against temperature - so none is recorded.
+  size: >-
+    drawing - S6301-56ST HIG Figure 7 (DC PSU dimension drawing): face 50.5 x 40.2 mm, body
+    196.0 mm (203.5 mm over the latch), drawn in the PSU's own orientation with 50.5
+    vertical; in the chassis it mounts with 50.5 horizontal, which is how the HIG component
+    table rounds it to 'PSU (W x D x H) 50.5 x 196 x 40 mm'. Same face as the S9510
+    family's PSU-401 and drawn to the same layout, from the S6301-56ST rear photograph
+    (1510 px straight-on render, 3.43 px/mm, aspect within 0.5% of true).
+  latch-color: >-
+    photo + HIG section 4 - 'The picture on the right is the DC PSU for front-to-back
+    airflow, identified with a red latch'; blue identifies back-to-front. This skin draws
+    the red exhaust unit to match the fan family's exhaust skin; the intake variant is not
+    separately drawn.
+  led-states: S6301-56ST HIG section 10, PSU FRU LED table (page 22), transcribed in full
+  block: >-
+    estimated - the terminal block, its three clamp rings and the handle are drawn from the
+    UfiSpace S6301-56ST Hardware Installation Guide, section 9.1 Connecting Power (DC version),
+    Figure 26 (PDF page 21), the supply's face with the legend printed under its screws, read as
+    a picture against the face's own 50.5 x 40.2 mm (about 4.6 pixels to the millimetre, so a
+    reading is good to about half a millimetre), and cross-read on the vendor's rear render of
+    the chassis (3.43 pixels to the millimetre). With the latch on the left, the figure shows
+    the block 30.8 mm wide and 17.4 mm tall, 3.0 mm from the left edge and 18.2 mm from the top;
+    the screws 9.4 mm apart (9.0, 18.3 and 27.8 across); and the handle about 5 mm wide, 34.7 mm
+    from the left edge. The render shows the screws about 9.5 mm apart, the block about 32 mm
+    wide and 1 to 2 mm higher on the face, and the handle about 5.3 mm wide, a millimetre or so
+    further right than the figure's and a little shorter. Figure 25 (PDF page 20) shows the
+    block's outer walls 31.4 mm apart and its three cells about 9.7 mm apart. This skin takes
+    9.6 mm between the screws, as the PSU-401, PSU-201 and PSU-751 skins draw the same block
+    (this guide's Figure 25 is the picture that the S9510-28DC guide prints as its Figure 23),
+    at 9.0, 18.6 and 28.2 across and 26.9 down; the block 31.6 mm wide and 17.6 mm tall at 2.8
+    mm across and 18.1 mm down; and the handle 5.3 mm wide and 36.0 mm tall at 35.4 across and
+    3.1 down. Across, these are the means of the figure and the render, which differ by a
+    millimetre or so at the block's right edge and at the handle; down they follow the figure,
+    except the handle's height and top, which are the means of the figure's, which runs the
+    handle to the face's lower edge, and the render's, which stops it short. The 8.2 mm that
+    Figure 25 dimensions is the width of one terminal's cell, between the partitions of the
+    block, not the distance between two screws: three cells with their partitions and end walls
+    make a block about 31 to 32 mm wide. No document held gives the block's width, the spacing
+    of the screws or the handle's box as a number, so each is an estimate. The legend printed
+    under the screws is not drawn. Version 1 of this part draws the block 24.6 by 19.2 mm at
+    3.0 across and 16.5 down, with the screws 7.5 mm apart, and the handle 4.6 mm wide at 28.0
+    across; because those boxes moved, this drawing is version 2, and version 1 keeps its own.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head
+    3.4 across (that part's own size is an estimate), standing at the centre of the clamp screw
+    this skin draws (centres 9.0, 18.6, 28.2 across, 26.9 down) and lifted 8.0 mm, this block's
+    own estimated proudness. The head is drawn smaller than the ring round it, and smaller than
+    the screw: the guide names M3.5 screws (UfiSpace S6301-56ST Hardware Installation Guide,
+    section 9.1 (DC version), Figure 25 (PDF page 20)), and an M3.5 thread is wider than that
+    head, so the drawing marks where a lug lands and does not show the screw. The same figure
+    gives a lug hole over 3.5 mm and a lug no wider than 8.2 mm (W < 8.2 mm). No document held
+    gives the screw head, the stud length or the spacing of the screws; the spacing is estimated
+    in `block`.
+  poles: >-
+    UfiSpace S6301-56ST Hardware Installation Guide, section 9.1 Connecting Power (DC version),
+    Figure 26 (PDF page 21): the supply's face with the legend printed under its three terminal
+    screws, 'RTN', a negative voltage range ('-36 ~ -75V' as the picture reads) and the earth
+    symbol, a lug and wire under each, and the label 'Green/Yellow Grounding Wire (min. size 18
+    AWG)' at the right-hand one. The roles are the legend's, left to right as this skin's face
+    stands, latch on the left: `rtn` for RTN, `batt` for the negative voltage range
+    (spec/schemas/dc.yaml writes `batt` as -48V or negative (battery)) and `gnd` for the earth
+    symbol (it writes `gnd` as the earth symbol). The earth terminal is the third pole of the
+    port and is not a conductor of a feed. No document held gives a nominal voltage: the legend
+    prints -36 ~ -75V, and the guide's step 4 and its Preparation Check List print -36 to -72V.
+  rating: >-
+    datasheet - 'DC input: -36 to -72V, 6A' in the S6301-56ST datasheet (Power Specs.), and 'DC
+    version: -36 to -72V DC, 6A maximum x2' in the UfiSpace S6301-56ST Hardware Installation
+    Guide, section 2.3 Preparation Check List (PDF page 6), where the 'x2' reads as the two
+    supplies. The 6 A is the input current. The range has no nominal in either, and a port's
+    `voltage` needs one, so the port states no voltage. The guide's step 4 adds a built-in 15A
+    fast acting fuse; that is the fuse, not the input current.
+  awg: >-
+    UfiSpace S6301-56ST Hardware Installation Guide, section 9.1 step 2 (PDF page 20): a 'UL
+    1015, 18 AWG DC power cable' of stranded copper for the screw-type terminal block; Figure 26
+    (PDF page 21) labels the earth wire 'min. size 18 AWG'. One size in the guide held for this
+    supply, so the port states it.
+elements:
+  status-led:
+    at: [43.4, 5.1]
+    size: [3.2, 3.2]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: fw-update, color: '#22c55e', behavior: blinking},
+             {name: critical, color: '#eab308'},
+             {name: input-lost, color: '#eab308', behavior: blinking},
+             {name: warning, color: '#22c55e', behavior: {mode: alternating, color: '#eab308'}}]
+    description: >-
+      S6301-56ST HIG PSU FRU LED table - Off (no input power to all power supplies), Green
+      (output ON and OK), Blinking Green 1/sec (standby state, input present, only +5VSB
+      on), Blinking Green 2/sec (power supply firmware updating, boot-loader mode - same
+      colour and behaviour token as standby, the table separates them only by blink rate),
+      Yellow (critical event causing shutdown: failure, over current, short circuit, over
+      voltage, fan failure, over temperature), Blinking Yellow 1/sec (DC power cord
+      unplugged or DC power lost with the second supply still fed; or DC present with 5VSB
+      and 12V off via system control), Blinking between Green and Yellow (warning events
+      where the supply continues to operate: high temp, high power, high current, slow fan)
+  latch: {at: [0.4, 0.6], size: [6.4, 3.6], class: latch}
+  handle: {at: [35.4, 3.1], size: [5.3, 36.0], class: handle}
+  terminal-block: {at: [2.8, 18.1], size: [31.6, 17.6], class: inlet}
+relief:
+  features:
+    - node: latch
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-151-dc@2 - the HIG's Figure 7 drawing gives the face and the body
+        length and dimensions nothing else off the face; 2.2 follows the psu-401 family
+        estimate.
+    - node: handle
+      uhandle: 38
+      confidence: datasheet
+      source: >-
+        S6301-56ST HIG, Space Clearance: 'the handle for the power supplies will extend
+        outwards by 1.5 inches (3.8cm)'. 38 mm, published by the vendor for THIS device's
+        supplies - NOT the 27 mm of the S9510's PSU-401, which is that HIG's own figure.
+    - node: terminal-block
+      out: 8
+      confidence: estimated
+      source: >-
+        ufispace/psu-151-dc@2 - unsourced; the HIG dimensions the face outline only. Same 8
+        mm estimate the psu-401-dc carries for the same style of block.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-151-dc@2 - unsourced. The HIG's PSU FRU LED table gives the lamp's
+        states and nothing about its lens; 0.4 follows the UfiSpace FRU family estimate.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-151-dc@2 - the vent depth is not in any held drawing; follows the
+        psu-401 family estimate.
+connection-points:
+  power: {at: [18.6, 26.9], direction: front}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [7.3, 25.2], lift: 8.0}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [16.9, 25.2], lift: 8.0}
+  - {ref: common/terminal-screw-34@1, id: pole-gnd, at: [26.5, 25.2], lift: 8.0}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 6
+      awg: [18]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+        - {role: gnd, slot: pole-gnd}
+      source: {poles: poles, rating-a: rating, awg: awg}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#c22f2f'
+  latch-edge:
+    label: Latch edge
+    type: text
+    default: '#8c1f1f'
+skins: [default]

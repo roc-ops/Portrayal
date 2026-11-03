@@ -262,7 +262,7 @@ def test_the_kit_resolves_the_published_table(built, tmp_path):
 
 # --- DC feeds, ground wires, stack, USB, console, RPS and StackPower ---------------------
 
-DC_FEEDS = ["dc-feed-2x14awg", "dc-feed-2x12awg", "dc-feed-2x10awg", "dc-feed-2x6awg"]
+DC_FEEDS = ["dc-feed-2x18awg", "dc-feed-2x14awg", "dc-feed-2x12awg", "dc-feed-2x10awg", "dc-feed-2x6awg"]
 GROUND_WIRES = ["ground", "ground-14awg", "ground-12awg", "ground-8awg", "ground-6awg"]
 NEW_BARE = ["stack", "usb", "console"]
 POWER_CABLES = ["cab-rps2300-e", "cab-spwr-30cm", "cab-spwr-150cm"]
@@ -321,7 +321,7 @@ def test_a_dc_feed_names_its_conductors_by_the_roles_of_dc_yaml(built):
             assert set(c) == {"role", "awg"} and c["role"] in roles - {"gnd"} and c["awg"] > 0, (tid, c)
         assert t["ampacity-a"] > 0 and t["ampacity-sources"], tid
     # the gauges of the library's DC ends, one type each
-    assert sorted(t["conductors"][0]["awg"] for t in (built["types"][x] for x in DC_FEEDS)) == [6, 10, 12, 14]
+    assert sorted(t["conductors"][0]["awg"] for t in (built["types"][x] for x in DC_FEEDS)) == [6, 10, 12, 14, 18]
     # the AC cords are not DC feeds
     assert not any(t.get("dc") for tid, t in built["types"].items() if tid not in DC_FEEDS)
 
