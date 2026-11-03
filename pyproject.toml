@@ -43,7 +43,15 @@ Issues = "https://github.com/roc-ops/Portrayal/issues"
 # local modules, rather than by guessing. A module-scope import in a collected test file is
 # a COLLECTION ERROR, so a missing one takes the suite down rather than skipping
 # a file.
-test = ["pytest", "pytest-xdist", "pillow", "numpy"]
+#
+# PYTEST BELOW 9.2, UNTIL pytest-xdist CATCHES UP. 9.2 builds a test's `nodeid`
+# from a new field, and xdist 3.8 still groups a test by rewriting the old one,
+# so under 9.2 every `xdist_group` runs as plain `load` - with nothing failing.
+# CI picked 9.2 up on its release (2026-10-27) and the full-lint readers went
+# from one lint to three at once. 9.1.1 was CI's last good version.
+# `test_an_xdist_group_reaches_the_scheduler` (test_onebuild.py) fails by name
+# on a version that breaks the rename, so lifting this pin is safe to try.
+test = ["pytest>=9.0,<9.2", "pytest-xdist", "pillow", "numpy"]
 # Rasterising the DCIM elevation images. Imported lazily, so a build that passes
 # `--no-raster` needs none of it.
 render = ["cairosvg"]
