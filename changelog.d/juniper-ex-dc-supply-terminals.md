@@ -14,4 +14,4 @@
   0.3.0, `juniper/ex9253` from 0.1.1 to 0.2.0), because the build now publishes their DC ports; and `juniper/ex4300-24p`,
   `-24t` and `-48p`, which only accept the two EX4300 supplies, take a patch (0.2.1 to 0.2.2). Their locks and the drawing version line
   of their exported device types move with them, and the supplies' module types carry the new contract versions. No port, interface
-  or id moves. Four rows of the records file are gone and its `cap:` is 150.
+  or id moves. Four rows of the records file are gone and its `cap:` is 148.
