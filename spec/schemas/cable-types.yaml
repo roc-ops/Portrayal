@@ -72,7 +72,7 @@
 # minor, a removed type or a changed id is a major. `format` is the shape of
 # the published file, and only a removed or renamed key raises it.
 format: 1
-version: 1.2.0
+version: 1.3.0
 
 sources:
   foa-tia568:
@@ -392,11 +392,30 @@ types:
   # outside diameter that Waskoenig+Walter lists for 1.5 mm2 (about 3 mm) and
   # 2.5 mm2 (about 4 mm), the nearest sizes to those gauges; the 10 AWG feed is
   # an estimate, and the 6 AWG feed twice the kit's 6.3 mm for a 6 AWG
-  # insulated wire. The ampacity is the 60 degree column of the US National
-  # Electrical Code ampacity table as commonly published, which was not read
-  # for this table, so it is an estimate. The radius is eight times the
-  # diameter, the figure published for unscreened building wire, which no
-  # source held here confirms.
+  # insulated wire. The 18 AWG feed is an estimate of two conductors of about
+  # 2.5 mm. The ampacity is the 60 degree column of the US National Electrical
+  # Code ampacity table as commonly published, which was not read for this
+  # table, so it is an estimate; that column starts at 14 AWG, so the 18 AWG
+  # feed takes the 7 A that the code's rule for small conductors is commonly
+  # published as allowing an 18 AWG copper conductor, also not read. The radius
+  # is eight times the diameter, the figure published for unscreened building
+  # wire, which no source held here confirms.
+  dc-feed-2x18awg:
+    label: DC power feed, 2 x 18 AWG
+    media: power
+    family: power
+    dc: true
+    conductors: [{role: unstated, awg: 18}, {role: unstated, awg: 18}]
+    ampacity-a: 7
+    ampacity-sources: [portrayal-estimate]
+    od_mm: 5.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 8, basis: convention, sources: [portrayal-estimate], unverified: true,
+                  note: "unscreened building wire's published rule; not confirmed by a source held"}
+      loaded: null
+    unverified: true
+    note: no source held gives the diameter of an 18 AWG wire; the diameter, ampacity and radius are estimates; no polarity or colour is known
   dc-feed-2x14awg:
     label: DC power feed, 2 x 14 AWG
     media: power
