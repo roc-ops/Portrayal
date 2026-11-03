@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: osa542x-dc-plug
+version: 1.0.0
+class: port
+mates: latch-header-3
+profile: power
+description: >-
+  The cable connector of the OSA 5420 and OSA 5421 -48 VDC supplies, wired, seen from the wire side
+  as seated. The body carries the release tab on its top edge. One insulated wire enters each of
+  its three ways. They run left to right as the supply prints them: "-" (the -48 VDC battery), Gnd
+  and "+" (the return). It seats in a `latch-header-3` header at its own mate point. It carries one
+  wire per contact, not one cable.
+size: {w: 13.7, h: 10.3}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the header it seats in, oscilloquartz/osa542x-dc-header@1, 13.7 by 10.3. The manual's
+  Figure 15 draws the cable connector without a scale and no dimension of it is held.
+attrs: {media: osa542x-dc, connector: latching power cable connector, positions: 3}
+fields:
+  wire-1-color: {label: 'Wire colour (minus, pin 3)', type: text, default: '#c8262c'}
+  wire-2-color: {label: 'Wire colour (Gnd, pin 2)', type: text, default: '#5a9e3c'}
+  wire-3-color: {label: 'Wire colour (plus, pin 1)', type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    manual - OSA 5420/5421 Installation and Commissioning Manual R9.5.1, Figure 15 (page 70) draws the cable
+    with a connector at one end, a release tab "at top of power connector", and three forked terminals at
+    the other; Table 8 gives each pin's wire. No maker, series or part number of the connector is named, and
+    the manual says (page 31) the DC cable is not supplied with the equipment and is ordered separately from
+    the System Description, which is not held. THE PART IS A STAND-IN FOR THE CABLE CONNECTOR.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    manual - Table 8: pin 1 "+" return, North American wire black, European blue; pin 2 Gnd, yellow and
+    green in both; pin 3 "-48 VDC Battery", North American red, European grey. The defaults are the North
+    American colours (Figure 15 draws them: red, green over yellow, black); the earth wire's yellow and green
+    stripe is drawn as one green, an estimate. A colour per stripe is not expressible here, and the
+    European colours are a field away.
+  far-end: >-
+    NOT DRAWN. The three forked terminals at the far end of the cable land on the source's terminal strip
+    (page 63 steps 3 and 4), which is the office's equipment and not this supply's.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the header, so the part draws a
+    plan outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [6.85, 7.55], direction: front}
+  wire-1: {at: [2.5, 7.45], direction: front}
+  wire-2: {at: [6.9, 7.45], direction: front}
+  wire-3: {at: [11.3, 7.45], direction: front}
+skins: [default]
