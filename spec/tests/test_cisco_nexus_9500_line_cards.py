@@ -46,7 +46,7 @@ IFACE = {"n9k-x9736c-fx": {"100gbase-x-qsfp28": 36},
 # chassis -> (bays, the cards its own guide supports). The 9516 guide's Overview says the N9K-X9716D-GX "is not
 # compatible with this switch" (PDF p7, printed 1), so its bays do not accept it.
 CHASSIS = {"9504": (4, set(CARDS)), "9508": (8, set(CARDS)), "9516": (16, set(CARDS) - {"n9k-x9716d-gx"})}
-VERSIONS = {"9504": "2.1.0", "9508": "1.1.0", "9516": "2.1.0"}
+VERSIONS = {"9504": "2.1.1", "9508": "1.1.1", "9516": "2.1.1"}
 
 
 def contract(name):

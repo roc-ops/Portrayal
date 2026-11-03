@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pwr-c1-715wdc
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -49,14 +49,65 @@ provenance:
     Good to a few millimetres at best.
   terminals: >-
     datasheet - Figure 49 callouts 6, 7 and 8, with the glyphs + and - and an earth symbol
-    printed above them. Ground wire gauge 12 AWG or 8 AWG (Table 47). They are drawn as
-    elements and not as seated parts, because the library holds no terminal block of this
-    pitch.
+    printed above them. Ground wire gauge 12 AWG or 8 AWG (Table 47). The elements stay
+    drawn, and a seat part stands on each (see `seats`), because the library holds no terminal
+    block of this pitch to compose instead.
   lamps: >-
     datasheet - Table 36, Switch Power Supply Module LEDs: DC OK green with input present, off
     without; PS OK as the AC supplies.
   colour: >-
     estimated - as the AC supplies.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head
+    3.4 across (that part's own size is an estimate), standing at the centre of the terminal
+    element this contract already draws (`terminal-positive`, `terminal-negative` and
+    `terminal-ground`: centres 25.0, 37.0 and 49.0 across, 24.0 down; each element is 10 by 14,
+    itself an estimate, see `elements`). It is not lifted: Figure 49 shows the three terminals
+    standing off the face and no document says how far, and this contract draws no relief for
+    them, so the seats are at the face's own level. The guide names M3 screws for the fork
+    terminals in a Dinkle DT-35-B25-style terminal block and, for NEBS installations, M5 screws
+    for 12 AWG wire (the equipment list, page 96), and a torque of 11 lbf-in (page 100); it
+    gives no head or pitch, and which of the two sizes is the block's own screw is not said. The
+    part claims no thread, so none is written, and the places of the screws are the elements'
+    own. The elements stay drawn as before.
+  poles: >-
+    Cisco Catalyst 9300 Series Switches Hardware Installation Guide (first published 2017-06-20,
+    last modified 2026-05-15), Figure 49 "715W DC Power Supply" (printed page 91): three screws
+    in one row under one terminal block safety cover, with a plus sign, a minus sign and an
+    earth symbol printed above them, left to right, and the callouts "6 Input power terminal
+    (positive polarity)", "7 Input power terminal (negative polarity)" and "8 Grounding
+    terminal"; and Figure 57 "DC Connection with Ground" (printed page 100), which draws the
+    same three screws head on as one block of three sections, a plus over the left one and a
+    minus over the middle one, the left and middle screws wired to a battery and the right one
+    to a ground symbol. (The wiring text, printed page 99, says "terminal blocks" in the plural;
+    this contract follows the figure and reads one block.) The roles are the guide's words and
+    signs: `pos` for the positive polarity terminal, `neg` for the negative polarity terminal
+    and `gnd` for the grounding terminal (spec/schemas/dc.yaml writes `gnd` as the earth symbol
+    and PE), listed in the callouts' order. The guide's words never say return or battery
+    (Figure 57 draws a battery symbol and names no conductor). The earth screw is one of the
+    block's three and is the port's pole `gnd` (decided 2026-11-02); it is not a conductor of a
+    feed. The port states a negative voltage (see `voltage`), and on a negative end dc.yaml
+    pairs `pos` with a plant's `rtn` and `neg` with its `batt`.
+  voltage: >-
+    Cisco Catalyst 9300 Series Switches Hardware Installation Guide, Table 47 "Power
+    Specifications for DC Power Supplies" (printed page 126), the column PWR-C1-715WDC: input
+    voltage range, domestic and international, "-36 VDC (minimum), -48 VDC (nominal), -72 VDC
+    (maximum)". A held source gives a nominal, so the port states one, with its minus, and the
+    range in the order the table gives it (minimum, then maximum). It is the figure
+    `input-voltage` in `attrs` already carries.
+  rating: >-
+    NOT STATED. Table 47 (printed page 126) prints the input current as "24-12 A", a pair, and a
+    branch circuit protection of 20 A, which is the circuit's and not the supply's. A port's
+    `rating-a` is one figure and no document says which of the pair is the input rating, so the
+    port states none and a later change can state it once a source says so. `attrs` keeps the
+    words as printed.
+  awg: >-
+    NOT STATED. The guide gives this supply's DC wires two sizes: "Four leads of 14-gauge copper
+    wire" in the equipment list (printed page 96) and "12-AWG DC power input wires" in the
+    wiring procedure (printed page 99), and Table 47 gives "12 AWG or 8 AWG" for the ground
+    connection (printed page 126), which the grounding section (printed pages 96 to 98) ties to
+    the switch's own ground lug. No one size is the one the documents give for the terminals, so
+    the port states none.
 states: [absent]
 elements:
   dc-ok: {at: [10.2, 7.6], size: [3.0, 3.0], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
@@ -69,6 +120,20 @@ elements:
   terminal-cover: {at: [18.0, 15.0], size: [38.0, 22.0], class: cover}
 relief:
   wall: '#15171a'
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-pos, at: [23.3, 22.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-neg, at: [35.3, 22.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-gnd, at: [47.3, 22.3]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      voltage: {nominal: -48, range: [-36, -72]}
+      poles:
+        - {role: pos, slot: pole-pos}
+        - {role: neg, slot: pole-neg}
+        - {role: gnd, slot: pole-gnd}
+      source: {poles: poles, voltage: voltage}
 skins: [default]
 body:
   depth: 309.9

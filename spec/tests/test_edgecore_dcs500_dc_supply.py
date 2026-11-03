@@ -130,7 +130,7 @@ def test_the_colours_are_filed_as_estimated_with_their_regions():
 
 def test_the_ac_part_is_patched_and_its_stale_sentence_is_gone():
     c = _contract(AC)
-    assert c["version"] == "1.0.1"
+    assert c["version"] == "1.1.0"
     text = _flat(c["provenance"]["dc-build"])
     assert "is not modelled" not in text
     assert "edgecore/dcs500-psu-dc@1" in text
@@ -224,7 +224,7 @@ def test_the_dc_configuration_descriptions_say_the_oz_silkscreen_stand_in():
 
 def test_the_layout_is_the_source_of_the_expanded_device():
     assert _layout()["version"] == _device()["version"]
-    assert _device()["version"] == "4.2.0"
+    assert _device()["version"] == "4.2.1"
 
 
 # --- exports and the lock ------------------------------------------------------
