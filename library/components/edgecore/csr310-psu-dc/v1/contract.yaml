@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: csr310-psu-dc
-version: 1.1.0
+version: 1.1.1
 class: psu
 behaviour: fills
 profile: networking
@@ -92,6 +92,19 @@ provenance:
     this one is part of a supply that comes out as one unit, so it belongs to the
     module's own face. Splitting it out would claim a seam the hardware does not
     have.
+  block-colour: >-
+    estimated - read off the guides' pictures with a pixel reader, not measured, and no document
+    gives a colour code. The Edgecore CSR310 (AS7315-27X) Quick Start Guide, page 2, "b. DC Power"
+    (a rendering), the CSR430 (AS7515-24X) Quick Start Guide, page 3 (a photograph) and the CSR310
+    data sheet, page 2, "Interfaces", item 1, all show the block as dark plastic with silver screws,
+    and the CSR430's photograph shows grey metal plates under the screws. The block is drawn dark,
+    about half as bright as the module's face, as the pictures show it (the photograph's barriers
+    read near #151515 against a face near #434343, the rendering's walls #414141 to #535353
+    against #717171): #1e2125 for the block, #2b2f34 and #24282c for its lips and middle, #6b7076
+    for the plates under the screws (the photograph's plates read near #6b6b6b). The screws keep
+    #c3c9cf (the photograph's heads read near #c2c3be). The raised plate (the `inlet` relief) takes
+    the block's colour. The block used to be drawn light grey with white plates, which none of the
+    three pictures shows. Nothing is moved or resized: this is a change of colours only.
   markings: >-
     photo-measured - a general-warning triangle centred 12.8 from the module's
     left edge and a hot-surface triangle at 31.2, both about 10.9 across, above
@@ -157,7 +170,7 @@ relief:
   features:
     - node: inlet
       out: 9.5
-      color: '#b7bdc3'
+      color: '#1e2125'
       confidence: estimated
       source: >-
         edgecore/csr310-psu-dc@1's own terminal-block key - the block's face is
