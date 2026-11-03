@@ -8,6 +8,7 @@ decision somebody makes rather than a drift nobody sees.
 """
 import json
 import pathlib
+import re
 
 import pytest
 
@@ -105,3 +106,15 @@ def test_the_budget_file_gives_a_reason_for_every_number():
         assert isinstance(entry["seconds"], int) and entry["seconds"] > 0, (tier, entry)
         assert len(entry.get("why", "")) >= 40, (tier, "says why in a sentence")
     assert doc["light"]["new_function_seconds"] == 5.0
+
+
+def test_raising_the_budget_is_a_one_way_door():
+    """The budget only stops growth if raising it is a decision: the
+    contributing guide's merge-danger list and the pull request skill's both
+    name the file, so a pull request that edits it is held for the maintainer."""
+    contributing = (ROOT / "CONTRIBUTING.md").read_text()
+    danger = contributing[contributing.index("#### Merge danger"):]
+    danger = danger[:re.search(r"\n#{1,4} ", danger[1:]).start() + 1]
+    assert "spec/test-budget.json" in danger
+    skill = (ROOT / ".claude/skills/portrayal-pr/SKILL.md").read_text()
+    assert "spec/test-budget.json" in skill

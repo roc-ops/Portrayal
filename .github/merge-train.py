@@ -25,8 +25,10 @@ commit; if the template's `**Door:**` line is not two-way (or is missing), an
 `OWNER DECISION: approve` comment is the latest owner-decision comment; and the
 `gates` workflow succeeded on the head with every check run finished and
 passing, `lint` and `build` among them as successes (a draft's `build` is
-skipped, and a skip is not a pass). Every problem with every pull request is
-listed before it stops.
+skipped, and a skip is not a pass). A pull request push runs only the light
+tier, whose verdict is `light suite`; `build` comes from a full run, the
+dispatch started on the head before a merge (docs/merging.md). Every problem
+with every pull request is listed before it stops.
 
 THE FULL RUN is `gates.yml`'s `workflow_dispatch`. On a dispatch `dist`,
 `tests` and `build` all run (their `if:` only excludes a push and a draft), so
