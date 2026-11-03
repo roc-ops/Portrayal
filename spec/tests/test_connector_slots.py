@@ -129,7 +129,9 @@ def test_the_connector_registry_is_not_vacuous():
                          # the alarm and BITS connectors of the Nokia general facilities cards
                          "micro-dsub-50", "wire-wrap-6",
                          # the DC input connector of the Edgecore PSU-48V-650-F and -B
-                         "positronic-pla03"}
+                         "positronic-pla03",
+                         # the DC input header of the Oscilloquartz OSA 5420 and 5421 supplies
+                         "latch-header-3"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -175,7 +177,10 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "micro-dsub-50", "wire-wrap-6",
                                    # the DC input connector of the Edgecore PSU-48V-650-F
                                    # and -B
-                                   "positronic-pla03"}
+                                   "positronic-pla03",
+                                   # the DC input header of the Oscilloquartz OSA 5420 and
+                                   # 5421 supplies
+                                   "latch-header-3"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
