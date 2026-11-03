@@ -132,7 +132,7 @@ def test_the_lint_run_is_the_real_command_over_the_whole_library():
 
 
 @pytest.mark.xdist_group("group-probe")
-def test_an_xdist_group_reaches_the_scheduler(request):
+def test_an_xdist_group_reaches_the_scheduler(request, monkeypatch):
     """THE GROUPS ARE WHAT MAKE ONE RUN SERVE ITS READERS, and they stopped
     working without a single test failing. xdist's `loadgroup` sends a grouped
     test to its group's worker by renaming it `id@group` on the worker; pytest
@@ -157,15 +157,14 @@ def test_an_xdist_group_reaches_the_scheduler(request):
         return
     from xdist.remote import WorkerInteractor
 
-    class _Loadgroup:
-        """The one question xdist's rename asks of the config."""
-        def getvalue(self, name):
-            return name == "loadgroup"
-
+    # THE REAL CONFIG, set the way an xdist worker sets it for `--dist
+    # loadgroup` (xdist/remote.py, `config.option.loadgroup`), so the hook
+    # finds whatever else it reads where a worker would.
+    monkeypatch.setattr(config.option, "loadgroup", True, raising=False)
     probe = pytest.Function.from_parent(request.node.parent, name="probe",
                                         callobj=lambda: None)
     probe.add_marker(pytest.mark.xdist_group("probe"))
-    WorkerInteractor.pytest_collection_modifyitems(None, _Loadgroup(), [probe])
+    WorkerInteractor.pytest_collection_modifyitems(None, config, [probe])
     assert probe.nodeid.endswith("@probe"), (
         f"xdist renamed the probe and pytest reports {probe.nodeid!r}: the rename "
         "no longer reaches the id, so `--dist loadgroup` cannot keep a group "

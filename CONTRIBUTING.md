@@ -57,7 +57,7 @@ If you prefer a driver to a path, `python -m portrayal` wraps the gates:
 python -m portrayal lint         # the library against the schemas
 python -m portrayal lock         # what version bump your change needs
 python -m portrayal build        # or `publish`, which adds the DCIM exports
-python -m portrayal test         # runs the suite in parallel, with -n auto
+python -m portrayal test         # the whole suite, as CI runs it; add -k <vendor>/<model> for yours
 ```
 
 `./build.sh` is the check that your environment works. It lints the whole
@@ -249,8 +249,8 @@ python3 -m pytest spec/tests -q -n auto -k <vendor>/<model>   # after publish; i
 tests rather than failing them: run `./build.sh` (or `./publish.sh`) first. A
 handful also skip on a built tree, each with its reason: most compare against
 reference images that are not in this repository, and one or two look for a
-part the library does not have yet. `-rs` prints the reasons. A skip count in
-the hundreds means no build, not a clean suite.
+part the library does not have yet. `-rs` prints the reasons. If most of what
+you selected skipped, there is no build, not a clean run.
 
 `-n auto` runs the suite on every core, as CI does. Serially it takes about
 three times as long.
@@ -270,7 +270,9 @@ rule in the message rather than handing you a list of slugs and a test name.
 The whole suite is CI's: it runs on the pull request, and a local copy of it
 only repeats that run, at twenty minutes or more on one machine.
 The tests that count the whole library, such as a census a new device has to
-join, answer there. A component is selected the same way, by `-k <ns>/<part>`.
+join, answer there. For a component, select `-k <ns>/<part>` and every device
+the lock check named, since those are the devices the change reaches:
+`-k "<ns>/<part> or <vendor>/<model> or ..."`.
 
 Commit the regenerated `device.lock.json` and `library/exports/` with your
 change. CI fails on a stale export. The build also writes
