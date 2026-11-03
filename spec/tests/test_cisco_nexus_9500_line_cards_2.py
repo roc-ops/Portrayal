@@ -327,6 +327,7 @@ def test_the_fm5_notes_no_longer_say_a_named_card_is_not_modelled():
             assert "N9K-X9788TC-FX" in before[-200:]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("chassis", sorted(CHASSIS))
 def test_each_chassis_is_at_the_minor_the_lock_asked_for_and_the_lock_agrees(chassis):
     assert device(chassis)["version"] == VERSIONS[chassis]
