@@ -36,7 +36,7 @@ LUG = "generic/ring-lug@1"
 SUPPLIES = {
     "edgecore/csr310-psu-dc@1": dict(
         screws=[("pole-gnd", [12.2, 25.2], "gnd"), ("pole-batt", [20.8, 25.2], "batt"), ("pole-rtn", [29.6, 25.2], "rtn")],
-        lift=9.5, elements=["handle", "inlet", "latch"], awg=[14], version="1.1.0"),
+        lift=9.5, elements=["handle", "inlet", "latch"], awg=[14], version="1.1.1"),
     "edgecore/dcs500-psu-dc@1": dict(
         screws=[("pole-rtn", [13.1, 27.7], "rtn"), ("pole-batt", [13.1, 19.3], "batt"), ("pole-gnd", [13.1, 10.0], "gnd")],
         lift=5.0, elements=["handle", "latch", "pole-1", "pole-2", "pole-3", "terminal", "vent"], awg=[10], version="1.1.0"),
