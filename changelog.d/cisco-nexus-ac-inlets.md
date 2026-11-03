@@ -9,7 +9,7 @@
   two Saf-D-Grid supplies no longer declare `inlet: other`, which a composed part makes the weaker of two statements. The three
   chassis that seat them (`cisco/n9k-c9504`, 2.1.0 to 2.1.1; `cisco/n9k-c9508`, 1.1.0 to 1.1.1; `cisco/n9k-c9516`, 2.1.0 to 2.1.1)
   take a patch each, because the lock compares only a device's own port names, with their locks and the drawing version line of their
-  exported device types (six files, in NetBox and Nautobot). Three rows of the records file are gone and its `cap:` is 169.
+  exported device types (six files, in NetBox and Nautobot). Three rows of the records file are gone and its `cap:` is 164.
 - **BREAKING for DCIM data already imported.** A part's id is lower case, so the power ports that those supplies' module types export
   change, in the NetBox and Nautobot files of `N9K-PAC-3000W-B`, `N9K-PUV-3000W-B` and `N9K-PUV2-3000W-B` (six files). The first
   supply's one port is named `{module}/inlet` where it was `{module}/Inlet`, and its type, `iec-60320-c20`, is the same. The second's
