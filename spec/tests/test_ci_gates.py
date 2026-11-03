@@ -510,7 +510,7 @@ def test_a_dispatch_tests_the_pull_requests_merge_with_main(workflow):
     on the head the merge is of. With no `pr` the ref is the run's own."""
     on = workflow.get("on", workflow.get(True))
     assert "pr" in on["workflow_dispatch"]["inputs"], on["workflow_dispatch"]
-    for name in ("lint", "dist", "tests"):
+    for name in ("lint", "dist", "tests", "build"):
         checkout = next(s for s in steps(workflow["jobs"][name])
                         if s.get("uses", "").startswith("actions/checkout@"))
         assert (checkout.get("with") or {}).get("ref") == MERGE_REF, name
@@ -519,9 +519,29 @@ def test_a_dispatch_tests_the_pull_requests_merge_with_main(workflow):
 def test_the_budget_reads_the_pull_requests_files(workflow):
     """A new slow test fails only the change whose files hold it (suite_budget.py,
     NEW MEANS ABSENT FROM THE BASE). The list is read with the job's own token and
-    `pull-requests: read`; if it cannot be read, every file counts as touched."""
+    `pull-requests: read`; if it cannot be read, nothing counts as touched."""
     budget = next(s for s in steps(workflow["jobs"]["build"]) if s.get("name") == "test budget")
     assert budget["env"]["PR"] == "${{ github.event.pull_request.number || inputs.pr }}"
     assert budget["env"]["GH_TOKEN"] == "${{ github.token }}"
     assert 'pulls/$PR/files' in budget["run"] and "--paginate" in budget["run"]
     assert '"${touched[@]}"' in budget["run"]
+    # UNREADABLE MEANS NOTHING TOUCHED, so a rate limit warns and never fails
+    assert ': > "$RUNNER_TEMP/touched.txt"' in budget["run"], budget["run"]
+
+
+def test_a_dispatch_proves_its_tree_is_the_heads_before_it_builds(workflow):
+    """THE `build` A DISPATCH REPORTS LANDS ON THE DISPATCHED HEAD, so the tree it
+    tested must be that head's merge. A wrong `-f pr`, or a merge ref GitHub has
+    not yet recomputed after a push, would put a passing `build` on a head whose
+    heavy tests never ran; and a dispatch on a branch with no `-f pr` would test
+    the branch without main. `dist` refuses all three before it builds, and
+    nothing after it runs without `dist`."""
+    dist = workflow["jobs"]["dist"]
+    names = [s.get("name") or s.get("uses", "") for s in steps(dist)]
+    guard = next(s for s in steps(dist) if s.get("name") == "the tree is the head's")
+    assert guard.get("if") == "github.event_name == 'workflow_dispatch'"
+    checkout = next(i for i, n in enumerate(names) if n.startswith("actions/checkout@"))
+    assert checkout < names.index("the tree is the head's") < names.index("build and publish")
+    run = guard["run"]
+    assert "git cat-file -p HEAD" in run and '"$GITHUB_SHA"' in run
+    assert "-f pr=<number>" in run and "refs/heads/main" in run
