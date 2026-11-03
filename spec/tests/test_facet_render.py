@@ -178,6 +178,7 @@ def test_a_facet_features_own_lift_offsets_the_whole_wedge(tmp_path):
     assert h.get("data-z-profile-y") == "0:5,30:22.3205"
 
 
+@pytest.mark.heavy
 def test_a_sunk_facet_carries_negative_heights(tmp_path):
     """Recessed facets: a facet at lift -12 in a 12 mm pocket roots 12 below
     the plate, and its proud edge ends at -12 + 30 x tan 30 = 5.3205."""

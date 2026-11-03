@@ -107,6 +107,7 @@ def test_absent_or_public_passes(doc):
     assert run(doc) == []
 
 
+@pytest.mark.heavy
 def test_the_rule_is_in_the_table_and_the_library_passes_it():
     assert "L192" in lint.RULES
     bad = []

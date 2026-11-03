@@ -66,6 +66,7 @@ def test_the_enum_and_the_table_are_the_same_list():
         f"table-only: {sorted(set(dx.INLET_TYPE) - enum)}")
 
 
+@pytest.mark.heavy
 def test_every_token_in_use_is_in_the_vocabulary():
     """The schema validates this too; asserting it here names the file."""
     bad = {ref: (d.get("attrs") or {}).get("inlet") for ref, d in _psus().items()

@@ -113,6 +113,7 @@ def drawn_problems(out, idx):
     return problems
 
 
+@pytest.mark.heavy
 def test_the_compiled_device_states_its_direction_on_every_build(tmp_path):
     idx = render_device(tmp_path)
     assert {c["name"] for c in idx["configs"]} == set(WANT)

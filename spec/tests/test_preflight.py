@@ -64,6 +64,7 @@ def ctx_of(root, mbase):
 
 # ------------------------------------------------------------------ the diff ---
 
+@pytest.mark.heavy
 def test_the_diff_is_the_working_tree_plus_untracked_and_only_added_lines(tmp_path):
     base = make_repo(tmp_path, {"a.txt": "one\ntwo\nthree\n", "b.txt": "keep\n"})
     (tmp_path / "a.txt").write_text("one\nTWO\nthree\nfour\n")      # unstaged edit
@@ -86,6 +87,7 @@ SKIPS_BASE = {
 }
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("added,ok", [
     ('pytest.skip("a brand new reason")', False),
     ('pytest.skip(f"{ref} is gone")', False),
@@ -115,6 +117,7 @@ def test_skips_fail_on_a_new_reason_the_allow_list_does_not_carry(tmp_path, adde
     assert not any("old reason" in d for d in res.details)
 
 
+@pytest.mark.heavy
 def test_skip_reasons_reads_every_spelling():
     src = textwrap.dedent("""\
         import pytest
@@ -130,6 +133,7 @@ def test_skip_reasons_reads_every_spelling():
 
 # ------------------------------------------------------------------- private ---
 
+@pytest.mark.heavy
 def test_private_fails_on_an_added_machine_path_address_or_email(tmp_path):
     base = make_repo(tmp_path, {"notes.md": "clean\n"})
     planted = ["see " + "/" + "Volumes/Disk/x", "host 10" + ".1.2.3",
@@ -141,6 +145,7 @@ def test_private_fails_on_an_added_machine_path_address_or_email(tmp_path):
     assert all(d.startswith("notes.md:") for d in res.details)
 
 
+@pytest.mark.heavy
 def test_private_passes_on_clean_added_lines_and_ignores_old_ones(tmp_path):
     old = "/" + "Users/someone/old"                   # in the base, so not in the diff
     base = make_repo(tmp_path, {"notes.md": old + "\n"})
@@ -156,6 +161,7 @@ CHANGELOG_BASE = {"changelog.d/README.md": "how\n", "library/x.yaml": "a: 1\n",
                   "docs/x.md": "doc\n"}
 
 
+@pytest.mark.heavy
 def test_changelog_fails_when_library_changes_without_a_fragment(tmp_path):
     base = make_repo(tmp_path, CHANGELOG_BASE)
     (tmp_path / "library/x.yaml").write_text("a: 2\n")
@@ -164,6 +170,7 @@ def test_changelog_fails_when_library_changes_without_a_fragment(tmp_path):
     assert preflight.check_changelog(ctx_of(tmp_path, base)).ok
 
 
+@pytest.mark.heavy
 def test_changelog_fails_on_a_malformed_fragment(tmp_path):
     base = make_repo(tmp_path, CHANGELOG_BASE)
     (tmp_path / "library/x.yaml").write_text("a: 2\n")
@@ -189,12 +196,14 @@ def _release(tmp_path, changelog=RELEASED, delete=True):
     return base
 
 
+@pytest.mark.heavy
 def test_changelog_accepts_a_release_diff_that_folds_the_fragments_in(tmp_path):
     base = _release(tmp_path)
     res = preflight.check_changelog(ctx_of(tmp_path, base))
     assert res.ok and "0.2.0" in res.summary
 
 
+@pytest.mark.heavy
 def test_changelog_still_fails_without_a_fragment_when_the_diff_is_not_a_release(tmp_path):
     # nothing folded: the fragment stays and the library changes in a branch of its own
     base = make_repo(tmp_path, RELEASE_BASE)
@@ -209,6 +218,7 @@ def test_changelog_still_fails_without_a_fragment_when_the_diff_is_not_a_release
     assert not preflight.check_changelog(ctx_of(tmp_path / "c", base)).ok
 
 
+@pytest.mark.heavy
 def test_changelog_fails_a_release_that_leaves_unreleased_entries_or_drops_one(tmp_path):
     left = RELEASED.replace("## Unreleased\n", "## Unreleased\n\n### Fixed\n- Left behind.\n")
     base = _release(tmp_path / "a", changelog=left)
@@ -218,6 +228,7 @@ def test_changelog_fails_a_release_that_leaves_unreleased_entries_or_drops_one(t
     assert not preflight.check_changelog(ctx_of(tmp_path / "b", base)).ok
 
 
+@pytest.mark.heavy
 def test_changelog_wants_no_fragment_for_docs(tmp_path):
     base = make_repo(tmp_path, CHANGELOG_BASE)
     (tmp_path / "docs/x.md").write_text("more doc\n")
@@ -226,6 +237,7 @@ def test_changelog_wants_no_fragment_for_docs(tmp_path):
 
 # ----------------------------------------------------------------------- kit ---
 
+@pytest.mark.heavy
 @pytest.mark.skipif(shutil.which("npm") is None, reason="npm not installed")
 @pytest.mark.parametrize("script,ok", [("exit 1", False), ("exit 0", True)])
 def test_kit_runs_npm_test_when_kit_changes(tmp_path, script, ok):
@@ -237,6 +249,7 @@ def test_kit_runs_npm_test_when_kit_changes(tmp_path, script, ok):
     assert preflight.check_kit(ctx_of(tmp_path, base)).ok is ok
 
 
+@pytest.mark.heavy
 @pytest.mark.skipif(shutil.which("npm") is None, reason="npm not installed")
 def test_kit_runs_the_behaviour_tests_naming_a_changed_module_and_counts_skips(tmp_path):
     pkg = {"name": "k", "version": "0.0.0", "scripts": {"test": "exit 0"}}
@@ -259,6 +272,7 @@ def test_kit_runs_the_behaviour_tests_naming_a_changed_module_and_counts_skips(t
     assert any("node not installed" in d for d in res.details), res.details
 
 
+@pytest.mark.heavy
 def test_reach_sees_refs_and_yaml_aliases():
     for line in ("    ref: common/x@2", "accepts: *asr-cards", "cards: &asr-cards",
                  "  - *lc-adapters", "unplaced: reference only"):
@@ -269,6 +283,7 @@ def test_reach_sees_refs_and_yaml_aliases():
 
 # ------------------------------------------------------------------- exports ---
 
+@pytest.mark.heavy
 def test_exports_fail_on_a_stale_a_missing_and_an_extra_file(tmp_path):
     fresh, tree = tmp_path / "fresh", tmp_path / "tree"
     for d in (fresh, tree):
@@ -283,6 +298,7 @@ def test_exports_fail_on_a_stale_a_missing_and_an_extra_file(tmp_path):
     assert preflight.compare_exports(fresh, fresh) == ([], [], [])
 
 
+@pytest.mark.heavy
 def test_exports_report_a_stale_module_type_file_as_no_longer_exported(tmp_path, monkeypatch):
     """A component renamed to `part-numbers` leaves its old module-type file in
     the tree; the exporter no longer writes it, so the check names it."""
@@ -302,6 +318,7 @@ def test_exports_report_a_stale_module_type_file_as_no_longer_exported(tmp_path,
         for d in res.details), (res.summary, res.details)
 
 
+@pytest.mark.heavy
 def test_exports_fail_when_current_but_not_committed(tmp_path, monkeypatch):
     base = make_repo(tmp_path, {"library/exports/netbox/a.yaml": "old\n"})
     (tmp_path / "library/exports/netbox/a.yaml").write_text("new\n")
@@ -359,6 +376,7 @@ def test_a_touched_component_fans_out_to_every_device_that_places_it():
     assert devs / "commscope/ch3000" in devices
 
 
+@pytest.mark.heavy
 def test_a_library_wide_change_asks_for_the_full_lint():
     lab = str(next((LIBRARY / "labs").rglob("lab.yaml")).relative_to(ROOT))
     _, _, full, _ = preflight.lint_plan(preflight.Context(ROOT, None, [lab]))
@@ -425,6 +443,7 @@ def _bump(v):
     return f"{a}.{b}.{int(c) + 1}"
 
 
+@pytest.mark.heavy
 def test_devicelock_and_lint_pass_on_the_clean_copy(fresh):
     root, base = fresh
     dev = root / "library/devices" / DEVICE / "device.yaml"
@@ -437,6 +456,7 @@ def test_devicelock_and_lint_pass_on_the_clean_copy(fresh):
     assert res.summary.startswith("1 device(s) + library-wide rules:"), res.summary
 
 
+@pytest.mark.heavy
 def test_devicelock_fails_on_an_unbumped_change_and_on_a_relock_without_the_bump(fresh):
     """`--update` before the bump re-records the change and the working-tree
     check goes quiet; the merge-base lock still has the old version."""
@@ -457,6 +477,7 @@ def test_devicelock_fails_on_an_unbumped_change_and_on_a_relock_without_the_bump
     assert res.ok, res.details
 
 
+@pytest.mark.heavy
 def test_lint_fails_on_an_error_in_a_touched_device(fresh):
     root, base = fresh
     dev = root / "library/devices" / DEVICE / "device.yaml"
@@ -466,6 +487,7 @@ def test_lint_fails_on_an_error_in_a_touched_device(fresh):
     assert any(d.startswith("error:") and "as7726-32x" in d for d in res.details), res.details
 
 
+@pytest.mark.heavy
 def test_lint_fails_on_a_warning_the_baseline_does_not_carry(fresh):
     """Seeded from the other side: the baseline forgets one of the device's
     warnings, committed into the base, so the same warning is now new."""
@@ -485,6 +507,7 @@ def test_lint_fails_on_a_warning_the_baseline_does_not_carry(fresh):
     assert any(d.startswith(f"+1 [{code}] {key} - e.g.") for d in res.details), res.details
 
 
+@pytest.mark.heavy
 def test_lint_fails_on_a_component_no_device_places(fresh):
     """L89 is a library-wide rule a `--device` run skips. A new major nothing
     seats is an error in CI's full lint, and must be one here."""
@@ -519,6 +542,7 @@ def _device(description, extra=""):
     return f"kind: device\nname: box\ndescription: >\n  {description}\n{extra}"
 
 
+@pytest.mark.heavy
 def test_prose_warns_on_an_added_long_sentence_and_does_not_fail(tmp_path):
     base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8))})
     (tmp_path / PROSE_DEVICE).write_text(_device(_sentence(8) + " " + _sentence(26, "added")))
@@ -530,6 +554,7 @@ def test_prose_warns_on_an_added_long_sentence_and_does_not_fail(tmp_path):
     assert res.fix
 
 
+@pytest.mark.heavy
 def test_prose_is_silent_at_exactly_the_limit(tmp_path):
     base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8))})
     (tmp_path / PROSE_DEVICE).write_text(_device(_sentence(25, "added")))
@@ -538,6 +563,7 @@ def test_prose_is_silent_at_exactly_the_limit(tmp_path):
     assert "1 changed manifest" in res.summary
 
 
+@pytest.mark.heavy
 def test_prose_is_silent_on_a_long_sentence_the_base_already_has(tmp_path):
     """The existing text is left alone: the file changes, around a sentence of
     forty words that was there before, and nothing is reported. The same
@@ -556,6 +582,7 @@ def test_prose_is_silent_on_a_long_sentence_the_base_already_has(tmp_path):
     assert len(res.details) == 1 and "40 words" in res.details[0], res.details
 
 
+@pytest.mark.heavy
 def test_prose_is_silent_on_a_long_sentence_that_only_moved_lines(tmp_path):
     """Re-wrapping a folded block changes every line and no sentence."""
     words = _sentence(30, "old").split()
@@ -567,6 +594,7 @@ def test_prose_is_silent_on_a_long_sentence_that_only_moved_lines(tmp_path):
     assert preflight.check_prose(ctx).as_dict()["status"] == "PASS"
 
 
+@pytest.mark.heavy
 def test_prose_does_not_count_a_quoted_vendor_sentence(tmp_path):
     """Nine words of ours around twenty quoted from a vendor is a nine-word
     sentence. Without the quote marks it is twenty-nine, and is reported."""
@@ -580,6 +608,7 @@ def test_prose_does_not_count_a_quoted_vendor_sentence(tmp_path):
     assert res.as_dict()["status"] == "WARN" and "29 words" in res.details[0], res.details
 
 
+@pytest.mark.heavy
 def test_prose_reads_the_fields_an_export_carries_and_no_others(tmp_path):
     """A configuration's description, an attrs string and a component's
     description are read. A gap note, provenance and a file that is not a
@@ -610,6 +639,7 @@ def test_prose_reads_the_fields_an_export_carries_and_no_others(tmp_path):
         f"{PROSE_DEVICE}: configurations.ac.description"], res.details
 
 
+@pytest.mark.heavy
 def test_prose_is_silent_on_long_attrs_text_the_base_already_has(tmp_path):
     """The base is read through the same fields as the tree: a long sentence
     under `attrs`, and one inside a list there, are known and stay silent."""
@@ -627,6 +657,7 @@ def test_prose_is_silent_on_long_attrs_text_the_base_already_has(tmp_path):
         f"{PROSE_DEVICE}: attrs.power.notes[0]"], res.details
 
 
+@pytest.mark.heavy
 def test_a_quotation_that_ends_a_sentence_still_ends_it(tmp_path):
     """Fifteen words, a quotation with its own full stop, then fifteen more:
     two sentences, neither long. Merged they would be thirty."""
@@ -638,6 +669,7 @@ def test_a_quotation_that_ends_a_sentence_still_ends_it(tmp_path):
     assert preflight.check_prose(ctx_of(tmp_path, base)).as_dict()["status"] == "PASS"
 
 
+@pytest.mark.heavy
 def test_the_pass_summary_counts_only_the_files_that_were_read(tmp_path):
     base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8)),
                                 PROSE_PART: "kind: component\nname: card\n"})
@@ -647,6 +679,7 @@ def test_the_pass_summary_counts_only_the_files_that_were_read(tmp_path):
     assert res.summary.startswith("1 changed manifest"), res.summary
 
 
+@pytest.mark.heavy
 def test_prose_is_silent_on_a_new_major_that_copies_the_old_text(tmp_path):
     """A major bump is a new directory, so the whole file is added. Its
     sentences are compared with the majors the base holds."""
@@ -660,6 +693,7 @@ def test_prose_is_silent_on_a_new_major_that_copies_the_old_text(tmp_path):
     assert len(res.details) == 1 and "attrs.note: 28 words" in res.details[0], res.details
 
 
+@pytest.mark.heavy
 def test_a_warn_shows_in_the_report_and_leaves_the_exit_status_alone(tmp_path, capsys):
     base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8))})
     (tmp_path / PROSE_DEVICE).write_text(_device(_sentence(26, "added")))
@@ -684,11 +718,13 @@ def _changed_device_repo(tmp_path):
     return base
 
 
+@pytest.mark.heavy
 def test_conformance_warns_when_a_device_changed_and_no_report_was_run(tmp_path):
     res = preflight.check_conformance(ctx_of(tmp_path, _changed_device_repo(tmp_path)))
     assert res.as_dict()["status"] == "WARN" and "test_part_conformance_report" in res.fix
 
 
+@pytest.mark.heavy
 def test_conformance_passes_on_a_report_newer_than_the_change(tmp_path):
     base = _changed_device_repo(tmp_path)
     report = tmp_path / preflight.CONFORMANCE_REPORT
@@ -698,6 +734,7 @@ def test_conformance_passes_on_a_report_newer_than_the_change(tmp_path):
     assert res.as_dict()["status"] == "PASS" and "C15 x3" in res.summary
 
 
+@pytest.mark.heavy
 def test_conformance_warns_on_a_report_older_than_the_change(tmp_path):
     base = _changed_device_repo(tmp_path)
     report = tmp_path / preflight.CONFORMANCE_REPORT
@@ -708,6 +745,7 @@ def test_conformance_warns_on_a_report_older_than_the_change(tmp_path):
     assert res.as_dict()["status"] == "WARN" and "older" in res.summary
 
 
+@pytest.mark.heavy
 def test_conformance_is_silent_when_no_device_or_component_changed(tmp_path):
     base = make_repo(tmp_path, {"README.md": "a\n"})
     (tmp_path / "README.md").write_text("b\n")

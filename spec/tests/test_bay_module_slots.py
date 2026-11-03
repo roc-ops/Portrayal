@@ -80,6 +80,7 @@ def _render_with(tmp_path, dev, cfg, bays, occupants):
     return "".join(p.read_text() for p in out.glob(f"{Path(dev).name}.{cfg}.*.svg"))
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("dev,cfg,bay,ref,jack,plug", [
     ("casa/c100g", "bdm2m-11plus1", "front-6", "casa/smm-8x10g@1", "console",
      "generic/rj45-plug@1"),

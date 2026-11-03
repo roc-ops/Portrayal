@@ -400,6 +400,7 @@ def test_every_built_ac_outlet_and_inlet_element_says_what_it_is():
     assert seen["outlet"] >= 124 and seen["input"] >= 600 and under_module >= 600, (seen, under_module)
 
 
+@pytest.mark.heavy
 def test_a_mixed_group_of_outlets_drops_neither_fact(tmp_path):
     """A `mixed` group states no attrs, so nothing of the group says `outlet`;
     the element must still say it, from its part. Built: the PDUMH20NET with

@@ -751,6 +751,7 @@ def test_lint_every_new_default_is_in_its_slots_accepts(ref):
     assert _l110(_contract_path(ref), [str(LIB)]) == []
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref,wrong", [
     ("common/mpo-adapter@2", LC_CAP), ("common/mpo-flange-adapter@2", SC_CAP),
     ("common/lc-duplex-v-adapter@6", LC_CAP)])
@@ -766,6 +767,7 @@ def test_lint_finds_a_top_level_default_the_slot_does_not_take(tmp_path, ref, wr
     assert got and wrong in got[0], got
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", ["common/lc-duplex-adapter@6", "common/sc-duplex-adapter@5"])
 def test_lint_finds_a_bore_default_the_slot_does_not_take(tmp_path, ref):
     root = tmp_path / "lib"

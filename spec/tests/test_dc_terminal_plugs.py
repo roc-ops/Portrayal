@@ -655,6 +655,7 @@ def test_the_turned_seats_are_measured_turned(seated):
     assert turned == 4
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_each_wire_is_over_its_own_contact(seated, seat):
     """In the device frame, on a turned header as on a flat one: `wire-k` is

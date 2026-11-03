@@ -394,6 +394,7 @@ def test_the_chassis_device_types_are_exported(flavour, name):
     assert (LIB / "exports" / flavour / "device-types" / "Cisco" / f"{name}.yaml").exists()
 
 
+@pytest.mark.heavy
 def test_the_lock_agrees_with_the_chassis_and_the_new_parts():
     from portrayal import devicelock
 

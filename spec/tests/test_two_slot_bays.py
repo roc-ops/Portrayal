@@ -254,6 +254,7 @@ def test_the_latch_row_stays_when_slot_2_is_not_covered(tmp_path):
     assert 'id="riser-1--module--plate--louvres-1"' in svg
 
 
+@pytest.mark.heavy
 def test_the_build_refuses_the_bracket_over_slot_2s_filler(tmp_path):
     rc, err, _svg = _render(tmp_path, {"riser-1/slot-1": BRACKET})
     assert rc != 0

@@ -602,6 +602,7 @@ def test_every_module_port_name_is_bay_scoped():
     assert not bad, "\n".join(bad[:20])
 
 
+@pytest.mark.heavy
 def test_no_device_type_puts_two_bays_at_one_position():
     """The position IS the `{module}` value. The trailing number alone put Fan 1,
     PSU 1 and slot-1 all at `1` on 167 of 205 bayed devices."""

@@ -64,6 +64,7 @@ def _dir(root, target, dist, card):
     return Path(root) / target / "module-types" / dist.manufacturer_of(card["ns"])
 
 
+@pytest.mark.heavy
 def test_a_module_type_no_component_writes_any_more_is_removed(tmp_path, capsys):
     dist = _dist()
     two = _card(dist, "prune-card", ["PRUNE-OPEN", "PRUNE-NOLIC"])
@@ -82,6 +83,7 @@ def test_a_module_type_no_component_writes_any_more_is_removed(tmp_path, capsys)
     assert "PRUNE-OPEN.yaml" not in out.split("removed", 1)[-1], "a kept file is not reported"
 
 
+@pytest.mark.heavy
 def test_a_file_the_library_still_writes_is_kept_byte_for_byte(tmp_path, capsys):
     dist = _dist()
     card = _card(dist, "prune-card", ["PRUNE-OPEN", "PRUNE-NOLIC"])
@@ -96,6 +98,7 @@ def test_a_file_the_library_still_writes_is_kept_byte_for_byte(tmp_path, capsys)
         assert now == before[t] and len(now) == 2, t
 
 
+@pytest.mark.heavy
 def test_only_the_exporters_own_kind_of_file_is_removed(tmp_path):
     dist = _dist()
     card = _card(dist, "prune-card", ["PRUNE-OPEN"])

@@ -658,6 +658,7 @@ def overridden(tmp_path_factory):
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("case", OVERRIDES, ids=[c[0].split("/")[1] for c in OVERRIDES])
 def test_a_placements_cable_od_sets_the_stub(overridden, case):
     ref, _device, _config, _view, host_id, od = case

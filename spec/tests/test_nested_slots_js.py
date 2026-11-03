@@ -246,6 +246,7 @@ def test_a_second_swap_takes_the_plug_out(world):
     assert lc1 == ["bay-1/module/lc1"], lc1
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_seated_plugs_own_slots_are_read_at_its_chained_path(world):
     """P3, amended 2026-09-24. Given an index in which the duplex plug
@@ -663,6 +664,7 @@ def _keyed(tmp_path, src, cfg, key, ref):
     return dev
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("src,cfg,key,ref,instead", WRAPPED, ids=[w[0] for w in WRAPPED])
 def test_the_build_refuses_a_key_on_a_wrappers_aperture(tmp_path, src, cfg, key, ref, instead):
     dev = _keyed(tmp_path, src, cfg, key, ref)

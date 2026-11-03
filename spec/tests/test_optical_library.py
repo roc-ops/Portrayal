@@ -14,6 +14,7 @@ import yaml
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library" / "components"
 from portrayal import optical
+import pytest
 
 
 def contracts():
@@ -37,6 +38,7 @@ def test_the_sweep_finds_optical_contracts_at_all():
         "this sweep stopped finding them")
 
 
+@pytest.mark.heavy
 def test_every_optical_endpoint_resolves_to_a_real_position():
     bad = []
     for f, d in contracts():
@@ -51,6 +53,7 @@ def test_every_optical_endpoint_resolves_to_a_real_position():
     assert not bad, "unresolvable optical endpoints:\n  " + "\n  ".join(bad)
 
 
+@pytest.mark.heavy
 def test_every_declared_position_is_reached_or_declared_unused():
     bad = []
     for f, d in contracts():

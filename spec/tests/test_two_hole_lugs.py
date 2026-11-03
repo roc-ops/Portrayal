@@ -570,6 +570,7 @@ def kit(built, tmp_path_factory):
     return got
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("pid", KIT_ASKS)
 def test_the_kit_offers_the_pair_and_its_studs(kit, pid):
     ids = {e["id"] for e in kit[pid]["studs"]}

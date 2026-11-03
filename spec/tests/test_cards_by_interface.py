@@ -534,6 +534,7 @@ def test_a_published_component_bay_list_is_the_list_the_contract_states():
     assert checked > 50, f"read {checked} bays"
 
 
+@pytest.mark.heavy
 def test_a_published_device_bay_list_is_the_list_the_manifest_states():
     if not (LIB / "dist" / "components.json").exists():
         pytest.skip("components.json not built")

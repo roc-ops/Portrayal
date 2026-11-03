@@ -244,6 +244,7 @@ def test_two_boxes_cannot_share_a_face_plane_where_they_overlap():
     assert not run(a, b)
 
 
+@pytest.mark.heavy
 def test_no_library_part_has_coplanar_body_boxes():
     for f in sorted((LIB / "components").glob("**/contract.yaml")):
         boxes = ((yaml.safe_load(f.read_text()) or {}).get("body") or {}).get("boxes") or []

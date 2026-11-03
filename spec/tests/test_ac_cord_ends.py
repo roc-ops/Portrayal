@@ -176,6 +176,7 @@ def test_a_panel_of_inlets_publishes_one_slot_each(comps):
     assert all(c["accepts"] == ["generic/c13-plug@1"] for c in slots)
 
 
+@pytest.mark.heavy
 def test_a_placed_supply_with_one_inlet_is_the_slot(tmp_path):
     """common/psu-550w@2 is PLACED on a face, not seated in a bay, and composes
     one inlet: it presents that inlet as its own, so the slot is published at
@@ -552,6 +553,7 @@ def overridden(tmp_path_factory):
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("case", OVERRIDES, ids=[c[0].split("/")[1] for c in OVERRIDES])
 def test_a_placements_cable_od_sets_the_stub(overridden, case):
     ref, _device, _view, host_id, od = case

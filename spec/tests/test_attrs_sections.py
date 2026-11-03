@@ -111,6 +111,7 @@ def test_the_requirement_names_a_section_and_not_four_spellings():
     assert reqs[1]["keys"] == ["cpu", "memory"]
 
 
+@pytest.mark.heavy
 def test_the_tail_is_counted_so_it_cannot_go_quiet(tmp_path):
     """`other` is a section, not an escape hatch, and the difference is that
     somebody counts it. 17 of the 22 keys that fit no section appeared on

@@ -82,6 +82,7 @@ def translate(el):
     return float(m.group(1)), float(m.group(2))
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("config, back", [("cas", (99.0, 31.0)), ("pan", (88.0, 34.8))])
 def test_each_back_is_centred_on_the_cutout_it_is_seen_through(built, config, back):
     root = built[config]

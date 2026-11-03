@@ -66,3 +66,28 @@ def test_marking_adds_the_decorator_once_and_the_import_it_needs(tmp_path):
     assert "    @pytest.mark.heavy\n    def test_m" in text
     assert "@pytest.mark.heavy\ndef test_fast" not in text
     compile(text, str(src), "exec")
+
+
+def test_a_group_is_heavy_together():
+    """THE TESTS OF AN xdist GROUP WAIT ON ONE SHARED RUN, and whichever of them
+    runs first is billed for it: in a full run one `full-lint` reader took 290 s
+    and its group-mates 0.01 s. Marked singly, the cheap-looking readers stay
+    light and the light tier runs the whole-library lint anyway."""
+    times = {"test_l::a@full-lint": 200.0, "test_l::b@full-lint": 0.01,
+             "test_o::c[x@1]@full-lint": 0.02, "test_l::d": 0.1}
+    assert mark_heavy.heavy_functions(times) == {
+        ("test_l", "a"), ("test_l", "b"), ("test_o", "c")}
+
+
+def test_the_heaviest_of_several_runs_decides():
+    """A module fixture is billed to whichever test a worker runs first, so the
+    same function measures heavy in one run and light in the next."""
+    one = {"test_m::f": 6.0, "test_m::g": 0.1}
+    two = {"test_m::f": 0.1, "test_m::g": 6.0}
+    assert mark_heavy.heavy_functions([one, two]) == {("test_m", "f"), ("test_m", "g")}
+
+
+def test_a_key_splits_into_module_function_and_group():
+    assert suite_times.split_key("test_c::C.f[common/x@1]@full-lint") == (
+        "test_c", "C.f", "full-lint")
+    assert suite_times.split_key("test_c::f[common/x@1]") == ("test_c", "f", None)

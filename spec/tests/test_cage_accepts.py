@@ -193,6 +193,7 @@ def test_a_family_with_nothing_to_seat_says_so_explicitly():
     assert pool.get("cfp2"), "the cached pool was edited"
 
 
+@pytest.mark.heavy
 def test_a_cage_entry_carries_the_documented_shape(tmp_path):
     idx = _build(CSR310, tmp_path)
     cage = _cage(idx, "front", "m1-0")

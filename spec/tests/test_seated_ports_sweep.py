@@ -71,6 +71,7 @@ def test_every_yes_is_drawn(sweep):
     assert sweep["slots"] > 100, f"the kit said yes to {sweep['slots']} slots that take a cable end"
 
 
+@pytest.mark.heavy
 def test_a_bay_the_configuration_has_and_does_not_list_gets_an_answer(sweep):
     # asked of every part of its default, each answer held to the drawing above
     assert sweep["unspoken"] > 4000, "no bay left to its default was asked about"

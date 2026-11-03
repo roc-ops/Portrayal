@@ -181,6 +181,7 @@ def _seat(seated, seat):
     return parents, host, occ, configs
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_it_seats_with_its_mate_on_the_receptacles_mate(seated, seat):
     parents, host, occ, _ = _seat(seated, seat)

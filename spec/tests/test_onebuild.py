@@ -119,6 +119,7 @@ def test_a_copy_can_be_written_into_without_touching_the_shared_index(tmp_path):
     assert not (shared_json.parent / "a-render.svg").exists()
 
 
+@pytest.mark.heavy
 @pytest.mark.xdist_group("full-lint")
 def test_the_lint_run_is_the_real_command_over_the_whole_library():
     """NON-VACUITY for the three tests that read it: a run that linted nothing

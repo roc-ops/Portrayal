@@ -103,6 +103,7 @@ def test_the_fixture_overlay_builds_into_its_own_folder(built):
     assert list(rack) == [DEVICE] and rack[DEVICE]["ru"] == 1
 
 
+@pytest.mark.heavy
 def test_the_overlay_build_names_the_fixture_as_a_fixture(built):
     """Nothing guessed is presented as fact: the device says what it is."""
     doc = yaml.safe_load(device_file(FIXTURE).read_text())
@@ -111,6 +112,7 @@ def test_the_overlay_build_names_the_fixture_as_a_fixture(built):
     assert all(v["confidence"] == "estimated" for v in doc["provenance"].values())
 
 
+@pytest.mark.heavy
 def test_the_public_dist_is_byte_identical_with_and_without_an_overlay(built):
     r, _, before, after = built
     assert r.returncode == 0, r.stdout[-3000:] + r.stderr[-3000:]
@@ -159,6 +161,7 @@ def test_a_public_component_ref_in_the_overlay_is_refused_naming_both(tmp_path):
     assert "common/led-dot@1" in text, text[-2000:]
 
 
+@pytest.mark.heavy
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
 @pytest.mark.parametrize("script", ["overlay-dist.mjs", "overlay-shell.mjs"])
 def test_the_kit_loads_the_overlay_device_beside_a_public_one(built, script):
@@ -172,6 +175,7 @@ def test_the_kit_loads_the_overlay_device_beside_a_public_one(built, script):
     assert "# pass 0" not in p.stdout and "# pass" in p.stdout, p.stdout[-2000:]
 
 
+@pytest.mark.heavy
 def test_the_3d_viewer_reads_its_indexes_through_the_layered_reader():
     """viewer3d.js needs three.js and cannot be mounted under node, so what is
     held is the line that matters: its component index comes through

@@ -56,18 +56,24 @@ LOAD_SUSPECT = 1.5  # a load this high is named: a busy runner, or everything sl
 ARTIFACT = "test-times"
 
 
-def fold_function(key):
-    """(module stem, function) for a test key: `stem::C.name[param]@group` is
-    `(stem, "C.name")`. Every parameter of a function is one cost, and the tier
-    and the budget are decided per function.
+def split_key(key):
+    """(module stem, function, xdist group or None) for a test key:
+    `stem::C.name[param]@group` is `(stem, "C.name", "group")`.
 
     A GROUP SUFFIX COMES AFTER THE PARAMETER. Component refs put `@1` inside a
     parameter, so an `@` counts as xdist's group suffix only when it follows the
     last `]` - the rule xdist's own scheduler uses (`scheduler/loadgroup.py`)."""
     stem, _, rest = key.partition("::")
+    group = None
     if rest.rfind("@") > rest.rfind("]"):
-        rest = rest[:rest.rfind("@")]
-    return stem, rest.split("[", 1)[0]
+        rest, group = rest[:rest.rfind("@")], rest[rest.rfind("@") + 1:]
+    return stem, rest.split("[", 1)[0], group
+
+
+def fold_function(key):
+    """(module stem, function) for a test key. Every parameter of a function is
+    one cost, and the tier and the budget are decided per function."""
+    return split_key(key)[:2]
 
 
 def read_junit(path):

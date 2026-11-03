@@ -97,6 +97,7 @@ def test_a_retired_module_alone_writes_nothing(tmp_path):
     assert not any("FIXTURE-RETIRED" in f for f in files), files
 
 
+@pytest.mark.heavy
 def test_a_retired_major_does_not_change_its_successors_export(tmp_path):
     """Sorted FIRST and identical in what a DCIM reads, so without the skip it
     would collapse into the successor's file and put its own stamp there."""

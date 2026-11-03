@@ -85,6 +85,7 @@ def test_a_manifest_missing_one_is_actually_rejected():
         assert any(field in str(e.message) for e in v.iter_errors(short)), field
 
 
+@pytest.mark.heavy
 def test_every_declared_profile_is_a_defined_one(devices, profiles):
     """`dell/r740xd` said `server` when profiles.yaml had only `networking` and
     `optical`, which capability reports as `profile-undefined`. Declaring a
@@ -110,6 +111,7 @@ def test_every_profile_says_what_it_requires(profiles):
         assert spec.get("requires"), f"{name} demands nothing, so the flag is free"
 
 
+@pytest.mark.heavy
 def test_changing_the_profile_asks_for_a_version(devices):
     """It sat beside `maturity`, which IS hashed, and was not. A required field
     nothing fingerprints can be changed with no version consequence - and this

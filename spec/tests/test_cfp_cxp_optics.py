@@ -581,6 +581,7 @@ def _slots(entry):
     return [s for s in [entry.get("presents")] + (entry.get("cages") or []) if s]
 
 
+@pytest.mark.heavy
 @EACH
 def test_each_receptacle_is_a_slot_offering_its_plugs_and_cap(comps, ref):
     want, iface, accepts = OPTICS[ref][2:]
@@ -650,6 +651,7 @@ def device_cages():
     return got
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("family", sorted(OFFERS))
 def test_every_cage_of_the_family_offers_exactly_its_own_optics(device_cages, comps, family):
     """Every placement of these four cages is on a card, so the cages are

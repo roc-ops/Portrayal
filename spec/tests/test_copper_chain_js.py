@@ -127,6 +127,7 @@ def clean(world, face, seated):
 
 # ---------------------------------------------------------------- the build
 
+@pytest.mark.heavy
 def test_the_build_draws_the_chain_in_both_cages(world):
     """The premise: each link `data-for` the one below, siblings in the
     device's group, and the turned cage's links really turned - so a kit
@@ -164,6 +165,7 @@ def test_each_face_offers_the_next_link(world):
     assert rot[TURNED] != rot["port-0"], rot
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("port", PORTS)
 @pytest.mark.parametrize("tier", [0, 1, 2], ids=["sfp", "plug", "boot"])

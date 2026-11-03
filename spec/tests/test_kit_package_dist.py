@@ -36,6 +36,7 @@ def result(tmp_path_factory):
     return json.loads(p.stdout.strip().splitlines()[-1])
 
 
+@pytest.mark.heavy
 def test_latest_is_pinned_before_anything_else_is_read(result):
     """`latest` moves; the page must not mix two releases, so it asks once
     what `latest` is and reads everything else at that exact version."""
@@ -44,6 +45,7 @@ def test_latest_is_pinned_before_anything_else_is_read(result):
         f"https://cdn.test/npm/@portrayal/index@{result['indexVersion']}/packages.json"]
 
 
+@pytest.mark.heavy
 def test_every_file_the_kit_can_ask_for_lands_in_the_package_that_holds_it(result):
     assert result["checked"] > 3000, "measured almost nothing; the build is not the library"
     assert not result["unresolved"], result["unresolved"]
@@ -59,6 +61,7 @@ def test_an_index_version_npm_does_not_have_says_so(result):
     assert "HTTP 404" in result["pinnedMissing"]
 
 
+@pytest.mark.heavy
 def test_an_empty_dist_is_the_default_as_it_was(result):
     """`opts.dist || default` before #691: an empty string is not a base."""
     assert result["resolverFromEmpty"] == "../dist/devices.json"

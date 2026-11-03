@@ -259,6 +259,7 @@ def assert_seated(root, parents, holder_path, host_id, host_ref, root_lib):
 
 # --- a bore's default ----------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_an_unconfigured_bore_draws_its_default_in_every_configuration(tmp_path, lib):
     dev, configs = fhd(tmp_path, "test/capped-cassette@1")
     assert len(configs) > 1, "every configuration needs more than one"
@@ -269,6 +270,7 @@ def test_an_unconfigured_bore_draws_its_default_in_every_configuration(tmp_path,
         assert_seated(root, parents, "bay-1/module/lc01", "1", "std/lc-bore@3", lib)
 
 
+@pytest.mark.heavy
 def test_an_empty_string_empties_a_default(tmp_path, lib):
     dev, _ = fhd(tmp_path, "test/capped-cassette@1", {"bay-1/lc01/1": ""})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
@@ -500,6 +502,7 @@ def booted(lib):
     return lib
 
 
+@pytest.mark.heavy
 def test_a_configured_occupant_brings_its_own_default(tmp_path, booted):
     """The occupant path: a plug seated by a configuration ships its boot,
     whatever seated the plug (the nested seat, inside the cassette)."""
@@ -521,6 +524,7 @@ def test_a_default_occupant_brings_its_own_default(tmp_path, booted):
         "bay-1/module/lc01/1-occupant-occupant": BOOT}
 
 
+@pytest.mark.heavy
 def test_a_configuration_empties_a_chained_default(tmp_path, booted):
     """The chained default stays addressable: the produced id empties it."""
     dev, _ = fhd(tmp_path, "test/booted-cassette@1",
@@ -540,6 +544,7 @@ def test_a_device_level_occupant_brings_its_own_default(tmp_path, booted):
                                      "port-1510-occupant-occupant": BOOT}
 
 
+@pytest.mark.heavy
 def test_a_device_level_chained_default_is_addressable(tmp_path, booted):
     out = build(dcp(tmp_path, {"port-1510": "test/booted-plug@1",
                                "port-1510-occupant": ""}),
@@ -548,6 +553,7 @@ def test_a_device_level_chained_default_is_addressable(tmp_path, booted):
     assert occupants_drawn(root) == {"port-1510-occupant": "test/booted-plug@1"}
 
 
+@pytest.mark.heavy
 def test_a_device_level_default_brings_its_own_default(tmp_path, booted):
     """The placed slot's own default ships its boot too: port-1510 defaults to
     the plug (test/self-hplug@1 below is the same adapter, defaulted)."""
@@ -608,6 +614,7 @@ def test_a_bay_module_whose_parts_ship_defaults_is_fine(tmp_path, lib):
 
 # --- two slots shipping the same part, and a real cycle ---------------------------------
 
+@pytest.mark.heavy
 def test_sibling_slots_shipping_the_same_default_each_ship_its_chain(tmp_path, booted):
     """THE GUARD IS THE CHAIN, NOT THE REF. Both bores of an adapter ship the
     same plug, and that plug ships a boot: two plugs and TWO boots. A guard

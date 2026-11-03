@@ -137,6 +137,7 @@ def component_names():
     return {c.parts[-3] for c in LIB.glob("components/*/*/v*/contract.yaml")}
 
 
+@pytest.mark.heavy
 def test_nothing_exported_is_cut_mid_word(component_names):
     """A description is mid-word only if it was TRUNCATED and does not say so.
 

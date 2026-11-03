@@ -315,6 +315,7 @@ def _components_stating_a_dc_block():
                   for p in (LIB / "components").glob("*/*/v*/contract.yaml") if "\ndc:" in "\n" + p.read_text())
 
 
+@pytest.mark.heavy
 def test_a_component_of_the_real_library_publishes_dc_ports_when_it_states_a_dc_block_and_not_otherwise():
     """Before the first part stated a `dc` block this held the library to none."""
     doc = json.loads((onebuild.components_index() / "components.json").read_text())

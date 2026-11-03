@@ -110,6 +110,7 @@ def test_a_superseded_by_pointer_does_not_count_as_a_use(tmp_path):
     assert composed.get("generic/sfp-lc@1", set()) == set(), composed.get("generic/sfp-lc@1")
 
 
+@pytest.mark.heavy
 def test_a_device_that_only_names_a_part_in_prose_does_not_seat_it():
     """#348: the `devices` column counted a ref anywhere in a manifest's text,
     so a device explaining why it does NOT use a part counted as seating it.

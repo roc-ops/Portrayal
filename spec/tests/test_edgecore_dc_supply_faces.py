@@ -438,6 +438,7 @@ def test_the_committed_module_exports_equal_the_exporters_own_output(flavour, tm
         assert made[0].read_text() == committed.read_text(), name
 
 
+@pytest.mark.heavy
 def test_the_lock_agrees_with_the_three_devices_and_the_five_parts():
     from portrayal import devicelock
 

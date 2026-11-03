@@ -644,6 +644,7 @@ def test_no_other_bay_accepts_the_sfc2():
                 assert slug in ASR and b["id"] in FC_IDS, (slug, b["id"])
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("slug", ASR)
 def test_asr_chassis_versions_and_locks(slug):
     assert device(slug)["version"] == ASR_VERSIONS[slug]

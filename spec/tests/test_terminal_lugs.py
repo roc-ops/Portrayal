@@ -543,6 +543,7 @@ def kit(built, tmp_path_factory):
     return got
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("device", KIT_FACES)
 def test_the_kits_slot_walk_offers_every_pole_of_every_block(kit, built, device):
     config, view, path, block, key = SEATED[device]

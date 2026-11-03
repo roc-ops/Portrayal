@@ -105,6 +105,7 @@ def test_a_fixed_warning_is_reported_as_fixed():
     assert not new and gone == {"a.yaml": {"L61": 2}}
 
 
+@pytest.mark.heavy
 @pytest.mark.xdist_group("full-lint")
 def test_the_baseline_matches_the_library_today():
     """A committed baseline that has drifted from the tree is worse than none -
@@ -123,6 +124,7 @@ def test_the_c40g_states_its_l44_decision():
     assert "3D" in reason, "the reason should say why the field is kept"
 
 
+@pytest.mark.heavy
 @pytest.mark.xdist_group("full-lint")
 def test_a_waived_warning_is_separated_and_its_reason_printed():
     r = onebuild.full_lint()

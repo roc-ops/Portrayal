@@ -339,6 +339,7 @@ def test_every_case_is_a_lifted_slot_the_kit_used_to_refuse(parity):
     assert by["dcp-2 ila-node"]["built"]["slot-1/module/edfa"]["ref"] == DUPLEX
 
 
+@pytest.mark.heavy
 @needs_node
 def test_nestedSlots_is_the_slot_entry_on_every_carrier(parity):
     """The parity seats through the kit's own nestedSlots (B3 Task 10a) - on

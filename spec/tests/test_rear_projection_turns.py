@@ -154,6 +154,7 @@ def test_a_back_with_no_footprint_fills_the_turned_hole():
     assert turned_box(*p["at"], 100, 40, p["rotate"]) == pytest.approx((10.0, 5.0, 50.0, 105.0))
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("config, back", [("cas", (99.0, 31.0)), ("odd", (60.0, 30.0))])
 def test_the_rendered_back_is_turned_and_lies_inside_its_hole(built, config, back):
     el = by_id(built[config], "bay-1-rear")
@@ -169,6 +170,7 @@ def test_the_rendered_back_is_turned_and_lies_inside_its_hole(built, config, bac
     assert tuple(map(float, hole.get("data-rear-at").split(","))) == pytest.approx((x, y))
 
 
+@pytest.mark.heavy
 def test_the_cassettes_centred_body_is_centred_in_the_hole(built):
     x, y, r, _, _ = pose(by_id(built["cas"], "bay-1-rear"))
     assert (x + 99.0 / 2, y + 31.0 / 2) == pytest.approx(CENTRE)

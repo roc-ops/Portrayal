@@ -378,6 +378,7 @@ def test_the_fhd_front_keeps_its_cassettes_and_its_caps_apart(roles):
     assert len(caps) == 24 and all(re.fullmatch(r"bay-[1-4]/module/lc[1-6]-occupant", c) for c in caps)
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_cassette_back_holds_no_fru(roles, world):
     """The back's own drawing is what 3D builds a cassette's back from, inside
@@ -405,6 +406,7 @@ def _check_face(world, seated, case, view, cfg):
     return tree_diff(out["faces"][view], world["faces"][f"{cfg}:{view}"])
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("case", sorted(f"fhd:{c}" for c in FHD) + sorted(f"dcp:{c}" for c in DCP))
 def test_the_faces_3d_is_cut_from_are_the_builds(world, seated_faces, case):
