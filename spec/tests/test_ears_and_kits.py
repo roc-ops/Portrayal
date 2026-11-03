@@ -570,6 +570,7 @@ def test_an_edited_kit_makes_its_device_stale(lib):
     assert names == {"acme/slide", "acme/inner", "acme/outer", "acme/mid", "acme/cma"}
 
 
+@pytest.mark.heavy
 def test_render_writes_ears_and_kits_into_configs_json(lib, tmp_path):
     """End to end: the real duct, given positions and a kit from the tmp
     library, renders them into its configs.json."""

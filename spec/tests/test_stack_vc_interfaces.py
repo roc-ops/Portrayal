@@ -168,6 +168,7 @@ def _rear_cages(dev, tmp_path):
     return cfg["cages"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("dev", DEVICES)
 def test_each_stack_or_vcp_placement_is_a_connector_slot_of_its_key(dev, tmp_path):
     cages = _rear_cages(dev, tmp_path)

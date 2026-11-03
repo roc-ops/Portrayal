@@ -295,6 +295,7 @@ def test_a_raised_cage_on_a_card_lifts_its_optic(tmp_path):
     assert effective_lift(parents, occ) == pytest.approx(effective_lift(parents, card) + pub["lift"])
 
 
+@pytest.mark.heavy
 def test_a_bay_only_on_an_unbound_variant_face_is_reported(tmp_path):
     """The R740xd's LFF drive bays live on the `front-lff-12` variant, which
     the default configuration does not bind: no drawing shows them, so a key

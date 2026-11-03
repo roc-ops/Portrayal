@@ -139,6 +139,7 @@ def test_a_bay_attrs_key_is_checked_too():
     assert len(found) == 1 and "mpa-7" in found[0], found
 
 
+@pytest.mark.heavy
 def test_the_whole_library_passes_it():
     bad = []
     for p in libwalk.iter_devices([LIB]):

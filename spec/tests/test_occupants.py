@@ -26,6 +26,7 @@ LIB = SPEC.parent / "library"
 import warmrender
 from portrayal import lint
 from portrayal import libwalk
+import pytest
 
 SRC = LIB / "devices/ufispace/s9510-28dc"
 PORTS = ["port-4", "port-5", "port-6", "port-7"]
@@ -199,6 +200,7 @@ def test_a_chain_cycling_back_on_itself_is_an_error(tmp_path):
     assert any("cycles back" in e for e in errs), errs
 
 
+@pytest.mark.heavy
 def test_the_library_is_clean():
     for man in libwalk.iter_devices([LIB]):
         assert not errors_for(man, yaml.safe_load(man.read_text())), man

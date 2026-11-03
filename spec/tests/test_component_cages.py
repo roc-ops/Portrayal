@@ -340,6 +340,7 @@ def test_every_component_cage_is_the_device_answer_for_the_same_placement(
     assert checked > 0
 
 
+@pytest.mark.heavy
 def test_the_census_every_cage_presenting_part_is_published(index, lib, families):
     """Across the whole library: the published cages are exactly the
     cage-presenting parts, counted independently of the indexer. 166

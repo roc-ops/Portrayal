@@ -93,6 +93,13 @@ testpaths = ["spec/tests"]
 # `loadgroup` is `load` for every test without an `xdist_group` mark, and does
 # nothing at all without `-n`.
 addopts = "--dist loadgroup"
+# THE TWO TIERS. A pull request push runs `-m "not heavy"`; a full run - a pull
+# request labelled `full-gates`, the nightly, a fork's pull request - runs everything.
+# A test is marked from a measurement (spec/tools/dev/mark_heavy.py), and both
+# tiers answer to spec/test-budget.json.
+markers = [
+  "heavy: five seconds or more per function in a full run; runs at merge time and nightly, not on a pull request push",
+]
 # A PASSING TEST'S tmp_path IS REMOVED WHEN IT FINISHES, and a clean run removes
 # its worker directories; only failures are kept to look at. pytest's default
 # keeps every test's directory for the last three runs, and this suite renders

@@ -132,6 +132,7 @@ def test_the_jack_states_no_rating_of_its_own():
 
 # --- 2. the seven placements, and their ratings ------------------------------------
 
+@pytest.mark.heavy
 def test_the_jack_is_placed_on_exactly_these_devices():
     """The census: every placement of the jack in the library, and nothing
     composes it inside another part. Seven: the CRS309-1G-8S+IN is the seventh."""
@@ -191,6 +192,7 @@ def comps():
     return got
 
 
+@pytest.mark.heavy
 def test_the_barrel_plug_is_the_one_part_that_mates_dc_barrel(comps):
     assert sorted(r for r in comps if _contract(r).get("mates") == IFACE) == [PLUG]
     assert [r for r in comps if _contract(r).get("interface") == IFACE] == [JACK]

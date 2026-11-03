@@ -144,6 +144,7 @@ def test_no_other_component_carries_either_model():
 
 # --- which bays take them ------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_ac_module_is_accepted_in_the_ac_positions_of_the_two_chassis_and_nowhere_else():
     seen = {}
     for p, doc in _all_devices():
@@ -393,6 +394,7 @@ def test_the_chassis_device_types_are_exported(flavour, name):
     assert (LIB / "exports" / flavour / "device-types" / "Cisco" / f"{name}.yaml").exists()
 
 
+@pytest.mark.heavy
 def test_the_lock_agrees_with_the_chassis_and_the_new_parts():
     from portrayal import devicelock
 

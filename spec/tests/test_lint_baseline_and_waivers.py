@@ -61,6 +61,7 @@ def test_the_baseline_exists_and_is_counts_not_sentences():
             assert code.startswith("L") and isinstance(n, int) and n > 0, (f, code, n)
 
 
+@pytest.mark.heavy
 @pytest.mark.xdist_group("full-lint")
 def test_a_clean_tree_reports_no_change():
     """THE POINT OF THE WHOLE THING. The tail has to say the backlog is the
@@ -74,6 +75,7 @@ def test_a_clean_tree_reports_no_change():
     assert "no change against the baseline" in r.stdout, r.stdout[-800:]
 
 
+@pytest.mark.heavy
 def test_new_only_prints_nothing_on_a_clean_tree():
     r = run("--new-only")
     assert r.returncode == 0
@@ -103,6 +105,7 @@ def test_a_fixed_warning_is_reported_as_fixed():
     assert not new and gone == {"a.yaml": {"L61": 2}}
 
 
+@pytest.mark.heavy
 @pytest.mark.xdist_group("full-lint")
 def test_the_baseline_matches_the_library_today():
     """A committed baseline that has drifted from the tree is worse than none -
@@ -121,6 +124,7 @@ def test_the_c40g_states_its_l44_decision():
     assert "3D" in reason, "the reason should say why the field is kept"
 
 
+@pytest.mark.heavy
 @pytest.mark.xdist_group("full-lint")
 def test_a_waived_warning_is_separated_and_its_reason_printed():
     r = onebuild.full_lint()
@@ -156,6 +160,7 @@ def test_changing_a_waiver_asks_for_a_version():
     assert before["surface"] != after["surface"]
 
 
+@pytest.mark.heavy
 def test_waivers_have_not_become_the_answer():
     """The count that matters if this field goes wrong. One device when this
     landed; a library where waiving is how warnings are dealt with would show

@@ -267,8 +267,9 @@ id (`libdata.each_device()`), so a failure names the device in the id and the
 rule in the message rather than handing you a list of slugs and a test name.
 
 **That, with every test file your change adds or edits, is the local run.**
-The whole suite is CI's: it runs on the pull request, and a local copy of it
-only repeats that run, at twenty minutes or more on one machine.
+The whole suite is CI's: the light tier runs on every push and the rest before
+the merge ("The gates", below), and a local copy of it only repeats that
+work, at twenty minutes or more on one machine.
 The tests that count the whole library, such as a census a new device has to
 join, answer there. For a component, select `-k <ns>/<part>` and every device
 the lock check named, since those are the devices the change reaches:
@@ -337,6 +338,11 @@ the maintainer to read it. It is one-way if any of these is true:
   version cannot be withdrawn from whoever installed it.
 - **It changes how changes are checked or merged:** a workflow, the merge
   script, a repository setting.
+- **It raises a number in `spec/test-budget.json`, or re-records
+  `spec/test-budget-reference.json`.** The budget is what keeps a pull request
+  push quick and the suite from growing unseen, and the reference is the run
+  its numbers are read against. Changing either decides that every later
+  change pays for the growth, so the maintainer makes that decision.
 
 Beside the door, say the **blast radius**: who notices if it is wrong. One
 device, every device that seats a part, DCIM data already imported, kit
@@ -414,9 +420,23 @@ runs the suite.
 
 Every pull request, device or not, passes the same checks: `lint`, `publish`
 (build + exports), the `devicelock` check, "exports are current", and `pytest`.
-CI builds once and runs the suite in four parallel shards against that build;
-the check named `build` passes only when every shard did, and it proves the
-shards between them ran every collected test exactly once. Locally you run
+CI builds once and runs the suite in parallel shards against that build, and
+it proves the shards between them ran every collected test exactly once.
+
+**The suite has two tiers.** A push to a pull request runs the light tier,
+every test not marked `heavy`, and its verdict is the check `light suite`.
+Heavy tests are the few hundred functions a full run measured at five seconds
+or more. The whole suite runs before a merge, when the maintainer or the
+merge agent labels the pull request `full-gates` (`gh pr edit <number>
+--add-label full-gates`; every later push runs it too), and every night
+on `main`. Only that full run reports `build`,
+the check branch protection requires, so a pull request shows `build` as
+expected until it has had one. A pull request from a fork runs the whole
+suite on every push, since nobody can start a run on a fork's branch. Both
+tiers are held to `spec/test-budget.json`: a tier over its summed seconds, or
+a new light-tier test function of five seconds or more, fails the run. A slow
+test can be made cheaper, or marked `@pytest.mark.heavy`; it then still
+counts against the full budget. Locally you run
 the part of it your change reaches (above). CI runs the steps in that order because its lock check only has to confirm that the
 lock you committed matches the tree. Locally the lock step comes earlier, as
 step 5 shows: the check must see the lock *before* you regenerate it, or the

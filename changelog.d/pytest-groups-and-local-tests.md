@@ -9,5 +9,5 @@
 ### Changed
 - A contributor runs the tests a change reaches, not the whole suite:
   `pytest spec/tests -k <vendor>/<model>` and the test files the change adds or
-  edits. CI runs the whole suite on the pull request. The contributing guide,
+  edits. CI runs the rest ("The gates" in the contributing guide). The guide,
   the pull request template, the modelling skill and `AGENTS.md` say so.

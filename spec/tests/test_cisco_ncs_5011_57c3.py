@@ -289,6 +289,7 @@ def test_57c3_fans_fill_their_trays_as_the_figure_shows(part):
         assert not list(g.iter(ns + "rect")), (part, g.get("id"))
 
 
+@pytest.mark.heavy
 def test_the_lock_agrees_with_the_devices():
     findings = [f for f in devicelock.check(LIB) if f[0] in {f"cisco/{n}" for n in DEVICES} | set(DEVICES)]
     assert findings == []

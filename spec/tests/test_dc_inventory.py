@@ -130,17 +130,20 @@ def part(inv, ref):
     return next((p for p in inv["parts"] if p["ref"] == ref), None)
 
 
+@pytest.mark.heavy
 def test_a_terminal_drawn_as_art_is_listed_and_is_not_a_cable_end(inv):
     p = part(inv, "t/art-block@1")
     assert p and p["cable_end"] == "no" and "presents no interface" in p["why_not"]
     assert p["drawing"]["elements"] == ["terminal-rtn", "terminal-48v"]
 
 
+@pytest.mark.heavy
 def test_a_registered_interface_a_port_part_mates_is_a_cable_end(inv):
     p = part(inv, "t/stud@1")
     assert p["cable_end"] == "yes" and p["interface"] == "terminal-stud" and p["plugs"] == ["generic/lug@1"]
 
 
+@pytest.mark.heavy
 def test_a_part_that_composes_a_slot_lands_by_it_and_a_supply_by_the_part(inv):
     block, psu = part(inv, "t/slot-block@1"), part(inv, "t/psu-x@1")
     assert block["cable_end"] == "via-parts" and [v["path"] for v in block["via"]] == ["/lug-1", "/lug-2"]
@@ -148,15 +151,18 @@ def test_a_part_that_composes_a_slot_lands_by_it_and_a_supply_by_the_part(inv):
     assert psu["signals"] == ["part:terminal"]       # found only by what it composes, on the second pass
 
 
+@pytest.mark.heavy
 def test_the_lug_is_a_cable_end_part_and_not_a_dc_end(inv):
     assert part(inv, "generic/lug@1") is None
     assert [e["ref"] for e in inv["cable_end_parts"]] == ["generic/lug@1"]
 
 
+@pytest.mark.heavy
 def test_an_ac_supply_is_not_listed_even_with_a_dc_ok_lamp(inv):
     assert part(inv, "t/psu-ac@1") is None
 
 
+@pytest.mark.heavy
 def test_polarity_is_what_a_source_states_and_where(inv):
     structured = part(inv, "t/art-block@1")["polarity"]
     assert structured["via"] == "structured" and set(structured["conductors"]) >= {"RTN", "-48V"}
@@ -167,6 +173,7 @@ def test_polarity_is_what_a_source_states_and_where(inv):
     assert silent == {"conductors": [], "via": "none stated", "evidence": []}
 
 
+@pytest.mark.heavy
 def test_a_device_counts_its_placements_and_says_whether_any_part_lands(inv):
     by = {d["device"]: d for d in inv["devices"]}
     assert by["v/box"]["placements"] == {"t/art-block@1": 2, "t/slot-block@1": 1}
@@ -174,12 +181,14 @@ def test_a_device_counts_its_placements_and_says_whether_any_part_lands(inv):
     assert part(inv, "t/art-block@1")["placements"] == 2 and part(inv, "t/art-block@1")["devices"] == 1
 
 
+@pytest.mark.heavy
 def test_a_dc_device_with_no_dc_part_is_named_with_its_own_note(inv):
     by = {d["device"]: d for d in inv["devices"]}
     assert by["v/bare"]["lands"] == "no part" and "decor" in by["v/bare"]["note"]
     assert "v/acbox" not in by
 
 
+@pytest.mark.heavy
 def test_the_counts_add_up_and_the_report_says_them(inv):
     c = D.counts(inv)
     for key in ("by_kind", "by_vendor", "by_role", "by_cable_end", "by_polarity"):
@@ -189,6 +198,7 @@ def test_the_counts_add_up_and_the_report_says_them(inv):
     assert "`t/art-block@1`" in md and "none stated" in md
 
 
+@pytest.mark.heavy
 def test_main_writes_the_report_and_the_json(lib, tmp_path, capsys):
     out, js = tmp_path / "inv.md", tmp_path / "inv.json"
     assert D.main(["--library", str(lib), "--out", str(out), "--json", str(js)]) == 0
@@ -204,6 +214,7 @@ def real():
     return D.inventory(D.ROOT / "library")
 
 
+@pytest.mark.heavy
 def test_the_parts_that_showed_the_problem_are_in_the_inventory(real):
     refs = {p["ref"] for p in real["parts"]}
     for ref in ("supermicro/psu-pws-601s-1r@1", "nokia/lpwr-f@1", "amphenol-ns/output-terminal@1",
@@ -213,6 +224,7 @@ def test_the_parts_that_showed_the_problem_are_in_the_inventory(real):
     assert "ufispace/s9701-82dc" in {d["device"] for d in real["devices"]}
 
 
+@pytest.mark.heavy
 def test_a_yes_names_a_registered_interface_and_a_plug(real):
     reg = yaml.safe_load((D.ROOT / "spec/schemas/connectors.yaml").read_text())["interfaces"]
     for p in real["parts"]:
@@ -224,6 +236,7 @@ def test_a_yes_names_a_registered_interface_and_a_plug(real):
             assert p["why_not"], p["ref"]
 
 
+@pytest.mark.heavy
 def test_every_stated_polarity_has_evidence_and_no_ground_is_listed_as_a_dc_end(real):
     for p in real["parts"]:
         pol = p["polarity"]
@@ -231,6 +244,7 @@ def test_every_stated_polarity_has_evidence_and_no_ground_is_listed_as_a_dc_end(
         assert p["class"] != "ground", p["ref"]
 
 
+@pytest.mark.heavy
 def test_the_real_counts_add_up(real):
     c = D.counts(real)
     assert c["parts"] > 50 and c["devices_with_dc"] > 100

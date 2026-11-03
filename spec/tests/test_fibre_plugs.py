@@ -486,6 +486,7 @@ def _within(inner, outer, tol=1e-6):
             and inner[2] <= outer[2] + tol and inner[3] <= outer[3] + tol)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", [MPO12, MPO24])
 def test_a_seated_mpo_plug_lies_inside_its_opening_and_the_opening_inside_its_adapter(
         tmp_path, lib, ref):
@@ -610,6 +611,7 @@ def occupant(root, path, ref):
     return occ
 
 
+@pytest.mark.heavy
 def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
     """THE ASSERTION THE COMPOSITION EXISTS FOR, and it is made in the DEVICE
     frame rather than on the contract's own arithmetic.
@@ -653,6 +655,7 @@ def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
         assert abs(hx - bx) < 1e-6 and abs(hy - by) < 1e-6, (half_id, bore_id)
 
 
+@pytest.mark.heavy
 def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
     """Deep addressing: `bay-1/lc01` is the duplex slot of the adapter `lc01`
     in the cassette in `bay-1`, and the plug is drawn inside the innermost
@@ -695,6 +698,7 @@ def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
         assert abs(px - bx) < 1e-6 and abs(py - by) < 1e-6, (half_id, bore_id)
 
 
+@pytest.mark.heavy
 def test_a_boot_seats_on_one_half_of_the_duplex_plug(tmp_path):
     """HOW A BOOT ADDRESSES ONE HALF, which the brief left to be decided.
 
@@ -806,6 +810,7 @@ def test_a_key_under_a_seated_occupant_that_reaches_nothing_is_still_an_error(tm
     assert "occupants/bay-1/lc01-occupant/zz" in r.stderr, r.stderr[-600:]
 
 
+@pytest.mark.heavy
 def test_the_sc_plug_seats_in_an_fhd_sc_cassette_bore(tmp_path):
     """`bay-1/sc1/1` is bore 1 of the adapter `sc1` in the cassette -
     the seat common/sc-dust-cap@1 already takes, with the plug in its place."""

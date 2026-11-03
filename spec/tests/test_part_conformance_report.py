@@ -66,6 +66,7 @@ def refs_of_sample():
     return [p["ref"] if isinstance(p, dict) else p for p in parts]
 
 
+@pytest.mark.heavy
 def test_part_conformance_report(tmp_path):
     """Run the sample and the touched devices, write the report, fail on nothing."""
     try:

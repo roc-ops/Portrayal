@@ -16,6 +16,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 import warmrender
 from portrayal.manifest import presented_interface  # noqa: E402
+import pytest
 
 
 def resolve(ref):
@@ -113,6 +114,7 @@ def test_a_forwarded_mate_on_no_feature_presents_the_part_lift_alone():
     assert presented_interface(bezel, res)[2] == 0.0
 
 
+@pytest.mark.heavy
 def test_a_forwarding_wrapper_presents_as_deep_as_its_core_placed_bare():
     """Every forwarding wrapper in the library: what it presents is the part's
     lift plus exactly what the core presents placed on its own, so an occupant
@@ -148,6 +150,7 @@ def test_the_optical_form_factors_can_all_host():
     assert not missing, f"no port presents {missing}"
 
 
+@pytest.mark.heavy
 def test_the_two_modelled_optics_have_a_cage_that_will_take_them():
     """Both directions of the join: an optic's `mates` must be presented by
     something, or the optic can never be seated anywhere."""

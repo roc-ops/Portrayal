@@ -76,6 +76,7 @@ def test_the_build_writes_the_aggregate():
         "build.sh writes it, so this means the build did not run")
 
 
+@pytest.mark.heavy
 def test_update_rewrites_only_the_device_that_moved(tmp_path):
     """THE CLAUSE THE ISSUE IS ABOUT, measured by mtime rather than asserted.
 

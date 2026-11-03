@@ -162,6 +162,7 @@ def test_the_s9600_front_publishes_its_rates():
         assert {(e.get("data-speed"), e.get("data-speeds")) for e in qsfp28} == {("100g", "40g 100g")}
 
 
+@pytest.mark.heavy
 def test_no_other_port_in_the_library_carries_data_speeds():
     carrying = {}
     for svg in _built_faces():

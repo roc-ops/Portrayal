@@ -134,6 +134,7 @@ def check_stated_directions(doc):
     return problems, n
 
 
+@pytest.mark.heavy
 def test_a_part_never_states_a_direction_its_build_does_not_have():
     # a front-to-back configuration with a back-to-front entry is named
     plant = {"name": "plant", "chassis": {"airflow": F2B}, "configurations": {
@@ -196,6 +197,7 @@ def faces(drawn_dev, config):
     return c, {face: (d / name).read_text() for face, name in c["files"].items() if name.endswith(".svg")}
 
 
+@pytest.mark.heavy
 def test_every_fan_and_supply_drawn_states_its_configurations_airflow(drawn):
     sample = '<g id="a" data-class="fan" data-airflow="front-to-back" data-config-airflow="back-to-front">'
     assert stamp_problems(sample, B2F, "plant") == []
@@ -217,6 +219,7 @@ def test_every_fan_and_supply_drawn_states_its_configurations_airflow(drawn):
     assert not problems, "\n".join(problems)
 
 
+@pytest.mark.heavy
 def test_only_fans_and_supplies_carry_it_and_the_parts_own_statement_is_untouched(drawn):
     def strays(text):
         return [t for t in ANY_TAG.findall(text) if STAMP.search(t)
@@ -251,6 +254,7 @@ def test_only_fans_and_supplies_carry_it_and_the_parts_own_statement_is_untouche
     assert own_words(rewritten, "fan") != fan_words
 
 
+@pytest.mark.heavy
 def test_a_configuration_that_states_no_airflow_gets_no_stamp(drawn):
     c, svgs = faces(drawn["juniper/mx150"], "default")
     assert c["airflow"] is None

@@ -14,6 +14,7 @@ LIB = SPEC.parent / "library"
 
 from portrayal import lint
 from portrayal import libwalk
+import pytest
 
 
 def check(dev):
@@ -117,6 +118,7 @@ def test_mixed_on_a_group_that_is_not_mixed_is_also_wrong():
     assert len(warns) == 1 and "[L23]" in warns[0] and "drop it" in warns[0]
 
 
+@pytest.mark.heavy
 def test_the_portfolio_is_clean():
     """Every device in the library passes both rules. L23 is a warning so that
     it can land without going red everywhere - but there is nothing left for it

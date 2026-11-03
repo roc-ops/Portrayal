@@ -5,16 +5,29 @@ same way each time. This page says how, who does it, and why.
 
 ## The short version
 
-1. A pull request is **ready** when its own gates are green, a fresh reviewer
-   has posted `REVIEW: approve` after the last commit, and, for a
-   [one-way door](../CONTRIBUTING.md), the owner has posted
+1. A pull request is **ready** when its `lint` and `light suite` checks are
+   green, a fresh reviewer has posted `REVIEW: approve` after the last commit,
+   and, for a [one-way door](../CONTRIBUTING.md), the owner has posted
    `OWNER DECISION: approve`.
-2. Before the owner merges a set of ready pull requests, the coordinator tests
-   them **together, once**, on a temporary branch: `train/<date>-<n>`, made
-   from `origin/main` with each pull request's head merged in, in the order
-   they will be merged, with the full gates run on it.
-3. The owner merges them in that order, with **nothing else merged in
-   between**. The train prints the commands.
+2. **Before it merges, the whole suite runs on its head.** A push runs only the
+   light tier, and only a full run reports `build`, the check branch
+   protection requires (`gates.yml`, "THE TWO TIERS"). Label the pull request
+   `full-gates`:
+
+   ```
+   gh pr edit <number> --repo roc-ops/Portrayal --add-label full-gates
+   ```
+
+   That starts the full run, on the pull request's merge with main as every
+   pull request run is, and every later push runs the full suite too while the
+   label is on. Merge on that run's `build`, with `--match-head-commit <sha>`.
+   A dispatched run (`gh workflow run`) does not do this: GitHub leaves its
+   checks out of the pull request, so branch protection never sees its
+   `build`. A pull request from a fork runs the whole suite on every push, so
+   its `build` is already there.
+3. Several ready pull requests can be tested **together, once**, on a train
+   (below), which catches two changes that pass apart and fail together. Each
+   head still needs its own `build` before it merges.
 
 The coordinator never merges. The owner is the only one who does.
 
@@ -53,7 +66,9 @@ first step that fails:
    comment is the latest owner-decision comment (a missing `Door` line counts as
    one-way); the `gates` workflow has succeeded on the head, and every check run
    on it has finished and passed, with `lint` and `build` as successes (a
-   draft's `build` is skipped, and a skip is not a pass).
+   draft's `build` is skipped, and a skip is not a pass). A head has a
+   `build` only after a full run, so label each pull request `full-gates`
+   first (step 2 of the short version).
 2. **Builds the train** from `origin/main`, merging each head in order. This is
    done in git's object database (`git merge-tree`), so your checkout, index and
    branch are not touched. A conflict stops it and names the pull request, the
