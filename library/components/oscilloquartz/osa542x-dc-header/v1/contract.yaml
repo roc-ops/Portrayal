@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: osa542x-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: latch-header-3
+description: >-
+  The three-position keyed latching power header of the Oscilloquartz OSA 5420 and OSA 5421 -48 VDC
+  supplies, seen from its mating face. A grey body carries three square contact cells in a row.
+  A release-tab key stands above the body. The supply prints "- Gnd +" beneath it. The cable
+  connector oscilloquartz/osa542x-dc-plug@1 seats at its mate point.
+size: {w: 13.7, h: 10.3}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The box of the `inlet` element the two supplies already draw (13.7 across, 10.3 high with the key),
+  read off the 2023 OSA 5420 Series data sheet's render of the supply at 3.25 px/mm. The manual draws
+  the header without a scale (Figures 13 and 15).
+attrs: {connector: latching power header, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED: OSA 5420/5421
+    Installation and Commissioning Manual R9.5.1, "Connect -48 VDC Power" (page 62, Figure 13) and
+    "-48 VDC Power Supply Unit Connector Pin Assignments" (page 70, Figure 15, Table 8) call it "the
+    power connector" and "the -48 VDC power connector(s)" and say only that it is inserted at the OSA 542x
+    after the wiring is done. So no part number is stated and the interface claims no standard.
+  gender: >-
+    NOT STATED. The manual's figures show a three-cell body with a contact dot in each cell and a release
+    tab "at top of power connector"; they do not say which half carries pins. The cable connector is
+    drawn as the half that seats in this one.
+  pins: >-
+    manual - Table 8 (page 70): pin 1 "+", "Return for battery source"; pin 2 "Gnd", "Ground"; pin 3 "-",
+    "-48 VDC Battery". Figure 15 numbers the cells 3, 2, 1 left to right under the legend "- Gnd +", so the
+    row is drawn left to right as pin 3, pin 2, pin 1.
+  size: >-
+    estimated - see size-notes. No manual figure is dimensioned; the cell pitch (4.4) and the cell size
+    (3.0 by 3.6) are the readings of the data sheet render that the supplies' own skin used.
+  key: >-
+    manual - Figures 13 and 15 call the tab above the body "Position Connector Release Tab at top of power
+    connector". Drawn as a rectangle 3.8 across and 5.0 high, centred over the middle cell, from the same
+    render; it is the cable connector's latch that engages it, which the manual does not describe.
+  mate: >-
+    derived - the centre of the middle cell, (6.85, 7.55), facing out. The cable connector's own middle
+    contact is at its centre too, so the two align.
+  colour: >-
+    estimated - the grey body #6a6f75 and the dark cells #1b1d20 that the supplies' skin already drew. The
+    manual's figures are line art.
+  relief: >-
+    NONE STATED. No document gives how far the header stands out of the supply's face, so it is drawn
+    flush and states no relief.
+elements: {}
+connection-points:
+  mate: {at: [6.85, 7.55], direction: front}
+skins: [default]
