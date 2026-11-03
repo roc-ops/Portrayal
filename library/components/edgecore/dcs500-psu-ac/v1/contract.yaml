@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcs500-psu-ac
-version: 1.0.1
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -36,6 +36,17 @@ provenance:
   inlet: >-
     DATASHEET ordering table, 'C13 - C14 Power Cord', and both rear elevations draw a
     three-pin appliance inlet with a cord retainer.
+  inlet-part: >-
+    COMPOSED, NOT DRAWN, SINCE 1.1.0: std/c14-inlet@1, so a power cord lands on the supply.
+    ITS PLACE IS ESTIMATED, read off pictures. The datasheet's rear elevation gave a recess
+    17.2 x 27.4 at [6.2, 4.6]; the part's own 20.0 x 28.0, turned on its side, stands on that
+    recess's centre, [14.8, 18.3]. ITS TURN IS ESTIMATED TOO. The data sheet's rear (page 2,
+    items 7 and 9) shows each supply's inlet on its end with two blades one above the other
+    at the left of the opening and a third, alone, at the right, and the quick start guide's
+    figure for step 4, "Connect Power" (page 2), shows the two at the left with a cord end
+    going in. The part's earth contact lies on its angled side, so it is turned 90 to put
+    the earth at the right. The cord retainer and the hanging cord those pictures draw are
+    not drawn here.
   the-face: >-
     PHOTO-MEASURED in the module's own coordinates at 5x on the left supply. The inlet
     recess about x 6-23, the handle a black loop about x 26-30 standing the full height,
@@ -50,12 +61,13 @@ provenance:
     drawn on the OZ silkscreen as a declared stand-in. See the device's o-series-numbering gap.
 states: [absent]
 elements:
-  inlet: {at: [6.20, 4.60], size: [17.20, 27.40], class: connector}
   handle: {at: [25.60, 1.20], size: [4.60, 36.00], class: handle}
   vent: {at: [32.60, 4.40], size: [12.40, 26.20], class: vent}
   latch: {at: [39.50, 16.80], size: [10.40, 21.60], class: latch}
 fields:
   latch-finish: {label: Latch colour, type: text, default: '#c0453f'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [0.80, 8.30], rotate: 90}
 relief:
   wall: '#15181b'
   features:

@@ -33,7 +33,7 @@ TOL = 0.06
 DEVICES = {
     "cor550": dict(view="rear", ac_cfg="ac-f2b", dc_cfg="dc-f2b", bays=["psu-0", "psu-1"],
                    ac="edgecore/cor550-psu-ac@1", dc="edgecore/cor550-psu-dc@1",
-                   gap="dc-supply-face", version="3.2.0"),
+                   gap="dc-supply-face", version="3.2.1"),
     "cor580": dict(view="rear", ac_cfg="ac-f2b", dc_cfg="dc48-f2b", bays=["psu-1", "psu-2"],
                    ac="common/psu-ac-1300@1", dc="edgecore/fsj033-610g@1",
                    gap="dc-psu-module", version="3.2.0"),
@@ -292,7 +292,7 @@ def test_no_other_component_carries_these_part_numbers_or_models():
 
 def test_the_cor550_ac_part_is_patched_and_no_longer_says_no_dc_face_is_drawn():
     c = _contract("edgecore/cor550-psu-ac@1")
-    assert c["version"] == "1.0.1"
+    assert c["version"] == "1.1.0"
     assert c["attrs"]["input"] == "ac"
     assert "the-dc-build-is-not-drawn" not in c["provenance"]
     text = _words(c["provenance"]["the-dc-build-is-a-separate-part"])
