@@ -15,7 +15,7 @@
 - The S6301-56ST takes a minor (3.1.2 to 3.2.0): its two DC configurations seat `ufispace/psu-151-dc@2`, and its supply bays
   accept it beside `@1`. The build now publishes a DC port for each supply; the lock and the drawing version line of its exported
   device types move with it, and the supply's module types carry contract version 2.0.0. One row of the records file is gone and
-  its `cap:` is 159.
+  its `cap:` is 158.
 - `ufispace/psu-151-dc@1` (1.1.0 to 1.1.1) says `superseded-by: ufispace/psu-151-dc@2`. Its drawing is unchanged, the
   S6301-56ST's supply bays still accept it, and a manifest that pins `@1` still resolves to it; it is no longer exported as a
   module type, because `@2` carries the same part number.
