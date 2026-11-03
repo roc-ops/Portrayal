@@ -273,7 +273,11 @@ def test_the_report_cannot_turn_a_green_run_red(build):
 
 def test_the_times_are_published_for_the_next_run_to_compare_against(build):
     s = step(build, "publish test times")
-    assert s["with"]["name"] == T.ARTIFACT
+    # ONLY A FULL RUN'S TIMES ARE THE BASE: a light run's record lacks the heavy
+    # tier, and a base without it would report every heavy test as new
+    assert s["with"]["name"] == (
+        "${{ needs.dist.outputs.tier == 'full' && '" + T.ARTIFACT + "' || '"
+        + T.ARTIFACT + "-light' }}")
     # a re-run finds the first attempt's artifact; neither may fail the job
     assert s["with"]["overwrite"] is True and s.get("continue-on-error") is True
     uses = s["uses"]
