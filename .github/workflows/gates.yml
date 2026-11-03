@@ -160,7 +160,7 @@ jobs:
   # THE TWO TIERS. A same-repository pull request push runs the LIGHT tier:
   # `-m "not heavy"` on two shards, every test but the few hundred functions a
   # full run measured at five seconds or more (`heavy`, spec/tools/dev/
-  # mark_heavy.py), in about a tenth of the suite's seconds. Its verdict is
+  # mark_heavy.py), in about a fifth of the suite's seconds. Its verdict is
   # called `light suite`. Everything else - a dispatch, the nightly, a fork's
   # pull request (which cannot be dispatched on) - is a FULL run on four shards,
   # and only its verdict is called `build`. A head therefore has the required
@@ -543,11 +543,13 @@ jobs:
             --fetch-base "$GITHUB_REPOSITORY" --summary "$GITHUB_STEP_SUMMARY"
 
       # THE BUDGET, WHICH CAN FAIL THE RUN where the report above cannot. The
-      # tier's summed seconds against spec/test-budget.json, the load divided
-      # out against the newest merged full run; on the light tier, a new test
-      # function of five seconds or more too. Raising a budget is a one-way
-      # door. With no base run it measures, warns, and does not fail (a rate
-      # limit must not hold a merge). The job installs nothing, and the tool's
+      # tier's summed seconds against spec/test-budget.json, read in the units
+      # of the run each number was set from (spec/test-budget-reference.json,
+      # file by file), so a slow runner is not a bigger suite; on the light
+      # tier, a new test function of five seconds or more too, judged against
+      # the newest merged run. Raising a budget, or re-recording its reference,
+      # is a one-way door. With no base run the ceiling goes unchecked and the
+      # step says so (a rate limit must not hold a merge). The job installs nothing, and the tool's
       # one import is the standard-library suite_times, hence PYTHONPATH.
       #
       # THE PULL REQUEST'S FILES, so a new slow test fails only the change that
@@ -573,7 +575,8 @@ jobs:
             touched=(--touched "$RUNNER_TEMP/touched.txt")
           fi
           python3 spec/tools/portrayal/suite_budget.py "${junits[@]}" "${touched[@]}" \
-            --tier "$TIER" --budget spec/test-budget.json --fetch-base "$GITHUB_REPOSITORY"
+            --tier "$TIER" --budget spec/test-budget.json \
+            --reference spec/test-budget-reference.json --fetch-base "$GITHUB_REPOSITORY"
 
       # The record a LATER run compares against, and the weights a later run
       # splits by. Only a merged head's is ever read, but the run cannot know

@@ -490,6 +490,7 @@ def test_the_budget_step_can_fail_and_the_report_still_cannot(workflow):
     assert "continue-on-error" not in budget
     assert budget.get("if") == "always()"
     assert "suite_budget.py" in budget["run"] and '--tier "$TIER"' in budget["run"]
+    assert "--reference spec/test-budget-reference.json" in budget["run"], budget["run"]
     assert "--fetch-base" in budget["run"]
     assert budget["env"]["TIER"] == "${{ needs.dist.outputs.tier }}"
     assert budget["env"]["PYTHONPATH"] == "spec/tools", "the job installs nothing"

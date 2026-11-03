@@ -115,9 +115,10 @@ def test_raising_the_budget_is_a_one_way_door():
     contributing = (ROOT / "CONTRIBUTING.md").read_text()
     danger = contributing[contributing.index("#### Merge danger"):]
     danger = danger[:re.search(r"\n#{1,4} ", danger[1:]).start() + 1]
-    assert "spec/test-budget.json" in danger
     skill = (ROOT / ".claude/skills/portrayal-pr/SKILL.md").read_text()
-    assert "spec/test-budget.json" in skill
+    for name in ("spec/test-budget.json", "spec/test-budget-reference.json"):
+        assert name in danger, name
+        assert name in skill, name
 
 
 LIGHT = {**BUDGET, "light": {**BUDGET["light"], "seconds": 1700}}
@@ -186,3 +187,48 @@ def test_the_command_prefers_a_light_base_for_a_light_run(monkeypatch, tmp_path,
     assert B.main([junit, "--tier", "light", "--budget", str(budget), "--fetch-base", "o/r"]) == 0
     assert calls[0] == "test-times-light"
     assert "base #1" in capsys.readouterr().out
+
+
+# The run the budget's numbers were set from, file by file: the same thirty
+# files at ten seconds. A later run is read in its units, whatever base is newest.
+REFERENCE = {"light": {"run": 1, "files": {f"test_a{i}": 10.0 for i in range(30)}},
+             "full": {"run": 1, "files": {f"test_a{i}": 10.0 for i in range(30)}}}
+
+
+def test_the_total_is_read_in_the_reference_runs_units():
+    """A MOVING BASE MOVES THE UNITS. The newest merged run had its own runner,
+    and two runs of the same 19,309 tests measured 8,410 s and 9,559 s; against
+    whichever base was newest, an unchanged suite read over budget. Against the
+    run the budget was set from, it reads what it is."""
+    tests = {f"test_a{i}::f": 20.0 for i in range(30)}
+    assert B.check(tests, None, BUDGET, "full", reference=REFERENCE) == ([], [])
+
+
+def test_over_budget_against_the_reference_fails_with_no_base_at_all():
+    tests = {**{f"test_a{i}::f": 20.0 for i in range(30)}, "test_new::g": 200.0}
+    small = {**BUDGET, "full": {"seconds": 300, "why": "x"}}
+    failures, _ = B.check(tests, None, small, "full", reference=REFERENCE)
+    assert len(failures) == 1 and "400" in failures[0] and "300" in failures[0], failures
+
+
+def test_with_no_base_the_light_ceiling_is_said_to_be_unchecked():
+    failures, warnings = B.check(dict(BASE), None, LIGHT, "light", reference=REFERENCE)
+    assert failures == []
+    assert len(warnings) == 1 and "not checked" in warnings[0], warnings
+
+
+def test_recording_writes_the_runs_seconds_file_by_file(tmp_path):
+    junit = _junit(tmp_path / "j.xml", {"test_a0::f": 2.0, "test_a0::g": 3.0, "test_b::h": 1.0})
+    ref = tmp_path / "ref.json"
+    ref.write_text(json.dumps({"full": {"run": 7, "files": {"test_z": 1.0}}}))
+    assert B.main(["--record", junit, "--tier", "light", "--reference", str(ref),
+                   "--run", "41622295122"]) == 0
+    doc = json.loads(ref.read_text())
+    assert doc["light"] == {"run": 41622295122, "files": {"test_a0": 5.0, "test_b": 1.0}}
+    assert doc["full"]["run"] == 7, "recording one tier leaves the other"
+
+
+def test_the_committed_reference_covers_both_tiers():
+    doc = json.loads((ROOT / "spec/test-budget-reference.json").read_text())
+    for tier in ("light", "full"):
+        assert isinstance(doc[tier]["run"], int) and len(doc[tier]["files"]) >= 100, tier

@@ -338,10 +338,11 @@ the maintainer to read it. It is one-way if any of these is true:
   version cannot be withdrawn from whoever installed it.
 - **It changes how changes are checked or merged:** a workflow, the merge
   script, a repository setting.
-- **It raises a number in `spec/test-budget.json`.** The budget is what keeps
-  a pull request push quick and the suite from growing unseen. Raising it
-  decides that every later change pays for the growth, so the maintainer makes
-  that decision.
+- **It raises a number in `spec/test-budget.json`, or re-records
+  `spec/test-budget-reference.json`.** The budget is what keeps a pull request
+  push quick and the suite from growing unseen, and the reference is the run
+  its numbers are read against. Changing either decides that every later
+  change pays for the growth, so the maintainer makes that decision.
 
 Beside the door, say the **blast radius**: who notices if it is wrong. One
 device, every device that seats a part, DCIM data already imported, kit
