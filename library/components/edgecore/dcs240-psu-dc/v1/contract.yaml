@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcs240-psu-dc
-version: 1.2.0
+version: 1.3.0
 class: psu
 behaviour: fills
 profile: networking
@@ -26,10 +26,11 @@ provenance:
     13 x 26 box at [8.0, 7.0] that was drawn across the lattice's middle. THE LATCH IS A TALL
     VERTICAL BAR, NOT A SMALL TAB: the red segments at x 44.63-54.22 by y 18.52-40.44, against
     a 9.5 x 3.4 tab at [40.5, 35.0].
-    THE DC TERMINAL IS NOT MEASURED AND IS NOT CLAIMED TO BE. Every rear photograph and
-    elevation in this corpus draws the AC pair; this variant's face is borrowed from its AC
-    sibling and its terminal is estimated, which the device's dc-supply-face gap says. It is
-    left exactly where it was, because moving an estimate is not measuring it.
+    THE AC FACE IS NO LONGER THIS PART'S FACE. Every rear photograph and elevation of the
+    chassis in this corpus draws the AC pair, so this variant borrowed the AC face and
+    estimated its terminal; that was 1.2.0 and before. Since 1.3.0 the face of this DC
+    variant is drawn from its own photograph (see `face`); the corrections above were read
+    off the AC pair and no longer apply to the bail, the grille or the terminal.
   size: >-
     photo-measured - the DCS240 quick start guide, page 1 Overview rear elevation at 600 dpi,
     scaled by the stated 438.4 mm body width to 5.0844 px/mm. Both supplies were read with an
@@ -48,12 +49,80 @@ provenance:
     its own and its supplies are rated 1000/1500 W AC and 1600 W DC, so seating any of them
     would export a figure this vendor does not claim. A shape may be shared; a rating may not.
   elements: >-
-    MEASURED, NOT ESTIMATED, SINCE 1.1.0. These were copied from the DCS201's supply as
-    proportions off a perspective render; they are now read off an orthographic photograph of
-    this module. See the-face-was-remeasured-from-an-orthographic-photograph above for the
-    three that moved and by how much. What is still estimated is the HEIGHT of the face, 40.0,
-    and every relief depth below - the photograph fixes where things are on the face, not how
-    far they stand off it.
+    The latch is MEASURED, since 1.1.0, off an orthographic photograph of the AC module in the
+    same bay (see the-face-was-remeasured-from-an-orthographic-photograph above), and it is
+    where the DC photograph puts it: at the right-hand edge, in the lower half. The bail, the
+    grille (`vent-field`) and the terminal block (`dc-inlet`) are ESTIMATED, since 1.3.0: they
+    are read off the DC supply's own photograph (see `face`). What is also estimated is the
+    HEIGHT of the face, 40.0, and every relief depth below - a photograph fixes where things
+    are on the face, not how far they stand off it.
+  face: >-
+    estimated - the Edgecore DCS240 (AS9726-32DB) Quick Start Guide, page 3, the photograph
+    above the callouts (the DCS511 (AS9737-32DB) Quick Start Guide, page 3, prints the same
+    photograph smaller). It is a close-up from the front, in perspective, with no scale
+    printed, and it shows the DC supply with a black two-screw block, the black bail at the
+    left, a perforated grille behind and above the block, a cross-head earth screw at the
+    upper right and the red latch at the right. THE SCALE: the metal plate in the photograph
+    is taken as the supply's 54.4 mm width. It reads 676 px wide and 485 px high, 54.4 by 39.0
+    mm at 12.43 px/mm, which agrees with the face's 40.0 mm height within a millimetre; every
+    position below is that scale from the plate's top left corner. The plate is the only part
+    of the photograph that is flat to the camera, so what stands off it (the block's walls,
+    the screws, the earth screw) is a little larger in the photograph than its place on the
+    face, and that is not corrected. The block reads 34.0 by 23.2 mm at (8.1, 15.3), its two
+    clamp plates 11 by 11.8 mm, its screw heads about 8 mm across at 17.9 and 32.4 across and
+    27.0 down (a 14.6 mm pitch), the legend "-" under the left screw and "+" under the right
+    one. The grille is a lattice of holes about 3.1 mm across at a 4.1 mm pitch, drawn where
+    the photograph shows it (above the block, left of it between the bail and the block, and
+    right of it beside the latch). The earth screw, with its star washer, reads about 11 mm
+    across at (44.7, 8.1). THE BAIL AND THE LATCH ARE NOT READ AT THE PHOTOGRAPH'S SIZE. They
+    stand off the plate, closer to the camera, and the photograph shows them larger than the
+    plate and spilling past its left, right and lower edges (the bail 4 mm past the left edge,
+    the latch 8 mm past the right edge and 12 mm below it), which the bay does not allow. The
+    bail is drawn inside the face, as a C-shaped loop 9.8 mm across and 38.4 mm tall whose
+    bar is 5.6 mm wide (the AC bail's measured bar is 6.0 mm); the latch keeps its measured
+    box. The photograph shows a slot in the latch that is not drawn. The colours are read off
+    the photograph and are estimates too.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head
+    3.4 across (that part's own size is an estimate), standing at the centre of a screw head
+    this skin draws (17.86 and 32.42 across, 27.03 down; each head is drawn 8.0 across, so the
+    drawing marks where a lug lands and does not show the screw). The quick start guides show
+    the two screws and give a wire size and a current, and no screw head, thread or stud; the
+    places are read off the photograph (see `face`). No depth is claimed: the guide shows the
+    block's walls standing off the plate and gives no height, so the block has no relief and
+    the screws stand on the face.
+  earth: >-
+    A DECLARED STAND-IN, and its place is estimated. The Edgecore DCS240 (AS9726-32DB) Quick
+    Start Guide and the DCS511 (AS9737-32DB) Quick Start Guide, page 3, the photograph above the
+    callouts, show a cross-head screw with a star washer at the upper right of the supply's
+    face, above the block, and call it "4. Ground". It is a screw beside the two-screw terminal
+    block, not on it, so it is a ground seat a lug lands on outside the DC port, which keeps two
+    poles (decided 2026-11-02). It is the library's common/ground-screw@1, a screw that claims no
+    stud size, because no document held gives this screw's thread or head. It stands where the
+    photograph puts it (its centre at 44.65 across, 8.13 down, over the earth screw this skin
+    draws there). The data sheets give the supplied cable as "3 x ring terminal to 3 x ring
+    terminal", which agrees with three lugs, one on each screw. The place is an estimate.
+  poles: >-
+    Edgecore DCS240 (AS9726-32DB) Quick Start Guide and DCS511 (AS9737-32DB) Quick Start Guide,
+    step 3 "Connect Power", page 3, the photograph above the callouts: two screws between black
+    barriers, "1. Use the DC power cable included with the DC PSU.", "2. -40 - -75 VDC" on the
+    left screw and "3. DC return" on the right one, with "-" printed under the left screw and "+"
+    under the right one, and "4. Ground". The roles are the callouts': `batt` for the -40 - -75 VDC
+    wire (spec/schemas/dc.yaml writes `batt` as negative (battery)) and `rtn` for the DC return (it
+    writes `rtn` as RTN and return), listed in the callouts' order. The port states no voltage: the
+    guides give a range and call the supply "48 VDC" and "-48 VDC", a name and no nominal.
+  rating: >-
+    Edgecore DCS240 (AS9726-32DB) Quick Start Guide and DCS511 (AS9737-32DB) Quick Start Guide,
+    page 3, "DC PSU", "DC Input -40 V - -75 V, 40 A maximum", and both data sheets, page 3, "DC
+    PSU": "-40 - -75 VDC (40 A/1600 W max.)" and "(1600 W/40 A max.)". One current, the same in
+    all four, so the port states it as the supply's input current.
+  awg: >-
+    Edgecore DCS240 (AS9726-32DB) Quick Start Guide and DCS511 (AS9737-32DB) Quick Start Guide,
+    page 3, the note under the callouts: "Use #8 AWG / 6 mm2 copper wire (for a -40 to -75 VDC
+    PSU)". It is the one size the guides give for this supply's wires, so the port states it. The
+    data sheets, page 4, print the supplied cable as "6/8AWG (4.3/6.4mm2)"; that is the cable
+    that comes with a system, not a limit on the wire to use, and it is recorded here and not
+    stated.
   airflow-colour-convention: >-
     This device's guide states it: F2B supplies carry RED release latches and B2F supplies
     BLUE. The latch fill is therefore a default overridden per configuration. See
@@ -62,10 +131,10 @@ provenance:
     quick start: '-48 VDC, 1600 W'.
 states: [absent]
 elements:
-  handle: {at: [17.70, 2.00], size: [6.00, 37.70], class: handle}
+  handle: {at: [0.20, 0.80], size: [9.80, 38.40], class: handle}
   latch: {at: [45.40, 19.40], size: [9.00, 20.60], class: latch}
-  vent-field: {at: [4.20, 3.60], size: [19.40, 32.40], class: vent}
-  dc-inlet: {at: [30.0, 12.0], size: [20.0, 16.0], class: inlet}
+  vent-field: {at: [5.90, 2.65], size: [45.20, 31.90], class: vent}
+  dc-inlet: {at: [8.1, 15.3], size: [34.0, 23.2], class: inlet}
 
 fields:
   latch-finish: {label: Latch colour, type: text, default: '#b8324a'}
@@ -102,6 +171,20 @@ relief:
       source: >-
         edgecore/dcs240-psu-dc@1's own elements key - the lattice's extent is drawn and the
         depth of the cavity behind it is not stated.
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [16.16, 25.33]}
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [30.72, 25.33]}
+  - {ref: common/ground-screw@1, id: earth, at: [41.85, 5.33]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 40
+      awg: [8]
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles, rating-a: rating, awg: awg}
 skins: [default]
 body:
   depth: 300

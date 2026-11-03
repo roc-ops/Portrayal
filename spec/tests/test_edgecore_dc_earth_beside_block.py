@@ -166,11 +166,11 @@ def test_the_build_publishes_a_seat_for_each_screw_and_the_earth_and_one_dc_port
     assert [(q["role"], q["slot"]) for q in port["poles"]] == [(role, i) for i, _, role in want["screws"]]
 
 
-def test_the_dcs240_supply_is_not_part_of_this_change_and_keeps_its_row():
+def test_the_dcs240_supply_is_not_part_of_this_change_and_has_a_module_of_its_own():
     d = contract(DCS240)
-    assert d["version"] == "1.2.0" and "dc" not in d and "parts" not in d
+    assert d["version"] == "1.3.0" and "dc" in d and "parts" in d
     rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
-    assert len([r for r in rows if r["part"] == DCS240 and r["code"] == "C19"]) == 1
+    assert [r for r in rows if r["part"] == DCS240 and r["code"] == "C19"] == []
 
 
 def test_the_findings_this_change_closes_have_no_row_left():
