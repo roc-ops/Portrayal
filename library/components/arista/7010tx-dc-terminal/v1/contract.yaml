@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: 7010tx-dc-terminal
-version: 1.0.0
+version: 1.1.0
 class: inlet
 behaviour: mounts
 profile: networking
@@ -24,6 +24,17 @@ provenance:
     estimated - read off the same photograph: the upper screw centre at 19.7 mm from the part's left edge and
     8.3 down, the lower one at the same x and 17.6 down, a 9.3 mm pitch. The guide's Figure D-4 labels
     them -48V (upper) and RTN (lower); Table 4 gives the wire as 14 to 18 AWG, ring lug, torque 0.8 N m.
+  voltage: >-
+    NOT STATED. Arista 7010 Series 1RU Quick Start Guide, Table 3 (page 4), prints "-40 to -72 VDC" for the DC
+    models: a range, and a port states one nominal, so the port states none.
+  rating: >-
+    NOT STATED. Table 3 (page 4) prints "2.5 A" beside the DC models without saying whether it is per switch
+    or per power supply, so the port states no current.
+  awg: >-
+    NOT STATED. Table 4 (page 21) prints the wire as "14 to 18" AWG for the DCS-7010TX-48-DC: a range, not a list
+    of sizes, so the port states none.
+  side: >-
+    NOT STATED. No document says which of the two power supplies is feed A, so the port states no side.
   screws: >-
     each terminal screw is the composed common/terminal-screw-34@1, as common/dc-terminal-24@1 composes
     it. The head size is that part's estimate; the photograph shows a larger slotted screw with a
@@ -38,6 +49,14 @@ elements:
 parts:
   - {ref: common/terminal-screw-34@1, id: lug-1, at: [18.0, 6.6]}
   - {ref: common/terminal-screw-34@1, id: lug-2, at: [18.0, 15.9]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      poles:
+        - {role: batt, slot: lug-1}
+        - {role: rtn, slot: lug-2}
+      source: {poles: poles}
 connection-points:
   dc-in: {at: [21.2, 13.7], direction: front}
 skins: [default]
