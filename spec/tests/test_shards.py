@@ -203,9 +203,16 @@ def test_a_marker_selection_is_split_and_recorded_after_it_deselects(tmp_path):
     would prove a split that did not happen."""
     suite = tmp_path / "tiered"
     suite.mkdir()
+    heavy = """
+import pytest
+
+@pytest.mark.heavy
+def test_slow():
+    pass
+
+"""
     (suite / "test_t.py").write_text(
-        "import pytest\n\n@pytest.mark.heavy\ndef test_slow():\n    pass\n\n"
-        + "".join(f"def test_l{i}():\n    pass\n\n" for i in range(6)))
+        heavy + "".join(f"def test_l{i}():\n    pass\n\n" for i in range(6)))
     (suite / "test_u.py").write_text("".join(f"def test_u{i}():\n    pass\n\n" for i in range(6)))
     out = tmp_path / "records"
     out.mkdir()
