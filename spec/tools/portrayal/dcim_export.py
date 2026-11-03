@@ -667,6 +667,10 @@ PART_POWER = {
     # target, and a plug is not a screw terminal, so it is `other`, as the bus-bar clip is, and
     # POWER_LABEL says which connector.
     "common/pla03-receptacle": "other",
+    # THE OSA 5420 AND OSA 5421 DC SUPPLIES' POWER HEADER IS A THREE-POSITION LATCHING HEADER NEITHER
+    # LIBRARY NAMES, from a maker the manual does not name. It is not a screw terminal, so it is `other`,
+    # and POWER_LABEL says which connector.
+    "oscilloquartz/osa542x-dc-header": "other",
     # A RACK PDU'S FIXED INPUT CORD. The Eaton G4 EVMI2130X has no inlet: its feed
     # is a 10 ft cord ending in a NEMA L21-30P twist-lock plug, and the part that
     # stands for it is the cord leaving the end cap. `nema-l21-30p` is a
@@ -721,6 +725,7 @@ POWER_LABEL = {
     "std/12vhpwr-header": "12VHPWR 16-pin",
     "std/12v-2x6-header": "12V-2x6 16-pin",
     "common/pla03-receptacle": "Positronic PCS PLA03 (3-position)",
+    "oscilloquartz/osa542x-dc-header": "Latching power header (3-position, - Gnd +)",
 }
 
 
