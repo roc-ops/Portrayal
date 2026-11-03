@@ -129,3 +129,43 @@ def test_the_lint_run_is_the_real_command_over_the_whole_library():
     assert r.stdout.rstrip().splitlines()[-1].startswith("LINT: ok ("), r.stdout[-300:]
     files = int(r.stdout.rstrip().splitlines()[-1].split("(")[1].split(" files")[0])
     assert files > devices, f"lint read {files} files; the library has {devices} devices"
+
+
+@pytest.mark.xdist_group("group-probe")
+def test_an_xdist_group_reaches_the_scheduler(request, monkeypatch):
+    """THE GROUPS ARE WHAT MAKE ONE RUN SERVE ITS READERS, and they stopped
+    working without a single test failing. xdist's `loadgroup` sends a grouped
+    test to its group's worker by renaming it `id@group` on the worker; pytest
+    9.2 builds `nodeid` from a new field and ignores the one xdist 3.8 writes.
+    From then on every group ran as plain `load`: the three full-lint readers
+    sat on three workers waiting for the same lint (210 s each in CI where one
+    should have paid), the overlay fixture was built four times, the tests
+    that write `library/dist` could run at once, and the shard weights for
+    grouped tests were never found. `test_dist_writers_share_a_group` still
+    passed, because it reads the marks and not what xdist did with them.
+
+    Under xdist's `loadgroup`, as CI always runs, this test's own id is the
+    measurement. Without it there is no scheduler to reach, so a probe goes
+    through xdist's own rename and pytest has to report the name it was given.
+    Either way a dependency that breaks the rename fails here, by name."""
+    config = request.config
+    if getattr(config, "workerinput", None) is not None and config.getvalue("loadgroup"):
+        assert request.node.nodeid.endswith("@group-probe"), (
+            f"{request.node.nodeid!r} carries no @group-probe: xdist_group marks are "
+            "not reaching the scheduler, so every group runs as plain `load`. Check "
+            "the pytest and pytest-xdist versions against the pin in pyproject.toml")
+        return
+    from xdist.remote import WorkerInteractor
+
+    # THE REAL CONFIG, set the way an xdist worker sets it for `--dist
+    # loadgroup` (xdist/remote.py, `config.option.loadgroup`), so the hook
+    # finds whatever else it reads where a worker would.
+    monkeypatch.setattr(config.option, "loadgroup", True, raising=False)
+    probe = pytest.Function.from_parent(request.node.parent, name="probe",
+                                        callobj=lambda: None)
+    probe.add_marker(pytest.mark.xdist_group("probe"))
+    WorkerInteractor.pytest_collection_modifyitems(None, config, [probe])
+    assert probe.nodeid.endswith("@probe"), (
+        f"xdist renamed the probe and pytest reports {probe.nodeid!r}: the rename "
+        "no longer reaches the id, so `--dist loadgroup` cannot keep a group "
+        "together. Check the versions against the pin in pyproject.toml")

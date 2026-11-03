@@ -13,9 +13,9 @@ grounding terminal, which is one of the block's three screws and so a pole of th
     wire size (the guide gives two) and the entries of `provenance` that its `source` names;
   - the terminal elements, every other id of the supply and its description are unchanged.
 
-The Catalyst 3650 supply (five screws, two feeds) and the Nexus 9500 DC supply (four posts, two inputs) are not part of this change:
-each keeps its contract and its record. These run against the real library, a components index built by the indexer the build runs,
-and the records file. They read no library/dist and render nothing.
+The Nexus 9500 DC supply (four posts, two inputs) is not part of this change: it keeps its contract and its record. The Catalyst
+3650 supply (five screws, two feeds) has a test module of its own. These run against the real library, a components index built by
+the indexer the build runs, and the records file. They read no library/dist and render nothing.
 """
 import json
 import re
@@ -36,7 +36,7 @@ LUG = "generic/ring-lug@1"
 SCREWS = [("pole-pos", [23.3, 22.3], "pos"), ("pole-neg", [35.3, 22.3], "neg"), ("pole-gnd", [47.3, 22.3], "gnd")]
 ELEMENTS = ["dc-ok", "handle", "latch", "ps-ok", "terminal-cover", "terminal-ground", "terminal-negative", "terminal-positive"]
 DEVICES = ["c9300-24p", "c9300-24u", "c9300-48p", "c9300-48t", "c9300-48u"]
-NOT_TAKEN = ["cisco/pwr-c2-640wdc@1", "cisco/n9k-pdc-3000w-b@1"]
+NOT_TAKEN = ["cisco/n9k-pdc-3000w-b@1"]
 
 
 def contract(ref):

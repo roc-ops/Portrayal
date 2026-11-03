@@ -30,7 +30,7 @@
 - [ ] `./build.sh --device <name>` lints clean for this device (or `./build.sh` for a component change)
 - [ ] `python3 spec/tools/portrayal/devicelock.py --library library` run **against main's lock first**; every device it named took the bump it asked for; then `--update`
 - [ ] `./publish.sh --no-images` and the regenerated `library/exports` committed
-- [ ] `python3 -m pytest spec/tests -q -n auto` passes (build first; it skips without `dist/`)
+- [ ] The tests this change reaches pass: `python3 -m pytest spec/tests -q -n auto -k <vendor>/<model>`, plus every test file it adds or edits (build first; they skip without `dist/`). CI runs the whole suite
 - [ ] A change a consumer could notice has its entry in a new file under `changelog.d/`, not in `CHANGELOG.md`
 - [ ] A change to `kit/` adds a changelog fragment only. Do not bump the kit version in a pull request; the version is bumped when the kit is published
 - [ ] No vendor material committed: no PDF, CAD, stencil, or photograph; dumps sanitised
