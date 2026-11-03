@@ -91,3 +91,26 @@ def test_a_key_splits_into_module_function_and_group():
     assert suite_times.split_key("test_c::C.f[common/x@1]@full-lint") == (
         "test_c", "C.f", "full-lint")
     assert suite_times.split_key("test_c::f[common/x@1]") == ("test_c", "f", None)
+
+
+def test_the_import_goes_before_the_first_definition_and_an_alias_is_not_it(tmp_path):
+    """A LATE TOP-LEVEL IMPORT is not where `import pytest` goes: put after it, the
+    mark it serves would be read before the name exists and collection would fail.
+    And `import pytest as pt` binds `pt`, not `pytest`."""
+    src = tmp_path / "test_y.py"
+    src.write_text('"""Doc."""\nimport json\nimport pytest as pt\n\n\n'
+                   "def test_slow():\n    pass\n\n\nimport re\n")
+    assert mark_heavy.mark_file(src, {"test_slow"}) == 1
+    text = src.read_text()
+    assert text.index("import pytest\n") < text.index("def test_slow")
+    ns = {}
+    exec(compile(text, str(src), "exec"), ns)
+    assert ns["test_slow"].pytestmark[0].name == "heavy"
+
+
+def test_a_name_that_cannot_be_found_is_named(tmp_path):
+    src = tmp_path / "test_z.py"
+    src.write_text('class Outer:\n    """A class with a docstring."""\n    class Inner:\n'
+                   "        def test_x(self):\n            pass\n")
+    assert mark_heavy.unfound(src, {"Outer.Inner.test_x", "test_gone"}) == {
+        "Outer.Inner.test_x", "test_gone"}

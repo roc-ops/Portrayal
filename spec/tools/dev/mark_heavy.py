@@ -68,22 +68,47 @@ def _is_heavy_mark(node):
 
 
 def _targets(tree, names):
-    """(def node, indent) for each named function: `f` at module level, `C.m` in a class."""
+    """(def node, indent, name) for each named function: `f` at module level,
+    `C.m` in a class. A nested class or an inherited method is not found."""
     out = []
     for node in tree.body:
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name in names:
-            out.append((node, ""))
+            out.append((node, "", node.name))
         elif isinstance(node, ast.ClassDef):
             for sub in node.body:
-                if (isinstance(sub, (ast.FunctionDef, ast.AsyncFunctionDef))
-                        and f"{node.name}.{sub.name}" in names):
-                    out.append((sub, " " * sub.col_offset))
+                if not isinstance(sub, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    continue
+                qual = f"{node.name}.{sub.name}"
+                if qual in names:
+                    out.append((sub, " " * sub.col_offset, qual))
     return out
 
 
+def unfound(path, names):
+    """The names in `names` this file has no markable function for."""
+    tree = ast.parse(pathlib.Path(path).read_text())
+    return set(names) - {qual for _, _, qual in _targets(tree, names)}
+
+
 def _imports_pytest(tree):
-    return any(isinstance(n, ast.Import) and any(a.name == "pytest" for a in n.names)
+    """`import pytest` itself: `import pytest as pt` binds `pt`, not `pytest`."""
+    return any(isinstance(n, ast.Import) and any(a.name == "pytest" and a.asname is None
+                                                  for a in n.names)
                for n in tree.body)
+
+
+def _import_line(tree):
+    """Where `import pytest` goes: after the imports that open the module, so it
+    is bound before any definition reads it - never after a late import."""
+    after, body = 0, tree.body
+    if body and isinstance(body[0], ast.Expr) and isinstance(getattr(body[0], "value", None),
+                                                             ast.Constant):
+        after, body = body[0].end_lineno, body[1:]
+    for node in body:
+        if not isinstance(node, (ast.Import, ast.ImportFrom)):
+            break
+        after = node.end_lineno
+    return after
 
 
 def mark_file(path, names):
@@ -93,7 +118,7 @@ def mark_file(path, names):
     tree = ast.parse(text)
     lines = text.splitlines(keepends=True)
     inserts = []
-    for node, indent in _targets(tree, names):
+    for node, indent, _ in _targets(tree, names):
         if any(_is_heavy_mark(d) for d in node.decorator_list):
             continue
         first = min([d.lineno for d in node.decorator_list] + [node.lineno])
@@ -101,13 +126,7 @@ def mark_file(path, names):
     if not inserts:
         return 0
     if not _imports_pytest(tree):
-        after = max((n.end_lineno for n in tree.body
-                     if isinstance(n, (ast.Import, ast.ImportFrom))), default=None)
-        if after is None:
-            doc = tree.body[0] if tree.body and isinstance(tree.body[0], ast.Expr) \
-                and isinstance(getattr(tree.body[0], "value", None), ast.Constant) else None
-            after = doc.end_lineno if doc else 0
-        inserts.append((after, "import pytest\n"))
+        inserts.append((_import_line(tree), "import pytest\n"))
     for at, line in sorted(inserts, reverse=True):
         lines.insert(at, line)
     path.write_text("".join(lines))
@@ -136,15 +155,19 @@ def main(argv=None):
             print(f"  no file for {stem} ({len(names)} function(s)) - renamed or removed since the run")
             missing += 1
             continue
+        lost = unfound(path, names)
         if args.write:
             n = mark_file(path, names)
             added += n
             print(f"  {n:3d} marked  {path}")
         else:
             print(f"  {len(names):3d} heavy   {path}")
+        for name in sorted(lost):
+            print(f"      NOT FOUND {name} - nested, inherited or made by assignment; mark it by hand")
+            missing += 1
     print(f"{len(heavy)} heavy function(s) in {len(by_file)} file(s)"
           + (f"; {added} mark(s) added" if args.write else "; nothing written (--write)")
-          + (f"; {missing} file(s) not found" if missing else ""))
+          + (f"; {missing} file(s) or function(s) not found, named above" if missing else ""))
     return 0
 
 
