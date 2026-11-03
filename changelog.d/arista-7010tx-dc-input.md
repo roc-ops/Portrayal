@@ -7,4 +7,4 @@
   configurations offer two places to land a cable.
 - The switch that places it (`arista/7010tx-48`, 0.1.2 to 0.2.0) takes a minor, because the build now publishes its DC ports, with its
   lock and the drawing version line of its exported device types (8 files in NetBox and Nautobot). No port, interface or id moves. One
-  row of the records file is gone and its `cap:` is 158.
+  row of the records file is gone and its `cap:` is 155.
