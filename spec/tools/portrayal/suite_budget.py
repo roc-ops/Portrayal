@@ -17,9 +17,17 @@ each was - since the same tree measures up to twice as slow on a busy runner:
 
   - the tier's summed seconds may not pass its `seconds`;
   - LIGHT TIER ONLY: a test function the base run did not have may not take
-    `new_function_seconds` or more, its parameters summed. The light tier is
-    what every pull request push runs; a slow test belongs in the heavy tier,
-    where it still counts against the full budget.
+    `new_function_seconds` or more, its parameters summed - AND ADD that much
+    to its file. A module fixture is billed to whichever test a worker runs
+    first, so a cheap new test can measure the fixture while the old test that
+    used to pay it drops to nothing; the file did not grow, and neither did the
+    tier. The light tier is what every pull request push runs; a slow test
+    belongs in the heavy tier, where it still counts against the full budget.
+
+A LIGHT RUN IS MEASURED AGAINST A LIGHT RUN: the newest merged pull request's
+`test-times-light`, falling back to a full run's `test-times` until one exists.
+A full run bills fixtures to heavy tests the light tier does not run, so its
+per-file seconds are not a light file's, and the load read off them is wrong.
 
 NEW MEANS ABSENT FROM THE BASE, AND THE BASE CAN LAG MAIN: a slow function
 merged since the base run was measured reads as new to every pull request
@@ -44,6 +52,7 @@ import sys
 from portrayal.suite_times import by_file, fetch_base, fold_function, load_factor, read_junit
 
 BUDGET = "spec/test-budget.json"
+LIGHT_ARTIFACT = "test-times-light"
 REMEDY = {
     "light": "Make a test cheaper, or mark it @pytest.mark.heavy so it runs before a "
              "merge and nightly instead",
@@ -92,8 +101,10 @@ def check(tests, base, budget, tier, touched=None):
             if f not in known:
                 new[f] = new.get(f, 0.0) + v / load
         ceiling = entry["new_function_seconds"]
+        mine_files = by_file({k: v / load for k, v in tests.items()})
+        base_files = by_file(base)
         for (stem, name), s in sorted(new.items()):
-            if s < ceiling:
+            if s < ceiling or mine_files[stem] - base_files.get(stem, 0.0) < ceiling:
                 continue
             line = (f"light tier: the new test function {stem}::{name} took {s:.1f} s (load "
                     f"divided out); a light-tier function may take less than {ceiling:g} s. "
@@ -147,9 +158,14 @@ def main(argv=None):
     if a.base and pathlib.Path(a.base).is_file():
         base, label = json.loads(pathlib.Path(a.base).read_text())["tests"], a.base
     elif a.fetch_base:
+        token, head = os.environ.get("GITHUB_TOKEN"), os.environ.get("HEAD_SHA")
         try:
-            base, label = fetch_base(a.fetch_base, os.environ.get("GITHUB_TOKEN"),
-                                     os.environ.get("HEAD_SHA"))
+            if a.tier == "light":
+                base, label = fetch_base(a.fetch_base, token, head, artifact=LIGHT_ARTIFACT)
+            if base is None:
+                base, label = fetch_base(a.fetch_base, token, head)
+                if base is not None and a.tier == "light":
+                    label += " (a full run: no merged light run has been published yet)"
         except Exception as e:  # noqa: BLE001 - any failure here means "no base"
             base, label = None, f"the base run could not be fetched ({type(e).__name__}: {e})"
 

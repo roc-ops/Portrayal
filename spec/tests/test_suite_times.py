@@ -291,3 +291,16 @@ def test_the_job_may_read_artifacts_and_pull_requests_and_write_nothing(jobs):
         perms = jobs[name]["permissions"]
         assert perms == {"contents": "read", "actions": "read", "pull-requests": "read"}, name
     assert "permissions" not in jobs["tests"]
+
+
+def test_a_light_run_compares_with_a_light_run():
+    """A light run's base is the newest merged LIGHT run (`test-times-light`): a
+    full run bills a module fixture to a heavy test that the light tier does not
+    run, so its per-file seconds are not a light file's."""
+    light = {**art("new", "2026-10-02T09:00:00Z"), "name": T.ARTIFACT + "-light"}
+    full = art("newer", "2026-10-03T09:00:00Z")
+    merged = {"new": 742, "newer": 743}
+    chosen, number = T.choose_base([light, full], merged, artifact=T.ARTIFACT + "-light")
+    assert chosen["name"] == T.ARTIFACT + "-light" and number == 742
+    chosen, number = T.choose_base([light, full], merged)
+    assert chosen["name"] == T.ARTIFACT and number == 743

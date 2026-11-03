@@ -159,3 +159,30 @@ def test_the_command_reads_the_touched_list(tmp_path, capsys):
     args = [junit, "--tier", "light", "--budget", str(budget), "--base", str(base)]
     assert B.main(args + ["--touched", str(touched)]) == 0
     assert B.main(args) == 1
+
+
+def test_a_fixture_billed_to_a_new_test_is_not_its_cost():
+    """A MODULE FIXTURE IS BILLED TO WHICHEVER TEST A WORKER RUNS FIRST. A new
+    0.1 s test that happens to go first measures the fixture's 8 s, while the
+    old test that used to pay it drops to almost nothing: the file did not grow.
+    The ceiling is on what the new function adds to its file."""
+    base = {**BASE, "test_m::old": 8.1}
+    tests = {**BASE, "test_m::old": 0.1, "test_m::new": 8.1}
+    failures, _ = B.check(tests, base, LIGHT, "light")
+    assert failures == [], failures
+
+
+def test_the_command_prefers_a_light_base_for_a_light_run(monkeypatch, tmp_path, capsys):
+    calls = []
+
+    def fake_fetch(repo, token, skip_sha, artifact="test-times"):
+        calls.append(artifact)
+        return (BASE, "#1") if artifact.endswith("-light") else (None, "none")
+
+    monkeypatch.setattr(B, "fetch_base", fake_fetch)
+    junit = _junit(tmp_path / "j.xml", dict(BASE))
+    budget = tmp_path / "budget.json"
+    budget.write_text(json.dumps(LIGHT))
+    assert B.main([junit, "--tier", "light", "--budget", str(budget), "--fetch-base", "o/r"]) == 0
+    assert calls[0] == "test-times-light"
+    assert "base #1" in capsys.readouterr().out
