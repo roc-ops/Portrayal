@@ -1,0 +1,64 @@
+format: 1
+kind: component
+name: sr-7-dc-pole
+version: 1.0.0
+class: mechanical
+# THE PAIR IS ITSELF A SLOT (docs/connectors-dc-terminal-design.md section 13.7): one
+# two-hole lug lands across both studs, at their midpoint. That slot and the two stud slots
+# below are mutually exclusive, as a duplex adapter's slot and its two bores are.
+interface: stud-pair-5-8
+behaviour: mounts
+profile: networking
+description: >-
+  One pole of the 7750 SR-7 and 7450 ESS-7 DC PEM-3 terminal block: two studs side by side
+  on 5/8 in. (15.875) centres, the landing one two-hole power lug takes. nokia/sr-7-pem-3@1
+  composes two, the -48 pole and the RTN pole.
+size: {w: 19.275, h: 3.4}
+size-confidence: {w: datasheet, h: estimated}
+size-notes: >-
+  the two studs' own boxes, 15.875 apart centre to centre, side by side: the width is the
+  pitch and one stud, the height one stud
+attrs: {connector: stud-pair-5-8}
+provenance:
+  size: >-
+    datasheet and estimated - the 5/8 in. pitch is the interface's (spec/schemas/standards.yaml
+    `two-hole-lug-5-8`, 15.875); each stud is common/terminal-screw-34@1, whose own 3.4 across
+    is an estimate.
+  pitch: >-
+    THE PITCH IS INFERRED, NOT STATED. The 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide
+    (3HE18643AAAATQZZA03, 22.7) states the spacing of the lug that goes on a pole, 5/8 in.
+    (1.59 cm) in Table 60 and Figure 30 (p135) and in the note on p134, and no document held
+    dimensions the studs themselves. The studs are taken to stand where the lug's holes do, so
+    they are composed at exactly 15.875 and lint L116 holds them there to 0.01. The skin of
+    nokia/sr-7-pem-3@1 draws them 16.5 apart (Figure 8 p51), 0.6 mm more, and is not redrawn.
+  thread: >-
+    NOT CLAIMED. The guide's nuts on these studs are 1/4-20 hex nuts, tightened with a 7/16 in.
+    socket (Table 62 key 5 p137, steps 4 and 6 p138), and its lug holes are 3/8 in. (0.95 cm)
+    (Table 60 key 2). The studs are common/terminal-screw-34@1, a head 3.4 across that claims
+    no thread: a STAND-IN, declared. It marks where a lug lands, and the drawn studs and rings
+    are the skin of the module that composes this part.
+  lug: >-
+    THE DOCUMENTED LUG IS NOT THE ONE OFFERED. The guide's lug is a copper, standard barrel,
+    two-hole lug for #2 AWG cable, such as a Burndy YA2CL2NT14, with 3/8 in. holes (p134,
+    pp135-136). generic/two-hole-lug-5-8@1, which mates this interface, is the library's
+    nominal lug (5.08 mm holes, a #6 AWG barrel) and stands in for it.
+  axis: >-
+    THE STUDS ARE COMPOSED LEFT TO RIGHT, so the pair runs along +x, the canonical axis a
+    two-hole lug is drawn on, and a lug seated here leaves its wire to the right
+    (manifest.spanning_axis). The guide does not say which way the wires leave.
+  seat: >-
+    THE PAIR PRESENTS AT THE TOP OF ITS STUDS. `mate` is the midpoint of the two studs' own
+    `mate` points and states `seat-out: 9.2`, the height each stud presents at (its lift 8.0
+    and its 1.2 head), so a lug across the pair lies exactly where a one-hole lug on either
+    stud would. L116 holds the two to one figure.
+elements: {}
+parts:
+  # FIRST STUD, then second: the order is the axis (provenance.axis). Each is a slot of its
+  # own, `<pole>/1` and `<pole>/2`, which the ring lug still seats in.
+  - {ref: common/terminal-screw-34@1, id: '1', at: [0, 0], lift: 8.0}
+  - {ref: common/terminal-screw-34@1, id: '2', at: [15.875, 0], lift: 8.0}
+connection-points:
+  # WHERE A TWO-HOLE LUG SEATS: the midpoint of the studs' own mate points, (1.7, 1.7) and
+  # (17.575, 1.7), at the height they present.
+  mate: {at: [9.6375, 1.7], direction: front, seat-out: 9.2}
+skins: [default]
