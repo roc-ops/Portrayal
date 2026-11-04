@@ -15,4 +15,4 @@
   EX4650-48Y, EX9251, MX204, QFX3500-48S4Q, QFX3600-16Q, QFX5100-24Q, -48S, -48T and -96S, QFX5110-32Q and -48S, QFX5120-48T,
   QFX5200-32C), with their locks and the drawing version line of their exported device types (144 files in NetBox and Nautobot); the
   supplies' module types carry the new contract version (14 files). No port, interface or id moves. Seven rows of the records file are
-  gone and its `cap:` is 141.
+  gone and its `cap:` is 139.
