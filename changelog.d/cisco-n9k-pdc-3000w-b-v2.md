@@ -14,7 +14,7 @@
 ### Changed
 - The Nexus 9504, 9508 and 9516 (`cisco/n9k-c9504` 2.2.0 to 2.3.0, `cisco/n9k-c9508` 1.2.0 to 1.3.0, `cisco/n9k-c9516` 2.2.0 to
   2.3.0) take a minor each: their DC build seats `cisco/n9k-pdc-3000w-b@2`, and their supply bays accept it beside `@1`. The
-  build now publishes the two DC ports of each supply; the locks and the drawing version line of the exported device types move
+  build now publishes the two DC ports of each supply; the device version records and the drawing version line of the exported device types move
   with them, and the supply's module types carry contract version 2.0.0 (the power port is still `{module}/Inlet`). One row of the
   records file is gone and its `cap:` is 144.
 - `cisco/n9k-pdc-3000w-b@1` (1.0.0 to 1.0.1) says `superseded-by: cisco/n9k-pdc-3000w-b@2`. Its drawing is unchanged, the
