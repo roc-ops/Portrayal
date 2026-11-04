@@ -45,7 +45,7 @@ VERSIONS = {QFX[0]: "1.1.0", QFX[1]: "1.1.0", MX: "1.2.0"}
 DEVICES = {"qfx5130-32cd": "0.2.0", "qfx5130-48c": "0.2.0", "qfx5220-32cd": "0.2.0", "mx104": "5.1.0"}
 NOT_TAKEN = [
     "juniper/qfx5210-jpsu-1100w-dc-afi@1", "juniper/qfx5210-jpsu-1100w-dc-afo@1",
-    "juniper/mx240-psu-dc@1", "juniper/mx304-psu-dc@1",
+    "juniper/mx304-psu-dc@1",
     "juniper/qfx10002-jpsu-1600w-dc-afo@1", "juniper/qfx10000-pwr-dc@1", "juniper/mx2000-psm-dc-v@1",
 ]
 
