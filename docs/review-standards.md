@@ -124,6 +124,10 @@ list of things to do.
   gates on whether the build ran, never on whether the result was empty.
 - **Its fixture is built, not borrowed.** A test pinned to what a live device
   lacks breaks the day the device gets better.
+- **It states what is true of the library.** What a change left alone belongs
+  to the diff and the review, not to a test: a list of the parts or records
+  rows that "stay" is true of one diff and goes false the day a later change
+  does its job. `preflight.py` asks the same question of the diff.
 - **It is worth what it costs.** A test of five seconds or more says why a
   lint rule or a cheaper fixture could not answer the same question, and a
   whole-library lint or index is the session's shared one, not a new run.

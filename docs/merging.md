@@ -25,11 +25,14 @@ same way each time. This page says how, who does it, and why.
    checks out of the pull request, so branch protection never sees its
    `build`. A pull request from a fork runs the whole suite on every push, so
    its `build` is already there.
-3. Several ready pull requests can be tested **together, once**, on a train
-   (below), which catches two changes that pass apart and fail together. Each
-   head still needs its own `build` before it merges.
+3. Changes come in through **batches**. A batch pull request is a set tested
+   once, which catches two changes that pass apart and fail together. Its
+   `build` stands for each head in it, and GitHub marks each of them merged
+   when the batch merges.
 
-The coordinator never merges. The owner is the only one who does.
+The coordinator merges a batch on its `build`. A one-way change in a batch
+merges only on the owner's yes on its exact head. `.github/merge-train.py`
+stays for a set the owner merges, and the rest of this page describes it.
 
 ## Why a train
 
