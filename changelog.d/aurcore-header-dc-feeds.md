@@ -10,4 +10,4 @@
 - The AIS2001, AIS2001P, AIS2002, AIS2002P, AIS2003, AIS2003P, AIS2004, AIS2004P, AIS4001 and AIS4001P (`aurcore/ais2001` and the
   nine others, 2.0.1 to 2.1.0) each take a minor, because the build now publishes two DC ports for them, with their pinned hashes and the
   drawing version line of their exported device types (20 files in NetBox and Nautobot). No port, interface or id
-  moves. Ten rows of the records file are gone and its `cap:` is 136.
+  moves. Ten rows of the records file are gone and its `cap:` is 135.
