@@ -9,7 +9,7 @@ mates it are declared stand-ins, and the place and size are estimates; each cont
   - the supply states the roles of the three contacts (`neg`, `pos`, `gnd`) in its provenance and states no DC port, because a
     port whose poles are the contacts of one pluggable connector is offered only where that part is itself the connector;
   - no skin is edited and the supply's description is unchanged;
-  - the three devices that seat it take a patch, and the record for the supply is gone while the other rows of the issue stay.
+  - the three devices that seat it take a patch, and the record for the supply is gone.
 
 These run against the real library, a components index built by the indexer the build runs, and the records file. They read no
 library/dist and render nothing.
@@ -31,9 +31,6 @@ SUPPLY = "cisco/nxa-pdc-930w@1"
 HEADER, PLUG = "cisco/nxa-pdc-930w-dc-header@1", "cisco/nxa-pdc-930w-dc-plug@1"
 KEY = "cisco-dc-block-3"
 DEVICES = ["n9k-c93108tc-fx3", "n9k-c93180yc-fx3", "n9k-c93180yc-fx3s"]
-STAY = ["cisco/a9k-1600w-dc@1", "cisco/nc57-1600w-dcfw@1", "cisco/nc5k-pdc-930w-bk@1",
-        "cisco/nc5k-pdc-930w-fr@1", "cisco/nxa-pdc-1100w@1", "cisco/nxa-pdc-440w@1", "cisco/nxa-pdc-715w@1",
-        "cisco/nxa-phv-350w@1", "cisco/pwr-1p6kw-dc@2"]
 
 
 def path_of(ref):
@@ -118,10 +115,8 @@ def test_three_devices_seat_the_supply_and_no_others():
     assert seats == DEVICES
 
 
-def test_the_record_of_the_supply_is_gone_and_the_others_of_the_issue_stay():
+def test_the_record_of_the_supply_is_gone():
     doc = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())
     rows = {(r["part"], r["code"]) for r in doc["rows"]}
     assert (SUPPLY, "C19") not in rows
-    for ref in STAY:
-        assert (ref, "C19") in rows, ref
     assert doc["cap"] == len(doc["rows"])

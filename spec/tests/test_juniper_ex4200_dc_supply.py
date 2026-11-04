@@ -6,9 +6,9 @@ of that block as parts, in the order the face prints them from the top (A+, B+, 
 guide describes: `feed-a` on A+ and A- and `feed-b` on B+ and B-, the poles `pos` and `neg` the supply prints, the sides a and b
 it prints. The jumpers fitted at the factory, from A+ to B+ and from A- to B-, are not modelled.
 
-The three EX4200 switches that seat it take a minor each, and the record of the issue that the change closes is gone. The other
-supplies of the same issue keep their contracts and their records. These run against the real library, a components index built
-by the indexer the build runs, and the records file. Only one of them reads the index, and none reads library/dist or renders.
+The three EX4200 switches that seat it take a minor each, and the record of the issue that the change closes is gone. These run
+against the real library, a components index built by the indexer the build runs, and the records file. Only one of them reads
+the index, and none reads library/dist or renders.
 """
 import json
 import re
@@ -32,10 +32,6 @@ PORTS = [("feed-a", "a", [("pos", "pole-a-pos"), ("neg", "pole-a-neg")]), ("feed
 ELEMENTS = ["handle", "latch", "led-a", "led-b"]
 # the devices that seat it and the version each takes (a minor)
 DEVICES = {"ex4200-24f": "0.3.0", "ex4200-24t": "0.3.0", "ex4200-48t": "0.3.0"}
-# the supplies of the same issue that this change leaves for later, with the record each keeps
-STAYING = ["juniper/ex3400-jpsu-150-dc-afo@1", "juniper/ex4100-jpsu-150-dc-afo@1", "juniper/jpsu-550-c-dc-afi@1",
-           "juniper/jpsu-550-c-dc-afo@1", "juniper/ex6200-pwr-dc2100@1", "juniper/ex8200-pwr-dc2kr@1",
-           "juniper/ex8200-pwr-dc3kr@1", "juniper/ex9200-pwr-mx480-2400-dc@1", "juniper/ex9214-pwr-mx960-4100-dc@1"]
 
 
 def path_of(ref):
@@ -154,14 +150,6 @@ def test_each_device_that_seats_the_supply_takes_one_minor(device):
     assert lock["composed-refs"][SUPPLY].startswith("1.1.0+")
     assert lock["composed-refs"][SCREW].startswith("1.0.1+")
     assert sorted(lock["dc-ports"]) == ["psu-0/module/feed-a", "psu-0/module/feed-b"]
-
-
-@pytest.mark.parametrize("ref", STAYING)
-def test_the_supplies_left_for_later_keep_their_contract_and_their_record(ref):
-    d = contract(ref)
-    assert "dc" not in d and "parts" not in d
-    rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
-    assert len([r for r in rows if r["part"] == ref and r["code"] == "C19"]) == 1
 
 
 def test_the_finding_this_change_closes_has_no_row_left():

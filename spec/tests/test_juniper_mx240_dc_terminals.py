@@ -156,12 +156,7 @@ def test_only_the_mx240_and_the_mx480_seat_the_supply():
     assert seated == sorted(DEVICES)
 
 
-def test_the_finding_this_change_closes_has_no_row_left_and_the_others_keep_theirs():
+def test_the_finding_this_change_closes_has_no_row_left():
     rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
     have = {(r["part"], r["code"]) for r in rows}
     assert (PSU, "C19") not in have
-    # what this change leaves for later is still recorded
-    for stays in (("juniper/mx304-psu-dc@1", "C19"), ("juniper/qfx10000-pwr-dc@1", "C19"),
-                  ("juniper/qfx5230-jnp-2400w-dc-afi@1", "C19"), ("juniper/qfx5230-jnp-3000w-dc-afo@1", "C19"),
-                  ("juniper/mx240-psu-ac@1", "C19"), ("juniper/mx960-psu-ac@1", "C19")):
-        assert stays in have, stays

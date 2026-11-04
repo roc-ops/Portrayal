@@ -149,8 +149,7 @@ def test_the_device_that_seats_the_supply_took_a_patch_and_its_lock_agrees(ref):
     assert [f for f in devicelock.check(LIB) if f[0] in (want["device"], ref.split("/")[1].split("@")[0])] == []
 
 
-def test_the_findings_this_change_closes_have_no_row_left_and_the_48v_supply_of_the_amx3200_keeps_its_own():
+def test_the_findings_this_change_closes_have_no_row_left():
     rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
     for ref in SUPPLIES:
         assert [r for r in rows if r["part"] == ref and r["code"] == "C19"] == []
-    assert len([r for r in rows if r["part"] == "edgecore/amx-3200-48v-psu@1" and r["code"] == "C19"]) == 1

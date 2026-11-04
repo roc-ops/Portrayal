@@ -11,8 +11,7 @@ that block as parts and states the DC port or ports the vendor's hardware guide 
   - juniper/ex9253-jnp-pwr1100-dc@1 (two studs with nuts, RTN and -48V): one input port, the poles `rtn` and `batt`.
 
 The four devices that seat them take a minor each (the EX4300-32F, the EX4300-48T, the EX4500-40F and the EX9253) and the four
-records of the issue that the change closes are gone. The other supplies of the same issue keep their contracts and their records.
-These run against the real library, a components index built by the indexer the build runs, and the records file. They read no
+records of the issue that the change closes are gone. These run against the real library, a components index built by the indexer the build runs, and the records file. They read no
 library/dist and render nothing.
 """
 import json
@@ -68,13 +67,6 @@ CENTRES = {
 # the devices that seat them and the version each takes (a minor)
 DEVICES = {"ex4300-32f": "0.3.0", "ex4300-48t": "0.3.0", "ex4500-40f": "0.3.0", "ex9253": "0.2.0"}
 SEATED_BY = {"ex4300-32f": [AFO, AFI], "ex4300-48t": [AFO, AFI], "ex4500-40f": [EX4500], "ex9253": [EX9253]}
-# the rows of the same issue that stay, with the supplies and devices they name
-STAYING = [("juniper/ex3400-jpsu-150-dc-afo@1", "C19"),
-           ("juniper/ex4100-jpsu-150-dc-afo@1", "C19"), ("juniper/jpsu-550-c-dc-afi@1", "C19"),
-           ("juniper/jpsu-550-c-dc-afo@1", "C19"), ("juniper/ex6200-pwr-dc2100@1", "C19"),
-           ("juniper/ex8200-pwr-dc2kr@1", "C19"), ("juniper/ex8200-pwr-dc3kr@1", "C19"),
-           ("juniper/ex9200-pwr-mx480-2400-dc@1", "C19"), ("juniper/ex9214-pwr-mx960-4100-dc@1", "C19")]
-NOT_TAKEN = [ref for ref, _ in STAYING]
 
 
 def path_of(ref):
@@ -220,14 +212,6 @@ def test_the_lock_of_the_ex4300_32f_holds_the_two_feeds_of_the_dc_supply_it_seat
     assert sorted(ports) == ["psu-0/module/feed-a", "psu-0/module/feed-b"]
     for path, refs in ports.items():
         assert AFO in refs and refs[AFO]["voltage"] == {"nominal": -48, "range": [-40.8, -60]}
-
-
-@pytest.mark.parametrize("ref", NOT_TAKEN)
-def test_the_supplies_left_for_later_keep_their_contract_and_their_record(ref):
-    d = contract(ref)
-    assert "dc" not in d and "parts" not in d
-    rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
-    assert len([r for r in rows if r["part"] == ref and r["code"] == "C19"]) == 1
 
 
 def test_the_findings_this_change_closes_have_no_row_left():

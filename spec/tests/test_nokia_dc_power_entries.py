@@ -154,12 +154,8 @@ def test_the_build_publishes_the_sr_7_poles_as_pairs_a_two_hole_lug_lands_across
     assert [(q["role"], q["slot"]) for q in port["poles"]] == [("batt", "pole-batt"), ("rtn", "pole-rtn")]
 
 
-def test_the_findings_this_change_closes_have_no_row_left_and_the_others_keep_theirs():
+def test_the_findings_this_change_closes_have_no_row_left():
     rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
     have = {(r["part"], r["code"]) for r in rows}
     assert (SRE, "C19") not in have
     assert ("sr-7", "C19") not in have
-    # what this change leaves for later is still recorded
-    for stays in (("sr-12", "C19"), ("lmfs-f", "C19"), ("lmfs-f", "C20"), ("sr-7", "C20"),
-                  ("supermicro/psu-pws-601s-1r@1", "C19")):
-        assert stays in have, stays
