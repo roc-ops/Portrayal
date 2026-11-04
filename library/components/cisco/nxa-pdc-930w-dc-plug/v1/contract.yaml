@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: nxa-pdc-930w-dc-plug
+version: 1.0.0
+class: port
+mates: cisco-dc-block-3
+profile: power
+description: >-
+  The cable connector of the Cisco NXA-PDC-930W supply, wired, seen from the wire side as seated. The
+  body carries a clip tab on its left side. One insulated wire enters each of its three ways, from the
+  top down "- DC", "+ DC" and the earth, as the supply prints them. It seats in a `cisco-dc-block-3`
+  connector at its own mate point. It carries one wire per contact, not one cable.
+size: {w: 9.0, h: 16.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, cisco/nxa-pdc-930w-dc-header@1, 9.0 by 16.0. The guide's
+  figure draws the cable connector without a scale and no dimension of it is held.
+attrs: {media: nxa-pdc-930w-dc, connector: DC power cable connector, positions: 3}
+fields:
+  wire-1-color: {label: 'Wire colour (- DC, top)', type: text, default: '#c8262c'}
+  wire-2-color: {label: 'Wire colour (+ DC, middle)', type: text, default: '#1c1c1c'}
+  wire-3-color: {label: 'Wire colour (earth, bottom)', type: text, default: '#3a9a4a'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    guide - the Cisco N93108TC-FX3 NX-OS Mode Switch Hardware Installation Guide, figure 504148 (PDF page 50)
+    draws the cable connector with a clip, a release tab and three wires leaving it, red, black and green from
+    the top down. The cable table (PDF page 59) names the cable CAB-48DC-40A-8AWG, and the text says the
+    ground, negative and positive DC power cables go to a connector block. No maker, series or part number of
+    the connector is named. THE PART IS A STAND-IN FOR THE CABLE CONNECTOR.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    guide - the figure draws red, black and green wires; no document states which pole each carries, so the
+    defaults are the figure's colours from the top down and the order of the marks is the only statement.
+  far-end: >-
+    NOT DRAWN. The other ends of the three cables land on the DC power source and the ground (the guide:
+    "Verify that the other ends of the cables are attached to the DC power source and ground"), which is the
+    site's equipment and not this supply's.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the supply, so the part draws a
+    plan outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [5.3, 8.0], direction: front}
+  wire-1: {at: [5.3, 3.4], direction: front}
+  wire-2: {at: [5.3, 8.0], direction: front}
+  wire-3: {at: [5.3, 12.6], direction: front}
+skins: [default]
