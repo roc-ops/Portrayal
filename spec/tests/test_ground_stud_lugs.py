@@ -410,7 +410,7 @@ def test_what_is_out_of_scope_is_still_not_a_seat():
 # --- 2. the census, and every placement is a slot ----------------------------------
 
 # THE ONE KIND OF COMPONENT THAT COMPOSES ONE OF THE FOUR: a DC supply module whose earth screw or stud is a ground seat
-# outside its DC ports: beside its terminal block, or (the Catalyst 3650 supply) on it between two feeds. A supply is
+# outside its DC ports: beside its terminal block, or (the Catalyst 3650 supply and the two EX4300 supplies) on it between two feeds. A supply is
 # seated in a bay of a chassis and is not a placement on a chassis face, so its
 # earth seat is counted here and not in CENSUS. (component, id of its part) -> the part it composes.
 COMPOSED = {
@@ -420,6 +420,8 @@ COMPOSED = {
     ("edgecore/csr440-psu-dc@1", "earth"): "common/ground-stud@1",
     ("edgecore/dcs240-psu-dc@2", "earth"): "common/ground-screw@1",
     ("edgecore/fsj033-610g@1", "ground-stud"): "common/ground-screw@1",
+    ("juniper/ex4300-jpsu-550-dc-afi@1", "earth"): "common/ground-screw@1",
+    ("juniper/ex4300-jpsu-550-dc-afo@1", "earth"): "common/ground-screw@1",
 }
 
 
@@ -439,7 +441,7 @@ def placed(walked):
 def test_the_census_of_ground_stud_placements(placed, walked):
     """Counted by walking every device view and every component's `parts:`.
     All four parts are placed straight on a chassis face, except the earth
-    seats of five DC supply modules, which COMPOSED counts apart."""
+    seats of eight DC supply modules, which COMPOSED counts apart."""
     assert {(where, p["id"]): p["ref"] for where, view, p in walked if view is None} == COMPOSED
     counts = {}
     for where, view, p in placed:

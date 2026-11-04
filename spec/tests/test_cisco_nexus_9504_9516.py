@@ -4,7 +4,7 @@ Every figure here is Cisco's N9504 or N9516 NX-OS Mode Switch Hardware Installat
 Dimensions" for the envelopes, the "Overview" for the slots and what each takes, and the chassis's own table in
 "Planning for Power Requirements" for the power figures (the guide's first table is a copy of the 9508's). Pages
 are PDF pages, and the printed page is six lower. Each line-card slot takes the line-card blank and the line
-cards its guide supports, which test_cisco_nexus_9500_line_cards.py models. The eleven parts shared with the
+cards its guide supports, which test_cisco_nexus_9500_line_cards.py and test_cisco_nexus_9500_line_cards_2.py model. The eleven parts shared with the
 9508 are referenced by id, never redrawn.
 """
 from pathlib import Path
@@ -30,8 +30,10 @@ BLANKS = {"9504": ["n9k-c9504-fm-cv", "n9k-c9504-fan-pwr"], "9516": ["n9k-c9516-
 NEW = {k: FANS[k] + FABRICS[k] + BLANKS[k] for k in FANS}
 
 LINE_CARDS = {"9504": 4, "9516": 16}
-CARDS_TAKEN = {"9504": ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx", "n9k-x9716d-gx"],
-               "9516": ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx"]}
+CARDS_TAKEN = {"9504": ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx", "n9k-x9716d-gx",
+                        "n9k-x9736c-ex", "n9k-x9732c-ex", "n9k-x9736c-fx3", "n9k-x9736q-fx", "n9k-x9408pc-cfp2"],
+               "9516": ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx",
+                        "n9k-x9736c-ex", "n9k-x9732c-ex", "n9k-x9736c-fx3", "n9k-x9736q-fx", "n9k-x9408pc-cfp2"]}
 SUPPLY_BAYS = {"9504": 4, "9516": 10}
 HEIGHT = {"9504": 7 * 44.45, "9516": 21 * 44.45}      # 311.15 and 933.45 mm: the guide's own RU counts
 
