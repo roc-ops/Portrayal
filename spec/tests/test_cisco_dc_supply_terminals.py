@@ -13,9 +13,9 @@ grounding terminal, which is one of the block's three screws and so a pole of th
     wire size (the guide gives two) and the entries of `provenance` that its `source` names;
   - the terminal elements, every other id of the supply and its description are unchanged.
 
-The Nexus 9500 DC supply (four posts, two inputs) is not part of this change: it keeps its contract and its record. The Catalyst
-3650 supply (five screws, two feeds) has a test module of its own. These run against the real library, a components index built by
-the indexer the build runs, and the records file. They read no library/dist and render nothing.
+The Catalyst 3650 supply (five screws, two feeds) and the Nexus 9500 DC supply (four posts, two inputs) have test modules of their
+own. These run against the real library, a components index built by the indexer the build runs, and the records file. They read
+no library/dist and render nothing.
 """
 import json
 import re
@@ -36,7 +36,6 @@ LUG = "generic/ring-lug@1"
 SCREWS = [("pole-pos", [23.3, 22.3], "pos"), ("pole-neg", [35.3, 22.3], "neg"), ("pole-gnd", [47.3, 22.3], "gnd")]
 ELEMENTS = ["dc-ok", "handle", "latch", "ps-ok", "terminal-cover", "terminal-ground", "terminal-negative", "terminal-positive"]
 DEVICES = ["c9300-24p", "c9300-24u", "c9300-48p", "c9300-48t", "c9300-48u"]
-NOT_TAKEN = ["cisco/n9k-pdc-3000w-b@1"]
 
 
 def contract(ref):
@@ -139,14 +138,6 @@ def test_each_of_the_five_devices_that_seat_the_supply_takes_one_minor(name):
     assert lock["version"] == "1.2.0"
     assert lock["composed-refs"]["cisco/pwr-c1-715wdc@1"].startswith("1.1.0+")
     assert lock["composed-refs"]["common/terminal-screw-34@1"].startswith("1.0.1+")
-
-
-@pytest.mark.parametrize("ref", NOT_TAKEN)
-def test_the_two_cisco_dc_supplies_with_two_feeds_are_not_part_of_this_change_and_keep_their_rows(ref):
-    d = contract(ref)
-    assert d["version"] == "1.0.0" and "dc" not in d and "parts" not in d
-    rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
-    assert len([r for r in rows if r["part"] == ref and r["code"] == "C19"]) == 1
 
 
 def test_the_finding_this_change_closes_has_no_row_left():
