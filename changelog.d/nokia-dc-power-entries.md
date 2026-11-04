@@ -14,4 +14,4 @@
 - The 7750 SR-1e, SR-2e and SR-3e (0.2.0 to 0.3.0) and the 7750 SR-7 (1.0.7 to 1.1.0) each take a minor: the build now
   publishes a DC port for the supply they seat. Their device files and the drawing version line of their exported device types
   move with them, and the two modules' types carry the new contract versions. The drawings gain only the seats' small
-  screw heads. Two rows of the records file are gone and its `cap:` is 150.
+  screw heads. Two rows of the records file are gone and its `cap:` is 146.
