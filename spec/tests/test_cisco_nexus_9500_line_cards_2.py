@@ -56,7 +56,7 @@ BATCH1 = {"n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx", "n9k-x9716d-gx"}
 # 9504 PDF pp8-9 (printed 2-3), 9508 PDF pp8-9 (printed 2-3), 9516 PDF pp7-8 (printed 1-2).
 CHASSIS = {"9504": (4, BATCH1 | set(CARDS)), "9508": (8, BATCH1 | set(CARDS)),
            "9516": (16, (BATCH1 - {"n9k-x9716d-gx"}) | set(CARDS))}
-VERSIONS = {"9504": "2.2.0", "9508": "1.2.0", "9516": "2.2.0"}
+VERSIONS = {"9504": "2.3.0", "9508": "1.3.0", "9516": "2.3.0"}
 
 
 def contract(name):

@@ -208,7 +208,8 @@ def test_each_slot_accepts_what_the_guide_lists(device, chassis):
         assert set(front[f"sup-{n}"]["accepts"]) == refs(SUPERVISORS)
         assert set(rear[f"sc-{n}"]["accepts"]) == {"cisco/n9k-sc-a@1"}
     for n in range(1, SUPPLY_BAYS[chassis] + 1):
-        assert set(front[f"ps-{n}"]["accepts"]) == refs(SUPPLIES + ["n9k-psu-blank"])
+        # the redrawn DC supply is accepted beside the first drawing, which stays for a saved rack
+        assert set(front[f"ps-{n}"]["accepts"]) == refs(SUPPLIES + ["n9k-psu-blank"]) | {"cisco/n9k-pdc-3000w-b@2"}
     for n in range(1, 4):
         assert set(rear[f"fan-{n}"]["accepts"]) == refs(FANS[chassis])
     for n in range(1, 7):
@@ -342,13 +343,13 @@ def test_9516_base_is_the_guides_planning_example():
     assert {s[f"lc-{n}"] for n in range(1, 17)} == {"cisco/n9k-c9500-lc-cv@1"}
 
 
-@pytest.mark.parametrize("config,supply", [("psu-universal", "n9k-puv-3000w-b"),
-                                           ("psu-dual-input", "n9k-puv2-3000w-b"),
-                                           ("psu-dc", "n9k-pdc-3000w-b")])
+@pytest.mark.parametrize("config,supply", [("psu-universal", "n9k-puv-3000w-b@1"),
+                                           ("psu-dual-input", "n9k-puv2-3000w-b@1"),
+                                           ("psu-dc", "n9k-pdc-3000w-b@2")])
 def test_supply_builds_seat_the_bases_supply_count_of_one_supply(device, chassis, config, supply):
     s = seated(device, config)
     n = SUPPLY_BAYS[chassis] if chassis == "9504" else 5
-    assert [s[f"ps-{k}"] for k in range(1, n + 1)] == [f"cisco/{supply}@1"] * n
+    assert [s[f"ps-{k}"] for k in range(1, n + 1)] == [f"cisco/{supply}"] * n
     assert device["configurations"][config]["kind"] == "example"
 
 
