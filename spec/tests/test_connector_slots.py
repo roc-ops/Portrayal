@@ -130,6 +130,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "micro-dsub-50", "wire-wrap-6",
                          # the DC input connector of the Edgecore PSU-48V-650-F and -B
                          "positronic-pla03",
+                         # the DC power connector of the Juniper JPSU-150-DC-AFO supplies
+                         "juniper-dc-block-3",
                          # the DC input header of the Oscilloquartz OSA 5420 and 5421 supplies
                          "latch-header-3",
                          # the DC power connector of the Cisco NXA-PDC-930W supply
@@ -180,6 +182,8 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    # the DC input connector of the Edgecore PSU-48V-650-F
                                    # and -B
                                    "positronic-pla03",
+                                   # the DC power connector of the Juniper JPSU-150-DC-AFO supplies
+                                   "juniper-dc-block-3",
                                    # the DC input header of the Oscilloquartz OSA 5420 and
                                    # 5421 supplies
                                    "latch-header-3",

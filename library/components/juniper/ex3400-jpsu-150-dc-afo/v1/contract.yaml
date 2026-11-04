@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ex3400-jpsu-150-dc-afo
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -48,6 +48,26 @@ provenance:
     size): fan left, latch, the two lamps, a three-position terminal block (+, - and earth) and a
     grip at the right. The latch keeps the orange of the AC supply photographs, since the figure is
     line art and states no colour. The clear plastic cover over the terminals is not drawn.
+  connector: >-
+    the supply composes juniper/jpsu-150-dc-header@1 as `dc-header`, the pluggable three-terminal connector of the EX3400
+    Switch Hardware Guide (Juniper Networks, published 2026-01-09), "Connecting DC Power to an EX3400 Switch" (PDF pages 142
+    and 143) and its Figure 47 (the supply's socket, with the connector approaching). The guide calls it "the terminal
+    connector" and names no maker or part number for it (it names "Molex 192120005" for the wire pins, not for the
+    connector), so the part is a declared stand-in (its own provenance). Its place is an estimate: the guide gives no
+    dimension, so it stands at the top left of the block the skin already draws (47.5, 7.6; 10.1 by 25.8), inside it. The
+    three round screw heads the skin draws in that block are covered by the part, and the skin is unchanged. The cable
+    connector of Figure 46, juniper/jpsu-150-dc-plug@1, mates it. The EX4100 supply of the same part number carries the same
+    connector (the same drawing in its guide) and composes the same part.
+  roles: >-
+    guide - Figure 47 prints "+", "-" and an earth symbol beside the three cells, top to bottom. Step 1's note says the + terminal
+    is referred to as +RTN and the - terminal as -48 V, so the roles are `rtn`, `batt` and `gnd`, in that order from the top.
+    The guide prints no nominal beside the figure; Table 20 prints a range.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. The three poles are the cells of one pluggable connector that has an earth
+    cell in it, and a port whose poles are a connector's contacts is offered only where that path's part is itself the
+    connector; on a supply in a bay it is the supply, not the connector it composes, so a port stated here would be published
+    and then not offered. The roles above are recorded for the port a later change can state, a minor on the devices that seat
+    this supply.
 states:
 - ok
 - fault
@@ -83,4 +103,6 @@ relief:
     color: '#ee6a1f'
     confidence: estimated
     source: photo - the latch of the AC supply stands proud; projection not measured
+parts:
+  - {ref: juniper/jpsu-150-dc-header@1, id: dc-header, at: [47.6, 8.0]}
 skins: [default]
