@@ -8,6 +8,6 @@
   supply gains a screw head at the centre of each terminal its skin already draws, and each screw head is an estimate, which its
   contract says.
 - The three EX4200 switches that seat it (`juniper/ex4200-24f`, `juniper/ex4200-24t` and `juniper/ex4200-48t`) take a minor, 0.2.1 to
-  0.3.0, because the build now publishes its DC ports. Their locks and the drawing version line of their exported device types move
+  0.3.0, because the build now publishes its DC ports. Their version records and the drawing version line of their exported device types move
   with them, and the supply's module type carries the new contract version. No port, interface or id moves. One row of the records
   file is gone and its `cap:` is 144.
