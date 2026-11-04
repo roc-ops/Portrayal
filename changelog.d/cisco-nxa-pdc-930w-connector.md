@@ -12,4 +12,4 @@
   `{module}/Inlet`.
 - The three switches that seat it (`cisco/n9k-c93108tc-fx3`, `cisco/n9k-c93180yc-fx3` and `cisco/n9k-c93180yc-fx3s`) take a patch, with their
   locks and the drawing version line of their exported device types; the supply's module type carries the new contract version and the new
-  port name. One row of the records file is gone and its `cap:` is 145.
+  port name. One row of the records file is gone and its `cap:` is 144.
