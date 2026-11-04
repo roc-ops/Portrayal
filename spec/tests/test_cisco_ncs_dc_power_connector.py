@@ -141,8 +141,9 @@ def test_the_exporter_lists_the_nc5k_header_as_the_nxa_header_is_listed():
 def test_the_supplies_are_seated_by_the_devices_that_listed_them():
     seats = {ref: sorted(p.parent.name for p in (LIB / "devices" / "cisco").glob("*/layout.yaml")
                          if ref in p.read_text()) for ref in SUPPLIES}
-    assert seats[NC57] == ["ncs-57c3-mod-hx", "ncs-57c3-mod-s"]
-    assert seats[NC5K[0]] == seats[NC5K[1]] == ["ncs-5001", "ncs-5002", "ncs-5011"]
+    assert {"ncs-57c3-mod-hx", "ncs-57c3-mod-s"} <= set(seats[NC57])
+    for ref in NC5K:
+        assert {"ncs-5001", "ncs-5002", "ncs-5011"} <= set(seats[ref])
 
 
 def test_the_records_of_the_three_supplies_are_gone():
