@@ -16,7 +16,7 @@
   2.3.0) take a minor each: their DC build seats `cisco/n9k-pdc-3000w-b@2`, and their supply bays accept it beside `@1`. The
   build now publishes the two DC ports of each supply; the locks and the drawing version line of the exported device types move
   with them, and the supply's module types carry contract version 2.0.0 (the power port is still `{module}/Inlet`). One row of the
-  records file is gone and its `cap:` is 145.
+  records file is gone and its `cap:` is 144.
 - `cisco/n9k-pdc-3000w-b@1` (1.0.0 to 1.0.1) says `superseded-by: cisco/n9k-pdc-3000w-b@2`. Its drawing is unchanged, the
   chassis' supply bays still accept it, and a manifest that pins `@1` still resolves to it; it is no longer exported as a module
   type, because `@2` carries the same part number.
