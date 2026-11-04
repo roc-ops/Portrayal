@@ -17,5 +17,5 @@
   and the data sheet's ring terminals are the far ends of its cable. Each supply's exported power port is `{module}/dc-header`
   of type `other` where it was `{module}/Inlet` of type `dc-terminal`.
 - The four devices that seat them (`edgecore/dcs201`, `edgecore/dcs202`, `edgecore/amx3200` and `edgecore/agr560`) take a patch,
-  with their locks and the drawing version line of their exported device types; the supplies' module types carry the new
+  with their recorded contents and the drawing version line of their exported device types; the supplies' module types carry the new
   contract versions and the new port name. Three rows of the records file are gone.
