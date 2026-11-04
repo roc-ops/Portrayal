@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ex4200-pwr-190-dc
-version: 1.0.1
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -42,8 +42,8 @@ provenance:
   terminals: >-
     datasheet - guide, DC Power Supplies and Figure 19 (g020202): four terminals labelled A+, B+,
     A- and B-; "The A+ and B+ terminals are referred to as +RTN and A- and B- terminals are
-    referred to as -48 V". Drawn as four screw terminals; no component models a DC terminal block
-    with four poles, so they are art and not seats
+    referred to as -48 V". Drawn as four screw terminals on a block, A+ at the top, then B+, A-
+    and B-; each is also a seat a lug lands on (see `seats`), and the drawing stays as it was
   face: >-
     drawing - guide Figure 19 (DC Power Supply, g020202): locking lever at the top left, two round
     lamps labelled LED-A and LED-B below it, a honeycomb exhaust, a diagonal handle and the terminal
@@ -56,6 +56,53 @@ provenance:
     its input has failed; both off when there is no input
   power-draw: >-
     NOT APPLICABLE - a supply states its output
+  seats: >-
+    estimated - each of the four terminal screws is the library's common/terminal-screw-34@1, a
+    slotted head 3.4 across (that part's own size is an estimate), standing at the centre of the
+    terminal this skin already draws in its `terminals` group (the circles at 80.0 across and 8.0,
+    17.0, 26.0 and 35.0 down, read off the guide's Figure 19, so good to about 1 mm). The seats are
+    not lifted: no document says how far the screws stand off the block, and this contract draws no
+    relief for them. The guide's wiring steps (printed page 148 onward) have the ring lug secured
+    with "the screw from the terminals" and give a torque; no page gives the screw's thread or
+    head, and the screw part claims no thread, so none is written. The drawn terminals stay as
+    they are, and the screw marks where a lug lands, not the screw
+  poles: >-
+    Juniper EX4200 Switch Hardware Guide (published 2022-01-16), the note on the DC power supply
+    (printed page 39) and Figure 19 "DC Power Supply" (printed page 40): four terminals labelled A+,
+    B+, A- and B- from the top of the block, "for connecting DC power source cables labeled positive
+    (+) and negative (-)"; and the wiring steps (printed pages 148 to 150) and Figure 45, which land
+    the ring lug of a positive cable on a + terminal and of a negative cable on a - terminal. The
+    supply ships with a jumper from A+ to B+ and another from A- to B-; the steps leave them in
+    place for one power source and have them removed for two. The block carries two feeds, so it
+    has one DC port per feed: `feed-a` on the A+ and A- screws and `feed-b` on the B+ and B-
+    screws, the poles of each in the order the face prints them from the top. The jumpers are
+    fitted at the factory and are not modelled: with them in place the two ports are one source,
+    and a plant that wants two sources removes them. The roles are what the supply prints: `pos`
+    for + and `neg` for -. The guide's note says the + terminals are "referred to as +RTN" and the
+    - terminals "as -48 V" in its safety sections, but the face prints A+, B+, A- and B-, never
+    RTN or -48 V, so the roles are not `rtn` and `batt`
+  side: >-
+    The face prints A and B on the two feeds' terminals (Figure 19, printed page 40), and the EX 3200
+    and EX 4200 Switch Quick Start (Part 3, "To connect DC power to the switch") lands the first
+    power source on A+ and A- and the second on B+ and B-. So `feed-a` is side a and `feed-b` is
+    side b. The hardware guide's own two-source steps (printed page 150) name "the A+ terminal on
+    the second DC power supply" for the second source's cables, which reads as a slip, and the
+    quick start is followed
+  voltage: >-
+    NOT STATED. The guide's Table 13 (printed page 44) prints "36 through 72 VDC" and no nominal.
+    A port states a nominal with any voltage, and a nominal is stated only where a held table
+    prints one, so the ports state none. `attrs` keeps the range as printed
+  rating: >-
+    Juniper EX4200 Switch Hardware Guide, Table 13 "DC Power Supply Electrical Specifications"
+    (printed page 44): "DC input current: 7 A maximum". One figure for the supply, so each port
+    states it. The notes that recommend 7.5 A and a 10 A breaker (printed page 44) and a facility
+    source of at least 8 A at -48 VDC (printed page 149) are advice for the source, not the
+    supply's rating, and are not stated
+  awg: >-
+    Juniper EX4200 Switch Hardware Guide, the list of parts for "Connecting DC Power to an EX4200
+    Switch" (printed page 147), and the EX 3200 and EX 4200 Switch Quick Start (Part 3): "DC power
+    source cables (12-14 AWG) with ring lug (Molex 190700067 or equivalent)", not provided. One
+    range of sizes for the cables that land on the block, so each port states both, 12 and 14
 states:
 - ok
 - fault
@@ -101,3 +148,28 @@ relief:
     color: '#c9ccd0'
     confidence: estimated
     source: guide Figure 19 - the handle stands proud of the face; projection not measured
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-a-pos, at: [78.3, 6.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-b-pos, at: [78.3, 15.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-a-neg, at: [78.3, 24.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-b-neg, at: [78.3, 33.3]}
+dc:
+  ports:
+    - id: feed-a
+      direction: input
+      rating-a: 7
+      awg: [12, 14]
+      side: a
+      poles:
+        - {role: pos, slot: pole-a-pos}
+        - {role: neg, slot: pole-a-neg}
+      source: {poles: poles, rating-a: rating, awg: awg, side: side}
+    - id: feed-b
+      direction: input
+      rating-a: 7
+      awg: [12, 14]
+      side: b
+      poles:
+        - {role: pos, slot: pole-b-pos}
+        - {role: neg, slot: pole-b-neg}
+      source: {poles: poles, rating-a: rating, awg: awg, side: side}

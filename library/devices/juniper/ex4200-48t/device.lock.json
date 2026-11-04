@@ -25,19 +25,20 @@
    "juniper/ex4200-pwr3-930-ac@1"
   ]
  },
- "composed": "56efbf072908acbe",
+ "composed": "8440740210720a98",
  "composed-refs": {
   "common/esd-jack@1": "1.0.1+fa89d49c1ff75841",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
   "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "juniper/ex4200-fan-tray@1": "1.0.0+96c6f50c36af4cea",
   "juniper/ex4200-lcd-button@1": "1.0.0+67298f45df82c76b",
   "juniper/ex4200-poe-plate@1": "1.0.0+67a2e8d69292942f",
   "juniper/ex4200-port-numerals@1": "1.0.0+acaf639f9e63de09",
   "juniper/ex4200-psu-cover@1": "1.0.0+1c2ced301fd9119c",
-  "juniper/ex4200-pwr-190-dc@1": "1.0.1+78f70f627fef67ad",
+  "juniper/ex4200-pwr-190-dc@1": "1.1.0+db6aecc8d0bf7339",
   "juniper/ex4200-pwr-320-ac@1": "1.0.0+873ecda0690e8ff2",
   "juniper/ex4200-pwr-600-ac@1": "1.0.0+ac68bc95b0f925d7",
   "juniper/ex4200-pwr-930-ac@1": "1.0.0+def538e5c5800e4f",
@@ -55,6 +56,60 @@
   "dc",
   "s"
  ],
+ "dc-ports": {
+  "psu-0/module/feed-a": {
+   "juniper/ex4200-pwr-190-dc@1": {
+    "awg": [
+     12,
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "feed-a",
+    "poles": [
+     {
+      "role": "pos",
+      "slot": "psu-0/module/pole-a-pos"
+     },
+     {
+      "role": "neg",
+      "slot": "psu-0/module/pole-a-neg"
+     }
+    ],
+    "rating-a": 7,
+    "side": "a",
+    "voltage": null
+   }
+  },
+  "psu-0/module/feed-b": {
+   "juniper/ex4200-pwr-190-dc@1": {
+    "awg": [
+     12,
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "feed-b",
+    "poles": [
+     {
+      "role": "pos",
+      "slot": "psu-0/module/pole-b-pos"
+     },
+     {
+      "role": "neg",
+      "slot": "psu-0/module/pole-b-neg"
+     }
+    ],
+    "rating-a": 7,
+    "side": "b",
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "7f5f5c51f7ba6faa",
  "groups": [
@@ -383,5 +438,5 @@
  "placement-surface": "53b0944cc9397771",
  "shape": "92238402aba8d387",
  "surface": "55ef77343f964653",
- "version": "0.2.1"
+ "version": "0.3.0"
 }
