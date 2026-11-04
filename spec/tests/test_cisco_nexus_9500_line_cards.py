@@ -50,7 +50,7 @@ IFACE = {"n9k-x9736c-fx": {"100gbase-x-qsfp28": 36},
 BATCH2 = {"n9k-x9736c-ex", "n9k-x9732c-ex", "n9k-x9736c-fx3", "n9k-x9736q-fx", "n9k-x9408pc-cfp2"}
 CHASSIS = {"9504": (4, set(CARDS) | BATCH2), "9508": (8, set(CARDS) | BATCH2),
            "9516": (16, (set(CARDS) - {"n9k-x9716d-gx"}) | BATCH2)}
-VERSIONS = {"9504": "2.2.0", "9508": "1.2.0", "9516": "2.2.0"}
+VERSIONS = {"9504": "2.3.0", "9508": "1.3.0", "9516": "2.3.0"}
 
 
 def contract(name):

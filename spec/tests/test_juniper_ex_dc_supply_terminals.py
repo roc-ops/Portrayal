@@ -69,8 +69,7 @@ CENTRES = {
 DEVICES = {"ex4300-32f": "0.3.0", "ex4300-48t": "0.3.0", "ex4500-40f": "0.3.0", "ex9253": "0.2.0"}
 SEATED_BY = {"ex4300-32f": [AFO, AFI], "ex4300-48t": [AFO, AFI], "ex4500-40f": [EX4500], "ex9253": [EX9253]}
 # the rows of the same issue that stay, with the supplies and devices they name
-STAYING = [("juniper/ex4200-pwr-190-dc@1", "C19"), ("juniper/ex4600-jpsu-650-dc-afi@1", "C19"),
-           ("juniper/ex4600-jpsu-650-dc-afo@1", "C19"), ("juniper/ex3400-jpsu-150-dc-afo@1", "C19"),
+STAYING = [("juniper/ex3400-jpsu-150-dc-afo@1", "C19"),
            ("juniper/ex4100-jpsu-150-dc-afo@1", "C19"), ("juniper/jpsu-550-c-dc-afi@1", "C19"),
            ("juniper/jpsu-550-c-dc-afo@1", "C19"), ("juniper/ex6200-pwr-dc2100@1", "C19"),
            ("juniper/ex8200-pwr-dc2kr@1", "C19"), ("juniper/ex8200-pwr-dc3kr@1", "C19"),

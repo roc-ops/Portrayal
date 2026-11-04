@@ -176,12 +176,13 @@
    "juniper/mx480-psu-ac@1"
   ]
  },
- "composed": "f96ea1a64a90a2c9",
+ "composed": "6d4cf75662eea7a7",
  "composed-refs": {
   "common/esd-jack@1": "1.0.1+fa89d49c1ff75841",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "juniper/dpc-r-4xge-xfp@3": "3.0.0+9dc1c3ae48932f3a",
   "juniper/dpce-20ge-2xge@2": "2.0.0+b4209f1468193052",
   "juniper/dpce-2xge-xfp@2": "2.0.0+109e843d78aa39b7",
@@ -221,7 +222,8 @@
   "juniper/mx-ground-stud-pair-5-8@1": "1.0.0+c975dff16d7abae3",
   "juniper/mx-ground-stud@1": "1.0.1+23a05a5129dadc5b",
   "juniper/mx-mic-blank@2": "2.0.0+afcfbd9d9ffa9522",
-  "juniper/mx240-psu-dc@1": "1.0.1+e6713bd64326ec84",
+  "juniper/mx240-dc-pole@1": "1.0.0+f7799a0f22b3f76c",
+  "juniper/mx240-psu-dc@1": "1.1.0+2f974c3fe3c3902c",
   "juniper/mx480-air-filter@1": "1.0.0+41d58af039c8efe9",
   "juniper/mx480-craft@1": "1.1.0+b382b3a90629bd84",
   "juniper/mx480-fan-tray@1": "1.0.0+c073047338e5fb07",
@@ -250,6 +252,132 @@
   "base",
   "dc"
  ],
+ "dc-ports": {
+  "pem0/module/input": {
+   "juniper/mx240-psu-dc@1": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "pem0/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "pem0/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": {
+     "nominal": -48,
+     "range": [
+      -40.5,
+      -72
+     ]
+    }
+   }
+  },
+  "pem1/module/input": {
+   "juniper/mx240-psu-dc@1": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "pem1/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "pem1/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": {
+     "nominal": -48,
+     "range": [
+      -40.5,
+      -72
+     ]
+    }
+   }
+  },
+  "pem2/module/input": {
+   "juniper/mx240-psu-dc@1": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "pem2/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "pem2/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": {
+     "nominal": -48,
+     "range": [
+      -40.5,
+      -72
+     ]
+    }
+   }
+  },
+  "pem3/module/input": {
+   "juniper/mx240-psu-dc@1": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "pem3/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "pem3/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": {
+     "nominal": -48,
+     "range": [
+      -40.5,
+      -72
+     ]
+    }
+   }
+  }
+ },
  "format": 1,
  "gaps": "66ed679b8a92e9d1",
  "groups": [
@@ -344,5 +472,5 @@
  "placement-surface": "44136fa355b3678a",
  "shape": "fc9ed7825cf4965e",
  "surface": "2efef37452778eb6",
- "version": "7.2.1"
+ "version": "7.3.0"
 }

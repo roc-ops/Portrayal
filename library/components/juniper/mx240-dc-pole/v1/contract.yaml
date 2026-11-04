@@ -1,0 +1,69 @@
+format: 1
+kind: component
+name: mx240-dc-pole
+version: 1.0.0
+class: mechanical
+# THE PAIR IS ITSELF A SLOT (docs/connectors-dc-terminal-design.md section 13.7): one
+# two-hole lug lands across both studs, at their midpoint. That slot and the two stud slots
+# below are mutually exclusive, as a duplex adapter's slot and its two bores are.
+interface: stud-pair-5-8
+behaviour: mounts
+profile: networking
+description: >-
+  One pole of the MX240 and MX480 DC power entry module (normal capacity): two terminal studs
+  side by side on 5/8 in. (15.875) centres, the landing the module's two-hole DC power cable lug
+  takes. juniper/mx240-psu-dc@1 composes two, the RTN pole and the -48V pole.
+size: {w: 19.275, h: 3.4}
+size-confidence: {w: datasheet, h: estimated}
+size-notes: >-
+  the two studs' own boxes, 15.875 apart centre to centre, side by side: the width is the
+  pitch and one stud, the height one stud
+attrs: {connector: stud-pair-5-8}
+provenance:
+  size: >-
+    datasheet and estimated - the pitch is the lug's, 0.625 in. (15.875), printed in Figure 22
+    of the MX240 guide; each stud is common/terminal-screw-34@1, whose own 3.4 across is an
+    estimate.
+  pitch: >-
+    THE PITCH IS THE LUG'S, NOT THE STUDS'. The MX240 Universal Routing Platform Hardware Guide
+    (Juniper Networks, 2026), Figure 22 "DC Power Cable Lug" (printed page 59), dimensions the lug
+    that goes on the terminal studs: two holes 0.28 in. across, 0.625 in. apart, in inches. The
+    same figure is printed as Figure 20 of the MX480 Universal Routing Platform Hardware Guide
+    (printed page 50). No
+    document held dimensions the studs themselves. The studs are taken to stand where the lug's
+    holes do, so they are composed at exactly 15.875 and lint L116 holds them there to 0.01.
+  thread: >-
+    NOT CLAIMED. The guide's nuts on these studs take a 7/16 in. (11 mm) socket (section
+    "Connecting Power to a DC-Powered MX240 Router with Normal-Capacity Power Supplies", step 7)
+    and name no thread. The studs are common/terminal-screw-34@1, a head 3.4 across that claims
+    none: a STAND-IN, declared. It marks where a lug lands, and the drawn studs are the skin of
+    the module that composes this part.
+  lug: >-
+    THE LUG IS DRAWN, NOT NAMED. Figure 22 gives a lug for a 6 AWG conductor with two 0.28 in.
+    holes 0.625 in. apart and prints no maker or part number. generic/two-hole-lug-5-8@1, which
+    mates this interface, is the library's nominal lug (5.08 mm holes, a #6 AWG barrel) and
+    stands in for it.
+  axis: >-
+    THE STUDS ARE COMPOSED LEFT TO RIGHT, so the pair runs along +x, the canonical axis a
+    two-hole lug is drawn on, and a lug seated here leaves its wire to the right
+    (manifest.spanning_axis). The module that composes this part turns it to the direction its
+    studs stand in.
+  seat: >-
+    THE PAIR PRESENTS AT THE TOP OF ITS STUDS. `mate` is the midpoint of the two studs' own
+    `mate` points and states `seat-out: 10.6`, the height each stud presents at (its lift 9.4
+    and its 1.2 head), so a lug across the pair lies exactly where a one-hole lug on either
+    stud would. L116 holds the two to one figure.
+  lift: >-
+    estimated - 9.4 is the lift (2.4) and the height (7.0) the relief of juniper/mx240-psu-dc@1
+    already gives each stud; no document dimensions it.
+elements: {}
+parts:
+  # FIRST STUD, then second: the order is the axis (provenance.axis). Each is a slot of its
+  # own, `<pole>/1` and `<pole>/2`, which the ring lug still seats in.
+  - {ref: common/terminal-screw-34@1, id: '1', at: [0, 0], lift: 9.4}
+  - {ref: common/terminal-screw-34@1, id: '2', at: [15.875, 0], lift: 9.4}
+connection-points:
+  # WHERE A TWO-HOLE LUG SEATS: the midpoint of the studs' own mate points, (1.7, 1.7) and
+  # (17.575, 1.7), at the height they present.
+  mate: {at: [9.6375, 1.7], direction: front, seat-out: 10.6}
+skins: [default]

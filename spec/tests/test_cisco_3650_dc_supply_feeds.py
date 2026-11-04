@@ -14,9 +14,8 @@ lands on, and states one DC input port per feed, two poles each (decided 2026-11
   - the earth screw is common to both feeds and is a ground seat outside both ports, not a pole of either;
   - the supply's elements, its other ids and its description are unchanged.
 
-The Nexus 9500 DC supply (four posts, two inputs) is not part of this change: it keeps its contract and its record. These run
-against the real library, a components index built by the indexer the build runs, and the records file. They read no
-library/dist and render nothing.
+The Nexus 9500 DC supply (four posts, two inputs) has a test module of its own. These run against the real library, a
+components index built by the indexer the build runs, and the records file. They read no library/dist and render nothing.
 """
 import json
 import re
@@ -42,7 +41,6 @@ PORTS = [("feed-a", "a", [("pos", "pole-a-pos"), ("neg", "pole-a-neg")]),
          ("feed-b", "b", [("neg", "pole-b-neg"), ("pos", "pole-b-pos")])]
 ELEMENTS = ["dc-ok", "handle", "latch", "ps-ok", "terminals"]
 DEVICE = "ws-c3650-48pd"
-NOT_TAKEN = "cisco/n9k-pdc-3000w-b@1"
 
 
 def contract(ref):
@@ -160,13 +158,6 @@ def test_the_lock_holds_two_ports_for_each_supply_of_the_two_dc_configurations()
     for path, fact in ports.items():
         assert fact["configs"] == (["dc", "dc-dual"] if path.startswith("psu-1/") else ["dc-dual"])
         assert fact["side"] == path[-1] and fact["voltage"] is None and fact["rating-a"] is None
-
-
-def test_the_nexus_9500_dc_supply_is_not_part_of_this_change_and_keeps_its_row():
-    d = contract(NOT_TAKEN)
-    assert d["version"] == "1.0.0" and "dc" not in d and "parts" not in d
-    rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
-    assert len([r for r in rows if r["part"] == NOT_TAKEN and r["code"] == "C19"]) == 1
 
 
 def test_the_finding_this_change_closes_has_no_row_left():

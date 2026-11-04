@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx204-psu-dc
-version: 1.2.0
+version: 1.3.0
 class: psu
 behaviour: fills
 profile: networking
@@ -54,6 +54,52 @@ provenance:
     receiving power, off = disconnected; OUT green steady = output good, off =
     output off; ! amber steady = fault, replace but leave seated for airflow.
     Figure g009866 callouts name them Input, Output and Fault'
+  seats: >-
+    estimated - each of the four terminal screws is the library's common/terminal-screw-34@1, a screw
+    head 3.4 across (that part's own size is an estimate), standing at the centre of the screw this skin
+    already draws (8.0, 19.0, 30.0 and 41.0 across, 11.6 down). It is lifted 2.2 mm, the estimated lift
+    of the studs this skin draws (the `stud-0` to `stud-3` relief features). The guide calls them
+    terminal studs and its steps remove screws from the terminals; the screw part claims no thread. The
+    MX204 Universal Routing Platform Hardware Guide asks for the accessory box's cable lugs (PDF page
+    47) and "DC power ring terminal lugs, 14 - 16 AWG, sized for #6 screw" (PDF page 86) and gives no
+    screw head, thread or pitch; the screw part claims no thread, so none is written. Each screw is a
+    seat a ring lug lands on (`terminal-stud`, which generic/ring-lug@1 mates).
+  shunts: >-
+    THE SECOND SCREW OF EACH PAIR IS A SEAT OUTSIDE THE PORT. The guide's caution says the V+ terminals
+    are shunted internally together, as are the V- terminals, that the same polarity may be wired twice
+    from the same source and that the terminals must never go to different sources. A feed therefore has
+    two conductors and the supply has one input, however many screws carry them. Each pole of the port
+    is the first screw of its pair, counted from the left: `pole-batt` is the left V- screw and
+    `pole-rtn` the left V+ screw. `shunt-batt` (the second V- screw) and `shunt-rtn` (the second V+
+    screw) are seats a lug lands on, as an earth seat is, and are in no pole (decided 2026-11-03). WHICH
+    SCREW OF A PAIR CARRIES THE POLE IS A CHOICE AND NOT A READING: the guide joins the two inside the
+    supply and ranks neither. A later change that gave the port four poles would be a major.
+  poles: >-
+    MX204 Universal Routing Platform Hardware Guide, Figure 13 "DC Power Suppy Module LEDs" (PDF page
+    39, printed page 30) prints V-, V-, V+ and V+ from the left over four terminals, and the caution
+    beneath it says the V+ terminals are shunted internally together, as are the V- terminals.
+    "Connecting DC Power to the MX204" (PDF page 105) puts the positive (+) cable lug on the "RTN
+    (return) terminal" and the negative (-) cable lug on the "-48V (input) terminal", and the guide says
+    each supply has "a single DC input" (PDF page 45). The roles are the guide's words, not the printed
+    signs: `rtn` for the return terminal and `batt` for the input terminal, which the guide pairs with
+    the negative cable (spec/schemas/dc.yaml writes `batt` as negative (battery) and `rtn` as return).
+    The supply has one DC port, `input`, of two poles, `batt` on the left V- terminal and `rtn` on the
+    left V+ terminal, in the order the figure prints them from the left. The second terminal of each
+    pair is a seat outside the port (see `shunts`).
+  voltage: >-
+    NOT STATED. Table 16 (PDF page 45) prints "Nominal: -48 VDC, -60 VDC" and an operating range of -40
+    to -72 VDC: two nominals, and a port states one. The port states none and a later change can state
+    one once a source says which. `attrs` keeps the words as printed.
+  rating: >-
+    Table 16 (PDF page 45) gives the DC power supply "DC input current rating: 20 A @ -44 VDC", the one
+    figure the guide gives for it (Table 15, PDF page 44, gives the same for the system), and the MX204
+    is the only router that seats this part. The figure is printed at -44 VDC, the bottom of the
+    operating range, and the port states `rating-a` 20.
+  awg: >-
+    MX204 guide, "DC Power Cable Specifications" (PDF page 47): "You must supply four DC power cables
+    that meet the following specifications: 14-16 AWG" (two cables for each of the two supplies), and
+    the parts list (PDF page 86) names ring terminal lugs "14 - 16 AWG, sized for #6 screw": a range of
+    two sizes, so the port states both, 14 and 16.
 states:
 - ok
 - fault
@@ -132,3 +178,18 @@ relief:
     lift: 2.2
     confidence: estimated
     source: drawing g009872 - as stud-0
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [6.3, 9.9], lift: 2.2}
+  - {ref: common/terminal-screw-34@1, id: shunt-batt, at: [17.3, 9.9], lift: 2.2}
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [28.3, 9.9], lift: 2.2}
+  - {ref: common/terminal-screw-34@1, id: shunt-rtn, at: [39.3, 9.9], lift: 2.2}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 20
+      awg: [14, 16]
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles, rating-a: rating, awg: awg}

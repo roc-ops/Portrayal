@@ -397,7 +397,7 @@ def test_chassis_versions_and_locks(slug):
     assert [f for f in devicelock.check(LIBRARY) if f[0] == slug] == []
 
 
-VERSIONS = {"juniper/mx240": "6.2.1", "juniper/mx480": "7.2.1", "juniper/mx960": "5.2.0"}
+VERSIONS = {"juniper/mx240": "6.3.0", "juniper/mx480": "7.3.0", "juniper/mx960": "5.2.0"}
 
 
 # ---- the DCIM exports
