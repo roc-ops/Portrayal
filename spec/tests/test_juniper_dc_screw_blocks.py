@@ -71,7 +71,7 @@ NOT_TAKEN = [
     # a three-hole pluggable block on the face, and cables the supply ships with: no lug lands on it
     "juniper/qfx5210-jpsu-1100w-dc-afi@1", "juniper/qfx5210-jpsu-1100w-dc-afo@1",
     # two-hole lugs, pluggables and the rest, for later changes
-    "juniper/mx240-psu-dc@1", "juniper/mx304-psu-dc@1", "juniper/qfx10002-jpsu-1600w-dc-afo@1", "juniper/qfx10000-pwr-dc@1",
+    "juniper/mx304-psu-dc@1", "juniper/qfx10002-jpsu-1600w-dc-afo@1", "juniper/qfx10000-pwr-dc@1",
     "juniper/mx2000-psm-dc-v@1", "juniper/qfx5230-jnp-2400w-dc-afi@1", "juniper/qfx5230-jnp-3000w-dc-afo@1",
 ]
 

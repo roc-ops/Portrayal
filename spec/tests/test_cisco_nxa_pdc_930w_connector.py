@@ -31,7 +31,7 @@ SUPPLY = "cisco/nxa-pdc-930w@1"
 HEADER, PLUG = "cisco/nxa-pdc-930w-dc-header@1", "cisco/nxa-pdc-930w-dc-plug@1"
 KEY = "cisco-dc-block-3"
 DEVICES = ["n9k-c93108tc-fx3", "n9k-c93180yc-fx3", "n9k-c93180yc-fx3s"]
-STAY = ["cisco/a9k-1600w-dc@1", "cisco/n9k-pdc-3000w-b@1", "cisco/nc57-1600w-dcfw@1", "cisco/nc5k-pdc-930w-bk@1",
+STAY = ["cisco/a9k-1600w-dc@1", "cisco/nc57-1600w-dcfw@1", "cisco/nc5k-pdc-930w-bk@1",
         "cisco/nc5k-pdc-930w-fr@1", "cisco/nxa-pdc-1100w@1", "cisco/nxa-pdc-440w@1", "cisco/nxa-pdc-715w@1",
         "cisco/nxa-phv-350w@1", "cisco/pwr-1p6kw-dc@2"]
 
