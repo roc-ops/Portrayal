@@ -31,8 +31,9 @@ same way each time. This page says how, who does it, and why.
    when the batch merges.
 
 The coordinator merges a batch on its `build`. A one-way change in a batch
-merges only on the owner's yes on its exact head. `.github/merge-train.py`
-stays for a set the owner merges, and the rest of this page describes it.
+merges only on an `OWNER DECISION: approve` comment on its exact head.
+`.github/merge-train.py` stays for a set the owner merges, and the rest of
+this page describes it.
 
 ## Why a train
 
