@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx240-psu-dc
-version: 1.0.1
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -45,6 +45,47 @@ provenance:
   leds: 'guide DC PSU LED table: PWR OK green = output ok, BKR ON green =
     breaker on, INPUT OK green = input present; summarised, full rows in the
     guide'
+  seats: >-
+    estimated - each pole is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in. centres that
+    one two-hole lug lands across, turned a quarter so the pair runs down the face the way the
+    guide's Figure 19 (printed page 57) and Figure 79 (printed page 285) draw the lug, one lug
+    on two studs one above the other. Each stands so that the pair's midpoint is the midpoint
+    of the two studs the skin draws in its column (13.0 and 28.0 across, 53.5 down). The skin
+    draws the two studs of a column 13.0 apart and the part composes its studs 15.875 apart,
+    the pitch of the lug the guide dimensions (Figure 22, printed page 59), so each stud of a
+    seat stands 1.44 from the stud the skin draws and the skin is not redrawn. THE LUG'S
+    PITCH IS PRINTED AND THE STUDS' IS NOT: no document held dimensions the studs, and the
+    skin's own 13.0 is read off a photograph. The studs are common/terminal-screw-34@1, a
+    stand-in that claims no thread, lifted to the height the stud relief below gives.
+  poles: >-
+    MX240 Universal Routing Platform Hardware Guide (Juniper Networks, 2026), "Connecting Power to
+    a DC-Powered MX240 Router with Normal-Capacity Power Supplies" (printed page 284, step 8):
+    "Secure each positive (+) DC source power cable lug to the RTN(return) terminal" and each
+    negative (-) lug "to the 48V (input) terminal"; "Powering On a DC-Powered MX240 Router with
+    Normal Capacity Power Supplies" (printed page 286, step 4) reads "the return terminal
+    (labeled RTN)" and "the input terminal (labeled -48V)". The skin prints RTN over the left
+    column of studs and -48V over the right.
+    The roles are the supply's printed words: `rtn` for RTN and `batt` for -48V
+    (spec/schemas/dc.yaml writes `batt` as -48V and negative (battery)). The supply has one DC
+    input, so one port, `input`, of two poles, left to right as the skin prints them. The same
+    two terminals serve the MX480, whose guide prints the same figure and steps.
+  voltage: >-
+    MX240 Universal Routing Platform Hardware Guide, Table 23 "Power Supply Electrical Specifications" (printed
+    page 52), the Normal-Capacity block: "DC input voltage: Operating Range: -40.5 VDC to -72
+    VDC Nominal: -48 VDC". A held table prints a nominal, so the port states it, with its minus,
+    and the range in the order the table gives it. The MX480 guide's table for the same supply
+    prints the same words.
+  rating: >-
+    NOT STATED. The guide's Table 23 (printed page 52) gives two figures for this supply's DC
+    input current: "DC input current rating" of 33.3 A at -48 V nominal and "Maximum Input
+    Current" of 40 A, and the supply carries a 40 A breaker. They differ, and a port's
+    `rating-a` is one figure, so the port states none and a later change can state one once a
+    source says which is meant. `attrs` keeps the 40 A breaker as it already carried it.
+  awg: >-
+    MX240 Universal Routing Platform Hardware Guide, "DC Power Cable Specifications for the MX240 Router" (printed
+    page 59): "6-AWG (13.3 mm 2), minimum 60 C wire", and the MX480 guide's DC cable
+    specifications, row "Power", print "Eight 6-AWG" for the same supply. One size in every guide
+    held for the supply, so the port states it.
 states:
 - ok
 - fault
@@ -108,3 +149,16 @@ relief:
     lift: 2.4
     confidence: estimated
     source: photo - as stud-0
+parts:
+  - {ref: juniper/mx240-dc-pole@1, id: pole-rtn, at: [3.3625, 51.8], rotate: 90}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-batt, at: [18.3625, 51.8], rotate: 90}
+dc:
+  ports:
+    - id: input
+      direction: input
+      voltage: {nominal: -48, range: [-40.5, -72]}
+      awg: [6]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+      source: {poles: poles, voltage: voltage, awg: awg}

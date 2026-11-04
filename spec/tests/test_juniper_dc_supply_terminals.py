@@ -47,7 +47,7 @@ NOT_TAKEN = [
     "juniper/qfx5100-jpsu-650w-dc-afi@1", "juniper/qfx5100-jpsu-650w-dc-afo@1",
     "juniper/qfx5200-jpsu-850w-dc-afi@1", "juniper/qfx5200-jpsu-850w-dc-afo@1",
     "juniper/qfx5210-jpsu-1100w-dc-afi@1", "juniper/qfx5210-jpsu-1100w-dc-afo@1",
-    "juniper/mx204-psu-dc@1", "juniper/mx240-psu-dc@1", "juniper/mx304-psu-dc@1",
+    "juniper/mx204-psu-dc@1", "juniper/mx304-psu-dc@1",
     "juniper/qfx10002-jpsu-1600w-dc-afo@1", "juniper/qfx10000-pwr-dc@1", "juniper/mx2000-psm-dc-v@1",
 ]
 
