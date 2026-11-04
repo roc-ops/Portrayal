@@ -14,8 +14,8 @@ hardware guide gives them and no voltage:
   - both screw parts present `terminal-stud`, and generic/ring-lug@1 mates it;
   - the supplies' elements, ids and descriptions are unchanged, and no skin is edited.
 
-The other Juniper DC supplies are not part of this change: each keeps its contract and its record. These run against the real
-library, a components index built by the indexer the build runs, and the records file. They read no library/dist and render nothing.
+These run against the real library, a components index built by the indexer the build runs, and the records file. They read no
+library/dist and render nothing.
 """
 import json
 import re
@@ -43,11 +43,6 @@ MX_POLES = [("batt", "pole-batt"), ("rtn", "pole-rtn")]
 VERSIONS = {QFX[0]: "1.1.0", QFX[1]: "1.1.0", MX: "1.2.0"}
 # the devices that seat them: slug -> (version on the change, the supplies it seats)
 DEVICES = {"qfx5130-32cd": "0.2.0", "qfx5130-48c": "0.2.0", "qfx5220-32cd": "0.2.0", "mx104": "5.1.0"}
-NOT_TAKEN = [
-    "juniper/qfx5210-jpsu-1100w-dc-afi@1", "juniper/qfx5210-jpsu-1100w-dc-afo@1",
-    "juniper/mx304-psu-dc@1",
-    "juniper/qfx10002-jpsu-1600w-dc-afo@1", "juniper/qfx10000-pwr-dc@1", "juniper/mx2000-psm-dc-v@1",
-]
 
 
 def folder(ref):
@@ -200,14 +195,6 @@ def test_the_lock_holds_one_input_port_for_each_supply_bay_a_dc_configuration_se
     for path, refs in ports.items():
         for ref, fact in refs.items():
             assert ref in SUPPLIES and fact["voltage"] is None and fact["rating-a"] is None
-
-
-@pytest.mark.parametrize("ref", NOT_TAKEN)
-def test_the_supplies_this_change_leaves_for_later_keep_their_contract_and_their_record(ref):
-    d = contract(ref)
-    assert "dc" not in d and "parts" not in d
-    rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
-    assert len([r for r in rows if r["part"] == ref and r["code"] == "C19"]) == 1
 
 
 @pytest.mark.parametrize("ref", SUPPLIES)

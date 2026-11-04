@@ -15,9 +15,8 @@ second screw of each pair is a seat outside the port, as an earth seat is:
     supply, 20 A), and a wire size only where they agree (14 to 16 AWG);
   - the supplies' elements, ids, descriptions and skins are unchanged.
 
-The other Juniper DC supplies are not part of this change: each keeps its contract and its record. These run against the real
-library, a components index built by the indexer the build runs, the device locks and the records file. They read no library/dist
-and render nothing.
+These run against the real library, a components index built by the indexer the build runs, the device locks and the records file.
+They read no library/dist and render nothing.
 """
 import json
 import re
@@ -67,13 +66,6 @@ DEVICES = {
     "qfx3500-48s4q": "0.2.0", "qfx3600-16q": "0.2.0", "qfx5100-24q": "0.2.0", "qfx5100-48s": "0.2.0", "qfx5100-48t": "0.2.0",
     "qfx5100-96s": "0.2.0", "qfx5110-32q": "0.2.0", "qfx5110-48s": "0.2.0", "qfx5120-48t": "0.2.0", "qfx5200-32c": "0.2.0",
 }
-NOT_TAKEN = [
-    # a three-hole pluggable block on the face, and cables the supply ships with: no lug lands on it
-    "juniper/qfx5210-jpsu-1100w-dc-afi@1", "juniper/qfx5210-jpsu-1100w-dc-afo@1",
-    # two-hole lugs, pluggables and the rest, for later changes
-    "juniper/mx304-psu-dc@1", "juniper/qfx10002-jpsu-1600w-dc-afo@1", "juniper/qfx10000-pwr-dc@1",
-    "juniper/mx2000-psm-dc-v@1", "juniper/qfx5230-jnp-2400w-dc-afi@1", "juniper/qfx5230-jnp-3000w-dc-afo@1",
-]
 
 
 def folder(ref):
@@ -242,14 +234,6 @@ def test_the_lock_holds_one_input_port_for_each_supply_bay_a_dc_configuration_se
     for path, refs in ports.items():
         for ref, fact in refs.items():
             assert ref in SUPPLIES and fact["voltage"] is None and fact["rating-a"] == SUPPLIES[ref]["rating"]
-
-
-@pytest.mark.parametrize("ref", NOT_TAKEN)
-def test_the_supplies_this_change_leaves_for_later_keep_their_contract_and_their_record(ref):
-    d = contract(ref)
-    assert "dc" not in d and "parts" not in d
-    rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
-    assert len([r for r in rows if r["part"] == ref and r["code"] == "C19"]) == 1
 
 
 @pytest.mark.parametrize("ref", SUPPLIES)

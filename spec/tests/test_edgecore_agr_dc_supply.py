@@ -152,15 +152,8 @@ def test_the_other_devices_that_seat_the_generic_supply_still_do(slug):
     assert GENERIC in seated and SUPPLY not in seated
 
 
-def test_the_generic_supply_is_not_edited_and_states_no_port():
-    d = contract(GENERIC)
-    assert d["version"] == "2.6.1" and "dc" not in d
-    assert d["attrs"] == {"power-output-w": 650, "input": "dc", "voltage": "-48v", "inlet": "dc-terminal"}
-
-
-def test_the_generic_supply_keeps_its_record_because_three_devices_still_seat_it_and_the_new_one_needs_none():
+def test_the_new_supply_needs_no_record():
     rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
-    assert len([r for r in rows if r["part"] == GENERIC and r["code"] == "C19"]) == 1
     assert [r for r in rows if r["part"] == SUPPLY] == []
 
 

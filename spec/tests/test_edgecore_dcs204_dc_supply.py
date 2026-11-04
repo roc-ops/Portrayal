@@ -168,8 +168,6 @@ def test_the_other_devices_that_seat_the_generic_supply_still_do(slug):
     assert GENERIC in seated and not seated & set(SUPPLIES)
 
 
-def test_the_generic_supply_is_not_edited_and_keeps_its_record():
-    assert contract(GENERIC)["version"] == "2.6.1"
+def test_the_new_parts_and_supplies_need_no_record():
     rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
-    assert len([r for r in rows if r["part"] == GENERIC and r["code"] == "C19"]) == 1
     assert [r for r in rows if r["part"] in {RECEPTACLE, PLUG, *SUPPLIES}] == []

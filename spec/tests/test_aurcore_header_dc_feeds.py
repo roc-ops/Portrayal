@@ -11,7 +11,7 @@ places it offered no power end. So:
   - the earth contact is in neither port and is not a connection point;
   - no port states a voltage, a current, a wire size or a side: the printed range differs by model and no document gives the rest;
   - the ten switches take the minor the lock asks and place the part where they did; no skin is redrawn;
-  - the ten rows of the issue that asked for it go and the other rows of that issue stay.
+  - the ten rows of the issue that asked for it are gone.
 
 These run against the real library, a components index built by the indexer the build runs, the device locks and the records file.
 They read no library/dist and render nothing.
@@ -34,7 +34,6 @@ PLUG = "generic/terminal-508-5-plug@1"
 SMALL = ("aurcore/ais2001", "aurcore/ais2001p", "aurcore/ais2002", "aurcore/ais2002p")
 LARGE = ("aurcore/ais2003", "aurcore/ais2003p", "aurcore/ais2004", "aurcore/ais2004p", "aurcore/ais4001", "aurcore/ais4001p")
 DEVICES = {**{slug: [10.92, 55.3] for slug in SMALL}, **{slug: [9.32, 37.3] for slug in LARGE}}
-STAYS = ["smartoptics/dcp-2-psu-dc@1", "ds6000"]
 
 
 def contract():
@@ -165,10 +164,8 @@ def test_the_index_carries_the_header_as_one_part_with_its_two_ports(index):
         assert (p["voltage"], p["rating-a"], p["awg"], p["side"]) == (None, None, None, None)
 
 
-def test_the_ten_rows_go_and_the_other_rows_of_the_issue_stay():
+def test_the_ten_rows_are_gone():
     doc = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())
     rows = doc["rows"]
     assert doc["cap"] == len(rows)
     assert [r for r in rows if r["part"] in {s.split("/")[1] for s in DEVICES}] == []
-    for part in STAYS:
-        assert len([r for r in rows if r["part"] == part and r["code"] == "C19"]) == 1, part

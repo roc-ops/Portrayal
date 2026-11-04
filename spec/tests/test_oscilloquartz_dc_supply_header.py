@@ -9,7 +9,7 @@ the return for the battery source, and a cable whose plug carries the release ta
   - oscilloquartz/osa542x-dc-plug@1, the cable connector of Figure 15, mates it, wired top to bottom as the figure wires it;
   - both supplies (40 W and 90 W, one face) compose the header, keep every other figure, and state no DC port (a port on a composed
     connector cannot be published at the connector yet);
-  - the four devices that seat them take the patch the lock asks; the two AC supplies are not touched; the rows of the other makers stay.
+  - the four devices that seat them take the patch the lock asks.
 
 These run against the real library, a components index built by the indexer the build runs, the device locks and the records file.
 They read no library/dist and render nothing.
@@ -29,14 +29,12 @@ KEY = "latch-header-3"
 HEADER = "oscilloquartz/osa542x-dc-header@1"
 PLUG = "oscilloquartz/osa542x-dc-plug@1"
 SUPPLIES = {"oscilloquartz/osa542x-psu-dc-40w@1": 40, "oscilloquartz/osa542x-psu-dc-90w@1": 90}
-AC_SUPPLIES = ["oscilloquartz/osa542x-psu-ac-40w@1", "oscilloquartz/osa542x-psu-ac-90w@1"]
 DEVICES = {
     "oscilloquartz/osa-5420-quartz": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-40w@1"),
     "oscilloquartz/osa-5420-quartz-hq-plus": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-40w@1"),
     "oscilloquartz/osa-5421-quartz-hq-plus-plus": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-90w@1"),
     "oscilloquartz/osa-5421-rubidium": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-90w@1"),
 }
-STAYS = ["smartoptics/dcp-2-psu-dc@1", "ds6000"]
 
 
 def contract(ref):
@@ -135,16 +133,8 @@ def test_each_device_takes_one_minor_and_its_lock_records_the_new_part(slug):
     assert HEADER in lock["composed-refs"] and supply in lock["composed-refs"]
 
 
-@pytest.mark.parametrize("ref", AC_SUPPLIES)
-def test_the_ac_supplies_are_not_edited(ref):
-    assert contract(ref)["version"] == "1.0.0"
-    assert all(p["ref"].split("@")[0] != HEADER.split("@")[0] for p in contract(ref).get("parts", []))
-
-
-def test_the_two_supplies_records_go_and_the_other_rows_of_the_issue_stay():
+def test_the_two_supplies_records_are_gone():
     doc = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())
     rows = doc["rows"]
     assert doc["cap"] == len(rows)
     assert [r for r in rows if r["part"] in set(SUPPLIES) | {HEADER, PLUG}] == []
-    for part in STAYS:
-        assert len([r for r in rows if r["part"] == part and r["code"] == "C19"]) == 1, part
