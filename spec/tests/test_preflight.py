@@ -750,3 +750,95 @@ def test_conformance_is_silent_when_no_device_or_component_changed(tmp_path):
     base = make_repo(tmp_path, {"README.md": "a\n"})
     (tmp_path / "README.md").write_text("b\n")
     assert preflight.check_conformance(ctx_of(tmp_path, base)).as_dict()["status"] == "PASS"
+
+
+# -------------------------------------------------------------------- records ---
+# WARN only: a row of the records file removed by a diff that touches neither the
+# part's folder nor the device's, and a list of "what stays" added to a test.
+
+RECORDS = "library/conformance-exceptions.yaml"
+PART_FILE = "library/components/acme/psu/v1/contract.yaml"
+DEVICE_FILE = "library/devices/acme/box/device.yaml"
+
+
+def _records(*rows):
+    return "format: 1\nrows:\n" + "".join(
+        f"- {{part: {part}, code: {code}, why: a gap, order: '#1', since: 2026-11-01}}\n" for part, code in rows)
+
+
+def _records_repo(tmp_path, rows):
+    base = make_repo(tmp_path, {RECORDS: _records(*rows), PART_FILE: "version: 1.0.0\n",
+                                DEVICE_FILE: "version: 1.0.0\n", "spec/tests/test_a.py": "x = 1\n"})
+    return base
+
+
+def _records_result(tmp_path, base):
+    return preflight.check_records(ctx_of(tmp_path, base))
+
+
+@pytest.mark.parametrize("gone", [("acme/psu@1", "C19"), ("box", "C21")])
+def test_records_warns_naming_a_row_removed_when_its_folder_is_untouched(tmp_path, gone):
+    base = _records_repo(tmp_path, [("acme/psu@1", "C19"), ("box", "C21"), ("acme/other@1", "C19")])
+    kept = [r for r in [("acme/psu@1", "C19"), ("box", "C21"), ("acme/other@1", "C19")] if r != gone]
+    (tmp_path / RECORDS).write_text(_records(*kept))
+    res = _records_result(tmp_path, base)
+    assert res.as_dict()["status"] == "WARN"
+    assert any(gone[0] in line and gone[1] in line for line in res.details), res.details
+    assert not any("acme/other@1" in line for line in res.details)
+
+
+def test_records_is_silent_when_the_diff_touches_the_part_or_the_device_of_each_removed_row(tmp_path):
+    base = _records_repo(tmp_path, [("acme/psu@1", "C19"), ("box", "C21")])
+    (tmp_path / RECORDS).write_text(_records())
+    (tmp_path / PART_FILE).write_text("version: 1.1.0\n")
+    res = _records_result(tmp_path, base)                  # the device's row is still unexplained
+    assert res.as_dict()["status"] == "WARN" and len(res.details) == 1 and "box" in res.details[0]
+    (tmp_path / DEVICE_FILE).write_text("version: 1.1.0\n")
+    assert _records_result(tmp_path, base).as_dict()["status"] == "PASS"
+
+
+def test_records_is_silent_when_no_row_is_removed(tmp_path):
+    base = _records_repo(tmp_path, [("acme/psu@1", "C19")])
+    (tmp_path / RECORDS).write_text(_records(("acme/psu@1", "C19"), ("acme/psu@1", "C20"), ("box", "C21")))
+    assert _records_result(tmp_path, base).as_dict()["status"] == "PASS"
+
+
+def test_records_keys_a_row_by_part_and_code(tmp_path):
+    base = _records_repo(tmp_path, [("acme/psu@1", "C19"), ("acme/psu@1", "C20")])
+    (tmp_path / RECORDS).write_text(_records(("acme/psu@1", "C20")))
+    res = _records_result(tmp_path, base)
+    assert res.as_dict()["status"] == "WARN" and len(res.details) == 1 and "C19" in res.details[0]
+
+
+@pytest.mark.parametrize("name", ["NOT_TAKEN", "STAY", "STAYS", "STAYING"])
+def test_records_warns_on_an_added_test_list_of_what_stays(tmp_path, name):
+    base = _records_repo(tmp_path, [("acme/psu@1", "C19")])
+    (tmp_path / "spec/tests/test_a.py").write_text(f"x = 1\n{name} = ['acme/psu@1']\n")
+    res = _records_result(tmp_path, base)
+    assert res.as_dict()["status"] == "WARN"
+    assert any(name in line and "spec/tests/test_a.py" in line for line in res.details), res.details
+
+
+def test_records_is_silent_on_a_test_list_that_was_already_there(tmp_path):
+    base = make_repo(tmp_path, {"spec/tests/test_a.py": "STAY = ['a']\n"})
+    (tmp_path / "spec/tests/test_a.py").write_text("STAY = ['a']\ny = 2\n")
+    assert _records_result(tmp_path, base).as_dict()["status"] == "PASS"
+
+
+def test_records_does_not_warn_on_the_records_test_reading_rows(tmp_path):
+    base = make_repo(tmp_path, {"README.md": "a\n"})
+    (tmp_path / "spec/tests").mkdir(parents=True)
+    shutil.copy(ROOT / "spec/tests/test_port_usable_records.py", tmp_path / "spec/tests/test_port_usable_records.py")
+    res = _records_result(tmp_path, base)
+    assert res.as_dict()["status"] == "PASS", res.details
+
+
+def test_a_records_warn_leaves_the_exit_status_at_zero(tmp_path, capsys):
+    base = _records_repo(tmp_path, [("acme/psu@1", "C19")])
+    (tmp_path / RECORDS).write_text(_records())
+    args = ["--root", str(tmp_path), "--base", base, "--only", "records"]
+    assert preflight.main(args + ["--json"]) == 0
+    doc = json.loads(capsys.readouterr().out)
+    assert doc["ok"] is True and [(c["name"], c["status"]) for c in doc["checks"]] == [("records", "WARN")]
+    assert preflight.main(args) == 0
+    assert capsys.readouterr().out.splitlines()[-1].startswith("preflight: PASS, with advice (records)")

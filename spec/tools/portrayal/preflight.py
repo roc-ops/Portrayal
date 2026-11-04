@@ -9,8 +9,8 @@ exports not regenerated after a device change, a new skip reason missing from
 `spec/allowed-skips.txt`, a local path in committed text. Each one is a line
 a tool could have printed, and each round re-ran a full suite and a publish on
 a shared machine. This runs the cheap half of those gates against the diff and
-says PASS or FAIL per check, with the command that fixes it. Two checks, `prose`
-and `conformance`, are advice and say PASS or WARN: a WARN never changes the exit status.
+says PASS or FAIL per check, with the command that fixes it. Three checks, `prose`,
+`conformance` and `records`, are advice and say PASS or WARN: a WARN never changes the exit status.
 
 WHAT IT IS NOT. It runs no build and no suite. It is the step before asking for
 review; CI is still the gate.
@@ -68,6 +68,14 @@ THE CHECKS
              `library/dist/part-conformance.json`, which
              `spec/tests/test_part_conformance_report.py` writes, is missing or
              older than the change. It runs nothing: it reads the report.
+  records    WARN ONLY. A row of `library/conformance-exceptions.yaml` (keyed by
+             `part` and `code`) that the diff removes while it touches neither
+             that part's folder nor that device's: a new mate elsewhere or a
+             runner change can rightly close a finding, so a person judges it.
+             And a line the diff adds under `spec/tests/` that defines a list
+             called `NOT_TAKEN`, `STAY`, `STAYS` or `STAYING`: a test states what
+             is true of the library, and what a change left alone is the
+             diff's to say.
 
 Exit status is 1 when any check fails. A WARN is not a failure. `--json` prints one document for an
 agent to read instead of the table.
@@ -93,7 +101,7 @@ TOOLS_ROOT = TOOLS.parents[1]          # the checkout this file belongs to
 SCHEMAS = TOOLS_ROOT / "spec" / "schemas"
 
 CHECKS = ("exports", "skips", "private", "changelog", "devicelock", "lint", "kit",
-          "prose", "conformance")
+          "prose", "conformance", "records")
 
 
 def _pin_toolchain():
@@ -1115,12 +1123,74 @@ def check_conformance(ctx):
                            if blocking else "; no blocking code"))
 
 
+# ----------------------------------------------------------------- records ---
+
+# A test states what is true of the library; what a change left alone belongs to
+# the diff. So the question a "what stays" test used to answer is asked here,
+# against the diff, where a person judges the answer.
+RECORDS_FILE = "library/conformance-exceptions.yaml"
+STAY_LIST = re.compile(r"^\s*(NOT_TAKEN|STAY|STAYS|STAYING)\s*(?::[^=]*)?=(?!=)")
+
+
+def _record_keys(text):
+    """{(part, code)} for the rows of a records file, or the empty set."""
+    import yaml
+    try:
+        doc = yaml.safe_load(text)
+    except yaml.YAMLError:
+        return set()
+    rows = doc.get("rows") if isinstance(doc, dict) else None
+    return {(r["part"], r["code"]) for r in (rows if isinstance(rows, list) else ())
+            if isinstance(r, dict) and "part" in r and "code" in r}
+
+
+def _record_folder(part):
+    """The folder prefix a row's part lives in: a component's own folder for a
+    `ns/name@major`, a device's for a device name (`model` or `vendor/model`)."""
+    if "@" in part:
+        return re.compile(r"^library/components/" + re.escape(part.split("@")[0]) + r"/")
+    if "/" in part:
+        return re.compile(r"^library/devices/" + re.escape(part) + r"/")
+    return re.compile(r"^library/devices/[^/]+/" + re.escape(part) + r"/")
+
+
+def check_records(ctx):
+    """WARN ONLY. A row of the records file removed by a diff that touches
+    neither its part's folder nor its device's; a list of what stays added to a
+    test. A new mate elsewhere, or a runner change, can rightly close a finding,
+    so this names the row and a person judges it."""
+    name = "records"
+    lines = []
+    if RECORDS_FILE in ctx.changed and RECORDS_FILE in ctx.base_files and (ctx.root / RECORDS_FILE).is_file():
+        before = _record_keys(git(ctx.root, "show", f"{ctx.mbase}:{RECORDS_FILE}"))
+        after = _record_keys((ctx.root / RECORDS_FILE).read_text(encoding="utf-8"))
+        for part, code in sorted(before - after):
+            where = _record_folder(part)
+            if not any(where.match(p) for p in ctx.changed):
+                lines.append(f"{RECORDS_FILE}: row {part} {code} is removed and the diff touches no "
+                             "folder of that part or device")
+    for rel, added in sorted(ctx.added.items()):
+        if not (rel.startswith("spec/tests/") and rel.endswith(".py")):
+            continue
+        for n, text in added.items():
+            m = STAY_LIST.match(text)
+            if m:
+                lines.append(f"{rel}:{n}: adds a list called {m.group(1)}, a test of what the change left alone")
+    if lines:
+        return warned(name, f"{len(lines)} record row(s) removed without a part, or test list(s) of what stays",
+                      lines,
+                      "a closed finding needs its part or device in the diff, or a sentence in the review saying "
+                      "what closed it; a test states what is true of the library, not what a change left alone "
+                      "- docs/review-standards.md, 'A test'")
+    return passed(name, "no record row removed unexplained, no test list of what stays added")
+
+
 # -------------------------------------------------------------------- main ---
 
 RUNNERS = {"exports": check_exports, "skips": check_skips, "private": check_private,
            "changelog": check_changelog, "devicelock": check_devicelock,
            "lint": check_lint, "kit": check_kit,
-           "prose": check_prose, "conformance": check_conformance}
+           "prose": check_prose, "conformance": check_conformance, "records": check_records}
 
 
 def run(ctx, only=CHECKS):
