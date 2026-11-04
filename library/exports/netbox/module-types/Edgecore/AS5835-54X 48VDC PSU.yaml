@@ -4,8 +4,9 @@ model: AS5835-54X 48VDC PSU
 description: The 400 W -48 VDC power supply of the Edgecore DCS201 (AS5835-54X) - the same 54 x 40 CRPS
   face as the AC supply, with a THREE-POLE PLUGGABLE GREEN TERMINAL in place of the C14 inlet
 power-ports:
-  - name: '{module}/Inlet'
-    type: dc-terminal
+  - name: '{module}/dc-header'
+    type: other
+    label: Pluggable DC terminal (3-position, earth - +)
 comments: 'The 400 W -48 VDC power supply of the Edgecore DCS201 (AS5835-54X) - the same 54 x 40 CRPS
   face as the AC supply, with a THREE-POLE PLUGGABLE GREEN TERMINAL in place of the C14 inlet. The quick
   start wires it DC return, -36 to -75 VDC, Ground.
@@ -13,8 +14,10 @@ comments: 'The 400 W -48 VDC power supply of the Edgecore DCS201 (AS5835-54X) - 
 
   Facts carried in the model that this schema has no field for:
 
+  - inlet: dc-terminal
+
   - input: dc
 
   - power-output-w: 400
 
-  Contract version 1.1.0 (edgecore/dcs201-psu-dc).'
+  Contract version 1.2.0 (edgecore/dcs201-psu-dc).'
