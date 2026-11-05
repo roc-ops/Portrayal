@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: amx-3200-48v-psu
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -35,6 +35,24 @@ provenance:
     down it, which the guide's Connect Power figure wires 'DC Return (white), Ground
     (yellow-green), -40 - -72 VDC (black)'. The blue latch at the left edge is the DC
     build's colour; the AC build's is green, both on the same photographed rear.
+  connector: >-
+    the supply composes edgecore/amx-3200-dc-header@1 as `dc-header`, the three-pin DC power connector of the
+    Edgecore AMX3200 Quick Start Guide, "Connect Power" (page 3, the figure above the wire list), at the box of the
+    `inlet` element (17.9 by 34.5), which carries the same outline, window and pins the skin draws. The guide names no
+    part number for it ("DC power cord (included with DC PSUs only)", package contents, item 5) and the maker is
+    not named in words, so the part is a declared stand-in (its own provenance) and the key `edgecore-amx-dc-block-3`
+    claims no maker, series, standard or pitch. edgecore/amx-3200-dc-plug@1, the cable connector of the figure,
+    mates it. The skin is unchanged, so the picture does not change.
+  roles: >-
+    quick start - the guide lists the plug's wires "1. DC Return (white wire), 2. Ground (yellow-green wire), 3. -40 -
+    -72 VDC (black wire)" and the figure numbers them 1, 2 and 3 from the top. No mark is printed on the connector, so
+    the roles of the three pins from the top are read from the wires: `rtn`, `gnd` and `batt` (the -40 to -72 VDC
+    conductor). No nominal is stated: the guide prints a range.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. A port whose poles are a connector's contacts is offered only
+    where that path's part is itself the connector; on a supply in a bay it is the supply, not the connector it
+    composes, so a port stated here would be published and then not offered. The roles above are recorded for the
+    port a later change can state, a minor on the devices that seat this supply.
   power-output-w: >-
     DATASHEET, 'PSU capacity 1200 W (Max system power consumption 850 W)' and the ordering
     table's '1200 W DC PSU'.
@@ -47,6 +65,8 @@ elements:
   handle: {at: [31.30, 30.50], size: [40.00, 8.70], class: handle}
 fields:
   latch-finish: {label: Latch colour, type: text, default: '#2f63c4'}
+parts:
+  - {ref: edgecore/amx-3200-dc-header@1, id: dc-header, at: [11.0, 2.3]}
 relief:
   wall: '#15181b'
   features:
