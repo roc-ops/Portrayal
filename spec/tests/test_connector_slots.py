@@ -116,6 +116,10 @@ def test_the_connector_registry_is_not_vacuous():
                          # a riser bay states one as its `interface`, so no part
                          # presents either and neither is a slot below
                          "pcie-fh", "pcie-lp",
+                         # the four OCP NIC 3.0 card slots (Table 5 of the
+                         # OCP NIC 3.0 Design Specification 1.6.0): a device bay
+                         # states one as its `interface`, so none is a slot below
+                         "ocp3-sff", "ocp3-tsff", "ocp3-dsff", "ocp3-tdsff",
                          # stack, virtual-chassis and redundant-power connectors,
                          # each presented by a port part
                          "flexstack", "stackwise-480", "stackpower", "ex4200-vcp",
@@ -136,6 +140,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "latch-header-3",
                          # the DC power connector of the Cisco NXA-PDC-930W supply
                          "cisco-dc-block-3",
+                         # the DC power connector of the Cisco ASR 9000 fixed-port DC supplies
+                         "cisco-dc-block-2",
                          # the DC input header of the Juniper QFX5200-48Y DC supplies
                          "juniper-dc-header-3",
                          # the DC input header of the Juniper QFX5210 DC supplies
@@ -143,7 +149,13 @@ def test_the_connector_registry_is_not_vacuous():
                          # the DC connectors of the Edgecore AS5835, AMX3200 and AGR560 supplies
                          "edgecore-dcs-dc-block-3", "edgecore-amx-dc-block-3", "edgecore-agr-dc-block-2",
                          # the DC connectors of the Telco Systems XM-3352 and XM-8424H supplies
-                         "telco-dc-block-3", "telco-dc-block-2"}
+                         "telco-dc-block-3", "telco-dc-block-2",
+                         # the DC input connector of the UfiSpace PSU-242-DEERN supply
+                         "ufispace-dc-block-6",
+                         # the DC power connectors of the Juniper QFX5241 DC supply and QFX10002 1600 W DC supply
+                         "juniper-dc-header-6", "dc-connector-3w3",
+                         # the AC inlet of the Telco Systems XM-3352 supply
+                         "telco-ac-cloverleaf-3"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -197,6 +209,9 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "latch-header-3",
                                    # the DC power connector of the Cisco NXA-PDC-930W supply
                                    "cisco-dc-block-3",
+                                   # the DC power connector of the Cisco ASR 9000 fixed-port
+                                   # DC supplies
+                                   "cisco-dc-block-2",
                                    # the DC input header of the Juniper QFX5200-48Y DC supplies
                                    "juniper-dc-header-3",
                                    # the DC input header of the Juniper QFX5210 DC supplies
@@ -207,7 +222,13 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "edgecore-agr-dc-block-2",
                                    # the DC connectors of the Telco Systems XM-3352 and XM-8424H
                                    # supplies
-                                   "telco-dc-block-3", "telco-dc-block-2"}
+                                   "telco-dc-block-3", "telco-dc-block-2",
+                                   # the DC input connector of the UfiSpace PSU-242-DEERN supply
+                                   "ufispace-dc-block-6",
+                                   # the DC power connectors of the Juniper QFX5241 and QFX10002 DC supplies
+                                   "juniper-dc-header-6", "dc-connector-3w3",
+                                   # the AC inlet of the Telco Systems XM-3352 supply
+                                   "telco-ac-cloverleaf-3"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
@@ -290,7 +311,8 @@ ALARM_TERMINAL_BUSBAR_PARTS = {
     "screw-terminal-2": ("common/dc-terminal-plug-2@1",),
     "terminal-381-5": ("juniper/ex4100-h-psu-connector@1",),
     "terminal-350-6": ("juniper/ex4100-h-alarm-connector@1",),
-    "screw-terminal-4": ("telco-systems/tm-7124s-dc-feed@1",),
+    "screw-terminal-4": ("telco-systems/tm-7124s-dc-feed@1", "telco-systems/tm-7124s-dc-cable-plug@1"),
+    "telco-ac-cloverleaf-3": ("telco-systems/xm3352-ac-inlet@1", "telco-systems/xm3352-ac-cord-plug@1"),
     "orv3-busbar": ("common/orv3-busbar-connector@1",),
 }
 

@@ -1,0 +1,87 @@
+format: 1
+kind: component
+name: ex2200-dc-terminal
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: networking
+description: >-
+  The four-terminal DC input block on the rear panel of the Juniper EX2200-24T-DC, the built-in DC supply's
+  input. The terminals are labelled B-, A-, B+ and A+ from left to right and take ring lugs on 14 AWG wire. A
+  clear plastic cover over them is lifted off to land the lugs. A+ and A- take one DC source and B+ and B- a
+  second. The maker gives no part number for the block, so the name is this device's.
+size: {w: 36.0, h: 18.4}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: dc-terminal}
+provenance:
+  size: >-
+    ESTIMATED, NO SCALE. Neither a flat figure of the DC rear nor a photograph of it is held for the EX2200: the
+    hardware guide's Figure 48 (PDF page 111) is a close view with no scale and the maker's photographs of the
+    EX2200 are not held. The block was drawn 36.0 x 18.4 mm centred on the AC inlet it replaces (Figure 5 puts the
+    inlet at 419.2 mm) and that size carries no anchor. It is the size the device drew before this part held it,
+    moved here unchanged.
+  poles: >-
+    Juniper EX2200 and EX2200-C Switches Hardware Guide, Connecting DC Power to an EX2200 Switch (PDF pages 110 and
+    111) and Figure 48: four terminals labelled B-, A-, B+ and A+ from left to right under a clear plastic cover,
+    each with a screw that holds a ring lug, for "DC power source cables labeled positive (+) and negative (-)".
+    The guide's note says "The A+ and B+ terminals are referred to as +RTN and A- and B- terminals are referred to
+    as -48 V" in its safety sections, so the roles are `rtn` for A+ and B+ and `batt` for A- and B-. The poles
+    of a port are listed positive first, then negative, as the steps land them.
+  pitch: >-
+    ESTIMATED, NO SCALE. The pole pitch of 8.0 mm is the one the device drew before this part held it. Figure 48 shows
+    the four terminals on an even pitch and gives no dimension.
+  seats: >-
+    estimated - each of the four terminal screws is the library's common/terminal-screw-34@1, a slotted head 3.4
+    across (that part's own size is an estimate), standing at the centre of the screw this skin draws on each pole. No
+    document gives the screw's thread or head, and the screw part claims no thread, so none is written. The guide
+    names the lug (Molex 0190700067 or equivalent) and the torque, 8 to 9 in-lb (0.9 to 1.02 Nm), and not the screw.
+  side: >-
+    Juniper EX2200 and EX2200-C Switches Hardware Guide, PDF page 111: one power source lands on A+ and A- and the
+    second on B+ and B-, so `input-a` is side a and `input-b` side b. The block carries two feeds of one supply, which
+    the guide calls the power supply in the switch.
+  voltage: >-
+    NOT STATED. The guide's Table 13 prints "36 through 75 VDC" for the DC input and no nominal, so the ports state
+    none. The device keeps the range as printed.
+  rating: >-
+    Juniper EX2200 and EX2200-C Switches Hardware Guide, Table 13: "3.5 A maximum" for the DC input. It is one figure
+    for the supply, so each port states it. The facility source of at least 7.5 A at -48 VDC that the wiring steps ask
+    for is advice for the source and is not stated.
+  awg: >-
+    Juniper EX2200 and EX2200-C Switches Hardware Guide, Connecting DC Power to an EX2200 Switch (PDF page 109): "DC power
+    source cables (14 AWG) with ring lug (Molex 0190700067 or equivalent)", not provided. One size, so each port states it.
+  cover: >-
+    NOT DRAWN. The guide says a clear plastic cover protects the terminals and is lifted off to land the lugs
+    (Figure 48 shows it off). The skin draws the block as the figure does, with the cover removed.
+elements:
+  pole-1: {at: [2.8, 2.7], size: [6.4, 9.4], class: terminal}
+  pole-2: {at: [10.8, 2.7], size: [6.4, 9.4], class: terminal}
+  pole-3: {at: [18.8, 2.7], size: [6.4, 9.4], class: terminal}
+  pole-4: {at: [26.8, 2.7], size: [6.4, 9.4], class: terminal}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-b-neg, at: [4.3, 5.7]}
+  - {ref: common/terminal-screw-34@1, id: pole-a-neg, at: [12.3, 5.7]}
+  - {ref: common/terminal-screw-34@1, id: pole-b-pos, at: [20.3, 5.7]}
+  - {ref: common/terminal-screw-34@1, id: pole-a-pos, at: [28.3, 5.7]}
+dc:
+  ports:
+    - id: input-a
+      direction: input
+      rating-a: 3.5
+      awg: [14]
+      side: a
+      poles:
+        - {role: rtn, slot: pole-a-pos}
+        - {role: batt, slot: pole-a-neg}
+      source: {poles: poles, rating-a: rating, awg: awg, side: side}
+    - id: input-b
+      direction: input
+      rating-a: 3.5
+      awg: [14]
+      side: b
+      poles:
+        - {role: rtn, slot: pole-b-pos}
+        - {role: batt, slot: pole-b-neg}
+      source: {poles: poles, rating-a: rating, awg: awg, side: side}
+connection-points:
+  dc-in: {at: [18.0, 9.2], direction: front}
+skins: [default]

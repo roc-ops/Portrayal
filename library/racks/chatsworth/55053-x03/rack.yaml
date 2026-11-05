@@ -1,0 +1,128 @@
+format: 1
+kind: rack
+name: 55053-x03
+version: 1.0.0
+maturity: modelled
+manufacturer: Chatsworth Products
+model: 55053-X03
+part-numbers:
+  55053-X03: Standard Rack, 7 ft (2.1 m) x 19 in, 45U
+description: >-
+  The Chatsworth Standard Rack, a 45U two-post frame of bolted aluminium
+  extrusion with one pair of C-shaped channels carrying tapped #12-24 holes.
+  It is sold in clear aluminium or painted black, gray or glacier white, and
+  must be secured to the building structure. The X in the part number stands
+  for the colour.
+form: 2-post-frame
+ru: 45
+numbering:
+  direction: bottom-up
+  start: 1
+width: 19
+holes:
+  style: tapped
+  thread: 12-24
+hole-centres: 465.3
+opening: 451.9
+rails:
+  - id: front
+max-device-depth: 508
+outer:
+  w: 516.1
+  h: 2133.6
+  d: 381.0
+load:
+  static-kg: 453.6
+datasheet:
+  title: Standard Rack, 2-Post, product data sheet (Rev.11 03/24)
+references:
+  - title: Chatsworth Products, Standard Rack product data sheet, Rev.11 03/24, pages 1 and 2
+provenance:
+  ru:
+    confidence: datasheet
+    note: >-
+      45U in the part-number table (page 2), the specifications (page 1) and the
+      dimensioned drawing's "45 RMU". The channel length on the drawing is a
+      half inch short of 45 U of rail; see the rail-length gap.
+  form:
+    confidence: datasheet
+    note: >-
+      The data sheet is for the two-post Standard Rack: one pair of C-shaped
+      channels, and "Equipment attaches to the front or rear" of them (page 2).
+  width:
+    confidence: datasheet
+    note: 19 in EIA, EIA-310-D compliant (page 1).
+  holes:
+    confidence: datasheet
+    note: >-
+      "Threaded #12-24 equipment mounting holes" (page 1); the drawing counts
+      135 holes, three for each of 45 U. No hole size is printed.
+  hole-centres:
+    confidence: drawing
+    note: >-
+      The dimensioned drawing (page 2) gives the mounting holes 18.32 in (465.3
+      mm) apart.
+  opening:
+    confidence: drawing
+    note: >-
+      The drawing (page 2) gives the flange edges 17.79 in (451.9 mm) apart.
+      Page 1 prints a clearance of 17-3/4 in (450.85 mm), 1.05 mm less. The
+      drawing's figure is written.
+  rails:
+    confidence: datasheet
+    note: One pair of channels, so the front rail alone. Equipment may sit on either face of it.
+  max-device-depth:
+    confidence: datasheet
+    note: >-
+      The equipment space depth is 20 in (508 mm) (page 1). The channels are
+      3 in deep (page 2 prints 80 mm; 3 in is 76.2 mm), which is not a key.
+  outer:
+    confidence: drawing
+    note: >-
+      Height 84.00 in (2133.6 mm), full width 20.32 in (516.1 mm) and base depth
+      15.00 in (381.0 mm) on the drawing (page 2). Page 1 prints the width as
+      20.3 in (516.1 mm). The depth is the footprint of the base, not the depth
+      equipment may have.
+  load:
+    confidence: datasheet
+    note: >-
+      "1000 lb (453.6 kg) of equipment" (page 1), written as the sheet's
+      capacity for equipment on the frame. The sheet does not say static.
+      Page 2 prints 453.1 kg for the same 1,000 lb; 1000 lb is 453.59 kg, so
+      that figure is set aside as a misprint.
+  numbering:
+    confidence: estimated
+    note: >-
+      A stand-in. The sheet says the positions are marked and numbered and does
+      not say which way. Bottom-up from 1 is the default of the rack file.
+gaps:
+  - what: numbering
+    reason: vendor-silent
+    note: Neither page says which way the numbers run on the channel.
+    wanted: The direction the labels run, from a photograph of the channel or the maker's drawing.
+  - what: load
+    reason: sources-disagree
+    note: Page 1 prints 453.6 kg and page 2 prints 453.1 kg for 1,000 lb. 453.6 is the conversion and is written.
+    wanted: The maker's correction of page 2.
+  - what: load-kind
+    reason: vendor-silent
+    note: The sheet gives a capacity "of equipment" and does not call it static or rolling.
+    wanted: The maker's statement of whether the capacity is static.
+  - what: opening
+    reason: sources-disagree
+    note: Page 1 prints a 17-3/4 in clearance (450.85 mm) and the drawing prints 17.79 in (451.9 mm) between the flange edges.
+    wanted: The maker's statement of the clear width between the channels.
+  - what: rail-length
+    reason: sources-disagree
+    note: >-
+      The drawing gives the channel 78.25 in (1987.6 mm) long, half an inch
+      less than 45 U of rail (78.75 in). 45U is written from the sheet's own count.
+    wanted: The maker's explanation of the channel length against the 45U count.
+  - what: hole-size
+    reason: vendor-silent
+    note: No hole size is printed. The drawing's .656 in and .750 in holes are in the base.
+    wanted: The size of a channel hole.
+  - what: weight-kg
+    reason: vendor-silent
+    note: The 31 lb (14.1 kg) on page 2 is the shipping weight with the carton; the rack's own weight is not printed.
+    wanted: The weight of the assembled rack.

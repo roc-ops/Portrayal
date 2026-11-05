@@ -1,8 +1,12 @@
 format: 1
 kind: component
 name: input-stud-pair
-version: 1.0.0
+version: 1.1.0
 class: inlet
+# THE PAIR IS ITSELF A SLOT: one dual-hole lug lands across both studs, at their midpoint. That slot
+# and the two stud slots are mutually exclusive, as an LC duplex adapter's slot and its two bores are.
+interface: stud-pair-1
+behaviour: mounts
 profile: power
 description: >-
   One input terminal of an Amphenol Network Solutions 1RU power panel with
@@ -19,10 +23,38 @@ provenance:
     datasheet - 300CB08 datasheet, Inputs: two pairs of 3/8-16 studs on 1 inch
     centres per terminal, maximum lug width 1.15 inch, Keps nuts and flat
     washers.
-attrs: {stud-thread: 3/8-16, stud-centres-mm: 25.4, lug-holes: 2}
+  pitch: >-
+    THE PITCH IS PRINTED: 1 inch (25.4). The 300CB08 installation guide 149722-2 A9 gives the input terminal as
+    "Two pairs of 3/8-16 studs on 1" centers per terminal" (PDF page 10), its Lug Reference Guide as "Input
+    Cables: 2 Hole 3/8" on 1" Centers" (PDF page 37), and the rear views (Fig. 3-6 and 3-7, PDF page 39; Fig.
+    3-10 and 3-11, PDF page 40) call the terminal "3/8" STUD ON 1" CENTERS"; the 300CB08 and nrgILS300CB08
+    datasheets print the same line. The studs are composed at exactly 25.4, which lint L116 holds to 0.01.
+  skin-pitch: >-
+    THE SKIN DRAWS THE STUDS 23.0 APART, NOT 25.4, AND IS NOT REDRAWN HERE. The washers and studs in
+    the skin are centred at 9.0 and 32.0 down, and the guide's Fig. 3-6 measures about 25.5 between the
+    two stud centres. The composed screws stand 25.4 apart about the same midpoint, so each head stands
+    1.2 off its drawn stud's centre, away from the midpoint and still inside the drawn stud. The
+    interface is the printed pitch; the skin is the older, tighter estimate and is the drawing to correct.
+  seats: >-
+    estimated - THE PAIR IS A SEAT A DUAL-HOLE LUG LANDS ACROSS, EACH STUD IS A SEAT OF THE REGISTERED
+    `terminal-stud` KEY (the registry notes that a ring lug still mates each stud of a pair), AND THE HEADS ARE
+    STAND-INS. Each stud is the composed common/terminal-screw-34@1, whose 3.4 mm head
+    is that part's own estimate and claims no thread (the 3/8-16 stays in `attrs`). The head stands at the end
+    of the stud (lift 24.0, the stud's own estimated length in this contract's relief) and the lug seats on top
+    of it, as that part states. The studs are composed top to bottom, so the pair runs down the face and a lug
+    seated here leaves its wire downward.
+attrs: {stud-thread: 3/8-16, stud-centres-mm: 25.4, lug-holes: 2, connector: stud-pair-1}
 elements:
   stud-top: {at: [10.9, 5.4], size: [7.2, 7.2], class: inlet}
   stud-bottom: {at: [10.9, 28.4], size: [7.2, 7.2], class: inlet}
+parts:
+  # FIRST STUD, then second: the order is the axis. Each is a slot of its own, `<terminal>/1` and `<terminal>/2`.
+  - {ref: common/terminal-screw-34@1, id: '1', at: [12.8, 6.1], lift: 24.0}
+  - {ref: common/terminal-screw-34@1, id: '2', at: [12.8, 31.5], lift: 24.0}
+connection-points:
+  # WHERE A DUAL-HOLE LUG SEATS: the midpoint of the studs' own mate points, (14.5, 7.8) and (14.5, 33.2), at the
+  # height they present.
+  mate: {at: [14.5, 20.5], direction: front, seat-out: 25.2}
 relief:
   wall: '#0c0d0e'
   features:

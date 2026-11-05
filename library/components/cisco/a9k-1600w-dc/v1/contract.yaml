@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-1600w-dc
-version: 1.0.1
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -69,6 +69,24 @@ provenance:
     confirms the position: its one callout points at the lamp above the +DC mark.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake.
+  header: >-
+    the module composes cisco/a9k-dc-header@1 as `dc-header`, the two-socket DC power connector of the Cisco
+    ASR 9000 Series Fixed-Port Routers Hardware Installation Guide, Figure 163 (PDF page 164), standing
+    inside the connector the skin already draws (the dark shroud and its two sockets), centred on it. The
+    guide names no series or part number for the connector, so the part is a declared stand-in (its own
+    provenance). Its place is an estimate: the guide gives no dimension. cisco/a9k-dc-plug@1, the cable
+    block of Figures 67 and 68 (Figure 68 is the ASR 9901's), mates it. The skin is unchanged.
+  roles: >-
+    guide - Figure 163 prints "+DC" above and "-DC" below the connector, and the text says the module takes
+    "one source cable and one return cable". The roles are therefore `pos` and `neg`, in that order from
+    the top. The guide prints a nominal and a range in its power chapter ("-48 VDC", "-40.5 VDC to -72
+    VDC", "40A maximum") and none on the figure.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. The two poles are the contacts of one pluggable
+    connector, and a port whose poles are a connector's contacts is offered only where that path's part is
+    itself the connector; on a supply in a bay it is the supply, not the connector it composes, so a port
+    stated here would be published and then not offered. The roles above are recorded for the port a later
+    change can state, a minor on the devices that seat this supply.
 elements:
   ok:
     at: [64.30, 3.20]
@@ -99,4 +117,6 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own
         provenance is 'size: estimated' and the dome carries none
+parts:
+  - {ref: cisco/a9k-dc-header@1, id: dc-header, at: [45.61, 4.70]}
 skins: [default]

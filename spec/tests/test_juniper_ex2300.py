@@ -204,10 +204,10 @@ def test_the_dc_rear_has_the_terminal_block_and_one_fan():
     assert d["configurations"]["dc"]["views"] == {"rear": "rear-dc"}
     assert d["views"]["rear-dc"]["face"] == "rear"
     pl = by_id(d, "rear-dc")
-    decor = {x.get("id"): x for x in d["views"]["rear-dc"]["panel"]["decor"]}
-    assert decor["dc-terminal"]["size"] == [52.6, 17.5]
-    assert len([i for i in decor if i.startswith("dc-pole-") and not i.endswith("-screw")]) == 4
-    assert "ac-inlet" not in pl and "dc-terminal" not in pl
+    # the block is a placed part's, 52.6 by 17.5 mm where the art stood, not decor, and the AC inlet is not on this rear
+    assert pl["dc-terminal"]["ref"] == "juniper/ex2300-dc-terminal@1" and pl["dc-terminal"]["at"] == [377.3, 9.5]
+    assert not [x for x in d["views"]["rear-dc"]["panel"]["decor"] if str(x.get("kind", "")).startswith("dc-terminal")]
+    assert "ac-inlet" not in pl
     assert len([x for x in d["views"]["rear-dc"]["panel"]["decor"] if x.get("kind") == "fan-grille"]) == 1
     # the management cluster is the AC rear's
     for i in ("mgmt", "usb", "console-rj45", "esd-rear-jack"):
@@ -355,12 +355,11 @@ def test_the_24t_ac_legend_discrepancy_and_the_top_face_photo_are_noted():
 
 # --- the components ----------------------------------------------------------
 
-def test_this_slice_adds_no_component():
-    """Every part is a registry or common one: the guide's supply and fans are built in, the mini-USB
-    console is the registry's receptacle, and the one piece of metalwork no library part covers (the DC
-    terminal block) is chassis art, because the DCIM export has no row that could carry a part of that
-    kind."""
-    assert not list(COMP.glob("ex2300-*"))
+def test_this_slice_adds_only_the_dc_terminal_component():
+    """Every part but one is a registry or common one: the guide's supply and fans are built in, and the
+    mini-USB console is the registry's receptacle. The one piece of metalwork no registry part covers, the DC
+    terminal block, is a placed part of its own that composes its four terminal screws."""
+    assert sorted(p.name for p in COMP.glob("ex2300-*")) == ["ex2300-dc-terminal"]
 
 
 # =============================================================================================
@@ -743,5 +742,5 @@ def test_the_12t_rear_legend_and_table_15_disagree_and_both_are_kept():
     assert any("2.5A Max" in t for t in silk_texts(d, "rear"))
 
 
-def test_this_slice_still_adds_no_component():
-    assert not list(COMP.glob("ex2300-*")) and not list(COMP.glob("ex2300m-*"))
+def test_this_slice_still_adds_only_the_dc_terminal_component():
+    assert sorted(p.name for p in COMP.glob("ex2300-*")) == ["ex2300-dc-terminal"] and not list(COMP.glob("ex2300m-*"))

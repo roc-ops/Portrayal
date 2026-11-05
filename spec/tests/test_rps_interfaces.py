@@ -247,8 +247,8 @@ def test_no_other_placement_changed_its_id_group_position_or_turn(name):
     """A guard: it passes before the change and after it."""
     new, old = placements(layout(name)), base_placements(name)
     added = set(new) - set(old)
-    # the EX2200 also place their earthing pair (a later change)
-    assert added <= {(v, "rps") for v in ("rear", "rear-dc")} | {(v, "ground-pair") for v in ("rear", "rear-dc")} if name in EX2200 else not added
+    # the EX2200 also place their earthing pair (a later change), and the 24T its DC terminal block (a later one still)
+    assert added <= {(v, "rps") for v in ("rear", "rear-dc")} | {(v, "ground-pair") for v in ("rear", "rear-dc")} | {("rear-dc", "dc-terminal")} if name in EX2200 else not added
     assert not set(old) - set(new)
     for key, p in old.items():
         q = new[key]

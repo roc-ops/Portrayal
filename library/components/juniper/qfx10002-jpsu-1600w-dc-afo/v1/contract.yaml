@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: qfx10002-jpsu-1600w-dc-afo
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -68,8 +68,22 @@ provenance:
   connector: >-
     datasheet - DC Power Cable Specifications: the supply takes a D-sub 3W3 connector, whose three
     pins carry -48 VDC input, return and ground. The supplied cable CBL-JNP-PWR-DSUB is straight;
-    the optional right-angle cables CBL-JNP-PWR-DSUB2 and -DSUB3 carry no ground wire. The library
-    has no 3W3 connector standard, so the shell is drawn in the skin and presents no seat.
+    the optional right-angle cables CBL-JNP-PWR-DSUB2 and -DSUB3 carry no ground wire. The supply composes
+    juniper/qfx10002-dc-header@1 as `dc-header`, the D-sub 3W3 connector with its two standoffs, at the box of the
+    `connector` group the skin drew (Figure 31). The guide names no maker or part number for the connector, so the part
+    is a declared stand-in (its own provenance). juniper/qfx10002-dc-plug@1, the cable connector of Figure 41, mates
+    it. The supply's own skin no longer draws the shell, its contacts or its standoffs; the part does, in the same
+    shapes and colours at the same place.
+  roles: >-
+    guide - QFX10002 DC Power Cable Specifications: the three pins carry "-48 VDC input (-)" (the library's `batt`),
+    "return (+)" (`rtn`) and "ground" (`gnd`); Table 25 gives a range, -48 to -60 VDC rated, and no nominal.
+    WHICH CONTACT OF THE SHELL IS WHICH IS NOT STATED: Figure 31 prints no mark beside the contacts, so no contact is
+    given a role.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. A port whose poles are a connector's contacts is offered only
+    where that path's part is itself the connector; on a supply in a bay it is the supply, not the connector it
+    composes, so a port stated here would be published and then not offered. The roles above are recorded for the
+    port a later change can state, a minor on the devices that seat this supply.
   led: >-
     drawing - Table 27 and Figure 31: one bicolour lamp, with the same states as the AC supply,
     centred at 66.4, 7.4 mm on the flat Figure 31 (upper right of the connector column, above the
@@ -94,6 +108,8 @@ elements:
       - {name: fault, color: '#f59e0b'}
   handle: {at: [2.5, 28.7], size: [39.9, 10.6], class: handle}
   latch: {at: [62.6, 12.2], size: [10.1, 17.9], class: latch}
+parts:
+- {ref: juniper/qfx10002-dc-header@1, id: dc-header, at: [48.5, 2.2]}
 fields:
   handle-finish: {label: Handle colour, type: text, default: '#f2581a'}
 size: {w: 74.1, h: 40.6, d: 185.0}
