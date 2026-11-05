@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9502-16smt
-version: 2.0.2
+version: 2.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9502-16SMT
@@ -81,8 +81,9 @@ provenance:
       'Fixed, 1+1 redundant PSU' and lists '120W DC PSU, fixed dual feed' and '120W AC PSU, fixed
       dual feed'; the HIG's PSU Overview sections say '1+1, Fixed power supply unit (PSU)' and
       show no release latch, no handle and no bay. So there are no components.bays on this device
-      at all - the two feeds are panel features, drawn as the six screw terminal posts the DC
-      faceplate carries, and PSU 0 and PSU 1 are silkscreen over them rather than bay ids.
+      at all - the two feeds are panel features, each a placement of ufispace/psu-120-dc@1, the
+      three-post screw terminal block the DC faceplate carries, and PSU 0 and PSU 1 are silkscreen
+      over them rather than bay ids.
       Datasheet 'Typical power: 45.1 Watts (no transceiver)' is the vendor's own scope, so
       power-envelope is bare; no maximum is published in either document, and the per-feed input
       ratings (AC 100-240 V 2 A, DC -36 to -75 V 4.5 A) are supply-side and are not converted into
@@ -219,8 +220,10 @@ provenance:
       millimetre. ONE THING DID NOT AGREE: the six DC terminal posts read 4.83 mm wide in the
       guide figure and 6.1 mm in the photograph, with their centres 1.35 mm apart. The figure
       resolves 0.11 mm per pixel and the photograph 0.85, and every other feature measured from
-      that same photograph agrees with the figure to 0.3 mm, so the figure's number is carried and
-      the disagreement is written down here rather than split.
+      that same photograph agrees with the figure to 0.3 mm, so the figure's number was carried while
+      the posts were panel art. They are now drawn by ufispace/psu-120-dc@1, whose posts measure
+      6.4 mm on the S9502-12SM front render, near the photograph's 6.1; the figure's 4.83 stays here
+      as a reading and the disagreement is written down rather than split.
   lifecycle:
     note: >-
       searched 2026-08-28: 'UfiSpace S9502-16SMT end of life end of sale' - no announcement found;
@@ -350,12 +353,12 @@ gaps:
   note: >-
     The two fixed supply feeds are real, distinguishable things - the HIG's PSU lamp table
     tells PSU1-good-PSU2-bad apart from PSU1-bad-PSU2-good - but they are not addressable
-    in this manifest. A fixed supply seats nothing, so there is no bay; the six screw
-    terminal posts are panel metal and are drawn as decor; and the library has no terminal
-    block component to place over them. The PSU lamp therefore points at the chassis and
-    the PSU 0 / PSU 1 legends are chassis silkscreen, which loses the per-feed link a
-    consumer would want. Recorded rather than papered over with a group nothing joins.
-  wanted: a terminal-block or power-inlet component that a fixed feed can be placed as
+    in this manifest. A fixed supply seats nothing, so there is no bay, and each feed is now a
+    placement, psu-0 and psu-1, of ufispace/psu-120-dc@1. The PSU lamp and the PSU 0 / PSU 1
+    legends still point at the chassis: pointing the lamp at the two supplies changes its
+    `for`, which is a major version of this device, and the legends would then stand 1.1 mm
+    off the centre of the supplies they name (L61). The S9502-12SM points its lamp at both.
+  wanted: a decision to point the PSU lamp at psu-0 and psu-1, which costs this device a major version
 - what: system-lamp-size
   scope: [status-leds]
   reason: needs-hardware
@@ -442,6 +445,12 @@ groups:
     role: indicator
     index-origin: 1
     description: every indicator that belongs to a particular port, ordered by that port
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    description: the two FIXED 1+1 120W supplies. These do not pull out - what the front panel carries is each
+      supply's input block, drawn as a placement for that reason
   grounding:
     term: Point
     role: furniture
@@ -466,12 +475,6 @@ views:
         - {at: [206.44, 4.9], size: [34.47, 34.1], fill: '#b0b5bb', rx: 0.8}
         - {at: [301.8, 4.9], size: [62.26, 34.1], fill: '#b0b5bb', rx: 0.8}
         - {at: [365.79, 4.9], size: [35.15, 34.1], fill: '#a8c8e8', rx: 0.8}
-        - {at: [21.94, 20.5], size: [4.83, 11.0], fill: '#b0b5bb', rx: 0.6}
-        - {at: [31.48, 20.5], size: [4.83, 11.0], fill: '#b0b5bb', rx: 0.6}
-        - {at: [41.01, 20.5], size: [4.83, 11.0], fill: '#b0b5bb', rx: 0.6}
-        - {at: [78.12, 20.5], size: [4.83, 11.0], fill: '#b0b5bb', rx: 0.6}
-        - {at: [87.66, 20.5], size: [4.83, 11.0], fill: '#b0b5bb', rx: 0.6}
-        - {at: [97.19, 20.5], size: [4.83, 11.0], fill: '#b0b5bb', rx: 0.6}
     silkscreen:
       - {at: [33.9, 10.8], text: 'PSU 0', font-size: 2.0, anchor: middle, for: chassis}
       - {at: [90.07, 10.8], text: 'PSU 1', font-size: 2.0, anchor: middle, for: chassis}
@@ -507,6 +510,8 @@ views:
       - {at: [388.27, 38.5], text: '15', font-size: 2.0, anchor: middle, fill: '#1f4e79', for: port-15}
     components:
       placements:
+        - {ref: ufispace/psu-120-dc@1, id: psu-0, at: [18.36, 17.95], group: psus, rel-pos: 0}
+        - {ref: ufispace/psu-120-dc@1, id: psu-1, at: [74.54, 17.95], group: psus, rel-pos: 1}
         - {ref: common/smb-jack@1, id: clk-1pps, at: [121.10, 4.88], group: timing, rel-pos: 1, attrs: {role: 1pps-io}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [121.10, 15.96], group: timing, rel-pos: 2, attrs: {role: 10mhz-io}}
         - {ref: common/led-rect@1, id: led-sync, for: chassis, at: [133.49, 20.89],
@@ -584,7 +589,7 @@ views:
         - {ref: common/led-dot@1, id: led-port-15, at: [389.27, 20.95], for: port-15, group: port-leds, rel-pos: 16}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [430.90, 18.00], group: grounding, rel-pos: 1}
     regions:
-      - {id: power-feeds, at: [18, 5], size: {w: 88, h: 37}, label: Fixed dual power feed, members: []}
+      - {id: power-feeds, at: [18, 5], size: {w: 88, h: 37}, label: Fixed dual power feed, members: [psu-0, psu-1]}
       - {id: timing, at: [118, 3], size: {w: 86, h: 39}, label: Timing block, members: [clk-1pps, clk-10mhz, tod]}
       - {id: mgmt-block, at: [163, 8], size: {w: 41, h: 32}, label: Management, members: [mgmt, usb, console]}
   rear:
