@@ -12,6 +12,11 @@
   they are drawn alike at 90 and 270. The shelf's drawing is unchanged, and so is any device
   that states none. This key is one-way: configs.json publishes it and only the rack elevation
   reads it.
+- **A part can state that it has no ears.** A new optional key, `chassis.ears.none`, draws no
+  generic ear and no screw heads at the rails for a part that stands between the posts on another
+  part's brackets. The vertical mount kit's tray and top baffle state it, as the installation
+  manual's Figure 84 draws them; they showed wide grey ears the figure does not. A device that
+  states none draws as before. This key is one-way: configs.json publishes it.
 - **`nokia/fx8-vertical-air-intake-tray` and `nokia/fx8-vertical-top-baffle`**: the two
   parts of the 7360 ISAM FX-8 vertical shelf mount kit that take rack units, each placed
   as a device of two units under and over a shelf rolled 90. Sizes are from the kit's unit

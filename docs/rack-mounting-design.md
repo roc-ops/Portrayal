@@ -148,6 +148,13 @@ gets no generic ear, so it would have no use for `h`, `y` or `color`.)
   installation figure. The brackets are the rack's, so they are drawn alike at
   90 and at 270. A new key, so a reader that does not know it draws a quarter
   turn without them.
+- **`none`** says the part has no ears: no flange and no bolt to a post, because
+  it stands between the posts on another part's brackets. The tray and the top
+  baffle of the 7360 ISAM FX-8 vertical mount kit state it, as the installation
+  manual's Figure 84 draws them. The elevation then draws no generic ear and no
+  screw heads for it, and the 3D scene no generic ear. `behind` could not say this:
+  it describes a face as wide as the rack, and the elevation still draws screws
+  for it. A device that states none draws as before.
 - `ears` and `kits` are for a `rack` device only (L125).
 
 The [rack products note](rack-products-design.md) (section 7.1) proposes one

@@ -481,6 +481,7 @@ object.
 chassis:
   ears:
     behind: true            # optional; the same statement as the bare string
+    none: true              # optional; a part with no ears at all
     h: 43.5                 # optional; mm the ears span, when not the chassis height
     y: 0.15                 # optional; mm from the bottom of the chassis to the ears
     color: "#1b1e21"        # optional; the ears' colour, when they are not silver
@@ -514,6 +515,14 @@ chassis:
   ignores the key and draws a quarter turn as before. The brackets are the
   rack's: they are drawn alike at 90 and at 270 and a device that states none
   draws none.
+- `none` is **one-way** (a new optional boolean, added beside `rolled`). `none: true`
+  says the part has no ears: it is not bolted to the posts and carries no flange,
+  because it stands between them on another part's brackets, as the tray and the
+  top baffle of a vertical shelf mount kit do. The rack elevation and the 3D
+  scene then draw no generic ear for it, and the elevation draws no screw heads at
+  the rails. Absent or `false`, the device draws as before. Unlike `behind`, it
+  does not say the face is as wide as the rack. An older reader ignores the key
+  and draws the generic ear as before.
 - A kit entry's `ref` is a `kind: kit` (L161), listed once. `supply` is
   `in-box` or `optional`, and `variant: reversed` marks a reverse-mount kit.
   `depth` replaces the `depth` of one configuration of the kit for this device:
@@ -593,7 +602,7 @@ states neither (#907):
 
 - **`ears` is an object, always.** The bare string `ears: behind` is
   published as `{"behind": true}`; an object is published with the keys it
-  states (`behind`, `h`, `y`, `color`, `positions`, `rolled`) and no others, so a reader
+  states (`behind`, `none`, `h`, `y`, `color`, `positions`, `rolled`) and no others, so a reader
   asks `ears.behind === true` and reads `ears.positions || []`. `rolled` is the
   list the manifest writes, its lengths floats. `color` is the
   string the manifest writes, and absent means silver. `h`, `y` and each

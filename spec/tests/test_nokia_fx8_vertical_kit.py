@@ -94,6 +94,36 @@ def test_the_shelf_validates_against_the_device_schema_with_the_brackets():
     jsonschema.validate(load("nfxs-e-bb"), schema)
 
 
+def test_the_tray_and_the_baffle_state_that_they_have_no_ears_and_draw_no_generic_ear():
+    from portrayal import ears
+    for name in PARTS:
+        doc = load(name)
+        assert doc["chassis"]["ears"] == {"none": True}, name
+        assert ears.plan(doc) is None, name
+        note = doc["provenance"]["ears"]
+        assert "Figure 84" in note["note"], name
+
+
+def test_a_device_that_states_none_is_unchanged_and_the_key_is_published_only_when_stated():
+    from portrayal import ears
+    from portrayal.render import published_ears
+    assert published_ears({"none": True}) == {"none": True}
+    assert "none" not in published_ears({"behind": True})
+    assert "none" not in published_ears({"h": 40})
+    box = {"chassis": {"width": 350.01, "height": 89.02, "depth": 251.97}, "views": {"front": {"size": {"w": 350.01, "h": 89.02}}}}
+    assert ears.plan(box)["flange"] > 60, "a box that states nothing gets its ear as before"
+    box["chassis"]["ears"] = {"none": False}
+    assert ears.plan(box) is not None
+
+
+def test_the_none_key_is_a_boolean_in_the_device_schema():
+    import json
+    import jsonschema
+    schema = json.loads((ROOT / "spec" / "schemas" / "device.schema.json").read_text())
+    ears = schema["properties"]["chassis"]["properties"]["ears"]["oneOf"][1]["properties"]
+    assert ears["none"]["type"] == "boolean"
+
+
 def test_each_part_names_its_unit_data_sheet_with_a_hash_and_says_the_units_are_read_off_a_figure():
     for name in PARTS:
         doc = load(name)

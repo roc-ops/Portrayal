@@ -7,6 +7,11 @@ import assert from 'node:assert/strict';
 import * as F from '../../../kit/rack/fit.js';
 import {rolledTransform, rolledBracketShapes, drawRolledBrackets} from '../../../kit/rack/view/elevation.js';
 import {RU, SIDES} from '../../../kit/rack/rails.js';
+import * as FACE from '../../../kit/rack/view/face.js';
+
+// (kit/relief.js and kit/dist.js read the page's location as they load and as they fetch)
+globalThis.location = new URL('http://localhost/rack.html');
+const {genericEars} = await import('../../../kit/relief.js');
 
 // the shelf: 446.5 mm wide, 355 mm high (3FE64936BB)
 const SHELF = {ru: 8, w: 446.5, h: 355, d: 278.3, model: 'shelf'};
@@ -125,4 +130,41 @@ test('a bracket is drawn in the colour its data states, over the rails, with a s
   for (const p of paths) assert.equal(p.attrs.fill, '#c8cacc');
   const wanted = shapesOf(it).reduce((n, s) => n + 2 * s.holes.length, 0);
   assert.equal(g.kids.filter(k => k.tag === 'circle').length, wanted);
+});
+
+// ---- a part that has no ears (`chassis.ears.none`): the tray and the baffle of the kit ----
+// They stand between the posts on the shelf's brackets and carry none of their own, so the
+// elevation draws neither the flange nor the screw heads for them.
+const library = {
+  'tray.configs.json': {device: 'tray', default: 'base', chassis: {w: 350.01, h: 89.02, d: 251.97, ears: {none: true}}, configs: []},
+  'box.configs.json': {device: 'box', default: 'base', chassis: {w: 350.01, h: 89.02, d: 251.97}, configs: []},
+  'behind.configs.json': {device: 'behind', default: 'base', chassis: {w: 480, h: 44.45, d: 200, ears: {behind: true}}, configs: []},
+};
+globalThis.fetch = async url => {
+  const body = library[String(url).split('/').pop()];
+  return body ? {ok: true, status: 200, json: async () => body} : {ok: false, status: 404};
+};
+const distAt = path => `http://lib.test/none/${path}`;
+
+test('a part that states no ears is read as having none, and a part that states none of it is not', async () => {
+  assert.equal(await FACE.earsNoneFor('tray', distAt), true);
+  assert.equal(await FACE.earsNoneFor('box', distAt), false, 'no ears stated: drawn as before');
+  assert.equal(await FACE.earsNoneFor('behind', distAt), false, '`behind` is another statement');
+  assert.equal(await FACE.earsNoneFor('missing', distAt), false, 'an index that cannot be read says nothing');
+});
+
+test('the generic plan of a part with no ears is null, and the same box that states none still gets its ear', () => {
+  const chassis = ears => ({w: 350.01, h: 89.02, d: 251.97, ears});
+  assert.equal(genericEars(chassis({none: true}), 350.01), null);
+  const before = genericEars(chassis(undefined), 350.01);
+  assert.ok(before && before.flange > 60, 'the wide grey ear of a 350 mm box');
+  assert.deepEqual(genericEars(chassis({none: false}), 350.01), before);
+});
+
+test('a shelf that states brackets still draws them at 90 and 270 while a part beside it states no ears', async () => {
+  for (const roll of [90, 270]) {
+    const it = item({roll});
+    assert.equal(shapesOf(it).length, 2, `roll ${roll}`);
+  }
+  assert.equal(await FACE.earsNoneFor('tray', distAt), true);
 });

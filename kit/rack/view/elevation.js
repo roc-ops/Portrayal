@@ -13,7 +13,7 @@
 
 import {RU, RAIL_W, OPENING, HOLE_DY, HOLE_SQUARE, HOLE_ROUND, SIDES} from '../rails.js';
 import {earHoles} from './ear-holes.js';
-import {configuredFace, earPlanFor, rolledBracketsFor, zeroUModuleEnds} from './face.js';
+import {configuredFace, earPlanFor, earsNoneFor, rolledBracketsFor, zeroUModuleEnds} from './face.js';
 import {dom} from './dom.js';
 import {paintFace, paintMaps} from './settable.js';
 import {uLabel, zeroUOf, zeroUBottomMm} from '../model.js';
@@ -505,7 +505,9 @@ export async function drawElevation({document: domDoc, distAt, surface = rackSur
     // (none on a quarter-turned item: its ears would stand across the rack. A
     // device that states `chassis.ears.rolled` is held there by those brackets
     // instead: a bar across the rack against each edge and an ear on each post)
-    if (!through && ears && !quarter && isRackMount(it)) drawEars(svgEl, out, it, {top: paneY(box.hi), bottom: paneY(box.lo), holes: surface.ears(box).map(paneY)},
+    // (none on a part that states `chassis.ears.none`: it stands between the posts on
+    // another part's brackets, with no flange and no screw of its own)
+    if (!through && ears && !quarter && isRackMount(it) && !await earsNoneFor(it.ref, distAt)) drawEars(svgEl, out, it, {top: paneY(box.hi), bottom: paneY(box.lo), holes: surface.ears(box).map(paneY)},
                                                       C, await earPlanFor(it.ref, it.cfg, distAt), [fx, fx + faceW]);
     if (!through && quarter && isRackMount(it)) drawRolledBrackets(svgEl, out, it, rolledBracketShapes(it, await rolledBracketsFor(it.ref, distAt), box), paneY, C);
     if (it.id === selectedId) rings.push([topOf(ruH), ruH]);

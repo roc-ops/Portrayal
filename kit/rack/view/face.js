@@ -307,3 +307,21 @@ export function rolledBracketsFor(ref, distAt) {
   }
   return ROLLED.get(key);
 }
+
+// A PART THAT HAS NO EARS (`chassis.ears.none`, which configs.json publishes):
+// true only where the device states it. The elevation then draws neither the
+// generic flange nor the screw heads at the rails, since nothing bolts it there.
+// False where it states none or its index cannot be read. Memoized per device.
+// Kept per library.
+const NO_EARS = new Map();
+export function earsNoneFor(ref, distAt) {
+  const key = `${libraryId(distAt)}:${ref}`;
+  if (!NO_EARS.has(key)) {
+    NO_EARS.set(key, (async () => {
+      await Promise.resolve(distAt.ready).catch(() => {});   // a layered library knows its roots first
+      const idx = await jdist(distAt(`${ref}.configs.json`)).catch(() => null);
+      return idx?.chassis?.ears?.none === true;
+    })());
+  }
+  return NO_EARS.get(key);
+}
