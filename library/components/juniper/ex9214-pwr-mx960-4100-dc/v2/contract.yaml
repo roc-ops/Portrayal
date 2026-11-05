@@ -1,0 +1,122 @@
+format: 1
+kind: module
+name: ex9214-pwr-mx960-4100-dc
+version: 2.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper 4100 W DC power supply (PWR-MX960-4100-DC) of the EX9214. It is the high-capacity DC supply of the MX960. It stands
+  upright in PEM0 to PEM3 at the rear. At the top are the power switch, a door over the input mode switch and four lamps. The lamps are
+  INP0 OK, INP1 OK, DC OK and PS FAIL. A vertical handle is below them. Lower down, a terminal strip is printed INP0 and INP1 over four
+  legends: -48V, RTN, RTN and -48V from left to right. A lower cover is below the strip. Each of the two DC inputs takes an RTN lug
+  and a -48V lug. The supplies work in two zones. PEM0 and PEM2 feed one zone, and PEM1 and PEM3 feed the other.
+part-numbers:
+  PWR-MX960-4100-DC-S: {part: PWR-MX960-4100-DC-S}
+attrs:
+  power-output-w: 4100
+  input-voltage: -40 to -72 VDC
+  inlet: dc-terminal
+  redundancy: 1+1 per zone
+provenance:
+  part-numbers: >-
+    datasheet - EX9200 Ethernet Switch Datasheet (1000432-022-EN, Aug 2022), ordering information: "PWR-MX960-4100-DC-S 4100 W DC Power Supply for EX9214, spare". The MX960
+    guide lists PWR-MX960-4100-DC as "DC 4.1kW Power Entry Module". The MX960 device on main seats no DC supply.
+  power: >-
+    datasheet - EX9200 Ethernet Switch Datasheet (Aug 2022), Table 4: 4,100 W per chassis zone on a -40 to -72 V DC input, and the EX9214 text "deliver 4,100 W of power to
+    the chassis". The guide's DC chapter recommends a 208 A circuit breaker for the maximum configuration, 104 A per supply.
+  size: >-
+    estimated - the face is 101.6 mm wide and 368.3 mm tall, as version 1 and as the AC supply (juniper/ex9214-pwr-mx960-4100-ac size): the four bays of the chassis
+    are that wide. Table 7 of the EX9214 guide gives the DC supply 1.75 x 14.5 x 9.05 in. under height, width and depth.
+  skin: >-
+    estimated - the face is redrawn from the EX9214 Switch Hardware Guide (Juniper Networks), Figure 23 "DC Power Supply in an EX9214 Switch" (printed page 64, PDF page 76: one
+    isometric line drawing of the supply upright, seen from the left-front) and Figure 58 "Connecting DC Power to an EX9214 Switch" (printed page 195, PDF page 207, whose
+    zoom shows the terminal strip). The figures are line art and give no dimension, so each place is a fraction of the face read off the figure at 600 dpi, estimated to about 5 mm
+    and not corrected for the angle of view: the power switch from 19 to 40 mm across and 27 to 60 mm down; the four lamps in a column at 46 mm across, 34 to 55 mm down; the
+    door over the input mode switch from 56 to 67 mm across and 32 to 62 mm down; the plate of lamp legends from 76 to 92 mm across; the handle from 32 to 43 mm across and 98
+    to 175 mm down; the INP0 and INP1 labels at 16 to 35 mm and 70 to 88 mm across, 208 to 217 mm down; the strip across the whole width, 221 to 234 mm down, with its four legends
+    centred at 12.3, 37.1, 63.0 and 88.4 mm across; and the lower cover from 247 mm down, with a screw at each lower corner. Version 1 drew the switch at the top middle, the
+    lamps at the upper left, the handle from 135 mm down and a plain strip at 262 mm, and no terminal; because those boxes moved, this drawing is version 2, and version 1 keeps its
+    own. The colours are version 1's: the figures are line art, and the only photograph held of this chassis's rear (Juniper's product image of the EX9214 rear) shows AC supplies, whose silver grey body and dark switch
+    these match. None of a DC supply is held, so the colours are estimates.
+  seats: >-
+    ESTIMATED, and every figure of it. The figures draw no stud: the strip prints four legends and nothing stands on it, and the guide's text says "terminal studs" under a clear plastic cover it removes
+    (step 8 of Connecting DC Power to an EX9214 Switch, printed page 193). The poles are placed from what is printed. There are four, one for each legend, because the guide says each
+    input takes an RTN lug and a -48V lug; each is two studs on the 5/8 in. centres of the two-hole lug the guide draws (provenance lug), because "the same cable lug is used for the DC
+    power cables"; each stands across the face at the centre of its legend; the pair runs down the face, because four lugs 0.55 in. wide fit side by side at the legends' 25 mm pitch
+    and four lugs 0.625 in. between holes laid across the face would not; and the pairs' centre is 265 mm down, below the strip and under the cover's upper edge, a height no figure
+    gives. The studs are juniper/mx240-dc-pole@1's, common/terminal-screw-34@1 heads, a declared stand-in that claims no thread; the guide gives a 7/16 in. nut and no thread.
+  lug: >-
+    EX9214 Switch Hardware Guide (Juniper Networks), Figure 46 "Grounding Lug for an EX9200 Switch" (printed page 147, PDF page 159): a two-hole lug, holes 0.28 in. across and 0.625 in. apart, a
+    crimp area for a 6 AWG conductor, in inches, with the note "The same cable lug is used for the DC power cables." The MX960 guide's Figure 62 "DC Power Cable Lug" (printed page 297) draws the same lug at 0.63 in. between holes
+    for a 4 AWG conductor. No maker or part number is printed. generic/two-hole-lug-5-8@1 mates the pair and stands in for it.
+  poles: >-
+    EX9214 Switch Hardware Guide (Juniper Networks), Figure 58 (printed page 195, PDF page 207, the zoom on the inputs): a strip printed INP0 and INP1 over four legends, left to right
+    -48V, RTN, RTN and -48V; and "Connecting DC Power to an EX9214 Switch" (printed page 193, step 9): on INP0 the positive (+) cable lug goes to the RTN (return) terminal and the negative (-) lug to the -48 V
+    (input) terminal, and the same for INP1 if two feeds are used. So the supply has two inputs, `input-0` and `input-1`, of two poles each, in the order the strip prints them: INP0 is
+    the left pair, -48V then RTN, and INP1 the right pair, RTN then -48V. The roles are the legends' words: `batt` for -48V and `rtn` for RTN (spec/schemas/dc.yaml writes `batt` as
+    -48V and negative (battery)). Which two legends belong to which input is read from the two labels' places over the strip.
+  voltage: >-
+    EX9214 Switch Hardware Guide (Juniper Networks), Table 19 "DC Power Supply Specifications for an EX9214 Switch" (printed page 65, PDF page 77): "Nominal operating range: -48 VDC" and "Operating voltage range: -40 VDC to -72 VDC". The MX960
+    guide's table for its high-capacity supplies prints "Nominal: -48 VDC" and "Operating range: -40 to -72 VDC". A held table prints a nominal, so each port states it, with its minus, and the range in the order the table gives it.
+  rating: >-
+    NOT STATED. Table 19 gives the input current as 104 A for both feeds, "54 A and 50 A per feed", in two-feed mode and 42 A in one-feed mode, and a maximum of 128 A (66 A and 62 A per feed) at 40 V. A port's `rating-a` is one figure and the
+    two feeds differ, so the ports state none and a later change can state one once a source says which feed is which. The MX960 guide prints the same figures.
+  awg: >-
+    NOT STATED, the ports state none. The EX9214 guide says the provided cable lugs "are sized for 6 AWG" and the cables "must be 6 AWG (13.3 mm2), minimum 60 C wire" ("Connecting DC Power to an EX9214 Switch", printed pages 190 to 191), and Figure 46 draws the lug for a 6 AWG
+    conductor. The MX960 guide, which also lists this supply (PWR-MX960-4100-DC), prints "Eight 4-AWG (21.2 mm2)" in its table of DC power cable specifications (printed page 298) and draws its lug for a 4 AWG conductor. One part number, two
+    sizes: a port's `awg` is stated only where every guide that seats the supply prints one size, so the ports state none.
+  leds: >-
+    guide, DC power supply LED table: INP0 OK and INP1 OK green (input present, correct polarity), DC OK green (output in range), PS FAIL red; each off when not lit. The guide adds that INP0 OK and INP1 OK light amber on reverse polarity; no state is drawn for it.
+  switch: >-
+    Figure 23 and step 3 and 4 of Connecting DC Power to an EX9214 Switch: the supply has a power switch (set to OFF (0) in step 5) and, behind a metal door, an input mode switch with positions 0 (one feed) and 1 (two feeds). The input mode switch
+    is drawn as its door and is not modelled: it decides how many feeds are used and changes no port.
+states:
+- ok
+- fault
+- absent
+elements:
+  led-inp0-ok: {at: [44.6, 33.2], size: [2.2, 2.2], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-inp1-ok: {at: [44.6, 40.0], size: [2.2, 2.2], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-dc-ok: {at: [44.6, 46.8], size: [2.2, 2.2], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-ps-fail: {at: [44.6, 53.6], size: [2.2, 2.2], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  switch: {at: [19.5, 27.5], size: [20.0, 32.5], class: switch}
+  handle: {at: [32.4, 98.3], size: [10.2, 77.0], class: latch}
+size:
+  w: 101.6
+  h: 368.3
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle
+    out: 2.4
+    color: '#9aa0a6'
+    confidence: estimated
+    source: guide Figure 23 - the vertical pull handle stands proud of the face
+  - node: switch
+    out: 2.4
+    color: '#26292d'
+    confidence: estimated
+    source: guide Figure 23 - the switch projects
+parts:
+  - {ref: juniper/mx240-dc-pole@1, id: pole-0-batt, at: [2.6625, 263.3], rotate: 90}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-0-rtn, at: [27.4625, 263.3], rotate: 90}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-1-rtn, at: [53.3625, 263.3], rotate: 90}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-1-batt, at: [78.7625, 263.3], rotate: 90}
+dc:
+  ports:
+    - id: input-0
+      direction: input
+      voltage: {nominal: -48, range: [-40, -72]}
+      poles:
+        - {role: batt, slot: pole-0-batt}
+        - {role: rtn, slot: pole-0-rtn}
+      source: {poles: poles, voltage: voltage}
+    - id: input-1
+      direction: input
+      voltage: {nominal: -48, range: [-40, -72]}
+      poles:
+        - {role: rtn, slot: pole-1-rtn}
+        - {role: batt, slot: pole-1-batt}
+      source: {poles: poles, voltage: voltage}
+skins: [default]
