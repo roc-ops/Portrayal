@@ -1,0 +1,49 @@
+{
+  "source": "Taken from docs/infrahub-export-design.md sections 3.1, 3.2, 3.6 and 3.9, not from the schema library; unchecked against the library commit that note names.",
+  "library_commit_named_by_the_note": "26336e9026dff1907f2c58e81dd6ae7b5c3f763e",
+  "assumed": [
+    "The note gives no kind for part_number and description; Text is assumed.",
+    "The note gives no kind for OrganizationManufacturer.name; Text is assumed."
+  ],
+  "nodes": {
+    "OrganizationManufacturer": {
+      "attributes": {
+        "name": {"kind": "Text", "unique": true}
+      },
+      "relationships": {}
+    },
+    "DcimDeviceType": {
+      "attributes": {
+        "name": {"kind": "Text", "unique": true},
+        "part_number": {"kind": "Text", "optional": true},
+        "description": {"kind": "Text", "optional": true},
+        "height": {"kind": "Number", "default": 1},
+        "full_depth": {"kind": "Boolean", "default": true},
+        "weight": {"kind": "Number", "optional": true, "label": "Weight (kg)"},
+        "weight_grams": {"kind": "Number", "optional": true, "overlay": true}
+      },
+      "relationships": {
+        "manufacturer": {"peer": "OrganizationManufacturer", "optional": false, "cardinality": "one"}
+      }
+    },
+    "DcimModuleType": {
+      "attributes": {
+        "name": {"kind": "Text", "unique": true},
+        "part_number": {"kind": "Text", "optional": true},
+        "weight_grams": {"kind": "Number", "optional": true},
+        "description": {"kind": "Text", "optional": true}
+      },
+      "relationships": {
+        "manufacturer": {"peer": "OrganizationManufacturer", "optional": false, "cardinality": "one"}
+      }
+    },
+    "InterfacePhysical": {
+      "attributes": {
+        "name": {"kind": "Text"},
+        "port_type": {"kind": "Text", "optional": true, "overlay": true}
+      },
+      "relationships": {}
+    }
+  },
+  "dropdowns": {}
+}
