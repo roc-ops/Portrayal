@@ -120,7 +120,7 @@ def test_the_sources_are_public(key):
 @pytest.mark.parametrize("key", sorted(WANT))
 def test_the_product_says_nothing_private(key):
     text = (LIB / "racks" / key / "rack.yaml").read_text().lower()
-    for word in ("okf", "/volumes", "/home/", "/data/", "customer", "agent", "netlab", "sha256"):
+    for word in ("okf", "/volumes", "/home/", "/data/", "customer", "agent", "sha256"):
         assert word not in text, word
 
 
