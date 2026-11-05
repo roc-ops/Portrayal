@@ -410,7 +410,12 @@ function usableCodes(W, ref, cfgName, cfg, slots, offered, zero, flag, counts, U
         if (part && (NOT_A_CONNECTOR.has(part.class) || isPlug(part) || sentenceOf(U, refOf(e)))) continue;   // by data: not a place, or said so
         // a placed part that composes this one connector part presents it as its own slot, at the placement's path (`psu-1` for `psu-1/inlet`)
         const forwarded = !!part?.interface && offered.some(o => e.path.startsWith(`${o.path}/`) && (slots.cages[view] || []).some(s => s.id === o.path && s.interface === part.interface));
-        if (!forwarded && !offered.some(o => o.path === e.path || o.path.startsWith(`${e.path}/`))) lone.push({...e, view});
+        // a seat the build publishes at the element's own path: a connector slot, of an interface the registry knows, that takes a cable end (a pole of a DC port is one, and no free cable end)
+        const seatedAt = (o) => (slots.cages[view] || []).some(s => s.id === o.path && s.kind === 'connector' && registered(U, s.interface) && (s.accepts || []).some(r => W.compByRef(r)?.class === 'port'));
+        const within = (a, b) => !!a && !!b && a.x >= b.x - 0.01 && a.y >= b.y - 0.01 && a.x + a.w <= b.x + b.w + 0.01 && a.y + a.h <= b.y + b.h + 0.01;
+        // a block a placed part draws with no part of its own is judged by the seats drawn inside it; a terminal in it with no seat is reported on its own
+        const holdsSeat = !e.ref && !!e.parent && els.some(o => o !== e && o.parent === e.parent && within(o.box, e.box) && seatedAt(o));
+        if (!forwarded && !seatedAt(e) && !holdsSeat && !offered.some(o => o.path === e.path || o.path.startsWith(`${e.path}/`))) lone.push({...e, view});
       }
     }
     if (lone.length) flag('C20', `${lone.length} drawn inlets, terminals or studs are not offered as a place to land a cord or lug`, lone.length,
