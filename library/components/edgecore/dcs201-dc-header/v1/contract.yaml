@@ -1,0 +1,57 @@
+format: 1
+kind: component
+name: dcs201-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: edgecore-dcs-dc-block-3
+description: >-
+  The three-position pluggable DC terminal on the face of the Edgecore AS5835-54X and AS5835-54T 48 VDC
+  supply, seen from its mating face. A green body carries three cells in a column and a white label
+  strip beside them printed with an earth symbol, "-" and "+" from the top down, and a screw flange at its
+  top and bottom. The cable connector edgecore/dcs201-dc-plug@1 seats at its mate point.
+size: {w: 20.0, h: 18.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The Quick Start Guides draw the terminal without a scale and print no dimension for it. The box is the one the
+  supply's skin already reserves for it (edgecore/dcs201-psu-dc@1, 20.0 by 18.0), itself an estimate; the guide's
+  figure shows a plate taller than it is wide, so the proportions here are not the figure's.
+attrs: {connector: pluggable DC terminal, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED: the Edgecore AS5835-54T and
+    AS5835-54X Quick Start Guides call it "DC power connector (included with 48 VDC PSU only)" (package
+    contents, item 6, page 1) and say "Wire the DC terminal plug" (AS5835-54X guide, "Connect Power", page 2). The
+    DCS202 guide's "DC Power" figure (page 2) draws it; no catalogue line, series or pitch is printed beside it.
+    So the interface claims no maker, standard or pitch.
+  gender: >-
+    NOT STATED. The figure shows a green housing on the supply with three open cells, facing a green plug whose
+    wires enter at the back; it does not say which half carries pins. The cable connector is drawn as the half that
+    seats in this one.
+  marks: >-
+    quick start, AS5835-54T guide page 2 figure "DC Power" - the label strip beside the cells prints an earth
+    symbol, "-" and "+", top to bottom; a small "B2F" label sits above the plate (the airflow marking, not part of
+    the connector). The cells are drawn in that order. The text lists, for the numbered wires of the plug, "1. DC
+    Return, 2. -36 - -75 VDC, 3. Ground", and the figure puts callout 3 on the top wire, 2 on the middle one and 1
+    on the bottom one, so the top cell is the ground, the middle one the "-" cell (-36 to -75 VDC) and the bottom
+    one the "+" cell (DC Return): the marks and the numbered list agree.
+  size: >-
+    estimated - see size-notes.
+  key: >-
+    guide - the figure draws a screw flange at the top and at the bottom of the plate, each with a round screw head
+    and a hole, and the plug has a screw boss at its top. They are drawn as two small circles at the left edge, an
+    estimate of their place.
+  mate: >-
+    derived - the centre of the middle cell, (8.2, 9.0), facing out. The cable connector's own middle contact is at
+    its centre too, so the two align.
+  colour: >-
+    estimated - the guides' figures are colour renders, not photographs, and no photograph of the 48 VDC supply is
+    held. The plate in the figure measures about #73a354 in its shaded face and #89cc6c on its lit top, so the body
+    is drawn #6fa851 with an edge #3d6b2e. The supply's own skin draws the block darker (#2f7d32).
+  relief: >-
+    NONE STATED. No document gives how far the terminal stands out of the supply's face, so it is drawn flush and
+    states no relief.
+elements: {}
+connection-points:
+  mate: {at: [8.2, 9.0], direction: front}
+skins: [default]

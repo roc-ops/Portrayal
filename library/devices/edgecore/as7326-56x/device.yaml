@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7326-56x
-version: 3.0.9
+version: 4.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS7326-56X
@@ -162,7 +162,7 @@ groups:
     term: LED
     role: indicator
     index-origin: 1
-  leds:
+  system-leds:
     term: LED
     role: indicator
     index-origin: 1
@@ -480,11 +480,11 @@ views:
         - {ref: common/led-arrow@1, id: led-port-48, at: [272.6, 11.7], skin: down, group: sfp28-leds, for: port-48, attrs: {port: '48'}, rel-pos: 48}
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0], skin: left, optional: ears, group: furniture, rel-pos: 1}
         - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0], skin: right, optional: ears, group: furniture, rel-pos: 2}
-        - {ref: common/led-indicator@1, id: led-diag, at: [10.5, 3.5], group: leds, rel-pos: 1, for: chassis, attrs: {entity: led0}}
-        - {ref: common/led-indicator@1, id: led-loc, at: [10.5, 11.5], group: leds, rel-pos: 2, for: chassis, attrs: {entity: led1}}
-        - {ref: common/led-indicator@1, id: led-psu1, at: [10.5, 19.5], group: leds, rel-pos: 3, for: rear/psu-1, attrs: {entity: led3}}
-        - {ref: common/led-indicator@1, id: led-psu2, at: [10.5, 27.5], group: leds, rel-pos: 4, for: rear/psu-2, attrs: {entity: led4}}
-        - {ref: common/led-indicator@1, id: led-fan, at: [10.5, 35.5], group: leds, rel-pos: 5, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6], attrs: {entity: led2}}
+        - {ref: common/led-indicator@1, id: led-diag, at: [10.5, 3.5], group: system-leds, rel-pos: 1, for: chassis, attrs: {entity: led0}}
+        - {ref: common/led-indicator@1, id: led-loc, at: [10.5, 11.5], group: system-leds, rel-pos: 2, for: chassis, attrs: {entity: led1}}
+        - {ref: common/led-indicator@1, id: led-psu1, at: [10.5, 19.5], group: system-leds, rel-pos: 3, for: rear/psu-1, attrs: {entity: led3}}
+        - {ref: common/led-indicator@1, id: led-psu2, at: [10.5, 27.5], group: system-leds, rel-pos: 4, for: rear/psu-2, attrs: {entity: led4}}
+        - {ref: common/led-indicator@1, id: led-fan, at: [10.5, 35.5], group: system-leds, rel-pos: 5, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6], attrs: {entity: led2}}
         - {ref: std/sfp-ganged@1, id: port-1, at: [16, 1], group: sfp28, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: port-2, at: [16, 15.5], rotate: 180, group: sfp28, rel-pos: 2}
         - {ref: std/sfp-ganged@1, id: port-3, at: [16, 30], group: sfp28, rel-pos: 3}

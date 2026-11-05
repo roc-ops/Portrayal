@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: xm3352-psu-ac
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -26,6 +26,13 @@ provenance:
   elements: >-
     photo-measured at the same scale: thumbscrew centred at about (4.3, 12.1) on the face, the
     inlet surround x 18.2-40.8, y 1.0-21.5.
+  connector: >-
+    the supply composes telco-systems/xm3352-ac-inlet@1 as `inlet`, the cloverleaf AC inlet its photographs show
+    (the Telco Systems XM-3352 data sheet, its front photographs), at the place the skin has always drawn it. No
+    document held names the inlet's type, maker or part number, so the part is a declared stand-in (its own
+    provenance) and the connector key `telco-ac-cloverleaf-3` claims no standard. telco-systems/xm3352-ac-cord-plug@1,
+    a declared stand-in for the cord connector, mates it. The skin is unchanged, and the exported power port keeps its
+    name `{module}/inlet` and its type `iec-60320-c6`.
 states: [absent]
 elements:
   thumbscrew: {at: [1.1, 8.3], size: [6.4, 6.4], class: fastener}

@@ -1,6 +1,6 @@
 {
  "bay-accepts": {},
- "composed": "9b65010b1b230766",
+ "composed": "9f3d600ce9fedad6",
  "composed-refs": {
   "common/compliance-sticker@1": "1.0.0+6b3c51b31c446689",
   "common/ground-screw-m4@1": "1.0.1+4793ba55a2d2f342",
@@ -12,22 +12,87 @@
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
   "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
   "common/smb-jack@1": "1.0.0+d68248050fc18e92",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
   "std/sfp-ganged@1": "1.1.1+46f35de7bfa8a751",
   "std/smb@1": "1.0.0+8e814eaf9c2e6e5b",
-  "std/usb-a@1": "1.3.0+3c77f06ea6794bfc"
+  "std/usb-a@1": "1.3.0+3c77f06ea6794bfc",
+  "ufispace/psu-120-dc@1": "1.1.0+880781f48123ba61"
  },
  "configs": [
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-0/input": {
+   "ufispace/psu-120-dc@1": {
+    "awg": [
+     18
+    ],
+    "configs": [
+     "ac",
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-0/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-0/pole-batt"
+     },
+     {
+      "role": "gnd",
+      "slot": "psu-0/pole-gnd"
+     }
+    ],
+    "rating-a": 4.5,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/input": {
+   "ufispace/psu-120-dc@1": {
+    "awg": [
+     18
+    ],
+    "configs": [
+     "ac",
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-1/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/pole-batt"
+     },
+     {
+      "role": "gnd",
+      "slot": "psu-1/pole-gnd"
+     }
+    ],
+    "rating-a": 4.5,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
- "gaps": "8c0329667ff7ef9a",
+ "gaps": "2f7efcdf4234a5cd",
  "groups": [
   "furniture",
   "grounding",
   "mgmt",
   "port-leds",
+  "psus",
   "rj45-1g",
   "sfp-1g",
   "sfp-plus",
@@ -73,6 +138,8 @@
   "front/placements/port-7",
   "front/placements/port-8",
   "front/placements/port-9",
+  "front/placements/psu-0",
+  "front/placements/psu-1",
   "front/placements/reset",
   "front/placements/tod",
   "front/placements/usb",
@@ -94,7 +161,7 @@
   "top/placements/screw-t4",
   "top/placements/screw-t5"
  ],
- "names": "70ac08fd525337d4",
+ "names": "8c4e590d66de3b59",
  "placement-addressing": {
   "for": {
    "front/placements/led-port-10": [
@@ -188,6 +255,8 @@
    "front/placements/port-7": 7,
    "front/placements/port-8": 8,
    "front/placements/port-9": 9,
+   "front/placements/psu-0": 0,
+   "front/placements/psu-1": 1,
    "front/placements/reset": 4,
    "front/placements/tod": 3,
    "front/placements/usb": 2,
@@ -251,6 +320,8 @@
   "front/placements/port-7": "sfp-1g",
   "front/placements/port-8": "sfp-1g",
   "front/placements/port-9": "sfp-1g",
+  "front/placements/psu-0": "psus",
+  "front/placements/psu-1": "psus",
   "front/placements/reset": "mgmt",
   "front/placements/tod": "timing",
   "front/placements/usb": "mgmt",
@@ -273,7 +344,7 @@
   "top/placements/screw-t5": "furniture"
  },
  "placement-surface": "8aa589e7f63910f6",
- "shape": "09a989a37b307647",
- "surface": "b4fef61e6a376f7f",
- "version": "2.0.2"
+ "shape": "5e0c08d15647848c",
+ "surface": "c7ec7de7e31630c8",
+ "version": "2.1.0"
 }

@@ -612,6 +612,10 @@ PART_POWER = {
     # AND THE JUNIPER EX3300-24T-DC's FOUR-TERMINAL BLOCK (A+, B+, A-, B-) under a clear cover,
     # the input of the switch's built-in DC supply: ring lugs on the terminals, the same row.
     "juniper/ex3300-dc-terminal": "dc-terminal",
+    # AND THE JUNIPER EX2200-24T-DC's AND EX2300-24T-DC's FOUR-TERMINAL BLOCKS, the input of each switch's
+    # built-in DC supply: ring lugs on the terminals, the same row for the same reason.
+    "juniper/ex2200-dc-terminal": "dc-terminal",
+    "juniper/ex2300-dc-terminal": "dc-terminal",
     # A PLUGGABLE TWO-POLE BLOCK IS WHERE THE WIRE LANDS TOO, so the same row: the
     # ECS4530-54CSFP-DC-I takes -48 V in a screw-clamp plug seated in a header, the
     # plug pulled out whole rather than lugs lifted off screws.
@@ -623,11 +627,11 @@ PART_POWER = {
     # (-48VA RETA -48VB RETB) in one pluggable screw-clamp header on the chassis
     # face. It is still where a supply's wire is landed, so the same row.
     "telco-systems/tm-7124s-dc-feed": "dc-terminal",
-    # AND THE XM-8424H's DC SUPPLY MODULE: a smaller two-pole screw-clamp plug (20.1 mm
+    # AND THE XM-8424H's DC SUPPLY MODULE: a smaller two-cell pluggable block (20.1 mm
     # against the ECS4530's 32.1), so its own part, landing the -36 to -72 V feed. The same row.
-    "telco-systems/xm8424-dc-plug": "dc-terminal",
-    # AND THE XM-3352's DC SUPPLY: a three-pole screw-clamp plug, the same row.
-    "telco-systems/xm3352-dc-plug": "dc-terminal",
+    "telco-systems/xm8424-dc-header": "dc-terminal",
+    # AND THE XM-3352's DC SUPPLY: a three-cell pluggable block, the same row.
+    "telco-systems/xm3352-dc-header": "dc-terminal",
     # AND THE AURCORE AIS SWITCHES' FIVE-WAY HEADER, `+ - earth + -`: two DC feeds
     # landed in one pluggable screw-clamp plug on the top face, the TM-7124S case
     # again. Still where a supply's wire is landed, so the same row (#737).
@@ -674,6 +678,29 @@ PART_POWER = {
     # THE NXA-PDC-930W'S DC POWER CONNECTOR IS A THREE-POSITION BLOCK THE GUIDE DOES NOT NAME THE MAKER OF.
     # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
     "cisco/nxa-pdc-930w-dc-header": "other",
+    # THE ASR 9000 FIXED-PORT DC SUPPLIES' POWER CONNECTOR IS A TWO-SOCKET BLOCK THE GUIDE DOES NOT NAME THE SERIES OF.
+    # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "cisco/a9k-dc-header": "other",
+    # THE QFX5200-48Y DC SUPPLIES' POWER HEADER IS A THREE-POSITION HEADER NEITHER LIBRARY NAMES, from a maker the
+    # guide does not name. It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "juniper/qfx5200-48y-dc-header": "other",
+    # THE QFX5241 AND QFX10002 DC SUPPLIES' POWER CONNECTORS ARE VENDOR CONNECTORS THE GUIDES DO NOT NAME THE PART OF.
+    # Neither is a screw terminal, so each is `other`, and POWER_LABEL says which connector.
+    "juniper/qfx524x-dc-header": "other",
+    "juniper/qfx10002-dc-header": "other",
+    # THE DC CONNECTORS OF THE EDGECORE AS5835, AMX3200 AND AGR560 48 VDC SUPPLIES ARE VENDOR CONNECTORS THE
+    # DOCUMENTS DO NOT NAME THE PART OF. None is a screw terminal, so each is `other`, and POWER_LABEL says which.
+    "edgecore/dcs201-dc-header": "other",
+    "edgecore/amx-3200-dc-header": "other",
+    "edgecore/agr560-dc-header": "other",
+    # THE JPSU-150-DC-AFO'S DC POWER CONNECTOR IS A THREE-POSITION PLUGGABLE BLOCK THE GUIDES DO NOT NAME THE MAKER OF.
+    # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "juniper/jpsu-150-dc-header": "other",
+    # THE NC5K-PDC-930W SUPPLIES' DC POWER CONNECTOR IS THE SAME BLOCK drawn at the size of their housing: the same row.
+    "cisco/nc5k-pdc-930w-dc-header": "other",
+    # THE PSU-242-DEERN'S DC INPUT CONNECTOR IS A SIX-POSITION BLOCK, TWO ROWS OF THREE, THAT THE GUIDE DOES NOT NAME THE
+    # MAKER OF. It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "ufispace/psu-242-dc-header": "other",
     # A RACK PDU'S FIXED INPUT CORD. The Eaton G4 EVMI2130X has no inlet: its feed
     # is a 10 ft cord ending in a NEMA L21-30P twist-lock plug, and the part that
     # stands for it is the cord leaving the end cap. `nema-l21-30p` is a
@@ -729,7 +756,17 @@ POWER_LABEL = {
     "std/12v-2x6-header": "12V-2x6 16-pin",
     "common/pla03-receptacle": "Positronic PCS PLA03 (3-position)",
     "oscilloquartz/osa542x-dc-header": "Latching power header (3-position, - Gnd +)",
+    "juniper/jpsu-150-dc-header": "DC power connector block (3-position, + - earth)",
     "cisco/nxa-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
+    "cisco/a9k-dc-header": "DC power connector block (2-position, +DC -DC)",
+    "juniper/qfx5200-48y-dc-header": "DC power header (3-position, RTN, -36 to -72 V, grounding)",
+    "juniper/qfx524x-dc-header": "DC power connector (6-position, 2x3)",
+    "juniper/qfx10002-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
+    "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
+    "edgecore/amx-3200-dc-header": "DC power connector (3-pin)",
+    "edgecore/agr560-dc-header": "DC power connector (2-socket)",
+    "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
+    "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
 }
 
 
@@ -853,6 +890,11 @@ PART_MEDIA = {
     ("qsfp", "40g"): "40gbase-x-qsfpp",
     ("qsfp28", "100g"): "100gbase-x-qsfp28",
     ("qsfp-dd", "400g"): "400gbase-x-qsfpdd",
+    # A QSFP-DD CAGE PLACED AT 100G TAKES A QSFP28 OPTIC, and the library already
+    # types it so: a device's QSFP-DD cages at 100G reach IFACE_TYPE's (qsfp, 100g)
+    # row. The Juniper MX304's LMIC16 states `media: qsfp-dd, speed: 100g` on twelve
+    # of its sixteen cages and would otherwise take the card's 400G type on all.
+    ("qsfp-dd", "100g"): "100gbase-x-qsfp28",
     # A PLACEMENT'S OWN 800G, so a QSFP-DD800 port that says so types from
     # itself; the card's `qsfp-dd-800g` gives the same answer (QDD800_ATTR).
     ("qsfp-dd", "800g"): "800gbase-x-qsfpdd",

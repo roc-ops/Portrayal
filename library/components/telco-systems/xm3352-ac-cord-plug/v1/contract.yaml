@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: xm3352-ac-cord-plug
+version: 1.0.0
+class: port
+mates: telco-ac-cloverleaf-3
+profile: power
+description: >-
+  The cord connector of the Telco Systems XM-3352's AC supply, seen from the cord side as seated. A dark
+  moulded block at the outline of the inlet it seats in, with the cord entering its middle. It seats in a
+  `telco-ac-cloverleaf-3` connector at its own mate point. It carries one cord, not three wires.
+size: {w: 22.6, h: 20.5}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the inlet it seats in, telco-systems/xm3352-ac-inlet@1, 22.6 by 20.5. No document held draws
+  or measures a cord connector for this supply.
+attrs: {media: xm3352-ac, connector: AC cord connector, positions: 3}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    NO DOCUMENT HELD SHOWS A CORD CONNECTOR FOR THIS SUPPLY: the Telco Systems XM-3352 data sheet's photographs show
+    the supply with nothing seated in its inlet. THE PART IS A STAND-IN FOR THE CORD CONNECTOR, drawn as the half
+    that seats in telco-systems/xm3352-ac-inlet@1 and no more.
+  size: >-
+    estimated - see size-notes.
+  cord: >-
+    estimated - the cord is drawn as one plain dark disc because no document states a cord's size or colour.
+  far-end: >-
+    NOT DRAWN. The other end of the cord lands on the site's AC source, which is not this supply's.
+  depth: >-
+    NOT STATED. No document gives how far the cord connector stands out of the supply, so the part draws a plan
+    outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [11.3, 10.3], direction: front}
+  cord: {at: [11.3, 10.3], direction: front}
+skins: [default]
