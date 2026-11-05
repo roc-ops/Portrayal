@@ -1,17 +1,26 @@
 format: 1
 kind: module
 name: mx-dpc-blank
-version: 2.0.0
+version: 2.1.0
 class: blank
 behaviour: fills
 profile: networking
 description: >-
-  Blank cover panel for an unoccupied MX240/MX480 DPC/MPC slot, as the MX480 reference photograph shows
-  in slots 5, 2 and 1 - a plain silver plate with a short slotted knob at each end and a printed 0/1 rotary
-  mark beside the left one.
+  Juniper DPC-SCB-BLANK, the blank cover panel for an unoccupied DPC, MPC or SCB slot of the MX240, MX480 and
+  MX960 - a plain silver plate with a short slotted knob at each end, drawn horizontal like the cards it stands in
+  for (the MX960 seats it turned 90). Two printings of the one part: `default` carries a printed 0/1 rotary mark
+  beside the left knob, as the MX480 reference photograph shows in slots 5, 2 and 1; `plain` has no mark, as the
+  MX960 reference photograph shows.
 attrs:
-  model: MX Series DPC slot blank
+  model: DPC-SCB-BLANK
 provenance:
+  model: >-
+    Juniper MX480 Universal Routing Platform Hardware Guide, Table 5 (MX480 Router Hardware Components and CLI
+    Terminology, page 17): 'Interface module blank panel | DPC-SCB-BLANK MIC-BLANK'; Juniper MX960 Universal
+    Routing Platform Hardware Guide, Table 5 (page 23): 'DPC or SCB blank panel | DPC-SCB-BLANK'. One part number
+    in both guides, and the two photographs show one plate and one knob; only the printed 0/1 mark differs, so it
+    is one part with two printings. The MX240 hardware guide's table lists no DPC or SCB blank, and no MX240
+    photograph shows one, so the MX240 places the printing of the MX480.
   states: >-
     NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal
     that fills an opening: it has no indicator to light and no condition to report,
@@ -21,19 +30,29 @@ provenance:
   size: >-
     photo-measured plate, estimated envelope - the plate is 396.0 x 29.5 centred in the 413.5 slot envelope
     every card of the MX240/MX480 cage reserves (L123: one bay, one size). Off the MX480 front photograph
-    (body px 35-1466 = 443 mm, 3.230 px/mm), slots 5, 2 and 1: plate px 155-1435 = 396.3 mm.
+    (body px 35-1466 = 443 mm, 3.230 px/mm), slots 5, 2 and 1: plate px 155-1435 = 396.3 mm. The MX960
+    front photograph, at 2.054 px/mm, gives 396.6 mm for the plate of the blanks in slots 2, 4, 5 and 8-11, and
+    the MX960 slot envelope is the same 413.5.
   knobs: >-
     photo-measured - the MX480 front photograph's blanks (slots 5, 2, 1), 3.230 px/mm: NOT the cards'
     29 mm ejector lever but a short knob at each end, 63.5 px = 19.6 mm long and about 9 mm tall with
     a slot across it, overhanging the plate end by about 4 mm (card x 4.7-24.3 and 389.2-408.8). The left
     one carries a printed rotary mark: a 0 above, a 1 level with the knob, and an arc between, each placed
-    off the photograph to about 0.5 mm. 1.x drew card levers and a round latch boss here instead.
+    off the photograph to about 0.5 mm. 1.x drew card levers and a round latch boss here instead. The MX960
+    front photograph shows the same knob at each end at 2.05 px/mm (about 19.0 mm long, 8.4 mm across, a
+    slot lengthways), within a pixel of the MX480's measure, and no printed mark beside it; the `plain` skin
+    draws it without the mark.
 states: [absent]
 size:
   w: 413.5
   h: 29.5
 size-notes: >-
-  w is the slot envelope every MX240/MX480 card reserves (the 413.5 lever envelope of the cards, #261),
+  w is the slot envelope every MX240/MX480/MX960 card reserves (the 413.5 lever envelope of the cards, #261),
   so a blank seats like a card; the plate inside it is photo-measured and the knobs do not reach the envelope's
   ends. h is the plate height, estimated as the cards'.
 size-confidence: {w: estimated, h: estimated}
+skins: [default, plain]
+supersedes:
+  - ref: juniper/mx960-blank@1
+    signature: sha256:ce392a230c6e21c889cf5f393aac7cb64ee96853c06e7fadc1755128b5244ec8
+    from: 6b4139323a19
