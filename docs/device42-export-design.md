@@ -35,12 +35,12 @@ instance.
 
 Sheets 1, 2, 3, 5 and 6 are written for one rack by `kit/rack/device42.js`
 (`device42Sheets`, `sheetCsv`). Sheet 4 is written once for the library by
-`spec/tools/portrayal/device42_export.py`.
+`spec/tools/dev/device42_export.py`.
 
 ## Running it, and why nothing is published yet
 
 ```sh
-python3 spec/tools/portrayal/device42_export.py --out <folder>
+python3 spec/tools/dev/device42_export.py --out <folder>
 ```
 
 The tool reads `library/exports/netbox/device-types/` and writes

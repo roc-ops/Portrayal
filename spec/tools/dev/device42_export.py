@@ -6,7 +6,7 @@ devices and devices-to-racks, in that sequence. A hardware model needs a name;
 its type, size and manufacturer are optional. This tool writes the
 hardware-model sheet, one row for each model a maker sells:
 
-    python3 spec/tools/portrayal/device42_export.py --out DIR
+    python3 spec/tools/dev/device42_export.py --out DIR
 
 The sheet is not published: nothing is written unless `--out` says where, and
 no file it writes is committed.
@@ -118,7 +118,7 @@ def hardware_models(source=SOURCE):
 README = """# Device42 sheets
 
 The hardware-model sheet for Device42's spreadsheet import, written by
-`spec/tools/portrayal/device42_export.py` from the NetBox device types under
+`spec/tools/dev/device42_export.py` from the NetBox device types under
 `library/exports/netbox/device-types/`. The rack side (buildings, rooms, racks,
 devices and devices-to-racks) is written from a rack file by the Rack Builder
 (`kit/rack/device42.js`) and is numbered `1-` to `6-` in the import sequence;

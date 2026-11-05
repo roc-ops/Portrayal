@@ -17,7 +17,7 @@ import pathlib
 import pytest
 import yaml
 
-from portrayal import device42_export as D
+from portrayal_dev import device42_export as D
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 TYPES = ROOT / "library/exports/netbox/device-types"
