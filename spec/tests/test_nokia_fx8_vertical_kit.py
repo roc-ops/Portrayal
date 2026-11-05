@@ -47,6 +47,53 @@ def test_a_shelf_and_its_kit_stack_at_the_pitch_the_figure_shows():
     assert pitch == STACK_PITCH_RU
 
 
+# Tables 2 and 3 of the unit data sheet print a bracket's height, width and length: read as the bar's
+# height, the ear's rise and the length across the rack (Figure 2 of the sheet draws each so)
+BRACKETS = {
+    "below": {"bar-h": 25.4, "ear-h": 92.44, "length": 486.41},    # shelf horizontal mount bracket, Table 3
+    "above": {"bar-h": 31.5, "ear-h": 62.0, "length": 486.75},     # top cross bracket, Table 2
+}
+
+
+def shelf_brackets():
+    return {b["id"]: b for b in load("nfxs-e-bb")["chassis"]["ears"]["rolled"]}
+
+
+def test_the_shelf_states_the_two_brackets_that_hold_it_stood_on_its_side_at_the_sizes_the_sheet_prints():
+    brackets = shelf_brackets()
+    assert sorted(brackets) == ["above", "below"]
+    for name, size in BRACKETS.items():
+        got = brackets[name]
+        assert got["side"] == name
+        for key, value in size.items():
+            assert got[key] == value, (name, key)
+        assert got["length"] > 465.1,"long enough to reach the hole columns of both posts"
+        assert got["ear-w"] > 0 and got["color"].startswith("#"), name
+
+
+def test_the_brackets_say_which_figures_they_are_read_from_and_what_is_estimated():
+    doc = load("nfxs-e-bb")
+    note = doc["provenance"]["rolled-brackets"]
+    assert note["confidence"] == "drawing"
+    for words in ("Figure 84", "Table 2", "Table 3", "ear width", "colour"):
+        assert words in note["note"], words
+    assert any(g["what"] == "rolled-brackets" for g in doc["gaps"])
+
+
+def test_a_device_that_states_no_brackets_publishes_none_and_one_that_does_publishes_floats():
+    from portrayal.render import published_ears
+    assert "rolled" not in published_ears({"behind": True})
+    out = published_ears({"rolled": [{"id": "x", "side": "below", "bar-h": 25, "length": 486, "ear-h": 92, "ear-w": 28}]})
+    assert out == {"rolled": [{"id": "x", "side": "below", "bar-h": 25.0, "length": 486.0, "ear-h": 92.0, "ear-w": 28.0}]}
+
+
+def test_the_shelf_validates_against_the_device_schema_with_the_brackets():
+    import json
+    import jsonschema
+    schema = json.loads((ROOT / "spec" / "schemas" / "device.schema.json").read_text())
+    jsonschema.validate(load("nfxs-e-bb"), schema)
+
+
 def test_each_part_names_its_unit_data_sheet_with_a_hash_and_says_the_units_are_read_off_a_figure():
     for name in PARTS:
         doc = load(name)

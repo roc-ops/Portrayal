@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: nfxs-e-bb
-version: 1.0.2
+version: 1.0.3
 maturity: modelled
 manufacturer: Nokia
 model: 7360 ISAM FX-8 (NFXS-E BB)
@@ -45,6 +45,22 @@ provenance:
       figures are taken, and the 485 is not the body. The body modelled is the 446.5 between the
       flange folds; the flanges (ears) are not drawn, per the method, and their extent is
       (480.5 - 446.5) / 2 = 17 mm a side. RU 8 is derived (8 x 44.45 = 355.6), not stated.
+  rolled-brackets:
+    confidence: drawing
+    note: >-
+      The brackets that hold the shelf stood on its side, drawn in the rack elevation at roll 90 and
+      270. Figure 84 of 3HH12893AAAATCZZA29 (printed page 168) draws a one-piece bracket under the
+      shelf and a second over it, each a bar across from post to post with an ear bolted to each post.
+      The kit's unit data sheet 3FE67300BAAATQZZA01 (Edition 01, page 5) prints each part's height, width
+      and length: Table 3, the shelf horizontal mount bracket, 25.40 x 92.44 x 486.41 mm; Table 2, the
+      top cross bracket, 31.5 x 62 x 486.75 mm. Its Figures 1 and 2 draw an ear rising from a bar, so
+      the height is read as the bar, the width as the ear's rise and the length as the span across the
+      posts; Figure 84 agrees at its scale (one unit, 44.45 mm). The ear width, 28 mm, is read off Figure
+      84 and is an estimate. The slope between ear and bar is drawn and carries no size. The colour is the
+      library's silver for bare sheet-metal ears (#c8cacc), a neutral and not a reading: no held source
+      states it. Where the bars sit is read off the figure: the lower bar's upper edge on the shelf's
+      lower edge, the upper bar's lower edge on its upper edge. No source describes a roll of 270, so
+      the brackets are drawn the same there.
   panel-scale:
     confidence: drawing
     note: >-
@@ -189,7 +205,18 @@ chassis:
   depth: 278.3
   ru: 8
   color: '#c9ccd0'
+  ears:
+    rolled:
+    - {id: below, side: below, bar-h: 25.4, length: 486.41, ear-h: 92.44, ear-w: 28.0, color: '#c8cacc'}
+    - {id: above, side: above, bar-h: 31.5, length: 486.75, ear-h: 62.0, ear-w: 28.0, color: '#c8cacc'}
 gaps:
+- what: rolled-brackets
+  reason: needs-drawing
+  note: >-
+    The kit's two brackets are drawn as a bar and two ears. The unit data sheet prints their sizes but
+    not their shapes, so the ear width and the slope between ear and bar are read off Figure 84. The
+    upper bracket's side tabs, the slots in its strip and the bolt pattern are not drawn.
+  wanted: a dimensioned drawing of the shelf horizontal mount bracket and the top cross bracket
 - what: line-cards
   scope: [lt-1, lt-2, lt-3, lt-4, lt-5, lt-6, lt-7, lt-8]
   reason: needs-drawing

@@ -487,6 +487,9 @@ chassis:
     positions:
       - {name: flush, at: 0, default: true}
       - {name: mid, at: 228, racks: [2-post], part: {kit: acme/slide@1, part: mid}}
+    rolled:                 # optional; the brackets that hold it rolled a quarter turn
+      - {id: below, side: below, bar-h: 25.4, length: 486.41, ear-h: 92.44, ear-w: 28.0,
+         color: "#c8cacc"}  # `color` optional
   kits:
     - {ref: acme/slide@1, supply: in-box,
        depth: {config: four-post, range: {square: [685, 868]}}}
@@ -499,6 +502,18 @@ chassis:
   when a source gives it. At most one position is `default` (L160). `racks`
   takes the words a kit configuration's `racks` takes. `part` names a kit the
   device lists and the `id` of one of that kit's parts (L162).
+- `rolled` is **one-way** (a new optional key, added with the drawing of a
+  quarter turn in the rack elevation). Each entry is a bracket that holds the
+  device when a rack file rolls it `90` or `270`: `side` (`below` or `above`)
+  says which edge of the turned body its bar lies against, `bar-h` is the bar's
+  height, `length` its span from the outer edge of one ear to the other (at
+  least the distance between the rail hole columns, 465.1 mm, to reach both
+  posts), `ear-h` the height of each ear standing on the bar's lower edge,
+  `ear-w` how far an ear stands in from the end, and `color` its fill. All
+  lengths are millimetres. Only the rack elevation reads it; an older reader
+  ignores the key and draws a quarter turn as before. The brackets are the
+  rack's: they are drawn alike at 90 and at 270 and a device that states none
+  draws none.
 - A kit entry's `ref` is a `kind: kit` (L161), listed once. `supply` is
   `in-box` or `optional`, and `variant: reversed` marks a reverse-mount kit.
   `depth` replaces the `depth` of one configuration of the kit for this device:
@@ -578,8 +593,9 @@ states neither (#907):
 
 - **`ears` is an object, always.** The bare string `ears: behind` is
   published as `{"behind": true}`; an object is published with the keys it
-  states (`behind`, `h`, `y`, `color`, `positions`) and no others, so a reader
-  asks `ears.behind === true` and reads `ears.positions || []`. `color` is the
+  states (`behind`, `h`, `y`, `color`, `positions`, `rolled`) and no others, so a reader
+  asks `ears.behind === true` and reads `ears.positions || []`. `rolled` is the
+  list the manifest writes, its lengths floats. `color` is the
   string the manifest writes, and absent means silver. `h`, `y` and each
   position's `at` are floats. A position keeps every key the manifest writes.
   From #865 to #907 the bare string was published as the string, on main

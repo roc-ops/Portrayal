@@ -615,6 +615,9 @@ refused.
   draws the quarter turn (`90` clockwise, from the manual's Figures 82 and 84),
   and the kit's two parts that take units, the air intake baffle and drip tray
   and the top baffle, are ordinary devices placed under and over the shelf.
+  The two brackets that hold the shelf to the posts are drawn too, from the
+  shelf's own `chassis.ears.rolled` (a bar across against each edge and an ear
+  on each post, alike at 90 and 270); they take no units of their own.
   Not built: the lug size and cable exit as facts of the mounting, the kit
   as a contract, and the 3D solid and cables of a turned device. A
   `wall-frame-vertical` product (FS-SVWM-1U and -4U) hangs every device face

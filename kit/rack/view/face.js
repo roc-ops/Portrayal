@@ -290,3 +290,20 @@ export function earPlanFor(ref, cfg, distAt) {
   }
   return EAR_PLANS.get(key);
 }
+
+// THE BRACKETS A DEVICE ROLLED A QUARTER TURN IS HELD BY (`chassis.ears.rolled`,
+// which configs.json publishes): the list the device states, or [] where it
+// states none or its index cannot be read. The elevation draws them round the
+// turned body; nothing else reads them. Memoized per device. Kept per library.
+const ROLLED = new Map();
+export function rolledBracketsFor(ref, distAt) {
+  const key = `${libraryId(distAt)}:${ref}`;
+  if (!ROLLED.has(key)) {
+    ROLLED.set(key, (async () => {
+      await Promise.resolve(distAt.ready).catch(() => {});   // a layered library knows its roots first
+      const idx = await jdist(distAt(`${ref}.configs.json`)).catch(() => null);
+      return idx?.chassis?.ears?.rolled ?? [];
+    })());
+  }
+  return ROLLED.get(key);
+}

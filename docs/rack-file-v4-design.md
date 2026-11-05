@@ -51,7 +51,7 @@ same way.
 | key | on | from | what the first version-4 reader does with it |
 |---|---|---|---|
 | `ru` in steps of 0.5 | item | section 2 | read, fitted, drawn, exported |
-| `roll` (`90`, `180`, `270`) | item | section 6 | read, fitted by the rolled box; `180` drawn and routed; quarter turns drawn turned in the elevation (3D solid and cables stay an outline) |
+| `roll` (`90`, `180`, `270`) | item | section 6 | read, fitted by the rolled box; `180` drawn and routed; quarter turns drawn turned in the elevation, with the brackets a device states in `chassis.ears.rolled` (3D solid and cables stay an outline) |
 | `states`, `readings` | item, zero-U entry | section 4 | read, checked against the catalogue, applied, exported |
 | `swaps`, `fields` | zero-U entry | section 4 | read and applied, as on an item |
 | `heldBy` `{parts}` | zero-U entry | section 5 | read, fitted, exported |

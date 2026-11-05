@@ -138,6 +138,16 @@ gets no generic ear, so it would have no use for `h`, `y` or `color`.)
   L43 stands down for `{behind: true}` as it does for the string.
   `fs/uscmh-sfdabsb2u` now writes the object, `behind: true` with a `proud`
   position, because a bare string cannot hold a position.
+- **`rolled`** is a list of the brackets that hold the device when a rack file
+  rolls it a quarter turn (`roll: 90` or `270`), which the rack elevation draws
+  and nothing else reads. Each is `{id, side, bar-h, length, ear-h, ear-w}` and
+  an optional `color`, in millimetres: a bar across the rack against the turned
+  body's lower (`below`) or upper (`above`) edge, and an ear on each post
+  standing on the bar's lower edge, `length` apart end to end. The 7360 ISAM
+  FX-8 shelf states two, read from its vertical mount kit's data sheet and
+  installation figure. The brackets are the rack's, so they are drawn alike at
+  90 and at 270. A new key, so a reader that does not know it draws a quarter
+  turn without them.
 - `ears` and `kits` are for a `rack` device only (L125).
 
 The [rack products note](rack-products-design.md) (section 7.1) proposes one
