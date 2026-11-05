@@ -1,10 +1,11 @@
 format: 1
 kind: component
 name: tm-7124s-dc-feed
-version: 1.0.0
+version: 1.1.0
 class: inlet
 behaviour: mounts
 profile: networking
+interface: screw-terminal-4
 description: >-
   The four-pole green DC feed connector at the left end of the TM-7124S face, labelled for
   two feeds (-48VA RETA / -48VB RETB): a pluggable screw-clamp header held by a screw above
@@ -28,8 +29,37 @@ provenance:
     TWO FEEDS, ONE CONNECTOR, ONE EXPORTED POWER PORT. The header lands feed A (-48VA/RETA)
     and feed B (-48VB/RETB), but a part exports one power port, so a DCIM sees one inlet
     where there are two cableable feeds - recorded as the dc-feed-a-b gap on the device.
+  connector: >-
+    the part presents the registered key `screw-terminal-4`, the four-position pluggable screw-clamp
+    header the registry already described for it, and telco-systems/tm-7124s-dc-cable-plug@1, a
+    declared stand-in for the cable connector, mates it. THE PART IS A DECLARED STAND-IN FOR THE HEADER:
+    no document held names its maker, series or part number, the data sheets call it only "DC feed
+    connector", and the drawing it is read from states no pitch, so the key claims none. The skin
+    and the box are unchanged.
+  gender: >-
+    NOT STATED. The stencil and the render show the header seated on the chassis, four poles in a
+    column and no cable; neither says which half carries pins. The cable connector is drawn as the
+    half that seats in this one.
+  roles: >-
+    drawing - the stencil prints `-48VA`, `RETA`, `-48VB` and `RETB` in a column above the four poles,
+    in that order. Read top to bottom, the poles are `batt` (feed A), `rtn` (feed A), `batt` (feed B) and
+    `rtn` (feed B); `dc.yaml` writes `batt` as "-48V" and `rtn` as "RET". The legend sits above the
+    header, not beside each pole, so the pairing of word and pole is the legend's reading order and
+    nothing printed on a pole. The data sheets print no nominal for the feed (the 2019 edition
+    says "-48VDC, -60VDC, +24VDC nominal" for the supply it orders with it, the 2025 edition
+    "-24VDC to -60VDC"). NO DC PORT IS STATED HERE, ON PURPOSE: the part exports one power
+    port for two feeds (see `feeds`), and a port whose poles are one header's contacts is stated
+    in a later change, a minor on the devices that carry this part.
+  mate: >-
+    derived - the centre of the pole column, (5.7, 20.0), facing out. The cable connector's own
+    mate point is at the same place, so the two align.
+  colour: >-
+    drawing and photograph - a pale green block with dark pole cells and a silver screw at each end,
+    as the stencil and the 2025 render show it. The drawn pole cells are a dark green where the
+    stencil draws black cells; the skin is not edited here.
 elements:
   poles: {at: [2.3, 9.9], size: [6.8, 20.1], class: terminal}
 connection-points:
   dc-in: {at: [5.7, 20.0], direction: front}
+  mate: {at: [5.7, 20.0], direction: front}
 skins: [default]

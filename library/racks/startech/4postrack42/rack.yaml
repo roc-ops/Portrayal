@@ -1,0 +1,164 @@
+format: 1
+kind: rack
+name: 4postrack42
+version: 1.0.0
+maturity: modelled
+manufacturer: StarTech.com
+model: 4POSTRACK42
+part-numbers:
+  4POSTRACK42: 42U 4-Post Server Rack, 19in Open Frame Rack
+description: >-
+  The StarTech.com 42U open frame rack, four posts in black steel with L-shape
+  rails that have square holes for cage nuts. The rails are adjustable from 22
+  to 40 in of mounting depth. It ships flat pack with four casters and four
+  leveling feet, and has a base plate with floor-anchoring holes and a
+  grounding lug. It is not wall-mountable. The casters, feet and base plate
+  are described here and are not data yet: the rack product has no key for a
+  base.
+form: 4-post-frame
+ru: 42
+numbering:
+  direction: bottom-up
+  start: 1
+width: 19
+holes:
+  style: square
+  fixing: cage nut
+hole-centres: 465.1
+opening: 450.85
+rails:
+  - id: front
+  - id: rear
+    depth:
+      min: 558.8
+      max: 1016.0
+outer:
+  w: 600
+  h: 2040
+  d: 1130
+weight-kg: 38.51
+load:
+  static-kg: 600.10
+  rolling-kg: 360.06
+datasheet:
+  title: StarTech.com 4POSTRACK42 product page, printed 2026-11-05
+  url: https://www.startech.com/en-us/server-management/4postrack42
+provenance:
+  ru:
+    confidence: datasheet
+    note: >-
+      The U Height row of the StarTech.com 4POSTRACK42 product page, printed
+      2026-11-05, page 1, says 42U.
+  form:
+    confidence: datasheet
+    note: >-
+      The Rack Type row (4-Post) and the Frame Type row (Open Frame) on page 1.
+      The box list on page 2 has two left and two right vertical rails joined by
+      corner and center sections and brackets.
+  width:
+    confidence: datasheet
+    note: >-
+      The product listing line on page 3 says 19in Open Frame Rack, and the
+      Industry Standards row on page 2 says EIA/ECA-310-E.
+  holes:
+    confidence: datasheet
+    note: >-
+      The Mounting Hole Types row on page 2 says Square (For Cage Nut), and the
+      box holds 50 M6 cage nuts. The page does not say those are the nuts for the
+      rails, so no thread is written, and it prints no hole size.
+  rails:
+    confidence: datasheet
+    note: >-
+      Page 1 prints the Minimum Mounting Depth as 22.0 in [56 cm], written as
+      558.8 mm. The Maximum Mounting Depth row prints 3.3 ft [1.0 m], and the
+      page title and the listing line on page 3 print 40 in. Not a conflict:
+      40 in is 3.33 ft, which rounds to 3.3 ft, and 40 in is written, 1016.0 mm.
+      That is a reading of the rounded row. The rear rail adjusts between the
+      two; the page prints no step.
+  outer:
+    confidence: datasheet
+    note: >-
+      Page 1 prints the Product Length as 3.7 ft [1.1 m], the Product Width as
+      23.6 in [60.0 cm], the Product Height as 6.5 ft [2.0 m] and Height with
+      Casters as 6.7 ft [2.0 m]. The lengths and heights are in feet to one
+      decimal, good to about 15 mm, so they are readings and are written to the
+      nearest 10 mm: d 1130 and h 2040, the height with the casters fitted. The
+      height without them is 6.5 ft, about 1980 mm. The width is 600 mm from
+      the metric print. Length is read as front to back, as the sheet labels
+      width and height beside it.
+  weight-kg:
+    confidence: datasheet
+    note: >-
+      Page 1 prints Weight of Product as 84.9 lb [38.5 kg]. The page prints
+      inches and pounds first. The pounds figure converted, 38.51 kg, is the
+      finer and is written.
+  load:
+    confidence: datasheet
+    note: >-
+      Page 1 prints Weight Capacity (Stationary) as 1323.0 lb [600 kg] and
+      Weight Capacity (Rolling) as 793.8 lb [360 kg]. The pounds figures
+      converted, 600.10 and 360.06 kg, are the finer and are written.
+  numbering:
+    confidence: estimated
+    note: >-
+      A stand-in. The page lists U-Markings and does not say which way the
+      labels run; bottom-up from 1 is the default of the rack file.
+  hole-centres:
+    confidence: estimated
+    note: >-
+      A stand-in for the EIA-310 figure, 465.1 mm between hole lines (18.312
+      in). The page names the standard as EIA/ECA-310-E and prints no hole
+      spacing.
+  opening:
+    confidence: estimated
+    note: >-
+      A stand-in for the EIA-310 minimum clear opening between the rails, 450.85
+      mm (17.75 in). The page prints no figure for it.
+gaps:
+  - what: numbering
+    reason: vendor-silent
+    note: The page lists U-Markings and does not say which way they run.
+    wanted: A photograph of the rail showing the unit labels, or a dimensioned drawing.
+  - what: hole-centres
+    reason: vendor-silent
+    note: The page prints no spacing between the hole lines.
+    wanted: A dimensioned front view of the vertical mounting rails.
+  - what: opening
+    reason: vendor-silent
+    note: The page prints no clear opening between the rails.
+    wanted: A dimensioned front view, or a measurement between the rails.
+  - what: hole-size
+    reason: vendor-silent
+    note: The page says the holes are square for a cage nut and prints no size.
+    wanted: A dimensioned drawing of the rail, or a measurement of a square hole.
+  - what: rail-depth-step
+    reason: vendor-silent
+    note: >-
+      The page prints the two ends of the depth range and no step, so the Rack
+      Builder takes any depth between them.
+    wanted: The step, or the positions of the adjustment holes, from the maker.
+  - what: outer-size
+    reason: needs-drawing
+    note: >-
+      The depth and the heights are printed in feet to one decimal, good to
+      about 15 mm, and the page has no drawing. d 1130 and h 2040 are readings
+      to the nearest 10 mm.
+    wanted: A dimensioned drawing, or the sizes in millimetres, from the maker.
+  - what: max-device-depth
+    reason: vendor-silent
+    note: The page prints no usable depth for a device, so none is written.
+    wanted: The usable depth between the rails, from the maker.
+  - what: casters
+    reason: needs-drawing
+    note: >-
+      The frame ships with four casters, and the rack product has no key for a
+      base yet, so they are in the description only. The page prints no caster
+      size.
+    wanted: A base key in the rack product, and the caster size from the maker.
+  - what: leveling-feet-and-base-plate
+    reason: needs-drawing
+    note: >-
+      The page lists four leveling feet, a base plate with floor-anchoring holes
+      and a grounding lug. They are in the description only, for the same reason
+      as the casters, and the page prints no position or size for them.
+    wanted: A base key in the rack product, and a dimensioned drawing of the base plate.

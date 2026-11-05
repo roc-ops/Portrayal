@@ -759,6 +759,24 @@ async function ensureViewer() {
   return viewer;
 }
 
+// THE SELECTED FIBRE'S FAR END IN 3D. The faces are baked into textures, so the
+// shell's `data-portrayal-linked` never reaches the scene; the far paths the
+// shell found (state.far, a list: a splitter's common end has several) go in as
+// ring marks, the 2D far ring's role, in the 2D ring's colour. Never the plate
+// the selection wears, so the two read apart. A far end the scene can only place
+// on an ancestor is left unmarked: ringing the cassette would say less than
+// nothing. Cleared with the selection, on a return to 2D and by a new load,
+// which resets state.far.
+function markFar() {
+  if (!viewer) return;
+  const hl = getComputedStyle(document.documentElement).getPropertyValue('--hl').trim();
+  const color = /^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(hl) ? hl : '#f59e0b';
+  const paths = mode === '3d' ? (state.far || []) : [];
+  const list = paths.map(path => ({path, color, style: 'ring'}));
+  const rep = viewer.setMarks(list);
+  if (rep?.nearest?.length) viewer.setMarks(list.filter(m => !rep.nearest.includes(m.path)));
+}
+
 async function sync3d() {
   if (mode !== '3d') return;
   const v = await ensureViewer();
@@ -781,6 +799,7 @@ async function sync3d() {
   mountExtras(v);
   fruBar(v);
   if (state.sel) v.select(state.sel);
+  markFar();
 }
 
 async function setMode(m) {
@@ -810,11 +829,12 @@ async function setMode(m) {
   if (merge) shell.loadFaces().then(() => shell.refreshTree())
     .catch(err => console.warn('[portrayal] faces for the merged tree', err));
   else shell.refreshTree();
-  if (m === '2d') { shell.fit(); if (state.sel) shell.select(state.sel, true); return; }
+  if (m === '2d') { markFar(); shell.fit(); if (state.sel) shell.select(state.sel, true); return; }
   shell.el.status.textContent = 'loading 3D…';
   try {
     await sync3d();
     (await ensureViewer()).resize();
+    markFar();
     // a context lost while the drawing showed is still lost: keep saying so
     shell.el.status.textContent = gpuLost ? LOST_MSG : '';
   } catch (err) {
@@ -846,7 +866,7 @@ shell.on('mode', m => {
   shell.el.fit.hidden = m === '3d';
 });
 
-shell.on('select', path => { if (mode === '3d' && viewer) viewer.select(path); });
+shell.on('select', path => { if (mode === '3d' && viewer) { viewer.select(path); markFar(); } });
 
 // ---------------------------------------------------------------- positions
 // A PART THAT SLIDES IS SET HERE AND NOWHERE ELSE (#950,

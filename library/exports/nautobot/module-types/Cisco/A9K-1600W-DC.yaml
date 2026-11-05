@@ -3,8 +3,9 @@ manufacturer: Cisco
 model: A9K-1600W-DC
 description: Cisco ASR 9901 1600 W DC power module
 power-ports:
-  - name: '{module}/Inlet'
-    type: dc-terminal
+  - name: '{module}/dc-header'
+    type: other
+    label: DC power connector block (2-position, +DC -DC)
 comments: 'Cisco ASR 9901 1600 W DC power module. The AC module''s mechanics - one axial fan, the release
   latch down the right edge and one OK lamp - with a two-pole DC connector in place of the Saf-D-Grid
   inlet, marked +DC above and -DC below. The ASR 9901 takes two of these; AC and DC modules may not be
@@ -17,10 +18,12 @@ comments: 'Cisco ASR 9901 1600 W DC power module. The AC module''s mechanics - o
 
   - fans: 1
 
+  - inlet: dc-terminal
+
   - input: dc
 
   - power-output-w: 1600
 
   - role: power-module
 
-  Contract version 1.0.1 (cisco/a9k-1600w-dc).'
+  Contract version 1.1.0 (cisco/a9k-1600w-dc).'

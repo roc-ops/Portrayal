@@ -1,0 +1,142 @@
+format: 1
+kind: rack
+name: fs-or4p-45u
+version: 1.0.0
+maturity: modelled
+manufacturer: FS.com
+model: FS-OR4P-45U
+part-numbers:
+  FS-OR4P-45U: 45U GF4-Series 4-Post Open Frame Rack
+description: >-
+  The FS GF4-Series four-post open frame rack, 45U, with square-punched rails
+  and a rear rail that sets in one-inch steps from 22 to 40 in behind the front
+  rail. Casters and levelling feet are supplied. Rated for a static load only.
+form: 4-post-frame
+ru: 45
+numbering:
+  direction: bottom-up
+  start: 1
+width: 19
+holes:
+  style: square
+hole-centres: 465
+opening: 450
+rails:
+  - id: front
+  - id: rear
+    depth:
+      min: 558.8
+      max: 1016
+      step: 25.4
+outer:
+  w: 600
+  h: 2104.8
+  d: 1049
+load:
+  static-kg: 907.18
+datasheet:
+  title: FS-OR4P-45U Open Frame Rack Datasheet
+  url: https://resource.fs.com/mall/doc/2023060211053742i6a4.pdf
+references:
+  - title: FS-OR4P-45U 45U Open Frame Rack Quick Start Guide V1.0 (GF4-Series-45U)
+    url: https://resource.fs.com/mall/file/user_manual/fs-or4p-45u-open-frame-rack-quick-start-guide.pdf
+    sha256: 26ed603a866b9977707433ea5d30f9a77c70d89060367fc6f482f7df9063dc99
+provenance:
+  ru:
+    confidence: datasheet
+    note: >-
+      "No. of Rack Spaces 45U" in the datasheet specification table (page 2).
+  form:
+    confidence: datasheet
+    note: >-
+      "Product Type 4-Post" (page 2), an open frame with two left and two right
+      vertical rails, top and base brackets and side sections (page 3 and the
+      assembly figure).
+  width:
+    confidence: datasheet
+    note: >-
+      "Rack-Mount Width 19'' EIA" in the datasheet specification table (page 2).
+  holes:
+    confidence: datasheet
+    note: >-
+      "Mounting Rails Square-punched" (page 2). No sheet gives a hole size, and
+      none says the supplied M6 screws, nuts and cup washers (page 3) fit the
+      rail holes, so no `size` and no `fixing` is written.
+  hole-centres:
+    confidence: drawing
+    note: >-
+      The front view of the technical drawing (page 4) dimensions 18.3'' [465mm]
+      between the two hole columns of the rail pair.
+  opening:
+    confidence: drawing
+    note: >-
+      The front view of the technical drawing (page 4) dimensions 17.7''
+      [450mm] as the inner line, the clear opening between the rails.
+  rails:
+    confidence: datasheet
+    note: >-
+      The quick start guide (page 4) tabulates "Mounting Depth" from 22 in to 40
+      in, one row per inch, each with a pair of index numbers (0 and 0 up to 9
+      and 9). The range is 22 in to 40 in, 558.8 mm to 1016 mm, in 25.4 mm
+      steps, each converted once at 25.4 mm to the inch. The drawing's side view
+      (page 4) dimensions 1.0'' [25.4mm] on the rail. The table does not say
+      which face of each rail the depth runs between.
+  outer:
+    confidence: drawing
+    note: >-
+      Width 23.6'' [600mm] and height 82.9'' [2104.8mm] in the specification
+      table and in the front view. The depth moves with the rail setting. The
+      side view prints the overall depth as "MAX=41.3'' [1049mm]" and
+      "MIN=23.3'' [591.8mm]"; 1049 mm is written, which is the overall depth at
+      the 40 in setting. The specification table prints a depth of 40'' [1016mm],
+      which is the rail setting and not the overall box; the gap below records
+      both.
+  load:
+    confidence: datasheet
+    note: >-
+      "Weight Capacity - Stationary 2000lbs (907.18kg)" (page 2). No rolling
+      rating is stated although casters are supplied, and no weight of the rack
+      itself is printed.
+  numbering:
+    confidence: estimated
+    note: >-
+      The direction is printed, "Rail Number Direction Bottom Up" (page 2). The
+      label of the first unit is a stand-in: 1 is the default of the rack file,
+      and neither the datasheet nor the quick start guide says what the first
+      label is.
+gaps:
+  - what: numbering
+    reason: vendor-silent
+    note: >-
+      The direction is printed as bottom up; the number on the lowest unit is
+      not.
+    wanted: A photograph of the rail, or a drawing that shows the labels.
+  - what: outer
+    reason: sources-disagree
+    note: >-
+      The specification table prints a depth of 1016 mm (40''); the technical
+      drawing prints an overall depth of 591.8 mm (23.3'') at the shortest
+      setting and 1049 mm (41.3'') at the longest. The longest rail setting in
+      the quick start guide is 1016 mm, so 1016 is the rail setting and 1049 the
+      frame at that setting, 33 mm more at both ends of the range. 1049 is
+      written as the outside depth, at the longest setting; the figures are not
+      averaged.
+    wanted: FS's statement of what the 1016 mm in the specification table measures.
+  - what: holes
+    reason: vendor-silent
+    note: >-
+      No document gives the size of the square holes or says what the supplied
+      M6 screws and nuts fit into.
+    wanted: A dimensioned drawing of the rail holes, and the assembly step that uses the nuts.
+  - what: max-device-depth
+    reason: vendor-silent
+    note: No document gives a usable depth for equipment.
+    wanted: FS's maximum equipment depth for each rail setting.
+  - what: weight-kg
+    reason: vendor-silent
+    note: No document prints the weight of the frame itself.
+    wanted: The net weight of the frame, from FS.
+  - what: rolling-kg
+    reason: vendor-silent
+    note: Four casters are supplied and no rolling rating is printed.
+    wanted: FS's rolling load rating for the casters.
