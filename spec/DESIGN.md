@@ -129,13 +129,17 @@ Three layers:
    before it is removed: that release is the coexistence above, spent on the
    consumers it exists for. The deprecation is the `superseded-by:` key the
    schema already has, on the retired major's contract, naming the ref that
-   replaces it: one key for the fact, not a second marker beside it. L89
-   telling a superseded major that still ships from a dead one is pending
-   (roc-ops/Portrayal#448). The 0.x rule was chosen on 2026-10-10 over
-   building the deprecation first. The whole mechanism is required before 1.0:
-   the marker, a stated support window, and the L89 distinction. 1.0 is not cut
-   without the three. Inside the repository, L89 still fails on a
-   superseded major that nothing references — it will not accept
+   replaces it: one key for the fact, not a second marker beside it. L89 now
+   tells a superseded major that still ships (its contract says
+   `superseded-by:` with a ref that exists) from a dead one. The 0.x rule was
+   chosen on 2026-10-10 over building the deprecation first (the `OWNER
+   DECISION:` comment on roc-ops/Portrayal#448). The whole mechanism is
+   required before 1.0: the marker, a stated support window, and the L89
+   distinction. The marker and the L89 distinction are in place; the support
+   window, at least one release, is stated here and not yet a number of
+   releases or a date anywhere a tool reads. 1.0 is not cut without the three.
+   Inside the repository, L89 still fails on a
+   superseded major that nothing references and that says nothing — it will not accept
    an `unplaced:` sentence from a major that a newer live major supersedes.
    There is one exception, and it is the reason the check asks whether anything
    NAMES a major rather than only whether something seats it: a retired major

@@ -367,7 +367,7 @@ RULES = {
     "L88": ("component",  "a fibre face with more than one row of connectors states its own front numbering", "add `optical.front-order` listing the fibre part ids in the vendor's printed order",
             "On a face with more than one row of connectors, numbering by position alone guesses the vendor's printed order, so DCIM front ports could be numbered differently from the silkscreen.",
             ERROR),
-    "L89": ("library",    "every component major is reachable from a device, or says why it is not", "seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing",
+    "L89": ("library",    "every component major is reachable from a device, or says why it is not", "seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing; a major that a live major supersedes is marked `superseded-by: <the live ref>` to keep it for outside manifests that pin it, or its directory is deleted",
             "A part nothing seats would look in the catalogue exactly like one in use, so a reader could choose a part no drawing has ever shown in place.",
             ERROR),
     "L90": ("device",     "a manifest's top-level keys read in the canonical order", "reorder them; the message prints the order, and docs/device-template.yaml is written in it",
@@ -8502,13 +8502,31 @@ def lint_unplaced_majors(root):
             if oname == name and int(omajor) > int(major):
                 live_successor[ref] = other
 
+    # RETIRED AND STILL SHIPPED IS NOT DEAD (#448). Once a manifest outside the
+    # library can pin `name@2`, deleting it breaks that manifest, so a retired
+    # major may stay on one condition: its contract says `superseded-by: <ref>`
+    # and the ref is a different major that exists. The key is the one the
+    # schema already has, and the successor is what a consumer is told to pin
+    # instead. A marker that names nothing real (L101 reports that, and this
+    # does not read the key as an answer) or the part itself does not count.
+    # A package at 0.x may still delete; from 1.0 the marker is kept for at
+    # least one release before the directory goes.
+    def ships_retired(ref):
+        marker = (load_yaml(contracts[ref]) or {}).get("superseded-by")
+        return (isinstance(marker, str) and marker != ref and marker in contracts)
+
     for ref in sorted(contracts):
+        if ref not in seated and ref in live_successor and ships_retired(ref):
+            continue
         if (ref not in seated and ref in live_successor and ref not in mentions):
             err(contracts[ref], "L89",
                 f"{ref} is superseded by {live_successor[ref]}, is reachable from no "
-                "device, and is named nowhere. #172 kept the `v<major>` level on the "
-                "terms that a dead major goes: delete the directory rather than "
-                "describing it in `unplaced:`")
+                "device, is named nowhere, and says nothing. #172 kept the "
+                "`v<major>` level on the terms that a dead major goes: mark it "
+                f"`superseded-by: {live_successor[ref]}` to keep it for outside "
+                "manifests that pin it (from 1.0, for at least one release before "
+                "it is removed), or delete the directory rather than describing it "
+                "in `unplaced:`")
             continue
         if ref not in justified:
             err(contracts[ref], "L89",
