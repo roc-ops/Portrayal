@@ -1,5 +1,5 @@
 ### Added
-- `spec/tools/portrayal/infrahub_export.py` writes Infrahub object files for every
+- `spec/tools/dev/infrahub_export.py` writes Infrahub object files for every
   device type and module type from the NetBox export tree: one manufacturers file,
   then one file per maker. A type's name is `<manufacturer> <model>`; `height` is
   the `u_height` rounded up (a half-unit type says its nominal height, a zero-U type

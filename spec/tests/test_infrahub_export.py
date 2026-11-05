@@ -46,7 +46,7 @@ def whole_kg(value, unit="kg"):
 
 @pytest.fixture(scope="module")
 def out(tmp_path_factory):
-    from portrayal import infrahub_export as ix
+    from portrayal_dev import infrahub_export as ix
     dest = tmp_path_factory.mktemp("infrahub")
     assert ix.main(["--netbox", str(NETBOX), "--out", str(dest)]) == 0
     return dest
@@ -244,7 +244,7 @@ def test_the_overlay_is_the_note_s_and_only_names_overlay_attributes(out):
 
 
 def test_the_output_is_stable(out, tmp_path):
-    from portrayal import infrahub_export as ix
+    from portrayal_dev import infrahub_export as ix
     assert ix.main(["--netbox", str(NETBOX), "--out", str(tmp_path)]) == 0
     first = sorted(p.relative_to(out) for p in out.rglob("*") if p.is_file())
     second = sorted(p.relative_to(tmp_path) for p in tmp_path.rglob("*") if p.is_file())
@@ -255,7 +255,7 @@ def test_the_output_is_stable(out, tmp_path):
 
 
 def test_out_has_no_default():
-    from portrayal import infrahub_export as ix
+    from portrayal_dev import infrahub_export as ix
     with pytest.raises(SystemExit):
         ix.main(["--netbox", str(NETBOX)])
 
