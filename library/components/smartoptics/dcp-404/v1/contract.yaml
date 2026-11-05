@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-404
-version: 1.1.1
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: optical
@@ -243,15 +243,28 @@ body:
   depth: 270.0
   color: '#8f959c'
 skins: [default]
+groups:
+  client-100g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: four QSFP28 client ports, numbered 1 to 4 on the face, each 100GBE
+  line-400g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp-dd, speed: 400g}
+    description: the one QSFP-DD line port, numbered 5 on the face, 400G
 parts:
   # four client cages ABUTTING as one block - 18.98 pitch, so the per-port
   # ganged opening (18.5) and not a standalone qsfp28 cage (20.0, would overlap)
-  - {ref: std/qsfp-ganged@1, id: c1, at: [38.42, 29.30], lift: 44.0, attrs: {media: qsfp28, role: client}}
-  - {ref: std/qsfp-ganged@1, id: c2, at: [57.40, 29.30], lift: 44.0, attrs: {media: qsfp28, role: client}}
-  - {ref: std/qsfp-ganged@1, id: c3, at: [76.38, 29.30], lift: 44.0, attrs: {media: qsfp28, role: client}}
-  - {ref: std/qsfp-ganged@1, id: c4, at: [95.37, 29.30], lift: 44.0, attrs: {media: qsfp28, role: client}}
+  - {ref: std/qsfp-ganged@1, id: c1, at: [38.42, 29.30], lift: 44.0, group: client-100g, attrs: {media: qsfp28, role: client}}
+  - {ref: std/qsfp-ganged@1, id: c2, at: [57.40, 29.30], lift: 44.0, group: client-100g, attrs: {media: qsfp28, role: client}}
+  - {ref: std/qsfp-ganged@1, id: c3, at: [76.38, 29.30], lift: 44.0, group: client-100g, attrs: {media: qsfp28, role: client}}
+  - {ref: std/qsfp-ganged@1, id: c4, at: [95.37, 29.30], lift: 44.0, group: client-100g, attrs: {media: qsfp28, role: client}}
   # the line port stands alone past the honeycomb block
-  - {ref: std/qsfp-dd@1, id: line, at: [147.88, 29.09], lift: 44.0, attrs: {media: qsfp-dd, role: line}}
+  - {ref: std/qsfp-dd@1, id: line, at: [147.88, 29.09], lift: 44.0, group: line-400g, attrs: {media: qsfp-dd, role: line}}
   # a green lamp beside each word of every port's Tx/Rx caption, ABOVE the cage
   - {ref: common/led-dot@1, id: led-c1-tx, at: [45.07, 25.75], lift: 44.0, attrs: {function: tx}}
   - {ref: common/led-dot@1, id: led-c1-rx, at: [48.27, 25.75], lift: 44.0, attrs: {function: rx}}
