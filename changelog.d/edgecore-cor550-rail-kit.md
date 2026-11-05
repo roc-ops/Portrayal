@@ -6,7 +6,7 @@
   `gaps` say the range is unknown. Both parts are plain placeholder plates with estimated sizes.
 
 ### Changed
-- `edgecore/cor550` version 4.0.0 states its ears and its kit: `chassis.kits` lists the rack
+- `edgecore/cor550` version 4.0.1 states its ears and its kit: `chassis.kits` lists the rack
   mounting kit as in-box, and `chassis.ears` gives the bracket's colour and its 0.25 mm lift.
   The four placed `common/rack-ear@1` ears (`ear-left`, `ear-right`, `rear-ear-left`,
   `rear-ear-right`) are gone, so a viewer that asks for ears draws the generic bracket out to
