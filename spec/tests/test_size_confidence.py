@@ -94,7 +94,7 @@ def test_every_chassis_sized_part_now_says_it_is_an_estimate():
     # measured, 15 of them on live contracts (native MX2000 cards, MIC6/MRATE MICs,
     # blanks and the like). The 10-port SFP+ MIC's retired major was then removed
     # (it is seated now), which leaves 65.
-    assert len(_chassis_sized()) >= 65,"the group has shrunk without explanation"
+    assert len(_chassis_sized()) >= 65, "the group has shrunk without explanation"
 
 
 def test_each_one_says_which_chassis_opening_it_is():
