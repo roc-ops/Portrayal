@@ -123,14 +123,19 @@ export function nextRackName(names) {
   return `Rack ${Math.max(0, ...used) + 1}`;
 }
 
-// AN ITEM ID IS NEVER REUSED WHILE A CABLE END NAMES IT. A cable kept when its
-// device was removed (or trimmed by a shrink) still names that device's id,
-// and reads "the device was removed"; handing the id to the next device
-// placed would land the cable on something unrelated. So the ids in use are
-// the items' own and every id a cable end names. (model.js cannot import
-// cable-rules.js, which imports this file: the two ends are read here.)
+// AN ITEM ID IS NEVER REUSED WHILE A CABLE END, A ROUTE WAYPOINT OR A HOLDER
+// NAMES IT. A cable kept when its device was removed (or trimmed by a shrink)
+// still names that device's id, and reads "the device was removed"; handing
+// the id to the next device placed would land the cable on something
+// unrelated. So the ids in use are the items' own and every id a cable end or
+// a waypoint of its route names, and the holder an item says it hangs on.
+// (model.js cannot import cable-rules.js, which imports this file: the two
+// ends are read here.)
 const endItems = cables => (Array.isArray(cables) ? cables : [])
   .flatMap(c => [c?.a?.item, c?.b?.item]).filter(id => id != null && id !== '').map(id => ({id: String(id)}));
+const waypointItems = cables => (Array.isArray(cables) ? cables : []).flatMap(c => (Array.isArray(c?.route) ? c.route : []))
+  .filter(w => !!w && typeof w === 'object' && !Array.isArray(w) && typeof w.item === 'string' && w.item).map(w => ({id: w.item}));
+const holderItems = items => items.map(holderOf).filter(id => id !== null).map(id => ({id}));
 // A BUNDLE'S TRUNK AND PEEL POINTS name items too (#921): a removed manager's
 // id is not handed to the next device while a trunk still names it, so it can
 // never resolve to something placed later.
@@ -140,7 +145,8 @@ const bundleItems = bundles => bundleList(bundles).flatMap(b => [
   ...(Array.isArray(b.route) ? b.route : []),
   ...(Array.isArray(b.members) ? b.members : []).flatMap(m => (plainObj(m) ? [m.a, m.b] : []))])
   .filter(w => plainObj(w) && typeof w.item === 'string' && w.item).map(w => ({id: w.item}));
-export const itemIdsInUse = rack => [...rack.items, ...endItems(rack.cables), ...bundleItems(rack.bundles)];
+export const itemIdsInUse = rack => [...rack.items, ...endItems(rack.cables), ...waypointItems(rack.cables),
+  ...holderItems(rack.items), ...bundleItems(rack.bundles)];
 // A ZERO-U ID THE SAME WAY (P-0019): a cord kept when its PDU was taken away
 // still names the PDU's id, so the next part placed beside the rack is not
 // handed it.

@@ -396,7 +396,7 @@ function usableCodes(W, ref, cfgName, cfg, slots, offered, zero, flag, counts, U
     const fixedCord = FACES.some(view => faceOf(view).some(e => e.ref && e.class === 'inlet' && W.compByRef(refOf(e))?.attrs?.plug && sentenceOf(U, refOf(e))));
     // a configuration whose every supply bay (a bay that takes a part of class psu) is open, as a spare chassis ships, orders no supply:
     // it has none to offer a power end, and the supplies ordered for it are judged on their own parts
-    const supplyBays = Object.values(slots.bays || {}).flat().filter(b => (b.accepts || []).some(r => W.compByRef(r)?.class === 'psu'));
+    const supplyBays = Object.values(slots.bays || {}).flat().filter(b => (!b['only-in'] || b['only-in'].includes(cfgName)) && (b.accepts || []).some(r => W.compByRef(r)?.class === 'psu'));
     const noSupplyOrdered = supplyBays.length > 0 && supplyBays.every(b => !(Object.hasOwn(cfg.bays || {}, b.id) ? cfg.bays[b.id] : b.default));
     if ((cfg.power || []).length && !offered.some(o => o.kind === 'power') && !bare.length && !supplies.length && !fixedCord && !noSupplyOrdered)
       flag('C19', `the configuration says it is powered (${cfg.power.join(', ')}) and no power end is offered`, 1, {causes: [cause('', 'front', '')]});

@@ -1,47 +1,78 @@
 format: 1
 kind: component
 name: a9k-ground-pad
-version: 1.0.0
+version: 1.1.0
 class: ground
+# THE PAD IS A PAIR OF SCREWS ONE TWO-HOLE LUG LANDS ACROSS (docs/connectors-dc-terminal-design.md section 13.7): it
+# presents `stud-pair-5-8` at the midpoint of its two screws, and each screw is a slot of its own, `<placement>/1` and
+# `<placement>/2`. The two levels are mutually exclusive (L115).
+interface: stud-pair-5-8
 behaviour: mounts
 profile: networking
 description: >-
-  Cisco ASR 9000 NEBS bonding and grounding pad - the two-hole lug landing every
-  chassis in the family cuts, with the flat lug bolted across it by two screws.
-  One part for all eight positions across seven chassis, because the guide
-  documents one receptacle type and varies only where it sits.
-attrs: {model: 'NEBS Bonding and Grounding Pad'}
+  Cisco ASR 9000 NEBS bonding and grounding pad, the two-hole lug landing every
+  chassis in the family cuts. The flat lug is bolted across it by two screws,
+  and one two-hole lug lands across them. One part serves every position on ten
+  chassis, because the guides document one receptacle type and vary only where
+  it sits.
+attrs:
+  model: NEBS Bonding and Grounding Pad
+  connector: stud-pair-5-8
 size: {w: 46.0, h: 20.0}
 parts:
-  - {ref: common/screw-head@1, id: screw-left, at: [13.55, 8.2]}
-  - {ref: common/screw-head@1, id: screw-right, at: [28.85, 8.2]}
+  # FIRST SCREW (left), then second (right): the pair's axis (provenance.axis). Each is a slot of its own.
+  - {ref: common/ground-screw-10-32@1, id: '1', at: [10.3275, 5.265]}
+  - {ref: common/ground-screw-10-32@1, id: '2', at: [26.2025, 5.265]}
+connection-points:
+  # the midpoint of the two screws' own mate points, (15.0625, 10.0) and (30.9375, 10.0), at the top of their heads
+  mate: {at: [23.0, 10.0], direction: front, seat-out: 2.79}
 provenance:
-  what-it-is: 'datasheet + drawing. The install guide (b-asr9k-hardware-installation-guide.pdf
-    p125) tables a grounding receptacle location for every chassis in the family, and the
-    ASR 9006 entry is the one that says what the thing IS: Figure 133, "NEBS Bonding and
-    Grounding for the Cisco ASR 9006 Router", draws a TWO-HOLE LUG PAD with a detail circle
-    showing two screws through a flat lug. Every other chassis has its own figure - 132 for
-    the 9010 and 9910, 134 for the 9904, 136 for the 9922, 137 for the 9912 - and none of
-    them contradicts it'
+  what-it-is: 'datasheet + drawing. The Cisco ASR 9000 Series Aggregation Services Router
+    Hardware Installation Guide tables a grounding receptacle location for every chassis in the
+    family (Table 12, Figures 132 to 137), and the ASR 9006 entry is the one that says what the
+    thing IS: Figure 133, "NEBS Bonding and Grounding for the Cisco ASR 9006 Router", draws a
+    TWO-HOLE LUG PAD with a detail circle showing two screws through a flat lug. Every other
+    chassis has its own figure - 132 for the 9010 and 9910, 134 for the 9904, 135 for the 9906,
+    136 for the 9922, 137 for the 9912 - and none of them contradicts it. The ASR 9000 Series
+    Fixed-Port Routers Hardware Installation Guide draws the same two-hole landing for the 9901,
+    9902 and 9903 (Figures 106 to 108)'
   size: 'the 46.0 x 20.0 is NOT measured here. It is the extent every one of these devices
     already carries for its `ground-pad` cutout, and this part is built to fill those holes
-    rather than to assert a new figure. All eight agree, which is either one measurement
-    propagated or one reading of a family that really is uniform - the guide describes a
-    single receptacle type and varies only WHERE it sits, so uniform is the expected answer.
+    rather than to assert a new figure. All of them agree, which is either one measurement
+    propagated or one reading of a family that really is uniform - the guides describe a
+    single receptacle type and vary only WHERE it sits, so uniform is the expected answer.
     If the pad is ever measured properly and differs, the cutouts move with it'
-  hole-pitch: 'BORROWED AND WEAKER THAN THE C40G BORROW, which is why it says so. 15.3 mm
-    comes from casa/ground-bolts@1, off the maintainer''s hand-built C100G rear SVG, described there
-    as "the standard two-hole lug spacing" - but that is CASA hardware and this is Cisco, so
-    it is a convention borrowed across vendors rather than a measurement of this part. The
-    two-hole telecom lug is a standardised interface and 15.3 sits within a millimetre of the
-    0.625 inch spacing the practice is built around, so the risk is small and the alternative
-    was inventing a number. WHAT WOULD SETTLE IT: a caliper on any ASR 9000 ground pad, or a
-    Cisco drawing that dimensions one'
+  hole-pitch: 'DECLARED, NOT MEASURED: 5/8 in. (15.875), THE LOWER END OF A RANGE THE GUIDES PRINT. Both
+    guides give a range and no figure dimensions the receptacle itself. The ASR 9000 hardware
+    installation guide says of the lug "two holes with 0.625- to 0.75-inch (15.86- to 19.05-mm)
+    spacing" (NEBS Supplemental Unit Bonding and Grounding Guidelines) and of the receptacle
+    "two M6 bolt holes with 0.625 to 0.75 spacing between them" (Supplemental Bonding and Grounding
+    Connections); the Fixed-Port Routers guide prints the same range for the 9901 (M6 holes) and
+    the 9902 and 9903 (M5 holes). 5/8 in. is the registered `stud-pair-5-8` pitch; 0.75 in. is
+    `stud-pair-3-4`, which this part does not present, so a lug stamped for 3/4 in. is not
+    offered a seat here. The lower end is drawn because the first guide also gives 0.625 in.
+    (15.88 mm) alone for the M6 studs of its DC power tray, and because Cisco''s own stencil
+    masters for the 9901, 9902 and 9903 draw the holes 15.96, 15.95 and 15.77 mm apart, which agree
+    with 5/8 in. to 0.11 mm and are 3 mm short of 3/4 in. The drawing before this change used 15.3 mm,
+    borrowed from the Casa terminal''s hand-built drawing. WHAT WOULD SETTLE IT: a caliper on any
+    ASR 9000 ground pad, or a Cisco drawing that dimensions the receptacle'
+  screws: 'registry and datasheet - the lug is bolted with "10-32 round-head" screws and locking
+    washers (both guides), so each screw is common/ground-screw-10-32@1, the ASME B18.6.3 No. 10
+    pan head, 9.47 across. The drawing before this change showed two 3.6 screw heads, a
+    decorative stand-in; the screw is drawn at the size the guides name. The receptacle''s own
+    thread is not the screw''s and is not drawn: the guides say M6 for most chassis and M5 for
+    the 9902 and 9903'
+  seat: 'THE PAIR PRESENTS AT THE TOP OF ITS SCREW HEADS, 2.79 off the pad: `mate` is the midpoint
+    of the two screws'' own mate points and states `seat-out`, the height each screw presents at,
+    as every pair host does'
+  axis: 'THE SCREWS ARE COMPOSED LEFT THEN RIGHT, so the pair runs along +x, the canonical axis a
+    two-hole lug is drawn on, and a lug seated here leaves its wire to the right. Each chassis
+    places the pad at the turn its figure shows the lug'
   artwork: 'the pad plate and the lug across it are drawn from Figure 133''s detail circle -
-    a flat lug over a pad, two screws through it. The screws are common/screw-head@1 rather
-    than drawn again. The earth mark is IEC 60417-5019, placed left of the lug where the
-    figure shows a marking; its exact position on the metal is not dimensioned anywhere and
-    is drawn to read rather than to measure'
+    a flat lug over a pad, two screws through it. The earth mark is IEC 60417-5019, placed left of the
+    lug where the figure shows a marking; its exact position on the metal is not dimensioned anywhere and
+    is drawn to read rather than to measure. The two screws are centred on the lug as the
+    drawing before this change centred them'
   depth: 'ABSENT, for the reason casa/ground-bolts@1 records: size.d on a non-module compiles
     to data-depth, which the 3D viewer reads as a CAVITY - so a depth here would sink the
     grounding pad into a pit in the panel. What stands proud says so through relief.features,
