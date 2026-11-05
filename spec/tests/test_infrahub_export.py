@@ -71,6 +71,7 @@ def entries(dest, kind):
     return rows
 
 
+@pytest.mark.heavy
 def test_every_object_file_has_the_note_file_shape(out):
     files = _read(out)
     assert MANUFACTURERS_FILE in files
@@ -83,6 +84,7 @@ def test_every_object_file_has_the_note_file_shape(out):
             assert isinstance(doc["spec"]["data"], list) and doc["spec"]["data"], name
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("kind,folder", [("DcimDeviceType", "device-types"), ("DcimModuleType", "module-types")])
 def test_a_type_has_its_fields_and_the_key_rule(out, kind, folder):
     rows = entries(out, kind)
@@ -111,6 +113,7 @@ def test_a_bare_model_collides_across_makers_and_the_name_does_not(out):
         assert {f"{mk} {model}" for mk in makers} <= names
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("kind,folder", [("DcimDeviceType", "device-types"), ("DcimModuleType", "module-types")])
 def test_the_types_agree_with_the_netbox_tree_one_to_one(out, kind, folder):
     docs = netbox(folder)
@@ -138,6 +141,7 @@ def test_the_manufacturers_file_lists_every_maker_once(out):
     assert len(stems) == len(makers)
 
 
+@pytest.mark.heavy
 def test_height_is_the_u_height_rounded_up_and_half_units_say_so(out):
     rows = {e["name"]: e for _, e in entries(out, "DcimDeviceType")}
     halves = 0
