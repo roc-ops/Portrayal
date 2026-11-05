@@ -876,6 +876,11 @@ PART_MEDIA = {
     ("qsfp", "40g"): "40gbase-x-qsfpp",
     ("qsfp28", "100g"): "100gbase-x-qsfp28",
     ("qsfp-dd", "400g"): "400gbase-x-qsfpdd",
+    # A QSFP-DD CAGE PLACED AT 100G TAKES A QSFP28 OPTIC, and the library already
+    # types it so: a device's QSFP-DD cages at 100G reach IFACE_TYPE's (qsfp, 100g)
+    # row. The Juniper MX304's LMIC16 states `media: qsfp-dd, speed: 100g` on twelve
+    # of its sixteen cages and would otherwise take the card's 400G type on all.
+    ("qsfp-dd", "100g"): "100gbase-x-qsfp28",
     # A PLACEMENT'S OWN 800G, so a QSFP-DD800 port that says so types from
     # itself; the card's `qsfp-dd-800g` gives the same answer (QDD800_ATTR).
     ("qsfp-dd", "800g"): "800gbase-x-qsfpdd",

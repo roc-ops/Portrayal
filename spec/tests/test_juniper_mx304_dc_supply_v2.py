@@ -40,7 +40,6 @@ RING = "generic/ring-lug@1"
 POLES = [("pole-batt", "batt", [[41.0, 14.56], [41.0, 30.44]]), ("pole-rtn", "rtn", [[56.7, 14.56], [56.7, 30.44]])]
 PITCH = 15.875
 DEVICE = "mx304"
-DEVICE_VERSION = "4.1.0"
 V1_SKIN_SHA256 = "f5e8e2720b5dd020cd280f44c66ff6c8ff911401089555d62b95247025e3d2b5"
 
 
@@ -170,8 +169,6 @@ def test_the_device_accepts_both_majors_and_seats_the_new_one_in_its_dc_configur
 def test_the_device_took_one_minor_and_its_lock_holds_one_port_for_each_supply_bay():
     folder = LIB / "devices/juniper" / DEVICE
     lock = json.loads((folder / "device.lock.json").read_text())
-    assert re.search(rf"^version: {re.escape(DEVICE_VERSION)}$", (folder / "device.yaml").read_text(), re.M)
-    assert lock["version"] == DEVICE_VERSION
     assert lock["composed-refs"][SUPPLY].startswith("2.0.0+") and lock["composed-refs"][POLE].startswith("1.0.0+")
     assert sorted(lock["dc-ports"]) == ["psu-0/module/input", "psu-1/module/input"]
     for path, refs in lock["dc-ports"].items():

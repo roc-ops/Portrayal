@@ -21,7 +21,7 @@ DIST = LIB / "dist"
 
 DEVICES_WITH_SPEEDS = {"s9600-72xc"}
 # devices whose placements, not their groups, state `speeds`
-DEVICES_WITH_PORT_SPEEDS = {"s9720-56ed"}
+DEVICES_WITH_PORT_SPEEDS = {"mx304", "s9720-56ed"}
 
 
 @pytest.fixture
