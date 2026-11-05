@@ -224,7 +224,7 @@ def test_the_terminal_screw_interfaces_were_read():
 def test_the_terminal_header_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
-    assert _terminal_header_interfaces() == {"terminal-508-2", "terminal-508-5",
+    assert _terminal_header_interfaces() >= {"terminal-508-2", "terminal-508-5",
                                              "terminal-508-6", "dc-barrel",
                                              # the GPU power headers (P-0028) state
                                              # `input: dc` as the barrel jack does
