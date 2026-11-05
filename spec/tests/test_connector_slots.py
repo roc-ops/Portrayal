@@ -151,7 +151,9 @@ def test_the_connector_registry_is_not_vacuous():
                          # the DC input connector of the UfiSpace PSU-242-DEERN supply
                          "ufispace-dc-block-6",
                          # the DC power connectors of the Juniper QFX5241 DC supply and QFX10002 1600 W DC supply
-                         "juniper-dc-header-6", "dc-connector-3w3"}
+                         "juniper-dc-header-6", "dc-connector-3w3",
+                         # the AC inlet of the Telco Systems XM-3352 supply
+                         "telco-ac-cloverleaf-3"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -220,7 +222,9 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    # the DC input connector of the UfiSpace PSU-242-DEERN supply
                                    "ufispace-dc-block-6",
                                    # the DC power connectors of the Juniper QFX5241 and QFX10002 DC supplies
-                                   "juniper-dc-header-6", "dc-connector-3w3"}
+                                   "juniper-dc-header-6", "dc-connector-3w3",
+                                   # the AC inlet of the Telco Systems XM-3352 supply
+                                   "telco-ac-cloverleaf-3"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
@@ -303,7 +307,8 @@ ALARM_TERMINAL_BUSBAR_PARTS = {
     "screw-terminal-2": ("common/dc-terminal-plug-2@1",),
     "terminal-381-5": ("juniper/ex4100-h-psu-connector@1",),
     "terminal-350-6": ("juniper/ex4100-h-alarm-connector@1",),
-    "screw-terminal-4": ("telco-systems/tm-7124s-dc-feed@1",),
+    "screw-terminal-4": ("telco-systems/tm-7124s-dc-feed@1", "telco-systems/tm-7124s-dc-cable-plug@1"),
+    "telco-ac-cloverleaf-3": ("telco-systems/xm3352-ac-inlet@1", "telco-systems/xm3352-ac-cord-plug@1"),
     "orv3-busbar": ("common/orv3-busbar-connector@1",),
 }
 

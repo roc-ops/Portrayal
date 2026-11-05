@@ -232,7 +232,10 @@ def test_the_terminal_header_interfaces_were_read():
                                              "pcie-12vhpwr", "pcie-12v-2x6",
                                              # the Open Rack v3 bus-bar clip states
                                              # `input: dc` too
-                                             "orv3-busbar"}
+                                             "orv3-busbar",
+                                             # the four-pole DC feed header of the
+                                             # TM-7124S states `media: dc-terminal`
+                                             "screw-terminal-4"}
 
 
 def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():

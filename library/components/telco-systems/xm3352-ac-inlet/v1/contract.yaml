@@ -1,10 +1,11 @@
 format: 1
 kind: component
 name: xm3352-ac-inlet
-version: 1.0.0
+version: 1.1.0
 class: inlet
 behaviour: mounts
 profile: networking
+interface: telco-ac-cloverleaf-3
 description: >-
   The AC inlet on the Telco Systems XM-3352's AC supply module - a three-lobed "cloverleaf"
   appliance inlet (IEC 60320 C6 form, taking a C5 cord) in a dark rectangular surround, the lobes
@@ -21,6 +22,23 @@ provenance:
   form: >-
     photo: three round lobes, two above and one below centre, each with a pin - the C5/C6
     cloverleaf. The data sheet names no inlet type.
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED, AND NO DOCUMENT HELD NAMES
+    THE INLET'S TYPE OR STANDARD: the Telco Systems XM-3352 data sheet shows the inlet in its front
+    photograph and prints only "Power Supply 100-240V AC, 48-60V DC" and, in its ordering table,
+    "XM-3352-ACPS-NA" for the AC supply. The cloverleaf reading is the photograph's (and the X-Marc 3352
+    stencil master draws the same three lobes), so the interface claims no standard.
+  gender: >-
+    PHOTOGRAPH - three pins stand in the lobes, so the inlet is the male half and a cord connector with three
+    sockets seats in it. The cord connector is drawn as that half.
+  mate: >-
+    derived - the centre of the three lobes, (11.3, 10.3), facing out. The cord connector's own mate point is at
+    the same place, so the two align.
+  colour: >-
+    photograph - a black surround and black lobes with silver pins, as drawn (#26292d surround, #101214 lobes,
+    #c9ccd0 pins). The skin is unchanged.
 elements:
   body: {at: [0.0, 0.0], size: [22.6, 20.5], class: connector}
+connection-points:
+  mate: {at: [11.3, 10.3], direction: front}
 skins: [default]
