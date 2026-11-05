@@ -1,0 +1,60 @@
+format: 1
+kind: component
+name: psu-242-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: ufispace-dc-block-6
+description: >-
+  The six-position DC input connector on the face of the UfiSpace PSU-242-DEERN supply, seen from its
+  mating face. A dark body carries two rows of three cells, with a narrow bar between the rows. The
+  upper row is printed "V+" and the lower "V-" on the supply. The cable connector
+  ufispace/psu-242-dc-plug@1 seats at its mate point.
+size: {w: 22.0, h: 22.6}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The box of the `dc-input` element the supply already draws (22.0 across, 22.6 high), which its own
+  provenance says rests on the AC unit's measured inlet footprint and not on the scale of the guide's
+  Figure 6, a CAD sheet whose aspect is good to a couple of percent. The cell size (5.4 by 7.2), the
+  pitch (6.4 across, 11.4 between the rows) and the bar are the same readings. No dimension of the
+  connector is held.
+attrs: {connector: DC input connector, positions: 6}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR STANDARD IS CLAIMED. The UfiSpace S9311-64D
+    Hardware Installation Guide, Figure 6 (PDF page 11, front view of the front-to-back DC unit), prints
+    "INPUT CONNECTOR PN:3072980925" beside the block. That is the number the figure prints, as printed,
+    and not a maker's identity: no document held joins it to a maker's part. The datasheet names
+    "CRPS TE 2204535-3 ELON Mini" for the intake variant PSU-242-DIEB-NN only and names no connector for
+    this exhaust unit, so the interface claims no maker, no standard and no pitch.
+  gender: >-
+    NOT STATED. Figure 6 shows two rows of three cells in a housing and Figures 24 and 25 (PDF pages 22
+    and 23) a cable connector with a pull handle going into the inlet connector with a click; neither says
+    which half carries pins. The cable connector is drawn as the half that seats in this one.
+  marks: >-
+    guide - Figure 6 prints "V+" beside the upper row and "V-" beside the lower, "DC+(+48V)" with three
+    arrows to the three upper cells and "DC-(0)" with three arrows to the three lower. The rows are drawn
+    in that order, upper row first. The figure marks the rows and no single cell: the cells of a row are
+    drawn alike and the guide gives no order inside a row.
+  size: >-
+    estimated - see size-notes. The part draws what the supply's skin already drew in the same place:
+    the body, the six grey cells and the bar between the rows.
+  key: >-
+    NOT DRAWN. Figure 6 shows the "teeth" of the block with a note that they shall not exceed the chassis
+    surface when fully pressed, and a small mark between the rows and a round hole at the lower right of
+    the block. The supply's face did not draw them and this part does not.
+  mate: >-
+    derived - the centre of the block, (11.0, 11.3), facing out. The cable connector's own centre is at the
+    same point, so the two align.
+  colour: >-
+    estimated - the dark body #101315, the grey cells #8d9297 and the bar #2b2f33 that the supply's skin
+    already drew. The guide's figures are a CAD sheet and two renders with the connector in a teal that is
+    not carried here, and no photograph of the DC face is held.
+  relief: >-
+    NONE STATED. The figure's note says the teeth shall not exceed the chassis surface, which says the
+    block is near flush and gives no number, so the part is drawn flush and states no relief; the supply
+    keeps its own estimated relief for the `dc-input` element.
+elements: {}
+connection-points:
+  mate: {at: [11.0, 11.3], direction: front}
+skins: [default]
