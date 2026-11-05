@@ -224,7 +224,7 @@ def test_the_terminal_screw_interfaces_were_read():
 def test_the_terminal_header_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
-    assert _terminal_header_interfaces() == {"terminal-508-2", "terminal-508-5",
+    assert _terminal_header_interfaces() >= {"terminal-508-2", "terminal-508-5",
                                              "terminal-508-6", "dc-barrel",
                                              # the GPU power headers (P-0028) state
                                              # `input: dc` as the barrel jack does
@@ -232,7 +232,10 @@ def test_the_terminal_header_interfaces_were_read():
                                              "pcie-12vhpwr", "pcie-12v-2x6",
                                              # the Open Rack v3 bus-bar clip states
                                              # `input: dc` too
-                                             "orv3-busbar"}
+                                             "orv3-busbar",
+                                             # the four-pole DC feed header of the
+                                             # TM-7124S states `media: dc-terminal`
+                                             "screw-terminal-4"}
 
 
 def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():

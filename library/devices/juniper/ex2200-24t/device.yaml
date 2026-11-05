@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2200-24t
-version: 0.3.0
+version: 0.4.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2200-24T
@@ -116,10 +116,10 @@ provenance:
       ("AC power cord inlet or DC power terminals"). The DC rear is Figure 5's with the inlet replaced
       by a block of four terminals labelled, left to right, B-, A-, B+ and A+ (Figure 48) under a clear
       plastic cover, centred on the inlet's centre (419.2 mm) and drawn 36.0 x 18.4 mm; the size has no
-      scale anchor and is estimated. The block is chassis art and not a component: the library has no
-      four-pole DC terminal block (common/dc-terminal-24 has three poles) and the DCIM export has no row
-      for such a part. A and B are two inputs of one supply; the guide says a DC-powered switch provides
-      no PoE.
+      scale anchor and is estimated. The block is the part juniper/ex2200-dc-terminal@1, placed at 401.2
+      mm, which composes the four terminal screws and states one DC input port for each of the two feeds,
+      A (A+ and A-) and B (B+ and B-). A and B are two inputs of one supply; the guide says a DC-powered
+      switch provides no PoE.
   rps-port:
     confidence: estimated
     note: >-
@@ -219,8 +219,9 @@ gaps:
   - rear
   reason: vendor-silent
   note: >-
-    The four-terminal DC block of the -DC part number is chassis art; no library component has four poles
-    and no document held gives its part, its pole pitch or its legend.
+    The four-terminal DC block of the -DC part number is the part juniper/ex2200-dc-terminal@1, drawn
+    at an estimated size and pole pitch; no document held gives its part number, its dimensions or its
+    legend.
   wanted: The DC terminal block's dimensions and printed legend.
 - what: jack-lamp-meaning
   scope:
@@ -780,17 +781,6 @@ views:
         fill: '#7b7f83'}
       - {id: slot-1, kind: slot, at: [269.7, 4.7], size: [2.6, 6.8], rx: 0.4, fill: '#2a2d31'}
       - {id: slot-2, kind: slot, at: [269.7, 33.6], size: [2.6, 7.2], rx: 0.4, fill: '#2a2d31'}
-      - {id: dc-terminal, kind: dc-terminal-plate, at: [401.2, 11.9], size: [36.0, 18.4], rx: 0.6, fill: '#6f7479'}
-      - {id: dc-terminal-strip, kind: dc-terminal-strip, at: [402.2, 13.0], size: [34.0, 16.2], rx: 0.4,
-        fill: '#1b1d20'}
-      - {id: dc-pole-1, kind: dc-terminal-pole, at: [404.0, 14.6], size: [6.4, 9.4], rx: 0.3, fill: '#d9dcdf'}
-      - {id: dc-pole-2, kind: dc-terminal-pole, at: [412.0, 14.6], size: [6.4, 9.4], rx: 0.3, fill: '#d9dcdf'}
-      - {id: dc-pole-3, kind: dc-terminal-pole, at: [420.0, 14.6], size: [6.4, 9.4], rx: 0.3, fill: '#d9dcdf'}
-      - {id: dc-pole-4, kind: dc-terminal-pole, at: [428.0, 14.6], size: [6.4, 9.4], rx: 0.3, fill: '#d9dcdf'}
-      - {id: dc-pole-1-screw, kind: dc-terminal-screw, at: [405.0, 17.1], size: [4.4, 4.4], rx: 2.2, fill: '#a7acb2'}
-      - {id: dc-pole-2-screw, kind: dc-terminal-screw, at: [413.0, 17.1], size: [4.4, 4.4], rx: 2.2, fill: '#a7acb2'}
-      - {id: dc-pole-3-screw, kind: dc-terminal-screw, at: [421.0, 17.1], size: [4.4, 4.4], rx: 2.2, fill: '#a7acb2'}
-      - {id: dc-pole-4-screw, kind: dc-terminal-screw, at: [429.0, 17.1], size: [4.4, 4.4], rx: 2.2, fill: '#a7acb2'}
       cutouts:
       - {id: mgmt, at: [11.2, 15.7], size: [15.8, 13.2], shape: rect}
       - {id: usb, at: [12.5, 31.85], size: [12.0, 4.5], shape: rect}
@@ -835,6 +825,7 @@ views:
       - {ref: common/ground-symbol@1, id: earth-mark, at: [85.4, 8.3], for: chassis, group: furniture,
         rel-pos: 1}
       - {ref: common/esd-jack@1, id: esd-rear-jack, at: [106.6, 8.6], for: chassis, group: esd, rel-pos: 0}
+      - {ref: juniper/ex2200-dc-terminal@1, id: dc-terminal, at: [401.2, 11.9], group: power-input, rel-pos: 0}
       - {ref: common/screw-head@1, id: rps-screw-0, at: [53.0, 31.0], for: rps, group: furniture, rel-pos: 2}
       - {ref: common/screw-head@1, id: rps-screw-1, at: [110.7, 31.0], for: rps, group: furniture, rel-pos: 3}
       - {ref: common/screw-head@1, id: rps-screw-2, at: [55.1, 38.5], for: rps, group: furniture, rel-pos: 4}
