@@ -469,6 +469,9 @@ this checkout's tools:
 ./build.sh --overlay-library ../my-library --overlay-out ../my-library-dist
 ```
 
+The output folder is resolved through `python3`, so the build runs on macOS
+with no GNU coreutils, and the folder need not exist yet.
+
 The build lints the overlay's files, renders its devices against the public
 components plus its own, and writes `devices.json`, `components.json`, each
 device's `configs.json` and faces, and `rack.json` to `--overlay-out`. It reads
