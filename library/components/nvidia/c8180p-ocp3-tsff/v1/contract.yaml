@@ -1,0 +1,108 @@
+format: 1
+kind: module
+name: c8180p-ocp3-tsff
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: networking
+description: >-
+  NVIDIA ConnectX-8 C8180P SuperNIC, OCP NIC 3.0 tall small form factor, one OSFP cage: 800Gb/s XDR InfiniBand by default or 2x400GbE, PCIe 6.0 x16, with the NVIDIA heatsink. The Partner Cooled card (900-9X85E-00EX-MP0) is a separate part number and is not modelled
+size: {w: 71.8, h: 17.8, d: 115.0}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+unplaced: >-
+  no bay in the library takes this card. It is a tall small form factor card
+  (OCP NIC 3.0 Design Specification 1.6.0, Table 5, 14.20 high) and the only held
+  OCP bay, the Dell R660's, is a small form factor slot (Dell technical guide,
+  Table 11), which does not take it. A server whose documents give a TSFF slot,
+  or a bay that states `interface: ocp3-tsff`, would seat it.
+attrs:
+  model: C8180P
+  part-numbers: 900-9X85E-00EX-MJ0
+  ports: 1
+  media: osfp
+  form-factor: ocp3-tsff
+  osfp: 1
+  role: nic
+  pcie-generation: 6
+groups:
+  osfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: osfp, speed: 800g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    NVIDIA ConnectX-8 SuperNIC for OCP Spec 3.0 user manual: the part-number table
+    (single-cage OSFP, "OCP3.0 TSFF", PCIe 6.0 x16), the specifications table
+    (115.00 x 76.00 board, the NVIDIA heatsink on 900-9X85E-00EX-MJ0), the
+    bracket drawings and the LED section. The outline from OCP NIC 3.0 Design
+    Specification 1.6.0, Table 5, page 25. No photograph of the card is held; the
+    face is read off the manual's figures.
+  speeds: >-
+    the part-number table prints "InfiniBand: 800Gb/s XDR IB (default), Ethernet:
+    2x400GbE". The port carries 800g, the cage's own rate; the Ethernet mode is
+    two 400GbE ports on the one cage and the manual's port-splitting section lists
+    eight 100GbE as a third mode. Which mode a build uses is a configuration, so
+    none is drawn.
+  size: >-
+    drawing - the face is the manual's 71.80 x 17.80 bracket (the short bracket
+    of its bracket drawing, with no thumbscrew tab), `d` is the specifications
+    table's 115.00 board depth. The manual's specifications table gives the
+    bracket type of both part numbers as the one drawn at 71.80; the board
+    drawing for the C8180P draws a pull-tab bracket on it (116.61 overall with the
+    tab). The two disagree and the short bracket is modelled.
+  thickness: >-
+    OCP NIC 3.0 Design Specification 1.6.0, Table 5, page 25: TSFF Z-height 14.20
+    (the SFF is 11.50), board 76.00 x 115.00. The size here is the bracket's face,
+    71.80 x 17.80, and the component schema has no key for the Z-height, so it is
+    stated here; ocp3-tsff is the standards registry entry. A TSFF card does not seat in
+    an SFF slot, so no Dell R660 bay lists it.
+  face: >-
+    drawing - vent grid, window and lamp holes read off the manual's bracket
+    drawing and scaled on its printed 71.80 width: six columns of three rows at
+    about 4.95 x 4.7 pitch (the third row stops at four columns for the lamps),
+    three vents at the far end, the OSFP window 23.6 x 11.0 at x 38.7. The figure
+    is not uniformly scaled (its height reads about 5 percent off its 17.80), so
+    every position is an estimate to about half a millimetre.
+  port: >-
+    std/osfp@1 is a 23.1 x 13.5 aperture, placed on the centre of the drawn
+    window; the window itself reads 11.0 tall against it. The registry figure
+    is a vendor reading of another face and no document held gives the OSFP cage
+    opening.
+  lamps: >-
+    drawing - two round holes legended LINK and ACT, about 1.0 across (drawn
+    0.8 to 1.0), carried as common/led-dot@1 (2.0). The figure's arrows call the
+    right hole (legend ACT) LED 1 and the left (LINK) LED 2, and the text calls LED
+    1 the bi-colour yellow/green lamp (green solid at full speed, yellow solid
+    below it, green blinking on activity, yellow 1 Hz beacon) and LED 2 the green
+    lamp (on at link up and on error, blinking on activity, off for beacon). The
+    legends and the numbering disagree and the arrows' numbering is followed.
+  colour: >-
+    estimated - the figures draw the bracket black and agree on that; the
+    drawn heatsink is tan-finned in one figure and black in another, so the
+    body colour is carried as a dark grey and nothing about the heatsink is
+    drawn. No photograph is held.
+body:
+  depth: 115.0
+  color: '#2a2d31'
+parts:
+  - ref: std/osfp@1
+    id: port-1
+    at: [38.95, 1.65]
+    group: osfp
+    attrs: {media: osfp, speed: 800g}
+  - ref: common/led-dot@1
+    id: led-port-1-1
+    at: [34.2, 12.8]
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: link-up-reduced-speed, color: '#eab308'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-1-2
+    at: [30.4, 12.8]
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: error, color: '#22c55e'}]}
+skins: [default]

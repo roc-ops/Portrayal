@@ -116,6 +116,10 @@ def test_the_connector_registry_is_not_vacuous():
                          # a riser bay states one as its `interface`, so no part
                          # presents either and neither is a slot below
                          "pcie-fh", "pcie-lp",
+                         # the four OCP NIC 3.0 card slots (Table 5 of the
+                         # OCP NIC 3.0 Design Specification 1.6.0): a device bay
+                         # states one as its `interface`, so none is a slot below
+                         "ocp3-sff", "ocp3-tsff", "ocp3-dsff", "ocp3-tdsff",
                          # stack, virtual-chassis and redundant-power connectors,
                          # each presented by a port part
                          "flexstack", "stackwise-480", "stackpower", "ex4200-vcp",
