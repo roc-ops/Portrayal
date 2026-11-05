@@ -623,11 +623,11 @@ PART_POWER = {
     # (-48VA RETA -48VB RETB) in one pluggable screw-clamp header on the chassis
     # face. It is still where a supply's wire is landed, so the same row.
     "telco-systems/tm-7124s-dc-feed": "dc-terminal",
-    # AND THE XM-8424H's DC SUPPLY MODULE: a smaller two-pole screw-clamp plug (20.1 mm
+    # AND THE XM-8424H's DC SUPPLY MODULE: a smaller two-cell pluggable block (20.1 mm
     # against the ECS4530's 32.1), so its own part, landing the -36 to -72 V feed. The same row.
-    "telco-systems/xm8424-dc-plug": "dc-terminal",
-    # AND THE XM-3352's DC SUPPLY: a three-pole screw-clamp plug, the same row.
-    "telco-systems/xm3352-dc-plug": "dc-terminal",
+    "telco-systems/xm8424-dc-header": "dc-terminal",
+    # AND THE XM-3352's DC SUPPLY: a three-cell pluggable block, the same row.
+    "telco-systems/xm3352-dc-header": "dc-terminal",
     # AND THE AURCORE AIS SWITCHES' FIVE-WAY HEADER, `+ - earth + -`: two DC feeds
     # landed in one pluggable screw-clamp plug on the top face, the TM-7124S case
     # again. Still where a supply's wire is landed, so the same row (#737).
