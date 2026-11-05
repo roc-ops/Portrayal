@@ -72,22 +72,24 @@
    "juniper/ex6210-fan@1"
   ]
  },
- "composed": "00c677b5329e2526",
+ "composed": "cd10489ca5365b97",
  "composed-refs": {
   "common/esd-jack@1": "1.0.1+fa89d49c1ff75841",
   "common/esd-warning@1": "1.0.0+630c20786ff1f896",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "juniper/ex6200-blnk-pwr-2u@1": "1.0.0+abeddb7bb57a9990",
   "juniper/ex6200-blnk-pwr-3u@1": "1.0.0+876726d574188698",
   "juniper/ex6200-lc-cover@1": "1.0.0+a0987940e02e579c",
   "juniper/ex6200-psu-shelf@1": "1.0.0+b823096613d62a7c",
   "juniper/ex6200-pwr-ac2500@1": "1.0.0+3dd0ed46dd64f320",
   "juniper/ex6200-pwr-ac5000@1": "1.0.0+62da11e43763b212",
-  "juniper/ex6200-pwr-dc2100@1": "1.0.0+aa6865c6a853def2",
+  "juniper/ex6200-pwr-dc2100@1": "1.1.0+f3e82be72c166c3d",
   "juniper/ex6200-sre-cover@1": "1.0.0+8164e1b1d7dec697",
   "juniper/ex6200-sre64-4xs@1": "1.0.0+f84bc9e5cb285894",
   "juniper/ex6210-fan@1": "1.0.0+f96ea9e38c8dd411",
+  "juniper/mx240-dc-pole@1": "1.0.0+f7799a0f22b3f76c",
   "std/c20-inlet@1": "1.4.0+618074a1c18c1faa",
   "std/rj45@2": "2.1.0+2c8fec73bdc493fb",
   "std/sfp-ganged@1": "1.1.1+46f35de7bfa8a751",
@@ -103,6 +105,31 @@
   "dc-2100-t",
   "redundant"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "juniper/ex6200-pwr-dc2100@1": {
+    "awg": null,
+    "configs": [
+     "dc-2100-t"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "pos",
+      "slot": "psu-0/module/pole-pos"
+     },
+     {
+      "role": "neg",
+      "slot": "psu-0/module/pole-neg"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "437eb71ad342595b",
  "groups": [
@@ -211,5 +238,5 @@
  "placement-surface": "44136fa355b3678a",
  "shape": "476d82cf35d50b5f",
  "surface": "b50e9ae1481063f5",
- "version": "0.1.1"
+ "version": "0.2.0"
 }
