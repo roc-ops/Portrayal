@@ -693,6 +693,7 @@ PART_POWER = {
     "edgecore/dcs201-dc-header": "other",
     "edgecore/amx-3200-dc-header": "other",
     "edgecore/agr560-dc-header": "other",
+    "edgecore/ais800-64-dc-header": "other",
     # THE JPSU-150-DC-AFO'S DC POWER CONNECTOR IS A THREE-POSITION PLUGGABLE BLOCK THE GUIDES DO NOT NAME THE MAKER OF.
     # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
     "juniper/jpsu-150-dc-header": "other",
@@ -765,6 +766,7 @@ POWER_LABEL = {
     "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
     "edgecore/amx-3200-dc-header": "DC power connector (3-pin)",
     "edgecore/agr560-dc-header": "DC power connector (2-socket)",
+    "edgecore/ais800-64-dc-header": "DC power connector (6-socket)",
     "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
 }
