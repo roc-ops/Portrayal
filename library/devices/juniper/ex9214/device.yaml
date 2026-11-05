@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex9214
-version: 0.2.1
+version: 0.3.0
 maturity: modelled
 manufacturer: Juniper
 model: EX9214
@@ -226,7 +226,13 @@ gaps:
   reason: needs-drawing
   wanted: >-
     A flat drawing or photograph of the DC supply. The guide draws it once, in an isometric (Figure 23), and Figure 9 draws four of them. The face is drawn from
-    fractions of that figure on the AC supply's outline.
+    fractions of that figure and estimated to about 5 mm; it is not corrected for the angle of view.
+- what: dc-terminal-studs
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    A photograph of the DC supply's terminal strip with its clear cover off. Figures 23 and 58 print the legends -48V, RTN, RTN and -48V and draw no stud, and no document
+    dimensions the studs or says how high on the face they stand. The four poles are placed at the legends, two studs each on the lug's 5/8 in. pitch, and their height is estimated.
 - what: psu-blank
   scope: [rear]
   reason: vendor-silent
@@ -415,16 +421,16 @@ views:
     components:
       bays:
       - {id: pem0, at: [1.5, 212.0], size: {w: 101.6, h: 368.3},
-         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1],
+         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1, juniper/ex9214-pwr-mx960-4100-dc@2],
          default: juniper/ex9214-pwr-mx960-4100-ac@1, group: psus, rel-pos: 0}
       - {id: pem1, at: [106.7, 212.0], size: {w: 101.6, h: 368.3},
-         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1],
+         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1, juniper/ex9214-pwr-mx960-4100-dc@2],
          default: juniper/ex9214-pwr-mx960-4100-ac@1, group: psus, rel-pos: 1}
       - {id: pem2, at: [211.9, 212.0], size: {w: 101.6, h: 368.3},
-         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1],
+         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1, juniper/ex9214-pwr-mx960-4100-dc@2],
          default: juniper/ex9214-pwr-mx960-4100-ac@1, group: psus, rel-pos: 2}
       - {id: pem3, at: [317.1, 212.0], size: {w: 101.6, h: 368.3},
-         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1],
+         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1, juniper/ex9214-pwr-mx960-4100-dc@2],
          default: juniper/ex9214-pwr-mx960-4100-ac@1, group: psus, rel-pos: 3}
       placements:
       - {id: inlet-0, ref: std/c20-inlet@1, at: [21.0, 126.8], for: pem0, group: inlets, rel-pos: 0, attrs: {function: AC-2 inlet PEM 0}}
@@ -521,10 +527,10 @@ configurations:
       EX9214-RED3C-DC: three EX9200-SF3 modules with two EX9200-RE2, two fan trays, four 4100 W DC supplies and blank panels for the line card slots.
     bays:
       sf2-lc6/re: ''
-      pem0: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem1: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem2: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem3: juniper/ex9214-pwr-mx960-4100-dc@1
+      pem0: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem1: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem2: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem3: juniper/ex9214-pwr-mx960-4100-dc@2
     part-numbers:
       EX9214-RED3C-DC: {}
   base3b-ac:
@@ -602,10 +608,10 @@ configurations:
       sf1: juniper/ex9200-sf2@1
       sf2-lc6: juniper/ex9200-sf2@1
       sf2-lc6/re: ''
-      pem0: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem1: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem2: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem3: juniper/ex9214-pwr-mx960-4100-dc@1
+      pem0: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem1: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem2: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem3: juniper/ex9214-pwr-mx960-4100-dc@2
     part-numbers:
       EX9214-RED3B-DC: {}
   base3a-ac:
@@ -648,10 +654,10 @@ configurations:
       sf1/re: juniper/ex9200-re@1
       sf2-lc6: juniper/ex9200-sf2@1
       sf2-lc6/re: ''
-      pem0: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem1: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem2: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem3: juniper/ex9214-pwr-mx960-4100-dc@1
+      pem0: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem1: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem2: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem3: juniper/ex9214-pwr-mx960-4100-dc@2
     part-numbers:
       EX9214-REDUND3A-DC: {}
   base3-ac:
@@ -680,10 +686,10 @@ configurations:
       sf1/re: juniper/ex9200-re@1
       sf2-lc6: juniper/ex9200-sf@1
       sf2-lc6/re: ''
-      pem0: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem1: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem2: juniper/ex9214-pwr-mx960-4100-dc@1
-      pem3: juniper/ex9214-pwr-mx960-4100-dc@1
+      pem0: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem1: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem2: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem3: juniper/ex9214-pwr-mx960-4100-dc@2
     part-numbers:
       EX9214-REDUND3-DC: {}
   redund3-ac:

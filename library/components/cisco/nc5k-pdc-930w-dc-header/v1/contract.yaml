@@ -1,0 +1,59 @@
+format: 1
+kind: component
+name: nc5k-pdc-930w-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: cisco-dc-block-3
+description: >-
+  The three-cell DC power connector on the face of the Cisco NC5K-PDC-930W-BK and NC5K-PDC-930W-FR
+  supplies, seen from its mating face. Three grey cells in a column, printed -DC, +DC and an earth
+  symbol from the top down beside the housing it stands in. It is the connector of the NXA-PDC-930W,
+  drawn at the size the NCS 5000 supplies' housing holds. The cable connector
+  cisco/nxa-pdc-930w-dc-plug@1 seats at its mate point.
+size: {w: 10.0, h: 30.4}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The Hardware Installation Guide for Cisco NCS 5000 Series Routers draws the connector without a
+  scale (Figure 21) and prints no dimension for it. The box is the three cells the supplies' skins
+  drew before this part took them over (9.6 by 9.6, 9.6 by 9.6 and 9.6 by 9.0, 30.0 high in all)
+  with 0.2 around them for their outlines. The NXA-PDC-930W's header draws the same connector about
+  9.0 by 16.0; both are estimates, so one connector is drawn at two sizes.
+attrs: {connector: DC power connector block, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED: the Hardware
+    Installation Guide for Cisco NCS 5000 Series Routers, Figure 21 "Connect Power Cord to DC Power
+    Outlet" (PDF page 40, guide page 32), marks it with callout 3 and its cord plug with callout 4;
+    the steps beside it call it "the power connector"; neither gives a part number. The Cisco N93108TC-FX3 NX-OS Mode
+    Switch Hardware Installation Guide, figure 504148 (PDF page 50), draws the same connector for the
+    NXA-PDC-930W: three cells in a column, the same marks in the same order, a clip at the left of the
+    middle cell. So the interface is the one the NXA-PDC-930W's header presents, and it claims no
+    standard.
+  gender: >-
+    NOT STATED. Figure 21 shows the three cells and, drawn apart, a three-way plug whose wires enter at
+    the back; it does not say which half carries pins. The cable connector is the half that seats in
+    this one.
+  marks: >-
+    guide - Figure 21 prints -DC, +DC and an earth symbol beside the three cells, top to bottom. The
+    marks are on the supply's skin, not on this part; the cells are drawn in that order.
+  size: >-
+    estimated - see size-notes. The three cells are the ones the skins of the supplies drew before, at
+    the same places and sizes; Figure 21 has no scale.
+  colour: >-
+    estimated - the cells are the grey the skins drew (#8d9399 with an outline #5c6167). Figure 21 shows
+    grey cells in a pale housing and states no shade; the NCS 5700 guide's Figure 93 shows the same three
+    cells in a black housing on the NC57-1600W-DCFW.
+  clip: >-
+    NOT DRAWN HERE. Figure 21 shows a small tab at the left of the middle cell; the skins of the
+    supplies never drew it and this part draws what they drew.
+  mate: >-
+    derived - the centre of the middle cell, (5.0, 15.2), facing out. The cable connector's own middle
+    contact is at its centre too, so the two align.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face, so it is drawn
+    flush and states no relief.
+elements: {}
+connection-points:
+  mate: {at: [5.0, 15.2], direction: front}
+skins: [default]

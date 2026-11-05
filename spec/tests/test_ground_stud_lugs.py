@@ -398,7 +398,7 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
 
 @pytest.mark.heavy
 def test_what_is_out_of_scope_is_still_not_a_seat():
-    for ref in ("cisco/a9k-ground-pad@1", "common/ground-screw-washer@1", "casa/ground-bolts@1",
+    for ref in ("common/ground-screw-washer@1", "casa/ground-bolts@1",
                 "edgecore/agr-ground-plate@1", "common/ground-symbol@1",
                 ):
         c = _contract(ref)

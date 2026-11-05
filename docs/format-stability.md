@@ -836,7 +836,7 @@ configuration's front, rear and top views.
 
 `format` is 1. Each device, keyed by `name`, always carries `manufacturer`,
 `model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default`, `configs`
-(the names of its configurations) and `kind`. Seven keys appear only when the
+(the names of its configurations) and `kind`. Eight keys appear only when the
 device has them:
 
 - `ears`: `{"default": {"name", "at"}}`, the default position of
@@ -845,6 +845,21 @@ device has them:
   section 3). The kit's `setbackOf` stands the part `at` mm in front of the
   rail. A device whose default position states no `at`, or that has none,
   has no `ears` key, and the kit places its front on the rail.
+- `kit`: `{"ref", "motion", "depth"?, "preset"?}`, the kit the site defaults
+  to, so a rack tool need not open the device's `configs.json`. It is the
+  `in-box` kit of `chassis.kits`, else the first listed (docs/rack-mounting-design.md
+  section 5), read from the row `configs.json` resolves inline. `ref` is the
+  kit's ref and `motion` is `fixed`, `telescoping`, `sliding` or `shelf`.
+  `depth` is the rack depth the kit fits, front flange to rear flange in mm,
+  and `preset` its factory setting, each written as the kit's configuration
+  writes it, with the device's own `depth` override applied: `depth` is one
+  `[min, max]` or one range for each hole type the source gives, and is absent
+  where the configuration states none (a `preset` and no range: factory
+  setting known, range unknown), never `null` and never `[preset, preset]`. A
+  kit with more than one configuration has no default one, so its entry has
+  `ref` and `motion` and neither `depth` nor `preset`. A device that lists no
+  kit, or whose default kit does not resolve, has no `kit` key. A reader that
+  does not know `kit` is unaffected, and `format` is still 1.
 - `mount`: the device's `chassis.mount`, present only when it is not `rack`.
 - `shell`: `chassis.shell`, `sheet` for a body that is a sheet and not a box.
 - `capacity`: `{"count", "basis", "media"}`, the cable capacity the vendor
