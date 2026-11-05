@@ -357,6 +357,36 @@ def test_c19_lets_off_a_supply_whose_part_carries_a_sentence(tmp_path):
     assert usable(scan(world(tmp_path / "b", comps=[supply], front=drawn), tmp_path / "b", library=library)) == {}
 
 
+def test_c19_lets_off_a_configuration_whose_every_supply_bay_is_open_and_no_other(tmp_path):
+    """A spare chassis ships with its supply bays open: the configuration says it is powered, and it has no supply to offer a power end.
+    The supplies ordered for it are judged on their own parts. A bay that takes no supply, a bay seated, a bay seated by default and a
+    chassis with no bay at all stay reported."""
+    supply = comp("acme/psu@1", **{"class": "psu"})
+    fan = comp("acme/fan@1", **{"class": "fan"})
+    psu_bay = lambda pid, default=None: {"id": pid, "accepts": ["acme/psu@1"], "default": default, "group": "psu"}
+    fan_bay = {"id": "fan-0", "accepts": ["acme/fan@1"], "default": None, "group": "fan"}
+    drawn = [element("psu-1", "psu", ref="acme/psu@1:1.0.0")]
+
+    def reported(name, bays, seated, front=()):
+        folder = tmp_path / name
+        folder.mkdir()
+        dist = world(folder, comps=[supply, fan], front=list(front), bays=seated)
+        doc = json.loads((dist / "dev.configs.json").read_text())
+        doc["bays"] = {"front": bays, "rear": []}
+        doc["configs"][0]["power"] = ["ac"]
+        (dist / "dev.configs.json").write_text(json.dumps(doc))
+        return sorted(usable(scan(dist, folder)))
+
+    got = {"every supply bay open": reported("a", [psu_bay("psu-0"), psu_bay("psu-1"), fan_bay], {"psu-0": "", "psu-1": "", "fan-0": ""}),
+           "a supply drawn with no power end": reported("b", [psu_bay("psu-1")], {"psu-1": "acme/psu@1"}, drawn),
+           "one supply bay seated, none drawn": reported("c", [psu_bay("psu-0"), psu_bay("psu-1")], {"psu-0": "acme/psu@1", "psu-1": ""}),
+           "a bay that takes no supply": reported("d", [fan_bay], {"fan-0": ""}),
+           "a supply bay seated by default": reported("e", [psu_bay("psu-1", "acme/psu@1")], {}),
+           "no bay": reported("f", [], {})}
+    assert got == {"every supply bay open": [], "a supply drawn with no power end": ["C19"], "one supply bay seated, none drawn": ["C19"],
+                   "a bay that takes no supply": ["C19"], "a supply bay seated by default": ["C19"], "no bay": ["C19"]}, got
+
+
 def test_c19_and_c20_let_off_a_fixed_cord_and_an_inlet_that_its_placement_presents(tmp_path):
     """A device fed through a fixed cord, a plug of the part's own that its sentence says is no connector, offers no power end by
     design (C19). A placed part that composes one connector part presents it as its own slot, at the placement's path (C20)."""
@@ -385,6 +415,51 @@ def test_c19_and_c20_let_off_a_fixed_cord_and_an_inlet_that_its_placement_presen
            "no slot at the placement": codes("f", [supply, inlet], placed)}
     assert got == {"fixed cord": [], "cord with no sentence": ["C19", "C20"], "sentence on a part with no plug": ["C19"],
                    "slot at the placement": [], "slot of another interface": ["C20"], "no slot at the placement": ["C19", "C20"]}, got
+
+
+def test_c20_counts_a_seat_the_build_publishes_and_judges_a_placed_block_by_the_seats_drawn_in_it(tmp_path):
+    """A drawn screw, stud or inlet is a place to land a cord or lug when the build publishes a connector slot at its own path, with a
+    registered interface, that takes a cable end. The poles of a DC port are such seats, and the free-port list shows the port in their
+    place. A block that a placed part draws with no part of its own is judged by the seats drawn inside it. A terminal drawn with no
+    published seat stays reported."""
+    screw = comp("acme/scr@1", **{"class": "screw"})
+    block = element("psu-1/block", "terminal", parent="psu-1", box={"x": 10, "y": 5, "w": 20, "h": 8})
+    titled = {**block, "ref": "acme/scr@1:1.0.0"}                               # the same block, drawn from a part of its own
+
+    def inside(pid, x):
+        return element(pid, "screw", parent="psu-1", ref="acme/scr@1:1.0.0", box={"x": x, "y": 6, "w": 4, "h": 4})
+
+    def seat(pid, interface="rj45", accepts=("generic/rj45-plug@1",)):
+        return {**slot(pid, accepts), "interface": interface}
+
+    def reported(name, drawn, cages):
+        folder = tmp_path / name
+        folder.mkdir()
+        dist = world(folder, comps=[screw], front=drawn, cages=cages)
+        if cages:                                                               # one DC port over the seats, which the free-port list offers instead of them
+            doc = json.loads((dist / "dev.configs.json").read_text())
+            doc["configs"][0]["dc-ports"] = [{"id": "in", "path": "psu-1/in", "direction": "input",
+                                              "poles": [{"role": "batt", "slot": c["id"]} for c in cages]}]
+            (dist / "dev.configs.json").write_text(json.dumps(doc))
+        return sorted(c["path"] for c in causes(scan(dist, folder), "C20"))
+
+    one, two, three = inside("psu-1/s1", 12), inside("psu-1/s2", 20), inside("psu-1/s3", 26)
+    got = {"seat at the screw": reported("a", [one], [seat("psu-1/s1")]),
+           "no seat": reported("b", [one], []),
+           "seat of an interface nobody registered": reported("c", [one], [seat("psu-1/s1", "nothing")]),
+           "seat at another path": reported("d", [one], [seat("psu-1/s2")]),
+           "seat that takes no cable end": reported("e", [one], [seat("psu-1/s1", accepts=("acme/scr@1",))]),
+           "the device's own element": reported("f", [element("gnd", "ground", x=20)], [seat("gnd")]),
+           "block with a seat in it": reported("g", [block, one, two], [seat("psu-1/s1"), seat("psu-1/s2")]),
+           "block with seats in it and one screw without": reported("h", [block, one, two, three], [seat("psu-1/s1"), seat("psu-1/s2")]),
+           "block with no seat in it": reported("i", [block, one, two], []),
+           "block whose only seat is outside it": reported("j", [block, inside("psu-1/s4", 40)], [seat("psu-1/s4")]),
+           "block drawn from a part of its own": reported("k", [titled, one], [seat("psu-1/s1")])}
+    assert got == {"seat at the screw": [], "no seat": ["psu-1/s1"], "seat of an interface nobody registered": ["psu-1/s1"],
+                   "seat at another path": ["psu-1/s1"], "seat that takes no cable end": ["psu-1/s1"], "the device's own element": [],
+                   "block with a seat in it": [], "block with seats in it and one screw without": ["psu-1/s3"],
+                   "block with no seat in it": ["psu-1/block", "psu-1/s1", "psu-1/s2"],
+                   "block whose only seat is outside it": ["psu-1/block"], "block drawn from a part of its own": ["psu-1/block"]}, got
 
 
 def test_every_finding_lists_every_cause_uncapped_with_the_part_that_draws_it(tmp_path):

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ex4100-jpsu-150-dc-afo
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -54,6 +54,25 @@ provenance:
     terminals is not drawn. The 50-60 Hz legend is as printed in Figure 45.
   relief: >-
     estimated - the latch stands proud of the face in Figure 45. Its projection is not stated or measured.
+  connector: >-
+    the supply composes juniper/jpsu-150-dc-header@1 as `dc-header`, the pluggable three-terminal connector of the EX4100
+    Switch Hardware Guide (Juniper Networks), "Connect DC Power to an EX4100 Switch" (PDF pages 139 and 140) and its Figure 75
+    (the supply's socket, with the connector approaching). The guide calls it "the terminal connector" and names no maker or
+    part number for it, so the part is a declared stand-in (its own provenance). Its place is an estimate: the guide gives no
+    dimension, so it stands at the centre of the block the skin already draws (48.2, 9.4; 12.6 by 27.5), inside it. The three
+    round screw heads the skin draws in that block are covered by the part, and the skin is unchanged. The cable connector of
+    Figure 74, juniper/jpsu-150-dc-plug@1, mates it. The EX3400 supply of the same part number carries the same connector (the
+    same drawing in its guide) and composes the same part.
+  roles: >-
+    guide - Figure 75 prints "+", "-" and an earth symbol beside the three cells, top to bottom. Step 1's note says the + terminal
+    is referred to as +RTN and the - terminal as -48 V, so the roles are `rtn`, `batt` and `gnd`, in that order from the top.
+    The guide prints no nominal beside the figure; Table 38 prints a range.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. The three poles are the cells of one pluggable connector that has an earth
+    cell in it, and a port whose poles are a connector's contacts is offered only where that path's part is itself the
+    connector; on a supply in a bay it is the supply, not the connector it composes, so a port stated here would be published
+    and then not offered. The roles above are recorded for the port a later change can state, a minor on the devices that seat
+    this supply.
 states:
 - ok
 - fault
@@ -93,4 +112,6 @@ relief:
 body:
   depth: 225.0
   color: '#b9bec4'
+parts:
+  - {ref: juniper/jpsu-150-dc-header@1, id: dc-header, at: [49.5, 10.65]}
 skins: [default]
