@@ -1918,7 +1918,7 @@ which carry what decides it (`color`, `jackets`, `typeColor`).
 
 The figure is a sketch drawn from the kit's own answers for one rack
 (`cablePlan` with the readers, then `colorOf` of each link), not a page's
-drawing. The last two cables are the media's dark grey, as every AOC was.
+drawing. The last two cables are the media's teal, `#08788a`.
 
 ### 14.3 What was decided in the build
 
@@ -1973,7 +1973,8 @@ wording here, and every other item, still waits.
    own colour either way.
 7. **draw.io** draws a cable in its colour when rule 1, 2 or 3 gives one. A
    cable coloured by its media alone is filed under its media as before,
-   and takes the entry of the draw.io writer's own palette.
+   and takes the kit's colour for that media (`CABLE_COLOURS`, derived from
+   `COLORS`).
 8. **NetBox and Nautobot** get the cable's own colour and nothing else, in
    the `color` column both files already had and left blank: six lower-case
    hex digits with no `#`. Both store a cable's colour so (NetBox v4.7.2
@@ -2010,11 +2011,13 @@ wording here, and every other item, still waits.
 
 **What moved with the AOC default (14.5):** `COLORS.aoc` went from `#3a3f45`
 to `#08788a`, so a drawing, sheet or 3D file of a rack with an AOC that states
-no colour is drawn in the teal, and `CABLE_COLOURS.aoc` in `kit/drawio.js`
-follows it.
+no colour is drawn in the teal. The draw.io writer's palette moved for every
+media, not only this one: `CABLE_COLOURS` in `kit/drawio.js` is now derived
+from `COLORS`, so each of its rows is the colour the Rack Builder draws.
 
-**What does not move:** the colour of every other media, so every drawing,
-sheet and 3D file of a rack that states no colour and has no AOC; the four
+**What does not move:** the colour of every other media in the Rack Builder,
+so every drawing, sheet and 3D file of a rack that states no colour and has
+no AOC (a draw.io export excepted, as above); the four
 values of `JACKETS`; every recorded answer of
 `spec/tests/js/speed-goldens.json`; the columns of every export.
 
