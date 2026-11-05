@@ -14,14 +14,16 @@
   ],
   "rear/bays/psu-0": [
    "ufispace/psu-202-ac@1",
-   "ufispace/psu-202-dc@1"
+   "ufispace/psu-202-dc@1",
+   "ufispace/psu-202-dc@2"
   ],
   "rear/bays/psu-1": [
    "ufispace/psu-202-ac@1",
-   "ufispace/psu-202-dc@1"
+   "ufispace/psu-202-dc@1",
+   "ufispace/psu-202-dc@2"
   ]
  },
- "composed": "9423278293561cb3",
+ "composed": "3b9d421a79e44287",
  "composed-refs": {
   "common/compliance-sticker@1": "1.0.0+6b3c51b31c446689",
   "common/ground-symbol@1": "1.0.1+0018bfdfc1559185",
@@ -29,6 +31,8 @@
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
   "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
+  "juniper/mx240-dc-pole@1": "1.0.0+f7799a0f22b3f76c",
   "std/c20-inlet@1": "1.4.0+618074a1c18c1faa",
   "std/micro-usb@1": "1.0.1+623c203fe8667fd2",
   "std/qsfp-dd@1": "1.3.1+c3cf5f2db67d8233",
@@ -41,14 +45,67 @@
   "std/usb-a@1": "1.3.0+3c77f06ea6794bfc",
   "ufispace/fan-808012@1": "1.0.0+90a5595c03389564",
   "ufispace/psu-202-ac@1": "1.0.1+fb5788d303eb112e",
-  "ufispace/psu-202-dc@1": "1.0.2+5d752eec7af80f08"
+  "ufispace/psu-202-dc@1": "1.0.3+a2c129997ce48834",
+  "ufispace/psu-202-dc@2": "2.0.0+54952fa47b7e0605"
  },
  "configs": [
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "ufispace/psu-202-dc@2": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     }
+    ],
+    "rating-a": 60,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "ufispace/psu-202-dc@2": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     }
+    ],
+    "rating-a": 60,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
- "gaps": "efdd28725151959f",
+ "gaps": "769374ef6e8bd46f",
  "groups": [
   "fans",
   "furniture",
@@ -209,7 +266,7 @@
   "right/placements/pin-r5",
   "right/placements/rail-screw-r"
  ],
- "names": "a1249c7eba99deb0",
+ "names": "44d6546bf1c2e6f2",
  "placement-addressing": {
   "for": {
    "front/placements/led-fan": [
@@ -696,6 +753,6 @@
  },
  "placement-surface": "ed4f3f8ceb725cc1",
  "shape": "0d15003edce0f06c",
- "surface": "0fa63f5fb43c98ef",
- "version": "4.0.9"
+ "surface": "321b3cb0168559ab",
+ "version": "4.1.0"
 }

@@ -1,0 +1,186 @@
+format: 1
+kind: module
+name: psu-202-dc
+version: 2.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-202-DESR 2000W DC PSU (S9600-56DX 2RU aggregation family) -
+  black face with a two-post screw-terminal block behind a hinged plastic safety cover
+  filling the left half, a square-grid intake vent on the right carrying the status
+  lamp, and a red release latch on the right edge; exhaust airflow
+size: {w: 50.5, h: 40.2}
+size-confidence: {w: datasheet, h: datasheet}
+size-notes: >-
+  both axes from the S9600-56DX HIG's Component Physical Information table, 50.5 x 321 x 40.2 mm
+  (provenance `size`).
+attrs: {power-output-w: 2000, input: dc, model: PSU-202-DESR, airflow: exhaust, inlet: dc-terminal}
+provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'a two-post screw-terminal block
+    behind a hinged plastic safety cover'. Nothing new was measured.
+  power: >-
+    datasheet - the S9600-56DX datasheet's Available to Order block states the rating in
+    the part number's own row: 'PSU-202-DESR, 2000W DC, exhaust air flow', beside the AC
+    sibling 'PSU-202-AESR, 2000W AC, exhaust air flow'. A supply carries a nameplate
+    rating and not a draw measured against an ambient, so no temperature is recorded with
+    it. Datasheet DC input '-40 to -72 V, 60 A'.
+  size: >-
+    HIG - Component Physical Information table, 'PSU (W x D x H) 1.99 x 12.64 x 1.58 in
+    (50.5 x 321 x 40.2 mm)', so the FACE is 50.5 x 40.2. Weight 2.2 lb (1.0 kg) for the DC
+    unit, same table. The W/H order was settled from outside the drawing exactly as
+    ufispace/psu-202-ac@1 records it - two of these stack inside an 87.7 mm chassis, which
+    40.2 allows and 50.5 does not - and that sentence is this file's reason too, not an
+    independent confirmation of it.
+  layout: >-
+    photo - the S9600-56DX rear product photograph (photos/s9600-56dx-3-rear, 948 px across
+    the 436 mm body, 2.174 px/mm, its horizontal scale confirmed by the four fan status
+    lamps landing on an 84.4 mm pitch against the rear drawing's 84.47). THIS FACE IS THE
+    MIRROR OF THE AC ONE and that is a measurement, not a guess: the AC unit drawn in HIG
+    Figure 7 has its vent on the left and its status lamp 8.5 mm from the left edge, while
+    the photographed DC unit has its lamp at 413.0 mm across the rear face, 37.5 mm from
+    the same bay's left edge, with the terminal block occupying the left half instead. The
+    two builds are laid out opposite ways round. Element positions across the face come
+    off that photograph; nothing in the intake dimensions them, so they are photo-measured
+    at 2.174 px/mm and are good to about half a millimetre.
+  terminal-block: >-
+    HIG Connecting Power / DC Version - the PSU carries a screw-type DC terminal block
+    under a plastic cover, opened by pressing at its top or bottom edge and swinging it
+    outwards, and the DC cable's two-hole lug is fastened to the block. Two
+    poles, a hinged cover, #6 AWG lug. Drawn CLOSED, which is how the rear photograph shows
+    it and how a running unit sits. The supply also carries a built-in fast-acting fuse per
+    the DC section.
+  block: >-
+    estimated - the screws of the block are drawn from the UfiSpace S9600-56DX Hardware
+    Installation Guide, section 9.1 Connecting Power (DC version), Figures 25 and 26 (PDF
+    pages 22 and 23; the same pictures as Figures 25 and 26 of the S9600-30DX guide), which
+    show the block in isometric with no elevation and no scale: two poles one above the
+    other with a barrier between them, and two screws side by side on each pole (four in
+    all), under a clear plastic cover, the black cable marked -40 to -72 on the upper pole
+    and the red RTN cable on the lower. The rear photograph shows the same block closed,
+    black, with one screw of each pole in view (15.2 mm apart down the face, measured at
+    2.174 px/mm; the first drawing, version 1, drew 16.0 and drew one screw to a row). The
+    block's own spacing is printed nowhere: each pole's screws stand 5/8 in. (15.875 mm)
+    apart, read from the lug the guide dimensions (Figure 22, PDF page 21, a Pencom EL1048
+    6 STR CU two-hole lug, hole centres .65/.61 in., that is 16.5 to 15.5 mm, a range that
+    holds 5/8 in.). The skin keeps the first drawing's block box, the two rows (12.0 and
+    28.0 down) and the pair's middle on the block's middle line (14.2 across); the second
+    screw of each pole is placed by that pitch and not seen in any photograph. The screws'
+    ring size and every colour are estimates.
+  seats: >-
+    estimated - each pole is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in. centres
+    that one two-hole lug lands across, standing so that the pair's middle is the middle of
+    the two screws this skin draws in its row (centres 6.26 and 22.135 across, 12.0 and
+    28.0 down). The pole's own screw heads, 3.4 across, and the height it presents at (10.6
+    above the block's base, from its own estimate for a Juniper stud) are Portrayal's
+    stand-ins, not UfiSpace's: the guide shows low pan-head screws with square washers and
+    gives no height. The drawing marks where a lug lands and does not show the screw. The
+    guide's lug is bent at a right angle (Figure 22, 95 to 85 degrees), which the library's
+    straight generic/two-hole-lug-5-8@1 stands in for. The height of the pair off the face
+    is estimated and each device that seats this supply carries a dc-terminal-height gap
+    that names the drawing wanted.
+  poles: >-
+    UfiSpace S9600-56DX Hardware Installation Guide, section 9.1 Connecting Power (DC
+    version), step 3 and Figure 25 (PDF page 22): the two-hole lug of the black cable
+    marked '-40 to -72' goes on the upper pole and that of the red cable marked 'RTN' on
+    the lower. The roles are the markings': `batt` for the negative voltage range
+    (spec/schemas/dc.yaml writes `batt` as -48V and negative (battery)) and `rtn` for RTN.
+    The port has two poles, upper pole first, as the figure stands. No document states a
+    nominal voltage: the guide prints a range, -40V to -72V.
+  rating: >-
+    datasheet - 'DC input: -40 to -72V, 60A' in the datasheets of the six devices that seat
+    this supply (S9600-56DX, S9610-46DX, S9610-48DX, S9700-23D, S9700-53DX, S9705-48D), the
+    same figure in all six. The range has no nominal, so the port states no voltage. The
+    guides' fuse rating is the fuse and not the input current.
+  awg: >-
+    UfiSpace Hardware Installation Guides of the six devices that seat this supply, section
+    9.1 (DC version), the cable step: a 'UL 1015, 6 AWG DC power cable' (written '#6 AWG' in
+    the S9700-23D, S9700-53DX and S9705-48D guides) of stranded copper, attached to a
+    two-hole lug. One size in every guide held for this supply, so the port states it. The
+    torque the S9600-56DX guide prints, 14.0 +/- 0.5 kgf.cm, is not stated by the port.
+  depth-disagreement: >-
+    SOURCES DISAGREE and both are carried rather than reconciled: the HIG's Component
+    Physical Information table gives the PSU 321 mm deep, and HIG Figure 6's own mechanical
+    drawing of this DC unit dimensions the body at 360.0 mm and 369.8 mm over the handle.
+    `size` here is the face only, so nothing in this contract depends on it. Recorded on
+    the device as a gap. Same sentence, same two documents, as ufispace/psu-202-ac@1 -
+    one finding about one table, not two.
+  led-states: >-
+    HIG section 10, PSU FRU LED table, transcribed in full - the same table serves both
+    builds. Its two Blinking Green rows (standby with only +5VSB on, and firmware updating
+    in boot-loader mode) are one appearance at this fidelity and share one state.
+  handle-projection: >-
+    datasheet - HIG Space Clearance, 'the handle for the power supplies will extend
+    outwards by 1.19 inches (3cm)', published by the vendor for this chassis's supply.
+elements:
+  status-led:
+    at: [36.05, 3.65]
+    size: [2.9, 2.9]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: critical, color: '#ef4444'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: input-lost, color: '#ef4444', behavior: blinking},
+             {name: warning, color: '#22c55e', behavior: {mode: alternating, color: '#ef4444'}}]
+    description: >-
+      HIG PSU FRU LED table - Off (no input power to all power supplies), Green (output ON
+      and OK), Red (a critical event causing a shutdown - failure, overcurrent, short
+      circuit, over voltage, fan failure or over temperature), Blinking Green (standby
+      state, input power present and only +5VSB on; the firmware-updating boot-loader row
+      is visually identical and shares this state), Blinking Red (input cord unplugged or
+      input lost with a second supply in parallel still fed), Blinking between Green and
+      Red (warning events where the supply keeps operating - high temp, high power, high
+      current, slow fan)
+  terminal-block: {at: [1.4, 4.0], size: [25.6, 32.2], class: inlet}
+  handle: {at: [2.4, 36.4], size: [23.6, 3.0], class: handle}
+  latch: {at: [45.4, 11.0], size: [4.3, 18.2], class: latch}
+relief:
+  features:
+    - node: vent-grid
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-202-dc@2 - the rear photograph shows the grid without dimensioning its
+        open area and no held drawing gives one. Same estimate the other UfiSpace supplies
+        carry.
+    - node: terminal-block
+      out: 8
+      confidence: estimated
+      source: >-
+        ufispace/psu-202-dc@2 - unsourced. The HIG dimensions the face and the body length
+        and says nothing about how far the covered terminal stands proud. Same 8 mm
+        estimate as ufispace/psu-201-dc@1 and ufispace/psu-401-dc@1.
+    - node: handle
+      uhandle: 30
+      confidence: datasheet
+      source: >-
+        UfiSpace S9600-56DX HIG, Space Clearance: 'the handle for the power supplies will
+        extend outwards by 1.19 inches (3cm)'. 30 mm exactly, published by the vendor for
+        this chassis's supply.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-202-dc@2 - the latch is pressed to release (HIG section 7) so it must
+        stand proud; nothing dimensions it.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-202-dc@2 - unsourced. The HIG's PSU FRU LED table gives the lamp's
+        states and nothing about its lens. Same 0.4 estimate as the other UfiSpace FRUs.
+parts:
+  - {ref: juniper/mx240-dc-pole@1, id: pole-batt, at: [4.56, 10.3]}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-rtn, at: [4.56, 26.3]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 60
+      awg: [6]
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles, rating-a: rating, awg: awg}
+skins: [default]
