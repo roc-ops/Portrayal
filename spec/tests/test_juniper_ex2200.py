@@ -330,10 +330,10 @@ def test_the_dc_rear_has_the_four_terminals_and_no_inlet():
     assert d["configurations"]["dc"]["power"] == "dc"
     assert d["views"]["rear-dc"]["face"] == "rear"
     pl = by_id(d, "rear-dc")
-    decor = {x.get("id"): x for x in d["views"]["rear-dc"]["panel"]["decor"]}
-    poles = [i for i in decor if i.startswith("dc-pole-") and not i.endswith("-screw")]
-    assert len(poles) == 4
-    assert "ac-inlet" not in pl and "dc-terminal" not in pl
+    # the four terminals are a placed part's, not decor, and the AC inlet is not on this rear
+    assert pl["dc-terminal"]["ref"] == "juniper/ex2200-dc-terminal@1"
+    assert not [x for x in d["views"]["rear-dc"]["panel"]["decor"] if str(x.get("kind", "")).startswith("dc-terminal")]
+    assert "ac-inlet" not in pl
     # B-, A-, B+ and A+ left to right (Figure 48), one under each pole
     legends = [s["text"] for s in d["views"]["rear-dc"]["silkscreen"] if s.get("text") in ("B-", "A-", "B+", "A+")]
     xs = [s["at"][0] for s in d["views"]["rear-dc"]["silkscreen"] if s.get("text") in ("B-", "A-", "B+", "A+")]
@@ -464,9 +464,8 @@ def test_the_device_is_generated_from_its_layout(name):
 
 # --- the components ----------------------------------------------------------
 
-def test_this_slice_adds_only_the_rps_port_component():
-    """Every part but one is a registry or common one: the guide's supply and fans are built in, and the
-    pieces of metalwork no library part covers (the mini-USB console, the four-pole DC terminal block) are
-    chassis art, because the DCIM export has no row that could carry a part of either kind. The RPS port is
-    the one component, a placed part that presents no interface."""
-    assert sorted(p.name for p in COMP.glob("ex2200-*")) == ["ex2200-rps-port"]
+def test_this_slice_adds_only_the_rps_port_and_the_dc_terminal_components():
+    """Every part but two is a registry or common one: the guide's supply and fans are built in, and the
+    mini-USB console is chassis art. The RPS port is a placed part that presents no interface, and the
+    four-pole DC terminal block is a placed part of its own that composes its four terminal screws."""
+    assert sorted(p.name for p in COMP.glob("ex2200-*")) == ["ex2200-dc-terminal", "ex2200-rps-port"]

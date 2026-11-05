@@ -1,0 +1,48 @@
+format: 1
+kind: component
+name: qfx524x-dc-plug
+version: 1.0.0
+class: port
+mates: juniper-dc-header-6
+profile: power
+description: >-
+  The cord connector of the QFX524X DC power cord, wired, seen from the wire side as seated. A grey body carries
+  six ways in two rows of three, one insulated wire entering each. It seats in a `juniper-dc-header-6` connector at its
+  own mate point. It carries one wire per contact, not one cable. It draws no wire at a contact, because the guide
+  does not say which wire is at which.
+size: {w: 32.6, h: 27.7}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, juniper/qfx524x-dc-header@1, 32.6 by 27.7. The guide's Figure 35 draws
+  the cord connector in perspective without a scale and no dimension of it is held.
+attrs: {media: qfx524x-dc, connector: DC power cord connector, positions: 6}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    guide - QFX5241-64OD and QFX5241-64QD Hardware Guide (Juniper Networks), DC Power Cord Specifications and Table
+    18 (a six-wire connector, "six-pin female", 2x3), and Connect DC Power to the QFX5241-64OD and QFX5241-64QD
+    Switches, Figure 35 (the cord connector going into the faceplate with a latch). No maker, series or part number of
+    the connector is named. THE PART IS A STAND-IN FOR THE CORD CONNECTOR.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    guide - Table 18 gives the six wires, pin by pin: P1 8 AWG blue, P2 8 AWG brown, S1 12 AWG black (negative
+    bundle, S1 the sense pin), S2 12 AWG red (positive bundle, sense pin), P3 8 AWG green and P4 8 AWG white
+    (positive bundle). WHICH CELL EACH WIRE ENTERS IS NOT STATED, so the part draws the six ways alike and
+    places no wire colour; the colours are recorded here only. The figures are line art and no photograph of the cord
+    is held.
+  colour: >-
+    estimated - the body is a light grey (#9aa0a6), the colour of the plug of the other Juniper DC cord connector the
+    library holds. Figure 35 is line art and no photograph of the cord connector is held.
+  far-end: >-
+    NOT DRAWN. The guide says the cord ends in ring terminal lugs, a mating connector or another DC source, which
+    lands on the site's source, not on this supply.
+  depth: >-
+    NOT STATED. No document gives how far the cord connector stands out of the faceplate, so the part draws a plan
+    outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [16.3, 13.85], direction: front}
+skins: [default]

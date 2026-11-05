@@ -1,8 +1,9 @@
 format: 1
 kind: component
 name: output-terminal
-version: 1.0.0
+version: 1.1.0
 class: inlet
+behaviour: mounts
 profile: power
 description: >-
   One output circuit of an Amphenol Network Solutions 1RU power panel with
@@ -23,10 +24,21 @@ provenance:
   rows: >-
     photo - BATT is printed beside the upper row and RTN beside the lower in
     the rear photograph of the guide (Fig. 1-2).
+  seats: >-
+    estimated - EACH SCREW IS A SEAT A SINGLE-HOLE LUG LANDS ON, AND ITS HEAD IS A STAND-IN. The guide's lug
+    reference (installation guide 149722-2 A9, Lug Reference Guide, PDF page 37) lists "Output Cables: 1
+    Hole 10-32 Max. Width .50"" and the rear views (Fig. 3-6, PDF page 39) call the screw "#10 SCREW".
+    Each screw is the composed common/terminal-screw-34@1, whose 3.4 mm head is that part's own
+    estimate and claims no thread; it stands on the pan head this contract's relief already draws (lift 2.5,
+    the same estimate) at the centre of the drawn screw. The lug seats on top of the head, as the part
+    states. The #10-32 thread stays in `attrs`, from the datasheet.
 attrs: {screw-thread: '#10-32', lug-holes: 1}
 elements:
   batt: {at: [2.975, 4.1], size: [8.8, 8.8], class: inlet}
   rtn: {at: [2.975, 20.7], size: [8.8, 8.8], class: inlet}
+parts:
+  - {ref: common/terminal-screw-34@1, id: lug-batt, at: [5.675, 6.8], lift: 2.5}
+  - {ref: common/terminal-screw-34@1, id: lug-rtn, at: [5.675, 23.4], lift: 2.5}
 relief:
   wall: '#101113'
   features:

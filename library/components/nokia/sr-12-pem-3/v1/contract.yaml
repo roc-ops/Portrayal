@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: sr-12-pem-3
-version: 1.2.0
+version: 1.3.0
 class: power
 behaviour: fills
 profile: networking
@@ -107,6 +107,45 @@ provenance:
     with black print, as the line art leaves it; a gap.
   logo-zone: 'reserved on the plain metal right of the caution triangle; the figures print no mark'
   lifecycle: 'searched only the staged corpus; still listed in the 22.7 guide'
+  seats: >-
+    estimated - each pole is nokia/sr-12-dc-pole@1, a pair of studs on 3/4 in. centres that one
+    two-hole lug lands across, standing so that the pair's midpoint is the midpoint of the two
+    rings the skin draws in that row of a well (90.24 across for the -48 VDC well and 327.04 for
+    the RTN well; 17.79 down for the upper row and 39.32 for the lower). The skin draws the rings
+    17.98 apart and the part composes its studs 19.05 apart, the pitch of the lug the guide names
+    (7450 ESS-12 and 7750 SR-12 Chassis Installation Guide, 3HE18644AAAATQZZA03, 22.7: p137, and
+    Figure 27 with Table 57 key 1 on p138), so each stud stands 0.53 from the centre of its ring
+    and the skin is not redrawn. THE PITCH IS INFERRED, NOT STATED: no document held dimensions
+    the studs. The studs are common/terminal-screw-34@1, a stand-in that claims no thread (the
+    guide's studs are 0.250-20 UNC, p137); each is lifted 8.0 mm, the pole part's own estimate,
+    where the stud relief below estimates 10.0.
+  poles: >-
+    datasheet - 7450 ESS-12 and 7750 SR-12 Chassis Installation Guide (3HE18644AAAATQZZA03,
+    22.7): Table 12 p70 key 1 "Dual Power cable (VDC)" and key 2 "Dual Return cable (RTN)"; p136
+    puts the -48 VDC terminal block on the left of the PEM-3 and the RTN block on the right;
+    Figure 30 p139 prints "-48V" at the left well and "RTN" at the right. The roles are the
+    guide's words: `batt` for the -48 VDC pole (spec/schemas/dc.yaml writes `batt` as -48V and
+    negative (battery)) and `rtn` for the RTN pole (it writes `rtn` as RTN and positive (battery
+    return)). Each well has two rows of two studs and Figure 30 draws one two-hole lug on each
+    row, so the PEM-3 has two feeds, `feed-a` on the upper row of each well and `feed-b` on the
+    lower.
+  pairing: >-
+    NOT STATED. No document says which row of the -48 VDC well goes with which row of the RTN
+    well, and the guide does not name a feed A or a feed B. The upper rows are paired and the
+    lower rows are paired, by assumption, the pairing the connection points `feed-a` and
+    `feed-b` already stand on. p136 says the RTN and -48 VDC feeds are electrically joined, so
+    power on one feed is present on the other.
+  rating: >-
+    NOT STATED PER FEED. The breaker is 175 A for the whole PEM-3 (p91 Table 27, p137) and the
+    ratings of Table 27 are those of the PEM-3 over its two feeds; no table gives a current for
+    one feed, so the ports state no `rating-a`.
+  voltage: >-
+    NOT STATED AS A NOMINAL. Table 27 p91 gives ranges (-40 to -72 VDC and narrower ones) and the
+    guide's "-48" names the terminal. No table prints a nominal for a port, so the ports state no
+    `voltage`. A feed is matched on its roles.
+  awg: >-
+    NOT STATED AS ONE SIZE. p137: "a minimum of #4 AWG" in the United States, and lugs are
+    supplied for #4 and for #2 AWG cable. The ports state no `awg`.
 fields:
   power-switch: {label: Power Switch, type: choice, options: ['off', 'on'], default: 'off'}
 elements:
@@ -135,6 +174,10 @@ parts:
   - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [200.67, 34.38],
      states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
   - {ref: std/db25@1, id: status, group: monitoring, at: [224.64, 37.75]}
+  - {ref: nokia/sr-12-dc-pole@1, id: pole-batt-a, at: [79.015, 16.09]}
+  - {ref: nokia/sr-12-dc-pole@1, id: pole-batt-b, at: [79.015, 37.62]}
+  - {ref: nokia/sr-12-dc-pole@1, id: pole-rtn-a, at: [315.815, 16.09]}
+  - {ref: nokia/sr-12-dc-pole@1, id: pole-rtn-b, at: [315.815, 37.62]}
 relief:
   features:
     - {node: power-switch-off, out: 2.5, profile: [[0, 1.1], [29.3, 2.5]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at an assumed 2.5 and the low end at 0.45 of it, the ratio the GL-12xB GLB rocker shows; no source dimensions it'}
@@ -162,6 +205,20 @@ relief:
     - {node: terminal-rtn-stud-ur, cyl: 10.0, confidence: estimated, source: as terminal-neg-stud-ul}
     - {node: terminal-rtn-stud-ll, cyl: 10.0, confidence: estimated, source: as terminal-neg-stud-ul}
     - {node: terminal-rtn-stud-lr, cyl: 10.0, confidence: estimated, source: as terminal-neg-stud-ul}
+dc:
+  ports:
+    - id: feed-a
+      direction: input
+      poles:
+        - {role: batt, slot: pole-batt-a}
+        - {role: rtn, slot: pole-rtn-a}
+      source: {poles: poles}
+    - id: feed-b
+      direction: input
+      poles:
+        - {role: batt, slot: pole-batt-b}
+        - {role: rtn, slot: pole-rtn-b}
+      source: {poles: poles}
 connection-points:
   mate: {at: [212.85, 25.8], direction: rear}
   feed-a: {at: [90.2, 17.8], direction: left}

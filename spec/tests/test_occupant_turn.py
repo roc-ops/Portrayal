@@ -452,7 +452,8 @@ WANT = {"down": 194, "left": 57, "up": 27, "right": 40}   # the Juniper EX9204 a
 # the 23 Juniper earthing terminals of this change: 23 pair seats on 21 devices (down 3, left 5, right 15)
 # the Nokia SR-1e, SR-2e and SR-3e 10-32 pairs lead down, the SR-12's 1/4-20 pair leads left
 # the Cisco ASR 9000 grounding pad: 13 pair seats on 10 devices (left 7, right 5, up 1)
-WANT_PAIRS = {"down": 57, "left": 29, "up": 3, "right": 30}
+# the Amphenol Network Solutions 300CB08 input terminals: four pair seats on each of eight devices, leading down
+WANT_PAIRS = {"down": 89, "left": 29, "up": 3, "right": 30}
 NAMES = {0: "right", 90: "down", 180: "left", 270: "up"}
 LEADS = {"right": 0, "down": 90, "left": 180, "up": 270}
 PAIR_IFACES = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
