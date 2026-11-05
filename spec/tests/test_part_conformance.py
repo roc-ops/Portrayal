@@ -357,6 +357,36 @@ def test_c19_lets_off_a_supply_whose_part_carries_a_sentence(tmp_path):
     assert usable(scan(world(tmp_path / "b", comps=[supply], front=drawn), tmp_path / "b", library=library)) == {}
 
 
+def test_c19_lets_off_a_configuration_whose_every_supply_bay_is_open_and_no_other(tmp_path):
+    """A spare chassis ships with its supply bays open: the configuration says it is powered, and it has no supply to offer a power end.
+    The supplies ordered for it are judged on their own parts. A bay that takes no supply, a bay seated, a bay seated by default and a
+    chassis with no bay at all stay reported."""
+    supply = comp("acme/psu@1", **{"class": "psu"})
+    fan = comp("acme/fan@1", **{"class": "fan"})
+    psu_bay = lambda pid, default=None: {"id": pid, "accepts": ["acme/psu@1"], "default": default, "group": "psu"}
+    fan_bay = {"id": "fan-0", "accepts": ["acme/fan@1"], "default": None, "group": "fan"}
+    drawn = [element("psu-1", "psu", ref="acme/psu@1:1.0.0")]
+
+    def reported(name, bays, seated, front=()):
+        folder = tmp_path / name
+        folder.mkdir()
+        dist = world(folder, comps=[supply, fan], front=list(front), bays=seated)
+        doc = json.loads((dist / "dev.configs.json").read_text())
+        doc["bays"] = {"front": bays, "rear": []}
+        doc["configs"][0]["power"] = ["ac"]
+        (dist / "dev.configs.json").write_text(json.dumps(doc))
+        return sorted(usable(scan(dist, folder)))
+
+    got = {"every supply bay open": reported("a", [psu_bay("psu-0"), psu_bay("psu-1"), fan_bay], {"psu-0": "", "psu-1": "", "fan-0": ""}),
+           "a supply drawn with no power end": reported("b", [psu_bay("psu-1")], {"psu-1": "acme/psu@1"}, drawn),
+           "one supply bay seated, none drawn": reported("c", [psu_bay("psu-0"), psu_bay("psu-1")], {"psu-0": "acme/psu@1", "psu-1": ""}),
+           "a bay that takes no supply": reported("d", [fan_bay], {"fan-0": ""}),
+           "a supply bay seated by default": reported("e", [psu_bay("psu-1", "acme/psu@1")], {}),
+           "no bay": reported("f", [], {})}
+    assert got == {"every supply bay open": [], "a supply drawn with no power end": ["C19"], "one supply bay seated, none drawn": ["C19"],
+                   "a bay that takes no supply": ["C19"], "a supply bay seated by default": ["C19"], "no bay": ["C19"]}, got
+
+
 def test_c19_and_c20_let_off_a_fixed_cord_and_an_inlet_that_its_placement_presents(tmp_path):
     """A device fed through a fixed cord, a plug of the part's own that its sentence says is no connector, offers no power end by
     design (C19). A placed part that composes one connector part presents it as its own slot, at the placement's path (C20)."""
