@@ -674,6 +674,9 @@ PART_POWER = {
     # THE NXA-PDC-930W'S DC POWER CONNECTOR IS A THREE-POSITION BLOCK THE GUIDE DOES NOT NAME THE MAKER OF.
     # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
     "cisco/nxa-pdc-930w-dc-header": "other",
+    # THE ASR 9000 FIXED-PORT DC SUPPLIES' POWER CONNECTOR IS A TWO-SOCKET BLOCK THE GUIDE DOES NOT NAME THE SERIES OF.
+    # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "cisco/a9k-dc-header": "other",
     # THE QFX5200-48Y DC SUPPLIES' POWER HEADER IS A THREE-POSITION HEADER NEITHER LIBRARY NAMES, from a maker the
     # guide does not name. It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
     "juniper/qfx5200-48y-dc-header": "other",
@@ -751,6 +754,7 @@ POWER_LABEL = {
     "oscilloquartz/osa542x-dc-header": "Latching power header (3-position, - Gnd +)",
     "juniper/jpsu-150-dc-header": "DC power connector block (3-position, + - earth)",
     "cisco/nxa-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
+    "cisco/a9k-dc-header": "DC power connector block (2-position, +DC -DC)",
     "juniper/qfx5200-48y-dc-header": "DC power header (3-position, RTN, -36 to -72 V, grounding)",
     "juniper/qfx524x-dc-header": "DC power connector (6-position, 2x3)",
     "juniper/qfx10002-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
