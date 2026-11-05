@@ -610,13 +610,18 @@ refused.
   room view. Nothing new is needed until a wall is drawn.
 - **Vertical mounting (#550).** Two cases. A device turned 90 degrees in an
   ordinary rack (the 7360 ISAM FX-8 on its kit) is an item key, `roll: 90 |
-  270`, whose U footprint is its width over 44.45 mm, plus a kit configuration
-  for the baffles and the facts that differ (lug size, cable exit). A
+  270`, whose U footprint is its width over 44.45 mm, plus the baffles and the
+  facts that differ (lug size, cable exit). *Built, first part:* the elevation
+  draws the quarter turn (`90` clockwise, from the manual's Figures 82 and 84),
+  and the kit's two parts that take units, the air intake baffle and drip tray
+  and the top baffle, are ordinary devices placed under and over the shelf.
+  Not built: the lug size and cable exit as facts of the mounting, the kit
+  as a contract, and the 3D solid and cables of a turned device. A
   `wall-frame-vertical` product (FS-SVWM-1U and -4U) hangs every device face
   down; the frame states it and the elevation is drawn from above. `roll` is
   reserved by this note; the cable lay note proposes it for version 4 with a
   third value, `180`, for a manager mounted upside down (its section 7.1),
-  and the quarter turns are built with #550.
+  and the quarter turns are drawn as above.
 - **The tilted desktop rack.** `desktop-frame` with `tilt: 9` (degrees back
   from vertical, FS-DR-8U's 81 degrees to its base). The 3D scene leans the
   rail plane; the 2D elevation is face on and unchanged.

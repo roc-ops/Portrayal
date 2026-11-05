@@ -69,6 +69,12 @@ function drawRails(svgEl, out, frame, baseRU, totalH, C = THEMED) {
 
 // The selection ring is drawn, not styled: CSS outline does not render on
 // an SVG group.
+// A quarter turn as an SVG transform prefix about (cx, cy): 90 is clockwise as
+// the face the item is on shows it (fit.js), so seen through to the other face
+// it runs the other way round. Any other roll is no turn here.
+export const rolledTransform = (roll, through, cx, cy) =>
+  (roll === 90 || roll === 270) ? `rotate(${through ? -roll : roll} ${cx} ${cy}) ` : '';
+
 export const ring = (svgEl, top, ruH) => svgEl('rect', {x: -3, y: top - 1.5, width: OPENING + 6, height: ruH * RU + 3,
   rx: 3, fill: 'none', stroke: 'var(--pt-brass)', 'stroke-width': 2.5, class: 'rk-sel-ring',
   'pointer-events': 'none'});
@@ -355,17 +361,11 @@ export async function drawElevation({document: domDoc, distAt, surface = rackSur
     // halves since rack file version 4), falling back to the compiled
     // drawing's own height only when it is not.
     let ruH = it.u ?? 1;
-    // ROLLED A QUARTER TURN (rack file version 4), an item is an outline, as
-    // the kit fits and routes it and says when the file opens: how it mounts
-    // that way is not described yet, so its drawing is not stood on its side
-    // by guesswork, nor drawn upright in a span that is its width.
+    // ROLLED A QUARTER TURN (rack file version 4): the drawing is turned about
+    // the middle of the box the kit fits the item by (fit.js itemBox: its width
+    // up the rack, its height across), below. Its 3D solid and its cables stay
+    // an outline, and the frame notice says so.
     const quarter = it.roll === 90 || it.roll === 270;
-    if (quarter && face && placeholders) {
-      out.append(outline(svgEl, topOf(ruH), ruH, `${it.label} · rolled a quarter turn`,
-                         {...common, 'data-panel': through ? 'through' : 'mounted', 'data-rolled': String(it.roll)}, paper ? OUTLINE_PAPER : OUTLINE));
-      if (it.id === selectedId) rings.push([topOf(ruH), ruH]);
-      continue;
-    }
     if (!face) {
       if (placeholders) {
         out.append(outline(svgEl, topOf(ruH), ruH, `${it.label} · no ${panel} drawing`,
@@ -400,8 +400,10 @@ export async function drawElevation({document: domDoc, distAt, surface = rackSur
     const [faceW, faceH] = declared ? [fw, fh] : [w, h];
     const [ox, oy] = declared ? [0, 0] : [Number.isFinite(vb[0]) ? vb[0] : 0, Number.isFinite(vb[1]) ? vb[1] : 0];
     const fx = (OPENING - faceW) / 2, fy = paneY((box.lo + box.hi) / 2) - faceH / 2;
-    const g = svgEl('g', {transform: isFace(it) && SIDED.has(it.side) ? sidedTransform(it, view, w, h, y) : `translate(${fx - ox} ${fy - oy})`, ...common,
+    const g = svgEl('g', {transform: isFace(it) && SIDED.has(it.side) ? sidedTransform(it, view, w, h, y)
+                                     : `${rolledTransform(it.roll, through, fx + faceW / 2, fy + faceH / 2)}translate(${fx - ox} ${fy - oy})`, ...common,
                           ...(isFace(it) && SIDED.has(it.side) ? {'data-side': it.side} : {}),
+                          ...(quarter ? {'data-rolled': String(it.roll)} : {}),
                           'data-panel': through ? 'through' : 'mounted'});
     // THE SLOTS A CABLE LANDS ON besides the ports (a power inlet or outlet, a
     // ground stud: kit ports.js cableEndPaths), for portAt to take a click on.
@@ -442,7 +444,8 @@ export async function drawElevation({document: domDoc, distAt, surface = rackSur
     // second pair over them would hide the real ones: such a device gets its
     // screw heads only. In the plan's colour, silver unless the device states
     // `chassis.ears.color`.
-    if (!through && ears && isRackMount(it)) drawEars(svgEl, out, it, {top: paneY(box.hi), bottom: paneY(box.lo), holes: surface.ears(box).map(paneY)},
+    // (none on a quarter-turned item: its ears would stand across the rack)
+    if (!through && ears && !quarter && isRackMount(it)) drawEars(svgEl, out, it, {top: paneY(box.hi), bottom: paneY(box.lo), holes: surface.ears(box).map(paneY)},
                                                       C, await earPlanFor(it.ref, it.cfg, distAt), [fx, fx + faceW]);
     if (it.id === selectedId) rings.push([topOf(ruH), ruH]);
   }

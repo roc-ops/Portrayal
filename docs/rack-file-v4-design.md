@@ -51,7 +51,7 @@ same way.
 | key | on | from | what the first version-4 reader does with it |
 |---|---|---|---|
 | `ru` in steps of 0.5 | item | section 2 | read, fitted, drawn, exported |
-| `roll` (`90`, `180`, `270`) | item | section 6 | read, fitted by the rolled box; `180` drawn and routed; quarter turns drawn as an outline until #550 |
+| `roll` (`90`, `180`, `270`) | item | section 6 | read, fitted by the rolled box; `180` drawn and routed; quarter turns drawn turned in the elevation (3D solid and cables stay an outline) |
 | `states`, `readings` | item, zero-U entry | section 4 | read, checked against the catalogue, applied, exported |
 | `swaps`, `fields` | zero-U entry | section 4 | read and applied, as on an item |
 | `heldBy` `{parts}` | zero-U entry | section 5 | read, fitted, exported |
@@ -1126,11 +1126,11 @@ item is seen in the elevation of the face it is on, applied after `face` and
 | | `180` | `90`, `270` |
 |---|---|---|
 | units | unchanged | the width over 44.45 mm, rounded up to a whole unit |
-| box | the same box, from `itemBox` | height and width swapped, centred across the opening until #550 says otherwise |
-| ears | a whole-unit ear meets the same holes; see below for a half unit | the ears do not meet the rails; the mount kit of #550 does |
+| box | the same box, from `itemBox` | height and width swapped, centred across the opening; the drawing is turned about the middle of the box, `90` clockwise as the face it is on shows it, `270` the other way, and the other way round seen through |
+| ears | a whole-unit ear meets the same holes; see below for a half unit | the ears do not meet the rails, so none is drawn; the mount kit of #550 does |
 | ports and guides | every face point turned about the centre of the box | the same |
-| routing | resting and lay in the frame as mounted (cable lay, 3.1) | routed as an outline only, and said so, until #550 |
-| version 4 builds | fit, drawing data, routing | fit and the outline |
+| routing | resting and lay in the frame as mounted (cable lay, 3.1) | routed as an outline only, and said so |
+| version 4 builds | fit, drawing data, routing | fit, the turned drawing, and the outline for the 3D solid and cables |
 
 - **Ears at a half unit.** Measured from the hole pattern (2.5): turning a
   half-unit panel over moves a hole that is 6.35 mm above its bottom to
