@@ -6,8 +6,9 @@ the maker that built it: a NOS vendor's relisting of a box is the same metal
 and is not a second model. The column headers are the issue's own field names,
 declared as stand-ins in the README until the import page is read.
 
-These tests read the committed files and write to a temporary folder; nothing
-needs a build.
+The sheet is not committed: these tests read the committed device types, write
+into a temporary folder and compare structure, never a row count or a version.
+Nothing needs a build.
 """
 import csv
 import functools
@@ -20,7 +21,6 @@ from portrayal import device42_export as D
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 TYPES = ROOT / "library/exports/netbox/device-types"
-OUT = ROOT / "library/exports/device42"
 
 
 @functools.lru_cache(maxsize=1)
@@ -28,8 +28,15 @@ def built():
     return D.hardware_models(TYPES)
 
 
-def committed():
-    with open(OUT / "hardware-models.csv", newline="", encoding="utf-8") as fh:
+@pytest.fixture(scope="module")
+def written(tmp_path_factory):
+    out = tmp_path_factory.mktemp("device42")
+    D.write(out, TYPES)
+    return out
+
+
+def table(out):
+    with open(out / "hardware-models.csv", newline="", encoding="utf-8") as fh:
         return list(csv.reader(fh))
 
 
@@ -76,16 +83,17 @@ def test_a_makers_own_type_is_never_dropped():
         assert (maker, model) in present, path
 
 
-def test_every_row_has_a_name_and_the_declared_columns_in_sequence():
+def test_every_row_has_a_name_and_the_declared_columns_in_sequence(written):
     rows, _ = built()
     assert D.COLUMNS == ("name", "size", "manufacturer")
     for r in rows:
         assert list(r) == list(D.COLUMNS)
         assert r["name"].strip(), r
         assert r["manufacturer"].strip(), r
-    table = committed()
-    assert tuple(table[0]) == D.COLUMNS
-    assert all(len(line) == len(D.COLUMNS) for line in table)
+    lines = table(written)
+    assert tuple(lines[0]) == D.COLUMNS
+    assert all(len(line) == len(D.COLUMNS) for line in lines)
+    assert len(lines) - 1 == len(rows)
 
 
 def test_rows_are_sorted_by_maker_then_model():
@@ -111,14 +119,25 @@ def test_size_is_the_device_types_u_height_as_written():
             assert float(by[(maker, model)]) == float(u)
 
 
-def test_the_committed_sheet_is_what_the_tool_writes(tmp_path):
-    D.write(tmp_path, TYPES)
+def test_the_tool_run_twice_writes_identical_bytes(tmp_path):
+    first, second = tmp_path / "a", tmp_path / "b"
+    D.write(first, TYPES)
+    D.write(second, TYPES)
+    assert sorted(p.name for p in first.iterdir()) == ["README.md", "hardware-models.csv"]
     for name in ("hardware-models.csv", "README.md"):
-        assert (tmp_path / name).read_bytes() == (OUT / name).read_bytes(), name
+        assert (first / name).read_bytes() == (second / name).read_bytes(), name
 
 
-def test_the_readme_names_every_stand_in_header():
-    text = (OUT / "README.md").read_text(encoding="utf-8")
+def test_nothing_is_written_unless_the_tool_is_told_where(capsys):
+    with pytest.raises(SystemExit) as exc:
+        D.main([])
+    assert exc.value.code == 2
+    assert "--out" in capsys.readouterr().err
+    assert not (ROOT / "library/exports/device42").exists()
+
+
+def test_the_readme_names_every_stand_in_header(written):
+    text = (written / "README.md").read_text(encoding="utf-8")
     for column in D.STAND_INS:
         assert f"`{column}`" in text, column
     assert "not confirmed against the import page" in text

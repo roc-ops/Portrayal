@@ -29,13 +29,25 @@ instance.
 | 1 | buildings | `1-buildings.csv` | a rack file's `dcim.site` |
 | 2 | rooms | `2-rooms.csv` | a rack file's `dcim.site` |
 | 3 | racks | `3-racks.csv` | a rack file's name and frame |
-| 4 | hardware models | `library/exports/device42/hardware-models.csv` | the NetBox device types |
+| 4 | hardware models | `hardware-models.csv` | the NetBox device types |
 | 5 | devices | `5-devices.csv` | a rack file's items |
 | 6 | devices to racks | `6-devices-to-racks.csv` | a rack file's items |
 
 Sheets 1, 2, 3, 5 and 6 are written for one rack by `kit/rack/device42.js`
 (`device42Sheets`, `sheetCsv`). Sheet 4 is written once for the library by
-`spec/tools/portrayal/device42_export.py`, and is committed.
+`spec/tools/portrayal/device42_export.py`.
+
+## Running it, and why nothing is published yet
+
+```sh
+python3 spec/tools/portrayal/device42_export.py --out <folder>
+```
+
+The tool reads `library/exports/netbox/device-types/` and writes
+`hardware-models.csv` and a `README.md` into `<folder>`; it has no default
+folder. Nothing it writes is committed: the sheet is not published yet, and
+publishing it with the other exports is a later change, which needs a
+`publish.sh` line and a matching preflight change.
 
 ### 1. buildings: `name`
 
@@ -124,6 +136,5 @@ into a real instance.
    name rule above.
 4. Does the importer accept CSV for each of the six sheets, or only `.xls`?
 5. Which `type` values exist, and may the export write one?
-6. A sheet's committed rows change whenever a device type is added or
-   re-sized: should the sheet be re-written by the publish step, as the NetBox
-   and Nautobot trees are?
+6. Should the sheet be re-written by the publish step, as the NetBox and
+   Nautobot trees are? It would change with every device change.

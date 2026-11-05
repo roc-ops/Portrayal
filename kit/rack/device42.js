@@ -3,7 +3,7 @@
 // buildings, rooms, racks, hardware models, devices and devices-to-racks, in
 // that sequence; this module writes the five sheets a rack file has the facts
 // for. The hardware models come from the device types
-// (spec/tools/portrayal/device42_export.py, library/exports/device42).
+// (spec/tools/portrayal/device42_export.py, written where --out says).
 //
 // THE HEADERS ARE STAND-INS: the issue's own field names, not read from the
 // import page, and not confirmed against it. docs/device42-export-design.md

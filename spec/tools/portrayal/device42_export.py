@@ -6,8 +6,10 @@ devices and devices-to-racks, in that sequence. A hardware model needs a name;
 its type, size and manufacturer are optional. This tool writes the
 hardware-model sheet, one row for each model a maker sells:
 
-    python3 spec/tools/portrayal/device42_export.py            # library/exports/device42
     python3 spec/tools/portrayal/device42_export.py --out DIR
+
+The sheet is not published: nothing is written unless `--out` says where, and
+no file it writes is committed.
 
 THE SOURCE IS THE FILES, not the exporter. It reads
 `library/exports/netbox/device-types/<Maker>/<Model>.yaml` as text (the first
@@ -35,7 +37,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 SOURCE = ROOT / "library/exports/netbox/device-types"
-OUT = ROOT / "library/exports/device42"
 
 # STAND-INS, from the issue's report of the import page: `name` is required,
 # `size` (in U) and `manufacturer` are optional. `type` is optional too and is
@@ -170,7 +171,7 @@ Nothing here has been loaded into a Device42 instance.
 """
 
 
-def write(out=OUT, source=SOURCE):
+def write(out, source=SOURCE):
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     rows, report = hardware_models(source)
@@ -185,7 +186,7 @@ def write(out=OUT, source=SOURCE):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--source", default=str(SOURCE), help="the NetBox device-types folder")
-    ap.add_argument("--out", default=str(OUT), help="the folder the sheets are written to")
+    ap.add_argument("--out", required=True, help="the folder the sheets are written to")
     args = ap.parse_args(argv)
     report = write(args.out, args.source)
     print(", ".join(f"{k} {v}" for k, v in report.items()))
