@@ -11,10 +11,11 @@ conforms: keystone-opening
 profile: networking
 description: >-
   FS Cat6 unshielded RJ45 keystone jack (FS #72818, the jack the FHD-FAPM6
-  datasheet lists): a snap-in jack with an RJ45 on the front, where any
-  patch-panel port takes a cable, and a punch-down (IDC) termination behind it
-  for 23 to 26 AWG cable. It seats in the clip of an FHD-FAPM6 opening, turned
-  on its side in the landscape opening, and offers one port, `rj45`.
+  datasheet lists). It is a snap-in jack with an RJ45 on the front, where any
+  patch-panel port takes a cable, and a punch-down (IDC) termination behind it.
+  It seats in the clip of an FHD-FAPM6 opening. Its body turns on its side in
+  the landscape opening; the housing is drawn unturned (estimated, below). It
+  offers one port, `rj45`.
 size: {w: 16.5, h: 14.9}
 size-confidence: {w: datasheet, h: datasheet}
 size-notes: >-
@@ -43,7 +44,8 @@ provenance:
     face-on. ESTIMATED: which way the aperture faces; it is drawn unturned,
     pins up, because a 15.8 x 13.2 housing turned a quarter does not fit a
     14.9 opening. A generic/rj45-plug@1 cable end lands on it as on any RJ45
-    port. No lamps: a keystone jack has none.
+    port. ESTIMATED: no lamps are drawn, as no held document shows any on a
+    keystone jack.
   match: >-
     ESTIMATED: that FS #72818 is the jack the Cat6 punchdown keystone jack
     datasheet describes. The FAPM6 datasheet (p5) lists #72818 as the Cat6
@@ -52,7 +54,10 @@ provenance:
   rear: >-
     The punch-down (IDC) termination behind the jack is NOT MODELLED here: this
     contract composes no rear port. fs/fhd-fapm6-rj45-rear@1 draws it for the
-    fixed panel; for a seated jack it is left for a later change.
+    fixed panel; for a seated jack it is left for a later change. The jack
+    takes 23 to 26 AWG cable: that range is carried over unread from
+    fs/fhd-fapm6-rj45@1, which read it from the jack datasheet, and that
+    datasheet is not held, so it is ESTIMATED here.
   face: >-
     ESTIMATED. The body is drawn as the blanking insert is: a plain plate
     16.1 x 14.6, centred, with the composed RJ45 housing over it. No held
