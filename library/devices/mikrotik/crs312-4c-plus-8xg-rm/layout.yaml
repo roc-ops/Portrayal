@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: crs312-4c-plus-8xg-rm
-version: 1.0.0
+version: 1.1.0
 maturity: modelled
 manufacturer: MikroTik
 model: CRS312-4C+8XG-RM
@@ -13,8 +13,8 @@ description: >-
   The front carries the eight 10G jacks in two blocks of four. Beside them are the combo jacks under a blue
   bracket and the two by two SFP+ block. Then come the CONSOLE and MGMT/BOOT jacks, the RESET button and the USB
   port. The USER, FAULT, POWER 2 and POWER 1 lamps follow. The two AC supplies and the four fans are built into
-  the chassis, so there are no bays. The air passes through a vent field in the right wall. No document held shows
-  the rear, so the rear is not drawn and the AC inlets are not placed.
+  the chassis, so there are no bays. The air passes through a vent field in the right wall. The rear carries the
+  two IEC C14 inlets, POWER 1 and POWER 2, and four fan grilles. The inlets are drawn and the grilles are not.
 profile: networking
 provenance:
   sources:
@@ -27,7 +27,8 @@ provenance:
       (https://mikrotik.com/product/crs312_4c_8xg_rm, saved 2026-10-26): dimensions, AC inputs, cooling, ports. Quick
       Guide CRS312-4C+8XG-RM (file CRS312-4Cplus8XG-RM-qg_190711.pdf, revision stamp 190711): powering, ports, combo
       interface, accessories. Studio photograph 1825 (front): the printed legends, colours and counts. The block
-      diagram CRS312-4C8XGr2_261038.png. NetBox read as a second opinion only. MikroTik prints no figure numbers. The
+      diagram CRS312-4C8XGr2_261038.png. The brochure's rear photograph (page 1, the second picture): the two AC
+      inlets and their legends. NetBox read as a second opinion only. MikroTik prints no figure numbers. The
       device name spells MikroTik's + as -plus because a directory name cannot carry +; model: keeps the + as printed.
   datasheet:
     confidence: datasheet
@@ -98,16 +99,20 @@ provenance:
     note: >-
       The product page lists two AC inputs and four fans; the brochure says it has a dual power supply for redundancy;
       the quick guide says two alternating current inputs with IEC power connectors and four cooling fans with
-      automatic speed control. No document held shows a removable supply module or gives a supply part number, so
-      the supplies are part of the chassis and there are no bays, as on juniper/ex2300-24t. The fans are inside; the
-      only opening the drawing shows for them is the vent field in the right wall.
+      automatic speed control. No document held shows a removable supply module or gives a supply part number, and
+      the brochure's rear photograph shows two bare inlets, so the supplies are part of the chassis and there are no
+      bays, as on juniper/ex2300-24t. The fans are inside; the brochure's rear photograph shows four hexagon grilles
+      and the drawing shows the vent field in the right wall.
   rear-layout:
     confidence: estimated
     note: >-
-      No held document shows the rear: the drawing has no rear view, its isometric hides the rear, the one studio
-      photograph looks at the front, and the NetBox files carry no rear. The rear is left empty and the two AC inlets
-      are not placed; no other model's rear is used. The export therefore carries no power port, though the product
-      page counts two AC inputs.
+      estimated - read off the brochure's rear photograph (page 1, the second picture; MikroTik prints no figure
+      numbers), which looks slightly down on the rear, so x is taken at 3.38 px per mm across the 443 mm width from the
+      rear plate's outer edges (4 and 1503 px) and y is estimated, good to about 2 mm. The two C14 inlets are centred
+      at 27.8 and 112.6 mm and carry POWER 1 and POWER 2, with 100-240 V~1.5 A MAX 50/60 Hz printed under each, as the
+      photograph prints them. The photograph shows the rear as seen from behind, so POWER 1 is at the left of the
+      rear view. It also shows a spring wire retaining clip over each inlet, four hexagon fan grilles and crosshead
+      screws; the clips are a cord accessory and the grilles and screws are not drawn.
   side-layout:
     confidence: estimated
     note: >-
@@ -158,14 +163,14 @@ chassis:
     - {name: flush, at: 0, default: true}
   power: ac
 gaps:
-- what: rear-face
+- what: rear-fans-and-screws
   scope: [rear]
   reason: needs-drawing
   note: >-
-    No held document shows the rear: no rear view in the dimensions drawing, none in the one studio photograph, none
-    in the NetBox files. The rear is left empty and no AC inlet is placed, so the DCIM export carries no power port.
-    The product page counts two AC inputs.
-  wanted: A rear photograph or drawing showing the two AC inlets.
+    The only rear view held is the brochure's photograph, taken slightly from above. The two inlets are placed from it,
+    and the four fan grilles, the crosshead screws and the inlets' retaining clips are not drawn. The dimensions
+    drawing has no rear view.
+  wanted: A rear elevation with dimensions.
 - what: left-wall
   scope: [left]
   reason: needs-drawing
@@ -263,6 +268,11 @@ groups:
     role: indicator
     index-origin: 1
     description: the USER, FAULT, POWER 2 and POWER 1 lamps
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the two IEC C14 AC inlets on the rear, printed POWER 1 and POWER 2
 views:
   front:
     size: {w: 443.0, h: 44.0}
@@ -371,9 +381,19 @@ views:
       - {id: logo-zone, at: [403.5, 33.5], size: {w: 31.0, h: 8.0}, label: 'Vendor logo; not drawn'}
   rear:
     size: {w: 443.0, h: 44.0}
-    empty: >-
-      No document held shows the rear: the dimensions drawing has no rear view, the one studio photograph looks at the
-      front, and the NetBox files carry no rear. Not drawn from another model; the two AC inlets are not placed.
+    panel:
+      cutouts:
+      - {id: ac-inlet-1, at: [13.8, 15.0], size: [28.0, 20.0], shape: rect}
+      - {id: ac-inlet-2, at: [98.6, 15.0], size: [28.0, 20.0], shape: rect}
+    silkscreen:
+    - {at: [27.8, 38.0], text: POWER 1, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [27.8, 41.0], text: 100-240 V~1.5 A MAX 50/60 Hz, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [112.6, 38.0], text: POWER 2, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
+    - {at: [112.6, 41.0], text: 100-240 V~1.5 A MAX 50/60 Hz, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: ac-inlet-2}
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [13.8, 15.0], group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [98.6, 15.0], group: inlets, rel-pos: 2}
   top:
     size: {w: 443.0, h: 183.0}
     empty: >-
