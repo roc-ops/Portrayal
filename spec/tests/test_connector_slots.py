@@ -141,7 +141,9 @@ def test_the_connector_registry_is_not_vacuous():
                          # the DC connectors of the Edgecore AS5835, AMX3200 and AGR560 supplies
                          "edgecore-dcs-dc-block-3", "edgecore-amx-dc-block-3", "edgecore-agr-dc-block-2",
                          # the DC connectors of the Telco Systems XM-3352 and XM-8424H supplies
-                         "telco-dc-block-3", "telco-dc-block-2"}
+                         "telco-dc-block-3", "telco-dc-block-2",
+                         # the DC power connectors of the Juniper QFX5241 DC supply and QFX10002 1600 W DC supply
+                         "juniper-dc-header-6", "dc-connector-3w3"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -203,7 +205,9 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "edgecore-agr-dc-block-2",
                                    # the DC connectors of the Telco Systems XM-3352 and XM-8424H
                                    # supplies
-                                   "telco-dc-block-3", "telco-dc-block-2"}
+                                   "telco-dc-block-3", "telco-dc-block-2",
+                                   # the DC power connectors of the Juniper QFX5241 and QFX10002 DC supplies
+                                   "juniper-dc-header-6", "dc-connector-3w3"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
