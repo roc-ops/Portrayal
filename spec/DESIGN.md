@@ -140,7 +140,7 @@ Three layers:
    releases or a date anywhere a tool reads. 1.0 is not cut without the three.
    Inside the repository, L89 still fails on a
    superseded major that nothing references and that says nothing — it will not accept
-   an `unplaced:` sentence from a major that a newer live major supersedes.
+   an `unplaced:` sentence from an unmarked major that a newer live major supersedes.
    There is one exception, and it is the reason the check asks whether anything
    NAMES a major rather than only whether something seats it: a retired major
    can still be one side of an open question. `common/psu-550w@1` is retired and

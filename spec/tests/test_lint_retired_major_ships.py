@@ -53,7 +53,7 @@ def device(root, name, *refs):
 
 
 def bulk(root, n):
-    """Enough seated parts that the rule's own broken-walk guard stays quiet."""
+    """Enough seated parts that the rule's own broken-walk check stays quiet."""
     refs = [f"std/filler-{i}@1" for i in range(n)]
     for r in refs:
         write(root, r)
