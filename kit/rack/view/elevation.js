@@ -67,14 +67,14 @@ function drawRails(svgEl, out, frame, baseRU, totalH, C = THEMED) {
   }
 }
 
-// The selection ring is drawn, not styled: CSS outline does not render on
-// an SVG group.
 // A quarter turn as an SVG transform prefix about (cx, cy): 90 is clockwise as
 // the face the item is on shows it (fit.js), so seen through to the other face
 // it runs the other way round. Any other roll is no turn here.
 export const rolledTransform = (roll, through, cx, cy) =>
   (roll === 90 || roll === 270) ? `rotate(${through ? -roll : roll} ${cx} ${cy}) ` : '';
 
+// The selection ring is drawn, not styled: CSS outline does not render on
+// an SVG group.
 export const ring = (svgEl, top, ruH) => svgEl('rect', {x: -3, y: top - 1.5, width: OPENING + 6, height: ruH * RU + 3,
   rx: 3, fill: 'none', stroke: 'var(--pt-brass)', 'stroke-width': 2.5, class: 'rk-sel-ring',
   'pointer-events': 'none'});
