@@ -225,3 +225,136 @@ def test_the_comparable_facts_read_the_standard_and_the_draw():
     facts = comparable.resolve(copy.deepcopy(_device(CEILING)))
     assert [r["value"] for r in facts["poe-pd-max-w"]["readings"]] == [72.95]
     assert [r["value"] for r in facts["poe-pd-standard"]["readings"]] == ["802.3bt"]
+
+
+# --- the bodies ---------------------------------------------------------------
+#
+# Each unit is a solid with six faces, built from `chassis.bevel` (the wall plate's
+# rounded edges) or `chassis.rounded` (the ceiling unit's large plan corners and its
+# smaller face), and the face drawings are what that solid shows.
+
+from portrayal import bevel                      # noqa: E402
+from portrayal import render                     # noqa: E402
+
+FACES = ("front", "rear", "left", "right", "top", "bottom")
+
+
+def _solid(name):
+    ch = _device(name)["chassis"]
+    w, h, d = ch["width"], ch["height"], ch["depth"]
+    return ch, bevel.solid(w, h, d, bevel.parse(ch))
+
+
+def _area(polys, face):
+    return sum(bevel._area(p["points"], p["normal"]) for p in polys if p["face"] == face)
+
+
+def _svg(name, view):
+    dev = _device(name)
+    out = render.render_view(dev, view, dev["views"][view], render.Library([str(LIB)]), config={})
+    return out if isinstance(out, str) else render.ET.tostring(out, encoding="unicode")
+
+
+@pytest.mark.parametrize("name", DEVICES)
+def test_each_body_has_all_six_faces_in_its_solid(name):
+    ch, polys = _solid(name)
+    for face in FACES:
+        assert _area(polys, face) > 0, f"{name}: no {face} face in the solid"
+
+
+@pytest.mark.parametrize("name", DEVICES)
+def test_each_body_has_a_view_for_every_face_at_the_size_the_solid_draws(name):
+    dev = _device(name)
+    ch = dev["chassis"]
+    for face in FACES:
+        view = dev["views"][face]
+        want = bevel.draw_size(face, ch["width"], ch["height"], ch["depth"])
+        assert (view["size"]["w"], view["size"]["h"]) == want
+        assert view.get("panel") or view.get("silkscreen") or view.get("empty")
+
+
+@pytest.mark.parametrize("name", DEVICES)
+def test_each_solid_is_closed_every_edge_shared_by_two_polygons(name):
+    _, polys = _solid(name)
+    seen = {}
+    for poly in polys:
+        pts = [tuple(round(c, 4) for c in p) for p in poly["points"]]
+        for i, p in enumerate(pts):
+            key = frozenset((p, pts[(i + 1) % len(pts)]))
+            seen[key] = seen.get(key, 0) + 1
+    assert set(seen.values()) == {2}
+
+
+def test_the_wall_plate_edges_are_rounded_off_all_twelve():
+    ch = _device(WALL_PLATE)["chassis"]
+    assert sorted(bevel.parse(ch)) == bevel.EDGES
+    # a body with its edges taken off is not a rectangle in any view
+    for face in FACES:
+        el = bevel.elevation(face, ch["width"], ch["height"], ch["depth"], bevel.parse(ch))
+        assert not bevel.is_rectangle(el["outline"], *bevel.draw_size(
+            face, ch["width"], ch["height"], ch["depth"]))
+
+
+def test_the_ceiling_units_face_is_smaller_than_its_back():
+    ch, polys = _solid(CEILING)
+    assert _area(polys, "front") < _area(polys, "rear")
+    taper = ch["rounded"]["taper"]
+    assert taper["face"] == "front" and 0 < taper["inset"] < ch["rounded"]["radius"]
+    front = bevel.elevation("front", ch["width"], ch["height"], ch["depth"], bevel.parse(ch))["flat"]
+    assert max(p[0] for p in front) - min(p[0] for p in front) == pytest.approx(
+        ch["width"] - 2 * taper["inset"], abs=0.01)
+
+
+def test_the_ceiling_units_corner_radius_is_stated_and_the_corners_are_round():
+    ch = _device(CEILING)["chassis"]
+    assert ch["rounded"]["radius"] > 20
+    rear = bevel.elevation("rear", ch["width"], ch["height"], ch["depth"], bevel.parse(ch))
+    pts = rear["outline"]
+    assert len(pts) > 20                             # an arc, not a square or a chamfer
+    assert all(min(abs(x), abs(x - ch["width"])) > 1 or min(abs(y), abs(y - ch["height"])) > 1
+               for x, y in pts)                      # no point sits on a square corner
+    prov = _device(CEILING)["provenance"]["chassis-shape"]
+    assert prov["confidence"] == "estimated"
+    assert "radius" in prov["note"] and "taper" in prov["note"]
+
+
+def test_the_ceiling_units_taper_and_radius_are_gaps_where_no_document_prints_them():
+    gaps = {g["what"] for g in _device(CEILING)["gaps"]}
+    assert {"corner-radius", "taper"} <= gaps
+
+
+def test_the_ceiling_units_face_draws_its_ridges_wordmark_mark_and_slanted_lamp():
+    front = _device(CEILING)["views"]["front"]
+    refs = {p["id"]: p for p in front["components"]["placements"]}
+    assert refs["ridges"]["ref"] == "readylinks/apwf7-ridges@1"
+    assert refs["wifi-mark"]["ref"] == "readylinks/wifi-mark@1"
+    assert refs["led-status"]["rotate"] not in (0, None)
+    assert any(s["text"] == "ReadyLinks" for s in front["silkscreen"])
+    svg = _svg(CEILING, "front")
+    assert 'id="ridges"' in svg and 'id="wifi-mark"' in svg
+
+
+def test_the_ceiling_units_front_is_drawn_as_the_tapered_outline():
+    svg = _svg(CEILING, "front")
+    assert 'id="chassis-bevels"' in svg
+    assert svg.count("data-edge=") >= 36
+
+
+@pytest.mark.parametrize("name,colour", [(WALL_PLATE, "#fcfcfc"), (CEILING, "#f9f9f8")])
+def test_each_body_is_the_white_of_its_photograph_not_the_old_grey(name, colour):
+    assert _device(name)["chassis"]["color"] == colour
+    prov = _device(name)["provenance"]["chassis-colour"]
+    assert prov["confidence"] == "photo-measured"
+
+
+def test_the_wall_plates_poe_out_tag_is_blue_and_its_jacks_sit_in_a_dark_band():
+    decor = _device(WALL_PLATE)["views"]["bottom"]["panel"]["decor"]
+    fills = {d["fill"] for d in decor}
+    assert "#1c60b7" in fills and "#131313" in fills
+
+
+def test_the_wall_plates_wordmark_is_the_data_sheets_and_the_gap_says_the_photograph_differs():
+    dev = _device(WALL_PLATE)
+    assert [s["text"] for s in dev["views"]["front"]["silkscreen"]] == ["ReadyLinks"]
+    note = dev["provenance"]["front-layout"]["note"]
+    assert "data sheet" in note and "photograph" in note and "not the maker's logo" in note

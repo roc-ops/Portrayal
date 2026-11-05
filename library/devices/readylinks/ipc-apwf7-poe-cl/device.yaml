@@ -9,7 +9,8 @@ description: >-
   Wi-Fi 7 ceiling access point with five radios, one of them an AI radio. Ports: a 10GbE PoE-in
   port, and a second 10GbE RJ45 shared with a 10GbE SFP+ cage. A GbE RJ45 hands on 48 V PoE. There
   are also an RJ45 console port, a DC input and a USB 3.0 Type-A port. It carries Bluetooth 5.3.
-  The ports are on the mounting side; the face is a plain dome.
+  The ports are on the mounting side. The face is a rounded square, smaller than the back, with
+  diagonal ridges, a Wi-Fi mark and wordmark, and one slanted status lamp.
 profile: networking
 provenance:
   sources:
@@ -55,14 +56,31 @@ provenance:
       datasheet page 4, the face view: a USB-A opening on the right-hand edge at about mid-height
       ('(1) USB 3.0 (Type-A connector)'). Its height along the edge is read from that figure; its
       depth position in the 67 mm thickness is not shown and is drawn at the middle.
+  chassis-shape:
+    confidence: estimated
+    note: >-
+      the datasheet's page 4 figure prints only the three overall dimensions (9.65, 9.65 and 2.64
+      in) and no corner radius or taper angle. Read off the stock photograph of the face (about
+      0.17 mm per pixel from the 245 mm width): the plan corner radius is about 43 mm, where the
+      straight edge ends 250 pixels from the corner. A lighter band about 5 mm wide runs along the
+      bottom edge of the face and its lower right, which is the wall seen leaning out, so the face
+      is drawn 5 mm smaller on each side than the back. How deep the taper runs is not shown: it
+      is drawn over the front 25 mm of the 67, which clears the USB-A port, about 11 degrees. The
+      body is built as a taper over a rounded square, in eight chords a corner.
+  chassis-colour:
+    confidence: photo-measured
+    note: >-
+      the median of the plain lit face in the stock photograph, #f9f9f8 (69000 pixels); the
+      shaded sides read #e3e3e3 to #ebebeb, which is the lighting and not the plastic.
   front-layout:
     confidence: photo-measured
     note: >-
       stock photograph of the face (about 0.17 mm per pixel from the 245 mm width): the wordmark
-      at the top right and one slanted status lamp at the bottom left. The lamp is drawn as a
-      round lamp at its centre. The wordmark is printed as text, not as the maker's logo; the
-      diagonal ridges across the dome are not drawn. The datasheet does not say what the lamp
-      shows.
+      ReadyLinks at the top right with a three-arc Wi-Fi mark above its right-hand letters, five
+      diagonal ridges across the middle, and one status lamp at the bottom left, a bar about 15 mm
+      long slanted at 45 degrees. The wordmark is printed as text, not as the maker's logo; the
+      ridges are drawn as shading and not built up, because no document gives their height.
+      The datasheet does not say what the lamp shows.
 attrs:
   physical:
     weight-kg: 2.0
@@ -94,10 +112,25 @@ chassis:
   height: 245.0
   depth: 67.0
   mount: ceiling
-  color: '#f2f3f4'
+  rounded:
+    radius: 43.0
+    taper: {face: front, inset: 5.0, depth: 25.0}
+  color: '#f9f9f8'
   edge: '#d3d6d9'
   silk: '#4a4f55'
 gaps:
+- what: corner-radius
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    A dimensioned drawing of the unit from the front, with the radius of its plan corners, which
+    is read here by eye from a photograph.
+- what: taper
+  scope: [front, left, right, top, bottom]
+  reason: vendor-silent
+  wanted: >-
+    A dimensioned side view of the unit, with how much smaller the face is than the back and how
+    far down the wall the slope runs.
 - what: usb-position
   scope: [right]
   reason: vendor-silent
@@ -155,18 +188,18 @@ views:
     size: {w: 245.0, h: 245.0}
     panel:
       decor: []
-      cutouts:
-      - {id: led-status, at: [36.6, 204.0], size: [2.0, 2.0], shape: circle}
     silkscreen:
-    - {at: [195.8, 33.0], text: ReadyLinks, font-size: 7.5, anchor: middle, for: chassis}
+    - {at: [196.1, 35.5], text: ReadyLinks, font-size: 10.5, anchor: middle, for: chassis}
     components:
       placements:
-      - {ref: common/led-dot@1, id: led-status, at: [36.6, 204.0], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: readylinks/apwf7-ridges@1, id: ridges, at: [33.0, 38.0], for: chassis}
+      - {ref: readylinks/wifi-mark@1, id: wifi-mark, at: [199.5, 20.5], for: chassis}
+      - {ref: readylinks/led-slant@1, id: led-status, at: [30.4, 205.5], rotate: 45, for: chassis, group: status-leds, rel-pos: 1}
   rear:
     size: {w: 245.0, h: 245.0}
     panel:
       decor:
-      - {at: [8.0, 8.0], size: [229.0, 229.0], pattern: ribs}
+      - {at: [8.0, 8.0], size: [229.0, 229.0], pattern: ribs, rx: 35.0}
       - {at: [50.5, 44.0], size: [146.0, 125.0], fill: '#f4f5f6', rx: 3.0}
       cutouts:
       - {id: dc-in, at: [62.8, 82.1], size: [12.0, 13.0], shape: rect}

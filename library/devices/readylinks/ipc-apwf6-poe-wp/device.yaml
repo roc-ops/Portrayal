@@ -61,13 +61,26 @@ provenance:
       read by eye from the figure (about 23, 46 and 96 mm from the end opposite the jacks). The
       legends beside the micro-USB port and the pinhole are not legible at the size the sheet
       prints them and are not transcribed.
+  chassis-shape:
+    confidence: estimated
+    note: >-
+      the data sheet gives the three overall dimensions and no edge radius. The stock photograph
+      shows every edge of the box softly rounded, to about 2.5 mm by eye against the 43 mm
+      thickness. The library's bevel cuts an edge at 45 degrees, so each of the twelve edges is
+      drawn as a 2.5 mm chamfer where the photograph shows a round of about that size.
+  chassis-colour:
+    confidence: photo-measured
+    note: >-
+      the median of the lit long face and the lit end of the stock photograph, #fdfdfd and #fbfbfb,
+      taken as #fcfcfc; the shaded side reads #e6e6e6, which is the lighting and not the plastic.
   front-layout:
     confidence: estimated
     note: >-
-      the datasheet's page 1 picture shows a plain white plate with a small wordmark near the top;
-      the stock photograph shows no other feature on the face. The wordmark is printed as text, not
-      as the maker's logo. The stock photograph prints another maker's name on the top face, which
-      is not reproduced.
+      the data sheet prints the name ReadyLinks on the plate: in the header of page 1, on the
+      plate's face in the page 1 picture and in small type on it in the page 4 figure. The
+      wordmark is drawn as that name, as text near the top of the face; it is not the maker's
+      logo. The stock photograph prints another maker's name there, on the face near one end,
+      which is not reproduced; the data sheet is the authority for the device's name.
 attrs:
   physical:
     weight-kg: 0.3
@@ -103,7 +116,9 @@ chassis:
   height: 170.0
   depth: 43.0
   mount: wall
-  color: '#f2f3f4'
+  bevel:
+  - {edges: [front-left, front-right, front-top, front-bottom, rear-left, rear-right, rear-top, rear-bottom, top-left, top-right, bottom-left, bottom-right], size: 2.5}
+  color: '#fcfcfc'
   edge: '#d3d6d9'
   silk: '#4a4f55'
 gaps:
@@ -174,7 +189,9 @@ views:
   bottom:
     size: {w: 86.0, h: 43.0}
     panel:
-      decor: []
+      decor:
+      - {at: [7.0, 13.5], size: [72.0, 15.4], fill: '#131313', rx: 1.0, kind: jack-band}
+      - {at: [9.4, 34.6], size: [14.6, 2.9], fill: '#1c60b7', rx: 0.5, kind: poe-out-tag}
       cutouts:
       - {id: lan-1, at: [8.8, 14.9], size: [15.8, 13.2], shape: rect}
       - {id: lan-2, at: [26.3, 14.9], size: [15.8, 13.2], shape: rect}
@@ -182,7 +199,7 @@ views:
       - {id: lan-4, at: [61.3, 14.9], size: [15.8, 13.2], shape: rect}
     silkscreen:
     - {at: [16.7, 33.0], text: LAN 1, font-size: 2.2, anchor: middle, for: lan-1}
-    - {at: [16.7, 36.4], text: PoE Out, font-size: 2.2, anchor: middle, for: lan-1}
+    - {at: [16.7, 36.8], text: PoE Out, font-size: 2.2, anchor: middle, fill: '#ffffff', for: lan-1}
     - {at: [34.2, 33.0], text: LAN 2, font-size: 2.2, anchor: middle, for: lan-2}
     - {at: [51.7, 33.0], text: LAN 3, font-size: 2.2, anchor: middle, for: lan-3}
     - {at: [69.2, 33.0], text: LAN 4, font-size: 2.2, anchor: middle, for: lan-4}

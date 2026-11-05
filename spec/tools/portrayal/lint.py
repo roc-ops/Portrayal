@@ -9906,7 +9906,7 @@ def lint_device_bevel(path, data, lib_roots):
     are held to the flat for the same reason.
     """
     ch = data.get("chassis") or {}
-    if not ch.get("bevel"):
+    if not (ch.get("bevel") or ch.get("rounded")):
         return
     try:
         bevels = bevel_mod.parse(ch)

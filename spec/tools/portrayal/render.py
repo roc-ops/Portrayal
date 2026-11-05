@@ -2692,7 +2692,7 @@ def bevel_face(svg, faceplate, ch, face, w, h):
     kit can find (`chassis-bevels`). bevel.py builds the solid; the 3D viewer
     builds its mesh from the same polygons, so the two cannot disagree.
     """
-    if not ch.get("bevel") or face not in _bevel.FACES:
+    if not (ch.get("bevel") or ch.get("rounded")) or face not in _bevel.FACES:
         return
     bevels = _bevel.parse(ch)
     W, H, D = ch["width"], ch["height"], ch["depth"]
@@ -6287,7 +6287,7 @@ def main():
                              "power": ch.get("power"),
                              # a bevelled body, as the polygons the viewer
                              # builds its mesh from; absent on a plain box
-                             **({"solid": _bevel.published(ch)} if ch.get("bevel") else {}),
+                             **({"solid": _bevel.published(ch)} if ch.get("bevel") or ch.get("rounded") else {}),
                              # how far parts reach beyond the rack face each
                              # side, and where the ear folds are when they are
                              # behind the body; absent where unstated (#865)

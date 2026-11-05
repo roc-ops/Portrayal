@@ -13,3 +13,9 @@
   IPC-APWF7-POE-CL ceiling access point are modelled from their data sheets, each exporting
   `u_height: 0` and `is_full_depth: false` to NetBox and Nautobot. This closes no row of the port
   records.
+- **A body with rounded plan corners and a smaller face.** `chassis.rounded` takes a corner
+  `radius` and an optional `taper` (`face: front`, an `inset` and a `depth`): the body is the
+  same cutting-plane solid a bevel makes, so the face drawings and the 3D viewer read it with no
+  change, and it combines with `bevel`. The ceiling access point uses it, with ridges, a Wi-Fi
+  mark and a slanted lamp on its face; the wall-plate access point uses `bevel` on its twelve
+  edges. Additive: every file valid before stays valid.

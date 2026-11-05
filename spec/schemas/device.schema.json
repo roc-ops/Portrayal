@@ -732,6 +732,25 @@
       }
      }
     },
+    "rounded": {
+     "type": "object",
+     "description": "A BODY WITH ROUNDED PLAN CORNERS AND, OPTIONALLY, A SMALLER FACE. A bevel is one plane on one edge and cannot round a corner; a ceiling access point is a square whose four corners are large arcs and whose front is smaller than its back. `radius` is the corner radius in mm of the full-size outline seen from the front or the rear (the arc is built as eight chords a quarter-turn). `taper` makes the `front` face smaller: over the front `depth` mm of the body the outline steps in by `inset` mm all round, and the corner arcs follow, so the drafted wall has one angle, atan(inset / depth). The face drawings keep their full size and coordinates; the front's flat face is the part inside the taper, which is where parts go (L126). Combines with `bevel`. The build makes the solid from the same cutting planes a bevel uses; L126 checks it.",
+     "required": ["radius"],
+     "additionalProperties": false,
+     "properties": {
+      "radius": {"type": "number", "exclusiveMinimum": 0},
+      "taper": {
+       "type": "object",
+       "required": ["face", "inset", "depth"],
+       "additionalProperties": false,
+       "properties": {
+        "face": {"enum": ["front"]},
+        "inset": {"type": "number", "exclusiveMinimum": 0, "description": "mm the front outline is smaller by on each side"},
+        "depth": {"type": "number", "exclusiveMinimum": 0, "description": "mm of the body's depth, from the front, that the taper runs over"}
+       }
+      }
+     }
+    },
     "airflow": {
      "description": "WHERE AIRFLOW LIVES. The chassis is the home; a configuration states `airflow` only when it DIFFERS from this, and the build reads the configuration first and falls back here. `top-to-bottom` is air drawn in at the top face and pushed out of the bottom, as a rack fan tray blowing down through the rack does. The enums differ on purpose: `side`, `passive` and `top-to-bottom` are chassis answers a configuration cannot give, because a fanless enclosure, a side-breathing modular chassis and a fan tray offer no airflow option to choose between. L91 checks the division.",
      "enum": [
