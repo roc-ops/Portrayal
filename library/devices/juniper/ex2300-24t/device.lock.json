@@ -1,6 +1,6 @@
 {
  "bay-accepts": {},
- "composed": "2fa62a1c531445dc",
+ "composed": "94e29cfb773e695a",
  "composed-refs": {
   "common/esd-jack@1": "1.0.1+fa89d49c1ff75841",
   "common/esd-warning@1": "1.0.0+630c20786ff1f896",
@@ -13,7 +13,9 @@
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
   "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "common/usb-symbol@1": "1.0.0+fbb7f12a15136c0d",
+  "juniper/ex2300-dc-terminal@1": "1.0.0+8bb0baafac87b608",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/mini-usb@1": "1.0.0+4396db4f4afdd75d",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
@@ -27,8 +29,60 @@
   "taa",
   "vc"
  ],
+ "dc-ports": {
+  "dc-terminal/input-1": {
+   "juniper/ex2300-dc-terminal@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input-1",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "dc-terminal/pole-1-pos"
+     },
+     {
+      "role": "batt",
+      "slot": "dc-terminal/pole-1-neg"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "dc-terminal/input-2": {
+   "juniper/ex2300-dc-terminal@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input-2",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "dc-terminal/pole-2-pos"
+     },
+     {
+      "role": "batt",
+      "slot": "dc-terminal/pole-2-neg"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
- "gaps": "387e1f9678a47366",
+ "gaps": "7ef61228d611c211",
  "groups": [
   "controls",
   "esd",
@@ -136,6 +190,7 @@
   "rear-dc/cutout/mgmt",
   "rear-dc/cutout/usb",
   "rear-dc/placements/console-rj45",
+  "rear-dc/placements/dc-terminal",
   "rear-dc/placements/esd-mark",
   "rear-dc/placements/esd-rear-jack",
   "rear-dc/placements/ground-pair",
@@ -175,7 +230,7 @@
   "rear/placements/usb",
   "rear/placements/usb-mark"
  ],
- "names": "784450691a595fb6",
+ "names": "817aaba13a025e15",
  "placement-addressing": {
   "for": {
    "front/placements/btn-mode": [
@@ -291,6 +346,7 @@
    "front/placements/uplink-2": 2,
    "front/placements/uplink-3": 3,
    "rear-dc/placements/console-rj45": 3,
+   "rear-dc/placements/dc-terminal": 0,
    "rear-dc/placements/esd-mark": 2,
    "rear-dc/placements/esd-rear-jack": 0,
    "rear-dc/placements/ground-pair": 0,
@@ -374,6 +430,7 @@
   "front/placements/uplink-2": "uplink",
   "front/placements/uplink-3": "uplink",
   "rear-dc/placements/console-rj45": "mgmt",
+  "rear-dc/placements/dc-terminal": "power-input",
   "rear-dc/placements/esd-mark": "furniture",
   "rear-dc/placements/esd-rear-jack": "esd",
   "rear-dc/placements/ground-pair": "grounding",
@@ -409,7 +466,7 @@
   "rear/placements/usb-mark": "furniture"
  },
  "placement-surface": "c226bc8590799548",
- "shape": "fed136fe7f094e20",
- "surface": "43e018fa170cb1b9",
- "version": "0.4.0"
+ "shape": "31b3f874342f2657",
+ "surface": "360c413c5dc8b655",
+ "version": "0.5.0"
 }

@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: a9k-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: cisco-dc-block-2
+description: >-
+  The two-socket DC power connector on the face of the Cisco ASR 9000 fixed-port DC supplies, seen from
+  its mating face. A shrouded body carries two round sockets, one above the other. Each has a pin at its
+  centre. The supply prints "+DC" beside the upper and "-DC" beside the lower. The cable block
+  cisco/a9k-dc-plug@1 seats at its mate point.
+size: {w: 15.0, h: 23.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The guide draws the connector without a scale (Figures 162 and 163) and prints no dimension for it. The
+  box is an estimate chosen to stand inside the connector window each of the two supplies draws (23.1 by
+  30.0 on the A9K-1600W-DC, 17.5 by 26.6 on the PWR-1.6KW-DC).
+attrs: {connector: DC power connector block, positions: 2}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO SERIES OR PART NUMBER IS NAMED: the Cisco ASR 9000 Series Fixed-Port
+    Routers Hardware Installation Guide shows the connector on the ASR 9902 DC supply (Figure 162, PDF page
+    164, a photograph) and on the ASR 9901 DC supply (Figure 163, same page, line art) and says only that
+    DC power cables are terminated "using terminal blocks" supplied with the supply (PDF page 60). The
+    guide's cable list names "6AWG Amphenol connector" for the cables PWR-DC-NEBS-CBL and PWR-2KW-DC-CBL, a
+    maker for the cable and no series or part number for either end. So no part number is stated for the
+    connector and the interface claims no standard.
+  gender: >-
+    NOT STATED. Figure 152 (PDF page 152) draws the cable block lined up with the supply's connector by
+    dashed lines; it does not say which half carries pins. The cable block is drawn as the half that seats
+    in this one.
+  marks: >-
+    guide - Figures 162 and 163 print "+DC" above and "-DC" below, to the right of the connector. The two
+    sockets are drawn in that order. Roles are recorded on the supplies, not here.
+  size: >-
+    estimated - see size-notes. The socket pitch (12.0) and the socket size (11.0 by 9.2) are the part's
+    own estimate.
+  key: >-
+    NOT DRAWN. Figure 162 shows a small mark between the two sockets and Figure 163 a raised edge on the
+    shroud; neither is dimensioned or named, so no keying feature is drawn.
+  mate: >-
+    derived - the centre of the body, (7.5, 11.5), facing out, midway between the two sockets. The cable
+    block's own centre is the same point, so the two align.
+  colour: >-
+    estimated - the photograph (Figure 162) shows a black module with a black connector shroud and a pin
+    at the centre of each socket, so the body is drawn #1d2023 with a lighter edge #3c4045, darker sockets
+    #0d0f11 and grey pins #9a9fa5. The ASR 9901's Figure 163 is line art and shows no colour.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face, so it is drawn
+    flush and states no relief.
+elements: {}
+connection-points:
+  mate: {at: [7.5, 11.5], direction: front}
+skins: [default]

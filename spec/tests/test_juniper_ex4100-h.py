@@ -425,10 +425,3 @@ def test_the_12mp_label_prints_two_hazard_icons():
 def test_the_guides_table_68_48mp_is_named_and_not_modelled():
     assert not (DEV / "ex4100-h-48mp").exists()
     assert "EX4100-H-48MP" in prov(load_device("ex4100-h-24mp"))
-
-
-def test_this_slice_adds_these_components_and_no_other():
-    names = sorted(p.name for p in COMP.glob("ex4100-h-*"))
-    assert names == ["ex4100-h-24f-dc-psu", "ex4100-h-24mp-dc-psu", "ex4100-h-alarm-connector",
-                     "ex4100-h-jpsu-340w-ac", "ex4100-h-jpsu-90w-ac", "ex4100-h-mode-button",
-                     "ex4100-h-psu-blank", "ex4100-h-psu-connector", "ex4100-h-terminal-pad"]

@@ -162,7 +162,9 @@ def test_the_two_keys_are_registered_and_point_at_their_standards():
 def test_no_other_pcie_form_is_a_key_yet():
     reg = load_yaml(SCHEMAS / "connectors.yaml")["interfaces"]
     for key in reg:
-        assert not key.startswith(("ocp", "e3", "edsff")), key
+        assert not key.startswith(("e3", "edsff")), key
+        if key.startswith("ocp"):
+            assert key in {"ocp3-sff", "ocp3-tsff", "ocp3-dsff", "ocp3-tdsff"}, key
     assert "pcie-fh-2slot" not in reg, "the two-slot bracket mates pcie-fh"
     assert not [k for k in reg if "." in k]
 
