@@ -299,6 +299,12 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # The EX9214 4100 W DC supply redrawn from its guide's figures: the EX9214 seats the @2 in its DC
     # configurations, and its supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
     kept["juniper/ex9214-pwr-mx960-4100-dc"] = [1, 2]
+    # The FS keystone clip: the FHD-FAPM6 composes the @3, which presents the keystone interface, and the @2, which
+    # presents none, stays drawn as it was for a saved rack or a manifest that names it.
+    kept["common/keystone-clip"] = [2, 3]
+    # The FS blanking insert: the @2 states that it occupies a keystone opening and mates it, and the stand-in blank
+    # panel still composes the @1, which mates nothing and is drawn as it was.
+    kept["common/keystone-blank"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
         if name.startswith(("juniper/", "cisco/")):

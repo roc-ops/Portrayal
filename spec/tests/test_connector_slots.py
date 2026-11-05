@@ -97,6 +97,8 @@ def test_the_connector_registry_is_not_vacuous():
     # and never the plug that enters it
     # micro-dsub-50/wire-wrap-6: the 50-pin micro D-sub alarm connector (FEMALE on the panel)
     # and the six-pin BITS wire-wrap header of nokia/ngfc-h@1 and nokia/ngfc-g@1
+    # keystone: the landscape keystone opening of the FS FHD-FAPM6 panel, presented by
+    # common/keystone-clip@3 and mated by the blank and the jack that seat in a clip
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
@@ -141,7 +143,9 @@ def test_the_connector_registry_is_not_vacuous():
                          # the DC connectors of the Edgecore AS5835, AMX3200 and AGR560 supplies
                          "edgecore-dcs-dc-block-3", "edgecore-amx-dc-block-3", "edgecore-agr-dc-block-2",
                          # the DC connectors of the Telco Systems XM-3352 and XM-8424H supplies
-                         "telco-dc-block-3", "telco-dc-block-2"}
+                         "telco-dc-block-3", "telco-dc-block-2",
+                         # the keystone opening of the FS FHD-FAPM6 panel
+                         "keystone"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -203,7 +207,9 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "edgecore-agr-dc-block-2",
                                    # the DC connectors of the Telco Systems XM-3352 and XM-8424H
                                    # supplies
-                                   "telco-dc-block-3", "telco-dc-block-2"}
+                                   "telco-dc-block-3", "telco-dc-block-2",
+                                   # the keystone clips of the FS FHD-FAPM6 panel
+                                   "keystone"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
