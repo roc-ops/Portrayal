@@ -1,0 +1,57 @@
+format: 1
+kind: kit
+name: cor550-rack-kit
+version: 1.0.0
+description: >-
+  The rack mounting kit of the Edgecore COR550 (AS7926-40XKFB). It holds two rack mount
+  brackets, which screw to the sides of the switch, and two rack-rail assemblies, whose rear
+  slide plates are set to a marked position before the rails are fixed to the posts of a
+  four-post rack. The switch slides into the rack onto the rails.
+motion: telescoping
+parts:
+  - {ref: edgecore/cor550-rack-bracket@1, id: bracket, count: 2}
+  - {ref: edgecore/cor550-rack-rail@1, id: rail, count: 2}
+configurations:
+  - id: four-post
+    racks: [4-post]
+    parts: [bracket, rail]
+    preset: 630
+provenance:
+  contents: >-
+    The Edgecore Quick Start Guide for the 100G Aggregation Router AS7926-40XKFB (the
+    COR550), page 1, lists a rack mounting kit among the package contents and does not
+    itemise it. Its installation procedure, page 2, step 1 "Mount the Switch", names the two
+    parts: a rack mount bracket for each side of the switch, fixed with the included screws,
+    and a rack-rail assembly for each side, fixed to the rack with screws, four at the rear
+    post and two at the front. The screws are hardware and are not parts here.
+  preset: >-
+    The same guide, page 2, step 2, says to "adjust the rear slide plate to the position
+    marked as 630mm", and step 3 fastens the thumbscrew. The figure beside it draws the
+    rail's scale, labelled 750, 700, 650 and 600, with a callout reading 630 at the slide
+    plate. The guide does not say what 630 mm measures. THE LIBRARY'S READING, decided
+    2026-10-18 in the rack mounting design note, is the factory setting in mm of rack depth,
+    front post to rear post, and it is not checked against a second document. It is stated as
+    `preset`.
+  rack-type: >-
+    The same guide, page 2, steps 4 and 5: each rail is extended to meet both the rear post
+    and the front post of the rack and is fixed to both, so a four-post rack. Two-post use is
+    not described.
+  depth: >-
+    NOT STATED. The guide prints no minimum or maximum for the rail. The scale in its figure
+    belongs to an illustration, and the guide says its drawings are for illustration only, so
+    the scale is not read as a range. No range is written and none is derived from the
+    preset. See `gaps`.
+gaps:
+  - what: depth
+    scope: [four-post]
+    reason: vendor-silent
+    wanted: >-
+      The rack depth range the rail extends to, front post to rear post. The quick start guide
+      gives only the 630 mm position of the rear slide plate. A rail datasheet or a
+      dimensioned drawing of the assembly settles it.
+  - what: part-dimensions
+    scope: [bracket, rail]
+    reason: needs-drawing
+    wanted: >-
+      A dimensioned drawing of the bracket and of the rail assembly. The guide dimensions
+      neither; both parts carry placeholder envelopes.
