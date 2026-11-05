@@ -43,35 +43,47 @@ provenance:
     figure gives this face in elevation: HIG Figure 7's rear elevation and every product
     render show the AC unit with its appliance inlet, and the guide's DC section draws the
     block in isometric only (see `block`). The face here is the AC unit's, measured, with
-    the DC terminal block drawn on the inlet's own footprint, widened to hold the pair of
-    screws of each pole (see `block`). Where the block stands on the face is inferred, not
+    the DC terminal block drawn on the inlet's own footprint, a little wider than the
+    first drawing gave it (see `block`). Where the block stands on the face is inferred, not
     measured; see the device's dc-psu-face gap.
   block: >-
     estimated - the block is drawn from the UfiSpace S9600-30DX Hardware Installation
     Guide, section 9.1 Connecting Power (DC version), Figures 25 and 26 (PDF pages 23 and
-    24), which show it in isometric with no elevation and no scale: a dark housing under a
-    clear plastic cover that is pushed open from its top or bottom edge, two poles one
-    above the other with a barrier between them, and two screws side by side on each pole
-    (four in all), the black cable marked -40 to -72 on the upper pole and the red RTN
-    cable on the lower. The block's own spacing is printed nowhere. Each pole's screws
-    stand 5/8 in. (15.875 mm) apart, read from the lug the guide dimensions (Figure 22, PDF
-    page 22, a Pencom EL1048 6 STR CU two-hole lug, hole centres .65/.61 in., that is
-    16.5 to 15.5 mm, a range that holds 5/8 in.). The box of the block (22.6 across, 4.0
-    down, 20.9 by 32.0 mm), the two rows (12.0 and 28.0 down, 16.0 apart) and the screws'
-    ring size are estimates; the block is wider than the 19.0 mm the first drawing gave it,
-    to hold the pair, and stays clear of the grille and the edge strip. The first drawing
+    24), which show it in isometric with no elevation and no scale. The block PROJECTS OUT
+    of the rear face between three dark barrier bars that run outward from it, a dark
+    housing under a clear plastic cover pushed open from its top or bottom edge, two poles
+    one above the other. The two screws of a pole stand ONE BEHIND THE OTHER along the
+    block: each pole has a pale metal plate standing on the left side of the block, square
+    to the rear face, with its two screws and their square washers entering it from the
+    left (the figure's arrows run sideways into it). Seen straight on, the bars show
+    edge-on as dark horizontal bars, the plates edge-on as thin pale vertical lines and one
+    screw of each pole side-on beside its plate, the second hidden behind it, which is how
+    the skin draws it. The black cable marked -40 to -72 lands on the upper pole and the
+    red RTN cable on the lower. The block's own spacing is printed nowhere. Each pole's
+    screws stand 5/8 in. (15.875 mm) apart along the block, read from the lug the guide
+    dimensions (Figure 22, PDF page 22, a Pencom EL1048 6 STR CU two-hole lug, hole centres
+    .65/.61 in., that is 16.5 to 15.5 mm, a range that holds 5/8 in.). The box of the block
+    (22.6 across, 4.0 down, 20.9 by 32.0 mm), the two rows (12.0 and 28.0 down, 16.0
+    apart), how far the block stands proud, the bars' and plates' thickness and the screws'
+    size are estimates; the block is wider than the 19.0 mm the first drawing gave it and
+    stays clear of the grille and the edge strip. The first drawing
     (version 1) put one pad in each row and printed '+' above '-' beside it, which the
     figures do not show and which stood the wrong way round (the upper pole takes the
     negative range); version 2 draws neither. The colours are the library's own for this
     family, not read from a figure: the figures are CAD pictures with a grey-blue body.
   seats: >-
     estimated - each pole is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in. centres
-    that one two-hole lug lands across, standing so that the pair's middle is the middle of
-    the two screws this skin draws in its row (centres 25.11 and 40.985 across, 12.0 and
-    28.0 down). The pole's own screw heads, 3.4 across, and the height it presents at (10.6
-    above the block's base, from its own estimate for a Juniper stud) are Portrayal's
-    stand-ins, not UfiSpace's: the guide shows low pan-head screws with square washers and
-    gives no height. The drawing marks where a lug lands and does not show the screw. The
+    that one two-hole lug lands across. The pole stands on its plate's relief feature, a
+    facet 89 degrees off the face looking left, which is how the format states a surface
+    square to the face: the pair is drawn edge-on, its two studs one behind the other, 12.0
+    and 28.0 down at 33.05 across, and in three dimensions it runs out along the block with
+    the screws' heads toward the left. The format has no seat that faces a side and says
+    nothing of a lug landing from the side, so the lug's own drawing is still face-on; the
+    facet is the nearest statement and 89 degrees stands for 90. The pole's own screw
+    heads, 3.4 across, and the height it presents at (10.6 off the plate, from its own
+    estimate for a Juniper stud) are Portrayal's stand-ins, not UfiSpace's: the guide shows
+    low pan-head screws with square washers and gives no height. The skin draws one screw
+    side-on beside each plate, the second being behind it. The
     guide's lug is bent at a right angle (Figure 22, 95 to 85 degrees), which the library's
     straight generic/two-hole-lug-5-8@1 stands in for; no document gives the lug's maker
     drawing for this block beyond that figure. The height of the pair off the face is
@@ -105,6 +117,16 @@ elements:
   handle: {at: [10.5, 3.0], size: [8.0, 34.0], class: handle}
   latch: {at: [44.0, 2.0], size: [5.5, 14.0], class: latch}
   dc-input: {at: [22.6, 4.0], size: [20.9, 32.0], class: inlet}
+  plate-batt:
+    at: [32.88, 6.4]
+    size: [0.34, 11.2]
+    class: mechanical
+    description: the upper pole's pale metal plate seen edge-on, square to the rear face
+  plate-rtn:
+    at: [32.88, 22.4]
+    size: [0.34, 11.2]
+    class: mechanical
+    description: the lower pole's pale metal plate seen edge-on, square to the rear face
   status-led:
     at: [7.0, 3.4]
     size: [3.0, 3.0]
@@ -138,16 +160,33 @@ relief:
       confidence: estimated
       source: ufispace/psu-162-dc@2 - unsourced, as for the vendor's other FRUs.
     - node: dc-input
-      out: 8
+      out: 22
       confidence: estimated
       source: >-
-        ufispace/psu-162-dc@2 - the terminal block stands proud under its cover; no
-        held figure dimensions it and none shows this face in elevation. Version 1 gave
-        0.8; this follows the 8 mm that ufispace/psu-202-dc and the PSU-201 and PSU-401
-        families carry for the same style of block.
+        ufispace/psu-162-dc@2 - the terminal block stands proud between its bars; no
+        held figure dimensions it and none shows this face in elevation or gives a scale.
+        It projects at least as far as its two screws stand apart along it, 5/8 in.
+        (15.875) plus a screw head, so 22 mm is drawn: an estimate, not a reading. Version
+        1 gave 0.8.
+    - node: plate-batt
+      facet: {deg: 89, facing: left}
+      confidence: estimated
+      source: >-
+        UfiSpace S9600-30DX Hardware Installation Guide, Figure 25 (PDF page 23): the pale
+        metal plate of the upper pole stands on the side of the block, square to the rear
+        face, and its screws enter from the left looking at the rear. 89 degrees is the
+        steepest angle the format states, and stands for 90. The plate's length along the
+        block is the pitch of its two screws plus a head, which the footprint 0.34 across
+        gives; no figure scales it.
+    - node: plate-rtn
+      facet: {deg: 89, facing: left}
+      confidence: estimated
+      source: >-
+        UfiSpace S9600-30DX Hardware Installation Guide, Figure 25 (PDF page 23): the lower
+        pole's plate, the same as the upper's.
 parts:
-  - {ref: juniper/mx240-dc-pole@1, id: pole-batt, at: [23.41, 10.3]}
-  - {ref: juniper/mx240-dc-pole@1, id: pole-rtn, at: [23.41, 26.3]}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-batt, at: [32.88, 10.3], 'on': plate-batt}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-rtn, at: [32.88, 26.3], 'on': plate-rtn}
 dc:
   ports:
     - id: input

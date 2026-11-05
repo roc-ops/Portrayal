@@ -1,17 +1,18 @@
 """The UfiSpace PSU-162 and PSU-202 DC supplies draw the terminal block the vendor's guides show, offer two poles and state their DC input.
 
 Both supplies fit a screw-type terminal block under a plastic cover: two poles stacked one above the other, each pole two
-screws side by side, a two-hole lug on each pole (the guides' Figures 25 and 26 for the S9600-30DX and the S9600-56DX, and the
+screws one behind the other along the block, a two-hole lug on each pole (the guides' Figures 25 and 26 for the S9600-30DX and the S9600-56DX, and the
 lug of Figure 22, whose hole centres are printed as a range, .65/.61 in., that holds 5/8 in.). The black cable of the negative
 voltage range lands on the upper pole and the red RTN cable on the lower. The first drawing of each supply put one screw in
 each row, and the PSU-162's put the legend "+" over "-" the wrong way round. Each is redrawn as version 2 of its part
 (`v2/`), which composes the two poles as parts that present a registered stud pair a two-hole lug lands on, and states one DC
 input port whose poles are those two parts, with the roles the vendor's guides print on the cables:
 
-  - the skin draws four screws, two to a pole, the two poles one above the other on one vertical line, inside a block that holds
-    a pair 5/8 in. apart, and the `terminal-block` (PSU-202) or `dc-input` (PSU-162) element is that block's box;
-  - the supply composes juniper/mx240-dc-pole@1 twice, as `pole-batt` (upper) and `pole-rtn` (lower), each standing on the middle
-    of the two screws the skin draws in its row;
+  - the skin draws the block as seen straight at the rear face: the plates the screws enter stand square to it, so they show
+    edge-on, the two poles one above the other on one vertical line, no screw head facing the viewer, and the `terminal-block`
+    (PSU-202) or `dc-input` (PSU-162) element is that block's box;
+  - the supply composes juniper/mx240-dc-pole@1 twice, as `pole-batt` (upper) and `pole-rtn` (lower), each standing on its
+    plate, a relief facet 89 degrees off the face looking left, which is how the format states a surface square to the face;
   - that pole presents `stud-pair-5-8`, and generic/two-hole-lug-5-8@1 mates it;
   - the `dc` block has one input port, `input`, with `batt` on `pole-batt` and `rtn` on `pole-rtn`, the cable size every guide of
     the supply prints, the input current every datasheet of its devices prints, no voltage, and the entries of `provenance` that
@@ -23,6 +24,7 @@ These run against the real library, a components index built by the indexer the 
 library/dist and render nothing.
 """
 import json
+import math
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -39,6 +41,8 @@ LUG = "generic/two-hole-lug-5-8@1"
 KEY = "stud-pair-5-8"
 PITCH = 15.875              # 5/8 in., inside the .65/.61 in. range the lug's Figure 22 prints
 POLE_MIDDLE = (9.6375, 1.7)  # the pole's `mate` point: the middle of its two screws
+POLE_WIDTH = PITCH + 3.4     # the pair's own width, which a facet square to the face foreshortens
+PLATES = [("batt", "plate-batt"), ("rtn", "plate-rtn")]   # the pale plates the poles stand on, upper first
 
 SUPPLIES = {
     "psu-162-dc": {"block": "dc-input", "rating": 50,
@@ -58,20 +62,17 @@ def rect(e):
     return [float(e.get(k)) for k in ("x", "y", "width", "height")]
 
 
+def skin_root(name):
+    return ET.parse(LIB / f"components/ufispace/{name}/v2/skins/default.svg").getroot()
+
+
 def art(name):
-    """The plate of the skin's block group, and the screw circles in it."""
-    root = ET.parse(LIB / f"components/ufispace/{name}/v2/skins/default.svg").getroot()
+    """The box of the skin's block group, and the two pale plates in it (upper first), each as x, y, w, h."""
+    root = skin_root(name)
     group = next(e for e in root.iter(f"{SVG}g") if e.get("id") == SUPPLIES[name]["block"])
     plate = rect(group.find(f"{SVG}rect"))
-    circles = [(float(c.get("cx")), float(c.get("cy")), float(c.get("r"))) for c in group.iter(f"{SVG}circle")]
-    return plate, circles
-
-
-def rows(name):
-    """The four screws as two rows, upper first, each row left to right."""
-    _, circles = art(name)
-    ys = sorted({y for _, y, _ in circles})
-    return [sorted((x, y) for x, yy, _ in circles if yy == y) for y in ys]
+    plates = [rect(next(e for e in group.iter(f"{SVG}rect") if e.get("id") == pid)) for _, pid in PLATES]
+    return plate, plates
 
 
 @pytest.fixture(scope="module")
@@ -93,17 +94,18 @@ def test_the_pole_presents_the_stud_pair_and_the_two_hole_lug_mates_it():
 
 
 @EVERY
-def test_the_skin_draws_two_rows_of_two_screws_a_pair_apart_inside_the_block(name):
-    plate, _ = art(name)
-    upper, lower = rows(name)
-    assert len(upper) == len(lower) == 2
-    assert [x for x, _ in upper] == pytest.approx([x for x, _ in lower]), "the two poles stand on one vertical line"
-    for row in (upper, lower):
-        assert row[1][0] - row[0][0] == pytest.approx(PITCH, abs=0.01)
-    assert lower[0][1] > upper[0][1]
-    r = art(name)[1][0][2]
-    for x, y in upper + lower:
-        assert plate[0] <= x - r and x + r <= plate[0] + plate[2] and plate[1] <= y - r and y + r <= plate[1] + plate[3], (x, y)
+def test_the_skin_draws_the_block_as_seen_straight_on_with_the_plates_edge_on(name):
+    """Figure 25: the plates and screws stand square to the rear face, so no screw head faces the viewer."""
+    block, plates = art(name)
+    upper, lower = plates
+    assert upper[0] == pytest.approx(lower[0]), "the two poles stand on one vertical line"
+    assert lower[1] > upper[1]
+    for p in plates:
+        assert p[2] < 0.5, "a plate seen edge-on is a line"
+        assert block[0] <= p[0] and p[0] + p[2] <= block[0] + block[2]
+        assert block[1] <= p[1] and p[1] + p[3] <= block[1] + block[3]
+    assert not list(skin_root(name).iter(f"{SVG}circle")) or all(
+        c.get("id") == "status-led" for c in skin_root(name).iter(f"{SVG}circle")), "no screw drawn face-on"
 
 
 @EVERY
@@ -111,7 +113,7 @@ def test_the_element_is_the_box_the_skin_draws_and_no_id_of_the_supply_went(name
     d, old = contract(name), contract(name, 1)
     box = SUPPLIES[name]["block"]
     plate, _ = art(name)
-    assert sorted(d["elements"]) == sorted(old["elements"])
+    assert set(old["elements"]) <= set(d["elements"]) and set(d["elements"]) - set(old["elements"]) == {p for _, p in PLATES}
     assert d["elements"][box]["class"] == "inlet"
     assert d["elements"][box]["at"] + d["elements"][box]["size"] == pytest.approx(plate)
 
@@ -126,14 +128,20 @@ def test_the_redraw_is_version_2_and_version_1_keeps_its_drawing_and_names_it(na
 
 
 @EVERY
-def test_the_supply_composes_two_poles_each_on_the_middle_of_a_row_of_screws(name):
-    got = {q["id"]: (q["ref"], q["at"]) for q in contract(name)["parts"]}
+def test_the_supply_composes_two_poles_each_standing_on_its_plate_square_to_the_face(name):
+    d = contract(name)
+    got = {q["id"]: q for q in d["parts"]}
+    facets = {f["node"]: f for f in d["relief"]["features"] if "facet" in f}
     assert sorted(got) == sorted(i for _, i in ROLES)
-    for (_, pole_id), row in zip(ROLES, rows(name)):
-        ref, at = got[pole_id]
-        assert ref == POLE
-        middle = ((row[0][0] + row[1][0]) / 2, row[0][1])
-        assert (at[0] + POLE_MIDDLE[0], at[1] + POLE_MIDDLE[1]) == pytest.approx(middle, abs=0.01), pole_id
+    _, plates = art(name)
+    for (_, pole_id), (_, plate_id), box in zip(ROLES, PLATES, plates):
+        q = got[pole_id]
+        assert q["ref"] == POLE and q["on"] == plate_id
+        assert facets[plate_id]["facet"] == {"deg": 89, "facing": "left"}
+        assert facets[plate_id]["confidence"] == "estimated"
+        x, y = q["at"]
+        assert box[0] - 0.5 <= x and x + POLE_WIDTH * math.cos(math.radians(89)) <= box[0] + box[2] + 0.5, pole_id
+        assert y + POLE_MIDDLE[1] == pytest.approx(box[1] + box[3] / 2, abs=0.01), "the pair is level with its plate"
 
 
 @EVERY

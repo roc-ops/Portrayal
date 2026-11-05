@@ -54,27 +54,36 @@ provenance:
     estimated - the screws of the block are drawn from the UfiSpace S9600-56DX Hardware
     Installation Guide, section 9.1 Connecting Power (DC version), Figures 25 and 26 (PDF
     pages 22 and 23; the same pictures as Figures 25 and 26 of the S9600-30DX guide), which
-    show the block in isometric with no elevation and no scale: two poles one above the
-    other with a barrier between them, and two screws side by side on each pole (four in
-    all), under a clear plastic cover, the black cable marked -40 to -72 on the upper pole
-    and the red RTN cable on the lower. The rear photograph shows the same block closed,
-    black, with one screw of each pole in view (15.2 mm apart down the face, measured at
-    2.174 px/mm; the first drawing, version 1, drew 16.0 and drew one screw to a row). The
-    block's own spacing is printed nowhere: each pole's screws stand 5/8 in. (15.875 mm)
-    apart, read from the lug the guide dimensions (Figure 22, PDF page 21, a Pencom EL1048
-    6 STR CU two-hole lug, hole centres .65/.61 in., that is 16.5 to 15.5 mm, a range that
-    holds 5/8 in.). The skin keeps the first drawing's block box, the two rows (12.0 and
-    28.0 down) and the pair's middle on the block's middle line (14.2 across); the second
-    screw of each pole is placed by that pitch and not seen in any photograph. The screws'
-    ring size and every colour are estimates.
+    show the block in isometric with no elevation and no scale. The block PROJECTS OUT of
+    the rear face between three dark barrier bars that run outward from it, two poles one
+    above the other, and the two screws of a pole stand ONE BEHIND THE OTHER along the
+    block: each pole has a pale metal plate standing on the left side of the block, square
+    to the rear face, with its two screws and their square washers entering it from the
+    left (the figure's arrows run sideways into it), under a clear plastic cover, the black
+    cable marked -40 to -72 on the upper pole and the red RTN cable on the lower. Looking
+    straight at the rear face, as the rear photograph does, the three bars show edge-on as
+    dark horizontal bars, the plates edge-on as thin pale vertical lines and one screw of
+    each pole side-on beside its plate, the second hidden behind it; that is how the skin
+    draws it, four screws in two poles, seen as two. The block's own spacing is printed
+    nowhere: each pole's screws stand 5/8 in. (15.875 mm) apart along the block, read from
+    the lug the guide dimensions (Figure 22, PDF page 21, a Pencom EL1048 6 STR CU two-hole
+    lug, hole centres .65/.61 in., that is 16.5 to 15.5 mm, a range that holds 5/8 in.). The
+    skin keeps the first drawing's block box, the two rows (12.0 and 28.0 down) and the
+    plates on the block's middle line (14.2 across). How far the block stands proud, the
+    bars' and plates' thickness, the screws' size and every colour are estimates.
   seats: >-
     estimated - each pole is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in. centres
-    that one two-hole lug lands across, standing so that the pair's middle is the middle of
-    the two screws this skin draws in its row (centres 6.26 and 22.135 across, 12.0 and
-    28.0 down). The pole's own screw heads, 3.4 across, and the height it presents at (10.6
-    above the block's base, from its own estimate for a Juniper stud) are Portrayal's
-    stand-ins, not UfiSpace's: the guide shows low pan-head screws with square washers and
-    gives no height. The drawing marks where a lug lands and does not show the screw. The
+    that one two-hole lug lands across. The pole stands on its plate's relief feature, a
+    facet 89 degrees off the face looking left, which is how the format states a surface
+    square to the face: the pair is drawn edge-on, its two studs one behind the other, 12.0
+    and 28.0 down at 14.2 across, and in three dimensions it runs out along the block with
+    the screws' heads toward the left. The format has no seat that faces a side and says
+    nothing of a lug landing from the side, so the lug's own drawing is still face-on; the
+    facet is the nearest statement and 89 degrees stands for 90. The pole's own screw
+    heads, 3.4 across, and the height it presents at (10.6 off the plate, from its own
+    estimate for a Juniper stud) are Portrayal's stand-ins, not UfiSpace's: the guide shows
+    low pan-head screws with square washers and gives no height. The skin draws one screw
+    side-on beside each plate, the second being behind it. The
     guide's lug is bent at a right angle (Figure 22, 95 to 85 degrees), which the library's
     straight generic/two-hole-lug-5-8@1 stands in for. The height of the pair off the face
     is estimated and each device that seats this supply carries a dc-terminal-height gap
@@ -133,6 +142,16 @@ elements:
       Red (warning events where the supply keeps operating - high temp, high power, high
       current, slow fan)
   terminal-block: {at: [1.4, 4.0], size: [25.6, 32.2], class: inlet}
+  plate-batt:
+    at: [14.0, 6.4]
+    size: [0.34, 11.2]
+    class: mechanical
+    description: the upper pole's pale metal plate seen edge-on, square to the rear face
+  plate-rtn:
+    at: [14.0, 22.4]
+    size: [0.34, 11.2]
+    class: mechanical
+    description: the lower pole's pale metal plate seen edge-on, square to the rear face
   handle: {at: [2.4, 36.4], size: [23.6, 3.0], class: handle}
   latch: {at: [45.4, 11.0], size: [4.3, 18.2], class: latch}
 relief:
@@ -145,12 +164,29 @@ relief:
         open area and no held drawing gives one. Same estimate the other UfiSpace supplies
         carry.
     - node: terminal-block
-      out: 8
+      out: 22
       confidence: estimated
       source: >-
         ufispace/psu-202-dc@2 - unsourced. The HIG dimensions the face and the body length
-        and says nothing about how far the covered terminal stands proud. Same 8 mm
-        estimate as ufispace/psu-201-dc@1 and ufispace/psu-401-dc@1.
+        and says nothing about how far the block stands proud, and its Figure 25 has no
+        scale. The block projects at least as far as its two screws stand apart along it, 5/8
+        in. (15.875) plus a screw head, so 22 mm is drawn: an estimate, not a reading.
+    - node: plate-batt
+      facet: {deg: 89, facing: left}
+      confidence: estimated
+      source: >-
+        UfiSpace S9600-56DX Hardware Installation Guide, Figure 25 (PDF page 22): the pale
+        metal plate of the upper pole stands on the side of the block, square to the rear
+        face, and its screws enter from the left looking at the rear. 89 degrees is the
+        steepest angle the format states, and stands for 90. The plate's length along the
+        block is the pitch of its two screws plus a head, which the footprint 0.34 across
+        gives; no figure scales it.
+    - node: plate-rtn
+      facet: {deg: 89, facing: left}
+      confidence: estimated
+      source: >-
+        UfiSpace S9600-56DX Hardware Installation Guide, Figure 25 (PDF page 22): the lower
+        pole's plate, the same as the upper's.
     - node: handle
       uhandle: 30
       confidence: datasheet
@@ -171,8 +207,8 @@ relief:
         ufispace/psu-202-dc@2 - unsourced. The HIG's PSU FRU LED table gives the lamp's
         states and nothing about its lens. Same 0.4 estimate as the other UfiSpace FRUs.
 parts:
-  - {ref: juniper/mx240-dc-pole@1, id: pole-batt, at: [4.56, 10.3]}
-  - {ref: juniper/mx240-dc-pole@1, id: pole-rtn, at: [4.56, 26.3]}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-batt, at: [14.0, 10.3], 'on': plate-batt}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-rtn, at: [14.0, 26.3], 'on': plate-rtn}
 dc:
   ports:
     - id: input
