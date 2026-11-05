@@ -60,7 +60,7 @@ def test_the_inlets_stand_on_the_rear_and_do_not_overlap(rear):
 
 def test_each_inlet_carries_the_legend_the_photograph_prints(rear):
     texts = {}
-    for s in rear["silkscreen"]:
+    for s in (s for s in rear["silkscreen"] if "text" in s):
         texts.setdefault(s["for"], []).append(s["text"])
     assert texts["ac-inlet-1"] == ["POWER 1", "100-240 V~1.5 A MAX 50/60 Hz"]
     assert texts["ac-inlet-2"] == ["POWER 2", "100-240 V~1.5 A MAX 50/60 Hz"]
@@ -81,7 +81,7 @@ def centre(item, size=None):
 def test_the_rear_draws_four_fan_grilles_left_to_right_as_the_photograph_shows(rear):
     fans = sorted((d for d in rear["panel"]["decor"] if d.get("kind") == "fan-grille"), key=lambda d: d["at"][0])
     assert len(fans) == 4
-    assert all(d.get("pattern") == "vent" and d.get("vent") for d in fans)
+    assert all(d.get("pattern") == "motif" and d.get("vent") for d in fans)
     xs = [centre(d)[0] for d in fans]
     inlets = sorted(centre(p, (INLET_W, INLET_H))[0] for p in placements(rear).values())
     # the first stands between the two inlets, the other three are to the right of the second
@@ -92,14 +92,86 @@ def test_the_rear_draws_four_fan_grilles_left_to_right_as_the_photograph_shows(r
         assert d["size"][0] == d["size"][1] and 0 <= d["at"][1] and d["at"][1] + d["size"][1] <= rear["size"]["h"]
 
 
-def test_each_inlet_has_a_spring_clip_over_it_and_the_clips_are_in_order(rear):
-    clips = sorted((d for d in rear["panel"]["decor"] if d.get("kind") == "retaining-clip"), key=lambda d: d["at"][0])
+def test_the_fan_grilles_are_hexagon_rings_round_a_solid_hub_as_the_photograph_shows(rear):
+    decor = rear["panel"]["decor"]
+    fans = sorted((d for d in decor if d.get("kind") == "fan-grille"), key=lambda d: d["at"][0])
+    hubs = sorted((d for d in decor if d.get("kind") == "fan-hub"), key=lambda d: d["at"][0])
+    assert len(hubs) == 4
+    for fan, hub in zip(fans, hubs):
+        # the tile's origin is the fan's centre, where a hexagon of the lattice stands under the hub
+        assert fan["pattern-offset"] == pytest.approx(centre(fan), abs=0.05)
+        assert centre(hub) == pytest.approx(centre(fan), abs=0.05)
+        assert 20 <= hub["size"][0] <= 24 and hub["rx"] == hub["size"][0] / 2
+        # hexagons about 5.4 mm across, read at 3.38 px per mm on the photograph
+        tw, th = fan["pattern-pitch"]
+        hexagon = [c for c in fan["pattern-cells"] if len(c) == 6]
+        assert len(hexagon) == 1
+        xs = [p[0] for p in hexagon[0]]
+        assert 5.0 <= max(xs) - min(xs) <= 5.8 and th == pytest.approx(5.88, abs=0.2) and tw == pytest.approx(2 * 5.092, abs=0.2)
+
+
+def clip_paths(rear):
+    return sorted((s for s in rear["silkscreen"] if "path" in s), key=lambda s: s["at"][0])
+
+
+def test_each_inlet_has_a_wire_bale_clip_over_it_with_its_legs_outside_the_housing(rear):
+    paths = clip_paths(rear)
+    assert len(paths) == 6
+    for inlet in placements(rear).values():
+        mine = [s for s in paths if s["for"] == inlet["id"]]
+        assert len(mine) == 3 and all(s["filled"] is False and s["stroke-width"] <= 0.8 for s in mine)
+        # a bar over the top of the inlet with a bump up at its middle (a loop of wire)...
+        (top,) = [s for s in mine if " C " in s["path"]]
+        assert top["at"][1] < inlet["at"][1]
+        assert top["at"][0] < inlet["at"][0] and top["at"][0] + 30.8 > inlet["at"][0] + INLET_W
+        # ...and a leg down each side of the housing, outside it
+        legs = sorted(s["at"][0] for s in mine if s is not top)
+        assert legs[0] < inlet["at"][0] and legs[1] > inlet["at"][0] + INLET_W
+
+
+def test_each_clip_has_a_white_pivot_tab_and_a_pin_each_side_of_its_inlet(rear):
+    decor = rear["panel"]["decor"]
+    tabs = sorted((d for d in decor if d.get("kind") == "clip-tab"), key=lambda d: d["at"][0])
+    pins = sorted((d for d in decor if d.get("kind") == "clip-pin"), key=lambda d: d["at"][0])
     inlets = sorted(placements(rear).values(), key=lambda p: p["at"][0])
-    assert len(clips) == 2
-    for clip, inlet in zip(clips, inlets):
-        assert clip["stroke"]
-        assert clip["at"][0] <= inlet["at"][0] and clip["at"][0] + clip["size"][0] >= inlet["at"][0] + INLET_W
-        assert clip["at"][1] < inlet["at"][1]
+    assert len(tabs) == 4 and len(pins) == 4
+    for n, inlet in enumerate(inlets):
+        left, right = tabs[2 * n], tabs[2 * n + 1]
+        assert left["at"][0] + left["size"][0] <= inlet["at"][0] + 0.5 and right["at"][0] >= inlet["at"][0] + INLET_W - 0.5
+        for tab in (left, right):
+            assert inlet["at"][1] < tab["at"][1] and tab["at"][1] + tab["size"][1] < inlet["at"][1] + INLET_H
+        # each pin runs out from its tab to the side, level with the tab's middle
+        assert pins[2 * n]["at"][0] + pins[2 * n]["size"][0] <= left["at"][0] + 0.2
+        assert pins[2 * n + 1]["at"][0] >= right["at"][0] + right["size"][0] - 0.2
+
+
+# Read from the brochure's rear photograph away from text and ports (median of a patch, or the darkest few percent of a thin line)
+COLOURS = {
+    "clip wire": "#666667",
+    "pivot tab": "#e9eaf0",
+    "pin": "#f7f7f9",
+    "legend": "#363633",
+}
+
+
+def test_the_rear_colours_are_the_ones_read_from_the_photograph(rear):
+    decor = rear["panel"]["decor"]
+    assert {s["fill"] for s in clip_paths(rear)} == {COLOURS["clip wire"]}
+    assert {d["fill"] for d in decor if d.get("kind") == "clip-tab"} == {COLOURS["pivot tab"]}
+    assert {d["fill"] for d in decor if d.get("kind") == "clip-pin"} == {COLOURS["pin"]}
+    assert {s["fill"] for s in rear["silkscreen"] if "text" in s} == {COLOURS["legend"]}
+
+
+def test_the_body_colour_stays_the_face_colour_on_the_rear(rear):
+    source = source_of_rear_colour()
+    assert source == "#c4c4ca"
+    for d in rear["panel"]["decor"]:
+        if d.get("kind") == "fan-hub":
+            assert d["fill"] == source
+
+
+def source_of_rear_colour():
+    return source("layout.yaml")["chassis"]["color"]
 
 
 def test_the_rear_carries_twelve_crosshead_screws_from_the_screw_part(rear):
@@ -114,7 +186,7 @@ def test_the_rear_carries_twelve_crosshead_screws_from_the_screw_part(rear):
 
 
 def test_the_only_printing_is_the_two_legends_under_the_inlets_in_order(rear):
-    lines = sorted(rear["silkscreen"], key=lambda s: (s["at"][0], s["at"][1]))
+    lines = sorted((s for s in rear["silkscreen"] if "text" in s), key=lambda s: (s["at"][0], s["at"][1]))
     assert [s["text"] for s in lines] == [
         "POWER 1",
         "100-240 V~1.5 A MAX 50/60 Hz",
