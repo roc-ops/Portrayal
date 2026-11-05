@@ -88,6 +88,7 @@ def test_the_fapm6_composes_the_newest_clip_in_each_of_its_six_openings():
     assert (COMP / "common/keystone-clip" / f"v{_newest('common', 'keystone-clip')}" / "skins/default.svg").exists()
 
 
+@pytest.mark.heavy
 def test_every_keystone_clip_a_part_composes_presents_the_interface():
     """a clip composed without an interface publishes no slot, so nothing seats in its opening"""
     bare = []
@@ -109,6 +110,7 @@ def test_the_fapm6_publishes_six_empty_keystone_slots_that_take_every_insert():
         assert sorted(g["accepts"]) == sorted(inserts), g
 
 
+@pytest.mark.heavy
 def test_every_insert_fills_the_opening_and_lands_centred_in_the_clip():
     clip = _contract(f"common/keystone-clip@{_newest('common', 'keystone-clip')}")
     for ref, doc in _inserts().items():
@@ -119,6 +121,7 @@ def test_every_insert_fills_the_opening_and_lands_centred_in_the_clip():
         assert (COMP / ref.split("/")[0] / doc["name"] / f"v{ref.split('@')[1]}" / "skins/default.svg").exists(), ref
 
 
+@pytest.mark.heavy
 def test_every_insert_says_what_it_estimates():
     for ref, doc in _inserts().items():
         text = " ".join(str(v) for v in (doc.get("provenance") or {}).values())
