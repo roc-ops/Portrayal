@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nc57-1600w-dcfw
-version: 1.1.0
+version: 1.2.0
 class: psu
 behaviour: fills
 profile: networking
@@ -38,6 +38,30 @@ provenance:
     estimated - NO HELD FIGURE DRAWS THIS SUPPLY'S FACE. Figure 93 (Connecting DC Power) shows a DC connector being inserted;
     the arrangement here is the AC supply's with a dark block where the inlet is, and the fan ring carries no printed wattage.
     The lamp is Figure 138's STATUS lamp (Table 38).
+  connector: >-
+    the supply composes cisco/nxa-pdc-930w-dc-header@1 as `dc-header`, the three-position DC power connector, standing
+    inside the dark DC input block the skin draws. Figure 93 (Hardware Installation Guide for Cisco NCS 5700 Series
+    Fixed-Port Routers, "Connect DC Power to the Chassis", PDF page 117) is a rendering of the NCS-57C3-MOD with its two
+    1600W DC supplies: a black housing of three cells stacked in a column stands beside each fan, the cell marks -DC,
+    a second DC mark whose sign cannot be read at the figure's resolution, and an earth symbol stand to its left, and a
+    light grey cord plug with a latch is shown seated in one supply. The cells, their order and the earth cell are those
+    of Figure 21 of the Hardware Installation Guide for Cisco NCS 5000 Series Routers and of figure 504148 of the Cisco
+    N93108TC-FX3 guide, so the one part serves all three supplies and cisco/nxa-pdc-930w-dc-plug@1 mates it. THE GUIDES
+    NAME NO MAKER OR PART NUMBER for the connector, so the part is a declared stand-in and its key claims no maker or
+    standard; its size and its place here are estimates, since Figure 93 has no scale. The skin is unchanged and its dark
+    block is the window the header stands in; the header's black body is the colour Figure 93 shows.
+  roles: >-
+    guide - Figure 93 prints -DC, a second DC mark and an earth symbol beside the three cells, top to bottom, and the
+    text names the cord CAB-48DC-40A-8AWG, with "the red color (DC negative) wire" on top for the NCS-57C3 at step 5.
+    The sign of the second mark is not legible; with the first mark -DC and the earth below, the roles are `neg`, `pos`
+    and `gnd` from the top, as for the same connector in the two other guides. The figure prints no nominal; the input
+    ranges table prints -48 V to -60 V DC.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. The three poles are the contacts of one pluggable connector that has
+    an earth cell in it, and a port whose poles are a connector's contacts is offered only where that path's part is
+    itself the connector; on a supply in a bay it is the supply, not the connector it composes, so a port stated here
+    would be published and then not offered. The roles above are recorded for the port a later change can state, a
+    minor on the devices that seat this supply.
   airflow: >-
     datasheet - "port-side air intake", carried as front-to-back as the NCS 5000 supplies are.
   depth: >-
@@ -48,6 +72,8 @@ elements:
   inlet: {at: [43.5, 3.0], size: [26.0, 37.5], class: bezel}
   latch: {at: [71.0, 12.0], size: [5.5, 19.0], class: latch}
   status: {at: [75.0, 37.0], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b'}, {name: failed, color: '#f59e0b'}]}
+parts:
+  - {ref: cisco/nxa-pdc-930w-dc-header@1, id: dc-header, at: [52.0, 13.5]}
 skins: [default]
 body:
   depth: 250
