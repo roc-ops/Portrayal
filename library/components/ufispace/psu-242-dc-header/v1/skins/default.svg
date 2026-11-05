@@ -12,4 +12,12 @@
     <rect x="14.7" y="13.4" width="5.4" height="7.2" rx="0.4"/>
   </g>
   <rect id="bar" x="1.9" y="10.2" width="18.2" height="2.4" rx="0.3" fill="#2b2f33"/>
+  <!-- The supply prints "V+" on its own face, just left of the block, and the build paints its raised pull bar over that printing. The
+       mark is drawn again here, outside this part's box and clipped to the bar's end, so it stays above the bar and nowhere else. -->
+  <defs>
+    <clipPath id="bar-end"><rect x="-5" y="3.15" width="3.25" height="6.9"/></clipPath>
+  </defs>
+  <g id="silkscreen" fill="#c9ced4" font-family="sans-serif" font-size="2.2" text-anchor="end" clip-path="url(#bar-end)">
+    <text x="-0.5" y="4.0">V+</text>
+  </g>
 </svg>
