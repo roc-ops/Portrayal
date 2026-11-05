@@ -475,7 +475,7 @@ RULES = {
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)",
              "A module is the same metal in every chassis, so two bays reserving different sizes for it show the card not fitting its slot in one of them.",
              WARNING),
-    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`), a `rack-face` part or a `rack-side` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error); `chassis.full-depth`, `chassis.overhang`, `chassis.ears` and `chassis.kits` appear only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit",
+    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`), a `rack-face` part or a `rack-side` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall`, `ceiling` or `desktop` states none (error); `chassis.full-depth`, `chassis.overhang`, `chassis.ears` and `chassis.kits` appear only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit",
              "Without a stated mount, a wall-mounted or desktop box exports as a 1U rack device, and someone planning a rack makes room for equipment that never goes in it.",
              MIXED),
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is",
@@ -694,6 +694,9 @@ RULES = {
     "L197": ("device", "a device's decor `kind` does not name a connector: the names are the list in spec/schemas/connector-decor-names.yaml (a floor of names, not a proof) (warning)", "model the connector as a part that presents its interface; a decor that is not a connector is renamed for what it is, such as `case-screw` for `earth-screw`",
              "A connector drawn as panel decor is a picture of a port that nothing can plug into, so a cable laid to the device has no end to land on and a reader takes the port for a usable one.",
              WARNING),
+    "L198": ("device", "a powered device's PoE keys agree: `poe-pd-standard-min` is stated only with `poe-pd-standard` and is lower than it (error); `poe-pd-class` is stated only with `poe-pd-standard` (error); `poe-pd-max-w` is stated only with `poe-pd-standard` (warning), is at least `power-self-max-w` plus `poe-budget-w` where both are numbers (warning), and is stated by a device that states `poe-budget-w` and `poe-pd-standard` (warning)", "state the standard the maker names for the PoE input; write `poe-pd-max-w` as the whole intake, the figure printed 'excluding PoE output' plus what the device hands on, with the sum in the provenance",
+             "A powered device's draw with no standard cannot be checked against the port that feeds it, and a figure printed 'excluding PoE output' read as the whole intake is a number short of what the port has to supply.",
+             MIXED),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -1969,6 +1972,10 @@ AMBIGUOUS_POWER_KEYS = {
     "power-min-w": "that spelling belongs to the whole device",
     "power-max-ac-w": "that spelling belongs to the whole device",
     "power-max-dc-w": "that spelling belongs to the whole device",
+    "poe-pd-standard": "a PoE input is the whole device's",
+    "poe-pd-standard-min": "a PoE input is the whole device's",
+    "poe-pd-class": "a PoE input is the whole device's",
+    "poe-pd-max-w": "a PoE input is the whole device's",
 }
 
 
@@ -8670,7 +8677,7 @@ def lint_device_mount(path, data):
     elif bolts_to_rack and "ru" not in ch:
         warn(path, "L125", "a rack device states `ru`. If this box is not racked, "
                           "say how it is installed with `chassis.mount` "
-                          "(`din-rail`, `wall`, `desktop`)")
+                          "(`din-rail`, `wall`, `ceiling`, `desktop`)")
     elif not bolts_to_rack and "ru" in ch:
         err(path, "L125", f"`chassis.mount` is {mount!r}, so `ru` {ch['ru']!r} "
                           "describes a rack this box is not in - drop it")
@@ -8689,6 +8696,43 @@ def lint_device_mount(path, data):
         if key in ch and mount != "rack":
             err(path, "L125", f"`chassis.{key}` is for a rack device, and this one "
                               f"mounts {mount!r}; drop it")
+
+
+def lint_device_poe_pd(path, data):
+    """L198: the keys a powered device states for its PoE input agree.
+
+    The schema checks each `poe-pd-*` key alone (its type, its enum, its range);
+    this relates them. Whether a class fits a standard is not checked: that needs
+    the table in IEEE 802.3, which the library does not hold.
+    """
+    power = (data.get("attrs") or {}).get("power") or {}
+    standard, floor = power.get("poe-pd-standard"), power.get("poe-pd-standard-min")
+    order = {"802.3af": 1, "802.3at": 2, "802.3bt": 3}
+    if floor is not None:
+        if standard is None:
+            err(path, "L198", "`poe-pd-standard-min` is stated with no `poe-pd-standard`: it is the "
+                              "lowest standard the maker names, below the one the device needs")
+        elif order.get(floor, 0) >= order.get(standard, 0):
+            err(path, "L198", f"`poe-pd-standard-min` {floor!r} is not below `poe-pd-standard` "
+                              f"{standard!r}; state it only where the maker names a lower standard "
+                              "the device runs reduced on")
+    if "poe-pd-class" in power and standard is None:
+        err(path, "L198", "`poe-pd-class` is stated with no `poe-pd-standard`")
+    if "poe-pd-max-w" in power and standard is None:
+        warn(path, "L198", "`poe-pd-max-w` is stated with no `poe-pd-standard`: a draw with no "
+                           "standard cannot be checked against the port that feeds it")
+
+    def number(key):
+        value = power.get(key)
+        return value if isinstance(value, (int, float)) and not isinstance(value, bool) else None
+    own, handed, intake = number("power-self-max-w"), number("poe-budget-w"), number("poe-pd-max-w")
+    if own is not None and handed is not None and intake is not None and intake < own + handed - 1e-9:
+        warn(path, "L198", f"`poe-pd-max-w` {intake:g} W is below `power-self-max-w` {own:g} W plus "
+                           f"`poe-budget-w` {handed:g} W: it is the whole intake, so a figure printed "
+                           "'excluding PoE output' belongs in `power-self-max-w` and the sum here")
+    if "poe-budget-w" in power and standard is not None and "poe-pd-max-w" not in power:
+        warn(path, "L198", "this device hands on PoE and takes PoE but states no `poe-pd-max-w`: its own "
+                           "draw is not its intake")
 
 
 def _is_kit(ref, lib_roots):
@@ -14615,6 +14659,7 @@ def main():
                 lint_device_airflow_home(f, d)
                 lint_device_power_home(f, d)
                 lint_device_mount(f, d)
+                lint_device_poe_pd(f, d)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
                 lint_device_power_outlets(f, d, args.library)

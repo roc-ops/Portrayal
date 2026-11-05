@@ -265,7 +265,8 @@ Establish `chassis.width/height/depth` and each view's `size`.
 - **How it mounts is `chassis.mount`:** `rack` (the default), `rack-face` (on
   the rail face at a rack unit, projecting outward: a lacer panel, a 5U finger
   bracket), `rack-side` (on the side of an upright, beside the rack, outside
-  the rails: a full-height vertical cable manager), `din-rail`, `wall` or
+  the rails: a full-height vertical cable manager), `din-rail`, `wall`,
+  `ceiling` (fixes to a ceiling or hangs below it, its front facing down) or
   `desktop`. The first three state `ru`; the others do not (L125). A
   `rack-side` part is drawn as it stands, its front `w` across the rack's face
   direction and `h` the height it runs, so its front is portrait (L152).

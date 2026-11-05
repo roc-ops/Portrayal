@@ -1,0 +1,229 @@
+format: 1
+kind: device
+name: ipc-apwf6-poe-wp
+version: 1.0.0
+maturity: modelled
+manufacturer: ReadyLinks
+model: IPC-APWF6-POE-WP
+description: >-
+  Wi-Fi 6 wall-plate access point that replaces the plate over an existing outlet. It has a
+  2.5GbE PoE/PoE+ uplink on the wall side. Four GbE RJ45 ports are on one end, and LAN 1 hands on
+  48 V / 10 W. A DC input, a micro-USB console port and a reset button sit on one long side. It
+  carries Bluetooth 5.1.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      ReadyLinks, IPC-APWF6-POE-WP Wi-Fi 6 Wall-Plate Access Point product datasheet (July 2026,
+      5 pages): page 3 for the dimensions, ports and power, page 4 for the ports and dimensions
+      figure. The vendor's stock photograph of the unit (a three-quarter view of the end with the
+      four jacks and of one long side) confirms the jack count, the DC jack and the legends. No
+      vendor 3D model and no mechanical drawing is held for this unit.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet page 3, Dimensions: 6.69 x 3.39 x 1.69 in (170 x 86 x 43 mm), weight 0.66 lb (0.3
+      kg). Modelled upright as a plate, 86 mm wide, 170 mm high and 43 mm deep. The figure on page
+      4 draws the box lying on its back with the four jacks on the right-hand end; which end is
+      the top once it is on a wall is not stated, and the jacks are drawn on the bottom end.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet page 3, Power input: 48 V DC / 0.6 A over a DC connector (2.1 mm / 5.5 mm,
+      centre-positive), or PoE/PoE+ IEEE 802.3af/at; 'If both DC power and PoE are available, DC
+      power is preferred'; 'When powered by 802.3at (PoE+), the AP operates with the optimal
+      performance'. Max power consumption 25 W: 'DC power: 25 W', '802.3at (PoE+): 25 W', each
+      with 'LAN 1 for PoE supply'; '802.3af (PoE): 15 W' with LAN 1 PoE out disabled; 'Idle mode:
+      8 W'. The sheet does not say that 25 W excludes the PoE it hands on, and lists LAN 1 supply
+      among its conditions, so 25 W is taken as the whole intake and is `poe-pd-max-w` as printed.
+      LAN 1 hands on 48 V / 10 W (`poe-budget-w`). The sheet prints no 802.3 class. The 15 W mode
+      with PoE out off and the 8 W idle figure are kept here and nowhere else.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      datasheet page 4, the back view: one RJ45 on a recessed rectangle, labelled WAN / PoE and
+      '2.5GbE PoE/PoE+ IN', with four mounting slots at the corners. Placed on the centre line,
+      its height up the plate read by eye from a figure whose scale is not stated; the mounting
+      slots are not drawn.
+  bottom-layout:
+    confidence: estimated
+    note: >-
+      datasheet page 4 and the stock photograph: four RJ45 jacks side by side, legends LAN 1 (with
+      a 'PoE Out' tag beneath it), LAN 2, LAN 3 and LAN 4. The pitch and the margins are read by
+      eye from the photograph and span the end; the jacks are the library's own 15.8 x 13.2.
+  side-layout:
+    confidence: estimated
+    note: >-
+      datasheet page 4 and the stock photograph show, on one long side, a micro-USB port (the
+      sheet calls it the console port), a pinhole beside it (the reset button, 'Factory reset')
+      and a DC jack legended DC 48 V. Drawn on the left side. Their distances along the plate are
+      read by eye from the figure (about 23, 46 and 96 mm from the end opposite the jacks). The
+      legends beside the micro-USB port and the pinhole are not legible at the size the sheet
+      prints them and are not transcribed.
+  front-layout:
+    confidence: estimated
+    note: >-
+      the datasheet's page 1 picture shows a plain white plate with a small wordmark near the top;
+      the stock photograph shows no other feature on the face. The wordmark is printed as text, not
+      as the maker's logo. The stock photograph prints another maker's name on the top face, which
+      is not reproduced.
+attrs:
+  physical:
+    weight-kg: 0.3
+    overall-dimensions: 170 x 86 x 43 mm (datasheet)
+  performance:
+    wifi-rates: 802.11ax 2.976 Gbps, 802.11ac 1.733 Gbps, 802.11n 600 Mbps
+  platform:
+    memory: 512 MB DRAM
+    storage: 128 MB flash
+  power:
+    power-max-w: 25
+    power-max-scope: DC power or 802.3at, both radios 2x2, LAN 1 supplying PoE
+    power-input: 48 V DC / 0.6 A over a 2.1 mm / 5.5 mm centre-positive connector, or PoE/PoE+ 802.3af/at over the 2.5GbE port. DC is preferred when both are present
+    poe-pd-standard: 802.3at
+    poe-pd-standard-min: 802.3af
+    poe-pd-max-w: 25
+    poe-budget-w: 10
+    poe-budget-scope: LAN 1, 48 V
+    power-idle-w: 8
+  environmental:
+    operating-temp-c: 0 to 40
+    operating-humidity: 5 to 95 percent noncondensing
+  features:
+    wifi: 802.11a/b/g/n/ac/ax (WiFi 6), 2.4 GHz 2x2 and 5 GHz 2x2
+    bluetooth: '5.1'
+  management:
+    interfaces: ReadyView cloud; Ethernet/Fiber in-band; Ethernet/Fiber out-of-band
+    button-functions: factory reset
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 86.0
+  height: 170.0
+  depth: 43.0
+  mount: wall
+  color: '#f2f3f4'
+  edge: '#d3d6d9'
+  silk: '#4a4f55'
+gaps:
+- what: top-end
+  scope: [bottom, top]
+  reason: vendor-silent
+  wanted: >-
+    Which end of the plate is up on a wall. The datasheet draws the box lying down and does not
+    say; the four jacks are drawn on the bottom end.
+- what: side-ports-position
+  scope: [left]
+  reason: vendor-silent
+  wanted: >-
+    A dimensioned drawing of the long side: the micro-USB console port, the reset pinhole and
+    the DC jack are placed by eye from a figure with no scale, and which long side carries them
+    is not stated.
+- what: rear-mounting-slots
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    A dimensioned drawing of the wall side: the four mounting slots and the recess round the
+    2.5GbE port are visible in the datasheet's figure and are not drawn.
+groups:
+  lan:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the four GbE ports on the end of the plate; LAN 1 hands on PoE
+  uplink:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 2.5g}
+    description: the 2.5GbE PoE/PoE+ port on the wall side
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: micro-usb-b}
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+  buttons:
+    term: Button
+    role: management
+    index-origin: 1
+views:
+  front:
+    size: {w: 86.0, h: 170.0}
+    panel:
+      decor: []
+    silkscreen:
+    - {at: [43.0, 9.0], text: ReadyLinks, font-size: 4.0, anchor: middle, for: chassis}
+  rear:
+    size: {w: 86.0, h: 170.0}
+    panel:
+      decor:
+      - {at: [27.0, 52.0], size: [32.0, 32.0], fill: '#e6e8ea', rx: 1.0}
+      cutouts:
+      - {id: wan-poe, at: [35.1, 61.4], size: [15.8, 13.2], shape: rect}
+    silkscreen:
+    - {at: [43.0, 80.5], text: WAN / PoE, font-size: 2.2, anchor: middle, for: wan-poe}
+    components:
+      placements:
+      - {ref: common/rj45-eth@1, id: wan-poe, at: [35.1, 61.4], group: uplink, rel-pos: 1, attrs: {poe: 802.3af/at PD (in)}}
+  bottom:
+    size: {w: 86.0, h: 43.0}
+    panel:
+      decor: []
+      cutouts:
+      - {id: lan-1, at: [8.8, 14.9], size: [15.8, 13.2], shape: rect}
+      - {id: lan-2, at: [26.3, 14.9], size: [15.8, 13.2], shape: rect}
+      - {id: lan-3, at: [43.8, 14.9], size: [15.8, 13.2], shape: rect}
+      - {id: lan-4, at: [61.3, 14.9], size: [15.8, 13.2], shape: rect}
+    silkscreen:
+    - {at: [16.7, 33.0], text: LAN 1, font-size: 2.2, anchor: middle, for: lan-1}
+    - {at: [16.7, 36.4], text: PoE Out, font-size: 2.2, anchor: middle, for: lan-1}
+    - {at: [34.2, 33.0], text: LAN 2, font-size: 2.2, anchor: middle, for: lan-2}
+    - {at: [51.7, 33.0], text: LAN 3, font-size: 2.2, anchor: middle, for: lan-3}
+    - {at: [69.2, 33.0], text: LAN 4, font-size: 2.2, anchor: middle, for: lan-4}
+    components:
+      placements:
+      - {ref: common/rj45-eth@1, id: lan-1, at: [8.8, 14.9], group: lan, rel-pos: 1, attrs: {poe: 48 V / 10 W (out)}}
+      - {ref: common/rj45-eth@1, id: lan-2, at: [26.3, 14.9], group: lan, rel-pos: 2}
+      - {ref: common/rj45-eth@1, id: lan-3, at: [43.8, 14.9], group: lan, rel-pos: 3}
+      - {ref: common/rj45-eth@1, id: lan-4, at: [61.3, 14.9], group: lan, rel-pos: 4}
+  left:
+    size: {w: 43.0, h: 170.0}
+    panel:
+      decor: []
+      cutouts:
+      - {id: console, at: [17.75, 21.6], size: [7.5, 2.75], shape: rect}
+      - {id: reset, at: [19.5, 44.0], size: [4.0, 4.0], shape: circle}
+      - {id: dc-in, at: [15.5, 89.5], size: [12.0, 13.0], shape: rect}
+    silkscreen:
+    - {at: [21.5, 107.5], text: DC 48V, font-size: 2.2, anchor: middle, for: dc-in}
+    components:
+      placements:
+      - {ref: std/micro-usb@1, id: console, at: [17.75, 21.6], group: console, rel-pos: 1}
+      - {ref: common/reset-button@1, id: reset, at: [19.5, 44.0], for: chassis, group: buttons, rel-pos: 1}
+      - {ref: common/dc-barrel@1, id: dc-in, at: [15.5, 89.5], group: inlets, rel-pos: 1, attrs: {input-voltage: 48 VDC, current-max-a: 0.6}}
+  right:
+    size: {w: 43.0, h: 170.0}
+    empty: >-
+      the datasheet's figure and the stock photograph show the other long side only edge-on or
+      not at all; nothing on it is documented
+  top:
+    size: {w: 86.0, h: 43.0}
+    empty: >-
+      the end opposite the four jacks: neither the datasheet's figure nor the stock photograph
+      shows a feature on it
+configurations:
+  base:
+    kind: base
+    description: IPC-APWF6-POE-WP Wi-Fi 6 wall-plate access point
+    default: true
+    part-numbers:
+      IPC-APWF6-POE-WP: {}
+datasheet:
+  title: 'ReadyLinks IPC-APWF6-POE-WP datasheet'
+  sha256: b88a494030d7f792f6c1dc0c1bfc4a31ec0c2a93b3e5532c3dd1124959f21441

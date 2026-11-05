@@ -340,6 +340,7 @@ def test_every_pluggable_media_the_library_uses_is_a_pluggable_cage():
         "db9",          # a D-sub alarm or serial connector (the 7750 SR-1 alarm port) takes no module
         "usb-a",        # a USB Type-A receptacle takes a USB device, not a transceiver (the DL160 Gen10's front and rear USB group)
         "mini-usb-b",   # the Catalyst 9300's USB console jack takes a cable, not a module
+        "micro-usb-b",  # a micro-USB console jack takes a cable, not a module (the IPC-APWF6-POE-WP)
         "stackwise-480",  # Cisco's own stacking connector, which takes a stacking cable
         "stackpower",     # the Catalyst 9300's power-sharing connector, which takes a StackPower cable
     }

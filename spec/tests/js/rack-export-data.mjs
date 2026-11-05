@@ -136,6 +136,7 @@ test('a device that is not rack-mount is said to need a shelf or bracket', () =>
   assert.equal(X.mountText('din-rail'), 'a DIN-rail device, so it needs a shelf or DIN-rail bracket');
   assert.equal(X.mountText('desktop'), 'a desktop device, so it needs a shelf');
   assert.equal(X.mountText('wall'), 'a wall-mount device, so it needs a shelf or bracket');
+  assert.equal(X.mountText('ceiling'), 'a ceiling-mount device, so it needs a shelf or bracket');
   assert.equal(X.mountText('pole'), 'not a rack-mount device (pole), so it needs a shelf or bracket');
   assert.equal(X.mountText('rack'), null);
   assert.equal(X.mountText(undefined), null);
@@ -163,11 +164,12 @@ test('the picker flags a device that is not rack-mount, in its own words', () =>
   assert.equal(X.mountPick('din-rail').tag, 'DIN rail');
   assert.equal(X.mountPick('din-rail').fit, 'Fits here, on a shelf or DIN-rail bracket: this is a DIN-rail device.');
   // one table: the note and the fit line say the same device and the same place
-  for (const m of ['din-rail', 'desktop', 'wall', 'pole']) {
+  for (const m of ['din-rail', 'desktop', 'wall', 'ceiling', 'pole']) {
     const [, what, where] = /^(.*), so it needs (.*)$/.exec(X.mountText(m));
     assert.equal(X.mountPick(m).fit, `Fits here, on ${where}: this is ${what}.`);
   }
   assert.equal(X.mountPick('wall').tag, 'wall mount');
+  assert.equal(X.mountPick('ceiling').tag, 'ceiling mount');
   assert.equal(X.mountPick('wall').fit, 'Fits here, on a shelf or bracket: this is a wall-mount device.');
   assert.equal(X.mountPick('pole').fit, 'Fits here, on a shelf or bracket: this is not a rack-mount device (pole).');
 });

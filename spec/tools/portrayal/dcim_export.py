@@ -1696,6 +1696,23 @@ def flatten(section, prefix=""):
     return out
 
 
+def poe_pd_prose(dev):
+    """One sentence for a powered device's PoE input, or None: neither target has a
+    field for the standard a device needs or the most it takes in."""
+    power = (dev.get("attrs") or {}).get("power") or {}
+    standard = power.get("poe-pd-standard")
+    if not standard:
+        return None
+    text = f"PoE powered device: {standard}"
+    if power.get("poe-pd-standard-min"):
+        text += f" (runs on {power['poe-pd-standard-min']})"
+    if power.get("poe-pd-class") is not None:
+        text += f", class {power['poe-pd-class']}"
+    if power.get("poe-pd-max-w") is not None:
+        text += f", at most {power['poe-pd-max-w']:g} W at the PD input"
+    return text + "."
+
+
 def comments_for(dev, cfg_name, cfg):
     """Everything true about the device that the target schema has no field for.
 
@@ -1744,6 +1761,11 @@ def comments_for(dev, cfg_name, cfg):
     rating = _manifest.input_rating(dev)
     if rating:
         lines += [f"Input rating: {rating}.", ""]
+    # A POWERED DEVICE'S PoE INPUT: the standard it needs, what it runs reduced on and the most it
+    # takes in, which a device type has no field for (docs/non-rack-devices-design.md).
+    pd = poe_pd_prose(dev)
+    if pd:
+        lines += [pd, ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):
@@ -1895,6 +1917,7 @@ def is_full_depth(ch):
 MOUNT_PROSE = {
     "din-rail": "Mounts on a DIN rail (IEC 60715); not rack-mounted.",
     "wall": "Wall-mounted; not rack-mounted.",
+    "ceiling": "Ceiling-mounted; not rack-mounted.",
     "desktop": "Desktop unit; not rack-mounted.",
     "rack-face": "Mounts on the rack rail face at a rack unit; occupies no rack unit.",
     "rack-side": "Mounts on the side of a rack's upright, beside the rack; occupies no rack unit.",
