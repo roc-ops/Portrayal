@@ -674,6 +674,9 @@ PART_POWER = {
     # THE NXA-PDC-930W'S DC POWER CONNECTOR IS A THREE-POSITION BLOCK THE GUIDE DOES NOT NAME THE MAKER OF.
     # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
     "cisco/nxa-pdc-930w-dc-header": "other",
+    # THE PSU-242-DEERN'S DC INPUT CONNECTOR IS A SIX-POSITION BLOCK, TWO ROWS OF THREE, THAT THE GUIDE DOES NOT NAME THE
+    # MAKER OF. It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "ufispace/psu-242-dc-header": "other",
     # A RACK PDU'S FIXED INPUT CORD. The Eaton G4 EVMI2130X has no inlet: its feed
     # is a 10 ft cord ending in a NEMA L21-30P twist-lock plug, and the part that
     # stands for it is the cord leaving the end cap. `nema-l21-30p` is a
@@ -730,6 +733,7 @@ POWER_LABEL = {
     "common/pla03-receptacle": "Positronic PCS PLA03 (3-position)",
     "oscilloquartz/osa542x-dc-header": "Latching power header (3-position, - Gnd +)",
     "cisco/nxa-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
+    "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
 }
 
 
