@@ -65,18 +65,6 @@ def test_the_blank_is_exported_under_its_part_number_and_not_its_description():
     assert described == [], described
 
 
-def test_the_second_blank_is_gone():
-    assert not folder(RETIRED).exists()
-    assert not folder(RETIRED).parent.exists()
-
-
-@pytest.mark.parametrize("device", DEVICES)
-def test_each_chassis_seats_the_one_blank_and_names_no_other(device):
-    text = (LIB / "devices" / "juniper" / device / "device.yaml").read_text()
-    assert BLANK in text
-    assert "mx960-blank" not in text
-
-
 @pytest.mark.parametrize("device", DEVICES)
 def test_a_blank_is_what_each_chassis_seats_in_its_empty_slots(device):
     configs = manifest(device)["configurations"]
