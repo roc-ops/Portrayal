@@ -66,6 +66,77 @@ def test_each_inlet_carries_the_legend_the_photograph_prints(rear):
     assert texts["ac-inlet-2"] == ["POWER 2", "100-240 V~1.5 A MAX 50/60 Hz"]
 
 
+SCREW = "common/screw-head@1"
+FRONT_SHA = {
+    "layout.yaml": "93529a70c14aa07b4caa5ec8921ac469cdbecf2aa6ca660d8c5c825f87553881",
+    "device.yaml": "db4cc6460e639a76727c28596f85d3079d4ffcaa65556eac985b2bdbf3ae9dfe",
+}
+
+
+def centre(item, size=None):
+    w, h = size or item["size"]
+    return item["at"][0] + w / 2, item["at"][1] + h / 2
+
+
+def test_the_rear_draws_four_fan_grilles_left_to_right_as_the_photograph_shows(rear):
+    fans = sorted((d for d in rear["panel"]["decor"] if d.get("kind") == "fan-grille"), key=lambda d: d["at"][0])
+    assert len(fans) == 4
+    assert all(d.get("pattern") == "vent" and d.get("vent") for d in fans)
+    xs = [centre(d)[0] for d in fans]
+    inlets = sorted(centre(p, (INLET_W, INLET_H))[0] for p in placements(rear).values())
+    # the first stands between the two inlets, the other three are to the right of the second
+    assert inlets[0] < xs[0] < inlets[1] < xs[1] < xs[2] < xs[3]
+    # the last two stand together, and the first of those two is nearer them than the one before
+    assert xs[3] - xs[2] < xs[2] - xs[1] and xs[3] - xs[2] < 45
+    for d in fans:
+        assert d["size"][0] == d["size"][1] and 0 <= d["at"][1] and d["at"][1] + d["size"][1] <= rear["size"]["h"]
+
+
+def test_each_inlet_has_a_spring_clip_over_it_and_the_clips_are_in_order(rear):
+    clips = sorted((d for d in rear["panel"]["decor"] if d.get("kind") == "retaining-clip"), key=lambda d: d["at"][0])
+    inlets = sorted(placements(rear).values(), key=lambda p: p["at"][0])
+    assert len(clips) == 2
+    for clip, inlet in zip(clips, inlets):
+        assert clip["stroke"]
+        assert clip["at"][0] <= inlet["at"][0] and clip["at"][0] + clip["size"][0] >= inlet["at"][0] + INLET_W
+        assert clip["at"][1] < inlet["at"][1]
+
+
+def test_the_rear_carries_twelve_crosshead_screws_from_the_screw_part(rear):
+    screws = [p for p in rear["components"]["placements"] if p.get("ref") == SCREW]
+    assert len(screws) == 12
+    assert [p["rel-pos"] for p in screws] == list(range(1, 13))
+    xs = [p["at"][0] for p in screws]
+    assert xs == sorted(xs)
+    assert {p["group"] for p in screws} == {"furniture"}
+    for p in screws:
+        assert 0 <= p["at"][0] and p["at"][0] <= rear["size"]["w"] and 0 <= p["at"][1] <= rear["size"]["h"]
+
+
+def test_the_only_printing_is_the_two_legends_under_the_inlets_in_order(rear):
+    lines = sorted(rear["silkscreen"], key=lambda s: (s["at"][0], s["at"][1]))
+    assert [s["text"] for s in lines] == [
+        "POWER 1",
+        "100-240 V~1.5 A MAX 50/60 Hz",
+        "POWER 2",
+        "100-240 V~1.5 A MAX 50/60 Hz",
+    ]
+    inlets = {p["id"]: p for p in placements(rear).values()}
+    for s in lines:
+        inlet = inlets[s["for"]]
+        assert s["at"][1] > inlet["at"][1] + INLET_H
+        assert abs(s["at"][0] - (inlet["at"][0] + INLET_W / 2)) < 0.5
+
+
+@pytest.mark.parametrize("name", ["layout.yaml", "device.yaml"])
+def test_the_front_is_unchanged(name):
+    import hashlib
+    import json
+
+    front = json.dumps(source(name)["views"]["front"], sort_keys=True)
+    assert hashlib.sha256(front.encode()).hexdigest() == FRONT_SHA[name]
+
+
 def test_the_inlets_group_is_declared():
     for name in ("layout.yaml", "device.yaml"):
         assert "inlets" in source(name)["groups"], name
@@ -75,7 +146,7 @@ def test_the_rear_gap_no_longer_says_the_inlets_are_not_placed():
     for name in ("layout.yaml", "device.yaml"):
         for gap in source(name)["gaps"]:
             assert "no AC inlet is placed" not in " ".join(str(gap.get("note", "")).split()), (name, gap["what"])
-            assert gap["what"] != "rear-face", name
+            assert gap["what"] not in ("rear-face", "rear-fans-and-screws"), name
 
 
 @pytest.mark.parametrize("flavour", ["netbox", "nautobot"])

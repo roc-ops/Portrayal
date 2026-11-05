@@ -215,7 +215,7 @@ def test_crs312_lower_left_cage_is_1f_as_printed():
 def test_crs312_power_is_built_in_and_the_rear_keeps_a_gap_for_what_it_does_not_draw():
     d = load("crs312-4c-plus-8xg-rm")
     assert not (d["views"]["front"].get("components") or {}).get("bays")
-    gap = [g for g in d["gaps"] if g["what"] == "rear-fans-and-screws"]
+    gap = [g for g in d["gaps"] if g["what"] == "rear-elevation"]
     assert len(gap) == 1 and gap[0]["scope"] == ["rear"]
     assert d["attrs"]["power"]["power-max-w"] == 60
     assert "four built-in fans" in d["attrs"]["thermal"]["cooling"]
