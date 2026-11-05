@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nxa-phv-350w
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -50,6 +50,21 @@ provenance:
     exhaust. The values are cisco/nxa-pac-500w@1's.
   depth: >-
     estimated - not stated. 185 mm is cisco/nxa-pac-500w@1's round figure.
+  connector: >-
+    the supply composes std/saf-d-grid@1 as `inlet`, inside the surround the skin already draws for it. The Cisco
+    N9348GC-FX3 NX-OS Mode Switch Hardware Installation Guide names the connector in "Starting the Switch" (PDF
+    page 33): "connect the Anderson Power Saf-D-Grid connector on the power cable to the power receptacle on
+    the power supply" for any HVAC/HVDC supply, and again in "Installing an HVAC/HVDC Power Supply" (PDF page
+    46); its cable table lists CAB-HVAC-SD-0.6M, CAB-HVAC-C14-2M, CAB-HVAC-RT-0.6M and CAB-HVDC-3T-2M, "Saf-D-Grid
+    and three terminal connectors". The Cisco N9336C-FX2-E guide says the same of its HVAC/HVDC supplies. NO FIGURE
+    SHOWS THIS SUPPLY'S INLET (the guide's figure shows AC supplies only), so the part's turn and place are
+    estimates: it is seated unturned, centred in the surround, in the landscape window the skin draws. The
+    library's cable connector generic/saf-d-grid-plug@1 mates it. The skin is unchanged.
+  no-dc-port: >-
+    NO DC PORT IS STATED. The supply takes HVAC or HVDC at one connector, and the library's DC power model leaves
+    HVDC out. The HVDC cable's source end carries three terminal rings, ground, negative and positive (the guide's
+    "Starting the Switch" steps 3 to 5 and the cable table's "three terminal connectors"); the guide does not say
+    which contact of the connector each lands on, so no role is stated here.
 states: [absent]
 elements:
   ac-ok: {at: [8.1, 6.1], size: [4.4, 4.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
@@ -78,6 +93,8 @@ relief:
       confidence: estimated
       source: >-
         Not stated in any guide held. cisco/nxa-pac-500w@1 carries 3.0 mm for the same latch.
+parts:
+  - {ref: std/saf-d-grid@1, id: inlet, at: [44.4, 7.9]}
 skins: [default]
 body:
   depth: 185
