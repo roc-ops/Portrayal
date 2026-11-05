@@ -1,5 +1,5 @@
 ### Changed
-- The MikroTik CRS312-4C+8XG-RM (`mikrotik/crs312-4c-plus-8xg-rm`, 1.0.0 to 1.2.2) draws its rear. MikroTik's brochure prints a rear
+- The MikroTik CRS312-4C+8XG-RM (`mikrotik/crs312-4c-plus-8xg-rm`, 1.0.0 to 1.2.3) draws its rear. MikroTik's brochure prints a rear
   photograph that shows two IEC C14 inlets, POWER 1 and POWER 2, each with the legend `100-240 V~1.5 A MAX 50/60 Hz`. The device
   places the library's `std/c14-inlet@1` twice, as `ac-inlet-1` and `ac-inlet-2`, so each is a place a power cord lands. The
   places are estimates read off a photograph taken slightly from above, good to about 2 mm. The rear also
