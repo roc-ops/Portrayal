@@ -392,6 +392,52 @@ test('a grommet too small for the cable is no opening; one it fits is (the fit r
   }
 });
 
+// ── a shell grommet is judged on the tube ──────────────────────────────────
+// The grommet is 40 x 24 in the rear wall, centred at rack x -154 and y U10.
+// A cable runs straight through it along z.
+const grommetRun = (x, y) => [{x, y, z: -600}, {x, y, z: -300}];
+
+test('a 6 mm cable 2 mm inside a shell grommet\'s edge crosses the wall; through the middle it does not', () => {
+  const {rack, ctx} = enclosure();
+  const s = S.solidsOf(rack, ctx);
+  const n = (x, y, d = 6) => S.legCrossings(...grommetRun(x, y), s, {diameter: d}).length;
+  assert.equal(n(-154, U10), 0);
+  // the grommet's edge is at x -134 and -174, and 12 mm either side of U10: a third of the tube is in the wall
+  assert.equal(n(-136, U10), 1);
+  assert.equal(n(-172, U10), 1);
+  assert.equal(n(-154, U10 + 10), 1);
+  assert.equal(n(-154, U10 - 10), 1);
+  // its tube just fits at 3 mm from the edge, and a hair nearer it does not
+  assert.equal(n(-137, U10), 0);
+  assert.equal(n(-136.9, U10), 1);
+  assert.equal(n(-154, U10 + 9), 0);
+  assert.equal(n(-154, U10 + 9.1), 1);
+});
+
+test('a cable exactly a shell grommet\'s smaller side passes through its middle; a diameter of 0 passes by its centre line', () => {
+  const {rack, ctx} = enclosure();
+  const s = S.solidsOf(rack, ctx);
+  const n = (x, y, d) => S.legCrossings(...grommetRun(x, y), s, {diameter: d}).length;
+  assert.equal(n(-154, U10, 24), 0);
+  assert.equal(n(-150, U10, 24), 0);
+  assert.equal(n(-154, U10 + 1, 24), 1);
+  assert.equal(n(-154, U10, 25), 1);
+  // no diameter, no radius: the edge itself is within the grommet, as before
+  assert.equal(n(-134, U10, 0), 0);
+  assert.equal(n(-154, U10 + 12, 0), 0);
+  assert.equal(n(-133.9, U10, 0), 1);
+});
+
+test('a shell grommet\'s depth is not shrunk: a leg that starts on the wall\'s face still passes', () => {
+  const {rack, ctx} = enclosure();
+  const s = S.solidsOf(rack, ctx);
+  const wall = s.find(x => x.part === 'shell/rear').box;
+  const through = (z0) => S.legCrossings({x: -154, y: U10, z: z0}, {x: -154, y: U10, z: wall.z0 - 5}, s, {diameter: 6}).length;
+  assert.equal(through(wall.z1), 0);
+  assert.equal(through(wall.z1 + 1), 0);
+  assert.equal(through(wall.z1 - 0.5), 0);
+});
+
 // ── a zero-U PDU over the gutter ───────────────────────────────────────────
 function pdu(at = 'left-front') {
   const {rack, ctx} = owner();

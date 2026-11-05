@@ -324,8 +324,9 @@ const within = (p, box) => AX.every(k => p[k] >= box[`${k}0`] - EPS && p[k] <= b
 // and one whose centre line clears the corner by a fraction of a millimetre
 // would otherwise run across the PDU's outlet face, which section 1.3 rule 4
 // keeps for the last resort. Its pass-through holes are judged on the tube
-// as well (#992, `legCrossings`). Every other plate or envelope is met by the
-// centre line, as before: a cable lies against those at its radius, and a
+// as well (#992, `legCrossings`), and so are the holes of a rack device's
+// shell walls. Every other plate or envelope is met by the centre line, as
+// before: a cable lies against those at its radius, and a
 // tube touching a plate the cable rests on is contact, not a fault. A plate
 // it does not rest on is left to the lay work (#986).
 const RING_PART = /^ring\/[^/]+\/./;
@@ -417,11 +418,12 @@ export function legCrossings(a, b, solids, {diameter = 0} = {}) {
     const grown = met(s, diameter) !== s.box;
     const own = grown ? inside(a, b, s.box.x0, s.box.x1, s.box.y0, s.box.y1, s.box.z0, s.box.z1) : null;
     const [hp, hq] = own ? [lerp(a, b, own[0]), lerp(a, b, own[1])] : [p, q];
-    // A ZERO-U PART's hole is judged on the tube too (#992): its box is taken
-    // less the cable's radius across the hole, so the tube fits inside it and
-    // does not lie a third in the wall. Not along the way through the plate.
+    // A hole is judged on the tube, a zero-U part's and a rack device's shell
+    // wall's alike: its box is taken less the cable's radius across the hole,
+    // so the tube fits inside it and does not lie a third in the wall. Not
+    // along the way through the plate, which for a wall is its thin axis.
     const through = (s.holes || []).some(h => {
-      const box = s.zeroU === true && diameter > 0 ? shrunk(h.box, s.box, diameter / 2) : h.box;
+      const box = diameter > 0 ? shrunk(h.box, s.box, diameter / 2) : h.box;
       return within(hp, box) && within(hq, box) && diameter <= Math.min(...h.size) + 1e-9;
     });
     if (!through) out.push({solid: s, t0: span[0], t1: span[1], at: p});
