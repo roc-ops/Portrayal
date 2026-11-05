@@ -387,6 +387,37 @@ def test_c19_lets_off_a_configuration_whose_every_supply_bay_is_open_and_no_othe
                    "a bay that takes no supply": ["C19"], "a supply bay seated by default": ["C19"], "no bay": ["C19"]}, got
 
 
+def test_c19_counts_only_the_supply_bays_the_configuration_has(tmp_path):
+    """The build publishes a bay with the configurations that have it (`only-in`), and the drawing leaves it out of any other. A supply bay
+    scoped to another configuration is not a bay of this one, so its default orders nothing here. A bay scoped to this configuration, a bay
+    that states no scope and a chassis whose only supply bay belongs elsewhere (it has none) stay reported."""
+    supply = comp("acme/psu@1", **{"class": "psu"})
+    psu_bay = lambda pid, default=None, **scope: {"id": pid, "accepts": ["acme/psu@1"], "default": default, "group": "psu", **scope}
+
+    def reported(name, bays, seated):
+        folder = tmp_path / name
+        folder.mkdir()
+        dist = world(folder, comps=[supply], bays=seated)
+        doc = json.loads((dist / "dev.configs.json").read_text())
+        doc["bays"] = {"front": bays, "rear": []}
+        doc["configs"][0]["power"] = ["ac"]
+        (dist / "dev.configs.json").write_text(json.dumps(doc))
+        return sorted(usable(scan(dist, folder)))
+
+    got = {"every bay open, a seated bay scoped to another configuration":
+               reported("a", [psu_bay("psu-0"), psu_bay("psu-0-3u", "acme/psu@1", **{"only-in": ["other"]})], {"psu-0": ""}),
+           "the same bay scoped to this configuration":
+               reported("b", [psu_bay("psu-0"), psu_bay("psu-0-3u", "acme/psu@1", **{"only-in": ["base"]})], {"psu-0": ""}),
+           "a seated bay that states no scope":
+               reported("c", [psu_bay("psu-0"), psu_bay("psu-0-3u", "acme/psu@1")], {"psu-0": ""}),
+           "the only supply bay scoped to another configuration":
+               reported("d", [psu_bay("psu-0-3u", "acme/psu@1", **{"only-in": ["other"]})], {})}
+    assert got == {"every bay open, a seated bay scoped to another configuration": [],
+                   "the same bay scoped to this configuration": ["C19"],
+                   "a seated bay that states no scope": ["C19"],
+                   "the only supply bay scoped to another configuration": ["C19"]}, got
+
+
 def test_c19_and_c20_let_off_a_fixed_cord_and_an_inlet_that_its_placement_presents(tmp_path):
     """A device fed through a fixed cord, a plug of the part's own that its sentence says is no connector, offers no power end by
     design (C19). A placed part that composes one connector part presents it as its own slot, at the placement's path (C20)."""
