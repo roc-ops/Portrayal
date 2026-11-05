@@ -115,9 +115,9 @@ def test_the_drawn_discs_the_studs_stand_over_are_kept():
     assert svg.count("<circle cx=\"11.9\"") == 4 and svg.count("<circle cx=\"29.3\"") == 4
 
 
-def test_the_device_takes_a_minor_and_its_lock_reads_the_port():
+def test_the_device_takes_a_minor_then_a_patch_and_its_lock_reads_the_port():
     doc = yaml.safe_load((LIB / "devices/juniper/ex6210/device.yaml").read_text())
-    assert doc["version"] == "0.2.0"
+    assert doc["version"] == "0.2.1"
     text = (LIB / "devices/juniper/ex6210/device.lock.json").read_text()
     assert "pole-pos" in text and "pole-neg" in text and json.loads(text)
 
