@@ -36,10 +36,16 @@ provenance:
     the three lamps along the bottom. Figure 23 draws four studs, two in a left column beside the Positive callout
     and two in a right column beside the Negative callout; the text speaks of a pair of input lugs (a positive and
     a negative terminal). The four are drawn as the figure shows them. Every position is estimated to about 3 mm.
-    The skin is not redrawn; the studs the supply composes (seats) stand over the four drawn ones.
+    The studs the supply composes (seats) stand over the four drawn discs, and the skin adds the bracket the left
+    pair sits on.
+  bracket: >-
+    estimated - Figure 23 (printed page 79) draws a flat bracket plate standing beside the left pair of fasteners,
+    between the two pairs. The skin draws it as a pale strip on the terminal block, 3 mm wide; its size and its
+    colour are estimated, the figure being line art.
   seats: >-
-    estimated - each pole is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in. centres that one two-hole lug lands
-    across, turned a quarter so the pair runs down the face, one stud above the other, as Figure 23 draws each column.
+    estimated - each pole is common/hex-nut-stud-pair-5-8@1, two hex nuts on studs, a washer under each nut, on 5/8
+    in. centres, as Figure 23 draws each fastener; one two-hole lug lands across the pair, turned a quarter so the
+    pair runs down the face, one stud above the other, as Figure 23 draws each column.
     The pitch is the lug's: EX6210 Switch Hardware Guide (published 2020-12-15) names the lug of the DC input,
     "Two DC lugs (Panduit LCD4-14A-L)" in its configuration table and parts list, and Panduit's catalog "Power and
     Grounding Infrastructure Solutions", page 9, prints for LCD4-14A-L a 1/4 in. stud hole and a stud hole spacing
@@ -115,8 +121,8 @@ relief:
     confidence: estimated
     source: figure - the handle loop stands proud of the vent field in Figure 23; its projection is not measured
 parts:
-  - {ref: juniper/mx240-dc-pole@1, id: pole-pos, at: [2.2625, 30.05], rotate: 90}
-  - {ref: juniper/mx240-dc-pole@1, id: pole-neg, at: [19.6625, 31.55], rotate: 90}
+  - {ref: common/hex-nut-stud-pair-5-8@1, id: pole-pos, at: [0.3625, 28.15], rotate: 90}
+  - {ref: common/hex-nut-stud-pair-5-8@1, id: pole-neg, at: [17.7625, 29.65], rotate: 90}
 dc:
   ports:
     - id: input

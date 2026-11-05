@@ -371,7 +371,7 @@ def test_the_5000_w_supply_has_two_c20_inlets_and_the_2500_w_supply_one():
 
 def test_the_dc_supply_has_no_ac_inlet_and_a_terminal_block():
     c = comp("ex6200-pwr-dc2100")
-    assert [p["ref"] for p in c["parts"]] == ["juniper/mx240-dc-pole@1"] * 2    # the studs; no inlet part
+    assert [p["ref"] for p in c["parts"]] == ["common/hex-nut-stud-pair-5-8@1"] * 2    # the studs; no inlet part
     assert c["elements"]["terminals"]["class"] == "terminal"
 
 
