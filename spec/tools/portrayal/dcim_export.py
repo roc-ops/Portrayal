@@ -682,6 +682,9 @@ PART_POWER = {
     "edgecore/dcs201-dc-header": "other",
     "edgecore/amx-3200-dc-header": "other",
     "edgecore/agr560-dc-header": "other",
+    # THE JPSU-150-DC-AFO'S DC POWER CONNECTOR IS A THREE-POSITION PLUGGABLE BLOCK THE GUIDES DO NOT NAME THE MAKER OF.
+    # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "juniper/jpsu-150-dc-header": "other",
     # A RACK PDU'S FIXED INPUT CORD. The Eaton G4 EVMI2130X has no inlet: its feed
     # is a 10 ft cord ending in a NEMA L21-30P twist-lock plug, and the part that
     # stands for it is the cord leaving the end cap. `nema-l21-30p` is a
@@ -737,6 +740,7 @@ POWER_LABEL = {
     "std/12v-2x6-header": "12V-2x6 16-pin",
     "common/pla03-receptacle": "Positronic PCS PLA03 (3-position)",
     "oscilloquartz/osa542x-dc-header": "Latching power header (3-position, - Gnd +)",
+    "juniper/jpsu-150-dc-header": "DC power connector block (3-position, + - earth)",
     "cisco/nxa-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "juniper/qfx5200-48y-dc-header": "DC power header (3-position, RTN, -36 to -72 V, grounding)",
     "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
