@@ -9,6 +9,8 @@ import pytest
 
 from libdata import devices, components
 
+pytestmark = pytest.mark.heavy
+
 CHASSIS = ("juniper/mx240", "juniper/mx480", "juniper/mx960")
 
 # part -> (attrs.model, attrs.model-variants, watts in the chassis guide's FRU power table, MIC parts its column takes)
