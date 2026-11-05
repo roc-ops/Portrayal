@@ -33,7 +33,7 @@ TOL = 0.06
 DEVICES = {
     "cor550": dict(view="rear", ac_cfg="ac-f2b", dc_cfg="dc-f2b", bays=["psu-0", "psu-1"],
                    ac="edgecore/cor550-psu-ac@1", dc="edgecore/cor550-psu-dc@1",
-                   gap="dc-supply-face", version="3.2.1"),
+                   gap="dc-supply-face", version="4.0.0"),
     "cor580": dict(view="rear", ac_cfg="ac-f2b", dc_cfg="dc48-f2b", bays=["psu-1", "psu-2"],
                    ac="common/psu-ac-1300@1", dc="edgecore/fsj033-610g@1",
                    gap="dc-psu-module", version="3.2.0"),

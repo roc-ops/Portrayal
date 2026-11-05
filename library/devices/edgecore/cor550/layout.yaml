@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor550
-version: 3.2.1
+version: 4.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS7926-40XKFB
@@ -92,14 +92,25 @@ provenance:
       triple - and the imperial conversion in the datasheet's own parenthesis is the only
       internal check: 440/25.4 = 17.32, 87/25.4 = 3.43, both exact, and 635/25.4 = 25.0.
       440 IS THE BODY, not the ear-to-ear width. Both elevations' ink panels measure to it
-      with the rack ears absent from the drawing, and the ears are placed outside it at the
-      library's 14 mm, as the AGR560 and DCS520 do on this same 440 x 87 shell.
+      with the rack ears absent from the drawing, and the ears are stated in chassis.ears and
+      drawn by the generic plan when a viewer asks, out to the 482.6 mm rack face.
   weight:
     confidence: datasheet
     note: >-
       DATASHEET, 'Weight: 39 kg (GW), 19 kg (NW)'. NW - net, the machine - is what
       chassis.weight-kg carries; GW is the gross shipping weight of the carton and is not
       a property of the device. Stated once, in one document, with no second source.
+  rack-ears-and-kit:
+    confidence: estimated
+    note: >-
+      The Edgecore Quick Start Guide (AS7926-40XKFB), page 1, lists a rack mounting kit in the
+      package contents and does not itemise it, so edgecore/cor550-rack-kit@1 is listed as
+      in-box. The ears are the kit's rack mount brackets. The guide's figures (page 2, steps 1,
+      6 and 7) draw each as a dark bracket, the colour of the body, that runs the full height of
+      the 2 RU face, so `ears.color` is the chassis colour and `ears.h` is left out; `ears.y`
+      keeps the 0.25 mm the placed ears stood at. The photographs staged for this device show
+      no ear fitted, so they say nothing of the bracket. No figure dimensions the set-back, so
+      no position is stated (see gaps).
   the-face-is-forty-plus-thirteen:
     confidence: measured
     note: >-
@@ -277,8 +288,8 @@ provenance:
     confidence: borrowed
     note: >-
       THE AGR560 AND THE DCS520 ARE ON THIS FACE. Both are Edgecore 2RU machines modelled
-      at 440.0 x 87.0 with the rack ears placed at [-14, 0.25] and [440, 0.25], and this
-      device follows them exactly there, which is the whole of what is carried over. The
+      at 440.0 x 87.0, and this device follows them on the body's width and height, which is
+      the whole of what is carried over. The
       DEPTH differs - 635 here against their 649.2 - so it is not the same shell, and
       NOTHING ELSE is inherited: both of them seat four fan trays about 80 mm wide where
       this seats five at 68, and neither puts its supplies in a single column.
@@ -347,8 +358,19 @@ attrs:
       not a certification.
   lifecycle: {eol: none-announced}
 chassis: {width: 440.0, height: 87.0, depth: 635.0, ru: 2, weight-kg: 19.0, color: '#3c3c3f',
-  airflow: front-to-back}
+  airflow: front-to-back,
+  ears: {y: 0.25, color: '#3c3c3f'},
+  kits: [{ref: 'edgecore/cor550-rack-kit@1', supply: in-box}]}
 gaps:
+  - what: rack-ear-setback
+    scope: [front, rear]
+    reason: vendor-silent
+    wanted: >-
+      HOW FAR BEHIND THE FACEPLATE THE BRACKET'S FLANGE SITS. The quick start guide's figures
+      draw the bracket's flange against the front post with the faceplate flush with it, and
+      print no dimension, so no position is stated and the generic ear is drawn flush. A
+      dimensioned drawing of the bracket on the chassis side, or a statement of the setback,
+      settles it.
   - what: lane-lamp-legend
     scope: [front]
     reason: vendor-silent
@@ -468,7 +490,7 @@ groups:
     term: Item
     role: furniture
     index-origin: 1
-    description: the rack ears and the product tag - things you neither connect to nor read.
+    description: the USB symbol and the compliance label - things you neither connect to nor read.
 views:
   front:
     size: {w: 440.0, h: 87.0}
@@ -721,8 +743,6 @@ views:
           cutouts: true
           rotate: {bottom: 180}
       placements:
-        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
-        - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
         - {block: qsfp28-100g}
         - {block: qsfpdd-400g-fabric}
         - {ref: std/qsfp-dd@1, id: fab-12, at: [269.58, 35.52], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 12}
@@ -788,8 +808,6 @@ views:
         - {id: fan-1, at: [290.03, 12.30], size: {w: 68.0, h: 62.3}, accepts: [edgecore/cor550-fan@1], group: fans, rel-pos: 1, default: edgecore/cor550-fan@1}
         - {id: fan-0, at: [358.56, 12.30], size: {w: 68.0, h: 62.3}, accepts: [edgecore/cor550-fan@1], group: fans, rel-pos: 0, default: edgecore/cor550-fan@1}
       placements:
-        - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 4}
-        - {ref: common/rack-ear@1, id: rear-ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 5}
         - {ref: common/ground-lug@1, id: ground-point, at: [70.00, 33.00], group: grounding, rel-pos: 1}
     regions:
       - {id: exhaust, at: [84.45, 0], size: {w: 342.12, h: 87.0}, physical-context: Exhaust,
