@@ -158,10 +158,11 @@ A cable crosses a solid only through:
 - **a duct**, into its channel and out through a finger gap;
 - **a pass-through**, along z, when the diameter of the cable (or of the
   bundle, at that point) is no larger than the smaller side of its `size`.
-  On a zero-U part (#992) the tube must also fit: the hole's box is taken
-  less the cable's radius across the hole, so a centre line 2 mm inside the
-  edge is a crossing for a 6 mm cable. The box is not shortened along the way
-  through the plate.
+  On a zero-U part (#992) and on a grommet in a rack device's shell wall the
+  tube must also fit: the hole's box is taken less the cable's radius across
+  the hole, so a centre line 2 mm inside the edge is a crossing for a 6 mm
+  cable. The box is not shortened along the way through the plate, which is
+  the plate's thinnest axis (for a wall, its normal).
 
 A pass-through is the one opening kind for a hole in a plate. A slot that is
 big enough to take a cable is declared as one, with its size, and the check
@@ -969,7 +970,8 @@ front edge to the ring's face, ran along the face and grazed both legs.
   from a lacer's end ring to the lane beside a zero-U PDU cleared the PDU's
   corner by a fraction of a millimetre with its centre line and ran its tube
   across the outlet face, which rule 4 of 1.3 keeps for the last resort.
-  Every other body is met by the centre line, as in 1.2. Meeting every body
+  The holes in a zero-U part and in a rack device's shell wall are judged on
+  the tube too (1.2). Every other body is met by the centre line, as in 1.2. Meeting every body
   by the tube was measured on a sample of 3,120 generated cables: it
   lengthened routes on racks with no PDU by up to 276 mm, and reported every
   cable as crossing a body, since a plug leaves its port on the face of the
@@ -2470,7 +2472,7 @@ published file or a saved rack file uses it.
 | the lane moving outboard of a zero-U part that stands in the gutter and carries no lane (a zero-U PDU), and routed lengths changing beside one | kit (`laneXAt`), drawings | every route on that lane is longer, and a saved length moves on the next measure; a drawing that places lanes itself must follow |
 | the reach point (`at: 'reach'` with `end`, and `rigid_mm` on a DAC's or an AOC's, #985) in `routePath`, `ctx.plugReachOf`, `PLUG_REACH` and `PLUG_SPLIT` (the helpers that compute them stay internal), with the plug outside the face in the path (1.5) | kit API | a page passes `plugReachOf` and reads the points by these names; moving the plug into the allowance later would change every length again |
 | the end allowance by media, `END_ALLOWANCE_BY_MEDIA` (the table: the plug inside the port and the maker's short tolerance, never slack), `endAllowance(cable)` and the path's `allowance` (what a length adds an end: the table's figure and, until #949 step 4, the temporary dressing allowance of 0.1 m, which is not exported) (1.6); `END_ALLOWANCE_M` is gone | kit API | a page reads the table by these names, and every routed length and stock size depends on the figures; removing the dressing allowance shortens every routed length by 0.2 m |
-| a zero-U part's pass-through hole judged on the tube (1.2, #992) | kit | a route through a pass-through hole, and its length, can change on saved racks |
+| a zero-U part's and a rack device's shell grommet's pass-through hole judged on the tube (1.2, #992) | kit | a route through a pass-through hole, and its length, can change on saved racks |
 | `crosses-body` (with `part` and, for a held-face stack, `face`), `unheld` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
 | the public subpath `@portrayal/kit/rack/solids` (`solidsOf`, `legCrossings`, `detour` with its `room`, `CLEAR`) | kit package exports | a consumer imports it by that path and those names; a rename or removal is a breaking kit release |
 | `cable.slack`, `cable.slack.clear`, `cable.lay` (with `face`), and `roll` on `patch` | kit commands, offered to agents | agent sessions and saved prompts call them by name |
