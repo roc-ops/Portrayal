@@ -1,0 +1,50 @@
+format: 1
+kind: component
+name: agr560-dc-plug
+version: 1.0.0
+class: port
+mates: edgecore-agr-dc-block-2
+profile: power
+description: >-
+  The cable connector of the Edgecore AGR560 48 VDC supply, wired, seen from the wire side as seated. A dark body with
+  one insulated wire entering each of its two ways. It seats in an `edgecore-agr-dc-block-2` connector at its own
+  mate point. It carries one wire per contact, not one cable.
+size: {w: 16.1, h: 29.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, edgecore/agr560-dc-header@1, 16.1 by 29.0. No document draws the cable
+  connector and no dimension of it is held.
+attrs: {media: edgecore-agr-dc, connector: DC cable connector, positions: 2}
+fields:
+  wire-1-color: {label: 'Wire colour (upper socket)', type: text, default: '#2b2b2b'}
+  wire-2-color: {label: 'Wire colour (lower socket)', type: text, default: '#2b2b2b'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    NO DOCUMENT DRAWS THE CABLE CONNECTOR. The Edgecore AGR560 data sheet's ordering table lists the DC cable as "6AWG
+    PSU to 2 x Ring Terminal, 2.5 m" (page 4): read as a cable from the supply to two ring terminals, the ring terminals
+    are at the far end, which lands on the site's DC source, and the supply end is a connector the data sheet does not
+    describe. The guide's "DC Power" figure (page 2) draws the supply's side only. No maker, series or part number is
+    named for the plug. THE PART IS A STAND-IN FOR THE CABLE CONNECTOR, drawn as the half that seats in the supply's.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    NOT STATED. No document gives a wire colour or says which socket takes which pole; the two defaults are a neutral
+    dark grey and mean nothing.
+  far-end: >-
+    NOT DRAWN. The data sheet's "2 x Ring Terminal" are the far ends of the two wires and are the site's equipment's
+    mate, not this supply's.
+  gauge: >-
+    quick start and data sheet - "Use #6 AWG/ 10 mm2 copper wire (for a -48 to -60 VDC PSU)" (guide, page 3) and "6AWG
+    PSU to 2 x Ring Terminal" (data sheet, page 4). Not stated as the gauge of the connector's own wires.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the supply, so the part draws a plan
+    outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [8.05, 16.25], direction: front}
+  wire-1: {at: [6.9, 9.4], direction: front}
+  wire-2: {at: [6.9, 23.1], direction: front}
+skins: [default]

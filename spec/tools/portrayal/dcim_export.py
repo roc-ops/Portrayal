@@ -623,11 +623,11 @@ PART_POWER = {
     # (-48VA RETA -48VB RETB) in one pluggable screw-clamp header on the chassis
     # face. It is still where a supply's wire is landed, so the same row.
     "telco-systems/tm-7124s-dc-feed": "dc-terminal",
-    # AND THE XM-8424H's DC SUPPLY MODULE: a smaller two-pole screw-clamp plug (20.1 mm
+    # AND THE XM-8424H's DC SUPPLY MODULE: a smaller two-cell pluggable block (20.1 mm
     # against the ECS4530's 32.1), so its own part, landing the -36 to -72 V feed. The same row.
-    "telco-systems/xm8424-dc-plug": "dc-terminal",
-    # AND THE XM-3352's DC SUPPLY: a three-pole screw-clamp plug, the same row.
-    "telco-systems/xm3352-dc-plug": "dc-terminal",
+    "telco-systems/xm8424-dc-header": "dc-terminal",
+    # AND THE XM-3352's DC SUPPLY: a three-cell pluggable block, the same row.
+    "telco-systems/xm3352-dc-header": "dc-terminal",
     # AND THE AURCORE AIS SWITCHES' FIVE-WAY HEADER, `+ - earth + -`: two DC feeds
     # landed in one pluggable screw-clamp plug on the top face, the TM-7124S case
     # again. Still where a supply's wire is landed, so the same row (#737).
@@ -674,6 +674,17 @@ PART_POWER = {
     # THE NXA-PDC-930W'S DC POWER CONNECTOR IS A THREE-POSITION BLOCK THE GUIDE DOES NOT NAME THE MAKER OF.
     # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
     "cisco/nxa-pdc-930w-dc-header": "other",
+    # THE QFX5200-48Y DC SUPPLIES' POWER HEADER IS A THREE-POSITION HEADER NEITHER LIBRARY NAMES, from a maker the
+    # guide does not name. It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "juniper/qfx5200-48y-dc-header": "other",
+    # THE DC CONNECTORS OF THE EDGECORE AS5835, AMX3200 AND AGR560 48 VDC SUPPLIES ARE VENDOR CONNECTORS THE
+    # DOCUMENTS DO NOT NAME THE PART OF. None is a screw terminal, so each is `other`, and POWER_LABEL says which.
+    "edgecore/dcs201-dc-header": "other",
+    "edgecore/amx-3200-dc-header": "other",
+    "edgecore/agr560-dc-header": "other",
+    # THE JPSU-150-DC-AFO'S DC POWER CONNECTOR IS A THREE-POSITION PLUGGABLE BLOCK THE GUIDES DO NOT NAME THE MAKER OF.
+    # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "juniper/jpsu-150-dc-header": "other",
     # THE NC5K-PDC-930W SUPPLIES' DC POWER CONNECTOR IS THE SAME BLOCK drawn at the size of their housing: the same row.
     "cisco/nc5k-pdc-930w-dc-header": "other",
     # A RACK PDU'S FIXED INPUT CORD. The Eaton G4 EVMI2130X has no inlet: its feed
@@ -731,7 +742,12 @@ POWER_LABEL = {
     "std/12v-2x6-header": "12V-2x6 16-pin",
     "common/pla03-receptacle": "Positronic PCS PLA03 (3-position)",
     "oscilloquartz/osa542x-dc-header": "Latching power header (3-position, - Gnd +)",
+    "juniper/jpsu-150-dc-header": "DC power connector block (3-position, + - earth)",
     "cisco/nxa-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
+    "juniper/qfx5200-48y-dc-header": "DC power header (3-position, RTN, -36 to -72 V, grounding)",
+    "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
+    "edgecore/amx-3200-dc-header": "DC power connector (3-pin)",
+    "edgecore/agr560-dc-header": "DC power connector (2-socket)",
     "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
 }
 

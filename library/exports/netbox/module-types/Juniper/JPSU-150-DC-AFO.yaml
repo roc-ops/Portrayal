@@ -6,8 +6,9 @@ weight: 0.65
 weight_unit: kg
 description: Juniper JPSU-150-DC-AFO, the 150 W DC power supply for the EX3400-24T-DC and EX3400-48T-DC
 power-ports:
-  - name: '{module}/Inlet'
-    type: dc-terminal
+  - name: '{module}/dc-header'
+    type: other
+    label: DC power connector block (3-position, + - earth)
 comments: 'Juniper JPSU-150-DC-AFO, the 150 W DC power supply for the EX3400-24T-DC and EX3400-48T-DC.
   It seats in power supply slot 0 or 1 at the rear. It takes -48 through -60 VDC on a three-terminal connector,
   marked +, - and earth. The face has a fan, a release latch and two lamps, OUT OK and IN OK. Airflow
@@ -18,6 +19,8 @@ comments: 'Juniper JPSU-150-DC-AFO, the 150 W DC power supply for the EX3400-24T
 
   - airflow: front-to-back
 
+  - inlet: dc-terminal
+
   - input: -48 through -60 VDC, 4.7 A maximum at -48 VDC
 
   - power-output-w: 150
@@ -26,4 +29,4 @@ comments: 'Juniper JPSU-150-DC-AFO, the 150 W DC power supply for the EX3400-24T
 
   - weight-kg: 0.65
 
-  Contract version 1.0.0 (juniper/ex3400-jpsu-150-dc-afo).'
+  Contract version 1.1.0 (juniper/ex3400-jpsu-150-dc-afo).'

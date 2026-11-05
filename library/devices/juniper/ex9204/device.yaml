@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex9204
-version: 0.1.2
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX9204
@@ -281,7 +281,8 @@ gaps:
   reason: needs-drawing
   wanted: >-
     A flat drawing or photograph of the DC supply. The guide draws it once, in a small isometric (Figure 21), and Figure 8 draws four of them
-    the same way. The face is drawn from fractions of that figure on the AC supply's outline.
+    the same way. The face is drawn from fractions of that figure on the AC supply's outline; the terminal block is redrawn from
+    Figure 57 and the MX480 guide's Figure 83, which are line art too.
 - what: psu-blank
   scope: [rear]
   reason: vendor-silent
@@ -422,16 +423,16 @@ views:
     components:
       bays:
       - {id: pem0, at: [8.7, 9.4], size: {w: 101.6, h: 89.7},
-         accepts: [juniper/ex9200-pwr-mx480-2520-ac@1, juniper/ex9200-pwr-mx480-2400-dc@1],
+         accepts: [juniper/ex9200-pwr-mx480-2520-ac@1, juniper/ex9200-pwr-mx480-2400-dc@1, juniper/ex9200-pwr-mx480-2400-dc@2],
          default: juniper/ex9200-pwr-mx480-2520-ac@1, group: psus, rel-pos: 0}
       - {id: pem1, at: [112.7, 9.4], size: {w: 101.6, h: 89.7},
-         accepts: [juniper/ex9200-pwr-mx480-2520-ac@1, juniper/ex9200-pwr-mx480-2400-dc@1],
+         accepts: [juniper/ex9200-pwr-mx480-2520-ac@1, juniper/ex9200-pwr-mx480-2400-dc@1, juniper/ex9200-pwr-mx480-2400-dc@2],
          default: juniper/ex9200-pwr-mx480-2520-ac@1, group: psus, rel-pos: 1}
       - {id: pem2, at: [216.7, 9.4], size: {w: 101.6, h: 89.7},
-         accepts: [juniper/ex9200-pwr-mx480-2520-ac@1, juniper/ex9200-pwr-mx480-2400-dc@1],
+         accepts: [juniper/ex9200-pwr-mx480-2520-ac@1, juniper/ex9200-pwr-mx480-2400-dc@1, juniper/ex9200-pwr-mx480-2400-dc@2],
          default: juniper/ex9200-pwr-mx480-2520-ac@1, group: psus, rel-pos: 2}
       - {id: pem3, at: [320.7, 9.4], size: {w: 101.6, h: 89.7},
-         accepts: [juniper/ex9200-pwr-mx480-2520-ac@1, juniper/ex9200-pwr-mx480-2400-dc@1],
+         accepts: [juniper/ex9200-pwr-mx480-2520-ac@1, juniper/ex9200-pwr-mx480-2400-dc@1, juniper/ex9200-pwr-mx480-2400-dc@2],
          default: juniper/ex9200-pwr-mx480-2520-ac@1, group: psus, rel-pos: 3}
       - {id: air-filter, at: [23.1, 100.0], size: {w: 12.0, h: 110.0},
          accepts: [juniper/mx240-air-filter@1], default: juniper/mx240-air-filter@1, group: cooling, rel-pos: 0}
@@ -519,9 +520,9 @@ configurations:
       EX9204-RED3C-DC: two EX9200-SF3 modules with two EX9200-RE2, one fan tray and two 2520 W DC supplies in PEM0 and PEM2. Blank panels fill
       the line card slots.
     bays:
-      pem0: juniper/ex9200-pwr-mx480-2400-dc@1
+      pem0: juniper/ex9200-pwr-mx480-2400-dc@2
       pem1: ''
-      pem2: juniper/ex9200-pwr-mx480-2400-dc@1
+      pem2: juniper/ex9200-pwr-mx480-2400-dc@2
       pem3: ''
     part-numbers:
       EX9204-RED3C-DC: {}
@@ -593,10 +594,10 @@ configurations:
     bays:
       sf0: juniper/ex9200-sf2@1
       sf1-lc0: juniper/ex9200-sf2@1
-      pem0: juniper/ex9200-pwr-mx480-2400-dc@1
-      pem1: juniper/ex9200-pwr-mx480-2400-dc@1
-      pem2: juniper/ex9200-pwr-mx480-2400-dc@1
-      pem3: juniper/ex9200-pwr-mx480-2400-dc@1
+      pem0: juniper/ex9200-pwr-mx480-2400-dc@2
+      pem1: juniper/ex9200-pwr-mx480-2400-dc@2
+      pem2: juniper/ex9200-pwr-mx480-2400-dc@2
+      pem3: juniper/ex9200-pwr-mx480-2400-dc@2
     part-numbers:
       EX9204-RED3B-DC: {}
   base3a-ac:
@@ -650,9 +651,9 @@ configurations:
       sf0/re: juniper/ex9200-re@1
       sf1-lc0: juniper/ex9200-sf2@1
       sf1-lc0/re: juniper/ex9200-re@1
-      pem0: juniper/ex9200-pwr-mx480-2400-dc@1
+      pem0: juniper/ex9200-pwr-mx480-2400-dc@2
       pem1: ''
-      pem2: juniper/ex9200-pwr-mx480-2400-dc@1
+      pem2: juniper/ex9200-pwr-mx480-2400-dc@2
       pem3: ''
     part-numbers:
       EX9204-REDUND3A-DC: {}
@@ -692,9 +693,9 @@ configurations:
       sf0/re: juniper/ex9200-re@1
       sf1-lc0: juniper/ex9200-sf@1
       sf1-lc0/re: juniper/ex9200-re@1
-      pem0: juniper/ex9200-pwr-mx480-2400-dc@1
+      pem0: juniper/ex9200-pwr-mx480-2400-dc@2
       pem1: ''
-      pem2: juniper/ex9200-pwr-mx480-2400-dc@1
+      pem2: juniper/ex9200-pwr-mx480-2400-dc@2
       pem3: ''
     part-numbers:
       EX9204-REDUND-DC: {}
