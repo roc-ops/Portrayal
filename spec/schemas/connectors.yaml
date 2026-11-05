@@ -198,6 +198,15 @@ interfaces:
   # states either yet.
   pcie-fh: {standard: pcie-bracket-fh, note: 'a PCIe slot whose opening takes a full-height add-in card bracket (PCI Express CEM 5.0, figure 11-5); a two-slot card mates it too and states slot-width: 2'}
   pcie-lp: {standard: pcie-bracket-lp, note: 'a PCIe slot whose opening takes a low-profile add-in card bracket (PCI Express CEM 5.0, figure 11-9)'}
+  # OCP NIC 3.0 card slots (docs/cards-by-interface-design.md), from the OCP NIC 3.0
+  # Design Specification, Version 1.6.0, Table 5, under the Open Compute Project
+  # Hardware License (Permissive) Version 1.0. THE KEY IS THE SLOT, by the card outline
+  # it is cut for. The deprecated large form factor is not registered. No part states
+  # any of them as `mates` yet; a device bay may state one as its `interface`.
+  ocp3-sff: {standard: ocp3-sff, note: 'an OCP NIC 3.0 slot for the small form factor card: 76.00 x 115.00, 11.50 high, one 4C+ connector (OCP NIC 3.0 Design Specification 1.6.0, Table 5, page 25). A TSFF slot takes this card mechanically too, so a card of this form factor is not refused by an ocp3-tsff slot'}
+  ocp3-tsff: {standard: ocp3-tsff, note: 'an OCP NIC 3.0 slot for the tall small form factor card: the SFF outline at 14.20 high, one 4C+ connector (OCP NIC 3.0 Design Specification 1.6.0, Table 5, page 25). The specification says a TSFF slot may mechanically accept an SFF card and leaves the electromagnetic effect of the faceplate gap out of its scope (section 2.1.2, page 26; Table 7, page 43: "Fits mechanically"), so this slot takes ocp3-tsff and ocp3-sff cards. An SFF slot does not take a TSFF card, which is 2.70 taller'}
+  ocp3-dsff: {standard: ocp3-dsff, note: 'an OCP NIC 3.0 slot for the dual small form factor card: 157.55 x 115.00, 11.50 high, two 4C+ connectors (OCP NIC 3.0 Design Specification 1.6.0, Table 5, page 25). The specification describes a DSFF slot as two SFF slots with a removable guide rail (section 2.1.3, page 27) and lists SFF cards as supported in it (Table 7, page 43). No held device has one'}
+  ocp3-tdsff: {standard: ocp3-tdsff, note: 'an OCP NIC 3.0 slot for the tall dual small form factor card: the DSFF outline at 14.20 high, two 4C+ connectors (OCP NIC 3.0 Design Specification 1.6.0, Table 5, page 25). Table 7, page 43, lists SFF and DSFF cards as fitting it mechanically and TSFF cards as supported. No held device has one'}
   # Stacking, Virtual Chassis and redundant-power connectors. VENDOR CONNECTORS: each is
   # the maker's own, no standard is held for any, and the entries cite none. THE KEY IS
   # THE RECEPTACLE ON THE SWITCH, as `p40` is, and not the cable or the use. Two
