@@ -290,6 +290,9 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # The Nexus 9500 3 kW DC supply redrawn from its guide's figures: the three chassis seat the @2 in
     # their DC build, and their supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
     kept["cisco/n9k-pdc-3000w-b"] = [1, 2]
+    # The MX304 DC supply redrawn from its guide's figures: the MX304's DC build seats the @2, and its
+    # supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
+    kept["juniper/mx304-psu-dc"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
         if name.startswith(("juniper/", "cisco/")):
