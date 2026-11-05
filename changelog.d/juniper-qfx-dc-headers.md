@@ -20,7 +20,7 @@
   connector the supply composes cannot be published at the connector. The roles the guides print for the wires are recorded in
   the contracts. Their drawn faces are unchanged. Their two records in the conformance records go.
 - `juniper/qfx5241-64od`, `juniper/qfx5241-64qd`, `juniper/qfx10002-36q`, `juniper/qfx10002-60c`, `juniper/qfx10002-72q` and
-  `juniper/qfx5220-128c` take a patch, with their locks and the drawing version line of their exported device types in NetBox and
+  `juniper/qfx5220-128c` take a patch, with their recorded component versions and the drawing version line of their exported device types in NetBox and
   Nautobot. No port, interface or id of a device moves.
 - The module types of the two supplies, in NetBox and Nautobot, export their power port as `{module}/dc-header`, of type other and
   labelled as the DC power connector, where they exported `{module}/Inlet`. A DCIM that imported the earlier type keeps the old

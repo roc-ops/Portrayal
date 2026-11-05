@@ -10,9 +10,9 @@ connector". Neither guide names a maker or a part number for the connector, and 
   - a header part presents each key, drawn at the box the supply's face already showed (sizes are estimates);
   - a plug part, the cord's connector, mates each key and draws no wire at a contact (no document places a wire);
   - each supply composes its header, keeps every other figure and states no DC port yet;
-  - each device that seats one of them takes the patch or minor the lock asks.
+  - each device that seats one of them takes the patch or minor the version check asks.
 
-These run against the real library, a components index built by the indexer the build runs, the device locks and the records
+These run against the real library, a components index built by the indexer the build runs, the devices' recorded component versions and the records
 file. They read no library/dist and render nothing.
 """
 import json
