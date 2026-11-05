@@ -17,7 +17,7 @@ from portrayal.manifest import load_yaml
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 
-REFS = ["apc/ar201@1", "apc/ar203a@1", "generic/2-post-frame@1", "generic/4-post-frame@1", "generic/4-post-cabinet@1"]
+REFS = ["apc/ar201@1", "apc/ar203a@1", "fs/fs-or4p-45u@1", "fs/fs-or4p-xxu@1", "generic/2-post-frame@1", "generic/4-post-frame@1", "generic/4-post-cabinet@1"]
 
 # what a row says of a product besides its numbers
 IDENTITY = {"ref", "vendor", "name", "version", "major", "manufacturer", "model", "maturity",
