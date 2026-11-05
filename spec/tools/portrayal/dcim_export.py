@@ -612,6 +612,10 @@ PART_POWER = {
     # AND THE JUNIPER EX3300-24T-DC's FOUR-TERMINAL BLOCK (A+, B+, A-, B-) under a clear cover,
     # the input of the switch's built-in DC supply: ring lugs on the terminals, the same row.
     "juniper/ex3300-dc-terminal": "dc-terminal",
+    # AND THE JUNIPER EX2200-24T-DC's AND EX2300-24T-DC's FOUR-TERMINAL BLOCKS, the input of each switch's
+    # built-in DC supply: ring lugs on the terminals, the same row for the same reason.
+    "juniper/ex2200-dc-terminal": "dc-terminal",
+    "juniper/ex2300-dc-terminal": "dc-terminal",
     # A PLUGGABLE TWO-POLE BLOCK IS WHERE THE WIRE LANDS TOO, so the same row: the
     # ECS4530-54CSFP-DC-I takes -48 V in a screw-clamp plug seated in a header, the
     # plug pulled out whole rather than lugs lifted off screws.
