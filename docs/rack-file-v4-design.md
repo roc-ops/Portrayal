@@ -2008,10 +2008,15 @@ wording here, and every other item, still waits.
 | `jacket` on a cable type, table version 1.1.0, and the type `aoc-siemon-q1q28f` | `cable-types.json` | additive; no rack names the type |
 | `typeColorOf` in what `loadCableTypes` returns | kit output | additive |
 
-**What does not move:** the colour of every media, so every drawing, sheet
-and 3D file of a rack that states no colour; the four values of `JACKETS`;
-every recorded answer of `spec/tests/js/speed-goldens.json`; the columns of
-every export.
+**What moved with the AOC default (14.5):** `COLORS.aoc` went from `#3a3f45`
+to `#08788a`, so a drawing, sheet or 3D file of a rack with an AOC that states
+no colour is drawn in the teal, and `CABLE_COLOURS.aoc` in `kit/drawio.js`
+follows it.
+
+**What does not move:** the colour of every other media, so every drawing,
+sheet and 3D file of a rack that states no colour and has no AOC; the four
+values of `JACKETS`; every recorded answer of
+`spec/tests/js/speed-goldens.json`; the columns of every export.
 
 **What does move, by design:** a rack that already seats two cable ends
 that state the same jacket colour is drawn in that colour once a page passes
@@ -2020,7 +2025,7 @@ library state one today, and no device or lab sets the field:
 
 | both ends | states | on | the cable goes from | to |
 |---|---|---|---|---|
-| `siemon/qsfp28-aoc@1` | `#49eaf8` | counted on the sheet's photograph | `#3a3f45` (aoc) | `#49eaf8` |
+| `siemon/qsfp28-aoc@1` | `#49eaf8` | counted on the sheet's photograph | `#08788a` (aoc) | `#49eaf8` |
 | `volex/qsfp-dd-passive-dac@1` | `#1c1c1c` | the datasheet's "Cable Colour Black" | `#15171a` (dac) | `#1c1c1c` |
 | `amphenol/qsfp56-linear-active@1` | `#1c1c1c` | the drawing's "PVC BLACK" | `#15171a` (dac) | `#1c1c1c` |
 | `credo/hiwire-shift-qsfp-dd@1` | `#6b3fa0` | the brief's word "purple"; **the shade is an estimate, not a reading** | its media's | `#6b3fa0` |
@@ -2029,33 +2034,30 @@ The two blacks differ from the DAC default by seven steps a channel and
 read the same. The purple is the one colour here that nothing counted: its
 contract says so, and a cable between two such ends takes it.
 
-### 14.5 Open: three tables name a colour for an AOC, and they disagree
+### 14.5 Decided: the AOC default is a deeper teal, and draw.io follows `COLORS`
 
-Not settled here. No colour was changed to settle it.
+<!-- OWNER DECISION: the AOC default is the teal `#08788a`, decided in #1028; the docs say so. -->
 
-- `COLORS.aoc` in `kit/rack/cable-geometry.js` is `#3a3f45`, dark grey. It
-  decides what the Rack Builder draws: the elevation, the sheet and 3D.
-- `JACKETS` in the same file has no entry for an AOC. Its comment said
-  multimode fibre and AOCs are aqua, and the front-page hero draws an AOC
-  with the `mm` jacket, `#2bb3c8`. `JACKETS` now names entries of `COLORS`
-  and holds no colour of its own, so the two tables cannot drift; what the
-  hero passes for an AOC is the hero's choice, and is as it was.
-- `CABLE_COLOURS.aoc` in `kit/drawio.js` is `#2F80C0`, blue. That table is
-  the draw.io writer's own palette for a white page, and differs from
-  `COLORS` for every media, not only this one.
+Three tables once named a colour for an AOC and disagreed. They now agree:
 
-The one source the library holds is Siemon's 100G QSFP28 AOC, aqua on its
-maker's photograph (`#49eaf8`, counted). It is now the `jacket` of the named
-type `aoc-siemon-q1q28f` and was already the stated jacket of
-`siemon/qsfp28-aoc@1`, so a cable between two of those ends is aqua by rule
-2. No source is held for a 400G QSFP-DD AOC.
+- `COLORS.aoc` in `kit/rack/cable-geometry.js` is `#08788a`, a deeper teal
+  of the multimode aqua family (`#2bb3c8`), so an AOC and an OM4 lead can be
+  told apart. It decides what the Rack Builder draws: the elevation, the
+  sheet and 3D. It was `#3a3f45`, dark grey.
+- `JACKETS` in the same file has no entry for an AOC. It names entries of
+  `COLORS` and holds no colour of its own, so the two tables cannot drift;
+  the front-page hero draws an AOC with the `mm` jacket, `#2bb3c8`, which is
+  the hero's choice and is as it was.
+- `CABLE_COLOURS` in `kit/drawio.js` is derived from `COLORS` by
+  `mediaColor`, for every media, so `CABLE_COLOURS.aoc` is `#08788a` too. It
+  was `#2F80C0`, blue, from a palette of the writer's own.
 
-**The question:** should `COLORS.aoc` become aqua? One maker's 100G cable is
-not every AOC, and a changed default recolours every drawing, sheet and 3D
-file with an AOC in it. If it should, the change is one line in `COLORS`,
-with a test that says so (`rack-cable-colour.mjs` holds every default to
-what it was). Whether the draw.io palette should follow `COLORS` is the
-same kind of question for every media.
+The one maker's source the library holds is Siemon's 100G QSFP28 AOC, aqua on
+its photograph (`#49eaf8`, counted). It is the `jacket` of the named type
+`aoc-siemon-q1q28f` and the stated jacket of `siemon/qsfp28-aoc@1`, so a
+cable between two of those ends is aqua by rule 2, not teal. No source is held
+for a 400G QSFP-DD AOC, which takes the default. `rack-cable-colour.mjs` and
+`rack-aoc-colour.mjs` hold the values.
 
 ### 14.6 Not built
 
@@ -2066,10 +2068,6 @@ same kind of question for every media.
 
 ### 14.7 Still open
 
-- **The AOC default** (`COLORS.aoc`, 14.5): whether it becomes aqua. One-way:
-  it recolours every existing drawing, sheet and 3D file with an AOC.
-- **The draw.io palette** (`CABLE_COLOURS` in `kit/drawio.js`): whether it
-  follows `COLORS`. One-way for the same reason.
 - **The Rack Builder page's half**, which is not in this repository: the
   cable form's colour input, and passing the readers to `cablePlan` and
   `cablePlan3d`. Until it does, no page shows a colour from the ends or a
