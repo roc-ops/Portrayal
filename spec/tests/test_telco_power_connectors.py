@@ -23,6 +23,8 @@ import yaml
 import onebuild
 from portrayal import dcim_export as dx
 
+pytestmark = pytest.mark.heavy
+
 ROOT = Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 
@@ -149,7 +151,6 @@ def test_the_two_records_are_gone_and_the_file_is_consistent():
     assert doc["cap"] == len(doc["rows"])
 
 
-@pytest.mark.heavy
 @pytest.mark.parametrize("case", CASES)
 def test_the_index_lists_each_header_with_its_key_and_mate_point_and_each_plug_as_a_port(case, index):
     header, plug, key, supply, device = CASES[case]
