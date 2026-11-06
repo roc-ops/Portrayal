@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr430
-version: 1.1.1
+version: 1.1.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS7515-24X
@@ -16,6 +16,18 @@ description: >-
   Ports number 0-23 in one range, the four QSFP28s first.
 profile: networking
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed
+      logotype, red at both ends, left of the model text at the lower centre. Measured on
+      Edgecore's front photograph of the CSR430 / AS7515-24X (960 x 700 px), calibrated on the
+      body outline at 2.173 px/mm across and 2.227 down, which agree to 2.5 percent: the mark runs
+      x 183.3 to 208.7 and y 34.6 to 39.1. The model text in the photograph is centred at 242.5,
+      against the 242.4 the face draws. The photograph is square-on, so the sureness is sure and
+      the position is good to about 1 mm. The plain text `Edge-core` that the face draws stays as
+      it is; the region reserves the printed mark. The `logo-zone` region on the front view holds
+      the place and nothing is drawn in it.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -444,6 +456,7 @@ views:
       - {ref: common/led-rect@1, id: led-port-3, at: [169.30, 32.85], group: port-leds, rel-pos: 3, for: port-3,
          states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-50g, color: '#06b6d4'}, {name: link-40g, color: '#d946ef'}, {name: link-25g, color: '#3b82f6'}, {name: link-10g, color: '#fbbf24'}]}
     regions:
+    - {id: logo-zone, at: [183.3, 34.6], size: {w: 25.4, h: 4.5}, label: 'Vendor logo; not drawn'}
     - {id: status-leds, at: [286.0, 32.2], size: {w: 46.0, h: 6.4}, label: System LEDs,
        members: [led-loc, led-diag, led-psu1, led-psu2, led-fan]}
     - {id: power, at: [3.5, 1.0], size: {w: 119.0, h: 41.6}, label: 'Power supplies (hot-swappable, 1+1)',
