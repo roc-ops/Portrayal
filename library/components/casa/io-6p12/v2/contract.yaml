@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12
-version: 2.7.1
+version: 2.8.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -177,6 +177,12 @@ provenance:
     estimate written eleven times, not eleven readings that agreed. NOTE this card has
     NO LAMPS, so the family''s dome figure is deliberately not cited here - citing a
     source for a number a file does not carry is how an inert wrong claim gets started. The three brass comb standoffs above are a separate, PHOTO-MEASURED number and are not part of this family treatment.'
+  groups: >-
+    Casa Systems C100G Hardware Installation Guide (rev 07/08/2022), Figure 1-15 (PDF
+    page 50) labels the 6+12 IO module's ports U0 to U11 and D0 to D5, and its cable
+    options give an MCX plug. No page names a role; the role follows the job, the
+    subscriber upstream and downstream paths, so it is traffic. The coax ports state no
+    speed.
 relief:
   wall: '#4a4f55'
   features:
@@ -192,25 +198,36 @@ relief:
     - {node: standoff-t, out: 9.5, color: '#b08d57', confidence: photo-measured, source: 'the maintainer - 3/8in off one C40G rear photograph. All twelve are that ONE reading'}
     - {node: standoff-m, out: 9.5, color: '#b08d57', confidence: photo-measured, source: 'the maintainer - 3/8in off one C40G rear photograph. All twelve are that ONE reading'}
     - {node: standoff-b, out: 9.5, color: '#b08d57', confidence: photo-measured, source: 'the maintainer - 3/8in off one C40G rear photograph. All twelve are that ONE reading'}
+groups:
+  upstream:
+    term: Port
+    role: traffic
+    index-origin: 0
+    description: twelve upstream MCX ports, labelled U0 to U11
+  downstream:
+    term: Port
+    role: traffic
+    index-origin: 0
+    description: six downstream MCX ports, labelled D0 to D5
 parts:
-  - {ref: std/mcx@1, id: u0, at: [4.38, 39.455]}
-  - {ref: std/mcx@1, id: u1, at: [4.38, 58.795]}
-  - {ref: std/mcx@1, id: u2, at: [4.38, 78.135]}
-  - {ref: std/mcx@1, id: u3, at: [4.38, 97.475]}
-  - {ref: std/mcx@1, id: u4, at: [4.38, 116.815]}
-  - {ref: std/mcx@1, id: u5, at: [4.38, 136.155]}
-  - {ref: std/mcx@1, id: u6, at: [4.38, 155.495]}
-  - {ref: std/mcx@1, id: u7, at: [4.38, 174.835]}
-  - {ref: std/mcx@1, id: u8, at: [4.38, 194.175]}
-  - {ref: std/mcx@1, id: u9, at: [4.38, 213.515]}
-  - {ref: std/mcx@1, id: u10, at: [4.38, 232.855]}
-  - {ref: std/mcx@1, id: u11, at: [4.38, 252.195]}
-  - {ref: std/mcx@1, id: d0, at: [15.51, 44.245]}
-  - {ref: std/mcx@1, id: d1, at: [15.51, 83.035]}
-  - {ref: std/mcx@1, id: d2, at: [15.51, 121.825]}
-  - {ref: std/mcx@1, id: d3, at: [15.51, 160.615]}
-  - {ref: std/mcx@1, id: d4, at: [15.51, 199.405]}
-  - {ref: std/mcx@1, id: d5, at: [15.51, 238.195]}
+  - {ref: std/mcx@1, id: u0, group: upstream, at: [4.38, 39.455]}
+  - {ref: std/mcx@1, id: u1, group: upstream, at: [4.38, 58.795]}
+  - {ref: std/mcx@1, id: u2, group: upstream, at: [4.38, 78.135]}
+  - {ref: std/mcx@1, id: u3, group: upstream, at: [4.38, 97.475]}
+  - {ref: std/mcx@1, id: u4, group: upstream, at: [4.38, 116.815]}
+  - {ref: std/mcx@1, id: u5, group: upstream, at: [4.38, 136.155]}
+  - {ref: std/mcx@1, id: u6, group: upstream, at: [4.38, 155.495]}
+  - {ref: std/mcx@1, id: u7, group: upstream, at: [4.38, 174.835]}
+  - {ref: std/mcx@1, id: u8, group: upstream, at: [4.38, 194.175]}
+  - {ref: std/mcx@1, id: u9, group: upstream, at: [4.38, 213.515]}
+  - {ref: std/mcx@1, id: u10, group: upstream, at: [4.38, 232.855]}
+  - {ref: std/mcx@1, id: u11, group: upstream, at: [4.38, 252.195]}
+  - {ref: std/mcx@1, id: d0, group: downstream, at: [15.51, 44.245]}
+  - {ref: std/mcx@1, id: d1, group: downstream, at: [15.51, 83.035]}
+  - {ref: std/mcx@1, id: d2, group: downstream, at: [15.51, 121.825]}
+  - {ref: std/mcx@1, id: d3, group: downstream, at: [15.51, 160.615]}
+  - {ref: std/mcx@1, id: d4, group: downstream, at: [15.51, 199.405]}
+  - {ref: std/mcx@1, id: d5, group: downstream, at: [15.51, 238.195]}
 connection-points:
   mate: {at: [15.23, 172.75], direction: rear}
 skins: [default]
