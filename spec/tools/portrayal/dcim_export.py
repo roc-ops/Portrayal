@@ -1184,6 +1184,7 @@ NOT_A_DCIM_PORT = {
     # placements now declare their speed. The entry had to go with it - a register
     # of parts that export nothing is wrong about one that does.
     "opengear/sim-slot-4ff": "the 4FF SIM card slot of the CM8000's cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
+    "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
 }
 
 # THE MANAGEMENT CLUSTER'S PORTS THAT DO NOT REACH A DCIM, AND WHY (#384).
