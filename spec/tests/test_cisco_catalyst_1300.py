@@ -133,7 +133,7 @@ def test_the_24t_rear_places_the_inlet_with_its_rating_and_the_24p_rear_is_empty
     t = load("c1300-24t-4g")
     inlet = [p for p in placements(t, "rear") if p["ref"] == "std/c14-inlet@1"]
     assert [p["id"] for p in inlet] == ["ac-inlet"]
-    legend = [s["text"] for s in t["views"]["rear"]["silkscreen"]]
+    legend = [s["text"] for s in t["views"]["rear"]["silkscreen"] if "text" in s]
     assert legend == ["AC INPUT RATING:", "100-240V~", "700mA, 50-60Hz"]
     p = load("c1300-24p-4g")
     assert "empty" in p["views"]["rear"] and not placements(p, "rear")
