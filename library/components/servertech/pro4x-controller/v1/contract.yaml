@@ -1,0 +1,59 @@
+format: 1
+kind: module
+name: pro4x-controller
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: power
+description: >-
+  The controller panel of a Server Technology PRO4X PDU. It has a colour LCD with four keys and two
+  Ethernet jacks. It also has a PDU link jack, a sensor jack, two USB-A ports and a USB-B port.
+size: {w: 52.96, h: 216.08, d: 40}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {module: PRO4X controller}
+provenance:
+  method: >-
+    drawing - Server Technology outline drawing 810-03-1596-00 rev A is vector, so the panel was read from
+    its path geometry at 0.42483 pt/mm, the scale that makes its 1778.2 overall land on the strip. The
+    drawing lies the PDU down, cord end left; this part is drawn as the PDU stands, cord end down.
+  size: >-
+    drawing - the panel is 216.1 along the PDU by 53.0 across, between the frame lines either side of the
+    controller. The LCD is 42.4 by 33.5, each of the four round keys 8.9 across, and each jack cell 16.5
+    along by 15.7 across, read from the same view.
+  identity: >-
+    datasheet - the PRO4X data sheet, section "MANAGEMENT CONTROLLER", lists it as true hot-swappable, so it is
+    a module that fills a bay in the PDU.
+  ports: >-
+    datasheet and drawing - the PRO4X data sheet lists a multi-colour LCD, dual 10/100/1000 Ethernet, dual
+    USB-A, one USB-B, a PDU link port and a sensor port. The drawing shows two jack stacks of two cells and
+    a stack of three USB openings. THE STACK NEXT TO THE LCD IS TAKEN AS ETHERNET and the far one as link
+    and sensor, in the data sheet's order; no document labels either stack (gaps: port-names).
+  usb-b: >-
+    drawing - the USB-B jack is the third opening of the USB stack, 11.9 across by 12.7 along. It is drawn
+    as art in the skin with no interface key: no USB-B standard sheet is held.
+  jacks: >-
+    drawing - each jack is unrotated and centred on its cell: common/rj45-eth@1 for the two Ethernet jacks
+    and std/rj45@2 for the link and sensor jacks, as the RJ45 family rules ask. The drawing does not show
+    which way a latch faces. The link and sensor jacks carry `media: rj45-telemetry`, which keeps them out
+    of the Ethernet interfaces.
+  depth: >-
+    estimated - no document held shows the controller's depth, so 40 is chosen to sit inside the 63.5 body.
+  power: >-
+    no document held states the controller's own draw; L27 stands as the record.
+groups:
+  ethernet: {term: Port, role: management, index-origin: 0, attrs: {media: rj45, speed: 1g}, description: 'the two 10/100/1000 network ports'}
+  peripheral: {term: Port, role: management, index-origin: 1, mixed: 'the PDU link port, the sensor port and the two USB-A ports'}
+elements:
+  lcd: {at: [9.74, 121.17], size: [33.47, 42.37], class: display, kind: pixel}
+  key-1: {at: [13.98, 187.27], size: [8.9, 8.9], class: button}
+  key-2: {at: [30.08, 187.27], size: [8.9, 8.9], class: button}
+  key-3: {at: [13.98, 174.56], size: [8.9, 8.9], class: button}
+  key-4: {at: [30.08, 174.56], size: [8.9, 8.9], class: button}
+parts:
+  - {ref: common/rj45-eth@1, id: eth0, at: [10.11, 84.28], group: ethernet, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-eth@1, id: eth1, at: [27.05, 84.28], group: ethernet, attrs: {media: rj45, speed: 1g}}
+  - {ref: std/rj45@2, id: link, at: [10.11, 40.43], group: peripheral, attrs: {media: rj45-telemetry, function: pdu-link}}
+  - {ref: std/rj45@2, id: sensor, at: [27.05, 40.43], group: peripheral, attrs: {media: rj45-telemetry, function: sensor}}
+  - {ref: std/usb-a@1, id: usb-a-1, at: [6.92, 66.81], rotate: 90, group: peripheral}
+  - {ref: std/usb-a@1, id: usb-a-2, at: [17.09, 66.81], rotate: 90, group: peripheral}
+skins: [default]

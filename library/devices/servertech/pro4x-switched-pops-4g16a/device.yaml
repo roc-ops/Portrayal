@@ -1,0 +1,406 @@
+format: 1
+kind: device
+name: pro4x-switched-pops-4g16a
+version: 0.1.0
+maturity: modelled
+manufacturer: Server Technology
+model: PRO4X Switched POPS 4G16A
+description: >-
+  Server Technology PRO4X Switched POPS, 0U: a 1778.2 mm strip for a rack's vertical channel.
+  It has 36 outlets, 12 HDOT C13 and 24 HDOT Cx, in two banks of eighteen either side of a controller panel.
+  The panel has a colour LCD, two Ethernet ports, a PDU link port, a sensor port and USB ports.
+  Each bank has three branch breakers, and neighbouring outlets sit on different breakers.
+  The drawing is the one a family of five SKUs shares.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S VECTOR DRAWING. Server Technology outline drawing 810-03-1596-00 rev A (sheet 1,
+      11-Dec-2021) draws the strip lying down, cord end left, with a plan view, a rear view above it, a side
+      view and an end view, and a detail A of the outlets. Its views are paths, so positions were read off the
+      PDF's geometry at 0.42483 pt/mm, the scale that puts the 1778.2 overall on the strip; the 68.4, 88.4,
+      422.4 and 1555.8 button dimensions land within 0.9 mm at it. The library draws the PDU STANDING, cord
+      end down, so a position along the drawing becomes 1778.2 minus that, and a position across becomes x.
+      The STEP model in the maker's archive was not read: no reader for it is held.
+  mount:
+    confidence: drawing
+    note: >-
+      `rack-side`: the strip stands beside a rack's upright on mounting buttons at the back. The outline
+      dimensions eleven positions along the back; the maker's mounting data sheet says a kit is two
+      buttons, and a PDU wider than 45 mm takes two kits. Which positions carry buttons on this SKU is
+      not stated, so the pair 1555.8 apart, the dimensioned one, is drawn (gaps: button-positions).
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 1778.2 long and 55.9 wide. The side view's body is 63.5 deep; the outlets stand about 14.4
+      beyond it, which makes the 77.9 callout. THAT READING IS FROM THE SIDE VIEW'S GEOMETRY, not a label.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the plan view. From the cord end: an end plate with the cord entry, the label panel, a
+      three-breaker module, 18 outlets in groups of 3, 6, 6 and 3, the controller panel, a second
+      three-breaker module and 18 more outlets in the same groups. Outlet positions are the centres of
+      each outlet's lamp window; the C13 pitch is 21.18 and the HDOT Cx pitch 26.69, measured from the
+      paths and not dimensioned. THE STANDARD C13 RECESS IS 22.0 ALONG, WIDER THAN THE 21.18 PITCH, so
+      each C13 triplet is spaced at 22.0 about its drawn middle, up to 0.8 mm off the drawn centres.
+  numbering:
+    confidence: drawing
+    note: >-
+      drawing - read from a render, not text extraction. Detail A prints 36, 35, 34 at the cord end and 19
+      beside the controller; the far bank prints 18 beside the controller and 1 at the far end.
+  breakers:
+    confidence: drawing
+    note: >-
+      drawing - the wiring diagram 810-04-1596-WYE rev A draws two banks of three two-pole breakers
+      ("MONITORED OCPs"), each bank feeding 18 outlets. Its drops alternate three colours along a bank, so
+      each outlet is on the breaker its position leaves after three, 1 2 3 1 2 3 from the bank's cord side;
+      the data sheet lists "Alternating Phase Outlet Technology".
+      Which breaker takes which line is not labelled and is not stated.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - the PRO4X data sheet's family table gives Switched POPS individual outlet control, per
+      outlet power monitoring and branch circuit protection, and lists remote outlet on/off. So
+      `metering-scope: outlet` and `outlet-switching: true`, and each outlet declares [on, off].
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - the PRO4X data sheet says HDOT Cx is a hybrid of the IEC C13 and C19 and HDOT C13 is
+      its C13. The twelve HDOT C13 are drawn as std/c13-outlet@1 (the retention feature is not drawn).
+      The HDOT Cx is servertech/hdot-cx-outlet@1, an estimate: no dimensioned outlet drawing is held.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear view dimensions 68.4 and 20.0 from the cord end, 1555.8 between the outer pair,
+      31.3 either side of marks at 422.4 and 1355.9, and 68.4 and 20.0 from the far end: eleven positions.
+  sides:
+    confidence: drawing
+    note: >-
+      drawing - the side view shows a perforated area along the back half of one long side, from 48.9 to
+      1756.8, 29 deep. The other side is drawn as its mirror (estimated).
+  ends:
+    confidence: estimated
+    note: >-
+      estimated - the end views show a plate with the cord entry at one end and two screws at the other.
+      No view shows the cord, so none is drawn.
+  input:
+    confidence: datasheet
+    note: >-
+      drawing and datasheet - the wiring diagram titles the unit 3PH WYE and draws a plug with L1, L2, L3,
+      NEUT and GND. The SKU page prints NEMA L22-20P, 415 V, 20 A (16 A rated), 11.5 kW for
+      C4G36RA-5BBD2FE1 only, and the drawing serves five SKUs. No input part is placed (gaps: input-cord).
+attrs:
+  physical:
+    length-mm: 1778.2
+    construction: metal strip
+  power:
+    input-cord: fixed
+    input-phase: three
+    input-wiring: wye
+    input-ac: >-
+      three-phase wye, L1 L2 L3 N PE; for C4G36RA-5BBD2FE1 alone the SKU page prints 415 V, 20 A (16 A rated),
+      11.5 kW, NEMA L22-20P
+    breakers: six two-pole branch breakers, 10 kAIC (SKU page)
+  management:
+    metering-scope: outlet
+    outlet-switching: true
+    network-module: PRO4X controller
+chassis: {width: 55.9, height: 1778.2, depth: 63.5, ru: 40, mount: rack-side, color: '#2b2d30', airflow: passive}
+gaps:
+- what: input-cord
+  scope: [bottom]
+  reason: vendor-silent
+  note: >-
+    the SKU page names a NEMA L22-20P on a fixed cord for C4G36RA-5BBD2FE1. No drawing shows the plug or the
+    cord and the library has no L22-20P part, so no input is placed and no input plug is stated. The outlets
+    state no feed.
+  wanted: a drawing of the cord and its plug, or a library part for the NEMA L22-20P.
+- what: button-positions
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    the rear view marks eleven positions and no document says which carry buttons on this SKU. The pair
+    1555.8 apart is drawn with buttons and the rest as holes.
+  wanted: the PRO4X installation guide, or a photograph of the back.
+- what: outlet-size
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    no dimensioned drawing of an HDOT Cx or an HDOT C13 outlet is held. The Cx recess is estimated and the
+    C13 is the standard's, so the maker's retention feature is not drawn.
+  wanted: a dimensioned outlet drawing from Server Technology.
+- what: port-names
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    no held document labels the controller's jack stacks. The stack by the LCD is taken as Ethernet from the
+    data sheet's list, and the other as the link and sensor ports in its order.
+  wanted: the PRO4X user guide or a close photograph of the controller.
+- what: breaker-handle
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the outline shows a rectangular window per breaker and no document names or draws its handle, so only
+    the window is drawn. Which line a breaker takes is not labelled either.
+  wanted: the PRO4X user guide or a photograph of a breaker module.
+- what: lamp-colours
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the data sheet says R/G/B outlet and breaker indicators without saying which colour means what, so the
+    lamp windows are drawn unlit and no state is given.
+  wanted: the PRO4X user guide.
+- what: wordmark-and-end-plates
+  scope: [front, top, bottom]
+  reason: needs-photo
+  note: >-
+    the label panel's wordmark is not reproduced, the cord-end bevel is a silhouette not drawn, and the end
+    views are read at low resolution, so the end faces are caps with the cord entry only.
+  wanted: a close photograph of each end.
+- what: body-colour
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    no document states a colour. The only photograph is a generic strip image, not this SKU's, so a dark
+    neutral is used.
+  wanted: a photograph of this SKU.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s 36 outlets, numbered 1 to 36 as printed from the far end - 12 HDOT C13 and 24 HDOT Cx in two banks of eighteen, each switchable'}
+  outlet-numerals: {term: Label, role: furniture, index-origin: 1}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'six two-pole branch breakers in two banks of three, each feeding every third outlet of its bank'}
+  controller: {term: Module, role: management, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 55.9, h: 1778.2}
+    panel:
+      decor:
+      - {id: end-cap-top, at: [0, 0], size: [55.9, 2], fill: '#26282b', kind: end-cap}
+      - {id: cord-end-plate, at: [0, 1712.11], size: [55.9, 66.09], fill: '#26282b', kind: end-cap}
+      - {id: cord-entry, at: [10.3, 1736.9], size: [36.0, 24.5], rx: 2, fill: '#141516', kind: cord-entry}
+      - {id: screw-cord-end-1, at: [2.94, 1715.9], size: [6.4, 6.4], rx: 3.2, fill: '#565b60', kind: screw-head}
+      - {id: screw-cord-end-2, at: [47.01, 1715.9], size: [6.4, 6.4], rx: 3.2, fill: '#565b60', kind: screw-head}
+      - {id: label-panel, at: [1.7, 1603.22], size: [53.0, 107.62], rx: 1.5, fill: '#1c1d1f', kind: label-panel}
+      - {id: breaker-plate-1, at: [1.7, 1380.36], size: [53.0, 188.12], rx: 1.5, fill: '#232528', kind: breaker-plate}
+      - {id: breaker-plate-2, at: [1.7, 488.08], size: [53.0, 188.12], rx: 1.5, fill: '#232528', kind: breaker-plate}
+      - {id: housing-a1, at: [17.4, 1291.18], size: [30.1, 63.55], rx: 3, fill: '#1e1f21', kind: outlet-housing}
+      - {id: housing-a2, at: [17.4, 1129.96], size: [30.1, 160.15], rx: 3, fill: '#1e1f21', kind: outlet-housing}
+      - {id: housing-a3, at: [17.4, 966.85], size: [30.1, 160.15], rx: 3, fill: '#1e1f21', kind: outlet-housing}
+      - {id: housing-a4, at: [17.4, 898.84], size: [30.1, 63.55], rx: 3, fill: '#1e1f21', kind: outlet-housing}
+      - {id: housing-b1, at: [17.4, 398.47], size: [30.1, 63.55], rx: 3, fill: '#1e1f21', kind: outlet-housing}
+      - {id: housing-b2, at: [17.4, 237.26], size: [30.1, 160.15], rx: 3, fill: '#1e1f21', kind: outlet-housing}
+      - {id: housing-b3, at: [17.4, 74.14], size: [30.1, 160.15], rx: 3, fill: '#1e1f21', kind: outlet-housing}
+      - {id: housing-b4, at: [17.4, 6.14], size: [30.1, 63.55], rx: 3, fill: '#1e1f21', kind: outlet-housing}
+      - {id: lamp-1, at: [4.24, 12.32], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-2, at: [4.24, 34.32], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-3, at: [4.24, 56.32], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-4, at: [4.24, 83.89], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-5, at: [4.24, 110.58], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-6, at: [4.24, 137.27], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-7, at: [4.24, 163.97], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-8, at: [4.24, 190.66], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-9, at: [4.24, 217.35], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-10, at: [4.24, 247.01], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-11, at: [4.24, 273.7], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-12, at: [4.24, 300.39], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-13, at: [4.24, 327.09], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-14, at: [4.24, 353.78], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-15, at: [4.24, 380.47], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-16, at: [4.24, 404.65], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-17, at: [4.24, 426.65], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-18, at: [4.24, 448.65], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-19, at: [4.24, 905.02], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-20, at: [4.24, 927.02], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-21, at: [4.24, 949.02], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-22, at: [4.24, 976.59], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-23, at: [4.24, 1003.28], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-24, at: [4.24, 1029.98], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-25, at: [4.24, 1056.67], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-26, at: [4.24, 1083.36], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-27, at: [4.24, 1110.05], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-28, at: [4.24, 1139.71], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-29, at: [4.24, 1166.4], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-30, at: [4.24, 1193.09], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-31, at: [4.24, 1219.79], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-32, at: [4.24, 1246.48], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-33, at: [4.24, 1273.17], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-34, at: [4.24, 1297.35], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-35, at: [4.24, 1319.35], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+      - {id: lamp-36, at: [4.24, 1341.35], size: [5.1, 7.2], rx: 1, fill: '#2a2d30', kind: lamp}
+    components:
+      bays:
+        - {id: controller, at: [1.69, 677.05], size: {w: 52.96, h: 216.08}, accepts: [servertech/pro4x-controller@1], default: servertech/pro4x-controller@1, group: controller, rel-pos: 1}
+      placements:
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [17.2, 4.92], group: outlets, rel-pos: 1, through: breaker-6, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [17.2, 26.92], group: outlets, rel-pos: 2, through: breaker-5, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [17.2, 48.92], group: outlets, rel-pos: 3, through: breaker-4, states: ['on', 'off']}
+        - {id: outlet-4, ref: servertech/hdot-cx-outlet@1, at: [17.35, 75.49], group: outlets, rel-pos: 4, through: breaker-6, states: ['on', 'off']}
+        - {id: outlet-5, ref: servertech/hdot-cx-outlet@1, at: [17.35, 102.18], group: outlets, rel-pos: 5, through: breaker-5, states: ['on', 'off']}
+        - {id: outlet-6, ref: servertech/hdot-cx-outlet@1, at: [17.35, 128.87], group: outlets, rel-pos: 6, through: breaker-4, states: ['on', 'off']}
+        - {id: outlet-7, ref: servertech/hdot-cx-outlet@1, at: [17.35, 155.57], group: outlets, rel-pos: 7, through: breaker-6, states: ['on', 'off']}
+        - {id: outlet-8, ref: servertech/hdot-cx-outlet@1, at: [17.35, 182.26], group: outlets, rel-pos: 8, through: breaker-5, states: ['on', 'off']}
+        - {id: outlet-9, ref: servertech/hdot-cx-outlet@1, at: [17.35, 208.95], group: outlets, rel-pos: 9, through: breaker-4, states: ['on', 'off']}
+        - {id: outlet-10, ref: servertech/hdot-cx-outlet@1, at: [17.35, 238.61], group: outlets, rel-pos: 10, through: breaker-6, states: ['on', 'off']}
+        - {id: outlet-11, ref: servertech/hdot-cx-outlet@1, at: [17.35, 265.3], group: outlets, rel-pos: 11, through: breaker-5, states: ['on', 'off']}
+        - {id: outlet-12, ref: servertech/hdot-cx-outlet@1, at: [17.35, 291.99], group: outlets, rel-pos: 12, through: breaker-4, states: ['on', 'off']}
+        - {id: outlet-13, ref: servertech/hdot-cx-outlet@1, at: [17.35, 318.69], group: outlets, rel-pos: 13, through: breaker-6, states: ['on', 'off']}
+        - {id: outlet-14, ref: servertech/hdot-cx-outlet@1, at: [17.35, 345.38], group: outlets, rel-pos: 14, through: breaker-5, states: ['on', 'off']}
+        - {id: outlet-15, ref: servertech/hdot-cx-outlet@1, at: [17.35, 372.07], group: outlets, rel-pos: 15, through: breaker-4, states: ['on', 'off']}
+        - {id: outlet-16, ref: std/c13-outlet@1, at: [17.2, 397.25], group: outlets, rel-pos: 16, through: breaker-6, states: ['on', 'off']}
+        - {id: outlet-17, ref: std/c13-outlet@1, at: [17.2, 419.25], group: outlets, rel-pos: 17, through: breaker-5, states: ['on', 'off']}
+        - {id: outlet-18, ref: std/c13-outlet@1, at: [17.2, 441.25], group: outlets, rel-pos: 18, through: breaker-4, states: ['on', 'off']}
+        - {id: outlet-19, ref: std/c13-outlet@1, at: [17.2, 897.62], group: outlets, rel-pos: 19, through: breaker-3, states: ['on', 'off']}
+        - {id: outlet-20, ref: std/c13-outlet@1, at: [17.2, 919.62], group: outlets, rel-pos: 20, through: breaker-2, states: ['on', 'off']}
+        - {id: outlet-21, ref: std/c13-outlet@1, at: [17.2, 941.62], group: outlets, rel-pos: 21, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-22, ref: servertech/hdot-cx-outlet@1, at: [17.35, 968.19], group: outlets, rel-pos: 22, through: breaker-3, states: ['on', 'off']}
+        - {id: outlet-23, ref: servertech/hdot-cx-outlet@1, at: [17.35, 994.88], group: outlets, rel-pos: 23, through: breaker-2, states: ['on', 'off']}
+        - {id: outlet-24, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1021.58], group: outlets, rel-pos: 24, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-25, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1048.27], group: outlets, rel-pos: 25, through: breaker-3, states: ['on', 'off']}
+        - {id: outlet-26, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1074.96], group: outlets, rel-pos: 26, through: breaker-2, states: ['on', 'off']}
+        - {id: outlet-27, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1101.65], group: outlets, rel-pos: 27, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-28, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1131.31], group: outlets, rel-pos: 28, through: breaker-3, states: ['on', 'off']}
+        - {id: outlet-29, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1158.0], group: outlets, rel-pos: 29, through: breaker-2, states: ['on', 'off']}
+        - {id: outlet-30, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1184.69], group: outlets, rel-pos: 30, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-31, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1211.39], group: outlets, rel-pos: 31, through: breaker-3, states: ['on', 'off']}
+        - {id: outlet-32, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1238.08], group: outlets, rel-pos: 32, through: breaker-2, states: ['on', 'off']}
+        - {id: outlet-33, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1264.77], group: outlets, rel-pos: 33, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-34, ref: std/c13-outlet@1, at: [17.2, 1289.95], group: outlets, rel-pos: 34, through: breaker-3, states: ['on', 'off']}
+        - {id: outlet-35, ref: std/c13-outlet@1, at: [17.2, 1311.95], group: outlets, rel-pos: 35, through: breaker-2, states: ['on', 'off']}
+        - {id: outlet-36, ref: std/c13-outlet@1, at: [17.2, 1333.95], group: outlets, rel-pos: 36, through: breaker-1, states: ['on', 'off']}
+        - {id: numeral-1, ref: servertech/outlet-numeral@1, at: [51.4, 6.92], group: outlet-numerals, rel-pos: 1, attrs: {label: '1'}}
+        - {id: numeral-2, ref: servertech/outlet-numeral@1, at: [51.4, 28.92], group: outlet-numerals, rel-pos: 2, attrs: {label: '2'}}
+        - {id: numeral-3, ref: servertech/outlet-numeral@1, at: [51.4, 50.92], group: outlet-numerals, rel-pos: 3, attrs: {label: '3'}}
+        - {id: numeral-4, ref: servertech/outlet-numeral@1, at: [51.4, 78.49], group: outlet-numerals, rel-pos: 4, attrs: {label: '4'}}
+        - {id: numeral-5, ref: servertech/outlet-numeral@1, at: [51.4, 105.18], group: outlet-numerals, rel-pos: 5, attrs: {label: '5'}}
+        - {id: numeral-6, ref: servertech/outlet-numeral@1, at: [51.4, 131.87], group: outlet-numerals, rel-pos: 6, attrs: {label: '6'}}
+        - {id: numeral-7, ref: servertech/outlet-numeral@1, at: [51.4, 158.57], group: outlet-numerals, rel-pos: 7, attrs: {label: '7'}}
+        - {id: numeral-8, ref: servertech/outlet-numeral@1, at: [51.4, 185.26], group: outlet-numerals, rel-pos: 8, attrs: {label: '8'}}
+        - {id: numeral-9, ref: servertech/outlet-numeral@1, at: [51.4, 211.95], group: outlet-numerals, rel-pos: 9, attrs: {label: '9'}}
+        - {id: numeral-10, ref: servertech/outlet-numeral@1, at: [51.4, 241.61], group: outlet-numerals, rel-pos: 10, attrs: {label: '10'}}
+        - {id: numeral-11, ref: servertech/outlet-numeral@1, at: [51.4, 268.3], group: outlet-numerals, rel-pos: 11, attrs: {label: '11'}}
+        - {id: numeral-12, ref: servertech/outlet-numeral@1, at: [51.4, 294.99], group: outlet-numerals, rel-pos: 12, attrs: {label: '12'}}
+        - {id: numeral-13, ref: servertech/outlet-numeral@1, at: [51.4, 321.69], group: outlet-numerals, rel-pos: 13, attrs: {label: '13'}}
+        - {id: numeral-14, ref: servertech/outlet-numeral@1, at: [51.4, 348.38], group: outlet-numerals, rel-pos: 14, attrs: {label: '14'}}
+        - {id: numeral-15, ref: servertech/outlet-numeral@1, at: [51.4, 375.07], group: outlet-numerals, rel-pos: 15, attrs: {label: '15'}}
+        - {id: numeral-16, ref: servertech/outlet-numeral@1, at: [51.4, 399.25], group: outlet-numerals, rel-pos: 16, attrs: {label: '16'}}
+        - {id: numeral-17, ref: servertech/outlet-numeral@1, at: [51.4, 421.25], group: outlet-numerals, rel-pos: 17, attrs: {label: '17'}}
+        - {id: numeral-18, ref: servertech/outlet-numeral@1, at: [51.4, 443.25], group: outlet-numerals, rel-pos: 18, attrs: {label: '18'}}
+        - {id: numeral-19, ref: servertech/outlet-numeral@1, at: [51.4, 899.62], group: outlet-numerals, rel-pos: 19, attrs: {label: '19'}}
+        - {id: numeral-20, ref: servertech/outlet-numeral@1, at: [51.4, 921.62], group: outlet-numerals, rel-pos: 20, attrs: {label: '20'}}
+        - {id: numeral-21, ref: servertech/outlet-numeral@1, at: [51.4, 943.62], group: outlet-numerals, rel-pos: 21, attrs: {label: '21'}}
+        - {id: numeral-22, ref: servertech/outlet-numeral@1, at: [51.4, 971.19], group: outlet-numerals, rel-pos: 22, attrs: {label: '22'}}
+        - {id: numeral-23, ref: servertech/outlet-numeral@1, at: [51.4, 997.88], group: outlet-numerals, rel-pos: 23, attrs: {label: '23'}}
+        - {id: numeral-24, ref: servertech/outlet-numeral@1, at: [51.4, 1024.58], group: outlet-numerals, rel-pos: 24, attrs: {label: '24'}}
+        - {id: numeral-25, ref: servertech/outlet-numeral@1, at: [51.4, 1051.27], group: outlet-numerals, rel-pos: 25, attrs: {label: '25'}}
+        - {id: numeral-26, ref: servertech/outlet-numeral@1, at: [51.4, 1077.96], group: outlet-numerals, rel-pos: 26, attrs: {label: '26'}}
+        - {id: numeral-27, ref: servertech/outlet-numeral@1, at: [51.4, 1104.65], group: outlet-numerals, rel-pos: 27, attrs: {label: '27'}}
+        - {id: numeral-28, ref: servertech/outlet-numeral@1, at: [51.4, 1134.31], group: outlet-numerals, rel-pos: 28, attrs: {label: '28'}}
+        - {id: numeral-29, ref: servertech/outlet-numeral@1, at: [51.4, 1161.0], group: outlet-numerals, rel-pos: 29, attrs: {label: '29'}}
+        - {id: numeral-30, ref: servertech/outlet-numeral@1, at: [51.4, 1187.69], group: outlet-numerals, rel-pos: 30, attrs: {label: '30'}}
+        - {id: numeral-31, ref: servertech/outlet-numeral@1, at: [51.4, 1214.39], group: outlet-numerals, rel-pos: 31, attrs: {label: '31'}}
+        - {id: numeral-32, ref: servertech/outlet-numeral@1, at: [51.4, 1241.08], group: outlet-numerals, rel-pos: 32, attrs: {label: '32'}}
+        - {id: numeral-33, ref: servertech/outlet-numeral@1, at: [51.4, 1267.77], group: outlet-numerals, rel-pos: 33, attrs: {label: '33'}}
+        - {id: numeral-34, ref: servertech/outlet-numeral@1, at: [51.4, 1291.95], group: outlet-numerals, rel-pos: 34, attrs: {label: '34'}}
+        - {id: numeral-35, ref: servertech/outlet-numeral@1, at: [51.4, 1313.95], group: outlet-numerals, rel-pos: 35, attrs: {label: '35'}}
+        - {id: numeral-36, ref: servertech/outlet-numeral@1, at: [51.4, 1335.95], group: outlet-numerals, rel-pos: 36, attrs: {label: '36'}}
+        - id: breaker-1
+          ref: servertech/pro4x-breaker@1
+          at: [27.96, 1521.87]
+          group: breakers
+          rel-pos: 1
+          description: 'Breaker 1 of 6, a two-pole branch breaker: bank 1, position 1 from the cord end'
+        - id: breaker-2
+          ref: servertech/pro4x-breaker@1
+          at: [27.96, 1460.44]
+          group: breakers
+          rel-pos: 2
+          description: 'Breaker 2 of 6, a two-pole branch breaker: bank 1, position 2 from the cord end'
+        - id: breaker-3
+          ref: servertech/pro4x-breaker@1
+          at: [27.96, 1399.43]
+          group: breakers
+          rel-pos: 3
+          description: 'Breaker 3 of 6, a two-pole branch breaker: bank 1, position 3 from the cord end'
+        - id: breaker-4
+          ref: servertech/pro4x-breaker@1
+          at: [27.96, 629.17]
+          group: breakers
+          rel-pos: 4
+          description: 'Breaker 4 of 6, a two-pole branch breaker: bank 2, position 1 from the cord end'
+        - id: breaker-5
+          ref: servertech/pro4x-breaker@1
+          at: [27.96, 567.95]
+          group: breakers
+          rel-pos: 5
+          description: 'Breaker 5 of 6, a two-pole branch breaker: bank 2, position 2 from the cord end'
+        - id: breaker-6
+          ref: servertech/pro4x-breaker@1
+          at: [27.96, 506.73]
+          group: breakers
+          rel-pos: 6
+          description: 'Breaker 6 of 6, a two-pole branch breaker: bank 2, position 3 from the cord end'
+  rear:
+    size: {w: 55.9, h: 1778.2}
+    panel:
+      decor:
+      - {id: end-cap-top, at: [0, 0], size: [55.9, 2], fill: '#26282b', kind: end-cap}
+      - {id: end-cap-cord, at: [0, 1776.2], size: [55.9, 2], fill: '#26282b', kind: end-cap}
+      - {id: mount-hole-1, at: [24.8, 1706.65], size: [6.3, 6.3], rx: 3.15, fill: '#141516', kind: hole}
+      - {id: mount-hole-2, at: [24.8, 1686.65], size: [6.3, 6.3], rx: 3.15, fill: '#141516', kind: hole}
+      - {id: mount-hole-3, at: [24.8, 1383.95], size: [6.3, 6.3], rx: 3.15, fill: '#141516', kind: hole}
+      - {id: mount-hole-4, at: [24.8, 1352.65], size: [6.3, 6.3], rx: 3.15, fill: '#141516', kind: hole}
+      - {id: mount-hole-5, at: [24.8, 1321.35], size: [6.3, 6.3], rx: 3.15, fill: '#141516', kind: hole}
+      - {id: mount-hole-6, at: [24.8, 450.45], size: [6.3, 6.3], rx: 3.15, fill: '#141516', kind: hole}
+      - {id: mount-hole-7, at: [24.8, 419.15], size: [6.3, 6.3], rx: 3.15, fill: '#141516', kind: hole}
+      - {id: mount-hole-8, at: [24.8, 387.85], size: [6.3, 6.3], rx: 3.15, fill: '#141516', kind: hole}
+      - {id: mount-hole-9, at: [24.8, 130.85], size: [6.3, 6.3], rx: 3.15, fill: '#141516', kind: hole}
+      - {id: mount-hole-10, at: [24.8, 85.25], size: [6.3, 6.3], rx: 3.15, fill: '#141516', kind: hole}
+      - {id: mount-hole-11, at: [24.8, 65.25], size: [6.3, 6.3], rx: 3.15, fill: '#141516', kind: hole}
+    components:
+      placements:
+        - {id: button-1, ref: servertech/mounting-button@1, at: [15.25, 1677.1], group: mounting, rel-pos: 1}
+        - {id: button-2, ref: servertech/mounting-button@1, at: [15.25, 121.3], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 55.9, h: 63.5}
+    panel:
+      decor:
+      - {id: end-cap, at: [0, 0], size: [55.9, 63.5], fill: '#26282b', kind: end-cap}
+  bottom:
+    size: {w: 55.9, h: 63.5}
+    panel:
+      decor:
+      - {id: end-cap, at: [0, 0], size: [55.9, 63.5], fill: '#26282b', kind: end-cap}
+  left:
+    size: {w: 63.5, h: 1778.2}
+    panel:
+      decor:
+      - {id: end-cap-top, at: [0, 0], size: [63.5, 2], fill: '#26282b', kind: end-cap}
+      - {id: end-cap-cord, at: [0, 1776.2], size: [63.5, 2], fill: '#26282b', kind: end-cap}
+      - {id: vent, at: [0, 21.4], size: [29.0, 1707.9], fill: '#1a1b1d', kind: vent-grille}
+  right:
+    size: {w: 63.5, h: 1778.2}
+    panel:
+      decor:
+      - {id: end-cap-top, at: [0, 0], size: [63.5, 2], fill: '#26282b', kind: end-cap}
+      - {id: end-cap-cord, at: [0, 1776.2], size: [63.5, 2], fill: '#26282b', kind: end-cap}
+      - {id: vent, at: [34.5, 21.4], size: [29.0, 1707.9], fill: '#1a1b1d', kind: vent-grille}
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-36'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships.
+    bays:
+      controller: servertech/pro4x-controller@1
+    part-numbers:
+      C4x36RA-GPBD2FE1: {}
+datasheet:
+  title: 'Server Technology PRO4X data sheet (STI_PRO4X_Datasheet_Update_V1318_R7)'
+  url: https://cdn10.servertech.com/assets/documents/documents/1139/original/STI_PRO4X_Datasheet_Update_V1318_R7.pdf
+  sha256: 1906c20a4c85cfa8cb9f7f8eee327a8bf7493e451f7805e5f40c36355cf0d07b
+references:
+  - {title: 'Server Technology outline drawing 152-XX-1596-XX, 810-03-1596-00 rev A', url: 'https://cdn10.servertech.com/assets/documents/documents/985/original/DD_810-03-1596-00.pdf', sha256: b6e8ef5eee03a17254885271b62053617274d6c639eab1961a7ec0bb1a56c226}
+  - {title: 'Server Technology functional block wiring diagram, (24)CX (12)C13, 3PH WYE, 6BR, 810-04-1596-WYE rev A', url: 'https://cdn10.servertech.com/assets/documents/documents/1000/original/810-04-1596-WYE.pdf', sha256: a4d530f3adcef6daca98c58352327de515168667d06cda1156e142c8759a79d5}
