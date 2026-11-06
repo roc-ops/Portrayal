@@ -737,6 +737,28 @@ def config_power(device, cfg):
     return sorted({v} if isinstance(v, str) else set(v))
 
 
+def config_attrs(device, cfg):
+    """The device's `attrs` as one configuration states them, section by section.
+
+    `configurations.<name>.attrs` takes the device's own sections, and only what
+    the build states differently: a key it names wins, the rest of that section
+    stays the device's, and a section it does not name is untouched. Nothing
+    here removes a device key (a null is not a legal `attrs` value). Absent, or
+    empty, it is the device's `attrs` exactly, which is what keeps every
+    existing export as it was. The DCIM export's facts list reads it; the
+    drawing does not, because a face is shared by every configuration that draws
+    it. A fresh dict each time, so a caller may edit what it gets.
+    """
+    out = {s: dict(v) if isinstance(v, dict) else v
+           for s, v in ((device or {}).get("attrs") or {}).items()}
+    for s, v in ((cfg or {}).get("attrs") or {}).items():
+        if isinstance(v, dict) and isinstance(out.get(s), dict):
+            out[s].update(v)
+        else:
+            out[s] = dict(v) if isinstance(v, dict) else v
+    return out
+
+
 # THE CONFIGURATIONS A BUYER CAN ACTUALLY GET. An `example` is somebody's
 # illustration and a `model` a teaching build (#51), so neither may widen what
 # the device is said to be offered with. A device that declares no kinds at all

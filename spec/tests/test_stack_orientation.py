@@ -343,6 +343,9 @@ THREE_HIGH = {
     # printed "0 down-arrow up-arrow 1" strip between the stack and the third row say
     "cisco/ncs-57c3-mod-s": {f"port-{n}" for n in (*range(0, 24, 3), *range(32, 56, 3))},
     "cisco/ncs-57c3-mod-hx": {f"port-{n}" for n in (*range(0, 24, 3), *range(32, 56, 3))},
+    # the 7050SX3-48YC12: each end holds four groups of a 2x2 block of SFP28 cages (1 to 32, outlined in
+    # yellow) with a separate row of two cages under each group (33 to 48), as Figure C-14 draws them
+    "arista/7050sx3-48yc12": {f"port-{n}" for n in range(33, 49)},
 }
 
 
