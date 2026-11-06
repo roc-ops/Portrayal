@@ -108,19 +108,17 @@ def test_crs504_front_carries_console_management_reset_dc_jack_and_three_lamps()
     mgmt = [p for p in refs(d, "front", "common/rj45-eth@1") if p.get("group") == "mgmt"]
     assert [(p["id"], p["attrs"]["speed"]) for p in mgmt] == [("mgmt", "100m")]
     assert [p["id"] for p in refs(d, "front", "common/reset-button@1")] == ["btn-reset"]
-    assert not refs(d, "front", "common/dc-barrel@1")  # drawn as chassis art: the barrel census wants a current
-    assert [x["id"] for x in d["views"]["front"]["panel"]["decor"] if x.get("kind") == "dc-jack-art"] == [
-        "dc-jack-housing", "dc-jack-rim", "dc-jack-bore", "dc-jack-pin"]
-    assert [x["id"] for x in d["views"]["front"]["panel"]["decor"] if x.get("kind") == "dc-terminal-art"] == [
-        "dc-terminal-cap", "dc-terminal-housing", "dc-terminal-entry-1", "dc-terminal-entry-2"]
+    # both DC inputs are parts that present a registered connector, not panel art
+    assert [p["id"] for p in refs(d, "front", "common/dc-barrel@1")] == ["dc-jack"]
+    assert [p["id"] for p in refs(d, "front", "common/terminal-header-508-2@3")] == ["dc-terminal"]
+    assert not [x for x in d["views"]["front"]["panel"]["decor"] if x.get("kind") in ("dc-jack-art", "dc-terminal-art")]
     assert len([p for p in placements(d, "front") if p.get("group") == "status-leds"]) == 5  # 3 bars, 2 supply lamps
     assert len(refs(d, "front", "common/led-rect@2")) == 11 and len(refs(d, "front", "common/led-dot@1")) == 2
     assert {"CONSOLE", "MGMT/PoE in", "RESET", "USER", "FAULT", "POWER", "36 - 60 V", "CRS504-4XQ-IN",
             "ACT", "100G", "1", "2", "3", "4"} <= text_of(d, "front")
     gaps = {g["what"] for g in d["gaps"]}
     assert {"dc-jack", "dc-terminal", "hot-swap-supplies", "led-states", "right-wall", "rear-face"} <= gaps
-    assert not [p for p in placements(d, "front") if p["ref"].startswith("common/dc-terminal")]
-    ports = [p for p in placements(d, "front") if p.get("group") in {"qsfp28", "mgmt", "console"}]
+    ports =[p for p in placements(d, "front") if p.get("group") in {"qsfp28", "mgmt", "console"}]
     assert len(ports) == 4 + 1 + 1  # page: 4 QSFP28 and one 100M Ethernet port; the console is on the metal
 
 
@@ -278,49 +276,44 @@ def test_crs504_supply_vents_are_rects_of_slots_measured_on_the_drawing():
         assert second["at"][1] == first["at"][1] and second["size"] == first["size"]
 
 
-def test_crs504_dc_terminal_and_jack_are_drawn_at_their_measured_places():
+def test_crs504_dc_terminal_and_jack_sit_where_the_drawing_measures_them():
     d = load(CRS504)
-    cap, housing, e1, e2 = (decor(d, "front", i) for i in (
-        "dc-terminal-cap", "dc-terminal-housing", "dc-terminal-entry-1", "dc-terminal-entry-2"))
-    assert (cap["at"], cap["size"]) == ([276.0, 25.1], [10.0, 4.1])
-    assert (housing["at"], housing["size"]) == ([275.1, 29.2], [11.4, 8.2])
-    assert cap["fill"] == housing["fill"] == "#90cc90" and e1["fill"] == e2["fill"] == "#405a40"
-    assert e1["at"][0] < e2["at"][0] and e1["at"][1] == e2["at"][1] == 30.7
-    jack = {i: decor(d, "front", i) for i in ("dc-jack-housing", "dc-jack-rim", "dc-jack-bore", "dc-jack-pin")}
-    assert (jack["dc-jack-housing"]["at"], jack["dc-jack-housing"]["size"]) == ([289.8, 25.4], [10.3, 11.9])
-    assert [jack[i]["fill"] for i in jack] == ["#464646", "#222222", "#141312", "#a49478"]
-    # the rim and the bore are concentric on the pin
-    centre = lambda x: (x["at"][0] + x["size"][0] / 2, x["at"][1] + x["size"][1] / 2)
-    assert centre(jack["dc-jack-rim"]) == pytest.approx(centre(jack["dc-jack-bore"]))
-    assert centre(jack["dc-jack-pin"])[0] == pytest.approx(centre(jack["dc-jack-bore"])[0])
-    assert not [p for p in placements(d, "front") if p["ref"].startswith("common/dc-")]
-    assert not [p for p in d["views"]["front"]["components"]["placements"] if p.get("id", "").startswith("dc-")]
+    terminal, jack = refs(d, "front", "common/terminal-header-508-2@3")[0], refs(d, "front", "common/dc-barrel@1")[0]
+    # the drawing's terminal housing is 11.4 mm wide at 275.1 mm and the jack housing 10.3 x 11.9 mm at 289.8, 25.4 mm
+    # down; each part is centred where the drawing's housing is (to about 0.6 mm: the parts are drawn at their own size)
+    assert abs(terminal["at"][0] + 12.16 / 2 - (275.1 + 11.4 / 2)) < 0.7
+    assert abs(jack["at"][0] + 12.0 / 2 - (289.8 + 10.3 / 2)) < 0.7 and abs(jack["at"][1] + 13.0 / 2 - (25.4 + 11.9 / 2)) < 0.7
+    # the brochure states the voltage and no current: the placement carries the voltage alone
+    assert jack["attrs"] == {"input-voltage": "36-57 VDC"}
+    assert terminal["attrs"]["input-voltage"] == "36-57 VDC"
+    assert not [x for x in d["views"]["front"]["panel"]["cutouts"] if x.get("id") == "dc-jack"]
+    assert any(x.get("id") == "dc-terminal" for x in d["views"]["front"]["panel"]["cutouts"])
 
 
 def test_crs504_dc_legends_bracket_and_polarity_marks_are_drawn_for_the_chassis():
     d = load(CRS504)
     silk = {s.get("id"): s for s in d["views"]["front"]["silkscreen"] if s.get("id")}
-    assert {"dc-bracket", "dc-terminal-polarity", "dc-jack-polarity"} <= set(silk)
+    assert {"dc-bracket-left", "dc-bracket-right", "dc-terminal-polarity", "dc-jack-polarity"} <= set(silk)
     assert all(silk[i]["for"] == "chassis" and silk[i]["filled"] is False and silk[i]["stroke-width"] == 0.25
-               for i in ("dc-bracket", "dc-terminal-polarity", "dc-jack-polarity"))
-    assert silk["dc-bracket"]["at"] == [275.4, 20.8]
-    assert silk["dc-terminal-polarity"]["at"] == [278.7, 23.5] and silk["dc-jack-polarity"]["at"] == [291.9, 23.5]
+               for i in ("dc-bracket-left", "dc-bracket-right", "dc-terminal-polarity", "dc-jack-polarity"))
+    assert silk["dc-bracket-left"]["at"] == silk["dc-bracket-right"]["at"] == [275.4, 20.8]
+    assert silk["dc-terminal-polarity"]["at"] == [278.7, 23.5] and silk["dc-jack-polarity"]["at"] == [291.9, 23.0]
     legend = [s for s in d["views"]["front"]["silkscreen"] if s.get("text") == "36 - 60 V"]
     assert len(legend) == 1 and legend[0]["at"] == [288.6, 20.0] and legend[0]["for"] == "chassis"
     assert "36 - 60 V" in d["attrs"]["power"]["power-rating-label"] and "36 - 57 V" in d["attrs"]["power"]["power-dc-input"]
     assert "dc-terminal" in {g["what"] for g in d["gaps"]}
 
 
-def test_crs504_rear_draws_the_stud_the_guards_and_their_holes_and_declares_what_2158_cannot_show():
+def test_crs504_rear_places_the_stud_and_draws_the_guards_and_their_holes_and_declares_what_2158_cannot_show():
     d = load(CRS504)
     rear = d["views"]["rear"]
-    assert not rear.get("empty") and not rear.get("components")
+    assert not rear.get("empty")
     assert [x["id"] for x in rear["panel"]["decor"]] == [
-        "rear-stud", "fan-0", "fan-1", "fan-hub-0", "fan-hub-1",
-        "fan-0-hole-a", "fan-0-hole-b", "fan-1-hole-a", "fan-1-hole-b"]
-    stud = decor(d, "rear", "rear-stud")
-    # as seen from behind: centred 11.0 mm from the left end (the drawing's right edge) and, as 2158 settles, 9.2 mm up from the bottom
-    assert stud["size"] == [4.3, 4.3] and stud["at"] == [8.85, 32.65]
+        "fan-0", "fan-1", "fan-hub-0", "fan-hub-1", "fan-0-hole-a", "fan-0-hole-b", "fan-1-hole-a", "fan-1-hole-b"]
+    stud = refs(d, "rear", "mikrotik/earth-stud-disc@1")
+    assert [p["id"] for p in stud] == ["earth-stud"]
+    # the part is 8 mm across and the drawing's stud 4.3 mm, centred 11.0 mm from the left end and 9.2 mm up from the bottom
+    assert abs(stud[0]["at"][0] + 4.0 - 11.0) < 0.1 and abs(stud[0]["at"][1] + 4.0 - 34.8) < 0.1
     gap = next(g for g in d["gaps"] if g["what"] == "rear-face")
     assert "4.3 mm" in gap["note"] and "11.0 mm" in gap["note"] and "9.2 mm" in gap["note"]
     assert "MikroTik's own pages were searched" in gap["note"] and "photograph 2158" in gap["note"]
@@ -454,7 +447,7 @@ def test_crs504_connectors_are_turned_as_the_photographs_show_them():
     assert placed["ac-inlet-1"]["rotate"] == placed["ac-inlet-2"]["rotate"] == -90
     assert placed["console"]["rotate"] == 180  # 2157: the key notch at the top of the jack, so the plug's side is up
     assert "rotate" not in placed["mgmt"]  # 2157: the key notch and the two lamps at the bottom of the jack
-    assert "components" not in lay["views"]["rear"]  # the rear carries the guards and the stud: no connector
+    assert [p["id"] for p in lay["views"]["rear"]["components"]["placements"]] == ["earth-stud"]  # the guards are art
 
 
 def test_crs520_connectors_are_turned_as_the_photographs_show_them():
@@ -482,17 +475,30 @@ def test_crs520_ears_and_the_rail_kit_are_declared_not_modelled():
 def test_crs520_walls():
     d = load(CRS520)
     assert [x["id"] for x in d["views"]["right"]["panel"]["decor"]] == [
-        "side-vent", "side-hole-front-upper", "side-hole-front-lower", "side-hole-rear-front", "side-hole-rear-rear"]
+        "side-vent-long-rows", "side-vent-short-rows", "lid-screw-front", "lid-screw-middle", "lid-screw-rear",
+        "side-hole-front-upper", "side-hole-front-lower", "side-hole-rear-front", "side-hole-rear-rear"]
     # photograph 2352 unwarped to 367 x 44 mm at 5.45 px per mm: four round holes 2.2 mm across (estimated)
     holes = {h: decor(d, "right", h) for h in ("side-hole-front-upper", "side-hole-front-lower",
                                                 "side-hole-rear-front", "side-hole-rear-rear")}
     assert all(h["kind"] == "screw-hole" and h["size"] == [2.2, 2.2] and h["rx"] == 1.1 for h in holes.values())
     assert [h["at"] for h in holes.values()] == [[60.7, 13.7], [60.4, 28.2], [313.4, 18.8], [340.9, 18.4]]
     assert [h["fill"] for h in holes.values()] == ["#867267", "#7f6f62", "#867468", "#8a756a"]
-    v = decor(d, "right", "side-vent")
-    assert v["pattern"] == "holes"  # photograph 2352 shows round perforations
-    assert (v["at"], v["size"]) == ([11.0, 14.0], [35.0, 17.0])  # unwarped from the photograph's wall quad
-    assert (v["pattern-pitch"], v["pattern-offset"]) == ([3.6, 3.0], [11.0, 14.0])  # 10 columns and 6 rows of holes
+    # photograph 2352 shows 37 hexagonal holes in staggered rows of 8 and 7: two motif fields of one hexagon
+    long_rows, short_rows = decor(d, "right", "side-vent-long-rows"), decor(d, "right", "side-vent-short-rows")
+    for field, columns, rows in ((long_rows, 8, 2), (short_rows, 7, 3)):
+        assert field["pattern"] == "motif" and len(field["pattern-cells"]) == 1
+        pitch_x, pitch_y = field["pattern-pitch"]
+        cell = field["pattern-cells"][0]
+        width = max(x for x, _ in cell) - min(x for x, _ in cell)
+        height = max(y for _, y in cell) - min(y for _, y in cell)
+        assert (pitch_x, pitch_y) == (4.55, 6.8) and field["pattern-offset"] == field["at"]
+        assert round((field["size"][0] - width) / pitch_x) + 1 == columns
+        assert round((field["size"][1] - height) / pitch_y) + 1 == rows
+    assert 8 * 2 + 7 * 3 == 37
+    # the short rows start half a column in and sit between the long rows
+    assert short_rows["at"][0] - long_rows["at"][0] == pytest.approx(4.55 / 2)
+    assert long_rows["at"][1] - short_rows["at"][1] == pytest.approx(6.8 / 2)
+    assert [s["id"] for s in d["views"]["right"]["silkscreen"]] == ["lid-seam"]
     assert d["views"]["left"].get("empty")
     assert d["views"]["top"].get("empty") and d["views"]["bottom"].get("empty")
 
@@ -656,7 +662,8 @@ def test_dcim_crs504_interfaces_and_power_ports_follow_the_faces():
     a = exported(CRS504)
     assert count(a, "100gbase-x-qsfp28") == 4
     assert count(a, "100base-tx") == 1
-    assert len(a["power-ports"]) == 2  # the two C14 inlets; the DC jack and the terminal are not placed
+    # the two C14 inlets and the DC jack; the terminal header is a port part and exports no power port
+    assert [p["name"] for p in a["power-ports"]] == ["ac-inlet-1", "ac-inlet-2", "dc-jack"]
     assert len(a["console-ports"]) == 1
 
 

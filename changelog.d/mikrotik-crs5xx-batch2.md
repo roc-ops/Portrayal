@@ -6,4 +6,7 @@
   with two hot-swap AC supplies and four hot-swap fans at the rear), both from MikroTik's dimensions drawings. The
   supplies and fans are part of the chassis, not bays, because no held document prints a part number for them. The
   CRS504's drawing is filed under an RM name and titled for the IN; that is declared. The CRS518-16XS-2XQ-RM and the
-  CRS510-8XS-2XQ-IN are in batch 1.
+  CRS510-8XS-2XQ-IN are in batch 1. The CRS504's DC jack, its two-pin DC terminal and its earthing stud are placed parts
+  that present a registered connector (the barrel jack, the two-position pluggable header and the terminal stud), so
+  every connector either device places has a plug that mates it. The CRS520's right wall draws the photograph's 37
+  hexagonal holes, its lid seam and three lid screws.

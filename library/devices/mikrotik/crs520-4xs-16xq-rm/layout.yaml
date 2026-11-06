@@ -145,10 +145,12 @@ provenance:
   side-layout:
     confidence: estimated
     note: >-
-      Photograph 2352 shows a field of small round perforations on the right wall, near the front. The wall's four corners in
-      the photograph (a perspective transform of the quad onto 367 x 44 mm, 5 px per mm) put the field 35 x 17 mm, 11 mm from
-      the front and 14 mm down, good to about 3 mm; it is drawn so, as the `holes` tile scaled to 3.6 x 3.0 mm (the photograph's
-      10 columns and 6 rows; the photograph staggers the rows, which the tile does not). The same unwarp (5.45 px per mm,
+      Photograph 2352 shows a field of 37 small hexagonal perforations on the right wall, near the front, in staggered rows
+      of 7 and 8 (five rows). The wall's four corners in the photograph (a perspective transform of the quad onto 367 x 44 mm,
+      5 px per mm) put the field about 35 x 17 mm, 11 mm from the front and 14 mm down, good to about 3 mm; it is drawn as
+      two `motif` fields of one hexagon, 2.43 x 2.8 mm, on a 4.55 x 6.8 mm pitch, the rows of 8 and the rows of 7 offset by
+      half a column (estimated, hexagon size and pitch read off the unwarped photograph). The lid seam and its step at the
+      front corner are drawn as one printed line, and three crosshead screws sit on the lid flange. The same unwarp (5.45 px per mm,
       good to about 1 mm along the wall) shows four small round holes 2.2 mm across, drawn as screw holes: two beside the
       field at 61.8 mm from the front, 14.8 and 29.3 mm down, and two near the rear at 314.5 and 342.0 mm, 19.9 and
       19.5 mm down; each fill is the median of its own dark pixels (about 70 to 107 pixels each, spreads 15 to 27),
@@ -258,6 +260,42 @@ gaps:
     The lamps' resting colour comes from the lamp component and is not changed here: the photographs show the lamps unlit grey
     and the render draws them with the component's own colour.
   wanted: MikroTik's LED description for the CRS520-4XS-16XQ-RM.
+- what: lamp-colours
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    Photograph 2354 shows the lamps as mid brown-grey to pink-beige ovals and the two management link lamps olive green
+    and yellow; the brochure's picture of the same face draws them black. The lamps are the lamp component's own resting
+    colour, #3a3938, and no lit lamp is drawn; both readings are recorded here and neither is chosen.
+  wanted: A statement of which picture shows the lamps as they ship.
+- what: shared-part-look
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    The QSFP28 and SFP28 cages, the management jacks and the C14 inlets are shared parts drawn for other boxes. Against
+    photograph 2354 their frames are black with a thin copper-beige rim and a bright silver tab where the shared parts draw
+    near-black blocks, a light blue-grey frame and one shared frame for the two management jacks. The drawn parts are not
+    changed here, because a new version of a shared part is a follow-up that moves other boxes' drawings.
+  wanted: A new version of each shared part drawn to these cages and jacks.
+- what: rear-handles-and-colour
+  scope: [rear]
+  reason: sources-disagree
+  note: >-
+    The rear's handles are chrome loops and its thumbscrews knurled in photograph 2353; the medians sampled from them are
+    dark because chrome reflects the bronze modules, so they are drawn as flat bars and pills in those medians. The face
+    between the modules reads #e9e9e8 where lit and #bbbbb7 in shade in 2353, neutral, while the front face reads #e0dcd5
+    in 2354; the chassis has one colour, #e0dcd5, from the front. The fan screws and the small hole at the upper left of
+    each fan are drawn estimated from 2353, at about 1 mm.
+  wanted: A straight-on, evenly lit rear photograph.
+- what: right-wall-colour
+  scope: [right]
+  reason: sources-disagree
+  note: >-
+    Photograph 2352 reads the right wall about #d9d6d3 to #dcdad6, slightly darker and greyer than the front's #e0dcd5,
+    which is shading on a wall that faces away from the light. The wall is drawn in the chassis colour. The 37 hexagonal
+    holes in rows of 7 and 8, the lid seam, the three lid screws and the step at the front corner are drawn from that
+    photograph, the screws estimated to about 3 mm along the wall.
+  wanted: A straight-on photograph of the right wall.
 - what: qsfp28-orientation
   scope: [front]
   reason: needs-drawing
@@ -558,6 +596,8 @@ views:
          pattern-pitch: [9.39, 5.42], pattern-offset: [10.6, 10.3]}
       - {id: psu-2-vent, kind: vent-field, at: [71.2, 8.0], size: [27.0, 28.4], pattern: vent, vent: 1.0,
          pattern-pitch: [9.39, 5.42], pattern-offset: [74.0, 10.3]}
+      - {id: psu-1-inlet-frame, kind: module-plate, at: [41.05, 7.65], size: [25.9, 29.7], fill: '#22211f'}
+      - {id: psu-2-inlet-frame, kind: module-plate, at: [104.45, 7.65], size: [25.9, 29.7], fill: '#22211f'}
       - {id: fan-1-module, kind: module-plate, at: [158.5, 2.2], size: [60.4, 39.6], fill: '#5d493d'}
       - {id: fan-2-module, kind: module-plate, at: [227.6, 2.2], size: [60.4, 39.6], fill: '#5d493d'}
       - {id: fan-3-module, kind: module-plate, at: [296.2, 2.2], size: [60.4, 39.6], fill: '#5d493d'}
@@ -596,6 +636,14 @@ views:
       - {id: fan-3-handle-core, kind: handle, at: [309.9, 7.5], size: [2.8, 33.0], rx: 1.4, fill: '#524339'}
       - {id: fan-4-handle, kind: handle, at: [376.8, 5.0], size: [4.6, 38.0], rx: 2.3, fill: '#776d64'}
       - {id: fan-4-handle-core, kind: handle, at: [377.7, 7.5], size: [2.8, 33.0], rx: 1.4, fill: '#524339'}
+      - {id: fan-1-screw, kind: screw-head, at: [209.4, 5.2], size: [3.6, 3.6], rx: 1.8, fill: '#6d635c'}
+      - {id: fan-2-screw, kind: screw-head, at: [278.5, 5.2], size: [3.6, 3.6], rx: 1.8, fill: '#6d635c'}
+      - {id: fan-3-screw, kind: screw-head, at: [347.1, 5.2], size: [3.6, 3.6], rx: 1.8, fill: '#6d635c'}
+      - {id: fan-4-screw, kind: screw-head, at: [414.9, 5.2], size: [3.6, 3.6], rx: 1.8, fill: '#6d635c'}
+      - {id: fan-1-hole, kind: screw-hole, at: [178.6, 5.9], size: [2.6, 2.6], rx: 1.3, fill: '#2a2320'}
+      - {id: fan-2-hole, kind: screw-hole, at: [247.7, 5.9], size: [2.6, 2.6], rx: 1.3, fill: '#2a2320'}
+      - {id: fan-3-hole, kind: screw-hole, at: [316.3, 5.9], size: [2.6, 2.6], rx: 1.3, fill: '#2a2320'}
+      - {id: fan-4-hole, kind: screw-hole, at: [384.1, 5.9], size: [2.6, 2.6], rx: 1.3, fill: '#2a2320'}
       - {id: chassis-screw-1, kind: earth-screw, at: [130.9, 4.1], size: [4.4, 4.4], rx: 2.2, fill: '#51453b'}
       - {id: chassis-screw-2, kind: earth-screw, at: [222.6, 2.0], size: [4.4, 4.4], rx: 2.2, fill: '#51453b'}
       - {id: chassis-screw-3, kind: earth-screw, at: [291.8, 2.0], size: [4.4, 4.4], rx: 2.2, fill: '#51453b'}
@@ -644,12 +692,38 @@ views:
     size: {w: 367.0, h: 44.0}
     panel:
       decor:
-      - {id: side-vent, kind: vent-field, at: [11.0, 14.0], size: [35.0, 17.0], pattern: holes, vent: 1.0,
-         pattern-pitch: [3.6, 3.0], pattern-offset: [11.0, 14.0]}
+      - id: side-vent-long-rows
+        kind: vent-field
+        at: [11.0, 17.4]
+        size: [34.28, 9.6]
+        rx: 0
+        pattern: motif
+        vent: 1.0
+        pattern-pitch: [4.55, 6.8]
+        pattern-offset: [11.0, 17.4]
+        pattern-cells:
+        - [[1.215, 0.0], [2.43, 0.7], [2.43, 2.1], [1.215, 2.8], [0.0, 2.1], [0.0, 0.7]]
+      - id: side-vent-short-rows
+        kind: vent-field
+        at: [13.275, 14.0]
+        size: [29.73, 16.4]
+        rx: 0
+        pattern: motif
+        vent: 1.0
+        pattern-pitch: [4.55, 6.8]
+        pattern-offset: [13.275, 14.0]
+        pattern-cells:
+        - [[1.215, 0.0], [2.43, 0.7], [2.43, 2.1], [1.215, 2.8], [0.0, 2.1], [0.0, 0.7]]
+      - {id: lid-screw-front, kind: screw-head, at: [49.1, 0.8], size: [2.6, 2.6], rx: 1.3, fill: '#6f625a'}
+      - {id: lid-screw-middle, kind: screw-head, at: [238.7, 0.8], size: [2.6, 2.6], rx: 1.3, fill: '#6f625a'}
+      - {id: lid-screw-rear, kind: screw-head, at: [350.9, 0.8], size: [2.6, 2.6], rx: 1.3, fill: '#6f625a'}
       - {id: side-hole-front-upper, kind: screw-hole, at: [60.7, 13.7], size: [2.2, 2.2], rx: 1.1, fill: '#867267'}
       - {id: side-hole-front-lower, kind: screw-hole, at: [60.4, 28.2], size: [2.2, 2.2], rx: 1.1, fill: '#7f6f62'}
       - {id: side-hole-rear-front, kind: screw-hole, at: [313.4, 18.8], size: [2.2, 2.2], rx: 1.1, fill: '#867468'}
       - {id: side-hole-rear-rear, kind: screw-hole, at: [340.9, 18.4], size: [2.2, 2.2], rx: 1.1, fill: '#8a756a'}
+    silkscreen:
+    - {id: lid-seam, at: [0, 0], path: M 0 4.6 L 32.0 4.6 L 35.5 3.4 L 367.0 3.4, filled: false, stroke-width: 0.25,
+       fill: '#7a6c62', for: chassis}
 configurations:
   base:
     kind: base
