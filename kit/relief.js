@@ -1084,9 +1084,14 @@ export function pieceMesh(b, w, h, d, art = {}) {
 // tilts it, they do not: a box's top is no longer the part's top and a ring's
 // `y` is no longer up - so such a piece is built as the plain box it would
 // have been before either key existed, rather than as a confident wrong one.
+//
+// A FACE DRAWN FLIPPED IS MIRRORED TOO, AND `m` DOES NOT SAY SO. `flip` is the
+// face's [flipLX, flipLY]: they mirror where the face places what it holds,
+// after the module's own transform, so an unturned occupant on such a face
+// reads as straight from `m` alone and is placed mirrored.
 // Pure, so it is checked under node.
-export function pieceIsStraight(m, tilt) {
-  if (tilt) return false;
+export function pieceIsStraight(m, tilt, flip) {
+  if (tilt || (flip && (flip[0] || flip[1]))) return false;
   if (!m) return true;
   return Math.abs(m.b) < 1e-9 && Math.abs(m.c) < 1e-9 && m.a > 0 && m.d > 0;
 }
@@ -1111,8 +1116,20 @@ export const SIDES = ['left', 'right', 'top', 'bottom'];
 // each piece takes a clone, which shares the upload and carries its own crop.
 //
 // A DRAWING THAT WILL NOT LOAD COSTS THE ART, NOT THE FACE. A plain box could
-// never fail to build, so a failed fetch or decode leaves the piece plain,
-// says so once, and is not remembered.
+// never fail to build, so a failed fetch or decode leaves the piece plain and
+// says so once for the build: the cache keeps the failure, so each piece that
+// shows the drawing is plain without rasterising it again or saying so again.
+// The next build asks afresh.
+//
+// A SHOWN DRAWING IS PAINTED AS THE KIT'S OTHER CANVAS MATERIALS ARE, with
+// `transparent` and `alphaTest`: a plan or rear with clear regions is a map
+// whose clear texels would otherwise come out black.
+//
+// THE CROP IS READ UNDER THE DEFAULT CLAMP. A negative repeat with an offset
+// inside 0..1 reads backwards without wrapping, so repeat wrapping is not
+// needed - and with it a crop that reaches the drawing's edge bleeds the
+// opposite edge in under linear filtering. L71 asks a piece's patch to lie
+// inside the drawing, so nothing is cropped from outside it.
 export async function pieceArt(body, b, dist, scope, cache) {
   const out = {};
   if (!b.shows || b.shape || !body.drawings || !dist) return out;
@@ -1126,21 +1143,28 @@ export async function pieceArt(body, b, dist, scope, cache) {
     const px = SIDES.includes(which) ? Math.max(2 * _px(scope), 8) : undefined;
     const raster = () => svgCanvas(url, dr.w, dr.h, false, false, scope, px).then(canvasTex);
     if (cache && !cache.has(url)) cache.set(url, raster());
+    const pending = cache ? cache.get(url) : null;
     let base;
     try {
-      base = await (cache ? cache.get(url) : raster());
+      base = await (cache ? pending : raster());
     } catch (err) {
-      if (cache) cache.delete(url);
-      console.warn(`[portrayal] a body piece's ${which} drawing did not load (${dr.file}); built plain`, err);
+      // the first piece to meet the failure says so and leaves a settled
+      // answer for the rest; one already waiting on the same load finds it
+      if (!cache || cache.get(url) === pending) {
+        if (cache) cache.set(url, Promise.resolve(null));
+        console.warn(`[portrayal] a body piece's ${which} drawing did not load (${dr.file}); built plain`, err);
+      }
       continue;
     }
+    if (!base) continue;
     const tex = cache ? base.clone() : base;
     const {repeat, offset} = pieceArtCrop(b, which, (body.face || [dr.w])[0], dr.w, dr.h,
                                           {at: dr.at || [0, 0], depth: body.depth || 0});
-    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;   // a negative repeat reads backwards, inside 0..1
+    tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
     tex.repeat.set(...repeat); tex.offset.set(...offset);
     tex.needsUpdate = true;
-    out[which] = new THREE.MeshBasicMaterial({map: tex});
+    out[which] = new THREE.MeshBasicMaterial(
+      {map: tex, transparent: true, alphaTest: 0.1, alphaToCoverage: true});
   }
   return out;
 }
@@ -4312,7 +4336,7 @@ export async function buildFaceRelief(F, ctx) {
           if (!pieceFitted(b, shown[f.path])) continue;
           // toFace is the drawn (foreshortened) frame; a tilted box is unprojected
           const r = f.tilt ? unproject(localToFace(f.toFace, b), f.tilt) : localToFace(f.toFace, b);
-          const pb = pieceIsStraight(f.toFace, f.tilt) ? b : plainPiece(b);
+          const pb = pieceIsStraight(f.toFace, f.tilt, [F.flipLX, F.flipLY]) ? b : plainPiece(b);
           const m = pieceMesh(pb, r.w, r.h, b.z1 - b.z0,
                               await pieceArt(meta.body, pb, ctx.dist, ctx.scope, pieceTex));
           m.position.set(LX(r.x, r.w), LY(r.y, r.h),
@@ -4421,7 +4445,7 @@ export async function buildFaceRelief(F, ctx) {
       for (const b of bodyBoxes(body, 0, 0)) {
         if (!pieceFitted(b, shown[s.path])) continue;
         const r = s.tilt ? unproject(localToFace(s.toFace, b), s.tilt) : localToFace(s.toFace, b);
-        const pb = pieceIsStraight(s.toFace, s.tilt) ? b : plainPiece(b);
+        const pb = pieceIsStraight(s.toFace, s.tilt, [F.flipLX, F.flipLY]) ? b : plainPiece(b);
         const m = pieceMesh(pb, r.w, r.h, b.z1 - b.z0,
                             await pieceArt(body, pb, ctx.dist, ctx.scope, pieceTex));
         m.position.set(LX(r.x, r.w), LY(r.y, r.h),
