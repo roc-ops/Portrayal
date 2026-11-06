@@ -173,7 +173,7 @@ them: `std/nema-5-20r@1` and `eaton/c39-outlet@1`.
 
 | interface | presented by | mated by |
 |---|---|---|
-| `nema-5-15r` | no part yet | `generic/nema-5-15p-cord@1` |
+| `nema-5-15r` | `std/nema-5-15r@1` | `generic/nema-5-15p-cord@1` |
 | `nema-5-20r` | `std/nema-5-20r@1` | `generic/nema-5-15p-cord@1`, `generic/nema-5-20p-cord@1` |
 | `eaton-c39` | `eaton/c39-outlet@1` | `generic/c14-plug@1`, `generic/c20-plug@1` |
 
@@ -183,9 +183,10 @@ them: `std/nema-5-20r@1` and `eaton/c39-outlet@1`.
   targets already have. `eaton-c39` is the outlet type both targets carry.
 - **A 5-15R and a 5-20R are two interfaces.** What each accepts differs: a 5-20P does not
   enter a 5-15R. One interface for both would offer a 20 A plug to a 15 A receptacle.
-- **`nema-5-15r` is registered with nothing presenting it.** A 5-15P must name it to be a
-  true statement of where the plug goes, and the first 5-15R part then needs no change to
-  the plug. It cites no standard: no drawing of a 5-15R is held.
+- **`nema-5-15r` was registered before a part presented it.** A 5-15P names it to be a
+  true statement of where the plug goes, and `std/nema-5-15r@1` then needed no change to
+  the plug. Its face is borrowed from the 5-20R, because no drawing of a 5-15R is held;
+  the contract and the `nema-5-15r` entry of `standards.yaml` say so.
 - **The C39 takes a C14 or a C20 plug.** The Eaton Rack PDU G4 installation and setup
   guide, P-164001156 rev 3, section 1.5, says the outlet is a combination of the C13 and
   C19 styles designed to accept both.

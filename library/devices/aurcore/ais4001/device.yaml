@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais4001
-version: 2.1.0
+version: 2.1.1
 maturity: modelled
 manufacturer: AurCore
 model: AIS4001
@@ -82,6 +82,9 @@ provenance:
       LINK/ACT under its colour key (no PoE key on this build); the summary line '8 x GE | 4 x
       10GE SFP+ | L3'. The AURCORE wordmark is printed as text: its A is drawn as a chevron
       mark, which is not reproduced (no logo marks).
+      The printed logotype's place on the front is reserved as a logo-zone region. It was measured on the
+      square-on AIS4001 product image 1, scaled on the face's own width and height (sure, about 0.5 mm).
+      The mark is not drawn. The plain text AURCORE the library draws stays.
   top-layout:
     confidence: estimated
     note: >-
@@ -332,6 +335,8 @@ views:
       - {ref: common/led-rect-sm@1, id: led-sfp-10, at: [19.2, 119.0], rotate: 90, for: port-10, group: sfp-leds, rel-pos: 10}
       - {ref: common/led-rect-sm@1, id: led-sfp-11, at: [19.2, 124.2], rotate: 90, for: port-11, group: sfp-leds, rel-pos: 11}
       - {ref: common/led-rect-sm@1, id: led-sfp-12, at: [19.2, 129.6], rotate: 90, for: port-12, group: sfp-leds, rel-pos: 12}
+    regions:
+    - {id: logo-zone, at: [60.6, 3.6], size: {w: 4.2, h: 26.9}, label: 'Vendor logo; not drawn'}
   rear:
     size: {w: 83.8, h: 145.0}
     components:

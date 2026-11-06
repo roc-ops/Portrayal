@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-64o
-version: 4.0.6
+version: 4.0.7
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-64O
@@ -105,6 +105,17 @@ stack-exceptions:
     bank and 180/180 in the lower; the guide's page 3 install render reads the lower bank otherwise. The
     two documents disagree, so the geometry is held until a photograph settles it; see the gap stacked-osfp-orientation.
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed logotype
+      over the model text at the top right, beside the management port. Measured on Edgecore's front photograph
+      of the AIS800-64O (960 x 700 px), which is taken from slightly above: the width gives 2.173 px/mm,
+      and the face height read on the photograph (top edge to bottom edge) gives 2.126 px/mm down, which
+      agree to 2.2 percent. The mark runs x 411.2 to 436.2 and y 2.6 to 7.1, and the AIS800-64D photograph
+      puts the same mark within 0.3 mm of that. The sureness is likely, and the position is good to about
+      1 mm. The light boxes over the ports are real cage frames, away from the mark. The `logo-zone` region
+      on the front view reserves the place; nothing is drawn in it.
   stack-orientation:
     confidence: drawing
     note: >-
@@ -1565,6 +1576,10 @@ views:
         group: port-leds
         rel-pos: 64
     regions:
+    - id: logo-zone
+      at: [411.2, 2.6]
+      size: {w: 25.0, h: 4.5}
+      label: Vendor logo; not drawn
     - id: optics-upper
       at: [8.0, 11.4]
       size: {w: 385.5, h: 29.8}
