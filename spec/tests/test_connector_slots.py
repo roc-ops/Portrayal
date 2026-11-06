@@ -151,6 +151,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "juniper-qfx5210-dc-header-3",
                          # the DC connectors of the Edgecore AS5835, AMX3200 and AGR560 supplies
                          "edgecore-dcs-dc-block-3", "edgecore-amx-dc-block-3", "edgecore-agr-dc-block-2",
+                         # the DC connector of the Edgecore AIS800-64D and AIS800-64O supply
+                         "edgecore-ais800-dc-block-6",
                          # the DC power connector of the Smartoptics DCP-2-PSU-DC-FB supply
                          "smartoptics-dcp-dc-block-3",
                          # the DC connectors of the Telco Systems XM-3352 and XM-8424H supplies
@@ -231,6 +233,9 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    # AGR560 supplies
                                    "edgecore-dcs-dc-block-3", "edgecore-amx-dc-block-3",
                                    "edgecore-agr-dc-block-2",
+                                   # the DC connector of the Edgecore AIS800-64D and AIS800-64O
+                                   # supply
+                                   "edgecore-ais800-dc-block-6",
                                    # the DC power connector of the Smartoptics DCP-2-PSU-DC-FB
                                    # supply
                                    "smartoptics-dcp-dc-block-3",
