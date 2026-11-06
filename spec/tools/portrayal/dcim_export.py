@@ -757,6 +757,10 @@ PART_POWER = {
     # type for it has been read from a held source, so it is `other` and POWER_LABEL
     # says which connector.
     "rittal/pdu-cord-cee-16a": "other",
+    # THE PRO4X'S FIXED CORD ENDS IN AN IEC 60309 3P+N+G 6h PLUG (the SKU page of C4G36RA-GPBD2FE1). No power-port type
+    # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
+    # says which connector.
+    "servertech/pro4x-cord-60309": "other",
 }
 # THE CONNECTOR A `other` POWER PORT IS, for a reader who would otherwise see
 # "Other". Only the parts above that have no upstream type are listed; a test
@@ -783,6 +787,7 @@ POWER_LABEL = {
     "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
+    "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
 }
 
 
