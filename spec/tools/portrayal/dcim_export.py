@@ -1683,6 +1683,23 @@ def device_console_row(p, a):
     return None
 
 
+# A CONSOLE SERVER'S SERIAL LINES are console SERVER ports, the other end of a
+# console port: the RJ45 jacks a terminal cable plugs into so that the box can
+# reach the serial consoles of other equipment. Only a placement that says
+# `role: console-server` is one - an `rj45-serial` jack is also a PDU's LX
+# interface and a routing engine's serial jack, which are consoles or something
+# else, never console servers. NetBox ConsoleServerPortTypeChoices at 64ce9e2d
+# (`rj-45`) and Nautobot ConsoleServerPortTypeChoices at 3edb1fca (`rj-45`), the
+# same files and the same commits as the console-port type above.
+def device_console_server_row(p, a):
+    """The console-server-port row `build` lists a device placement under, or
+    None. Named by the placement's id, which is the printed label, and typed
+    `rj-45`; `media: rj45-serial` is required so that the type is true."""
+    if a.get("role") == "console-server" and a.get("media") == "rj45-serial":
+        return {"name": p["id"], "type": "rj-45"}
+    return None
+
+
 def device_port_type(p, a, group_role, names=None):
     """What `build` exports a device placement as when it is a switch port:
     (type, label, None), or (None, None, why) when it is not one.
@@ -1696,6 +1713,8 @@ def device_port_type(p, a, group_role, names=None):
         return None, None, "a timing or RF input"
     if names is None and a.get("role") == "console":
         return None, None, "a console port"
+    if names is None and device_console_server_row(p, a):
+        return None, None, "a console server port"
     if names is None and group_role not in PORT_ROLES:
         return None, None, f"in a group whose role is {group_role!r}, not a port role"
     if names is None and a.get("role") == "mgmt" and a.get("speed") == "10g":
@@ -2062,8 +2081,8 @@ def worth_a_file(doc, dev):
     DCIM cables to. Outlets and not power ports, because a box whose only
     resolved row is its own inlet is still the failure described above.
     """
-    if any(k in doc for k in ("console-ports", "interfaces", "module-bays",
-                              "power-outlets")):
+    if any(k in doc for k in ("console-ports", "console-server-ports", "interfaces",
+                              "module-bays", "power-outlets")):
         return True
     return (dev or {}).get("profile") == "passive"
 
@@ -2186,6 +2205,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     own = listing_names(dev) if names is None and dev.get("interfaces") else {}
 
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
+    console_server = []
     outlets = {}
     for view in views_for(dev, cfg_name):
         parts = view_parts(view)
@@ -2238,6 +2258,11 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
                 if trace is not None:
                     trace.add(p["id"])
             con = device_console_row(p, a)
+            csp = device_console_server_row(p, a)
+            if csp:
+                console_server.append(csp)
+                if trace is not None:
+                    trace.add(p["id"])
             if con:
                 console.append({**con, "_id": p["id"]})
                 if trace is not None:
@@ -2348,6 +2373,8 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
         for c in console:
             c.pop("_id", None)
         out["console-ports"] = console
+    if console_server:
+        out["console-server-ports"] = console_server
     if ifaces:
         out["interfaces"] = ifaces
     # A CHASSIS INLET AND A SUPPLY'S INLET ARE NOT THE SAME PORT, and the
