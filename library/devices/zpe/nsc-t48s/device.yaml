@@ -24,22 +24,22 @@ provenance:
       Three documents and two photographs. ZPE Systems, Datasheet: Nodegrid Serial Console - S Series,
       April 15, 2026, page 2 (specifications, power), page 3 (interfaces, physical, ordering table, the
       Front and Rear figures); the same data sheet's page 1 (14 USB serial ports). ZPE Systems, Fixed
-      Rail Mounting Kit For 4-Post Racks (RAIL-180-395), November 18, 2024. Photographs from the maker's
-      pages: the T48S front (T48S-4.jpg) and the T48S dual-AC rear with SFP (T48S-DAC-SFP-2.jpg), each
-      1024 px wide. No installation guide, drawing, CAD model or stencil is held.
+      Rail Mounting Kit For 4-Post Racks (RAIL-180-395), November 18, 2024. ZPE Systems, the end-of-life
+      notice for selected rails, which carries the older rail ranges. Photographs from the maker's pages:
+      the T48S front (T48S-4.jpg) and the T48S dual-AC rear with SFP (T48S-DAC-SFP-2.jpg), each 1024 px
+      wide. No installation guide, drawing, CAD model or stencil is held.
   face-names:
     confidence: datasheet
     note: >-
-      THE DATA SHEET'S WORDS ARE KEPT. Page 3 captions the face with HDMI, one USB-A port, three lamps
-      and the fan modules "Front", and the face with the 48 RJ45 ports, the inlets and the SFP cages "Rear".
-      The ports are on the Rear, as on the maker's other serial consoles.
+      THE DATA SHEET'S WORDS ARE KEPT. Page 3 captions the face with HDMI, one USB-A port, two lamps,
+      a reset button and the fan modules "Front", and the face with the 48 RJ45 ports, the inlets and
+      the SFP cages "Rear". The ports are on the Rear, as on the maker's other serial consoles.
   size:
     confidence: datasheet
     note: >-
       Page 3, "Size (L X W X H): 443 X 312 X 43 mm", 1U. The labels read length, width, height, and 443
-      is plainly the body's width and 312 its depth; the maker's Serial Console R ear drawing agrees on
-      312.0 and 43. 443 is the body between the ears: the photographs show no ears. Weight 4.9 kg, "depending
-      on options".
+      is plainly the body's width and 312 its depth. 443 is the body between the ears: the photographs
+      show no ears. Weight 4.9 kg, "depending on options".
   scale:
     confidence: photo-measured
     note: >-
@@ -130,9 +130,8 @@ gaps:
   wanted: >-
     The rack ears and their positions. The data sheet says only "Front-Rear mounting brackets", and the
     rail kit sheet that "This kit replaces the Rack Mount Ears that are provided with each unit". No S
-    document dimensions an ear or says where it bolts. The R data sheet's page 4 drawing is another model's.
-    The rear photograph on the rail sheet shows the ears folded back at the Rear, not measurable. `chassis.ears`
-    is left out.
+    document dimensions an ear or says where it bolts. The rear photograph on the rail sheet shows the
+    ears folded back at the Rear, not measurable. `chassis.ears` is left out.
 - what: other-skus
   scope:
   - front
@@ -212,13 +211,8 @@ groups:
     role: management
     index-origin: 0
     attrs: {media: sfp-plus, speed: 10g}
-  mgmt:
-    term: Port
-    role: management
-    index-origin: 1
-    mixed: >-
-      the console RJ45 and the USB 3.0 Host beside it on the Rear, the way in and the way to load or store
-      software when the network is not up
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: the console RJ45 and the USB 3.0 Host beside
+      it on the Rear}
   usb-front:
     term: Port
     role: management

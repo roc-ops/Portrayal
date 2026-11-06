@@ -7,4 +7,4 @@
   Four new parts (`zpe/nsc-fan-module`, `zpe/nsc-power-rocker`, `zpe/nsc-hdmi` and the fixed rail kit
   `zpe/rail-180-395` with its four pieces) are drawn from one small photograph or a sketch with no
   section, and each says so as an estimate. The device is listed with the rail kit. A new device is
-  a minor bump for the lock and adds two DCIM device-type files; no existing device or part changes.
+  a new version record and adds two DCIM device-type files; no existing device or part changes.
