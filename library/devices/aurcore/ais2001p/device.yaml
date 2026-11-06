@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais2001p
-version: 2.1.0
+version: 2.1.1
 maturity: modelled
 manufacturer: AurCore
 model: AIS2001P
@@ -65,6 +65,11 @@ provenance:
       keys; the port numbers, odd on the left; the SFP numbers on their gold strips; the summary
       line '4 x GE | 2 x GE SFP | PoE+' up the left. The AURCORE wordmark is printed as text:
       its A is drawn as a chevron mark, which is not reproduced (no logo marks).
+      The printed logotype's place on the front is reserved as a logo-zone region. It was measured on the
+      square-on AIS2001P product image 1, scaled on the face's own width and height (sure, about 0.5 mm).
+      The mark is not drawn. The plain text AURCORE the library draws stays. The finned right side also
+      prints the logotype, but it is shown only in a three-quarter photograph with no scale, so no place
+      is reserved there.
   top-layout:
     confidence: estimated
     note: >-
@@ -290,6 +295,8 @@ views:
       - {ref: common/rj45-ganged-eth@1, id: port-4, at: [37.27, 40.42], rotate: 270, group: gbe-poe, rel-pos: 4, states: {led-a: ['off', {name: poe, color: '#f59e0b'}], led-b: ['off', {name: link-activity, color: '#22c55e'}]}}
       - {ref: std/sfp@1, id: port-5, at: [22.85, 89.85], rotate: 270, group: sfp, rel-pos: 5}
       - {ref: std/sfp@1, id: port-6, at: [37.95, 89.85], rotate: 90, group: sfp, rel-pos: 6}
+    regions:
+    - {id: logo-zone, at: [51.9, 2.4], size: {w: 2.8, h: 16.7}, label: 'Vendor logo; not drawn'}
   rear:
     size: {w: 72.1, h: 110.0}
     components:
