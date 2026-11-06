@@ -1,0 +1,183 @@
+format: 1
+kind: module
+name: psu-302-dc
+version: 2.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-302-DESR 3000W DC PSU (S9321-64E/EO family) - two-stud
+  screw-terminal block under a hinged plastic cover, Input and Output status LEDs
+  stacked at the left, black wire pull handle across the foot, red release clip on
+  the right edge; exhaust (front-to-back) airflow
+size: {w: 68.0, h: 40.6}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  both axes from the S9321-64E HIG's Figure 6, the DC PSU dimension drawing (provenance `size`).
+attrs: {power-output-w: 3000, input: dc, model: PSU-302-DESR, inlet: dc-terminal}
+provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'two-stud screw-terminal block under a
+    hinged plastic cover'. Nothing new was measured.
+  power: >-
+    datasheet - the rating is in the part number's own ordering line, in the S9321-64E
+    datasheet's Available to Order section: 'PSU-302-DESR, 3000W DC, exhaust air flow',
+    beside the AC sibling at the same 3000 W. No ambient is stated with it, so none is
+    recorded.
+  size: >-
+    drawing - S9321-64E HIG Figure 6 (DC PSU dimension drawing): the face view is
+    dimensioned 68.0 mm wide and 40.6 mm high, and the body 452.4 mm (458.9 over the
+    retainer, 19.6 mm for the rear tang) - the same envelope the AC unit is drawn in,
+    which is why the HIG's component table carries one PSU row for both.
+  face-layout: >-
+    estimated - and this is the honest difference from the AC sibling. HIG Figure 4's
+    rear elevation and the vendor rear render both show the AC build, so the DC face
+    has no straight-on source: only HIG Figure 6's isometric, which shows the terminal
+    block at the left of the face with two studs, the red clip on the right edge and
+    the black wire handle across the foot, and the small unscaled face thumbnail beside
+    the dimension drawing. The lamp and handle positions are taken from the AC unit,
+    which shares this envelope and this vendor's face layout; the terminal block's own
+    size and position are estimated from the isometric's proportions. If the DC face
+    is ever photographed straight on, this is the part of the model to re-measure - see
+    the device's gaps.
+  terminal-block: >-
+    HIG Connecting Power, DC Version: the PSU carries a screw-type DC terminal block
+    under a plastic cover, opened by pressing at its top or bottom edge and swinging it
+    outwards; the DC cable's two-hole lug is then fastened to the block - two poles, torque 14.0 +/- 0.5 kgf.cm, fed from a -40 to -72 V source
+    through a built-in 150 A fuse. The cover is drawn closed, which is how the unit
+    ships and how Figure 6 draws it.
+  block: >-
+    estimated - redrawn in this version from the S9321-64E Hardware Installation Guide,
+    section 9.1 Connecting Power (DC version), Figures 26 and 27 (PDF page 23),
+    which show the block in isometric with no scale: TWO POLES SIDE BY SIDE, EACH A
+    PAIR OF SCREWS ONE ABOVE THE OTHER, one two-hole lug (red cable on the left, blue
+    on the right) lying across each pair and its tongue leaving downward toward the
+    handle. Version 1 drew one screw ring to a pole. The pair's spacing is read from
+    the lug the guide dimensions (Figure 23, PDF page 21): its two holes are .63 +/- .02
+    in. apart, which holds 5/8 in. (15.875 mm); the guide prints no spacing for the
+    studs themselves. The block's box, the poles' positions across it and the screws'
+    ring size are estimates; the cover's latch bar that version 1 drew along the top
+    of the block is not drawn, because no figure shows it on the face.
+  seats: >-
+    estimated - each pole is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in.
+    centres that one two-hole lug lands across, stood on end (rotate 90) so that the
+    lug leaves downward as the guide's Figure 26 shows. The pole's own screw heads,
+    3.4 across, and the height it presents at are Portrayal's stand-ins, not
+    UfiSpace's: the guide draws pan-head screws and gives no height. The lug is drawn
+    straight (generic/two-hole-lug-5-8@1); the guide's lug (Figure 23, a Panduit
+    LCD2-14A as printed on it) is offset 0.10 in. at the barrel, which the stand-in
+    does not show.
+  poles: >-
+    NOT STATED. Figure 26 marks the two cables by colour (red, blue) and by
+    nothing else, the plastic cover's own print reads a torque, and no figure of
+    the guides of the seven devices that seat this supply prints a conductor name beside either
+    pole. The HIG's cautions say that the RTN terminal is isolated from the chassis
+    (DC-I) but not where it is. Both poles are therefore `unstated`, in the order
+    the face stands (left, then right), and each device that seats this supply carries
+    a `dc-polarity` gap that names the figure wanted.
+  rating: >-
+    datasheet - 'DC input: -40V to -72V, 80A' in the datasheets of the seven devices
+    that seat this supply (S9321-64E, S9321-64EO, S9610-36D, S9611-36D, S9710-76D,
+    S9720-56ED, S9725-64E), the same current in all seven. The range has no nominal,
+    so the port states no voltage. The guides' built-in 150 A fuse is the fuse and
+    not the input current.
+  awg: >-
+    UfiSpace Hardware Installation Guides of the seven devices, section 9.1 (DC
+    version), the cable step: a 'UL 1015' 4 AWG DC power cable (written '#4 AWG' in
+    five of them) of stranded copper, attached to a two-hole lug; the package list
+    says the same for the lug ('DC Lug (# 4 AWG)'). One size in every guide held, so
+    the port states it.
+  cover-disagreement: >-
+    THE GUIDES DISAGREE ON THE COVER AND THE TORQUE and both are carried, neither
+    reconciled. The S9321-64E, S9321-64EO and S9725-64E guides open the cover by
+    pushing at its top or bottom edge and flipping it outwards, and give 14.0 +/- 0.5
+    kgf.cm; the S9610-36D, S9611-36D, S9710-76D and S9720-56ED guides remove it by a
+    single screw, and the S9610-36D, S9710-76D and S9720-56ED guides give 50.0 +/- 0.5
+    kgf.cm. The block is the same picture in all of them. Nothing in this contract
+    states the torque or the cover's fastening.
+  led-states: >-
+    S9321-64E HIG section 10, PSU FRU LED table (page 23), transcribed in full. The
+    table is written for the PSU FRU without distinguishing AC from DC, so both units
+    carry the same two lamps and the same vocabulary.
+  clip-color: >-
+    drawing - HIG Figure 6 calls out 'Red Clip' and 'Black Handle' on the DC unit by
+    name, exactly as Figure 5 does on the AC one. This platform ships only exhaust-flow
+    FRUs, so red is not a variant marker here.
+elements:
+  input-led:
+    at: [4.7, 3.9]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: in-range, color: '#22c55e'}]
+    description: >-
+      S9321-64E HIG PSU FRU LED table, Input LED - Green (input within range), Off
+      (input out of range, or firmware upgrading)
+  output-led:
+    at: [4.7, 11.4]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: over-temp, color: '#f59e0b', behavior: blinking},
+             {name: fault, color: '#f59e0b'}]
+    description: >-
+      S9321-64E HIG PSU FRU LED table, Output LED - Solid Green (12.3V main output OK),
+      Blinking Green (12.3V main output in standby mode), Off (12.3V main output off due
+      to input out of range), Blinking Amber (over temp warning, or fan error), Solid
+      Amber (12.3V main output or 12VSB out of range; OTP, OVP, UVP, OCP)
+  terminal-block: {at: [19.8, 5.4], size: [30.0, 21.4], class: terminal}
+  handle: {at: [11.5, 29.8], size: [44.6, 7.7], class: handle}
+  clip: {at: [62.0, 10.1], size: [5.5, 16.7], class: latch}
+relief:
+  features:
+    - node: handle
+      uhandle: 30
+      confidence: datasheet
+      source: >-
+        S9321-64E HIG, Space Clearance: 'the handle of the PSU FRU is 1.2 inches
+        (3.0cm)'. 30 mm exactly, published by the vendor for THIS platform's supplies.
+    - node: terminal-block
+      out: 3.0
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-dc@2 - the HIG dimensions the face and the body and nothing
+        that stands off the face except the handle. The block plus its hinged cover
+        clearly stands proud in Figure 6's isometric; 3.0 is a guess at how far.
+    - node: clip
+      out: 2.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-dc@2 - unsourced, the same 2.2 the AC sibling carries. One
+        estimate written twice.
+    - node: vent-field
+      vent: 30
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-dc@2 - the vent depth is in no held drawing; follows the
+        UfiSpace PSU family estimate.
+    - node: input-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-dc@2 - unsourced; 0.4 is the UfiSpace FRU family estimate.
+    - node: output-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-302-dc@2 - unsourced, the same estimate as input-led.
+parts:
+  - {ref: juniper/mx240-dc-pole@1, id: pole-1, at: [18.3625, 14.4], rotate: 90}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-2, at: [31.9625, 14.4], rotate: 90}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 80
+      awg: [4]
+      poles:
+        - {role: unstated, slot: pole-1, stand-in: {order: left-to-right}}
+        - {role: unstated, slot: pole-2, stand-in: {order: left-to-right}}
+      source: {poles: poles, rating-a: rating, awg: awg}
+connection-points:
+  power: {at: [34.8, 16.1], direction: front}
+skins: [default]
