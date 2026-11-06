@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: dcp-2-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: smartoptics-dcp-dc-block-3
+description: >-
+  The three-cell pluggable DC power connector on the face of the Smartoptics DCP-2-PSU-DC-FB supply, seen from its
+  mating face. A metal shell holds a black insulator. Three gold-coloured cells stand in one column, small, large and
+  small from the top down. A "+" is scribed on the panel at its upper end. The cable
+  connector smartoptics/dcp-2-dc-plug@1 seats at its mate point.
+size: {w: 11.0, h: 26.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The DCP-series User Manual shows the connector in one three-quarter photograph (figure 2-13) and prints no
+  dimension for it. The box is the one the supply's skin already reserves for it
+  (smartoptics/dcp-2-psu-dc@1, 11.0 by 26.0), itself an estimate; the cells sit at that skin's pitch of 7.5, which the
+  photograph's unequal spacing does not confirm.
+attrs: {connector: pluggable DC power connector, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED. The DCP-series User Manual (14.0 A)
+    shows the connector in figure 2-13 (PDF page 19, "The DCP-2-PSU-AC-FB and DCP-2-PSU-DC-FB unit") and calls it
+    "the DC power connector" (section 3.1.5, "Site Requirements", "Power requirements", PDF page 29); the data sheet of the DCP-2 (rev 4.3) lists the
+    supply as "DCP-2-PSU-DC-FB" and prints no connector. The sticker on the supply is not legible in the photograph.
+    So the interface claims no maker, standard or pitch.
+  gender: >-
+    NOT STATED. The photograph shows a metal shell round a black insulator with three open gold-coloured cells and a
+    threaded post above it; it does not say which half carries pins. The cable connector is drawn as the half that
+    seats in this one.
+  marks: >-
+    the manual's figure 2-13: a thin "+" is scribed on the panel to the left of the block, level with its upper end;
+    no other mark is legible beside the block. The cells, from the top down, are one small, one large and one small,
+    and the photograph is a photograph, so the cells are drawn as it shows them and the "+" is not drawn.
+  size: >-
+    estimated - see size-notes.
+  key: >-
+    photograph - a threaded post stands on the panel above the block (a jackscrew or a retaining post; the manual does
+    not say which) and is not part of this box, so it is not drawn.
+  mate: >-
+    derived - the centre of the middle cell, (5.5, 13.0), facing out. The cable connector's own middle contact is at
+    its centre too, so the two align.
+  colour: >-
+    photograph - the shell is dark nickel (about #555347 in shadow), the insulator black (about #0a0d08) and the
+    cells gold (about #8f8256 where lit). The body is drawn #6b6f70 with an edge #3d4247, the insulator #15181a and
+    the cells #c9a227, the colours the supply's own skin already draws for them.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face, so it is drawn flush and
+    states no relief.
+elements: {}
+connection-points:
+  mate: {at: [5.5, 13.0], direction: front}
+skins: [default]
