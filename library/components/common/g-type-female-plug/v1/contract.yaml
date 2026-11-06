@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: g-type-female-plug
+version: 1.0.0
+class: port
+mates: g-type
+profile: networking
+description: >-
+  A G-type female cable end, the plug that seats on a G-type male test
+  connector (common/g-type-male-port@1). Seen from the face as a seated
+  plug: a round coupling and the cable behind it. Drawn as an estimate: no
+  maker drawing of a G-type plug is held.
+size: {w: 6.0, h: 6.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: coax-g, connector: g-type}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - no maker drawing of a G-type plug is held, so 6.0 is a
+    stand-in chosen to sit inside the 7.0 estimated for the male port it
+    mates, not a reading. A drawing of the plug the receiver data sheets
+    mean would replace it.
+  connector: >-
+    datasheet - the port it mates is the one CommScope's CH3000 AR3002E data
+    sheet (87-11046 Rev F) prints as "G-type male connector (at front
+    panel, -20 dB)". The plug is the other gender by definition; no document
+    held names it.
+elements: {}
+connection-points:
+  mate: {at: [3.0, 3.0], direction: front}
+skins: [default]

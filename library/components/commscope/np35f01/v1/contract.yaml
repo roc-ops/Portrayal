@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: np35f01
-version: 1.0.0
+version: 1.0.1
 class: filter
 behaviour: fills
 profile: optical
@@ -45,11 +45,17 @@ provenance:
     bay and its rear bay alike.
   power: >-
     passive - no power figure; the data sheet gives optical characteristics only.
+  adapter-bodies: >-
+    the adapter frames drawn in the skin are declared as class adapter.
+    They were declared as ports as well as the std/sc-bore@1 openings
+    composed beside them, which are the ports and present the registered
+    interface sc, so a drawn port stood on the face that presented none.
+    Ids, positions, sizes and the skin are unchanged.
 elements:
   screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
-  adapter-ch: {at: [0.8, 18.65], size: [19.0, 10.3], class: port}
-  adapter-dwdm: {at: [0.8, 29.05], size: [19.0, 10.3], class: port}
-  adapter-com: {at: [0.8, 50.45], size: [19.0, 10.3], class: port}
+  adapter-ch: {at: [0.8, 18.65], size: [19.0, 10.3], class: adapter}
+  adapter-dwdm: {at: [0.8, 29.05], size: [19.0, 10.3], class: adapter}
+  adapter-com: {at: [0.8, 50.45], size: [19.0, 10.3], class: adapter}
   screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
 parts:
   - {ref: std/sc-bore@1, id: ch, at: [6.50, 19.30], rotate: 90, attrs: {connector: SC/APC}}
