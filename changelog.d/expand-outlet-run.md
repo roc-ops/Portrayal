@@ -4,5 +4,5 @@
   (the segments again, shifted). Each outlet gets its placement, its bezel
   moulding, its numeral and its lamp, and carries `fed-by`, `states` and, per
   bank, `through`. The Eaton PDUMV20HVNETLX is authored this way. It expands
-  to the same outlets, so its lock, its version and its exports do not move.
+  to the same outlets, so its version and its exports do not move.
   The change closes no conformance rows.
