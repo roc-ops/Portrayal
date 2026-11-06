@@ -381,6 +381,25 @@ def test_a_region_that_gains_a_half_alone_is_a_patch():
     assert _bump(old, new) == "patch"
 
 
+def test_a_bay_newly_found_in_a_half_is_a_minor():
+    """A device that already has halves gains a bay in a half: nothing that was
+    there moves, so it is an addition."""
+    old = device()
+    old["views"]["open"]["components"]["bays"].append(
+        {"id": "spare-bay", "at": [420.0, 30.0], "size": {"w": 60.0, "h": 50.0}, "accepts": ["fixture/clam-card@1"]})
+    new = copy.deepcopy(old)
+    new["views"]["open"]["regions"].append(
+        {"id": "spare-half", "half": "lid", "at": [400.0, 0.0], "size": {"w": 100.0, "h": 110.0}})
+    assert _bump(old, new) == "minor"
+
+
+@pytest.mark.parametrize("half,key", [("base", "outer"), ("lid", "hinge")])
+def test_taking_an_outer_face_or_a_hinge_away_is_a_major(half, key):
+    new = device()
+    del halves_of(new)[half][key]
+    assert _bump(device(), new) == "major"
+
+
 def test_taking_the_halves_away_is_a_major():
     assert _bump(device(), _without_halves()) == "major"
 
