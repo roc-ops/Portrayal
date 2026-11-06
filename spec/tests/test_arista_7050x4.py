@@ -430,7 +430,7 @@ def test_the_dcim_types_export_one_per_orderable_configuration_with_the_guides_h
 @pytest.mark.parametrize("target", ["netbox", "nautobot"])
 def test_the_dcim_exports_nothing_for_an_example_or_a_left_out_model(target):
     folder = LIB / "exports" / target / "device-types" / "Arista"
-    got = {p.stem for p in folder.glob("DCS-7050*.yaml") if "7050SDX4" not in p.stem}
+    got = {p.stem for p in folder.glob("DCS-7050*.yaml") if "7050SDX4" not in p.stem and "X3" not in p.stem}
     want = {pn for v in DEVICES.values() for pn in v["orderable"].values()}
     assert got == want
 

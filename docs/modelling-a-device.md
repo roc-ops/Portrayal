@@ -1079,7 +1079,25 @@ configurations: {...}
 gaps: [...]               # what you could not find, and why
 ```
 
-For a fixed-port device with long repeated rows, `layout.yaml` plus
-`spec/tools/portrayal/expand.py` generates the placements from a pitch; two
-Edgecore devices are built that way and the plan is for all of them to be
-(#168).
+For a device with long repeated rows, `layout.yaml` plus
+`spec/tools/portrayal/expand.py` generates the placements from a pitch. The
+layout is the file you edit, and `device.yaml` is what it expands to. A layout
+holds two kinds of block, and each is placed in the face's lists by a
+`{block: <id>}` marker:
+
+- **A port block** (no `kind`) repeats one port part over `count`, `rows`,
+  `pitch`, `gang` and `gutter`. It gives each port an id, a numbering, a
+  cutout, a numeral and one or more lamps. The pitch is `registry` where the
+  standards file states one.
+- **An outlet run** (`kind: outlet-run`) repeats a strip PDU's outlets. A run
+  is `segments`, each one outlet kind on one `pitch` from an `at`, and `banks`,
+  which repeat the segments moved by a `shift`. Each outlet gets its
+  placement, a bezel moulding in the face's `decor`, a numeral and a lamp
+  that is `for` it. The block also carries `fed-by`, `states` and, per bank,
+  `through`, so a switched, breakered strip needs no longhand outlet. Numbering
+  and the moulding ids carry on across segments and banks. A bezel that is not
+  the pitch repeated says so in the moulding's `by-pos` list, and the
+  expander stops on a key it does not know.
+
+What a block cannot say stays longhand beside it: the meter, the network
+interface, the breakers and anything else that is not repeated.

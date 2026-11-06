@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: sim-tray-4ff
+version: 1.0.0
+class: port
+mates: sim-tray-4ff
+profile: networking
+description: >-
+  The 4FF SIM card tray that ships with the Opengear CM8000 cellular models
+  (part 429020). It is seen from the face it is pushed in from, a narrow tray
+  end. The card sits in the tray, and the tray goes into a SIM slot until it
+  clicks.
+size: {w: 13.0, h: 2.1}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: sim, form-factor: 4ff}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - no drawing of the tray is held. It is the width of the slot
+    bar read off the CM8004-C and CM8008-C rear photographs less the rim, and
+    a height that fits the bar. The data sheet and Quick Start Guide name the
+    tray (4FF, part 429020) and say to keep it, and give no dimension.
+  identity: >-
+    datasheet - Opengear CM8000 Console Manager data sheet, package checklist:
+    "2 x 4FF SIM card tray (Part #429020)", cellular models only. Quick Start
+    Guide, Hardware Installation step 4: put the card in the tray, push the
+    tray in until it clicks.
+  mate: >-
+    estimated - the centre of the tray end, on the slot's own mate point.
+  card: >-
+    NOT DRAWN. The SIM card is not an Opengear part and no drawing of one is
+    held; the tray end is what faces out of the slot.
+elements: {}
+connection-points:
+  mate: {at: [6.5, 1.05], direction: front}
+skins: [default]

@@ -6356,6 +6356,13 @@ def main():
                               # states nothing (config_power). Read this rather
                               # than `ac`/`dc` out of the name.
                               "power": config_power(device, c),
+                              # WHAT THIS BUILD STATES DIFFERENTLY FROM THE
+                              # DEVICE - its own `attrs` keys only, always an
+                              # object, `{}` where it has none. The device's
+                              # `attrs` above are the rest. The drawing does not
+                              # read it: a face is shared by every configuration
+                              # that draws it, so its `data-*` stay the device's.
+                              "attrs": c.get("attrs") or {},
                               "part-numbers": c.get("part-numbers") or {},
                               "bays": c.get("bays") or {},
                               # WHAT THIS CONFIGURATION SEATS IN ITS CAGES,
