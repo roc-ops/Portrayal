@@ -275,14 +275,15 @@ So:
 
 ### The mapping is a third export
 
-**The device-type YAML this project writes does not carry the front-to-rear
-binding.** The `front-port` schema is `{name, type, positions}` with no
-`rear_port` key, consistent with #20564 having removed the FK, and the mapping
-is per-INSTANCE M2M. An earlier version of this note said the type format had
-nowhere to put the binding at all, and that is no longer true: NetBox >= 4.6
-has type-level `port-mappings` (PortTemplateMapping), which a module type can
-carry. Adopting them is tracked as its own piece of work; until it lands, the
-fibre map below is where the binding lives.
+**A NetBox front port carries no binding of its own.** The `front-port` schema
+is `{name, type, positions}` with no `rear_port` key, consistent with #20564
+having removed the FK. NetBox >= 4.6 keeps the binding in the module type
+instead, as `port-mappings` (PortTemplateMapping): a list of `{front_port,
+front_port_position, rear_port, rear_port_position}`. The NetBox module type
+states one mapping per row of the fibre map below, in the map's order, so an
+import of the type is self-contained. `ratio` and `band` have no field in a
+mapping, so the fibre map stays the full record. A NetBox older than 4.6 has no
+such key. The fibre map is also what a script applies there.
 
 **Nautobot is the exception, and it was found by importing.** Its
 FrontPortTemplate still has a non-null rear port and rear-port position, and its

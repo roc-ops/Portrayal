@@ -3090,7 +3090,8 @@ def tokenize_fibre_map(m):
 # devices in one space - and the comment keeps the height the vendor states.
 #
 # FRONT PORTS. NetBox 4.5 moved the front-to-rear binding out of the type
-# (netbox#20564), which is why the fibre map exists. Nautobot did not: its
+# (netbox#20564), which is why the fibre map exists; 4.6 put it back in the type
+# as `port-mappings`, which `with_port_mappings` writes. Nautobot did not move it: its
 # FrontPortTemplate has a non-null `rear_port_template` and
 # `rear_port_position`, its library schema spells them `rear_port` and
 # `rear_port_position`, and neither has `positions` on a front port. A front
@@ -3114,14 +3115,48 @@ def _note(doc, text):
     doc["comments"] = (body + "\n\n" + text).strip()
 
 
+# PORT MAPPINGS. NetBox 4.6 and later keep the front-to-rear binding in the type
+# as `port-mappings` (PortTemplateMapping): `{front_port, front_port_position,
+# rear_port, rear_port_position}`, each position 1 to 1024. A fibre-map row is
+# those four fields under shorter keys, so the mappings are the rows one for
+# one, in the map's order. `ratio` and `band` have no field there and stay in
+# the fibre map, which remains the full record. A type with no fibre map has no
+# binding to state. A row that names a port or a position the type does not
+# have would import as an error on the instance, so it stops the export here.
+def with_port_mappings(doc, rows):
+    fronts = {p["name"]: p.get("positions") or 1 for p in doc.get("front-ports") or []}
+    rears = {p["name"]: p.get("positions") or 1 for p in doc.get("rear-ports") or []}
+    maps = []
+    for row in rows:
+        f, r = row["front"], row["rear"]
+        fp, rp = row["front_position"], row["rear_position"]
+        if (f not in fronts or r not in rears or not 1 <= fp <= min(fronts[f], 1024)
+                or not 1 <= rp <= min(rears[r], 1024)):
+            raise NotExpressible(
+                f"{doc.get('manufacturer')} {doc.get('model')}: the map row {f}:{fp} -> "
+                f"{r}:{rp} names a port or position the type does not have")
+        maps.append({"front_port": f, "front_port_position": fp,
+                     "rear_port": r, "rear_port_position": rp})
+    out = {}
+    for key, value in doc.items():
+        out[key] = value
+        if key == "front-ports":
+            out["port-mappings"] = maps
+    return out
+
+
 def for_target(doc, target, fibre_map=None):
-    """`doc` as `target` can import it. NetBox takes it as written; Nautobot
-    takes a copy with a whole-unit height and rear-bound front ports.
+    """`doc` as `target` can import it. NetBox takes it as written, with the
+    fibre map's rows as `port-mappings`; Nautobot takes a copy with a
+    whole-unit height and rear-bound front ports.
 
     `fibre_map` is the module's own map, tokenised the same way `doc` is, and
     is what a document with front ports is bound from.
     """
     if target != "nautobot":
+        rows = (fibre_map or {}).get("rows") or []
+        if target == "netbox" and rows and doc.get("front-ports"):
+            return with_port_mappings(doc, rows)
         return doc
     whole = float(doc.get("u_height") or 0).is_integer()
     if whole and not doc.get("front-ports"):

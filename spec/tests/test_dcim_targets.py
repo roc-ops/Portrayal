@@ -45,7 +45,8 @@ def panel():
 def test_netbox_takes_the_document_as_written():
     doc, fmap = breakout()
     doc["u_height"] = 3.5
-    assert dx.for_target(doc, "netbox", fmap) is doc
+    out = dx.for_target(doc, "netbox", fmap)
+    assert {k: v for k, v in out.items() if k != "port-mappings"} == doc
 
 
 def test_a_whole_height_with_no_front_ports_is_the_same_document_in_both():
