@@ -346,66 +346,45 @@ def test_crs510_front_carries_console_management_reset_dc_jack_and_three_lamps()
     mgmt = [p for p in refs(d, "front", "common/rj45-eth@1") if p.get("group") == "mgmt"]
     assert [(p["id"], p["attrs"]["speed"]) for p in mgmt] == [("mgmt", "100m")]
     assert [p["id"] for p in refs(d, "front", "common/reset-button@1")] == ["btn-reset"]
-    assert not refs(d, "front", "common/dc-barrel@1")  # drawn as chassis art: the barrel census wants a current
-    assert [x["id"] for x in d["views"]["front"]["panel"]["decor"] if x.get("kind") == "dc-jack-art"] == [
-        "dc-jack-housing", "dc-jack-rim", "dc-jack-bore", "dc-jack-pin"]
+    assert [p["id"] for p in refs(d, "front", "common/dc-barrel@1")] == ["dc-jack"]  # placed, as on the CRS504
+    assert [p["id"] for p in refs(d, "front", "common/terminal-header-508-2@3")] == ["dc-terminal"]
     assert len([p for p in placements(d, "front") if p.get("group") == "status-leds"]) == 5  # 3 bars, 2 supply lamps
     assert {"CONSOLE", "MGMT/PoE in", "RESET", "USER", "FAULT", "POWER", "36-57 V", "CRS510-8XS-2XQ-IN"} <= text_of(d, "front")
     gaps = {g["what"] for g in d["gaps"]}
-    assert {"dc-jack", "dc-terminal", "hot-swap-supplies", "led-states", "left-wall"} <= gaps  # neither DC input is placed
-    assert not [p for p in placements(d, "front") if p["ref"].startswith("common/dc-terminal")]
+    assert {"dc-jack", "dc-terminal", "hot-swap-supplies", "led-states", "left-wall"} <= gaps
 
 
-TERMINAL_GREEN = "#82967a"
-
-
-def test_crs510_two_pin_terminal_is_chassis_art_at_the_drawings_place_and_size():
-    """The drawing's front view: 11.4 x 11.8 mm at 275.4 mm, 24.8 mm down, a cap 10.4 mm wide over a body 11.4 x 7.9
-    with two wire entries on a 5.08 mm pitch. It stands 9 mm proud of the front in the drawing and is drawn flat."""
+def test_crs510_two_pin_terminal_is_the_placed_header_on_the_drawings_housing():
+    """The drawing's front view: the terminal is 11.4 x 11.8 mm at 275.4 mm, 24.8 mm down. The two-position header
+    (12.16 x 8.6 mm) stands where the housing's body does, as the CRS504's does, and no chassis art is left."""
     d = load(CRS510)
-    decor = _decor(d, "front")
-    art = {k: v for k, v in decor.items() if v.get("kind") == "dc-terminal-art"}
-    assert sorted(art) == ["dc-terminal-cap", "dc-terminal-entry-1", "dc-terminal-entry-2", "dc-terminal-housing"]
-    cap, body = art["dc-terminal-cap"], art["dc-terminal-housing"]
-    assert cap["at"] == [275.9, 24.8] and cap["size"] == [10.4, 3.9]
-    assert body["at"] == [275.4, 28.7] and body["size"] == [11.4, 7.9]
-    assert body["at"][1] + body["size"][1] == pytest.approx(24.8 + 11.8)  # the overall 11.8
-    assert cap["fill"] == body["fill"] == TERMINAL_GREEN
-    e1, e2 = art["dc-terminal-entry-1"], art["dc-terminal-entry-2"]
-    assert e2["at"][0] - e1["at"][0] == pytest.approx(5.05, abs=0.05)
-    for e in (e1, e2):
-        assert body["at"][0] <= e["at"][0] and e["at"][0] + e["size"][0] <= body["at"][0] + body["size"][0]
-        assert e["fill"] == "#051203"
-    assert not [p for p in placements(d, "front") if "terminal" in p["ref"]]  # no part is placed
-    gaps = {g["what"]: g for g in d["gaps"]}
-    note = gaps["dc-terminal"]["note"]
-    assert "chassis art" in note and "no power port" in note and "no held document names the part" in note
-    assert "left out" not in note and "not drawn" not in note
+    assert not [x for x in _decor(d, "front").values() if str(x.get("kind", "")).startswith("dc-")]
+    (term,) = refs(d, "front", "common/terminal-header-508-2@3")
+    assert term["id"] == "dc-terminal" and term["group"] == "inlets" and term["rel-pos"] == 3
+    assert term["attrs"] == {"media": "dc-terminal", "role": "power", "input-voltage": "36-57 VDC"}
+    centre = (term["at"][0] + 12.16 / 2, term["at"][1] + 8.6 / 2)
+    assert centre == pytest.approx((275.4 + 11.4 / 2, 28.7 + 7.9 / 2), abs=0.1)
+    cuts = {c["id"]: c for c in d["views"]["front"]["panel"]["cutouts"]}
+    assert cuts["dc-terminal"]["at"] == term["at"] and cuts["dc-terminal"]["size"] == [12.16, 8.6]
+    note = {g["what"]: g for g in d["gaps"]}["dc-terminal"]["note"]
+    assert "common/terminal-header-508-2@3" in note and "estimate" in note and "drawn empty" in note
     prov = d["provenance"]["dc-inputs"]["note"]
-    assert "9 mm" in prov and "flat" in prov and "11.4 x 11.8" in prov and TERMINAL_GREEN in prov
-    assert "polarity marks above the terminal are not drawn" not in prov
+    assert "9 mm" in prov and "11.4 x 11.8" in prov and "common/terminal-header-508-2@3" in prov
 
 
-def test_crs510_barrel_jack_is_a_rimmed_socket_with_a_centre_pin_and_no_part():
-    """Photograph 2232 (8.77 px per mm across the 320 mm face): a dark housing 10.3 x 11.8 mm, a round bore 5.7 mm
-    across inside a 6.5 mm rim ring, and a small bright centre pin. Fills are the medians of the pixels: the rim
-    ring is #292929 (506 pixels, radius 25 to 28 px about 2825.5,960), the bore #030303 (1954 pixels, radius under
-    25 px) and the pin #b0b0af (27 pixels brighter than 120 in box 2815,944 to 2831,958)."""
+def test_crs510_barrel_jack_is_the_placed_part_carrying_the_voltage_and_no_current():
+    """The jack is common/dc-barrel@1 (12 x 13 mm) centred on the drawn housing, 10.3 x 11.8 mm at 290.1 mm and
+    24.8 mm down, as the CRS504's is. No held document states a current or a barrel size, so the placement carries the
+    voltage alone and the barrel census lists the device among those that state no rating."""
     d = load(CRS510)
-    art = {k: v for k, v in _decor(d, "front").items() if v.get("kind") == "dc-jack-art"}
-    assert sorted(art) == ["dc-jack-bore", "dc-jack-housing", "dc-jack-pin", "dc-jack-rim"]
-    want = {"dc-jack-housing": ([290.1, 24.8], [10.3, 11.8], "#3e3e3d"),
-            "dc-jack-rim": ([291.9, 26.25], [6.5, 6.5], "#292929"),
-            "dc-jack-bore": ([292.3, 26.65], [5.7, 5.7], "#030303"),
-            "dc-jack-pin": ([294.25, 27.75], [1.1, 1.1], "#b0b0af")}
-    for key, (at, size, fill) in want.items():
-        assert (art[key]["at"], art[key]["size"], art[key]["fill"]) == (at, size, fill), key
-    for key in ("dc-jack-rim", "dc-jack-bore", "dc-jack-pin"):
-        assert art[key]["rx"] == art[key]["size"][0] / 2  # round
-    assert _centre(art["dc-jack-rim"]) == _centre(art["dc-jack-bore"])
-    assert not [p for p in placements(d, "front") if "dc-" in p["ref"] or p["id"].startswith("dc-jack")]
-    note = d["provenance"]["dc-inputs"]["note"]
-    assert all(v in note for v in ("#292929", "#030303", "#b0b0af", "1954", "506"))
+    (jack,) = refs(d, "front", "common/dc-barrel@1")
+    assert jack["id"] == "dc-jack" and jack["group"] == "inlets" and jack["rel-pos"] == 4
+    assert jack["attrs"] == {"input-voltage": "36-57 VDC"}
+    centre = (jack["at"][0] + 12.0 / 2, jack["at"][1] + 13.0 / 2)
+    assert centre == pytest.approx((290.1 + 10.3 / 2, 24.8 + 11.8 / 2), abs=0.1)
+    note = {g["what"]: g for g in d["gaps"]}["dc-jack"]["note"]
+    assert "no held document states a current or a barrel size" in note
+    assert not [x for x in _decor(d, "front").values() if x.get("kind") == "dc-jack-art"]
 
 
 def _paths(d):
@@ -418,12 +397,16 @@ def test_crs510_dc_legends_are_the_bracket_the_voltage_and_the_polarity_marks():
     the jack: the centre pin is the positive pole."""
     d = load(CRS510)
     paths = _paths(d)
-    assert {"dc-bracket", "dc-terminal-polarity", "dc-jack-polarity"} <= set(paths)
-    for s in (paths[i] for i in ("dc-bracket", "dc-terminal-polarity", "dc-jack-polarity")):
+    ids = ("dc-bracket-left", "dc-bracket-right", "dc-terminal-polarity", "dc-jack-polarity")
+    assert set(ids) <= set(paths)
+    for s in (paths[i] for i in ids):
         assert s["filled"] is False and s["stroke-width"] == 0.25 and s["for"] == "chassis"
-    bracket = paths["dc-bracket"]
+    # the bracket is two strokes meeting at 12.5 mm, so that the left leg ends clear of the jack part's box
+    bracket = paths["dc-bracket-left"]
+    assert paths["dc-bracket-right"]["at"] == bracket["at"]
     left, right = bracket["at"][0], bracket["at"][0] + 24.7  # the path runs 24.7 mm across
-    assert "L 23.7 0" in bracket["path"] and "L 24.7 2.1" in bracket["path"]  # 24.7 across, the right leg 2.1 down
+    assert bracket["path"].endswith("L 12.5 0") and paths["dc-bracket-right"]["path"].startswith("M 12.5 0")
+    assert "L 23.7 0" in paths["dc-bracket-right"]["path"] and "L 24.7 2.1" in paths["dc-bracket-right"]["path"]
     volt = [s for s in d["views"]["front"]["silkscreen"] if s.get("text") == "36-57 V"]
     assert len(volt) == 1 and volt[0]["for"] == "chassis"
     assert volt[0]["at"][0] == pytest.approx((left + right) / 2, abs=0.5)  # centred on the bracket, not on the jack
@@ -432,9 +415,11 @@ def test_crs510_dc_legends_are_the_bracket_the_voltage_and_the_polarity_marks():
     assert term["at"][0] < jack["at"][0] < right
     # two circles of two arcs each, and one vertical stroke: one minus and one plus
     assert term["path"].count(" a 1.2 1.2 ") == 4 and term["path"].count("v 1.2") == 1
-    assert jack["path"].count(" a 1.2 1.2 ") == 4 and jack["path"].count("v 1.2") == 1
+    # the jack's strokes are written as `l` and a no-op `h 0` before each arc, which draws the same marks and keeps
+    # the linter's coarse reading of the path (it pairs the numbers) from reaching down into the jack part's box
+    assert jack["path"].count(" a 1.2 1.2 ") == 4 and jack["path"].count("l 0 1.2") == 1
     # the centre pin dot sits on the plus side of the barrel symbol: its line runs to the plus circle at the right
-    assert "M 2.9 0 h 1.4" in jack["path"]
+    assert "M 2.9 0 l 1.4 0" in jack["path"]
     prov = d["provenance"]["dc-inputs"]["note"]
     assert "centre pin" in prov and "positive" in prov
 
@@ -464,8 +449,7 @@ def test_crs510_bar_lamps_seat_led_rect_2_in_the_same_places():
 
 
 CRS510_COLOURS = {  # drawn value -> where it sits
-    "psu-1-module": "#a3a5a7", "psu-2-module": "#a3a5a7", "mgmt-block": "#949290", "dc-jack-housing": "#3e3e3d",
-    "dc-terminal-housing": TERMINAL_GREEN, "dc-terminal-cap": TERMINAL_GREEN,
+    "psu-1-module": "#a3a5a7", "psu-2-module": "#a3a5a7", "mgmt-block": "#949290",
     "bar-25g": "#938ac6", "bar-100g": "#8e85c3",
 }
 CRS518_COLOURS = {
@@ -702,7 +686,7 @@ def test_dcim_crs510_interfaces_and_power_ports_follow_the_faces():
     a = exported(CRS510)
     assert count(a, "25gbase-x-sfp28") == 8 and count(a, "100gbase-x-qsfp28") == 2
     assert count(a, "100base-tx") == 1
-    assert len(a["power-ports"]) == 2  # the two C14 inlets; the DC jack and the terminal are not placed
+    assert len(a["power-ports"]) == 3  # the two C14 inlets and the DC jack; the terminal exports no port
     assert len(a["console-ports"]) == 1
 
 
