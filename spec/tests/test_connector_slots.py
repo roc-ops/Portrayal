@@ -162,7 +162,9 @@ def test_the_connector_registry_is_not_vacuous():
                          # the 4FF SIM card slot of the Opengear CM8004-C and CM8008-C
                          "sim-tray-4ff",
                          # the keystone opening of the FS FHD-FAPM6 panel
-                         "keystone"}
+                         "keystone",
+                         # the SCTE-91 external port of the Vecima Entra nodes, presented by common/scte-91-port@1 and mated by generic/scte-91-port-plug@1
+                         "scte-91"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}

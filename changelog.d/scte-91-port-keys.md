@@ -1,0 +1,3 @@
+### Added
+- One connector key in `connectors.yaml`. `scte-91` names the external port of the Entra EN8100 and EN9000 cable nodes: a threaded hole that takes a stinger connector, the sealing plug that ships in it or a fibre fitting. The documents state no thread size and no pin diameter, so the entry claims none and says so. No standard is held for it. No part is a sealed fibre gland key: the data sheets list the fibre ports as `scte-91` ports.
+- `common/scte-91-port@1`, a part that presents `scte-91`, and `generic/scte-91-port-plug@1`, the sealing plug that mates it: a 1/2 inch hex head, the size the guides name for the tool. The port's size and both heights are declared estimates. Neither part is placed on a device yet, so no device or export changes.

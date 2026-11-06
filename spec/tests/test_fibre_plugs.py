@@ -396,6 +396,13 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # jack - and their census is spec/tests/test_keystone_inserts.py.
         if "keystone" in ms:
             continue
+        # NOR IS THE SCTE-91 PORT PLUG. generic/scte-91-port-plug@1 mates
+        # `scte-91`, the threaded external port of the Entra edge nodes, which the
+        # registry holds so the port is a slot. Left out by what it IS - a hex
+        # sealing plug for an RF or fibre port, not a fibre plug - and its census
+        # is spec/tests/test_scte_91_registry.py.
+        if "scte-91" in ms:
+            continue
         if any(m in connectors for m in ms) and c.get("class") != "cap":
             ns = f.parents[2].name
             found[f"{ns}/{c['name']}@{c['version'].split('.')[0]}"] = c
