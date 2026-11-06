@@ -165,7 +165,7 @@ export function sheetShell(chassis) {
 // is the width the front DRAWING declares, which is how an ear-wide face is
 // known here - the R740xd's 482.6 mm front has its ears in it already. Null
 // where the device gets none: not a `rack` device, a sheet body, ears stated
-// `behind`, a face as wide as the rack, or a flange too narrow to draw.
+// `behind` or `none`, a face as wide as the rack, or a flange too narrow to draw.
 // The numbers are ears.py's, and spec/tests/test_generic_ears.py holds the two
 // to the same plan for the same chassis, colour included. ears2d.js draws this plan over a
 // published face in 2D, as render.py `--with ears` would have drawn it.
@@ -185,7 +185,7 @@ export function genericEars(chassis, faceW) {
   if (!chassis || (chassis.mount || 'rack') !== 'rack' || chassis.shell) return null;
   const ears = chassis.ears && typeof chassis.ears === 'object' ? chassis.ears
              : chassis.ears === 'behind' ? {behind: true} : {};
-  if (ears.behind === true) return null;
+  if (ears.behind === true || ears.none === true) return null;
   const w = Number(faceW || chassis.w), hBody = Number(chassis.h);
   if (!w || !hBody || w >= EAR.EAR_WIDE) return null;
   const flange = r4((EAR.RACK_FACE - w) / 2);
