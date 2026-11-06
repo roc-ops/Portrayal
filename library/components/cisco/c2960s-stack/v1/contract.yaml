@@ -63,13 +63,13 @@ provenance:
     reserved as the `logo-zone` element and left empty, as the library's rule for every vendor mark. The plain model text
     "C2960S-STACK" and the legends "STACK 1" and "STACK 2" are printed on the metal and are drawn.
   ports: >-
-    estimated. The guide names two FlexStack ports on the module and no connector type, and the library has no part for
-    the FlexStack port, so the two ports are the contract's own `class: port` elements (the pattern the Juniper EX4500
-    Virtual Chassis module uses) and are drawn as the photograph shows them: two stacked silver cages (#aea699) with a
-    dark opening (#171615) facing out, in a recess whose border is teal-blue (#2b3f45). Each cage keeps the place and
-    the size first measured (16.5 x 9.0 mm at (41.9, 15.2) and (41.9, 25.0)); the opening is the cage inset 0.6 mm at
-    the sides and 0.7 mm at the top and bottom, which is the 2 and 2.5 px wall the photograph shows at 3.41 px per mm.
-    The cages are not rotated.
+    estimated. The guide names two FlexStack ports on the module and no connector type. Each port is the part
+    cisco/flexstack-port@1 (interface `flexstack`), composed twice, as the photograph shows them: two stacked silver
+    cages (#aea699) with a dark opening (#171615) facing out, in a recess whose border is teal-blue (#2b3f45). Each
+    cage keeps the place and the size first measured (16.5 x 9.0 mm at (41.9, 15.2) and (41.9, 25.0)); the opening is
+    the cage inset 0.6 mm at the sides and 0.7 mm at the top and bottom, which is the 2 and 2.5 px wall the photograph
+    shows at 3.41 px per mm. The cages are not rotated. The guide puts the cable tab above the connector at STACK 1
+    and below it at STACK 2 (PDF p.42, printed 1-18); that is the cable end's turn when it is seated, not the port's.
   relief: >-
     The 3D body extrudes the skin's own `plate` outline (`shape: true`), as the blank cover does, so the slope and the
     chamfer stand in 3D as they are drawn in 2D. The depth, 3.0 mm, is the same guess as the cover's. The frame band
@@ -77,17 +77,10 @@ provenance:
     the band is not stepped in 3D. A component contract carries no `gaps` list, so this is the declaration. Wanted: a
     dimensioned view or a photograph of the module's edge, to say whether the face stands proud of the frame or sits
     below it; until then the relief is one slab.
+parts:
+- {ref: cisco/flexstack-port@1, id: stack-1, at: [41.9, 15.2]}
+- {ref: cisco/flexstack-port@1, id: stack-2, at: [41.9, 25.0]}
 elements:
-  stack-1:
-    at: [41.9, 15.2]
-    size: [16.5, 9.0]
-    class: port
-    description: the FlexStack port printed STACK 1
-  stack-2:
-    at: [41.9, 25.0]
-    size: [16.5, 9.0]
-    class: port
-    description: the FlexStack port printed STACK 2
   logo-zone: {at: [15.8, 5.0], size: [19.7, 10.8], class: logo-zone}
 relief:
   wall: '#3f565d'

@@ -12,3 +12,8 @@
   stand-in from another model's photograph, and the module has a teal-blue frame band and silver cages. The DCIM
   exports gain one device type per tool for WS-C2960S-48FPD-L and a module type per tool for each new component. The
   WS-C2960S-48LPD-L, -48TD-L, -24PD-L and -24TD-L follow in later batches.
+- The 48FPD's RPS connector is the part `cisco/rps2300-connector`, new version 2, which also draws the plate's two
+  screw holes, the shroud's dark top edge and a contact in each cavity; version 1 is unchanged. The C2960S-STACK
+  module composes `cisco/flexstack-port` twice for STACK 1 and STACK 2, and the two connectors now have a cable end
+  on main that mates them. The USB symbol on the front is drawn smaller. The `unplaced` sentence is gone from
+  `cisco/flexstack-port`, which a device now reaches. No connector finding is recorded for this device.

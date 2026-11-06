@@ -125,9 +125,14 @@ def path_points(svg_text, node_id):
     return list(zip(nums[0::2], nums[1::2]))
 
 
-def test_48fpd_rps_connector_is_chassis_art_with_a_gap():
+RPS = "cisco/rps2300-connector@2"
+
+
+def test_48fpd_rps_connector_is_the_part_seated_at_the_plates_place_with_a_gap():
     d = device("ws-c2960s-48fpd")
-    assert {"rps-plate", "rps-shroud", "rps-housing"} <= set(decor(d, "rear"))
+    p = by_id(d, "rear")["rps-connector"]
+    assert p["ref"] == RPS and p["at"] == [285.0, 21.4]
+    assert not {"rps-plate", "rps-shroud", "rps-housing"} & set(decor(d, "rear"))
     assert "rps-connector-part" in gaps(d)
 
 
@@ -188,17 +193,23 @@ def test_48fpd_rear_colour_is_a_declared_gap_because_the_photograph_is_another_m
 # --- the RPS connector: two rows of eleven in a shroud, on a plate with two screws ---------------------
 
 
-def test_48fpd_rps_connector_has_twenty_two_pins_in_two_rows_of_eleven_at_the_measured_pitch():
-    dc = decor(device("ws-c2960s-48fpd"), "rear")
-    pins = [v for k, v in dc.items() if k.startswith("rps-pin-")]
-    assert len(pins) == 22
-    xs = sorted({p["at"][0] for p in pins})
-    ys = sorted({p["at"][1] for p in pins})
+def rps_skin():
+    return (COMPONENTS / "rps2300-connector/v2/skins/default.svg").read_text()
+
+
+def test_the_rps_connector_has_twenty_two_cells_in_two_rows_of_eleven_at_the_measured_pitch():
+    import re
+    skin = rps_skin()
+    cells = re.findall(r'<rect x="([\d.]+)" y="([\d.]+)" width="3.5" height="3.7"', skin)
+    assert len(cells) == 22
+    xs = sorted({float(x) for x, _ in cells})
+    ys = sorted({float(y) for _, y in cells})
     assert len(xs) == 11 and len(ys) == 2
     assert abs((xs[-1] - xs[0]) / 10 - 4.17) < 0.01 and abs(ys[1] - ys[0] - 4.03) < 0.01
-    assert dc["rps-plate"]["at"] == [285.0, 21.4] and dc["rps-plate"]["size"] == [72.8, 22.6]
-    assert dc["rps-shroud"]["at"] == [298.4, 24.0] and dc["rps-shroud"]["size"] == [48.2, 11.3]
-    assert {dc["rps-screw-l"]["at"][0], dc["rps-screw-r"]["at"][0]} == {293.3, 348.8}
+    c = yaml.safe_load((COMPONENTS / "rps2300-connector/v2/contract.yaml").read_text())
+    assert c["size"] == {"w": 72.8, "h": 22.6} | {"d": c["size"]["d"]}
+    assert c["elements"]["opening"]["at"] == [13.4, 2.6] and c["elements"]["opening"]["size"] == [48.2, 11.3]
+    assert 'cx="9.7" cy="8.4"' in skin and 'cx="65.2" cy="8.4"' in skin
 
 
 def test_48fpd_rps_connector_is_drawn_open_with_its_two_label_plates():
@@ -476,13 +487,15 @@ def test_flexstack_module_has_the_covers_outline_and_size_so_it_fits_the_bay():
     assert (c["size"]["w"], c["size"]["h"]) == (b["size"]["w"], b["size"]["h"])
 
 
-def test_flexstack_module_has_two_stack_ports_declared_as_port_elements():
+def test_flexstack_module_composes_the_flexstack_port_twice_at_the_arts_places():
     c = component("c2960s-stack")
-    ports_ = {k: v for k, v in c["elements"].items() if v["class"] == "port"}
-    assert set(ports_) == {"stack-1", "stack-2"}
+    parts = {p["id"]: p for p in c["parts"]}
+    assert set(parts) == {"stack-1", "stack-2"}
+    assert {p["ref"] for p in parts.values()} == {"cisco/flexstack-port@1"}
+    assert parts["stack-1"]["at"] == [41.9, 15.2] and parts["stack-2"]["at"] == [41.9, 25.0]
     skin = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
     assert ">STACK 1<" in skin and ">STACK 2<" in skin and ">C2960S-STACK<" in skin
-    assert 'id="stack-1"' in skin and 'id="stack-2"' in skin
+    assert 'id="stack-1"' not in skin and 'id="stack-2"' not in skin, "the cages are the part's, not art"
 
 
 def test_flexstack_module_logo_is_a_reserved_region_and_not_drawn():
@@ -496,8 +509,9 @@ def test_flexstack_module_logo_is_a_reserved_region_and_not_drawn():
 def test_flexstack_module_colours_equal_their_photograph_samples():
     c = component("c2960s-stack")
     skin = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
-    for colour in ("#393e41", "#3f565d", "#171615", "#aea699", "#2b3f45", "#b3b8bb", "#a1a5a8"):
+    for colour in ("#393e41", "#3f565d", "#171615", "#2b3f45", "#b3b8bb", "#a1a5a8"):
         assert colour in skin, colour
+    assert "#aea699" in (COMPONENTS / "flexstack-port/v1/skins/default.svg").read_text()
     note = c["provenance"]["colour"]
     for needle in ("(80,60,140,120)", "3600", "#393e41", "2483", "#171615", "447", "#aea699", "606", "#2b3f45",
                    "(230,137,330,142)", "500 px", "#3f565d", "median", "estimated"):
@@ -742,26 +756,16 @@ def test_48fpd_rear_undrawn_details_gap_lists_what_the_photograph_shows_and_the_
     assert not [k for k in decor(d, "rear") if "tab" in k], "the tabs are too faint to place and are not drawn"
 
 
-def test_48fpd_rps_connector_fills_equal_their_photograph_samples_and_the_counts_are_unchanged():
+def test_the_rps_connector_fills_equal_their_photograph_samples():
     """Housing #f4f5ee (905 px), cells #7d7464 (594 px), contacts #887555 (198 px), top edge #0e1010 (420 px)."""
-    d = device("ws-c2960s-48fpd")
-    dc = decor(d, "rear")
-    assert dc["rps-housing"]["fill"] == "#f4f5ee" and dc["rps-housing"]["at"] == [299.1, 25.1]
-    cells = [v for k, v in dc.items() if k.startswith("rps-pin-")]
-    contacts = [v for k, v in dc.items() if k.startswith("rps-contact-")]
-    assert len(cells) == 22 and {c["fill"] for c in cells} == {"#7d7464"}
-    assert len(contacts) == 22 and {c["fill"] for c in contacts} == {"#887555"}
-    for c in cells:  # a contact sits in the middle of its cell
-        mid = [v for v in contacts if abs(v["at"][0] - (c["at"][0] + 1.15)) < 0.01 and abs(v["at"][1] - (c["at"][1] + 1.25)) < 0.01]
-        assert len(mid) == 1
-    assert dc["rps-shroud"]["fill"] == "#656c66" and dc["rps-housing-top-edge"]["fill"] == "#0e1010"
-    assert dc["rps-housing-top-edge"]["at"][1] == dc["rps-shroud"]["at"][1]
-    o = order(d, "rear")
-    assert o.index("rps-shroud") < o.index("rps-housing") < o.index("rps-pin-1-1") < o.index("rps-contact-1-1")
-    assert o.index("rps-shroud") < o.index("rps-housing-top-edge")
-    top = dc["rps-housing-top-edge"]
-    assert top["at"][1] + top["size"][1] <= dc["rps-housing"]["at"][1] + 0.001, "the edge lies above the housing"
-    assert "rps-connector-part" in gaps(d)
+    import re
+    skin = rps_skin()
+    assert re.search(r'id="housing"[^>]*fill="#f4f5ee"', skin)
+    assert re.search(r'id="opening"[^>]*fill="#656c66"', skin)
+    assert re.search(r'id="top-edge"[^>]*fill="#0e1010"', skin)
+    assert len(re.findall(r'width="3.5" height="3.7"', skin)) == 22 and '<g fill="#7d7464">' in skin
+    assert len(re.findall(r'width="1.2" height="1.2"', skin)) == 22 and '<g fill="#887555">' in skin
+    assert "rps-connector-part" in gaps(device("ws-c2960s-48fpd"))
 
 
 def test_48fpd_rear_colour_gap_adds_the_second_photograph_and_the_guides_three_faces():
@@ -801,7 +805,7 @@ def test_flexstack_module_frame_is_a_band_of_the_measured_thickness_inside_the_u
     assert len(face) == 8
     assert all(abs(a[0] - b[0]) < 0.02 and abs(a[1] - b[1]) < 0.02 for a, b in zip(face, want))
     import re
-    assert re.search(r'<path id="plate"[^>]*fill="#3f565d"', skin) and re.search(r'<path id="face"[^>]*fill="#393e41"', skin)
+    assert re.search(r'<path id="frame"[^>]*fill="#3f565d"', skin) and re.search(r'<path id="face"[^>]*fill="#393e41"', skin)
     assert skin.index('id="plate"') < skin.index('id="face"') < skin.index('id="pocket"')
     c = component("c2960s-stack")
     assert c["size"] == {"w": 103.3, "h": 39.0, "d": 3.0} and c["relief"]["wall"] == "#3f565d"
@@ -818,15 +822,14 @@ def test_flexstack_module_ports_are_two_silver_cages_with_dark_openings_in_a_blu
     skin = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
     assert "#a29886" not in skin
     c = component("c2960s-stack")
-    for i, y in (("stack-1", 15.2), ("stack-2", 25.0)):
-        g = re.search(r'<g id="%s">(.*?)</g>' % i, skin, re.S).group(1)
-        rects = re.findall(r'<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"[^>]*fill="(#[0-9a-f]+)"', g)
-        (sx, sy, sw, sh, sf), (ox, oy, ow, oh, of) = rects
-        assert (float(sx), float(sy), float(sw), float(sh), sf) == (41.9, y, 16.5, 9.0, "#aea699")
-        assert of == "#171615" and float(ox) > float(sx) and float(oy) > float(sy)
-        assert float(ox) + float(ow) < float(sx) + float(sw) and float(oy) + float(oh) < float(sy) + float(sh)
-        assert c["elements"][i]["at"] == [41.9, y] and c["elements"][i]["size"] == [16.5, 9.0]
+    port = yaml.safe_load((COMPONENTS / "flexstack-port/v1/contract.yaml").read_text())
+    assert port["size"] == {"w": 16.5, "h": 9.0}
+    port_skin = (COMPONENTS / "flexstack-port/v1/skins/default.svg").read_text()
+    rects = re.findall(r'<rect[^>]*fill="(#[0-9a-f]+)"', port_skin)
+    assert rects[:2] == ["#aea699", "#171615"]
+    for p, y in zip(c["parts"], (15.2, 25.0)):
+        assert p["at"] == [41.9, y]
     assert re.search(r'<rect id="pocket"[^>]*fill="#2b3f45"', skin)
-    assert set(k for k, v in c["elements"].items() if v["class"] == "port") == {"stack-1", "stack-2"}
+    assert not [k for k, v in c["elements"].items() if v["class"] == "port"], "the ports are composed parts"
     assert ">STACK 1<" in skin and ">STACK 2<" in skin and ">C2960S-STACK<" in skin
     assert "rotate" not in skin and c["elements"]["logo-zone"]["class"] == "logo-zone"

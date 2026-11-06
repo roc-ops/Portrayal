@@ -1080,6 +1080,11 @@ NOT_A_DCIM_PORT = {
                      "(device_port_type)",
 
     # --- power: a connector no DCIM has a type for ---------------------------
+    "cisco/rps2300-connector": "the RPS connector of the Catalyst 2960-S switches: the guide names it and "
+                               "gives no connector type or pinout, and no DCIM has a power port type for "
+                               "it, so it cannot be typed honestly",
+    "cisco/flexstack-port": "the FlexStack stacking port of the Catalyst 2960-S module: a vendor stacking "
+                            "interface no DCIM has a port type for, so it cannot be typed honestly",
     "juniper/ex3300-rps-port": "the redundant power system port of the Juniper EX3300 switches: the "
                                "guide names the port and gives no connector type or pinout, and no "
                                "DCIM has a power port type for an RPS connector, so it cannot be "
