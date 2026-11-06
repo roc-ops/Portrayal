@@ -1,0 +1,790 @@
+format: 1
+kind: device
+name: ex3200-24t
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: EX3200-24T
+portfolio: {line: EX Series, family: EX3200}
+description: >-
+  Juniper EX3200-24T - a fixed 1RU Gigabit Ethernet access switch with 24 10/100/1000BASE-T ports, the
+  first eight of them Power over Ethernet. The front carries the 24 jacks in two stacked rows, an LCD
+  panel with Menu and Enter buttons, three chassis status lamps and a slot for an optional uplink module,
+  which ships covered. The rear carries the management and console jacks, a USB port, a temperature shutdown
+  lamp, an ESD point, the earthing terminal, a fan tray and one power supply slot holding a 320 W AC supply.
+  Air moves side to rear. The -DC build carries a 190 W DC supply and gives no PoE.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      EX3200 Switch Hardware Guide, Juniper Networks, published 2020-12-15 (PDF in Juniper's EX Series
+      documentation archive): Table 3 (models), Table 5 (chassis size and weight), Figures 1 and 2 (the
+      48-port and 24-port front panels), Figure 3 (rear panel), Figures 4 to 8 (LCD panel, uplink modules
+      and chassis lamps), Figures 14 and 15 (fan tray and airflow), Figures 16 to 18 (supplies), Tables
+      11 to 15 (PoE budget and power) and Table 33 (earthing terminal). EX3200 Ethernet Switches datasheet
+      (Juniper Networks, 12 pages, 1000216-013-EN, Nov 2011): Table 1 (models), specifications, per-model
+      weights and noise, ordering information, and the four product photographs on page 4 (one image of
+      2175 x 654 px, greyscale). No quick-start figure and no studio photograph is used. Terms of use:
+      the guide and datasheet are Juniper's, published for customers; none is copied into the library,
+      only transcribed facts and new drawings. The guide's front and rear figures are vector line drawings
+      with the top face in perspective and the datasheet photographs are perspective views from above,
+      so every position is a measurement of a projection and is estimated, as the entries below say.
+  gate-1-front:
+    confidence: estimated
+    note: >-
+      The datasheet photograph of the 24-port switch (page 4) is a perspective view from above and a little
+      front-on. Its face spans 1800 px across for the guide's 438.2 mm (4.11 px per mm) and is 6 percent
+      shorter than orthographic down (3.87 px per mm up). The guide's Figure 2 (g020054) is a vector drawing
+      whose face is 1380 px wide at the resolution it was read and gives the same columns within 1.5 mm,
+      so the module panel, LCD and lamps are read from it and from the photograph together. No figure
+      dimensions the face, so every front position is estimated and carries the same positions the EX4200
+      photographs give, which this front matches.
+  gate-1-rear:
+    confidence: estimated
+    note: >-
+      Guide Figure 3 (g020052) is a vector rear view with the top face in perspective: the chassis outline
+      is 1407 px across for 438.2 mm (3.211 px per mm) and its face is 137 px high for 44.45 mm, so it
+      is 4 percent foreshortened vertically. Positions across are read at 3.211 px per mm and heights
+      at 0.325 mm per px from the top edge of the face. Every rear position is good to about 2 mm. Figure
+      3 is shared by all EX3200 models.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 5: height 1.75 in (4.45 cm) = 44.45 mm; width 17.25 in (43.82 cm) = 438.2 mm, "19 in.
+      (48.2 cm) with mounting brackets attached", so 438.2 is the body between the bracket flanges; depth
+      17 in (43.18 cm) with no supply, with the 320 W AC supply or with the 190 W DC supply, and 19.25
+      in (48.9 cm) with a 600 W or 930 W AC supply (they extend 2.25 in). This model ships with the 320
+      W supply, so the modelled depth is 431.8 mm. THE DATASHEET DISAGREES: it gives 17.41 x 1.72 x 16.43
+      in (44.21 x 4.32 x 41.73 cm) and 18.8 in (47.8 cm) with the 600 W or 930 W supply. They are different
+      measures of the same chassis (the datasheet's width is the desktop width), and the hardware guide
+      is the newer and the more specific document, so the guide's figures are used; the datasheet's are
+      in attrs. 1RU.
+  ears:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The datasheet ships a 19-inch rack mount kit with each switch, and orders the four-post
+      rack mount kit (EX-4PST-RMK) and the wall mount kit (EX-WMK) separately. The guide's mounting topics
+      give the post and recess options, and no figure dimensions the bracket positions, so no ear position
+      is written and no rail kit is listed in chassis.kits. The kit part numbers are recorded here for
+      the later dedupe.
+  front-ports:
+    confidence: estimated
+    note: >-
+      24 jacks in two stacked rows, two blocks of six columns at the left of the face (guide Figure 2).
+      The block starts read 8.9 mm and 95.6 mm from the left edge in the guide's drawing and 8.9 mm and
+      96.9 mm in the photograph; the jacks are placed on the registry's 13.97 mm ganged-jack pitch with
+      the blocks 88.0 mm apart, as the EX4200 front does, which both sources agree with to 1.5 mm. Row
+      centres read 16.8 and 31.6 mm down. The top row is the same part turned 180 so that its keyway is
+      up. Past the second block the plate is bare to the module panel, as Figure 2 shows.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      The photograph prints the numbers in pairs above the top row of each column: 0 and 1 over the first
+      column, 2 and 3 over the second, up to 22 and 23, the even number set higher and to the left, the
+      odd lower and to the right (Figure 2 prints the same pairs). The even number belongs to the upper
+      jack and the odd to the lower, so numbering runs down each column and then across. The numerals
+      are drawn white at 2.2 mm type, estimated, and 2.2 mm either side of the column centre, because
+      a mark that lands within 2 mm of the centre of the jack it names reads to lint as a slip at centring.
+      The photograph is greyscale and shows no colour difference for the PoE ports. The guide's CLI interface
+      names (ge-0/0/0 to ge-0/0/23) are not printed on the metal and are not modelled.
+  poe-legend:
+    confidence: photo-measured
+    note: >-
+      The photograph whose plate reads "8PoE" is captioned EX3200-24P on page 4 of the datasheet and the
+      one that reads "24PoE" is captioned EX3200-24T, which contradicts Table 1 (8 PoE ports for the -24T
+      and 24 for the -24P). The plate's own count is followed, so this model carries "8PoE". The -DC build
+      carries no PoE (guide Table 3; datasheet Table 1: 0 PoE ports), so the `ac` configuration places
+      the "8PoE" legend as a small part with `only-in` and `dc` leaves it off. No source shows the -DC
+      face itself; see the gaps.
+  port-lamps:
+    confidence: datasheet
+    note: >-
+      Guide, Network Port LEDs in EX3200 Switches, Figure 10 and Tables 9 and 10: each 10/100/1000BASE-T
+      port has two lamps, a Link/Activity lamp (green, blinking with activity, steady when linked) and
+      a Status lamp whose meaning is chosen with the LCD Enter button (ADM, DPX, POE or SPD). The lamps
+      are the jack housing's two corner windows (common/rj45-ganged-eth) and carry that component's default
+      vocabulary; no source pairs the windows of the lower row, so the pairing is the component's.
+  front-right:
+    confidence: estimated
+    note: >-
+      Read off the guide's Figure 2 and the datasheet photograph (the EX3200 module panel is the EX4200's):
+      the raised right-hand module panel 362.5 to 438.2 mm; the LCD window 375.5 to 411.2 x 10.3 to 19.9
+      mm; the Menu button centre (420.7, 12.5) and the Enter button (420.7, 20.7), 6.1 mm across; the
+      three chassis lamps at x 427.8, y 9.05, 12.85 and 16.75; a face screw each side at (366.5, 22.0)
+      and (429.9, 22.0); the uplink slot 366.9 to 429.9 x 26.5 to 41.0 mm. The model plate (296.5 to 344.0
+      x 0.9 to 5.0 mm) carries "EX3200" centred at 304.5 and the PoE count centred at 334.3, where the
+      photograph prints them; Figure 2 draws "EX3200" at the left of the top strip, beside the Juniper
+      mark, which the photograph does not show. The top strip also carries the Juniper logo at the left,
+      6.4 to 22.2 x 1.0 to 5.1 mm, reserved as a logo zone and not drawn.
+  lamp-legends:
+    confidence: estimated
+    note: >-
+      drawing-vs-photo: guide Figures 2 and 8 print ALM, SYS and MST beside the three lamps, to their
+      right. The photograph cannot resolve type of that size, so it neither confirms nor contradicts the
+      drawing. The legends are drawn as the guide draws them. Table 6 says the MST lamp "is meaningful
+      only on EX4200 switches"; the lamp is on the face and is drawn.
+  lcd:
+    confidence: photo-measured
+    note: >-
+      The LCD panel shows two lines of 16 characters (guide, LCD Panel in EX3200 Switches). It is drawn
+      as a window; no library component exists for a display and none is added, so it is a decor rectangle
+      and not a part. Its colour is the EX4200's: the EX3200 photograph is greyscale.
+  uplink-slot:
+    confidence: estimated
+    note: >-
+      Every EX3200 has one front-panel uplink module slot under a flip-up door held by screws; "Uplink
+      modules are not part of the standard package and must be ordered separately", and installing one
+      begins by removing "the blanking panel covering the empty uplink module slot". The slot is a bay
+      that takes the cover here. THE MODULES ARE NOT MODELLED, because none is in the library: the guide
+      names three, EX-UM-4SFP (4 SFP ports), EX-UM-2X4SFP (2 SFP+ ports, or 4 SFP in 1-gigabit mode; its
+      MACsec variant has no part number in the guide) and the XFP module (2 XFP ports; the datasheet orders
+      it as EX-UM-2XFP). The datasheet photographs show the slot with modules fitted, so they give the
+      opening and not the cover.
+  rear:
+    confidence: estimated
+    note: >-
+      Guide Figure 3, rear seen from behind with x = 0 at the left of the drawing: the two earthing holes
+      centred at (26.2, 14.0) and (45.8, 14.0) with the earth symbol below them at (35.2, 31.5); the temperature
+      shutdown lamp centred at (48.0, 25.7); the management jack at 64.4 to 80.2 and the console jack
+      at 88.3 to 104.1, each 27.9 to 41.1 mm down; the USB port at 121.7 to 133.7; the ESD point centred
+      at (170.4, 11.4); the fan tray plate from 198.0 to 338.8 mm and 2.3 to 42.2 mm down; and the power
+      supply slot from 339.0, 90.0 mm wide and 41.5 mm high from 2.5 mm down. The figure labels the supply
+      "Power supply" and draws no second slot and no redundant power system port. The small round screws
+      beside the earthing holes, the console jack and the USB port are not named by any callout and are
+      not drawn.
+  rear-legends:
+    confidence: estimated
+    note: >-
+      Guide Figure 3 prints MGMT and CON above the two jacks, as horizontal words about 1.4 mm high. They
+      are drawn so, with the earth symbol (a circle holding the earth mark) 12.5 mm across under the holes.
+  rear-temperature-lamp:
+    confidence: datasheet
+    note: >-
+      Guide, Rear Panel of an EX3200 Switch: "Temperature shutdown LED", lit when the system shuts down
+      because the chassis temperature has risen above the permitted level. No colour is stated.
+  rear-ground:
+    confidence: datasheet
+    note: >-
+      Guide Table 33: for the EX3200 the earthing terminal is on the "Rear panel of the chassis", two
+      10-32 x 0.25 in screws with a Panduit LCC10-14BWL lug or equivalent. Figure 3 draws two holes 19.6
+      mm apart, which disagrees with the 5/8 in pitch of a two-hole lug; juniper/ex3400-ground-pair is
+      reused, as the EX3300 does, set on the midpoint of the two holes.
+  fru-bays:
+    confidence: datasheet
+    note: >-
+      One power supply bay and one fan tray bay, each seating the guide's FRU parts (Field-Replaceable
+      Units in EX3200 Switches; the fan tray, uplink module and transceivers are hot-removable). The guide
+      says the supply "is not redundant". Nothing is built into the chassis.
+  psu-seating:
+    confidence: datasheet
+    note: >-
+      Guide Table 3 (the supply is "Power Supply (Minimum)") and Table 4 (PS 320W AC, PS 600W AC, PS 930W
+      AC, PS 190W DC); the datasheet prints the codes EX-PWR-320-AC, EX-PWR-600-AC, EX-PWR-930-AC and
+      EX-PWR-190-DC, the same codes the EX4200 uses, so those parts are reused. The guide does not say
+      in so many words that a larger supply is accepted in place of the minimum, so this model's bay takes
+      every supply at or above its minimum, and the DC supply for the -DC build; a configuration seats
+      the one shipped.
+  airflow:
+    confidence: datasheet
+    note: >-
+      Guide, Airflow Direction in the EX3200 Switch Chassis and Figure 15: the fan tray "provides side-to-rear
+      chassis cooling"; the datasheet gives 23.5 cfm. The chassis airflow enumeration has no side-to-rear,
+      so `side` is written, the nearest answer.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Table 11: the 320 W supply of this model leaves a 130 W PoE budget for its 8 PoE ports, at
+      up to 15.4 W each (up to 18.6 W with enhanced PoE from Junos OS 11.1). Table 14 gives 4 A for a
+      switch with 8 PoE ports. Table 15 gives the DC supply 36 through 72 VDC, 7 A maximum and 190 W output.
+      The guide and the datasheet give no typical or maximum draw of the switch itself.
+  colour:
+    confidence: estimated
+    note: >-
+      The datasheet photograph is greyscale and shows a black face: the blank face between the jacks and
+      the module panel reads 59 of 255 in luminance and the top strip 50. The face is drawn #3b3b3b, neutral.
+      The jack shells are drawn as the EX4200 draws them, the LCD green and the supply and fan faces are
+      estimated; no photograph of the rear is held and the guide's figures are uncoloured line art.
+  interface-names:
+    confidence: datasheet
+    note: >-
+      Not printed and not modelled. The guide's Table 4 names the built-in ports PIC 0 and the uplink
+      module PIC 1 and its examples name the network ports ge-0/0/0 and up and the uplink module's ports
+      ge-0/1/0 and up. No table gives the numbering rule for every model, so the names stay out of the
+      file as a block and go here.
+  other-faces:
+    confidence: drawing
+    note: >-
+      No source draws the top, bottom or sides flat: the guide's figures show them in perspective with
+      mounting holes in the sides. Each carries an `empty` sentence.
+attrs:
+  physical:
+    weight: >-
+      14.9 lb (6.8 kg) with the 320 W AC supply (datasheet); 15-17 lb (6.8-7.7 kg) with one supply (guide
+      Table 5)
+    weight-chassis-parts: >-
+      320 W AC and 190 W DC supplies 2.5 lb (1.1 kg); 600 W and 930 W AC supplies 3.1 lb (1.4 kg) (guide
+      Table 5)
+    depth-with-large-psu: >-
+      489 mm (19.25 in, 48.9 cm) with a 600 W or 930 W AC supply (guide Table 5); 18.8 in (47.8 cm) in
+      the datasheet
+    datasheet-dimensions: >-
+      17.41 x 1.72 x 16.43 in (44.21 x 4.32 x 41.73 cm) W x H x D; the guide's Table 5 is used for the
+      envelope
+    width-with-brackets: 482 mm (19 in, 48.2 cm) with the mounting brackets attached
+  performance: {switching-capacity: '88 Gbps packet switching, 64-byte packets (datasheet)', throughput: 65
+      Mpps wire speed (datasheet), mac-addresses-max: 32000, vlans-max: 4096, airflow-cfm: 23.5 (datasheet)}
+  power: {poe-ports: 8, poe-budget-w: 130, psu-redundancy: none; the guide says the supply "is not redundant"}
+  thermal: {airflow-direction: 'side to rear (guide, Figure 15)'}
+  environmental:
+    acoustic-noise: 53.2 dBA with the 320 W AC supply (datasheet, ISO 7779 at 23 C)
+    operating-temp: 0 to 45 C (32 to 113 F)
+    storage-temp: -40 to 70 C
+    humidity: 10 to 85 percent noncondensing operating; 0 to 95 percent non-operating
+    altitude: up to 3048 m operating (10,000 ft); 4877 m non-operating
+  platform: {cpu: 600 MHz PowerPC, memory: 512 MB DRAM, storage: 1 GB flash}
+  features:
+    uplink-module: >-
+      one slot; EX-UM-4SFP, EX-UM-2X4SFP or the XFP module (not part of the shipping configuration)
+    poe: IEEE 802.3af on the first eight ports, 15.4 W each, up to 18.6 W with enhanced PoE
+  management:
+    console: RJ-45 on the rear
+    oob: >-
+      RJ-45 management port on the rear, 100 Mbps full duplex, with link/activity and status lamps
+    lcd: 2 lines of 16 characters with Menu and Enter buttons
+    usb: one USB port on the rear
+  compliance:
+    nebs: >-
+      NEBS certified (datasheet Table 1 marks the -24T, -48T and DC models; its compliance section says
+      all models except EX3200-24P and EX3200-48P)
+    safety: UL 60950-1, C-UL, TUV/GS EN 60950-1, CB IEC 60950-1
+    emc: FCC 47 CFR Part 15 Class A, EN 55022 Class A, ICES-003, VCCI Class A
+chassis: {width: 438.2, height: 44.45, depth: 431.8, ru: 1, color: '#3b3b3b', airflow: side, power: ac}
+gaps:
+- what: rear-photograph
+  scope:
+  - rear
+  reason: needs-photo
+  wanted: >-
+    A straight-on photograph of the rear. None is held, so the rear is read off the guide's line drawing
+    and the supply and fan art follows the isometric drawings.
+- what: front-photograph
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    A straight-on colour photograph of the front. The datasheet's photographs are greyscale perspective
+    views from above, so the vertical positions carry a 6 percent foreshortening, every front position
+    is estimated and no PoE colouring can be read.
+- what: dc-front-legends
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    What the -DC build prints on its model plate. The guide shows the same front for it and the datasheet
+    photographs are of the PoE builds. Because the build gives no PoE, the `dc` face is drawn without
+    the "8PoE" legend; the "EX3200" line is kept.
+- what: rear-blank-plate
+  scope:
+  - rear
+  reason: needs-drawing
+  wanted: >-
+    The plate with a screw at each end between the USB port and the fan tray in Figure 3, 138.6 to 198
+    mm across. No callout or text names it, so it is not drawn.
+- what: side-faces
+  scope:
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    A flat drawing or photograph of the two side panels, which carry the bracket holes; the guide draws
+    no side elevation.
+- what: rack-ears
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    The bracket positions of the front, centre and rear mounting and of the 2-in-recess brackets: no figure
+    in the guide measures them, so no ear position or kit is listed.
+- what: lcd-component
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    A library component for an LCD display; the LCD panel is a decor rectangle until one exists.
+- what: uplink-modules
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    The EX-UM-4SFP, EX-UM-2X4SFP and XFP uplink modules and their ports, left for a later uplink-module
+    slice; the bay takes only the cover panel here.
+- what: fan-power
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: 'The fan tray''s power draw: neither the guide nor the datasheet states it.'
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      The 24 built-in 10/100/1000BASE-T ports; the first eight (0 to 7) are PoE ports. rel-pos carries
+      the number printed on the faceplate; the upper jack of a column takes the even number
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      how the switch is reached out of band - the RJ-45 management Ethernet port, the RJ-45 console port
+      and the USB port on the rear
+  lcd-buttons: {term: Button, role: management, index-origin: 0, description: the LCD panel's Menu and
+      Enter buttons}
+  status-leds: {term: LED, role: indicator, index-origin: 0, description: the three chassis status lamps
+      right of the LCD panel}
+  temp-leds: {term: LED, role: indicator, index-origin: 0, description: the temperature shutdown lamp
+      on the rear panel}
+  uplink: {term: Slot, role: traffic, index-origin: 0, description: the front-panel uplink module slot}
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: n+0
+      redundancy-note: >-
+        Hardware guide, EX3200 Cooling System: one fan tray with one fan; the system raises an alarm if
+        the fan fails and shuts down if the chassis overheats. The guide claims no tolerance of a failed
+        fan
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: n+0
+      redundancy-note: >-
+        Hardware guide, Power Supply in EX3200 Switches: "The power supply in EX3200 switches is not redundant"
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the rear earthing terminal, two 10-32 screws for a two-hole lug (Table 33)
+  esd: {term: Point, role: furniture, index-origin: 0}
+  furniture: {term: Item, role: furniture, index-origin: 0}
+views:
+  front:
+    size: {w: 438.2, h: 44.45}
+    panel:
+      decor:
+      - {id: shell-1, kind: jack-shell, at: [8.85, 10.7], size: [83.8, 27.0], rx: 0.6, fill: '#b1b2b5'}
+      - {id: shell-2, kind: jack-shell, at: [96.87, 10.7], size: [83.8, 27.0], rx: 0.6, fill: '#b1b2b5'}
+      - {id: model-plate, kind: label-plate, at: [296.5, 0.9], size: [47.5, 4.1], rx: 0.5, fill: '#4a4d57'}
+      - {id: module-panel, kind: bezel, at: [362.5, 0.8], size: [75.4, 42.8], rx: 1.0, fill: '#262628'}
+      - {id: lcd, kind: display, at: [375.5, 10.3], size: [35.7, 9.6], rx: 0.6, fill: '#6f8a5c'}
+      cutouts:
+      - {id: port-0, at: [9.45, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-1, at: [9.45, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [23.42, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [23.42, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [37.39, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [37.39, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [51.36, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [51.36, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [65.33, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-9, at: [65.33, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-10, at: [79.3, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-11, at: [79.3, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-12, at: [97.47, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-13, at: [97.47, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-14, at: [111.44, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-15, at: [111.44, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-16, at: [125.41, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-17, at: [125.41, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-18, at: [139.38, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-19, at: [139.38, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-20, at: [153.35, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-21, at: [153.35, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-22, at: [167.32, 11.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-23, at: [167.32, 26.1], size: [12.7, 11.0], shape: rect}
+      - {id: btn-menu, at: [417.65, 9.45], size: [6.1, 6.1], shape: circle}
+      - {id: btn-enter, at: [417.65, 17.65], size: [6.1, 6.1], shape: circle}
+      - {id: led-alm, at: [426.8, 8.05], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [426.8, 11.85], size: [2.0, 2.0], shape: circle}
+      - {id: led-mst, at: [426.8, 15.75], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [304.5, 3.8], text: EX3200, font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: chassis}
+    - {at: [430.3, 9.55], text: ALM, font-size: 1.4, anchor: start, fill: '#e4e6e9', for: led-alm}
+    - {at: [430.3, 13.35], text: SYS, font-size: 1.4, anchor: start, fill: '#e4e6e9', for: led-sys}
+    - {at: [430.3, 17.25], text: MST, font-size: 1.4, anchor: start, fill: '#e4e6e9', for: led-mst}
+    - {at: [13.6, 9.4], text: '0', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-0}
+    - {at: [18.0, 10.4], text: '1', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-1}
+    - {at: [27.57, 9.4], text: '2', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-2}
+    - {at: [31.97, 10.4], text: '3', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-3}
+    - {at: [41.54, 9.4], text: '4', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-4}
+    - {at: [45.94, 10.4], text: '5', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-5}
+    - {at: [55.51, 9.4], text: '6', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-6}
+    - {at: [59.91, 10.4], text: '7', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-7}
+    - {at: [69.48, 9.4], text: '8', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-8}
+    - {at: [73.88, 10.4], text: '9', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-9}
+    - {at: [83.45, 9.4], text: '10', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-10}
+    - {at: [87.85, 10.4], text: '11', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-11}
+    - {at: [101.62, 9.4], text: '12', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-12}
+    - {at: [106.02, 10.4], text: '13', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-13}
+    - {at: [115.59, 9.4], text: '14', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-14}
+    - {at: [119.99, 10.4], text: '15', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-15}
+    - {at: [129.56, 9.4], text: '16', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-16}
+    - {at: [133.96, 10.4], text: '17', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-17}
+    - {at: [143.53, 9.4], text: '18', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-18}
+    - {at: [147.93, 10.4], text: '19', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-19}
+    - {at: [157.5, 9.4], text: '20', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-20}
+    - {at: [161.9, 10.4], text: '21', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-21}
+    - {at: [171.47, 9.4], text: '22', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-22}
+    - {at: [175.87, 10.4], text: '23', font-size: 2.2, anchor: middle, fill: '#e4e6e9', for: port-23}
+    components:
+      bays:
+      - id: uplink
+        at: [366.9, 26.5]
+        size: {w: 63.0, h: 14.5}
+        group: uplink
+        rel-pos: 0
+        accepts:
+        - juniper/ex3200-uplink-cover@1
+        default: juniper/ex3200-uplink-cover@1
+      placements:
+      - ref: common/rj45-ganged-eth@1
+        id: port-0
+        at: [9.45, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 0
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-1
+        at: [9.45, 26.1]
+        group: rj45
+        rel-pos: 1
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-2
+        at: [23.42, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 2
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-3
+        at: [23.42, 26.1]
+        group: rj45
+        rel-pos: 3
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-4
+        at: [37.39, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 4
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-5
+        at: [37.39, 26.1]
+        group: rj45
+        rel-pos: 5
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-6
+        at: [51.36, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 6
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-7
+        at: [51.36, 26.1]
+        group: rj45
+        rel-pos: 7
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-8
+        at: [65.33, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 8
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-9
+        at: [65.33, 26.1]
+        group: rj45
+        rel-pos: 9
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-10
+        at: [79.3, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 10
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-11
+        at: [79.3, 26.1]
+        group: rj45
+        rel-pos: 11
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-12
+        at: [97.47, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 12
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-13
+        at: [97.47, 26.1]
+        group: rj45
+        rel-pos: 13
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-14
+        at: [111.44, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 14
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-15
+        at: [111.44, 26.1]
+        group: rj45
+        rel-pos: 15
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-16
+        at: [125.41, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 16
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-17
+        at: [125.41, 26.1]
+        group: rj45
+        rel-pos: 17
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-18
+        at: [139.38, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 18
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-19
+        at: [139.38, 26.1]
+        group: rj45
+        rel-pos: 19
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-20
+        at: [153.35, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 20
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-21
+        at: [153.35, 26.1]
+        group: rj45
+        rel-pos: 21
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-22
+        at: [167.32, 11.3]
+        rotate: 180
+        group: rj45
+        rel-pos: 22
+        attrs: {media: rj45, speed: 1g}
+      - ref: common/rj45-ganged-eth@1
+        id: port-23
+        at: [167.32, 26.1]
+        group: rj45
+        rel-pos: 23
+        attrs: {media: rj45, speed: 1g}
+      - {ref: juniper/ex3200-poe-legend@1, id: poe-legend, at: [328.3, 0.9], for: chassis, only-in: [
+          ac], group: furniture, rel-pos: 2}
+      - ref: juniper/ex4200-lcd-button@1
+        id: btn-menu
+        skin: menu
+        at: [417.65, 9.45]
+        for: chassis
+        group: lcd-buttons
+        rel-pos: 0
+        attrs: {function: LCD menu}
+      - ref: juniper/ex4200-lcd-button@1
+        id: btn-enter
+        skin: enter
+        at: [417.65, 17.65]
+        for: chassis
+        group: lcd-buttons
+        rel-pos: 1
+        attrs: {function: LCD enter}
+      - ref: common/led-dot@1
+        id: led-alm
+        at: [426.8, 8.05]
+        for: chassis
+        group: status-leds
+        rel-pos: 0
+        states:
+        - 'off'
+        - {name: major, color: '#ef4444'}
+        - {name: minor, color: '#eab308'}
+        description: >-
+          Table 6 - ALM: red major alarm, amber minor alarm, unlit no alarm or halted (red at power-up
+          until a network link is made)
+      - ref: common/led-dot@1
+        id: led-sys
+        at: [426.8, 11.85]
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states:
+        - 'off'
+        - {name: junos, color: '#22c55e'}
+        - {name: booting, color: '#22c55e', behavior: blinking}
+        description: >-
+          Table 6 - SYS: green steady, Junos OS loaded; green blinking, booting; unlit, powered off or
+          halted
+      - ref: common/led-dot@1
+        id: led-mst
+        at: [426.8, 15.75]
+        for: chassis
+        group: status-leds
+        rel-pos: 2
+        states:
+        - 'off'
+        - {name: primary, color: '#22c55e'}
+        description: 'Table 6 - MST: green, "meaningful only on EX4200 switches"'
+      - {ref: common/screw-head@1, id: face-screw-l, at: [364.7, 20.2], group: furniture, rel-pos: 0}
+      - {ref: common/screw-head@1, id: face-screw-r, at: [428.1, 20.2], group: furniture, rel-pos: 1}
+    regions:
+    - id: logo-zone
+      at: [6.4, 1.0]
+      size: {w: 15.8, h: 4.1}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 438.2, h: 44.45}
+    panel:
+      cutouts:
+      - {id: led-temp, at: [47.0, 24.7], size: [2.0, 2.0], shape: circle}
+      - {id: mgmt, at: [64.4, 27.9], size: [15.8, 13.2], shape: rect}
+      - {id: console, at: [88.3, 27.9], size: [15.8, 13.2], shape: rect}
+      - {id: usb, at: [121.7, 30.75], size: [12.0, 4.5], shape: rect}
+      - {id: esd-rear, at: [168.25, 9.25], size: [4.3, 4.3], shape: circle}
+    silkscreen:
+    - {at: [72.3, 23.0], text: MGMT, font-size: 1.4, anchor: middle, fill: '#e4e6e9', for: mgmt}
+    - {at: [96.2, 23.0], text: CON, font-size: 1.4, anchor: middle, fill: '#e4e6e9', for: console}
+    - id: earth-symbol
+      at: [35.2, 31.5]
+      path: >-
+        M 0 -6 A 6 6 0 1 0 0.01 -6 Z M -3.6 -1.3 H 3.6 M -2.3 1.3 H 2.3 M -0.8 3.6 H 0.8 M 0 -4.2 V -1.3
+      for: ground-pair
+    components:
+      bays:
+      - id: fan-0
+        at: [198.0, 2.3]
+        size: {w: 140.8, h: 39.9}
+        group: fans
+        rel-pos: 0
+        accepts:
+        - juniper/ex3200-fan-tray@1
+        default: juniper/ex3200-fan-tray@1
+      - id: psu-0
+        at: [339.0, 2.5]
+        size: {w: 90.0, h: 41.5}
+        group: psus
+        rel-pos: 0
+        accepts:
+        - juniper/ex4200-pwr-320-ac@1
+        - juniper/ex4200-pwr-600-ac@1
+        - juniper/ex4200-pwr-930-ac@1
+        - juniper/ex4200-pwr-190-dc@1
+        default: juniper/ex4200-pwr-320-ac@1
+      placements:
+      - {ref: juniper/ex3400-ground-pair@1, id: ground-pair, at: [18.66, 7.95], group: grounding, rel-pos: 0}
+      - ref: common/led-dot@1
+        id: led-temp
+        at: [47.0, 24.7]
+        for: chassis
+        group: temp-leds
+        rel-pos: 0
+        states:
+        - 'off'
+        - shutdown
+        description: >-
+          Rear panel - lit when the chassis temperature has risen above the permitted level and the system
+          has shut down
+      - ref: common/rj45-eth@1
+        id: mgmt
+        at: [64.4, 27.9]
+        group: mgmt
+        rel-pos: 0
+        attrs: {speed: 100m, role: mgmt}
+        states:
+          led-a:
+          - 'off'
+          - {name: link-activity, color: '#22c55e', behavior: blinking}
+          led-b:
+          - 'off'
+          - {name: status, color: '#22c55e'}
+        description: >-
+          Tables 7 and 8 - Link/Activity green blinking with activity, steady without, off when the port
+          is not active; Status green steady when the administrative status is enabled, off when disabled
+      - ref: std/rj45@2
+        id: console
+        at: [88.3, 27.9]
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - {ref: std/usb-a@1, id: usb, at: [121.7, 30.75], group: mgmt, rel-pos: 2}
+      - {ref: common/esd-jack@1, id: esd-rear-jack, at: [167.4, 8.4], for: chassis, group: esd, rel-pos: 0}
+  top:
+    size: {w: 438.2, h: 431.8}
+    empty: >-
+      Not drawn flat by any source held. The guide's figures show the lid in perspective with mounting
+      holes along the sides; nothing there can be measured.
+  bottom:
+    size: {w: 438.2, h: 431.8}
+    empty: >-
+      Not drawn by any source held: neither the guide nor the datasheet pictures the underside.
+  left:
+    size: {w: 431.8, h: 44.45}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the side panel with mounting
+      holes; the front-mounting brackets are separate hardware.
+  right:
+    size: {w: 431.8, h: 44.45}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the side panel with mounting
+      holes; the front-mounting brackets are separate hardware.
+configurations:
+  ac:
+    kind: orderable
+    description: >-
+      EX3200-24T as shipped - one 320 W AC power supply in the supply slot, the fan tray, and the uplink
+      slot covered. Side-to-rear airflow.
+    default: true
+    part-numbers:
+      EX3200-24T: {}
+  dc:
+    kind: orderable
+    power: dc
+    description: >-
+      EX3200-24T-DC - one 190 W DC power supply and the fan tray: DC powered, with no PoE (the guide:
+      "EX3200 switches with a DC power supply installed do not provide PoE").
+    bays: {psu-0: juniper/ex4200-pwr-190-dc@1}
+    part-numbers:
+      EX3200-24T-DC: {}
+datasheet:
+  title: EX3200 Ethernet Switches datasheet (Juniper Networks, 1000216-013-EN, Nov 2011)
+  sha256: 96ac8112d0e1626d6e4f482fcd50e85fd5047a101f8a4c72c4ec1b35728ac25a
+references:
+- title: EX3200 Switch Hardware Guide (Juniper Networks, published 2020-12-15)
+  sha256: 7fd47f21892e5dcb9bc922a745c38d1963f120903a9f9dcc82da95ccd40bd8da
