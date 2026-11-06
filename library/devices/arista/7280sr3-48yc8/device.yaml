@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 7280sr3-48yc8
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Arista
 model: 7280SR3-48YC8
@@ -165,9 +165,9 @@ provenance:
       Guide Table 4: typical / maximum 155 W / 325 W for the 7280SR3-48YC8 and 7280SR3K-48YC8, and 162
       W / 338 W for the 7280SR3K-48YC8A, each with PWR-511-AC or PWR-511-DC. The data sheet gives 154
       W / 324 W for the first two and 162 W / 338 W for the A (gap `size-conflict`); the guide's figures
-      are used and the typical is "measured at 25C ambient with 50% load on all ports". A configuration
-      cannot state a device attribute, so the device carries 155 W / 325 W and the -48YC8A figure is in
-      the gap config-scoped-device-attrs and in the description of its configurations.
+      are used and the typical is "measured at 25C ambient with 50% load on all ports". The device carries
+      155 W / 325 W, the figure of the 7280SR3-48YC8 and the 7280SR3K-48YC8, and the two 7280SR3K-48YC8A
+      configurations state 162 W / 338 W in their own attrs.
   environment:
     confidence: datasheet
     note: >-
@@ -183,9 +183,10 @@ provenance:
       sheet lists no DC build of the switch: the PWR-511-DC-RED and -BLUE supplies are spares, so the
       DC configurations are examples with no part number. The K and K-A builds share the base model's
       size, weight, figure and supplies and differ in memory, CPU, SSD and routes (and, for the A, power
-      draw), which a configuration cannot state; each is a configuration with its own part numbers. There
-      is no empty-bay (-S) configuration: no -S suffix exists in this family and the guide draws no blank
-      for a power supply or fan module.
+      draw); each is a configuration with its own part number, each states its own memory in attrs, and
+      the two A configurations state their own power, CPU, SSD and minimum EOS too (data sheet, model
+      comparison of the 7280SR3-48YC8, SR3K-48YC8 and SR3K-48YC8A). There is no empty-bay (-S) configuration:
+      no -S suffix exists in this family and the guide draws no blank for a power supply or fan module.
   interface-names:
     confidence: datasheet
     note: >-
@@ -282,17 +283,6 @@ gaps:
     Typical / maximum power 155 W / 325 W (guide Table 4) against 154 W / 324 W (data sheet) for the 7280SR3-48YC8
     and 7280SR3K-48YC8. The two documents agree for the 7280SR3K-48YC8A. The guide's figures are used.
   wanted: the maker's statement of which is current.
-- what: config-scoped-device-attrs
-  scope:
-  - front
-  - rear
-  reason: vendor-silent
-  note: >-
-    The 7280SR3K-48YC8A draws 162 W typical and 338 W maximum (guide Table 4) against 155 W and 325 W
-    for the other two, has an eight-core CPU in place of a quad-core, and the K builds carry 64 GB of
-    memory against 8 GB. No configuration can state a device attribute (the same open gap as cisco/asr-9001).
-    The attrs carry the 7280SR3-48YC8's figures and the platform lines name all three.
-  wanted: configuration-scoped device attrs.
 - what: environment
   scope:
   - front
@@ -1775,6 +1765,8 @@ configurations:
     description: >-
       The 7280SR3-48YC8 with two AC supplies and front-to-rear air: PWR-511-AC-RED supplies and FAN-7011M-F
       fan modules, all with red handles. Ordered as DCS-7280SR3-48YC8-F.
+    attrs:
+      platform: {memory: 8 GB}
     part-numbers:
       DCS-7280SR3-48YC8-F: {}
   r:
@@ -1783,6 +1775,8 @@ configurations:
     description: >-
       The 7280SR3-48YC8 with two AC supplies and rear-to-front air: PWR-511-AC-BLUE supplies and FAN-7011M-R
       fan modules, all with blue handles. Ordered as DCS-7280SR3-48YC8-R.
+    attrs:
+      platform: {memory: 8 GB}
     bays: {psu-1: arista/7280r3-pwr-500-ac-rev@1, psu-2: arista/7280r3-pwr-500-ac-rev@1, fan-1: arista/7280r3-fan-m-rev@1,
       fan-2: arista/7280r3-fan-m-rev@1}
     part-numbers:
@@ -1792,12 +1786,16 @@ configurations:
     description: >-
       The 7280SR3K-48YC8, the same hardware with 64 GB of memory, an SSD and the large-routes licence,
       with front-to-rear air. Ordered as DCS-7280SR3K-48YC8-F.
+    attrs:
+      platform: {memory: 64 GB}
     part-numbers:
       DCS-7280SR3K-48YC8-F: {}
   k-r:
     kind: orderable
     airflow: back-to-front
     description: The 7280SR3K-48YC8 with rear-to-front air. Ordered as DCS-7280SR3K-48YC8-R.
+    attrs:
+      platform: {memory: 64 GB}
     bays: {psu-1: arista/7280r3-pwr-500-ac-rev@1, psu-2: arista/7280r3-pwr-500-ac-rev@1, fan-1: arista/7280r3-fan-m-rev@1,
       fan-2: arista/7280r3-fan-m-rev@1}
     part-numbers:
@@ -1805,17 +1803,27 @@ configurations:
   k-a-f:
     kind: orderable
     description: >-
-      The 7280SR3K-48YC8A, the K build with an eight-core CPU, with front-to-rear air. It draws 162 W
-      typical and 338 W maximum (guide Table 4), against 155 W and 325 W for the other builds. Ordered
-      as DCS-7280SR3K-48YC8A-F.
+      The 7280SR3K-48YC8A, the K build with an eight-core CPU, with front-to-rear air. Ordered as DCS-7280SR3K-48YC8A-F.
+    export-description: >-
+      Arista 7280SR3K-48YC8A - a fixed 1RU data-centre switch router with 48 x 1/10/25G SFP ports and
+      8 x 100G QSFP ports, the K build with an eight-core CPU, running EOS
+    attrs:
+      power: {power-typical-w: 162, power-max-w: 338}
+      platform: {cpu: Eight-Core x86, memory: 64 GB, storage: 120 GB SSD (no flash storage)}
+      features: {eos-license: license group G2; minimum EOS 4.27.2}
     part-numbers:
       DCS-7280SR3K-48YC8A-F: {}
   k-a-r:
     kind: orderable
     airflow: back-to-front
-    description: >-
-      The 7280SR3K-48YC8A with rear-to-front air, drawing 162 W typical and 338 W maximum. Ordered as
-      DCS-7280SR3K-48YC8A-R.
+    description: The 7280SR3K-48YC8A with rear-to-front air. Ordered as DCS-7280SR3K-48YC8A-R.
+    export-description: >-
+      Arista 7280SR3K-48YC8A - a fixed 1RU data-centre switch router with 48 x 1/10/25G SFP ports and
+      8 x 100G QSFP ports, the K build with an eight-core CPU, running EOS
+    attrs:
+      power: {power-typical-w: 162, power-max-w: 338}
+      platform: {cpu: Eight-Core x86, memory: 64 GB, storage: 120 GB SSD (no flash storage)}
+      features: {eos-license: license group G2; minimum EOS 4.27.2}
     bays: {psu-1: arista/7280r3-pwr-500-ac-rev@1, psu-2: arista/7280r3-pwr-500-ac-rev@1, fan-1: arista/7280r3-fan-m-rev@1,
       fan-2: arista/7280r3-fan-m-rev@1}
     part-numbers:
