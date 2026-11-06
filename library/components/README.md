@@ -424,7 +424,7 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
 
   ```yaml
   component-attrs:
-    fan-module: {handle-finish: '#3d7bd6', airflow-legend: B2F}
+    fan-module: {handle-finish: '#3d7bd6', airflow-legend: B2F, airflow: back-to-front}
   ```
 
   A skin per colour also has to be CHOSEN, once per placement, which is how the
@@ -483,6 +483,57 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   `<rect id="logo-zone" fill="none"/>` over the box the mark covers. A device
   reserves the same box as a region `logo-zone` with `at` and `size`. Nothing
   named for a logo paints (L172); a product name in plain text is fine.
+
+
+## Airflow
+
+`attrs.airflow` is the convention by which a `class: fan` or `class: psu`
+contract states which way the unit moves air. `attrs` is free-form and nothing
+validates the key. Of the 437 fans and supplies in the library, 258 state one
+and 179 state none. Cards (`nvidia/*`) write `bidirectional` and blower prose
+under the same key; they are neither fans nor supplies and this section does
+not cover them.
+
+**The two values a tool compares** are `front-to-back` and `back-to-front`, the
+same two words a configuration's `airflow` takes. A new part uses them wherever
+the vendor's direction is one of the two. A part that states nothing is
+allowed: the direction of the unit in a picture is still there, as the build's
+`data-config-airflow` (below).
+
+**Restating it for one build.** A configuration that recolours a shared part
+sets `airflow` in that part's `component-attrs` entry (a bay's own, in
+`bay-attrs`), as the Edgecore, Cisco and UfiSpace builds do. The value replaces
+the part's own on that instance only; the part is not edited, and the value is
+the airflow the configuration already states.
+
+**The vendor words** a fan or supply uses, and what each shows. Where the
+library's own builds pair a word with the same direction everywhere and the
+part's provenance says why, the word is mapped; the rest are kept as written.
+
+| word | parts | maps to | why |
+|---|---|---|---|
+| `front-to-back`, `back-to-front` | 155, 59 | themselves | the two values above |
+| `exhaust` | 22 (`ufispace` 19, `nokia` 3) | on a rear-face unit, `front-to-back` - but see below | the UfiSpace rear modules say `exhaust` in the default build and their back-to-front builds restate `intake` in `component-attrs`; the `nokia/sr-e-psu-ac` and `-dc` provenance has the rear PSU shelf exhaust the air. `nokia/sr-7-fan-tray` also says `exhaust`, but its provenance has the chassis take air in at the right side, so the word gives no front or back direction there: not mapped, kept as written |
+| `intake` | 2 (`ufispace/psu-102-ac`, `-dc`) and the restatements in UfiSpace back-to-front builds | on a rear-face unit, `back-to-front`; on a front-face unit, `front-to-back` | the word is about the module's own face. The restatements are on rear fans, where intake at the rear is back-to-front. The two PSU-102 supplies sit on the front of `ufispace/s9620-40dg`, whose configurations are front-to-back, so their `intake` is front-to-back |
+| `port-side intake` | 9, all `cisco` Nexus 9500 | `front-to-back` | every build that seats them is front-to-back; air enters at the port side |
+| `side-to-side` | 5 (`edgecore` 2, `juniper` 3) | not mapped | not a front-or-back word; the builds that seat them are `side`, bar the two of `edgecore/csr440-fan` that say `front-to-back` |
+| `side-to-rear` | 1 (`juniper/ex4200-fan-tray`) | not mapped | not a front-or-back word; its builds are `side` |
+| `dual-direction` | 1 (`cisco/n9k-puv-1200w`) | not mapped | one supply for both directions: it is seated in front-to-back and in back-to-front builds alike |
+| a sentence | 4 (`juniper`) | not mapped | begins `front-to-back (...)` or `side-to-side (...)` and qualifies the word; kept as written |
+
+So `exhaust` and `intake` read relative to the module's face: on a fan or
+supply on the rear, `exhaust` is `front-to-back` and `intake` is
+`back-to-front`, and a module on another face reads the other way. The PSU-102
+is the library's one example. Read a vendor word through this table, and where
+it says not mapped, read the build's direction instead.
+
+**What the build writes.** The root `<svg>` of a compiled face carries
+`data-airflow`, the configuration's airflow. Every fan and supply `<g>` in it
+carries `data-config-airflow`, the same value, and nothing where the
+configuration states none; it may also carry `data-airflow`, the part's own
+word as the build leaves it. To learn the direction of a drawn unit, read
+`data-config-airflow`; to learn what the part says, read `data-airflow` and map
+it with the table.
 
 
 ## Adding an optic

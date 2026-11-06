@@ -1,15 +1,20 @@
 {
  "bay-accepts": {},
- "composed": "1d67f7fe3f947e2f",
+ "composed": "f33d7b14e319ac9b",
  "composed-refs": {
-  "common/esd-jack@1": "1.0.0+0991d3874bfac0f4",
-  "common/ground-symbol@1": "1.0.0+938c617ba0a96a89",
+  "common/esd-jack@1": "1.0.1+fa89d49c1ff75841",
+  "common/ground-hole-10-32@1": "1.0.0+75351fd069be8f68",
+  "common/ground-hole-pair-3-4-10-32@1": "1.0.0+997fa37ff9dcbec8",
+  "common/ground-symbol@1": "1.0.1+0018bfdfc1559185",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/led-rect@1": "1.1.0+0314fb1739d8b11d",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
-  "common/screw-head@1": "1.1.0+0f38d482bcc27ec9",
+  "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
+  "juniper/ex2200-dc-terminal@1": "1.0.0+3b2db87772890831",
+  "juniper/ex2200-rps-port@1": "1.0.0+3664eca1cec5ef83",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
   "std/rj45@2": "2.1.0+2c8fec73bdc493fb",
@@ -20,12 +25,65 @@
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "dc-terminal/input-a": {
+   "juniper/ex2200-dc-terminal@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input-a",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "dc-terminal/pole-a-pos"
+     },
+     {
+      "role": "batt",
+      "slot": "dc-terminal/pole-a-neg"
+     }
+    ],
+    "rating-a": 3.5,
+    "side": "a",
+    "voltage": null
+   }
+  },
+  "dc-terminal/input-b": {
+   "juniper/ex2200-dc-terminal@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input-b",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "dc-terminal/pole-b-pos"
+     },
+     {
+      "role": "batt",
+      "slot": "dc-terminal/pole-b-neg"
+     }
+    ],
+    "rating-a": 3.5,
+    "side": "b",
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
- "gaps": "4339cc5026e5f772",
+ "gaps": "4796a5ee7488b340",
  "groups": [
   "controls",
   "esd",
   "furniture",
+  "grounding",
   "mgmt",
   "mode-leds",
   "power-input",
@@ -126,8 +184,10 @@
   "rear-dc/cutout/mgmt",
   "rear-dc/cutout/usb",
   "rear-dc/placements/console-rj45",
+  "rear-dc/placements/dc-terminal",
   "rear-dc/placements/earth-mark",
   "rear-dc/placements/esd-rear-jack",
+  "rear-dc/placements/ground-pair",
   "rear-dc/placements/mgmt",
   "rear-dc/placements/rear-screw-0",
   "rear-dc/placements/rear-screw-1",
@@ -136,6 +196,7 @@
   "rear-dc/placements/rear-screw-4",
   "rear-dc/placements/rear-screw-5",
   "rear-dc/placements/rear-screw-6",
+  "rear-dc/placements/rps",
   "rear-dc/placements/rps-screw-0",
   "rear-dc/placements/rps-screw-1",
   "rear-dc/placements/rps-screw-2",
@@ -150,6 +211,7 @@
   "rear/placements/console-rj45",
   "rear/placements/earth-mark",
   "rear/placements/esd-rear-jack",
+  "rear/placements/ground-pair",
   "rear/placements/mgmt",
   "rear/placements/rear-screw-0",
   "rear/placements/rear-screw-1",
@@ -158,13 +220,14 @@
   "rear/placements/rear-screw-4",
   "rear/placements/rear-screw-5",
   "rear/placements/rear-screw-6",
+  "rear/placements/rps",
   "rear/placements/rps-screw-0",
   "rear/placements/rps-screw-1",
   "rear/placements/rps-screw-2",
   "rear/placements/rps-screw-3",
   "rear/placements/usb"
  ],
- "names": "6334da680f619cb0",
+ "names": "38f045b0a68a0193",
  "placement-addressing": {
   "for": {
    "front/placements/btn-mode": [
@@ -218,11 +281,35 @@
    "rear-dc/placements/esd-rear-jack": [
     "chassis"
    ],
+   "rear-dc/placements/rps-screw-0": [
+    "rps"
+   ],
+   "rear-dc/placements/rps-screw-1": [
+    "rps"
+   ],
+   "rear-dc/placements/rps-screw-2": [
+    "rps"
+   ],
+   "rear-dc/placements/rps-screw-3": [
+    "rps"
+   ],
    "rear/placements/earth-mark": [
     "chassis"
    ],
    "rear/placements/esd-rear-jack": [
     "chassis"
+   ],
+   "rear/placements/rps-screw-0": [
+    "rps"
+   ],
+   "rear/placements/rps-screw-1": [
+    "rps"
+   ],
+   "rear/placements/rps-screw-2": [
+    "rps"
+   ],
+   "rear/placements/rps-screw-3": [
+    "rps"
    ]
   },
   "rel-pos": {
@@ -270,8 +357,10 @@
    "front/placements/uplink-2": 2,
    "front/placements/uplink-3": 3,
    "rear-dc/placements/console-rj45": 3,
+   "rear-dc/placements/dc-terminal": 0,
    "rear-dc/placements/earth-mark": 1,
    "rear-dc/placements/esd-rear-jack": 0,
+   "rear-dc/placements/ground-pair": 0,
    "rear-dc/placements/mgmt": 1,
    "rear-dc/placements/rear-screw-0": 6,
    "rear-dc/placements/rear-screw-1": 7,
@@ -280,6 +369,7 @@
    "rear-dc/placements/rear-screw-4": 10,
    "rear-dc/placements/rear-screw-5": 11,
    "rear-dc/placements/rear-screw-6": 12,
+   "rear-dc/placements/rps": 4,
    "rear-dc/placements/rps-screw-0": 2,
    "rear-dc/placements/rps-screw-1": 3,
    "rear-dc/placements/rps-screw-2": 4,
@@ -289,6 +379,7 @@
    "rear/placements/console-rj45": 3,
    "rear/placements/earth-mark": 1,
    "rear/placements/esd-rear-jack": 0,
+   "rear/placements/ground-pair": 0,
    "rear/placements/mgmt": 1,
    "rear/placements/rear-screw-0": 6,
    "rear/placements/rear-screw-1": 7,
@@ -297,6 +388,7 @@
    "rear/placements/rear-screw-4": 10,
    "rear/placements/rear-screw-5": 11,
    "rear/placements/rear-screw-6": 12,
+   "rear/placements/rps": 4,
    "rear/placements/rps-screw-0": 2,
    "rear/placements/rps-screw-1": 3,
    "rear/placements/rps-screw-2": 4,
@@ -351,8 +443,10 @@
   "front/placements/uplink-2": "uplink",
   "front/placements/uplink-3": "uplink",
   "rear-dc/placements/console-rj45": "mgmt",
+  "rear-dc/placements/dc-terminal": "power-input",
   "rear-dc/placements/earth-mark": "furniture",
   "rear-dc/placements/esd-rear-jack": "esd",
+  "rear-dc/placements/ground-pair": "grounding",
   "rear-dc/placements/mgmt": "mgmt",
   "rear-dc/placements/rear-screw-0": "furniture",
   "rear-dc/placements/rear-screw-1": "furniture",
@@ -361,6 +455,7 @@
   "rear-dc/placements/rear-screw-4": "furniture",
   "rear-dc/placements/rear-screw-5": "furniture",
   "rear-dc/placements/rear-screw-6": "furniture",
+  "rear-dc/placements/rps": "mgmt",
   "rear-dc/placements/rps-screw-0": "furniture",
   "rear-dc/placements/rps-screw-1": "furniture",
   "rear-dc/placements/rps-screw-2": "furniture",
@@ -370,6 +465,7 @@
   "rear/placements/console-rj45": "mgmt",
   "rear/placements/earth-mark": "furniture",
   "rear/placements/esd-rear-jack": "esd",
+  "rear/placements/ground-pair": "grounding",
   "rear/placements/mgmt": "mgmt",
   "rear/placements/rear-screw-0": "furniture",
   "rear/placements/rear-screw-1": "furniture",
@@ -378,6 +474,7 @@
   "rear/placements/rear-screw-4": "furniture",
   "rear/placements/rear-screw-5": "furniture",
   "rear/placements/rear-screw-6": "furniture",
+  "rear/placements/rps": "mgmt",
   "rear/placements/rps-screw-0": "furniture",
   "rear/placements/rps-screw-1": "furniture",
   "rear/placements/rps-screw-2": "furniture",
@@ -385,7 +482,7 @@
   "rear/placements/usb": "mgmt"
  },
  "placement-surface": "20c470e4aea75a84",
- "shape": "ed6c6957043e5101",
- "surface": "a20910106fe70c00",
- "version": "0.1.0"
+ "shape": "699ac0944600f330",
+ "surface": "73f1696bc5050c85",
+ "version": "0.4.0"
 }

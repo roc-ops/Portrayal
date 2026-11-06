@@ -1,0 +1,50 @@
+format: 1
+kind: component
+name: a9k-dc-plug
+version: 1.0.0
+class: port
+mates: cisco-dc-block-2
+profile: power
+description: >-
+  The cable block of the Cisco ASR 9000 fixed-port DC supplies, wired, seen from the wire side as seated.
+  A grey housing carries one insulated wire in each of its two ways, "+DC" above and "-DC" below, as the
+  supply prints them. It seats in a `cisco-dc-block-2` connector at its own mate point. It carries one
+  wire per contact, not one cable.
+size: {w: 15.0, h: 23.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, cisco/a9k-dc-header@1, 15.0 by 23.0. The guide's figures draw
+  the cable block without a scale and no dimension of it is held.
+attrs: {media: a9k-dc, connector: DC power cable block, positions: 2}
+fields:
+  wire-1-color: {label: 'Wire colour (+DC, top)', type: text, default: '#cfd2d6'}
+  wire-2-color: {label: 'Wire colour (-DC, bottom)', type: text, default: '#cfd2d6'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    guide - the Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation Guide, Figure 67 (ASR 9903
+    DC power cable terminal block, PDF page 60) and Figure 68 (ASR 9901 DC power cable terminal block, PDF
+    page 61) draw a grey two-way housing with two cables leaving it, and Figure 152 (PDF page 152) draws it
+    lined up with the supply's connector. The text says the terminal blocks are "supplied along with the DC
+    power supply modules" and the cable list names "6AWG Amphenol connector" for the cables. No series or
+    part number of the block is named. THE PART IS A STAND-IN FOR THE CABLE BLOCK.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    guide - the figures are line art and show the two cables uncoloured; the text says each supply takes
+    "one source cable and one return cable". No document states a colour for either, so both default to
+    one neutral grey and the order of the marks, "+DC" above and "-DC" below, is the only statement.
+  far-end: >-
+    NOT DRAWN. The other ends of the two cables land on the DC power source, which is the site's equipment
+    and not this supply's.
+  depth: >-
+    NOT STATED. No document gives how far the cable block stands out of the supply, so the part draws a
+    plan outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [7.5, 11.5], direction: front}
+  wire-1: {at: [7.5, 5.5], direction: front}
+  wire-2: {at: [7.5, 17.5], direction: front}
+skins: [default]

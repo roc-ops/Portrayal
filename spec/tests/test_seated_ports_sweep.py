@@ -43,18 +43,21 @@ def sweep():
     return json.loads(p.stdout.strip().splitlines()[-1])
 
 
+@pytest.mark.heavy
 def test_the_sweep_read_the_library(sweep):
     assert sweep["devices"] > 200 and sweep["configs"] > 500, (sweep["devices"], sweep["configs"])
     assert sweep["drawn"] > 5000, "almost no port under a bay was read off the faces"
     assert sweep["asked"] > 10000, "almost no port of a seated part was asked about"
 
 
+@pytest.mark.heavy
 def test_no_drawn_port_is_denied(sweep):
     assert sweep["denied"] == [], sweep["denied"][:10]
     assert sweep["yes"] > 3000, f"the kit answered for {sweep['yes']} of {sweep['drawn']} drawn ports"
     assert sweep["yes"] + sweep["unsaid"] == sweep["drawn"]
 
 
+@pytest.mark.heavy
 def test_every_yes_is_drawn(sweep):
     assert sweep["phantom"] == [], sweep["phantom"][:10]
     assert sweep["said"] > 2000, f"the kit said yes to {sweep['said']} ports"
@@ -69,11 +72,13 @@ def test_every_yes_is_drawn(sweep):
     assert sweep["slots"] > 100, f"the kit said yes to {sweep['slots']} slots that take a cable end"
 
 
+@pytest.mark.heavy
 def test_a_bay_the_configuration_has_and_does_not_list_gets_an_answer(sweep):
     # asked of every part of its default, each answer held to the drawing above
     assert sweep["unspoken"] > 4000, "no bay left to its default was asked about"
 
 
+@pytest.mark.heavy
 def test_a_bay_the_configuration_does_not_have_gets_no_answer(sweep):
     # the ch3000's double-width bays, in the configurations that lack them: nothing
     # was answered for them, and nothing was drawn there (both are in `phantom`)

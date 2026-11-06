@@ -72,6 +72,7 @@ def negative_boxes(path):
     return out
 
 
+@pytest.mark.heavy
 def test_no_solid_has_negative_extent():
     if not DIST.exists():
         pytest.skip("library/dist not built")

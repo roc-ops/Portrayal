@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ex4300-jpsu-550-dc-afo
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -54,6 +54,64 @@ provenance:
     has failed
   power-draw: >-
     NOT APPLICABLE - a supply states its output
+  seats: >-
+    estimated - each of the four terminal screws is the library's common/terminal-screw-34@1, a
+    slotted head 3.4 across (that part's own size is an estimate), standing at the centre of the
+    terminal this skin already draws in its `terminal-block` group (the circles at 31.9, 40.3, 57.2
+    and 65.6 across, 26.4 down, read off the guide's flat faceplate drawing, Figure 45, so good to
+    about 0.5 mm). The seats are not lifted: no document says how far the screws stand off the
+    block, and this contract draws no relief for them. The guide's wiring steps (printed pages 203
+    and 204) say the ring lug is secured with "the screw from the terminals" and give a torque; no
+    page gives the screw's thread or head, and the screw part claims no thread, so none is written.
+    The drawn terminals stay as they are, and the screw marks where a lug lands, not the screw
+  earth: >-
+    A DECLARED STAND-IN. The middle terminal of the five, between the two feeds, is the earth
+    terminal: the guide's note on the DC power supply (printed page 203) counts "five terminals,
+    two positive terminals labeled V+ and two negative terminals labeled V-" and "one terminal for
+    connecting the power supply to earth ground", and the face prints the earth symbol over the
+    middle one. It is common to both feeds and belongs to neither, so it is a ground seat a lug
+    lands on, outside both DC ports, and not a pole of either. It is the library's
+    common/ground-screw@1, a screw that claims no stud size, because no document held gives this
+    terminal's screw and no part draws a terminal block's earth screw; that part's size, 5.6
+    across, is its own estimate. It stands at the centre of the middle terminal this skin draws
+    (48.8 across, 26.4 down) and is not lifted, as the four terminal screws are not
+  poles: >-
+    Juniper EX4300 Switch Hardware Guide (published 2025-08-12), the note on the DC power supply
+    under step 7 of "Connecting DC Power to an EX4300 Switch" (printed page 203): five terminals,
+    two positive terminals labeled V+, two negative terminals labeled V- and one earth terminal,
+    and Figure 69 "Securing Ring Lugs to the Terminals on the DC Power Supply" (printed page 204),
+    which draws the ring lugs of a +, a - and an earth cable landing on the first three terminals
+    from the left; the face prints + - earth - + (Figure 45). The procedure for one supply and two
+    power sources (printed page 204) lands the first source's positive lug on a + terminal and its
+    negative lug on "the - terminal adjacent" to it, and the second source's on the other pair, so
+    the block carries two feeds, one port each (`feed-a` on the left pair and `feed-b` on the
+    right pair, the poles of each in the order the face prints them from the left). The guide
+    names the two sources first and second and never A and B, so the ports state no side. The
+    roles are what the supply prints: `pos` for V+ and `neg` for V-. The guide's safety text
+    elsewhere calls V+ "+RTN" and V- "-48 V", but the supply prints neither of those words, so
+    the roles are not `rtn` and `batt`. The guide also says the two V+ terminals are shunted
+    internally together, as are the two V- terminals, to give a parallel current path; this
+    contract states the two ports as the two-source procedure describes them and does not model
+    the shunt
+  voltage: >-
+    Juniper EX4300 Switch Hardware Guide, Table 51 "DC Power Supply Specifications for an EX4300
+    Switch" (printed page 120): "Nominal operating voltage: -48 VDC" and an operating voltage
+    range of -40.8 VDC through -60 VDC. A held table gives a nominal, so each port states it, with
+    its minus, and the range in the order the table gives it. The -43.5 +/- 0.5 VDC the guide asks
+    to power on (Table 47, printed page 116) is a minimum to start, not a limit of the range, and
+    is left to `attrs`
+  rating: >-
+    NOT STATED. The guide gives two figures for this supply's DC input current: Table 47 (printed
+    page 116) prints a "DC input current rating" of 14.2 A and Table 51 (printed page 120) prints
+    "4 A maximum at nominal operating voltage". They differ, and a port's `rating-a` is one figure,
+    so the ports state none and a later change can state one once a source says which is right.
+    `attrs` keeps the 14.2 A it already carried
+  awg: >-
+    Juniper EX4300 Switch Hardware Guide, the list of parts for "Connecting DC Power to an EX4300
+    Switch" (printed page 200): "DC power source cables (14-16 AWG) with ring lug", not provided.
+    One range of sizes for the cables that land on the supply's terminals, so each port states
+    both, 14 and 16. The 14-10 AWG of the grounding cable on that list is the chassis ground's,
+    which the guide ties to the switch's own protective earthing terminal, and is not stated
 states:
 - ok
 - fault
@@ -93,3 +151,27 @@ relief:
     color: '#2b2e35'
     confidence: estimated
     source: guide Figure 44 - the loop handle stands proud of the face; projection not measured
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-a-pos, at: [30.2, 24.7]}
+  - {ref: common/terminal-screw-34@1, id: pole-a-neg, at: [38.6, 24.7]}
+  - {ref: common/ground-screw@1, id: earth, at: [46.0, 23.6]}
+  - {ref: common/terminal-screw-34@1, id: pole-b-neg, at: [55.5, 24.7]}
+  - {ref: common/terminal-screw-34@1, id: pole-b-pos, at: [63.9, 24.7]}
+dc:
+  ports:
+    - id: feed-a
+      direction: input
+      voltage: {nominal: -48, range: [-40.8, -60]}
+      awg: [14, 16]
+      poles:
+        - {role: pos, slot: pole-a-pos}
+        - {role: neg, slot: pole-a-neg}
+      source: {poles: poles, voltage: voltage, awg: awg}
+    - id: feed-b
+      direction: input
+      voltage: {nominal: -48, range: [-40.8, -60]}
+      awg: [14, 16]
+      poles:
+        - {role: neg, slot: pole-b-neg}
+        - {role: pos, slot: pole-b-pos}
+      source: {poles: poles, voltage: voltage, awg: awg}

@@ -201,6 +201,7 @@ def test_stops_alone_given_a_range_is_a_minor():
     assert bump(lambda d: d["adjustments"][AID].update(range=[20.0, 180.0]), base) == "minor"
 
 
+@pytest.mark.heavy
 def test_the_lock_asks_no_library_device_for_a_bump():
     """Step 1's gate: the lock learning these keys moves no committed lock."""
     assert dl.check(fx.LIB) == []

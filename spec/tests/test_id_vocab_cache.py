@@ -177,6 +177,7 @@ def _again(monkeypatch, cache_dir, forbid=False):
 
 # --- the census: every count below is of something real -----------------------
 
+@pytest.mark.heavy
 def test_the_corpus_is_not_empty():
     """Every other assertion here is only worth something if the vocabulary
     and the files it came from are actually there."""
@@ -200,6 +201,7 @@ def test_the_suite_never_touches_the_users_cache(monkeypatch):
 
 # --- the cached answer IS the fresh answer ------------------------------------
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("which", ["real", "copy"])
 def test_a_hit_returns_exactly_what_a_fresh_computation_does(which, lib, _cache_dir, monkeypatch):
     root = LIB if which == "real" else lib
@@ -215,6 +217,7 @@ def test_a_hit_returns_exactly_what_a_fresh_computation_does(which, lib, _cache_
     assert_same(corpus([root]), fresh)
 
 
+@pytest.mark.heavy
 def test_the_real_library_and_its_copy_share_one_entry(lib, _cache_dir, monkeypatch):
     """Keyed on relative paths and bytes, not on where the checkout lives - so
     every worktree of one commit shares an entry, and it is still correct."""
@@ -251,6 +254,7 @@ def _rewrite(path, edit):
     path.write_text(yaml.safe_dump(doc, sort_keys=False))
 
 
+@pytest.mark.heavy
 def test_changing_a_conforms_misses_and_changes_the_answer(lib, _cache_dir, monkeypatch):
     before = corpus([lib])
     target = next(f for f in sorted((lib / "components").rglob("contract.yaml"))
@@ -273,6 +277,7 @@ def _placements(doc):
                 yield q
 
 
+@pytest.mark.heavy
 def test_changing_a_placement_id_misses_and_changes_the_answer(lib, _cache_dir, monkeypatch):
     before = corpus([lib])
     # an id the library uses exactly twice is in `whole`; renaming one of the
@@ -301,6 +306,7 @@ def test_changing_a_placement_id_misses_and_changes_the_answer(lib, _cache_dir, 
     assert_same(after, uncached([lib]))
 
 
+@pytest.mark.heavy
 def test_a_new_file_misses(lib, _cache_dir, monkeypatch):
     corpus([lib])
     extra = lib / "components" / "zzq" / "probe" / "v1" / "contract.yaml"
@@ -312,6 +318,7 @@ def test_a_new_file_misses(lib, _cache_dir, monkeypatch):
     assert "zzq-new-file" in after[0]
 
 
+@pytest.mark.heavy
 def test_a_miss_in_a_process_that_has_seen_the_files_parses_only_the_new_ones(
         lib, _cache_dir, monkeypatch):
     """The per-file memo is keyed by each file's content hash, so after one
@@ -332,6 +339,7 @@ def test_a_miss_in_a_process_that_has_seen_the_files_parses_only_the_new_ones(
     assert_same(after, uncached([lib]))
 
 
+@pytest.mark.heavy
 def test_the_memo_is_keyed_by_content_not_path(lib, pristine, _cache_dir, monkeypatch):
     """A byte-identical file at another path is the same key: a tmp copy of the
     real library costs no parse at all once the real one has been read."""
@@ -350,6 +358,7 @@ def test_priming_computes_no_answer(mini, _cache_dir):
     assert entries(_cache_dir) == [], "priming wrote a disk entry"
 
 
+@pytest.mark.heavy
 @needs_fork
 def test_a_warm_render_with_a_tmp_root_parses_only_the_tmp_files(tmp_path, _cache_dir, monkeypatch):
     """The regression #545's CI showed: a render with roots [real library, tmp]
@@ -396,6 +405,7 @@ def test_a_warm_render_with_a_tmp_root_parses_only_the_tmp_files(tmp_path, _cach
     assert warm["parsed"] == 1, f"a warm child parsed {warm['parsed']} files, not just the tmp one"
 
 
+@pytest.mark.heavy
 def test_an_mtime_only_change_hits(lib, _cache_dir, monkeypatch):
     """Same bytes, same answer: a checkout or a `touch` must not cost a miss."""
     before = corpus([lib])
@@ -668,6 +678,7 @@ RACER = textwrap.dedent("""
 """)
 
 
+@pytest.mark.heavy
 def test_two_processes_computing_at_once_leave_a_good_entry(lib, tmp_path, _cache_dir):
     env = {**os.environ, "PYTHONPATH": str(ROOT / "spec" / "tools"),
            "PORTRAYAL_CACHE_DIR": str(_cache_dir)}

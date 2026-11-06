@@ -51,7 +51,7 @@ same way.
 | key | on | from | what the first version-4 reader does with it |
 |---|---|---|---|
 | `ru` in steps of 0.5 | item | section 2 | read, fitted, drawn, exported |
-| `roll` (`90`, `180`, `270`) | item | section 6 | read, fitted by the rolled box; `180` drawn and routed; quarter turns drawn as an outline until #550 |
+| `roll` (`90`, `180`, `270`) | item | section 6 | read, fitted by the rolled box; `180` drawn and routed; quarter turns drawn turned in the elevation, with the brackets a device states in `chassis.ears.rolled` (3D solid and cables stay an outline) |
 | `states`, `readings` | item, zero-U entry | section 4 | read, checked against the catalogue, applied, exported |
 | `swaps`, `fields` | zero-U entry | section 4 | read and applied, as on an item |
 | `heldBy` `{parts}` | zero-U entry | section 5 | read, fitted, exported |
@@ -1126,11 +1126,11 @@ item is seen in the elevation of the face it is on, applied after `face` and
 | | `180` | `90`, `270` |
 |---|---|---|
 | units | unchanged | the width over 44.45 mm, rounded up to a whole unit |
-| box | the same box, from `itemBox` | height and width swapped, centred across the opening until #550 says otherwise |
-| ears | a whole-unit ear meets the same holes; see below for a half unit | the ears do not meet the rails; the mount kit of #550 does |
+| box | the same box, from `itemBox` | height and width swapped, centred across the opening; the drawing is turned about the middle of the box, `90` clockwise as the face it is on shows it, `270` the other way, and the other way round seen through |
+| ears | a whole-unit ear meets the same holes; see below for a half unit | the ears do not meet the rails, so none is drawn; the mount kit of #550 does |
 | ports and guides | every face point turned about the centre of the box | the same |
-| routing | resting and lay in the frame as mounted (cable lay, 3.1) | routed as an outline only, and said so, until #550 |
-| version 4 builds | fit, drawing data, routing | fit and the outline |
+| routing | resting and lay in the frame as mounted (cable lay, 3.1) | routed as an outline only, and said so |
+| version 4 builds | fit, drawing data, routing | fit, the turned drawing, and the outline for the 3D solid and cables |
 
 - **Ears at a half unit.** Measured from the hole pattern (2.5): turning a
   half-unit panel over moves a hole that is 6.35 mm above its bottom to
@@ -1543,12 +1543,22 @@ one-way.
 
 ## 12. Left for version 5, or later with no version
 
+**Not a rack file version: the site file** (proposed 2026-10-28, to be
+decided with [site-file-design.md](site-file-design.md)). The rack file stays
+one rack. What needs two racks or a room belongs to a separate document above
+it, `portrayal-site`, which places each rack by reference to its rack file
+and never rewrites it:
+
+- **Rows of racks**, baying checked between two products, and `between: true`
+  resolved to two racks (rack products, 10): between two placements in a
+  space of the site file, and not as `rows` on the rack document.
+- **A room**: rows in plan, aisles, anchors, walls and what is fixed to them.
+- **Cables between racks, and slack across racks**: a cable whose two ends
+  are not in one rack is stored in the site file, at the lowest level that
+  holds both ends. A cable inside one rack stays in its rack file.
+
 **Needs a later version:**
 
-- **Rows of racks** (`rows` on the document), baying checked between two
-  products, and `between: true` resolved to two racks (rack products, 10).
-- **A room**: rows in plan, aisles, anchors.
-- **Slack across racks**, which needs rows first.
 - **A stored position for a channel that slides** (`moves`, rack products 3),
   if a product needs one.
 
@@ -1908,7 +1918,7 @@ which carry what decides it (`color`, `jackets`, `typeColor`).
 
 The figure is a sketch drawn from the kit's own answers for one rack
 (`cablePlan` with the readers, then `colorOf` of each link), not a page's
-drawing. The last two cables are the media's dark grey, as every AOC was.
+drawing. The last two cables are the media's teal, `#08788a`.
 
 ### 14.3 What was decided in the build
 
@@ -1963,7 +1973,8 @@ wording here, and every other item, still waits.
    own colour either way.
 7. **draw.io** draws a cable in its colour when rule 1, 2 or 3 gives one. A
    cable coloured by its media alone is filed under its media as before,
-   and takes the entry of the draw.io writer's own palette.
+   and takes the kit's colour for that media (`CABLE_COLOURS`, derived from
+   `COLORS`).
 8. **NetBox and Nautobot** get the cable's own colour and nothing else, in
    the `color` column both files already had and left blank: six lower-case
    hex digits with no `#`. Both store a cable's colour so (NetBox v4.7.2
@@ -1998,10 +2009,17 @@ wording here, and every other item, still waits.
 | `jacket` on a cable type, table version 1.1.0, and the type `aoc-siemon-q1q28f` | `cable-types.json` | additive; no rack names the type |
 | `typeColorOf` in what `loadCableTypes` returns | kit output | additive |
 
-**What does not move:** the colour of every media, so every drawing, sheet
-and 3D file of a rack that states no colour; the four values of `JACKETS`;
-every recorded answer of `spec/tests/js/speed-goldens.json`; the columns of
-every export.
+**What moved with the AOC default (14.5):** `COLORS.aoc` went from `#3a3f45`
+to `#08788a`, so a drawing, sheet or 3D file of a rack with an AOC that states
+no colour is drawn in the teal. The draw.io writer's palette moved for every
+media, not only this one: `CABLE_COLOURS` in `kit/drawio.js` is now derived
+from `COLORS`, so each of its rows is the colour the Rack Builder draws.
+
+**What does not move:** the colour of every other media in the Rack Builder,
+so every drawing, sheet and 3D file of a rack that states no colour and has
+no AOC (a draw.io export excepted, as above); the four
+values of `JACKETS`; every recorded answer of
+`spec/tests/js/speed-goldens.json`; the columns of every export.
 
 **What does move, by design:** a rack that already seats two cable ends
 that state the same jacket colour is drawn in that colour once a page passes
@@ -2010,7 +2028,7 @@ library state one today, and no device or lab sets the field:
 
 | both ends | states | on | the cable goes from | to |
 |---|---|---|---|---|
-| `siemon/qsfp28-aoc@1` | `#49eaf8` | counted on the sheet's photograph | `#3a3f45` (aoc) | `#49eaf8` |
+| `siemon/qsfp28-aoc@1` | `#49eaf8` | counted on the sheet's photograph | `#08788a` (aoc) | `#49eaf8` |
 | `volex/qsfp-dd-passive-dac@1` | `#1c1c1c` | the datasheet's "Cable Colour Black" | `#15171a` (dac) | `#1c1c1c` |
 | `amphenol/qsfp56-linear-active@1` | `#1c1c1c` | the drawing's "PVC BLACK" | `#15171a` (dac) | `#1c1c1c` |
 | `credo/hiwire-shift-qsfp-dd@1` | `#6b3fa0` | the brief's word "purple"; **the shade is an estimate, not a reading** | its media's | `#6b3fa0` |
@@ -2019,33 +2037,30 @@ The two blacks differ from the DAC default by seven steps a channel and
 read the same. The purple is the one colour here that nothing counted: its
 contract says so, and a cable between two such ends takes it.
 
-### 14.5 Open: three tables name a colour for an AOC, and they disagree
+### 14.5 Decided: the AOC default is a deeper teal, and draw.io follows `COLORS`
 
-Not settled here. No colour was changed to settle it.
+<!-- OWNER DECISION: the AOC default is the teal `#08788a`, decided in #1028; the docs say so. -->
 
-- `COLORS.aoc` in `kit/rack/cable-geometry.js` is `#3a3f45`, dark grey. It
-  decides what the Rack Builder draws: the elevation, the sheet and 3D.
-- `JACKETS` in the same file has no entry for an AOC. Its comment said
-  multimode fibre and AOCs are aqua, and the front-page hero draws an AOC
-  with the `mm` jacket, `#2bb3c8`. `JACKETS` now names entries of `COLORS`
-  and holds no colour of its own, so the two tables cannot drift; what the
-  hero passes for an AOC is the hero's choice, and is as it was.
-- `CABLE_COLOURS.aoc` in `kit/drawio.js` is `#2F80C0`, blue. That table is
-  the draw.io writer's own palette for a white page, and differs from
-  `COLORS` for every media, not only this one.
+Three tables once named a colour for an AOC and disagreed. They now agree:
 
-The one source the library holds is Siemon's 100G QSFP28 AOC, aqua on its
-maker's photograph (`#49eaf8`, counted). It is now the `jacket` of the named
-type `aoc-siemon-q1q28f` and was already the stated jacket of
-`siemon/qsfp28-aoc@1`, so a cable between two of those ends is aqua by rule
-2. No source is held for a 400G QSFP-DD AOC.
+- `COLORS.aoc` in `kit/rack/cable-geometry.js` is `#08788a`, a deeper teal
+  of the multimode aqua family (`#2bb3c8`), so an AOC and an OM4 lead can be
+  told apart. It decides what the Rack Builder draws: the elevation, the
+  sheet and 3D. It was `#3a3f45`, dark grey.
+- `JACKETS` in the same file has no entry for an AOC. It names entries of
+  `COLORS` and holds no colour of its own, so the two tables cannot drift;
+  the front-page hero draws an AOC with the `mm` jacket, `#2bb3c8`, which is
+  the hero's choice and is as it was.
+- `CABLE_COLOURS` in `kit/drawio.js` is derived from `COLORS` by
+  `mediaColor`, for every media, so `CABLE_COLOURS.aoc` is `#08788a` too. It
+  was `#2F80C0`, blue, from a palette of the writer's own.
 
-**The question:** should `COLORS.aoc` become aqua? One maker's 100G cable is
-not every AOC, and a changed default recolours every drawing, sheet and 3D
-file with an AOC in it. If it should, the change is one line in `COLORS`,
-with a test that says so (`rack-cable-colour.mjs` holds every default to
-what it was). Whether the draw.io palette should follow `COLORS` is the
-same kind of question for every media.
+The one maker's source the library holds is Siemon's 100G QSFP28 AOC, aqua on
+its photograph (`#49eaf8`, counted). It is the `jacket` of the named type
+`aoc-siemon-q1q28f` and the stated jacket of `siemon/qsfp28-aoc@1`, so a
+cable between two of those ends is aqua by rule 2, not teal. No source is held
+for a 400G QSFP-DD AOC, which takes the default. `rack-cable-colour.mjs` and
+`rack-aoc-colour.mjs` hold the values.
 
 ### 14.6 Not built
 
@@ -2056,10 +2071,6 @@ same kind of question for every media.
 
 ### 14.7 Still open
 
-- **The AOC default** (`COLORS.aoc`, 14.5): whether it becomes aqua. One-way:
-  it recolours every existing drawing, sheet and 3D file with an AOC.
-- **The draw.io palette** (`CABLE_COLOURS` in `kit/drawio.js`): whether it
-  follows `COLORS`. One-way for the same reason.
 - **The Rack Builder page's half**, which is not in this repository: the
   cable form's colour input, and passing the readers to `cablePlan` and
   `cablePlan3d`. Until it does, no page shows a colour from the ends or a

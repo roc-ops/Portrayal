@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-64x
-version: 4.0.9
+version: 4.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-64X
@@ -323,6 +323,15 @@ chassis:
   airflow: front-to-back
 
 gaps:
+- what: dc-terminal-height
+  scope: [ufispace/psu-162-dc@2]
+  reason: needs-drawing
+  note: >-
+    The height of the pair of screws of each DC pole off the supply's face is an estimate. The S9600-30DX Hardware Installation Guide draws the
+    block in isometric only (Figures 25 and 26), with no scale and no elevation, and no
+    held document gives the height.
+  wanted: a side elevation of the DC supply's terminal block with its height off the face, or a photograph taken
+    square to the block from the side
 - what: port-led-semantics
   scope: [qsfp28, sfp28, port-leds]
   reason: vendor-silent
@@ -880,8 +889,8 @@ views:
         - {id: fan-1, at: [92.81, 3.10], size: {w: 81.5, h: 81.5}, accepts: [ufispace/fan-803816-hi@1], default: ufispace/fan-803816-hi@1, group: fans, rel-pos: 1}
         - {id: fan-2, at: [176.68, 3.10], size: {w: 81.5, h: 81.5}, accepts: [ufispace/fan-803816-hi@1], default: ufispace/fan-803816-hi@1, group: fans, rel-pos: 2}
         - {id: fan-3, at: [260.55, 3.10], size: {w: 81.5, h: 81.5}, accepts: [ufispace/fan-803816-hi@1], default: ufispace/fan-803816-hi@1, group: fans, rel-pos: 3}
-        - {id: psu-0, at: [371.90, 3.10], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-162-dc@1, ufispace/psu-162-ac@1], default: ufispace/psu-162-ac@1, group: psus, rel-pos: 0}
-        - {id: psu-1, at: [371.90, 45.80], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-162-dc@1, ufispace/psu-162-ac@1], default: ufispace/psu-162-ac@1, group: psus, rel-pos: 1}
+        - {id: psu-0, at: [371.90, 3.10], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-162-dc@1, ufispace/psu-162-dc@2, ufispace/psu-162-ac@1], default: ufispace/psu-162-ac@1, group: psus, rel-pos: 0}
+        - {id: psu-1, at: [371.90, 45.80], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-162-dc@1, ufispace/psu-162-dc@2, ufispace/psu-162-ac@1], default: ufispace/psu-162-ac@1, group: psus, rel-pos: 1}
       placements:
         - {ref: common/ground-symbol@1, id: ground-mark, at: [360.20, 16.05], group: grounding, rel-pos: 1}
     regions:
@@ -950,8 +959,8 @@ configurations:
       docs/pluggables-design.md decision 2
     description: DC build, 2x PSU-162-DESR 1600 W -40 to -72 V, exhaust supplies, front-to-back airflow
     bays:
-      psu-0: ufispace/psu-162-dc@1
-      psu-1: ufispace/psu-162-dc@1
+      psu-0: ufispace/psu-162-dc@2
+      psu-1: ufispace/psu-162-dc@2
     component-attrs:
       psu-162-dc:
         model: PSU-162-DESR

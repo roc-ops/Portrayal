@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 29.0.2
+version: 30.0.0
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R740xd
@@ -478,7 +478,7 @@ groups:
       field-replaceable module that does the machine's work, which is the nearest
       of the five and is said here rather than left to be guessed.
     attrs: {media: sff-2.5}
-  ports:
+  local-access:
     term: Port
     role: management
     index-origin: 1
@@ -500,13 +500,20 @@ groups:
       of the metal - the ISM carries removal and installation procedures for
       each. The right-hand one is still drawn as loose placements and is the next
       thing to become a module.
-  leds:
+  port-leds:
     term: LED
     role: indicator
     index-origin: 1
     description: >-
-      indicators that are not part of a control panel module. Only one on this
-      face: the iDRAC Direct lamp under its port.
+      the lamp that belongs to one port and is not part of a control panel
+      module: the iDRAC Direct lamp under its port.
+  system-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      the lamps that report the whole chassis: the system identification lamp
+      on the rear panel.
   latches:
     term: Latch
     role: furniture
@@ -778,11 +785,11 @@ views:
         - {ref: dell/power-button-14g@1, id: power-btn, at: [458.80, 3.17], for: chassis,
            group: mgmt, rel-pos: 1}
         - {ref: std/usb-a@1, id: usb-1, at: [456.65, 23.29], rotate: 90, skin: usb2,
-           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+           attrs: {usb: '2.0'}, group: local-access, rel-pos: 1}
         - {ref: std/usb-a@1, id: usb-2, at: [456.65, 49.31], rotate: 90, skin: usb2,
-           attrs: {usb: '2.0'}, group: ports, rel-pos: 2}
+           attrs: {usb: '2.0'}, group: local-access, rel-pos: 2}
         - {ref: std/micro-usb@1, id: idrac-direct, at: [459.75, 65.81], rotate: 90,
-           group: ports, rel-pos: 3}
+           group: local-access, rel-pos: 3}
         # MOUNTED BEHIND THE FACEPLATE, WHICH IS THE EXCEPTION HERE. A D-sub
         # bolted through sheet metal stands its full 6.73 proud and std/vga@1
         # says so; this one is on the control-panel board, which sits back from
@@ -791,7 +798,7 @@ views:
         # so the difference is on the placement rather than in a second copy of
         # the part, and the two rear D-subs are untouched.
         - {ref: std/vga@1, id: vga, at: [464.90, 21.20], rotate: 270, inset: 5.23,
-           group: ports, rel-pos: 4}
+           group: local-access, rel-pos: 4}
         - {ref: common/usb-symbol@1, id: mark-usb-1, at: [459.45, 14.40],
            for: usb-1, group: marks, rel-pos: 1}
         - {ref: common/usb-symbol@1, id: mark-usb-2, at: [459.45, 40.90],
@@ -806,7 +813,7 @@ views:
           id: idrac-direct-led
           at: [462.50, 72.30]
           for: idrac-direct
-          group: leds
+          group: port-leds
           rel-pos: 1
           states: ['off',
                    {name: connected, color: '#22c55e'},
@@ -941,11 +948,11 @@ views:
         - {ref: dell/power-button-14g@1, id: power-btn, at: [458.80, 3.17], for: chassis,
            group: mgmt, rel-pos: 1}
         - {ref: std/usb-a@1, id: usb-1, at: [456.65, 23.29], rotate: 90, skin: usb2,
-           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+           attrs: {usb: '2.0'}, group: local-access, rel-pos: 1}
         - {ref: std/usb-a@1, id: usb-2, at: [456.65, 49.31], rotate: 90, skin: usb2,
-           attrs: {usb: '2.0'}, group: ports, rel-pos: 2}
+           attrs: {usb: '2.0'}, group: local-access, rel-pos: 2}
         - {ref: std/micro-usb@1, id: idrac-direct, at: [459.75, 65.81], rotate: 90,
-           group: ports, rel-pos: 3}
+           group: local-access, rel-pos: 3}
         # MOUNTED BEHIND THE FACEPLATE, WHICH IS THE EXCEPTION HERE. A D-sub
         # bolted through sheet metal stands its full 6.73 proud and std/vga@1
         # says so; this one is on the control-panel board, which sits back from
@@ -954,7 +961,7 @@ views:
         # so the difference is on the placement rather than in a second copy of
         # the part, and the two rear D-subs are untouched.
         - {ref: std/vga@1, id: vga, at: [464.90, 21.20], rotate: 270, inset: 5.23,
-           group: ports, rel-pos: 4}
+           group: local-access, rel-pos: 4}
         - {ref: common/usb-symbol@1, id: mark-usb-1, at: [459.45, 14.40],
            for: usb-1, group: marks, rel-pos: 1}
         - {ref: common/usb-symbol@1, id: mark-usb-2, at: [459.45, 40.90],
@@ -969,7 +976,7 @@ views:
           id: idrac-direct-led
           at: [462.50, 72.30]
           for: idrac-direct
-          group: leds
+          group: port-leds
           rel-pos: 1
           states: ['off',
                    {name: connected, color: '#22c55e'},
@@ -1406,7 +1413,7 @@ views:
         - {ref: dell/system-id-button-14g@1, id: sys-id, at: [8.36, 72.04],
            for: chassis, group: mgmt-rear, rel-pos: 1}
         - {ref: common/led-indicator@1, id: sys-status, at: [19.43, 73.73],
-           for: chassis, group: leds, rel-pos: 2,
+           for: chassis, group: system-leds, rel-pos: 1,
            states: ['off', {name: 'on', color: '#2563eb'}]}
         # THE REAR HANDLE, and it is a FRAME rather than a bar. Its middle rail
         # is what the chassis is pulled out by; the two windows in it clear the
@@ -1541,9 +1548,9 @@ views:
                      sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc4-1a2a3a-two-slot, sff24-rc4-1a2a3a-a100, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
                      sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         - {ref: dell/rear-bay-screw-tab-14g@1, id: rear-bay-screw-tab,
-           at: [144.26, 3.09], group: furniture, rel-pos: 20}
+           at: [144.26, 3.09], group: furniture, rel-pos: 32}
         - {ref: dell/thumbscrew-blue-14g@1, id: cage-screw-right,
-           at: [282.59, 26.00], group: furniture, rel-pos: 22}
+           at: [282.59, 26.00], group: furniture, rel-pos: 33}
         # THE CHASSIS ACROSS REAR BAYS 2 AND 3, and it is ALWAYS PRESENT.
         # It was scoped to the rear 4 x 2.5 configurations when it was called a drive cage, so a
         # machine with PCIe in those bays lost its rails, screw tabs and vent
@@ -1593,29 +1600,29 @@ views:
         - {ref: dell/rear-drive-label-lff-14g@1, id: lff-drive-label,
            at: [282.50, 14.50], only-in: [lff12-rlff2-rc0-noriser, lff12-rlff2-rc1-1b2b, lff12-rlff2-rc2-1b2c,
                      lff12-mlff4-rlff2-rc0-noriser, lff12-mlff4-rlff2-rc1-1b2b, lff12-mlff4-rlff2-rc2-1b2c],
-           group: furniture, rel-pos: 19}
+           group: furniture, rel-pos: 21}
         - {ref: dell/rear-drive-plate-14g@1, id: bay2-drive-plate,
            at: [254.75, 7.75], skin: n24-25,
            only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
-                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 19}
+                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 28}
         # THE SAME PLATE, THE OTHER NUMBERS. Behind a 12-bay front these
         # four bays are drives 12-15, so the plate that labels them has to
         # say so; one placement per front, scoped apart.
         - {ref: dell/rear-drive-plate-14g@1, id: bay2-drive-plate-lff,
            at: [254.75, 7.75], skin: n12-13,
            only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 19}
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 29}
         - {ref: dell/rear-drive-plate-14g@1, id: bay3-drive-plate,
            at: [311.80, 7.75], skin: n26-27,
            only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
-                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 19}
+                     sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 30}
         # THE SAME PLATE, THE OTHER NUMBERS. Behind a 12-bay front these
         # four bays are drives 12-15, so the plate that labels them has to
         # say so; one placement per front, scoped apart.
         - {ref: dell/rear-drive-plate-14g@1, id: bay3-drive-plate-lff,
            at: [311.80, 7.75], skin: n14-15,
            only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
-                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 19}
+                     lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c], group: furniture, rel-pos: 31}
   # THE FOUR FACES THAT WERE MISSING. 83 of the library's 84 devices carry all
   # six views and this one carried two, which is what stops it being opened in
   # the 3D explorer at all.

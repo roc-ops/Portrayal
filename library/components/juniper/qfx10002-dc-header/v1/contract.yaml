@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: qfx10002-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: dc-connector-3w3
+description: >-
+  The D-sub 3W3 DC power connector on the face of the Juniper JPSU-1600W-DC-AFO supply, seen from its mating face. A
+  vertical shell carries three contacts in a column, the middle one larger. A hex standoff above and below it takes
+  the cable plug's thumbscrews. The cable connector juniper/qfx10002-dc-plug@1 seats at its mate point.
+size: {w: 12.0, h: 36.6}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The box of the `connector` group the supply already drew, shell and both standoffs (12.0 across, 36.6 high: the shell
+  12.0 by 27.0 and a standoff 3.6 high beyond each end), read off the guide's flat Figure 31, which carries no scale.
+attrs: {connector: D-sub 3W3 DC power connector, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED: the QFX10002 Switch Hardware Guide
+    (Juniper Networks) says the DC supplies "require a D-Sub 3W3-type connector" (QFX10002 DC Power Cable
+    Specifications) and names whole cables, CBL-JNP-PWR-DSUB, -DSUB2 and -DSUB3, not a connector part. No standard
+    document for the 3W3 layout is held, so the interface claims none.
+  gender: >-
+    NOT STATED. Figure 31 draws a shell with three round contacts and does not say which half carries pins.
+  pins: >-
+    NOT STATED WHICH CONTACT IS WHICH. The guide says the three pins carry "-48 VDC input (-), return (+), and ground"
+    and no figure prints a mark beside a contact. The contacts are named by place only: top, middle (the larger) and
+    bottom, as Figure 31 draws the supply.
+  size: >-
+    estimated - see size-notes. No guide figure is dimensioned.
+  key: >-
+    guide - Figure 31 draws the shell with a slightly tapered outline, and Figures 41 to 43 show the cable plug's hood
+    seating over it with a thumbscrew at each standoff. The taper is not drawn here: the supply's skin drew a
+    rounded rectangle and is not redrawn.
+  mate: >-
+    derived - the middle contact, (6.0, 16.8), facing out. The cable connector's middle contact is at its centre too,
+    so the two align.
+  marks: >-
+    NONE PRINTED. Figure 31 prints no number or legend beside the contacts.
+  colour: >-
+    estimated - the grey shell #9ea1a4, dark face #2a2523, light contacts #d4d6d8 and standoffs #b9bbbe that the
+    supply's skin already drew. The guide's figures are line art and no photograph of a DC supply is held; the
+    photograph of the QFX10002-36Q shows AC supplies only.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face, so it is drawn flush and
+    states no relief.
+elements: {}
+connection-points:
+  mate: {at: [6.0, 16.8], direction: front}
+skins: [default]

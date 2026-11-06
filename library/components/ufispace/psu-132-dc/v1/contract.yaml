@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-132-dc
-version: 1.1.0
+version: 1.2.0
 class: psu
 behaviour: fills
 profile: networking
@@ -34,6 +34,27 @@ provenance:
     the datasheet rear view draws the two clamps side by side in the centre of the face.
     Two poles (-48V and return); positions photo-measured off the datasheet rear render,
     which is 6% off in aspect, so they are proportions, not measurements.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head
+    3.4 across (that part's own size is an estimate), standing at the centre of the clamp screw
+    this skin already draws (centres 19.8 and 30.2 across, 22.6 down), so the head is drawn
+    smaller than the ring round it, and lifted 8.0 mm, this block's own estimated proudness.
+    No document held gives the screw head, the thread or the stud of this block: the guides
+    name a one-hole lug and a torque and no screw.
+  poles: >-
+    UfiSpace S9300-32D Hardware Installation Guide, section 9 Connecting Power (DC version),
+    Figure 32; the S9701-82DC and S9600-72XC guides print the same figure. The cables land on
+    the left and right terminal, and the legend under them reads '-' (black cable, left) and
+    '+' (red cable, right), as this skin's face stands, latch on the left. The roles are the
+    signs the legend prints, `neg` and `pos`; the '-48V and return' of the terminal-block note
+    above is the telecom reading of the same two signs. The S9600-72XC, S9600-102XC and
+    S9601-102XC guides name 'the RTN terminal' only in a sentence about isolating it from the
+    chassis, and none of the guides says which of the two terminals that is.
+  rating: >-
+    datasheet - 'DC input: -40V to -75V, 40A' in the datasheet of every device that places
+    this part. The 40 A is the input current. The range has no nominal in any of them, and a
+    port's `voltage` needs one, so the port states no voltage. The guides name cable of #6, #8
+    and #10 AWG for this block between them, so the port states no `awg`.
   led-states: HIG section 10, PSU FRU LED table (page 25), transcribed in full
   airflow: >-
     inferred - the datasheet names two units by airflow word ('PSU-132-DESR... exhaust air flow',
@@ -106,6 +127,18 @@ relief:
         the vent depth is not in it.
 connection-points:
   power: {at: [25.0, 24.0], direction: front}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-neg, at: [18.1, 20.9], lift: 8.0}
+  - {ref: common/terminal-screw-34@1, id: pole-pos, at: [28.5, 20.9], lift: 8.0}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 40
+      poles:
+        - {role: neg, slot: pole-neg}
+        - {role: pos, slot: pole-pos}
+      source: {poles: poles, rating-a: rating}
 fields:
   latch-finish:
     label: Latch colour

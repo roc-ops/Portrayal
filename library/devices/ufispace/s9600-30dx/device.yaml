@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-30dx
-version: 4.0.6
+version: 4.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-30DX
@@ -267,6 +267,15 @@ chassis:
   airflow: front-to-back
 
 gaps:
+- what: dc-terminal-height
+  scope: [ufispace/psu-162-dc@2]
+  reason: needs-drawing
+  note: >-
+    The height of the pair of screws of each DC pole off the supply's face is an estimate. The S9600-30DX Hardware Installation Guide draws the
+    block in isometric only (Figures 25 and 26), with no scale and no elevation, and no
+    held document gives the height.
+  wanted: a side elevation of the DC supply's terminal block with its height off the face, or a photograph taken
+    square to the block from the side
 - what: port-led-semantics
   scope: [qsfp28, qsfpdd-100g, qsfpdd-400g, port-leds]
   reason: vendor-silent
@@ -693,8 +702,8 @@ views:
         - {id: fan-1, at: [85.9, 3.0], size: {w: 82.5, h: 81.5}, accepts: [ufispace/fan-803816@1], group: fans, rel-pos: 1, default: ufispace/fan-803816@1}
         - {id: fan-2, at: [170.3, 3.0], size: {w: 82.5, h: 81.5}, accepts: [ufispace/fan-803816@1], group: fans, rel-pos: 2, default: ufispace/fan-803816@1}
         - {id: fan-3, at: [254.7, 3.0], size: {w: 82.5, h: 81.5}, accepts: [ufispace/fan-803816@1], group: fans, rel-pos: 3, default: ufispace/fan-803816@1}
-        - {id: psu-0, at: [375.0, 2.0], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-162-ac@1, ufispace/psu-162-dc@1], group: psus, rel-pos: 0, default: ufispace/psu-162-ac@1}
-        - {id: psu-1, at: [375.0, 45.0], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-162-ac@1, ufispace/psu-162-dc@1], group: psus, rel-pos: 1, default: ufispace/psu-162-ac@1}
+        - {id: psu-0, at: [375.0, 2.0], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-162-ac@1, ufispace/psu-162-dc@1, ufispace/psu-162-dc@2], group: psus, rel-pos: 0, default: ufispace/psu-162-ac@1}
+        - {id: psu-1, at: [375.0, 45.0], size: {w: 50.5, h: 40.0}, accepts: [ufispace/psu-162-ac@1, ufispace/psu-162-dc@1, ufispace/psu-162-dc@2], group: psus, rel-pos: 1, default: ufispace/psu-162-ac@1}
       placements:
         - {ref: common/ground-symbol@1, id: ground-mark, at: [352.0, 26.0], group: grounding, rel-pos: 1}
     regions:
@@ -773,8 +782,8 @@ configurations:
       the HIG's maximum system consumption for this build is 1276 W. The DC build ships
       five grounding lugs where the AC build ships one (HIG accessory list).
     bays:
-      psu-0: ufispace/psu-162-dc@1
-      psu-1: ufispace/psu-162-dc@1
+      psu-0: ufispace/psu-162-dc@2
+      psu-1: ufispace/psu-162-dc@2
     component-attrs:
       psu-162-dc:
         model: PSU-162-DESR

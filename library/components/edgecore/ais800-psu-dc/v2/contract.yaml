@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ais800-psu-dc
-version: 2.0.0
+version: 2.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -112,6 +112,46 @@ provenance:
     thumbnail, and the callout numbers land on the features they name.
     EVERY RELIEF DEPTH IS ESTIMATED. The figure fixes where things are on the face and never
     how far they stand off it.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head 3.4
+    across (that part's own size is an estimate), standing at the centre of the disc this skin
+    already draws (centres 10.76 and 27.21 across, 24.89 down; each disc is 6.84 across). It is
+    not lifted: the figure shows the screw heads below the barriers, in recessed pockets (the
+    `terminal-pocket` relief above sinks them 3.2, estimated) and no document says how far, so the
+    seat is at the face's own level. The head is drawn smaller than the disc round it, so the
+    drawing marks where a lug lands and does not show the screw. The block itself stays drawn, as
+    `the-terminal-is-two-poles-plus-a-separate-ground` says; only the two screws and the ground
+    are composed. The quick start guides show the two screws and give a wire size and a torque,
+    and no screw head, thread or stud; the places are the skin's own.
+  earth: >-
+    A DECLARED STAND-IN. The AIS800-32D and AIS800-32O Quick Start Guides, "Connect Power", page
+    3, the first figure, callout "1. Ground": a hex-head screw with a cross recess and a round
+    washer at the top left of the supply, apart from the barrier block. It is a screw beside the
+    two-screw block, not on it, so it is a ground seat a lug lands on outside the DC port, which
+    keeps two poles (decided 2026-11-02). It is the library's common/ground-screw@1, a screw
+    that claims no stud size, standing at the centre of the hex this skin already draws as
+    `ground` (6.84 across, 8.36 down), because no document held gives this screw's thread or
+    head: the part draws a round cross-head cap over the hex, and the hex stays drawn.
+  poles: >-
+    Edgecore AIS800-32D and AIS800-32O Quick Start Guides, "Connect Power", page 3, the first
+    figure: two screws in a recessed block with -40 - -72 and RTN printed under them, "2. -40 -
+    -72 VDC" on the left screw and "3. DC return" on the right one. The second figure on that
+    page (a six-bore connector with a signal pair) is another module and is not read. The roles
+    are the callouts': `batt` for the -40 - -72 VDC wire (spec/schemas/dc.yaml writes `batt` as
+    negative (battery)) and `rtn` for DC return (it writes `rtn` as RTN and return), listed in the
+    callouts' order, which the printed legend agrees with. The port states no voltage: the guides
+    give two ranges (-40 - -72 and -48 - -60 VDC), a name and no nominal.
+  rating: >-
+    Edgecore AIS800-32D and AIS800-32O Quick Start Guides, page 4, Hardware Specifications, "DC
+    Input -48 - -60 VDC, 53 A max. per PS": the one current the documents held give for this
+    supply (the data sheets give 2400 W and no current), so the port states it as the supply's
+    input current. The range printed with it differs from the -40 - -72 on page 3; the port
+    states no voltage.
+  awg: >-
+    Edgecore AIS800-32D and AIS800-32O Quick Start Guides, page 3, the note under the figures:
+    "#6 AWG / 13.3 mm2 90C-rated copper wire" for a -40 to -72 VDC PSU, with a torque of 2.4
+    N.m. It is the one size the documents held give for this supply's DC wires, so the port
+    states it.
 states: [absent]
 elements:
   handle: {at: [13.34, 2.39], size: [37.96, 6.48], class: handle}
@@ -181,6 +221,20 @@ relief:
       source: >-
         edgecore/dcs240-psu-ac@1's latch, which records the same thing: outline drawn,
         projection not stated.
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [9.06, 23.19]}
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [25.51, 23.19]}
+  - {ref: common/ground-screw@1, id: earth, at: [4.04, 5.56]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 53
+      awg: [6]
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles, rating-a: rating, awg: awg}
 skins: [default]
 body:
   depth: 320

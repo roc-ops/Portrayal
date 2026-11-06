@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: sd-card-slot
+version: 1.0.0
+class: port
+profile: networking
+interface: sd-card
+description: >-
+  Full-size SD card slot of an Avocent ACS8000 console server, a thin dark opening on the front. It presents
+  the `sd-card` interface, which common/sd-card@1 mates.
+size: {w: 25.2, h: 2.9}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: sd-card}
+provenance:
+  size: >-
+    estimated - read off the Vertiv Avocent ACS8000 dual-AC front photograph (800 x 600 pixels, 1.77 pixels per
+    millimetre), where the slot reads about 44.5 pixels long and 4.5 pixels high. The data sheet says only "1
+    full size SD Card slot" and gives no dimension. The width agrees with a 24 mm card to within the
+    photograph's 0.6 mm, which is not a source for the slot. A dimensioned drawing of the front is wanted.
+  depth: >-
+    not stated - no document held gives how far a card enters the slot, so the contract states no depth and the
+    part is a flat opening in 3D.
+  seat: >-
+    the slot opening is drawn as the photograph shows it, a dark strip with a green edge, which is the card
+    connector's board behind the opening. The colour is read off the photograph and carries no meaning.
+elements:
+  opening: {at: [0.0, 0.0], size: [25.2, 2.9], class: port}
+connection-points:
+  mate: {at: [12.6, 1.45], direction: front}
+skins: [default]

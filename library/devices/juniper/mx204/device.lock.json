@@ -18,18 +18,19 @@
    "juniper/mx204-psu-dc@1"
   ]
  },
- "composed": "7a664d00700f624e",
+ "composed": "8ba3bc51ad3bf30f",
  "composed-refs": {
-  "common/esd-jack@1": "1.0.0+0991d3874bfac0f4",
+  "common/esd-jack@1": "1.0.1+fa89d49c1ff75841",
   "common/ground-screw-10-32@1": "1.0.0+f0abf79f91058854",
   "common/laser-warning@1": "1.0.0+3e1b8adda2030577",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "juniper/mx204-fan@1": "1.0.0+ed86358dc4f299ce",
   "juniper/mx204-ground-plate@2": "2.0.0+426e2e7cb9a8ddfc",
   "juniper/mx204-psu-ac@1": "1.1.0+803c59203629655b",
-  "juniper/mx204-psu-dc@1": "1.2.0+64f4f7fe752ef0e9",
+  "juniper/mx204-psu-dc@1": "1.3.0+d2cbe0efdf7b289c",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
   "std/rj45@2": "2.1.0+2c8fec73bdc493fb",
@@ -42,6 +43,60 @@
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "juniper/mx204-psu-dc@1": {
+    "awg": [
+     14,
+     16
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     }
+    ],
+    "rating-a": 20,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "juniper/mx204-psu-dc@1": {
+    "awg": [
+     14,
+     16
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     }
+    ],
+    "rating-a": 20,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "5a1abcd67770826c",
  "groups": [
@@ -352,5 +407,5 @@
  "placement-surface": "3e436b1dd29c6c90",
  "shape": "2eabbf91b5698853",
  "surface": "a451182100fd5ad8",
- "version": "4.0.2"
+ "version": "4.1.0"
 }

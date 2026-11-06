@@ -1,0 +1,103 @@
+format: 1
+kind: module
+name: nxa-pac-350w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 350 W AC power supply of the Cisco Nexus 9348GC-FX3 and 9348GC-FXP fixed switches. It is
+  ordered as NXA-PAC-350W-PI2 or NXA-PAC-350W-PI (port-side intake, burgundy latch) and
+  NXA-PAC-350W-PE2 or NXA-PAC-350W-PE (port-side exhaust, blue latch). It has two ring lamps,
+  a honeycomb grille, an IEC C14 inlet, two screws, a pull bar and a coloured release latch.
+size: {w: 84.7, h: 40.6}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PAC-350W'
+  power-output-w: 350
+  input: ac
+  inlet: c14
+  input-voltage: '100 to 120 Vac, 200 to 240 Vac'
+  input-current-max: '4 A at 100 to 120 Vac, 2 A at 200 to 240 Vac'
+  efficiency: 'Climate Savers Platinum Efficiency (80Plus Platinum certified)'
+  weight-kg: 1.2
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N9348GC-FX3 NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2023-08-18, Last Modified 2026-09-18), Overview: "350-W AC power supply with
+    port-side intake airflow (burgundy coloring) (NXA-PAC-350W-PI2)" and "... exhaust airflow
+    (blue coloring) (NXA-PAC-350W-PE2)". The Cisco Nexus 9348GC-FXP NX-OS Mode Hardware
+    Installation Guide, whose Overview lists NXA-PAC-350W-PI and NXA-PAC-350W-PE, was read
+    for the part numbers only. THE AIRFLOW SUFFIX IS DROPPED from the model, as on
+    cisco/nxa-pac-500w@1, AND SO IS THE 2: the guides do not say what the 2 marks, and give
+    the 350 W AC supply one specification table. One component carries both spellings
+    because the two guides draw the same module; a later device may split it if a source
+    ever shows a difference.
+  power: >-
+    datasheet - appendix B, "350-W AC Power Supply Specifications" of the 9348GC-FX3 guide:
+    AC input 100 to 120 VAC and 200 to 240 VAC, 50 to 60 Hz, 4 A at 100 to 120 VAC and 2 A at
+    200 to 240 VAC, "Maximumoutput power per power supply 350W" (an OUTPUT rating, so
+    `power-output-w`), inrush 33 A, Climate Savers Platinum, form factor RSP1. The weight is
+    the guide's weights table, 2.64 lb (1.2 kg), printed once for the 350 W AC, 350 W PHV and
+    440 W DC supplies. The guide notes that the 350 W AC supply "does not have the standby
+    voltage to be able to carry to a second power supply".
+  size: >-
+    estimated - THE GUIDE STATES NO DIMENSION, only "Form factor RSP1". Read off the guide's
+    rear figure (art number 504861, 1820 x 412 px, the switch body 1773 px across for 439.4
+    mm, 4.03 px per mm): the module's frame runs about 342 px across and 163 px down, 84.7 by
+    40.6 mm. A figure is not a dimension.
+  elements: >-
+    estimated - laid out from the same figure at 14.5 px per mm in a 3.6x enlargement: ring
+    lamps at 10.3 and 32.0 mm across and 8.3 mm down, a honeycomb grille below them from 3.4
+    to 41.6 mm across, a C14 inlet in a 31 by 24 mm surround from 42.3 mm, a latch block at
+    73.0 mm, two screws at the right edge and a pull bar along the foot. The legend text
+    ("AC OK" and "PS OK" above the lamps) is not carried.
+  lamps: >-
+    datasheet for the states - appendix C, "Power Supply LEDs": solid green for a regulated
+    12 V main and 12 V standby output, amber for a failure or a warning, off for no input. The
+    lamps are labelled AC OK and PS OK on the figure; the table does not say which state
+    belongs to which.
+  latch-colour: >-
+    datasheet for the convention - the guide's Overview gives burgundy for port-side intake
+    and blue for port-side exhaust. The values are cisco/nxa-pac-500w@1's.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-500w@1's round figure for a supply of
+    this class and nothing here measures it.
+states: [absent]
+elements:
+  ac-ok: {at: [8.1, 6.1], size: [4.4, 4.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  ps-ok: {at: [29.8, 6.1], size: [4.4, 4.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  fan: {at: [3.4, 11.0], size: [38.2, 23.0], class: rotor}
+  latch: {at: [73.0, 13.9], size: [10.2, 13.6], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [43.8, 8.1]}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-350w@1's own elements key - the grille's extent is read off the rear
+        figure and the depth of the cavity behind it is not stated.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        Not stated in any guide held. cisco/nxa-pac-500w@1 carries 3.0 mm for the same latch
+        and nothing here measures it.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [84.7, 40.6]}

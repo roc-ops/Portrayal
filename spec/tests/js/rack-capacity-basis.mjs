@@ -256,10 +256,12 @@ test('inspect states the count as its maker does: the count, the basis and the k
 test('the device schema takes the kinds of cable a rack file names, and no other', () => {
   // a device states the kind in the words a cable's `media` uses, so the two lists are one.
   // A capacity is a count of data cords: no maker states one in power cables or ground
-  // wires, and the device schema does not take those two words (#1045).
+  // wires, and the device schema does not take those two words (#1045). Nor does
+  // it take a stack, USB or console cable: none is a data cord a switch counts.
   const schema = JSON.parse(readFileSync(new URL('../../schemas/device.schema.json', import.meta.url), 'utf8'));
   const performance = schema.properties.attrs.properties.performance;
-  assert.deepEqual(performance.properties['cable-capacity-media'].enum, C.MEDIA.filter(m => m !== 'power' && m !== 'ground'));
+  assert.deepEqual(performance.properties['cable-capacity-media'].enum,
+    C.MEDIA.filter(m => !['power', 'ground', 'stack', 'usb', 'console'].includes(m)));
   assert.deepEqual(performance.dependentRequired['cable-capacity-media'], ['cable-capacity']);
   // an estimate is marked, and only a count of a named kind can be one (P-0027)
   assert.equal(performance.properties['cable-capacity-estimated'].type, 'boolean');

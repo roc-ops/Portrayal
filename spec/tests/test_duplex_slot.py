@@ -604,6 +604,7 @@ def seated_duplex(tmp_path, lib_root, seat, ref):
                          part["connection-points"]["mate"]["at"]))
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", [CAP, REAL_PLUG])
 @pytest.mark.parametrize("seat", SEATS, ids=[s[5].split("/")[1] for s in SEATS])
 def test_a_duplex_part_covers_both_bores_of_either_adapter(tmp_path, lib, ref, seat):
@@ -619,6 +620,7 @@ def test_a_duplex_part_covers_both_bores_of_either_adapter(tmp_path, lib, ref, s
         assert covers(box, pt), (ref, seat[3], bid, pt, box)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("deg", [90, 270])
 @pytest.mark.parametrize("ref", [CAP, REAL_PLUG])
 @pytest.mark.parametrize("seat", SEATS, ids=[s[5].split("/")[1] for s in SEATS])

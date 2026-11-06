@@ -24,17 +24,18 @@
    "ufispace/psu-401-dc@1"
   ]
  },
- "composed": "261e632bb199b22b",
+ "composed": "37393317cffba052",
  "composed-refs": {
   "common/compliance-sticker@1": "1.0.0+6b3c51b31c446689",
-  "common/ground-symbol@1": "1.0.0+938c617ba0a96a89",
+  "common/ground-symbol@1": "1.0.1+0018bfdfc1559185",
   "common/led-arrow@1": "1.1.0+bb17f3a6fc695571",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/led-rect@1": "1.1.0+0314fb1739d8b11d",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rivet@1": "1.0.0+4685edc04da9b23d",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
-  "common/screw-head@1": "1.1.0+0f38d482bcc27ec9",
+  "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "common/usb-a-bezel@1": "1.0.0+dbd65b62318759eb",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
@@ -43,13 +44,75 @@
   "std/usb-a@1": "1.3.0+3c77f06ea6794bfc",
   "ufispace/fan-402825@1": "1.2.0+7b69e930df2c4acc",
   "ufispace/psu-401-ac@1": "1.4.1+c3e502c3e4815abc",
-  "ufispace/psu-401-dc@1": "1.3.1+2e896232cfe5e70f"
+  "ufispace/psu-401-dc@1": "1.4.0+575c80a4c85f4b09"
  },
  "configs": [
   "ac",
   "base",
   "dc"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "ufispace/psu-401-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "base",
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     },
+     {
+      "role": "gnd",
+      "slot": "psu-0/module/pole-gnd"
+     }
+    ],
+    "rating-a": 16,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "ufispace/psu-401-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "base",
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "gnd",
+      "slot": "psu-1/module/pole-gnd"
+     }
+    ],
+    "rating-a": 16,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "5dce0022a44022a8",
  "groups": [
@@ -527,30 +590,30 @@
    "front/placements/led-port-46": 46,
    "front/placements/led-port-47": 47,
    "front/placements/led-port-48-1": 48,
-   "front/placements/led-port-48-2": 48,
-   "front/placements/led-port-48-3": 48,
-   "front/placements/led-port-48-4": 48,
-   "front/placements/led-port-49-1": 49,
-   "front/placements/led-port-49-2": 49,
-   "front/placements/led-port-49-3": 49,
-   "front/placements/led-port-49-4": 49,
+   "front/placements/led-port-48-2": 49,
+   "front/placements/led-port-48-3": 50,
+   "front/placements/led-port-48-4": 51,
+   "front/placements/led-port-49-1": 52,
+   "front/placements/led-port-49-2": 53,
+   "front/placements/led-port-49-3": 54,
+   "front/placements/led-port-49-4": 55,
    "front/placements/led-port-5": 5,
-   "front/placements/led-port-50-1": 50,
-   "front/placements/led-port-50-2": 50,
-   "front/placements/led-port-50-3": 50,
-   "front/placements/led-port-50-4": 50,
-   "front/placements/led-port-51-1": 51,
-   "front/placements/led-port-51-2": 51,
-   "front/placements/led-port-51-3": 51,
-   "front/placements/led-port-51-4": 51,
-   "front/placements/led-port-52-1": 52,
-   "front/placements/led-port-52-2": 52,
-   "front/placements/led-port-52-3": 52,
-   "front/placements/led-port-52-4": 52,
-   "front/placements/led-port-53-1": 53,
-   "front/placements/led-port-53-2": 53,
-   "front/placements/led-port-53-3": 53,
-   "front/placements/led-port-53-4": 53,
+   "front/placements/led-port-50-1": 56,
+   "front/placements/led-port-50-2": 57,
+   "front/placements/led-port-50-3": 58,
+   "front/placements/led-port-50-4": 59,
+   "front/placements/led-port-51-1": 60,
+   "front/placements/led-port-51-2": 61,
+   "front/placements/led-port-51-3": 62,
+   "front/placements/led-port-51-4": 63,
+   "front/placements/led-port-52-1": 64,
+   "front/placements/led-port-52-2": 65,
+   "front/placements/led-port-52-3": 66,
+   "front/placements/led-port-52-4": 67,
+   "front/placements/led-port-53-1": 68,
+   "front/placements/led-port-53-2": 69,
+   "front/placements/led-port-53-3": 70,
+   "front/placements/led-port-53-4": 71,
    "front/placements/led-port-6": 6,
    "front/placements/led-port-7": 7,
    "front/placements/led-port-8": 8,
@@ -829,6 +892,6 @@
  },
  "placement-surface": "41437548b127a846",
  "shape": "259b841a4ecc9325",
- "surface": "f56bbd971a9a2730",
- "version": "4.0.4"
+ "surface": "82b6d0ab4722d936",
+ "version": "5.0.0"
 }

@@ -41,6 +41,7 @@ def nested_devices():
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
 def test_every_nested_configuration_key_names_a_seated_bay_in_the_drawing(tmp_path):
     devs = nested_devices()

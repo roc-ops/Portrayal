@@ -1,0 +1,140 @@
+format: 1
+kind: module
+name: scbe-mx
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX Series Enhanced Switch Control Board (SCBE-MX, CLI name Enhanced MX SCB; Junos 11.4R1 and
+  later) - the fabric and control carrier for the MX240, MX480 and MX960 built for MPC3E line cards. It
+  seats in the same SCB slots as the SCB-MX, SCBE2-MX and SCBE3-MX. The Routing Engine slides into the
+  board's own bay. The face carries the OK/FAIL, FABRIC ACTIVE and FABRIC ONLY lamps at the left, the
+  BITS, GPS and UTI lamps, the RJ-45 EXT CLK jack, one plain port opening and an ejector lever at each end.
+attrs:
+  model: SCBE-MX
+  power-draw-max-w: 160
+  fabric-bandwidth: up to 240 Gbps per slot (non-redundant fabric), 160 Gbps (redundant)
+  generation: 2nd
+provenance:
+  size: >-
+    estimated - the bay envelope, carried as juniper/scb-mx@3 carries it: 413.5 x 29.5, the lever-tip
+    envelope of Juniper's stencil and the plate height (plate 396.0 between the levers). It is the SCB
+    bays' size and not this board's. The SCBE-MX description prints no dimensions; the chassis sections do,
+    in a row named "SCBE" and not "SCBE-MX", which is joined to this board by generation name (it sits
+    between the SCB and SCBE2 rows; the description names this board the Enhanced MX SCB). The MX960
+    Hardware Guide (PDF dated 2025-08-19), Table 83 (PDF p247, printed 228), prints width 17 in (43.2 cm),
+    depth 22 in (55.9 cm), height 1.25 in (3.2 cm) and 9.6 lb (4.4 kg) with a Routing Engine installed; the
+    MX480 guide (PDF dated 2026-01-29), Table 88 (PDF p220, printed 204), prints the same; the MX240 guide
+    (PDF dated 2026-05-27), Table 88 (PDF p226, printed 210), prints the same with 9.6 lb (4.4 kg) and no
+    Routing Engine remark. They are the SCB and SCBE2 rows' figures too: the one 17 x 22 x 1.25 in figure
+    the guides give every MPC, DPC and SCB (see juniper/scb-mx@3). 17 in is 431.8 mm against the 413.5
+    envelope and 1.25 in is 31.8 mm against 29.5, so the bays are not moved, resized or retyped for it. The
+    guide figures are not carried as `datasheet` because the envelope is not theirs
+  weight: guide - 9.6 lb (4.4 kg) with a Routing Engine installed (the "SCBE" row of the chassis physical-specification tables, joined by generation name)
+  software: >-
+    guide - MX960 Hardware Guide, SCBE-MX Description (printed p214): Software Release 11.4R1 (the MX240 and
+    MX480 upgrade procedures say Junos OS Release 11.4 or later); CLI identification Enhanced MX SCB;
+    designed for use with MPC3E line cards. The two names are a note only, no configuration is added: the hardware-components
+    table (Table 5, printed p24) prints the hardware model number SCBE-MX960-S, and the MX family data sheet
+    prints the orderable name SCBE-MX-BB (Enhanced Switch Control Board for MX240, MX480 and MX960). The
+    model is written as the description prints it, SCBE-MX
+  power: >-
+    EVERY PRINTED FIGURE, WITH ITS PAGE (watts at 55 / 40 / 25 C): 160 / 130 / 120 in the MX960 guide's
+    SCBE-MX Maximum Power Requirements (printed p215) and Power Requirements for Switch Control Boards
+    (printed p198, "applies to MX240, MX480, and MX960"), in the MX480 guide's table of the same name
+    (printed p200) and per-slot table Power Requirements for MX480 SCBs (printed p217), and in the MX240
+    guide's table (printed p206) and Maximum Power Consumption for SCB Models (printed p219). There is no
+    conflict: every table prints one figure for every chassis and slot (the SCBE3-MX's guides disagree, this
+    board's do not). Max takes 55 C. The guide states no typical, so none is carried. 160 W is the board
+    alone, without the Routing Engine (90 W at most, Interoperability with Routing Engines table, printed p216)
+  fabric: >-
+    guide - SCBE-MX description (printed p215): up to 240 Gbps per slot (non-redundant fabric configuration),
+    160 Gbps (redundant); chassis totals MX240 up to 930 Gbps, MX480 up to 2.79 Tbps, MX960 up to 5.25 Tbps;
+    switch fabric capacity 5.12 Tbps; the next-generation fabric (XF) chip, and a Stratum 3 clock module for
+    centralized clocking. The MX960 guide's capacity table (Table 76) agrees
+  re-bay: >-
+    estimated - the bay is drawn the width of the RE-S-1300 and RE-S-2000 plates (271.9) from card x 52.0, the
+    first clear space after the lamp group and screw, to 323.9, the last before the port opening: the figure
+    does not show the slot. Accepts the two Routing Engines the guide's SCBE-MX Interoperability with Routing
+    Engines table (printed p216; Table 77 lists the same) names that the library holds: RE-S-1300 (EOLed) is
+    juniper/re-s-1300@2 (model RE-S-1300-2048) and RE-S-2000 (EOLed) with RE-S-2000-4096 (EOL'd) is
+    juniper/re-s-2000@2 (model RE-S-2000-4096). The same table lists RE-S-1800 (all variants), which is not in
+    the library. "The routing engine installs directly into a slot on the SCBE-MX" (guide), so the bay is
+    the board's
+  face: >-
+    drawing, ESTIMATED - the SCBE-MX has one figure in the three guides, Figure 51 of the MX960 guide (PDF
+    p233, printed 214). The board body in it is a perspective drawing; its two magnified insets show the two
+    ends straight on, and the face is read off the insets, turned here as scb-mx@3 is turned (top of the
+    drawing at the left). Positions were read off the insets' pixels and are good to about 2 mm along the
+    card and 1.5 mm across; the upper inset is at about 8.0 px/mm and the lower at about 8.1, fitted so the
+    end panel is the 29.5 plate height, and the two are not on one scale to better than that. Lamps at card
+    x 33.75 (OK/FAIL, y 22.6) and x 40.6 (FABRIC ACTIVE y 22.0, FABRIC ONLY y 17.0); the legends stack ACTIVE
+    over ONLY with FABRIC under both, and which lamp each reads is estimated. The BITS, GPS and UTI lamps in a
+    row at x 359.7 (y 9.1, 13.8, 19.0), each led from its legend by a bracket that the figure draws, so the
+    order is the figure's. The RJ-45 jack at x 371.2 (y 14.75) with its EXT CLK legend. One plain rectangular
+    opening (17.0 x 11.7 at card x 337.1, y 10.1) above the lamps is drawn as the figure shows it: the guide
+    names no port for this board, so no cage is drawn (no cage the figure does not show, and a port not named
+    by the guide is not given one). A narrow label recess at card x 377-403 is the one the figure shows beside the jack. A plus
+    screw at x 44.0 (y 9.9). The levers and the Routing Engine bay are estimated. The Visio index sheet held
+    with the guides (MX Series Visio Index Sheet, page 12) lists a straight-on SCBE-MX shape, too small to
+    measure; it is stencil artwork and is not copied, and its labels are not this board's guide text
+  levers: >-
+    drawing, estimated - Figure 51 shows a winged lever at each end, about 28 mm long and 11 across at the
+    upper end and partly hidden at the lower; both drawn 27.0 x 11.0 with the tips at the envelope edge.
+    scb-mx@3's photo-measured 29 x 7.4 is the neighbour's, not this board's reading
+  ports: >-
+    guide - the description names one RJ-45 jack labelled EXT CLK, with the BITS, GPS and UTI lamps "next to the
+    EXT CLK port" (printed p216); it names no SFP+ or XGE port. Figure 51's lower inset shows one jack and one
+    plain rectangular opening above the lamps. The registry jack std/rj45@2 is reused, typed rj45-tod as the
+    SCBE2-MX's and SCBE3-MX's are (whether a BITS jack is better typed is a question the guide does not
+    settle). The opening is not a part
+  leds: >-
+    guide Table 80, SCBE-MX LEDs (printed p217-218): FABRIC ACTIVE green steady, fabric in active mode; FABRIC
+    ONLY green steady, fabric-only mode, off fabric/control board mode; OK/FAIL green online, red failed, off
+    offline; BITS, GPS, UTI each green active, red failed, off offline. The same table also lists, under OK/FAIL
+    with no label, red "GPS clocking interface has failed" and off "GPS clocking interface is offline", which
+    looks misfiled (it repeats the GPS rows) and is declared, not drawn. A note in the table says "The LEDs
+    BITS, GPS, and UTI are not currently supported": the three lamps are drawn because the figure shows
+    them, and what they show is the table's if they work at all
+  logo-zone: >-
+    reserved - Figure 51 prints no vendor mark on the board; the zone is kept clear as the neighbours do
+    and no logo or wordmark is drawn
+states:
+- ok
+- fail
+- absent
+groups:
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the RJ-45 external clock interface
+parts:
+- {ref: std/rj45@2, id: ext-clk, group: timing, at: [363.3, 8.15], rotate: 180, attrs: {media: rj45-tod, function: 'external clock (BITS, GPS, UTI)'}}
+elements:
+  lever-left:
+    at: [0.0, 9.9]
+    size: [27.0, 11.0]
+    class: latch
+  lever-right:
+    at: [386.5, 9.0]
+    size: [27.0, 11.0]
+    class: latch
+  logo-zone:
+    at: [60.0, 2.0]
+    size: [18.0, 5.0]
+    class: label
+bays:
+  re:
+    at: [52.0, 1.0]
+    size: [271.9, 27.5]
+    accepts: [juniper/re-s-1300@2, juniper/re-s-2000@2]
+    default: juniper/re-s-1300@2
+size:
+  w: 413.5
+  h: 29.5
+size-notes: >-
+  w is the lever envelope and h the plate height of the SCB bays that take this board, as juniper/scb-mx@3
+  carries them (its size-notes say how they were found). They are not the guide's 17 x 1.25 in.
+size-confidence: {w: drawing, h: estimated}

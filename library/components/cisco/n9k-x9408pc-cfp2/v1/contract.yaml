@@ -1,0 +1,123 @@
+format: 1
+kind: module
+name: n9k-x9408pc-cfp2
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9500 8-port 100-Gigabit Ethernet CFP2 line card (N9K-X9408PC-CFP2). Eight CFP2 ports in two rows
+  of four, a Beacon and a Status lamp at the left and one Link triangle per port between the rows, with an
+  ejector lever at each end. The Nexus 9504, 9508 and 9516 take it, with the 40-Gigabit N9K-C9504-FM,
+  N9K-C9508-FM and N9K-C9516-FM fabric modules.
+size: {w: 431.8, h: 44.45, d: 419.1}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-X9408PC-CFP2'
+  role: 'line-card'
+  cfp2: 8
+  media: 'CFP2, 100 Gigabit Ethernet'
+  weight-kg: 5.92
+  power-draw-typical-w: 310
+  power-draw-max-w: 432
+  chassis: 'Nexus 9504, Nexus 9508, Nexus 9516'
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    datasheet - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (PDF p120, printed 114), "Line cards": 17.0 in (43.18 cm) wide by 1.75 in (4.4 cm) high; the 9504 guide
+    (PDF p120, printed 114) and the 9516 guide (PDF p116, printed 110) print the same row. It is the class row
+    for every line card, not a row of this card.
+  depth: >-
+    datasheet - the same row: 16.5 in (41.91 cm) inside the chassis, ejector levers 2.5 in (6.35 cm) outside
+    it. The depth is the inside figure, as the supervisor's is; the levers swing out and are not added.
+  weight: >-
+    datasheet - Cisco N9504 NX-OS Mode Switch Hardware Installation Guide, "Weights and Quantities" (PDF p121,
+    printed 115): 13.05 lb (5.92 kg); the 9516 guide's weights table (PDF p116, printed 110) prints the same.
+    The 9508 guide's weights section has no table.
+  power: >-
+    datasheet - the "Planning for Power Requirements" tables, in the row under the "N9K-C9504-FM", "N9K-C9508-FM"
+    or "N9K-C9516-FM" fabric-module heading (9504 guide PDF p17, printed 11, and its copy of the 9508's table on
+    PDF p19; 9508 guide PDF p17, printed 11; 9516 guide PDF pp17 and 19, printed 11 and 13): typical 310 W,
+    maximum 432 W, the same in all three guides. The heading row carries its own figures, so the pair is read by
+    line order from the card's own row.
+  ports: >-
+    install guide - the Overview tables and the power and weight tables call it an "8-port 100-Gigabit
+    Ethernet CFP2 line card". TEXT ONLY: no held figure shows this card's faceplate, so the count and cage are
+    the guide's words and every position is estimated - eight CFP2 ports in two rows of four on a 90 mm pitch,
+    laid out evenly between the lamps and the right-hand lever, odd ports over even in each column. The
+    guide's figure of a 36-port card (9504 guide PDF p93, printed 87) names no model and is not this card's. The
+    numbering as printed on the metal is not shown; Ethernet1/n interface names are not drawn.
+  lamps: >-
+    install guide - "Line Card LEDs" (9504 and 9508 guides PDF p136, printed 130; 9516 guide PDF p132,
+    printed 126): the Beacon (BCN) and Status (STS) lamps are "on the front, toward the left side of the
+    module"; the Link lamp of each port is "between the two rows of ports", a triangle pointing to the port
+    above or below it. BCN: flashing blue, or off. STS: green, flashing red, flashing amber, or off. Link:
+    green, orange, flashing orange, or off. The lamps are drawn beside what they name; positions estimated.
+  skin: >-
+    estimated - the card's own faceplate is not shown, so the skin does not show this card. The levers follow
+    the install procedure ("Installing or Replacing a Line Card", 9504 guide PDF pp91-92, printed 85-86): a
+    release button on each ejector lever, which is pressed before the lever is rotated away. The maker's mark
+    is reserved as the logo-zone and not drawn.
+  chassis-compatibility: >-
+    install guide - the Overview tables of the 9504 (PDF p8, printed 2), 9508 (PDF p8, printed 2) and 9516
+    (PDF p8, printed 2) guides list it under the plain N9K-C9504-FM, N9K-C9508-FM and N9K-C9516-FM fabric
+    modules, four of them for maximum bandwidth, and under none of the -E, -E2 or -G1 modules. That is why the
+    slot bays of all three chassis accept it; geometry is not a compatibility source. The fabric modules the
+    guides pair with it are listed in the chassis and are not enforced.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number, and no end-of-sale notice is held.
+elements:
+  bcn:
+    at: [12.5, 12.0]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp, at the left of the face.
+    states:
+    - {name: blue, color: '#2a7de1', behavior: blinking}
+    - 'off'
+  sts:
+    at: [12.5, 25.0]
+    size: [3.0, 3.0]
+    class: led
+    description: STS lamp, at the left of the face.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#d0021b', behavior: blinking}
+    - {name: amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+  logo-zone:
+    at: [413.5, 18.0]
+    size: [8.0, 8.0]
+    class: mechanical
+    description: The maker's mark, reserved and not drawn.
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+  link-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    attrs:
+      led-states: 'green (port active), orange (port disabled or not initialising), flashing orange (beacon on the port, or the port is faulty and disabled), off (port not active, link not connected)'
+parts:
+  - {ref: std/cfp2@2, id: port-1, at: [45, 4.0], group: ports}
+  - {ref: std/cfp2@2, id: port-2, at: [45, 26.15], rotate: 180, group: ports}
+  - {ref: std/cfp2@2, id: port-3, at: [135, 4.0], group: ports}
+  - {ref: std/cfp2@2, id: port-4, at: [135, 26.15], rotate: 180, group: ports}
+  - {ref: std/cfp2@2, id: port-5, at: [225, 4.0], group: ports}
+  - {ref: std/cfp2@2, id: port-6, at: [225, 26.15], rotate: 180, group: ports}
+  - {ref: std/cfp2@2, id: port-7, at: [315, 4.0], group: ports}
+  - {ref: std/cfp2@2, id: port-8, at: [315, 26.15], rotate: 180, group: ports}
+  - {ref: common/led-arrow-sm@1, id: link-1, at: [59, 20.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-2, at: [69, 20.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-3, at: [149, 20.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-4, at: [159, 20.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-5, at: [239, 20.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-6, at: [249, 20.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-7, at: [329, 20.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-8, at: [339, 20.2], skin: down, group: link-leds}
+skins: [default]

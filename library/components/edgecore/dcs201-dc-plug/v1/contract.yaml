@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: dcs201-dc-plug
+version: 1.0.0
+class: port
+mates: edgecore-dcs-dc-block-3
+profile: power
+description: >-
+  The cable connector of the Edgecore AS5835-54X and AS5835-54T 48 VDC supply, wired, seen from the wire side as
+  seated. A green body with a screw boss at its top; one insulated wire enters each of its three ways, from the
+  top down the ground, the wire for -36 to -75 VDC and the DC return, as the guides number them 3, 2 and 1. It seats
+  in an `edgecore-dcs-dc-block-3` connector at its own mate point. It carries one wire per contact, not one cable.
+size: {w: 20.0, h: 18.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, edgecore/dcs201-dc-header@1, 20.0 by 18.0. The guides draw the cable
+  connector without a scale and no dimension of it is held.
+attrs: {media: edgecore-dcs-dc, connector: pluggable DC cable connector, positions: 3}
+fields:
+  wire-1-color: {label: 'Wire colour (ground, top)', type: text, default: '#f1f0a8'}
+  wire-2-color: {label: 'Wire colour (-36 to -75 VDC, middle)', type: text, default: '#4a3426'}
+  wire-3-color: {label: 'Wire colour (DC return, bottom)', type: text, default: '#2f3f86'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    quick start - the Edgecore AS5835-54T Quick Start Guide, "Connect Power" (page 2), draws the plug in its "DC
+    Power" figure with three wires entering a green body that has a screw boss at its top, and numbers them
+    "1. DC Return, 2. -36 - -75 VDC, 3. Ground". The AS5835-54X guide prints the same figure without the numbers.
+    The package contents list it as "DC power connector (included with 48 VDC PSU only)". No maker, series or part
+    number is named. THE PART IS A STAND-IN FOR THE CABLE CONNECTOR.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    quick start - the figure draws a pale yellow wire (callout 3, ground), a brown one (callout 2, -36 to -75 VDC)
+    and a dark blue one (callout 1, DC return), top to bottom as the plug stands. The guide prints no wire colour in
+    words, so the defaults are the figure's colours and no colour is stated as a meaning. The pale yellow wire shows no
+    green stripe at the size the figure is drawn.
+  far-end: >-
+    NOT DRAWN. The other ends of the wires land on the DC power source, which is the site's equipment and not this
+    supply's; the guide says only "Connect a DC power source to the PSUs".
+  gauge: >-
+    quick start - "a #14 AWG wire (for -36 VDC to -75 VDC PSU) to connect to a DC PSU" (AS5835-54T guide, page 2).
+    Not stated as the gauge of the supplied connector's wires.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the supply, so the part draws a plan
+    outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [8.2, 9.0], direction: front}
+  wire-1: {at: [8.2, 4.2], direction: front}
+  wire-2: {at: [8.2, 9.0], direction: front}
+  wire-3: {at: [8.2, 13.8], direction: front}
+skins: [default]

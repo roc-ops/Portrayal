@@ -166,6 +166,7 @@ def test_the_sweep_reads_the_repository(tracked):
     assert len(tracked) > 500, f"only {len(tracked)} tracked text files - the walk is broken"
 
 
+@pytest.mark.heavy
 def test_no_tracked_file_carries_a_private_address(tracked):
     hits = _sweep(tracked, PRIVATE_IP)
     assert not hits, (
@@ -176,6 +177,7 @@ def test_no_tracked_file_carries_a_private_address(tracked):
         "see roc-ops/Portrayal#253.")
 
 
+@pytest.mark.heavy
 def test_no_tracked_file_carries_a_login_against_an_address(tracked):
     hits = _sweep(tracked, SSH_TARGET)
     assert not hits, (
@@ -183,6 +185,7 @@ def test_no_tracked_file_carries_a_login_against_an_address(tracked):
         "\n\n`user@host` as a placeholder is fine; a username against a real address is not.")
 
 
+@pytest.mark.heavy
 def test_no_tracked_file_carries_a_machine_path(tracked):
     hits = _sweep(tracked, MACHINE_PATH)
     assert not hits, (
@@ -190,6 +193,7 @@ def test_no_tracked_file_carries_a_machine_path(tracked):
         "\n\nWrite it relative to the repository root, or use `/home/me/` as the example.")
 
 
+@pytest.mark.heavy
 def test_no_tracked_file_carries_a_personal_email(tracked):
     hits = _sweep(tracked, EMAIL, keep=lambda m: not _allowed_email(m))
     assert not hits, (
@@ -197,6 +201,7 @@ def test_no_tracked_file_carries_a_personal_email(tracked):
         "\n\nUse example.com for an example, a noreply address for attribution.")
 
 
+@pytest.mark.heavy
 def test_no_tracked_file_names_a_customer_employer_or_maintainer(tracked):
     hits = []
     for rel, text in tracked:

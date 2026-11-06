@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22.0mm" height="22.6mm" viewBox="0 0 22.0 22.6">
+  <!-- The PSU-242-DEERN DC input connector seen from its mating face: a body with two rows of three cells, "V+" over "V-" as the supply prints
+       them, and the bar between the rows. It draws what the supply's skin already drew in the same place, shape for shape. Shapes and colours
+       are estimates; the guide's figure is a CAD sheet. -->
+  <rect id="body" x="0" y="0" width="22.0" height="22.6" rx="0.8" fill="#101315" stroke="#4a4f55" stroke-width="0.4"/>
+  <g id="cells" fill="#8d9297">
+    <rect x="1.9" y="2.0" width="5.4" height="7.2" rx="0.4"/>
+    <rect x="8.3" y="2.0" width="5.4" height="7.2" rx="0.4"/>
+    <rect x="14.7" y="2.0" width="5.4" height="7.2" rx="0.4"/>
+    <rect x="1.9" y="13.4" width="5.4" height="7.2" rx="0.4"/>
+    <rect x="8.3" y="13.4" width="5.4" height="7.2" rx="0.4"/>
+    <rect x="14.7" y="13.4" width="5.4" height="7.2" rx="0.4"/>
+  </g>
+  <rect id="bar" x="1.9" y="10.2" width="18.2" height="2.4" rx="0.3" fill="#2b2f33"/>
+  <!-- The supply prints "V+" on its own face, just left of the block, and the build paints its raised pull bar over that printing. The
+       mark is drawn again here, outside this part's box and clipped to the bar's end, so it stays above the bar and nowhere else. -->
+  <defs>
+    <clipPath id="bar-end"><rect x="-5" y="3.15" width="3.25" height="6.9"/></clipPath>
+  </defs>
+  <g id="silkscreen" fill="#c9ced4" font-family="sans-serif" font-size="2.2" text-anchor="end" clip-path="url(#bar-end)">
+    <text x="-0.5" y="4.0">V+</text>
+  </g>
+</svg>

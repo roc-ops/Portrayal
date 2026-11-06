@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ex4500-vc1
-version: 1.0.0
+version: 1.1.0
 class: fabric
 behaviour: fills
 profile: networking
@@ -26,8 +26,17 @@ provenance:
   face: >-
     estimated - read as fractions of the isometric Figure 12: a screw at each end, two lamps at the left,
     two connector openings in the left half and the model name at the lower right. Every position is
-    estimated, and the two connectors are drawn as plain openings because the guide names no connector
-    type for the dedicated ports. The maker's mark is a logo and is not drawn.
+    estimated; the two connectors are the EX4200's port part (see ports). The maker's mark is a logo and
+    is not drawn.
+  ports: >-
+    borrowed - juniper/ex4200-vcp-port@1, on the guide's own words. EX4500 Switch Hardware Guide: the
+    module's two dedicated VCPs interconnect the switch "with EX4200 switches, EX4500 switches, or EX4550
+    switches" (PDF p.27); "EX4500 switches use a 68-pin connector cable to interconnect switches to form a
+    Virtual Chassis" (PDF p.129); and the 0.5-meter Virtual Chassis cable, which "is supplied with an
+    EX4200", joins EX4200, EX4500 and EX4550 switches through their VCPs (PDF p.137, Table 58). One cable
+    fits both, so it is one connector and one part. Each port keeps the centre the isometric art gave
+    (98.0, 11.4 and 162.0, 11.4) and is drawn at the part's 36.2 x 8.3, where the art was 24.0 x 8.0, an
+    estimate off Figure 12.
   led: >-
     datasheet - Table 9: ST is green when the module works. VC MODE is green when the module and its ports
     are active, and unlit when the module works as an intraconnect module and the ports are not active.
@@ -51,14 +60,6 @@ elements:
     states:
     - {name: green, color: '#39b54a'}
     - 'off'
-  vcp-0:
-    at: [86.0, 7.4]
-    size: [24.0, 8.0]
-    class: port
-  vcp-1:
-    at: [150.0, 7.4]
-    size: [24.0, 8.0]
-    class: port
   screw-left:
     at: [2.8, 10.3]
     size: [8.0, 8.0]
@@ -67,6 +68,9 @@ elements:
     at: [333.1, 10.3]
     size: [8.0, 8.0]
     class: screw
+parts:
+  - {ref: juniper/ex4200-vcp-port@1, id: vcp-0, at: [79.9, 7.25]}
+  - {ref: juniper/ex4200-vcp-port@1, id: vcp-1, at: [143.9, 7.25]}
 size:
   w: 345.9
   h: 21.7

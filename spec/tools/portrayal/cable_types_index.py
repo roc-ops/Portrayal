@@ -17,7 +17,7 @@ from portrayal.manifest import load_yaml
 
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
 FORMAT = 1
-FAMILIES = ("fiber", "copper", "dac", "aoc", "power")
+FAMILIES = ("fiber", "copper", "dac", "aoc", "power", "ground", "stack", "usb", "console")
 BASES = ("standard", "convention")
 # A jacket colour can also be counted on the maker's photograph (#1028).
 JACKET_BASES = BASES + ("photo",)
@@ -80,10 +80,59 @@ def jacket_problems(where, j, sources):
     return out
 
 
-def problems(doc):
+def dc_roles():
+    """The roles a DC conductor may have: the keys of spec/schemas/dc.yaml's `roles`."""
+    return tuple(load_yaml(SCHEMAS / "dc.yaml")["roles"])
+
+
+def dc_problems(where, t, sources, roles):
+    """What is wrong with the DC keys of one type: `dc`, `conductors`, `ampacity-a`."""
+    out = []
+    dc = t.get("dc")
+    if "dc" in t and not isinstance(dc, bool):
+        out.append(f"{where}: dc must be true or false")
+    if "conductors" in t:
+        cond = t["conductors"]
+        if not isinstance(cond, list) or not cond:
+            out.append(f"{where}: conductors is a list of one or more {{role, awg}} mappings")
+        else:
+            for i, c in enumerate(cond, 1):
+                w = f"{where} conductor {i}"
+                if not isinstance(c, dict):
+                    out.append(f"{w}: not a mapping")
+                    continue
+                if c.get("role") == "gnd":
+                    out.append(f"{w}: role 'gnd' is a ground wire, a type of its own, and not a conductor of a feed")
+                elif c.get("role") not in roles:
+                    out.append(f"{w}: role {c.get('role')!r} is not one of dc.yaml's roles ({', '.join(roles)})")
+                if not _positive(c.get("awg")):
+                    out.append(f"{w}: awg must be a positive number")
+                out += [f"{w}: unknown key {k!r}" for k in sorted(set(c) - {"role", "awg"})]
+    if "ampacity-a" in t:
+        if not _positive(t["ampacity-a"]):
+            out.append(f"{where}: ampacity-a must be a positive number of amperes")
+        src = t.get("ampacity-sources")
+        if not isinstance(src, list) or not src:
+            out.append(f"{where}: ampacity-a has no ampacity-sources")
+        else:
+            out += [f"{where} ampacity-sources: unknown source {s!r}" for s in src if not _known(s, sources)]
+    if dc is True:
+        if t.get("family") != "power":
+            out.append(f"{where}: a DC feed is of the family power")
+        if "conductors" not in t:
+            out.append(f"{where}: a DC feed names its conductors")
+        if "ampacity-a" not in t:
+            out.append(f"{where}: a DC feed states its ampacity-a")
+    elif "conductors" in t:
+        out.append(f"{where}: conductors belong to a DC feed, which states dc: true")
+    return out
+
+
+def problems(doc, roles=None):
     """Every reason the table cannot be published; [] when it can."""
     if not isinstance(doc, dict):
         return ["the table is not a mapping"]
+    roles = dc_roles() if roles is None else roles
     out = []
     if doc.get("format") != FORMAT:
         out.append(f"format must be {FORMAT}")
@@ -134,8 +183,15 @@ def problems(doc):
             out.append(f"{w}: fiber is not a mapping")
         elif fib is not None and "min_bend" in fib:
             out += radius_problems(f"{w} fiber.min_bend", fib["min_bend"], sources, False)
-        if t.get("family") == "power" and not (isinstance(t.get("conductor"), str) and t["conductor"]):
+        out += dc_problems(w, t, sources, roles)
+        # a DC feed names its `conductors` instead
+        if t.get("family") == "power" and t.get("dc") is not True and not (isinstance(t.get("conductor"), str) and t["conductor"]):
             out.append(f"{w}: a power type names its cord's `conductor`")
+        if "sources" in t:
+            if not isinstance(t["sources"], list) or not t["sources"]:
+                out.append(f"{w}: sources is a list of the documents that name the cable")
+            else:
+                out += [f"{w}: unknown source {s!r}" for s in t["sources"] if not _known(s, sources)]
         if (fib is not None) != (t.get("family") == "fiber"):
             out.append(f"{w}: a fiber type, and only a fiber type, states `fiber`")
         if "jacket" in t:

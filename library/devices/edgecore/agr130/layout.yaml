@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr130
-version: 0.1.10
+version: 0.2.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XKS
@@ -935,9 +935,9 @@ views:
       - {at: [363.03, 5.60], text: '5', font-size: 1.8, anchor: middle, fill: '#e4e8eb', for: fan-5}
     components:
       bays:
-      - {id: psu-0, at: [14.16, 2.00], size: {w: 54.0, h: 40.0}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2],
+      - {id: psu-0, at: [14.16, 2.00], size: {w: 54.0, h: 40.0}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2, edgecore/agr110-psu-dc@1],
          default: common/psu-ac-650@3, group: psus, rel-pos: 0}
-      - {id: psu-1, at: [369.88, 2.00], size: {w: 54.0, h: 40.0}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2],
+      - {id: psu-1, at: [369.88, 2.00], size: {w: 54.0, h: 40.0}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2, edgecore/agr110-psu-dc@1],
          default: common/psu-ac-650@3, group: psus, rel-pos: 1}
       - {id: fan-0, at: [71.99, 2.00], size: {w: 46.6, h: 40.0}, accepts: [common/fan-module-46@1], default: common/fan-module-46@1, group: fans, rel-pos: 0}
       - {id: fan-1, at: [120.67, 2.00], size: {w: 46.6, h: 40.0}, accepts: [common/fan-module-46@1], default: common/fan-module-46@1, group: fans, rel-pos: 1}
@@ -1004,7 +1004,7 @@ configurations:
       wire and the grounding kit's ring lugs, and the datasheet's input range is -36 to -72 VDC.
     part-numbers:
       5916-54XKS-O-48V-F: {part: FP1ZZ56540BAA}
-    bays: {psu-0: common/psu-dc-650@2, psu-1: common/psu-dc-650@2}
+    bays: {psu-0: edgecore/agr110-psu-dc@1, psu-1: edgecore/agr110-psu-dc@1}
 references:
 - {title: 'Edgecore AGR130 / AS5916-54XKS Data Sheet', sha256: ce97c48ccc309404e9c72612d81ab50e302f834e18489a34562e84ae1530a7a0}
 - {title: 'Edgecore AS5916-54XKS | AS5916-54XL Quick Start Guide E052020-AP-R03', sha256: 50cb3d9f07cdfaea815ae8026ea9c3356cd8e6b92f4eccdf32498c0245c2574a}

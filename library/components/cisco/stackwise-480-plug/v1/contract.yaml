@@ -1,0 +1,94 @@
+format: 1
+kind: component
+name: stackwise-480-plug
+version: 1.0.0
+class: port
+mates: stackwise-480
+profile: networking
+description: >-
+  A Cisco StackWise-480 cable end on its cable, seen from the cable end as a front elevation sees it
+  seated: one body carrying three stacked flat blades, a finger screw above and below, and one round
+  cable leaving it. It seats in the carrier of a `stackwise-480` port at its own mate point and is held
+  by its screws. The stub is the cable, drawn as one straight run.
+size: {w: 14.9, h: 33.8}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: stackwise-480, connector: stackwise-480}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 5.0}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 9300 Series Switches Hardware Installation Guide, Connecting a
+    StackWise-480/1T Cable and Figure 38: the connector is aligned with the port and its screws are
+    finger-tightened clockwise, with the Cisco logo on its top side. Figure 38 shows one connector body
+    on one thick cable, and the guide's Table 51 lists the cables STACK-T1-50CM, -1M and -3M.
+  size: >-
+    estimated - NO MAKER DRAWING OF THE PLUG IS HELD. The body is the carrier of
+    cisco/stackwise-480-port@1 (14.9 x 23.8, itself estimated off the community NetBox device-type
+    library's rear elevation), and the two screws stand beyond it, one ahead of the top blade and one
+    below the bottom blade, 4.0 across, which makes the part 14.9 x 33.8. Every figure is a reading.
+  needs-drawing: >-
+    a maker's drawing of the StackWise-480 cable connector (STACK-T1-50CM, -1M, -3M) with its body
+    outline, the blade pitch, the screw positions and the cable strain reliefs; or a dimensioned
+    photograph of the connector next to a scale.
+  blades: >-
+    estimated - three blades 12.5 x 3.6 at the carrier's 9.3 mm pitch, each inside one of its openings
+    (14.9 x 5.2) with 0.8 clear above and below. The blade contacts are not drawn.
+  screws: >-
+    estimated - the guide says only that its screws are finger-tightened and shows no dimension or
+    position. Drawn as two 4.0 knobs on the part's centre line, one above and one below the body, not
+    built in 3D.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: one straight run of cable 30 long
+    starting where the strain relief ends, on the middle blade. The bend is the installation.
+  cable-od: >-
+    estimated - the guide gives no cable diameter; its Table 54 gives the minimum bend radius of the
+    cables, 41 mm for the 0.5 meter cable, and that is the only figure read. 5.0 is a reading of the one
+    thick cable Figure 38 draws.
+  jacket-colour: >-
+    a FIELD. Black is the default because Figure 38 draws the cable dark. The Cisco logo on the body is a
+    logo and is not drawn.
+  orientation: >-
+    drawn with the logo side up, as the guide asks (Figure 38); a seat's turn carries the plug round.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame the house plugs use.
+    cisco/stackwise-480-port@1 presents at its own face, so 0 is the panel plane. The blades stand 2.0
+    in front of it (estimated, no insertion depth is held).
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the body (7.45, 16.9), which is the
+    centre of the middle blade; the cable runs straight through the connector.
+elements: {}
+relief:
+  features:
+    - node: shell
+      out: 2.0
+      shape: true
+      color: '#c9cdd1'
+      confidence: estimated
+      source: provenance.blades - the three blades, 2.0 in front of the carrier face (estimated)
+    - node: body
+      lift: 2.0
+      out: 32.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: provenance.size - the body, 30.0 long (estimated)
+    - node: relief-boot
+      lift: 32.0
+      shape: true
+      out: 47.0
+      color: '#202225'
+      confidence: estimated
+      source: provenance.stub - the strain relief over the cable, 15.0 long (estimated)
+    - node: stub
+      lift: 47.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [7.45, 16.9], direction: front}
+  cable: {at: [7.45, 16.9], direction: front, 'on': stub}
+skins: [default]

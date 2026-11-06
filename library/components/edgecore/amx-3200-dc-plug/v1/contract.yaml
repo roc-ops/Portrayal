@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: amx-3200-dc-plug
+version: 1.0.0
+class: port
+mates: edgecore-amx-dc-block-3
+profile: power
+description: >-
+  The cable connector of the Edgecore AMX3200 48 VDC supply, wired, seen from the wire side as seated. A blue body
+  with a latch tab above it; one insulated wire enters each of its three ways, from the top down white (DC return),
+  yellow-green (ground) and black (-40 to -72 VDC), as the guide's figure numbers them 1, 2 and 3. It seats in an
+  `edgecore-amx-dc-block-3` connector at its own mate point. It carries one wire per contact, not one cable.
+size: {w: 17.9, h: 34.5}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, edgecore/amx-3200-dc-header@1, 17.9 by 34.5. The guide's figure shows the
+  cable connector in perspective, without a scale, and no dimension of it is held.
+attrs: {media: edgecore-amx-dc, connector: DC cable connector, positions: 3}
+fields:
+  wire-1-color: {label: 'Wire colour (DC return, top)', type: text, default: '#f2f2f2'}
+  wire-2-color: {label: 'Wire colour (ground, middle)', type: text, default: '#b6c43a'}
+  wire-3-color: {label: 'Wire colour (-40 to -72 VDC, bottom)', type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    quick start - the Edgecore AMX3200 Quick Start Guide, "Connect Power" (page 3, figure at the top of the right
+    column) is a photograph of the plug with three wires leaving a blue body that has a latch tab, and lists "1. DC
+    Return (white wire), 2. Ground (yellow-green wire), 3. -40 - -72 VDC (black wire)". The package contents list it
+    as "DC power cord (included with DC PSUs only)". The body carries moulded lettering that reads, at the size
+    printed, like "POSITRONIC INDUSTRIES"; no series or part number is legible. THE PART IS A STAND-IN FOR THE CABLE
+    CONNECTOR.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    quick start - the wire colours are stated in words and shown in the photograph: white, yellow-green and black,
+    numbered 1, 2 and 3 from the top as the plug stands. The defaults are those colours (the yellow-green is drawn as
+    one flat colour, #b6c43a, where the wire is striped).
+  far-end: >-
+    NOT DRAWN. The other ends of the wires land on the DC power source and the chassis ground, which are the site's
+    equipment and not this supply's.
+  gauge: >-
+    quick start - "Use #10 AWG copper wire (for a -40 to -72 VDC PSU) to connect to a DC PSU" (page 3). Not stated as
+    the gauge of the supplied cord's wires.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the supply, so the part draws a plan
+    outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [7.0, 16.8], direction: front}
+  wire-1: {at: [7.0, 9.0], direction: front}
+  wire-2: {at: [7.0, 16.8], direction: front}
+  wire-3: {at: [7.0, 24.6], direction: front}
+skins: [default]

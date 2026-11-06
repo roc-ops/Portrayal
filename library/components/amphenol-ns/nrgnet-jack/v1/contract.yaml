@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: nrgnet-jack
+version: 1.0.0
+class: port
+interface: rj45
+profile: power
+description: >-
+  One nrgNET RJ45 jack of an Amphenol Network Solutions nrgILS power panel, seen
+  from the rear: a grey shell round a black opening, with its latch slot below.
+  nrgNET is the panel-to-panel link of the nrgSMART family, and on an nrgILS
+  panel the guide gives its connector as a removable RJ45, IN from the
+  controller or the upstream panel and OUT to the downstream one. It presents
+  the `rj45` interface at the top of its shell. The nrgILS centre block
+  composes one for IN and one for OUT.
+size: {w: 16.0, h: 12.8}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  the jack as amphenol-ns/nrg-ils-rear-block@1 drew it, read by eye off the only image of the block held (the nrgILS300CB08
+  datasheet, Fig. 2), good to two millimetres at best
+attrs: {media: rj45-serial}
+provenance:
+  size: >-
+    estimated - the jack as amphenol-ns/nrg-ils-rear-block@1 drew it before the jack became a part of its own, moved
+    here unchanged: a shell 16.0 by 12.8, an opening 12.4 by 8.6 and a latch slot 5.2 by 1.6 below it.
+  media: >-
+    datasheet - the nrgILS300CB08 datasheet (Communication, p4) calls the nrgNET protocol "a proprietary serial
+    protocol", its connector "RJ45" and its functions "Ethernet IN" and "Ethernet OUT". The jack is therefore a serial
+    link on an RJ45 and states `rj45-serial`, the media the library gives such a jack; it states no lamps, and none is
+    shown in the photograph.
+  not-std-rj45: >-
+    THE JACK IS DRAWN HERE AND IS NOT std/rj45@2, which is a housing drawn from a maker's customer drawing. This one is
+    read by eye off a photograph, and the centre block that holds two of them cannot present `rj45` itself, which the
+    library asks of any port that composes one of its RJ45 housings.
+  seat: >-
+    estimated - `mate` is the centre of the opening, (8.0, 6.3), on the shell's own top, so a plug seated here starts
+    where the shell ends. The shell's 2.0 of height is by eye off the same photograph.
+  behaviour: >-
+    DELIBERATELY OMITTED. The jack is part of the centre block and is never placed on its own.
+elements: {}
+relief:
+  features:
+    - node: shell
+      out: 2.0
+      color: '#c9cbcd'
+      confidence: estimated
+      source: >-
+        a jack shell standing a little off the plate in the datasheet photograph; height by eye
+connection-points:
+  mate: {at: [8.0, 6.3], direction: front, 'on': shell}
+skins: [default]

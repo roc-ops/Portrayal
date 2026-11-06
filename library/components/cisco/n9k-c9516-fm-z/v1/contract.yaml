@@ -1,0 +1,38 @@
+format: 1
+kind: module
+name: n9k-c9516-fm-z
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9516 fabric blank module with a fan-tray power connector (N9K-C9516-FM-Z). It fills a
+  fabric-module slot that holds no fabric module and passes power to the fan tray in front of it. Fabric
+  slots FM 2, FM 4 and FM 6 must hold a fabric module or this blank to power their fan tray, so it is the
+  blank for an empty even slot; an empty odd slot (FM 1, FM 3, FM 5) takes the N9K-C9516-FM-CV.
+size: {w: 62.48, h: 772.16, d: 297.18}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs:
+  model: 'N9K-C9516-FM-Z'
+  role: 'airflow-blank'
+  eol: 'unknown'
+provenance:
+  size: >-
+    estimated - the guide gives dimensions for the fabric module (2.46 in by 30.4 in by 11.7 in) and none for
+    its blank. The blank takes the fabric module's slot, so it takes that envelope.
+  purpose: >-
+    install guide - "Overview" note (PDF p9, printed 3): fabric slots FM 2, FM 4 and FM 6 "must be filled with
+    functioning fabric modules or blank modules with power connectors (N9K-C9516-FM-Z) to provide power to the
+    fan trays covering those modules". "Fan Tray LEDs" (PDF p131, printed 125) calls it a "fabric blank module
+    with fan tray power connector (N9K-C9516-FM-Z)", and the FAB row (PDF p132, printed 126) shows amber when
+    there is not one to power the fan tray.
+  conflict: >-
+    install guide - the migration caution (PDF p114, printed 108) names "N9K-C950x-FM-G-Z" for an empty
+    FM 1, FM 3 or FM 5, which is the 9508 guide's text copied; the Overview note puts the FM-Z in the even
+    slots and the FM-CV in the odd ones, and that is used. Both blanks are accepted in every fabric bay; see
+    cisco/n9k-c9516-fm-cv.
+  skin: >-
+    estimated - a plain plate with a power connector and two captive screws; no figure draws the blank.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+skins: [default]

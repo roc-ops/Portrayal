@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a99-32x100ge-se
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -9,15 +9,6 @@ description: >-
   Cisco ASR 9900 Series 32-Port 100 Gigabit Ethernet Service Edge Line Card, 4th
   generation. Thirty-two QSFP28/QSFP+ ports in two rows of sixteen; QSFP+ is permitted
   on ports 0 to 20 only. Superseded by the A99-32X100GE-X-SE.
-unplaced: >-
-  no ASR 9000 chassis in this library accepts this card because no Cisco document in the
-  corpus says which chassis take it. Searched: the per-card datasheets with a Chassis
-  compatibility row, the RSP5 and RP3 supported-line-card tables (c78-741128 Table 4,
-  c78-741127 Table 4), the Ethernet Line Card Installation Guide chassis tables (Tables 2 to
-  10), the release notes and the 4th generation line card end-of-life bulletin. The part appears only in documents that do not state
-  chassis support - release notes, the bulletin, the secure boot list and feature lists. Its
-  siblings are not evidence: the -TR has its own row in c78-741101 and the -X-SE and -X-TR in
-  c78-743579, and neither sheet names the plain -SE. Tracked in roc-ops/Portrayal#262.
 size: {w: 41.4, h: 395.7, d: 604.5}
 attrs:
   model: 'A99-32X100GE-SE'
@@ -172,6 +163,21 @@ provenance:
     THIS IS A VENDOR DISCLOSURE GAP, NOT AN INTAKE GAP - staging more documents will not
     close it. The remaining routes are the Cisco Power Calculator or asking Cisco directly,
     and if either produces a figure it belongs here.
+  chassis-compatibility: >-
+    estimated - INFERRED, not read from a document. No held document names A99-32X100GE-SE
+    beside a chassis: it appears only in the 4th generation line card end-of-life bulletin,
+    three release-note firmware tables, the secure boot product list and once in a jumbo-frame
+    list of the interfaces configuration guide, and the Ethernet Line Card Installation Guide's
+    Tables 6 and 7 list the -TR and -CM parts and not this one. The seating is read from the
+    -TR sibling's row: the A99-32X100GE-TR data sheet c78-741101 (p4, Chassis compatibility)
+    reads "Compatible with the Cisco ASR 9904, ASR 9910, ASR 9906, ASR 9912 and ASR 9922
+    chassis", and this card is accepted by the line card bays that accept the -TR (the five
+    ASR 9900-generation chassis, 44 bays; not the ASR 9006 or ASR 9010, which that row does
+    not name). The family evidence is that the two share a part-number stem, are listed
+    together in the one table of bulletin EOL15321, are the same drawing (the se-tr note) and
+    are not told apart by the guide's slot and fan-tray notes. Not evidenced: that the -SE
+    takes the same chassis; the two differ in buffering and table scale, which is not modelled.
+    A document that names the -SE overrides this. Tracked in roc-ops/Portrayal#262
   lifecycle: >-
     bulletin EOL15321, 'End-of-Sale and End-of-Life Announcement for the Cisco ASR 9000
     Series 4th Generation Ethernet Line Card Family', updated 15 March 2024. Table 2
