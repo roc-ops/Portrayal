@@ -1160,6 +1160,17 @@ NOT_A_DCIM_PORT = {
                              "power-sharing link between switches, not a power input; neither DCIM "
                              "has a type for it and a power port would read as a feed",
 
+    # --- test points and a serial jack ---------------------------------------------
+    "common/g-type-male-port": "the G-type male -20 dB RF test point of the CommScope CH3000 receivers: a "
+                               "monitoring tap, not a network interface, and neither DCIM has a port type "
+                               "for a G-type connector",
+    "common/g-type-female-port": "the G-type female -20 dB RF test point of the CommScope CH3000 DR3600N: a "
+                                 "monitoring tap, not a network interface, and neither DCIM has a port type "
+                                 "for a G-type connector",
+    "common/stereo-jack": "the stereo-jack style RS-232 port of the CommScope CH3000 CX3003C and CX3033N, "
+                          "reserved for factory use: not a console a DCIM manages, and neither DCIM has a "
+                          "port type for it",
+
     # `dell/rj45-port-14g` USED TO BE HERE, as "a modelling gap, not an exporter
     # one": the NDC's four jacks carried no speed, so the exporter could not say
     # which two were 10GBASE-T and rightly refused to guess. #287 closed it by

@@ -161,7 +161,9 @@ def test_the_connector_registry_is_not_vacuous():
                          # the AC inlet of the Telco Systems XM-3352 supply
                          "telco-ac-cloverleaf-3",
                          # the keystone opening of the FS FHD-FAPM6 panel
-                         "keystone"}
+                         "keystone",
+                         # the G-type test points and the stereo-jack RS-232 port of the CH3000 modules
+                         "g-type", "g-type-female", "stereo-jack"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -239,7 +241,10 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    # the AC inlet of the Telco Systems XM-3352 supply
                                    "telco-ac-cloverleaf-3",
                                    # the keystone clips of the FS FHD-FAPM6 panel
-                                   "keystone"}
+                                   "keystone",
+                                   # the G-type test points and the stereo-jack RS-232 port of
+                                   # the CH3000 modules
+                                   "g-type", "g-type-female", "stereo-jack"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
