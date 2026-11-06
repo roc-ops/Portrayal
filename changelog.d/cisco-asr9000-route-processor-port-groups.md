@@ -8,6 +8,6 @@
   RSP4-S and RP are their own groups. Each adapter has one `traffic` group stating its cage and rate. A media or speed is stated
   only where the Overview and Reference Guide or the Ethernet Line Card Installation Guide prints it. Part ids, positions and
   drawn geometry are unchanged. The eight chassis that seat these cards (ASR 9001, 9006, 9010, 9904, 9906, 9910, 9912 and 9922)
-  take a patch with their locks and the drawing version line of their exported device types, and the NetBox and Nautobot module
+  take a patch bump, which moves the drawing version line of their exported device types, and the NetBox and Nautobot module
   types of the route processors now mark their management Ethernet ports `mgmt_only`. Two lint entries for the ASR 9922
   route processors' pluggable cages are gone from the baseline.
