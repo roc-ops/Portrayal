@@ -1075,6 +1075,9 @@ NOT_A_DCIM_PORT = {
     # path (device_console_row), and iDRAC Direct moved to MGMT_NOT_A_DCIM_PORT.
     "common/usb-a": "USB storage/maintenance port; not a console - std/usb-a's console placements type via device_console_row",
     "common/usb-a-bezel": "the same USB storage/maintenance port as common/usb-a, in a taller panel bezel; split out of that name's @3 in #264 and it needs its own entry because this register keys on the NAME, not the major",
+    "raritan/pxo-usb-b": "the USB-B jack of the Raritan PXO controller: a device-side port for a phone or tablet, a computer "
+                         "link (command line, recovery) and cascading - no document names it a console, and a DCIM device type "
+                         "has no field for a USB data port",
     # `std/usb-c` WAS HERE, as the GL-8xEP's USB-C power input. It was stale: the
     # DS6000, DS6001 and AS7326-56X have exported a USB-C console all along, and
     # test_silent_drops' mirror of `build` did not know the console exit, so it
