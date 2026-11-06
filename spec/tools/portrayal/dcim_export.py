@@ -2268,7 +2268,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
                 if trace is not None:
                     trace.add(p["id"])
         for b in scoped(parts["bays"], cfg_name):
-            bays.append(bay_row(b["id"], b.get("accepts")))
+            bays.append(bay_row(b["id"], b.get("accepts"), None, b.get("interface")))
 
     # Switch and management interfaces. With a listing, a placement is an
     # interface exactly when a rule names it - `mgmt-eth` becomes `ma1` because
@@ -2589,7 +2589,7 @@ def outlet_rows(outlets, powers, bays, who, names=None, dev=None):
     for bay in bays:
         held = protects.get(bay["position"])
         if held:
-            said = bay.get("description")
+            said = (bay.get("description") or "").rstrip(".") or None
             whole = f"{said}; protects {', '.join(held)}" if said else None
             if whole is None or len(whole) <= LIMIT:
                 bay["description"] = fit_items(

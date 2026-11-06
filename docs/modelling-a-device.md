@@ -702,6 +702,20 @@ Gate 4b checks it.
    the vendor requires a filler and no component exists for it, that is a
    missing component, not a missing decision: leave the default off and record
    the sentence that says the filler is required.
+
+   **An opening for a module the library does not hold states its class.** A
+   chassis with an optional module window, a socket or an I/O bay has a fact
+   to state even with nothing to seat: what kind of module the opening takes.
+   Declare the bay with `interface:` set to a key registered in
+   `spec/schemas/connectors.yaml` whose note says what the opening takes and
+   cites the document, and give it neither `accepts` nor `default`. L6 does not
+   ask such a bay for a default while no part mates the key; the day a part
+   mates it, L6 asks again. The device type's export lists the bay with its
+   name and position and a description saying what it takes, and no port. A
+   `base` configuration states each such bay of a `traffic` group empty with
+   `''`, as it does any traffic bay. A new
+   key is a registry change: state it in the pull request as one. The gap that
+   names the missing module drawing stays.
 9a. **An open-frame chassis says so on the face: `open-frame: true`.** A
     mid-plane chassis whose slots are two guide rails and nothing between them
     is seen straight through wherever a slot is empty (the CommScope CH3000 is
