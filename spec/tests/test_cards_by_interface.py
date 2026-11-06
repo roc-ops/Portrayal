@@ -492,7 +492,7 @@ def _authored_bays(contract):
 
 @pytest.mark.heavy
 def test_a_bay_that_states_an_interface_takes_no_part_beyond_its_list():
-    """THIS IS A GUARD. Some readers of a bay's `accepts` still read the
+    """THIS TEST HOLDS A FACT THE READERS RELY ON. Some readers of a bay's `accepts` still read the
     authored list alone: in dcim_export.py `_chassis_seated`, `_chassis_seats`,
     `pass_through_bays`, `anchored_bays`, `seating_depths` and the device-bay
     rows, and `manifest.component_refs` (the incremental build's dependency
