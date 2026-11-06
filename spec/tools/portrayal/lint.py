@@ -313,8 +313,8 @@ RULES = {
     "L70": ("device",     "a `fact:` gap names a real fact and does not contradict the device", "fix the gap's scope or remove it",
             "A gap scoped to a misspelt fact leaves the comparison showing a bare blank although the search was done, and a device that states a figure while calling the vendor silent on it shows a number and a retraction at once.",
             ERROR),
-    "L71": ("component",  "a body box reaches no further than the part says it is deep, unless it is a fitted option (`when`); a round one states its axis (a ring its wall) and is square across it; one that `shows` a drawing is a box of a part declaring that face, and one that shows a side shows a patch inside that side's `skins/body-<side>.svg`, whose width and height are its viewBox's in mm", "shrink the body box or raise `body.depth`; state `axis`/`wall` or square the envelope; declare the face, draw the side, widen its viewBox or drop `shows`",
-            "A body box deeper than the part gives the wrong bay hole, pull distance and fit checks, a round piece with no axis or a non-square section builds as an oval in 3D, and a side patch outside its drawing is smeared with the drawing's edge.",
+    "L71": ("component",  "a body box reaches no further than the part says it is deep, unless it is a fitted option (`when`); a round one states its axis (a ring its wall) and is square across it; one that `shows` a drawing is a box of a part declaring that face, and one that shows a drawing shows a patch inside it - a side's `skins/body-<side>.svg`, whose width and height are its viewBox's in mm, or the size of the `plan` or `rear` part", "shrink the body box or raise `body.depth`; state `axis`/`wall` (x, y or z) or square the envelope; declare the face, draw the side, widen the drawing, move the piece or drop `shows`",
+            "A body box deeper than the part gives the wrong bay hole, pull distance and fit checks, a round piece with no axis or a non-square section builds as an oval in 3D, and a patch outside its drawing is smeared with the drawing's edge or tiled from the other one.",
             MIXED),
     "L72": ("device",     "a bay's `plan:` or `rear:` lands in a view that exists, inside the chassis", "fix the plan view name or the coordinates",
             "A bay projected into a view or neighbour that does not exist draws nothing and raises nothing, so the plan or rear view silently loses the part.",
@@ -2825,7 +2825,7 @@ def _lights_up(path, data, lib_roots, seen):
     return False
 
 
-def lint_component_body_boxes(path, data, _lib_roots=None):
+def lint_component_body_boxes(path, data, lib_roots=None):
     """L71: a body box reaches no further than the part says it is deep.
 
     `size.d` is the part's reach into the chassis, and it is what the bay
@@ -2834,8 +2834,10 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
     a 170.9 reach and a PCB starting 13.9 behind the plate and running 170.9,
     which is 184.8. The number the part states has to contain its own body.
     A box with no `confidence` is counted, once per file, as L35 counts.
-    A piece that `shows` a side shows a patch of the part's own
-    body-<side>.svg that lies inside that drawing (faces.side_patch).
+    A piece that `shows` a drawing shows a patch of it that lies inside that
+    drawing (faces.side_patch): of the part's own body-<side>.svg for a side,
+    of the `faces.plan` or `faces.rear` part's size for those, where the library
+    is at hand to read it.
     """
     body = data.get("body") or {}
     boxes = body.get("boxes") or []
@@ -2871,6 +2873,9 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
             if not axis:
                 err(path, "L71", f"body box {name} is a {shape} and states no `axis` - "
                                  f"y for one standing up the face, z for one seen face-on")
+            elif axis not in ("x", "y", "z"):
+                err(path, "L71", f"body box {name} is a {shape} on axis {axis!r} - `axis` is "
+                                 f"x, y or z")
             else:
                 w, h = (float(v) for v in b["size"])
                 a, c = {"y": (w, float(b["depth"])), "z": (w, h),
@@ -2939,6 +2944,19 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
             elif not face_ref(data, which):
                 err(path, "L71", f"body box {name} shows the part's `{which}` drawing and "
                                  f"the part declares no `faces.{which}`")
+            elif which in ("plan", "rear") and lib_roots:
+                # THE PATCH IS READ FROM THE FACE'S OWN DRAWING, which starts at
+                # its origin and is as big as that part's `size`: a crop that
+                # reaches past it is read off the edge, and tiles or smears.
+                dw_dh = _instance_size(face_ref(data, which), lib_roots)
+                if dw_dh:
+                    x0, y0, x1, y1 = side_patch(b, which, float((data.get("size") or {}).get("w") or 0),
+                                                float(body.get("depth") or 0))
+                    dw, dh = float(dw_dh[0]), float(dw_dh[1])
+                    if x0 < -0.05 or y0 < -0.05 or x1 > dw + 0.05 or y1 > dh + 0.05:
+                        err(path, "L71", f"body box {name} shows {x0:g}..{x1:g} x {y0:g}..{y1:g} of "
+                                         f"the part's `{which}` drawing, which covers 0..{dw:g} x "
+                                         f"0..{dh:g} - move or shrink the piece, or drop `{which}`")
     if unmarked:
         warn(path, "L71", f"{unmarked} of {len(boxes)} body boxes carry no confidence")
     for a, b, axis, at in coplanar_box_faces(boxes):
@@ -14704,7 +14722,7 @@ def main():
                 lint_component_spanned_geometry(f, d, args.library)
                 lint_component_spanned_exclusion(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
-                lint_component_body_boxes(f, d)
+                lint_component_body_boxes(f, d, args.library)
                 lint_component_fitted_pieces(f, d)
                 lint_component_faces_once(f, d)
                 # L83 IS HANDED THE PART'S OWN REF, so it can catch a contract
