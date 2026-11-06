@@ -13495,7 +13495,16 @@ def lint_device(path, validator, lib_roots):
             # A warning, because "what is normally fitted here" is a modelling
             # decision with a source behind it, and a linter guessing it would be
             # worse than the hole.
-            if not b.get("default") and b["id"] not in cfg_filled:
+            #
+            # A BAY THAT NAMES ITS INTERFACE AND HAS NO PART TO SEAT IS EMPTY
+            # BECAUSE THE LIBRARY HAS NO MODULE FOR IT YET, not because nobody
+            # chose one: nothing mates the interface and `accepts` lists nothing,
+            # so no default exists to name. The bay stays a stated fact (what the
+            # opening takes) and the module's absence is the device's own gap.
+            has_part = bool(_manifest.offers(
+                b, _slot_core(lib_roots)[4] if b.get("interface") else None))
+            if (not b.get("default") and b["id"] not in cfg_filled
+                    and not (b.get("interface") and not has_part)):
                 warn(path, "L6", f"bay {b['id']} names no default and no "
                                  "configuration fills it, so it draws as an empty "
                                  "frame in every drawing of this device")

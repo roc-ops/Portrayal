@@ -491,24 +491,25 @@ def _authored_bays(contract):
 
 
 @pytest.mark.heavy
-def test_no_bay_in_the_library_states_an_interface_yet():
-    """The slice publishes a key and builds a mechanism; it migrates nothing.
-
-    THIS IS ALSO A GUARD. Some readers of a bay's `accepts` still read the
+def test_a_bay_that_states_an_interface_takes_no_part_beyond_its_list():
+    """THIS TEST HOLDS A FACT THE READERS RELY ON. Some readers of a bay's `accepts` still read the
     authored list alone: in dcim_export.py `_chassis_seated`, `_chassis_seats`,
     `pass_through_bays`, `anchored_bays`, `seating_depths` and the device-bay
     rows, and `manifest.component_refs` (the incremental build's dependency
-    graph). The slice that first states an `interface` on a real bay deletes
-    this test and routes those readers through `manifest.offers` first."""
+    graph). A bay may state the class of module it takes as its `interface`
+    while no part mates that interface, and those readers lose nothing. The
+    change that first lets a part mate such an interface routes them through
+    `manifest.offers` first, and only then does this test move."""
+    lib = render.Library([str(LIB)])
     found = []
     for cf in libwalk.iter_components([LIB]):
         for bid, b in _authored_bays(load_yaml(cf) or {}).items():
-            if b.get("interface"):
+            if b.get("interface") and lib.offers(b) != list(b.get("accepts") or []):
                 found.append(f"{cf.parent.parent.name}/{cf.parent.name}:{bid}")
     for df in libwalk.iter_devices([LIB]):
         for view in ((load_yaml(df) or {}).get("views") or {}).values():
             for b in manifest.view_parts(view or {})["bays"]:
-                if b.get("interface"):
+                if b.get("interface") and lib.offers(b) != list(b.get("accepts") or []):
                     found.append(f"{df.parent.name}:{b['id']}")
     assert found == [], found
 
@@ -554,6 +555,6 @@ def test_a_published_device_bay_list_is_the_list_the_manifest_states():
                 (load_yaml(man).get("views") or {}).get(view) or {})["bays"]}
             for b in bays:
                 assert b["accepts"] == (authored[b["id"]].get("accepts") or []), (f, b["id"])
-                assert "interface" not in b
+                assert b.get("interface") == authored[b["id"]].get("interface")
                 checked += 1
     assert checked, "no bay was compared; the layout of configs.json moved"
