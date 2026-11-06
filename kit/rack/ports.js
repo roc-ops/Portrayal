@@ -21,6 +21,7 @@ import {hexColor} from './cable-geometry.js';
 import {zeroUById} from './model.js';
 
 const MODULE = '/module/';
+const OCCUPANT = '-occupant';
 const OTHER = {front: 'rear', rear: 'front'};
 const faceRef = f => (typeof f === 'string' ? f : f?.ref) || null;
 const list = v => (Array.isArray(v) ? v : []);
@@ -126,8 +127,10 @@ export function seatedPort(item, end, ctx) {
 }
 function seatedBase(item, end, ctx) {
   if (!item || !loaded(ctx)) return null;
-  const p = portPathOf(end?.path ?? ''), first = p.indexOf(MODULE), cut = p.lastIndexOf(MODULE);
+  const raw = String(end?.path ?? ''), p = portPathOf(raw), first = p.indexOf(MODULE), cut = p.lastIndexOf(MODULE);
   if (first < 0 || isElementId(p)) return null;
+  // what follows the cage in the address, `rj45` in `bay-1/module/clip1-occupant/rj45`
+  const into = raw.startsWith(`${p}${OCCUPANT}/`) ? raw.slice(p.length + OCCUPANT.length + 1).split('/') : null;
   const slots = ctx.slotsOf(item.ref);
   if (!slots || slots.error) return null;
   const env = slotEnv(item, slots, ctx.compByRef, ctx.redirects), swaps = item.swaps || {};
@@ -157,6 +160,12 @@ function seatedBase(item, end, ctx) {
   const behind = rear ? portIn(rear, steps, ctx.compByRef) : null;
   const back = !!behind && view === OTHER[bay.view];
   const drawn = back ? behind : face && view === bay.view ? face : null;
+  // A PORT OF WHAT A CAGE OF THE PART HOLDS (a jack in a keystone clip): the cage is a slot of the
+  // part and no port itself, and the address goes on into the occupant
+  if (into && !face && !behind) {
+    const held = occupantPort(R, p, into, {base, holder, view, bay, end, ctx});
+    if (held) return held;
+  }
   if (!drawn) {
     if (face || behind) return {...base, holder, onView: face ? bay.view : OTHER[bay.view]};
     // NOT A PORT, BUT A PART OF THE FACE: it lands when a connector slot that
@@ -184,6 +193,28 @@ function seatedBase(item, end, ctx) {
   const role = list(above?.parts).find(q => q.id === steps.at(-1))?.attrs?.role || drawn.attrs?.role || '';
   return {...base, port: true, onView: view, back, holder, cage: slot?.kind === 'cage',
           occupied: !!slot && holdsAt(env, swaps, p, {...slot, isCage: true}) != null,
+          info: connectorOf({portMedia: drawn.attrs?.media || '', iface: slot?.interface || drawn.attrs?.connector || '', role})};
+}
+
+// THE PORT AT `<cage>-occupant/<steps>` under a part seated in a bay: what the
+// cage holds, and the port that part composes at `steps`, or why there is none.
+// Null when the path names no cage of the seated part, so the walk falls to the
+// part's own composed parts as before. `holder` is the part in the bay and is
+// the answer's holder where there is a port; where there is none it is the cage,
+// with what it holds (null when empty), which is what looseReason names.
+function occupantPort(R, cage, steps, {base, holder, view, bay, end, ctx}) {
+  if (!R.entryAt(cage)?.isCage) return null;
+  const ref = R.refAt(`${cage}${OCCUPANT}`);
+  if (!ref) return {...base, holder: {path: cage, part: null, ref: null}};
+  const comp = partOf(ctx.compByRef, ref);
+  if (!comp) return null;
+  const held = {path: cage, part: modelOf(comp, ref), ref: String(ref).split(':')[0]};
+  const drawn = portIn(comp, steps, ctx.compByRef);
+  if (!drawn) return {...base, holder: held};
+  if (view !== bay.view) return {...base, holder: held, onView: bay.view};
+  const slot = R.entryAt(`${cage}${OCCUPANT}/${steps.join('/')}`);
+  const role = list(comp.parts).find(q => q.id === steps.at(-1))?.attrs?.role || drawn.attrs?.role || '';
+  return {...base, port: true, onView: view, holder,
           info: connectorOf({portMedia: drawn.attrs?.media || '', iface: slot?.interface || drawn.attrs?.connector || '', role})};
 }
 
@@ -473,8 +504,14 @@ export function cableEndPaths(item, view, ctx) {
     }
   };
   for (const g of env.cages) if (g.view === view) take(g.id);
-  for (const b of slotTree(env, swaps).bays)
+  const tree = slotTree(env, swaps);
+  for (const b of tree.bays)
     if (b.view === view && b.holds) under(partOf(ctx.compByRef, b.holds), `${b.path}/module`, 0);
+  // the ports of what a cage of a seated part holds, at `<cage>-occupant/<part>` (a jack in a keystone
+  // clip). A cage that is itself a port (an optic's) is the end, and what it holds is not.
+  for (const g of tree.cages)
+    if (g.view === view && g.holds && g.path.includes(MODULE) && !takesCableEnd(R.entryAt(g.path), ctx.compByRef))
+      under(partOf(ctx.compByRef, g.holds), `${g.path}${OCCUPANT}`, 0);
   return [...out];
 }
 

@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: keystone-blank
+version: 2.0.0
+class: mechanical
+behaviour: occupies
+mates: keystone
+conforms: keystone-opening
+profile: networking
+description: >-
+  A blanking insert for a keystone opening: the snap-on ABS plug that closes
+  an unused opening in a keystone faceplate or modular panel. FS blanking
+  insert for faceplate, FBPWH white (#159373, #185432) and FBPBL black
+  (#203961). It seats in the clip of an FHD-FAPM6 opening and carries no
+  connector and no port; the face is a flat plug.
+size: {w: 16.5, h: 14.9}
+size-confidence: {w: datasheet, h: datasheet}
+size-notes: >-
+  THE OPENING IT CLOSES, as common/keystone-clip@3 takes it: the registry's
+  keystone-opening, 16.5 x 14.9 landscape. FS draws the insert's body through
+  the opening 16.1 x 14.6 (the blanking insert datasheet, p3: 16.1 and 14.6),
+  which is 0.4 and 0.3 inside the opening and is drawn here as the plug with a
+  thin dark margin to the metal. That datasheet is not held, so these figures
+  are carried over from common/keystone-blank@1 and not re-read. The envelope
+  is the opening.
+attrs: {opening: keystone, finish: white}
+unplaced: >-
+  seated by a configuration of a panel, or by a person choosing an insert for
+  an opening; no device in this library composes it in a fixed place
+provenance:
+  size: >-
+    datasheet - see size-notes. The 14.6 x 16.1 body is the figure
+    common/keystone-blank@1 recorded from the blanking insert datasheet
+    (resource.fs.com/mall/doc/20231207141153wvi0lg.pdf) p3; that datasheet is
+    not held, so the body is carried over unread.
+  face: >-
+    ESTIMATED. Drawn as common/keystone-blank@1 draws it: a plain flat plug
+    16.1 x 14.6 with no collar. No held document shows the insert face-on.
+  colour: >-
+    ESTIMATED. The datasheet names white (FBPWH, #159373 and #185432) and black
+    (FBPBL, #203961) and gives no figure; #ece9e2, as common/keystone-clip@3
+    draws FS's white plastic.
+  history: >-
+    MAJOR 2.0.0: @1 was a flat plug that mated nothing, so nothing could seat
+    it in a clip. @2 is the same FS part (the same part numbers) and states
+    that it `occupies` and `mates` the `keystone` interface, at the centre of
+    the opening where the clip's own `mate` point stands. Size, face and colour
+    are @1's. fs/fhd-fapm6-blank@1 composes @1 and is unchanged.
+  mate: >-
+    `mate.at` is the centre of the opening, (8.25, 7.45), where the clip's own
+    `mate` point stands, so the plug lands centred in the clip.
+connection-points:
+  mate: {at: [8.25, 7.45], direction: front}
+skins: [default]

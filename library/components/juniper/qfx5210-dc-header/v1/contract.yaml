@@ -1,0 +1,50 @@
+format: 1
+kind: component
+name: qfx5210-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: juniper-qfx5210-dc-header-3
+description: >-
+  The three-position DC power header on the face of the Juniper QFX5210 DC power supplies, seen from its
+  mating face. A dark housing with a keyed shroud carries three round contact cells in a column. The supply
+  numbers them 1, 2 and 3 from the top. The cable connector juniper/qfx5210-dc-plug@1 seats at its mate point.
+size: {w: 10.9, h: 29.9}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The box of the `terminals` element the two supplies already draw (10.9 across, 29.9 high), read off the
+  hardware guide's flat Figure 19, which carries no scale. The cell size (3.0 across) and the pitch (5.4)
+  are the same readings.
+attrs: {connector: DC power header, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED: the QFX5210 Switch Hardware
+    Guide (Juniper Networks) calls it the "Terminal block" (Figures 19 and 32) and shows three round cells
+    numbered 1, 2 and 3. Its text is not consistent about what lands on it: it says the DC power source cables
+    are provided, that they are removed "by unlatching the cables", and also that a lug is attached to the
+    cables and that the terminals' screws are loosened with a screwdriver. So the interface claims no standard
+    and no thread.
+  gender: >-
+    NOT STATED. Figure 19 shows three round cells in a keyed shroud and no cable; it does not say which half
+    carries pins. The cable connector is drawn as the half that seats in this one.
+  marks: >-
+    guide - Figures 19 and 32 print 1, 2 and 3 beside the cells, top to bottom, and no sign, colour or other
+    mark. The guide's note that "The V+ terminals are shunted internally together, as are the V- terminals"
+    does not say which cell is which, so NO POLE IS ASSIGNED to any cell.
+  size: >-
+    estimated - see size-notes. No guide figure is dimensioned.
+  key: >-
+    guide - Figure 19 draws the shroud with a stepped shoulder at the left and a notch in the right edge between
+    cells 1 and 2. They are drawn here as the supply's own skin draws them.
+  mate: >-
+    derived - the centre of the middle cell, (5.2, 15.2), facing out. The cable connector's own middle contact
+    is at its centre too, so the two align.
+  colour: >-
+    estimated - the dark housing #111316 and the grey cells #4a4f55 that the supplies' skin already drew. The
+    guide's figures are line art and no photograph of a DC supply is held.
+  relief: >-
+    NONE STATED HERE. The supplies' own relief features raise the block and its cells; this part is drawn flush.
+elements: {}
+connection-points:
+  mate: {at: [5.2, 15.2], direction: front}
+skins: [default]
