@@ -47,7 +47,7 @@ from portrayal.manifest import (view_parts, targets, split_target, presented_int
                       spanning_axis, _turn,
                       occupant_spec, seated_ref, slot_width, span_covers, span_clashes,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER, config_power, OFFERED_KINDS,
-                      resolve_views)
+                      config_airflow, resolve_views)
 from jsonschema import Draft202012Validator
 
 SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
@@ -694,6 +694,9 @@ RULES = {
     "L197": ("device", "a device's decor `kind` does not name a connector: the names are the list in spec/schemas/connector-decor-names.yaml (a floor of names, not a proof) (warning)", "model the connector as a part that presents its interface; a decor that is not a connector is renamed for what it is, such as `case-screw` for `earth-screw`",
              "A connector drawn as panel decor is a picture of a port that nothing can plug into, so a cable laid to the device has no end to land on and a reader takes the port for a usable one.",
              WARNING),
+    "L198": ("device", "a configuration's airflow agrees with the fans and supplies it seats - a `front-to-back` build over a `back-to-front` fan is a contradiction; a part that states a vendor word or nothing is not compared - warning at `modelled`, error at `verified`", "correct the configuration's `airflow`, seat the part for this direction, or state the part's direction for this build in `component-attrs`",
+             "A build whose label says one way while its fans or supplies blow the other misleads anyone choosing a swap part or planning hot and cold aisles.",
+             AT_VERIFIED),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -10009,6 +10012,92 @@ def lint_device_power_stated(path, data):
                  "this build ships with")
 
 
+_DIRECTIONS = ("front-to-back", "back-to-front")
+_AIRFLOW_UNSTATED = object()
+
+
+def _seated_air_parts(data, cfg):
+    """{bay id: component ref} for every fan or supply this build seats.
+
+    A supply is found as `_seated_supplies` finds it; a fan by `fan` in the ref
+    or the bay id."""
+    out = {}
+
+    def walk(items):
+        for b in items or []:
+            if not isinstance(b, dict):
+                continue
+            bid = b.get("id")
+            if isinstance(bid, str):
+                ref = ((cfg or {}).get("bays") or {}).get(bid, b.get("default"))
+                if isinstance(ref, str) and (
+                        re.search(r"psu|pem|power|supply|fan", ref, re.I)
+                        or re.search(r"fan", bid, re.I)):
+                    out[bid] = ref
+            walk(b.get("bays"))
+    for view in (data.get("views") or {}).values():
+        walk(view_parts(view)["bays"])
+    return out
+
+
+def _airflow_stated_by_build(cfg, bid, ref):
+    """What the configuration says of this bay's airflow, or _AIRFLOW_UNSTATED.
+
+    `bay-attrs` reaches the occupant of one bay, `component-attrs` a bay id or
+    every instance of a component; the narrower one is read first."""
+    comp_attrs = (cfg or {}).get("component-attrs") or {}
+    name = ref.split(":")[0].split("/")[-1].split("@")[0]
+    for src in (((cfg or {}).get("bay-attrs") or {}).get(bid),
+                comp_attrs.get(bid), comp_attrs.get(name)):
+        if isinstance(src, dict) and "airflow" in src:
+            return src["airflow"]
+    return _AIRFLOW_UNSTATED
+
+
+def air_part_words(data, cfg, lib_roots):
+    """[(bay id, ref, the word the build gives that part)] for one configuration.
+
+    The word is the configuration's own where it states one for the bay, else
+    the contract's `attrs.airflow`; None where neither does."""
+    out = []
+    for bid, ref in sorted(_seated_air_parts(data, cfg).items()):
+        word = _airflow_stated_by_build(cfg, bid, ref)
+        if word is _AIRFLOW_UNSTATED:
+            word = (_contract(ref, lib_roots).get("attrs") or {}).get("airflow")
+        out.append((bid, ref, word))
+    return out
+
+
+def lint_device_airflow_agrees(path, data, lib_roots):
+    """L198: a build's airflow agrees with the fans and supplies it seats.
+
+    The airflow of a build is the configuration's own, else the chassis's
+    (`config_airflow`, the value the drawing's `data-airflow` carries). A fan or
+    supply may state `attrs.airflow`, and the configuration may restate it for
+    one bay in `component-attrs`. A `front-to-back` build seating a
+    `back-to-front` fan is a contradiction the picture does not show.
+
+    THE RULE NEVER MAPS A WORD TO A DIRECTION. It speaks only when both sides
+    say `front-to-back` or `back-to-front` and they differ. `exhaust`,
+    `intake`, `side-to-side` and the sentences some parts carry, a part that
+    states nothing, and a build that is `side`, `passive` or silent are all
+    skipped: whether `exhaust` means front-to-back is a design question, not
+    this rule's to settle. A warning at `modelled` and an error at `verified`,
+    as L120 is, so that a waiver can carry the honest case.
+    """
+    loud = err if data.get("maturity") == "verified" else warn
+    for n, c in (data.get("configurations") or {}).items():
+        build = config_airflow(data, c)
+        if build not in _DIRECTIONS:
+            continue
+        for bid, ref, word in air_part_words(data, c, lib_roots):
+            if word in _DIRECTIONS and word != build:
+                loud(path, "L198", f"configuration {n!r} is {build} and seats {ref} in "
+                     f"{bid}, which is {word}. Correct the configuration's `airflow`, "
+                     "seat the part for this direction, or state the part's direction "
+                     "for this build in `component-attrs`")
+
+
 def lint_device_provenance_confidence(path, data):
     """L93: a device's provenance entry says how the figure is known.
 
@@ -14641,6 +14730,7 @@ def main():
                 lint_device_input_rating(f, d)
                 lint_device_lines(f, d, args.library)
                 lint_device_power_stated(f, d)
+                lint_device_airflow_agrees(f, d, args.library)
                 lint_device_provenance_confidence(f, d)
                 lint_quoted_prose(f, d)
                 lint_device_component_attrs_resolve(f, d)
