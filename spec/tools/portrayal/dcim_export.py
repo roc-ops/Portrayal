@@ -1426,7 +1426,13 @@ def breakout_note(breakout, n):
 # needs them as interfaces. They export exactly as they did when they sat in
 # `traffic`: typed from the cage and speed, and not `mgmt_only`, because the
 # fabric is the data path, not the way you reach the box.
-PORT_ROLES = {"traffic", "fabric", "management", "service"}
+#
+# `stack-control` IS A PORT ROLE TOO. The control and sync jacks between the
+# units of a stack are cabled like any other port, and the CSR310's STACK-CTRL
+# exports as the 1G interface it did when it sat in `traffic`: it states its
+# speed, which the RJ45 guard in `iface_type` asks for. It is not `mgmt_only`,
+# since it is not the way you reach the box.
+PORT_ROLES = {"traffic", "fabric", "management", "service", "stack-control"}
 NON_PORT_ROLES = {"indicator", "furniture"}
 
 
