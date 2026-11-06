@@ -287,7 +287,9 @@ def test_the_unstated_ones_are_the_ones_we_could_not_source():
     # level (one failed rotor in any one module tolerated), no count of modules, so the group says
     # so in its note and states no form.
     assert "cisco/n9k-c9336c-fx2-e" in unstated
-    assert len(unstated) == 46, unstated
+    # THE ZPE NSC-T48S MADE IT FORTY-SEVEN: the data sheet says "Fanless" and the front figure shows two fan modules, so its group quotes both and states no form.
+    assert "zpe/nsc-t48s" in unstated
+    assert len(unstated) == 47, unstated
 
 
 def test_the_comparison_layer_can_now_reach_them():
