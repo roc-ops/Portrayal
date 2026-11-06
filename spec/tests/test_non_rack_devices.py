@@ -159,30 +159,30 @@ def test_a_box_that_states_no_pd_standard_gets_no_pd_sentence():
 def _found(power):
     with lint.collecting() as found:
         lint.lint_device_poe_pd("device.yaml", {"attrs": {"power": power}})
-    return ([m for m in found.errors if "[L198]" in m], [m for m in found.warnings if "[L198]" in m])
+    return ([m for m in found.errors if "[L199]" in m], [m for m in found.warnings if "[L199]" in m])
 
 
-def test_L198_a_consistent_set_of_keys_is_quiet():
+def test_L199_a_consistent_set_of_keys_is_quiet():
     assert _found({"poe-pd-standard": "802.3at", "poe-pd-standard-min": "802.3af",
                    "poe-pd-class": 4, "poe-pd-max-w": 25}) == ([], [])
 
 
-def test_L198_the_floor_is_stated_with_the_standard_and_below_it():
+def test_L199_the_floor_is_stated_with_the_standard_and_below_it():
     assert _found({"poe-pd-standard-min": "802.3af"})[0]
     assert _found({"poe-pd-standard": "802.3at", "poe-pd-standard-min": "802.3at"})[0]
     assert _found({"poe-pd-standard": "802.3at", "poe-pd-standard-min": "802.3bt"})[0]
 
 
-def test_L198_a_class_is_stated_with_a_standard():
+def test_L199_a_class_is_stated_with_a_standard():
     assert _found({"poe-pd-class": 4})[0]
 
 
-def test_L198_a_draw_with_no_standard_cannot_be_checked_against_a_port():
+def test_L199_a_draw_with_no_standard_cannot_be_checked_against_a_port():
     errors, warnings = _found({"poe-pd-max-w": 25})
     assert not errors and warnings
 
 
-def test_L198_the_intake_is_at_least_what_the_unit_uses_plus_what_it_hands_on():
+def test_L199_the_intake_is_at_least_what_the_unit_uses_plus_what_it_hands_on():
     base = {"poe-pd-standard": "802.3bt", "power-self-max-w": 60, "poe-budget-w": 12.95}
     assert _found({**base, "poe-pd-max-w": 60})[1]
     assert not _found({**base, "poe-pd-max-w": 72.95})[1]
@@ -190,14 +190,33 @@ def test_L198_the_intake_is_at_least_what_the_unit_uses_plus_what_it_hands_on():
     assert not _found({**base, "poe-budget-w": "12.95 W", "poe-pd-max-w": 60})[1]
 
 
-def test_L198_a_box_that_gives_and_takes_poe_states_its_whole_intake():
+def test_L199_a_box_that_gives_and_takes_poe_states_its_whole_intake():
     errors, warnings = _found({"poe-pd-standard": "802.3at", "poe-budget-w": 10})
     assert not errors and warnings
     assert not _found({"poe-pd-standard": "802.3at", "poe-budget-w": 10, "poe-pd-max-w": 25})[1]
 
 
-def test_L198_is_in_the_catalogue_beside_the_others():
-    assert "L198" in lint.RULES
+def test_L199_is_in_the_catalogue_beside_the_others():
+    assert "L199" in lint.RULES
+    assert "PoE keys" in lint.RULES["L199"][1]
+
+
+def test_L198_in_the_catalogue_is_still_the_airflow_rule():
+    """The two rules never share a number: L198 is the airflow rule, L199 the PoE keys."""
+    assert "airflow" in lint.RULES["L198"][1]
+    assert "poe-pd" in lint.RULES["L199"][1]
+
+
+def test_both_access_points_reach_the_highest_capability_level():
+    import libdata
+    from portrayal import capability
+    profiles = capability.load_profiles(ROOT / "spec" / "schemas")
+    levels = {}
+    for _slug, f, d in libdata.library():
+        if f.parent.parent.name == "readylinks" and f.parent.name in DEVICES:
+            cap, _ = capability.assess(d, profiles=profiles)
+            levels[f.parent.name] = (cap["level"], cap.get("blocked") or [])
+    assert levels == {name: (4, []) for name in DEVICES}
 
 
 @pytest.mark.parametrize("key", PD_KEYS)

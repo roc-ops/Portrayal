@@ -348,7 +348,7 @@
         "802.3at",
         "802.3bt"
        ],
-       "description": "THE HIGHEST 802.3 STANDARD the maker names for the device's PoE input - what it needs to run as specified - written as the makers print it, without 'IEEE'. It describes the powered device's own input; what a switch hands out goes in `poe-budget-w`. Never derived from a draw. Lint L198 relates it to the other `poe-pd-*` keys."
+       "description": "THE HIGHEST 802.3 STANDARD the maker names for the device's PoE input - what it needs to run as specified - written as the makers print it, without 'IEEE'. It describes the powered device's own input; what a switch hands out goes in `poe-budget-w`. Never derived from a draw. Lint L199 relates it to the other `poe-pd-*` keys."
       },
       "poe-pd-standard-min": {
        "enum": [
@@ -356,7 +356,7 @@
         "802.3at",
         "802.3bt"
        ],
-       "description": "the lowest 802.3 standard the maker names for the PoE input, stated only where it differs from `poe-pd-standard`. Below `poe-pd-standard` the device runs reduced. L198 holds it below `poe-pd-standard`."
+       "description": "the lowest 802.3 standard the maker names for the PoE input, stated only where it differs from `poe-pd-standard`. Below `poe-pd-standard` the device runs reduced. L199 holds it below `poe-pd-standard`."
       },
       "poe-pd-class": {
        "type": "integer",
@@ -367,7 +367,7 @@
       "poe-pd-max-w": {
        "type": "number",
        "exclusiveMinimum": 0,
-       "description": "the most the device takes in at its PoE input, in watts, INCLUDING anything it hands on over PoE out or USB: the number a tool sums against a switch's `poe-budget-w`. A figure printed 'excluding PoE output' stays in `power-self-max-w`, what is handed on in `poe-budget-w`, and this key is their sum with the arithmetic in the provenance (L198 warns on a figure below the sum)."
+       "description": "the most the device takes in at its PoE input, in watts, INCLUDING anything it hands on over PoE out or USB: the number a tool sums against a switch's `poe-budget-w`. A figure printed 'excluding PoE output' stays in `power-self-max-w`, what is handed on in `poe-budget-w`, and this key is their sum with the arithmetic in the provenance (L199 warns on a figure below the sum)."
       }
      },
      "additionalProperties": {

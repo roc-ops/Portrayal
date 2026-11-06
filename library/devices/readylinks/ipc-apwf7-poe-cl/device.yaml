@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ipc-apwf7-poe-cl
-version: 1.0.0
+version: 1.1.0
 maturity: modelled
 manufacturer: ReadyLinks
 model: IPC-APWF7-POE-CL
@@ -131,6 +131,12 @@ gaps:
   wanted: >-
     A dimensioned side view of the unit, with how much smaller the face is than the back and how
     far down the wall the slope runs.
+- what: ridge-height
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    A dimensioned side view of the face, with how far the five diagonal ridges stand proud of it;
+    they are drawn as shading, positioned by eye from the stock photograph.
 - what: usb-position
   scope: [right]
   reason: vendor-silent
@@ -183,6 +189,11 @@ groups:
     term: LED
     role: indicator
     index-origin: 1
+  marks:
+    term: Mark
+    role: furniture
+    index-origin: 1
+    description: the ridges across the face and the Wi-Fi mark beside the wordmark, which carry no connection
 views:
   front:
     size: {w: 245.0, h: 245.0}
@@ -192,8 +203,8 @@ views:
     - {at: [196.1, 35.5], text: ReadyLinks, font-size: 10.5, anchor: middle, for: chassis}
     components:
       placements:
-      - {ref: readylinks/apwf7-ridges@1, id: ridges, at: [33.0, 38.0], for: chassis}
-      - {ref: readylinks/wifi-mark@1, id: wifi-mark, at: [199.5, 20.5], for: chassis}
+      - {ref: readylinks/apwf7-ridges@1, id: ridges, at: [33.0, 38.0], for: chassis, group: marks, rel-pos: 1}
+      - {ref: readylinks/wifi-mark@1, id: wifi-mark, at: [199.5, 20.5], for: chassis, group: marks, rel-pos: 2}
       - {ref: readylinks/led-slant@1, id: led-status, at: [30.4, 205.5], rotate: 45, for: chassis, group: status-leds, rel-pos: 1}
   rear:
     size: {w: 245.0, h: 245.0}
