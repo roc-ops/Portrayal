@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: sr-3e
-version: 0.3.0
+version: 0.3.1
 maturity: modelled
 manufacturer: Nokia
 model: 7750 SR-3e
@@ -144,6 +144,15 @@ provenance:
       power including optical components"; worst case is 100 percent line rate at 55 C (p83). Carried as
       the vendor's system figure. The per-module figures (p84 Table 27) live on the module contracts; this
       figure is not reconciled against them.
+  power-feed:
+    confidence: datasheet
+    note: >-
+      Each build states the feed of the supplies it seats. base seats the -48/-60 VDC PSU
+      (3HE09548AA) and ac the universal AC PSU (3HE09549AA), the two supplies of SR-e Table 15 p62;
+      DC input is -48/-60 VDC with an operating range of -40 to -72 VDC (Table 24 p81) and AC input
+      is 100-120/220-240 VAC, 90-127/200-264 VAC (p82). The guide says the chassis can take a mix of
+      AC and DC supplies (p62); no build here mixes them, so each states one feed. base is the
+      library's drawn default and not a vendor bundle.
   colour:
     confidence: estimated
     note: >-
@@ -497,12 +506,14 @@ configurations:
   base:
     kind: base
     default: true
+    power: dc
     description: >-
       The chassis as the SR-e guide draws it - both control pairs, every IOM-e, a ME10-10GB-SFP+ in
       every MDA-e slot, six -48/-60 VDC supplies and two PSU impedance panels,
       and the fan tray.
   ac:
     kind: orderable
+    power: ac
     description: >-
       The same build on AC supplies (3HE09549AA) in place of the DC ones; AC and DC may also be
       mixed (p62).

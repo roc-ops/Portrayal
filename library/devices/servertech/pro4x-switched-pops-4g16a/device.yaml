@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pro4x-switched-pops-4g16a
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Server Technology
 model: PRO4X Switched POPS 4G16A
@@ -83,24 +83,29 @@ provenance:
     confidence: estimated
     note: >-
       estimated - the end views show a plate with the cord entry at one end and two screws at the other.
-      No view shows the cord, so none is drawn.
+      The cord end's entry frame is drawn from its end view; no view shows the cord itself, so none is drawn.
   input:
     confidence: datasheet
     note: >-
       drawing and datasheet - the wiring diagram titles the unit 3PH WYE and draws a plug with L1, L2, L3,
-      NEUT and GND. The SKU page prints NEMA L22-20P, 415 V, 20 A (16 A rated), 11.5 kW for
-      C4G36RA-5BBD2FE1 only, and the drawing serves five SKUs. No input part is placed (gaps: input-cord).
+      NEUT and GND. The SKU page for C4G36RA-GPBD2FE1 prints Input Plug Type "230/400 32A & 240/415V Wye 30A
+      IEC 60309 3P+N+G 6Hr", 415 V, 30 A (24 A rated), 17.3 kW and Input Cord Location Bottom/Angled; the
+      drawing serves five SKUs and the other four print other plugs, so only this SKU's is stated. The fixed
+      cord is one part at the cord end, drawn as the end view shows its entry frame (29.2 across), and every
+      outlet is fed by it. The cord's length and gauge and the plug's face are in no held document (gaps:
+      cord-and-plug).
 attrs:
   physical:
     length-mm: 1778.2
     construction: metal strip
   power:
     input-cord: fixed
+    input-plug: other
     input-phase: three
     input-wiring: wye
     input-ac: >-
-      three-phase wye, L1 L2 L3 N PE; for C4G36RA-5BBD2FE1 alone the SKU page prints 415 V, 20 A (16 A rated),
-      11.5 kW, NEMA L22-20P
+      three-phase wye, L1 L2 L3 N PE. The SKU page for C4G36RA-GPBD2FE1 prints 415 V, 30 A (24 A rated), 17.3 kW
+      and an IEC 60309 3P+N+G 6h plug.
     breakers: six two-pole branch breakers, 10 kAIC (SKU page)
   management:
     metering-scope: outlet
@@ -108,14 +113,14 @@ attrs:
     network-module: PRO4X controller
 chassis: {width: 55.9, height: 1778.2, depth: 63.5, ru: 40, mount: rack-side, color: '#2b2d30', airflow: passive}
 gaps:
-- what: input-cord
+- what: cord-and-plug
   scope: [bottom]
   reason: vendor-silent
   note: >-
-    the SKU page names a NEMA L22-20P on a fixed cord for C4G36RA-5BBD2FE1. No drawing shows the plug or the
-    cord and the library has no L22-20P part, so no input is placed and no input plug is stated. The outlets
-    state no feed.
-  wanted: a drawing of the cord and its plug, or a library part for the NEMA L22-20P.
+    the SKU page names the plug and the outline drawing marks the cord entry, and no held document gives the
+    cord's length or gauge or draws the plug's face. Only the entry frame is drawn. The held 3D archive was
+    not read: no reader for a STEP file is held.
+  wanted: the SKU's own data sheet or a photograph of the cord and its plug.
 - what: button-positions
   scope: [rear]
   reason: vendor-silent
@@ -178,6 +183,7 @@ groups:
   breakers: {term: Breaker, role: service, index-origin: 1, description: 'six two-pole branch breakers in two banks of three, each feeding every third outlet of its bank'}
   controller: {term: Module, role: management, index-origin: 1}
   mounting: {term: Button, role: furniture, index-origin: 1}
+  power-input: {term: Cord, role: service, index-origin: 1}
 views:
   front:
     size: {w: 55.9, h: 1778.2}
@@ -239,42 +245,42 @@ views:
       bays:
         - {id: controller, at: [1.69, 677.05], size: {w: 52.96, h: 216.08}, accepts: [servertech/pro4x-controller@1], default: servertech/pro4x-controller@1, group: controller, rel-pos: 1}
       placements:
-        - {id: outlet-1, ref: std/c13-outlet@1, at: [17.2, 4.92], group: outlets, rel-pos: 1, through: breaker-6, states: ['on', 'off']}
-        - {id: outlet-2, ref: std/c13-outlet@1, at: [17.2, 26.92], group: outlets, rel-pos: 2, through: breaker-5, states: ['on', 'off']}
-        - {id: outlet-3, ref: std/c13-outlet@1, at: [17.2, 48.92], group: outlets, rel-pos: 3, through: breaker-4, states: ['on', 'off']}
-        - {id: outlet-4, ref: servertech/hdot-cx-outlet@1, at: [17.35, 75.49], group: outlets, rel-pos: 4, through: breaker-6, states: ['on', 'off']}
-        - {id: outlet-5, ref: servertech/hdot-cx-outlet@1, at: [17.35, 102.18], group: outlets, rel-pos: 5, through: breaker-5, states: ['on', 'off']}
-        - {id: outlet-6, ref: servertech/hdot-cx-outlet@1, at: [17.35, 128.87], group: outlets, rel-pos: 6, through: breaker-4, states: ['on', 'off']}
-        - {id: outlet-7, ref: servertech/hdot-cx-outlet@1, at: [17.35, 155.57], group: outlets, rel-pos: 7, through: breaker-6, states: ['on', 'off']}
-        - {id: outlet-8, ref: servertech/hdot-cx-outlet@1, at: [17.35, 182.26], group: outlets, rel-pos: 8, through: breaker-5, states: ['on', 'off']}
-        - {id: outlet-9, ref: servertech/hdot-cx-outlet@1, at: [17.35, 208.95], group: outlets, rel-pos: 9, through: breaker-4, states: ['on', 'off']}
-        - {id: outlet-10, ref: servertech/hdot-cx-outlet@1, at: [17.35, 238.61], group: outlets, rel-pos: 10, through: breaker-6, states: ['on', 'off']}
-        - {id: outlet-11, ref: servertech/hdot-cx-outlet@1, at: [17.35, 265.3], group: outlets, rel-pos: 11, through: breaker-5, states: ['on', 'off']}
-        - {id: outlet-12, ref: servertech/hdot-cx-outlet@1, at: [17.35, 291.99], group: outlets, rel-pos: 12, through: breaker-4, states: ['on', 'off']}
-        - {id: outlet-13, ref: servertech/hdot-cx-outlet@1, at: [17.35, 318.69], group: outlets, rel-pos: 13, through: breaker-6, states: ['on', 'off']}
-        - {id: outlet-14, ref: servertech/hdot-cx-outlet@1, at: [17.35, 345.38], group: outlets, rel-pos: 14, through: breaker-5, states: ['on', 'off']}
-        - {id: outlet-15, ref: servertech/hdot-cx-outlet@1, at: [17.35, 372.07], group: outlets, rel-pos: 15, through: breaker-4, states: ['on', 'off']}
-        - {id: outlet-16, ref: std/c13-outlet@1, at: [17.2, 397.25], group: outlets, rel-pos: 16, through: breaker-6, states: ['on', 'off']}
-        - {id: outlet-17, ref: std/c13-outlet@1, at: [17.2, 419.25], group: outlets, rel-pos: 17, through: breaker-5, states: ['on', 'off']}
-        - {id: outlet-18, ref: std/c13-outlet@1, at: [17.2, 441.25], group: outlets, rel-pos: 18, through: breaker-4, states: ['on', 'off']}
-        - {id: outlet-19, ref: std/c13-outlet@1, at: [17.2, 897.62], group: outlets, rel-pos: 19, through: breaker-3, states: ['on', 'off']}
-        - {id: outlet-20, ref: std/c13-outlet@1, at: [17.2, 919.62], group: outlets, rel-pos: 20, through: breaker-2, states: ['on', 'off']}
-        - {id: outlet-21, ref: std/c13-outlet@1, at: [17.2, 941.62], group: outlets, rel-pos: 21, through: breaker-1, states: ['on', 'off']}
-        - {id: outlet-22, ref: servertech/hdot-cx-outlet@1, at: [17.35, 968.19], group: outlets, rel-pos: 22, through: breaker-3, states: ['on', 'off']}
-        - {id: outlet-23, ref: servertech/hdot-cx-outlet@1, at: [17.35, 994.88], group: outlets, rel-pos: 23, through: breaker-2, states: ['on', 'off']}
-        - {id: outlet-24, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1021.58], group: outlets, rel-pos: 24, through: breaker-1, states: ['on', 'off']}
-        - {id: outlet-25, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1048.27], group: outlets, rel-pos: 25, through: breaker-3, states: ['on', 'off']}
-        - {id: outlet-26, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1074.96], group: outlets, rel-pos: 26, through: breaker-2, states: ['on', 'off']}
-        - {id: outlet-27, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1101.65], group: outlets, rel-pos: 27, through: breaker-1, states: ['on', 'off']}
-        - {id: outlet-28, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1131.31], group: outlets, rel-pos: 28, through: breaker-3, states: ['on', 'off']}
-        - {id: outlet-29, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1158.0], group: outlets, rel-pos: 29, through: breaker-2, states: ['on', 'off']}
-        - {id: outlet-30, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1184.69], group: outlets, rel-pos: 30, through: breaker-1, states: ['on', 'off']}
-        - {id: outlet-31, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1211.39], group: outlets, rel-pos: 31, through: breaker-3, states: ['on', 'off']}
-        - {id: outlet-32, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1238.08], group: outlets, rel-pos: 32, through: breaker-2, states: ['on', 'off']}
-        - {id: outlet-33, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1264.77], group: outlets, rel-pos: 33, through: breaker-1, states: ['on', 'off']}
-        - {id: outlet-34, ref: std/c13-outlet@1, at: [17.2, 1289.95], group: outlets, rel-pos: 34, through: breaker-3, states: ['on', 'off']}
-        - {id: outlet-35, ref: std/c13-outlet@1, at: [17.2, 1311.95], group: outlets, rel-pos: 35, through: breaker-2, states: ['on', 'off']}
-        - {id: outlet-36, ref: std/c13-outlet@1, at: [17.2, 1333.95], group: outlets, rel-pos: 36, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [17.2, 4.92], group: outlets, rel-pos: 1, through: breaker-6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [17.2, 26.92], group: outlets, rel-pos: 2, through: breaker-5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [17.2, 48.92], group: outlets, rel-pos: 3, through: breaker-4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: servertech/hdot-cx-outlet@1, at: [17.35, 75.49], group: outlets, rel-pos: 4, through: breaker-6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: servertech/hdot-cx-outlet@1, at: [17.35, 102.18], group: outlets, rel-pos: 5, through: breaker-5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: servertech/hdot-cx-outlet@1, at: [17.35, 128.87], group: outlets, rel-pos: 6, through: breaker-4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: servertech/hdot-cx-outlet@1, at: [17.35, 155.57], group: outlets, rel-pos: 7, through: breaker-6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-8, ref: servertech/hdot-cx-outlet@1, at: [17.35, 182.26], group: outlets, rel-pos: 8, through: breaker-5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-9, ref: servertech/hdot-cx-outlet@1, at: [17.35, 208.95], group: outlets, rel-pos: 9, through: breaker-4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-10, ref: servertech/hdot-cx-outlet@1, at: [17.35, 238.61], group: outlets, rel-pos: 10, through: breaker-6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-11, ref: servertech/hdot-cx-outlet@1, at: [17.35, 265.3], group: outlets, rel-pos: 11, through: breaker-5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-12, ref: servertech/hdot-cx-outlet@1, at: [17.35, 291.99], group: outlets, rel-pos: 12, through: breaker-4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-13, ref: servertech/hdot-cx-outlet@1, at: [17.35, 318.69], group: outlets, rel-pos: 13, through: breaker-6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-14, ref: servertech/hdot-cx-outlet@1, at: [17.35, 345.38], group: outlets, rel-pos: 14, through: breaker-5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-15, ref: servertech/hdot-cx-outlet@1, at: [17.35, 372.07], group: outlets, rel-pos: 15, through: breaker-4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-16, ref: std/c13-outlet@1, at: [17.2, 397.25], group: outlets, rel-pos: 16, through: breaker-6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-17, ref: std/c13-outlet@1, at: [17.2, 419.25], group: outlets, rel-pos: 17, through: breaker-5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-18, ref: std/c13-outlet@1, at: [17.2, 441.25], group: outlets, rel-pos: 18, through: breaker-4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-19, ref: std/c13-outlet@1, at: [17.2, 897.62], group: outlets, rel-pos: 19, through: breaker-3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-20, ref: std/c13-outlet@1, at: [17.2, 919.62], group: outlets, rel-pos: 20, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-21, ref: std/c13-outlet@1, at: [17.2, 941.62], group: outlets, rel-pos: 21, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-22, ref: servertech/hdot-cx-outlet@1, at: [17.35, 968.19], group: outlets, rel-pos: 22, through: breaker-3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-23, ref: servertech/hdot-cx-outlet@1, at: [17.35, 994.88], group: outlets, rel-pos: 23, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-24, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1021.58], group: outlets, rel-pos: 24, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-25, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1048.27], group: outlets, rel-pos: 25, through: breaker-3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-26, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1074.96], group: outlets, rel-pos: 26, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-27, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1101.65], group: outlets, rel-pos: 27, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-28, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1131.31], group: outlets, rel-pos: 28, through: breaker-3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-29, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1158.0], group: outlets, rel-pos: 29, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-30, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1184.69], group: outlets, rel-pos: 30, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-31, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1211.39], group: outlets, rel-pos: 31, through: breaker-3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-32, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1238.08], group: outlets, rel-pos: 32, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-33, ref: servertech/hdot-cx-outlet@1, at: [17.35, 1264.77], group: outlets, rel-pos: 33, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-34, ref: std/c13-outlet@1, at: [17.2, 1289.95], group: outlets, rel-pos: 34, through: breaker-3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-35, ref: std/c13-outlet@1, at: [17.2, 1311.95], group: outlets, rel-pos: 35, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-36, ref: std/c13-outlet@1, at: [17.2, 1333.95], group: outlets, rel-pos: 36, through: breaker-1, fed-by: input, states: ['on', 'off']}
         - {id: numeral-1, ref: servertech/outlet-numeral@1, at: [51.4, 6.92], group: outlet-numerals, rel-pos: 1, attrs: {label: '1'}}
         - {id: numeral-2, ref: servertech/outlet-numeral@1, at: [51.4, 28.92], group: outlet-numerals, rel-pos: 2, attrs: {label: '2'}}
         - {id: numeral-3, ref: servertech/outlet-numeral@1, at: [51.4, 50.92], group: outlet-numerals, rel-pos: 3, attrs: {label: '3'}}
@@ -378,6 +384,9 @@ views:
     panel:
       decor:
       - {id: end-cap, at: [0, 0], size: [55.9, 63.5], fill: '#26282b', kind: end-cap}
+    components:
+      placements:
+        - {id: input, ref: servertech/pro4x-cord-60309@1, at: [13.0, 27.7], group: power-input, rel-pos: 1, description: 'the fixed input cord, ending in an IEC 60309 3P+N+G 6h plug'}
   left:
     size: {w: 63.5, h: 1778.2}
     panel:

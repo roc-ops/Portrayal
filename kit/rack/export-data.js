@@ -437,6 +437,7 @@ export {isRackMount} from './fit.js';
 const MOUNTS = {
   'din-rail': {tag: 'DIN rail', what: 'a DIN-rail device', where: 'a shelf or DIN-rail bracket'},
   desktop: {tag: 'desktop', what: 'a desktop device', where: 'a shelf'},
+  ceiling: {tag: 'ceiling mount', what: 'a ceiling-mount device', where: 'a shelf or bracket'},
   wall: {tag: 'wall mount', what: 'a wall-mount device', where: 'a shelf or bracket'}};
 // A rack-face part (a 0U cable manager) bolts to the rails like a rack device:
 // it needs no shelf, so it has no "needs" sentence - managerNotes says where it is.

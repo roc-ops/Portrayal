@@ -689,6 +689,32 @@ export function createViewer(container, opts = {}) {
           return m;
         });
     }
+    // THE PIECES' ART IS RESOLVED BEFORE THE SWAP. A shown drawing is an image
+    // load, and awaited between disposing the old body and adding the new it
+    // left a frame with neither.
+    const bx = COMP && COMP_ENTRY.body && COMP_ENTRY.body.boxes;
+    let bodyBox = null;
+    if (bx && bx.length) {
+      bodyBox = new THREE.Group();
+      const pieceTex = new Map();   // one texture per drawing, for this build
+      // A FITTED PIECE FOLLOWS THE DRAWING (relief.js pieceFitted): the part's
+      // own face, with what the host has written on it, says which of its
+      // options it shows. The part alone is keyed by its own path, its name.
+      let shown = {};
+      if (bx.some(b => b.when)) {
+        const doc = new DOMParser().parseFromString(
+          await svgSource(distAt(COMP_ENTRY.files[cfg]), SCOPE), 'image/svg+xml');
+        shown = shownOptions(applyNodeFields(doc.documentElement, SCOPE));
+      }
+      for (const b of bodyBoxes(COMP_ENTRY.body, W, H)) {
+        if (!pieceFitted(b, shown[COMP_ENTRY.name])) continue;
+        const m = pieceMesh(b, b.w, b.h, b.z1 - b.z0,
+                            await pieceArt(COMP_ENTRY.body, b, distAt, SCOPE, pieceTex));
+        m.position.set(b.x + b.w / 2 - W / 2, H / 2 - (b.y + b.h / 2),
+                       D / 2 - b.z0 - (b.z1 - b.z0) / 2);
+        bodyBox.add(m);
+      }
+    }
     // the old scene stayed up while the new one was rasterising; swap it now
     clearHighlight();
     if (box) {
@@ -702,8 +728,7 @@ export function createViewer(container, opts = {}) {
     for (const k of Object.keys(faceGroups)) delete faceGroups[k];
     Object.assign(faceGroups, built);
     const fp = COMP && COMP_ENTRY.body && COMP_ENTRY.body.footprint;
-    const bx = COMP && COMP_ENTRY.body && COMP_ENTRY.body.boxes;
-    if (bx && bx.length) {
+    if (bodyBox) {
       // A BODY IN PIECES: the face on a thin plate and each box behind it
       // where the part says it is - the riser alone shows its PCB and its
       // connectors standing off the plate, as it does in the chassis.
@@ -727,25 +752,6 @@ export function createViewer(container, opts = {}) {
       box = new THREE.Mesh(new THREE.BoxGeometry(pl.size[0], pl.size[1], 1.2), plateMats);
       box.position.set(pl.at[0] + pl.size[0] / 2 - W / 2,
                        H / 2 - (pl.at[1] + pl.size[1] / 2), D / 2 - 0.6);
-      const bodyBox = new THREE.Group();
-      const pieceTex = new Map();   // one texture per drawing, for this build
-      // A FITTED PIECE FOLLOWS THE DRAWING (relief.js pieceFitted): the part's
-      // own face, with what the host has written on it, says which of its
-      // options it shows. The part alone is keyed by its own path, its name.
-      let shown = {};
-      if (COMP_ENTRY.body.boxes.some(b => b.when)) {
-        const doc = new DOMParser().parseFromString(
-          await svgSource(distAt(COMP_ENTRY.files[cfg]), SCOPE), 'image/svg+xml');
-        shown = shownOptions(applyNodeFields(doc.documentElement, SCOPE));
-      }
-      for (const b of bodyBoxes(COMP_ENTRY.body, W, H)) {
-        if (!pieceFitted(b, shown[COMP_ENTRY.name])) continue;
-        const m = pieceMesh(b, b.w, b.h, b.z1 - b.z0,
-                            await pieceArt(COMP_ENTRY.body, b, distAt, SCOPE, pieceTex));
-        m.position.set(b.x + b.w / 2 - W / 2, H / 2 - (b.y + b.h / 2),
-                       D / 2 - b.z0 - (b.z1 - b.z0) / 2);
-        bodyBox.add(m);
-      }
       scene.add(box);
       box.userData.bodyBox = bodyBox;
       scene.add(bodyBox);

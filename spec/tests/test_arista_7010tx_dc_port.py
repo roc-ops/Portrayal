@@ -25,7 +25,7 @@ LIB = ROOT / "library"
 PART = "arista/7010tx-dc-terminal@1"
 SCREW = "common/terminal-screw-34@1"
 DEVICE = LIB / "devices/arista/7010tx-48"
-LAYOUT_VERSION = "0.2.0"
+LAYOUT_VERSION = "0.3.0"
 
 
 def contract():
@@ -85,7 +85,7 @@ def test_the_build_publishes_one_input_port_of_two_poles(index):
     assert [(q["role"], q["slot"]) for q in entry["dc-ports"][0]["poles"]] == [("batt", "lug-1"), ("rtn", "lug-2")]
 
 
-def test_the_switch_takes_one_minor_and_its_lock_holds_one_port_for_each_supply_of_the_two_dc_configurations():
+def test_the_switch_takes_one_minor_and_its_lock_holds_one_port_for_each_supply_of_the_four_dc_configurations():
     for fn in ("layout.yaml", "device.yaml"):
         assert re.search(rf"^version: {re.escape(LAYOUT_VERSION)}$", (DEVICE / fn).read_text(), re.M), fn
     lock = json.loads((DEVICE / "device.lock.json").read_text())
@@ -95,7 +95,7 @@ def test_the_switch_takes_one_minor_and_its_lock_holds_one_port_for_each_supply_
     assert sorted(ports) == ["dc-ps1/input", "dc-ps2/input"]
     for path, fact in ports.items():
         slot = path.split("/")[0]
-        assert fact["configs"] == ["dc-f", "dc-r"]
+        assert fact["configs"] == ["dc-c-f", "dc-c-r", "dc-f", "dc-r"]
         assert [(p["role"], p["slot"]) for p in fact["poles"]] == [("batt", f"{slot}/lug-1"), ("rtn", f"{slot}/lug-2")]
         assert fact["voltage"] is None and fact["rating-a"] is None and fact["awg"] is None and fact["side"] is None
 

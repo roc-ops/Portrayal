@@ -341,6 +341,33 @@
        "type": "number",
        "exclusiveMinimum": 0,
        "description": "the load a rack PDU can hand on, in kilowatts - NEVER a draw: the profile's draw requirement is not met by it. A `capacity-scope` sentence qualifies it where a source does."
+      },
+      "poe-pd-standard": {
+       "enum": [
+        "802.3af",
+        "802.3at",
+        "802.3bt"
+       ],
+       "description": "THE HIGHEST 802.3 STANDARD the maker names for the device's PoE input - what it needs to run as specified - written as the makers print it, without 'IEEE'. It describes the powered device's own input; what a switch hands out goes in `poe-budget-w`. Never derived from a draw. Lint L199 relates it to the other `poe-pd-*` keys."
+      },
+      "poe-pd-standard-min": {
+       "enum": [
+        "802.3af",
+        "802.3at",
+        "802.3bt"
+       ],
+       "description": "the lowest 802.3 standard the maker names for the PoE input, stated only where it differs from `poe-pd-standard`. Below `poe-pd-standard` the device runs reduced. L199 holds it below `poe-pd-standard`."
+      },
+      "poe-pd-class": {
+       "type": "integer",
+       "minimum": 0,
+       "maximum": 8,
+       "description": "the 802.3 class, 0 to 8, the PoE input requests, stated only where a source prints it. Never derived from the standard or the draw."
+      },
+      "poe-pd-max-w": {
+       "type": "number",
+       "exclusiveMinimum": 0,
+       "description": "the most the device takes in at its PoE input, in watts, INCLUDING anything it hands on over PoE out or USB: the number a tool sums against a switch's `poe-budget-w`. A figure printed 'excluding PoE output' stays in `power-self-max-w`, what is handed on in `poe-budget-w`, and this key is their sum with the arithmetic in the provenance (L199 warns on a figure below the sum)."
       }
      },
      "additionalProperties": {
@@ -498,14 +525,15 @@
      "description": "rack units, for a device that bolts to the rack - `mount` `rack` (the default), `rack-face` or `rack-side`. For a rack-face part it is the units its ears span, and for a rack-side part the units of height it runs beside, not units either occupies. L125: these three state it, and a device mounted any other way does not."
     },
     "mount": {
-     "description": "HOW THE BOX IS INSTALLED, which a DCIM device type has to know and the dimensions do not say. `rack` is the default and needs no statement; a device mounted any other way says so here and states no `ru`, and the DCIM export then writes `u_height: 0` and `is_full_depth: false` rather than inventing a rack unit. `din-rail` is a box that clips onto a rail (IEC 60715), `wall` one that screws to a surface, `desktop` one that stands on its feet. A box that does more than one names the way it is drawn and exported, and its provenance says the rest. `rack-face` is a part that bolts to rack holes at a rack unit ON THE RAIL FACE, with its body projecting outward from the mounting plane rather than in between the posts - a lacer panel in front of a patch panel. It states `ru` (the units its ears span), its `depth` is that outward projection, and it exports `u_height: 0` like the others because it occupies none. It says nothing about front or rear: the same part goes on either face, and that is a placement's to say. `rack-side` is a part that attaches to the SIDE OF A RACK'S UPRIGHT and runs vertically beside it, outside the rails - a full-height vertical cable manager on its brackets. It states `ru`, the rack units of height it spans, and exports `u_height: 0` and `is_full_depth: false` because it occupies none; it is drawn as it stands, so its front is taller than it is wide (L152), and which side of the rack it stands on is a placement's to say. The name says where on the rack the part attaches; \"zero-U\" says only what it does not use, and is as true of a vertical power strip. L125 checks it against `ru`.",
+     "description": "HOW THE BOX IS INSTALLED, which a DCIM device type has to know and the dimensions do not say. `rack` is the default and needs no statement; a device mounted any other way says so here and states no `ru`, and the DCIM export then writes `u_height: 0` and `is_full_depth: false` rather than inventing a rack unit. `din-rail` is a box that clips onto a rail (IEC 60715), `wall` one that screws to a surface, `desktop` one that stands on its feet. `ceiling` is one that fixes to a ceiling or hangs below it, its front facing down. A box that does more than one names the way it is drawn and exported, and its provenance says the rest. `rack-face` is a part that bolts to rack holes at a rack unit ON THE RAIL FACE, with its body projecting outward from the mounting plane rather than in between the posts - a lacer panel in front of a patch panel. It states `ru` (the units its ears span), its `depth` is that outward projection, and it exports `u_height: 0` like the others because it occupies none. It says nothing about front or rear: the same part goes on either face, and that is a placement's to say. `rack-side` is a part that attaches to the SIDE OF A RACK'S UPRIGHT and runs vertically beside it, outside the rails - a full-height vertical cable manager on its brackets. It states `ru`, the rack units of height it spans, and exports `u_height: 0` and `is_full_depth: false` because it occupies none; it is drawn as it stands, so its front is taller than it is wide (L152), and which side of the rack it stands on is a placement's to say. The name says where on the rack the part attaches; \"zero-U\" says only what it does not use, and is as true of a vertical power strip. L125 checks it against `ru`.",
      "enum": [
       "rack",
       "rack-face",
       "rack-side",
       "din-rail",
       "wall",
-      "desktop"
+      "desktop",
+      "ceiling"
      ]
     },
     "shell": {
@@ -757,6 +785,25 @@
          {"type": "number", "exclusiveMinimum": 0},
          {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number", "exclusiveMinimum": 0}}
         ]
+       }
+      }
+     }
+    },
+    "rounded": {
+     "type": "object",
+     "description": "A BODY WITH ROUNDED PLAN CORNERS AND, OPTIONALLY, A SMALLER FACE. A bevel is one plane on one edge and cannot round a corner; a ceiling access point is a square whose four corners are large arcs and whose front is smaller than its back. `radius` is the corner radius in mm of the full-size outline seen from the front or the rear (the arc is built as eight chords a quarter-turn). `taper` makes the `front` face smaller: over the front `depth` mm of the body the outline steps in by `inset` mm all round, and the corner arcs follow, so the drafted wall has one angle, atan(inset / depth). The face drawings keep their full size and coordinates; the front's flat face is the part inside the taper, which is where parts go (L126). Combines with `bevel`. The build makes the solid from the same cutting planes a bevel uses; L126 checks it.",
+     "required": ["radius"],
+     "additionalProperties": false,
+     "properties": {
+      "radius": {"type": "number", "exclusiveMinimum": 0},
+      "taper": {
+       "type": "object",
+       "required": ["face", "inset", "depth"],
+       "additionalProperties": false,
+       "properties": {
+        "face": {"enum": ["front"]},
+        "inset": {"type": "number", "exclusiveMinimum": 0, "description": "mm the front outline is smaller by on each side"},
+        "depth": {"type": "number", "exclusiveMinimum": 0, "description": "mm of the body's depth, from the front, that the taper runs over"}
        }
       }
      }
@@ -1096,9 +1143,10 @@
        "management",
        "service",
        "indicator",
-       "furniture"
+       "furniture",
+       "stack-control"
       ],
-      "description": "what this block is FOR - the one thing the drawing cannot work out for itself. A PSU bay, a fan bay and a line-card bay are all data-class `bay`, the same hole with a module in it, so anything ranking the tree by class cannot tell which of them is why the box exists and which two keep it alive. Only the group knows. `traffic` is the work the device is bought to do - line-card slots and the ports that carry user traffic. `fabric` is the cell or chassis interconnect of a distributed chassis - the ports on a DDC or VDR line-card box that lead to its fabric boxes, and every port on the fabric box itself. PORTS ONLY: it is not a customer port, which is `traffic`, and it is not a fabric CARD, which is a control-plane board in `service` below; an exporter still lists these ports as interfaces, because they are cabled like any other. It is its own bucket so that a filter on `traffic` means the ports a customer plugs into, and so that one on `fabric` finds the interconnect on every such box, whatever the vendor called the bank. `management` is how you reach and discipline it - the OOB jack, the console, the craft port, the timing and sync interfaces; a bucket of its own, so that a tree ordered by role never puts a console socket among the traffic ports. `service` is what keeps it running - PSUs, fans, filters, power shelves, AND THE CONTROL-PLANE CARDS: routing engines, route processors, supervisors, fabric and switch-control boards. A control-plane card is not `traffic`, which a base configuration empties, and an RE is not `management`: that bucket is jacks and ports, the things you plug into, not the cards behind them. `indicator` is what you read - LEDs, displays. `furniture` is what you neither connect to nor read - ears, rivets, labels, grounding points, doors. Ordering WITHIN a role stays document order, which already reads correctly; this only says which bucket the block falls in. Lint L37 checks it."
+      "description": "what this block is FOR - the one thing the drawing cannot work out for itself. A PSU bay, a fan bay and a line-card bay are all data-class `bay`, the same hole with a module in it, so anything ranking the tree by class cannot tell which of them is why the box exists and which two keep it alive. Only the group knows. `traffic` is the work the device is bought to do - line-card slots and the ports that carry user traffic. `fabric` is the cell or chassis interconnect of a distributed chassis - the ports on a DDC or VDR line-card box that lead to its fabric boxes, and every port on the fabric box itself. PORTS ONLY: it is not a customer port, which is `traffic`, and it is not a fabric CARD, which is a control-plane board in `service` below; an exporter still lists these ports as interfaces, because they are cabled like any other. It is its own bucket so that a filter on `traffic` means the ports a customer plugs into, and so that one on `fabric` finds the interconnect on every such box, whatever the vendor called the bank. `management` is how you reach and discipline it - the OOB jack, the console, the craft port, the timing and sync interfaces; a bucket of its own, so that a tree ordered by role never puts a console socket among the traffic ports. `service` is what keeps it running - PSUs, fans, filters, power shelves, AND THE CONTROL-PLANE CARDS: routing engines, route processors, supervisors, fabric and switch-control boards. A control-plane card is not `traffic`, which a base configuration empties, and an RE is not `management`: that bucket is jacks and ports, the things you plug into, not the cards behind them. `stack-control` is the control and sync links between the units of a stack, never user traffic - a stack-control RJ-45, a stack-sync RJ-45. It is its own bucket so that a filter on `traffic` counts only the ports user traffic can use, and a filter on `management` only the ways in to the box; the data ports of a stack, such as the QSFP28 cages that carry its data path, stay `traffic`. `indicator` is what you read - LEDs, displays. `furniture` is what you neither connect to nor read - ears, rivets, labels, grounding points, doors. Ordering WITHIN a role stays document order, which already reads correctly; this only says which bucket the block falls in. Lint L37 checks it."
      },
      "physical-context": {
       "type": "string",
@@ -1148,6 +1196,14 @@
         }
        }
       ]
+     },
+     "programmable": {
+      "type": "boolean",
+      "description": "true when the user chooses the colour of these lamps (per port, per VLAN, per speed), not only a fixed link and activity colour. It says the light is programmable, never which colours it takes; those stay in `states` where the maker lists them. The drawing rings the port each lamp belongs to in a neutral grey, and the device index and the DCIM export say the device's ports light up. Draw it only where the maker's figure shows a light round or beside the port. A placement's own `programmable` wins over its group's"
+     },
+     "programmable-note": {
+      "type": "string",
+      "description": "the maker's own name for the programmable light, as text only - for example Ubiquiti's Etherlighting - so other makers' versions fit the one mark. Read beside `programmable`; it is never a colour or a figure"
      },
      "description": {
       "type": "string",
@@ -1879,6 +1935,14 @@
              }
             }
            ]
+          },
+          "programmable": {
+           "type": "boolean",
+           "description": "true when the user chooses the colour of this lamp, false to take the mark back from a group that sets it. See the same key on a group. When this placement is a lamp with a `for` naming a port on the same face, the ring is drawn round that port; otherwise round the placement itself"
+          },
+          "programmable-note": {
+           "type": "string",
+           "description": "the maker's own name for the programmable light, as text only. See the same key on a group; a placement's wins over its group's"
           },
           "positions": {
            "description": "what each position of a part's position fields MEANS on this device: a field key, then each option and its meaning - `sw-3: {on: alarm enabled for breaker position A3, 'off': alarm silenced}`. Documentation carried into the drawing as `data-positions`; it sets nothing, because a position is a field and is set by `attrs`",

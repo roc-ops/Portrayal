@@ -272,7 +272,7 @@ PLACEMENT_GEOMETRY = {"inset", "lift", "in", "under", "only-in", "optional",
 PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface", "fed-by", "through",
                         "lines", "dc", "hides"}
 PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
-                     "frames", "positions"}
+                     "frames", "positions", "programmable", "programmable-note"}
 # MEMBERSHIP - which adjustment a placed thing slides with
 # (docs/adjustable-positions-design.md section 9). It is in none of the three
 # digests above, because none of them has its bumps: a member ADDED to an
@@ -627,10 +627,12 @@ def _composed(doc, versions):
 # guard, and the same reason, as PORT_ROLES/NON_PORT_ROLES in dcim_export.
 # `bevel` IS GEOMETRY: it changes the outline of a face and what a part may be
 # placed on, so adding or resizing one is a major (#735).
+# `rounded` IS GEOMETRY AS `bevel` IS: the plan corners and the taper change a
+# face's outline and the flat a part may sit on.
 # `shell` IS GEOMETRY TOO: it decides whether the envelope is a solid box or
 # open air round what the views' parts build (docs/cable-managers-design.md
 # section 4).
-CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell"}
+CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "rounded", "shell"}
 # `mount` IS NOT A DIMENSION EITHER: it says how the box is installed and moves
 # nothing on the drawing, so stating it on an existing device is a patch (#734).
 # `thickness` IS A STATED GAUGE, like the weight beside it: nothing is drawn or
