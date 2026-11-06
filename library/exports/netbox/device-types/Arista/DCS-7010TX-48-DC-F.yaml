@@ -140,8 +140,8 @@ comments: "Arista 7010TX-48 - a fixed 1RU data-centre access switch with 48 10/1
   \ air, and as the 7010TX-48C part numbers, which differ from the 7010TX-48 in memory and minimum EOS\
   \ release only.\n\nConfiguration `dc-f`: The DC build, front-to-back air: two internal -48 V DC supplies\
   \ on terminal blocks (a different rear), the fan module as in the AC front-to-back build. Ordered as\
-  \ DCS-7010TX-48-DC-F and DCS-7010TX-48C-DC-F.\n\nDatasheet: 7010X Series Data Center Switches Data Sheet\
-  \ (Arista Networks, 03-0052-14, Aug 20th 2025)\n  https://www.arista.com/assets/data/pdf/Datasheets/7010TX-Datasheet.pdf\n\
+  \ DCS-7010TX-48-DC-F; the 7010TX-48C-DC of the same build is dc-c-f.\n\nDatasheet: 7010X Series Data\
+  \ Center Switches Data Sheet (Arista Networks, 03-0052-14, Aug 20th 2025)\n  https://www.arista.com/assets/data/pdf/Datasheets/7010TX-Datasheet.pdf\n\
   \nFacts carried in the model that this schema has no field for:\n- compliance.certifications: BSMI,\
   \ CE, KCC, NRTL, RCM, UKCA, VCCI (data sheet)\n- compliance.emc: FCC Class A, ICES-003, EN 55032, EN\
   \ IEC 61000-3-2:2019, EN 61000-3-3, EN 55035, EN 300 386\n- compliance.rohs: RoHS 2011/65/EU and 2015/863/EU\
@@ -149,10 +149,10 @@ comments: "Arista 7010TX-48 - a fixed 1RU data-centre access switch with 48 10/1
   \ 0 to 3,000 m (10,000 ft) operating\n- environmental.humidity: 5 to 90 percent non-condensing (guide\
   \ Table 2); the data sheet says 5 to 95 percent\n- environmental.operating-temp: 0 to 40 C (32 to 104\
   \ F)\n- environmental.storage-temp: -25 to 70 C (guide Table 2); the data sheet says -40 to 70 C\n-\
-  \ features.eos-license: license group G2; minimum EOS 4.26.0 (7010TX-48, -48-DC), 4.31.1 (-48C), 4.33.2\
-  \ (-48C-DC)\n- features.optics-sfp28: 1000BASE-SX/LX, 10GBASE-CR, -AOC, -SR, -LR, -ER, -ZR and 25GBASE-CR,\
-  \ -AOC, -SR, -LR (data sheet)\n- lifecycle.end-of-life: 2031-03-20\n- lifecycle.end-of-sale: 2026-03-20\n\
-  - lifecycle.eol: announced\n- lifecycle.eol-announcement: https://www.arista.com/en/support/advisories-notices/end-of-sale/22420-end-of-sale-of-the-arista-7010tx-48-switches\n\
+  \ features.eos-license: license group G2; minimum EOS 4.26.0 (7010TX-48, -48-DC)\n- features.optics-sfp28:\
+  \ 1000BASE-SX/LX, 10GBASE-CR, -AOC, -SR, -LR, -ER, -ZR and 25GBASE-CR, -AOC, -SR, -LR (data sheet)\n\
+  - lifecycle.end-of-life: 2031-03-20\n- lifecycle.end-of-sale: 2026-03-20\n- lifecycle.eol: announced\n\
+  - lifecycle.eol-announcement: https://www.arista.com/en/support/advisories-notices/end-of-sale/22420-end-of-sale-of-the-arista-7010tx-48-switches\n\
   - management.console: RJ-45 RS-232 serial on the front, 9600 baud 8N1, no flow control\n- management.oob:\
   \ one 10/100/1000 management port on the front\n- management.usb: one USB port on the front, for software\
   \ or configuration updates\n- performance.latency: from 2.8 microseconds (25G SFP to RJ-45)\n- performance.mac-addresses-max:\
@@ -162,13 +162,13 @@ comments: "Arista 7010TX-48 - a fixed 1RU data-centre access switch with 48 10/1
   \ in) \"incl. fans\" (data sheet); the modelled 258.0 mm is the guide's\n- physical.size-over-ears:\
   \ 48.3 x 4.4 x 25.8 cm (19 x 1.75 x 10.0 in) with the mounting ears (guide Table 1)\n- physical.weight:\
   \ 3.9 kg (8.6 lb) for the 7010TX-48, -48C, -48-DC and -48C-DC (guide Table 1, data sheet)\n- platform.cpu:\
-  \ Dual-Core x86\n- platform.memory: 4 GB for the 7010TX-48 and -48-DC; 8 GB for the -48C and -48C-DC\
-  \ (data sheet)\n- platform.storage: 8 GB flash\n- power.efficiency: 93 percent (Platinum) AC, 92 percent\
-  \ DC (data sheet)\n- power.input-ac: 100 - 240 VAC, 2.2 A, 50/60 Hz (guide Table 3), IEC 60320 C14\n\
-  - power.input-dc: -40 to -72 VDC, 2.5 A, AWG 14 to 18 ring lug (guide Tables 3 and 4)\n- power.power-envelope:\
-  \ unstated\n- power.power-max-w: 100\n- power.power-typical-w: 75\n- power.psu-redundancy: 1+1; two\
-  \ internal supplies, at least one of which must be connected\n- thermal.airflow: reversible, front-to-back\
-  \ or back-to-front; set by turning the fan module 180 degrees\n- thermal.noise: 46.5 dBA typical at\
-  \ 27 C, 56.5 dBA maximum (data sheet)\n\nDrawing version 0.1.1. A major bump means a slot moved or an\
-  \ id was renamed, so anything cached from an earlier export may no longer line up.\nModel maturity:\
-  \ modelled. Every dimension in the source records where it came from."
+  \ Dual-Core x86\n- platform.memory: 4 GB (data sheet)\n- platform.storage: 8 GB flash\n- power.efficiency:\
+  \ 93 percent (Platinum) AC, 92 percent DC (data sheet)\n- power.input-ac: 100 - 240 VAC, 2.2 A, 50/60\
+  \ Hz (guide Table 3), IEC 60320 C14\n- power.input-dc: -40 to -72 VDC, 2.5 A, AWG 14 to 18 ring lug\
+  \ (guide Tables 3 and 4)\n- power.power-envelope: unstated\n- power.power-max-w: 100\n- power.power-typical-w:\
+  \ 75\n- power.psu-redundancy: 1+1; two internal supplies, at least one of which must be connected\n\
+  - thermal.airflow: reversible, front-to-back or back-to-front; set by turning the fan module 180 degrees\n\
+  - thermal.noise: 46.5 dBA typical at 27 C, 56.5 dBA maximum (data sheet)\n\nDrawing version 0.3.0. A\
+  \ major bump means a slot moved or an id was renamed, so anything cached from an earlier export may\
+  \ no longer line up.\nModel maturity: modelled. Every dimension in the source records where it came\
+  \ from."

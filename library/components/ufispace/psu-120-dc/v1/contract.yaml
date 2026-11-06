@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-120-dc
-version: 1.0.1
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -55,6 +55,42 @@ provenance:
     6 nor the front render shows one on this window. The panel's PSU lamp (green /
     yellow / blinking yellow for which feed is good) is a system lamp in the device's
     own status block, not a lamp on this part.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head
+    3.4 across (that part's own size is an estimate), standing at the centre of the clamp screw
+    this skin already draws (centres 5.99, 15.48 and 24.96 across, 8.05 down) and lifted 14.0
+    mm, the figure the relief below takes from the datasheet's space-clearance sentence for the
+    whole block's projection (it is not a height of the screw). The head is drawn smaller than
+    the ring round it, and smaller than the screw: the guides name M3.5 screws (the S9502-12SM
+    and S9502-16SMT Hardware Installation Guides, section 7 (DC version), Figure 16), and an
+    M3.5 thread is wider than that head, so the drawing marks where a lug lands and does not
+    show the screw. The same figure gives a lug hole over 3.5 mm and a lug no wider than 8.2
+    mm (W < 8.2 mm). No document held gives the screw head, the stud length or the spacing of
+    the screws; the spacing is this skin's own.
+  poles: >-
+    UfiSpace S9502-12SM Hardware Installation Guide, section 7 Connecting Power (DC version),
+    Figures 16 and 17: three terminal screws side by side and a ring lug under each, the
+    right-hand one labelled 'Green/ Yellow Ground Wire (min. size 18 AWG)'. The S9502-16SMT
+    guide prints the same two figures. The legend printed on the panel under the block, 'RTN
+    -36 — -75 ⎓ ⏚' (the S9502-12SM front render and its Figure 6; 'RTN -36 ~ -75V' on the
+    S9502-16SMT), reads, left to right as this skin's face stands, RTN, a negative voltage range
+    and the earth symbol. The roles are the legend's: `rtn` for RTN, `batt` for the negative
+    voltage range (spec/schemas/dc.yaml writes `batt` as -48V or negative (battery)) and `gnd`
+    for the earth symbol (it writes `gnd` as the earth symbol). The earth terminal is the third
+    pole of the port and is not a conductor of a feed. No document held gives a nominal
+    voltage. A fixed supply is one feed: the two supplies of a device are two placements, each
+    with its own port.
+  rating: >-
+    datasheet - 'DC input: -36 to -75V, 4.5A' in the S9502-12SM and S9502-16SMT datasheets,
+    which both order the '120W DC PSU, fixed dual feed'. The 4.5 A is the input current. The
+    range has no nominal in either, and a port's `voltage` needs one, so the port states no
+    voltage. The guides add a built-in 6A fast acting fuse; that is the fuse, not the input
+    current.
+  awg: >-
+    UfiSpace S9502-12SM and S9502-16SMT Hardware Installation Guides, section 7 step 2: a 'UL
+    1015, 18 AWG DC power cable' of stranded copper for the screw-type terminal block; the
+    earth wire of Figure 17 is labelled 'min. size 18 AWG'. One size in both guides held for
+    this supply, so the port states it.
 elements:
   terminal-block: {at: [0.0, 0.0], size: [33.3, 15.9], class: terminal}
 relief:
@@ -70,4 +106,19 @@ relief:
         Published by the vendor for this platform's front-panel connectors.
 connection-points:
   power: {at: [16.65, 8.0], direction: front}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [4.29, 6.35], lift: 14.0}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [13.78, 6.35], lift: 14.0}
+  - {ref: common/terminal-screw-34@1, id: pole-gnd, at: [23.26, 6.35], lift: 14.0}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 4.5
+      awg: [18]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+        - {role: gnd, slot: pole-gnd}
+      source: {poles: poles, rating-a: rating, awg: awg}
 skins: [default]

@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: ground-hole-1-4
+version: 1.0.0
+class: ground
+interface: terminal-stud
+profile: networking
+description: >-
+  A bare tapped 1/4-20 grounding hole, seen head on: a dark round opening in the panel, 6.35 across, the nominal diameter
+  of the thread. No screw is drawn: the screw that holds a lug over it is fitted with the lug. It presents the nominal
+  `terminal-stud` interface on its axis, at the face of the panel, so a lug lies where it seats. Composed by the parts that
+  land a two-hole lug on a pair of bare holes; a device places it alone only where its documents name one bare 1/4-20 hole.
+  Generic: it carries no vendor's facts.
+size: {w: 6.35, h: 6.35}
+size-confidence: {w: registry, h: registry}
+size-notes: >-
+  the nominal major diameter of the 1/4-20 thread; the chamfer and the depth of the hole are not drawn
+attrs: {connector: terminal-stud}
+provenance:
+  size: >-
+    registry - ASME B1.1, the 1/4-20 UNC thread: nominal (major) diameter 0.250 in. (6.35 mm). A device's own figure may read
+    a receptacle larger or smaller; the part is drawn at the thread's size and not at any one device's reading.
+  seat: >-
+    THE LUG SEATS ON THE FACE OF THE PANEL. `mate` is the centre of the hole and states no `seat-out`: there is no head
+    to stand a lug on, a lug lies on the panel and its screw goes through it into the hole. The screw-head parts of the
+    library (common/ground-screw-1-4@1 and the others) stand a lug on top of a head; this part is the bare hole.
+  bare: >-
+    THE HOLE IS BARE: a dark threaded opening and no screw. The screws that hold a lug are not part of the switch; where a
+    guide lists them it lists them with the lug.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on the sized screws. The hole has no behaviour of its own: a part that composes it states
+    `mounts`, and a device that places it alone offers its `terminal-stud` seat to a ring lug through the interface.
+elements: {}
+connection-points:
+  mate: {at: [3.175, 3.175], direction: front}
+skins: [default]

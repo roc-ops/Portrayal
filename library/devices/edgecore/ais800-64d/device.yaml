@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-64d
-version: 4.0.4
+version: 4.0.7
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-64D
@@ -17,6 +17,15 @@ description: >-
   x 87 shell with four 2RU trays and 3000 W C20 supplies. Nothing crosses over.
 profile: networking
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed logotype,
+      red at both ends, over the model text at the top right, above the management port. Measured on Edgecore's
+      front photograph of the AIS800-64D (960 x 700 px), calibrated on the body outline at 2.173 px/mm
+      across and 2.172 down, which agree to 0.1 percent: the mark runs x 411.2 to 436.2 and y 2.3 to 6.8.
+      The photograph is square-on, so the sureness is sure and the position is good to about 1 mm. The
+      `logo-zone` region on the front view reserves the place; nothing is drawn in it.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -1730,6 +1739,10 @@ views:
         group: port-leds
         rel-pos: 64
     regions:
+    - id: logo-zone
+      at: [411.2, 2.3]
+      size: {w: 25.0, h: 4.5}
+      label: Vendor logo; not drawn
     - id: optics-upper
       at: [11.0, 13.0]
       size: {w: 382.0, h: 29.0}

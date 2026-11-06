@@ -1,9 +1,9 @@
 format: 1
 kind: component
 name: c14-plug
-version: 1.2.0
+version: 1.3.0
 class: port
-mates: [iec-c13, eaton-c39]
+mates: [iec-c13, eaton-c39, servertech-hdot-cx]
 conforms: c14-plug
 profile: networking
 description: >-
@@ -40,7 +40,11 @@ provenance:
     both: the relief below is measured against the 18 well of
     std/c13-outlet@1, and the C39 well is modelled 20 deep, so in a C39 the
     plug is drawn up to 2 prouder than it would sit. No Eaton drawing held
-    sections the C39.
+    sections the C39. `servertech-hdot-cx` is the Server Technology HDOT Cx
+    outlet, which its PRO4X data sheet calls a hybrid of the C13 and C19 that
+    takes a C14 or a C20 plug; the plug seats at the `mate` of
+    servertech/hdot-cx-outlet@1 as it does in the C39, and the same stand-off
+    applies.
   no-depth: >-
     NO `size.d`, DELIBERATELY, as on generic/c13-plug@1.
   orientation: >-

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: csr310-psu-dc
-version: 1.0.2
+version: 1.1.1
 class: psu
 behaviour: fills
 profile: networking
@@ -92,6 +92,19 @@ provenance:
     this one is part of a supply that comes out as one unit, so it belongs to the
     module's own face. Splitting it out would claim a seam the hardware does not
     have.
+  block-colour: >-
+    estimated - read off the guides' pictures with a pixel reader, not measured, and no document
+    gives a colour code. The Edgecore CSR310 (AS7315-27X) Quick Start Guide, page 2, "b. DC Power"
+    (a rendering), the CSR430 (AS7515-24X) Quick Start Guide, page 3 (a photograph) and the CSR310
+    data sheet, page 2, "Interfaces", item 1, all show the block as dark plastic with silver screws,
+    and the CSR430's photograph shows grey metal plates under the screws. The block is drawn dark,
+    about half as bright as the module's face, as the pictures show it (the photograph's barriers
+    read near #151515 against a face near #434343, the rendering's walls #414141 to #535353
+    against #717171): #1e2125 for the block, #2b2f34 and #24282c for its lips and middle, #6b7076
+    for the plates under the screws (the photograph's plates read near #6b6b6b). The screws keep
+    #c3c9cf (the photograph's heads read near #c2c3be). The raised plate (the `inlet` relief) takes
+    the block's colour. The block used to be drawn light grey with white plates, which none of the
+    three pictures shows. Nothing is moved or resized: this is a change of colours only.
   markings: >-
     photo-measured - a general-warning triangle centred 12.8 from the module's
     left edge and a hot-surface triangle at 31.2, both about 10.9 across, above
@@ -103,6 +116,50 @@ provenance:
     NEITHER is an output rating for this supply. The DC input range is stated -
     36 to 72 V, 10 A - and is carried in attrs; the wattage is not, so L27 stands
     on it and the hole stays visible.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head
+    3.4 across (that part's own size is an estimate), standing at the centre of the disc this
+    skin already draws (centres 13.9, 22.5 and 31.3 across, 26.9 down; each disc is 4.0 across)
+    and lifted 9.5 mm, this block's own estimated proudness (the `inlet` relief below). The head
+    is drawn smaller than the disc round it, so the drawing marks where a lug lands and does not
+    show the screw. The quick start guides show the three screws and give a wire size and a
+    torque, and no screw head, thread or stud; the places of the screws are the skin's own (the
+    discs it already draws); the terminal block itself is photo-measured and its screws are not,
+    so they are estimated. The skin is regrouped and not redrawn: the block's drawing sits in
+    one plain group, `block`, so that the `inlet` relief, raised off the face, keeps its plate
+    under the drawing on it once the supply composes parts.
+  poles: >-
+    Edgecore CSR310 (AS7315-27X) Quick Start Guide, step 4 "Connect Power", "b. DC Power", the
+    figure on page 2: the supply's barrier block with its three screws, left to right as this
+    skin's face stands, and the callouts "1. Connect the ground wire / protective earth.", "2.
+    Connect the 36 - 72 VDC wire." and "3. Connect the DC return wire." The Edgecore CSR430
+    (AS7515-24X) Quick Start Guide, step 3 "Connect Power", "b. DC Power", page 3, prints the
+    same three callouts under a figure of the same block, with an earth symbol under the left
+    screw, for the same supply (`shared-with`). The roles are the callouts': `gnd` for the
+    ground wire / protective earth (spec/schemas/dc.yaml writes `gnd` as the earth symbol and
+    PE), `batt` for the 36 - 72 VDC wire (it writes `batt` as negative (battery)) and `rtn` for
+    the DC return (it writes `rtn` as return), and the poles are listed in the callouts' order.
+    The earth screw is one of the block's three and is the port's pole `gnd`; it is not a
+    conductor of a feed. The signs the documents print for the two wires are not read: the
+    CSR430 guide's figure prints "input-" under the middle screw and "Input+" under the right
+    one, and its note on the same page prints "(36VDC-72VDC: Input+)" and "(VDC return:
+    Input-)", the other way round. The guides call the supply a 48 VDC one and give its input as
+    a range; the label is a name and no document gives a nominal for the port, so the port
+    states no voltage.
+  rating: >-
+    NOT STATED. The documents held give this supply's input three ways: the Edgecore CSR310
+    Quick Start Guide (page 3, "48 VDC PSU") and data sheet (page 3, "PSU") print "36 V - 72 V,
+    10 A" (the words `input-note` keeps); the CSR430 data sheet (page 3, "PSU") prints "-44 -
+    -60V, 15.5-9.6 A, per PS"; and the CSR430 Quick Start Guide (page 4) gives the system input,
+    "36 - 72 VDC, 8.4-4.2 A". The CSR430 takes this same supply (`shared-with`). A port's
+    `rating-a` is one figure and the documents disagree on it, so the port states none and a
+    later change can state it once a source settles it.
+  awg: >-
+    Edgecore CSR310 Quick Start Guide, page 2, the caution above the DC figure, and the CSR430
+    Quick Start Guide, page 3: a "#14 AWG/1.5 mm2" wire for a 36 to 72 VDC supply. The CSR430
+    guide's note on the same page suggests "UL 1015 AWG#10-14" stranded wire, 2 m maximum, for
+    each of the three conductors; the port states the one size both guides print and not the
+    range that note suggests.
 elements:
   inlet: {at: [7.0, 19.7], size: [30.5, 14.4], class: inlet}
   handle: {at: [41.5, 3.6], size: [3.5, 21.3], class: handle}
@@ -113,7 +170,7 @@ relief:
   features:
     - node: inlet
       out: 9.5
-      color: '#b7bdc3'
+      color: '#1e2125'
       confidence: estimated
       source: >-
         edgecore/csr310-psu-dc@1's own terminal-block key - the block's face is
@@ -134,4 +191,18 @@ relief:
       confidence: estimated
       source: >-
         edgecore/csr310-psu-dc@1's own depth key - see `handle`.
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-gnd, at: [12.2, 25.2], lift: 9.5}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [20.8, 25.2], lift: 9.5}
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [29.6, 25.2], lift: 9.5}
+dc:
+  ports:
+    - id: input
+      direction: input
+      awg: [14]
+      poles:
+        - {role: gnd, slot: pole-gnd}
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles, awg: awg}
 skins: [default]

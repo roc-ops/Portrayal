@@ -166,6 +166,60 @@ def test_the_default_ear_position_reaches_the_real_rack_json():
     assert not any("ears" in devices[n] for n in devices if n.startswith("cmv-"))
 
 
+def _kit(ref, supply, configurations, motion="sliding"):
+    """One row of `chassis.kits` as configs.json publishes it, the kit resolved inline."""
+    return {"ref": ref, "supply": supply, "variant": None, "depth": None, "version": "1.0.0",
+            "motion": motion, "travel": None, "install": None, "configurations": configurations,
+            "parts": [], "accessories": []}
+
+
+def test_the_default_kit_is_written_with_its_motion_and_depth_range(tmp_path):
+    """The schema's rule: the site defaults to the `in-box` kit, then to the first
+    listed. rack.json carries that kit's ref, motion and depth range, so a rack
+    tool need not open the device's configs.json."""
+    optional = _kit("acme/slide@1", "optional", [{"id": "four-post", "depth": [600, 800]}])
+    in_box = _kit("acme/brackets@1", "in-box", [{"id": "four-post", "depth": [500, 700]}], motion="fixed")
+    d = _dist(tmp_path, {"h": 44, "kits": [optional, in_box]})
+    assert rack_index.build(d)["devices"]["mgr"]["kit"] == {
+        "ref": "acme/brackets@1", "motion": "fixed", "depth": [500, 700]}
+    # none in the box: the first listed
+    (tmp_path / "b").mkdir()
+    d = _dist(tmp_path / "b", {"h": 44, "kits": [optional, _kit("acme/other@1", "optional", [])]})
+    assert rack_index.build(d)["devices"]["mgr"]["kit"]["ref"] == "acme/slide@1"
+    # a range per hole type is published as the kit writes it
+    (tmp_path / "c").mkdir()
+    holes = {"square": [631, 868], "round": [617, 861]}
+    d = _dist(tmp_path / "c", {"h": 44, "kits": [_kit("acme/slide@1", "in-box", [{"id": "four-post", "depth": holes}])]})
+    assert rack_index.build(d)["devices"]["mgr"]["kit"]["depth"] == holes
+
+
+def test_a_preset_with_no_range_is_published_with_no_depth_key(tmp_path):
+    """A configuration may state a `preset` and no `depth`: factory setting known,
+    range unknown. The key is absent, never null and never [preset, preset]."""
+    kit = _kit("acme/rail@1", "in-box", [{"id": "four-post", "preset": 630}], motion="telescoping")
+    e = rack_index.build(_dist(tmp_path, {"h": 44, "kits": [kit]}))["devices"]["mgr"]
+    assert e["kit"] == {"ref": "acme/rail@1", "motion": "telescoping", "preset": 630}
+    # a kit with several configurations has no default one: neither figure is written
+    (tmp_path / "many").mkdir()
+    bands = [{"id": "a", "depth": [600, 700]}, {"id": "b", "depth": [700, 800]}]
+    e = rack_index.build(_dist(tmp_path / "many", {"h": 44, "kits": [_kit("acme/bands@1", "in-box", bands)]}))["devices"]["mgr"]
+    assert e["kit"] == {"ref": "acme/bands@1", "motion": "sliding"}
+
+
+def test_a_device_with_no_kit_has_no_kit_key(tmp_path):
+    for chassis in ({"h": 44}, {"h": 44, "kits": []}, {"h": 44, "kits": None}):
+        d = _dist(tmp_path, chassis)
+        assert "kit" not in rack_index.build(d)["devices"]["mgr"], chassis
+
+
+def test_a_kit_the_index_does_not_resolve_writes_no_key_and_does_not_crash(tmp_path):
+    """A row that names a ref and nothing of the kit (no motion), or is not a row."""
+    unresolved = {"ref": "acme/gone@1", "supply": "in-box", "variant": None, "depth": None}
+    for kits in ([unresolved], ["acme/gone@1"], [None]):
+        d = _dist(tmp_path, {"h": 44, "kits": kits})
+        assert "kit" not in rack_index.build(d)["devices"]["mgr"], kits
+
+
 def test_every_device_carries_its_kind(tmp_path):
     d = _dist(tmp_path, {"h": 44, "airflow": "passive"}, device={"profile": "optical"})
     assert rack_index.build(d)["devices"]["mgr"]["kind"] == "patch panel"

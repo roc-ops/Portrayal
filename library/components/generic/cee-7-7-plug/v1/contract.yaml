@@ -1,0 +1,53 @@
+format: 1
+kind: component
+name: cee-7-7-plug
+version: 1.0.0
+class: port
+mates: cee-7-3
+profile: networking
+description: >-
+  A moulded CEE 7/7 plug on its cord, the end of a jumper that goes into a
+  CEE 7/3 earthing-pin socket. Seen from the cable end as a front elevation sees
+  it seated: a round body and a short stub of cord. Seats in a `cee-7-3` outlet
+  at its own mate point.
+size: {w: 38.0, h: 38.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: cee-7-7, connector: cee-7-7}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 7.1}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - NO DRAWING OR STANDARD SHEET OF A CEE 7/7 PLUG IS HELD. The body
+    is drawn round and 38 across, 1.5 inside the 39.5 well of rittal/cee-7-3-outlet@1
+    (itself a reading of a drawing), so that it seats in it with play. It is
+    declared an estimate; a plug sheet is wanted.
+  cable-od: >-
+    datasheet - H05VV-F 3G1.0, the same default as generic/c14-plug@1 (Oznur
+    Kablo, H05VV-F 300/500 V flexible cord technical data, the 3x1 row, 7.1 mm).
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+  dcim: >-
+    NO DCIM ROW, as generic/c14-plug@1 has none: a cord end is the far end of a
+    jumper, not a port of the device it is drawn on.
+elements: {}
+relief:
+  features:
+    - node: body
+      out: 20.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        estimated - the body is taken to go the 20 deep that rittal/cee-7-3-outlet@1
+        models its well; no plug drawing is held.
+    - node: stub
+      lift: 20.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [19.0, 19.0], direction: front}
+  cable: {at: [19.0, 19.0], direction: front, 'on': stub}
+skins: [default]

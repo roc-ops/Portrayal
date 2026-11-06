@@ -1,10 +1,11 @@
 format: 1
 kind: component
 name: ex3300-rps-port
-version: 1.0.0
+version: 1.1.0
 class: inlet
 behaviour: mounts
 profile: networking
+interface: ex3300-rps
 description: >-
   Redundant power system (RPS) port on the rear panel of the Juniper EX3300 switches. It is a long
   connector opening on a screwed plate, beside the console port. It takes the cable of an external
@@ -24,6 +25,16 @@ provenance:
     to about 3 percent. The guide gives no dimension for the port
   depth: >-
     estimated. The drawing is a front view; 20.0 is what the relief builds, not a figure from any source
+  interface: >-
+    datasheet - registry `ex3300-rps`. EX3300 Switch Hardware Guide (published 2020-12-15), Rear Panel of
+    an EX3300 Switch: "Redundant power system (RPS) port", Figures 3 and 4. The guide names no connector
+    type, contact count or dimension, so the key is the port as the guide draws it and no standard
+    stands behind it. The cable end that mates it is juniper/ex3300-rps-plug@1, drawn estimated.
+  mate: >-
+    derived - the centre of the connector opening, (33.1, 7.1), on the panel face. The guide gives no
+    seating depth, so the mate stands at the face and the plug's relief is measured from it.
 elements:
   opening: {at: [10.9, 2.7], size: [44.4, 8.8], class: slot}
+connection-points:
+  mate: {at: [33.1, 7.1], direction: front}
 skins: [default]

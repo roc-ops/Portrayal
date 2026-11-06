@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: n9k-puv-3000w-b
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -16,7 +16,6 @@ attrs:
   model: 'N9K-PUV-3000W-B'
   role: 'power-module'
   input: 'ac-dc'
-  inlet: other
   power-output-w: 3000
   input-voltage: '200 to 277 VAC or 240 to 380 VDC'
   input-frequency: '47 to 63 Hz'
@@ -43,6 +42,24 @@ provenance:
     estimated - the Saf-D-Grid receptacle and the power switch are named in "Connecting a 3-kW Universal
     AC/DC Power Supply to an AC Power Source" and drawn in the figures of PDF pp104-105; no figure dimensions
     them, so every position in the skin is estimated.
+  inlet-part: >-
+    COMPOSED, NOT DRAWN, SINCE 1.1.0: std/saf-d-grid@1, so a power cord lands on the supply. ITS PLACE IS
+    ESTIMATED, read off the drawing it replaces: that drawing's box (28.5 x 26.0 at [8.0, 76.0]) was itself
+    estimated from the guide's figures, none of which dimensions the receptacle, and the part's own 26.8 x
+    19.9, turned on end, stands on that box's centre, [22.25, 89.0]. ITS TURN IS ESTIMATED TOO, AND WHICH
+    WAY ROUND THE QUARTER TURN GOES IS NOT SOURCED. The Cisco N9508 NX-OS Mode Switch Hardware
+    Installation Guide's figures for "Installing or Replacing a 3-kW Universal AC/DC Power Supply" (PDF
+    pp105 and 106; the N9504 guide's PDF pp109 and 110 and the N9516 guide's PDF pp105 and 106 carry the
+    same figures) draw the receptacle standing on end, taller than wide, in the lower half of the supply,
+    and in one of them the cord's plug fills it. No held figure shows the receptacle's blades or the side
+    its keyed corners are on, so the turn is a choice between two equally undetermined options. 90 is the
+    turn the library gives every other supply that stands this receptacle on end (cisco/a9k-1600w-ac@1,
+    cisco/n9k-puv-1200w@1, edgecore/ais800-psu-ac@1, arista/7280dr3a-pwr-3000@1); it puts the ground
+    contact and the keyed corners of std/saf-d-grid@1 at the right. The guide names the connector, "the
+    Saf-D-Grid receptacle on the power supply" (the N9508 guide's PDF p38), and its cord tables (PDF pp127
+    to 131) list the supply's Saf-D-Grid cords. No page gives the receptacle's size or place on the
+    supply. The cord is not drawn. `attrs.inlet` (it said other) is gone: the part names the connector
+    exactly, and a module that composes an inlet needs nothing there.
   lifecycle: >-
     unknown - Cisco's support page gives no sale status for this part number.
 elements:
@@ -64,4 +81,6 @@ elements:
     - {name: amber, color: '#f5a623'}
     - {name: flashing-amber, color: '#f5a623', behavior: blinking}
     - 'off'
+parts:
+  - {ref: std/saf-d-grid@1, id: inlet, at: [8.85, 79.05], rotate: 90}
 skins: [default]

@@ -55,24 +55,28 @@ def entries(devices):
             yield slug, k, v
 
 
+@pytest.mark.heavy
 def test_there_are_entries_to_check(devices):
     """NON-VACUITY. Every sweep below iterates provenance and would pass over an
     empty one."""
     assert sum(1 for _ in entries(devices)) > 1500
 
 
+@pytest.mark.heavy
 def test_every_entry_is_an_object_with_a_note(devices):
     bad = [f"{s}/{k}" for s, k, v in entries(devices)
            if not isinstance(v, dict) or not str(v.get("note") or "").strip()]
     assert not bad, f"{len(bad)} entries are not {{confidence?, note}}: {bad[:5]}"
 
 
+@pytest.mark.heavy
 def test_a_stated_confidence_is_one_of_the_eight(devices):
     bad = {v["confidence"] for _, _, v in entries(devices)
            if isinstance(v, dict) and v.get("confidence") not in (None, *ENUM)}
     assert not bad, f"confidence values outside the enum: {sorted(bad)}"
 
 
+@pytest.mark.heavy
 def test_the_prose_survived_the_migration(devices):
     """Spot-checks against sentences that were in the file before it moved. The
     migration asserted this per file as it ran; this keeps it asserted."""
@@ -83,6 +87,7 @@ def test_the_prose_survived_the_migration(devices):
     assert "confidence" not in p["numbering"], "nothing should have been invented here"
 
 
+@pytest.mark.heavy
 def test_the_unstated_confidences_are_counted_and_not_growing(devices):
     """744 at the migration. It may fall; it may not rise, because the only way
     to add one is to write a figure without saying how it is known."""
@@ -93,6 +98,7 @@ def test_the_unstated_confidences_are_counted_and_not_growing(devices):
         + "\n  ".join(sorted(bare)[:8]))
 
 
+@pytest.mark.heavy
 def test_a_good_share_of_them_do_say(devices):
     """The other side, so the test above cannot be satisfied by deleting the
     field everywhere."""
@@ -124,6 +130,7 @@ def _verified(tmp_path, provenance):
 SOURCED = {"confidence": "datasheet", "note": "datasheet - the vendor's own Table 3"}
 
 
+@pytest.mark.heavy
 def test_the_verified_gate_catches_a_structured_estimate(tmp_path):
     found = _verified(tmp_path, {"size": SOURCED,
                                  "layout": {"confidence": "estimated",
@@ -131,6 +138,7 @@ def test_the_verified_gate_catches_a_structured_estimate(tmp_path):
     assert any("estimated" in e and "layout" in e for e in found), found
 
 
+@pytest.mark.heavy
 def test_the_verified_gate_now_catches_a_BURIED_estimate(tmp_path):
     """THE DEFECT, end to end. The check was `startswith("estimated")`, so a note
     saying it in the middle of a sentence passed - and 80 of the library's 122
@@ -140,6 +148,7 @@ def test_the_verified_gate_now_catches_a_BURIED_estimate(tmp_path):
     assert any("estimated" in e and "layout" in e for e in found), found
 
 
+@pytest.mark.heavy
 def test_a_verified_device_with_nothing_estimated_passes(tmp_path):
     """NON-VACUITY: a check that fires on everything is not a check. Ordinary
     sourced prose must not trip the word search."""
@@ -151,6 +160,7 @@ def test_a_verified_device_with_nothing_estimated_passes(tmp_path):
 
 # --- and the component side is untouched --------------------------------------
 
+@pytest.mark.heavy
 def test_component_provenance_is_still_a_string():
     """Two shapes, on purpose. Migrating 584 contracts in the same pass would
     have made one reviewable change into an unreviewable one, and #173 had just

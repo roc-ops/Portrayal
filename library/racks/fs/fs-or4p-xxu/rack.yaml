@@ -1,0 +1,124 @@
+format: 1
+kind: rack
+name: fs-or4p-xxu
+version: 1.0.0
+maturity: modelled
+manufacturer: FS.com
+model: FS-OR4P-XXU
+part-numbers:
+  FS-OR4P-XXU: GF4-Series 4-Post Open Frame Rack, 42U/45U, customized
+description: >-
+  The FS GF4-Series four-post open frame rack sold as a customized listing in
+  42U or 45U, with square-punched rails. The datasheet prints no height, so
+  42 is a stand-in, and no rail depth range, so the range is the 45U frame's
+  stated as a reading. The FS-OR4P-45U is the same frame at 45U with its own
+  drawing.
+form: 4-post-frame
+ru: 42
+numbering:
+  direction: bottom-up
+  start: 1
+width: 19
+holes:
+  style: square
+rails:
+  - id: front
+  - id: rear
+    depth:
+      min: 558.8
+      max: 1016
+      step: 25.4
+load:
+  static-kg: 907.18
+datasheet:
+  title: Customized Open Frame Rack Datasheet (FS-OR4P-XXU)
+  url: https://resource.fs.com/mall/doc/20230714111614u0r2uh.pdf
+references:
+  - title: FS-OR4P-45U 45U Open Frame Rack Quick Start Guide V1.0 (GF4-Series-45U)
+    url: https://resource.fs.com/mall/file/user_manual/fs-or4p-45u-open-frame-rack-quick-start-guide.pdf
+    sha256: 26ed603a866b9977707433ea5d30f9a77c70d89060367fc6f482f7df9063dc99
+provenance:
+  ru:
+    confidence: estimated
+    note: >-
+      A stand-in. The datasheet specification table (page 2) prints "No. of Rack
+      Spaces 42U/45U" and no height, and the listing is customized, so the
+      height is chosen when it is bought. 42 is the lower of the two printed
+      figures.
+  form:
+    confidence: datasheet
+    note: >-
+      "Product Type 4-Post" in the specification table (page 2), with the
+      photograph of a black open frame beside it.
+  width:
+    confidence: datasheet
+    note: >-
+      "Rack-Mount Width 19'' EIA" in the specification table (page 2).
+  holes:
+    confidence: datasheet
+    note: >-
+      "Mounting Rails Square-punched" (page 2). No document gives a hole size
+      or what the supplied M6 screws and nuts fit into, so no `size` and no
+      `fixing` is written.
+  rails:
+    confidence: estimated
+    note: >-
+      A stand-in. This datasheet prints no depth range; its specification table
+      gives a depth of 40'' (1016 mm), the longest setting of the FS-OR4P-45U,
+      and lists the same components. The range, 558.8 mm to 1016 mm in 25.4 mm
+      steps, is that frame's, read from the quick start guide (page 4) of the
+      FS-OR4P-45U, and is stated here as a reading of "same components", not
+      as a printed fact.
+  load:
+    confidence: datasheet
+    note: >-
+      "Weight Capacity - Stationary 2000lbs (907.18kg)" in the specification
+      table (page 2). No rolling rating is stated although casters are
+      supplied.
+  numbering:
+    confidence: estimated
+    note: >-
+      The direction is printed, "Rail Number Direction Bottom Up" (page 2). The
+      label of the first unit is a stand-in: 1 is the default of the rack file,
+      and no document for this listing says what the first label is.
+gaps:
+  - what: ru
+    reason: vendor-silent
+    note: >-
+      The datasheet lists 42U/45U and the height is chosen at purchase. The
+      specification table prints a width and a depth, 600 x 1016 mm, and no
+      height.
+    wanted: FS's sales page for the listing, or FS's statement of which heights are sold.
+  - what: rails
+    reason: vendor-silent
+    note: >-
+      This datasheet has no drawing and no depth table. The range is the
+      FS-OR4P-45U's, read across because the components are listed the same.
+    wanted: A depth table or a drawing for this listing.
+  - what: numbering
+    reason: vendor-silent
+    note: >-
+      The direction is printed as bottom up; the number on the lowest unit is
+      not.
+    wanted: A photograph of the rail, or a drawing that shows the labels.
+  - what: outer
+    reason: needs-drawing
+    note: >-
+      Only a width and a depth are printed, 600 x 1016 mm, and the depth is the
+      longest rail setting. There is no height, and no drawing, so no outside
+      box is written.
+    wanted: A dimensioned drawing of the listing, with its heights.
+  - what: hole-centres
+    reason: needs-drawing
+    note: This datasheet has no drawing, so no hole centres are written.
+    wanted: A dimensioned front view.
+  - what: opening
+    reason: needs-drawing
+    note: This datasheet has no drawing, so no opening is written.
+    wanted: A dimensioned front view.
+  - what: holes
+    reason: vendor-silent
+    note: >-
+      No document gives the size of the square holes or says what the supplied
+      M6 screws and nuts fit into.
+    wanted: A dimensioned drawing of the rail holes.

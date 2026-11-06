@@ -21,7 +21,8 @@ devicelock.py for why `h` and `y` stay a patch).
 NO DEVICE GETS A SECOND PAIR. A device gets no generic ear when:
   - it is not a `rack` device - a `rack-face` part is its ears, a `rack-side`
     duct and a desktop box have none;
-  - it states `ears: behind` (or `{behind: true}`), whose face is the part;
+  - it states `ears: behind` (or `{behind: true}`), whose face is the part, or
+    `{none: true}`, a part that has no ears at all;
   - its front is as wide as the rack face (L43's 480-487 mm), so its ears are
     already in the drawing - the R740xd, whose ears carry its VGA;
   - it still places `common/rack-ear@1`, or anything under `optional: ears`,
@@ -74,7 +75,7 @@ def _places_own_ears(node):
 
 def _behind(ears):
     if isinstance(ears, dict):
-        return ears.get("behind") is True
+        return ears.get("behind") is True or ears.get("none") is True
     return ears == "behind"
 
 

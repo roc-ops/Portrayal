@@ -37,18 +37,19 @@
    "juniper/qfx5130-jpsu-1600-dc-afo@1"
   ]
  },
- "composed": "f7b8f16b823ff282",
+ "composed": "5f80cb0644f4f15a",
  "composed-refs": {
-  "common/esd-jack@1": "1.0.0+0991d3874bfac0f4",
+  "common/esd-jack@1": "1.0.1+fa89d49c1ff75841",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "juniper/qfx5130-32cd-fan-afi@1": "1.0.0+3a1c92ff895ccf43",
   "juniper/qfx5130-32cd-fan-afo@1": "1.0.0+c229f565b5385b79",
   "juniper/qfx5130-jpsu-1600-ac-afi@1": "1.0.0+73921850a75d7e04",
   "juniper/qfx5130-jpsu-1600-ac-afo@1": "1.0.0+1904ce5493b9ef47",
-  "juniper/qfx5130-jpsu-1600-dc-afi@1": "1.0.0+dd1a4b8ded301db9",
-  "juniper/qfx5130-jpsu-1600-dc-afo@1": "1.0.0+c7075b0693877714",
+  "juniper/qfx5130-jpsu-1600-dc-afi@1": "1.1.0+9944584e3457fdb9",
+  "juniper/qfx5130-jpsu-1600-dc-afo@1": "1.1.0+4550a63234c79c44",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-dd@1": "1.3.1+c3cf5f2db67d8233",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
@@ -64,6 +65,108 @@
   "dc-b2f",
   "dc-f2b"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "juniper/qfx5130-jpsu-1600-dc-afi@1": {
+    "awg": [
+     10,
+     12
+    ],
+    "configs": [
+     "dc-b2f"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   },
+   "juniper/qfx5130-jpsu-1600-dc-afo@1": {
+    "awg": [
+     10,
+     12
+    ],
+    "configs": [
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "juniper/qfx5130-jpsu-1600-dc-afi@1": {
+    "awg": [
+     10,
+     12
+    ],
+    "configs": [
+     "dc-b2f"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   },
+   "juniper/qfx5130-jpsu-1600-dc-afo@1": {
+    "awg": [
+     10,
+     12
+    ],
+    "configs": [
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "67dac831b0f9aa00",
  "groups": [
@@ -615,5 +718,5 @@
  "placement-surface": "44e3d194040297b2",
  "shape": "e4b0baafcbf62dfe",
  "surface": "6bb9049a30cdd25a",
- "version": "0.1.0"
+ "version": "0.2.0"
 }

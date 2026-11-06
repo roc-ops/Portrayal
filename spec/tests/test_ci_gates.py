@@ -42,6 +42,39 @@ def needs(job):
     return [n] if isinstance(n, str) else list(n)
 
 
+REPO = "roc-ops/Portrayal"
+
+
+def gh_eval(expr, ctx):
+    """A GitHub Actions expression, evaluated over a flat context: enough of the
+    language for the tier expressions here (`==`, `!=`, `&&`, `||`, `!`,
+    `fromJSON` and `contains` over a list such as `labels.*.name`). `&&` and
+    `||` return an operand, as Python's `and` and `or` do. A name the context
+    lacks is the empty string, as a skipped job's output is."""
+    body = expr.strip()
+    if body.startswith("${{"):
+        body = body[3:-2].strip()
+    py = re.sub(r"\b(?:github|needs|matrix)(?:\.(?:[\w-]+|\*))+",
+                lambda m: repr(ctx.get(m.group(0), "")), body)
+    py = re.sub(r"!(?!=)", " not ", py.replace("&&", " and ").replace("||", " or "))
+    return eval(py.replace("fromJSON", "json.loads"),
+                {"json": json, "contains": lambda seq, item: item in seq})
+
+
+def event(name, fork=False, draft=False, labels=()):
+    ctx = {"github.event_name": name, "github.repository": REPO}
+    if name == "pull_request":
+        ctx["github.event.pull_request.head.repo.full_name"] = "someone/Portrayal" if fork else REPO
+        ctx["github.event.pull_request.draft"] = draft
+        ctx["github.event.pull_request.labels.*.name"] = list(labels)
+    return ctx
+
+
+def tier_expression(workflow):
+    run = next(s["run"] for s in steps(workflow["jobs"]["dist"]) if s.get("id") == "tier")
+    return re.search(r"\$\{\{(.*?)\}\}", run).group(0)
+
+
 def test_lint_is_its_own_job_and_the_build_does_not_queue_behind_it(workflow):
     """`needs: lint` made a run queue twice on a busy pool. The gate it gave is
     kept by the merge train: see test_merge_train.py, test_a_failed_check_refuses
@@ -111,6 +144,8 @@ def test_a_draft_run_cannot_cancel_a_ready_run(workflow):
     group = workflow["concurrency"]["group"]
     assert "github.event.pull_request.draft" in group, group
     assert "github.ref" in group, "pushes to one ref must still supersede each other"
+    # and a push to main must not cancel the nightly, or a dispatch on main
+    assert "github.event_name" in group, group
     assert workflow["concurrency"]["cancel-in-progress"] is True
 
 
@@ -288,7 +323,7 @@ def test_the_required_check_is_still_called_build_and_waits_for_everything(workf
     refuses unless both succeeded."""
     jobs = workflow["jobs"]
     build = jobs["build"]
-    assert "name" not in build, "the check name is the job id, `build`"
+    assert gh_eval(build["name"], {"needs.dist.outputs.tier": "full"}) == "build"
     assert set(needs(build)) == {"dist", "tests"}
     assert "!cancelled()" in build["if"] and "always()" not in build["if"]
     last = steps(build)[-1]
@@ -305,8 +340,9 @@ def test_the_shards_split_by_the_matrix_and_build_checks_the_split(workflow):
     guards read every shard's log."""
     jobs = workflow["jobs"]
     tests = jobs["tests"]
-    shards = tests["strategy"]["matrix"]["shard"]
-    assert shards == list(range(1, len(shards) + 1)) and len(shards) > 1, shards
+    for tier in ("full", "light"):
+        shards = gh_eval(tests["strategy"]["matrix"]["shard"], {"needs.dist.outputs.tier": tier})
+        assert shards == list(range(1, len(shards) + 1)) and len(shards) > 1, (tier, shards)
     assert tests["strategy"]["fail-fast"] is False
     run = next(s["run"] for s in steps(tests) if s.get("name") == "tests")
     assert '--shard "${{ matrix.shard }}/${{ strategy.job-total }}"' in run
@@ -370,6 +406,7 @@ def test_a_tool_going_missing_is_caught(tmp_path):
     assert "does not list" in r.stdout
 
 
+@pytest.mark.heavy
 def test_the_allow_list_matches_what_the_suite_skips_today():
     """A list that has drifted from the suite is the same silence one level up:
     it passes because nothing matches it rather than because nothing is wrong."""
@@ -398,3 +435,101 @@ def test_the_intake_extra_and_its_requirements_file_agree():
     intake = {d.split(">")[0].split("=")[0].strip().lower()
               for d in extra["project"]["optional-dependencies"]["intake"]}
     assert named == intake, f"file-only: {named - intake}, extra-only: {intake - named}"
+
+
+# --- the two tiers ----------------------------------------------------------
+
+# (event, from a fork, draft, labels) and the tier `dist` hands on - "" where
+# `dist` does not run at all, as on a draft, and its output is empty.
+TIERS = {
+    ("pull_request", False, False, ()): "light",
+    ("pull_request", False, False, ("bug",)): "light",
+    ("pull_request", False, False, ("bug", "full-gates")): "full",
+    ("pull_request", False, True, ()): "",
+    ("pull_request", False, True, ("full-gates",)): "",
+    ("pull_request", True, False, ()): "full",
+    ("pull_request", True, True, ()): "",
+    ("workflow_dispatch", False, False, ()): "full",
+    ("schedule", False, False, ()): "full",
+}
+
+
+@pytest.mark.parametrize("case", list(TIERS), ids=lambda c: "-".join(map(str, c[:3]))
+                                                     + "-" + "+".join(c[3] or ("unlabelled",)))
+def test_only_a_full_run_reports_a_check_called_build(workflow, case):
+    """THE REQUIRED CHECK IS THE GATE ON THE HEAVY TIER. A pull request push runs
+    the light tier, and its verdict must not be called `build` - not even when
+    it is skipped, because branch protection reads a skipped required check as
+    passing (#867). So a head has a `build` only once a full run has reported:
+    a pull request labelled `full-gates` before merging (docs/merging.md), a
+    fork's pull request, a dispatch or the nightly."""
+    name, fork, draft, labels = case
+    dist_runs = not draft
+    tier = gh_eval(tier_expression(workflow), event(name, fork, draft, labels)) if dist_runs else ""
+    assert tier == TIERS[case], (case, tier)
+    check = gh_eval(workflow["jobs"]["build"]["name"], {"needs.dist.outputs.tier": tier})
+    assert check == ("build" if tier == "full" else "light suite"), (case, check)
+    if name == "pull_request" and not fork and "full-gates" not in labels:
+        assert check != "build"
+
+
+def test_a_dispatch_and_the_nightly_run_the_whole_suite(workflow):
+    on = workflow.get("on", workflow.get(True))
+    assert on["schedule"][0]["cron"], on.get("schedule")
+    assert "workflow_dispatch" in on
+    tests = workflow["jobs"]["tests"]
+    full = gh_eval(tests["strategy"]["matrix"]["shard"], {"needs.dist.outputs.tier": "full"})
+    light = gh_eval(tests["strategy"]["matrix"]["shard"], {"needs.dist.outputs.tier": "light"})
+    assert full == [1, 2, 3, 4] and light == [1, 2], (full, light)
+
+
+def test_the_light_tier_deselects_heavy_and_the_full_tier_nothing(workflow):
+    tests = workflow["jobs"]["tests"]
+    step = next(s for s in steps(tests) if s.get("name") == "tests")
+    assert step["env"]["TIER"] == "${{ needs.dist.outputs.tier }}"
+    assert '[ "$TIER" = full ] || select=(-m "not heavy")' in step["run"]
+    assert '"${select[@]}"' in step["run"]
+
+
+def test_the_budget_step_can_fail_and_the_report_still_cannot(workflow):
+    build = {s.get("name"): s for s in steps(workflow["jobs"]["build"])}
+    budget = build["test budget"]
+    assert "continue-on-error" not in budget
+    assert budget.get("if") == "always()"
+    assert "suite_budget.py" in budget["run"] and '--tier "$TIER"' in budget["run"]
+    assert "--reference spec/test-budget-reference.json" in budget["run"], budget["run"]
+    assert "--fetch-base" in budget["run"]
+    assert budget["env"]["TIER"] == "${{ needs.dist.outputs.tier }}"
+    assert budget["env"]["PYTHONPATH"] == "spec/tools", "the job installs nothing"
+    assert build["test time"].get("continue-on-error") is True
+    names = [s.get("name") for s in steps(workflow["jobs"]["build"])]
+    assert names.index("test budget") < names.index("every job passed") == len(names) - 1
+
+
+def test_a_label_gives_a_pull_request_its_full_run(workflow):
+    """THE FULL RUN BEFORE A MERGE IS A PULL REQUEST RUN, started by labelling it
+    `full-gates`. GitHub leaves a dispatched run out of a pull request's checks:
+    on #1398 a dispatch passed `build` on the head (966146dea) and branch
+    protection went on waiting for it. So `labeled` starts a run, and every
+    job checks out what the event gives it - for a pull request, its merge with
+    main, the tree the merge makes. No checkout names a ref of its own."""
+    on = workflow.get("on", workflow.get(True))
+    assert "labeled" in on["pull_request"]["types"], on["pull_request"]
+    assert not (on["workflow_dispatch"] or {}).get("inputs"), on["workflow_dispatch"]
+    for name in ("lint", "dist", "tests", "build"):
+        checkout = next(s for s in steps(workflow["jobs"][name])
+                        if s.get("uses", "").startswith("actions/checkout@"))
+        assert "ref" not in (checkout.get("with") or {}), name
+
+
+def test_the_budget_reads_the_pull_requests_files(workflow):
+    """A new slow test fails only the change whose files hold it (suite_budget.py,
+    NEW MEANS ABSENT FROM THE BASE). The list is read with the job's own token and
+    `pull-requests: read`; if it cannot be read, nothing counts as touched."""
+    budget = next(s for s in steps(workflow["jobs"]["build"]) if s.get("name") == "test budget")
+    assert budget["env"]["PR"] == "${{ github.event.pull_request.number }}"
+    assert budget["env"]["GH_TOKEN"] == "${{ github.token }}"
+    assert 'pulls/$PR/files' in budget["run"] and "--paginate" in budget["run"]
+    assert '"${touched[@]}"' in budget["run"]
+    # UNREADABLE MEANS NOTHING TOUCHED, so a rate limit warns and never fails
+    assert ': > "$RUNNER_TEMP/touched.txt"' in budget["run"], budget["run"]

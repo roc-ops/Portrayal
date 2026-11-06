@@ -18,6 +18,7 @@ import subprocess
 import sys
 
 import libdata
+import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
@@ -44,6 +45,7 @@ def test_components_have_the_same_mechanism():
     assert all("/" in p.id for p in params)
 
 
+@pytest.mark.heavy
 def test_k_selects_one_device_across_every_parametrised_sweep():
     """THE CLAUSE THE ISSUE IS ABOUT, run rather than asserted. `-k <slug>` has
     to select something, or the mechanism is decoration."""

@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: pro4x-breaker
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  A branch breaker of a Server Technology PRO4X PDU - a two-pole breaker behind a rectangular window in a
+  three-breaker module. Fixed to the PDU, not a plug-in part.
+size: {w: 19.1, h: 32.2}
+size-confidence: {w: drawing, h: drawing}
+attrs: {poles: 2}
+provenance:
+  method: >-
+    drawing - Server Technology outline drawing 810-03-1596-00 rev A is vector, so the window was read from
+    its path geometry at 0.42483 pt/mm, the scale that puts its 1778.2 overall on the strip. The drawing
+    lies the PDU down, cord end left; this part is drawn as the PDU stands, cord end down.
+  size: >-
+    drawing - each of the six windows is 32.2 along the PDU by 19.1 across, 61.4 apart in a module of
+    three. The module plate is 188.1 along and 53.0 across and belongs to the device.
+  rating: >-
+    datasheet - the wiring diagram 810-04-1596-WYE draws each breaker two-pole ("CB") under MONITORED OCPs,
+    and the SKU page says 2-pole breakers with 10 kAIC. NO CURRENT RATING IS HELD, so none is stated.
+  handle: >-
+    not drawn - no held document draws or names the handle behind the window, so only the window is drawn.
+  states: >-
+    datasheet - the PRO4X data sheet lists circuit breaker on/off as an indicator state.
+elements:
+  window: {at: [0, 0], size: [19.1, 32.2], class: breaker, states: ['on', 'off']}
+skins: [default]

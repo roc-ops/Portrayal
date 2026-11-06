@@ -21,6 +21,7 @@ import yaml
 from portrayal import devicelock as dl
 from portrayal import manifest
 from portrayal.faces import DIRECTIONS, face_ref
+import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
@@ -115,6 +116,7 @@ def test_a_module_with_no_faces_composes_what_it_did(tmp_path):
     assert set(refs) == {"acme/cassette@1"}, refs
 
 
+@pytest.mark.heavy
 def test_every_face_a_device_reaches_is_in_what_it_composes():
     """THE LIBRARY, NOT A FIXTURE. For every device, every face of every part it
     composes is itself composed - and the census counts what it checked, so an
@@ -140,6 +142,7 @@ def test_every_face_a_device_reaches_is_in_what_it_composes():
     assert not missing, f"{len(missing)} face(s) unfollowed, e.g. {missing[:3]}"
 
 
+@pytest.mark.heavy
 def test_fhd_1ufce_sees_a_redrawn_flange_adapter(tmp_path):
     """The case that found it, on a copy of the real library: the MPO flange
     adapter is reached from fs/fhd-1ufce only through its cassettes' rears."""

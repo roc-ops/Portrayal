@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: pxo-button
+version: 1.0.0
+class: button
+profile: power
+description: >-
+  One of the four round navigation buttons beside the display of the Raritan PXO, a dark circle with a printed
+  symbol. The skins are the four symbols the unit prints: an upward chevron (the default), a downward chevron,
+  a circle and a cross. The user guide names the four buttons Up, Down, OK and Back. The chevrons move through the
+  menu, the circle is OK and the cross is Back.
+size: {w: 8.4, h: 8.4}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  existence: >-
+    datasheet - Raritan PXO data sheet (V1377), page 1: four round buttons right of the display; the PXC/PXO
+    quick setup guide (255-80-0059-00), p.5, "Using the Front Panel Display", steps 1 to 3, prints each
+    symbol where it names the button; the PX-Series PDU User Guide (4.3.11), "Control Buttons" (printed pp.94 to 95), names
+    them Up, Down, OK and Back.
+  size: >-
+    drawing - the front line drawing of the PXO that Raritan's compact power distribution page shows
+    (1.64 px per mm across the 220 mm body): each circle spans about 14 px, 8.4 mm, good to about 0.6 mm.
+  colour: >-
+    photo - the data sheet photograph of the face: the buttons are the colour of the panel with a light
+    outline and symbol, read as #2b2b2d with #d6d6d6 strokes.
+elements:
+  cap: {at: [0.2, 0.2], size: [8.0, 8.0], class: button}
+relief:
+  features:
+    - node: cap
+      out: 0.5
+      color: '#2b2b2d'
+      confidence: estimated
+      source: >-
+        no document gives how far the buttons stand from the face; 0.5 mm is a stand-in for a flush
+        membrane-style button, declared an estimate.
+skins: [default, down, circle, cross]

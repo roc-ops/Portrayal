@@ -1,0 +1,26 @@
+format: 1
+kind: component
+name: ex3200-poe-legend
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: networking
+description: >-
+  The "8PoE" line of the model plate on the front of the Juniper EX3200-24T and -48T, printed beside
+  "EX3200". It is a part of its own so that the -DC builds, which the hardware guide says "do not
+  provide PoE", can leave it off with `only-in`.
+attrs: {model: 'Model plate PoE legend'}
+size: {w: 12.0, h: 4.1}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  existence: >-
+    datasheet - EX3200 Ethernet Switches datasheet (Juniper Networks, 1000216-013-EN, Nov 2011), page 4,
+    the 24-port and 48-port photographs: the model plate reads "EX3200" and the PoE count. The photograph
+    of the switch with the "8PoE" plate stands under the caption EX3200-24P and the one with the "24PoE"
+    plate under EX3200-24T, which cannot be right (Table 1 gives 8 PoE ports for the -24T), so the plate's
+    own count is followed. The photographs are greyscale, so no colour of the legend is known
+  absence-on-dc: >-
+    datasheet - Table 1 gives the DC models 0 PoE ports; hardware guide, Table 3 lists no PoE-enabled
+    ports for them and states that "EX3200 switches with a DC power supply installed do not provide PoE".
+  size: estimated - the legend box around 2.2 mm type, read off the photograph
+skins: [default]

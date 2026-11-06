@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: micro-dsub-50-receptacle
+version: 1.0.0
+class: port
+profile: networking
+interface: micro-dsub-50
+description: >-
+  A female 50-pin micro D-sub receptacle, as the Nokia NGFC-H and NGFC-G general facilities
+  cards carry it for the central office alarm interface: a flat light-grey shield with a dark
+  trapezoidal socket window. A 50-pin micro D-sub cable plug seats at its mate point.
+size: {w: 47.7, h: 9.1}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: micro-dsub-50}
+provenance:
+  model: >-
+    datasheet - Lightspan Access Node FX Unit Data Sheet Guide 3HH-90279-AAAA-TQZZA issue 23,
+    sections 31.5.3.1 (p338) and 32.5.3.1 (p351): a female 50-pin micro DSUB connector carries the
+    external alarms of the NGFC-H and the NGFC-G. The guide gives no standard, shell size, pitch or
+    dimension for it.
+  size: >-
+    estimated - THE GUIDE PRINTS NO DIMENSION OF THE CONNECTOR. It is drawn as the NGFC-H front panel
+    art measured it (nokia/ngfc-h@1 provenance layout: the alarm D-sub frame 180.5 to 228.2 across and
+    34.0 to 43.1 down at 6.919 px/mm), 47.7 x 9.1. The NGFC-G art draws the frame 45.7 x 8.15, so the
+    NGFC-G draws this part 2.0 wider and 0.95 taller than its own art did.
+  interface: >-
+    datasheet - the `micro-dsub-50` key of spec/schemas/connectors.yaml, female on the panel
+    (UDS 31.5.3.1 and 32.5.3.1). The mate point is the centre of the socket window, facing out.
+  colour: >-
+    estimated - the shield #f2f3f4 and the window #1c1e21 are the NGFC-H skin's own, read off the
+    same front panel art.
+elements:
+  opening: {at: [4.8, 2.6], size: [38.3, 3.7], class: window}
+connection-points:
+  mate: {at: [23.85, 4.55], direction: front}
+skins: [default]

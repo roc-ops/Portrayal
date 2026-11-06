@@ -18,6 +18,7 @@ from pathlib import Path
 
 import yaml
 from portrayal import libwalk
+import pytest
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
@@ -63,6 +64,7 @@ def test_a_synthesised_configuration_says_it_has_no_kind(tmp_path):
     assert idx["configs"][0]["kind"] is None
 
 
+@pytest.mark.heavy
 def test_every_declared_configuration_in_the_library_has_a_kind():
     """The schema leaves `kind` optional, and 228 of 228 declare it. If one
     stops, the index carries `null` for a configuration a person wrote, which

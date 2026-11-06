@@ -12,7 +12,7 @@
    "edgecore/csr310-psu-dc@1"
   ]
  },
- "composed": "4d91083861bb524e",
+ "composed": "1db2d577f519955e",
  "composed-refs": {
   "common/led-arrow-sm@1": "1.1.0+f6e565f48fbd46a4",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
@@ -20,9 +20,10 @@
   "common/rack-ear@1": "1.0.0+1682f189bae7936c",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/sma-jack@1": "1.0.1+dde698c727778ba3",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "edgecore/csr310-fan-tray@1": "1.0.2+cdc1604e2201eb3f",
   "edgecore/csr310-psu-ac@1": "1.0.2+6ae6e621f081d00c",
-  "edgecore/csr310-psu-dc@1": "1.0.2+0251cd674bbb51d4",
+  "edgecore/csr310-psu-dc@1": "1.1.1+26a819369fed81be",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
@@ -34,6 +35,66 @@
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-1/module/input": {
+   "edgecore/csr310-psu-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "gnd",
+      "slot": "psu-1/module/pole-gnd"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-2/module/input": {
+   "edgecore/csr310-psu-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "gnd",
+      "slot": "psu-2/module/pole-gnd"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-2/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-2/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "22234423a7bf4e3e",
  "groups": [
@@ -46,6 +107,7 @@
   "qsfp28",
   "sfp-plus",
   "sfp28",
+  "stack-control",
   "stacking",
   "timing"
  ],
@@ -268,7 +330,7 @@
   "front/placements/stack-sync",
   "front/placements/usb"
  ],
- "names": "1cc4689a4bae8bdf",
+ "names": "96811bae899081c4",
  "placement-addressing": {
   "for": {
    "front/placements/led-alrm": [
@@ -600,8 +662,8 @@
    "front/placements/reset": 4,
    "front/placements/stack-0": 0,
    "front/placements/stack-1": 1,
-   "front/placements/stack-ctrl": 2,
-   "front/placements/stack-sync": 3,
+   "front/placements/stack-ctrl": 1,
+   "front/placements/stack-sync": 2,
    "front/placements/usb": 3
   }
  },
@@ -716,12 +778,12 @@
   "front/placements/reset": "mgmt",
   "front/placements/stack-0": "stacking",
   "front/placements/stack-1": "stacking",
-  "front/placements/stack-ctrl": "stacking",
-  "front/placements/stack-sync": "timing",
+  "front/placements/stack-ctrl": "stack-control",
+  "front/placements/stack-sync": "stack-control",
   "front/placements/usb": "mgmt"
  },
  "placement-surface": "223fbed6c9f2b4a2",
  "shape": "ee776fb07d64ee76",
- "surface": "9ff02d0afdc7340d",
- "version": "1.0.7"
+ "surface": "3873103281ef53ed",
+ "version": "2.0.0"
 }

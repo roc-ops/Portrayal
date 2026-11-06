@@ -437,6 +437,7 @@ export {isRackMount} from './fit.js';
 const MOUNTS = {
   'din-rail': {tag: 'DIN rail', what: 'a DIN-rail device', where: 'a shelf or DIN-rail bracket'},
   desktop: {tag: 'desktop', what: 'a desktop device', where: 'a shelf'},
+  ceiling: {tag: 'ceiling mount', what: 'a ceiling-mount device', where: 'a shelf or bracket'},
   wall: {tag: 'wall mount', what: 'a wall-mount device', where: 'a shelf or bracket'}};
 // A rack-face part (a 0U cable manager) bolts to the rails like a rack device:
 // it needs no shelf, so it has no "needs" sentence - managerNotes says where it is.
@@ -1189,7 +1190,8 @@ export function hardwareNotes(frame) {
 // cable-plugs.js read it (`ends`, as for cableFindings); the two ends are
 // said in one order, so A-to-B and B-to-A are one line. The plugs a cable is
 // drawn with are part of the cable: they are never lines of their own.
-const FAMILY = {fiber: 'fiber', copper: 'copper', dac: 'DAC', aoc: 'AOC', power: 'power', ground: 'ground'};
+const FAMILY = {fiber: 'fiber', copper: 'copper', dac: 'DAC', aoc: 'AOC', power: 'power', ground: 'ground',
+  stack: 'stack', usb: 'USB', console: 'console'};
 const familyOf = info => (info && Object.hasOwn(FAMILY, info.family ?? '') ? FAMILY[info.family] : null);
 // WHAT THE LAY FINDS FOR ONE CABLE, as sentences for a notes cell (#1007):
 // its tight bends in one sentence (route.js bendFindings: the one finding's

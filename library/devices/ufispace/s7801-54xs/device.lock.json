@@ -24,16 +24,17 @@
    "ufispace/psu-401-dc@1"
   ]
  },
- "composed": "7b5bd7ae9b75cc86",
+ "composed": "ea5d56e31b533c0b",
  "composed-refs": {
   "common/compliance-sticker@1": "1.0.0+6b3c51b31c446689",
-  "common/ground-symbol@1": "1.0.0+938c617ba0a96a89",
+  "common/ground-symbol@1": "1.0.1+0018bfdfc1559185",
   "common/led-arrow@1": "1.1.0+bb17f3a6fc695571",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rivet@1": "1.0.0+4685edc04da9b23d",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
-  "common/screw-head@1": "1.1.0+0f38d482bcc27ec9",
+  "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "common/usb-a-bezel@1": "1.0.0+dbd65b62318759eb",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
@@ -42,7 +43,7 @@
   "std/usb-a@1": "1.3.0+3c77f06ea6794bfc",
   "ufispace/fan-402825@1": "1.2.0+7b69e930df2c4acc",
   "ufispace/psu-401-ac@1": "1.4.1+c3e502c3e4815abc",
-  "ufispace/psu-401-dc@1": "1.3.1+2e896232cfe5e70f"
+  "ufispace/psu-401-dc@1": "1.4.0+575c80a4c85f4b09"
  },
  "configs": [
   "ac-back-to-front",
@@ -51,6 +52,70 @@
   "dc-back-to-front",
   "dc-front-to-back"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "ufispace/psu-401-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "base",
+     "dc-back-to-front",
+     "dc-front-to-back"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     },
+     {
+      "role": "gnd",
+      "slot": "psu-0/module/pole-gnd"
+     }
+    ],
+    "rating-a": 16,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "ufispace/psu-401-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "base",
+     "dc-back-to-front",
+     "dc-front-to-back"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "gnd",
+      "slot": "psu-1/module/pole-gnd"
+     }
+    ],
+    "rating-a": 16,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "5eb02ec0e1b6d152",
  "groups": [
@@ -810,5 +875,5 @@
  "placement-surface": "08f8b1acc67aab5b",
  "shape": "554e4706ecf361c0",
  "surface": "2675dac4c89d64ef",
- "version": "5.0.4"
+ "version": "5.1.0"
 }

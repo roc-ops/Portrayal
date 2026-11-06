@@ -57,6 +57,7 @@ def device(**keys):
 
 # --- L90 ---------------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_library_is_in_one_order():
     """The corpus. 22 orderings became one."""
     bad = []
@@ -102,6 +103,7 @@ def test_the_template_is_written_in_the_canonical_order():
 
 # --- L91 ---------------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_library_states_airflow_once():
     bad = []
     for p in libwalk.iter_devices([LIB]):

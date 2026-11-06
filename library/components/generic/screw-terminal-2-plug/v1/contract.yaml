@@ -1,0 +1,48 @@
+format: 1
+kind: component
+name: screw-terminal-2-plug
+version: 1.0.0
+class: port
+mates: screw-terminal-2
+profile: power
+description: >-
+  The two-way screw-clamp cable plug of a two-pole pluggable DC terminal block, wired, seen from the wire side as seated. A green
+  body with a wire entry and one insulated wire at each of its two ways. It seats in a `screw-terminal-2` header at its own mate
+  point. It carries one wire per pole, not one cable.
+size: {w: 10.6, h: 11.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The box of the plug body that common/dc-terminal-plug-2@1 draws seated in its header (10.6 by 11.0), photo-measured there on the
+  Edgecore ECS4530 data sheet's DC-I front elevation. No document draws the plug on its own or dimensions it, so the size is
+  declared an estimate here.
+attrs: {media: pluggable-dc-terminal-2, connector: DC cable plug, positions: 2}
+fields:
+  wire-1-color: {label: 'Wire colour (left pole)', type: text, default: '#2b2b2b'}
+  wire-2-color: {label: 'Wire colour (right pole)', type: text, default: '#2b2b2b'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    A DECLARED STAND-IN FOR THE CABLE PLUG. No held document draws the plug alone or names a maker, series or part number: the Edgecore
+    ECS4530 data sheet prints only "DC Power Input (-48~-60 V)" and the ECS4120-28Fv2 Quick Start Guide says to "wire the DC plug".
+    The part is drawn as the plug body the header's skin already draws seated, so that the two align.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    NOT STATED BY POSITION: the two devices that place the header print '-' and '+' in opposite order (see the roles entry of
+    common/dc-terminal-plug-2@1). No document gives a wire colour; the two defaults are a neutral dark grey and mean nothing.
+  gauge: >-
+    NOT STATED. The ECS4120-28Fv2 Quick Start Guide names a grounding wire (18 AWG minimum) and gives no gauge for the DC feed wires.
+  pitch: >-
+    NOT STATED. No held document gives the pitch of the poles, so the part claims none. The wire centres, 4.6 apart, are read off
+    the header's skin and are an estimate of the drawing, not a pitch.
+  depth: >-
+    NOT STATED. No document gives how far the plug stands out of the header, so the part draws a plan outline only and builds no
+    relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [5.30, 5.50], direction: front}
+  wire-1: {at: [3.00, 5.80], direction: front}
+  wire-2: {at: [7.60, 5.80], direction: front}
+skins: [default]

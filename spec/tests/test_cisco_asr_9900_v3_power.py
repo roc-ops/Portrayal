@@ -76,7 +76,7 @@ def _all_devices():
 
 def test_the_ac_module_carries_the_figures_the_guide_prints():
     c = _contract(AC)
-    assert c["version"] == "1.0.0"
+    assert c["version"] == "1.0.1"
     a = c["attrs"]
     assert a["model"] == "PWR-6KW-AC-V3"
     assert a["power-output-w"] == 6000
@@ -89,7 +89,7 @@ def test_the_ac_module_carries_the_figures_the_guide_prints():
 
 def test_the_dc_module_carries_the_figures_the_guide_prints():
     c = _contract(DC)
-    assert c["version"] == "1.0.0"
+    assert c["version"] == "1.0.1"
     a = c["attrs"]
     assert a["model"] == "PWR-4.4KW-DC-V3"
     assert a["power-output-w"] == 4400
@@ -144,6 +144,7 @@ def test_no_other_component_carries_either_model():
 
 # --- which bays take them ------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_ac_module_is_accepted_in_the_ac_positions_of_the_two_chassis_and_nowhere_else():
     seen = {}
     for p, doc in _all_devices():
@@ -312,7 +313,7 @@ def test_the_power_group_is_declared_and_the_rear_is_still_undrawn_for_power(nam
         assert g["term"] == "PM" and g["role"] == "service"
         assert g["physical-context"] == "Power Module"
     # devicelock: "This change needs at least a major bump" - the shelf cutouts moved and grew
-    assert doc["version"] == "2.0.0"
+    assert doc["version"] == "2.0.3"
     rear_ids = {b["id"] for b in doc["views"]["rear"]["components"].get("bays", [])}
     assert not any("pm" in i for i in rear_ids)
 
@@ -393,6 +394,7 @@ def test_the_chassis_device_types_are_exported(flavour, name):
     assert (LIB / "exports" / flavour / "device-types" / "Cisco" / f"{name}.yaml").exists()
 
 
+@pytest.mark.heavy
 def test_the_lock_agrees_with_the_chassis_and_the_new_parts():
     from portrayal import devicelock
 

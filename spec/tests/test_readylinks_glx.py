@@ -139,6 +139,7 @@ def test_the_existing_device_and_cards_are_not_widened():
     assert _contract("gl-x-lc-blank")["version"] == "1.0.0"
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("name", sorted(SKUS))
 def test_a_sku_renders_with_its_cards_seated(name, tmp_path):
     _model, card, n, _dual, _single = SKUS[name]
@@ -156,6 +157,7 @@ def test_a_sku_renders_with_its_cards_seated(name, tmp_path):
 TWO_ROW = [n for n, s in sorted(SKUS.items()) if s[2] == 2]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("name", TWO_ROW)
 def test_both_rows_print_rl1_to_rl12_and_the_tree_tells_them_apart(name, tmp_path):
     """The maker prints RL1 to RL12 on each of the two plates (its product renders of the GL-24xB

@@ -1,0 +1,136 @@
+format: 1
+kind: rack
+name: 13853-x03
+version: 1.0.0
+maturity: modelled
+manufacturer: Chatsworth Products
+model: 13853-X03
+part-numbers:
+  13853-X03: SeismicFrame Two-Post Rack, 7 ft (2.1 m) x 19 in, 44U, tapped #12-24 zinc rails
+description: >-
+  The Chatsworth SeismicFrame two-post rack, a welded steel 44U frame for 19 in
+  equipment, with two pairs of tapped #12-24 zinc-plated rails that sit 6 in or
+  3 in apart. The maker rates it for 1000 lb (453.6 kg) as a seismic Zone 4 load
+  under GR-63-CORE; that is a seismic rating, not a static load, and is not
+  written as one. It is secured to the structural floor with seismic-rated
+  anchors and is painted black or gray, or glacier white.
+form: 2-post-frame
+ru: 44
+numbering:
+  direction: bottom-up
+  start: 1
+width: 19
+holes:
+  style: tapped
+  thread: 12-24
+hole-centres: 465.1
+opening: 450.85
+rails:
+  - id: front
+outer:
+  w: 610
+  h: 2133.6
+  d: 380
+datasheet:
+  title: SeismicFrame Two-Post Rack, data sheet (Rev11 10/26)
+references:
+  - title: Chatsworth Products, SeismicFrame Two-Post Rack data sheet, Rev11 10/26, pages 1 to 3
+provenance:
+  ru:
+    confidence: datasheet
+    note: 44U in the specifications (page 1) and in the part-number table (page 3).
+  form:
+    confidence: datasheet
+    note: >-
+      The data sheet is for the SeismicFrame Two-Post Rack: a welded frame with
+      two pairs of rails, drawn in front and side view (page 2).
+  width:
+    confidence: datasheet
+    note: >-
+      "Width: 19" EIA or 23"" (page 1); 13853-X03 is the 19 in rack (page 3).
+      The 23 in version is a separate part and is not modelled.
+  holes:
+    confidence: datasheet
+    note: >-
+      13853-X03 is "Tapped #12-24 Zinc Rails" (page 3). The square-punched
+      rails are other part numbers. No hole size is printed.
+  opening:
+    confidence: datasheet
+    note: >-
+      Rail Clearance (C) 17.75 in (450 mm) (page 2), the space between the rails
+      for equipment; 17.75 in is written, as the finer print. Frame Opening
+      (B) 19.3 in (490 mm) is the frame's own opening, not the rails'.
+  rails:
+    confidence: datasheet
+    note: >-
+      A two-post frame has the front rail alone. The two pairs of rails sit 6 in
+      (150 mm) or 3 in (80 mm) apart; the format has no key for that choice.
+  outer:
+    confidence: datasheet
+    note: >-
+      Overall width (A) 24.0 in (610 mm) (page 2). Depth 15 in is printed as
+      380 mm twice (pages 1 and 2) and is written as printed; 15 in is 381.0
+      mm. The height is printed as 7 ft (2.1 m) only, so 2133.6 mm is 7 ft
+      converted. The depth is the footprint of the base, not the depth
+      equipment may have.
+  numbering:
+    confidence: estimated
+    note: >-
+      A stand-in. The sheet says numbering "can start at the top or bottom of
+      the rack" so the part number does not fix it. Bottom-up from 1 is the
+      default of the rack file.
+  hole-centres:
+    confidence: estimated
+    note: >-
+      A stand-in for the EIA-310 figure, 465.1 mm between hole lines. The sheet
+      prints only the universal pattern's vertical spacing.
+gaps:
+  - what: numbering
+    reason: vendor-silent
+    note: The rails can be attached so numbering starts at the top or the bottom; the part number does not say which.
+    wanted: The direction the labels run on a 13853-X03 as shipped.
+  - what: hole-centres
+    reason: vendor-silent
+    note: The sheet gives no distance between the hole lines.
+    wanted: The distance between the hole lines, from the maker's drawing.
+  - what: load
+    reason: vendor-silent
+    note: >-
+      The sheet gives a seismic rating, 1000 lb (453.6 kg) in seismic areas
+      (page 1) and as a seismic Zone 4 load (page 2), and no static or rolling
+      capacity. The format has no seismic-rating key, so it is in the description.
+    wanted: A seismic-rating key, or the maker's static capacity.
+  - what: channel-depth
+    reason: sources-disagree
+    note: >-
+      The vertical channel is 9.6 in with 244 mm on page 1 and 294 mm in the
+      drawing on page 2. 9.6 in is 243.8 mm, so 244 is the figure the inches
+      support and 294 mm is set aside as a misprint. The channel depth has no key.
+    wanted: The maker's correction of page 2.
+  - what: rail-positions
+    reason: vendor-silent
+    note: >-
+      Two pairs of rails sit 6 in (150 mm) or 3 in (80 mm) apart. 6 in is 152.4 mm
+      and 3 in is 76.2 mm, so the maker's metric prints are rounded. The format has
+      no key for a two-position rail pair.
+    wanted: A key for a rail pair that sits at one of two positions.
+  - what: outer-height
+    reason: vendor-silent
+    note: The height is printed as 7 ft (2.1 m) only; 2133.6 mm is 7 ft converted.
+    wanted: The frame's height in millimetres, from the maker's drawing.
+  - what: weight-kg
+    reason: vendor-silent
+    note: The 180 lb (81.6 kg) on page 3 is the shipping weight; the frame's own weight is not printed.
+    wanted: The weight of the frame without its carton.
+  - what: hole-size
+    reason: vendor-silent
+    note: No hole size is printed.
+    wanted: The size of a rail hole.
+  - what: max-device-depth
+    reason: vendor-silent
+    note: The rail depths (6 in or 3 in) are the spacing between the rail pairs, not the depth equipment may have.
+    wanted: The deepest equipment the frame takes.
+  - what: square-punched-rails
+    reason: vendor-silent
+    note: The square-punched rails are other part numbers (13854 and 13856), and the painted ones 13855; none is modelled.
+    wanted: A product for each variant, if wanted.

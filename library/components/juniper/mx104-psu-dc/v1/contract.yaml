@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx104-psu-dc
-version: 1.1.0
+version: 1.2.0
 class: psu
 behaviour: fills
 profile: networking
@@ -36,6 +36,44 @@ provenance:
     8.88 in with the axes scrambled (104 mm is the credible width and 45 mm
     the face height per the photograph); face drawn 103.7 x 45.0, approximate'
   power-output: 'NOT STATED per module - L27 stands'
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head 3.4
+    across (that part's own size is an estimate), standing at the centre of the stud this skin
+    already draws (`stud-0` at 20.0 across and `stud-1` at 38.0, both 30.0 down) and lifted 2.4 mm,
+    those studs' own estimated lift (the `stud-0` and `stud-1` relief below). The hardware guide
+    asks for "M6 screws and washers (two per DC power supply, attached)" and "DC power ring lugs,
+    Panduit PV12-14HDRB-2k" (PDF page 98) and gives no screw head or pitch; the screw part claims
+    no thread, so none is written. The places are the skin's own, which were read off the front
+    photograph.
+  poles: >-
+    MX104 Universal Routing Platform Hardware Guide (published 2022-12-13), "Connecting DC Power
+    Cables to the MX104 Router" (PDF pages 98 to 100): each supply has "one grounding point and two
+    terminals", and the positive source cable lug goes on "the return (+) terminal" and the
+    negative source cable lug on "the input (-) terminal" (step 8, PDF page 100); the multimeter
+    test of step 4 (PDF page 99) calls them the return cable (+) and the DC input cable (-).
+    Figure 24 (PDF page 102) shows a ring lug for each of the two screws. The guide's figures draw
+    the two screws without a legend, so the order comes from the studio photograph of the MX104
+    front (Juniper image library, mx104-front-high.jpg), which prints V- above the left screw and V+
+    above the right one. The roles are the guide's words for those terminals, not the printed signs:
+    `batt` for the input (-) terminal at the left and `rtn` for the return (+) terminal at the
+    right (spec/schemas/dc.yaml writes `batt` as negative (battery) and `rtn` as return). The guide
+    says the supply has "a single DC input" (PDF pages 26 and 27, and again on page 33), so it has one
+    DC port, `input`, of two poles. For a +24 V supply the same guide swaps which cable is near
+    chassis ground (step 4, PDF page 99) and keeps the names, so the names are kept.
+  voltage: >-
+    NOT STATED. Table 9 "DC Power Electrical Specifications" (PDF pages 32 and 33) prints three
+    nominals, "nominal 24 VDC", "nominal 48 VDC" and "nominal 60 VDC", with their ranges, and the
+    supply takes any one. A port states one nominal, so the port states none and a later change can
+    state one once a source says which. `attrs` keeps the words as printed.
+  rating: >-
+    NOT STATED. Table 9 (PDF page 33) prints the input current as 40 A at 24 VDC, 20 A at -48 VDC
+    and 15 A at -60 VDC. A port's `rating-a` is one figure and the supply has three, one for each
+    nominal, so the port states none. `attrs` keeps the words as printed.
+  awg: >-
+    NOT STATED AS A SIZE. "DC Power Cable Specifications" (PDF page 35) asks for "14-AWG (2.08
+    mm2), minimum 90° C wire, or as required by the local code", and the installation list (PDF
+    page 98) for "minimum 14 AWG or as required by local code". That is a floor, not a size or a
+    list of sizes, and a port's `awg` lists the sizes it takes, so the port states none.
 states: [absent]
 elements:
   terminals:
@@ -65,3 +103,14 @@ relief:
     lift: 2.4
     confidence: estimated
     source: photo - as stud-0
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [18.3, 28.3], lift: 2.4}
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [36.3, 28.3], lift: 2.4}
+dc:
+  ports:
+    - id: input
+      direction: input
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles}

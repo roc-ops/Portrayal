@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56st
-version: 3.1.1
+version: 3.2.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56ST
@@ -573,8 +573,8 @@ views:
       bays:
         - {id: fan-0, at: [15.2, 0.8], size: {w: 51.5, h: 42.2}, accepts: [ufispace/fan-402825@1], group: fans, rel-pos: 0, default: ufispace/fan-402825@1}
         - {id: fan-1, at: [67.65, 0.8], size: {w: 51.5, h: 42.2}, accepts: [ufispace/fan-402825@1], group: fans, rel-pos: 1, default: ufispace/fan-402825@1}
-        - {id: psu-0, at: [322.9, 1.8], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-151-dc@1, ufispace/psu-151-ac@1], group: psus, rel-pos: 0, default: ufispace/psu-151-dc@1}
-        - {id: psu-1, at: [382.9, 1.8], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-151-dc@1, ufispace/psu-151-ac@1], group: psus, rel-pos: 1, default: ufispace/psu-151-dc@1}
+        - {id: psu-0, at: [322.9, 1.8], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-151-dc@1, ufispace/psu-151-dc@2, ufispace/psu-151-ac@1], group: psus, rel-pos: 0, default: ufispace/psu-151-dc@1}
+        - {id: psu-1, at: [382.9, 1.8], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-151-dc@1, ufispace/psu-151-dc@2, ufispace/psu-151-ac@1], group: psus, rel-pos: 1, default: ufispace/psu-151-dc@1}
       placements:
         - {ref: common/ground-symbol@1, id: ground-rear, at: [3.3, 32.8], group: grounding, rel-pos: 1}
     regions:
@@ -669,6 +669,9 @@ configurations:
     description: Dual 150W DC PSUs (PSU-151-DESR) 1+1, dual FAN-402825-HDN fan
       modules 1+1, front-to-back airflow - the build the vendor's rear render shows
     default: true
+    bays:
+      psu-0: ufispace/psu-151-dc@2
+      psu-1: ufispace/psu-151-dc@2
     component-attrs:
       fan-402825:
         model: FAN-402825-HDN
@@ -691,6 +694,9 @@ configurations:
       Dual 150W DC PSUs (PSU-151-DISB, intake) 1+1, dual FAN-402825-CDN fan modules 1+1,
       back-to-front airflow - blue handles, latches and tags, as the vendor's -3-rear render
       shows and the HIG's colour rule states
+    bays:
+      psu-0: ufispace/psu-151-dc@2
+      psu-1: ufispace/psu-151-dc@2
     region-context:
       fan-exhaust: Intake
       psu-bank: Intake
