@@ -101,7 +101,7 @@ def test_the_connector_registry_is_not_vacuous():
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
-                         "nema-5-15r", "nema-5-20r", "eaton-c39",
+                         "nema-5-15r", "nema-5-20r", "eaton-c39", "servertech-hdot-cx",
                          "usb-a", "micro-usb-b", "mini-usb-b", "usb-c",
                          "db9", "hd15", "da15", "db25",
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
@@ -159,6 +159,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "juniper-dc-header-6", "dc-connector-3w3",
                          # the AC inlet of the Telco Systems XM-3352 supply
                          "telco-ac-cloverleaf-3",
+                         # the 4FF SIM card slot of the Opengear CM8004-C and CM8008-C
+                         "sim-tray-4ff",
                          # the keystone opening of the FS FHD-FAPM6 panel
                          "keystone"}
     # No connector interface is also a cage family's: one core, two registries,
