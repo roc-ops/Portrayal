@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: spa-8xcht1-e1
-version: 1.1.1
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -165,6 +165,18 @@ provenance:
     searched - no end-of-life notice for SPA-8XCHT1/E1 is in this intake. Table 10 gives
     this part a minimum IOS XR release of 4.1.0 and a minimum hardware revision of 1.0,
     which is a support floor and not a lifecycle statement.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router SIP and SPA Hardware
+    Installation Guide, PDF pages 48-49 and 24-25, 8-Port Channelized T1/E1 SPA Interface
+    Specifications and Cables, Connectors, and Pinouts, and Table 10, which lists SPA-8XCHT1/E1
+    and SPA-8XCHT1/E1-V2 under one description: 'RJ-48c receptacles for E1 (120-Ohm) cables with
+    RJ-45 connectors', all ports usable at once, 120-ohm shielded twisted pair. The group holds
+    the adapter's 8 port parts. Role traffic: the ports are what the adapter is for.
+    index-origin 0: the guide says subslots and ports are numbered starting from 0 (SIP-700
+    interface addresses, PDF page 20), and the parts here are p0, p1 and so on. Media rj45: the
+    guide's connector, with the receptacle called RJ-48c. No speed is stated: the closed set of
+    speeds has no word for a T1 or E1 line rate, and this section prints none. Nothing was
+    measured: no position, size or part changed.
 elements:
   led-ca-p0:
     at: [-0.04, 15.04]
@@ -492,13 +504,23 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: rj45
+    description: >-
+      Each port is an RJ-48c receptacle for an RJ-45 connector. The guide prints E1 120-ohm
+      shielded twisted pair, and all eight ports can be used at once.
 parts:
-  - {ref: std/rj45-ganged@2, id: p0, at: [2.29, 12.64], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: p1, at: [2.29, 30.54], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: p2, at: [2.29, 48.45], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: p3, at: [2.29, 66.36], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: p4, at: [2.29, 90.83], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: p5, at: [2.29, 108.65], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: p6, at: [2.29, 126.46], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: p7, at: [2.29, 144.28], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: p0, at: [2.29, 12.64], rotate: 90, group: rj45}
+  - {ref: std/rj45-ganged@2, id: p1, at: [2.29, 30.54], rotate: 90, group: rj45}
+  - {ref: std/rj45-ganged@2, id: p2, at: [2.29, 48.45], rotate: 90, group: rj45}
+  - {ref: std/rj45-ganged@2, id: p3, at: [2.29, 66.36], rotate: 90, group: rj45}
+  - {ref: std/rj45-ganged@2, id: p4, at: [2.29, 90.83], rotate: 90, group: rj45}
+  - {ref: std/rj45-ganged@2, id: p5, at: [2.29, 108.65], rotate: 90, group: rj45}
+  - {ref: std/rj45-ganged@2, id: p6, at: [2.29, 126.46], rotate: 90, group: rj45}
+  - {ref: std/rj45-ganged@2, id: p7, at: [2.29, 144.28], rotate: 90, group: rj45}
 skins: [default]
