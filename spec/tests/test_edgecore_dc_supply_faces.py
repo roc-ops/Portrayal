@@ -33,13 +33,13 @@ TOL = 0.06
 DEVICES = {
     "cor550": dict(view="rear", ac_cfg="ac-f2b", dc_cfg="dc-f2b", bays=["psu-0", "psu-1"],
                    ac="edgecore/cor550-psu-ac@1", dc="edgecore/cor550-psu-dc@1",
-                   gap="dc-supply-face", version="3.2.1"),
+                   gap="dc-supply-face", version="4.0.2"),
     "cor580": dict(view="rear", ac_cfg="ac-f2b", dc_cfg="dc48-f2b", bays=["psu-1", "psu-2"],
                    ac="common/psu-ac-1300@1", dc="edgecore/fsj033-610g@1",
-                   gap="dc-psu-module", version="3.2.0"),
+                   gap="dc-psu-module", version="4.0.1"),
     "csr440": dict(view="front", ac_cfg="ac", dc_cfg="dc", bays=["psu-1", "psu-2"],
                    ac="edgecore/csr440-psu-ac@1", dc="edgecore/csr440-psu-dc@1",
-                   gap="dc-power-supply", version="2.2.0"),
+                   gap="dc-power-supply", version="2.2.1"),
 }
 
 # the new parts: the figures each carries

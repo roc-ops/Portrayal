@@ -394,7 +394,11 @@ function usableCodes(W, ref, cfgName, cfg, slots, offered, zero, flag, counts, U
       {examples: bare.slice(0, 3).map(s => `${s.view}:${s.path} ${modelOf(W.compByRef(refOf(s)), s.ref)}`), causes: bare.map(s => cause(refOf(s), s.view, s.path))});
     // a device fed through a fixed cord (a placed part that ends in a plug of its own and says so in its `unmated` sentence) has no power end to offer
     const fixedCord = FACES.some(view => faceOf(view).some(e => e.ref && e.class === 'inlet' && W.compByRef(refOf(e))?.attrs?.plug && sentenceOf(U, refOf(e))));
-    if ((cfg.power || []).length && !offered.some(o => o.kind === 'power') && !bare.length && !supplies.length && !fixedCord)
+    // a configuration whose every supply bay (a bay that takes a part of class psu) is open, as a spare chassis ships, orders no supply:
+    // it has none to offer a power end, and the supplies ordered for it are judged on their own parts
+    const supplyBays = Object.values(slots.bays || {}).flat().filter(b => (!b['only-in'] || b['only-in'].includes(cfgName)) && (b.accepts || []).some(r => W.compByRef(r)?.class === 'psu'));
+    const noSupplyOrdered = supplyBays.length > 0 && supplyBays.every(b => !(Object.hasOwn(cfg.bays || {}, b.id) ? cfg.bays[b.id] : b.default));
+    if ((cfg.power || []).length && !offered.some(o => o.kind === 'power') && !bare.length && !supplies.length && !fixedCord && !noSupplyOrdered)
       flag('C19', `the configuration says it is powered (${cfg.power.join(', ')}) and no power end is offered`, 1, {causes: [cause('', 'front', '')]});
   }
   // an inlet, terminal or stud the drawing shows (outside a supply, which is judged above) is a place to land a cord or a lug
@@ -410,7 +414,12 @@ function usableCodes(W, ref, cfgName, cfg, slots, offered, zero, flag, counts, U
         if (part && (NOT_A_CONNECTOR.has(part.class) || isPlug(part) || sentenceOf(U, refOf(e)))) continue;   // by data: not a place, or said so
         // a placed part that composes this one connector part presents it as its own slot, at the placement's path (`psu-1` for `psu-1/inlet`)
         const forwarded = !!part?.interface && offered.some(o => e.path.startsWith(`${o.path}/`) && (slots.cages[view] || []).some(s => s.id === o.path && s.interface === part.interface));
-        if (!forwarded && !offered.some(o => o.path === e.path || o.path.startsWith(`${e.path}/`))) lone.push({...e, view});
+        // a seat the build publishes at the element's own path: a connector slot, of an interface the registry knows, that takes a cable end (a pole of a DC port is one, and no free cable end)
+        const seatedAt = (o) => (slots.cages[view] || []).some(s => s.id === o.path && s.kind === 'connector' && registered(U, s.interface) && (s.accepts || []).some(r => W.compByRef(r)?.class === 'port'));
+        const within = (a, b) => !!a && !!b && a.x >= b.x - 0.01 && a.y >= b.y - 0.01 && a.x + a.w <= b.x + b.w + 0.01 && a.y + a.h <= b.y + b.h + 0.01;
+        // a block a placed part draws with no part of its own is judged by the seats drawn inside it; a terminal in it with no seat is reported on its own
+        const holdsSeat = !e.ref && !!e.parent && els.some(o => o !== e && o.parent === e.parent && within(o.box, e.box) && seatedAt(o));
+        if (!forwarded && !seatedAt(e) && !holdsSeat && !offered.some(o => o.path === e.path || o.path.startsWith(`${e.path}/`))) lone.push({...e, view});
       }
     }
     if (lone.length) flag('C20', `${lone.length} drawn inlets, terminals or studs are not offered as a place to land a cord or lug`, lone.length,

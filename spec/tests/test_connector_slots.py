@@ -79,8 +79,7 @@ def test_the_connector_registry_is_not_vacuous():
     # nothing presents it yet, so it is in the registry and in no slot below
     # nema-5-15r/nema-5-20r/eaton-c39: the NEMA straight-blade receptacles and the
     # Eaton combination outlet, made slots for a cord end (#1045). std/nema-5-20r@1
-    # and eaton/c39-outlet@1 present two of them. No part presents nema-5-15r yet:
-    # it is registered because a 5-15P names it in `mates`, and it is in no slot below
+    # and eaton/c39-outlet@1 present two of them; std/nema-5-15r@1 presents the third
     # flexstack/stackwise-480/stackpower: the Cisco stacking and power-stacking
     # connectors; ex4200-vcp: the Juniper EX4200 Virtual Chassis port;
     # cisco-rps2300/ex3300-rps: the two redundant-power connectors. Vendor connectors
@@ -97,16 +96,20 @@ def test_the_connector_registry_is_not_vacuous():
     # and never the plug that enters it
     # micro-dsub-50/wire-wrap-6: the 50-pin micro D-sub alarm connector (FEMALE on the panel)
     # and the six-pin BITS wire-wrap header of nokia/ngfc-h@1 and nokia/ngfc-g@1
+    # keystone: the landscape keystone opening of the FS FHD-FAPM6 panel, presented by
+    # common/keystone-clip@3 and mated by the blank and the jack that seat in a clip
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
-                         "nema-5-15r", "nema-5-20r", "eaton-c39",
-                         "usb-a", "micro-usb-b", "mini-usb-b", "usb-c",
+                         "nema-5-15r", "nema-5-20r", "eaton-c39", "servertech-hdot-cx",
+                         # the CEE 7/3 earthing-pin socket of the Rittal DK 7979 PDUs
+                         "cee-7-3",
+                         "usb-a", "usb-b", "micro-usb-b", "mini-usb-b", "usb-c",
                          "db9", "hd15", "da15", "db25",
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",
                          "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
-                         "mrj21", "vhdci", "rj11",
+                         "mrj21", "vhdci", "rj11", "sd-card",
                          "breaker-1ru-guard", "p40", "pdu-button",
                          # GPU power and NVLink (P-0028): presented by parts no
                          # device places yet, so none is a slot below
@@ -116,6 +119,10 @@ def test_the_connector_registry_is_not_vacuous():
                          # a riser bay states one as its `interface`, so no part
                          # presents either and neither is a slot below
                          "pcie-fh", "pcie-lp",
+                         # the four OCP NIC 3.0 card slots (Table 5 of the
+                         # OCP NIC 3.0 Design Specification 1.6.0): a device bay
+                         # states one as its `interface`, so none is a slot below
+                         "ocp3-sff", "ocp3-tsff", "ocp3-dsff", "ocp3-tdsff",
                          # stack, virtual-chassis and redundant-power connectors,
                          # each presented by a port part
                          "flexstack", "stackwise-480", "stackpower", "ex4200-vcp",
@@ -130,10 +137,38 @@ def test_the_connector_registry_is_not_vacuous():
                          "micro-dsub-50", "wire-wrap-6",
                          # the DC input connector of the Edgecore PSU-48V-650-F and -B
                          "positronic-pla03",
+                         # the DC power connector of the Juniper JPSU-150-DC-AFO supplies
+                         "juniper-dc-block-3",
                          # the DC input header of the Oscilloquartz OSA 5420 and 5421 supplies
                          "latch-header-3",
                          # the DC power connector of the Cisco NXA-PDC-930W supply
-                         "cisco-dc-block-3"}
+                         "cisco-dc-block-3",
+                         # the DC power connector of the Cisco ASR 9000 fixed-port DC supplies
+                         "cisco-dc-block-2",
+                         # the DC input header of the Juniper QFX5200-48Y DC supplies
+                         "juniper-dc-header-3",
+                         # the DC input header of the Juniper QFX5210 DC supplies
+                         "juniper-qfx5210-dc-header-3",
+                         # the DC connectors of the Edgecore AS5835, AMX3200 and AGR560 supplies
+                         "edgecore-dcs-dc-block-3", "edgecore-amx-dc-block-3", "edgecore-agr-dc-block-2",
+                         # the DC connector of the Edgecore AIS800-64D and AIS800-64O supply
+                         "edgecore-ais800-dc-block-6",
+                         # the DC power connector of the Smartoptics DCP-2-PSU-DC-FB supply
+                         "smartoptics-dcp-dc-block-3",
+                         # the DC connectors of the Telco Systems XM-3352 and XM-8424H supplies
+                         "telco-dc-block-3", "telco-dc-block-2",
+                         # the DC input connector of the UfiSpace PSU-242-DEERN supply
+                         "ufispace-dc-block-6",
+                         # the DC power connectors of the Juniper QFX5241 DC supply and QFX10002 1600 W DC supply
+                         "juniper-dc-header-6", "dc-connector-3w3",
+                         # the AC inlet of the Telco Systems XM-3352 supply
+                         "telco-ac-cloverleaf-3",
+                         # the 4FF SIM card slot of the Opengear CM8004-C and CM8008-C
+                         "sim-tray-4ff",
+                         # the keystone opening of the FS FHD-FAPM6 panel
+                         "keystone",
+                         # the SCTE-91 external port of the Vecima Entra nodes, presented by common/scte-91-port@1 and mated by generic/scte-91-port-plug@1
+                         "scte-91"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -180,11 +215,41 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    # the DC input connector of the Edgecore PSU-48V-650-F
                                    # and -B
                                    "positronic-pla03",
+                                   # the DC power connector of the Juniper JPSU-150-DC-AFO supplies
+                                   "juniper-dc-block-3",
                                    # the DC input header of the Oscilloquartz OSA 5420 and
                                    # 5421 supplies
                                    "latch-header-3",
                                    # the DC power connector of the Cisco NXA-PDC-930W supply
-                                   "cisco-dc-block-3"}
+                                   "cisco-dc-block-3",
+                                   # the DC power connector of the Cisco ASR 9000 fixed-port
+                                   # DC supplies
+                                   "cisco-dc-block-2",
+                                   # the DC input header of the Juniper QFX5200-48Y DC supplies
+                                   "juniper-dc-header-3",
+                                   # the DC input header of the Juniper QFX5210 DC supplies
+                                   "juniper-qfx5210-dc-header-3",
+                                   # the DC connectors of the Edgecore AS5835, AMX3200 and
+                                   # AGR560 supplies
+                                   "edgecore-dcs-dc-block-3", "edgecore-amx-dc-block-3",
+                                   "edgecore-agr-dc-block-2",
+                                   # the DC connector of the Edgecore AIS800-64D and AIS800-64O
+                                   # supply
+                                   "edgecore-ais800-dc-block-6",
+                                   # the DC power connector of the Smartoptics DCP-2-PSU-DC-FB
+                                   # supply
+                                   "smartoptics-dcp-dc-block-3",
+                                   # the DC connectors of the Telco Systems XM-3352 and XM-8424H
+                                   # supplies
+                                   "telco-dc-block-3", "telco-dc-block-2",
+                                   # the DC input connector of the UfiSpace PSU-242-DEERN supply
+                                   "ufispace-dc-block-6",
+                                   # the DC power connectors of the Juniper QFX5241 and QFX10002 DC supplies
+                                   "juniper-dc-header-6", "dc-connector-3w3",
+                                   # the AC inlet of the Telco Systems XM-3352 supply
+                                   "telco-ac-cloverleaf-3",
+                                   # the keystone clips of the FS FHD-FAPM6 panel
+                                   "keystone"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
@@ -267,7 +332,8 @@ ALARM_TERMINAL_BUSBAR_PARTS = {
     "screw-terminal-2": ("common/dc-terminal-plug-2@1",),
     "terminal-381-5": ("juniper/ex4100-h-psu-connector@1",),
     "terminal-350-6": ("juniper/ex4100-h-alarm-connector@1",),
-    "screw-terminal-4": ("telco-systems/tm-7124s-dc-feed@1",),
+    "screw-terminal-4": ("telco-systems/tm-7124s-dc-feed@1", "telco-systems/tm-7124s-dc-cable-plug@1"),
+    "telco-ac-cloverleaf-3": ("telco-systems/xm3352-ac-inlet@1", "telco-systems/xm3352-ac-cord-plug@1"),
     "orv3-busbar": ("common/orv3-busbar-connector@1",),
 }
 

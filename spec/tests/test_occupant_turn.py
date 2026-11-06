@@ -430,7 +430,9 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 # the Cisco C9300-48P's and C9300-48T's two rear ground screws each: one more seat down and one left on each
 # the Cisco C9300-24P's, C9300-24U's and C9300-48U's two rear ground screws each: one more seat down and one left on each
 # the 23 Juniper earthing terminals of this change: 48 ring seats (down 25, left 3, up 14, right 6), the two holes of each pair and the QFX5210 plate's, and the one M4 screw of the EX2300-24MP and -48MP
-WANT = {"down": 174, "left": 53, "up": 27, "right": 38}   # the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's
+# the Cisco ASR 9000 grounding pad's two 10-32 screws, on the ten chassis that place it (thirteen placements): 26 ring seats (down 20, left 4, right 2)
+# the grounding screw on its washer, placed by the ten AurCore AIS switches and the Eaton PDUMH20NET: eleven ring seats (down 11)
+WANT = {"down": 213, "left": 57, "up": 27, "right": 40}   # the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's; two more down on each of the four Juniper EX3200
 # THE TWO-HOLE LUG on a pair host: 59 seats on 33 devices - three on each of
 # the eleven Amphenol 300CB08 panels, one on each AIS800, the seven MX, the
 # LMFS-F, two on the FX-16, one on the FX-8 and FX-4, the SR-1-DC block's
@@ -450,7 +452,9 @@ WANT = {"down": 174, "left": 53, "up": 27, "right": 38}   # the Juniper EX9204 a
 # the Juniper EX9204, EX9208 and EX9214 stud pairs: two more seats leading down, one leading left
 # the 23 Juniper earthing terminals of this change: 23 pair seats on 21 devices (down 3, left 5, right 15)
 # the Nokia SR-1e, SR-2e and SR-3e 10-32 pairs lead down, the SR-12's 1/4-20 pair leads left
-WANT_PAIRS = {"down": 57, "left": 22, "up": 2, "right": 25}
+# the Cisco ASR 9000 grounding pad: 13 pair seats on 10 devices (left 7, right 5, up 1)
+# the Amphenol Network Solutions 300CB08 input terminals: four pair seats on each of eight devices, leading down
+WANT_PAIRS = {"down": 89, "left": 33, "up": 3, "right": 30}   # left: one more on each of the four Juniper EX3200
 NAMES = {0: "right", 90: "down", 180: "left", 270: "up"}
 LEADS = {"right": 0, "down": 90, "left": 180, "up": 270}
 PAIR_IFACES = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
@@ -539,9 +543,9 @@ def _pairs(census):
 def test_the_default_distribution_is_pinned(census):
     ring, pairs = _ring(census), _pairs(census)
     assert dict(collections.Counter(r["dir"] for r in ring.values())) == WANT
-    assert len({k[0] for k in ring}) == 133   # the Nokia SR-12, SR-1e, SR-2e and SR-3e and the MikroTik CRS309, CRS326 and CSS326 earth studs (7 devices), and the 23 Juniper earthing terminals of this change (21 pair devices and the EX2300-24MP and -48MP), and 103: 63, the Cisco C9300-48P and C9300-48T, the Cisco C9300-24P, C9300-24U and C9300-48U, the Juniper EX9204, EX9208 and EX9214, the Arista 7280CR3A-48D6 and -72, the Juniper QFX5241-64OD and -64QD, the Arista 7050CX4M-48D8, the Arista 7280CR3-96 (as the DR3A-36), the Arista 7280DR3A-36, and the Eaton EVMI2130X, EVMA8365X and PDU12IEC, the seven ReadyLinks GL-x siblings, the four Juniper EX3400, the four Juniper EX3300, the Arista 7010TX-48, the Juniper QFX5200-48Y, the Juniper QFX5120-32C, the Juniper QFX5240-64OD and -64QD, the Juniper EX9251 and the Juniper QFX5700
+    assert len({k[0] for k in ring}) == 158   # 154 and the four Juniper EX3200: the ten AurCore AIS switches and the Eaton PDUMH20NET (11 devices), and 143: the ten Cisco ASR 9000 chassis that place the grounding pad, and 133: the Nokia SR-12, SR-1e, SR-2e and SR-3e and the MikroTik CRS309, CRS326 and CSS326 earth studs (7 devices), and the 23 Juniper earthing terminals of this change (21 pair devices and the EX2300-24MP and -48MP), and 103: 63, the Cisco C9300-48P and C9300-48T, the Cisco C9300-24P, C9300-24U and C9300-48U, the Juniper EX9204, EX9208 and EX9214, the Arista 7280CR3A-48D6 and -72, the Juniper QFX5241-64OD and -64QD, the Arista 7050CX4M-48D8, the Arista 7280CR3-96 (as the DR3A-36), the Arista 7280DR3A-36, and the Eaton EVMI2130X, EVMA8365X and PDU12IEC, the seven ReadyLinks GL-x siblings, the four Juniper EX3400, the four Juniper EX3300, the Arista 7010TX-48, the Juniper QFX5200-48Y, the Juniper QFX5120-32C, the Juniper QFX5240-64OD and -64QD, the Juniper EX9251 and the Juniper QFX5700
     assert dict(collections.Counter(r["dir"] for r in pairs.values())) == WANT_PAIRS
-    assert len({k[0] for k in pairs}) == 76   # the Nokia SR-12, SR-1e, SR-2e and SR-3e (4 devices), and the 21 Juniper earthing pairs of this change, and 51: the Juniper EX9204, EX9208 and EX9214 pair hosts, the four Juniper EX3300, the two Juniper QFX5240 earthing pads, the Juniper QFX5700's and the two on the QFX5241-64OD and -64QD
+    assert len({k[0] for k in pairs}) == 90   # 86 and the four Juniper EX3200: the same ten Cisco chassis, and 76: the Nokia SR-12, SR-1e, SR-2e and SR-3e (4 devices), and the 21 Juniper earthing pairs of this change, and 51: the Juniper EX9204, EX9208 and EX9214 pair hosts, the four Juniper EX3300, the two Juniper QFX5240 earthing pads, the Juniper QFX5700's and the two on the QFX5241-64OD and -64QD
     # a pair is turned only along itself
     assert {r["turn"] for r in pairs.values()} == {0, 180}
 
@@ -600,7 +604,8 @@ def test_the_four_crossings_the_seat_gave_are_gone(census):
     # and the same ground screw of each of the Cisco C9300-24P, C9300-24U and C9300-48U
     # and the 23 Juniper earthing terminals of this change: 24 ring seats whose own direction crosses a part (ten holes of the EX2200, six seats of the EX2300, two of the EX4100-F, four of the EX4100-H and two of the QFX5210 plate), the default clearing every one
     # and both studs of the Nokia SR-12's pair, 15.9 away from each other
-    assert len(crossed) == 73 and not [k for k in crossed if census[k]["hard"]]
+    # and the two screws of the Cisco ASR 9902's grounding pad, 15.9 away from each other
+    assert len(crossed) == 75 and not [k for k in crossed if census[k]["hard"]]
 
 
 @pytest.mark.heavy

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nc5k-pdc-930w-bk
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -41,6 +41,29 @@ provenance:
     connector, 4 the cord plug. Figure 21 prints -DC, +DC and an earth symbol beside the sockets.
   latch-colour: >-
     Figure 21 draws the latch green but does not say which airflow part it shows; the colour is not tied to airflow.
+  connector: >-
+    the supply composes cisco/nc5k-pdc-930w-dc-header@1 as `dc-header`, the three-cell DC power connector, exactly as
+    for NC5K-PDC-930W-FR (the same face). The part draws what the skin drew before: the three grey cells in a column,
+    at the same place, size and colours, so the face is unchanged; the skin keeps the housing, the marks and the latch.
+    Figure 21 (Hardware Installation Guide for Cisco NCS 5000 Series Routers, PDF page 40) draws a column of three cells
+    with a clip tab at the left of the middle cell, printed -DC, +DC and an earth symbol from the top down, and a cord
+    plug with three wires; the Cisco N93108TC-FX3 guide's figure 504148 draws the same connector (the same cells, marks,
+    order and clip) for the NXA-PDC-930W, so it is one connector under the key cisco-dc-block-3 and
+    cisco/nxa-pdc-930w-dc-plug@1 mates it. THE GUIDE NAMES NO MAKER OR PART NUMBER for the connector, so the part is a
+    declared stand-in and its key claims no maker or standard. The connector is drawn here about 10 by 30 mm, as the
+    housing the skin draws holds it, and on the NXA-PDC-930W about 9 by 16 mm: both are estimates, since neither figure
+    has a scale. The cells are grey as the skin drew them; Figure 21 shows grey cells in a pale housing and states no
+    shade, and the NCS 5700 guide's Figure 93 shows a black housing of the same three cells on the NC57-1600W-DCFW.
+  roles: >-
+    guide - Figure 21 prints -DC, +DC and an earth symbol beside the three cells, top to bottom. The roles are therefore
+    `neg`, `pos` and `gnd`, in that order from the top. The figure prints no nominal; the specification tables print an
+    input voltage of "-48/-60".
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. The three poles are the contacts of one pluggable connector that has
+    an earth cell in it, and a port whose poles are a connector's contacts is offered only where that path's part is
+    itself the connector; on a supply in a bay it is the supply, not the connector it composes, so a port stated here
+    would be published and then not offered. The roles above are recorded for the port a later change can state, a
+    minor on the devices that seat this supply.
   depth: >-
     estimated - not stated in any held document; 185 mm is a round figure for a supply of this class.
 states: [absent]
@@ -66,6 +89,8 @@ relief:
       out: 3.0
       confidence: estimated
       source: the latch stands proud in Figure 21's plan and how far is not stated.
+parts:
+  - {ref: cisco/nc5k-pdc-930w-dc-header@1, id: dc-header, at: [75.4, 5.2]}
 skins: [default]
 body:
   depth: 185

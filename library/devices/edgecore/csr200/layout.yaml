@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr200
-version: 1.0.9
+version: 1.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS5915-18X
@@ -35,6 +35,17 @@ lint:
       are placed by the same generated rule and pass. Centring on the bore would move a
       measured mark to quieten a rule.
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed
+      logotype, red at both ends, over the model text at the right of the face. Measured on the
+      front picture on page 1 of Edgecore's CSR200 / AS5915-18X data sheet (2350 x 361 px), taken
+      from slightly above: the width gives 5.34 px/mm and the face height, from the bevel line to
+      the bottom edge, gives 5.18 px/mm down, which agree to 3 percent. The mark runs x 406.0 to
+      435.0 and y 3.9 to 9.1. The sureness is sure, and the position is good to about 1.5 mm. The
+      plain text `Edge-core` that the face draws stays as it is; the region reserves the printed
+      mark. The `logo-zone` region on the front view holds the place and nothing is drawn in it.
   stack-orientation:
     confidence: drawing
     note: >-
@@ -492,6 +503,7 @@ views:
       - {ref: common/led-rect@1, id: led-mgmt-link, at: [370.70, 33.06], group: leds, rel-pos: 9, for: mgmt-eth, states: ['off', {name: 'on', color: '#22c55e'}]}
       - {ref: common/led-rect@1, id: led-mgmt-act, at: [378.30, 33.06], group: leds, rel-pos: 10, for: mgmt-eth, states: ['off', {name: 'on', color: '#22c55e'}]}
     regions:
+    - {id: logo-zone, at: [406.0, 3.9], size: {w: 29.0, h: 5.2}, label: 'Vendor logo; not drawn'}
     - {id: status-leds, at: [190.5, 32.0], size: {w: 42.0, h: 6.0}, label: System LEDs,
        members: [led-loc, led-diag, led-psu1, led-psu2, led-fan, led-alarm]}
     - {id: dc-input, at: [36.0, 4.0], size: {w: 72.0, h: 36.0}, label: 'DC input (PSU 1 / PSU 2, fixed)',

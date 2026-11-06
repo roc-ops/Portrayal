@@ -7,8 +7,9 @@ is_full_depth: true
 weight: 22.0
 weight_unit: kg
 airflow: rear-to-front
-description: Arista 7280CR3A-48D6 - a fixed 2RU data-centre router switch with 48 x 100G QSFP ports, 6
-  x 400G QSFP-DD ports and one OSFP line-system port, running EOS
+description: Arista 7280CR3AK-48D6 - a fixed 2RU data-centre router switch with 48 x 100G QSFP ports,
+  6 x 400G QSFP-DD ports and one OSFP line-system port, large routes and TunnelSec encryption, running
+  EOS
 front_image: true
 rear_image: true
 console-ports:
@@ -172,28 +173,27 @@ comments: "Arista 7280CR3A-48D6 - a fixed 2RU data-centre router switch with 48 
   \ EN 62368-1:2020+A11:2020, IEC 62368-1:2018, CSA/UL 62368-1:2019, AS/NZS 62368.1:2022\n- environmental.altitude:\
   \ 0 to 3,000 m (0 to 10,000 ft)\n- environmental.humidity: 5 to 90 percent, non-condensing\n- environmental.operating-temp:\
   \ 0 to 40 C (32 to 104 F)\n- environmental.storage-temp: -25 to 70 C (-13 to 158 F)\n- environmental.storage-temp-datasheet:\
-  \ -40 to 70 C (-40 to 158 F), per the data sheet\n- features.encryption: none on the 7280CR3A-48D6;\
-  \ all ports (MACsec, IPsec and VXLANsec) on the 7280CR3AM-48D6 and 7280CR3AK-48D6\n- features.optics-osfp:\
-  \ the OSFP-LS port is \"for dense 400G-ZR deployment\"; the data sheet says the R3A platforms are \"\
-  optimized to support high power 400ZR OSFP and QSFP-DD optical modules\"\n- features.optics-qsfp-dd:\
-  \ each of the 6 QSFP-DD cages runs 400G, or 100G, 50G, 40G and 25/10G modes by breakout (data sheet)\n\
-  - features.optics-qsfp28: each of the 48 QSFP cages runs 100G, or 40G (QSFP+), 50G and 25/10G modes\
-  \ by breakout (data sheet)\n- features.precision-timing: PTP and SyncE with OCXO and PPS/10M/ToD inputs\n\
-  - lifecycle.eol: none-announced\n- management.console: RJ-45 serial (RS-232), 9600 baud, 8 data bits,\
-  \ no parity, 1 stop bit, no flow control\n- management.oob: 10/100/1000 Ethernet management port\n-\
-  \ performance.latency: from 3.8 us\n- performance.max-100g-ports: 68\n- performance.max-25-10g-ports:\
-  \ 114\n- performance.max-400g-ports: 6\n- performance.max-40g-ports: 54\n- performance.max-50g-ports:\
-  \ 114\n- performance.max-total-interfaces: 116\n- performance.packet-buffer: 8 GB\n- performance.packets-per-second:\
-  \ 2.7 Bpps\n- performance.throughput: 7.2 (14.4) Tbps\n- physical.size-over-ears: 48.3 x 8.8 x 68.4\
-  \ cm (19 x 3.50 x 27.3 in) with the mounting ears (guide Table 1)\n- physical.weight: 22.0 kg (48.6\
-  \ lbs) for the 7280CR3A-48D6, 7280CR3AM-48D6 and 7280CR3AK-48D6 (guide Table 1); 48.6 lbs (22.04 kg)\
-  \ in the data sheet\n- platform.cpu: Eight-core x86\n- platform.feature-license: EOS Feature Licenses\
-  \ Group 4\n- platform.software: EOS; minimum release 4.31.1 per the data sheet\n- platform.ssd-storage:\
+  \ -40 to 70 C (-40 to 158 F), per the data sheet\n- features.encryption: all ports (MACsec, IPsec and\
+  \ VXLANsec, as TunnelSec)\n- features.optics-osfp: the OSFP-LS port is \"for dense 400G-ZR deployment\"\
+  ; the data sheet says the R3A platforms are \"optimized to support high power 400ZR OSFP and QSFP-DD\
+  \ optical modules\"\n- features.optics-qsfp-dd: each of the 6 QSFP-DD cages runs 400G, or 100G, 50G,\
+  \ 40G and 25/10G modes by breakout (data sheet)\n- features.optics-qsfp28: each of the 48 QSFP cages\
+  \ runs 100G, or 40G (QSFP+), 50G and 25/10G modes by breakout (data sheet)\n- features.precision-timing:\
+  \ PTP and SyncE with OCXO and PPS/10M/ToD inputs\n- lifecycle.eol: none-announced\n- management.console:\
+  \ RJ-45 serial (RS-232), 9600 baud, 8 data bits, no parity, 1 stop bit, no flow control\n- management.oob:\
+  \ 10/100/1000 Ethernet management port\n- performance.latency: from 3.8 us\n- performance.max-100g-ports:\
+  \ 68\n- performance.max-25-10g-ports: 114\n- performance.max-400g-ports: 6\n- performance.max-40g-ports:\
+  \ 54\n- performance.max-50g-ports: 114\n- performance.max-total-interfaces: 116\n- performance.packet-buffer:\
+  \ 8 GB\n- performance.packets-per-second: 2.7 Bpps\n- performance.throughput: 7.2 (14.4) Tbps\n- physical.size-over-ears:\
+  \ 48.3 x 8.8 x 68.4 cm (19 x 3.50 x 27.3 in) with the mounting ears (guide Table 1)\n- physical.weight:\
+  \ 22.0 kg (48.6 lbs) for the 7280CR3A-48D6, 7280CR3AM-48D6 and 7280CR3AK-48D6 (guide Table 1); 48.6\
+  \ lbs (22.04 kg) in the data sheet\n- platform.cpu: Eight-core x86\n- platform.feature-license: EOS\
+  \ Feature Licenses Group 4\n- platform.software: EOS; minimum release 4.31.1 per the data sheet\n- platform.ssd-storage:\
   \ 120 GB\n- platform.system-memory: 64 GB\n- power.input-ac: 200 - 240 VAC, 9.6 A (PWR-1512-AC), IEC\
   \ 60320 C14\n- power.input-dc: -48 to -60 VDC (PWR-1511-DC)\n- power.power-draw-max-w: 979\n- power.power-draw-note:\
   \ Data sheet: \"388 W / 979 W\", typical measured at 25 C ambient with 50 percent load on all ports,\
   \ excluding transceivers. Guide Table 4 reads TBD.\n- power.power-draw-typical-w: 388\n- power.psu-redundancy:\
   \ 1+1\n- thermal.airflow: front-to-rear or rear-to-front, set by the fan modules and supplies fitted\n\
-  - thermal.fan-redundancy: 4 hot-swap fan modules, N+1\n\nDrawing version 0.1.0. A major bump means a\
+  - thermal.fan-redundancy: 4 hot-swap fan modules, N+1\n\nDrawing version 0.1.1. A major bump means a\
   \ slot moved or an id was renamed, so anything cached from an earlier export may no longer line up.\n\
   Model maturity: modelled. Every dimension in the source records where it came from."

@@ -1,0 +1,872 @@
+format: 1
+kind: device
+name: 7050cx3-32s
+version: 0.1.0
+maturity: modelled
+manufacturer: Arista
+model: 7050CX3-32S
+aliases:
+- {name: DCS-7050CX3-32S, kind: marketing}
+portfolio: {line: 7000 Series, family: 7050X3}
+description: >-
+  Arista 7050CX3-32S - a fixed 1RU data-centre switch with 32 x 100G QSFP ports and 2 x SFP+ ports, running
+  EOS. The front carries the QSFP cages in two stacked rows of sixteen columns in eight groups of two,
+  the odd number on top, with the two SFP+ cages stacked at the left. At the right are the stacked RJ-45
+  management port, USB port and RJ-45 console port, with four system lamps (system, fan, PS1, PS2). The
+  rear carries two hot-swap 500 W power supplies at the ends and four hot-swap fan modules. The same panel
+  is ordered with front-to-rear air (-F) or rear-to-front air (-R).
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      7050 Series 1RU (Gen 3) Quick Start Guide, Arista Networks, document DOC-00141-08, 57 pages, copyright
+      2025, PDF created 2025-08-19 (https://www.arista.com/assets/data/pdf/qsg/qsg-books/QS_7050_1RU_Gen3.pdf):
+      Table 1 (dimensions and weights), Table 2 (operating and storage), Table 3 (power input), Table
+      4 (power draw and supported supplies), section 2.1 (airflow orientation, handle colour), section
+      4.1 and Table 5 (grounding), Appendix C (Figure C-13, the front panel of the DCS-7050CX3-32S), Appendix
+      D (Figure D-1, the rear panel with management ports in the front), Appendix E (field replacement).
+      7050X3 Series 10/25/40/50/100G Data Center Switches Data Sheet, Arista Networks, 03-0040-46 (https://www.arista.com/assets/data/pdf/Datasheets/7050X3-Datasheet.pdf):
+      the model comparison, the power supply specifications and the ordering information. Held and checked
+      first: intake COVERAGE.md and SOURCES.md, which list no photograph, 3D model or CAD file for this
+      model (Arista publishes none; a `find` of the intake folder for 3D files found none) and a Visio
+      stencil master that was not used. No drawing, photograph or logo is copied into the library, only
+      transcribed facts and new drawings.
+  gate-1-front:
+    confidence: estimated
+    note: >-
+      Figure C-13 passes. The raster is 575 x 174 pixels; the body between its plate edges measures 569
+      px wide and 56 px tall (aspect 10.2) against the data sheet's 440 / 43.7 = 10.07, so the figure
+      is near-orthographic and carries geometry at 1.293 px/mm (the 440 mm body is the scale anchor).
+      One pixel is 0.77 mm, so every position is good to about 1 mm, and every one is `estimated` because
+      it is read off a picture and no dimension states it. The cage columns were read from the white port-number
+      tabs in a three-times enlargement.
+  gate-1-rear:
+    confidence: estimated
+    note: >-
+      Figure D-1 is a 576 x 155 px raster whose chassis is 573 px between its edges (1.302 px/mm over
+      the 440 mm body); positions are good to about 0.8 mm. The guide draws the rear generically (D-1
+      to D-4) and does not say which model uses which. The 7050CX3-32S is mapped to D-1 by its four fan
+      modules (data sheet: "Hot-swappable Fans 4 (N+1 redundant)"), its 1RU height, its two supplies and
+      its management ports at the front (Figure C-13 draws them there, and D-1 is the rear for "models
+      with management ports in the front"). The data sheet (PDF page 3) captions a rear photograph for
+      the 7050CX3-32S, a supply, four fan modules and a supply, which agrees; the guide does not name
+      the figure, so THE MAPPING IS ESTIMATED.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 1: 48.3 x 4.4 x 40.6 cm (19 x 1.75 x 16 inches), 8.8 kg (19.4 lbs). Data sheet: 44 x
+      4.4 x 40.64 cm, 20 lbs (9.1 kg). The width: 48.3 cm is over the mounting ears, so the body between
+      them, which is what is modelled, is the data sheet's 44 cm (440.0 here). The height is 43.7, as
+      the library's other 7050 devices. The depth is the guide's 40.6 cm (406.0); the data sheet's 40.64
+      is the same figure to one more place. The weight is the guide's 8.8 kg; the data sheet's 9.1 kg
+      is in the gap `weight`. 1RU.
+  ears:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The guide's Chapter 3 mounts the switch with the accessory-kit brackets and shows
+      them in isometric drawings that carry no measure, and the kit guides are not held. Recorded in the
+      gap rack-ears.
+  front-ports:
+    confidence: estimated
+    note: >-
+      Figure C-13 at 1.293 px/mm. Thirty-two QSFP100 cages in two stacked rows (ports 1 to 32), sixteen
+      columns in eight groups of two, the tab centres of ports 1, 3, 5, ... 31 reading 41.0, 59.6, 87.1,
+      ... mm across: a 18.6 mm step inside a group (the registry's ganged-QSFP pitch is 19.0, which is
+      used) and a 46.1 mm step between groups, so a 8.1 mm gap between the groups of two. The rows read
+      at 14.2 and 31.2 mm down (cage centres), a row pitch of 17.0; the perforated band the figure draws
+      between them is not drawn, because the numerals are set there. Two SFP+ cages (33 over 34) at the
+      left, centred 15.2 mm across on the same rows. The belly-to-belly orientation is the library's convention
+      (upper cage upright, lower turned 180); the figure is too small to show the latch side.
+  port-numbering:
+    confidence: estimated
+    note: >-
+      Figure C-13 (callout 8, "Port numbers") prints 1 over 2, 3 over 4, and so on across the sixteen
+      columns, 1 to 32, and 33 over 34 at the left. The odd number is the upper cage. The figure prints
+      each number on a white tab over its cage; a seated cage hides what is painted under it, so the numerals
+      are set in the band between the two rows, the odd number left of its column centre and the even
+      one right of it. EOS interface names are not printed on the metal and are not modelled.
+  port-lamps:
+    confidence: estimated
+    note: >-
+      Guide Appendix A.1.2 gives the port lamp states of the family. Figure C-13 draws a strip of tiny
+      lamps under each group of four cages at the bottom edge that Figure C-13 does not call out and that
+      cannot be counted at 1.3 px/mm. No port lamp is modelled (gap `port-lamps`).
+  status-lamps:
+    confidence: estimated
+    note: >-
+      Figure C-13 callouts 2 to 5: a system status lamp, a fan status lamp and a status lamp for each
+      of the two power supplies, four lamps in a column at the right of the management block with a legend
+      beside each. They sit 419.0 mm across and 7.0, 10.1, 13.2 and 16.3 mm down; the order (system, fan,
+      PS1, PS2) is the callout order of the figure.
+  management-block:
+    confidence: estimated
+    note: >-
+      Figure C-13 callouts 1, 6 and 7 draw a stack at the right, 399.6 to 417.7 mm across and 4 to 38
+      mm down: the Ethernet management port (top), the USB port and the console serial port (bottom),
+      the order of the callouts. The plate and cutouts are those of arista/7280tr3-40c6, moved to the
+      measured x.
+  front-legend:
+    confidence: estimated
+    note: >-
+      The figure prints the maker's wordmark and the model line at the top left. THE WORDMARK IS NOT DRAWN:
+      a logo-zone region is reserved over it and the plain model text is set. The blue outline round each
+      group of four cages and the tiny legends over them are not drawn.
+  vents:
+    confidence: estimated
+    note: >-
+      The figure shows a perforated band along the top, 0.8 to 5.3 mm down, from 27 mm across to the management
+      block. It is drawn in its measured extent, not hole by hole.
+  colour:
+    confidence: estimated
+    note: >-
+      The front plate is the median of the grey pixels (neither black nor white, low saturation) of the
+      guide's figure C-13, #7a7b7b. The figure is a raster and its lighting is not known, so the shade
+      is estimated.
+  rear:
+    confidence: estimated
+    note: >-
+      Figure D-1 at 1.302 px/mm, the rear seen from behind with x = 0 at the left of the drawing. PS1
+      is the left and PS2 the right. Each supply reads 86.5 mm wide (the PWR-500AC is wider than the PWR-511's
+      73.5 mm) at 4.8 and 344.5 mm across and 1.85 mm down, an inlet at the left and a fan guard with
+      a red diagonal handle at the right. Four fan modules at a pitch of 59.4 mm, the grilles starting
+      at 108.8, 168.9, 228.1 and 287.0 mm across (each module a honeycomb grille, a red handle and a label
+      tab, 56.4 mm wide, so the modules stand 3 mm apart), at 2.55 mm down. A narrow plate of symbols
+      beside the last fan and a blue plate beside the first, which the figure draws, are not drawn.
+  rear-fan:
+    confidence: datasheet
+    note: >-
+      Data sheet: "Hot-swappable Fans 4 (N+1 redundant)", "Fan Tray FAN-7000H-F/R" and the spares FAN-7000H-F
+      (front-to-rear) and FAN-7000H-R (rear-to-front). Guide section 2.1: a red handle is an air-exit
+      module and a blue handle an air-inlet one, and every module must have the same direction. The four
+      fan modules are bays that accept FAN-7000H-F; the -R module is not modelled.
+  fru-bays:
+    confidence: datasheet
+    note: >-
+      Guide Appendix E (E.2 power supplies, E.3 fan modules) and the data sheet ("1+1 hot-swappable power
+      supplies and four N+1 hot-swap fans"): THE TWO POWER SUPPLIES AND THE FOUR FAN MODULES ARE BAYS.
+      Nothing on this chassis is a built-in unit. The management block, the USB port and the console port
+      are part of the chassis and are placements.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Table 4: typical / maximum 206 W / 314 W for the 7050CX3-32S with PWR-500AC or PWR-500-DC.
+      The data sheet prints 168W / 343W, typical "measured at 25C ambient with 50% load on all ports,
+      excludes transceivers". The guide's are modelled and the data sheet's are in the gap `power`; the
+      two are the same measure, so this is a conflict. The guide does not state the conditions of its
+      figures.
+  environment:
+    confidence: datasheet
+    note: >-
+      Guide Table 2: operating 0 to 40 C, storage -25 to 70 C, altitude 0 to 3,000 m, humidity 5 to 90
+      percent non-condensing. Data sheet: storage -40 to 70 C. The storage temperature differs: gap `environment`,
+      the guide's used.
+  configurations:
+    confidence: datasheet
+    note: >-
+      Data sheet ordering information: DCS-7050CX3-32S-F and -R ("front-to-rear air, 2xAC" and "rear-to-front
+      air, 2xAC"), the "#" SKU ("configurable fans and psu") and the -D SKUs with expanded memory and
+      an SSD. Only the front-to-rear build is a configuration: the -R build seats PWR-500AC-R and FAN-7000H-R,
+      which are not modelled (gap `airflow-reverse`). The "#" SKU is an order of parts, not a part number
+      a DCIM can hold. The data sheet lists no DC build of the switch: the PWR-500-DC-F supply is a spare,
+      so the DC configuration is an example with no part number. The -D builds differ in memory and storage,
+      which a configuration cannot state.
+  interface-names:
+    confidence: datasheet
+    note: >-
+      Not printed and not modelled. EOS names ports Ethernet1 to Ethernet34 and Management1; this is the
+      vendor's convention and no held document prints it.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Searched the held documents (the guide and the data sheet) for an end-of-sale or end-of-life notice
+      for the 7050CX3-32S: none. No web search was made, so this is a statement about those documents
+      only.
+  other-faces:
+    confidence: datasheet
+    note: >-
+      No source draws the top, bottom or sides flat. The guide's installation figures are isometric. Each
+      carries an `empty` sentence. The guide's Table 5 says "Attach ground directly to back" for this
+      model (Figures 4-1 and 4-2, the earth grounding pad on the rear); no figure measures it.
+attrs:
+  physical:
+    weight: 8.8 kg (19.4 lbs) (guide Table 1); the data sheet says 20 lbs (9.1 kg)
+    size-over-ears: 48.3 x 4.4 x 40.6 cm (19 x 1.75 x 16 in) with the mounting ears (guide Table 1)
+  performance:
+    throughput: 3.2 (6.4) Tbps
+    packets-per-second: 2 Bpps
+    latency: from 800 ns
+    packet-buffer: 32 MB (dynamic buffer allocation)
+    ports-max-speed: >-
+      32 ports of 100 Gbps; 64 of 50 Gbps; 32 of 40 Gbps; 128 of 25 Gbps; 129 of 10 Gbps; 2 of 1 Gbps
+    interfaces-max: 129
+  power:
+    power-typical-w: 206
+    power-max-w: 314
+    power-envelope: as-tested
+    power-measure: >-
+      guide Table 4 typical and maximum, conditions not stated; the data sheet prints 168 W / 343 W, typical
+      measured at 25 C ambient with 50 percent load on all ports, excluding transceivers
+    psu-redundancy: 1+1
+    input-ac: 100 - 240 VAC, 6.5 to 3.0 A (PWR-500AC), IEC 60320 C14
+    input-dc: -48 to -60 VDC, 15 A (PWR-500-DC)
+    efficiency: 93 percent (Platinum) AC, 90 percent DC (data sheet)
+  thermal:
+    airflow: front-to-rear or rear-to-front, set by the fan modules and supplies fitted
+    fan-redundancy: 4 hot-swap fan modules, N+1
+  environmental: {operating-temp: 0 to 40 C (32 to 104 F), storage-temp: -25 to 70 C (guide Table 2);
+      the data sheet says -40 to 70 C, humidity: 5 to 90 percent non-condensing, altitude: '0 to 3,000
+      m (10,000 ft) operating'}
+  platform: {cpu: Quad-Core x86, memory: 8 GB (16 GB optional), storage: 8 GB flash (32 GB optional)}
+  features:
+    optics-qsfp28: 100G, 50G, 40G, 25G and 10G with breakout, in the 32 QSFP cages (data sheet)
+    optics-sfp-plus: 10G, in the two SFP+ cages (data sheet)
+    eos-license: license group LIC-FIX-2; minimum EOS 4.20.5
+  management: {console: RJ-45 RS-232 serial on the front, oob: one 10/100/1000 management port on the
+      front, usb: one USB port on the front}
+  compliance:
+    emc: >-
+      FCC Class A, ICES-003, EN 55032, EN IEC 61000-3-2:2019, EN 61000-3-3, EN 55035, EN 300 386
+    safety: EN 62368-1, IEC 62368-1, CSA/UL 62368-1
+    certifications: BSMI, CE, KCC, NRTL, RCM, UKCA, VCCI, TEC, ANATEL, ICASA, NOM Equivalency (data sheet)
+    rohs: RoHS 2011/65/EU and 2015/863/EU (data sheet, Directives)
+  lifecycle: {eol: none-announced}
+chassis: {width: 440.0, height: 43.7, depth: 406.0, ru: 1, color: '#7a7b7b', airflow: front-to-back, power: ac}
+gaps:
+- what: power
+  scope:
+  - front
+  - rear
+  reason: sources-disagree
+  note: >-
+    Guide Table 4 prints 206 W typical and 314 W maximum for the 7050CX3-32S; the data sheet prints 168W
+    / 343W for the same measure (typical at 25 C, 50 percent load, excluding transceivers; the guide gives
+    no conditions). The guide's are modelled, as the newer of the two documents for what it prints.
+  wanted: the maker's statement of which is current.
+- what: weight
+  scope:
+  - front
+  - rear
+  reason: sources-disagree
+  note: >-
+    Guide Table 1 gives 8.8 kg (19.4 lbs) and the data sheet 20 lbs (9.1 kg). The guide's is in attrs.
+  wanted: the maker's statement of which is current.
+- what: environment
+  scope:
+  - front
+  - rear
+  reason: sources-disagree
+  note: >-
+    Storage temperature -25 to 70 C (guide Table 2) against -40 to 70 C (data sheet). The guide's is in
+    attrs.
+  wanted: the maker's statement of which is current.
+- what: rear-mapping
+  scope:
+  - rear
+  reason: vendor-silent
+  note: >-
+    The guide draws four generic rear panels (Figures D-1 to D-4) and does not say which model uses which.
+    The 7050CX3-32S is mapped to D-1 by its four fans (data sheet), its two supplies and its front management
+    ports. The data sheet's "Rear View" photograph (PDF page 3) shows the same shape but is a thumbnail.
+  wanted: the maker's statement of the rear panel of the 7050CX3-32S.
+- what: rack-ears
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    The guide's Figures 3-1 to 3-14 are isometric drawings with no measure and the kit guides for KIT-7001,
+    KIT-7101 and the other spares are not held, so no ear position or rail kit is written.
+  wanted: a dimensioned drawing of the mounting bracket position, and the kit guides.
+- what: port-lamps
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    Figure C-13 is too small to resolve any per-port lamp, so none is modelled and the port lamp states
+    of guide Appendix A.1.2 are not attached to a port.
+  wanted: a photograph of the lit face.
+- what: front-legends
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    The small print over each group of cages, the lamp legends beside the four system lamps, the blue
+    group outlines and the model line under the wordmark are unreadable or barely readable in the 575
+    px figure. The model text, the four system lamps and their legends as read are drawn; the rest is
+    not drawn.
+  wanted: a photograph of the face.
+- what: cage-orientation
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    Which side the latches of the stacked cages face is not visible in the figure. The library's belly-to-belly
+    convention is used (upper cage upright, lower turned 180).
+  wanted: a photograph of the stacked cages.
+- what: mgmt-roles
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    Which of the two RJ-45 jacks is the management port and which the console is read from the callout
+    order of Figure C-13 (1 management port, 6 USB, 7 console); the figure resolves the block only as
+    two jacks and a USB port.
+  wanted: a photograph of the management block.
+- what: airflow-reverse
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    The data sheet orders the 7050CX3-32S as -F (front-to-rear) and -R (rear-to-front), and lists the
+    spares PWR-500AC-R, PWR-500-DC-R and FAN-7000H-R. The guide draws red handles only, so the blue reverse
+    parts are not modelled and no -R configuration is written.
+  wanted: a picture of the reverse-airflow supply and fan module.
+- what: psu-faces
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    The guide's Figure D-1 draws one generic supply (the AC one, an inlet and a fan guard with a red handle).
+    The PWR-500-DC is the AC housing with a plain two-pole terminal block; the guide shows a DC supply
+    only in isometric figures.
+  wanted: a flat drawing or photograph of the PWR-500AC and PWR-500-DC.
+- what: module-power
+  scope:
+  - rear
+  reason: vendor-silent
+  note: >-
+    The guide's power tables and the data sheet give whole-switch figures only; the fan modules' missing
+    power figure (lint L27) stands. The supplies state their output.
+  wanted: FAN-7000H power draw.
+- what: grounding
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    Guide Table 5 says "Attach ground directly to back" and Figures 4-1 and 4-2 show an earth grounding
+    pad on the rear, and callout 9 of Figure D-2 names it; the pad is not drawn flat anywhere, so none
+    is placed.
+  wanted: a flat drawing of the rear with the grounding pad.
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: The 32 100G QSFP ports, numbered 1 to 32 as printed; the odd numbers are the upper cages
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: The two SFP+ ports, numbered 33 and 34 as printed; 33 is the upper cage
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the system, fan and two power supply lamps at the right of the front
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      how the switch is reached out of band - the 10/100/1000 management port, the USB port and the RS-232
+      console port, stacked in one block at the right of the front panel
+  psu-bays:
+    term: Bay
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        Data sheet: "Hot-swap Power 2 (1+1 redundant)". Guide section 4.3: at least one supply must connect
+        to a power source
+    description: the two hot-swap power supplies, 1+1 redundant
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs: {redundancy: n+1, redundancy-note: 'Data sheet: "Hot-swappable Fans 4 (N+1 redundant)"'}
+    description: the four hot-swap fan modules
+views:
+  front:
+    size: {w: 440.0, h: 43.7}
+    panel:
+      decor:
+      - {id: mgmt-plate, kind: label-plate, at: [399.6, 4.9], size: [18.0, 34.0], rx: 0.8, fill: '#5d6064'}
+      - {at: [27.0, 0.8], size: [370.0, 4.5], pattern: vent, vent: 1.0}
+      cutouts:
+      - {id: port-1, at: [31.75, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-2, at: [31.75, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-3, at: [50.75, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-4, at: [50.75, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-5, at: [77.85, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-6, at: [77.85, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-7, at: [96.85, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-8, at: [96.85, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-9, at: [123.95, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-10, at: [123.95, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-11, at: [142.95, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-12, at: [142.95, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-13, at: [170.05, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-14, at: [170.05, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-15, at: [189.05, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-16, at: [189.05, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-17, at: [216.15, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-18, at: [216.15, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-19, at: [235.15, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-20, at: [235.15, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-21, at: [262.25, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-22, at: [262.25, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-23, at: [281.25, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-24, at: [281.25, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-25, at: [308.35, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-26, at: [308.35, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-27, at: [327.35, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-28, at: [327.35, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-29, at: [354.45, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-30, at: [354.45, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-31, at: [373.45, 9.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-32, at: [373.45, 26.4], size: [18.5, 9.58], shape: rect}
+      - {id: port-33, at: [8.1, 9.4], size: [14.25, 10.4], shape: rect}
+      - {id: port-34, at: [8.1, 26.4], size: [14.25, 10.4], shape: rect}
+      - {id: mgmt, at: [400.6, 6.0], size: [15.8, 13.2], shape: rect}
+      - {id: usb, at: [401.7, 19.6], size: [12.0, 4.5], shape: rect}
+      - {id: console, at: [400.6, 24.3], size: [15.8, 13.2], shape: rect}
+      - {id: led-system, at: [418.0, 6.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [418.0, 9.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps1, at: [418.0, 12.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps2, at: [418.0, 15.3], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [37.0, 21.8], text: '1', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-1}
+    - {at: [45.0, 24.8], text: '2', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-2}
+    - {at: [56.0, 21.8], text: '3', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-3}
+    - {at: [64.0, 24.8], text: '4', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-4}
+    - {at: [83.1, 21.8], text: '5', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-5}
+    - {at: [91.1, 24.8], text: '6', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-6}
+    - {at: [102.1, 21.8], text: '7', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-7}
+    - {at: [110.1, 24.8], text: '8', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-8}
+    - {at: [129.2, 21.8], text: '9', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-9}
+    - {at: [137.2, 24.8], text: '10', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-10}
+    - {at: [148.2, 21.8], text: '11', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-11}
+    - {at: [156.2, 24.8], text: '12', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-12}
+    - {at: [175.3, 21.8], text: '13', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-13}
+    - {at: [183.3, 24.8], text: '14', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-14}
+    - {at: [194.3, 21.8], text: '15', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-15}
+    - {at: [202.3, 24.8], text: '16', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-16}
+    - {at: [221.4, 21.8], text: '17', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-17}
+    - {at: [229.4, 24.8], text: '18', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-18}
+    - {at: [240.4, 21.8], text: '19', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-19}
+    - {at: [248.4, 24.8], text: '20', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-20}
+    - {at: [267.5, 21.8], text: '21', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-21}
+    - {at: [275.5, 24.8], text: '22', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-22}
+    - {at: [286.5, 21.8], text: '23', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-23}
+    - {at: [294.5, 24.8], text: '24', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-24}
+    - {at: [313.6, 21.8], text: '25', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-25}
+    - {at: [321.6, 24.8], text: '26', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-26}
+    - {at: [332.6, 21.8], text: '27', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-27}
+    - {at: [340.6, 24.8], text: '28', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-28}
+    - {at: [359.7, 21.8], text: '29', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-29}
+    - {at: [367.7, 24.8], text: '30', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-30}
+    - {at: [378.7, 21.8], text: '31', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-31}
+    - {at: [386.7, 24.8], text: '32', font-size: 1.3, anchor: middle, fill: '#23262b', for: port-32}
+    - {at: [14.0, 5.4], text: 7050CX3-32S, font-size: 1.5, anchor: middle, fill: '#e8eaed', for: chassis}
+    - {at: [15.2, 22.4], text: '33', font-size: 1.3, anchor: middle, fill: '#e8eaed', for: port-33}
+    - {at: [15.2, 25.2], text: '34', font-size: 1.3, anchor: middle, fill: '#e8eaed', for: port-34}
+    - {at: [421.2, 7.31], text: SYS, font-size: 1.0, anchor: start, fill: '#e8eaed', for: led-system}
+    - {at: [421.2, 10.41], text: FAN, font-size: 1.0, anchor: start, fill: '#e8eaed', for: led-fan}
+    - {at: [421.2, 13.51], text: PS1, font-size: 1.0, anchor: start, fill: '#e8eaed', for: led-ps1}
+    - {at: [421.2, 16.61], text: PS2, font-size: 1.0, anchor: start, fill: '#e8eaed', for: led-ps2}
+    components:
+      placements:
+      - ref: std/qsfp-ganged@1
+        id: port-1
+        at: [31.75, 9.4]
+        group: qsfp28
+        rel-pos: 1
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-2
+        at: [31.75, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 2
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-3
+        at: [50.75, 9.4]
+        group: qsfp28
+        rel-pos: 3
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-4
+        at: [50.75, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 4
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-5
+        at: [77.85, 9.4]
+        group: qsfp28
+        rel-pos: 5
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-6
+        at: [77.85, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 6
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-7
+        at: [96.85, 9.4]
+        group: qsfp28
+        rel-pos: 7
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-8
+        at: [96.85, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 8
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-9
+        at: [123.95, 9.4]
+        group: qsfp28
+        rel-pos: 9
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-10
+        at: [123.95, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 10
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-11
+        at: [142.95, 9.4]
+        group: qsfp28
+        rel-pos: 11
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-12
+        at: [142.95, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 12
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-13
+        at: [170.05, 9.4]
+        group: qsfp28
+        rel-pos: 13
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-14
+        at: [170.05, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 14
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-15
+        at: [189.05, 9.4]
+        group: qsfp28
+        rel-pos: 15
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-16
+        at: [189.05, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 16
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-17
+        at: [216.15, 9.4]
+        group: qsfp28
+        rel-pos: 17
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-18
+        at: [216.15, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 18
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-19
+        at: [235.15, 9.4]
+        group: qsfp28
+        rel-pos: 19
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-20
+        at: [235.15, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 20
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-21
+        at: [262.25, 9.4]
+        group: qsfp28
+        rel-pos: 21
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-22
+        at: [262.25, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 22
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-23
+        at: [281.25, 9.4]
+        group: qsfp28
+        rel-pos: 23
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-24
+        at: [281.25, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 24
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-25
+        at: [308.35, 9.4]
+        group: qsfp28
+        rel-pos: 25
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-26
+        at: [308.35, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 26
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-27
+        at: [327.35, 9.4]
+        group: qsfp28
+        rel-pos: 27
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-28
+        at: [327.35, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 28
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-29
+        at: [354.45, 9.4]
+        group: qsfp28
+        rel-pos: 29
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-30
+        at: [354.45, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 30
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-31
+        at: [373.45, 9.4]
+        group: qsfp28
+        rel-pos: 31
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-32
+        at: [373.45, 26.4]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 32
+        attrs: {media: qsfp28, speed: 100g}
+      - {ref: std/sfp-ganged@1, id: port-33, at: [8.1, 9.4], group: sfp-plus, rel-pos: 33}
+      - {ref: std/sfp-ganged@1, id: port-34, at: [8.1, 26.4], rotate: 180, group: sfp-plus, rel-pos: 34}
+      - ref: common/rj45-eth@1
+        id: mgmt
+        at: [400.6, 6.0]
+        rotate: 180
+        group: mgmt
+        rel-pos: 1
+        attrs: {speed: 1g, role: mgmt}
+      - {ref: std/usb-a@1, id: usb, at: [401.7, 19.6], group: mgmt, rel-pos: 2}
+      - ref: std/rj45@2
+        id: console
+        at: [400.6, 24.3]
+        group: mgmt
+        rel-pos: 3
+        attrs: {media: rj45-serial, role: console}
+      - ref: common/led-dot@1
+        id: led-system
+        at: [418.0, 6.0]
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states:
+        - 'off'
+        - {name: powering-up, color: '#22c55e', behavior: blinking}
+        - {name: ok, color: '#22c55e'}
+        - {name: locator, color: '#3b82f6'}
+        - {name: fault, color: '#f59e0b'}
+        description: >-
+          Table 9 - System Status: blinking green powering up; green normal operations; blue the locator
+          function is active; amber two or more fans disconnected or malfunctioning
+      - ref: common/led-dot@1
+        id: led-fan
+        at: [418.0, 9.1]
+        for:
+        - rear/fan-1
+        - rear/fan-2
+        - rear/fan-3
+        - rear/fan-4
+        group: status-leds
+        rel-pos: 2
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: degraded, color: '#f59e0b'}
+        - {name: fault, color: '#ef4444'}
+        description: >-
+          Table 9 - Fan Status: green all fan and power modules operating normally; amber single fan module
+          removed or malfunctioning; red two or more fans disconnected or malfunctioning
+      - ref: common/led-dot@1
+        id: led-ps1
+        at: [418.0, 12.2]
+        for: rear/psu-1
+        group: status-leds
+        rel-pos: 3
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        description: >-
+          Table 9 - PSU Status: green PSU functioning and fully operational; off PSU removed or not operating
+          properly
+      - ref: common/led-dot@1
+        id: led-ps2
+        at: [418.0, 15.3]
+        for: rear/psu-2
+        group: status-leds
+        rel-pos: 4
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        description: >-
+          Table 9 - PSU Status: green PSU functioning and fully operational; off PSU removed or not operating
+          properly
+    regions:
+    - id: logo-zone
+      at: [3.6, 1.9]
+      size: {w: 20.0, h: 3.6}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 440.0, h: 43.7}
+    components:
+      bays:
+      - id: psu-1
+        at: [4.8, 1.85]
+        size: {w: 86.5, h: 40.0}
+        group: psu-bays
+        rel-pos: 1
+        accepts:
+        - arista/7050x3-pwr-500-ac@1
+        - arista/7050x3-pwr-500-dc@1
+        default: arista/7050x3-pwr-500-ac@1
+      - id: psu-2
+        at: [344.5, 1.85]
+        size: {w: 86.5, h: 40.0}
+        group: psu-bays
+        rel-pos: 2
+        accepts:
+        - arista/7050x3-pwr-500-ac@1
+        - arista/7050x3-pwr-500-dc@1
+        default: arista/7050x3-pwr-500-ac@1
+      - id: fan-1
+        at: [108.8, 2.55]
+        size: {w: 56.4, h: 38.6}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - arista/7050x3-fan-7000h@1
+        default: arista/7050x3-fan-7000h@1
+      - id: fan-2
+        at: [168.2, 2.55]
+        size: {w: 56.4, h: 38.6}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - arista/7050x3-fan-7000h@1
+        default: arista/7050x3-fan-7000h@1
+      - id: fan-3
+        at: [227.6, 2.55]
+        size: {w: 56.4, h: 38.6}
+        group: fans
+        rel-pos: 3
+        accepts:
+        - arista/7050x3-fan-7000h@1
+        default: arista/7050x3-fan-7000h@1
+      - id: fan-4
+        at: [287.0, 2.55]
+        size: {w: 56.4, h: 38.6}
+        group: fans
+        rel-pos: 4
+        accepts:
+        - arista/7050x3-fan-7000h@1
+        default: arista/7050x3-fan-7000h@1
+  top:
+    size: {w: 440.0, h: 406.0}
+    empty: >-
+      Not drawn flat by any source held. The guide shows the lid only in isometric installation figures
+      (Figures 3-1 to 3-14); nothing there can be measured.
+  bottom:
+    size: {w: 440.0, h: 406.0}
+    empty: >-
+      Not drawn flat by any source held. The guide's Figure 4-4 shows an underside with a grounding adapter
+      (for another model) in an exploded isometric view and carries no measure.
+  left:
+    size: {w: 406.0, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the side wall with the bracket
+      holes and nothing that can be measured.
+  right:
+    size: {w: 406.0, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the side wall with the bracket
+      holes and nothing that can be measured.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis with two AC supplies and four fan modules fitted, front-to-rear air, before any part
+      number: the shape every build below starts from.
+  f:
+    kind: orderable
+    description: >-
+      The 7050CX3-32S with two AC supplies and front-to-rear air: PWR-500AC-F supplies and FAN-7000H-F
+      fan modules, all with red handles. Ordered as DCS-7050CX3-32S-F.
+    part-numbers:
+      DCS-7050CX3-32S-F: {}
+  dc-f:
+    kind: example
+    power: dc
+    description: >-
+      Two DC supplies and front-to-rear air: PWR-500-DC-F supplies and FAN-7000H-F fan modules. The data
+      sheet lists no DC part number for the 7050CX3-32S; the supply is a spare, and a DC build is ordered
+      through the "#" configurable SKU.
+    bays: {psu-1: arista/7050x3-pwr-500-dc@1, psu-2: arista/7050x3-pwr-500-dc@1}
+datasheet:
+  title: >-
+    7050X3 Series 10/25/40/50/100G Data Center Switches Data Sheet (Arista Networks, 03-0040-46)
+  url: https://www.arista.com/assets/data/pdf/Datasheets/7050X3-Datasheet.pdf
+  sha256: 1b752edf3de5607102d09ee0adf4f1dd480b954d391945bab9e0391c83e3f425
+references:
+- title: >-
+    7050 Series 1RU (Gen 3) Quick Start Guide (Arista Networks, DOC-00141-08, PDF created 2025-08-19)
+  sha256: 1d291af6586dbb299f9eeb321d838d15490fd0a3995c70a0cbcde139d2968947

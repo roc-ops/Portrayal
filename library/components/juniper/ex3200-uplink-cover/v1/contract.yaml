@@ -1,0 +1,58 @@
+format: 1
+kind: module
+name: ex3200-uplink-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Uplink module slot cover (the blanking panel) of the Juniper EX3200 switches, behind a flip-up door
+  held by screws. The guide's installation procedure says to loosen the screws of the door, flip it
+  up and remove the blanking panel before an uplink module (EX-UM-4SFP, EX-UM-2X4SFP or EX-UM-2XFP)
+  is slid in. A plain plate with a captive screw at each end.
+attrs:
+  model: EX3200 uplink module cover panel
+provenance:
+  states: >-
+    datasheet - NO LAMP AND NO HEALTH ON A COVER PANEL. `absent` stays, because an empty slot is a
+    real thing to draw
+  existence: >-
+    datasheet - EX3200 Switch Hardware Guide (Juniper Networks, published 2020-12-15), Installing an
+    Uplink Module in an EX3200 Switch, step 2: "flip the door upward, and remove the blanking panel
+    covering the empty uplink module slot". The guide also says uplink modules "are not part of the
+    standard package". No part number is given, and the guide does not say it is the panel of the
+    EX4200, so it is a part of its own
+  size: >-
+    estimated - the slot's opening, 63.0 x 14.5 mm, is read off the product photographs on page 4 of the
+    EX3200 datasheet, where an uplink module fills the slot: the module's top edge reads 26.4 mm down
+    and its left edge 367.6 mm from the left of the face, within 1 mm of the opening the EX4200 photographs
+    give. No document dimensions the slot or the cover; good to about 1.5 mm
+  face: >-
+    estimated - no figure or photograph of the cover panel itself was found: it is drawn as a
+    plain plate with two screws at the ends. Its colour follows the chassis plate
+states: [absent]
+elements:
+  screw-left:
+    at: [1.6, 4.5]
+    size: [5.0, 5.0]
+    class: screw
+  screw-right:
+    at: [56.4, 4.5]
+    size: [5.0, 5.0]
+    class: screw
+size:
+  w: 63.0
+  h: 14.5
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names screws; projection estimated
+  - node: screw-right
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names screws; projection estimated

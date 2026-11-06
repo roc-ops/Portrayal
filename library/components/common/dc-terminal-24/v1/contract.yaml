@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: dc-terminal-24
-version: 1.0.1
+version: 1.1.0
 class: inlet
 behaviour: mounts
 profile: networking
@@ -60,6 +60,18 @@ provenance:
     Edgecore quick start guides draw each pole open at its lower edge between
     the barriers. The element ids `pole-1` to `pole-3` are the poles and are
     unchanged.
+  roles: >-
+    Edgecore AS5915-16X Quick Start Guide, Connect Power (PDF page 3): the figure numbers the three screws left to right and its
+    list reads "Connect the ground wire / protective earth" (1, the left screw), "Connect the -36 - -72 VDC wire" (2, the middle
+    one) and "Connect the DC return wire" (3, the right one). The note under it calls the feed "Input-" and the return "Input+",
+    which the faceplate prints under the block. In DC roles that is `gnd` on `lug-1`, `batt` on `lug-2` and `rtn` on `lug-3`.
+  rating: >-
+    Edgecore AS5915-16X data sheet, the PSU section: "DC Input: 36V-72V, -36V- -72V, 6A"; the Quick Start Guide's specification
+    table gives the same 6 A as the system input rating. The range has no nominal in either, and a port's `voltage` needs one, so
+    the port states no voltage.
+  awg: >-
+    NOT STATED. The guide's caution says "#14 AWG/1.5 mm2" and its note suggests "AWG#10-14" stranded wire, two sizes for one wire,
+    so the port states none.
   cover: >-
     borrowed - common/dc-terminal-27@1. The two blocks are the same design at two
     sizes: a bright guard over a darker body with three screws resolving through
@@ -132,6 +144,16 @@ parts:
   - {ref: common/terminal-screw-34@1, id: lug-1, at: [3.8, 5.5], lift: 7.9}
   - {ref: common/terminal-screw-34@1, id: lug-2, at: [11.35, 5.5], lift: 7.9}
   - {ref: common/terminal-screw-34@1, id: lug-3, at: [18.9, 5.5], lift: 7.9}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 6
+      poles:
+        - {role: gnd, slot: lug-1}
+        - {role: batt, slot: lug-2}
+        - {role: rtn, slot: lug-3}
+      source: {poles: roles, rating-a: rating}
 connection-points:
   dc-in: {at: [13.05, 7.2], direction: front}
 skins: [default]

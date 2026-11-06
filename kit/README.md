@@ -912,6 +912,13 @@ it, and the scene is rebuilt as for any field that shows a node. `svgCanvas` tak
 density, `pxmm`. A page that does neither changes nothing. `kit/component.html` opens one component
 in the 3D viewer with camera presets and its choice fields.
 
+A piece's `axis` and `shows` are in the part's own frame, so a piece in a bay that turns, mirrors or
+tilts its occupant, or on a face drawn `flipLX` or `flipLY`, is built as the plain box it would have
+been without either key (`pieceIsStraight`, which takes the face's `[flipLX, flipLY]` as a third
+argument). A shown drawing's clear areas are cut away as on the kit's other canvas materials, its
+crop is read under clamped wrapping, a drawing that will not load is reported once for the build, and
+the standalone part view resolves every piece's art before it replaces the scene.
+
 **New in 0.50.0: a card two slots wide** (docs/pcie-two-slot-bays-design.md). components.json gives a
 part wider than one slot `slot-width` and a nested bay the siblings it can cover, `span`. A card
 `n` slots wide seats only in a bay whose `span` names `n - 1` bays, and only while each of them holds
@@ -1230,7 +1237,7 @@ module bay, a guard seat and a slot that accepts nothing do not land
   hands them in, each with `kind` (`power`, `ground`, `other`), `connector`
   and `plug`; the screws of one DC terminal carry `of` and the first
   `first: true` (for a part that states no DC port; a DC port is one row, below). `kinds: ['data']` is the ports alone. A port of class `port`
-  is the same entry it was.
+  is the same entry it was. A row on the left, right, top or bottom panel has `landable: false` and a `reason`, since `cable.add` takes a `view` of `front` or `rear` only; a row on the front or the rear has neither key.
 - **`zones.js`**: `readSvg(text, { ends })` and `readDrawing(root, doc, { ends
   })` read the part at each path in `ends` as a zone with `end: true` and its
   `ref`; `portsOf` includes them. `cableEndPaths(item, view, ctx)` in

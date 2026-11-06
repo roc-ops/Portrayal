@@ -265,7 +265,8 @@ Establish `chassis.width/height/depth` and each view's `size`.
 - **How it mounts is `chassis.mount`:** `rack` (the default), `rack-face` (on
   the rail face at a rack unit, projecting outward: a lacer panel, a 5U finger
   bracket), `rack-side` (on the side of an upright, beside the rack, outside
-  the rails: a full-height vertical cable manager), `din-rail`, `wall` or
+  the rails: a full-height vertical cable manager), `din-rail`, `wall`,
+  `ceiling` (fixes to a ceiling or hangs below it, its front facing down) or
   `desktop`. The first three state `ru`; the others do not (L125). A
   `rack-side` part is drawn as it stands, its front `w` across the rack's face
   direction and `h` the height it runs, so its front is portrait (L152).
@@ -608,6 +609,19 @@ Gate 4b checks it.
    the bay's opening showing around it.
 4. **An indicator declares what it belongs to**: `{id: led-p1, ref:
    std/led-arrow@1, for: port-1, group: sfp28-leds}`. Never rely on naming.
+
+   **A light whose colour the user chooses** (per port, VLAN or speed, from a
+   controller) is marked `programmable: true` on the lamps' group, or on one
+   placement, which wins over its group's and may say `false`. Put the maker's
+   own name for the feature, for example Ubiquiti's Etherlighting, in
+   `programmable-note`, as text only: the mark says the colour is the user's,
+   not which colours there are, and a figure is never put in the note. The build
+   draws a neutral ring round the port the lamp's `for` names, and the device
+   index and the DCIM export say the device's ports light up, so nothing else is
+   stated at device level. Use it only where the maker's documents say the
+   colour is user-set, and draw the ring only if the maker's figure shows a
+   light around or beside the port: the mark on a lamp the figure does not show
+   is a claim the figure does not support.
 5. **Every placement and bay carries `group:` and `rel-pos:`**, and every group
    is declared under top-level `groups:` with its `term` (the vendor's word:
    Port, Slot, Bay), its `role` and `index-origin`. That is what gives the tree,
@@ -622,7 +636,10 @@ Gate 4b checks it.
    `management` is how you reach and discipline it (OOB, console, craft,
    timing); `service` is what keeps it running (PSUs, fans, filters);
    `indicator` is what you read; `furniture` is what you neither connect to nor
-   read. L37 warns at `modelled` and fails at `verified`.
+   read; `stack-control` is the control and sync links between the units of a
+   stack, never user traffic (the stack's data ports stay `traffic`).
+   A group's `role` is the one thing a consumer may rely on; the group's name
+   promises nothing. L37 warns at `modelled` and fails at `verified`.
 
    Declare a group when you populate it, not before. One group per port
    family, named for the family: `sfp28`, `qsfp28`, `qsfpdd-400g`, with the
@@ -702,6 +719,20 @@ Gate 4b checks it.
    the vendor requires a filler and no component exists for it, that is a
    missing component, not a missing decision: leave the default off and record
    the sentence that says the filler is required.
+
+   **An opening for a module the library does not hold states its class.** A
+   chassis with an optional module window, a socket or an I/O bay has a fact
+   to state even with nothing to seat: what kind of module the opening takes.
+   Declare the bay with `interface:` set to a key registered in
+   `spec/schemas/connectors.yaml` whose note says what the opening takes and
+   cites the document, and give it neither `accepts` nor `default`. L6 does not
+   ask such a bay for a default while no part mates the key; the day a part
+   mates it, L6 asks again. The device type's export lists the bay with its
+   name and position and a description saying what it takes, and no port. A
+   `base` configuration states each such bay of a `traffic` group empty with
+   `''`, as it does any traffic bay. A new
+   key is a registry change: state it in the pull request as one. The gap that
+   names the missing module drawing stays.
 9a. **An open-frame chassis says so on the face: `open-frame: true`.** A
     mid-plane chassis whose slots are two guide rails and nothing between them
     is seen straight through wherever a slot is empty (the CommScope CH3000 is
@@ -1078,7 +1109,25 @@ configurations: {...}
 gaps: [...]               # what you could not find, and why
 ```
 
-For a fixed-port device with long repeated rows, `layout.yaml` plus
-`spec/tools/portrayal/expand.py` generates the placements from a pitch; two
-Edgecore devices are built that way and the plan is for all of them to be
-(#168).
+For a device with long repeated rows, `layout.yaml` plus
+`spec/tools/portrayal/expand.py` generates the placements from a pitch. The
+layout is the file you edit, and `device.yaml` is what it expands to. A layout
+holds two kinds of block, and each is placed in the face's lists by a
+`{block: <id>}` marker:
+
+- **A port block** (no `kind`) repeats one port part over `count`, `rows`,
+  `pitch`, `gang` and `gutter`. It gives each port an id, a numbering, a
+  cutout, a numeral and one or more lamps. The pitch is `registry` where the
+  standards file states one.
+- **An outlet run** (`kind: outlet-run`) repeats a strip PDU's outlets. A run
+  is `segments`, each one outlet kind on one `pitch` from an `at`, and `banks`,
+  which repeat the segments moved by a `shift`. Each outlet gets its
+  placement, a bezel moulding in the face's `decor`, a numeral and a lamp
+  that is `for` it. The block also carries `fed-by`, `states` and, per bank,
+  `through`, so a switched, breakered strip needs no longhand outlet. Numbering
+  and the moulding ids carry on across segments and banks. A bezel that is not
+  the pitch repeated says so in the moulding's `by-pos` list, and the
+  expander stops on a key it does not know.
+
+What a block cannot say stays longhand beside it: the meter, the network
+interface, the breakers and anything else that is not repeated.

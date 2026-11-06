@@ -244,6 +244,16 @@ python3 spec/tools/portrayal/devicelock.py --library library --update
 python3 -m pytest spec/tests -q -n auto -k <vendor>/<model>   # after publish; it skips without dist/
 ```
 
+For a change that needs no rendered drawing (wording, provenance, metadata,
+anything the exports carry that a picture does not show),
+`python3 spec/tools/portrayal/preflight.py --write-exports` writes the same
+exports in about a minute with no build, and deletes an export nothing writes
+any more. It renders nothing, so look at the drawing with
+`./build.sh --device <model>` as step 4 says, and it leaves the gitignored
+pictures under `library/exports` as they are. CI's "exports are current" step is
+still the gate: if it disagrees with the tool, `./publish.sh --no-images` is
+right.
+
 **Expect skips, and know which kind.** Most of the suite reads the build in
 `library/dist/`, so on a tree that has not been built it skips several hundred
 tests rather than failing them: run `./build.sh` (or `./publish.sh`) first. A
@@ -382,6 +392,11 @@ prints PASS or FAIL per check, with the command that fixes each failure. It
 exits non-zero if any check fails. Two checks, `prose` and `conformance`, are
 advice: they print PASS or WARN, and a WARN does not change the exit status.
 
+When `exports` fails on a change that needs no rendered drawing,
+`preflight.py --write-exports` writes the exports the check expects, without a
+build; commit `library/exports` after it. It renders nothing, and CI's
+"exports are current" step is still the gate.
+
 | Check | Fails when |
 |---|---|
 | `exports` | the DCIM exports regenerated from your tree differ from `library/exports/`, or a regenerated export is not committed |
@@ -468,6 +483,9 @@ this checkout's tools:
 ```sh
 ./build.sh --overlay-library ../my-library --overlay-out ../my-library-dist
 ```
+
+The output folder is resolved through `python3`, so the build runs on macOS
+with no GNU coreutils, and the folder need not exist yet.
 
 The build lints the overlay's files, renders its devices against the public
 components plus its own, and writes `devices.json`, `components.json`, each

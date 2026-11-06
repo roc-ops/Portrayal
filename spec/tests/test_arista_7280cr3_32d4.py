@@ -9,6 +9,7 @@ Tables 3 and 4 for the supplies, Appendix C and D for the faces) and the 7280R3 
 Each test reads the YAML a contributor edits, or the generated export a DCIM user imports.
 """
 import pathlib
+import re
 
 import pytest
 import yaml
@@ -265,12 +266,50 @@ def test_each_configuration_seats_matching_supplies_and_fans_for_its_airflow():
     assert load()["chassis"]["airflow"] == "front-to-back"
 
 
-def test_the_k_a_build_carries_its_own_power_figure_in_its_description():
-    cf = load()["configurations"]
+def test_the_k_a_build_states_its_own_figures_in_its_configurations():
+    """Guide Table 4 and the data sheet's model comparison agree: 543 W / 865 W for the 7280CR3K-32D4A against
+    535 W / 851 W. The data sheet gives it an eight-core CPU and a minimum EOS of 4.27.2; every K build has
+    64 GB of memory, one value in its column. The device keeps the 7280CR3-32D4's figures."""
+    d = load()
+    cf = d["configurations"]
     for n in ("k-a-f", "k-a-r"):
-        assert "543 W" in cf[n]["description"] and "865 W" in cf[n]["description"]
-    assert load()["attrs"]["power"]["power-typical-w"] == 535
-    assert load()["attrs"]["power"]["power-max-w"] == 851
+        assert cf[n]["attrs"] == {
+            "power": {"power-typical-w": 543, "power-max-w": 865},
+            "platform": {"cpu": "Eight-Core x86", "memory": "64 GB"},
+            "features": {"eos-license": "license group G3; minimum EOS 4.27.2"}}, n
+        assert not re.search(r"\d+\s*W\b", cf[n]["description"]), n
+    for n in ("k-f", "k-r"):
+        assert cf[n]["attrs"] == {"platform": {"memory": "64 GB"}}, n
+    for n in ("base", "f", "r", "dc-f", "dc-r"):
+        assert "attrs" not in cf[n], n
+    assert d["attrs"]["power"]["power-typical-w"] == 535
+    assert d["attrs"]["power"]["power-max-w"] == 851
+    assert not [g for g in d["gaps"] if g["what"] == "config-scoped-device-attrs"]
+
+
+@pytest.mark.parametrize("target", ["netbox", "nautobot"])
+def test_each_k_type_exports_its_own_memory_and_the_a_types_their_own_figures(target):
+    folder = LIB / "exports" / target / "device-types" / "Arista"
+
+    def doc(pn):
+        return yaml.safe_load((folder / f"{pn}.yaml").read_text())
+
+    def facts(pn):
+        return (doc(pn)["comments"] + "\n")
+
+    for pn in ("DCS-7280CR3K-32D4A-F", "DCS-7280CR3K-32D4A-R"):
+        assert doc(pn)["description"].startswith("Arista 7280CR3K-32D4A - "), pn
+        assert len(doc(pn)["description"]) <= 200
+        for fact in ("power.power-typical-w: 543", "power.power-max-w: 865", "platform.cpu: Eight-Core x86",
+                     "platform.memory: 64 GB", "features.eos-license: license group G3; minimum EOS 4.27.2"):
+            assert f"- {fact}\n" in facts(pn), (pn, fact)
+    for pn in ("DCS-7280CR3K-32D4-F", "DCS-7280CR3K-32D4-R"):
+        assert "- platform.memory: 64 GB\n" in facts(pn), pn
+        assert "- power.power-typical-w: 535\n" in facts(pn), pn
+    for pn in ("DCS-7280CR3-32D4-F", "DCS-7280CR3-32D4-R"):
+        assert "- platform.memory: 8 GB, 64 GB optional (7280CR3-32D4); 64 GB (7280CR3K-32D4 and -32D4A)\n" \
+            in facts(pn), pn
+        assert doc(pn)["description"].startswith("Arista 7280CR3-32D4 - "), pn
 
 
 # ------------------------------------------------------------------ the DCIM

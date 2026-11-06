@@ -57,7 +57,9 @@ if [ -n "$OVERLAY" ] || [ -n "$OVERLAY_OUT" ]; then
   fi
   if [ ! -d "$OVERLAY" ]; then echo "--overlay-library $OVERLAY is not a folder" >&2; exit 2; fi
   here="$(pwd -P)"
-  real_out="$(realpath -m "$OVERLAY_OUT")"; real_ov="$(realpath "$OVERLAY")"
+  # python3, not `realpath -m`: -m (a folder that does not exist yet) is GNU only
+  real_out="$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$OVERLAY_OUT")"
+  real_ov="$(realpath "$OVERLAY")"
   if [ "$real_out" = "$real_ov" ] || [ "$real_out" = "$here" ] \
      || [[ "$real_out/" == "$here/library/"* ]] || [[ "$real_ov/" == "$real_out/"* ]] \
      || [[ "$here/" == "$real_out/"* ]]; then

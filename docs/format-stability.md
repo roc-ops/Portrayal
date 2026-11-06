@@ -158,6 +158,7 @@ also draws is that part's row. Each row may carry:
 | `media`, `speed`, `group`, `group-role`, `rel-pos` | the `data-` attribute of the same name | string |
 | `speeds` | `data-speeds` | list: every native rate of a multi-rate cage, ascending, ending at `speed` (`["1g","10g","25g"]`); absent on a single-rate port. Written per group from the vendor's figure; native rates only, no breakout |
 | `states` | `data-states` | list: the lamp vocabulary |
+| `programmable`, `programmable-note` | `data-programmable`, `data-programmable-note` | `true` on a lamp the maker lets the user colour, and the maker's own name for it as a string; both absent on every other row ([A port light the user can colour](#a-port-light-the-user-can-colour)) |
 | `for` | `data-for` | list: the owners, local paths or device-absolute `/<view>/<path>` |
 | `inner` | `data-inner` | `true` for a port inside another port's housing |
 | `covered-by` | `data-covered-by` | on a bay a card wider than one slot covers: the path of the bay the card is seated in ([pcie-two-slot-bays-design.md](pcie-two-slot-bays-design.md)) |
@@ -317,6 +318,19 @@ reader that does not know it finds every field it read before.
   `input-wiring`, `input-voltage-v`, `input-current-a`, `plug-rating-a` and
   `capacity-kw`; attrs are flattened to `data-*` on every drawing, so these
   names are held as attribute names too.
+- **`attrs.power`** gains `poe-pd-standard` and `poe-pd-standard-min` (`802.3af`,
+  `802.3at` or `802.3bt`), `poe-pd-class` (an integer from 0 to 8) and `poe-pd-max-w` (a
+  number above 0), all optional and all about a device's own PoE input. `poe-pd-max-w`
+  is the whole intake, what the device hands on included, so a figure printed
+  'excluding PoE output' stays in `power-self-max-w`. Every file valid before stays
+  valid and `format` is still 1. From the first device on `main` that states them, the
+  names, the three spellings and the meaning of `poe-pd-max-w` cannot change without a
+  format change, and neither can the `mount` value `ceiling`. The served copy of the
+  device schema is republished in the same release as the first device that states
+  `ceiling`, or a reader validating against the older copy refuses that device.
+- **The DCIM export** of a device that states `poe-pd-standard` gains one sentence in the
+  comments: `PoE powered device: 802.3at (runs on 802.3af), at most 25 W at the PD
+  input.` A device with a `ceiling` mount reads `Ceiling-mounted; not rack-mounted.`
 - **The DCIM export** writes the input rating on the input power port's
   `description` and in the comments, with the derived class; an outlet's
   description names the breaker it runs `through` and its `lines`
@@ -481,12 +495,16 @@ object.
 chassis:
   ears:
     behind: true            # optional; the same statement as the bare string
+    none: true              # optional; a part with no ears at all
     h: 43.5                 # optional; mm the ears span, when not the chassis height
     y: 0.15                 # optional; mm from the bottom of the chassis to the ears
     color: "#1b1e21"        # optional; the ears' colour, when they are not silver
     positions:
       - {name: flush, at: 0, default: true}
       - {name: mid, at: 228, racks: [2-post], part: {kit: acme/slide@1, part: mid}}
+    rolled:                 # optional; the brackets that hold it rolled a quarter turn
+      - {id: below, side: below, bar-h: 25.4, length: 486.41, ear-h: 92.44, ear-w: 28.0,
+         color: "#c8cacc"}  # `color` optional
   kits:
     - {ref: acme/slide@1, supply: in-box,
        depth: {config: four-post, range: {square: [685, 868]}}}
@@ -499,6 +517,26 @@ chassis:
   when a source gives it. At most one position is `default` (L160). `racks`
   takes the words a kit configuration's `racks` takes. `part` names a kit the
   device lists and the `id` of one of that kit's parts (L162).
+- `rolled` is **one-way** (a new optional key, added with the drawing of a
+  quarter turn in the rack elevation). Each entry is a bracket that holds the
+  device when a rack file rolls it `90` or `270`: `side` (`below` or `above`)
+  says which edge of the turned body its bar lies against, `bar-h` is the bar's
+  height, `length` its span from the outer edge of one ear to the other (at
+  least the distance between the rail hole columns, 465.1 mm, to reach both
+  posts), `ear-h` the height of each ear standing on the bar's lower edge,
+  `ear-w` how far an ear stands in from the end, and `color` its fill. All
+  lengths are millimetres. Only the rack elevation reads it; an older reader
+  ignores the key and draws a quarter turn as before. The brackets are the
+  rack's: they are drawn alike at 90 and at 270 and a device that states none
+  draws none.
+- `none` is **one-way** (a new optional boolean, added beside `rolled`). `none: true`
+  says the part has no ears: it is not bolted to the posts and carries no flange,
+  because it stands between them on another part's brackets, as the tray and the
+  top baffle of a vertical shelf mount kit do. The rack elevation and the 3D
+  scene then draw no generic ear for it, and the elevation draws no screw heads at
+  the rails. Absent or `false`, the device draws as before. Unlike `behind`, it
+  does not say the face is as wide as the rack. An older reader ignores the key
+  and draws the generic ear as before.
 - A kit entry's `ref` is a `kind: kit` (L161), listed once. `supply` is
   `in-box` or `optional`, and `variant: reversed` marks a reverse-mount kit.
   `depth` replaces the `depth` of one configuration of the kit for this device:
@@ -578,8 +616,9 @@ states neither (#907):
 
 - **`ears` is an object, always.** The bare string `ears: behind` is
   published as `{"behind": true}`; an object is published with the keys it
-  states (`behind`, `h`, `y`, `color`, `positions`) and no others, so a reader
-  asks `ears.behind === true` and reads `ears.positions || []`. `color` is the
+  states (`behind`, `none`, `h`, `y`, `color`, `positions`, `rolled`) and no others, so a reader
+  asks `ears.behind === true` and reads `ears.positions || []`. `rolled` is the
+  list the manifest writes, its lengths floats. `color` is the
   string the manifest writes, and absent means silver. `h`, `y` and each
   position's `at` are floats. A position keeps every key the manifest writes.
   From #865 to #907 the bare string was published as the string, on main
@@ -836,7 +875,7 @@ configuration's front, rear and top views.
 
 `format` is 1. Each device, keyed by `name`, always carries `manufacturer`,
 `model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default`, `configs`
-(the names of its configurations) and `kind`. Seven keys appear only when the
+(the names of its configurations) and `kind`. Eight keys appear only when the
 device has them:
 
 - `ears`: `{"default": {"name", "at"}}`, the default position of
@@ -845,7 +884,24 @@ device has them:
   section 3). The kit's `setbackOf` stands the part `at` mm in front of the
   rail. A device whose default position states no `at`, or that has none,
   has no `ears` key, and the kit places its front on the rail.
-- `mount`: the device's `chassis.mount`, present only when it is not `rack`.
+- `kit`: `{"ref", "motion", "depth"?, "preset"?}`, the kit the site defaults
+  to, so a rack tool need not open the device's `configs.json`. It is the
+  `in-box` kit of `chassis.kits`, else the first listed (docs/rack-mounting-design.md
+  section 5), read from the row `configs.json` resolves inline. `ref` is the
+  kit's ref and `motion` is `fixed`, `telescoping`, `sliding` or `shelf`.
+  `depth` is the rack depth the kit fits, front flange to rear flange in mm,
+  and `preset` its factory setting, each written as the kit's configuration
+  writes it, with the device's own `depth` override applied: `depth` is one
+  `[min, max]` or one range for each hole type the source gives, and is absent
+  where the configuration states none (a `preset` and no range: factory
+  setting known, range unknown), never `null` and never `[preset, preset]`. A
+  kit with more than one configuration has no default one, so its entry has
+  `ref` and `motion` and neither `depth` nor `preset`. A device that lists no
+  kit, or whose default kit does not resolve, has no `kit` key. A reader that
+  does not know `kit` is unaffected, and `format` is still 1.
+- `mount`: the device's `chassis.mount`, present only when it is not `rack`. It can be
+  `ceiling`, added to the schema's values without moving `format`; a reader that does not
+  know a value treats the device as not racked, as it does any other.
 - `shell`: `chassis.shell`, `sheet` for a body that is a sheet and not a box.
 - `capacity`: `{"count", "basis", "media"}`, the cable capacity the vendor
   states. `media` is the kind of cable the count is of, in a rack file's
@@ -905,6 +961,36 @@ profiles in `spec/schemas/profiles.yaml` and follows that file. It is a new
 field, so `contract` stays 2: a reader that does not know it still finds every
 field it read before.
 
+### A port light the user can colour
+
+A lamp can be marked as a light whose colour the user chooses: `programmable:
+true` on a device's group or placement (a placement's own word wins over its
+group's), with `programmable-note` naming the maker's own feature as text.
+**One-way once a release carries it:** from that release the two key names, the
+boolean and the note's being text cannot change without a format change.
+Adding an optional key raises none of the three numbers (the rule under
+"What is a breaking change" above: "Adding an **optional** key does not raise
+`format`", and for the published build "A new field does not raise it"), so
+`format` is still 1, the elements file's `contract` and the device index's
+`CONTRACT` stay 2, and a reader that ignores the keys finds everything it read
+before.
+
+- **A compiled face** draws a `rect` with `data-class="programmable-ring"`,
+  `data-programmable="true"` and `data-ring-of="<placement id>"` round each port
+  a marked lamp's `for` names (round the lamp itself when it names none on the
+  face), in `#9aa0a8`, drawn before the port so it covers none of its parts. It
+  has no `data-path`, so it is no row of the elements file. The marked
+  placement's own element gains `data-programmable="true"` and, when a note
+  is stated, `data-programmable-note`. A face with no mark is drawn as before.
+- **The elements file**: the row of a marked placement gains `programmable:
+  true` and `programmable-note` (a string); both are absent on every other row.
+- **`devices.json`**: an entry gains `programmable-light: true` when any lamp on
+  any face of the device is marked; the build derives it, no manifest states it,
+  and the key is absent otherwise.
+- **The DCIM export**: the comments of such a device gain one sentence,
+  `Lamps with a programmable colour, set by the user (Etherlighting).`, with the
+  notes the model states in the brackets and no brackets when it states none.
+
 ### What a compiled face says about airflow
 
 A page that filters by airflow reads these attributes of the compiled faces, so
@@ -925,6 +1011,33 @@ they are part of the format too:
 not know it still finds every field it read before. It says what the
 configuration is, not that a unit's art was checked: a build that draws like
 its default carries the default's art, with the gap its device declares.
+
+### What a configuration can state of its own
+
+A configuration takes two optional keys beside `power`:
+
+- `attrs`: the device's own sections and types (`attrs` at the top of the
+  manifest), holding only what this build states differently. A key it names
+  wins; the rest of its section, and every section it does not name, stays the
+  device's; it cannot remove a key the device states. `manifest.config_attrs`
+  is the one answer, and the DCIM export's list of facts in `comments` reads it.
+- `export-description`: a string of at most 200 characters, the description a
+  DCIM shows for that build's device type in place of the first sentence of the
+  device's. 200 is the exporter's own limit, so it is never cut.
+
+Neither is legal on a configuration whose `kind` is `example`, which never
+exports. A manifest without them is valid as it was, resolves to the device's
+`attrs` and exports the description it always did, so adding the keys to the
+format moves no existing export. They are new optional keys, so `format` is not
+raised.
+
+`configs[].attrs` in `<device>.configs.json` publishes a configuration's own
+keys, always an object and `{}` where it has none. The device's `attrs` stay at
+the top of the file for the rest. The drawing does not read it: a face is shared
+by every configuration that draws it, so a face's `data-*` values stay the
+device's. `configs[].attrs` is a new field, so `contract` stays 2: a reader that
+does not know it still finds every field it read before. `devices.json` and the
+comparable facts read the device only.
 
 ### What a compiled face says about rings and trays
 
@@ -1031,10 +1144,12 @@ package is at 0.x, a superseded major may be removed, and every removal is
 listed in `CHANGELOG.md` with the ref that replaces it. From 1.0, a retired
 major is deprecated for at least one release before it is removed. The
 deprecation is the `superseded-by:` key the schema already has, on the
-retired major's contract, naming the ref that replaces it. L89 telling a
-superseded major that still ships from a dead one is pending
-(roc-ops/Portrayal#448). The whole mechanism is required before 1.0: the
-marker, a stated support window, and the L89 distinction.
+retired major's contract, naming the ref that replaces it. L89 now tells a
+superseded major that still ships (it says `superseded-by:` with a ref that
+exists) from a dead one (it says nothing, and fails). The whole mechanism is
+required before 1.0: the marker, a stated support window, and the L89
+distinction; the marker and the distinction are in place, and the window, at
+least one release, is not yet a number of releases or a date.
 DESIGN §9 has the reasoning.
 
 **A removed ref that a saved rack names** (#1049). A rack file names parts by

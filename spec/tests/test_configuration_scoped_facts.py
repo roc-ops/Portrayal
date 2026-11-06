@@ -24,8 +24,8 @@ thing this file is really pinning:
     marks the two CLUSTER ports too. It now takes a placement id as well, and
     `bay-attrs` already took a bay path and had never been used by anything.
 
-Still open, and filed on the device rather than papered over: a DEVICE attr that
-changes with the configuration - the 9001-S's 60 Gbps against the 9001's 120.
+A DEVICE attr that changes with the configuration - the 9001-S's 60 Gbps against
+the 9001's 120 - is stated by the configuration's own `attrs`.
 """
 import pathlib
 import re
@@ -39,6 +39,7 @@ LIB = ROOT / "library"
 DIST = LIB / "dist"
 from portrayal import lint
 from portrayal import libwalk
+from portrayal import manifest
 
 
 def dev(slug):
@@ -149,9 +150,11 @@ def test_the_whole_library_passes_it():
     assert not bad, bad[:4]
 
 
-def test_the_remaining_third_is_filed_and_not_forgotten():
-    """A configuration still cannot override a DEVICE attr. That is recorded as a
-    gap on the device it bites, not as silence."""
-    g = [x for x in dev("cisco/asr-9001")["gaps"] if x["what"] == "config-scoped-device-attrs"]
-    assert len(g) == 1, "the open third should be one gap"
-    assert "60 Gbps" in g[0]["note"]
+def test_the_last_third_is_stated_by_the_configuration_and_its_gap_is_gone():
+    """A configuration overrides a DEVICE attr: the 9001-S resolves to 60 Gbps while
+    the device, and so the full 9001, keeps 120."""
+    d = dev("cisco/asr-9001")
+    assert not [x for x in d["gaps"] if x["what"] == "config-scoped-device-attrs"]
+    got = manifest.config_attrs(d, d["configurations"]["asr-9001-s"])
+    assert got["performance"]["fabric-bandwidth"] == "60 Gbps"
+    assert d["attrs"]["performance"]["fabric-bandwidth"] == "120 Gbps"

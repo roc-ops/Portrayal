@@ -411,17 +411,14 @@ def test_the_device_carries_the_base_models_power_figure(dev):
     assert (p["power-typical-w"], p["power-max-w"]) == D[dev]["power"]
 
 
-def test_the_a_builds_carry_their_own_power_figure_in_their_descriptions():
+def test_the_a_builds_state_their_own_power_figure_in_their_attrs():
     """Guide Table 4: the 36A draws 262 / 437 W and the 48YC8A 162 / 338 W, against the base figures;
-    a configuration cannot state a device attribute, so the description does."""
-    cf = load("7280cr3-36s")["configurations"]
-    for n in ("k-a-f", "k-a-r"):
-        assert "262 W" in cf[n]["description"] and "437 W" in cf[n]["description"], n
-    cf = load("7280sr3-48yc8")["configurations"]
-    for n in ("k-a-f", "k-a-r"):
-        assert "162 W" in cf[n]["description"] and "338 W" in cf[n]["description"], n
-    for dev in ("7280cr3-36s", "7280sr3-48yc8"):
-        assert [g for g in load(dev)["gaps"] if g["what"] == "config-scoped-device-attrs"], dev
+    each A build states its own in `attrs`, and the device keeps the base model's (the test above)."""
+    for dev, own in (("7280cr3-36s", (262, 437)), ("7280sr3-48yc8", (162, 338))):
+        cf = load(dev)["configurations"]
+        for n in ("k-a-f", "k-a-r"):
+            p = cf[n]["attrs"]["power"]
+            assert (p["power-typical-w"], p["power-max-w"]) == own, (dev, n)
 
 
 def test_the_e_m_build_has_the_40yc6_face_and_its_own_part_numbers():

@@ -189,14 +189,18 @@ def pairs():
     return out
 
 
-def test_the_forty_fibrain_refs_of_1046_and_the_juniper_mic_are_redirected():
-    got = {old: new for new, s in pairs() for old in [s["ref"]]}
+def test_the_forty_fibrain_refs_of_1046_are_redirected():
+    got = {old: new for new, s in pairs() for old in [s["ref"]] if old.startswith("fibrain/")}
     want = {}
     for name in sorted(p.name for p in (ROOT / "library/components/fibrain").iterdir()
                        if p.name.startswith(("xmi", "xmn"))):
         want[f"fibrain/{name}@1"] = f"fibrain/{name}@2"
-    want["juniper/mic-3d-10ge-sfp-e@1"] = "juniper/mic-3d-10ge-sfp-e@2"
-    assert got == want and len(want) == 41, sorted(set(want) ^ set(got))
+    assert got == want and len(want) == 40, sorted(set(want) ^ set(got))
+
+
+def test_the_retired_juniper_mic_is_redirected():
+    got = {s["ref"]: new for new, s in pairs() if s["ref"].startswith("juniper/")}
+    assert got["juniper/mic-3d-10ge-sfp-e@1"] == "juniper/mic-3d-10ge-sfp-e@2"
 
 
 def test_no_redirect_names_a_ref_the_library_still_has():
@@ -216,13 +220,13 @@ def test_every_recorded_signature_matches_the_published_replacement():
 def test_the_published_entry_carries_supersedes_on_every_row():
     components = json.loads((DIST / "components.json").read_text())["components"]
     assert all(isinstance(c.get("supersedes"), list) for c in components)
-    assert sum(1 for c in components if c["supersedes"]) == 41
+    assert sum(len(c["supersedes"]) for c in components) == len(pairs())
 
 
-def test_the_redirect_table_of_the_live_library_has_forty_one_hops_and_no_chain():
+def test_the_redirect_table_of_the_live_library_has_one_hop_per_redirect_and_no_chain():
     components = json.loads((DIST / "components.json").read_text())["components"]
     t = R.table(components)
-    assert len(t) == 41 and not set(t) & set(t.values())
+    assert len(t) == len(pairs()) and not set(t) & set(t.values())
 
 
 def test_the_schema_has_the_key():

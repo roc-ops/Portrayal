@@ -144,7 +144,7 @@ def test_each_supply_exports_one_power_port_named_for_its_connector(ref):
 
 def test_the_device_seats_one_supply_per_airflow_and_still_accepts_the_generic_one():
     doc = device(DEVICE)
-    assert doc["version"] == "2.1.0"
+    assert doc["version"] == "3.0.0"
     for name, ref in SEATS.items():
         cfg = doc["configurations"][name]
         assert cfg["bays"] == {"psu-1": ref, "psu-2": ref}
@@ -156,7 +156,7 @@ def test_the_device_seats_one_supply_per_airflow_and_still_accepts_the_generic_o
 
 def test_the_lock_records_the_bays_and_the_composed_parts():
     lock = json.loads((LIB / "devices" / DEVICE / "device.lock.json").read_text())
-    assert lock["version"] == "2.1.0"
+    assert lock["version"] == "3.0.0"
     for bay in ("rear/bays/psu-1", "rear/bays/psu-2"):
         assert set(lock["bay-accepts"][bay]) == {"common/psu-ac-650@3", GENERIC, *SUPPLIES}
     assert {RECEPTACLE, *SUPPLIES} <= set(lock["composed-refs"])

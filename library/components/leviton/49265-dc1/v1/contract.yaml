@@ -1,0 +1,71 @@
+format: 1
+kind: component
+name: 49265-dc1
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The Leviton 49265-DC1 gray designer cover for the 1RU VERSI-DUCT horizontal ducts, seen from
+  the front. It is a PVC cover that snaps on across a channel in place of the black cover.
+  One pack holds two identical covers, one for each channel of a front-and-rear duct.
+provenance:
+  size: >-
+    datasheet - Leviton's specification sheet (Product Specifications 491RU-HFx, 492RU-HFx,
+    49265-xxx), page 2, the figure "Designer Cover, 1RU": 17.50 in [444.5mm] wide on the front
+    view and 0.86 in [21.8mm] deep on the side view, both printed on the page. THE HEIGHT, 1.73
+    in [43.9mm], IS NOT PRINTED ON THE VISIBLE PAGE. The page layout clips the left edge of the
+    front view, leaving only the two tick marks of its height dimension, and the label "1.73"" is
+    in the PDF's text layer beside them, outside the page's visible area. The two ticks,
+    measured on a 600 dpi render at the drawing's own scale (the printed 17.50 in width), are
+    1.72 in apart, which agrees. The side view's own height, measured the same way, is 1.72 in.
+  relief: >-
+    datasheet - the depth 0.86 in [21.8mm] is the page-2 side view's printed dimension, taken as
+    the reach of the lips from the front of the plate. The side view is a C-shaped section: a
+    plate dished toward the duct, a lip along its top and one along its bottom turning in
+    toward the duct, each ending in a barb. estimated - the plate and lips are drawn 2.0 mm
+    thick, which no view dimensions, and the plate is drawn flat at the front plane, where the
+    drawing shows it dished (about 7 mm deep at the middle, read at the drawing's scale) and
+    not dimensioned; the barbs are not drawn.
+  fitting: >-
+    estimated - the sheet says only "Gray snap-on covers", for the designer covers, and that the
+    ducts "come with concealing covers"; the side view's barbed lips are the shape of a snap
+    fit. It does not say that this cover replaces the black one. A channel's finger tips take
+    one cover, so this library fits it in place of the black cover. Its front is placed where
+    the black cover's is, so its lips end 1 mm short of the black cover's: the black cover is
+    22.8 mm deep and this one 21.8, and nothing states how it seats. The reference of this part
+    is the cover's rear edge, so a placement lifts it by the well's depth less 21.84.
+  color: >-
+    estimated - the sheet's part table says "Designer Cover, gray", and no shade is printed
+    anywhere: the drawings are line work. The gray here is this library's render of a mid gray.
+  logo-zone: >-
+    reserved, not drawn - the maker's mark sits at the right end of the front view, 1.13 in
+    [28.8mm] wide and 0.40 in [10.2mm] high, its left edge 15.37 in [390.3mm] from the left end
+    and its top 0.66 in [16.7mm] from the top, centred on the height. The box is read on a 600
+    dpi render of page 2 at the drawing's scale. The library reproduces no vendor logo.
+size: {w: 444.5, h: 43.9}
+size-confidence: {w: datasheet, h: datasheet}
+attrs: {material: PVC, color: gray}
+elements:
+  lip-top: {at: [0.0, 0.0], size: [444.5, 2.0], class: bezel}
+  lip-bottom: {at: [0.0, 41.9], size: [444.5, 2.0], class: bezel}
+  plate: {at: [0.0, 0.0], size: [444.5, 43.9], class: bezel}
+  logo-zone: {at: [390.3, 16.7], size: [28.8, 10.2], class: label}
+relief:
+  features:
+    - node: lip-top
+      out: 21.84
+      color: '#9a9da2'
+      confidence: datasheet
+      source: the page-2 side view of the Designer Cover, 1RU, 0.86 in deep; the lip's thickness is not dimensioned
+    - node: lip-bottom
+      out: 21.84
+      color: '#7d8084'
+      confidence: datasheet
+      source: the same side view, the lower lip
+    - node: plate
+      lift: 19.84
+      out: 21.84
+      color: '#8d9095'
+      confidence: estimated
+      source: the same side view, the plate drawn flat at the front plane and 2.0 mm thick; the drawing dishes it and does not dimension it
+skins: [default]

@@ -306,7 +306,8 @@ def test_an_sfp_dd_cage_offers_the_sfp_generics_and_no_part_names_it(tmp_path):
     assert list(offered.pop()) == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2",
                                     "generic/sfp-lc@1", "generic/sfp-rj45@1",
                                     "generic/sfp-sc-key-up@1", "generic/sfp-sc@1",
-                                    "molex/sfp-plus-passive-dac@1"]
+                                    "molex/sfp-plus-passive-dac@1",
+                                    "wetatronics/conx-sfp@1"]
     for c in by_id.values():
         assert c["interface"] == "sfp-dd" and c["media"] == "sfp-dd"
     import libdata

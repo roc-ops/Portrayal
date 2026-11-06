@@ -383,13 +383,12 @@ def _face_part_ref(entry, face, pid, load_ref):
 def fibre_map(entry, load_ref, model):
     """The per-instance front-to-rear bindings, as a flat row list.
 
-    THE DEVICE-TYPE YAML THIS PROJECT WRITES DOES NOT CARRY THIS. netbox#20564
-    replaced the FrontPort->RearPort FK with a bidirectional M2M, and the
-    front-port schema is `{name, type, positions}` with no `rear_port` key, so
-    the binding ships beside the type instead. That is no longer the only place
-    it could go: NetBox >= 4.6 has type-level `port-mappings`
-    (PortTemplateMapping), which a type document can carry. Adopting them is
-    tracked separately; until then this map is where the binding lives.
+    A NETBOX FRONT PORT CARRIES NO BINDING. netbox#20564 replaced the
+    FrontPort->RearPort FK with a bidirectional M2M, and the front-port schema
+    is `{name, type, positions}` with no `rear_port` key. NetBox >= 4.6 keeps
+    the binding in the type as `port-mappings` (PortTemplateMapping), and
+    `dcim_export.with_port_mappings` writes one per row here. This map stays
+    the full record: a mapping has no `ratio` or `band`.
 
     THERE IS NO UPSTREAM SCHEMA FOR THIS ARTEFACT, so this defines one. It is
     generated only and never hand-edited, which keeps the contracts the single
