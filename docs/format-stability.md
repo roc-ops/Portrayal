@@ -1133,6 +1133,47 @@ unit, the frame, the datum, the sign of an axis), is a breaking change: every
 saved link and every saved rack that holds a position would move with no edit
 to it.
 
+## A box that opens
+
+A device may be a box that opens in two halves, a base and a lid
+([modelling-a-device.md](modelling-a-device.md) has a worked example). The
+format gains two optional keys and the build gains the fields below, so
+`format` stays 1 and `contract` stays 2. A device that states neither gains no
+key and no attribute: its build is byte for byte what it was.
+
+**In a manifest.** `chassis.halves`, a map of exactly two entries:
+`base: {outer, stands}` and `lid: {hinge, angle, stands}`. `outer` and `hinge`
+are face names (`front`, `rear`, `left`, `right`, `top`, `bottom`), `angle` is
+degrees and `stands` millimetres, all bare numbers where they are numbers. And
+`half` on a region, naming a key of `chassis.halves`.
+
+**Which half a bay is in** is derived: the half of the one region, among those
+of a view that states a `half`, whose box holds the centre of the bay's box.
+
+**In a compiled face**, of a view whose regions state a `half`: `data-half` on
+the group of each bay, `base` or `lid`. No other node carries it.
+
+**In `<device>.configs.json`**, of such a device: `chassis.halves`, the two
+entries as written, and `half` on each entry of `bays[<view>]` whose bay is in
+a half. Both are left out for every other device.
+
+**In the DCIM exports**, the description of a module bay starts with
+`In the base.` or `In the lid.`; a bay of any other device reads as it did.
+
+**What the lock asks for.** Stating `chassis.halves` on a device that was
+released without it is a minor. Changing the `outer` of the base or the `hinge`
+of the lid, taking the halves away, or moving a bay into the other half (by
+changing a region's `half` or the box of a region or a bay) is a major. A
+corrected `angle` or `stands`, and a `half` stated on a region that holds no
+bay, are a patch. Renaming a key, or changing what an `outer`, a `hinge` or a
+`stands` refers to, is a breaking change.
+
+**An older validator** holding the schema from before this change refuses a file
+that states either key, because `chassis` and a region accept no key the schema
+does not list. Files written without them are read as before. A consumer that
+validates a manifest with a copy of the schema updates the copy before it reads
+a device that opens.
+
 ## What else a consumer holds
 
 Three more things reach a consumer outside this repository, and none of them
