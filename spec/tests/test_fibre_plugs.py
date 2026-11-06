@@ -383,6 +383,12 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # spec/tests/test_nokia_gfc_connector_parts.py.
         if str((c.get("attrs") or {}).get("media") or "") == "micro-dsub-50":
             continue
+        # NOR IS THE SD CARD. common/sd-card@1 mates `sd-card`, the full-size card slot of
+        # the Vertiv Avocent ACS8000 console servers, which the registry holds so the slot is
+        # a slot. Left out by what it IS - its `attrs.media` is `sd-card`, a storage card - and
+        # its tests are spec/tests/test_vertiv_acs8000.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "sd-card":
+            continue
         if any(m in connectors for m in ms) and c.get("class") != "cap":
             ns = f.parents[2].name
             found[f"{ns}/{c['name']}@{c['version'].split('.')[0]}"] = c
