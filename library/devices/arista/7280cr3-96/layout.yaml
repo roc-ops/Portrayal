@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 7280cr3-96
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Arista
 model: 7280CR3-96
@@ -176,8 +176,8 @@ provenance:
       Data sheet ordering information: DCS-7280CR3-96-F and DCS-7280CR3K-96-F ("front to rear air, 2 x AC"). The "#" SKUs ("configurable
       fans and psu") are orders of parts, not part numbers a DCIM can hold, and are not listed. The data sheet lists no DC build of the
       switch: the PWR-2411-DC-RED supply is a spare, so the DC configuration is an example with no part number. The K build shares the
-      base model's size, weight, figure and supplies and differs in the large-routes licence, which a configuration cannot state; it is a
-      configuration with its own part number. There is no empty-bay (-S) configuration: no -S suffix exists in this family and the guide
+      base model's size, weight, figure and supplies and differs in the large-routes licence, which its export description
+      states; it is a configuration with its own part number. There is no empty-bay (-S) configuration: no -S suffix exists in this family and the guide
       draws no blank for a power supply or fan module. No rear-to-front build is listed.
   interface-names:
     confidence: datasheet
@@ -254,13 +254,6 @@ chassis:
   airflow: front-to-back
   power: ac
 gaps:
-  - what: config-scoped-device-attrs
-    scope: [front, rear]
-    reason: vendor-silent
-    note: >-
-      The 7280CR3K-96 carries the large-routes licence (over 5M routes) where the 7280CR3-96 does not. No configuration can state
-      a device attribute (the same open gap as cisco/asr-9001). The data sheet gives the two the same hardware figures.
-    wanted: configuration-scoped device attrs.
   - what: environment
     scope: [front, rear]
     reason: sources-disagree
@@ -524,6 +517,9 @@ configurations:
     kind: orderable
     description: >-
       The 7280CR3K-96, the same hardware with the large-routes licence, with front-to-rear air. Ordered as DCS-7280CR3K-96-F.
+    export-description: >-
+      Arista 7280CR3K-96 - the large-routes build of the 7280CR3-96, a fixed 2RU data-centre switch router with 96
+      x 100G QSFP ports, running EOS
     part-numbers:
       DCS-7280CR3K-96-F: {}
   dc-f:
