@@ -22,9 +22,16 @@ nobody had tried beat both.
   **`component-attrs` keyed by a placement id**, which is one lookup in
   `instance_group`, not the `placements:` property this note costed. `bay-attrs`
   already took a bay path for the bay half and had no user at all until now.
-- **Still open**: a DEVICE attr that changes with the configuration, which is the
-  9001-S's 60 Gbps against the 9001's 120. Filed on `cisco/asr-9001` as the
-  `config-scoped-device-attrs` gap.
+- **A DEVICE attr that changes with the configuration** - the 9001-S's 60 Gbps
+  against the 9001's 120 - is now a mechanism, not an open gap: a configuration
+  takes `attrs`, the device's own sections, and `export-description` for the
+  text a DCIM shows (`docs/format-stability.md`, "What a configuration can state
+  of its own"). The configuration's value wins key by key, the rest of the
+  section stays the device's, and `manifest.config_attrs` is the one answer the
+  export reads. The drawing is unchanged, because a face is shared by every
+  configuration that draws it. **The gap row `config-scoped-device-attrs` stays
+  on each device until that device moves its figures into the keys**; filed on
+  `cisco/asr-9001` first.
 
 **The lesson worth keeping.** This note costed two schema changes and a
 rendering change, and the answer was a field that already existed used on a

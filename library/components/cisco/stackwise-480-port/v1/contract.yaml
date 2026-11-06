@@ -1,9 +1,10 @@
 format: 1
 kind: component
 name: stackwise-480-port
-version: 1.1.0
+version: 1.2.0
 class: port
 profile: networking
+interface: stackwise-480
 description: >-
   A Cisco StackWise-480 stacking port of the Catalyst 9300 - a latched carrier between two fan
   modules holding three stacked wide, flat edge connectors, for the StackWise-480 stacking
@@ -26,8 +27,17 @@ provenance:
   registry: >-
     There is no standard for it: no entry of spec/schemas/standards.yaml, and no other
     component in the library presents a StackWise connector.
+  interface: >-
+    datasheet - the `stackwise-480` key of spec/schemas/connectors.yaml. Cisco Catalyst 9300
+    Series Switches Hardware Installation Guide, Connecting a StackWise-480/1T Cable and
+    Figure 38: one cable connector with three stacked blades seats in the port and is
+    fastened by two finger-tightened screws, so the cable seats on the whole carrier and not
+    on one of its three openings. The mate point is the carrier's centre, which is also the
+    centre of the middle opening, facing out.
 elements:
   opening-1: {at: [0.0, 0.0], size: [14.9, 5.2], class: mechanical}
   opening-2: {at: [0.0, 9.3], size: [14.9, 5.2], class: mechanical}
   opening-3: {at: [0.0, 18.6], size: [14.9, 5.2], class: mechanical}
+connection-points:
+  mate: {at: [7.45, 11.9], direction: front}
 skins: [default]

@@ -109,12 +109,14 @@ def seat_of(seated, ref):
 
 # --- 1. solids ------------------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH
 def test_the_seated_plug_builds_right_side_out(seated, ref):
     parents, occ = seat_of(seated, ref)
     assert_solids(parents, occ, ref)
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_seat_carries_a_depth(seated, ref):
     """Not a flat-panel pass: every jack but SMA and SMB presents at a plane in
@@ -159,6 +161,7 @@ def rotated(tmp_path_factory):
     return root, {c: p for p in root.iter() for c in p}
 
 
+@pytest.mark.heavy
 def test_the_rotated_port_is_turned_in_the_library():
     """The premise: the card still draws that port at 180 and holds SMB."""
     mic = doc(ROTATED[3]["mic-1-0"])
@@ -167,6 +170,7 @@ def test_the_rotated_port_is_turned_in_the_library():
     assert port[0]["ref"] == PLUGS[ROTATED[5]][2]
 
 
+@pytest.mark.heavy
 def test_a_plug_in_a_turned_port_seats_and_turns_with_it(rotated):
     root, parents = rotated
     host = by_path(root, ROTATED[4])
@@ -181,6 +185,7 @@ def test_a_plug_in_a_turned_port_seats_and_turns_with_it(rotated):
     assert m[0][0] == pytest.approx(-1) and m[1][1] == pytest.approx(-1), m
 
 
+@pytest.mark.heavy
 def test_a_plug_in_a_turned_port_builds_right_side_out(rotated):
     root, parents = rotated
     occ = by_path(root, f"{ROTATED[4]}-occupant")
@@ -204,6 +209,7 @@ def stub_diameter(parents, stub):
     return min(x1 - x0, y1 - y0)
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_is_the_default_cable_od(seated, ref):
     parents, occ = seat_of(seated, ref)
@@ -241,11 +247,13 @@ def overridden(tmp_path_factory):
     return root, {c: p for p in root.iter() for c in p}
 
 
+@pytest.mark.heavy
 def test_the_override_is_not_the_default():
     ref, od = OVERRIDE[0], OVERRIDE[4]
     assert doc(ref)["fields"]["cable-od"]["default"] != pytest.approx(od, abs=0.1)
 
 
+@pytest.mark.heavy
 def test_a_placements_cable_od_sets_the_stub(overridden):
     root, parents = overridden
     ref, _, _, host_id, od = OVERRIDE

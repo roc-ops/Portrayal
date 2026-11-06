@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: terminal-header-508-5f
-version: 2.0.0
+version: 2.1.0
 class: inlet
 behaviour: mounts
 profile: networking
@@ -40,6 +40,41 @@ provenance:
     `terminal-508-5`, is the five-position mating face and says nothing of the flanges: a
     plain header presents it too. The data sheet above lists seventeen mating plugs
     (pp.16-25) and every one has screw flanges.
+  contacts: >-
+    ESTIMATED - the four connection points `pin-1`, `pin-2`, `pin-4` and `pin-5` stand at the
+    centres of four of the five contacts the skin draws (7.62, 12.7, 22.86 and 27.94 across, 4.3
+    down: the cells' 5.08 pitch from the first flange width in, the middle contact being the
+    earth's at 17.78), which are the fractions this part already uses for them. No figure
+    dimensions a contact; the skin's contacts are the estimate.
+  poles: >-
+    AurCore AIS2001, AIS2001P, AIS2002, AIS2002P, AIS2003, AIS2003P, AIS2004, AIS2004P, AIS4001
+    and AIS4001P Data Sheets 1.0 ("Phoenix Terminal*2" in the accessories, page 2, on all ten;
+    "Dual power input design" on page 1 of the nine that are not the AIS4001P) and the vendor's
+    video of the AIS4001P top face (1:02), which prints on the housing, from the left,
+    `1 + - (earth) + - 2`: two feeds, the first the pair `+ -`
+    after the printed `1` and the second the pair `+ -` before the printed `2`. The block
+    carries two feeds, so it has one DC port per feed: `feed-a` on the first pair (`pin-1`
+    `pos`, `pin-2` `neg`) and `feed-b` on the second (`pin-4` `pos`, `pin-5` `neg`). The roles
+    are what the housing prints, `+` for `pos` and `-` for `neg`. The names `feed-a` and
+    `feed-b` follow the printed order, `1` at the left end of the housing as drawn, and say
+    nothing of which input the switch treats as its first: no document says. The earth
+    contact, `pin-3`, is in neither port and is not a connection point: it is a pluggable
+    header's contact and not a screw, so there is no seat for a ground lug to land on.
+  voltage: >-
+    NOT STATED. The data sheets print the supply range per model ("DC 12-55 V" on the AIS2001,
+    AIS2002, AIS2003, AIS2004 and AIS4001; "DC 48-57 V" on the "P" models, page 2) and the
+    housing of the AIS4001P prints "POWER:48-57V DC". This part is one header for all ten, a
+    port states one nominal, and a range is not one, so the ports state none.
+  rating: >-
+    NOT STATED. The data sheets give the switches' power draw in watts and no input current, and
+    the Phoenix Contact MSTB 2,5/ 5-GF-5,08 (1776537) sheet's 12 A is the header's own contact
+    rating, which is not the switch's input rating. The ports state no `rating-a`.
+  awg: >-
+    NOT STATED. No document held gives a wire size for the plug the feeds land on, so the ports
+    state no `awg`.
+  side: >-
+    NOT STATED. No document says which of the two feeds is the switch's first, so the ports
+    state no `side`.
 elements:
   body: {at: [0.0, 0.0], size: [35.56, 8.6], class: connector}
 relief:
@@ -126,4 +161,22 @@ relief:
         common/terminal-header-508-5f@2's own 3D-form key - see `body`. The brass insert, flush with the flange.
 connection-points:
   mate: {at: [17.78, 4.3], direction: front, 'on': body}
+  pin-1: {at: [7.62, 4.3], direction: front}
+  pin-2: {at: [12.7, 4.3], direction: front}
+  pin-4: {at: [22.86, 4.3], direction: front}
+  pin-5: {at: [27.94, 4.3], direction: front}
+dc:
+  ports:
+    - id: feed-a
+      direction: input
+      poles:
+        - {role: pos, slot: pin-1}
+        - {role: neg, slot: pin-2}
+      source: {poles: poles}
+    - id: feed-b
+      direction: input
+      poles:
+        - {role: pos, slot: pin-4}
+        - {role: neg, slot: pin-5}
+      source: {poles: poles}
 skins: [default]

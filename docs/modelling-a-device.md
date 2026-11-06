@@ -265,7 +265,8 @@ Establish `chassis.width/height/depth` and each view's `size`.
 - **How it mounts is `chassis.mount`:** `rack` (the default), `rack-face` (on
   the rail face at a rack unit, projecting outward: a lacer panel, a 5U finger
   bracket), `rack-side` (on the side of an upright, beside the rack, outside
-  the rails: a full-height vertical cable manager), `din-rail`, `wall` or
+  the rails: a full-height vertical cable manager), `din-rail`, `wall`,
+  `ceiling` (fixes to a ceiling or hangs below it, its front facing down) or
   `desktop`. The first three state `ru`; the others do not (L125). A
   `rack-side` part is drawn as it stands, its front `w` across the rack's face
   direction and `h` the height it runs, so its front is portrait (L152).
@@ -324,6 +325,13 @@ Establish `chassis.width/height/depth` and each view's `size`.
   well (`relief: {walls: inside}`) has a side within 3 mm of a face, that side
   shows the face's declared vents, so with the cover off you can see where the
   air leaves. Undeclared, the wall is blank from inside.
+- A vent whose openings no fixed tile draws (slanted slots, alternating
+  chevrons) is `pattern: motif`. The face states the tile: `pattern-pitch` is
+  its size in mm, and `pattern-cells` are the dark cells in it, each a closed
+  polygon of points measured from the tile's top-left corner. Read one period
+  of the vent off a straight-on source, not a guess at a lattice; `vent:`
+  still makes it an air aperture, and the renderer refuses a point outside the
+  tile.
 
 **Gate 1: prove a figure can be measured before you measure it.** Render the
 guide page at 400 to 600 dpi (`pdftocairo -png -r 600`), find the panel in it,
@@ -571,6 +579,14 @@ present, spelled as printed, next to its cutout. Make L14 pass before moving on.
 
 Now populate. Reuse before building.
 
+**Every port on a device must be usable: anything that takes a cable, cord,
+plug, lug or pluggable is modelled as a connector part, and the library holds
+something that plugs into it. The change that adds a connector adds its mate.
+If no mate can exist, the connector says why in a sentence.** The worked
+example and the three ways to meet it are under
+[Every port is usable](#every-port-is-usable), after the placements below;
+Gate 4b checks it.
+
 1. **Search `library/components/` first.** `std/` and `common/` hold cages,
    jacks, lamps, PSUs and fans that conform to registry standards. A port is
    `std/sfp@1`, not a new rectangle. The
@@ -593,6 +609,19 @@ Now populate. Reuse before building.
    the bay's opening showing around it.
 4. **An indicator declares what it belongs to**: `{id: led-p1, ref:
    std/led-arrow@1, for: port-1, group: sfp28-leds}`. Never rely on naming.
+
+   **A light whose colour the user chooses** (per port, VLAN or speed, from a
+   controller) is marked `programmable: true` on the lamps' group, or on one
+   placement, which wins over its group's and may say `false`. Put the maker's
+   own name for the feature, for example Ubiquiti's Etherlighting, in
+   `programmable-note`, as text only: the mark says the colour is the user's,
+   not which colours there are, and a figure is never put in the note. The build
+   draws a neutral ring round the port the lamp's `for` names, and the device
+   index and the DCIM export say the device's ports light up, so nothing else is
+   stated at device level. Use it only where the maker's documents say the
+   colour is user-set, and draw the ring only if the maker's figure shows a
+   light around or beside the port: the mark on a lamp the figure does not show
+   is a claim the figure does not support.
 5. **Every placement and bay carries `group:` and `rel-pos:`**, and every group
    is declared under top-level `groups:` with its `term` (the vendor's word:
    Port, Slot, Bay), its `role` and `index-origin`. That is what gives the tree,
@@ -607,7 +636,10 @@ Now populate. Reuse before building.
    `management` is how you reach and discipline it (OOB, console, craft,
    timing); `service` is what keeps it running (PSUs, fans, filters);
    `indicator` is what you read; `furniture` is what you neither connect to nor
-   read. L37 warns at `modelled` and fails at `verified`.
+   read; `stack-control` is the control and sync links between the units of a
+   stack, never user traffic (the stack's data ports stay `traffic`).
+   A group's `role` is the one thing a consumer may rely on; the group's name
+   promises nothing. L37 warns at `modelled` and fails at `verified`.
 
    Declare a group when you populate it, not before. One group per port
    family, named for the family: `sfp28`, `qsfp28`, `qsfpdd-400g`, with the
@@ -687,6 +719,20 @@ Now populate. Reuse before building.
    the vendor requires a filler and no component exists for it, that is a
    missing component, not a missing decision: leave the default off and record
    the sentence that says the filler is required.
+
+   **An opening for a module the library does not hold states its class.** A
+   chassis with an optional module window, a socket or an I/O bay has a fact
+   to state even with nothing to seat: what kind of module the opening takes.
+   Declare the bay with `interface:` set to a key registered in
+   `spec/schemas/connectors.yaml` whose note says what the opening takes and
+   cites the document, and give it neither `accepts` nor `default`. L6 does not
+   ask such a bay for a default while no part mates the key; the day a part
+   mates it, L6 asks again. The device type's export lists the bay with its
+   name and position and a description saying what it takes, and no port. A
+   `base` configuration states each such bay of a `traffic` group empty with
+   `''`, as it does any traffic bay. A new
+   key is a registry change: state it in the pull request as one. The gap that
+   names the missing module drawing stays.
 9a. **An open-frame chassis says so on the face: `open-frame: true`.** A
     mid-plane chassis whose slots are two guide rails and nothing between them
     is seen straight through wherever a slot is empty (the CommScope CH3000 is
@@ -793,6 +839,41 @@ element's or bay's id. L105 checks both. The worked example in the library is
 the FELT-B, which numbers the ports of its 18 cages 1 to 36: a CSFP takes both
 ports of a cage and an SFP only the odd one, and the module type exports 36.
 
+### Every port is usable
+
+A connector is a part that presents an interface, and the part that plugs into
+it is another part that names the same interface in `mates:`. Take a chassis
+ground. `common/ground-stud@1` is class `ground` and presents `terminal-stud`.
+Its mate is `generic/ring-lug@1`, class `port` with `mates: terminal-stud`: the
+lug that clamps to the stud. The cable that joins them is a ground wire, a
+cable of media `ground` in the Rack Builder. The stud, the lug and the wire are
+three things the library holds, so a modeller who lays a ground wire to the
+stud finds an end to land on at each side. A stud drawn as a grey circle in
+`panel.decor` is none of the three, and nothing can be laid to it.
+
+A new connector meets the rule in one of three ways:
+
+1. **Its mate is in the library.** Say nothing more; place the connector and
+   the check finds the mate.
+2. **The change adds the mate.** Draw it from a source. Where no source gives
+   its size, set `size-confidence: estimated` and write a `provenance` sentence
+   that names the drawing wanted, because a component has no `gaps` list to say
+   it in.
+3. **No mate can exist.** The part, or the interface's entry in
+   `spec/schemas/connectors.yaml`, or a pluggable family's rate in
+   `spec/schemas/pluggables.yaml`, says why in an `unmated:` sentence of at
+   least 40 characters. A sentence where a mate could exist is a gap, not a
+   sentence: it hides a missing part behind words, and it is a reviewer's call
+   to refuse it.
+
+A connector that cannot be modelled as a part in this change is not drawn as
+decor to get past it. L197 warns on a decor `kind` that names a connector
+(`console-opening`, `earth-hole`, `inlet-housing`; the list is
+`spec/schemas/connector-decor-names.yaml`). The list is a floor of names, not a
+proof: decor kinds are free text, and a connector under another name passes it.
+A decor that is not a connector is renamed for what it is, `case-screw` and not
+`earth-screw`; a connector becomes a part.
+
 ### Power figures
 
 Every module you place or build gets its power figure, and the key says which
@@ -860,6 +941,29 @@ after every structural addition, not just at the end: rules see what is
 declared, so a collision is only visible once both sides exist. Adding the rear
 bays to one router immediately surfaced fifteen rivets sitting on the fan
 modules.
+
+## Gate 4b: every port is usable
+
+After the build, run the scan over the devices the change touches. It asks the
+four port-usable codes of the part-conformance runner, C19 to C22, in every
+configuration, with no cable laid:
+
+```sh
+python3 spec/tools/dev/part_conformance.py --dist library/dist --scan --refs <model> --out scan.json
+python3 -m pytest spec/tests/test_port_usable_records.py -q
+```
+
+- **Every finding has a record.** The record is a mate in the library, an
+  `unmated:` sentence (the part's, the interface's or the family's rate), or a
+  row in `library/conformance-exceptions.yaml` that names the change closing
+  it. A row also raises `cap:` there, so it is a reviewer's call and not a way
+  to pass.
+- **`test_port_usable_records.py` passes.**
+- **The pull request states the scan's counts**: the findings per code before
+  the records and after.
+
+This gate covers C19 to C22 and their records only. The runner's other codes
+are not part of it, and a device that passes here is not thereby audited.
 
 ## Gate 5: audit against the source, twice
 
@@ -1005,7 +1109,25 @@ configurations: {...}
 gaps: [...]               # what you could not find, and why
 ```
 
-For a fixed-port device with long repeated rows, `layout.yaml` plus
-`spec/tools/portrayal/expand.py` generates the placements from a pitch; two
-Edgecore devices are built that way and the plan is for all of them to be
-(#168).
+For a device with long repeated rows, `layout.yaml` plus
+`spec/tools/portrayal/expand.py` generates the placements from a pitch. The
+layout is the file you edit, and `device.yaml` is what it expands to. A layout
+holds two kinds of block, and each is placed in the face's lists by a
+`{block: <id>}` marker:
+
+- **A port block** (no `kind`) repeats one port part over `count`, `rows`,
+  `pitch`, `gang` and `gutter`. It gives each port an id, a numbering, a
+  cutout, a numeral and one or more lamps. The pitch is `registry` where the
+  standards file states one.
+- **An outlet run** (`kind: outlet-run`) repeats a strip PDU's outlets. A run
+  is `segments`, each one outlet kind on one `pitch` from an `at`, and `banks`,
+  which repeat the segments moved by a `shift`. Each outlet gets its
+  placement, a bezel moulding in the face's `decor`, a numeral and a lamp
+  that is `for` it. The block also carries `fed-by`, `states` and, per bank,
+  `through`, so a switched, breakered strip needs no longhand outlet. Numbering
+  and the moulding ids carry on across segments and banks. A bezel that is not
+  the pitch repeated says so in the moulding's `by-pos` list, and the
+  expander stops on a key it does not know.
+
+What a block cannot say stays longhand beside it: the meter, the network
+interface, the breakers and anything else that is not repeated.

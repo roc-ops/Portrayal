@@ -57,7 +57,9 @@ if [ -n "$OVERLAY" ] || [ -n "$OVERLAY_OUT" ]; then
   fi
   if [ ! -d "$OVERLAY" ]; then echo "--overlay-library $OVERLAY is not a folder" >&2; exit 2; fi
   here="$(pwd -P)"
-  real_out="$(realpath -m "$OVERLAY_OUT")"; real_ov="$(realpath "$OVERLAY")"
+  # python3, not `realpath -m`: -m (a folder that does not exist yet) is GNU only
+  real_out="$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$OVERLAY_OUT")"
+  real_ov="$(realpath "$OVERLAY")"
   if [ "$real_out" = "$real_ov" ] || [ "$real_out" = "$here" ] \
      || [[ "$real_out/" == "$here/library/"* ]] || [[ "$real_ov/" == "$real_out/"* ]] \
      || [[ "$here/" == "$real_out/"* ]]; then
@@ -186,7 +188,7 @@ python3 spec/tools/portrayal/cable_types_index.py --schemas spec/schemas --out "
 pids+=("$!")
 # THE LINT RULES, from lint.py's own rule table: code, scope, rule, why, fix
 # and severity, for the site's rule page. No library walk either.
-python3 spec/tools/portrayal/lint.py --list-rules --json > "$OUT/lint-rules.json" &
+python3 spec/tools/portrayal/lint.py --list-rules --json --out "$OUT/lint-rules.json" &
 pids+=("$!")
 for pid in "${pids[@]}"; do wait "$pid"; done
 # THE RACK CATALOGUE reads devices.json and the compiled faces, so it runs

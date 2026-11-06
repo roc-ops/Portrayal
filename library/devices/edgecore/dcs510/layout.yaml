@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs510
-version: 2.0.9
+version: 3.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS9716-32D
@@ -361,7 +361,8 @@ groups:
       the management cluster at the right-hand end of the faceplate - the out-of-band 1000BASE-T RJ-45,
       the RS-232 console, two SFP+ 10G management uplinks and a USB-A service port. Four media, one job;
       the vendor draws them as one block under one legend and so do we.
-  leds: {term: LED, role: indicator, index-origin: 1}
+  system-leds: {term: LED, role: indicator, index-origin: 1}
+  sfp-mgmt-leds: {term: LED, role: indicator, index-origin: 1}
   psus:
     term: PSU
     role: service
@@ -480,11 +481,11 @@ views:
         - {ref: common/sma-jack@1, id: timing-10mhz-in, at: [9.99, 13.07], group: timing, rel-pos: 3, attrs: {media: coax-sma, role: 10mhz-in}}
         - {ref: common/sma-jack@1, id: timing-1pps-in, at: [19.49, 13.07], group: timing, rel-pos: 4, attrs: {media: coax-sma, role: 1pps-in}}
         - {ref: std/rj45@2, id: tod, at: [13.2, 27.25], group: timing, rel-pos: 5, attrs: {media: rj45-tod, role: tod}, rotate: 180}
-        - {ref: common/led-dot@1, id: led-loc, at: [32.6, 6.70], group: leds, rel-pos: 1, for: chassis}
-        - {ref: common/led-dot@1, id: led-diag, at: [32.6, 9.93], group: leds, rel-pos: 2, for: chassis}
-        - {ref: common/led-dot@1, id: led-fan, at: [32.6, 13.16], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
-        - {ref: common/led-dot@1, id: led-ps1, at: [32.6, 16.39], group: leds, rel-pos: 4, for: rear/psu-1}
-        - {ref: common/led-dot@1, id: led-ps2, at: [32.6, 19.63], group: leds, rel-pos: 5, for: rear/psu-2}
+        - {ref: common/led-dot@1, id: led-loc, at: [32.6, 6.70], group: system-leds, rel-pos: 1, for: chassis}
+        - {ref: common/led-dot@1, id: led-diag, at: [32.6, 9.93], group: system-leds, rel-pos: 2, for: chassis}
+        - {ref: common/led-dot@1, id: led-fan, at: [32.6, 13.16], group: system-leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
+        - {ref: common/led-dot@1, id: led-ps1, at: [32.6, 16.39], group: system-leds, rel-pos: 4, for: rear/psu-1}
+        - {ref: common/led-dot@1, id: led-ps2, at: [32.6, 19.63], group: system-leds, rel-pos: 5, for: rear/psu-2}
         - {ref: common/reset-button@1, id: reset, at: [31.6, 21.86], group: mgmt, rel-pos: 6, for: chassis}
         - {block: qsfpdd-400g}
         - {ref: common/rj45-eth@1, id: mgmt-eth, at: [391.4, 2.55], group: mgmt, rel-pos: 1, attrs: {media: rj45, role: mgmt, speed: 1g}}
@@ -492,8 +493,8 @@ views:
         - {ref: std/rj45@2, id: console, at: [389.5, 26.95], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}, rotate: 180}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [409.3, 11.9], group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [409.3, 26.6], rotate: 180, group: mgmt, rel-pos: 4, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
-        - {ref: common/led-dot@1, id: led-mgmt-sfp-1, at: [412.95, 8.3], group: leds, rel-pos: 6, for: mgmt-sfp-1}
-        - {ref: common/led-dot@1, id: led-mgmt-sfp-2, at: [419.65, 8.3], group: leds, rel-pos: 7, for: mgmt-sfp-2}
+        - {ref: common/led-dot@1, id: led-mgmt-sfp-1, at: [412.95, 8.3], group: sfp-mgmt-leds, rel-pos: 1, for: mgmt-sfp-1}
+        - {ref: common/led-dot@1, id: led-mgmt-sfp-2, at: [419.65, 8.3], group: sfp-mgmt-leds, rel-pos: 2, for: mgmt-sfp-2}
         - {ref: common/pull-tab@1, id: info-tab, at: [414.5, 38.4], group: furniture, rel-pos: 3}
     regions:
       - {id: timing-block, at: [1.0, 1.0], size: {w: 30.0, h: 41.0}, label: Timing,
@@ -590,8 +591,8 @@ configurations:
       with the latch and handle colours set, which is what they are: a finish on one
       drawing rather than a second drawing of the same part.
     component-attrs:
-      psu-ac-1300: {latch-finish: '#2f6bc2', latch-edge: '#153a63'}
-      fan-module-46: {handle-finish: '#3d7bd6', airflow-legend: B2F}
+      psu-ac-1300: {latch-finish: '#2f6bc2', latch-edge: '#153a63', airflow: back-to-front}
+      fan-module-46: {handle-finish: '#3d7bd6', airflow-legend: B2F, airflow: back-to-front}
     part-numbers:
       9716-32D-O-AC-B-US: {part: FP5ZZ8632401A, power-cord: N. America}
       9716-32D-O-AC-B-EU: {part: FP5ZZ8632201A, power-cord: EU}

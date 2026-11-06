@@ -263,6 +263,7 @@ def test_every_part_presenting_a_terminal_interface_is_one_of_the_three_headers(
     assert presenting == {hdr: iface for iface, (hdr, _p, _n) in PAIRS.items()}
 
 
+@pytest.mark.heavy
 def test_every_header_a_device_places_is_counted():
     """The census on the device side: each header is placed, at least as often
     as when this was written, and nothing composes one inside another part."""
@@ -630,6 +631,7 @@ def test_the_seats_are_the_placements_they_say_they_are():
     assert {s[0] for s in SEATS} == set(PLUGS)
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_it_seats_with_its_mate_on_the_headers_mate(seated, seat):
     parents, host, occ, _ = _seat(seated, seat)
@@ -653,6 +655,7 @@ def test_the_turned_seats_are_measured_turned(seated):
     assert turned == 4
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_each_wire_is_over_its_own_contact(seated, seat):
     """In the device frame, on a turned header as on a flat one: `wire-k` is
@@ -672,6 +675,7 @@ def test_each_wire_is_over_its_own_contact(seated, seat):
         assert got == pytest.approx(want, abs=0.01), (w, got, want)
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_plug_stands_off_by_the_ruling(seated, seat):
     """The compiled depths, in the device frame: the body starts on the face
@@ -790,6 +794,7 @@ def overridden(tmp_path_factory):
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("case", OVERRIDES, ids=[c[0].split("/")[1] for c in OVERRIDES])
 def test_a_placements_fields_set_every_wire_and_the_body(overridden, case):
     ref, _device, _config, _view, host_id, od, wire, body = case

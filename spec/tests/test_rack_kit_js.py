@@ -13,6 +13,7 @@ JS = Path(__file__).resolve().parent / "js"
 FILES = sorted(p for p in JS.glob("rack-*.mjs") if p.name != "rack-face-width.mjs")
 
 
+@pytest.mark.heavy
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
 @pytest.mark.parametrize("path", FILES, ids=[p.stem for p in FILES])
 def test_rack_module(path):

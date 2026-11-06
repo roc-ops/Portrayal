@@ -1,0 +1,19 @@
+### Added
+- Cisco NCS routers (#1265), from the Hardware Installation Guide for Cisco NCS 5000 Series Routers and the Hardware Installation Guide
+  for Cisco NCS 5700 Series Fixed-Port Routers: the NCS 5011 (`cisco/ncs-5011`, 1RU, thirty-two QSFP28, four example
+  configurations that take the NCS 5000 supplies already in the library), the NCS-57C3-MOD-S (`cisco/ncs-57c3-mod-s`, 3RU, forty-eight SFP28
+  and eight QSFP28, with three modular port adapter bays that hold their blanks, two route processor bays, two front supplies and six rear fan
+  trays; also sold as NCS-57C3-MOD-SYS) and the NCS-57C3-MOD-HX (`cisco/ncs-57c3-mod-hx`, its environment-hardened variant, which takes only the hardened
+  route processor and fan trays). The guides print no ordering code for a build, so every build is an example or a derived base. The guides are silent on
+  sale status, so all three are recorded as unknown. The 5011's positions are estimated from three-quarter figures; the 57C3's are read from flat figures.
+- The parts they take, one component per Cisco part number: the NCS 5011 fan modules NCS-5011-FN-FR and -BK, the 57C3's supplies NC57-1600W-ACFW and
+  -DCFW, fan trays NC57-C3-FAN2-FW and NC57-C3-FAN1-FW (and -HX), route processors NC57-MOD-RP2-E and -E-HX, and the blanks NC55-MPA-BLNK,
+  NC57C3-RP-BLNK and NC57C3-PS-BLNK (`cisco/ncs-5011-fn-fr` and its eleven siblings).
+- The DCIM device types for the three routers, one each, in the NetBox and Nautobot exports.
+- The 57C3 faces follow the guide's Figures 19 and 20: the port plate's vent fields and slot rows at the figure's extents, the four-cell port status display and its
+  DISPLAY button, the grounding pad's hole and stud, each router's model legend, the supplies' fan wells, pull handles and IEC inlet (a C20 read from the figure's
+  pin layout, since the guide names only "IEC 320-type"), and the fan trays' hex guards.
+- The 57C3 rear follows Figure 20 more closely: the two FAN TRAY plates (0 1, and 2 3 4 5) with their printed text, yellow CAUTION labels and
+  stickers, screws and the lower tab, all estimated from the figure, with the maker's logo left to a reserved zone; fan grilles sized to the figure's
+  proportion of their trays (56 mm of 66 mm, and 35 mm of 45.5 mm, the small trays being the 45.5 mm of the tray body and not the 49 mm of its slot),
+  with no dark square behind them, thinner ribs, and looped pull handles.

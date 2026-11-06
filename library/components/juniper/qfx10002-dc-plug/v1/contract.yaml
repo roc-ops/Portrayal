@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: qfx10002-dc-plug
+version: 1.0.0
+class: port
+mates: dc-connector-3w3
+profile: power
+description: >-
+  The cable connector of the QFX10002 DC power cable, seen from the wire side as seated. A light grey hood covers a
+  D-sub 3W3 shell, with a thumbscrew at each end. It seats in a `dc-connector-3w3` connector at its own mate point.
+  It carries one cable of three wires. It draws no wire at a contact, because the guide does not say which wire
+  is at which.
+size: {w: 12.0, h: 36.6}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, juniper/qfx10002-dc-header@1, 12.0 by 36.6. The guide's Figures 41 to 43
+  draw the cable plug in perspective without a scale and no dimension of it is held.
+attrs: {media: qfx10002-dc, connector: D-sub 3W3 DC power cable connector, positions: 3}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    guide - QFX10002 Switch Hardware Guide (Juniper Networks), QFX10002 DC Power Cable Specifications and Table 26
+    (CBL-JNP-PWR-DSUB, the straight cable supplied, 4 m, a three-pin connector at one end and three insulated wires at the
+    other), and Figure 41 (the straight cable going in; Figures 42 and 43 show the optional right-angle cables).
+    The plug's maker and part number are not named; CBL-JNP-PWR-DSUB is the whole cable. THE PART IS A STAND-IN FOR
+    THE CABLE CONNECTOR, drawn for the straight cable.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    guide - Table 26 gives the straight cable's three wires, each 8 AWG (8.4 mm2), 90 C: "-48 VDC input (-)" blue,
+    "Return (+)" black and "Ground" green and yellow; the right-angle CBL-JNP-PWR-DSUB2 has the first two and no ground,
+    and CBL-JNP-PWR-DSUB3 has two gray wires. WHICH CONTACT EACH WIRE ENTERS IS NOT STATED, so the part places no
+    wire colour at a contact; the colours are recorded here only.
+  colour: >-
+    estimated - the hood is a light grey (#c8cacc), read from Figure 41's pale connector hood. The figure is line art
+    with grey fills and no photograph of the cable connector is held.
+  far-end: >-
+    NOT DRAWN. The three insulated wires at the far end land on the site's DC distribution, not on this supply.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the supply, so the part draws a plan
+    outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [6.0, 16.8], direction: front}
+skins: [default]

@@ -189,6 +189,7 @@ def seated(tmp_path_factory):
     return root, {c: p for p in root.iter() for c in p}, configs
 
 
+@pytest.mark.heavy
 @EACH
 def test_it_seats_in_a_cage_of_its_family(seated, ref):
     root, parents, _ = seated
@@ -201,6 +202,7 @@ def test_it_seats_in_a_cage_of_its_family(seated, ref):
     assert abs(hx - ox) < 1e-6 and abs(hy - oy) < 1e-6
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_takes_the_wrappers_cable_od_and_jacket(seated, ref):
     root, _, _ = seated

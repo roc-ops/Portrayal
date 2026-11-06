@@ -16,27 +16,35 @@
    "edgecore/cor550-fan@1"
   ],
   "rear/bays/psu-0": [
-   "edgecore/cor550-psu-ac@1"
+   "edgecore/cor550-psu-ac@1",
+   "edgecore/cor550-psu-dc@1"
   ],
   "rear/bays/psu-1": [
-   "edgecore/cor550-psu-ac@1"
+   "edgecore/cor550-psu-ac@1",
+   "edgecore/cor550-psu-dc@1"
   ]
  },
- "composed": "830f99a23d9ac12f",
+ "composed": "7fba5f8103f01dbf",
  "composed-refs": {
   "common/compliance-sticker@1": "1.0.0+6b3c51b31c446689",
   "common/ground-lug@1": "1.4.1+26b6835d39c39550",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
-  "common/rack-ear@1": "1.0.0+1682f189bae7936c",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
+  "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
   "common/seven-segment-dual@1": "1.2.0+6b5684ea002da26f",
   "common/sfp-plus-cage@2": "2.0.0+f6a9b62e3f500191",
   "common/smb-jack@1": "1.0.0+d68248050fc18e92",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "common/usb-symbol@1": "1.0.0+fbb7f12a15136c0d",
   "edgecore/cor550-fan@1": "1.0.0+d969375f69c3dbc5",
   "edgecore/cor550-lane-leds@1": "1.0.0+fdec9e8c2036b355",
-  "edgecore/cor550-psu-ac@1": "1.0.0+48b5ccc6a397fcbe",
+  "edgecore/cor550-psu-ac@1": "1.1.0+5a44f0098ab7353e",
+  "edgecore/cor550-psu-dc@1": "1.1.0+82174f95980b528c",
+  "edgecore/cor550-rack-bracket@1": "1.0.0+42c67b03094c86d6",
+  "edgecore/cor550-rack-kit@1": "1.0.0+ee846aa59f52cd78",
+  "edgecore/cor550-rack-rail@1": "1.0.0+19df1aa820eddc2b",
+  "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/micro-usb@1": "1.0.1+623c203fe8667fd2",
   "std/qsfp-dd@1": "1.3.1+c3cf5f2db67d8233",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
@@ -49,8 +57,60 @@
   "ac-f2b",
   "dc-f2b"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "edgecore/cor550-psu-dc@1": {
+    "awg": [
+     10
+    ],
+    "configs": [
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     }
+    ],
+    "rating-a": 40,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "edgecore/cor550-psu-dc@1": {
+    "awg": [
+     10
+    ],
+    "configs": [
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     }
+    ],
+    "rating-a": 40,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
- "gaps": "ec959b83a081ebcb",
+ "gaps": "d4b6a2cf4e71a0eb",
  "groups": [
   "displays",
   "fans",
@@ -151,8 +211,6 @@
   "front/cutout/usb",
   "front/placements/console-rj45",
   "front/placements/console-usb",
-  "front/placements/ear-left",
-  "front/placements/ear-right",
   "front/placements/fab-0",
   "front/placements/fab-1",
   "front/placements/fab-10",
@@ -284,11 +342,9 @@
   "rear/bays/psu-0",
   "rear/bays/psu-1",
   "rear/cutout/ground-point",
-  "rear/placements/ground-point",
-  "rear/placements/rear-ear-left",
-  "rear/placements/rear-ear-right"
+  "rear/placements/ground-point"
  ],
- "names": "b7ec35f817ec14a6",
+ "names": "ccf55818dc299571",
  "placement-addressing": {
   "for": {
    "front/placements/led-diag": [
@@ -496,8 +552,6 @@
    "bottom/placements/bottom-label": 6,
    "front/placements/console-rj45": 11,
    "front/placements/console-usb": 6,
-   "front/placements/ear-left": 1,
-   "front/placements/ear-right": 2,
    "front/placements/fab-0": 0,
    "front/placements/fab-1": 1,
    "front/placements/fab-10": 10,
@@ -628,19 +682,15 @@
    "rear/bays/fan-4": 4,
    "rear/bays/psu-0": 0,
    "rear/bays/psu-1": 1,
-   "rear/placements/ground-point": 1,
-   "rear/placements/rear-ear-left": 4,
-   "rear/placements/rear-ear-right": 5
+   "rear/placements/ground-point": 1
   }
  },
  "placement-attrs": "4a0d354684b746c6",
- "placement-geometry": "8b3f0c338d13f5fd",
+ "placement-geometry": "44136fa355b3678a",
  "placement-groups": {
   "bottom/placements/bottom-label": "furniture",
   "front/placements/console-rj45": "mgmt",
   "front/placements/console-usb": "mgmt",
-  "front/placements/ear-left": "furniture",
-  "front/placements/ear-right": "furniture",
   "front/placements/fab-0": "qsfpdd-400g-fabric",
   "front/placements/fab-1": "qsfpdd-400g-fabric",
   "front/placements/fab-10": "qsfpdd-400g-fabric",
@@ -771,12 +821,10 @@
   "rear/bays/fan-4": "fans",
   "rear/bays/psu-0": "psus",
   "rear/bays/psu-1": "psus",
-  "rear/placements/ground-point": "grounding",
-  "rear/placements/rear-ear-left": "furniture",
-  "rear/placements/rear-ear-right": "furniture"
+  "rear/placements/ground-point": "grounding"
  },
  "placement-surface": "44136fa355b3678a",
- "shape": "e38ffeae651f0056",
- "surface": "43ae7b3311d3f98b",
- "version": "3.0.3"
+ "shape": "8c33931fd14d6e58",
+ "surface": "a56f53cce156f6de",
+ "version": "4.0.2"
 }

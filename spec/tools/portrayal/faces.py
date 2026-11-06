@@ -91,11 +91,21 @@ def side_patch(box, side, face_w, depth):
         top     across: the face's x                  down: depth less mm behind
         bottom  across: face width less the face's x  down: depth less mm behind
 
+    `plan` and `rear` are the part's face drawings, read from their own
+    origin and both running right to left against the face:
+
+        plan    across: face width less the face's x     down: mm behind the face
+        rear    across: face width less the face's x     down: the face's y
+
     kit/relief.js pieceArtCrop crops by the same rule."""
     x, y = (float(v) for v in box["at"])
     w, h = (float(v) for v in box["size"])
     z0 = float(box.get("from") or 0)
     z1 = z0 + float(box["depth"])
+    if side == "plan":
+        return (face_w - x - w, z0, face_w - x, z1)
+    if side == "rear":
+        return (face_w - x - w, y, face_w - x, y + h)
     if side == "right":
         return (z0, y, z1, y + h)
     if side == "left":

@@ -1,0 +1,36 @@
+format: 1
+kind: module
+name: nc57c3-ps-blnk
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Blank filler for an unpopulated power supply bay of the Cisco NCS-57C3-MOD, with the part number its label prints,
+  NC57C3-PS-BLNK. A plain grey plate with a round pull loop, a latch at the right and its name printed at the upper left.
+size: {w: 81.0, h: 43.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+part-numbers:
+  NC57C3-PS-BLNK: {part: NC57C3-PS-BLNK}
+attrs:
+  role: airflow-blank
+provenance:
+  model: >-
+    photo-measured - the part number is read off the label printed on the blank in Figure 1 of the Hardware Installation Guide
+    for Cisco NCS 5700 Series Fixed-Port Routers (first published 2021-06-23, last modified 2026-05-15), upper front view, which
+    shows two power supply blanks at the bottom left; the label is small and reads "NC57C3-PS-BLNK". NO TEXT IN THE GUIDE NAMES
+    THE PART.
+  size: >-
+    photo-measured - Figure 1's front view at 1.225 px/mm taken from the 438.4 mm chassis width: each blank reads about 81 mm
+    wide and 43.5 mm high, the size of the supply it stands in for. The guide prints no dimension of the blank.
+  depth: >-
+    estimated - not stated in any held document; 15 mm is a round figure for a blank plate.
+states: [absent]
+elements:
+  pull: {at: [31.0, 8.0], size: [5.0, 27.0], class: handle}
+  latch: {at: [71.0, 17.0], size: [5.5, 10.0], class: latch}
+skins: [default]
+body:
+  depth: 15
+  color: '#b9bec4'
+  footprint: {at: [0, 0], size: [81.0, 43.5]}

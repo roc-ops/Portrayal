@@ -277,7 +277,7 @@ def test_blank_covers_say_the_guide_names_no_part_number_for_the_psu_cover():
 
 def device_types(vendor_dir):
     out = {}
-    for f in (EXPORTS / vendor_dir / "device-types/Cisco").glob("C9300-48*.yaml"):
+    for f in (EXPORTS / vendor_dir / "device-types/Cisco").glob("C9300-*.yaml"):
         t = yaml.safe_load(f.read_text())
         out[t["model"]] = t
     return out
@@ -286,7 +286,7 @@ def device_types(vendor_dir):
 @pytest.mark.parametrize("target", ["netbox", "nautobot"])
 def test_dcim_exports_one_type_per_orderable_configuration(target):
     types = device_types(target)
-    assert sorted(types) == ["C9300-48P", "C9300-48T"]
+    assert sorted(types) == ["C9300-24P", "C9300-24U", "C9300-48P", "C9300-48T", "C9300-48U"]
     for t in types.values():
         assert t["u_height"] == 1 == round(1.73 * IN / 44.45)
         assert t["manufacturer"] == "Cisco"
@@ -294,9 +294,11 @@ def test_dcim_exports_one_type_per_orderable_configuration(target):
 
 def test_the_exported_types_carry_no_illustration():
     names = [f.name for f in (EXPORTS / "netbox/device-types/Cisco").glob("C9300*")]
-    assert sorted(names) == ["C9300-48P.yaml", "C9300-48T.yaml"]
+    assert sorted(names) == [
+        "C9300-24P.yaml", "C9300-24U.yaml", "C9300-48P.yaml", "C9300-48T.yaml", "C9300-48U.yaml",
+    ]
 
 
 def test_no_other_catalyst_9300_model_is_claimed():
     names = {p.name for p in DEVICES.glob("c9300*")}
-    assert names == {"c9300-48p", "c9300-48t"}
+    assert names == {"c9300-48p", "c9300-48t", "c9300-24p", "c9300-24u", "c9300-48u"}

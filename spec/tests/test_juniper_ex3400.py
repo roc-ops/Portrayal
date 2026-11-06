@@ -106,10 +106,10 @@ def test_front_has_the_status_block_the_guide_names(name):
     d = load(name)
     ids = {p["id"] for p in placements(d, "front")}
     # Figure 5: SYS, ALM, MST. Figure 10: SPD, DX, EN, PoE. Then the Factory Reset/Mode button. The
-    # Mini-USB console is drawn as decor (see the device's gap), so it is legend only.
+    # Mini-USB console is the placed registry receptacle, and its old gap is gone.
     assert {"led-sys", "led-alm", "led-mst", "led-spd", "led-dx", "led-en", "led-poe",
-            "mode-btn"} <= ids
-    assert "console" not in ids and any(g["what"] == "mini-usb-console-port" for g in d["gaps"])
+            "mode-btn", "console-usb"} <= ids
+    assert not any(g["what"] == "mini-usb-console-port" for g in d["gaps"])
     legends = {s["text"] for s in d["views"]["front"]["silkscreen"] if "text" in s}
     assert {"SYS", "ALM", "MST", "SPD", "DX", "EN", "POE", "CON"} <= legends
     # the photographs print PoE+ on the P models and not on the T models

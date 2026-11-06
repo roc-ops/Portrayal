@@ -1,0 +1,74 @@
+format: 1
+kind: module
+name: fan-t1
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The fan module of the Cisco Catalyst 3650, FAN-T1 (ordered as FAN-T1=) - one hot-swappable 12 V fan behind
+  a honeycomb exhaust vent, with a fan LED at the upper left corner and a pair of extraction handles across
+  the lower part of the face. Three of them are required for proper cooling; the switch runs on two. The
+  Catalyst 3850 names the same part number.
+size: {w: 43.94, h: 41.15}
+size-confidence: {w: datasheet, h: datasheet}
+attrs:
+  model: 'FAN-T1'
+  power-absent: not-published
+  fans: 1
+  airflow: front-to-back
+  airflow-cfm: '20 CFM'
+  weight-kg: 0.07
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 3650 Switches Hardware Installation Guide, September 2016, OL-29734-01, Table
+    1-22 "Switch Fan Module": "FAN-T1=, Fan module". "The switch has three internal hot-swappable 12-V fan
+    modules." "Three fans are required for proper cooling." "The switch can operate with two operational fans
+    and one nonfunctional fan." The trailing = is Cisco's spare-order mark and is not part of the model.
+  power: >-
+    NOT PUBLISHED. Searched the guide's Fan Modules section, Table 1-22 and spec Table 1-5 for a power figure;
+    the table gives temperature, humidity, altitude, size, weight and airflow only. L29 stands on it.
+  size: >-
+    datasheet, with a CONFLICT SETTLED - spec Table 1-5 prints "Dimensions (H x D x W) 1.62 x 1.73 x 4.24 in.
+    (4.11 x 4.39 x 10.76 cm)". Read in that order the face would be 4.24 in (107.7 mm) wide, and three of them
+    with two 95.25 mm supplies would be 514 mm across a 444.5 mm chassis. Figure 1-13 draws the fan's face
+    about as wide as it is tall, 44 to 47 mm at the figure's scale. So the face is 1.73 in (43.94 mm) wide and
+    1.62 in (41.15 mm) tall, and 4.24 in (107.7 mm) is the depth: the table's D and W labels are taken as
+    swapped. Weight 0.2 lb (0.07 kg), airflow 20 cfm.
+  elements: >-
+    estimated - the guide's Figure 3-1 "Fan Module" (callouts Fan LED, Exhaust vent, Retainer clip, Extraction
+    handles) and Figure 1-13 draw a honeycomb vent over the upper part of the face, the LED at the upper left
+    and a looped handle across the lower part. Positions are fractions of the face.
+  lamps: >-
+    datasheet - Fan Modules (chapter 1): a green LED is on at the top left corner of the fan assembly, viewed
+    from the rear, while the fan operates properly, and it turns amber if the fan fails.
+  colour: >-
+    estimated - the guide's illustrations are "not intended to depict any particular color scheme"
+    (Front Panel, PDF p21). A neutral dark grey is drawn.
+  depth: >-
+    datasheet - 4.24 in, 107.7 mm, as settled above.
+states: [absent]
+elements:
+  fan-led: {at: [2.2, 2.2], size: [2.0, 2.0], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  vent: {at: [6.0, 2.5], size: [35.0, 22.0], class: rotor}
+  handle: {at: [3.0, 26.0], size: [38.0, 11.0], class: handle}
+relief:
+  wall: '#15181b'
+  features:
+    - node: vent
+      vent: 20
+      confidence: estimated
+      source: >-
+        cisco/fan-t1@1's own elements key - the vent's extent is read off Figure 3-1 and the depth behind it
+        is the fan's own, estimated.
+    - node: handle
+      uhandle: 8.0
+      color: '#5c6167'
+      confidence: estimated
+      source: >-
+        Not stated. Figure 3-1 draws a loop standing clear of the face; 8 mm is a reading of its proportions.
+skins: [default]
+body:
+  depth: 107.7
+  color: '#3a3d41'
+  footprint: {at: [0, 0], size: [43.94, 41.15]}

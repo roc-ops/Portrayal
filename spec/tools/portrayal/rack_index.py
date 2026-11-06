@@ -125,6 +125,26 @@ def frames(dist):
     return out
 
 
+def default_kit(kits):
+    """The kit the site defaults to, as a rack tool needs it without opening
+    configs.json: the `in-box` kit, else the first listed (the rule of
+    `chassis.kits` in device.schema.json), read from the rows configs.json
+    resolves inline. `{ref, motion}`, and the `depth` or `preset` of its one
+    configuration as the row writes it (a device's override already applied):
+    a missing range is absent, never null and never [preset, preset]. A kit with
+    several configurations has no default one, so states neither. A row that
+    does not resolve (no `motion`), or no kit, gives None."""
+    rows = [k for k in kits or [] if isinstance(k, dict)]
+    row = next((k for k in rows if k.get("supply") == "in-box"), rows[0] if rows else None)
+    if not row or not row.get("ref") or not row.get("motion"):
+        return None
+    out = {"ref": row["ref"], "motion": row["motion"]}
+    configurations = row.get("configurations") or []
+    if len(configurations) == 1:
+        out.update({k: configurations[0][k] for k in ("depth", "preset") if configurations[0].get(k) is not None})
+    return out
+
+
 def build(dist):
     dist = Path(dist)
     devices = json.loads((dist / "devices.json").read_text())["devices"]
@@ -160,6 +180,9 @@ def build(dist):
         pos = next((p for p in ears.get("positions") or [] if p.get("default") and p.get("at") is not None), None)
         if pos:
             entry["ears"] = {"default": {"name": pos.get("name"), "at": pos["at"]}}
+        kit = default_kit(c.get("kits"))
+        if kit:
+            entry["kit"] = kit
         perf = (idx.get("attrs") or {}).get("performance") or {}
         if perf.get("cable-capacity") is not None:
             entry["capacity"] = {"count": perf["cable-capacity"], "basis": perf.get("cable-capacity-basis", "")}

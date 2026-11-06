@@ -23,6 +23,7 @@ LIB = SPEC.parent / "library"
 from portrayal import attrsections
 from portrayal import lint
 from portrayal import libwalk
+import pytest
 
 MANIFESTS = list(libwalk.iter_devices([LIB]))
 
@@ -78,6 +79,7 @@ def test_optics_prose_must_reach_a_group():
     assert any("port group ports" in w for w in ws), ws
 
 
+@pytest.mark.heavy
 def test_the_library_has_no_unreachable_optics_left():
     """And the real device is now held to the fixed state, which is the
     assertion that was actually wanted."""
@@ -86,6 +88,7 @@ def test_the_library_has_no_unreachable_optics_left():
                     if "names no port group's media" in w], man
 
 
+@pytest.mark.heavy
 def test_nothing_is_structured_yet_and_that_is_the_point():
     """If this ever fails, the vocabulary got designed and #13 wants revisiting -
     the harvest was the deliverable, not a schema."""

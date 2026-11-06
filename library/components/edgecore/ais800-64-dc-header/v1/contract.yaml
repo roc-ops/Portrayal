@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: ais800-64-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: edgecore-ais800-dc-block-6
+description: >-
+  The six-socket DC power connector on the face of the Edgecore AIS800-64D and AIS800-64O 3000 W DC supply, seen from its mating
+  face. A grey housing holds six round sockets in two rows of three, with a dark web between the rows. Each socket has a slotted
+  contact at its centre. The cable connector edgecore/ais800-64-dc-plug@1 seats at its mate point.
+size: {w: 26.79, h: 22.19}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The Quick Start Guide draws the connector without a scale and prints no dimension for it. The box is the pocket the supply's skin
+  already reserves for it (edgecore/ais800-64-psu-dc@1, 26.79 by 22.19), which that contract reads off the guide's Connect Power
+  figure at 7.184 pixels to the millimetre; it is declared an estimate here, as the connector's outline is not a dimension.
+attrs: {connector: DC power connector, positions: 6}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO HELD DOCUMENT NAMES THIS CONNECTOR: the Edgecore AIS800-64D data sheet's power section reads
+    "DC Input rating: -48 V ~ -60 V (80 A/3000 W max.)" and names no connector, and the Quick Start Guide's Connect Power figure
+    (page 2) draws it with no maker, series or part number. The interface therefore claims no maker, series, standard or pitch.
+    The guide's figure draws a housing of six round sockets, each with a slotted contact, not six studs.
+  gender: >-
+    NOT STATED. The figure shows round sockets with a slotted contact at the centre of each, inside a housing; it does not say which
+    half of a pair carries the contacts. The cable connector is drawn as the half that seats in this one.
+  marks: >-
+    NONE PRINTED on the connector or beside it. The figure numbers the sockets with callouts and the guide's list under it reads
+    "-48 - -60 VDC" (1), "DC return" (2), "Signal +" (3) and "Signal -" (4). The upper-left and lower-left sockets are 1, the
+    upper-right and lower-right are 2, the upper-centre is 3 and the lower-centre is 4.
+  size: >-
+    estimated - see size-notes. The socket centres, (7.48, 4.00), (15.55, 4.00), (23.63, 4.00), (7.48, 18.13), (15.55, 18.13) and
+    (23.63, 18.13), are the supply's skin's own drawing, carried over so that the part stands where the drawn sockets stand.
+  key: >-
+    NOT DRAWN. The guide's figure shows a stepped outline at the left of the housing, which no dimension describes; the part is a
+    plain box, as the supply's skin draws the pocket, so the part adds nothing the skin did not already draw.
+  mate: >-
+    derived - the middle of the block, (13.395, 11.095), facing out. The cable connector's own middle is at its centre too, so the
+    two align.
+  colour: >-
+    estimated - the figure is a colour render in greys: the housing's face measures about #6e747b and the sockets about #101315, as
+    the supply's skin draws them.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face, so it is drawn flush and states no relief.
+elements: {}
+connection-points:
+  mate: {at: [13.395, 11.095], direction: front}
+skins: [default]

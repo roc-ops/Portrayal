@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: oob-2p8
-version: 0.1.0
+version: 0.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -74,17 +74,37 @@ provenance:
     module and the matching rear slots take an OOB I/O module. So this card is the
     rear half of a CSC position exactly as the 6+12 I/O is the rear half of a BDM
     position.
+  groups: >-
+    Casa Systems C100G Hardware Installation Guide (rev 07/08/2022), chapter 3 (PDF page
+    91) says the OOB I/O module has two NDF downstream ports, NDF0 and NDF1, and eight
+    NDR upstream ports, NDR0 to NDR7; Figure 3-2 (PDF page 92) draws ten coax ports and
+    Figure 3-4 (PDF page 94) labels them NDF0, NDF1, NDR0 to NDR7. Figure 3-2 prints the
+    fifth and sixth labels as NDF2 and NDF3, which the text and Figure 3-4 do not; the
+    groups follow the text. No page names a role; the role follows the job, narrowband
+    signalling carried for set-top boxes, so it is traffic. The coax ports state no
+    speed.
+groups:
+  ndf:
+    term: NDF
+    role: traffic
+    index-origin: 0
+    description: two narrowband digital forward (downstream) F-type ports, NDF0 and NDF1
+  ndr:
+    term: NDR
+    role: traffic
+    index-origin: 0
+    description: eight narrowband digital return (upstream) F-type ports, NDR0 to NDR7
 parts:
-  - {ref: std/f-type@1, id: ndf0, at: [10.385, 39.455]}
-  - {ref: std/f-type@1, id: ndf1, at: [10.385, 63.093]}
-  - {ref: std/f-type@1, id: ndr0, at: [10.385, 86.731]}
-  - {ref: std/f-type@1, id: ndr1, at: [10.385, 110.368]}
-  - {ref: std/f-type@1, id: ndr2, at: [10.385, 134.006]}
-  - {ref: std/f-type@1, id: ndr3, at: [10.385, 157.644]}
-  - {ref: std/f-type@1, id: ndr4, at: [10.385, 181.282]}
-  - {ref: std/f-type@1, id: ndr5, at: [10.385, 204.919]}
-  - {ref: std/f-type@1, id: ndr6, at: [10.385, 228.557]}
-  - {ref: std/f-type@1, id: ndr7, at: [10.385, 252.195]}
+  - {ref: std/f-type@1, id: ndf0, group: ndf, at: [10.385, 39.455]}
+  - {ref: std/f-type@1, id: ndf1, group: ndf, at: [10.385, 63.093]}
+  - {ref: std/f-type@1, id: ndr0, group: ndr, at: [10.385, 86.731]}
+  - {ref: std/f-type@1, id: ndr1, group: ndr, at: [10.385, 110.368]}
+  - {ref: std/f-type@1, id: ndr2, group: ndr, at: [10.385, 134.006]}
+  - {ref: std/f-type@1, id: ndr3, group: ndr, at: [10.385, 157.644]}
+  - {ref: std/f-type@1, id: ndr4, group: ndr, at: [10.385, 181.282]}
+  - {ref: std/f-type@1, id: ndr5, group: ndr, at: [10.385, 204.919]}
+  - {ref: std/f-type@1, id: ndr6, group: ndr, at: [10.385, 228.557]}
+  - {ref: std/f-type@1, id: ndr7, group: ndr, at: [10.385, 252.195]}
 connection-points:
   mate: {at: [15.23, 172.75], direction: rear}
 skins: [default]

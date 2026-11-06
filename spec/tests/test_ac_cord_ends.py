@@ -83,6 +83,7 @@ def rear(f):
 
 # --- 1. the registry -----------------------------------------------------------
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PAIRS))
 def test_each_inlet_interface_is_a_connector_citing_its_standard(iface):
     reg = render_mod._connector_registry()
@@ -92,6 +93,7 @@ def test_each_inlet_interface_is_a_connector_citing_its_standard(iface):
     assert reg[iface]["standard"] == inlet["conforms"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PAIRS))
 def test_each_inlet_presents_its_interface_at_its_face(iface):
     inlet = _contract(PAIRS[iface][0])
@@ -131,6 +133,7 @@ PSU = {
 }
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(CHASSIS))
 def test_a_chassis_inlet_publishes_a_slot_that_offers_its_plug(iface, tmp_path):
     device, view, pid = CHASSIS[iface]
@@ -143,6 +146,7 @@ def test_a_chassis_inlet_publishes_a_slot_that_offers_its_plug(iface, tmp_path):
     assert slot["lift"] == 0.0 and slot["default"] is None, slot
 
 
+@pytest.mark.heavy
 def test_no_chassis_places_a_saf_d_grid_inlet():
     """Why CHASSIS has no Saf-D-Grid row: the premise, so the gap is a fact of
     the library and not of this file."""
@@ -151,6 +155,7 @@ def test_no_chassis_places_a_saf_d_grid_inlet():
     assert hits == []
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PSU))
 def test_a_psu_inlet_is_a_nested_slot_that_offers_its_plug(iface, comps):
     ref, part_id = PSU[iface]
@@ -164,6 +169,7 @@ def test_a_psu_inlet_is_a_nested_slot_that_offers_its_plug(iface, comps):
     assert slot["lift"] == 0.0, slot
 
 
+@pytest.mark.heavy
 def test_a_panel_of_inlets_publishes_one_slot_each(comps):
     """casa/c40g-ac-inlet-panel@1 composes four inlets and forwards none of
     them (a wrapper forwards only a lone aperture), so each is its own slot
@@ -174,6 +180,7 @@ def test_a_panel_of_inlets_publishes_one_slot_each(comps):
     assert all(c["accepts"] == ["generic/c13-plug@1"] for c in slots)
 
 
+@pytest.mark.heavy
 def test_a_placed_supply_with_one_inlet_is_the_slot(tmp_path):
     """common/psu-550w@2 is PLACED on a face, not seated in a bay, and composes
     one inlet: it presents that inlet as its own, so the slot is published at
@@ -186,6 +193,7 @@ def test_a_placed_supply_with_one_inlet_is_the_slot(tmp_path):
     assert "generic/c13-plug@1" in slot["accepts"], slot
 
 
+@pytest.mark.heavy
 def test_every_composed_inlet_is_a_slot_or_is_forwarded(comps):
     """The census: each `parts:` entry that is one of the three inlets is
     either published as a slot of the component that composes it, or is that
@@ -217,6 +225,7 @@ def test_every_composed_inlet_is_a_slot_or_is_forwarded(comps):
 
 # --- 3. the plugs --------------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH
 def test_it_is_a_plug_that_mates_its_interface(ref):
     d = _contract(ref)
@@ -226,6 +235,7 @@ def test_it_is_a_plug_that_mates_its_interface(ref):
     assert d["conforms"] == name and name in std()
 
 
+@pytest.mark.heavy
 @EACH
 def test_it_states_no_depth_and_its_length_is_in_the_registry(ref):
     d = _contract(ref)
@@ -235,6 +245,7 @@ def test_it_states_no_depth_and_its_length_is_in_the_registry(ref):
     assert (entry["w"], entry["h"]) == (d["size"]["w"], d["size"]["h"])
 
 
+@pytest.mark.heavy
 @EACH
 def test_its_fields_are_the_cord(ref):
     f = _contract(ref)["fields"]
@@ -249,6 +260,7 @@ CORD_TYPE = {"generic/c13-plug@1": "power-c13", "generic/c14-plug@1": "power-c13
              "generic/c19-plug@1": "power-c19", "generic/c20-plug@1": "power-c19"}
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", sorted(CORD_TYPE))
 def test_an_iec_stub_is_the_diameter_of_the_cord_the_kit_draws(ref):
     types = yaml.safe_load((ROOT / "spec/schemas/cable-types.yaml").read_text())["types"]
@@ -261,6 +273,7 @@ def test_an_iec_stub_is_the_diameter_of_the_cord_the_kit_draws(ref):
     assert "Oznur" in c["provenance"]["cable-od"]
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_is_30_long_from_the_end_of_the_strain_relief(ref):
     f = feats(ref)
@@ -270,6 +283,7 @@ def test_the_stub_is_30_long_from_the_end_of_the_strain_relief(ref):
     assert ("cyl" in boot) == ROUND_BOOT[ref], boot
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_solids_chain_from_the_inlet_face_to_the_stub(ref):
     """nose, then the body (in one or two steps), then the strain relief:
@@ -286,6 +300,7 @@ def test_the_solids_chain_from_the_inlet_face_to_the_stub(ref):
     assert set(f) == set(chain) | ({"lugs"} if "lugs" in f else set())
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_cable_leaves_from_the_stub(ref):
     cps = _contract(ref)["connection-points"]
@@ -295,6 +310,7 @@ def test_the_cable_leaves_from_the_stub(ref):
     assert cps["mate"]["at"] == pytest.approx([d["size"]["w"] / 2, d["size"]["h"] / 2])
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_circle_is_bound_to_the_fields(ref):
     s = _skin_path(ref).read_text()
@@ -311,6 +327,7 @@ def test_the_stub_circle_is_bound_to_the_fields(ref):
 
 # --- 4. the seated depth, in the contracts --------------------------------------
 
+@pytest.mark.heavy
 @EACH
 def test_the_inlet_models_the_cavity_the_plug_was_seated_to(ref):
     """Fails by design when an inlet's depth is revised: the plug's relief
@@ -319,6 +336,7 @@ def test_the_inlet_models_the_cavity_the_plug_was_seated_to(ref):
     assert inlet["size"]["d"] == pytest.approx(FIGURES[ref][2])
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_plug_stands_its_length_less_the_modelled_cavity(ref):
     overall, nose, cavity, _od = FIGURES[ref]
@@ -332,6 +350,7 @@ def test_the_plug_stands_its_length_less_the_modelled_cavity(ref):
     assert rear(f["nose"]) == pytest.approx(nose - cavity)
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_ruling_is_recorded_in_provenance(ref):
     text = " ".join(_contract(ref)["provenance"]["seated-depth"].split())
@@ -421,6 +440,7 @@ def _front(parents, el):
     return lift_of(parents, el) + float(el.get("data-z-cyl"))
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_it_seats_with_its_mate_on_the_inlets_mate(seated, seat):
     parents, host, occ, _ = _seat(seated, seat)
@@ -430,6 +450,7 @@ def test_it_seats_with_its_mate_on_the_inlets_mate(seated, seat):
     assert_same_turn(parents, occ, host)
 
 
+@pytest.mark.heavy
 def test_one_seat_is_in_a_turned_inlet(seated):
     """Not a flat pass: a supply's inlet is drawn turned on at least one of
     the seats above, so the turn is measured and not assumed."""
@@ -442,6 +463,7 @@ def test_one_seat_is_in_a_turned_inlet(seated):
     assert turned >= 2, turned
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_plug_stands_off_by_the_ruling(seated, seat):
     """The compiled depths, in the device frame: the nose starts on the
@@ -461,6 +483,7 @@ def test_the_seated_plug_stands_off_by_the_ruling(seated, seat):
     assert _front(parents, el["stub"]) - base == pytest.approx(overall - cavity + STUB, abs=EPS)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(CHASSIS))
 def test_the_published_slot_lift_is_where_the_build_seats_the_plug(seated, iface):
     device, view, pid = CHASSIS[iface]
@@ -477,6 +500,7 @@ def test_the_published_slot_lift_is_where_the_build_seats_the_plug(seated, iface
 
 # --- 6. 3D solids ----------------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_plug_builds_right_side_out(seated, seat):
     ref = seat[0]
@@ -512,6 +536,7 @@ def _stub_diameter(parents, stub):
     return min(x1 - x0, y1 - y0)
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_stub_is_the_default_cable_od(seated, seat):
     ref = seat[0]
@@ -548,6 +573,7 @@ def overridden(tmp_path_factory):
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("case", OVERRIDES, ids=[c[0].split("/")[1] for c in OVERRIDES])
 def test_a_placements_cable_od_sets_the_stub(overridden, case):
     ref, _device, _view, host_id, od = case

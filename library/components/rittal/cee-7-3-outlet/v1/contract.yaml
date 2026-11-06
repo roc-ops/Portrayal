@@ -1,0 +1,53 @@
+format: 1
+kind: component
+name: cee-7-3-outlet
+version: 1.0.0
+class: inlet
+profile: power
+interface: cee-7-3
+description: >-
+  The CEE 7/3 earthing-pin socket outlet of a Rittal PDU. A round well with two
+  contact holes on one diagonal. An earth clip sits at each of two rim points on
+  the same diagonal, as the maker's dimensioned drawing of the DK 7979.175 draws
+  it. Takes a CEE 7/7 plug.
+size: {w: 39.5, h: 39.5, d: 20}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {outlet: cee-7-3, media: ac}
+provenance:
+  method: >-
+    drawing - Rittal, "Technical details, Power Distribution Unit, Basic version"
+    (dri2108028en, 08.2023), PDF page 25, the front view of DK 7979.175. The
+    drawing is a raster-free vector page; the socket was read from a 1200 dpi
+    render at the scale its own 1094 overall length gives (1.94 px per mm at 600
+    dpi, checked on the 44 mm width of the strip).
+  size: >-
+    estimated - the round well reads about 39.5 across on that render, inside a
+    cell 44.4 along the strip and 44 across. No standard sheet for a CEE 7/3
+    socket is held, so the size is a reading of a drawing at a scale good to
+    about 1 mm, and is declared so. The well depth, 20, is borrowed from
+    std/c19-outlet@1's estimated well and is not stated by any source held.
+  contacts: >-
+    drawing - two round holes read about 5 across, 19.2 apart on a diagonal of
+    the cell, and an earth clip at each of two rim points on the same diagonal.
+    The drawing turns the socket to that diagonal; this part is drawn as the
+    drawing's front view stands after the strip is stood on its end with the
+    cable foot down (a quarter turn counter-clockwise). The earth clips are drawn
+    as small tabs and are not dimensioned.
+  interface: >-
+    `cee-7-3` in spec/schemas/connectors.yaml. The data sheet names the outlet
+    "CEE 7/3 (earthing-pin socket)"; no standard sheet is held, so the entry cites
+    none. generic/cee-7-7-plug@1 mates it.
+  rating: >-
+    NO RATING IS STATED FOR THE OUTLET: the data sheet gives 16 A or 32 A for the
+    PDU as a whole and no figure for a socket, so none is written here.
+  dcim: >-
+    the outlet exports as an `other` power outlet labelled CEE 7/3: no upstream
+    outlet type for it has been read from a held source.
+elements:
+  recess: {at: [0, 0], size: [39.5, 39.5], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  cavity: recess
+connection-points:
+  mate: {at: [19.75, 19.75], direction: front}
+skins: [default]

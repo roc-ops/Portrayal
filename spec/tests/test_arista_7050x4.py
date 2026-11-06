@@ -352,10 +352,42 @@ def test_the_dx4m_is_a_configuration_of_the_dx4_because_figure_c_1_is_shared():
     d = load("7050dx4-32s")
     m = d["configurations"]["m-f"]
     assert list(m["part-numbers"]) == ["DCS-7050DX4M-32S-F"]
-    assert "423" in m["description"] and "1208" in m["description"]
     assert not [n for n in d["configurations"] if n.startswith("m-r")]
     assert not (LIB / "devices/arista/7050dx4m-32s").exists()
     assert not (LIB / "devices/arista/7050spx4-48d8").exists()
+
+
+def test_the_dx4m_states_its_own_figures_in_its_configuration():
+    """Guide Table 4 and the data sheet's model comparison agree: 423 W / 1208 W for the DX4M against 353 W /
+    880 W. The data sheet adds the MACsec ports, the licence and the minimum EOS. The configuration states
+    them, the device keeps the DX4-32S's, and the description no longer carries a figure."""
+    d = load("7050dx4-32s")
+    m = d["configurations"]["m-f"]
+    assert m["attrs"]["power"] == {"power-typical-w": 423, "power-max-w": 1208}
+    assert m["attrs"]["performance"] == {"macsec-ports": "16 (ports 1 to 8 and 25 to 32)"}
+    assert m["attrs"]["features"] == {"eos-license": "license group LIC-FIX-3-MACSEC; minimum EOS 4.30.1"}
+    assert d["attrs"]["power"]["power-typical-w"] == 353 and d["attrs"]["power"]["power-max-w"] == 880
+    assert not re.search(r"\d+\s*W\b", m["description"])
+    assert not [g for g in d["gaps"] if g["what"] == "config-scoped-device-attrs"]
+    for name in ("f", "r"):
+        assert "attrs" not in d["configurations"][name]
+        assert "export-description" not in d["configurations"][name]
+
+
+def test_the_dx4m_export_describes_the_dx4m_and_states_its_figures():
+    for target in ("netbox", "nautobot"):
+        folder = LIB / "exports" / target / "device-types" / "Arista"
+        dx4m = yaml.safe_load((folder / "DCS-7050DX4M-32S-F.yaml").read_text())
+        assert dx4m["description"].startswith("Arista 7050DX4M-32S - "), target
+        assert len(dx4m["description"]) <= 200
+        for fact in ("power.power-typical-w: 423", "power.power-max-w: 1208",
+                     "features.eos-license: license group LIC-FIX-3-MACSEC; minimum EOS 4.30.1",
+                     "performance.macsec-ports: 16 (ports 1 to 8 and 25 to 32)"):
+            assert f"- {fact}\n" in dx4m["comments"] + "\n", (target, fact)
+        assert "power-typical-w: 353" not in dx4m["comments"]
+        assert "power-max-w: 880" not in dx4m["comments"]
+        assert "- power.power-typical-w: 353\n" in yaml.safe_load(
+            (folder / "DCS-7050DX4-32S-F.yaml").read_text())["comments"] + "\n"
 
 
 def test_the_48y_power_figures_are_the_datasheets_because_the_guides_read_typical_above_maximum():
@@ -430,7 +462,7 @@ def test_the_dcim_types_export_one_per_orderable_configuration_with_the_guides_h
 @pytest.mark.parametrize("target", ["netbox", "nautobot"])
 def test_the_dcim_exports_nothing_for_an_example_or_a_left_out_model(target):
     folder = LIB / "exports" / target / "device-types" / "Arista"
-    got = {p.stem for p in folder.glob("DCS-7050*.yaml") if "7050SDX4" not in p.stem}
+    got = {p.stem for p in folder.glob("DCS-7050*.yaml") if "7050SDX4" not in p.stem and "X3" not in p.stem}
     want = {pn for v in DEVICES.values() for pn in v["orderable"].values()}
     assert got == want
 

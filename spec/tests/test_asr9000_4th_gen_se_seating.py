@@ -28,13 +28,13 @@ FAN_V3 = "cisco/asr-9922-fan-v3@1"
 
 # chassis -> (line-card bays that take the 16-port, line-card bays that take the 32-port, all bays, version)
 CHASSIS = {
-    "9006": (4, 0, 11, "3.3.0"),
-    "9010": (8, 0, 18, "1.2.0"),
-    "9904": (2, 2, 8, "3.3.0"),
-    "9906": (4, 4, 6, "1.3.0"),
-    "9910": (8, 8, 10, "1.3.0"),
-    "9912": (10, 10, 31, "2.2.0"),
-    "9922": (20, 20, 49, "2.2.0"),
+    "9006": (4, 0, 11, "3.3.3"),
+    "9010": (8, 0, 18, "2.0.1"),
+    "9904": (2, 2, 8, "3.3.3"),
+    "9906": (4, 4, 13, "2.0.3"),    # 6 slots + 3 AC and 4 DC power-module bays; 2.0.0 with the V3 power modules
+    "9910": (8, 8, 24, "2.0.3"),    # 10 slots + 6 AC and 8 DC power-module bays
+    "9912": (10, 10, 31, "2.3.3"),   # 2.2.0 here, then 2.3.0 with the A99-SFC2 (fabric boards change)
+    "9922": (20, 20, 49, "2.3.3"),
 }
 CARDS = {"a9k-16x100ge-se": (SE16, TR16, "1.1.0"), "a99-32x100ge-se": (SE32, TR32, "1.2.0")}
 
@@ -196,12 +196,14 @@ def test_power_stays_absent_and_the_tr_figure_is_not_copied(name):
 
 # ---- the lock
 
+@pytest.mark.heavy
 def test_each_chassis_is_at_the_minor_the_lock_asked_for_and_the_lock_agrees(chassis):
     assert device(chassis)["version"] == CHASSIS[chassis][3]
     mine = [f for f in devicelock.check(LIBRARY) if f[0] == f"cisco/asr-{chassis}"]
     assert mine == []
 
 
+@pytest.mark.heavy
 def test_the_two_components_are_locked_too():
     mine = [f for f in devicelock.check(LIBRARY) if f[0] in {f"cisco/{n}" for n in CARDS}]
     assert mine == []

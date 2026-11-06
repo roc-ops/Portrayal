@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: sd-card
+version: 1.0.0
+class: port
+profile: networking
+mates: sd-card
+description: >-
+  A full-size SD card, seen end on as it stands in a slot: the card's edge, 24 mm across and 2.1 mm thick.
+  It occupies any slot presenting the `sd-card` interface. Nothing about its capacity or speed class is
+  drawn or claimed.
+size: {w: 24.0, h: 2.1}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: sd-card}
+unplaced: >-
+  seated by a device that places an SD card in a slot presenting `sd-card`: none does yet, because no
+  document held shows a card fitted to the Avocent ACS8000 or any other device of the library.
+provenance:
+  size: >-
+    estimated - the card is called "full size" by the Vertiv Avocent ACS8000 data sheet and no document held
+    states the card's width or thickness. 24.0 by 2.1 is the commonly published full-size card edge and is
+    recorded as a stand-in until the SD Association's physical specification is held. It is not a
+    measurement and the part claims no standard.
+  mate-point: >-
+    estimated - the point is the centre of the edge, so a card seats on the centre of a slot's `mate` point.
+elements:
+  edge: {at: [0.0, 0.0], size: [24.0, 2.1], class: port}
+connection-points:
+  mate: {at: [12.0, 1.05], direction: front}
+skins: [default]

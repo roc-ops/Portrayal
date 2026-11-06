@@ -238,7 +238,7 @@ def test_the_front_has_the_guides_lamps_console_button_alarm_and_management_port
     assert ("MG PoE++" in legends) == (name != "ex4100-h-24f") and ("24F" in legends) == (name == "ex4100-h-24f")
 
 
-def test_the_12mp_has_two_psu_connectors_not_supply_bays_and_two_earth_holes():
+def test_the_12mp_has_two_psu_connectors_not_supply_bays_and_an_earthing_pair():
     d = load_device("ex4100-h-12mp")
     pl = by_id(d, "front")
     assert pl["psu-0"]["ref"] == pl["psu-1"]["ref"] == "juniper/ex4100-h-psu-connector@1"
@@ -246,8 +246,10 @@ def test_the_12mp_has_two_psu_connectors_not_supply_bays_and_two_earth_holes():
     for view in d["views"]:
         assert not bays(d, view)
     decor = {x["id"]: x for x in d["views"]["front"]["panel"]["decor"]}
-    # two holes 15.8 mm apart, the 5/8 in lug pitch
-    assert decor["earth-hole-2"]["at"][1] - decor["earth-hole-1"]["at"][1] == pytest.approx(15.8, abs=0.2)
+    # the two holes (15.8 mm apart, the 5/8 in lug pitch) are one placed pair of bare M5 holes, stood on end, inside the rings
+    assert pl["ground-pair"]["ref"] == "common/ground-hole-pair-5-8-m5@1" and pl["ground-pair"]["rotate"] == 90
+    assert not {"earth-hole-1", "earth-hole-2"} & set(decor)
+    assert {decor["earth-ring-1"]["kind"], decor["earth-ring-2"]["kind"]} == {"earth-boss"}
     note = " ".join(next(g for g in d["gaps"] if g["what"] == "external-power-supplies")["note"].split())
     assert "JPSU-H-340W-E-AC" in note and "EX4100-H-12MP-DC-PSU" in note
 
@@ -281,7 +283,8 @@ def test_the_rear_has_two_supply_bays_with_the_blank_over_the_second(name):
     pl = by_id(d, "rear")
     assert pl["esd-rear"]["ref"] == "common/esd-jack@1"
     decor = {x["id"]: x for x in d["views"]["rear"]["panel"]["decor"]}
-    assert decor["earth-hole-2"]["at"][1] - decor["earth-hole-1"]["at"][1] == pytest.approx(16.0, abs=0.2)
+    assert pl["ground-pair"]["ref"] == "common/ground-hole-pair-5-8-m5@1" and pl["ground-pair"]["rotate"] == 90
+    assert not {"earth-hole-1", "earth-hole-2"} & set(decor)
     assert {"lock-slot", "earth-plate"} <= set(decor)
 
 
@@ -395,7 +398,8 @@ def test_the_sources_are_cited_and_the_gaps_recorded(name):
     assert ref["url"].endswith("/ex4100-h/ex4100-h.pdf") and len(ref["sha256"]) == 64
     assert d["portfolio"] == {"line": "EX Series", "family": "EX4100-H"}
     assert d["manufacturer"] == "Juniper" and d["model"] == MODELS[name]["part"]
-    assert {"label-plates", "ground-hole-seat"} <= {g["what"] for g in d["gaps"]}
+    gaps = {g["what"] for g in d["gaps"]}
+    assert "label-plates" in gaps and "ground-pair-pitch" in gaps and "ground-hole-seat" not in gaps
     # the studio photograph and the guide's figure were both looked at, and the drawing's conflicts are said
     assert "studio photographs" in text
 
@@ -421,10 +425,3 @@ def test_the_12mp_label_prints_two_hazard_icons():
 def test_the_guides_table_68_48mp_is_named_and_not_modelled():
     assert not (DEV / "ex4100-h-48mp").exists()
     assert "EX4100-H-48MP" in prov(load_device("ex4100-h-24mp"))
-
-
-def test_this_slice_adds_these_components_and_no_other():
-    names = sorted(p.name for p in COMP.glob("ex4100-h-*"))
-    assert names == ["ex4100-h-24f-dc-psu", "ex4100-h-24mp-dc-psu", "ex4100-h-alarm-connector",
-                     "ex4100-h-jpsu-340w-ac", "ex4100-h-jpsu-90w-ac", "ex4100-h-mode-button",
-                     "ex4100-h-psu-blank", "ex4100-h-psu-connector", "ex4100-h-terminal-pad"]

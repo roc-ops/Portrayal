@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-46dx
-version: 4.0.8
+version: 4.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-46DX
@@ -416,6 +416,15 @@ chassis:
   airflow: front-to-back
 
 gaps:
+- what: dc-terminal-height
+  scope: [ufispace/psu-202-dc@2]
+  reason: needs-drawing
+  note: >-
+    The height of the pair of screws of each DC pole off the supply's face is an estimate. The S9600-56DX Hardware Installation Guide draws the
+    block in isometric only (Figures 25 and 26), with no scale and no elevation, and no
+    held document gives the height.
+  wanted: a side elevation of the DC supply's terminal block with its height off the face, or a photograph taken
+    square to the block from the side
 - what: port-led-semantics
   scope: [qsfp28, qsfpdd-400g, sfp28, sfp-plus-mgmt, port-leds]
   reason: vendor-silent
@@ -970,8 +979,8 @@ views:
         - {id: fan-1, at: [94.23, 3.05], size: {w: 81.0, h: 81.5}, accepts: [ufispace/fan-808012@1], group: fans, rel-pos: 1, default: ufispace/fan-808012@1}
         - {id: fan-2, at: [178.06, 3.05], size: {w: 81.0, h: 81.5}, accepts: [ufispace/fan-808012@1], group: fans, rel-pos: 2, default: ufispace/fan-808012@1}
         - {id: fan-3, at: [261.89, 3.05], size: {w: 81.0, h: 81.5}, accepts: [ufispace/fan-808012@1], group: fans, rel-pos: 3, default: ufispace/fan-808012@1}
-        - {id: psu-0, at: [369.35, 2.27], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-202-ac@1, ufispace/psu-202-dc@1], group: psus, rel-pos: 0, default: ufispace/psu-202-ac@1}
-        - {id: psu-1, at: [369.35, 45.22], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-202-ac@1, ufispace/psu-202-dc@1], group: psus, rel-pos: 1, default: ufispace/psu-202-ac@1}
+        - {id: psu-0, at: [369.35, 2.27], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-202-ac@1, ufispace/psu-202-dc@1, ufispace/psu-202-dc@2], group: psus, rel-pos: 0, default: ufispace/psu-202-ac@1}
+        - {id: psu-1, at: [369.35, 45.22], size: {w: 50.5, h: 40.2}, accepts: [ufispace/psu-202-ac@1, ufispace/psu-202-dc@1, ufispace/psu-202-dc@2], group: psus, rel-pos: 1, default: ufispace/psu-202-ac@1}
       placements:
         - {ref: common/ground-symbol@1, id: ground-mark, at: [359.70, 17.60], group: grounding, rel-pos: 1}
     regions:
@@ -1057,8 +1066,8 @@ configurations:
       -72 V at 60 A; maximum system consumption 1220 W under 400G MSA optics and 1524 W
       with OpenZR+, both below the AC build's figures.
     bays:
-      psu-0: ufispace/psu-202-dc@1
-      psu-1: ufispace/psu-202-dc@1
+      psu-0: ufispace/psu-202-dc@2
+      psu-1: ufispace/psu-202-dc@2
     component-attrs:
       psu-202-dc:
         model: PSU-202-DESR

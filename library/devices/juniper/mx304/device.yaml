@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 4.0.3
+version: 4.1.2
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -173,6 +173,7 @@ chassis:
   depth: 610.0
   ru: 2
   color: '#8b8f94'
+  power: ac
 gaps:
   - what: module-envelope-vs-aperture
     scope: [res, lmics, psus]
@@ -183,6 +184,8 @@ gaps:
       bays and module faces are both drawn at the aperture and the envelopes
       live in each contract's attrs. That reconciliation is a judgement (rails
       hidden behind the panel), not a measurement, and this gap is its record.
+      Re-read when the DC supply was redrawn as version 2 - its face is still drawn
+      at the 66.0 aperture, so the gap still holds.
   - what: front-cover-and-air-filter
     scope: [front]
     reason: needs-photo
@@ -368,10 +371,10 @@ views:
     components:
       bays:
         - {id: psu-0, at: [10.9, 2.4], size: {w: 66.0, h: 40.1},
-           accepts: [juniper/mx304-psu-ac@1, juniper/mx304-psu-dc@1, juniper/mx304-psu-hvacdc@1],
+           accepts: [juniper/mx304-psu-ac@1, juniper/mx304-psu-dc@1, juniper/mx304-psu-dc@2, juniper/mx304-psu-hvacdc@1],
            default: juniper/mx304-psu-ac@1, group: psus, rel-pos: 0}
         - {id: psu-1, at: [10.9, 44.4], size: {w: 66.0, h: 40.1},
-           accepts: [juniper/mx304-psu-ac@1, juniper/mx304-psu-dc@1, juniper/mx304-psu-hvacdc@1],
+           accepts: [juniper/mx304-psu-ac@1, juniper/mx304-psu-dc@1, juniper/mx304-psu-dc@2, juniper/mx304-psu-hvacdc@1],
            default: juniper/mx304-psu-ac@1, group: psus, rel-pos: 1}
         - {id: fan-0, at: [116.4, 1.5], size: {w: 82.0, h: 85.5},
            accepts: [juniper/mx304-fan@1], default: juniper/mx304-fan@1, group: fans, rel-pos: 0}
@@ -476,13 +479,15 @@ configurations:
       re1-lmic2: juniper/mx304-lmic16@1
   dc:
     kind: orderable
+    power: dc
     description: DC-powered chassis - two 2200 W DC PSUs, dual Routing
       Engines.
     bays:
-      psu-0: juniper/mx304-psu-dc@1
-      psu-1: juniper/mx304-psu-dc@1
+      psu-0: juniper/mx304-psu-dc@2
+      psu-1: juniper/mx304-psu-dc@2
   hvac-dc:
     kind: orderable
+    power: [ac, hvdc]
     description: High-voltage AC/DC universal power - two 2200 W HVAC/DC
       PSUs, dual Routing Engines.
     bays:

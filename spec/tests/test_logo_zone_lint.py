@@ -12,6 +12,7 @@ import yaml
 
 from portrayal import libwalk
 from portrayal import lint as L
+import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIBRARY = ROOT / "library"
@@ -163,6 +164,7 @@ def test_real_metal_under_another_name_is_not_guessed_at():
 
 # ---- today's library --------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_library_is_clean_and_the_rule_read_something():
     zones = regions = 0
     with L.collecting() as found:

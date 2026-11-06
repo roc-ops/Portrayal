@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 7280dr3-24
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Arista
 model: 7280DR3-24
@@ -266,15 +266,6 @@ gaps:
     Storage temperature -25 to 70 C (guide Table 2) against -40 to 70 C (data sheet), and relative humidity
     5 to 90 percent against 5 to 95 percent. The guide's, the older document by three months, are in attrs.
   wanted: the maker's statement of which is current.
-- what: config-scoped-device-attrs
-  scope:
-  - front
-  - rear
-  reason: vendor-silent
-  note: >-
-    The 7280DR3K-24 has 64 GB of memory against 8 GB (64 GB optional) for the 7280DR3-24. No configuration
-    can state a device attribute (the same open gap as cisco/asr-9001). The platform line names both.
-  wanted: configuration-scoped device attrs.
 - what: rack-ears
   scope:
   - front
@@ -796,6 +787,11 @@ configurations:
     description: >-
       The 7280DR3K-24, the same hardware with 64 GB of memory and the large-routes licence, with front-to-rear
       air. Ordered as DCS-7280DR3K-24-F.
+    export-description: >-
+      Arista 7280DR3K-24 - the large-routes build of the 7280DR3-24 with 64 GB of memory, a fixed 1RU
+      data-centre switch router with 24 x 400G QSFP-DD ports, running EOS
+    attrs:
+      platform: {memory: 64 GB, storage: 8 GB flash; 120 GB SSD}
     part-numbers:
       DCS-7280DR3K-24-F: {}
   dc-f:
