@@ -1,0 +1,48 @@
+format: 1
+kind: component
+name: usb-b-plug
+version: 1.0.0
+class: port
+mates: usb-b
+profile: networking
+description: >-
+  A moulded straight USB Type-B cable plug, seen from the cable end as a front elevation sees it seated.
+  It shows the overmould, square-shouldered like the receptacle it enters. It seats in a `usb-b` jack at its
+  own mate point, and the cable leaves from the far end.
+size: {w: 12.0, h: 11.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: usb-b, connector: usb-b}
+fields:
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - the USB-B jack of the Raritan PXO is drawn 12.2 by 12.7 mm on the maker's front drawing and
+    its opening 8.4 by 7.4 (raritan/pxo-usb-b@1, which says how those were read); a plug's overmould must be
+    a little smaller than the shell it enters at the shell, so it is drawn 12.0 wide and 11.0 high.
+    No USB specification and no cable maker's drawing is held, so no figure of a plug is. needs-drawing: the
+    USB 2.0 specification's Type-B plug figure, or a cable maker's drawing, to replace both numbers.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/mini-usb-b-plug@1: a depth on a component with no behaviour builds
+    as a pit behind its whole box.
+  jacket-colour: >-
+    a FIELD. Black is the default as for the other generic USB plugs; no document held states a colour.
+  orientation: >-
+    drawn with the shoulders of the overmould at the top, as the jack it enters is drawn; a device that
+    turns its jack turns the plug with it.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE. The contacts are on the mating face, which is inside the jack.
+elements: {}
+relief:
+  features:
+    - node: body
+      out: 20.0
+      shape: true
+      confidence: estimated
+      source: >-
+        no document held gives a Type-B plug's length; 20.0 is the overmould length the Mini-B plug of
+        generic/mini-usb-b-plug@1 takes from the USB 2.0 Mini-B connector ECN, used here as a stand-in
+        and declared an estimate.
+connection-points:
+  mate: {at: [6.0, 5.5], direction: front}
+skins: [default]

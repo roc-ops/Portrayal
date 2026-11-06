@@ -104,7 +104,7 @@ def test_the_connector_registry_is_not_vacuous():
                          "nema-5-15r", "nema-5-20r", "eaton-c39", "servertech-hdot-cx",
                          # the CEE 7/3 earthing-pin socket of the Rittal DK 7979 PDUs
                          "cee-7-3",
-                         "usb-a", "micro-usb-b", "mini-usb-b", "usb-c",
+                         "usb-a", "usb-b", "micro-usb-b", "mini-usb-b", "usb-c",
                          "db9", "hd15", "da15", "db25",
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",

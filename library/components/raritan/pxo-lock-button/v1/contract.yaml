@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: pxo-lock-button
+version: 1.0.0
+class: button
+profile: power
+description: >-
+  The release button beside a locking C13 outlet of the Raritan PXO: a small orange oval stud. The quick setup
+  guide has the user press and hold "the tiny button adjacent to" the outlet and then unplug the cord.
+size: {w: 4.0, h: 10.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  existence: >-
+    datasheet - Raritan PXO data sheet (V1377), page 3, the PXO-2401CR outlet picture shows an orange oval
+    button beside each of its four C13 outlets, and the table lists "4 x C13 (Locking)"; the PXC/PXO quick
+    setup guide (255-80-0059-00), Appendix C, "Disconnecting Devices from 'Locking' Outlets", p.7 figure and
+    step 1. The guide says not every PXC or PXO has locking outlets; the PXO-2401CR's data sheet row says
+    this one does.
+  size: >-
+    ESTIMATED. No document dimensions the button. The data sheet picture is a three-quarter view, so only
+    its proportion can be read: about one part wide to two and a half high, and about a third of the height of
+    the C13 mouth beside it, which is 22.0 mm by the registry. Drawn 4.0 wide and 10.0 high.
+    needs-drawing: a maker's drawing of the outlet face, or a straight-on photograph with a scale.
+  colour: >-
+    photo - the orange of the data sheet picture and of the guide figure, read as #f28c1b.
+elements:
+  cap: {at: [0.4, 0.4], size: [3.2, 9.2], class: button}
+relief:
+  features:
+    - node: cap
+      out: 0.8
+      color: '#f28c1b'
+      confidence: estimated
+      source: >-
+        no document gives how far the button stands; 0.8 mm is a stand-in for a moulded stud, declared an
+        estimate.
+skins: [default]
