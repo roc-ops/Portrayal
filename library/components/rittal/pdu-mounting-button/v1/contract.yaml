@@ -1,0 +1,57 @@
+format: 1
+kind: component
+name: pdu-mounting-button
+version: 1.0.0
+class: mount
+mates: pdu-button
+profile: power
+description: >-
+  The push-button mounting attachment on the back of a Rittal DK 7979 zero-U PDU.
+  A rectangular plate across the back with a round button and screw at its
+  centre, that engages a rack's button slot. Seen here from behind the PDU.
+size: {w: 36.6, h: 25.2}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the plan view of DK 7979.175 in Rittal, "Technical details, Power
+    Distribution Unit, Basic version" (dri2108028en, 08.2023), PDF page 25: the
+    plate reads 36.6 across the strip and 25.2 along it on a 600 dpi render, at
+    the scale the 44 mm strip width and the 933.45 span between the two
+    buttons give, good to about 0.5 mm. Two buttons, 933.45 apart (dimensioned).
+  head: >-
+    estimated - the plan view draws a round button about 11 across and a screw
+    about 4 across inside it; neither is dimensioned.
+  relief: >-
+    drawing, estimated - the side view draws the button below the back by about
+    7.7 on the same scale (the envelope of the end view, 109, is the 72.1 body with
+    the front gland and this button). The plate is built 3.0 of that and the head
+    the other 4.7; the split is not drawn.
+  mates: >-
+    `pdu-button` (spec/schemas/connectors.yaml), the interface a keyhole slot
+    presents. The data sheet names the fixing "push-button attachment" on the cable
+    route and "on the enclosure frame, at the side of the 482.6 mm (19") mounting
+    frame (zero-U space)"; the button's shaft and head diameters are not held, so
+    the fit is stated by mechanism and not checked by dimension.
+elements:
+  head: {at: [12.8, 7.1], size: [11.0, 11.0], class: mount}
+relief:
+  features:
+    - node: plate
+      out: 3.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        DK 7979.175 side view, page 25: the button stands about 7.7 below the back; the
+        plate is taken as 3.0 of it.
+    - node: head
+      cyl: 4.7
+      lift: 3.0
+      color: '#18191b'
+      confidence: estimated
+      source: >-
+        DK 7979.175 side view, page 25: the rest of the 7.7; the head is taken
+        as 4.7 and not dimensioned.
+connection-points:
+  mate: {at: [18.3, 12.6], direction: front}
+skins: [default]

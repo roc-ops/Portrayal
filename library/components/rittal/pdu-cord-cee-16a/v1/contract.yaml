@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: pdu-cord-cee-16a
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the cable gland of a PDU's fixed input cord, whose far end is a 16 A CEE plug that goes into a socket outside this library; no cable lands on the gland, so no mate is offered for it
+description: >-
+  The fixed input cord of a Rittal DK 7979 three-phase PDU with a 16 A CEE
+  (IEC 60309) plug. It is 3 m of H05-VV cord, five wires, leaving the front face
+  through a cable gland near the foot of the strip. Drawn as the gland shows
+  from the front; the cord and plug beyond it are not.
+size: {w: 33.0, h: 33.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {plug: cee-16a-3p-n-pe, cord-length-m: 3, cord-type: H05-VV, cord-wires: 5}
+provenance:
+  size: >-
+    estimated - the front view of DK 7979.175 in Rittal, "Technical details,
+    Power Distribution Unit, Basic version" (dri2108028en, 08.2023), PDF page 25,
+    draws the gland as a hexagon nut with a round bore in the 72.2 mm foot cell;
+    its outer circle reads about 33 and its bore about 26 on a 500 dpi render at
+    the drawing's own scale, good to about 1 mm. Not dimensioned.
+  cord: >-
+    datasheet - Rittal, "Technical details, Power Distribution Unit"
+    (dri1308088en, 08.2023), p.1: "Length of connection cable 3m", "Connection
+    cable type H05-VV", "No. of wires 3/5 (single-phase/3-phase PDU)", cable
+    cross-section 2.5 mm2 for 16 A versions.
+  plug: >-
+    drawing and datasheet - the data sheet gives "Connector, PDU input EN 60 309/CEE
+    or EN 60 320-C20 (depending on product variant)"; the DK 7979.175 circuit
+    diagram draws a CEE 16 A/3P + N + PE plug, "View A", beside the cord. The photograph
+    shows a red plug. The plug face is not a part: a device draws this cord or a
+    plug face, never both, or one input exports as two power ports.
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord is
+    not a part. This part stands for the power input a DCIM records, a power port
+    of type `other` labelled as a 16 A CEE plug.
+elements:
+  gland: {at: [0, 0], size: [33.0, 33.0], class: inlet}
+skins: [default]
