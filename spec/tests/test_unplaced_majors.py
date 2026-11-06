@@ -299,6 +299,10 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # The EX9214 4100 W DC supply redrawn from its guide's figures: the EX9214 seats the @2 in its DC
     # configurations, and its supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
     kept["juniper/ex9214-pwr-mx960-4100-dc"] = [1, 2]
+    # The UfiSpace PSU-302 and PSU-132 CRPS DC supplies redrawn from their guides' figures: the devices that seat them
+    # take the @2 in their DC builds, and their supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
+    kept["ufispace/psu-302-dc"] = [1, 2]
+    kept["ufispace/psu-132-crps-dc"] = [1, 2]
     # The UfiSpace PSU-162 and PSU-202 DC supplies redrawn from their guides' figures: each device's DC builds seat
     # the @2, and its supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
     kept["ufispace/psu-162-dc"] = [1, 2]
