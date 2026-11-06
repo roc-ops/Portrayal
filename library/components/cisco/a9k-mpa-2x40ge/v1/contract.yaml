@@ -167,6 +167,12 @@ provenance:
     compatible with consumption-model MOD400 consumption-model line card.' Cisco adds
     that 'The consumption-model MPAs can only be used only with consumption-model line
     cards', so the A9K-MOD400-CM carrier takes the -CM MPAs and not this one.
+  groups: >-
+    install guide - the Cisco ASR 9000 Series Aggregation Services Router Ethernet Line Card Installation Guide, its Ethernet Line Card and MPA comparison table, which gives
+    the port count and cage of each adapter (QSFP+); the speed is the one the adapter's own
+    name and the guide's title for it print ('40GE Modular Port Adapter'). ROLE: `traffic`, the work the adapter is
+    bought for. Port numbering: the guide numbers a card's ports 0, 1, 2 and so on, which is
+    `index-origin: 0`.
 elements:
   led-p0:
     at: [21.48, 11.23]
@@ -234,7 +240,13 @@ relief:
 body:
   depth: 170.18
   color: '#b9bec4'
+groups:
+  qsfp-40g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp, speed: 40g}
 parts:
-  - {ref: std/qsfp28@1, id: p0, at: [10.64, 25.79], rotate: 90}
-  - {ref: std/qsfp28@1, id: p1, at: [10.64, 93.16], rotate: 90}
+  - {ref: std/qsfp28@1, id: p0, group: qsfp-40g, at: [10.64, 25.79], rotate: 90}
+  - {ref: std/qsfp28@1, id: p1, group: qsfp-40g, at: [10.64, 93.16], rotate: 90}
 skins: [default]

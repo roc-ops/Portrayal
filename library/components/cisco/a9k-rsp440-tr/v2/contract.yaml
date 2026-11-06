@@ -174,6 +174,24 @@ provenance:
     has artwork in the stencil and neither is modelled.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake.
+  groups: >-
+    install guide - the Cisco ASR 9000 Series Aggregation Services Router Overview and Reference Guide, each card's 'Front Panel and Access Ports' list and the
+    'RSP and RP Front Panel Connectors' text. ROLE: the schema offers six words and `management`
+    (how the box is reached and disciplined: out-of-band, console, craft, timing) is the nearest
+    to every jack in mgmt, timing and alarm; no document names a role for them. MGMT: the
+    management Ethernet ports are 'dual-speed 100/1000 Mbit' in the card's list and 'triple-speed
+    RJ-45' in the connector text; the two give the same top rate, 1 Gbit, which is the speed stated,
+    and neither rate set is claimed. Console and auxiliary are EIA/TIA-232 RJ-45 serial ports, so
+    they take `rj45-serial`. TIMING: the SYNC ports 'can be configured as BITS or J.211' on
+    RJ-45, which the library names `rj48`; the 1588 timestamp, GPS time-of-day and inter-chassis
+    sync jacks are RJ-45 time and frequency interfaces named `rj45-tod`; no rate is printed
+    for any of them and none is stated.
+    SFP+: the guide lists these as '10-GE Small Form-Factor Pluggable (SFP/SFP+) virtualization
+    cluster ports', so the role is `fabric` (the chassis interconnect of a clustered system) and
+    the group states `sfp-plus` and 10 Gbit, which the same text prints. The RSP-880 is called
+    'virtualization cluster' in its list and 'external server connectivity' in the SFP/SFP+ Port
+    section; both sentences are recorded here and the cluster reading, which the RSP-440 and
+    RSP4-S entries also give, is the one carried.
 elements:
   fail:
     at: [11.46, 325.34]
@@ -341,22 +359,45 @@ relief:
       source: >-
         casa/pem@1 hs-button - 'NO PRECEDENT - a panel pushbutton. Invented here'. Reused
         rather than re-invented so the library carries ONE pushbutton number
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the route processor management cluster - the management Ethernet ports, the console and
+      auxiliary serial ports and the USB port. One job, several media
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the timing and synchronisation block - the SYNC (BITS), IEEE 1588, inter-chassis
+      sync and time-of-day jacks on RJ-45 beside the 10 MHz and 1 PPS SMB inputs. One job
+      (clock), several media
+  alarm:
+    term: Port
+    role: management
+    index-origin: 0
+  sfp-plus-fabric:
+    term: Port
+    role: fabric
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
 parts:
-  - {ref: std/rj45-ganged@2, id: sync-0, at: [7.37, 43.52], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: sync-1, at: [7.37, 61.57], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: ieee-1588, at: [7.37, 103.48], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: ics-0, at: [7.37, 121.86], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: ics-1-tod, at: [7.37, 140.24], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [7.37, 227.09], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [7.37, 246.28], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: console, at: [7.37, 265.76], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: aux, at: [7.37, 284.94], rotate: 90}
-  - {ref: std/smb@1, id: gps-10mhz, at: [9.65, 161.75]}
-  - {ref: std/smb@1, id: gps-1pps, at: [9.65, 171.26]}
-  - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [19.17, 82.68], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [8.04, 82.68], rotate: 270}
-  - {ref: std/usb-a@1, id: usb, at: [10.39, 215.86], rotate: 90}
-  - {ref: common/db9-receptacle@1, id: alarm-out, at: [-0.15, 189.63], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-0, group: timing, at: [7.37, 43.52], rotate: 90, attrs: {media: rj48}}
+  - {ref: std/rj45-ganged@2, id: sync-1, group: timing, at: [7.37, 61.57], rotate: 90, attrs: {media: rj48}}
+  - {ref: std/rj45-ganged@2, id: ieee-1588, group: timing, at: [7.37, 103.48], rotate: 90, attrs: {media: rj45-tod}}
+  - {ref: std/rj45-ganged@2, id: ics-0, group: timing, at: [7.37, 121.86], rotate: 90, attrs: {media: rj45-tod}}
+  - {ref: std/rj45-ganged@2, id: ics-1-tod, group: timing, at: [7.37, 140.24], rotate: 90, attrs: {media: rj45-tod}}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, group: mgmt, at: [7.37, 227.09], rotate: 90, attrs: {speed: 1g, media: rj45}}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, group: mgmt, at: [7.37, 246.28], rotate: 90, attrs: {speed: 1g, media: rj45}}
+  - {ref: std/rj45-ganged@2, id: console, group: mgmt, at: [7.37, 265.76], rotate: 90, attrs: {media: rj45-serial}}
+  - {ref: std/rj45-ganged@2, id: aux, group: mgmt, at: [7.37, 284.94], rotate: 90, attrs: {media: rj45-serial}}
+  - {ref: std/smb@1, id: gps-10mhz, group: timing, at: [9.65, 161.75]}
+  - {ref: std/smb@1, id: gps-1pps, group: timing, at: [9.65, 171.26]}
+  - {ref: std/sfp-ganged@1, id: sfp-plus-0, group: sfp-plus-fabric, at: [19.17, 82.68], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-plus-1, group: sfp-plus-fabric, at: [8.04, 82.68], rotate: 270}
+  - {ref: std/usb-a@1, id: usb, group: mgmt, at: [10.39, 215.86], rotate: 90}
+  - {ref: common/db9-receptacle@1, id: alarm-out, group: alarm, at: [-0.15, 189.63], rotate: 90}
 body:
   depth: 674.0
   color: '#b9bec4'
