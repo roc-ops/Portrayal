@@ -260,7 +260,7 @@ export function frameNotices(rack, chassisOf) {
       out.push(`${z.label || z.ref} names the channel ${z.channel}, which is not known for this frame, so it stands at ${z.at}.`);
   for (const it of rack.items)
     if (isQuarter(it) && chassisOf(it.ref))
-      out.push(`${it.label} is rolled a quarter turn: it is fitted by its rolled box and drawn and routed as an outline, since how it mounts that way is not described yet.`);
+      out.push(`${it.label} is rolled a quarter turn: it is fitted by its rolled box and drawn turned in the elevation; its 3D solid and its cables are an outline, since how it mounts that way is not described yet.`);
   for (const it of rack.items) {
     const id = holderOf(it);
     if (id == null) continue;

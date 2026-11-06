@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: rfu-16x8
-version: 1.6.1
+version: 1.7.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -137,6 +137,12 @@ provenance:
     estimate written eleven times, not eleven readings that agreed. NOTE this card has
     NO LAMPS, so the family''s dome figure is deliberately not cited here - citing a
     source for a number a file does not carry is how an inert wrong claim gets started.'
+  groups: >-
+    Casa Systems C100G Hardware Installation Guide (rev 07/08/2022), the specifications
+    table (PDF page 171) gives 16 ports per module, F-type, for the RF upstream I/O
+    module, and Figure 1-12 (PDF page 46) numbers the US IO ports from 0. No page names
+    a role; the role follows the job, upstream RF from the HFC network, so it is
+    traffic. The coax ports state no speed.
 relief:
   wall: '#4a4f55'
   features:
@@ -147,23 +153,29 @@ relief:
     # The ejector latch strip.
     - {node: latch-t, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
     - {node: latch-b, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
+groups:
+  upstream:
+    term: Port
+    role: traffic
+    index-origin: 0
+    description: sixteen upstream RF ports with F-type connectors, numbered 0 to 15
 parts:
-  - {ref: std/f-type@1, id: p0, at: [12.39, 49.04]}
-  - {ref: std/f-type@1, id: p1, at: [12.39, 65.81]}
-  - {ref: std/f-type@1, id: p2, at: [12.39, 82.58]}
-  - {ref: std/f-type@1, id: p3, at: [12.39, 99.35]}
-  - {ref: std/f-type@1, id: p4, at: [12.39, 116.12]}
-  - {ref: std/f-type@1, id: p5, at: [12.39, 132.89]}
-  - {ref: std/f-type@1, id: p6, at: [12.39, 149.66]}
-  - {ref: std/f-type@1, id: p7, at: [12.39, 166.43]}
-  - {ref: std/f-type@1, id: p8, at: [12.39, 183.2]}
-  - {ref: std/f-type@1, id: p9, at: [12.39, 199.97]}
-  - {ref: std/f-type@1, id: p10, at: [12.39, 216.74]}
-  - {ref: std/f-type@1, id: p11, at: [12.39, 233.51]}
-  - {ref: std/f-type@1, id: p12, at: [12.39, 250.28]}
-  - {ref: std/f-type@1, id: p13, at: [12.39, 267.05]}
-  - {ref: std/f-type@1, id: p14, at: [12.39, 283.82]}
-  - {ref: std/f-type@1, id: p15, at: [12.39, 300.59]}
+  - {ref: std/f-type@1, id: p0, group: upstream, at: [12.39, 49.04]}
+  - {ref: std/f-type@1, id: p1, group: upstream, at: [12.39, 65.81]}
+  - {ref: std/f-type@1, id: p2, group: upstream, at: [12.39, 82.58]}
+  - {ref: std/f-type@1, id: p3, group: upstream, at: [12.39, 99.35]}
+  - {ref: std/f-type@1, id: p4, group: upstream, at: [12.39, 116.12]}
+  - {ref: std/f-type@1, id: p5, group: upstream, at: [12.39, 132.89]}
+  - {ref: std/f-type@1, id: p6, group: upstream, at: [12.39, 149.66]}
+  - {ref: std/f-type@1, id: p7, group: upstream, at: [12.39, 166.43]}
+  - {ref: std/f-type@1, id: p8, group: upstream, at: [12.39, 183.2]}
+  - {ref: std/f-type@1, id: p9, group: upstream, at: [12.39, 199.97]}
+  - {ref: std/f-type@1, id: p10, group: upstream, at: [12.39, 216.74]}
+  - {ref: std/f-type@1, id: p11, group: upstream, at: [12.39, 233.51]}
+  - {ref: std/f-type@1, id: p12, group: upstream, at: [12.39, 250.28]}
+  - {ref: std/f-type@1, id: p13, group: upstream, at: [12.39, 267.05]}
+  - {ref: std/f-type@1, id: p14, group: upstream, at: [12.39, 283.82]}
+  - {ref: std/f-type@1, id: p15, group: upstream, at: [12.39, 300.59]}
 connection-points:
   mate: {at: [15.23, 172.75], direction: rear}
 skins: [default]

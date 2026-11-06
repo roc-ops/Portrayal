@@ -41,8 +41,9 @@ _LOADER = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
 MANUFACTURERS_FILE = "00-manufacturers.yml"
 GRAMS = {"kg": 1000, "g": 1, "lb": 453.59237, "oz": 28.349523125}
 # Ports a device type has that Infrahub holds no node for on a type (note, 3.5).
-UNHELD_PORTS = (("console-ports", "console port"), ("power-ports", "power port"),
-                ("power-outlets", "power outlet"))
+UNHELD_PORTS = (("console-ports", "console port"),
+                ("console-server-ports", "console server port"),
+                ("power-ports", "power port"), ("power-outlets", "power outlet"))
 
 OVERLAY = """\
 # Portrayal overlay, loaded after the library files. Unverified: whether an

@@ -150,7 +150,7 @@ def _usb_receptacle_interfaces():
 def test_the_usb_receptacle_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
-    assert _usb_receptacle_interfaces() == {"usb-a", "micro-usb-b", "mini-usb-b", "usb-c"}
+    assert _usb_receptacle_interfaces() == {"usb-a", "usb-b", "micro-usb-b", "mini-usb-b", "usb-c"}
 
 
 def _dsub_connector_interfaces():
@@ -403,6 +403,13 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # what each IS - an insert that closes the opening or carries a copper
         # jack - and their census is spec/tests/test_keystone_inserts.py.
         if "keystone" in ms:
+            continue
+        # NOR IS THE SCTE-91 PORT PLUG. generic/scte-91-port-plug@1 mates
+        # `scte-91`, the threaded external port of the Entra edge nodes, which the
+        # registry holds so the port is a slot. Left out by what it IS - a hex
+        # sealing plug for an RF or fibre port, not a fibre plug - and its census
+        # is spec/tests/test_scte_91_registry.py.
+        if "scte-91" in ms:
             continue
         if any(m in connectors for m in ms) and c.get("class") != "cap":
             ns = f.parents[2].name
