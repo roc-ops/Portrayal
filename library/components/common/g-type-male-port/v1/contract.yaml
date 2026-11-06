@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: g-type-male-port
+version: 1.0.0
+class: port
+profile: networking
+interface: g-type
+description: >-
+  A G-type male coaxial test connector on a panel, the -20 dB RF test point
+  that CommScope's CH3000 receiver data sheets print as "G-type male
+  connector (at front panel, -20 dB)". Seen from the face: a round socket
+  with a centre pin. No data sheet held gives the connector's dimensions or a
+  standard for it. The size is an estimate and the shape is a plain pin in a
+  collar.
+size: {w: 7.0, h: 7.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: coax-g}
+provenance:
+  size: >-
+    estimated - no document held dimensions a G-type connector. 7.0 is a
+    stand-in a little under half of the 15.8 across that the AR3002E face
+    drawing gives the whole knurled test-point body; it marks where a cable
+    end lands and is not a reading of the connector.
+  connector: >-
+    datasheet - CommScope (ARRIS) CH3000 AR3002E Analog Forward Receiver data
+    sheet, 87-11046 Rev F, Specifications, "RF Output Test Points": G-type
+    male connector, at the front panel, -20 dB. The AR3044H and AR3044L data
+    sheets print the same words. The sheets say nothing of the connector's
+    impedance, thread or maker.
+  pin: >-
+    estimated - a centre pin is drawn because the word "male" in the data
+    sheets means a pin on the panel; its length and width are not given.
+elements:
+  opening: {at: [0.0, 0.0], size: [7.0, 7.0], class: mechanical}
+connection-points:
+  mate: {at: [3.5, 3.5], direction: front}
+skins: [default]
