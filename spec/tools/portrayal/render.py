@@ -4813,7 +4813,7 @@ def published_ears(ears):
     added the object beside it; a reader that had to branch on the type to ask
     one question would branch on it for ever, so the string is published as
     `{behind: true}` and the object as the keys it states - `behind`, `h`, `y`,
-    `color`, `positions` - and no more. Lengths are floats, as `overhang`'s are; a
+    `none`, `color`, `positions`, `rolled` - and no more. Lengths are floats, as `overhang`'s are; a
     position keeps every key it writes (`name`, `label`, `at`, `default`,
     `racks`, `part`)."""
     if isinstance(ears, str):
@@ -4821,6 +4821,8 @@ def published_ears(ears):
     out = {}
     if "behind" in ears:
         out["behind"] = ears["behind"] is True
+    if "none" in ears:
+        out["none"] = ears["none"] is True
     for key in ("h", "y"):
         if ears.get(key) is not None:
             out[key] = float(ears[key])
@@ -4833,6 +4835,11 @@ def published_ears(ears):
             if pos.get("at") is not None:
                 pos["at"] = float(pos["at"])
             out["positions"].append(pos)
+    if ears.get("rolled"):
+        # THE BRACKETS A DEVICE STOOD ON ITS SIDE IS HELD BY: each keeps the keys it
+        # writes, its lengths as floats like `overhang`'s
+        out["rolled"] = [{k: (float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else v)
+                          for k, v in (b or {}).items()} for b in ears["rolled"]]
     return out
 
 
@@ -6356,6 +6363,13 @@ def main():
                               # states nothing (config_power). Read this rather
                               # than `ac`/`dc` out of the name.
                               "power": config_power(device, c),
+                              # WHAT THIS BUILD STATES DIFFERENTLY FROM THE
+                              # DEVICE - its own `attrs` keys only, always an
+                              # object, `{}` where it has none. The device's
+                              # `attrs` above are the rest. The drawing does not
+                              # read it: a face is shared by every configuration
+                              # that draws it, so its `data-*` stay the device's.
+                              "attrs": c.get("attrs") or {},
                               "part-numbers": c.get("part-numbers") or {},
                               "bays": c.get("bays") or {},
                               # WHAT THIS CONFIGURATION SEATS IN ITS CAGES,

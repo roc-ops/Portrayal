@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: slc-lcd
+version: 1.0.0
+class: display
+profile: networking
+description: >-
+  The front-panel LCD of the Lantronix SLC 8000 is a dark blue display with light text. It is set
+  into the silver front plate, to the left of the keypad. It shows the model name, the host name
+  and the clock, and the network settings that a person edits with the keypad.
+size: {w: 88.4, h: 20.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  identity: >-
+    SLC 8000 Quick Start Guide, "Configuring Network (IP) Settings": the front panel display and
+    keypad set the network parameters. SLC 8000 Advanced Console Manager User Guide, Chapter 2:
+    "LCD display and keypad".
+  size: >-
+    estimated - read off the front photograph in the User Guide, Figure 2-1, whose body edge to
+    edge is 580 px for 438.15 mm and whose face is 60 px for 44.45 mm (1.32 px/mm across and
+    1.35 down, a 2% difference). The glass reads 117 px by 27 px, 88.4 by 20.0 mm. The figure is
+    a small, slightly raised photograph, and no document gives a size for the display.
+  screen: >-
+    The element is `class: screen`, not `display`, because no document states how many
+    characters the display shows, and a character display must state a count. The photograph
+    shows two lines of text. What the display shows is software.
+elements:
+  screen:
+    at: [0.0, 0.0]
+    size: [88.4, 20.0]
+    class: screen
+    description: >-
+      the LCD glass; it shows the model name and clock, and the network settings that the keypad edits
+relief:
+  features:
+  - node: screen
+    pocket: 0.5
+    confidence: estimated
+    source: the photograph shows the glass in a flat bezel; no document states how far it is set back
+skins: [default]

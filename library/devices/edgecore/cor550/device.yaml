@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor550
-version: 4.0.1
+version: 4.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS7926-40XKFB
@@ -16,6 +16,16 @@ description: >-
   front-to-back only.
 profile: networking
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed logotype,
+      red at both ends, over the model text at the lower left. Measured on the front picture on page 2
+      of Edgecore's COR550 data sheet (1000 x 195 px), calibrated on the body outline at 2.268 px/mm across
+      and 2.230 down, which agree to 1.7 percent: the mark runs x 4.6 to 35.5 and y 77.9 to 83.3. The
+      picture is square-on, so the sureness is sure and the position is good to about 1 mm. The grey strips
+      over the cages are real foam filters, not the logo. The `logo-zone` region on the front view reserves
+      the place; nothing is drawn in it.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -1097,6 +1107,10 @@ views:
         rel-pos: 12
         attrs: {media: rj45, role: mgmt, speed: 1g}
     regions:
+    - id: logo-zone
+      at: [4.6, 77.9]
+      size: {w: 30.9, h: 5.4}
+      label: Vendor logo; not drawn
     - id: mgmt-cluster
       at: [374.0, 2.0]
       size: {w: 64.0, h: 84.0}

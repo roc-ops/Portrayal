@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais2002
-version: 2.1.0
+version: 2.1.2
 maturity: modelled
 manufacturer: AurCore
 model: AIS2002
@@ -65,6 +65,9 @@ provenance:
       port numbers, odd on the left; the SFP numbers on their gold strips; the summary line '8 x
       GE | 2 x GE SFP' up the left. The AURCORE wordmark is printed as text: its A is drawn as a
       chevron mark, which is not reproduced (no logo marks).
+      The printed logotype's place on the front is reserved as a logo-zone region. It was measured on the
+      square-on AIS2002 product image 1, scaled on the face's own width and height (sure, about 0.5 mm).
+      The mark is not drawn. The plain text AURCORE the library draws stays.
   top-layout:
     confidence: estimated
     note: >-
@@ -305,6 +308,8 @@ views:
       - {ref: common/rj45-ganged-link@1, id: port-8, at: [37.27, 71.96], rotate: 270, skin: lamp-right, group: gbe, rel-pos: 8, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}]}}
       - {ref: std/sfp@1, id: port-9, at: [22.85, 89.85], rotate: 270, group: sfp, rel-pos: 9}
       - {ref: std/sfp@1, id: port-10, at: [37.95, 89.85], rotate: 90, group: sfp, rel-pos: 10}
+    regions:
+    - {id: logo-zone, at: [51.9, 3.0], size: {w: 2.8, h: 16.6}, label: 'Vendor logo; not drawn'}
   rear:
     size: {w: 72.1, h: 110.0}
     components:

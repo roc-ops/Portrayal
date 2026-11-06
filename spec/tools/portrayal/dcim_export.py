@@ -63,7 +63,7 @@ import yaml
 
 from portrayal.artifacts import Dist, face_file
 
-from portrayal.manifest import view_parts, alias_names, config_airflow
+from portrayal.manifest import view_parts, alias_names, config_airflow, config_attrs
 from portrayal import manifest as _manifest
 from portrayal import optical_ports
 from portrayal.faces import POWER_FACES
@@ -696,6 +696,7 @@ PART_POWER = {
     "edgecore/dcs201-dc-header": "other",
     "edgecore/amx-3200-dc-header": "other",
     "edgecore/agr560-dc-header": "other",
+    "edgecore/ais800-64-dc-header": "other",
     # THE DCP-2-PSU-DC-FB'S DC POWER CONNECTOR IS A THREE-CELL PLUGGABLE CONNECTOR THE MANUAL DOES NOT NAME THE PART OF.
     # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
     "smartoptics/dcp-2-dc-header": "other",
@@ -751,6 +752,10 @@ PART_POWER = {
     "std/pcie-8pin-header": "other",
     "std/12vhpwr-header": "other",
     "std/12v-2x6-header": "other",
+    # A RITTAL DK 7979 PDU'S FIXED CORD ends in a 16 A CEE (IEC 60309) plug. No upstream
+    # type for it has been read from a held source, so it is `other` and POWER_LABEL
+    # says which connector.
+    "rittal/pdu-cord-cee-16a": "other",
 }
 # THE CONNECTOR A `other` POWER PORT IS, for a reader who would otherwise see
 # "Other". Only the parts above that have no upstream type are listed; a test
@@ -772,9 +777,11 @@ POWER_LABEL = {
     "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
     "edgecore/amx-3200-dc-header": "DC power connector (3-pin)",
     "edgecore/agr560-dc-header": "DC power connector (2-socket)",
+    "edgecore/ais800-64-dc-header": "DC power connector (6-socket)",
     "smartoptics/dcp-2-dc-header": "DC power connector (3-cell)",
     "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
+    "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
 }
 
 
@@ -811,8 +818,11 @@ def power_row(ref, pid):
 # PowerOutletTypeChoices values in both: netbox-community/netbox
 # netbox/dcim/choices.py at 64ce9e2d (TYPE_IEC_C19, TYPE_NEMA_520R) and
 # nautobot/nautobot nautobot/dcim/choices.py at 3edb1fca (the same two).
+#
+# AND THE NEMA 5-15R. `nema-5-15r` is the PowerOutletTypeChoices value of the
+# 5-15R in both, beside `nema-5-20r` in the same list.
 OUTLET_TYPES = frozenset({"dc-terminal", "other", "iec-60320-c13", "eaton-c39",
-                          "iec-60320-c19", "nema-5-20r"})
+                          "iec-60320-c19", "nema-5-15r", "nema-5-20r"})
 PART_OUTLET = {
     # ONE OUTPUT CIRCUIT OF A BREAKER PANEL, a BATT screw over an RTN screw: the
     # two poles of one circuit, so one outlet, as one feed is one power port.
@@ -829,15 +839,24 @@ PART_OUTLET = {
     # name it, so it is `eaton-c39` rather than `other`.
     "std/c13-outlet": "iec-60320-c13",
     "eaton/c39-outlet": "eaton-c39",
+    # A SERVER TECHNOLOGY HDOT Cx OUTLET, a hybrid of the C13 and C19 that takes a C14 or a
+    # C20. Neither target names it, so it is `other` with its label, as the P40 above is.
+    "servertech/hdot-cx-outlet": "other",
     # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
     # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
     "std/c19-outlet": "iec-60320-c19",
     "std/nema-5-20r": "nema-5-20r",
+    # A NEMA 5-15R, upstream's `nema-5-15r`.
+    "std/nema-5-15r": "nema-5-15r",
+    # A RITTAL PDU'S CEE 7/3 EARTHING-PIN SOCKET. No upstream outlet type for it has been
+    # read from a held source, so it is `other` with the connector as its label.
+    "rittal/cee-7-3-outlet": "other",
 }
 # The label an `other` outlet carries, so it says what to plug into it.
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
 # run on import, which test_tools_layout forbids).
-OUTLET_LABEL = {"amphenol-ns/output-p40": "P40"}
+OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
+                "rittal/cee-7-3-outlet": "CEE 7/3"}
 
 # ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
 #
@@ -1075,6 +1094,9 @@ NOT_A_DCIM_PORT = {
     # path (device_console_row), and iDRAC Direct moved to MGMT_NOT_A_DCIM_PORT.
     "common/usb-a": "USB storage/maintenance port; not a console - std/usb-a's console placements type via device_console_row",
     "common/usb-a-bezel": "the same USB storage/maintenance port as common/usb-a, in a taller panel bezel; split out of that name's @3 in #264 and it needs its own entry because this register keys on the NAME, not the major",
+    "raritan/pxo-usb-b": "the USB-B jack of the Raritan PXO controller: a device-side port for a phone or tablet, a computer "
+                         "link (command line, recovery) and cascading - no document names it a console, and a DCIM device type "
+                         "has no field for a USB data port",
     # `std/usb-c` WAS HERE, as the GL-8xEP's USB-C power input. It was stale: the
     # DS6000, DS6001 and AS7326-56X have exported a USB-C console all along, and
     # test_silent_drops' mirror of `build` did not know the console exit, so it
@@ -1177,6 +1199,9 @@ NOT_A_DCIM_PORT = {
     # reading the labels Dell's own master prints between the jacks, and the four
     # placements now declare their speed. The entry had to go with it - a register
     # of parts that export nothing is wrong about one that does.
+    "opengear/sim-slot-4ff": "the 4FF SIM card slot of the CM8000's cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
+    "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
+    "vertiv/sd-card-slot": "the full-size SD card slot of the ACS8000; a card slot, not a port, and no device-type field holds a card slot",
 }
 
 # THE MANAGEMENT CLUSTER'S PORTS THAT DO NOT REACH A DCIM, AND WHY (#384).
@@ -1229,6 +1254,8 @@ MGMT_NOT_A_DCIM_PORT = {
     ("std/rj45-ganged", "timing"): "the CSR180's stack-a-upper, which its own device marks "
                                    "`timing: unidentified` - there is no true type to give a jack "
                                    "nobody has identified",
+    ("std/rj45-ganged", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
+    ("common/rj45-ganged-lamped", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
 }
 MGMT_EXPORTED_ROLES = {"mgmt", "console", "aux"}
 
@@ -1684,6 +1711,23 @@ def device_console_row(p, a):
     return None
 
 
+# A CONSOLE SERVER'S SERIAL LINES are console SERVER ports, the other end of a
+# console port: the RJ45 jacks a terminal cable plugs into so that the box can
+# reach the serial consoles of other equipment. Only a placement that says
+# `role: console-server` is one - an `rj45-serial` jack is also a PDU's LX
+# interface and a routing engine's serial jack, which are consoles or something
+# else, never console servers. NetBox ConsoleServerPortTypeChoices at 64ce9e2d
+# (`rj-45`) and Nautobot ConsoleServerPortTypeChoices at 3edb1fca (`rj-45`), the
+# same files and the same commits as the console-port type above.
+def device_console_server_row(p, a):
+    """The console-server-port row `build` lists a device placement under, or
+    None. Named by the placement's id, which is the printed label, and typed
+    `rj-45`; `media: rj45-serial` is required so that the type is true."""
+    if a.get("role") == "console-server" and a.get("media") == "rj45-serial":
+        return {"name": p["id"], "type": "rj-45"}
+    return None
+
+
 def device_port_type(p, a, group_role, names=None):
     """What `build` exports a device placement as when it is a switch port:
     (type, label, None), or (None, None, why) when it is not one.
@@ -1697,6 +1741,8 @@ def device_port_type(p, a, group_role, names=None):
         return None, None, "a timing or RF input"
     if names is None and a.get("role") == "console":
         return None, None, "a console port"
+    if names is None and device_console_server_row(p, a):
+        return None, None, "a console server port"
     if names is None and group_role not in PORT_ROLES:
         return None, None, f"in a group whose role is {group_role!r}, not a port role"
     if names is None and a.get("role") == "mgmt" and a.get("speed") == "10g":
@@ -1795,7 +1841,7 @@ def comments_for(dev, cfg_name, cfg):
         lines.append("")
 
     facts = []
-    for section, vals in (dev.get("attrs") or {}).items():
+    for section, vals in config_attrs(dev, cfg).items():
         flat = flatten(vals)
         for k, v in flat.items():
             if isinstance(v, bool):
@@ -2040,8 +2086,8 @@ def worth_a_file(doc, dev):
     DCIM cables to. Outlets and not power ports, because a box whose only
     resolved row is its own inlet is still the failure described above.
     """
-    if any(k in doc for k in ("console-ports", "interfaces", "module-bays",
-                              "power-outlets")):
+    if any(k in doc for k in ("console-ports", "console-server-ports", "interfaces",
+                              "module-bays", "power-outlets")):
         return True
     return (dev or {}).get("profile") == "passive"
 
@@ -2122,7 +2168,11 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     if air:
         out["airflow"] = air
 
-    if dev.get("description"):
+    # A BUILD THAT SHOULD NOT READ AS THE BASE MODEL says so in its own
+    # `export-description`; any other build keeps the device's first sentence.
+    if cfg.get("export-description"):
+        out["description"] = fit(cfg["export-description"])
+    elif dev.get("description"):
         out["description"] = fit(first_sentence(dev["description"]))
 
     # Images, if this configuration has been rendered. front_image/rear_image are
@@ -2160,6 +2210,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     own = listing_names(dev) if names is None and dev.get("interfaces") else {}
 
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
+    console_server = []
     outlets = {}
     for view in views_for(dev, cfg_name):
         parts = view_parts(view)
@@ -2212,6 +2263,11 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
                 if trace is not None:
                     trace.add(p["id"])
             con = device_console_row(p, a)
+            csp = device_console_server_row(p, a)
+            if csp:
+                console_server.append(csp)
+                if trace is not None:
+                    trace.add(p["id"])
             if con:
                 console.append({**con, "_id": p["id"]})
                 if trace is not None:
@@ -2322,6 +2378,8 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
         for c in console:
             c.pop("_id", None)
         out["console-ports"] = console
+    if console_server:
+        out["console-server-ports"] = console_server
     if ifaces:
         out["interfaces"] = ifaces
     # A CHASSIS INLET AND A SUPPLY'S INLET ARE NOT THE SAME PORT, and the

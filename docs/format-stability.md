@@ -481,12 +481,16 @@ object.
 chassis:
   ears:
     behind: true            # optional; the same statement as the bare string
+    none: true              # optional; a part with no ears at all
     h: 43.5                 # optional; mm the ears span, when not the chassis height
     y: 0.15                 # optional; mm from the bottom of the chassis to the ears
     color: "#1b1e21"        # optional; the ears' colour, when they are not silver
     positions:
       - {name: flush, at: 0, default: true}
       - {name: mid, at: 228, racks: [2-post], part: {kit: acme/slide@1, part: mid}}
+    rolled:                 # optional; the brackets that hold it rolled a quarter turn
+      - {id: below, side: below, bar-h: 25.4, length: 486.41, ear-h: 92.44, ear-w: 28.0,
+         color: "#c8cacc"}  # `color` optional
   kits:
     - {ref: acme/slide@1, supply: in-box,
        depth: {config: four-post, range: {square: [685, 868]}}}
@@ -499,6 +503,26 @@ chassis:
   when a source gives it. At most one position is `default` (L160). `racks`
   takes the words a kit configuration's `racks` takes. `part` names a kit the
   device lists and the `id` of one of that kit's parts (L162).
+- `rolled` is **one-way** (a new optional key, added with the drawing of a
+  quarter turn in the rack elevation). Each entry is a bracket that holds the
+  device when a rack file rolls it `90` or `270`: `side` (`below` or `above`)
+  says which edge of the turned body its bar lies against, `bar-h` is the bar's
+  height, `length` its span from the outer edge of one ear to the other (at
+  least the distance between the rail hole columns, 465.1 mm, to reach both
+  posts), `ear-h` the height of each ear standing on the bar's lower edge,
+  `ear-w` how far an ear stands in from the end, and `color` its fill. All
+  lengths are millimetres. Only the rack elevation reads it; an older reader
+  ignores the key and draws a quarter turn as before. The brackets are the
+  rack's: they are drawn alike at 90 and at 270 and a device that states none
+  draws none.
+- `none` is **one-way** (a new optional boolean, added beside `rolled`). `none: true`
+  says the part has no ears: it is not bolted to the posts and carries no flange,
+  because it stands between them on another part's brackets, as the tray and the
+  top baffle of a vertical shelf mount kit do. The rack elevation and the 3D
+  scene then draw no generic ear for it, and the elevation draws no screw heads at
+  the rails. Absent or `false`, the device draws as before. Unlike `behind`, it
+  does not say the face is as wide as the rack. An older reader ignores the key
+  and draws the generic ear as before.
 - A kit entry's `ref` is a `kind: kit` (L161), listed once. `supply` is
   `in-box` or `optional`, and `variant: reversed` marks a reverse-mount kit.
   `depth` replaces the `depth` of one configuration of the kit for this device:
@@ -578,8 +602,9 @@ states neither (#907):
 
 - **`ears` is an object, always.** The bare string `ears: behind` is
   published as `{"behind": true}`; an object is published with the keys it
-  states (`behind`, `h`, `y`, `color`, `positions`) and no others, so a reader
-  asks `ears.behind === true` and reads `ears.positions || []`. `color` is the
+  states (`behind`, `none`, `h`, `y`, `color`, `positions`, `rolled`) and no others, so a reader
+  asks `ears.behind === true` and reads `ears.positions || []`. `rolled` is the
+  list the manifest writes, its lengths floats. `color` is the
   string the manifest writes, and absent means silver. `h`, `y` and each
   position's `at` are floats. A position keeps every key the manifest writes.
   From #865 to #907 the bare string was published as the string, on main
@@ -940,6 +965,33 @@ they are part of the format too:
 not know it still finds every field it read before. It says what the
 configuration is, not that a unit's art was checked: a build that draws like
 its default carries the default's art, with the gap its device declares.
+
+### What a configuration can state of its own
+
+A configuration takes two optional keys beside `power`:
+
+- `attrs`: the device's own sections and types (`attrs` at the top of the
+  manifest), holding only what this build states differently. A key it names
+  wins; the rest of its section, and every section it does not name, stays the
+  device's; it cannot remove a key the device states. `manifest.config_attrs`
+  is the one answer, and the DCIM export's list of facts in `comments` reads it.
+- `export-description`: a string of at most 200 characters, the description a
+  DCIM shows for that build's device type in place of the first sentence of the
+  device's. 200 is the exporter's own limit, so it is never cut.
+
+Neither is legal on a configuration whose `kind` is `example`, which never
+exports. A manifest without them is valid as it was, resolves to the device's
+`attrs` and exports the description it always did, so adding the keys to the
+format moves no existing export. They are new optional keys, so `format` is not
+raised.
+
+`configs[].attrs` in `<device>.configs.json` publishes a configuration's own
+keys, always an object and `{}` where it has none. The device's `attrs` stay at
+the top of the file for the rest. The drawing does not read it: a face is shared
+by every configuration that draws it, so a face's `data-*` values stay the
+device's. `configs[].attrs` is a new field, so `contract` stays 2: a reader that
+does not know it still finds every field it read before. `devices.json` and the
+comparable facts read the device only.
 
 ### What a compiled face says about rings and trays
 

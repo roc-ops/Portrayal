@@ -549,6 +549,10 @@
          "type": "boolean",
          "description": "the bare string `behind` as a key: the flanges fold back behind a body as wide as the rack, so the face is the part. `{behind: true}` stands L43 down as the bare string does."
         },
+        "none": {
+         "type": "boolean",
+         "description": "the part has no ears at all: it is not bolted to the posts and carries no flange, because it stands between them on another part's brackets (a drip tray or a baffle). `{none: true}` draws no generic ear and no screw heads at the rails, in 2D or 3D. Absent or false, the device draws as it always did. Unlike `behind`, it says nothing about the face being as wide as the rack."
+        },
         "h": {
          "type": "number",
          "exclusiveMinimum": 0,
@@ -562,6 +566,59 @@
         "color": {
          "type": "string",
          "description": "the ears' colour, a fill as `chassis.color` is written, when they are not silver. The generic L-bracket ear is drawn in it; absent, it is silver (#c8cacc), because most network gear has bare or plated steel ears even when its faceplate is black. A colour and not a dimension: the device lock hashes it with the rest of `ears` under chassis surface, so stating or changing it is a patch."
+        },
+        "rolled": {
+         "type": "array",
+         "minItems": 1,
+         "description": "THE BRACKETS THAT HOLD THE DEVICE WHEN IT IS ROLLED A QUARTER TURN in a rack (`roll: 90` or `270`), which the rack elevation draws round its turned body and which no other drawing reads. Stood on its side a device is held by a bracket against each of its edges, not by ears of its own: a bar across the rack and an ear on each post, standing on the bar's lower edge. They belong to the rack, so they are drawn the same at 90 and at 270 and do not turn with the device. A device that states none draws none.",
+         "items": {
+          "type": "object",
+          "required": [
+           "id",
+           "side",
+           "bar-h",
+           "length",
+           "ear-h",
+           "ear-w"
+          ],
+          "additionalProperties": false,
+          "properties": {
+           "id": {
+            "$ref": "#/$defs/segment"
+           },
+           "side": {
+            "enum": [
+             "below",
+             "above"
+            ],
+            "description": "which edge of the turned body the bar lies against: `below` puts its upper edge on the body's lower edge, `above` its lower edge on the body's upper edge"
+           },
+           "bar-h": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "millimetres, the height of the bar across the rack"
+           },
+           "length": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "millimetres from the outer edge of one ear to the outer edge of the other, centred on the rack; at least the distance between the hole columns for the ears to bolt to both posts"
+           },
+           "ear-h": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "millimetres, the height of each ear, from the bar's lower edge up"
+           },
+           "ear-w": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "millimetres each ear stands in from the bracket's outer end"
+           },
+           "color": {
+            "type": "string",
+            "description": "the bracket's colour, a fill as `chassis.color` is written; absent, the generic ear's silver"
+           }
+          }
+         }
         },
         "positions": {
          "type": "array",
@@ -760,6 +817,15 @@
       "description": "ONLY WHEN THIS BUILD DIFFERS FROM THE CHASSIS - see `chassis.power`. An AC and a DC build of one switch are two configurations of one chassis, and each says which it is here; a box with one feed states it once on the chassis instead, and restating it here is what L118 reports. It must agree with the supplies the build seats: `dc` over a bay holding an `-ac` supply is L120.",
       "$ref": "#/$defs/power-feed"
      },
+     "attrs": {
+      "description": "ONLY WHAT THIS BUILD STATES DIFFERENTLY FROM THE DEVICE: a figure that belongs to one orderable build and not to the box, such as the power draw of a build with a larger supply, or the memory of a build with more. It takes the device's own sections and types, so a key is filed where the device would file it. The configuration's value wins key by key; the rest of its section, and every section it does not name, stays the device's, and a configuration cannot remove a key the device states. The DCIM export's facts for this build read the merged set, and `configs` in the compiled index publishes the configuration's own keys only. The drawing does not change: a face is shared by every configuration that draws it, so its `data-*` values stay the device's. Never legal on an `example`, which exports nothing. L25 holds a key to one section across the merged set.",
+      "$ref": "#/properties/attrs"
+     },
+     "export-description": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "THE DESCRIPTION A DCIM SHOWS FOR THIS BUILD'S DEVICE TYPE, in place of the first sentence of the device's description, for a build whose device type should not read as the base model. 200 characters is the limit both targets set on a device type's description, so the exporter never has to cut it. Left out, the export keeps the device's text unchanged. Never legal on an `example`, which exports nothing."
+     },
      "occupants": {
       "type": "object",
       "description": "what is PLUGGED IN, keyed by the id of the receptacle it plugs into. A populated port is not a different port - it is the same cage with an optic in it - so this is a configuration the way `bays` is, and a device can be drawn bare or fitted without either being a separate model. Sugar for a `mate-to` placement: the occupant is positioned by its `mate` connection point landing on the host's, and L12 holds the two to the same `interface`, so nothing here is a second positioning path. The value is a component ref, or a mapping carrying `ref` and an explicit `id` where the derived `<host>-occupant` is not the name you want on the row",
@@ -885,6 +951,32 @@
        "$ref": "#/$defs/segment"
       },
       "description": "which panel each face wears in this configuration, as {face: view name}. Faces not named fall back to the view named after them, so a configuration that overrides only the front keeps the standard rear and sides. THIS IS WHAT COUPLES THE FACES: a front and a rear that do not go together on real hardware cannot both be named here, so the impossible machine has nowhere to live. Scoping a bay with `only-in` cannot do that - it varies occupants within one panel and says nothing about any other face."
+     }
+    },
+    "if": {
+     "properties": {
+      "kind": {
+       "const": "example"
+      }
+     },
+     "required": [
+      "kind"
+     ]
+    },
+    "then": {
+     "not": {
+      "anyOf": [
+       {
+        "required": [
+         "attrs"
+        ]
+       },
+       {
+        "required": [
+         "export-description"
+        ]
+       }
+      ]
      }
     }
    }
