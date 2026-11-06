@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: qfx5210-jpsu-1100w-dc-afi
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -42,6 +42,22 @@ provenance:
   colour: >-
     estimated - the guide says the supplies are colour-coded by airflow, all azure blue for AIR IN; no
     photograph of this build was held, so a plain azure is drawn, not a paint reference.
+  connector: >-
+    the supply composes juniper/qfx5210-dc-header@1 as `dc-header`, the three-position DC power header of
+    the QFX5210 Switch Hardware Guide (Juniper Networks), Figure 19 (flat faceplate, "Terminal block") and Figure 32,
+    at the box of the `terminals` element. The guide names no maker or part number for it, so the part is a
+    declared stand-in (its own provenance). juniper/qfx5210-dc-plug@1, a stand-in for the cable connector that no
+    figure draws, mates it. The supply's own skin is not edited: it still draws the block, the shroud, the cells and
+    the numbers 1, 2 and 3, and the part draws the same shapes over them.
+  roles: >-
+    guide - Figures 19 and 32 print only the numbers 1, 2 and 3 beside the cells, top to bottom. NO POLE IS
+    PRINTED AT ANY CELL: the guide says the V+ terminals are shunted internally together, as are the V- terminals,
+    and calls V+ the return and V- the input, and does not say which cell is which. Table 21 gives a rated range
+    and no nominal.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. No cell has a printed role, and a port whose poles are a
+    connector's contacts is offered only where that path's part is itself the connector. A later change can state
+    the port once a document prints the roles; it is a minor on the devices that seat this supply.
 states:
 - ok
 - fault
@@ -67,6 +83,8 @@ elements:
     at: [6.8, 4.4]
     size: [10.9, 29.9]
     class: terminal
+parts:
+- {ref: juniper/qfx5210-dc-header@1, id: dc-header, at: [6.8, 4.4]}
 size:
   w: 52.0
   h: 41.8

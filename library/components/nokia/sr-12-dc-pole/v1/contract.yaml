@@ -1,0 +1,66 @@
+format: 1
+kind: component
+name: sr-12-dc-pole
+version: 1.0.0
+class: mechanical
+# THE PAIR IS ITSELF A SLOT (docs/connectors-dc-terminal-design.md section 13.7): one
+# two-hole lug lands across both studs, at their midpoint. That slot and the two stud slots
+# below are mutually exclusive, as a duplex adapter's slot and its two bores are.
+interface: stud-pair-3-4
+behaviour: mounts
+profile: networking
+description: >-
+  One row of a terminal well of the 7750 SR-12 and 7450 ESS-12 175A DC PEM-3. It is two
+  studs side by side on 3/4 in. (19.05) centres, the landing one two-hole power lug takes.
+  nokia/sr-12-pem-3@1 composes four, one for each row of the -48 VDC well and of the RTN well.
+size: {w: 22.45, h: 3.4}
+size-confidence: {w: datasheet, h: estimated}
+size-notes: >-
+  the two studs' own boxes, 19.05 apart centre to centre, side by side: the width is the
+  pitch and one stud, the height one stud
+attrs: {connector: stud-pair-3-4}
+provenance:
+  size: >-
+    datasheet and estimated - the 3/4 in. pitch is the interface's (spec/schemas/standards.yaml
+    `two-hole-lug-3-4`, 19.05); each stud is common/terminal-screw-34@1, whose own 3.4 across
+    is an estimate.
+  pitch: >-
+    THE PITCH IS INFERRED, NOT STATED. The 7450 ESS-12 and 7750 SR-12 Chassis Installation
+    Guide (3HE18644AAAATQZZA03, 22.7) states the hole spacing of the lug that goes on the PEM-3
+    terminal block, 3/4 in. (1.91 cm), in the note on p137 and in Figure 27 and Table 57 key 1
+    on p138, and no document held dimensions the studs themselves. The studs are taken to stand
+    where the lug's holes do, so they are composed at exactly 19.05 and lint L116 holds them
+    there to 0.01. The skin of nokia/sr-12-pem-3@1 draws them 17.98 apart (Figure 62 p206), 1.07
+    mm less, and is not redrawn.
+  thread: >-
+    NOT CLAIMED. The guide's studs take 0.250-20 UNC lugs with two washers and two 1/4 in.-20
+    KEPS nuts (p137), and its lug holes are 1/4 in. (0.635 cm) (Table 57 key 2 p138). The studs
+    are common/terminal-screw-34@1, a head 3.4 across that claims no thread: a STAND-IN,
+    declared. It marks where a lug lands, and the drawn studs and washers are the skin of the
+    module that composes this part.
+  lug: >-
+    THE DOCUMENTED LUG IS NOT THE ONE OFFERED. The guide's lug is a copper, standard barrel,
+    two-hole lug with two 1/4 in. holes, for #4 or #2 AWG cable, such as a Burndy
+    YAV4CL2TC14E2FX or YAV2CL2TC14E2FX (p137). generic/two-hole-lug-3-4@1, which mates this
+    interface, is the library's nominal lug and stands in for it.
+  axis: >-
+    THE STUDS ARE COMPOSED LEFT TO RIGHT, so the pair runs along +x, the canonical axis a
+    two-hole lug is drawn on, and a lug seated here leaves its wire to the right
+    (manifest.spanning_axis). Figure 30 p139 draws the lugs of the -48 VDC well leaving to the
+    left and those of the RTN well to the right; the guide gives no direction for the wire.
+  seat: >-
+    THE PAIR PRESENTS AT THE TOP OF ITS STUDS. `mate` is the midpoint of the two studs' own
+    `mate` points and states `seat-out: 9.2`, the height each stud presents at (its lift 8.0
+    and its 1.2 head), so a lug across the pair lies exactly where a one-hole lug on either
+    stud would. L116 holds the two to one figure.
+elements: {}
+parts:
+  # FIRST STUD, then second: the order is the axis (provenance.axis). Each is a slot of its
+  # own, `<pole>/1` and `<pole>/2`, which the ring lug still seats in.
+  - {ref: common/terminal-screw-34@1, id: '1', at: [0, 0], lift: 8.0}
+  - {ref: common/terminal-screw-34@1, id: '2', at: [19.05, 0], lift: 8.0}
+connection-points:
+  # WHERE A TWO-HOLE LUG SEATS: the midpoint of the studs' own mate points, (1.7, 1.7) and
+  # (20.75, 1.7), at the height they present.
+  mate: {at: [11.225, 1.7], direction: front, seat-out: 9.2}
+skins: [default]

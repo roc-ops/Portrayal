@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2300-24t
-version: 0.4.0
+version: 0.5.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2300-24T
@@ -126,9 +126,9 @@ provenance:
       single fan at 115.7 mm, nine screws along the lower edge, no earth symbol left of the plate, and a
       four-pole DC terminal block 52.6 mm wide at 377.3 mm in place of the AC inlet. Figure 13 draws the earth
       symbol beside the plate while the photograph does not, so the two disagree on that one mark and the
-      photograph won; the rest of Figure 13's arrangement matches the photograph. The block is drawn as chassis art (a plate, a dark strip, two mounting screws and four
-      terminals, sized off the photograph) and is not a component, because the DCIM export has no row for a
-      part of that kind and a placed part would export nothing. The legend printed over the block reads DC INPUT : -44V- -72V, a DC symbol, 3.7A Max; the guide's Table 16 gives
+      photograph won; the rest of Figure 13's arrangement matches the photograph. The block (a plate, a dark strip, two mounting screws and four
+      terminals, sized off the photograph) is the part juniper/ex2300-dc-terminal@1, placed at 377.3 mm, which composes
+      the four terminal screws and states one DC input port for each of the two feeds. The legend printed over the block reads DC INPUT : -44V- -72V, a DC symbol, 3.7A Max; the guide's Table 16 gives
       -48 through -60 VDC at 2.8 A maximum (the printed range is the wider), both are recorded and the
       printed text is drawn with the DC symbol the photograph and Figure 13 both print. The guide's figure labels the poles INPUT 1 and INPUT 2
       under the block; the photograph shows no label there and none is drawn.
@@ -249,6 +249,14 @@ gaps:
     The guide names the screws and the lug and gives no spacing for the two holes; `ground-stud-pitch` says what the
     pair is drawn at and why.
   wanted: a drawing that dimensions the two holes, or the lug's own datasheet
+- what: dc-input-rating
+  scope: [dc-terminal]
+  reason: sources-disagree
+  note: >-
+    The guide's Table 16 gives -48 through -60 VDC at 2.8 A maximum and its Figure 81 prints "2.8A Max per input", while the
+    legend on the held rear photograph of the DC-powered model reads -44V to -72V and 3.7A Max. The DC input ports of
+    the placed terminal block state no voltage and no current, and `rear-dc` draws the photographed legend.
+  wanted: Juniper's statement of the DC input range and current of the EX2300-24T-DC, and which revision of the rear legend it belongs to.
 groups:
   rj45:
     term: Port
@@ -461,20 +469,6 @@ views:
       - {id: recess-mgmt, kind: recess, at: [16.9, 8.4], size: [17.3, 23.4], rx: 0.4, fill: '#1d2024'}
       - {id: earth-terminal, kind: earth-plate, at: [54.1, 2.0], size: [31.9, 11.8], rx: 0.3, fill: '#c9cbcd'}
       - {id: fan-0, kind: fan-grille, at: [96.35, 1.75], size: [38.7, 38.7], rx: 19.35, pattern: vent, vent: 1.0}
-      - {id: dc-terminal, kind: dc-terminal-plate, at: [377.3, 9.5], size: [52.6, 17.5], rx: 0.6, fill: '#6f7479'}
-      - {id: dc-terminal-strip, kind: dc-terminal-strip, at: [378.3, 11.7], size: [50.6, 13.0], rx: 0.4, fill: '#1b1d20'}
-      - {id: dc-mount-1, kind: dc-terminal-screw, at: [380.0, 15.0], size: [6.4, 6.4], rx: 3.2, fill: '#2b2e32'}
-      - {id: dc-mount-1-head, kind: dc-terminal-screw, at: [381.3, 16.3], size: [3.8, 3.8], rx: 1.9, fill: '#b9bec4'}
-      - {id: dc-mount-2, kind: dc-terminal-screw, at: [420.8, 15.0], size: [6.4, 6.4], rx: 3.2, fill: '#2b2e32'}
-      - {id: dc-mount-2-head, kind: dc-terminal-screw, at: [422.1, 16.3], size: [3.8, 3.8], rx: 1.9, fill: '#b9bec4'}
-      - {id: dc-pole-1, kind: dc-terminal-pole, at: [388.7, 13.8], size: [6.8, 8.9], rx: 0.3, fill: '#d9dcdf'}
-      - {id: dc-pole-2, kind: dc-terminal-pole, at: [397.0, 13.8], size: [6.8, 8.9], rx: 0.3, fill: '#d9dcdf'}
-      - {id: dc-pole-3, kind: dc-terminal-pole, at: [405.1, 13.8], size: [6.8, 8.9], rx: 0.3, fill: '#d9dcdf'}
-      - {id: dc-pole-4, kind: dc-terminal-pole, at: [413.3, 13.8], size: [6.8, 8.9], rx: 0.3, fill: '#d9dcdf'}
-      - {id: dc-pole-1-screw, kind: dc-terminal-screw, at: [390.1, 16.05], size: [4.4, 4.4], rx: 2.2, fill: '#a7acb2'}
-      - {id: dc-pole-2-screw, kind: dc-terminal-screw, at: [398.4, 16.05], size: [4.4, 4.4], rx: 2.2, fill: '#a7acb2'}
-      - {id: dc-pole-3-screw, kind: dc-terminal-screw, at: [406.5, 16.05], size: [4.4, 4.4], rx: 2.2, fill: '#a7acb2'}
-      - {id: dc-pole-4-screw, kind: dc-terminal-screw, at: [414.7, 16.05], size: [4.4, 4.4], rx: 2.2, fill: '#a7acb2'}
       cutouts:
       - {id: mgmt, at: [18.1, 8.4], size: [15.8, 13.2], shape: rect}
       - {id: usb, at: [20.0, 25.6], size: [12.0, 4.5], shape: rect}
@@ -497,6 +491,7 @@ views:
       - {ref: std/rj45@2, id: console-rj45, at: [37.8, 17.7], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
       - {ref: common/esd-warning@1, id: esd-mark, at: [60.55, 16.85], for: esd-rear-jack, group: furniture, rel-pos: 2}
       - {ref: common/esd-jack@1, id: esd-rear-jack, at: [74.5, 18.1], for: chassis, group: esd, rel-pos: 0}
+      - {ref: juniper/ex2300-dc-terminal@1, id: dc-terminal, at: [377.3, 9.5], group: power-input, rel-pos: 0}
       - {ref: common/screw-head@1, id: rear-screw-0, at: [49.9, 37.2], group: furniture, rel-pos: 3}
       - {ref: common/screw-head@1, id: rear-screw-1, at: [86.9, 37.2], group: furniture, rel-pos: 4}
       - {ref: common/screw-head@1, id: rear-screw-2, at: [156.1, 37.2], group: furniture, rel-pos: 5}
@@ -540,6 +535,7 @@ configurations:
     description: >-
       EX2300-24T-DC - the same front with a built-in DC supply (Table 1, Figure 13). A four-pole terminal
       block replaces the AC inlet on the rear, and the fan is in another place. The weight is 3.55 kg.
+    power: dc
     views:
       rear: rear-dc
     part-numbers:

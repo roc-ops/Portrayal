@@ -90,18 +90,22 @@ Setting it up, once:
    ticked, 90 days. Store it with `gh secret set NPM_TOKEN --env npm`.
 
 After a release that published new packages, trust the workflow on each. It
-takes npm 11.10 or later and an interactive `npm login`, since npm refuses a
-token for this:
+takes npm 11.15.0 or later and an interactive `npm login`, since npm refuses a
+token for this. `--file` is the workflow's file name, `--allow-publish` is what
+lets the workflow publish (npm needs it or `--allow-stage-publish` when it makes
+the relationship), and `--env npm` is the short form of `--environment npm`:
 
 ```sh
 for p in <the names published as a first publish>; do
   npx -y npm@11 trust github "$p" --repository roc-ops/Portrayal \
-    --file release.yml --environment npm --yes
+    --file release.yml --environment npm --allow-publish --yes
   sleep 2
 done
 ```
 
 The names are the `published ... (first publish)` lines of the run summary.
+`spec/tools/dev/npm_trust_lines.py` prints this line for every package of a
+build, or for the names given with `--only`, and runs nothing.
 Take them from every run of a release that failed and was run again: a package
 sent before the failure is on npm by the next run, which no longer calls it a
 first publish.

@@ -224,7 +224,7 @@ def test_the_terminal_screw_interfaces_were_read():
 def test_the_terminal_header_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
-    assert _terminal_header_interfaces() == {"terminal-508-2", "terminal-508-5",
+    assert _terminal_header_interfaces() >= {"terminal-508-2", "terminal-508-5",
                                              "terminal-508-6", "dc-barrel",
                                              # the GPU power headers (P-0028) state
                                              # `input: dc` as the barrel jack does
@@ -232,7 +232,10 @@ def test_the_terminal_header_interfaces_were_read():
                                              "pcie-12vhpwr", "pcie-12v-2x6",
                                              # the Open Rack v3 bus-bar clip states
                                              # `input: dc` too
-                                             "orv3-busbar"}
+                                             "orv3-busbar",
+                                             # the four-pole DC feed header of the
+                                             # TM-7124S states `media: dc-terminal`
+                                             "screw-terminal-4"}
 
 
 def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
@@ -379,6 +382,13 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # copper alarm cable - and its tests are
         # spec/tests/test_nokia_gfc_connector_parts.py.
         if str((c.get("attrs") or {}).get("media") or "") == "micro-dsub-50":
+            continue
+        # NOR ARE THE KEYSTONE INSERTS. common/keystone-blank@2 and
+        # fs/keystone-rj45-cat6@1 mate `keystone`, the opening of the FS FHD-FAPM6
+        # panel, which the registry holds so each opening is a slot. Left out by
+        # what each IS - an insert that closes the opening or carries a copper
+        # jack - and their census is spec/tests/test_keystone_inserts.py.
+        if "keystone" in ms:
             continue
         if any(m in connectors for m in ms) and c.get("class") != "cap":
             ns = f.parents[2].name

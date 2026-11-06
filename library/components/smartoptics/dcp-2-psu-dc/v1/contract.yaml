@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-psu-dc
-version: 1.4.1
+version: 1.5.0
 class: psu
 behaviour: fills
 profile: networking
@@ -64,12 +64,31 @@ provenance:
     the contacts inline at 12.5, 20.0 and 27.5. The AC and DC modules do NOT share an
     aperture size, which was the assumption underneath the error.
   terminal: >-
-    NOT a std/ part, and deliberately so. The AC module composes std/c14-inlet@1 because
-    IEC 60320-1 fixes that cutout; the DC input here is a three-post block whose standard,
-    if it has one, is not identified in any DCP document and for which the library holds
-    no part. It is drawn rather than composed. It does NOT share the C14's aperture -
-    see provenance/terminal-geometry, which corrects exactly that assumption. If a DC
-    terminal part is ever added to std/, this should compose it.
+    SUPERSEDED BY `connector` BELOW. This entry said the DC input was drawn rather than composed because its
+    standard is not identified in any DCP document and the library held no part for it. That is still so: the
+    part composed now is a declared stand-in that claims no maker, series or pitch. It does NOT share the C14's
+    aperture - see provenance/terminal-geometry, which corrects exactly that assumption.
+  connector: >-
+    the supply composes smartoptics/dcp-2-dc-header@1 as `dc-header`, the three-cell pluggable DC power connector
+    of the DCP-series User Manual (14.0 A), figure 2-13 (PDF page 19) and section 3.1.5 ("Site Requirements", PDF page 29: "the DC power connector"),
+    at the box of the `dc-terminal` element (11.0 by 26.0). No DCP document names a maker or part number for it, so
+    the part is a declared stand-in (its own provenance) and the key `smartoptics-dcp-dc-block-3` claims no maker,
+    standard or pitch. smartoptics/dcp-2-dc-plug@1, a stand-in for the cable connector no document shows, mates it.
+    The skin is unchanged and the part is drawn over the block it draws: the photograph shows one small, one large
+    and one small cell in a column where the skin draws three equal contacts, and the skin's lever is a green
+    (#1f8f6a) where the photograph's is a bluer teal.
+  roles: >-
+    the manual's figure 2-13 scribes a "+" on the panel at the upper end of the block, which this reads as the mark of
+    the top cell, so the top cell is `pos`. NO MARK IS PRINTED FOR THE MIDDLE AND THE BOTTOM CELL, and section 3.1.5
+    says only that the supply takes "-48VDC (-40V to -72V)" with "the positive terminal grounded" and that "the DC
+    power connector contains the chassis (frame) ground terminal", without saying which cell it is. Their roles are
+    NOT PRINTED here and are not guessed. No nominal is stated: the manual prints "-40 to -72 VDC".
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. A port whose poles are a connector's contacts is offered only
+    where that path's part is itself the connector; on a supply in a bay it is the supply, not the connector it
+    composes, so a port stated here would be published and then not offered. The one printed role above is recorded
+    for the port a later change can state, once the other two cells have a source; that change is a minor on the
+    devices that seat this supply, and its two unstated poles then need a `dc-polarity` gap on each of them.
   colour: >-
     photo-inferred - fig 2-13. The lever colour is the one unambiguous difference
     between the two modules in that photograph. NOT ASSERTED: why it differs. Latch
@@ -128,6 +147,8 @@ elements:
   lamp-status: {at: [66.0, 34.4], size: [3.6, 3.6], class: indicator}
 connection-points:
   power: {at: [50.5, 20.0], direction: rear}
+parts:
+  - {ref: smartoptics/dcp-2-dc-header@1, id: dc-header, at: [45.5, 7.0]}
 relief:
   wall: '#5a6065'
   features:

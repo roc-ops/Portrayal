@@ -47,7 +47,7 @@ from portrayal.manifest import (view_parts, targets, split_target, presented_int
                       spanning_axis, _turn,
                       occupant_spec, seated_ref, slot_width, span_covers, span_clashes,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER, config_power, OFFERED_KINDS,
-                      resolve_views)
+                      config_airflow, resolve_views)
 from jsonschema import Draft202012Validator
 
 SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
@@ -367,7 +367,7 @@ RULES = {
     "L88": ("component",  "a fibre face with more than one row of connectors states its own front numbering", "add `optical.front-order` listing the fibre part ids in the vendor's printed order",
             "On a face with more than one row of connectors, numbering by position alone guesses the vendor's printed order, so DCIM front ports could be numbered differently from the silkscreen.",
             ERROR),
-    "L89": ("library",    "every component major is reachable from a device, or says why it is not", "seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing",
+    "L89": ("library",    "every component major is reachable from a device, or says why it is not", "seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing; a major that a live major supersedes is marked `superseded-by: <the live ref>` to keep it for outside manifests that pin it, or its directory is deleted",
             "A part nothing seats would look in the catalogue exactly like one in use, so a reader could choose a part no drawing has ever shown in place.",
             ERROR),
     "L90": ("device",     "a manifest's top-level keys read in the canonical order", "reorder them; the message prints the order, and docs/device-template.yaml is written in it",
@@ -694,7 +694,10 @@ RULES = {
     "L197": ("device", "a device's decor `kind` does not name a connector: the names are the list in spec/schemas/connector-decor-names.yaml (a floor of names, not a proof) (warning)", "model the connector as a part that presents its interface; a decor that is not a connector is renamed for what it is, such as `case-screw` for `earth-screw`",
              "A connector drawn as panel decor is a picture of a port that nothing can plug into, so a cable laid to the device has no end to land on and a reader takes the port for a usable one.",
              WARNING),
-    "L198": ("device", "a powered device's PoE keys agree: `poe-pd-standard-min` is stated only with `poe-pd-standard` and is lower than it (error); `poe-pd-class` is stated only with `poe-pd-standard` (error); `poe-pd-max-w` is stated only with `poe-pd-standard` (warning), is at least `power-self-max-w` plus `poe-budget-w` where both are numbers (warning), and is stated by a device that states `poe-budget-w` and `poe-pd-standard` (warning)", "state the standard the maker names for the PoE input; write `poe-pd-max-w` as the whole intake, the figure printed 'excluding PoE output' plus what the device hands on, with the sum in the provenance",
+    "L198": ("device", "a configuration's airflow agrees with the fans and supplies it seats - a `front-to-back` build over a `back-to-front` fan is a contradiction; a part that states a vendor word or nothing is not compared - warning at `modelled`, error at `verified`", "correct the configuration's `airflow`, seat the part for this direction, or state the part's direction for this build in `component-attrs`",
+             "A build whose label says one way while its fans or supplies blow the other misleads anyone choosing a swap part or planning hot and cold aisles.",
+             AT_VERIFIED),
+    "L199": ("device", "a powered device's PoE keys agree: `poe-pd-standard-min` is stated only with `poe-pd-standard` and is lower than it (error); `poe-pd-class` is stated only with `poe-pd-standard` (error); `poe-pd-max-w` is stated only with `poe-pd-standard` (warning), is at least `power-self-max-w` plus `poe-budget-w` where both are numbers (warning), and is stated by a device that states `poe-budget-w` and `poe-pd-standard` (warning)", "state the standard the maker names for the PoE input; write `poe-pd-max-w` as the whole intake, the figure printed 'excluding PoE output' plus what the device hands on, with the sum in the provenance",
              "A powered device's draw with no standard cannot be checked against the port that feeds it, and a figure printed 'excluding PoE output' read as the whole intake is a number short of what the port has to supply.",
              MIXED),
 }
@@ -8509,13 +8512,31 @@ def lint_unplaced_majors(root):
             if oname == name and int(omajor) > int(major):
                 live_successor[ref] = other
 
+    # RETIRED AND STILL SHIPPED IS NOT DEAD (#448). Once a manifest outside the
+    # library can pin `name@2`, deleting it breaks that manifest, so a retired
+    # major may stay on one condition: its contract says `superseded-by: <ref>`
+    # and the ref is a different major that exists. The key is the one the
+    # schema already has, and the successor is what a consumer is told to pin
+    # instead. A marker that names nothing real (L101 reports that, and this
+    # does not read the key as an answer) or the part itself does not count.
+    # A package at 0.x may still delete; from 1.0 the marker is kept for at
+    # least one release before the directory goes.
+    def ships_retired(ref):
+        marker = (load_yaml(contracts[ref]) or {}).get("superseded-by")
+        return (isinstance(marker, str) and marker != ref and marker in contracts)
+
     for ref in sorted(contracts):
+        if ref not in seated and ref in live_successor and ships_retired(ref):
+            continue
         if (ref not in seated and ref in live_successor and ref not in mentions):
             err(contracts[ref], "L89",
                 f"{ref} is superseded by {live_successor[ref]}, is reachable from no "
-                "device, and is named nowhere. #172 kept the `v<major>` level on the "
-                "terms that a dead major goes: delete the directory rather than "
-                "describing it in `unplaced:`")
+                "device, is named nowhere, and says nothing. #172 kept the "
+                "`v<major>` level on the terms that a dead major goes: mark it "
+                f"`superseded-by: {live_successor[ref]}` to keep it for outside "
+                "manifests that pin it (from 1.0, for at least one release before "
+                "it is removed), or delete the directory rather than describing it "
+                "in `unplaced:`")
             continue
         if ref not in justified:
             err(contracts[ref], "L89",
@@ -8699,7 +8720,7 @@ def lint_device_mount(path, data):
 
 
 def lint_device_poe_pd(path, data):
-    """L198: the keys a powered device states for its PoE input agree.
+    """L199: the keys a powered device states for its PoE input agree.
 
     The schema checks each `poe-pd-*` key alone (its type, its enum, its range);
     this relates them. Whether a class fits a standard is not checked: that needs
@@ -8710,16 +8731,16 @@ def lint_device_poe_pd(path, data):
     order = {"802.3af": 1, "802.3at": 2, "802.3bt": 3}
     if floor is not None:
         if standard is None:
-            err(path, "L198", "`poe-pd-standard-min` is stated with no `poe-pd-standard`: it is the "
+            err(path, "L199", "`poe-pd-standard-min` is stated with no `poe-pd-standard`: it is the "
                               "lowest standard the maker names, below the one the device needs")
         elif order.get(floor, 0) >= order.get(standard, 0):
-            err(path, "L198", f"`poe-pd-standard-min` {floor!r} is not below `poe-pd-standard` "
+            err(path, "L199", f"`poe-pd-standard-min` {floor!r} is not below `poe-pd-standard` "
                               f"{standard!r}; state it only where the maker names a lower standard "
                               "the device runs reduced on")
     if "poe-pd-class" in power and standard is None:
-        err(path, "L198", "`poe-pd-class` is stated with no `poe-pd-standard`")
+        err(path, "L199", "`poe-pd-class` is stated with no `poe-pd-standard`")
     if "poe-pd-max-w" in power and standard is None:
-        warn(path, "L198", "`poe-pd-max-w` is stated with no `poe-pd-standard`: a draw with no "
+        warn(path, "L199", "`poe-pd-max-w` is stated with no `poe-pd-standard`: a draw with no "
                            "standard cannot be checked against the port that feeds it")
 
     def number(key):
@@ -8727,11 +8748,11 @@ def lint_device_poe_pd(path, data):
         return value if isinstance(value, (int, float)) and not isinstance(value, bool) else None
     own, handed, intake = number("power-self-max-w"), number("poe-budget-w"), number("poe-pd-max-w")
     if own is not None and handed is not None and intake is not None and intake < own + handed - 1e-9:
-        warn(path, "L198", f"`poe-pd-max-w` {intake:g} W is below `power-self-max-w` {own:g} W plus "
+        warn(path, "L199", f"`poe-pd-max-w` {intake:g} W is below `power-self-max-w` {own:g} W plus "
                            f"`poe-budget-w` {handed:g} W: it is the whole intake, so a figure printed "
                            "'excluding PoE output' belongs in `power-self-max-w` and the sum here")
     if "poe-budget-w" in power and standard is not None and "poe-pd-max-w" not in power:
-        warn(path, "L198", "this device hands on PoE and takes PoE but states no `poe-pd-max-w`: its own "
+        warn(path, "L199", "this device hands on PoE and takes PoE but states no `poe-pd-max-w`: its own "
                            "draw is not its intake")
 
 
@@ -10033,6 +10054,92 @@ def lint_device_power_stated(path, data):
             loud(path, "L120", f"configuration {n!r} says power {sorted(power)} and "
                  f"seats {', '.join(wrong)}. Correct `power`, or seat the supply "
                  "this build ships with")
+
+
+_DIRECTIONS = ("front-to-back", "back-to-front")
+_AIRFLOW_UNSTATED = object()
+
+
+def _seated_air_parts(data, cfg):
+    """{bay id: component ref} for every fan or supply this build seats.
+
+    A supply is found as `_seated_supplies` finds it; a fan by `fan` in the ref
+    or the bay id."""
+    out = {}
+
+    def walk(items):
+        for b in items or []:
+            if not isinstance(b, dict):
+                continue
+            bid = b.get("id")
+            if isinstance(bid, str):
+                ref = ((cfg or {}).get("bays") or {}).get(bid, b.get("default"))
+                if isinstance(ref, str) and (
+                        re.search(r"psu|pem|power|supply|fan", ref, re.I)
+                        or re.search(r"fan", bid, re.I)):
+                    out[bid] = ref
+            walk(b.get("bays"))
+    for view in (data.get("views") or {}).values():
+        walk(view_parts(view)["bays"])
+    return out
+
+
+def _airflow_stated_by_build(cfg, bid, ref):
+    """What the configuration says of this bay's airflow, or _AIRFLOW_UNSTATED.
+
+    `bay-attrs` reaches the occupant of one bay, `component-attrs` a bay id or
+    every instance of a component; the narrower one is read first."""
+    comp_attrs = (cfg or {}).get("component-attrs") or {}
+    name = ref.split(":")[0].split("/")[-1].split("@")[0]
+    for src in (((cfg or {}).get("bay-attrs") or {}).get(bid),
+                comp_attrs.get(bid), comp_attrs.get(name)):
+        if isinstance(src, dict) and "airflow" in src:
+            return src["airflow"]
+    return _AIRFLOW_UNSTATED
+
+
+def air_part_words(data, cfg, lib_roots):
+    """[(bay id, ref, the word the build gives that part)] for one configuration.
+
+    The word is the configuration's own where it states one for the bay, else
+    the contract's `attrs.airflow`; None where neither does."""
+    out = []
+    for bid, ref in sorted(_seated_air_parts(data, cfg).items()):
+        word = _airflow_stated_by_build(cfg, bid, ref)
+        if word is _AIRFLOW_UNSTATED:
+            word = (_contract(ref, lib_roots).get("attrs") or {}).get("airflow")
+        out.append((bid, ref, word))
+    return out
+
+
+def lint_device_airflow_agrees(path, data, lib_roots):
+    """L198: a build's airflow agrees with the fans and supplies it seats.
+
+    The airflow of a build is the configuration's own, else the chassis's
+    (`config_airflow`, the value the drawing's `data-airflow` carries). A fan or
+    supply may state `attrs.airflow`, and the configuration may restate it for
+    one bay in `component-attrs`. A `front-to-back` build seating a
+    `back-to-front` fan is a contradiction the picture does not show.
+
+    THE RULE NEVER MAPS A WORD TO A DIRECTION. It speaks only when both sides
+    say `front-to-back` or `back-to-front` and they differ. `exhaust`,
+    `intake`, `side-to-side` and the sentences some parts carry, a part that
+    states nothing, and a build that is `side`, `passive` or silent are all
+    skipped: whether `exhaust` means front-to-back is a design question, not
+    this rule's to settle. A warning at `modelled` and an error at `verified`,
+    as L120 is, so that a waiver can carry the honest case.
+    """
+    loud = err if data.get("maturity") == "verified" else warn
+    for n, c in (data.get("configurations") or {}).items():
+        build = config_airflow(data, c)
+        if build not in _DIRECTIONS:
+            continue
+        for bid, ref, word in air_part_words(data, c, lib_roots):
+            if word in _DIRECTIONS and word != build:
+                loud(path, "L198", f"configuration {n!r} is {build} and seats {ref} in "
+                     f"{bid}, which is {word}. Correct the configuration's `airflow`, "
+                     "seat the part for this direction, or state the part's direction "
+                     "for this build in `component-attrs`")
 
 
 def lint_device_provenance_confidence(path, data):
@@ -14668,6 +14775,7 @@ def main():
                 lint_device_input_rating(f, d)
                 lint_device_lines(f, d, args.library)
                 lint_device_power_stated(f, d)
+                lint_device_airflow_agrees(f, d, args.library)
                 lint_device_provenance_confidence(f, d)
                 lint_quoted_prose(f, d)
                 lint_device_component_attrs_resolve(f, d)

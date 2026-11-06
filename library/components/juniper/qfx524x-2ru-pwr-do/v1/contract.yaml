@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: qfx524x-2ru-pwr-do
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -47,6 +47,23 @@ provenance:
   input: >-
     datasheet - guide Tables 6 and 17: -48 V to -60 V, 80 A maximum per supply; the connector is the six-pin two by
     three one of "DC Power Cord Specifications" (pins P1, P2 and S1 negative, S2, P3 and P4 positive).
+  connector: >-
+    the supply composes juniper/qfx524x-dc-header@1 as `dc-header`, the six-position DC power connector of the
+    QFX5241-64OD and QFX5241-64QD Hardware Guide (Juniper Networks), Figure 22 (flat DC FRU panel), Figure 25 (the
+    supply) and Figure 35 (the cord connector going in), at the box of the `connector` group the skin drew. The guide
+    names no maker or part number for it, so the part is a declared stand-in (its own provenance).
+    juniper/qfx524x-dc-plug@1, the cord connector of Figure 35, mates it. The supply's own skin no longer draws the
+    block or its six cells; the part does, in the same shapes and colours at the same place.
+  roles: >-
+    guide - Table 18 (DC Power Cord Configuration): pins P1, P2 and S1 are the "Negative (-) bundle" (the library's
+    `batt`, S1 the sense pin) and S2, P3 and P4 the "Positive (+) bundle" (`rtn`, S2 the sense pin). Table 17 gives a
+    range, -48 V through -60 V, and no nominal. WHICH CELL OF THE CONNECTOR IS WHICH PIN IS NOT STATED: Figure 22 prints
+    no mark beside the cells, so no cell is given a role.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. A port whose poles are a connector's contacts is offered only
+    where that path's part is itself the connector; on a supply in a bay it is the supply, not the connector it
+    composes, so a port stated here would be published and then not offered. The roles above are recorded for the
+    port a later change can state, a minor on the devices that seat this supply.
 states:
 - ok
 - fault
@@ -68,6 +85,8 @@ elements:
     at: [66.5, 15.2]
     size: [6.0, 14.3]
     class: latch
+parts:
+- {ref: juniper/qfx524x-dc-header@1, id: dc-header, at: [23.0, 5.6]}
 size:
   w: 73.7
   h: 39.5
