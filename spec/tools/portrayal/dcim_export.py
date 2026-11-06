@@ -684,6 +684,9 @@ PART_POWER = {
     # THE QFX5200-48Y DC SUPPLIES' POWER HEADER IS A THREE-POSITION HEADER NEITHER LIBRARY NAMES, from a maker the
     # guide does not name. It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
     "juniper/qfx5200-48y-dc-header": "other",
+    # THE QFX5210 DC SUPPLIES' POWER HEADER IS A THREE-POSITION HEADER THE GUIDE DOES NOT NAME THE MAKER OF, with no pole
+    # printed at any cell. It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "juniper/qfx5210-dc-header": "other",
     # THE QFX5241 AND QFX10002 DC SUPPLIES' POWER CONNECTORS ARE VENDOR CONNECTORS THE GUIDES DO NOT NAME THE PART OF.
     # Neither is a screw terminal, so each is `other`, and POWER_LABEL says which connector.
     "juniper/qfx524x-dc-header": "other",
@@ -693,6 +696,9 @@ PART_POWER = {
     "edgecore/dcs201-dc-header": "other",
     "edgecore/amx-3200-dc-header": "other",
     "edgecore/agr560-dc-header": "other",
+    # THE DCP-2-PSU-DC-FB'S DC POWER CONNECTOR IS A THREE-CELL PLUGGABLE CONNECTOR THE MANUAL DOES NOT NAME THE PART OF.
+    # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "smartoptics/dcp-2-dc-header": "other",
     # THE JPSU-150-DC-AFO'S DC POWER CONNECTOR IS A THREE-POSITION PLUGGABLE BLOCK THE GUIDES DO NOT NAME THE MAKER OF.
     # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
     "juniper/jpsu-150-dc-header": "other",
@@ -760,11 +766,13 @@ POWER_LABEL = {
     "cisco/nxa-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "cisco/a9k-dc-header": "DC power connector block (2-position, +DC -DC)",
     "juniper/qfx5200-48y-dc-header": "DC power header (3-position, RTN, -36 to -72 V, grounding)",
+    "juniper/qfx5210-dc-header": "DC power header (3-position, cells 1 to 3)",
     "juniper/qfx524x-dc-header": "DC power connector (6-position, 2x3)",
     "juniper/qfx10002-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
     "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
     "edgecore/amx-3200-dc-header": "DC power connector (3-pin)",
     "edgecore/agr560-dc-header": "DC power connector (2-socket)",
+    "smartoptics/dcp-2-dc-header": "DC power connector (3-cell)",
     "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
 }
@@ -1158,6 +1166,7 @@ NOT_A_DCIM_PORT = {
     # reading the labels Dell's own master prints between the jacks, and the four
     # placements now declare their speed. The entry had to go with it - a register
     # of parts that export nothing is wrong about one that does.
+    "vertiv/sd-card-slot": "the full-size SD card slot of the ACS8000; a card slot, not a port, and no device-type field holds a card slot",
 }
 
 # THE MANAGEMENT CLUSTER'S PORTS THAT DO NOT REACH A DCIM, AND WHY (#384).
@@ -1210,6 +1219,7 @@ MGMT_NOT_A_DCIM_PORT = {
     ("std/rj45-ganged", "timing"): "the CSR180's stack-a-upper, which its own device marks "
                                    "`timing: unidentified` - there is no true type to give a jack "
                                    "nobody has identified",
+    ("common/rj45-ganged-lamped", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
 }
 MGMT_EXPORTED_ROLES = {"mgmt", "console", "aux"}
 
