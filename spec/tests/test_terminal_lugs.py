@@ -152,7 +152,9 @@ def test_the_screws_that_present_terminal_stud_are_these_two_and_one_lug_mates_i
     terminal screws. The ground studs present it too (`class: ground`,
     test_ground_stud_lugs.py); they are not terminal screws and are left to
     their own census. So does the 10-32 stud of the SR-1 DC terminal block,
-    which a pair host composes two to a pole (#828, test_grounding_devices.py)."""
+    which a pair host composes two to a pole (#828, test_grounding_devices.py).
+    The hex-nut stud of a DC supply's terminals is the same kind of case: a
+    pair host composes two to a pole."""
     presents, mates = [], []
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = _yaml(f)
@@ -161,7 +163,7 @@ def test_the_screws_that_present_terminal_stud_are_these_two_and_one_lug_mates_i
             presents.append(ref)
         if c.get("mates") == IFACE:
             mates.append(ref)
-    assert sorted(presents) == sorted([*SEATS, "nokia/sr-1-dc-stud@1"]) and len(SEATS) == 2
+    assert sorted(presents) == sorted([*SEATS, "common/hex-nut-stud@1", "nokia/sr-1-dc-stud@1"]) and len(SEATS) == 2
     assert mates == [LUG]
 
 
