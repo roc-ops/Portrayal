@@ -153,7 +153,9 @@ def test_the_connector_registry_is_not_vacuous():
                          # the DC power connectors of the Juniper QFX5241 DC supply and QFX10002 1600 W DC supply
                          "juniper-dc-header-6", "dc-connector-3w3",
                          # the AC inlet of the Telco Systems XM-3352 supply
-                         "telco-ac-cloverleaf-3"}
+                         "telco-ac-cloverleaf-3",
+                         # the 4FF SIM card slot of the Opengear CM8004-C and CM8008-C
+                         "sim-tray-4ff"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}

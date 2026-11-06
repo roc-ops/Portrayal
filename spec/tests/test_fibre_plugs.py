@@ -383,6 +383,12 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # spec/tests/test_nokia_gfc_connector_parts.py.
         if str((c.get("attrs") or {}).get("media") or "") == "micro-dsub-50":
             continue
+        # NOR IS THE 4FF SIM CARD TRAY. opengear/sim-tray-4ff@1 mates
+        # `sim-tray-4ff`, the SIM slot of the Opengear cellular console managers.
+        # Left out by what it IS - its `attrs.media` is `sim`, a card tray and
+        # no fibre - and its tests are spec/tests/test_opengear_cm8000.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "sim":
+            continue
         if any(m in connectors for m in ms) and c.get("class") != "cap":
             ns = f.parents[2].name
             found[f"{ns}/{c['name']}@{c['version'].split('.')[0]}"] = c
