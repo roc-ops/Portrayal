@@ -432,7 +432,7 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 # the 23 Juniper earthing terminals of this change: 48 ring seats (down 25, left 3, up 14, right 6), the two holes of each pair and the QFX5210 plate's, and the one M4 screw of the EX2300-24MP and -48MP
 # the Cisco ASR 9000 grounding pad's two 10-32 screws, on the ten chassis that place it (thirteen placements): 26 ring seats (down 20, left 4, right 2)
 # the grounding screw on its washer, placed by the ten AurCore AIS switches and the Eaton PDUMH20NET: eleven ring seats (down 11)
-WANT = {"down": 214, "left": 57, "up": 27, "right": 40}   # the MikroTik CRS510's earth stud, one more down (213 before it);the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's; two more down on each of the four Juniper EX3200
+WANT = {"down": 214, "left": 57, "up": 27, "right": 40}   # the MikroTik CRS510's earth stud, one more down (213 before it); the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's; two more down on each of the four Juniper EX3200
 # THE TWO-HOLE LUG on a pair host: 59 seats on 33 devices - three on each of
 # the eleven Amphenol 300CB08 panels, one on each AIS800, the seven MX, the
 # LMFS-F, two on the FX-16, one on the FX-8 and FX-4, the SR-1-DC block's
