@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: screw-terminal-5-plug
+version: 1.0.0
+class: port
+mates: screw-terminal-5
+profile: power
+description: >-
+  The removable five-way screw-down connector that plugs into the nrgNET header
+  of an Amphenol Network Solutions nrgSMART power panel, seen from the wire
+  side as a front elevation sees it seated: a green body with a wire entry and
+  a clamp screw at each of the five ways. It seats in a `screw-terminal-5`
+  header at its own mate point.
+size: {w: 20.3, h: 6.9}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  the outline of the header it seats on, amphenol-ns/nrgnet-header@1, 20.3 by 6.9; no drawing of the connector is held
+attrs: {media: nrgnet, connector: screw-terminal-5, positions: 5}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - THE CONNECTOR IS DRAWN AT THE OUTLINE OF THE HEADER IT SEATS ON, 20.3 by 6.9. The nrgSMART controller
+    datasheet and the 300CB08 datasheet call the nrgNET connector a "removable 5-pin connector with screw down
+    terminals" and the installation guide photographs it as a green pluggable header (Fig. 2-30) and sells it as a
+    replacement, "nrgNET 5-pin connector (Term Block: RCPT, 1x5)", part 141431 (section 2.10.1, p36); none gives a
+    dimension of the connector or its pitch. THE PART CARRIES NO MAKER PART NUMBER: it stands for the connector, and
+    that 141431 is this outline is not claimed. needs-drawing: the maker's drawing of part 141431, for its real
+    outline and pitch.
+  nominal: >-
+    A CONNECTOR OF THE HEADER'S OWN OUTLINE, NOT A READING OF ANY PART. It is not the 5.08 mm plug of
+    generic/terminal-508-5-plug@1 and it claims no pitch: `screw-terminal-5` claims none either.
+  depth: >-
+    NOT STATED. No document held gives how far the connector stands off the header; the part draws a plan outline
+    only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract (spec/tests/test_behaviour.py).
+elements: {}
+connection-points:
+  mate: {at: [10.15, 3.45], direction: front}
+  cable: {at: [10.15, 3.45], direction: front}
+skins: [default]

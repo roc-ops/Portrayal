@@ -18,6 +18,7 @@ import pathlib
 import xml.etree.ElementTree as ET
 
 import yaml
+import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library" / "components"
@@ -109,6 +110,7 @@ MPO_FRONTS = {"fs/fhd-fap12mtp-a@1": (12, 12), "fs/fhd-fap12mtp-b@1": (12, 12),
               "fs/fhd-fap8mtp-b@1": (8, 12), "fs/fhd-fap12mtp16-a@1": (12, 16)}
 
 
+@pytest.mark.heavy
 def test_an_mpo_front_is_one_port_per_adapter():
     from portrayal import optical_ports as P
     for ref, (count, positions) in MPO_FRONTS.items():

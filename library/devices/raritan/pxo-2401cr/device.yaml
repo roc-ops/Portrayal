@@ -1,0 +1,306 @@
+format: 1
+kind: device
+name: pxo-2401cr
+version: 0.1.0
+maturity: modelled
+manufacturer: Raritan
+model: PXO-2401CR
+description: >-
+  Raritan PXO compact intelligent PDU, 200 to 240 V, 16 A. A black metal box 220 mm wide, 133 mm deep and 44 mm
+  high. A mounting flange at each end is screwed down in place of a rack. The outlet face carries four locking
+  IEC C13 outlets, each with a release button and a lamp, and an IEC C20 inlet. The controller face carries two Ethernet
+  jacks, a console jack, a sensor jack and USB-B and USB-A jacks. It also has a reset button, a colour display and four buttons.
+profile: power
+provenance:
+  method:
+    confidence: photo-measured
+    note: >-
+      NO DIMENSIONED DRAWING OF EITHER FACE EXISTS. The controller face is read off the straight-on line drawing on
+      Raritan's compact power distribution page (a 450 x 253 px image of the PXO front with "1.7 in" marked on its
+      height). Its body spans 360 px across and 71 px down, 5.07 against the data sheet's 220 by 44, 5.00, so it agrees
+      with the data sheet to 1.5 percent and is read at 1.64 px per mm across and 1.61 down; every position on the
+      front is millimetres from that drawing and good to about 0.6 mm. The outlet face is read off the data sheet's
+      photograph of this SKU (V1377 page 3, 459 px wide), taken from the left and above: it is NOT orthographic, so
+      the block pitch and every position on that face are read as fractions of the face and are estimates (see `rear`).
+      The data sheet's page 1 photograph of the controller face, also at an angle, confirms the order and the colours of
+      what the drawing shows and adds the labels.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - Raritan PXO data sheet (V1377, 2022), page 3: "44 x 220 x 133 mm" and "1.7 x 8.7 x 5.2 in.", H x W x D,
+      for both SKUs. THE FLANGES ARE NOT IN IT: the line drawing's body (the same 5.07 aspect) ends where the flange
+      begins, and each flange stands about 14 mm outside it, so 220 is read as the body (gaps: flanges). No weight is
+      stated. The finish is black: the photographs read #333333 on the controller face in shade.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front line drawing, millimetres from the body's left edge as seen from the front, and from its top.
+      A seam runs down the face at 29.5 and at 191.5 (the end sections and the controller panel between them). USB-B
+      shell 35.6 to 47.8 across, 8.1 to 20.8 down; USB-A upright at 38.7 to 45.1 across, 24.4 to 37.6 down. The four RJ45
+      jacks stand in two rows in coloured frames (SENSOR yellow and ETH1 green above, CONSOLE blue and ETH2 green
+      below), each frame about 16.8 by 17.3: the left column from 49.4, the right from 69.2, the top row from 4.7 down,
+      the bottom from 22.8. The latch of the top row is at the top of the jack and of the bottom row at its bottom, as
+      the drawing shows. Two small circles right of the frames at 90.6 across, 16.3 and 28.7 down; the lower is
+      labelled RESET (gaps: front-circle). The maker's name stands up the face at 97.5 to 103.6. The display is 42.2 by
+      33.9 at 107.7, 5.7, and four round buttons about 8.4 across stand at centres 163.7 and 179.6, 16.1 and 29.0. The
+      labels are printed above the top row and below the bottom one, and are read from the photograph.
+  rear:
+    confidence: estimated
+    note: >-
+      ESTIMATED, off the data sheet photograph of the outlet face. The five blocks read 235, 240, 240, 245 and 225 px
+      wide at 1280 px for the face, so no block is much foreshortened and they are drawn with a common pitch of 41.2
+      for the four outlet blocks (an outlet block is 41.0 to 41.3 in the second SKU's photograph too), the first
+      starting at 15.3, which leaves the inlet block 180.1 to 220. The mouth of each C13 stands a little left of its
+      block's centre (40 percent across) and its release button right of it (75 percent); the face's middle line is
+      read at 53 percent of its height. The numerals are printed at the upper right of each block and the lamps stand
+      below each mouth, all read off the same photograph. No dimension of this face is printed.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - V1377 page 3: "4 x C13 (Locking)", "RATED CURRENT 16A". std/c13-outlet@1 turned so the chamfered end is
+      to the right, as the photograph shows. THE OUTLET IS A LOCKING C13 and the library holds no locking C13 part: it
+      is the C13 aperture, which a plain C14 plug enters, and the release button beside it is its own part
+      (raritan/pxo-lock-button@1), because the guide shows it and no document dimensions it.
+  lamps:
+    confidence: photo-measured
+    note: >-
+      photo and datasheet - a small red dot below each outlet mouth in the data sheet photograph. The PX-Series PDU
+      User Guide (4.3.11), "PXC and PXO Switched Series Outlets and LEDs" (printed pp.89 to 90), says of these models "A
+      small LED is adjacent to each outlet": not lit is powered off, red is on. Red covers on and live, and on but not live
+      (the relay board may be damaged). So the lamp states are off and on, and on is red. The quick setup guide
+      says the lamps are available on some models only. common/led-dot@1, whose 2.0 mm is its own estimate.
+  numbering:
+    confidence: photo-measured
+    note: >-
+      the unit prints 1 to 4 over the outlets, read from the data sheet photograph, left to right as seen from the
+      outlet face with the inlet at the right. The photograph's numerals are a few pixels high and are read, not
+      measured.
+  inlet:
+    confidence: datasheet
+    note: >-
+      datasheet - V1377 page 3: "INLET TYPE IEC60320 C20" and "INCLUDED CORD IEC60320 C20", which is a cord with a
+      C19 connector at the PDU and a C20 plug at the source. The cord's length is not stated and it is not drawn. The
+      inlet is at the end of the outlet face, its earth pin to the right in the photograph.
+  controller:
+    confidence: datasheet
+    note: >-
+      datasheet - V1377 page 1 labels SENSOR, ETH1 10/100, ETH2 10/100, CONSOLE, USB-B, USB-A and RESET on the face; the
+      quick setup guide (255-80-0059-00) p.1 says PXO and PXC "have the same connection ports on their front panels", and
+      p.7 that the SENSOR port "is labeled SENSOR and highlighted yellow" and that only environmental sensors go
+      in it, and p.6 that an Android device connects to the USB-B port and an iOS device to the USB-A port. The PX-Series
+      PDU User Guide (4.3.11, printed pp.13, 14 and 91 to 93) lists for the PXC and PXO one CONSOLE port (blue), one Sensor port
+      (yellow), one USB-A port, one USB-B port and two Ethernet ports (green), of which the USB-A is a powered host port
+      (480 Mbps), the LAN rate is at most 100 Mbps and the display is a dot-matrix LCD; two small LEDs stand adjacent to each
+      Ethernet port (green: link and activity; yellow: 10/100 speed). The console and the sensor port are RJ-45; the console
+      needs an RJ45 cable with a DB9 adapter on a controller of the iX7 kind, and its pinout is TxD on pin 3, RxD on 6 and
+      ground on 4 (printed p.611). The sensor pinout (p.611) is +12 V on pins 1 and 2 (500 mA together), RS-485 on 4 and 5,
+      a 1-wire signal on 7 and ground on 3, 6 and 8: a sensor bus and not Ethernet, so the jack states `rj45-serial`.
+  buttons:
+    confidence: datasheet
+    note: >-
+      datasheet - the user guide's "Control Buttons" table (printed pp.94 to 95) names the four: Up, Down, OK and Back,
+      and says Back is also the key that switches between the automatic and the manual mode. The quick setup guide p.5
+      prints the symbols: the cross or the circle shows the main menu, the chevrons choose an entry and the circle
+      selects it. So the chevrons are Up and Down, the circle is OK and the cross is Back; the photograph's display
+      shows a "Back" legend beside a cross.
+  mounting:
+    confidence: datasheet
+    note: >-
+      datasheet - quick setup guide p.4: "You can place PXO in any appropriate location with or without fastening it",
+      by screws through a flange at each end. So the unit stands free or is screwed down: `mount: desktop`. The flange
+      holes are not dimensioned (gaps: flanges).
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - V1377 page 3: voltage 200-240V, rated current 16A, capacity 3.2-3.8 kVA, surge protector 250J. The
+      data sheet's feature list adds "Built-in MOV surge and spike protection". No frequency, no per-outlet rating and no
+      circuit breaker is stated.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - V1377 page 1: "Remotely switchable outlets allow power to be cycled on/off to a specific outlet", so
+      `outlet-switching: true` and each outlet states on and off. The photograph's screen reads "Inlet I1" with active
+      power, apparent power, power factor and active energy, so the inlet is metered (`metering-scope: input`); the
+      data sheet's text does not say what is metered, and no outlet metering is stated.
+attrs:
+  physical:
+    construction: metal
+  power:
+    input-plug: iec-60320-c20
+    input-cord: detachable
+    input-voltage-v: 240
+    input-current-a: 16
+    input-range: 200-240 V
+  performance:
+    capacity: 3.2 to 3.8 kVA
+  environmental:
+    surge-protection: 250 J
+    operating-temp: up to 60 C maximum ambient (PXC and PXO, user guide specifications)
+  management:
+    metering-scope: input
+    outlet-switching: true
+chassis:
+  width: 220
+  height: 44
+  depth: 133
+  mount: desktop
+  color: '#333333'
+gaps:
+- what: flanges
+  scope: [front, rear, top, bottom, left, right]
+  reason: needs-drawing
+  note: >-
+    each end of the body carries a flat flange along its base with a screw hole, standing about 14 mm outside the body
+    on the front drawing; the quick setup guide (p.4) shows a hole at each end. No document dimensions a flange, its
+    thickness or its holes, and the format draws a body as a box, so the flanges are not drawn.
+  wanted: a dimensioned drawing of the PXO, or a straight-on photograph of the top.
+- what: front-circle
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    two small circles stand right of the Ethernet jacks. The lower is labelled RESET. The upper carries no label in the
+    drawing or the photograph and no document names it; it is drawn as a plain disc. The photograph also shows a small
+    grey dot above the USB-B jack that the line drawing omits; it is drawn as a plain disc too, and what either is, is
+    not stated.
+  wanted: the maker's description of the controller face.
+- what: eth-lamps
+  scope: [eth-1, eth-2]
+  reason: needs-photo
+  note: >-
+    the user guide says two small LEDs stand adjacent to each Ethernet port (green for link and activity, yellow for 10/100
+    speed). The maker's drawing and photograph show none beside either jack, so where they are is not known. The jacks are
+    drawn with the library's Ethernet jack part, whose two lamp windows are the part's and are not a reading of this unit.
+  wanted: a close photograph of an Ethernet jack of the unit.
+- what: outlet-face-positions
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    the outlet face is read off a photograph taken at an angle; the pitch, the first block and the height of every part
+    are fractions of it and good to a few millimetres.
+  wanted: a straight-on photograph of the outlet face, or a dimensioned drawing.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    no document shows the top, the bottom or an end straight on. The photographs see the lid at a steep angle with four
+    screw heads and an end with a seam; nothing on them can be measured.
+  wanted: straight-on photographs of the top, the bottom and an end, with a scale.
+- what: ground-point
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    the quick setup guide (p.7) says "some models" have a threaded grounding point marked with the earth symbol. No
+    photograph or drawing of this SKU shows one, so none is drawn.
+  wanted: a photograph of the unit's housing, or the maker's word on whether this SKU has one.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the four locking C13 outlets, numbered 1 to 4 from the left as seen from the outlet face, as printed'}
+  outlet-leds: {term: LED, role: indicator, index-origin: 1, description: 'one lamp per outlet, below its mouth: not lit when the outlet is off, red when it is on (user guide, PXC and PXO switched series outlets and LEDs)', states: ['off', {name: 'on', color: '#dc2626'}]}
+  lock-buttons: {term: Button, role: service, index-origin: 1, description: 'the release button of a locking outlet: hold it and unplug the cord (quick setup guide, Appendix C)'}
+  eth: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 100m}, description: 'the two 10/100 Ethernet jacks, ETH1 and ETH2'}
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: 'the console jack, the sensor jack for environmental sensors and the two USB jacks of the controller'}
+  buttons: {term: Button, role: service, index-origin: 1, description: 'the four navigation buttons and the reset button of the controller'}
+  display: {term: Display, role: indicator, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 220, h: 44}
+    panel:
+      decor:
+      - {id: seam-left, at: [29.3, 0], size: [0.4, 44], fill: '#1c1c1e', kind: seam}
+      - {id: seam-right, at: [191.3, 0], size: [0.4, 44], fill: '#1c1c1e', kind: seam}
+      - {id: frame-sensor, at: [49.4, 4.7], size: [16.8, 17.3], fill: none, stroke: '#e6d633', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-console, at: [49.4, 22.8], size: [16.8, 17.1], fill: none, stroke: '#388cb4', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-eth-1, at: [69.2, 4.7], size: [16.8, 17.3], fill: none, stroke: '#48a163', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-eth-2, at: [69.2, 22.8], size: [16.8, 17.1], fill: none, stroke: '#48a163', stroke-width: 0.5, kind: colour-frame}
+      - {id: unlabelled-circle, at: [89.1, 14.8], size: [3.0, 3.0], rx: 1.5, fill: '#1c1c1e', stroke: '#6b7076', stroke-width: 0.2, kind: unidentified}
+      - {id: unlabelled-dot, at: [36.7, 1.0], size: [2.2, 2.2], rx: 1.1, fill: '#6b7076', kind: unidentified}
+    silkscreen:
+      - {at: [57.8, 3.3], text: SENSOR, font-size: 1.7, fill: '#e8e8e8', for: sensor}
+      - {at: [77.6, 3.3], text: 'ETH① 10/100', font-size: 1.7, fill: '#e8e8e8', for: eth-1}
+      - {at: [57.8, 42.2], text: CONSOLE, font-size: 1.7, fill: '#e8e8e8', for: console}
+      - {at: [77.6, 42.2], text: 'ETH② 10/100', font-size: 1.7, fill: '#e8e8e8', for: eth-2}
+      - {at: [41.7, 23.2], text: USB-B, font-size: 1.5, fill: '#e8e8e8', for: usb-b}
+      - {at: [41.9, 41.2], text: USB-A, font-size: 1.5, fill: '#e8e8e8', for: usb-a}
+      - {at: [90.6, 32.4], text: RESET, font-size: 1.5, fill: '#e8e8e8', for: reset}
+    components:
+      placements:
+        - {id: usb-b, ref: raritan/pxo-usb-b@1, at: [35.6, 8.1], group: mgmt, rel-pos: 3, description: 'USB-B: an Android device connects here, through a USB OTG cable, as a local display'}
+        - {id: usb-a, ref: std/usb-a@1, at: [35.9, 28.75], rotate: 90, group: mgmt, rel-pos: 4, description: 'USB-A: an iOS device connects here as a local display'}
+        - {id: sensor, ref: std/rj45@2, at: [49.9, 6.75], rotate: 180, group: mgmt, rel-pos: 2, attrs: {media: rj45-serial}, description: 'SENSOR: for environmental sensors only; labelled and framed yellow. A sensor bus: RS-485 and a 1-wire signal, and 12 V power'}
+        - {id: console, ref: std/rj45@2, at: [49.9, 24.75], group: mgmt, rel-pos: 1, attrs: {role: console, media: rj45-serial}, description: 'CONSOLE, framed blue'}
+        - {id: eth-1, ref: common/rj45-eth@1, at: [69.7, 6.75], rotate: 180, group: eth, rel-pos: 1, attrs: {media: rj45, speed: 100m, role: mgmt}, description: 'ETH1 10/100'}
+        - {id: eth-2, ref: common/rj45-eth@1, at: [69.7, 24.75], group: eth, rel-pos: 2, attrs: {media: rj45, speed: 100m, role: mgmt}, description: 'ETH2 10/100'}
+        - {id: reset, ref: common/reset-button@1, at: [88.6, 26.7], group: buttons, rel-pos: 5, for: eth-1}
+        - {id: display, ref: raritan/pxo-lcd@1, at: [107.7, 5.7], group: display, rel-pos: 1, for: chassis}
+        - {id: button-up, ref: raritan/pxo-button@1, at: [159.5, 11.9], group: buttons, rel-pos: 1, for: display, description: 'upward chevron: previous entry'}
+        - {id: button-down, ref: raritan/pxo-button@1, skin: down, at: [159.5, 24.8], group: buttons, rel-pos: 2, for: display, description: 'downward chevron: next entry'}
+        - {id: button-ok, ref: raritan/pxo-button@1, skin: circle, at: [175.4, 11.9], group: buttons, rel-pos: 3, for: display, description: 'circle: OK, selects an entry; also shows the main menu'}
+        - {id: button-back, ref: raritan/pxo-button@1, skin: cross, at: [175.4, 24.8], group: buttons, rel-pos: 4, for: display, description: 'cross: Back; also switches between the automatic and the manual mode'}
+    regions:
+      - {id: logo-zone, at: [97.5, 15.1], size: {w: 6.1, h: 18.6}, label: 'Raritan wordmark, reading bottom to top; not drawn'}
+  rear:
+    size: {w: 220, h: 44}
+    panel:
+      decor:
+      - {id: inlet-recess, at: [187.0, 6.4], size: [26.0, 33.8], rx: 1.0, fill: '#242426', stroke: '#17191c', stroke-width: 0.3, kind: inlet-moulding}
+    silkscreen:
+      - {at: [45.3, 4.3], text: '1', font-size: 2.0, anchor: middle, fill: '#e8e8e8', for: outlet-1}
+      - {at: [86.5, 4.3], text: '2', font-size: 2.0, anchor: middle, fill: '#e8e8e8', for: outlet-2}
+      - {at: [127.7, 4.3], text: '3', font-size: 2.0, anchor: middle, fill: '#e8e8e8', for: outlet-3}
+      - {at: [168.9, 4.3], text: '4', font-size: 2.0, anchor: middle, fill: '#e8e8e8', for: outlet-4}
+    components:
+      placements:
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [16.8, 12.3], rotate: 90, group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [58.0, 12.3], rotate: 90, group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [99.2, 12.3], rotate: 90, group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [140.4, 12.3], rotate: 90, group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: lock-1, ref: raritan/pxo-lock-button@1, at: [44.1, 18.3], group: lock-buttons, rel-pos: 1, for: outlet-1}
+        - {id: lock-2, ref: raritan/pxo-lock-button@1, at: [85.3, 18.3], group: lock-buttons, rel-pos: 2, for: outlet-2}
+        - {id: lock-3, ref: raritan/pxo-lock-button@1, at: [126.5, 18.3], group: lock-buttons, rel-pos: 3, for: outlet-3}
+        - {id: lock-4, ref: raritan/pxo-lock-button@1, at: [167.7, 18.3], group: lock-buttons, rel-pos: 4, for: outlet-4}
+        - {id: led-1, ref: common/led-dot@1, at: [36.8, 39.0], group: outlet-leds, rel-pos: 1, for: outlet-1}
+        - {id: led-2, ref: common/led-dot@1, at: [78.0, 39.0], group: outlet-leds, rel-pos: 2, for: outlet-2}
+        - {id: led-3, ref: common/led-dot@1, at: [119.2, 39.0], group: outlet-leds, rel-pos: 3, for: outlet-3}
+        - {id: led-4, ref: common/led-dot@1, at: [160.4, 39.0], group: outlet-leds, rel-pos: 4, for: outlet-4}
+        - {id: input, ref: std/c20-inlet@1, at: [186.8, 11.1], rotate: 90, group: power-input, rel-pos: 1, description: 'the IEC C20 power inlet; the cord in the box has a C19 connector for it and a C20 plug'}
+  top:
+    size: {w: 220, h: 133}
+    empty: >-
+      no source shows the top straight on: the data sheet and the guide have no view of it, and the photographs see the
+      lid at a steep angle with four screw heads and nothing else that can be measured.
+  bottom:
+    size: {w: 220, h: 133}
+    empty: >-
+      no source shows the bottom: none of the photographs or figures looks at it, and the guide figure on page 4 draws
+      the unit from above.
+  left:
+    size: {w: 133, h: 44}
+    empty: >-
+      no source shows the left end straight on; the photographs see it side on, and the guide figure on page 4 draws the
+      flange and no end face.
+  right:
+    size: {w: 133, h: 44}
+    empty: >-
+      no source shows the right end straight on; the photographs see it side on, and the guide figure on page 4 draws
+      the flange and no end face.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-4'}
+- {physical: eth-1, name: ETH1}
+- {physical: eth-2, name: ETH2}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The cord in the box is not drawn. It has a C19 connector for the inlet and a C20 plug, and no
+      length is stated.
+    part-numbers:
+      PXO-2401CR: {}
+datasheet:
+  title: 'Raritan PXO Compact Power Distribution data sheet (V1377, 2022)'
+  url: https://www.raritan.com/assets/ram/resources/data_sheets/pxo-datasheet.pdf
+  sha256: ed970e6700f3f53815076bd039af14965a262f03224968671d239f81e0e68e99
+references:
+  - {title: 'Raritan PXC/PXO Quick Setup Guide, 255-80-0059-00', url: 'https://cdn1.raritan.com/download/pdu-g2/4.3.15/PXC_PXO_QSG_B1_4.1.0.pdf', sha256: 056c707437c4f7c0688b61fcaf68ecd5ae059b71251e12d08bf5b9a161109813}
+  - {title: 'Raritan PX-Series PDU User Guide, PX2, PX3, PXO, PXC (4.3.11)', url: 'https://cdn1.raritan.com/download/pdu-g2/4.3.15/PDU_G2_UG_F1_4.3.11.pdf', sha256: 71a5bb95218fb059546a2afd187bd40e66060c161a654aef0188f177886e27a6}
+  - {title: 'Raritan PXO front line drawing (feature-pxo-compact-form-factor.jpg, compact power distribution page)', url: 'https://www.raritan.com/assets/ram/products/feature-pxo-compact-form-factor.jpg', sha256: 5e187ca90f4fe202d9d8bae3c97625bf37126bff22a3244d9bce887394031f8a}

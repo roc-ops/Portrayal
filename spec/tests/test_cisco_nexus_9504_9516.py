@@ -4,7 +4,7 @@ Every figure here is Cisco's N9504 or N9516 NX-OS Mode Switch Hardware Installat
 Dimensions" for the envelopes, the "Overview" for the slots and what each takes, and the chassis's own table in
 "Planning for Power Requirements" for the power figures (the guide's first table is a copy of the 9508's). Pages
 are PDF pages, and the printed page is six lower. Each line-card slot takes the line-card blank and the line
-cards its guide supports, which test_cisco_nexus_9500_line_cards.py models. The eleven parts shared with the
+cards its guide supports, which test_cisco_nexus_9500_line_cards.py and test_cisco_nexus_9500_line_cards_2.py model. The eleven parts shared with the
 9508 are referenced by id, never redrawn.
 """
 from pathlib import Path
@@ -30,8 +30,10 @@ BLANKS = {"9504": ["n9k-c9504-fm-cv", "n9k-c9504-fan-pwr"], "9516": ["n9k-c9516-
 NEW = {k: FANS[k] + FABRICS[k] + BLANKS[k] for k in FANS}
 
 LINE_CARDS = {"9504": 4, "9516": 16}
-CARDS_TAKEN = {"9504": ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx", "n9k-x9716d-gx"],
-               "9516": ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx"]}
+CARDS_TAKEN = {"9504": ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx", "n9k-x9716d-gx",
+                        "n9k-x9736c-ex", "n9k-x9732c-ex", "n9k-x9736c-fx3", "n9k-x9736q-fx", "n9k-x9408pc-cfp2"],
+               "9516": ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx",
+                        "n9k-x9736c-ex", "n9k-x9732c-ex", "n9k-x9736c-fx3", "n9k-x9736q-fx", "n9k-x9408pc-cfp2"]}
 SUPPLY_BAYS = {"9504": 4, "9516": 10}
 HEIGHT = {"9504": 7 * 44.45, "9516": 21 * 44.45}      # 311.15 and 933.45 mm: the guide's own RU counts
 
@@ -206,7 +208,8 @@ def test_each_slot_accepts_what_the_guide_lists(device, chassis):
         assert set(front[f"sup-{n}"]["accepts"]) == refs(SUPERVISORS)
         assert set(rear[f"sc-{n}"]["accepts"]) == {"cisco/n9k-sc-a@1"}
     for n in range(1, SUPPLY_BAYS[chassis] + 1):
-        assert set(front[f"ps-{n}"]["accepts"]) == refs(SUPPLIES + ["n9k-psu-blank"])
+        # the redrawn DC supply is accepted beside the first drawing, which stays for a saved rack
+        assert set(front[f"ps-{n}"]["accepts"]) == refs(SUPPLIES + ["n9k-psu-blank"]) | {"cisco/n9k-pdc-3000w-b@2"}
     for n in range(1, 4):
         assert set(rear[f"fan-{n}"]["accepts"]) == refs(FANS[chassis])
     for n in range(1, 7):
@@ -340,13 +343,13 @@ def test_9516_base_is_the_guides_planning_example():
     assert {s[f"lc-{n}"] for n in range(1, 17)} == {"cisco/n9k-c9500-lc-cv@1"}
 
 
-@pytest.mark.parametrize("config,supply", [("psu-universal", "n9k-puv-3000w-b"),
-                                           ("psu-dual-input", "n9k-puv2-3000w-b"),
-                                           ("psu-dc", "n9k-pdc-3000w-b")])
+@pytest.mark.parametrize("config,supply", [("psu-universal", "n9k-puv-3000w-b@1"),
+                                           ("psu-dual-input", "n9k-puv2-3000w-b@1"),
+                                           ("psu-dc", "n9k-pdc-3000w-b@2")])
 def test_supply_builds_seat_the_bases_supply_count_of_one_supply(device, chassis, config, supply):
     s = seated(device, config)
     n = SUPPLY_BAYS[chassis] if chassis == "9504" else 5
-    assert [s[f"ps-{k}"] for k in range(1, n + 1)] == [f"cisco/{supply}@1"] * n
+    assert [s[f"ps-{k}"] for k in range(1, n + 1)] == [f"cisco/{supply}"] * n
     assert device["configurations"][config]["kind"] == "example"
 
 

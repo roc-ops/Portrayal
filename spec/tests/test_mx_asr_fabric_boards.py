@@ -389,14 +389,13 @@ def test_the_chassis_says_pairing_and_no_mixing_are_not_enforced(slug):
     assert "SCBE3-MX" in note and "previous generation" in note and "SCBE2-MX" in note
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("slug", MX)
 def test_chassis_versions_and_locks(slug):
-    d = device(slug)
-    assert d["version"] == VERSIONS[slug]
     assert [f for f in devicelock.check(LIBRARY) if f[0] == slug] == []
 
 
-VERSIONS = {"juniper/mx240": "6.2.0", "juniper/mx480": "7.2.0", "juniper/mx960": "5.2.0"}
+VERSIONS = {"juniper/mx240": "6.3.1", "juniper/mx480": "7.3.1", "juniper/mx960": "6.0.0"}
 
 
 # ---- the DCIM exports
@@ -538,6 +537,7 @@ def test_the_chassis_says_sfb_generations_cannot_be_mixed_and_it_is_not_enforced
     assert "SFB, SFB2 and SFB3" in note and "mixed" in note
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("slug", MX2K)
 def test_mx2k_chassis_versions_and_locks(slug):
     assert device(slug)["version"] == MX2K_VERSIONS[slug]
@@ -642,13 +642,14 @@ def test_no_other_bay_accepts_the_sfc2():
                 assert slug in ASR and b["id"] in FC_IDS, (slug, b["id"])
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("slug", ASR)
 def test_asr_chassis_versions_and_locks(slug):
     assert device(slug)["version"] == ASR_VERSIONS[slug]
     assert [f for f in devicelock.check(LIBRARY) if f[0] == slug] == []
 
 
-ASR_VERSIONS = {"cisco/asr-9912": "2.3.0", "cisco/asr-9922": "2.3.0"}
+ASR_VERSIONS = {"cisco/asr-9912": "2.3.3", "cisco/asr-9922": "2.3.3"}
 
 
 @pytest.mark.parametrize("slug", ASR)

@@ -1,0 +1,52 @@
+format: 1
+kind: component
+name: agr560-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: edgecore-agr-dc-block-2
+description: >-
+  The two-socket DC power connector on the face of the Edgecore AGR560 48 VDC supply, seen from its mating face. A
+  dark shroud narrowed at its waist holds two round sockets one above the other, each with a pin at its centre, and a
+  latch tab stands beside it. The cable connector edgecore/agr560-dc-plug@1 seats at its mate point.
+size: {w: 16.1, h: 29.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The Quick Start Guide draws the connector without a scale and prints no dimension for it. The box is the pocket the
+  supply's skin already reserves for it (edgecore/agr560-psu-dc@1, 16.1 by 29.0), which that contract reads off the guide's
+  rear elevation at 5.08 pixels to the millimetre; it is declared an estimate here, as the connector's outline is not
+  a dimension.
+attrs: {connector: DC power connector, positions: 2}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. THE DATA SHEET NAMES A MAKER AND NO SERIES OR PART NUMBER: the Edgecore AGR560
+    data sheet's power section reads "DC Inlet: Amphenol Terminal" (page 3) and nothing more. A maker named with no
+    part number is still unnamed, so the interface claims no maker, series, standard or pitch. The Quick Start Guide's "DC
+    Power" figure (page 2) draws the connector on the supply: a shrouded two-socket connector, not two studs.
+  gender: >-
+    NOT STATED. The figure shows two round sockets each with a pin standing in its centre, inside a shroud; it does not
+    say which half of a pair carries the contacts. The cable connector is drawn as the half that seats in this one.
+  marks: >-
+    NONE PRINTED on the connector or beside it in the figure. The label strip at the left of the supply prints "PSU0"
+    and "PSU1" and an earth symbol for the chassis, which are not marks of this connector. The data sheet and guide state
+    "-40 - -60 VDC" and "-48 - -60 VDC" (they disagree about the bottom of the range) and no document says which socket is
+    which, so the roles of the two sockets are NOT STATED.
+  size: >-
+    estimated - see size-notes. The socket centres, (6.9, 9.4) and (6.9, 23.1), are the supply's skin's own drawing,
+    carried over so that the part stands where the drawn sockets stand.
+  key: >-
+    guide - the figure draws the shroud with a narrowed waist between the two sockets and a rounded latch tab along its
+    right side. The waist is drawn; the tab is not, an estimate of its place.
+  mate: >-
+    derived - the middle of the pair, (8.05, 16.25), facing out. The cable connector's own middle is at its centre too,
+    so the two align.
+  colour: >-
+    estimated - the figure is a colour render in greys: the shroud's inside measures about #4b4b4b and the pins about
+    #a7a7a7. The body is drawn #3a3e43 with an edge #6c7073 and the pins #9aa0a6, as the supply's skin draws them.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face, so it is drawn flush and
+    states no relief.
+elements: {}
+connection-points:
+  mate: {at: [8.05, 16.25], direction: front}
+skins: [default]

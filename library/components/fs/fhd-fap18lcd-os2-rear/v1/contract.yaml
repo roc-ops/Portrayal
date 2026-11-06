@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: fhd-fap18lcd-os2-rear
-version: 1.0.0
+version: 1.1.0
 class: adapter-panel
 description: >-
   The back of FS SKU 133613 (FHD-FAP18LCDXSMF): the adapter block seen from
@@ -16,25 +16,34 @@ size-notes: >-
   on a fixed component into a pit as big as the face (the cassette rears
   record the same reading). The depth belongs to the panel, as `body.depth`.
 attrs: {media: fiber}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 18 LC duplex adapters on the rear face, seen from behind, each the other end
+      of the sleeve at the same number on the front; OS2 UPC, 36 fibres, passive
 parts:
-  - {id: b01, ref: common/lc-duplex-shuttered-adapter@2, at: [71.75, 23.075]}
-  - {id: b02, ref: common/lc-duplex-shuttered-adapter@2, at: [58.65, 23.075]}
-  - {id: b03, ref: common/lc-duplex-shuttered-adapter@2, at: [43.975, 23.075]}
-  - {id: b04, ref: common/lc-duplex-shuttered-adapter@2, at: [30.875, 23.075]}
-  - {id: b05, ref: common/lc-duplex-shuttered-adapter@2, at: [16.2, 23.075]}
-  - {id: b06, ref: common/lc-duplex-shuttered-adapter@2, at: [3.1, 23.075]}
-  - {id: b07, ref: common/lc-duplex-shuttered-adapter@2, at: [71.75, 11.475]}
-  - {id: b08, ref: common/lc-duplex-shuttered-adapter@2, at: [58.65, 11.475]}
-  - {id: b09, ref: common/lc-duplex-shuttered-adapter@2, at: [43.975, 11.475]}
-  - {id: b10, ref: common/lc-duplex-shuttered-adapter@2, at: [30.875, 11.475]}
-  - {id: b11, ref: common/lc-duplex-shuttered-adapter@2, at: [16.2, 11.475]}
-  - {id: b12, ref: common/lc-duplex-shuttered-adapter@2, at: [3.1, 11.475]}
-  - {id: b13, ref: common/lc-duplex-shuttered-adapter@2, at: [71.75, -0.125]}
-  - {id: b14, ref: common/lc-duplex-shuttered-adapter@2, at: [58.65, -0.125]}
-  - {id: b15, ref: common/lc-duplex-shuttered-adapter@2, at: [43.975, -0.125]}
-  - {id: b16, ref: common/lc-duplex-shuttered-adapter@2, at: [30.875, -0.125]}
-  - {id: b17, ref: common/lc-duplex-shuttered-adapter@2, at: [16.2, -0.125]}
-  - {id: b18, ref: common/lc-duplex-shuttered-adapter@2, at: [3.1, -0.125]}
+  - {id: b01, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [71.75, 23.075]}
+  - {id: b02, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [58.65, 23.075]}
+  - {id: b03, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [43.975, 23.075]}
+  - {id: b04, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [30.875, 23.075]}
+  - {id: b05, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [16.2, 23.075]}
+  - {id: b06, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [3.1, 23.075]}
+  - {id: b07, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [71.75, 11.475]}
+  - {id: b08, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [58.65, 11.475]}
+  - {id: b09, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [43.975, 11.475]}
+  - {id: b10, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [30.875, 11.475]}
+  - {id: b11, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [16.2, 11.475]}
+  - {id: b12, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [3.1, 11.475]}
+  - {id: b13, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [71.75, -0.125]}
+  - {id: b14, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [58.65, -0.125]}
+  - {id: b15, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [43.975, -0.125]}
+  - {id: b16, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [30.875, -0.125]}
+  - {id: b17, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [16.2, -0.125]}
+  - {id: b18, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [3.1, -0.125]}
 provenance:
   size: >-
     drawing - see size-notes.
@@ -49,4 +58,12 @@ provenance:
     FS's renders of the panel backs (the three-quarter gallery shots) show the
     adapter bodies and their caps and no printing; nothing is printed here. The
     steel behind the adapters is painted as one dark field.
+  groups: >-
+    FS FHD Fiber Adapter Panels Datasheet, pages 2 and 10 and the p6 drawing: the
+    FHD-FAP18LCDXSMF (FS SKU 133613) is a 18-adapter LC duplex panel, 36 fibres, OS2 UPC
+    (page 10 ordering table). The datasheet prints the fibre and the polish and no data
+    rate, and names no role for the adapters; the role follows the job, a through
+    connection a patch cord is plugged into, so it is traffic, and no speed is stated.
+    The group's media is the adapters' own, fiber. The rear face holds the same sleeves
+    as the front, so it takes the same group and the same count.
 skins: [default]

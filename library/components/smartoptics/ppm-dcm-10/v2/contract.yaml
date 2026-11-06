@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-dcm-10
-version: 2.2.0
+version: 2.3.0
 class: filter
 behaviour: fills
 profile: optical
@@ -104,8 +104,15 @@ provenance:
     is called rear is a DCIM convention here, not a vendor statement.
 elements:
   caption-dcm: {at: [4.50, 16.2], size: [13.2, 2.05], class: marking}
+groups:
+  lc-optical:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the duplex LC port of a passive dispersion compensator; the datasheet states no data rate
 parts:
-  - {ref: common/lc-duplex-adapter@6, id: dcm, at: [4.50, 4.0], attrs: {role: dcm}}
+  - {ref: common/lc-duplex-adapter@6, id: dcm, at: [4.50, 4.0], group: lc-optical, attrs: {role: dcm}}
 optical:
   # RX IN, TX OUT, THROUGH THE GRATING. ds-ppm-r4.0's flow figure for these
   # modules draws Rx entering and Tx leaving, and says so in prose: "Signals

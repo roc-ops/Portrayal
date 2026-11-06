@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: amx-3200-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: edgecore-amx-dc-block-3
+description: >-
+  The three-pin DC power connector on the face of the Edgecore AMX3200 48 VDC supply, seen from its mating
+  face. A blue housing with a window in it carries three gold pins down its length, the middle one set to the
+  left of the other two. The cable connector edgecore/amx-3200-dc-plug@1 seats at its mate point.
+size: {w: 17.9, h: 34.5}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The Quick Start Guide draws the connector without a scale and prints no dimension for it. The box is the one the
+  supply's skin already reserves for it (edgecore/amx-3200-48v-psu@1, 17.9 by 34.5), which that contract measures on the
+  DC rear photograph at 2.19 pixels to the millimetre, so a pixel and a half is about 0.7 mm; here it is declared an
+  estimate because it is a housing outline read off a photograph and not a dimension.
+attrs: {connector: DC power connector, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO PART NUMBER IS NAMED AND THE MAKER IS NOT NAMED IN WORDS: the Edgecore
+    AMX3200 Quick Start Guide lists "DC power cord (included with DC PSUs only)" (package contents, item 5, page 1) and
+    draws the connector in the "Connect Power" figure (page 3), where the plug's body carries moulded lettering that
+    reads, at the size the figure is printed, like "POSITRONIC INDUSTRIES" with a logo and a date code; no series or part
+    number is legible. A maker's name moulded on the cable half is not a part number, so the interface claims no maker,
+    series, standard or pitch, and it is not the library's `positronic-pla03`: no document ties this housing to that
+    series.
+  gender: >-
+    NOT STATED. The figure shows a blue housing on the supply with gold pins standing in it, facing a blue plug
+    whose wires enter at the back; the pins are on the supply's half. The cable connector is drawn as the half that
+    seats in this one.
+  marks: >-
+    NONE LEGIBLE on the supply's half in the figure or the DC rear photograph. The Quick Start Guide's list for the
+    plug's wires, "1. DC Return (white wire), 2. Ground (yellow-green wire), 3. -40 - -72 VDC (black wire)", and the
+    callouts of the figure put 1, 2 and 3 on the plug's wires from the top down, so the pins are taken in that order:
+    DC return, ground, -40 to -72 VDC. That order is read from the plug's wires and is not printed on the housing.
+  size: >-
+    estimated - see size-notes. The window and the pin positions are the supply's skin's own drawing of the
+    housing, carried over so that the part stands where the drawn connector stands.
+  key: >-
+    guide - the plug carries a latch tab above its body with a window in it, and the housing a matching blue
+    lever; the supply has its own release latch at the left edge. The part draws neither the tab nor the lever.
+  mate: >-
+    derived - the middle pin, (7.0, 16.8), facing out. The cable connector's own middle contact is at its centre
+    too, so the two align.
+  colour: >-
+    photograph - the DC rear photograph shows the housing blue with gold pins, and the guide's figure a blue plug
+    (about #0d69ca at its lit face). The housing is drawn #2f63c4 with an edge #1d3f80, as the supply's skin draws it.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face, so it is drawn flush and
+    states no relief.
+elements: {}
+connection-points:
+  mate: {at: [7.0, 16.8], direction: front}
+skins: [default]

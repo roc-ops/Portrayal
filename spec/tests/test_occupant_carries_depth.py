@@ -184,6 +184,7 @@ def _aperture_lift():
     return lift
 
 
+@pytest.mark.heavy
 def test_a_mate_to_occupant_carries_the_hosts_aperture_lift(tmp_path):
     lift = _aperture_lift()
     assert lift == 10.0, (
@@ -207,6 +208,7 @@ def test_a_mate_to_occupant_carries_the_hosts_aperture_lift(tmp_path):
     assert got != 2 * lift, "the aperture lift has been double-counted"
 
 
+@pytest.mark.heavy
 def test_seating_the_plug_does_not_resize_its_relief(tmp_path):
     """The other half of the trio. Lifting a part moves it; it must not
     stretch it - so `out` minus the summed lift is the same seated as bare."""

@@ -13,6 +13,8 @@ rear_image: true
 console-ports:
   - name: Console
     type: rj-45
+  - name: Console (mini-USB)
+    type: usb-mini-b
 interfaces:
   - name: mgmt
     type: 1000base-t
@@ -73,6 +75,9 @@ interfaces:
     type: 1000base-t
   - name: port-23
     type: 1000base-t
+power-ports:
+  - name: dc-terminal
+    type: dc-terminal
 comments: 'Juniper EX2300-24T is a fixed 1RU Gigabit Ethernet access switch. It has 24 10/100/1000BASE-T
   ports without PoE and four built-in 10-Gigabit SFP+/SFP uplink ports. The front carries the 24 jacks
   in two stacked rows numbered 0 to 23, and the upper jack of a column takes the even number. It also
@@ -116,7 +121,7 @@ comments: 'Juniper EX2300-24T is a fixed 1RU Gigabit Ethernet access switch. It 
   - thermal.cooling: one built-in fan, front-to-back
 
 
-  Drawing version 0.2.0. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 0.5.0. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.
 
   Model maturity: modelled. Every dimension in the source records where it came from.'

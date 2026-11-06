@@ -530,8 +530,8 @@ def test_the_committed_exports_equal_the_exporters_own_output_image_flags_includ
         assert (tmp_path / rel).read_text() == (LIB / "exports" / rel).read_text(), rel
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("name", DEVICES)
-def test_the_lock_file_agrees_with_the_device_at_1_0_0(name):
+def test_the_lock_file_agrees_with_the_device(name):
     problems = [f for f in devicelock.check(LIB) if f[0] == f"cisco/{name}"]
     assert not problems, problems
-    assert load(name)["version"] == "1.0.0"

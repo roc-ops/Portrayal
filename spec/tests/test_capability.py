@@ -11,6 +11,7 @@ LIB = SPEC.parent / "library"
 
 from portrayal import capability
 from portrayal import libwalk
+import pytest
 
 PROFILES = capability.load_profiles(SPEC / "schemas")
 
@@ -290,6 +291,7 @@ def test_a_gap_that_counts_nothing_omits_count(tmp_path):
     assert by_rule["L21"]["count"] > 0
 
 
+@pytest.mark.heavy
 def test_search_finds_what_a_device_is_not_how_it_was_phrased():
     """The filter matched manufacturer, model, series, family and description,
     so it found devices by wording. `search` flattens what a device IS - attrs,
@@ -425,6 +427,7 @@ def test_templated_is_false_where_the_ports_are_all_on_modules():
     assert not [g for g in gaps if "templated" in g.get("blocks", [])], gaps
 
 
+@pytest.mark.heavy
 def test_templated_is_not_dead_across_the_library():
     """A check that is false for every device fails here, loudly, instead of
     reporting False politely - the failure #129 was."""

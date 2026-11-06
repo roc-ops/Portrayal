@@ -2,8 +2,8 @@
 
 Every figure here is Cisco's N9508 NX-OS Mode Switch Hardware Installation Guide: Appendix A "Switch
 Dimensions" for the envelopes, the "Overview" for the slots and what each takes, "Planning for Power
-Requirements" for the power figures. Each line-card slot takes the line-card blank and the four line cards
-modelled in test_cisco_nexus_9500_line_cards.py.
+Requirements" for the power figures. Each line-card slot takes the line-card blank and the nine line cards
+modelled in test_cisco_nexus_9500_line_cards.py and test_cisco_nexus_9500_line_cards_2.py.
 """
 from pathlib import Path
 
@@ -23,7 +23,8 @@ FANS = ["n9k-c9508-fan", "n9k-c9508-fan2"]
 FABRICS = ["n9k-c9508-fm", "n9k-c9508-fm-s", "n9k-c9508-fm-e", "n9k-c9508-fm-e2",
            "n9k-c9508-fm-g", "n9k-c9508-fm-r", "n9k-c9508-fm-r2"]
 FABRIC_BLANKS = ["n9k-c9508-fm-z", "n9k-c9508-fm-cv", "n9k-c9508-fan-pwr"]
-LINE_CARDS = ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx", "n9k-x9716d-gx"]
+LINE_CARDS = ["n9k-x9736c-fx", "n9k-x97160yc-ex", "n9k-x9732c-fx", "n9k-x9716d-gx",
+              "n9k-x9736c-ex", "n9k-x9732c-ex", "n9k-x9736c-fx3", "n9k-x9736q-fx", "n9k-x9408pc-cfp2"]
 EVERY_MODULE = (SUPERVISORS + ["n9k-sc-a"] + SUPPLIES + ["n9k-psu-blank"] + FANS + FABRICS
                 + FABRIC_BLANKS + ["n9k-c9500-lc-cv"])
 
@@ -127,7 +128,8 @@ def test_each_slot_accepts_what_the_guide_lists(device):
         assert set(front[f"sup-{n}"]["accepts"]) == refs(SUPERVISORS)
         assert set(rear[f"sc-{n}"]["accepts"]) == {"cisco/n9k-sc-a@1"}
     for n in range(1, 9):
-        assert set(front[f"ps-{n}"]["accepts"]) == refs(SUPPLIES + ["n9k-psu-blank"])
+        # the redrawn DC supply is accepted beside the first drawing, which stays for a saved rack
+        assert set(front[f"ps-{n}"]["accepts"]) == refs(SUPPLIES + ["n9k-psu-blank"]) | {"cisco/n9k-pdc-3000w-b@2"}
     for n in range(1, 4):
         assert set(rear[f"fan-{n}"]["accepts"]) == refs(FANS)
     for n in range(1, 7):
@@ -228,12 +230,12 @@ def test_base_seats_the_common_equipment(device):
     assert {s[f"lc-{n}"] for n in range(1, 9)} == {"cisco/n9k-c9500-lc-cv@1"}
 
 
-@pytest.mark.parametrize("config,supply", [("psu-universal", "n9k-puv-3000w-b"),
-                                           ("psu-dual-input", "n9k-puv2-3000w-b"),
-                                           ("psu-dc", "n9k-pdc-3000w-b")])
+@pytest.mark.parametrize("config,supply", [("psu-universal", "n9k-puv-3000w-b@1"),
+                                           ("psu-dual-input", "n9k-puv2-3000w-b@1"),
+                                           ("psu-dc", "n9k-pdc-3000w-b@2")])
 def test_supply_builds_seat_four_of_one_supply(device, config, supply):
     s = seated(device, config)
-    assert [s[f"ps-{n}"] for n in range(1, 5)] == [f"cisco/{supply}@1"] * 4
+    assert [s[f"ps-{n}"] for n in range(1, 5)] == [f"cisco/{supply}"] * 4
     assert device["configurations"][config]["kind"] == "example"
 
 

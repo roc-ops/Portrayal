@@ -1,0 +1,27 @@
+format: 1
+kind: component
+name: outlet-numeral
+version: 1.0.0
+class: marking
+profile: power
+description: >-
+  The outlet number printed on the strip under a Server Technology PRO4X outlet - a number in a narrow
+  window. The number is a field.
+size: {w: 3.4, h: 18.0}
+size-confidence: {w: drawing, h: estimated}
+provenance:
+  method: >-
+    drawing - Server Technology outline drawing 810-03-1596-00 rev A is vector, so the strip was read from
+    its path geometry at 0.42483 pt/mm, the scale that puts its 1778.2 overall on the strip. The drawing
+    lies the PDU down, cord end left; this part is drawn as the PDU stands, cord end down.
+  size: >-
+    drawing and estimate - the numeral strip is 3.4 across under the outlets. Its window along the PDU is
+    estimated at 18.0, inside the 21.18 C13 pitch, because the drawing's numerals are too small to bound.
+  numbers: >-
+    drawing - detail A and the plan view print 36 down to 19 on the cord side of the controller and 18
+    down to 1 beyond it, read from a render. The number is a field on the placement.
+fields:
+  label: {label: Outlet number, type: text, default: '1'}
+elements:
+  band: {at: [0, 0], size: [3.4, 18.0], class: marking}
+skins: [default]

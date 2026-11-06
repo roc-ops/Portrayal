@@ -1,14 +1,14 @@
 format: 1
 kind: module
 name: ais800-64-psu-dc
-version: 1.0.1
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
 description: >-
   The 3000 W DC power supply of the Edgecore AIS800-64D and AIS800-64O - the AC unit's
-  73.5 x 40 CRPS shell with a six-stud terminal block in place of the fan guard and inlet:
-  two rows of three M-studs under a lifting cover, honeycomb fields either side, a black
+  73.5 x 40 CRPS shell with a six-socket DC power connector in place of the fan guard and inlet:
+  two rows of three round sockets under a lifting cover, honeycomb fields either side, a black
   pull loop standing at the left and the coloured release latch at the right. Drawn from
   the quick start guide's own Connect Power figure of this face.
 size: {w: 73.5, h: 40.0}
@@ -69,6 +69,22 @@ provenance:
     latch changes colour at all - and green on the DC unit against red or blue on the AC unit
     is the more useful convention anyway, because the two must not be mixed in one chassis.
     It is green in both DC configurations and the device no longer overrides it.
+  connector: >-
+    the supply composes edgecore/ais800-64-dc-header@1 as `dc-header`, the six-socket DC power connector of the Edgecore AIS800-64D
+    Quick Start Guide, Connect Power (page 2), at the box of the `terminal-pocket` element (26.79 by 22.19), which carries the six
+    socket centres the skin draws. No held document names the connector (see the-terminal-block-is-measured-and-unnamed), so the
+    part is a declared stand-in (its own provenance) and the key `edgecore-ais800-dc-block-6` claims no maker, series, standard or
+    pitch; a later held part number would replace it. edgecore/ais800-64-dc-plug@1 mates it, a stand-in for the cable connector no
+    document draws. The skin is unchanged and the part is drawn over the pocket it draws.
+  roles: >-
+    the guide's callouts on the Connect Power figure (page 2) and the list under it: "-48 - -60 VDC" (1) at the upper-left and
+    lower-left sockets, "DC return" (2) at the upper-right and lower-right sockets, "Signal +" (3) at the upper-centre socket and
+    "Signal -" (4) at the lower-centre socket. In DC roles that is `batt` on the two left sockets and `rtn` on the two right ones; the
+    centre pair is a signal pair and not a power feed. The callouts are the guide's and no mark is printed on the connector.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. A port whose poles are a connector's contacts is offered only where that path's
+    part is itself the connector; on a supply in a bay it is the supply, not the connector it composes, and two sockets carry each
+    pole. A later change can state the port, a minor on the devices that seat this supply.
   no-lamp: >-
     The round feature at the bottom right of the figure (69.4, 33.5) sits exactly where the
     AC unit's bottom-right screw head is on the elevation and the photograph, and is drawn
@@ -90,6 +106,7 @@ fields:
   latch-finish: {label: Latch colour, type: text, default: '#9cdb7d'}
 parts:
   - {ref: common/screw-head@1, id: screw-1, at: [67.60, 31.70]}
+  - {ref: edgecore/ais800-64-dc-header@1, id: dc-header, at: [24.19, 9.16]}
 relief:
   wall: '#3a3e43'
   features:

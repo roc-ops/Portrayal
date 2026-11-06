@@ -409,7 +409,8 @@ def test_the_exported_type_lists_the_front_ports_and_the_rear_management_ports(d
         (LIB / "exports/netbox/device-types/Juniper" / f"{DEVICES[dev][0]}.yaml").read_text())
     names = {i["name"] for i in doc["interfaces"]}
     assert {f"port-{k}" for k in range(n)} <= names
-    # the 68-pin Virtual Chassis ports have no registered interface, so a DCIM type does not list them
+    # the 68-pin Virtual Chassis ports present ex4200-vcp and no DCIM has a port type for
+    # them (NOT_A_DCIM_PORT), so a DCIM type does not list them
     assert "mgmt" in names and not {"vcp-0", "vcp-1"} & names
     assert not {f"port-{k}" for k in range(n, 48)} & names
     consoles = {c["name"] for c in doc.get("console-ports") or []}

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: osa542x-psu-dc-40w
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -44,6 +44,22 @@ provenance:
     power out of spec.
   depth: >-
     NOT STATED in the data sheet or the manual, so no body is declared.
+  connector: >-
+    the supply composes oscilloquartz/osa542x-dc-header@1 as `dc-header`, the three-position keyed latching
+    header of the OSA 5420/5421 Installation and Commissioning Manual R9.5.1, Figure 13 (page 62) and
+    Figure 15 and Table 8 (page 70), at the box of the `inlet` element. The manual names no maker or part
+    number for it, so the part is a declared stand-in (its own provenance). oscilloquartz/osa542x-dc-plug@1,
+    the cable connector of Figure 15, mates it. The supply's own skin no longer draws the header; the part does.
+  roles: >-
+    manual - Table 8 (page 70), left to right as the supply prints "- Gnd +" and Figure 15 numbers the
+    cells 3, 2, 1: pin 3 "-48 VDC Battery" (the library's `batt`), pin 2 "Gnd" ground (`gnd`) and pin 1 "+",
+    "Return for battery source" (`rtn`). The page-63 steps wire the return to the source's + terminal and the
+    battery to its - terminal. No nominal is stated: the manual and the data sheet print a range.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. A port whose poles are a connector's contacts is
+    offered only where that path's part is itself the connector; on a supply in a bay it is the supply, not
+    the connector it composes, so a port stated here would be published and then not offered. The roles above
+    are recorded for the port a later change can state, a minor on the devices that seat this supply.
 states: [absent]
 elements:
   handle: {at: [2.2, 3.95], size: [21.6, 4.8], class: handle}
@@ -54,6 +70,8 @@ elements:
     states: ['off', {name: ok, color: '#39b54a'}, {name: fail, color: '#d0342c'}]
   inlet: {at: [39.9, 17.75], size: [13.7, 10.3], class: inlet}
   thumbscrew: {at: [72.9, 28.15], size: [7.4, 7.4], class: fastener}
+parts:
+  - {ref: oscilloquartz/osa542x-dc-header@1, id: dc-header, at: [39.9, 17.75]}
 connection-points:
   power: {at: [46.75, 25.3], direction: rear}
 skins: [default]

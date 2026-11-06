@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2300-48mp
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2300-48MP
@@ -145,6 +145,16 @@ provenance:
       median of the bare front plate in the 24-port photograph (#656d74); the 48-port photograph's plate
       reads about #81868d near its top edge, lighter under the studio lights; the strip along the lower
       edge #bbe4f2.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      Table 36 lists, for the EX2300-24MP and EX2300-48MP, a Panduit LCA10-10L lug or equivalent (not provided) on one
+      Pan Phillips M4 x 6 mm nickel plated screw (provided). The figure calls the ring at the right of the rear the
+      ESD point and prints the earth symbol under it, and the `rear-layout` note draws it as the earthing terminal; it
+      was drawn as a plain light disc, which is how a nickel plated screw head looks. `common/ground-screw-m4@1` is
+      placed on that ring, at the centre the ring was drawn at: the one M4 screw that the guide says is provided,
+      which a ring lug lands on. It is a screw and not a bare hole because the guide says the screw ships with the
+      switch.
 attrs:
   physical:
     weight-note: 14.33 lb (6.5 kg), Table 3
@@ -203,6 +213,13 @@ gaps:
     The right panel carries the fans (drawn as grilles at the places read off Figure 36); no flat figure
     shows its mounting holes or the left panel's intake.
   wanted: A flat drawing of both side panels.
+- what: earthing-terminal-position
+  scope: [earth-screw]
+  reason: needs-photo
+  note: >-
+    The figure calls the ring at the right of the rear the ESD point and prints the earth symbol under it; Table 36
+    lists an earthing terminal on the rear panel, one M4 screw. The screw is placed on that ring.
+  wanted: a photograph of the rear that shows which feature is the earthing terminal
 groups:
   rj45:
     term: Port
@@ -276,6 +293,11 @@ groups:
     term: Item
     role: furniture
     index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the earthing terminal, one M4 screw for a lug (Table 36)
 views:
   front:
     size: {w: 440.9, h: 43.3}
@@ -286,7 +308,7 @@ views:
       - {id: shell-1, kind: jack-shell, at: [34.2, 8.6], size: [117.4, 26.6], rx: 0.6, fill: '#bfc1c4'}
       - {id: shell-2, kind: jack-shell, at: [151.8, 8.6], size: [117.4, 26.6], rx: 0.6, fill: '#bfc1c4'}
       - {id: shell-3, kind: jack-shell, at: [269.4, 8.6], size: [117.4, 26.6], rx: 0.6, fill: '#bfc1c4'}
-      - {id: usb-shell, kind: usb-shell, at: [6.9, 20.5], size: [6.3, 13.8], rx: 0.5, fill: '#b9bcc0'}
+      - {id: usb-shell, kind: port-shell, at: [6.9, 20.5], size: [6.3, 13.8], rx: 0.5, fill: '#b9bcc0'}
       cutouts:
       - {block: mgmt}
       - {block: console}
@@ -420,13 +442,13 @@ views:
     size: {w: 440.9, h: 43.3}
     panel:
       decor:
-      - {id: earth-terminal, kind: earth-stud, at: [420.35, 17.05], size: [6.5, 6.5], rx: 3.25, fill: '#c9cbcd'}
       - {id: rear-plate-right, kind: label-plate, at: [329.2, 14.9], size: [64.7, 21.8], rx: 0.5, fill: '#7a838b'}
     silkscreen:
     - {at: [41.6, 15.7], text: EX2300 MG PoE+, font-size: 4.2, anchor: start, fill: '#f2f4f6', for: chassis}
     - {at: [158.3, 38.2], text: 'AC INPUT : 100-240V~; 10.6-4.8A; 50/60 Hz', font-size: 3.7, anchor: start, fill: '#f2f4f6', for: chassis}
     components:
       placements:
+      - {ref: common/ground-screw-m4@1, id: earth-screw, at: [419.6, 16.3], group: grounding, rel-pos: 0}
       - {ref: common/ground-symbol@1, id: earth-mark, at: [420.6, 26.9], for: chassis, group: furniture, rel-pos: 0}
       - {ref: std/c14-inlet@1, id: ac-inlet, at: [184.4, 9.7], group: power-input, rel-pos: 0}
       - {ref: common/screw-head@1, id: rear-screw-0, at: [69.7, 4.9], group: furniture, rel-pos: 1}

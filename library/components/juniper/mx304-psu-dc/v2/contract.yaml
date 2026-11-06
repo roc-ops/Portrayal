@@ -1,0 +1,156 @@
+format: 1
+kind: module
+name: mx304-psu-dc
+version: 2.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX304 DC power supply module. Two stack at the rear left, 1+1
+  redundant and hot-swappable. 2200 W output from -40 to -72 VDC input
+  (nominal -48/-60 VDC, 50 A maximum). The round fan grille and the orange
+  pull handle are at the left. A terminal block is at the right, with four
+  studs: two for -48V/-60V and two for RTN. A single STATUS lamp is above it.
+attrs:
+  inlet: dc-terminal
+  envelope: 73.5 x 40.1 x 198.5 mm (Table 22)
+  model: MX304 DC PSU
+  role: dc-power-supply
+  power-output-w: 2200
+  input: -48/-60 VDC nominal (operating -40 to -72 VDC), 50 A maximum
+  redundancy: 1+1
+provenance:
+  size: 'datasheet-table + photo - Table 22: DC power supply 2.89 x 1.57 x
+    7.81 in (73.5 x 40.1 x 198.5 mm); drawn face 66.0 as the AC (same bay),
+    envelope in attrs. Provenance for the drawn-face reading is
+    mx304-psu-ac''s, copied here because the two share the bay - an echo,
+    not corroboration'
+  power-output-w: 'guide DC power specifications: "Maximum output power |
+    2200W". An OUTPUT because a psu PROVIDES power'
+  face: >-
+    ESTIMATED, redrawn from the figures. Juniper MX304 Universal Routing Platform Hardware Guide, Figure 54
+    "Removing the Nuts from the Terminals" and Figure 55 "Connecting the DC Cable" (printed page 105, PDF page
+    115, drawings g101319 and g101320), at 200 dpi. They draw the supply at an angle: a round fan grille with
+    the orange handle crossing it from its top left corner to its bottom right, the printed labels -48V/-60V
+    and RTN along the top of a raised, trough-shaped terminal block, and on the block four threaded studs
+    under four flanged nuts and a central rib; a cover with two cable cut-outs lies over it in Figure 55. The
+    figures are line art and carry no dimension of the face, so each box is a fraction read off them and the
+    held photograph (the rear view of the MX304 with DC supply in PSU 1): the grille square across the left
+    45 per cent of the face, the block across the right 47 per cent from 24 to 89 per cent down, the labels
+    above it. Version 1 drew two studs 11 mm apart on a flat black plate; because the studs, the plate and the
+    handle moved, this drawing is version 2 and version 1 keeps its own. The colours are estimates: the face,
+    the black block and the steel studs are read off the held photograph, the handle is version 1's. The
+    photograph shows two large bolts, 15.7 mm apart, under a clear cover where the figures show four studs;
+    the drawing follows the figures. The status lamp stands where version 1 put it, not re-read here. The
+    cover is drawn removed.
+  seats: >-
+    A DECLARED STAND-IN. Each pole is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in. (15.875) centres that
+    one two-hole lug lands across, turned a quarter so the pair runs down the face. Each stands so that the
+    pair's midpoint is the midpoint of the two studs the skin draws in its column (41.0 and 56.7 across, 22.5
+    down; the skin's studs are 15.88 apart). THE LUG'S PITCH IS PRINTED AND THE STUDS' IS NOT: Figure 35 "DC
+    Power Cable Lug" (printed page 76, PDF page 86) dimensions the lug, two holes .25 in. across and .63 in.
+    apart, and no document held dimensions the studs, their thread or their spacing. The pair's studs are
+    common/terminal-screw-34@1, which claims no thread. The direction of a pair on the face is not settled by
+    the figures; it is drawn down the face as the MX240 supply's pairs are.
+  poles: >-
+    Juniper MX304 Universal Routing Platform Hardware Guide, "Connect Power to a DC-Powered MX304 Router"
+    (printed pages 103 to 105): step 4, "two terminals labeled -48V/-60V (negative) and RTN (positive)", and step 8,
+    "Secure the positive (+) DC source power cable lug to the RTN (return) terminal" and "the negative (-) DC
+    source power cable lug to the -48V/-60V (input) terminal"; step 7 reads "the four terminals" and Figure 54
+    draws four studs. Figure 54 prints -48V/-60V at the left and RTN to its right on the block's plate, so
+    the left pair of studs is -48V/-60V and the right pair RTN; the figure does not bracket the studs under
+    the labels, so this is read from the drawing. The roles are what the supply prints: `batt` for -48V/-60V
+    (spec/schemas/dc.yaml writes `batt` as -48V and negative (battery)) and `rtn` for RTN. The supply has one
+    DC input, "a single DC input (-48/-60 VDC and return)", so one port, `input`, of two poles, left to right
+    as the skin prints them ("a terminal block that provides a single DC input", printed page 34).
+  lug: >-
+    Figure 35 "DC Power Cable Lug" (printed page 76, PDF page 86), part LCD6-14A-L: two holes .25 in. across
+    .63 in. apart, .48 in. wide and 2.24 in. long, for #6 AWG. The library reads .63 in. as 5/8 in. (15.875), as
+    it does for the MX304's ground plate. The packing list (printed page 91) gives four DC terminal lugs for the
+    two supplies, two for each, one for each pole.
+  voltage: >-
+    NOT STATED. The guide's electrical specifications table (printed page 70) gives "Nominal: -48 VDC, -60 VDC"
+    with an operating range of -40 through -72 VDC: two nominals. A port states one nominal, so the port
+    states none. `attrs` keeps the range as the table prints it.
+  rating: >-
+    The guide's electrical specifications table (printed page 70) gives "DC input current rating | 50 A maximum", one figure for
+    this supply, so the port states 50. The guide's recommended 60 A circuit breaker is the circuit's, not the
+    supply's, and is not stated.
+  awg: >-
+    Juniper MX304 Universal Routing Platform Hardware Guide, "DC Power Cable Specifications for the MX304
+    Router" (printed page 76): "6 AWG (4.11 mm2) stranded wire, minimum 60C wire", and Figure 35 prints #6
+    AWG for the lug's barrel. One size in the guide held for the supply, so the port states it.
+  leds: 'guide Table 14 mirrors Table 13''s single STATUS lamp vocabulary
+    (standby / updating / ok / fault / warning / off)'
+states:
+- ok
+- fault
+- absent
+elements:
+  handle:
+    at: [0.7, 1.0]
+    size: [30.4, 37.6]
+    class: latch
+  terminals:
+    at: [33.0, 9.5]
+    size: [31.0, 26.0]
+    class: terminal
+size:
+  w: 66.0
+  h: 40.1
+  d: 198.5
+size-confidence: {w: estimated, h: datasheet, d: datasheet}
+size-notes: >-
+  the height and depth are Table 22's (1.57 in and 7.81 in); the width is the 66.0 the bay's aperture is drawn at, and the
+  table's 73.5 is the envelope, kept in attrs
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#e8731f'
+    confidence: estimated
+    source: photo (AC unit and the DC unit's rear view) - the orange pull handle stands proud
+  - node: terminals
+    out: 2.0
+    color: '#1b1d20'
+    confidence: estimated
+    source: drawing and photo - the terminal block stands proud; raised as the group so
+      it carries its own stud detail, not a blank slab
+  - node: stud-0
+    cyl: 7.0
+    thread: 1.0
+    lift: 2.4
+    confidence: estimated
+    source: drawing - threaded terminal studs; height not dimensioned
+  - node: stud-1
+    cyl: 7.0
+    thread: 1.0
+    lift: 2.4
+    confidence: estimated
+    source: drawing - as stud-0
+  - node: stud-2
+    cyl: 7.0
+    thread: 1.0
+    lift: 2.4
+    confidence: estimated
+    source: drawing - as stud-0
+  - node: stud-3
+    cyl: 7.0
+    thread: 1.0
+    lift: 2.4
+    confidence: estimated
+    source: drawing - as stud-0
+parts:
+  - {ref: juniper/mx240-dc-pole@1, id: pole-batt, at: [31.3625, 20.8], rotate: 90}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-rtn, at: [47.0625, 20.8], rotate: 90}
+dc:
+  ports:
+    - id: input
+      direction: input
+      awg: [6]
+      rating-a: 50
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles, awg: awg, rating-a: rating}
+skins: [default]

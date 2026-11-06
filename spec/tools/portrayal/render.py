@@ -133,6 +133,54 @@ def mark_lamped(svg):
                 src.set("data-lamped", "true")
 
 
+# THE RING ROUND A PORT WHOSE LIGHT THE USER COLOURS (#1271). A grey the faces
+# already use for bare metal and ink (#9aa0a8, in the skins of the common parts),
+# so it is no state colour and no maker's: whatever colour the user sets, the
+# ring is the same. It is a band outside the port's box, `RING_GAP` clear of it
+# and `RING_WIDTH` thick, so it covers no part of the port.
+PROGRAMMABLE_RING = "#9aa0a8"
+RING_GAP = 0.5
+RING_WIDTH = 0.4
+
+
+def draw_programmable_rings(svg, marked, boxes):
+    """One ring per port a marked lamp belongs to, drawn under that port.
+
+    A marked placement that is a lamp with a `for` naming placements on this
+    face is ringed through them (the ring belongs to the port, not to the 1.4
+    mm lamp beside it); a lamp for something not on this face, or any other
+    marked placement, is ringed itself. Two lamps for one port make one ring.
+    The ring is not an element of the face: no `data-path`, so no row in the
+    elements file and no node in the Explorer's tree - the mark is on the
+    lamp's own row (`programmable`). `data-ring-of` names the placement it
+    surrounds.
+    """
+    done = set()
+    for p in marked:
+        hosts = [t for t in targets(p.get("for")) if t in boxes] or [p["id"]]
+        for host in hosts:
+            at = next((n for n in svg if n.get("id") == host), None)
+            if host in done or host not in boxes or at is None:
+                continue
+            done.add(host)
+            x0, y0, x1, y1 = boxes[host]
+            m = RING_GAP + RING_WIDTH / 2
+            ring = ET.Element(f"{{{SVG_NS}}}rect")
+            ring.set("id", f"programmable-ring--{host}")
+            ring.set("data-class", "programmable-ring")
+            ring.set("data-programmable", "true")
+            ring.set("data-ring-of", host)
+            ring.set("x", f"{x0 - m:g}")
+            ring.set("y", f"{y0 - m:g}")
+            ring.set("width", f"{x1 - x0 + 2 * m:g}")
+            ring.set("height", f"{y1 - y0 + 2 * m:g}")
+            ring.set("rx", f"{m:g}")
+            ring.set("fill", "none")
+            ring.set("stroke", PROGRAMMABLE_RING)
+            ring.set("stroke-width", f"{RING_WIDTH:g}")
+            svg.insert(list(svg).index(at), ring)
+
+
 def data_for(value):
     """The `data-for` attribute for a `for:` value, or None.
 
@@ -2692,7 +2740,7 @@ def bevel_face(svg, faceplate, ch, face, w, h):
     kit can find (`chassis-bevels`). bevel.py builds the solid; the 3D viewer
     builds its mesh from the same polygons, so the two cannot disagree.
     """
-    if not ch.get("bevel") or face not in _bevel.FACES:
+    if not (ch.get("bevel") or ch.get("rounded")) or face not in _bevel.FACES:
         return
     bevels = _bevel.parse(ch)
     W, H, D = ch["width"], ch["height"], ch["depth"]
@@ -4050,6 +4098,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             break
         member_of.update(grew)
 
+    # THE PLACEMENTS MARKED AS A PROGRAMMABLE LIGHT (#1271) and where each one
+    # stands, for the rings drawn after the last placement.
+    programmable = []
+    placed_boxes = {}
+
     def draw_placement(p):
         # How far off the face the SEAT is - the aperture's own protrusion,
         # nothing the author wrote. Kept separate from `p["lift"]` on purpose;
@@ -4235,6 +4288,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         states = p.get("states") or grp.get("states")
         if states:
             apply_states(g, states, inst_palette)
+        # A USER-PROGRAMMABLE COLOUR (#1271), the same way: a placement's own
+        # word wins over its group's, so one lamp may take the mark back. The
+        # mark rides on the instance as data; the ring is drawn once every
+        # placement's box is known (below), under the port the lamp belongs to.
+        on = p["programmable"] if "programmable" in p else grp.get("programmable")
+        if on and not p.get("projection-of"):
+            g.set("data-programmable", "true")
+            note = p.get("programmable-note") or grp.get("programmable-note")
+            if note:
+                g.set("data-programmable-note", note)
+            programmable.append(p)
         # The sentence the vendor wrote, kept beside the tokens rather than
         # instead of them. "Blue = 100G, Green = 40G" is not a state list and was
         # never usable as one; it is still worth carrying, so it travels as prose.
@@ -4281,6 +4345,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             x0, y0, x1, y1 = cx - chh_ / 2, cy - cw / 2, cx + chh_ / 2, cy + cw / 2
         else:
             x0, y0, x1, y1 = p["at"][0], p["at"][1], p["at"][0] + cw, p["at"][1] + chh_
+        placed_boxes[p["id"]] = (x0, y0, x1, y1)
         extents[0] = min(extents[0], x0); extents[1] = min(extents[1], y0)
         extents[2] = max(extents[2], x1); extents[3] = max(extents[3], y1)
 
@@ -4644,6 +4709,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                              key=lambda kv: tuple(str(x) for x in kv[0]))))
         style.text = STATE_CSS + extra + "\n"
 
+    draw_programmable_rings(svg, programmable, placed_boxes)
+
     mark_lamped(svg)
 
     # A component's own <g id="silkscreen"> is printed on ITS faceplate, so it
@@ -4813,7 +4880,7 @@ def published_ears(ears):
     added the object beside it; a reader that had to branch on the type to ask
     one question would branch on it for ever, so the string is published as
     `{behind: true}` and the object as the keys it states - `behind`, `h`, `y`,
-    `color`, `positions` - and no more. Lengths are floats, as `overhang`'s are; a
+    `none`, `color`, `positions`, `rolled` - and no more. Lengths are floats, as `overhang`'s are; a
     position keeps every key it writes (`name`, `label`, `at`, `default`,
     `racks`, `part`)."""
     if isinstance(ears, str):
@@ -4821,6 +4888,8 @@ def published_ears(ears):
     out = {}
     if "behind" in ears:
         out["behind"] = ears["behind"] is True
+    if "none" in ears:
+        out["none"] = ears["none"] is True
     for key in ("h", "y"):
         if ears.get(key) is not None:
             out[key] = float(ears[key])
@@ -4833,6 +4902,11 @@ def published_ears(ears):
             if pos.get("at") is not None:
                 pos["at"] = float(pos["at"])
             out["positions"].append(pos)
+    if ears.get("rolled"):
+        # THE BRACKETS A DEVICE STOOD ON ITS SIDE IS HELD BY: each keeps the keys it
+        # writes, its lengths as floats like `overhang`'s
+        out["rolled"] = [{k: (float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else v)
+                          for k, v in (b or {}).items()} for b in ears["rolled"]]
     return out
 
 
@@ -4900,6 +4974,119 @@ def config_slots(device, cfg_name, cfg, lib):
     whose two mounting options differ publishes each. `[]` on a device that
     offers none."""
     return _mounts(device, cfg_name, cfg, lib, "interface")
+
+
+# --- DC ports in components.json and configs.json (docs/dc-power-design.md 5.2) ----
+
+def _dc_join(base, tail):
+    """A path from a part's own path and what is under it; either may be empty,
+    which is how a component's frame (the part itself is `""`) is written."""
+    return f"{base}/{tail}" if base and tail else (base or tail)
+
+
+def published_dc_port(port, base, override=None):
+    """ONE DC PORT AS THE BUILD PUBLISHES IT, the shape components.json and
+    configs.json share: `{id, path, direction, voltage, rating-a, awg, side,
+    poles}`, each pole `{role, slot}` and a `stand-in` where the part states one.
+
+    `base` is the part's own path in the frame the entry is written in: `""` in
+    components.json, where the part is the frame, and the path a drawing
+    addresses the part by in configs.json (`feed-a`, `psu-0/module`). THE PATH
+    OF A PORT IS THE PART'S AND ITS ID, whether the part has one port or
+    several (`feed-a/input`, `psu-0/module/input`), so adding a port to a part
+    never moves another's path: the rule the component schema states. A pole's
+    `slot` is always under the part, never under the port.
+
+    `override` is the placement's `dc` entry for this port, applied over what the
+    part states: `side`, `voltage`, `rating-a` and the role of a pole by its
+    slot. An unstated figure is `null`, so "the part does not say" is tellable
+    from a key that is not a question this entry answers. `source` is not
+    published: it names a `provenance` note, which components-detail.json holds.
+    """
+    o = override or {}
+    roles = o.get("poles") or {}
+    poles = []
+    for pole in port.get("poles") or []:
+        role = roles.get(pole["slot"], pole["role"])
+        out = {"role": role, "slot": _dc_join(base, pole["slot"])}
+        # a stand-in goes with the role it stands in for: it is kept for a pole
+        # the placement leaves alone, and for one it sets back to unstated, and
+        # dropped for a role a placement states
+        if pole.get("stand-in") and role in (pole["role"], "unstated"):
+            out["stand-in"] = copy.deepcopy(pole["stand-in"])
+        poles.append(out)
+
+    def figure(key):
+        value = o[key] if key in o else port.get(key)
+        return copy.deepcopy(value) if value is not None else None
+
+    return {"id": port["id"], "path": _dc_join(base, port["id"]),
+            "direction": port["direction"], "voltage": figure("voltage"),
+            "rating-a": figure("rating-a"), "awg": figure("awg"),
+            "side": figure("side"), "poles": poles}
+
+
+def component_dc_ports(contract):
+    """A component's `dc-ports` for components.json, in the order the part
+    states them; `[]` for a part with no `dc` block, which the index leaves
+    out, as it does `cages`."""
+    ports = (contract.get("dc") or {}).get("ports") or []
+    return [published_dc_port(p, "") for p in ports]
+
+
+def config_dc_ports(device, cfg_name, cfg, contract_of):
+    """`configs[].dc-ports` (docs/dc-power-design.md 5.2): every DC port the
+    parts one configuration draws present, ascending by path, `[]` when it
+    draws none.
+
+    A PORT BELONGS TO THE CONFIGURATION THAT SEATS ITS PART. A placed part is in
+    every configuration its `only-in` allows; a part in a bay is whatever the
+    configuration's `bays` seats there, else the bay's `default`
+    (manifest.seated_ref), and a nested bay is keyed without its `module` steps
+    as the build keys it. So a configuration that seats another part, or none,
+    does not carry the port - the same reason `configs[].slots` and
+    `configs[].states` are per configuration, and `cages` per view, which holds
+    only what is true of every build.
+
+    PATHS ARE THE DRAWING'S. A placed part is at its placement id; a part in a
+    bay at `<bay>/module`; a part in a seated part's bay at
+    `<bay>/module/<bay>/module`. The placement's `dc` override is applied to a
+    placed part only, as lint reads it. `contract_of(ref)` answers the contract,
+    or None where the ref names nothing (lint reports it)."""
+    out = []
+    seats = cfg.get("bays")
+
+    def seat(ref, path, key, override, depth):
+        ref = ref.split(":")[0]
+        contract = contract_of(ref)
+        if not isinstance(contract, dict):
+            return
+        ports = (contract.get("dc") or {}).get("ports") or []
+        for port in ports:
+            out.append({**published_dc_port(port, path, (override or {}).get(port["id"])),
+                        "ref": ref})
+        if depth >= MAX_BAY_DEPTH:
+            return
+        for bid, bay in sorted((contract.get("bays") or {}).items()):
+            held = seated_ref(seats, f"{key}/{bid}", bay if isinstance(bay, dict) else None)
+            held = held.get("ref") if isinstance(held, dict) else held
+            if held:
+                seat(held, f"{path}/{bid}/module", f"{key}/{bid}", None, depth + 1)
+
+    for _face, (_name, view) in resolve_views(device, cfg).items():
+        parts = view_parts(view)
+        for p in parts["placements"]:
+            if p.get("id") and p.get("ref") and not (p.get("only-in") and cfg_name not in p["only-in"]):
+                override = p["dc"] if isinstance(p.get("dc"), dict) else None
+                seat(p["ref"], p["id"], p["id"], override, 0)
+        for b in parts["bays"]:
+            if b.get("only-in") and cfg_name not in b["only-in"]:
+                continue
+            held = seated_ref(seats, b["id"], b)
+            held = held.get("ref") if isinstance(held, dict) else held
+            if held:
+                seat(held, f"{b['id']}/module", b["id"], None, 0)
+    return sorted(out, key=lambda p: (p["path"], p["id"]))
 
 
 def config_states(device, cfg_name, cfg, lib):
@@ -5702,6 +5889,68 @@ def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
     }
 
 
+def nested_seat_entries(p, lib, families, connectors, candidates, default_occupants,
+                        extra_lift=0.0):
+    """THE SEATS A PLACED PART COMPOSES, as the device's `cages[]` lists them,
+    for a placement that presents no slot of its own.
+
+    `slot_entry` answers for the placement itself: its own interface, or the one
+    aperture it forwards (`manifest.forwarded_part`). A placed part that composes
+    TWO OR MORE seats - the C40G's three studs, a DC terminal's lugs, an inlet
+    panel's four C14s - forwards none, so the device listed nothing for it, and
+    a reader that has only the catalogue (kit/rack/slots.js, ports.js
+    `cableEndPaths`) never knew the studs were there. The build knew: a key
+    `ground-studs-rear/stud-tr` seats an occupant (manifest.nested_key_host),
+    `seat_turns` publishes its turn, and the Explorer reads the part's own
+    `cages` off the drawing (swap.nestedSlots).
+
+    The entries are `component_cages` of the placed part - the same answer
+    components.json carries for the part - re-keyed `<placement>/<part>` and
+    carried into the device frame by the placement, exactly as `turnable_seats`
+    does for the seat's mate point. Only for a placement whose own slot_entry is
+    None: a cage wrapper that forwards its aperture, or a stud pair that spans
+    its two studs, already lists that opening once, and a second key for it is
+    what manifest.slot_in_slot refuses.
+    """
+    if "at" not in p or not p.get("ref"):
+        return []
+    contract, _skins = lib.resolve(p["ref"])
+    if not contract.get("size"):
+        return []
+    csize = _xy_size(contract["size"])
+    out = []
+    for e in component_cages(contract, lib, families, candidates, connectors):
+        part = next((q for q in contract.get("parts") or [] if q.get("id") == e["id"]), None)
+        core = lib.resolve(part["ref"])[0] if part else None
+        if core is None or not core.get("size") or not part.get("at"):
+            continue
+        psize = _xy_size(core["size"])
+        # the part's centre carried through the placement; the pair (at, rotate)
+        # that draws the part there alone is the placement's transform composed
+        # with the part's own, so `_slot_dict`'s seat_point agrees with the sum
+        # turnable_seats makes
+        mid = seat_point(p["at"], csize, p.get("rotate"),
+                         [part["at"][0] + psize["w"] / 2, part["at"][1] + psize["h"] / 2])
+        key = f"{p['id']}/{e['id']}"
+        held = default_occupants.get(key)
+        entry = dict(e)
+        entry.pop("tilt", None)
+        entry.update({
+            "id": key,
+            "at": [round(mid[0] - psize["w"] / 2, 4), round(mid[1] - psize["h"] / 2, 4)],
+            # the placement's turn on top of the seat's own (None stays None)
+            "rotate": summed_rotate(e.get("rotate"), p.get("rotate") or None),
+            "mate": (seat_point(p["at"], csize, p.get("rotate"), e["mate"])
+                     if e.get("mate") is not None else None),
+            "lift": float(e.get("lift") or 0.0) + float(extra_lift or 0.0),
+            "mirror": bool(e.get("mirror")) or bool(p.get("mirror")),
+            "group": p.get("group"), "rel-pos": None,
+            "occupant": (held.get("ref") if isinstance(held, dict) else held) if held else None,
+        })
+        out.append(entry)
+    return out
+
+
 def cage_entries(device, view_name, lib, families, candidates, default_occupants,
                  connectors=None):
     """`cages[]` for one view: one entry per placement that presents a
@@ -5746,7 +5995,12 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
         entry = slot_entry(p, lib, families, connectors, candidates,
                            group=groups.get(p.get("group")), extra_lift=extra,
                            occupant=default_occupants.get(p["id"]))
-        if entry is not None:
+        # A PLACED PART THAT PRESENTS NO SLOT BUT COMPOSES SEATS lists each seat
+        # under `<placement>/<part>` (nested_seat_entries)
+        entries = ([entry] if entry is not None
+                   else nested_seat_entries(p, lib, families, connectors, candidates,
+                                            default_occupants, extra_lift=extra))
+        for entry in entries:
             # the configurations that have this cage, as the placement states
             # them (#1022); the key is absent where it states none
             if p.get("only-in"):
@@ -6054,6 +6308,13 @@ def main():
     _connectors = _connector_registry()
     _candidates = _pluggable_candidates(args.library)
     _default_occupants = (configs.get(default_cfg) or {}).get("occupants") or {}
+
+    def _contract_of(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None          # L5 reports the broken ref
+
     cfg_states = {n: drawn_states(config_states(device, n, c, lib),
                                   [faces[f] for f in files.get(n, {}).values() if f in faces])
                   for n, c in configs.items()}
@@ -6100,7 +6361,7 @@ def main():
                              "power": ch.get("power"),
                              # a bevelled body, as the polygons the viewer
                              # builds its mesh from; absent on a plain box
-                             **({"solid": _bevel.published(ch)} if ch.get("bevel") else {}),
+                             **({"solid": _bevel.published(ch)} if ch.get("bevel") or ch.get("rounded") else {}),
                              # how far parts reach beyond the rack face each
                              # side, and where the ear folds are when they are
                              # behind the body; absent where unstated (#865)
@@ -6169,6 +6430,13 @@ def main():
                               # states nothing (config_power). Read this rather
                               # than `ac`/`dc` out of the name.
                               "power": config_power(device, c),
+                              # WHAT THIS BUILD STATES DIFFERENTLY FROM THE
+                              # DEVICE - its own `attrs` keys only, always an
+                              # object, `{}` where it has none. The device's
+                              # `attrs` above are the rest. The drawing does not
+                              # read it: a face is shared by every configuration
+                              # that draws it, so its `data-*` stay the device's.
+                              "attrs": c.get("attrs") or {},
                               "part-numbers": c.get("part-numbers") or {},
                               "bays": c.get("bays") or {},
                               # WHAT THIS CONFIGURATION SEATS IN ITS CAGES,
@@ -6210,6 +6478,14 @@ def main():
                               # it draws, `{interface, at}`, the other side of
                               # a mount point; `[]` on a device with none
                               "slots": config_slots(device, n, c, lib),
+                              # THE DC PORTS THIS BUILD PRESENTS, each with
+                              # its placement's `dc` override applied and the
+                              # path a feed lands on (docs/dc-power-design.md
+                              # 5.2). Per configuration because a part in a
+                              # bay is only in the builds that seat it. Only
+                              # on a configuration that presents one.
+                              **({"dc-ports": dc_ports}
+                                 if (dc_ports := config_dc_ports(device, n, c, _contract_of)) else {}),
                               # WHAT EACH PLACED PART CAN BE SET TO (#934):
                               # `{<placement id>: [state names]}`, the parts
                               # that declare any; `{}` on a device with none

@@ -13,12 +13,12 @@
 
 import {RU, RAIL_W, OPENING, HOLE_DY, HOLE_SQUARE, HOLE_ROUND, SIDES} from '../rails.js';
 import {earHoles} from './ear-holes.js';
-import {configuredFace, earPlanFor, zeroUModuleEnds} from './face.js';
+import {configuredFace, earPlanFor, earsNoneFor, rolledBracketsFor, zeroUModuleEnds} from './face.js';
 import {dom} from './dom.js';
 import {paintFace, paintMaps} from './settable.js';
 import {uLabel, zeroUOf, zeroUBottomMm} from '../model.js';
 import {isRackMount} from '../export-data.js';
-import {itemBox, itemsWithU} from '../fit.js';
+import {isQuarter, itemBox, itemsWithU} from '../fit.js';
 import {faceOfAt, sideOfAt, STANDOFF, zeroUEntries} from '../zero-u.js';
 import {createView} from './view.js';
 
@@ -66,6 +66,12 @@ function drawRails(svgEl, out, frame, baseRU, totalH, C = THEMED) {
     }
   }
 }
+
+// A quarter turn as an SVG transform prefix about (cx, cy): 90 is clockwise as
+// the face the item is on shows it (fit.js), so seen through to the other face
+// it runs the other way round. Any other roll is no turn here.
+export const rolledTransform = (roll, through, cx, cy) =>
+  (roll === 90 || roll === 270) ? `rotate(${through ? -roll : roll} ${cx} ${cy}) ` : '';
 
 // The selection ring is drawn, not styled: CSS outline does not render on
 // an SVG group.
@@ -141,6 +147,64 @@ function drawEars(svgEl, out, item, span, C = THEMED, plan = null, face = [0, OP
         fill: C.screw, stroke: C.screwLine, 'stroke-width': 0.6}));
       g.append(svgEl('line', {x1: holeX - SCREW_SLOT, y1: cy, x2: holeX + SCREW_SLOT, y2: cy,
         stroke: C.screwLine, 'stroke-width': 0.5}));
+    }
+  }
+  out.append(g);
+}
+
+// THE BRACKETS OF A DEVICE ROLLED A QUARTER TURN (`chassis.ears.rolled`). Stood
+// on its side a device is held by a bracket against each of its edges, not by
+// ears of its own: a bar across the rack, and on each post an ear standing on the
+// bar's lower edge. They are the rack's, not the device's, so they are drawn the
+// same at `roll: 90` and `270` and do not turn with the body. Only the shapes
+// are here; every size is the device's data (the bar, the ear, the length across
+// and the colour). The slope that joins an ear to its bar is drawn, and only the
+// slope is this file's: a quarter of the ear's rise stands straight, and the
+// slope runs across 0.6 of what it falls.
+const SLOPE_STRAIGHT = 0.25;
+const SLOPE_RUN = 0.6;
+
+// `rolled` is what the device states, `box` the kit's itemBox of the item
+// ({y0, y1}: the body's edges in mm above the bottom of the rails). The answer
+// is a shape for each bracket, in the rack's own measures: x in mm right of the
+// centre line, y in mm above the bottom of the rails. [] for an item that is not
+// quarter-turned, and for a device that states none.
+export function rolledBracketShapes(item, rolled, box) {
+  if (!isQuarter(item) || !Array.isArray(rolled)) return [];
+  return rolled.map(b => {
+    const half = b.length / 2, ew = b['ear-w'], barH = b['bar-h'];
+    const bottom = b.side === 'below' ? box.y0 - barH : box.y1;
+    const barTop = bottom + barH, earTop = bottom + Math.max(b['ear-h'], barH);
+    const rise = earTop - barTop;
+    const yD = earTop - rise * SLOPE_STRAIGHT, dx = (yD - barTop) * SLOPE_RUN;
+    const holes = earHoles(bottom, earTop);
+    return {
+      id: b.id, side: b.side, color: b.color ?? null,
+      outline: [[-half, bottom], [-half, earTop], [-half + ew, earTop], [-half + ew, yD], [-half + ew + dx, barTop],
+                [half - ew - dx, barTop], [half - ew, yD], [half - ew, earTop], [half, earTop], [half, bottom]],
+      bar: {y0: bottom, y1: barTop},
+      ears: {left: {x0: -half, x1: -half + ew, y0: bottom, y1: earTop}, right: {x0: half - ew, x1: half, y0: bottom, y1: earTop}},
+      holes: holes.length > 2 ? [holes[0], holes[holes.length - 1]] : holes,
+    };
+  });
+}
+
+// Drawn after the body, like its ears, in the colour the data states (the
+// generic ear's, where it states none), with a screw at the lowest and the
+// highest hole of each ear. `paneY` turns mm above the bottom of the rails into
+// a y of the pane.
+export function drawRolledBrackets(svgEl, out, item, shapes, paneY, C = THEMED) {
+  if (!shapes.length) return;
+  const X = x => x + OPENING / 2;
+  const g = svgEl('g', {class: 'rk-brackets', 'data-brackets-for': item.id, 'data-item-id': item.id, 'pointer-events': 'all'});
+  for (const s of shapes) {
+    const d = s.outline.map(([x, y], i) => `${i ? 'L' : 'M'} ${X(x)} ${paneY(y)}`).join(' ') + ' Z';
+    g.append(svgEl('path', {d, 'data-bracket': s.id, fill: s.color || C.ear, 'fill-opacity': s.color ? 1 : C.earOpacity,
+      stroke: C.earLine, 'stroke-width': 1, 'stroke-linejoin': 'round'}));
+    for (const side of SIDES) {
+      for (const y of s.holes) {
+        g.append(svgEl('circle', {cx: X(side.hole), cy: paneY(y), r: HOLE_ROUND / 2, fill: C.screw, stroke: C.screwLine, 'stroke-width': 0.6}));
+      }
     }
   }
   out.append(g);
@@ -355,17 +419,11 @@ export async function drawElevation({document: domDoc, distAt, surface = rackSur
     // halves since rack file version 4), falling back to the compiled
     // drawing's own height only when it is not.
     let ruH = it.u ?? 1;
-    // ROLLED A QUARTER TURN (rack file version 4), an item is an outline, as
-    // the kit fits and routes it and says when the file opens: how it mounts
-    // that way is not described yet, so its drawing is not stood on its side
-    // by guesswork, nor drawn upright in a span that is its width.
+    // ROLLED A QUARTER TURN (rack file version 4): the drawing is turned about
+    // the middle of the box the kit fits the item by (fit.js itemBox: its width
+    // up the rack, its height across), below. Its 3D solid and its cables stay
+    // an outline, and the frame notice says so.
     const quarter = it.roll === 90 || it.roll === 270;
-    if (quarter && face && placeholders) {
-      out.append(outline(svgEl, topOf(ruH), ruH, `${it.label} · rolled a quarter turn`,
-                         {...common, 'data-panel': through ? 'through' : 'mounted', 'data-rolled': String(it.roll)}, paper ? OUTLINE_PAPER : OUTLINE));
-      if (it.id === selectedId) rings.push([topOf(ruH), ruH]);
-      continue;
-    }
     if (!face) {
       if (placeholders) {
         out.append(outline(svgEl, topOf(ruH), ruH, `${it.label} · no ${panel} drawing`,
@@ -400,8 +458,10 @@ export async function drawElevation({document: domDoc, distAt, surface = rackSur
     const [faceW, faceH] = declared ? [fw, fh] : [w, h];
     const [ox, oy] = declared ? [0, 0] : [Number.isFinite(vb[0]) ? vb[0] : 0, Number.isFinite(vb[1]) ? vb[1] : 0];
     const fx = (OPENING - faceW) / 2, fy = paneY((box.lo + box.hi) / 2) - faceH / 2;
-    const g = svgEl('g', {transform: isFace(it) && SIDED.has(it.side) ? sidedTransform(it, view, w, h, y) : `translate(${fx - ox} ${fy - oy})`, ...common,
+    const g = svgEl('g', {transform: isFace(it) && SIDED.has(it.side) ? sidedTransform(it, view, w, h, y)
+                                     : `${rolledTransform(it.roll, through, fx + faceW / 2, fy + faceH / 2)}translate(${fx - ox} ${fy - oy})`, ...common,
                           ...(isFace(it) && SIDED.has(it.side) ? {'data-side': it.side} : {}),
+                          ...(quarter ? {'data-rolled': String(it.roll)} : {}),
                           'data-panel': through ? 'through' : 'mounted'});
     // THE SLOTS A CABLE LANDS ON besides the ports (a power inlet or outlet, a
     // ground stud: kit ports.js cableEndPaths), for portAt to take a click on.
@@ -442,8 +502,14 @@ export async function drawElevation({document: domDoc, distAt, surface = rackSur
     // second pair over them would hide the real ones: such a device gets its
     // screw heads only. In the plan's colour, silver unless the device states
     // `chassis.ears.color`.
-    if (!through && ears && isRackMount(it)) drawEars(svgEl, out, it, {top: paneY(box.hi), bottom: paneY(box.lo), holes: surface.ears(box).map(paneY)},
+    // (none on a quarter-turned item: its ears would stand across the rack. A
+    // device that states `chassis.ears.rolled` is held there by those brackets
+    // instead: a bar across the rack against each edge and an ear on each post)
+    // (none on a part that states `chassis.ears.none`: it stands between the posts on
+    // another part's brackets, with no flange and no screw of its own)
+    if (!through && ears && !quarter && isRackMount(it) && !await earsNoneFor(it.ref, distAt)) drawEars(svgEl, out, it, {top: paneY(box.hi), bottom: paneY(box.lo), holes: surface.ears(box).map(paneY)},
                                                       C, await earPlanFor(it.ref, it.cfg, distAt), [fx, fx + faceW]);
+    if (!through && quarter && isRackMount(it)) drawRolledBrackets(svgEl, out, it, rolledBracketShapes(it, await rolledBracketsFor(it.ref, distAt), box), paneY, C);
     if (it.id === selectedId) rings.push([topOf(ruH), ruH]);
   }
   // A U carrying a manager says so in the gutter: the manager itself is mostly

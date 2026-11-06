@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: agr-psu-dc
-version: 1.0.1
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -10,7 +10,8 @@ description: >-
   (AS7946-74XKSB). Black bail handle on the left, a two-post -48 V terminal
   block in the middle and a red latch on the right. This is the unit we
   photographed.
-attrs: {power-absent: not-published, model: 'AGR PSU (DC)', input: '-40 to -75 VDC, 40 A max per PSU', inlet: dc-terminal}
+attrs: {power-absent: not-published, model: 'AGR PSU (DC)', input: dc,
+  input-note: '-40 to -75 VDC, 40 A max per PSU', inlet: dc-terminal}
 size: {w: 60.1, h: 37.6, d: 360.7}
 provenance:
   inlet: >-
@@ -46,6 +47,45 @@ provenance:
     were one component with two skins until the AC inlet needed to be a real
     standard part, which a skin cannot carry - so they are now two components
     sharing a shell and its body art'
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head 3.4
+    across (that part's own size is an estimate), standing at the centre of the bolt this skin
+    draws (`stud-pos` at 22.30 across and `stud-neg` at 35.70, both 18.75 down) and lifted 6.35
+    mm, the bolts' own measured height (the `stud-pos` and `stud-neg` relief below). The head
+    is drawn on the nut and the nut is not redrawn. The quick start guides show the two screws
+    between the barriers with a ring lug for each and give no screw head, thread or stud; the
+    places are the skin's own, which were read off photographs of the real unit.
+  earth: >-
+    A DECLARED STAND-IN, and its place is estimated. The AS7946-30XB (R04) and AS7946-74XKSB (R03)
+    Quick Start Guides, "Connect Power", page 3, the figure above the callouts, show a cross-head
+    screw with a star washer on the supply's rear panel at the upper right, above the red latch,
+    and call it "4. Use a 8 AWG green/yellow ground wire to ground the DC PSU." It is a screw
+    beside the two-screw terminal block, not on it, so it is a ground seat a lug lands on
+    outside the DC port, which keeps two poles (decided 2026-11-02). It is the library's
+    common/ground-screw@1, a screw that claims no stud size, because no document held gives
+    this screw's thread or head. It stands where the figure puts it, over the corner screw this
+    skin draws at the upper right (`screw-b`, 47.2 across, 4.4 down) and 1.2 mm to its right
+    (48.4 across, 4.4 down) so that its washer clears the terminal block; the skin's other
+    corner screw (`screw-a`, upper left) is named by no guide and gets no part. The figure is
+    an illustration with no scale, so the place is an estimate.
+  poles: >-
+    Edgecore AS7946-30XB Quick Start Guide (R04) and AS7946-74XKSB Quick Start Guide (R03),
+    "Connect Power", page 3, the figure above the callouts: two screws between three black
+    barriers, "1. Use the ring lugs included with the DC PSU.", "2. DC return" on the left
+    screw and "3. -40 - -75 VDC" on the right one. This skin prints + over its left bolt and -
+    over its right one, which agrees. The roles are the callouts': `rtn` for DC return
+    (spec/schemas/dc.yaml writes `rtn` as RTN and return) and `batt` for the -40 - -75 VDC wire
+    (it writes `batt` as negative (battery)), listed in the callouts' order. The port states no
+    voltage: the guides give a range and call the supply "48 VDC", a name and no nominal.
+  rating: >-
+    Edgecore AS7946-30XB Quick Start Guide (R04) and AS7946-74XKSB Quick Start Guide (R03),
+    page 4, "48 VDC PSU", "DC Input -40 - -75 VDC, 40 A max", and both data sheets, page 3,
+    "DC Input: -40 - -75V, 40 A, per PS": one current, the same in all four, so the port states
+    it as the supply's input current.
+  awg: >-
+    Edgecore AS7946-30XB Quick Start Guide (R04) and AS7946-74XKSB Quick Start Guide (R03), page
+    3, the note above the figure: "Use # 8 AWG/ 6 mm2 copper wire (for a -40 to -75 VDC PSU)".
+    It is the one size the documents held give for this supply's DC wires, so the port states it.
 body:
   depth: 360.7
   color: '#b9bec4'
@@ -184,4 +224,18 @@ relief:
         lifts are chosen to stack plausibly inside the measured 6.35 stud, so they are
         estimates standing on a measurement rather than measurements. ANYONE CITING THIS
         NODE AS 'MEASURED OFF REAL HARDWARE' IS CITING THE WALLS, NOT THE NUT.
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [20.6, 17.05], lift: 6.35}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [34.0, 17.05], lift: 6.35}
+  - {ref: common/ground-screw@1, id: earth, at: [45.6, 1.6]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 40
+      awg: [8]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+      source: {poles: poles, rating-a: rating, awg: awg}
 skins: [default]

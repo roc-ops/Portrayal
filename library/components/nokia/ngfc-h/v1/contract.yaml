@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ngfc-h
-version: 1.1.0
+version: 1.2.0
 class: power
 behaviour: fills
 profile: networking
@@ -53,6 +53,11 @@ provenance:
     309.85, 35.0; model name 270.7 to 326.6 with a 6.2 mm cap height. The terminal cover is
     drawn as the trapezoid the front view presents, and its tilt is a relief facet
     (provenance.relief).
+  connectors: >-
+    borrowed - common/micro-dsub-50-receptacle@1 and common/wire-wrap-header-6@1 draw the alarm
+    connector and the BITS header, each at the frame this art measured (180.5, 34.0, 47.7 x 9.1 and
+    236.7, 29.3, 31.0 x 9.7), in the shapes the skin drew for them before they were parts. They carry
+    the registry keys micro-dsub-50 and wire-wrap-6.
   callouts: >-
     datasheet - UDS p331 s31.4.1 items 1-13, the audit: 1 two EBATRET double-hole lug
     connectors -> ebatret-1, ebatret-2 (both callouts 1 point at the LEFT stud column, top
@@ -121,9 +126,17 @@ groups:
     role: management
     index-origin: 1
     description: >-
-      the DB-9 remote craft port (RS-232, UDS Table 117). The alarm I/O D-sub and the BITS
-      header are management too, but no library part exists for either, so they are
-      elements of this card and cannot join a group.
+      the DB-9 remote craft port (RS-232, UDS Table 117)
+  alarm:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the CO alarm connector, a female 50-pin micro D-sub (UDS Table 115)
+  bits:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the BITS timing header, a six-pin right-angle wire-wrap header (UDS Table 116)
   leds:
     term: LED
     role: indicator
@@ -169,21 +182,6 @@ elements:
     at: [193.1, 3.8]
     size: [54.5, 7.3]
     class: handle
-  alarm-io:
-    at: [180.5, 34.0]
-    size: [47.7, 9.1]
-    class: port
-    description: >-
-      female 50-pin micro D-sub, 'External Alarms' - seventeen external alarm inputs and
-      outputs, external ACO, and visual and audible critical, major and minor relay
-      contacts (UDS Table 115)
-  bits:
-    at: [236.7, 29.3]
-    size: [31.0, 9.7]
-    class: port
-    description: >-
-      six-pin right-angle wire-wrap header, recessed behind the panel, for the BITS inputs
-      to NT-A and NT-B with frame ground between (UDS Table 116)
   aco-switch:
     at: [370.3, 36.5]
     size: [6.2, 6.2]
@@ -204,6 +202,10 @@ relief:
 parts:
   - {ref: common/db9-receptacle@1, id: craft, group: craft, at: [294.45, 28.75],
      attrs: {media: db9, function: remote craft port}}
+  - {ref: common/micro-dsub-50-receptacle@1, id: alarm-io, group: alarm, at: [180.5, 34.0],
+     attrs: {function: "External Alarms - seventeen external alarm inputs and outputs, external ACO, and visual and audible critical, major and minor relay contacts (UDS Table 115)"}}
+  - {ref: common/wire-wrap-header-6@1, id: bits, group: bits, at: [236.7, 29.3],
+     attrs: {function: "BITS inputs to NT-A and NT-B with frame ground between (UDS Table 116)"}}
   - {ref: common/led-dot@1, id: bat-a, group: leds, at: [334.9, 36.4],
      states: {lamp: [{name: green, color: '#39b54a'}, 'off']}}
   - {ref: common/led-dot@1, id: bat-b, group: leds, at: [341.4, 36.4],

@@ -92,7 +92,7 @@ def test_a_bay_with_no_accepts_sentence_still_says_it():
         b.pop("accepts")
         b["interface"] = "breaker"
     bays = {b["position"]: b for b in build(dev)["module-bays"]}
-    assert bays["breaker-a2"]["description"] == "Protects output-a2"
+    assert bays["breaker-a2"]["description"] == "Takes breaker; protects output-a2"
 
 
 def test_an_outlet_with_no_feed_is_written_without_one():
@@ -124,8 +124,9 @@ def test_every_outlet_type_is_one_both_targets_list():
     # c77e4255 (the Eaton EVMI2130X, the first rack PDU).
     # iec-60320-c19 and nema-5-20r: NetBox choices.py at 64ce9e2d, Nautobot at
     # 3edb1fca (#933, std/c19-outlet and std/nema-5-20r).
+    # nema-5-15r: the same two files, beside nema-5-20r (std/nema-5-15r).
     assert dx.OUTLET_TYPES == {"dc-terminal", "other", "iec-60320-c13", "eaton-c39",
-                               "iec-60320-c19", "nema-5-20r"}
+                               "iec-60320-c19", "nema-5-15r", "nema-5-20r"}
     # the C13 is the standard's face, a std/ part; the C39 is Eaton's own
     assert dx.PART_OUTLET["std/c13-outlet"] == "iec-60320-c13"
     assert dx.PART_OUTLET["eaton/c39-outlet"] == "eaton-c39"

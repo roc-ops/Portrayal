@@ -46,6 +46,11 @@ interfaces:
     type: 10gbase-t
   - name: port-8
     type: 10gbase-t
+power-ports:
+  - name: ac-inlet-1
+    type: iec-60320-c14
+  - name: ac-inlet-2
+    type: iec-60320-c14
 comments: 'MikroTik CRS312-4C+8XG-RM is a fixed 1U Cloud Router Switch. It has eight 1G/2.5G/5G/10G RJ45
   ports and four combo ports. Each combo port is a 10G RJ45 jack (1T to 4T) and an SFP+ cage (1F to 4F),
   one in use at a time. It also has a 10/100 management jack (MGMT/BOOT), an RJ45 serial console and a
@@ -53,8 +58,8 @@ comments: 'MikroTik CRS312-4C+8XG-RM is a fixed 1U Cloud Router Switch. It has e
   Beside them are the combo jacks under a blue bracket and the two by two SFP+ block. Then come the CONSOLE
   and MGMT/BOOT jacks, the RESET button and the USB port. The USER, FAULT, POWER 2 and POWER 1 lamps follow.
   The two AC supplies and the four fans are built into the chassis, so there are no bays. The air passes
-  through a vent field in the right wall. No document held shows the rear, so the rear is not drawn and
-  the AC inlets are not placed.
+  through a vent field in the right wall. The rear carries the two IEC C14 inlets, POWER 1 and POWER 2.
+  A spring wire clip stands over each. It also carries four fan grilles and twelve crosshead screws.
 
 
   Configuration `base`: CRS312-4C+8XG-RM - eight 10G RJ45 ports, four combo 10G RJ45 / SFP+ ports, one
@@ -94,7 +99,7 @@ comments: 'MikroTik CRS312-4C+8XG-RM is a fixed 1U Cloud Router Switch. It has e
   - thermal.cooling: four built-in fans with automatic fan speed control
 
 
-  Drawing version 1.0.0. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 1.2.4. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.
 
   Model maturity: modelled. Every dimension in the source records where it came from.'

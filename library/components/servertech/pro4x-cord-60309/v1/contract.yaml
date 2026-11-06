@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: pro4x-cord-60309
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in an IEC 60309 3P+N+G 6h plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of a Server Technology PRO4X PDU whose SKU page lists an IEC 60309 3P+N+G 6h plug.
+  It leaves the cord end of the strip through a cord-entry frame held by six screws.
+  Drawn as the end view shows it; the cord and plug beyond it are not.
+size: {w: 29.2, h: 33.1}
+size-confidence: {w: drawing, h: drawing}
+size-notes: read off the end view of the outline drawing at 900 dpi, to about 0.3 mm
+attrs: {plug: iec-60309-3p-n-g-6h}
+provenance:
+  size: >-
+    drawing - Server Technology outline drawing 810-03-1596-00 rev A (sheet 1), the end view at the left:
+    the cord-entry frame with its six screws, 29.2 across and 33.1 down, at the scale that puts the 55.9
+    end width on the strip.
+  plug: >-
+    datasheet - the maker's SKU page for C4G36RA-GPBD2FE1 prints Input Plug Type "230/400 32A & 240/415V Wye
+    30A IEC 60309 3P+N+G 6Hr" and Input Cord Location "Bottom/Angled". The outline drawing marks "INPUT POWER
+    CORD ENTRY THIS END" and draws no cord and no plug.
+  not-drawn: >-
+    THE CORD BEYOND THE FRAME AND THE PLUG ARE NOT DRAWN, and no document held gives the cord's length or
+    gauge: the far end of a cord is not a part (docs/connectors-power-design.md section 7). This part stands
+    for the power input a DCIM records, one power port of type `other` labelled as an IEC 60309 3P+N+G 6h plug.
+elements:
+  frame: {at: [0, 0], size: [29.2, 33.1], class: inlet}
+skins: [default]

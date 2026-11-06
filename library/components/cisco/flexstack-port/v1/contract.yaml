@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: flexstack-port
+version: 1.0.0
+class: port
+profile: networking
+interface: flexstack
+description: >-
+  A Cisco FlexStack stack port of the Catalyst 2960-S FlexStack module (C2960S-STACK), printed STACK 1
+  or STACK 2 - a silver cage with a dark opening for the FlexStack cable, which snaps in and is released
+  by the tab on its connector. It is Cisco's own connector and has no registry standard.
+size: {w: 16.5, h: 9.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: flexstack}
+unplaced: >-
+  seated by the FlexStack module of the Catalyst 2960-S (cisco/c2960s-stack@1, #1322), which draws its
+  STACK 1 and STACK 2 ports as its own art until it composes this part; no device places it yet
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 2960-S Switch Hardware Installation Guide (OL-19732-04), FlexStack Ports
+    and Connecting the FlexStack Cables (Figure 1-17, PDF p.41; the tab note, PDF p.42, printed 1-18):
+    the module has the ports STACK 1 and STACK 2 for the cables CAB-STK-E-0.5M, -1M and -3M. The guide
+    names no connector type and gives no contact count or dimension.
+  size: >-
+    estimated - THE GUIDE PRINTS NO DIMENSION OF THE CONNECTOR. The cage is drawn as the module art of
+    cisco/c2960s-stack@1 measured it, off the community NetBox device-type library's rear elevation of
+    the WS-C2960S-48LPD-L (a photograph, 1516 x 150 px, 3.41 px per mm from its 444.5 mm width): 16.5 x
+    9.0 mm. The opening is the cage inset 0.6 mm at the sides and 0.7 mm at the top and bottom, which is
+    the 2 and 2.5 px wall the photograph shows at that scale, so 15.3 x 7.6 mm at (0.6, 0.7). Good to
+    about 0.5 mm. There is no depth.
+  interface: >-
+    datasheet - the `flexstack` key of spec/schemas/connectors.yaml. The guide's Connecting the
+    FlexStack Cables: the cable end is inserted until it snaps into place. The mate point is the centre
+    of the opening, facing out.
+  colour: >-
+    estimated - the cage silver #aea699 and the opening #171615 are the module art's, themselves read off
+    the same photograph.
+  two-ports: >-
+    The guide does not say that STACK 1 and STACK 2 are one receptacle; it says the cable tab is above
+    the connector at STACK 1 and below it at STACK 2. This part is drawn as the photograph shows each
+    cage, and the same part serves both.
+elements:
+  opening: {at: [0.6, 0.7], size: [15.3, 7.6], class: window}
+connection-points:
+  mate: {at: [8.25, 4.5], direction: front}
+skins: [default]

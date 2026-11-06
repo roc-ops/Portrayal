@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: dc-terminal-27
-version: 1.0.1
+version: 1.1.0
 class: inlet
 behaviour: mounts
 profile: networking
@@ -54,6 +54,18 @@ provenance:
     Edgecore quick start guides draw each pole open at its lower edge between
     the barriers. The element ids `pole-1` to `pole-3` are the poles and are
     unchanged.
+  roles: >-
+    Edgecore AS5915-18X Quick Start Guide, Connect Power (PDF page 2): the figure numbers the three screws left to right and its
+    list reads "Connect the ground wire / earth" (1, the left screw), "Connect the 36 - 72 VDC wire" (2, the middle one) and
+    "Connect the DC return wire" (3, the right one). In DC roles that is `gnd` on `lug-1`, `batt` on `lug-2` and `rtn` on `lug-3`.
+  rating: >-
+    Edgecore AS5915-18X data sheet, the PSU section: "DC Input: 36V - 72V, 6A", and the Quick Start Guide's 48 VDC PSU table:
+    "DC Input 36 V - 72 V, 6 A". The 6 A is the input current of the supply. The range has no signed nominal in either (the same
+    table's "Power Rating 48 VDC, 180 Watts" is the supply's rating, unsigned), and a port's `voltage` needs one, so the port
+    states no voltage.
+  awg: >-
+    Edgecore AS5915-18X Quick Start Guide, the caution above the Connect Power figure (PDF page 2): "#14 AWG/1.5 mm2" copper wire
+    for a 36 to 72 VDC supply. One size in the only guide held for this part, so the port states it.
   cover: >-
     photo-measured, as a colour rather than a dimension - the block reads far
     brighter than the panel around it in both instances, with the screws
@@ -127,6 +139,17 @@ parts:
   - {ref: common/terminal-screw-38@1, id: lug-1, at: [4.7, 6.1], lift: 9.0}
   - {ref: common/terminal-screw-38@1, id: lug-2, at: [12.9, 6.1], lift: 9.0}
   - {ref: common/terminal-screw-38@1, id: lug-3, at: [21.1, 6.1], lift: 9.0}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 6
+      awg: [14]
+      poles:
+        - {role: gnd, slot: lug-1}
+        - {role: batt, slot: lug-2}
+        - {role: rtn, slot: lug-3}
+      source: {poles: roles, rating-a: rating, awg: awg}
 connection-points:
   dc-in: {at: [14.8, 8.0], direction: front}
 skins: [default]

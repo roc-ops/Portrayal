@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan-module
-version: 1.16.1
+version: 1.16.2
 class: fan
 behaviour: fills
 profile: networking
@@ -46,9 +46,14 @@ provenance:
     The chassis-level hole stays visible in L29, which is the right place for it.
   size: photo-measured (red bar 36.6mm wide -> square 44.6mm; pitch 48.6mm)
   elements: photo-measured (bar rows 29.4-32.7mm abs)
+  screw-class: >-
+    The captive screw on the mounting tab holds the module by that tab, so it is class `latch`, the class this part gives its
+    pull handle and the class maiaedge/pbc-2000-fan-plate@2 gives the captive thumbscrew of its fan plate. It is not a place a
+    cord or lug lands, which is what class `screw` asks of the port checks. The class changes nothing that is drawn: the
+    position, the size and the relief of the screw are as they were.
 states: [absent]
 elements:
-  screw: {at: [0.3, 17.8], size: [3.4, 3.4], class: screw}
+  screw: {at: [0.3, 17.8], size: [3.4, 3.4], class: latch}
   rotor: {at: [7.5, 0.8], size: [37.6, 37.6], class: rotor}
   handle: {at: [8.0, 27.4], size: [36.6, 3.3], class: latch}
 relief:

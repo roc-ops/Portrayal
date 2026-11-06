@@ -190,7 +190,7 @@ def pairs():
 
 
 def test_the_forty_fibrain_refs_of_1046_are_redirected():
-    got = {old: new for new, s in pairs() for old in [s["ref"]]}
+    got = {old: new for new, s in pairs() for old in [s["ref"]] if old.startswith("fibrain/")}
     want = {}
     for name in sorted(p.name for p in (ROOT / "library/components/fibrain").iterdir()
                        if p.name.startswith(("xmi", "xmn"))):
@@ -215,13 +215,13 @@ def test_every_recorded_signature_matches_the_published_replacement():
 def test_the_published_entry_carries_supersedes_on_every_row():
     components = json.loads((DIST / "components.json").read_text())["components"]
     assert all(isinstance(c.get("supersedes"), list) for c in components)
-    assert sum(1 for c in components if c["supersedes"]) == 40
+    assert sum(len(c["supersedes"]) for c in components) == len(pairs())
 
 
-def test_the_redirect_table_of_the_live_library_has_forty_hops_and_no_chain():
+def test_the_redirect_table_of_the_live_library_has_one_hop_per_redirect_and_no_chain():
     components = json.loads((DIST / "components.json").read_text())["components"]
     t = R.table(components)
-    assert len(t) == 40 and not set(t) & set(t.values())
+    assert len(t) == len(pairs()) and not set(t) & set(t.values())
 
 
 def test_the_schema_has_the_key():

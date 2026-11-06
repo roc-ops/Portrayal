@@ -88,6 +88,7 @@ def _files(root, target, man):
 
 # ── the export ─────────────────────────────────────────────────────────────
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("target", ["netbox", "nautobot"])
 def test_a_component_with_two_part_numbers_exports_two_module_types(tmp_path, target):
     dist = _dist()
@@ -127,6 +128,7 @@ def test_a_part_numbers_entry_with_no_part_states_no_part_number(tmp_path):
     assert doc["model"] == "FIX-BARE" and "part_number" not in doc
 
 
+@pytest.mark.heavy
 def test_every_part_number_of_a_card_has_the_depth_the_card_seats_at():
     """Seating is keyed by (manufacturer, model). A card that seats in a bay is
     seated under EACH of its models, or the second type would lose the depth,

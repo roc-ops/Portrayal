@@ -56,6 +56,26 @@ LOAD_SUSPECT = 1.5  # a load this high is named: a busy runner, or everything sl
 ARTIFACT = "test-times"
 
 
+def split_key(key):
+    """(module stem, function, xdist group or None) for a test key:
+    `stem::C.name[param]@group` is `(stem, "C.name", "group")`.
+
+    A GROUP SUFFIX COMES AFTER THE PARAMETER. Component refs put `@1` inside a
+    parameter, so an `@` counts as xdist's group suffix only when it follows the
+    last `]` - the rule xdist's own scheduler uses (`scheduler/loadgroup.py`)."""
+    stem, _, rest = key.partition("::")
+    group = None
+    if rest.rfind("@") > rest.rfind("]"):
+        rest, group = rest[:rest.rfind("@")], rest[rest.rfind("@") + 1:]
+    return stem, rest.split("[", 1)[0], group
+
+
+def fold_function(key):
+    """(module stem, function) for a test key. Every parameter of a function is
+    one cost, and the tier and the budget are decided per function."""
+    return split_key(key)[:2]
+
+
 def read_junit(path):
     """{test id: seconds} from a junit file. The id is `file::name`, where the
     file is the classname up to its `test_` module - a class, when a test has
@@ -152,16 +172,17 @@ def report(tests, cmp=None, base_label=None):
 
 # --- the base run -------------------------------------------------------------
 
-def choose_base(artifacts, merged):
-    """The newest unexpired artifact whose run tested the head of a MERGED pull
-    request. A head that merged is a tree main contains, so every test in it is
-    one this run has too; an open branch's artifact would report main's newer
-    tests as this change's additions.
+def choose_base(artifacts, merged, artifact=ARTIFACT):
+    """The newest unexpired artifact named `artifact` whose run tested the head
+    of a MERGED pull request. A head that merged is a tree main contains, so
+    every test in it is one this run has too; an open branch's artifact would
+    report main's newer tests as this change's additions. `test-times` is a
+    full run's record; a light run's is `test-times-light`.
 
     `merged` is {head sha: pull request number}; returns (artifact, number)."""
     for a in sorted(artifacts, key=lambda a: a.get("created_at") or "", reverse=True):
         sha = (a.get("workflow_run") or {}).get("head_sha")
-        if a.get("name") == ARTIFACT and not a.get("expired") and sha in merged:
+        if a.get("name") == artifact and not a.get("expired") and sha in merged:
             return a, merged[sha]
     return None, None
 
@@ -190,14 +211,14 @@ def _api(url, token):
         return r.read()
 
 
-def fetch_base(repo, token, skip_sha=None):
-    """(tests, label) from the newest merged run's artifact, or (None, why)."""
+def fetch_base(repo, token, skip_sha=None, artifact=ARTIFACT):
+    """(tests, label) from the newest merged run's `artifact`, or (None, why)."""
     root = f"https://api.github.com/repos/{repo}"
     pulls = json.loads(_api(f"{root}/pulls?state=closed&sort=updated&direction=desc&per_page=50", token))
     merged = {p["head"]["sha"]: p["number"] for p in pulls
               if p.get("merged_at") and p["head"]["sha"] != skip_sha}
-    arts = json.loads(_api(f"{root}/actions/artifacts?name={ARTIFACT}&per_page=100", token))
-    art, number = choose_base(arts.get("artifacts") or [], merged)
+    arts = json.loads(_api(f"{root}/actions/artifacts?name={artifact}&per_page=100", token))
+    art, number = choose_base(arts.get("artifacts") or [], merged, artifact)
     if art is None:
         return None, "no merged pull request has published its test times yet"
     blob = _api(art["archive_download_url"], token)
