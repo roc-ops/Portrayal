@@ -7,6 +7,8 @@
   connectors' dimensions, so every size is an estimate, said in the part. None of the three ports exports as a DCIM port.
 
 ### Changed
+- The G-type male test point (`common/g-type-male-port@1`) is drawn as the maker's catalogue photographs show it: a silver
+  barrel with a small centre pin, with no black ring and no gold pin.
 - The CH3000's 27 passive modules and back plates declare the adapter frames drawn in their skins as class `adapter` instead of
   `port`: the `std/sc-bore@1` openings composed beside them are the ports and present `sc`, so no drawn port stands on a face that
   presents no interface. The AR3002E, AR3044H, AR3044L, DR3450N and DR3600N compose a G-type port at their test point, the HT358xH
