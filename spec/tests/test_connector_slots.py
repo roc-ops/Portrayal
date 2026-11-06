@@ -79,8 +79,7 @@ def test_the_connector_registry_is_not_vacuous():
     # nothing presents it yet, so it is in the registry and in no slot below
     # nema-5-15r/nema-5-20r/eaton-c39: the NEMA straight-blade receptacles and the
     # Eaton combination outlet, made slots for a cord end (#1045). std/nema-5-20r@1
-    # and eaton/c39-outlet@1 present two of them. No part presents nema-5-15r yet:
-    # it is registered because a 5-15P names it in `mates`, and it is in no slot below
+    # and eaton/c39-outlet@1 present two of them; std/nema-5-15r@1 presents the third
     # flexstack/stackwise-480/stackpower: the Cisco stacking and power-stacking
     # connectors; ex4200-vcp: the Juniper EX4200 Virtual Chassis port;
     # cisco-rps2300/ex3300-rps: the two redundant-power connectors. Vendor connectors

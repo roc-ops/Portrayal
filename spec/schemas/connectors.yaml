@@ -67,9 +67,9 @@ interfaces:
   # have, and `eaton-c39` is the outlet type both DCIM targets carry. A 5-15R
   # and a 5-20R are TWO interfaces and not one, because what each accepts
   # differs: a 5-20P does not enter a 5-15R. A plug that enters both names both
-  # in its `mates`, which is why `mates` takes a list. `nema-5-15r` cites no
-  # standard: the library holds no 5-15R part and no drawing of one yet.
-  nema-5-15r: {note: 'NEMA WD 6 configuration 5-15R, the 125 V 15 A straight-blade receptacle with two parallel slots and an earth hole; generic/nema-5-15p-cord@1 mates it, and a 5-20P does not enter it. No part in the library presents it yet'}
+  # in its `mates`, which is why `mates` takes a list. `nema-5-15r` cites the
+  # `nema-5-15r` entry of standards.yaml, whose face is borrowed from the 5-20R.
+  nema-5-15r: {standard: nema-5-15r, note: 'NEMA WD 6 configuration 5-15R, the 125 V 15 A straight-blade receptacle with two parallel slots and an earth hole, as std/nema-5-15r@1 draws it; generic/nema-5-15p-cord@1 mates it, and a 5-20P does not enter it'}
   nema-5-20r: {standard: nema-5-20r, note: 'NEMA WD 6 configuration 5-20R, the 125 V 20 A straight-blade receptacle whose neutral slot is a T, as std/nema-5-20r@1 draws it; generic/nema-5-15p-cord@1 and generic/nema-5-20p-cord@1 both mate it'}
   eaton-c39: {note: 'the Eaton C39 outlet of a Rack PDU G4, a combination of the C13 and C19 outlets that takes a C14 or a C20 plug (Eaton installation and setup guide P-164001156 rev 3, section 1.5); eaton/c39-outlet@1 presents it and generic/c14-plug@1 and generic/c20-plug@1 mate it. A vendor connector and no IEC 60320 sheet, so the entry cites no standard'}
   saf-d-grid: {standard: saf-d-grid, note: 'Anderson Power Products Saf-D-Grid receptacle (drawing 115171S1 rev 12; no IEC standard governs it); it sits in a C14 cutout but a C13 does not mate it'}
