@@ -7,4 +7,6 @@
   device types are exported: `N9K-C9364D-GX2A` and `N9K-C9348D-GX2A`. New components: the fan
   module `cisco/nxa-sfan-160cfm2` and the supplies `cisco/nxa-pac-3200w` and
   `cisco/nxa-pdc-3200w`, which add three DCIM module types. The two devices' L29 lint warning (the
-  guides print no per-fan power) is recorded in `library/lint-baseline.json`.
+  guides print no per-fan power) is recorded in `library/lint-baseline.json`. The connector scan
+  over both devices finds nothing: the DC supply states in its contract why no cable lands on it,
+  and the colour notes record that the held figures are colourless line art.
