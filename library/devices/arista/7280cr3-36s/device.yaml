@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 7280cr3-36s
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Arista
 model: 7280CR3-36S
@@ -171,9 +171,9 @@ provenance:
     note: >-
       Guide Table 4: typical / maximum 254 W / 423 W for the 7280CR3-36S and 7280CR3K-36S, and 262 W /
       437 W for the 7280CR3K-36A, each with PWR-1011-AC or PWR-1011-DC. The data sheet states the same
-      figures with typical "measured at 25C ambient with 50% load on all ports". A configuration cannot
-      state a device attribute, so the device carries 254 W / 423 W and the -36A figure is in the gap
-      config-scoped-device-attrs and in the description of its configurations.
+      figures with typical "measured at 25C ambient with 50% load on all ports". The device carries 254
+      W / 423 W, the figure of the 7280CR3-36S and the 7280CR3K-36S, and the two 7280CR3K-36A configurations
+      state 262 W / 437 W in their own attrs.
   environment:
     confidence: datasheet
     note: >-
@@ -189,9 +189,11 @@ provenance:
       can hold, and are not listed. The data sheet lists no DC build of the switch: the PWR-1011-DC-RED
       and -BLUE supplies are spares, so the DC configurations are examples with no part number. The K
       and K-A builds share the base model's size, weight, figure and supplies and differ in memory, CPU,
-      SSD and routes (and, for the 36A, power draw), which a configuration cannot state; each is a configuration
-      with its own part numbers. There is no empty-bay (-S) configuration: the "S" of the model name is
-      not a suffix of this kind and the guide draws no blank for a power supply or fan module.
+      SSD and routes (and, for the 36A, power draw); each is a configuration with its own part numbers,
+      and the two 36A configurations state their own power, CPU, SSD and minimum EOS in attrs (data sheet,
+      model comparison of the 7280CR3-36S, CR3K-36S and CR3K-36A). There is no empty-bay (-S) configuration:
+      the "S" of the model name is not a suffix of this kind and the guide draws no blank for a power
+      supply or fan module.
   interface-names:
     confidence: datasheet
     note: >-
@@ -278,17 +280,6 @@ attrs:
     end-of-life: '2031-10-10'
 chassis: {width: 440.0, height: 43.7, depth: 471.7, ru: 1, color: '#aaabad', airflow: front-to-back, power: ac}
 gaps:
-- what: config-scoped-device-attrs
-  scope:
-  - front
-  - rear
-  reason: vendor-silent
-  note: >-
-    The 7280CR3K-36A draws 262 W typical and 437 W maximum (guide Table 4) against 254 W and 423 W for
-    the other two, has an eight-core CPU in place of a quad-core and carries a 120 GB SSD where the others
-    carry none. No configuration can state a device attribute (the same open gap as cisco/asr-9001). The
-    attrs carry the 7280CR3-36S's figures and the platform lines name all three.
-  wanted: configuration-scoped device attrs.
 - what: environment
   scope:
   - front
@@ -942,16 +933,29 @@ configurations:
   k-a-f:
     kind: orderable
     description: >-
-      The 7280CR3K-36A, the K build with an eight-core CPU and a 120 GB SSD, with front-to-rear air. It
-      draws 262 W typical and 437 W maximum (guide Table 4), against 254 W and 423 W for the other builds.
-      Ordered as DCS-7280CR3K-36A-F.
+      The 7280CR3K-36A, the K build with an eight-core CPU and a 120 GB SSD, with front-to-rear air. Ordered
+      as DCS-7280CR3K-36A-F.
+    export-description: >-
+      Arista 7280CR3K-36A - a fixed 1RU data-centre switch router with 36 QSFP ports, the K build with
+      an eight-core CPU and a 120 GB SSD, running EOS
+    attrs:
+      power: {power-typical-w: 262, power-max-w: 437}
+      platform: {cpu: Eight-Core x86, storage: 120 GB SSD (no flash storage)}
+      features: {eos-license: license group G3; minimum EOS 4.27.2}
     part-numbers:
       DCS-7280CR3K-36A-F: {}
   k-a-r:
     kind: orderable
     airflow: back-to-front
-    description: >-
-      The 7280CR3K-36A with rear-to-front air, drawing 262 W typical and 437 W maximum. Ordered as DCS-7280CR3K-36A-R.
+    description: The 7280CR3K-36A with rear-to-front air. Ordered as DCS-7280CR3K-36A-R.
+    export-description: >-
+      Arista 7280CR3K-36A - a fixed 1RU data-centre switch router with 36 QSFP ports, the K build with
+      an eight-core CPU and a 120 GB SSD, running EOS
+    attrs:
+      power: {power-typical-w: 262, power-max-w: 437}
+      platform: {cpu: Eight-Core x86, storage: 120 GB SSD (no flash storage)}
+      features:
+        eos-license: license group G3; minimum EOS 4.27.2; rear-to-front air needs EOS 4.29.1
     bays: {psu-1: arista/7280cr3-pwr-1000-ac-rev@1, psu-2: arista/7280cr3-pwr-1000-ac-rev@1, fan-1: arista/7280cr3-fan-rev@1,
       fan-2: arista/7280cr3-fan-rev@1}
     part-numbers:
