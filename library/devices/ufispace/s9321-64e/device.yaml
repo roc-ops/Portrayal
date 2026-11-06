@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9321-64e
-version: 2.0.7
+version: 2.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9321-64E
@@ -312,6 +312,15 @@ chassis:
   airflow: front-to-back
 
 gaps:
+- what: dc-polarity
+  scope: [ufispace/psu-302-dc@2]
+  reason: needs-drawing
+  note: >-
+    No figure of the seven UfiSpace guides that show the DC supply's terminal block names a conductor at either pole: the
+    guides' connecting-power figure marks the two lugs' cables by colour only (red on the left pole, blue on the right) and
+    the supply's own face prints no legend that a held figure shows. The two poles are stated `unstated`, and a feed is
+    not called crossed on them.
+  wanted: a straight-on photograph or drawing of the PSU-302-DESR's terminal block with the legend printed at its poles
 - what: unidentified-front-panel-opening
   scope: [furniture]
   reason: vendor-silent
@@ -863,8 +872,8 @@ views:
         - {id: fan-1, at: [91.7, 3.1], size: {w: 81.0, h: 81.5}, accepts: [ufispace/fan-808012@1], group: fans, rel-pos: 1, default: ufispace/fan-808012@1}
         - {id: fan-2, at: [176.0, 3.1], size: {w: 81.0, h: 81.5}, accepts: [ufispace/fan-808012@1], group: fans, rel-pos: 2, default: ufispace/fan-808012@1}
         - {id: fan-3, at: [260.3, 3.1], size: {w: 81.0, h: 81.5}, accepts: [ufispace/fan-808012@1], group: fans, rel-pos: 3, default: ufispace/fan-808012@1}
-        - {id: psu-0, at: [360.0, 3.3], size: {w: 68.0, h: 40.6}, accepts: [ufispace/psu-302-ac@1, ufispace/psu-302-dc@1], group: psus, rel-pos: 0, default: ufispace/psu-302-ac@1}
-        - {id: psu-1, at: [360.0, 45.7], size: {w: 68.0, h: 40.6}, accepts: [ufispace/psu-302-ac@1, ufispace/psu-302-dc@1], group: psus, rel-pos: 1, default: ufispace/psu-302-ac@1}
+        - {id: psu-0, at: [360.0, 3.3], size: {w: 68.0, h: 40.6}, accepts: [ufispace/psu-302-ac@1, ufispace/psu-302-dc@1, ufispace/psu-302-dc@2], group: psus, rel-pos: 0, default: ufispace/psu-302-ac@1}
+        - {id: psu-1, at: [360.0, 45.7], size: {w: 68.0, h: 40.6}, accepts: [ufispace/psu-302-ac@1, ufispace/psu-302-dc@1, ufispace/psu-302-dc@2], group: psus, rel-pos: 1, default: ufispace/psu-302-ac@1}
       placements:
         - {ref: common/ground-symbol@1, id: ground-rear, at: [347.4, 48.0], group: grounding, rel-pos: 1}
     regions:
@@ -940,8 +949,8 @@ configurations:
     description: Dual 3000W DC PSUs (PSU-302-DESR) 1+1, four FAN-808012-HCE fan modules
       3+1, front-to-back airflow
     bays:
-      psu-0: ufispace/psu-302-dc@1
-      psu-1: ufispace/psu-302-dc@1
+      psu-0: ufispace/psu-302-dc@2
+      psu-1: ufispace/psu-302-dc@2
 datasheet:
   title: UfiSpace S9321-64E Datasheet
   url: https://www.ufispace.com/products/cloud-data-center
