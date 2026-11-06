@@ -2,9 +2,10 @@
 
 Every breaker ships wearing `amphenol-ns/touch-guard-1ru@1`, which covers the
 breaker face, so `populated` draws sixteen identical covers. `populated-guards-off`
-seats the same sixteen breakers with the same ratings and empties the cover
-slot of each (`<bay>/guard: ''`). It is a view, not a part number: it
-carries none and so exports nothing. The library half reads the device; the
+seats `breaker-bare-1ru`, the same breaker with no guard, with the same ratings,
+in the same sixteen bays. It seats nothing inside a part (no `occupants`), because
+shipped models stay bare. It is a view, not a part number: it carries none and so
+exports nothing. The library half reads the device; the
 render half draws the device into a temporary folder and reads the front face
 of each configuration, so nothing here reads library/dist.
 """
@@ -25,7 +26,8 @@ RENDER = ROOT / "spec" / "tools" / "portrayal" / "render.py"
 DEVICE = LIB / "devices" / "amphenol-ns" / "300cb08" / "device.yaml"
 VIEW = "populated-guards-off"
 BREAKER = "amphenol-ns/breaker-1ru@1"
-BLANK = "amphenol-ns/breaker-blank-1ru@1"
+BARE = "amphenol-ns/breaker-bare-1ru@1"
+BLANK ="amphenol-ns/breaker-blank-1ru@1"
 GUARD = "amphenol-ns/touch-guard-1ru@1"
 BAYS = [f"breaker-{side}{n}" for side in "ab" for n in range(1, 9)]
 
@@ -41,18 +43,19 @@ def test_the_view_exists_and_is_an_example_with_no_part_number():
     assert not cfg.get("default")
 
 
-def test_the_view_seats_a_breaker_in_all_sixteen_bays():
-    assert configurations()[VIEW]["bays"] == {bay: BREAKER for bay in BAYS}
+def test_the_view_seats_a_bare_breaker_in_all_sixteen_bays():
+    assert configurations()[VIEW]["bays"] == {bay: BARE for bay in BAYS}
 
 
-def test_the_view_empties_the_touch_guard_of_each_breaker_and_nothing_else():
-    assert configurations()[VIEW]["occupants"] == {f"{bay}/guard": "" for bay in BAYS}
+def test_the_view_seats_no_part_inside_another():
+    assert "occupants" not in configurations()[VIEW]
 
 
 def test_the_view_differs_from_populated_only_in_its_covers():
     cfgs = configurations()
-    for key in ("bays", "bay-attrs", "component-attrs"):
+    for key in ("bay-attrs", "component-attrs"):
         assert cfgs[VIEW][key] == cfgs["populated"][key]
+    assert set(cfgs["populated"]["bays"].values()) == {BREAKER}
 
 
 @pytest.fixture(scope="module")
@@ -74,7 +77,7 @@ def front(built, config):
 @pytest.mark.heavy
 def test_the_built_view_seats_no_touch_guard(built):
     _, components = front(built, VIEW)
-    assert BREAKER in components
+    assert BARE in components
     assert GUARD not in components
 
 
