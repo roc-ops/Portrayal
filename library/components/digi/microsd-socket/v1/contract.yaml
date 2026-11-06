@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: microsd-socket
+version: 1.0.0
+class: port
+profile: networking
+interface: microsd
+description: >-
+  The micro-SD socket on the front of the Digi Connect EZ 16 and 32 (Digi's product page: an
+  "SD/SDHC/SDXC socket") - a narrow slot in the face that a micro-SD card slides into.
+size: {w: 16.1, h: 2.45, d: 17.2}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+attrs: {media: microsd, connector: microsd}
+provenance:
+  size: >-
+    drawing - the Digi Connect EZ 16 dimension model ("footprint" STEP file, EZ16-A000): the
+    socket is a body 16.1 wide, 2.45 high and 17.2 deep behind the front face.
+  opening: >-
+    estimated - the slot is drawn as the whole 16.1 x 2.45 body face in dark metal with a black
+    mouth; the front photograph shows a dark slot of that length under a "Micro-SD" legend and
+    nothing more.
+elements:
+  opening: {at: [0.4, 0.5], size: [15.3, 1.45], class: cutout}
+relief:
+  wall: '#3a3f45'
+  cavity: cavity
+  size: {w: 15.3, h: 1.45}
+connection-points:
+  mate: {at: [8.05, 1.2], direction: front}
+skins: [default]

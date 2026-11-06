@@ -1,0 +1,75 @@
+format: 1
+kind: component
+name: serial-jack-10p
+version: 1.0.0
+class: port
+profile: networking
+interface: rj45-10p
+description: >-
+  The ten-position RJ45 serial jack of the Digi Connect EZ 16 and 32 - one cell of a
+  shared-wall block with two lamps in its lower corners, 16.0 wide on a 16.0 pitch. Digi calls
+  the connector "RJ45 10-pin"; its cable list names the RJ-45/RJ-50 cable that fits it. Pins up,
+  keyway down when unrotated; rotate 180 at placement for the upper jack of a stacked pair.
+size: {w: 16.0, h: 16.2, d: 18.0}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+attrs: {media: rj45-serial, connector: rj45-10p}
+provenance:
+  size: >-
+    drawing - the Digi Connect EZ 16 dimension model ("footprint" STEP file, EZ16-A000): the
+    serial jacks are four-jack blocks 64.0 wide, 16.2 high and 18.0 deep (0.5 proud of the
+    face), so one cell is 16.0 wide on a 16.0 pitch. The cell is the housing; the opening is
+    smaller.
+  cavity: >-
+    estimated - nothing held dimensions the opening of a ten-position jack. It is drawn as the
+    three tiers of std/rj45@2 (TE drawing 1734264) with the body widened from 11.91 to 14.1 for
+    the two extra contacts, and the position of the opening in the cell read off the Digi Connect
+    EZ 16 front photograph. A drawing of the jack, or Digi's connector part number, would replace
+    it.
+  pins: >-
+    estimated - ten contacts on the 1.02 pitch of std/rj45@2, the count Digi's product page prints
+    ("RJ45 10-pin"). The contact pitch of a ten-position jack is not held.
+  lamps: >-
+    photo-measured - the Digi Connect EZ 16 and 32 front photographs show a green lamp in the
+    lower left and a yellow lamp in the lower right of every serial jack; Digi's product page lists
+    per-port Serial and Ethernet lamps. The colours are the photograph's. Positions are estimated
+    from an 800 px photograph.
+  finish: >-
+    photo-measured - the front photographs show a bright metal shield with a darker bore, so the
+    housing takes the `finish` default of std/rj45@2.
+fields:
+  finish:
+    label: Shell finish
+    type: text
+    default: '#b0b5bb'
+elements:
+  opening: {at: [0.95, 0.9], size: [14.1, 15.3], class: cutout}
+  led-a:
+    at: [1.6, 13.3]
+    size: [2.0, 1.1]
+    class: led
+    states: ['off', {name: green, color: '#22c55e'}]
+  led-b:
+    at: [12.4, 13.3]
+    size: [2.0, 1.1]
+    class: led
+    states: ['off', {name: yellow, color: '#eab308'}]
+relief:
+  wall: '#3a3f45'
+  cavity: cavity
+  size: {w: 14.1, h: 15.3}
+  features:
+    - node: led-a
+      out: 0.3
+      color: '#0d0f11'
+      confidence: estimated
+      source: >-
+        common/rj45-ganged-lamped@1 - the same lamp-lens stand-off, itself unsourced.
+    - node: led-b
+      out: 0.3
+      color: '#0d0f11'
+      confidence: estimated
+      source: >-
+        common/rj45-ganged-lamped@1 - the same one estimate as led-a.
+connection-points:
+  mate: {at: [8.0, 6.0], direction: front}
+skins: [default]
