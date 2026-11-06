@@ -79,8 +79,7 @@ def test_the_connector_registry_is_not_vacuous():
     # nothing presents it yet, so it is in the registry and in no slot below
     # nema-5-15r/nema-5-20r/eaton-c39: the NEMA straight-blade receptacles and the
     # Eaton combination outlet, made slots for a cord end (#1045). std/nema-5-20r@1
-    # and eaton/c39-outlet@1 present two of them. No part presents nema-5-15r yet:
-    # it is registered because a 5-15P names it in `mates`, and it is in no slot below
+    # and eaton/c39-outlet@1 present two of them; std/nema-5-15r@1 presents the third
     # flexstack/stackwise-480/stackpower: the Cisco stacking and power-stacking
     # connectors; ex4200-vcp: the Juniper EX4200 Virtual Chassis port;
     # cisco-rps2300/ex3300-rps: the two redundant-power connectors. Vendor connectors
@@ -102,7 +101,7 @@ def test_the_connector_registry_is_not_vacuous():
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
-                         "nema-5-15r", "nema-5-20r", "eaton-c39",
+                         "nema-5-15r", "nema-5-20r", "eaton-c39", "servertech-hdot-cx",
                          # the CEE 7/3 earthing-pin socket of the Rittal DK 7979 PDUs
                          "cee-7-3",
                          "usb-a", "micro-usb-b", "mini-usb-b", "usb-c",
@@ -162,6 +161,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "juniper-dc-header-6", "dc-connector-3w3",
                          # the AC inlet of the Telco Systems XM-3352 supply
                          "telco-ac-cloverleaf-3",
+                         # the 4FF SIM card slot of the Opengear CM8004-C and CM8008-C
+                         "sim-tray-4ff",
                          # the keystone opening of the FS FHD-FAPM6 panel
                          "keystone"}
     # No connector interface is also a cage family's: one core, two registries,

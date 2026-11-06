@@ -718,4 +718,6 @@ def test_the_comparison_layer_can_now_reach_them():
     # Fan Modules: "Three fans are required for proper cooling" and the switch "can operate with two operational fans")
     # 183 with the Cisco NCS 5011 (3+1 over four fan modules; the NCS 5000 guide, Fan Modules) and the
     # NCS-57C3-MOD-S and -MOD-HX (n+1 over six fan trays; the NCS 5700 guide, Fan Modules and Fan Trays)
-    assert n == 183, n
+    # 187 with the Arista 7050CX3-32S, 7050SX3-48YC12, 7050SX3-48YC8 and 7050TX3-48C8: four and two fan modules
+    # (data sheet, model tables)
+    assert n == 187, n
