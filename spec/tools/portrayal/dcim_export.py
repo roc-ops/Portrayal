@@ -1243,8 +1243,6 @@ MGMT_NOT_A_DCIM_PORT = {
     ("std/rj45-ganged", "timing"): "the CSR180's stack-a-upper, which its own device marks "
                                    "`timing: unidentified` - there is no true type to give a jack "
                                    "nobody has identified",
-    ("std/rj45-ganged", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
-    ("common/rj45-ganged-lamped", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
 }
 MGMT_EXPORTED_ROLES = {"mgmt", "console", "aux"}
 
