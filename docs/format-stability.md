@@ -317,6 +317,19 @@ reader that does not know it finds every field it read before.
   `input-wiring`, `input-voltage-v`, `input-current-a`, `plug-rating-a` and
   `capacity-kw`; attrs are flattened to `data-*` on every drawing, so these
   names are held as attribute names too.
+- **`attrs.power`** gains `poe-pd-standard` and `poe-pd-standard-min` (`802.3af`,
+  `802.3at` or `802.3bt`), `poe-pd-class` (an integer from 0 to 8) and `poe-pd-max-w` (a
+  number above 0), all optional and all about a device's own PoE input. `poe-pd-max-w`
+  is the whole intake, what the device hands on included, so a figure printed
+  'excluding PoE output' stays in `power-self-max-w`. Every file valid before stays
+  valid and `format` is still 1. From the first device on `main` that states them, the
+  names, the three spellings and the meaning of `poe-pd-max-w` cannot change without a
+  format change, and neither can the `mount` value `ceiling`. The served copy of the
+  device schema is republished in the same release as the first device that states
+  `ceiling`, or a reader validating against the older copy refuses that device.
+- **The DCIM export** of a device that states `poe-pd-standard` gains one sentence in the
+  comments: `PoE powered device: 802.3at (runs on 802.3af), at most 25 W at the PD
+  input.` A device with a `ceiling` mount reads `Ceiling-mounted; not rack-mounted.`
 - **The DCIM export** writes the input rating on the input power port's
   `description` and in the comments, with the derived class; an outlet's
   description names the breaker it runs `through` and its `lines`
@@ -885,7 +898,9 @@ device has them:
   `ref` and `motion` and neither `depth` nor `preset`. A device that lists no
   kit, or whose default kit does not resolve, has no `kit` key. A reader that
   does not know `kit` is unaffected, and `format` is still 1.
-- `mount`: the device's `chassis.mount`, present only when it is not `rack`.
+- `mount`: the device's `chassis.mount`, present only when it is not `rack`. It can be
+  `ceiling`, added to the schema's values without moving `format`; a reader that does not
+  know a value treats the device as not racked, as it does any other.
 - `shell`: `chassis.shell`, `sheet` for a body that is a sheet and not a box.
 - `capacity`: `{"count", "basis", "media"}`, the cable capacity the vendor
   states. `media` is the kind of cable the count is of, in a rack file's
