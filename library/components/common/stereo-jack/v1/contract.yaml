@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: stereo-jack
+version: 1.0.0
+class: port
+profile: networking
+interface: stereo-jack
+description: >-
+  A stereo jack on a panel, the RS-232 port of CommScope's CX3003C and CX3033N
+  communications modules, which the data sheets describe as using "a stereo
+  jack style connector". Seen from the face: a round bore with a metal ring.
+  The data sheets give no jack diameter, pin count or pinout, so the size is
+  an estimate and nothing about the signals is claimed.
+size: {w: 7.4, h: 7.4}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: serial}
+provenance:
+  size: >-
+    estimated - the 7.4 box is the photo-measured jack outline on the CX3003C
+    and CX3033N faces; no data sheet dimensions the jack, so it is a stand-in
+    for where a plug lands, not a reading of the connector.
+  connector: >-
+    datasheet - CommScope CH3000 CX3003C Enhanced Communications Module data
+    sheet, Specifications, "RS-232 and micro-USB Ports": reserved for factory
+    use, and "RS-232 port uses a stereo jack style connector"; the CX3033N
+    data sheet prints the same words. The sheets do not give the plug's
+    diameter, so no size such as 3.5 mm is claimed.
+elements:
+  bore: {at: [0.0, 0.0], size: [7.4, 7.4], class: mechanical}
+connection-points:
+  mate: {at: [3.7, 3.7], direction: front}
+skins: [default]

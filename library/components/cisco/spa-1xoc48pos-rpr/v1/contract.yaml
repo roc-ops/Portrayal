@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: spa-1xoc48pos-rpr
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -168,6 +168,17 @@ provenance:
     searched - no end-of-life notice for SPA-1XOC48POS/RPR is in this intake. Table 10 gives
     this part a minimum IOS XR release of 5.1.1 and a minimum hardware revision of 1.0,
     which is a support floor and not a lifecycle statement.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router SIP and SPA Hardware
+    Installation Guide, PDF pages 33, 1-Port OC48-POS/RPR SPA Cables, Optical Transceiver
+    Modules, and Connectors: one duplex LC-type receptacle, SFP-OC48-SR, -IR1 and -LR2
+    single-mode modules; the 40-pin resilient-packet-ring connector is not a port part here. The
+    group holds the adapter's 1 port part. Role traffic: the ports are what the adapter is for.
+    index-origin 0: the guide says subslots and ports are numbered starting from 0 (SIP-700
+    interface addresses, PDF page 20), and the parts here are p0, p1 and so on. Media sfp: the
+    guide names a small form-factor pluggable optical transceiver module in each port. No speed
+    is stated: the closed set of speeds has no word for OC-48, so the rate stays in the group
+    description as the guide prints it. Nothing was measured: no position, size or part changed.
 elements:
   led-wrap:
     at: [5.02, 5.96]
@@ -337,6 +348,16 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp
+    description: >-
+      The port takes a single-mode SFP module with a duplex LC-type receptacle: SFP-OC48-SR,
+      -IR1 or -LR2. The guide prints it as an OC-48 port.
 parts:
-  - {ref: std/sfp@1, id: p0, at: [-0.41, 34.19], rotate: 90}
+  - {ref: std/sfp@1, id: p0, at: [-0.41, 34.19], rotate: 90, group: sfp}
 skins: [default]
