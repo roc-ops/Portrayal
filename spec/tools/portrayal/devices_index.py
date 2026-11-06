@@ -134,6 +134,32 @@ def search_blob(d, listings=(), roots=()):
     return " ".join(out)
 
 
+def programmable_notes(d):
+    """The maker's names for the programmable lights of a device, sorted: `None`
+    when no lamp on any face is marked `programmable`, `[]` when some are and
+    none is named (#1271).
+
+    DERIVED, NEVER AUTHORED: the device has no key of its own for it, so "the
+    ports light up" can only be said where a face carries a lamp that says it.
+    A placement's own `programmable` wins over its group's, as the drawing
+    reads it, and a group nothing places lights nothing."""
+    groups = d.get("groups") or {}
+    notes, found = set(), False
+    for view in (d.get("views") or {}).values():
+        for q in view_parts(view or {})["placements"]:
+            g = groups.get(q.get("group")) or {}
+            if q["programmable"] if "programmable" in q else g.get("programmable"):
+                found = True
+                note = q.get("programmable-note") or g.get("programmable-note")
+                if note:
+                    notes.add(note)
+    return sorted(notes) if found else None
+
+
+def has_programmable_light(d):
+    return programmable_notes(d) is not None
+
+
 def decor_confidence(d):
     """{token: n} over every decor entry that projects or recesses in 3D.
 
@@ -262,6 +288,11 @@ def main():
             # Absent means public and is left out, so a public index is unchanged.
             if d.get("audience"):
                 devices[-1]["audience"] = d["audience"]
+            # "PORTS LIGHT UP" (#1271): present, and true, only where a lamp on
+            # a face is marked programmable; absent otherwise, so the entry of
+            # every other device is as it was
+            if has_programmable_light(d):
+                devices[-1]["programmable-light"] = True
     devices.sort(key=lambda x: (x["manufacturer"], x["name"]))
 
     out = Path(args.out)

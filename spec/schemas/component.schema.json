@@ -1707,6 +1707,14 @@
       }
      ]
     },
+    "programmable": {
+     "type": "boolean",
+     "description": "true when the user chooses the colour of these lamps (per port, per VLAN, per speed), not only a fixed link and activity colour. It says the light is programmable, never which colours it takes; those stay in `states` where the maker lists them. The drawing rings the port each lamp belongs to in a neutral grey, and the device index and the DCIM export say the device's ports light up. Draw it only where the maker's figure shows a light round or beside the port. A placement's own `programmable` wins over its group's"
+    },
+    "programmable-note": {
+     "type": "string",
+     "description": "the maker's own name for the programmable light, as text only - for example Ubiquiti's Etherlighting - so other makers' versions fit the one mark. Read beside `programmable`; it is never a colour or a figure"
+    },
     "description": {
      "type": "string",
      "description": "the vendor's own sentence about this block of indicators, kept beside the tokens"
