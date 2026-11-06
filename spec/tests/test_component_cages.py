@@ -282,14 +282,20 @@ def test_a_card_cage_on_a_facet_publishes_the_facet(index):
 
 
 def test_a_card_cage_has_no_group_side_attrs(index):
-    """R3, for a card that declares no `groups:` - the three named cards do
-    not - the host side contributes nothing to a seated optic. A card that
-    DOES declare groups (#511) is held to the other half below."""
-    for ref in NAMED:
-        assert not _contract(ref).get("groups"), f"{ref} now declares groups - repick"
-        for c in index[ref]["cages"]:
-            assert c["occupant-attrs"] == {}
-            assert c["group-states"] is False
+    """R3, for a card that declares no `groups:` the host side contributes
+    nothing to a seated optic. A card that DOES declare groups (#511) is held
+    to the other half below. Every indexed card with cages and no groups is
+    checked, so a card that gains groups leaves this loop instead of failing
+    it."""
+    checked = 0
+    for ref, entry in index.items():
+        if _contract(ref).get("groups"):
+            continue
+        for c in entry.get("cages") or []:
+            assert c["occupant-attrs"] == {}, (ref, c["id"])
+            assert c["group-states"] is False, (ref, c["id"])
+            checked += 1
+    assert checked > 0, "no card is left without groups - this half is vacuous"
 
 
 def test_a_grouped_card_cage_publishes_its_group_side(index):

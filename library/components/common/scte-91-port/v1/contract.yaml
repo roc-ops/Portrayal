@@ -1,0 +1,65 @@
+format: 1
+kind: component
+name: scte-91-port
+version: 1.0.0
+class: port
+profile: networking
+interface: scte-91
+description: >-
+  An `scte-91` external port of a cable node, seen from the face. A round
+  boss with a threaded opening takes a stinger connector, a fibre fitting or
+  the sealing plug that ships in it. A stinger's centre pin enters a terminal
+  post behind the opening, which is not drawn. Presents `scte-91`;
+  generic/scte-91-port-plug@1 mates it. No thread size is stated or drawn.
+size: {w: 20.0, h: 20.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  an estimate: no held document dimensions the port. The sealing plug's hex
+  head is 14.665 across its corners (a 1/2 inch socket), and the boss is drawn
+  wider than that so the plug seats over the opening.
+attrs: {connector: scte-91}
+unplaced: placed by the node devices that list an SCTE-91 port, downstream of this part
+provenance:
+  size: >-
+    estimated - see size-notes. The documents name the port ("SCTE-91" in the
+    connector list of Entra EN8100/8400 Hardware Unit Data Sheet, revision 1,
+    page 7, and of Entra EN9000 Hardware Unit Data Sheet, revision 8, page 10)
+    and show it in photographs with no scale (Entra Remote PHY Node EN8100
+    Installation and Operations Guide, revision 14, page 76), and give neither
+    its outside diameter nor its thread. The 20.0 is a round figure above the
+    plug's 14.665.
+  thread: >-
+    UNKNOWN. No held document states the thread of the port or the diameter of
+    the stinger's centre pin; the opening is drawn without either.
+  mate: >-
+    estimated - the mate point is the centre of the opening, on the face of the
+    boss; a plug seats there and stands off by its own head height.
+  boss: >-
+    estimated - the boss stands 8.0 proud of the face it sits on. The
+    photograph on page 76 shows the plugs standing out of the housing end
+    wall; no view dimensions the boss. THE 8.0 IS THE ONE TO REVISIT.
+  bore: >-
+    estimated - the opening is 15.0 across and 6.0 deep, wider than the plug's
+    14.665 corners; no view dimensions it.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+relief:
+  wall: '#0c0d0e'
+  features:
+    - node: boss
+      out: 8.0
+      shape: true
+      color: '#b9bcc0'
+      confidence: estimated
+      source: >-
+        the port's boss stands out of the housing wall in the photograph on
+        page 76; no view dimensions it (provenance.boss)
+    - node: bore
+      pocket: 6.0
+      confidence: estimated
+      source: >-
+        the threaded opening; depth by eye (provenance.bore)
+connection-points:
+  mate: {at: [10.0, 10.0], direction: front, 'on': boss}
+skins: [default]

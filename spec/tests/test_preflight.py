@@ -360,6 +360,236 @@ def test_the_stub_dist_carries_what_the_build_does(tmp_path):
             f"{name}: library/dist is stale - rebuild with ./build.sh (or the stub is wrong)"
 
 
+# ------------------------------------------- writing the exports without a build ---
+
+def _snapshot(folder):
+    return {str(p.relative_to(folder)): p.read_bytes()
+            for p in sorted(Path(folder).rglob("*")) if p.is_file()}
+
+
+def _fake_regenerate(files):
+    """What regenerate_exports writes, as a fixed set of files, LICENSE and NOTICE
+    copied from the root only when the root has them (as the real one does)."""
+    def regenerate(root, out):
+        for rel, text in files.items():
+            p = Path(out) / rel
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text(text)
+        for f in ("LICENSE", "NOTICE"):
+            if (Path(root) / f).exists():
+                shutil.copyfile(Path(root) / f, Path(out) / f)
+        return []
+    return regenerate
+
+
+def _exports_tree(tmp_path):
+    """A repository whose library/exports holds a current file, a stale one, an
+    extra one alone in its folder, an extra one beside a picture, and the
+    picture itself (gitignored, as the real ones are)."""
+    ex = "library/exports/netbox/device-types/"
+    make_repo(tmp_path, {
+        "LICENSE": "licence\n", "NOTICE": "notice\n",
+        ".gitignore": "library/exports/**/*.png\n",
+        "library/exports/LICENSE": "licence\n", "library/exports/NOTICE": "notice\n",
+        ex + "A/same.yaml": "same\n", ex + "A/stale.yaml": "old\n",
+        ex + "Gone/extra.yaml": "extra\n", ex + "Pic/extra.yaml": "extra\n"})
+    png = tmp_path / "library/exports/netbox/device-images/Pic/front.png"
+    png.parent.mkdir(parents=True)
+    png.write_bytes(b"\x89PNG not a picture")
+    return ex
+
+
+@pytest.mark.heavy
+def test_write_exports_copies_stale_and_missing_removes_extra_and_keeps_pictures(
+        tmp_path, monkeypatch):
+    ex = _exports_tree(tmp_path)
+    monkeypatch.setattr(preflight, "regenerate_exports", _fake_regenerate({
+        "netbox/device-types/A/same.yaml": "same\n",
+        "netbox/device-types/A/stale.yaml": "new\n",
+        "netbox/device-types/B/missing.yaml": "added\n"}))
+    png = tmp_path / "library/exports/netbox/device-images/Pic/front.png"
+    errors, written, removed, unchanged = preflight.write_exports(tmp_path)
+    assert errors == []
+    assert written == ["netbox/device-types/A/stale.yaml", "netbox/device-types/B/missing.yaml"]
+    assert removed == ["netbox/device-types/Gone/extra.yaml", "netbox/device-types/Pic/extra.yaml"]
+    assert len(unchanged) == 3                                  # same.yaml, LICENSE, NOTICE
+    assert (tmp_path / ex / "A/stale.yaml").read_text() == "new\n"
+    assert (tmp_path / ex / "B/missing.yaml").read_text() == "added\n"
+    assert not (tmp_path / ex / "Gone").exists(), "the folder this emptied is still there"
+    assert not (tmp_path / ex / "Pic/extra.yaml").exists()
+    assert png.read_bytes() == b"\x89PNG not a picture", "an ignored picture was touched"
+    again = preflight.write_exports(tmp_path)
+    assert again[:3] == ([], [], []) and len(again[3]) == 5, again
+
+
+@pytest.mark.heavy
+def test_write_exports_changes_nothing_when_the_exporter_fails(tmp_path, monkeypatch, capsys):
+    _exports_tree(tmp_path)
+    before = _snapshot(tmp_path / "library/exports")
+
+    def regenerate(root, out):
+        (Path(out) / "partial.yaml").write_text("half\n")
+        return ["dcim_export (devices): boom"]
+    monkeypatch.setattr(preflight, "regenerate_exports", regenerate)
+    assert preflight.main(["--root", str(tmp_path), "--write-exports"]) == 1
+    assert "boom" in capsys.readouterr().out
+    assert _snapshot(tmp_path / "library/exports") == before
+
+
+@pytest.mark.heavy
+def test_write_exports_deletes_nothing_when_the_root_has_no_licence(tmp_path, monkeypatch, capsys):
+    _exports_tree(tmp_path)
+    (tmp_path / "LICENSE").unlink()
+    before = _snapshot(tmp_path / "library/exports")
+    monkeypatch.setattr(preflight, "regenerate_exports", _fake_regenerate({
+        "netbox/device-types/A/same.yaml": "same\n"}))
+    assert preflight.main(["--root", str(tmp_path), "--write-exports"]) == 1
+    assert "LICENSE" in capsys.readouterr().out
+    assert _snapshot(tmp_path / "library/exports") == before, "the committed copy was deleted"
+
+
+@pytest.mark.heavy
+def test_write_exports_follows_a_changed_root_licence(tmp_path, monkeypatch):
+    _exports_tree(tmp_path)
+    (tmp_path / "LICENSE").write_text("a newer licence\n")
+    monkeypatch.setattr(preflight, "regenerate_exports", _fake_regenerate({
+        "netbox/device-types/A/same.yaml": "same\n",
+        "netbox/device-types/A/stale.yaml": "old\n",
+        "netbox/device-types/Gone/extra.yaml": "extra\n",
+        "netbox/device-types/Pic/extra.yaml": "extra\n"}))
+    errors, written, removed, _ = preflight.write_exports(tmp_path)
+    assert (errors, written, removed) == ([], ["LICENSE"], [])
+    assert (tmp_path / "library/exports/LICENSE").read_text() == "a newer licence\n"
+
+
+CSS326 = "mikrotik/css326-24g-2s-plus-rm"     # a device with no other device's help
+CSS326_EXPORTS = ("nautobot/device-types/MikroTik/CSS326-24G-2S+RM.yaml",
+                  "netbox/device-types/MikroTik/CSS326-24G-2S+RM.yaml")
+
+
+@pytest.fixture(scope="module")
+def exports_repo(tmp_path_factory):
+    """Two devices and the parts they reach, with the exports the real library
+    commits for them: what the real exporter writes for this copy is checked,
+    file by file, against `library/exports` in this checkout before it is
+    committed as the base."""
+    root = tmp_path_factory.mktemp("exports-repo")
+    lib = root / "library"
+    for name in (DEVICE, CSS326):
+        dev = LIBRARY / "devices" / name
+        shutil.copytree(dev, lib / "devices" / name)
+        for f in lint.device_dependencies(dev / "device.yaml", [str(LIBRARY)]):
+            f = Path(f).resolve()
+            if f.name == "contract.yaml":
+                dst = lib / f.parent.relative_to(LIBRARY.resolve())
+                if not dst.exists():
+                    shutil.copytree(f.parent, dst)
+    for f in ("LICENSE", "NOTICE"):
+        shutil.copyfile(ROOT / f, root / f)
+    out = lib / "exports"
+    errors = preflight.regenerate_exports(root, out)
+    assert not errors, errors
+    for rel, data in _snapshot(out).items():
+        assert (LIBRARY / "exports" / rel).read_bytes() == data, \
+            f"{rel}: this copy exports differently from the committed library/exports"
+    make_repo(root, {"changelog.d/README.md": "how\n"})
+    return root, git(root, "rev-parse", "HEAD").strip()
+
+
+@pytest.fixture
+def exports_fresh(exports_repo):
+    root, base = exports_repo
+    yield root, base
+    git(root, "reset", "-q", "--hard", base)
+    git(root, "clean", "-qfd")
+
+
+def _edit_description(root):
+    path = root / "library/devices" / CSS326 / "device.yaml"
+    _edit(path, "MikroTik CSS326-24G-2S+RM is a fixed 1U", "MikroTik CSS326-24G-2S+RM is a fixed one-unit")
+    layout = path.with_name("layout.yaml")
+    if layout.exists():
+        _edit(layout, "MikroTik CSS326-24G-2S+RM is a fixed 1U",
+              "MikroTik CSS326-24G-2S+RM is a fixed one-unit")
+
+
+@pytest.mark.heavy
+def test_write_exports_on_the_committed_tree_writes_nothing(exports_fresh):
+    root, _ = exports_fresh
+    before = _snapshot(root / "library/exports")
+    errors, written, removed, unchanged = preflight.write_exports(root)
+    assert (errors, written, removed) == ([], [], [])
+    assert len(unchanged) == len(before) > 4
+    assert _snapshot(root / "library/exports") == before
+    assert git(root, "status", "--porcelain", "--", "library/exports") == ""
+
+
+def _real_passes(root, out):
+    """The three dcim_export.py passes, run as publish.sh --no-images runs them,
+    against a stub dist."""
+    import subprocess
+    import sys
+    import tempfile
+    library = root / "library"
+    with tempfile.TemporaryDirectory(prefix="stub-") as dist:
+        for ix in ("components_index", "registry_index"):
+            subprocess.run([sys.executable, preflight._tool(ix), "--library", str(library),
+                            "--out", dist], cwd=root, env=preflight._env(), check=True,
+                           capture_output=True)
+        preflight._stub_dist(library, dist)
+        base = [sys.executable, preflight._tool("dcim_export"), "--dist", dist,
+                "--out", str(out), "--images", "--no-raster"]
+        for extra in ([], ["--modules"], ["--racks"]):
+            subprocess.run(base + extra, cwd=root, env=preflight._env(), check=True,
+                           capture_output=True)
+    for f in ("LICENSE", "NOTICE"):
+        shutil.copyfile(root / f, Path(out) / f)
+
+
+@pytest.mark.heavy
+def test_a_description_edit_moves_exactly_the_two_files_the_real_passes_change(
+        exports_fresh, tmp_path):
+    root, _ = exports_fresh
+    _edit_description(root)
+    errors, written, removed, _ = preflight.write_exports(root)
+    assert (errors, removed) == ([], [])
+    assert written == list(CSS326_EXPORTS)
+    assert git(root, "status", "--porcelain", "--", "library/exports").split() == \
+        ["M", "library/exports/" + CSS326_EXPORTS[0], "M", "library/exports/" + CSS326_EXPORTS[1]]
+    second = tmp_path / "real"
+    _real_passes(root, second)
+    assert _snapshot(second) == _snapshot(root / "library/exports")
+
+
+@pytest.mark.heavy
+def test_a_removed_devices_exports_go_and_nothing_else_moves(exports_fresh):
+    root, _ = exports_fresh
+    # the device that seats no part with a module type of its own: removing the
+    # other one moves its parts' module types to another maker's folder
+    gone = CSS326_EXPORTS
+    before = _snapshot(root / "library/exports")
+    git(root, "rm", "-rq", "library/devices/" + CSS326)
+    errors, written, removed, _ = preflight.write_exports(root)
+    assert (errors, written) == ([], [])
+    assert removed == list(gone)
+    assert sorted(set(before) - set(_snapshot(root / "library/exports"))) == removed
+    assert not (root / "library/exports/netbox/device-types/MikroTik").exists()
+
+
+@pytest.mark.heavy
+def test_check_exports_fails_on_a_stale_tree_and_passes_after_the_tool_has_run(exports_fresh):
+    root, base = exports_fresh
+    _edit_description(root)
+    res = preflight.check_exports(ctx_of(root, base))
+    assert not res.ok and len(res.details) == 2, (res.summary, res.details)
+    assert "--write-exports" in res.fix and "publish.sh --no-images" in res.fix
+    assert preflight.write_exports(root)[0] == []
+    git(root, "add", "-A")
+    git(root, "commit", "-qm", "exports")
+    res = preflight.check_exports(ctx_of(root, base))
+    assert res.ok, (res.summary, res.details)
+
+
 # ---------------------------------------- lint planning, on the real tree, read-only ---
 
 @pytest.mark.heavy

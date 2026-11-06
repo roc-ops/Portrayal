@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais2003
-version: 2.1.0
+version: 2.1.2
 maturity: modelled
 manufacturer: AurCore
 model: AIS2003
@@ -85,6 +85,9 @@ provenance:
       LINK/ACT under its colour key (no PoE key on this build); the summary line '8 x GE | 4 x
       GE Base-T/SFP Combo'. The AURCORE wordmark is printed as text: its A is drawn as a chevron
       mark, which is not reproduced (no logo marks).
+      The printed logotype's place on the front is reserved as a logo-zone region. It was measured on the
+      square-on AIS2003 product image 1, scaled on the face's own width and height (sure, about 0.5 mm).
+      The mark is not drawn. The plain text AURCORE the library draws stays.
   top-layout:
     confidence: estimated
     note: >-
@@ -356,6 +359,8 @@ views:
       - {ref: std/sfp@1, id: port-10, at: [47.65, 30.75], rotate: 90, group: sfp-combo, rel-pos: 10}
       - {ref: std/sfp@1, id: port-11, at: [47.65, 45.25], rotate: 90, group: sfp-combo, rel-pos: 11}
       - {ref: std/sfp@1, id: port-12, at: [47.65, 59.75], rotate: 90, group: sfp-combo, rel-pos: 12}
+    regions:
+    - {id: logo-zone, at: [60.5, 108.6], size: {w: 4.6, h: 29.9}, label: 'Vendor logo; not drawn'}
   rear:
     size: {w: 83.8, h: 145.0}
     components:

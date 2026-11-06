@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: 7050x3-pwr-500-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 500 W AC power supply of the Arista 7050CX3-32S and 7050SX3-48YC12, PWR-500AC-F (front-to-rear
+  airflow, red handle). It is a 1RU module. An IEC C14 inlet, a latch and a status lamp are at the left.
+  A round fan guard with a red diagonal handle is at the right. Two seat at the ends of the rear. The
+  pair is 1+1 redundant and hot-swappable.
+size: {w: 86.5, h: 40.0}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  PWR-500AC-F: {part: PWR-500AC-F}
+attrs:
+  power-output-w: 500
+  input: ac
+  inlet: c14
+  airflow: front-to-back
+  input-note: '100 - 240 VAC, 6.5 to 3.0 A, 50/60 Hz'
+provenance:
+  size: >-
+    estimated - read off the rear panel figure D-1 of the 7050 Series 1RU (Gen 3) Quick Start Guide
+    (DOC-00141-08), a 576 x 155 px raster whose chassis is 573 px between its edges (1.302 px/mm over the
+    440 mm body, which the data sheet gives as 44 cm). The left supply reads 4.8 to 91.4 mm across, 86.5 mm
+    wide, and fills the chassis height. One pixel is 0.77 mm. The height is taken as 40.0, as for the library's
+    other 1RU supplies. Neither document dimensions the PWR-500AC; the data sheet's "73.5mm" is given for the
+    PWR-511 and PWR-1011 only.
+  part-number: >-
+    datasheet - the 7050X3 Series Data Sheet (03-0040-46, Sept 4, 2026), optional components and spares:
+    "PWR-500AC-F  Spare 500 Watt AC power supply for Arista 7050X, 7280 and 7060CX 1RU Switches
+    (front-to-rear airflow)", and the model comparison's "PWR-500-AC-F/R" for the 7050CX3-32S and the
+    7050SX3-48YC12. The guide's tables 3 and 4 list the supply as PWR-500AC and give it as the supported AC
+    supply of both switches.
+  power-output: >-
+    datasheet - the "Output Power 500W" row of the data sheet's power supply table, for PWR-500AC-F/R. An
+    output, because a supply provides power. The guide's table 4 gives each switch's own draw and is the
+    switch's figure, not this one.
+  input: >-
+    datasheet - guide table 3: PWR-500AC "100 - 240 VAC, 6.5 to 3.0 A, 50/60 Hz"; the data sheet's power supply
+    table gives 100-240 V AC, typical input current 6.3 - 2.3 A, 93 percent efficiency (Platinum) and an IEC
+    60320 C14 input connector. The two currents differ (6.5 A against 6.3 A at the top of the range) and are the
+    guide's rating and the data sheet's typical input current, so both are kept here.
+  airflow: >-
+    datasheet - the part number's "-F" and "front-to-rear airflow"; the guide's section 2.1 gives a red handle as
+    the colour of an air-exit module, and figure D-1 draws red handles. The rear-to-front supply, PWR-500AC-R,
+    is not modelled: no figure draws its blue handle and the gap `airflow-reverse` of the devices says so.
+  face: >-
+    estimated. Figure D-1 draws the supply at 1.3 px/mm: an IEC C14 inlet at the left with a white latch tab
+    beside it and a green status lamp to its right, then a fan guard with a red diagonal handle held by two
+    screws, which is drawn here. The label strip beside the lamp is not legible and is not drawn. Both supplies
+    in the figure face the same way, C14 on the left and fan on the right.
+  handle-finish: >-
+    The red of the handle is a field, `handle-finish`, default `#a32a38`, read off figure D-1.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [44.8, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [0.3, 10.4], size: [5.0, 12.8], class: latch}
+  status: {at: [31.0, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#a32a38'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [4.25, 14.3], rotate: 270}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [86.5, 40.0]}

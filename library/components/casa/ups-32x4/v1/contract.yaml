@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ups-32x4
-version: 1.7.1
+version: 1.8.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -206,6 +206,11 @@ provenance:
     estimate written eleven times, not eleven readings that agreed. NOTE this card has
     NO LAMPS, so the family''s dome figure is deliberately not cited here - citing a
     source for a number a file does not carry is how an inert wrong claim gets started. The three round thumb screws take the same cyl 1.6; `rf-field` is still NOT relief, for the reason its own entry gives.'
+  groups: >-
+    Casa Systems C100G Hardware Installation Guide (rev 07/08/2022), Figure 1-12 (PDF
+    page 46) numbers the UPS IO 32 ports 0 to 31, and the text on PDF page 45 gives
+    their connector as MCX. No page names a role for them; the role follows the port's
+    job, the subscriber upstream path, so it is traffic. The coax ports state no speed.
 relief:
   wall: '#4a4f55'
   features:
@@ -223,39 +228,45 @@ relief:
     # The ejector latch strip.
     - {node: latch-t, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
     - {node: latch-b, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
+groups:
+  upstream:
+    term: Port
+    role: traffic
+    index-origin: 0
+    description: thirty-two upstream MCX ports, numbered 0 to 31
 parts:
-  - {ref: std/mcx@1, id: p0, at: [17.177, 40.815]}
-  - {ref: std/mcx@1, id: p1, at: [3.093, 40.815]}
-  - {ref: std/mcx@1, id: p2, at: [17.177, 58.504]}
-  - {ref: std/mcx@1, id: p3, at: [3.093, 58.504]}
-  - {ref: std/mcx@1, id: p4, at: [17.177, 76.193]}
-  - {ref: std/mcx@1, id: p5, at: [3.093, 76.193]}
-  - {ref: std/mcx@1, id: p6, at: [17.177, 93.882]}
-  - {ref: std/mcx@1, id: p7, at: [3.093, 93.882]}
-  - {ref: std/mcx@1, id: p8, at: [17.177, 111.571]}
-  - {ref: std/mcx@1, id: p9, at: [3.093, 111.571]}
-  - {ref: std/mcx@1, id: p10, at: [17.177, 129.26]}
-  - {ref: std/mcx@1, id: p11, at: [3.093, 129.26]}
-  - {ref: std/mcx@1, id: p12, at: [17.177, 146.949]}
-  - {ref: std/mcx@1, id: p13, at: [3.093, 146.949]}
-  - {ref: std/mcx@1, id: p14, at: [17.177, 164.638]}
-  - {ref: std/mcx@1, id: p15, at: [3.093, 164.638]}
-  - {ref: std/mcx@1, id: p16, at: [17.177, 182.327]}
-  - {ref: std/mcx@1, id: p17, at: [3.093, 182.327]}
-  - {ref: std/mcx@1, id: p18, at: [17.177, 200.016]}
-  - {ref: std/mcx@1, id: p19, at: [3.093, 200.016]}
-  - {ref: std/mcx@1, id: p20, at: [17.177, 217.705]}
-  - {ref: std/mcx@1, id: p21, at: [3.093, 217.705]}
-  - {ref: std/mcx@1, id: p22, at: [17.177, 235.394]}
-  - {ref: std/mcx@1, id: p23, at: [3.093, 235.394]}
-  - {ref: std/mcx@1, id: p24, at: [17.177, 253.083]}
-  - {ref: std/mcx@1, id: p25, at: [3.093, 253.083]}
-  - {ref: std/mcx@1, id: p26, at: [17.177, 270.772]}
-  - {ref: std/mcx@1, id: p27, at: [3.093, 270.772]}
-  - {ref: std/mcx@1, id: p28, at: [17.177, 288.461]}
-  - {ref: std/mcx@1, id: p29, at: [3.093, 288.461]}
-  - {ref: std/mcx@1, id: p30, at: [17.177, 306.15]}
-  - {ref: std/mcx@1, id: p31, at: [3.093, 306.15]}
+  - {ref: std/mcx@1, id: p0, group: upstream, at: [17.177, 40.815]}
+  - {ref: std/mcx@1, id: p1, group: upstream, at: [3.093, 40.815]}
+  - {ref: std/mcx@1, id: p2, group: upstream, at: [17.177, 58.504]}
+  - {ref: std/mcx@1, id: p3, group: upstream, at: [3.093, 58.504]}
+  - {ref: std/mcx@1, id: p4, group: upstream, at: [17.177, 76.193]}
+  - {ref: std/mcx@1, id: p5, group: upstream, at: [3.093, 76.193]}
+  - {ref: std/mcx@1, id: p6, group: upstream, at: [17.177, 93.882]}
+  - {ref: std/mcx@1, id: p7, group: upstream, at: [3.093, 93.882]}
+  - {ref: std/mcx@1, id: p8, group: upstream, at: [17.177, 111.571]}
+  - {ref: std/mcx@1, id: p9, group: upstream, at: [3.093, 111.571]}
+  - {ref: std/mcx@1, id: p10, group: upstream, at: [17.177, 129.26]}
+  - {ref: std/mcx@1, id: p11, group: upstream, at: [3.093, 129.26]}
+  - {ref: std/mcx@1, id: p12, group: upstream, at: [17.177, 146.949]}
+  - {ref: std/mcx@1, id: p13, group: upstream, at: [3.093, 146.949]}
+  - {ref: std/mcx@1, id: p14, group: upstream, at: [17.177, 164.638]}
+  - {ref: std/mcx@1, id: p15, group: upstream, at: [3.093, 164.638]}
+  - {ref: std/mcx@1, id: p16, group: upstream, at: [17.177, 182.327]}
+  - {ref: std/mcx@1, id: p17, group: upstream, at: [3.093, 182.327]}
+  - {ref: std/mcx@1, id: p18, group: upstream, at: [17.177, 200.016]}
+  - {ref: std/mcx@1, id: p19, group: upstream, at: [3.093, 200.016]}
+  - {ref: std/mcx@1, id: p20, group: upstream, at: [17.177, 217.705]}
+  - {ref: std/mcx@1, id: p21, group: upstream, at: [3.093, 217.705]}
+  - {ref: std/mcx@1, id: p22, group: upstream, at: [17.177, 235.394]}
+  - {ref: std/mcx@1, id: p23, group: upstream, at: [3.093, 235.394]}
+  - {ref: std/mcx@1, id: p24, group: upstream, at: [17.177, 253.083]}
+  - {ref: std/mcx@1, id: p25, group: upstream, at: [3.093, 253.083]}
+  - {ref: std/mcx@1, id: p26, group: upstream, at: [17.177, 270.772]}
+  - {ref: std/mcx@1, id: p27, group: upstream, at: [3.093, 270.772]}
+  - {ref: std/mcx@1, id: p28, group: upstream, at: [17.177, 288.461]}
+  - {ref: std/mcx@1, id: p29, group: upstream, at: [3.093, 288.461]}
+  - {ref: std/mcx@1, id: p30, group: upstream, at: [17.177, 306.15]}
+  - {ref: std/mcx@1, id: p31, group: upstream, at: [3.093, 306.15]}
 connection-points:
   mate: {at: [15.23, 172.75], direction: rear}
 skins: [default]

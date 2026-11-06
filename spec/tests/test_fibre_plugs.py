@@ -150,7 +150,7 @@ def _usb_receptacle_interfaces():
 def test_the_usb_receptacle_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
-    assert _usb_receptacle_interfaces() == {"usb-a", "micro-usb-b", "mini-usb-b", "usb-c"}
+    assert _usb_receptacle_interfaces() == {"usb-a", "usb-b", "micro-usb-b", "mini-usb-b", "usb-c"}
 
 
 def _dsub_connector_interfaces():
@@ -382,6 +382,32 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # copper alarm cable - and its tests are
         # spec/tests/test_nokia_gfc_connector_parts.py.
         if str((c.get("attrs") or {}).get("media") or "") == "micro-dsub-50":
+            continue
+        # NOR IS THE 4FF SIM CARD TRAY. opengear/sim-tray-4ff@1 mates
+        # `sim-tray-4ff`, the SIM slot of the Opengear cellular console managers.
+        # Left out by what it IS - its `attrs.media` is `sim`, a card tray and
+        # no fibre - and its tests are spec/tests/test_opengear_cm8000.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "sim":
+            continue
+        # NOR IS THE SD CARD. common/sd-card@1 mates `sd-card`, the full-size card slot of
+        # the Vertiv Avocent ACS8000 console servers, which the registry holds so the slot is
+        # a slot. Left out by what it IS - its `attrs.media` is `sd-card`, a storage card - and
+        # its tests are spec/tests/test_vertiv_acs8000.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "sd-card":
+            continue
+        # NOR ARE THE KEYSTONE INSERTS. common/keystone-blank@2 and
+        # fs/keystone-rj45-cat6@1 mate `keystone`, the opening of the FS FHD-FAPM6
+        # panel, which the registry holds so each opening is a slot. Left out by
+        # what each IS - an insert that closes the opening or carries a copper
+        # jack - and their census is spec/tests/test_keystone_inserts.py.
+        if "keystone" in ms:
+            continue
+        # NOR IS THE SCTE-91 PORT PLUG. generic/scte-91-port-plug@1 mates
+        # `scte-91`, the threaded external port of the Entra edge nodes, which the
+        # registry holds so the port is a slot. Left out by what it IS - a hex
+        # sealing plug for an RF or fibre port, not a fibre plug - and its census
+        # is spec/tests/test_scte_91_registry.py.
+        if "scte-91" in ms:
             continue
         if any(m in connectors for m in ms) and c.get("class") != "cap":
             ns = f.parents[2].name

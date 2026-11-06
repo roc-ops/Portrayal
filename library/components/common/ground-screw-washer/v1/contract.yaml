@@ -1,13 +1,15 @@
 format: 1
 kind: component
 name: ground-screw-washer
-version: 1.0.0
+version: 1.1.0
 class: ground
+interface: terminal-stud
 profile: networking
 description: >-
   Chassis grounding screw - a Phillips pan head seated on a captive washer, screwed into
   the housing where the earth wire is landed under the washer. The earth symbol is printed
-  beside it on the housing, so it is not part of this.
+  beside it on the housing, so it is not part of this. It presents the nominal
+  `terminal-stud` interface at the top of the screw head, so a ring lug lands on it.
 size: {w: 11.0, h: 11.0}
 size-confidence: {w: photo-measured, h: photo-measured}
 provenance:
@@ -18,6 +20,17 @@ provenance:
     beside it reads 6.3 mm against the library's 6.0 mm symbol, so the same frame reads
     about 5 percent large there; 11.0 and 8.0 are the corrected figures. Good to half a
     millimetre at best.
+  seat: >-
+    THE PART PRESENTS `terminal-stud` AT THE TOP OF ITS SCREW HEAD, ON THE SCREW'S AXIS.
+    `mate` sits `on: screw`, the pan head, which this part builds 3.4 off the face, so a
+    ring lug lands on the head as it does on common/ground-screw@1. NO SCREW SIZE IS
+    CLAIMED, because no document held for a device that places this part prints one: the
+    AurCore datasheets label it "Ground Screw", and the Eaton PDUMH20NET specification
+    sheet lists "Grounding lug" under Grounding. Neither names a lug type, so the
+    interface is the nominal one, which a one-hole ring lug mates. The Supermicro
+    SuperServer SYS-111E-FWTR manual (MNL-2570, Figure 2-7, page 28) draws the DC
+    supply's safety ground wire ending in a ring lug beside the supply's face. The skin
+    is unchanged.
 elements:
   washer: {at: [0.1, 0.1], size: [10.8, 10.8], class: ground}
   screw: {at: [1.5, 1.5], size: [8.0, 8.0], class: ground}
@@ -36,4 +49,6 @@ relief:
       confidence: estimated
       source: >-
         common/ground-screw-washer@1's own 3D-form key - see `washer`. The pan head, on the washer.
+connection-points:
+  mate: {at: [5.5, 5.5], direction: front, 'on': screw}
 skins: [default]
