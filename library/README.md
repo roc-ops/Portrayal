@@ -122,14 +122,17 @@ does not need more than 4.5.7.
 
 | feature | needs | what an older NetBox does with a file that carries it |
 |---|---|---|
-| none yet | | |
+| `port-mappings` on a NetBox module type (`library/exports/netbox/module-types/`, the 63 types with front ports: FS.com, Fibrain, Smartoptics) | 4.6 | the key does not exist before 4.6, so the front-to-rear binding is not read from the type; whether 4.5.x ignores the key or refuses the file has not been tried |
 
-No export on `main` carries such a feature. A search of the repository for
-"NetBox 4." finds the 4.5.7 floor above and the versions the exports were tried
-on; its one mention of 4.6 is the rack kit's note that NetBox 4.6 and later has
-cable bundles of its own and that the cables file does not fill a cable's
-bundle field (`kit/rack/dcim-rules.js`). A change that adds such a feature adds
-its row to this table in the same change.
+The mappings are the rows of the type's fibre map in `library/exports/fibre-maps/`,
+one for one. On a NetBox older than 4.6 that file is what binds the front ports
+to the rear ports. Nautobot types do not carry the key and are not affected.
+
+The rack kit has one other feature that needs NetBox 4.6 or later: its export
+option "NetBox 4.6 or later" writes NetBox's own cable bundles
+(`kit/rack/dcim-rules.js`). It is off unless the option is set, and it is a
+feature of the kit's files, not of `library/exports/`. A change that adds such
+a feature adds its row to this table in the same change.
 
 Licensed Apache-2.0, same as the rest of the repository. See `../LICENSE`, and
 the Licence section of `../README.md` for why the data is not under a separate

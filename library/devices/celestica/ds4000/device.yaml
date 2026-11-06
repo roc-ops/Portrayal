@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ds4000
-version: 0.2.2
+version: 0.2.3
 maturity: modelled
 manufacturer: Celestica
 model: DS4000
@@ -197,9 +197,9 @@ provenance:
       only in CPU (4C D1627 or 8C D1649N), memory (1 or 2 x 16 GB) and SSD (64, 128 or 256 GB). Each is
       its own orderable configuration with its own part-numbers entry, because the DCIM exporter makes
       one device type per configuration SKU and a configuration listing three would export one. The
-      control-plane figures live in the descriptions: a configuration carries no attrs of its own (see
-      the config-scoped-device-attrs gap on cisco/asr-9001) and a part-numbers entry holds only part and
-      power-cord. The datasheet's ordering lines name only F9102 and F9003.
+      control-plane figures are each configuration's own attrs (platform cpu, memory and storage, from the
+      guide's What's in the Box Table 1) and stay in the descriptions too. The datasheet's ordering lines
+      name only F9102 and F9003.
   lifecycle:
     note: >-
       searched 2026-09-26 for a DS4000/DS4001 end-of-life or end-of-sale announcement; none found.
@@ -1593,6 +1593,11 @@ configurations:
       DDR4,64GB SSD,2X1500W AC PSU,7 FAN,F2B'). Drawn with the one-SFP+ front (M1 fitted, the M2 lanes
       routed as 10GBASE-KR - guide Figure 2), the build the DS4000 datasheet render shows; which front
       build each SKU ships with is not stated (see the front-build-sku gap).
+    attrs:
+      platform:
+        cpu: Intel Xeon D-1627 4-core
+        memory: 16 GB DDR4 ECC (1 x 16 GB)
+        storage: 64 GB M.2 SSD
     part-numbers:
       R4023-F9102-A0: {part: R4023-F9102-A0}
   f2b-2x16g-128g:
@@ -1601,6 +1606,11 @@ configurations:
       R4023-F9103-A0 - front-to-back, 4-core Xeon D-1627, 2 x 16 GB DDR4, 128 GB SSD, two 1500 W AC
       supplies, seven fans. The control plane is the only difference from f2b, and nothing on the faces
       shows it.
+    attrs:
+      platform:
+        cpu: Intel Xeon D-1627 4-core
+        memory: 32 GB DDR4 ECC (2 x 16 GB)
+        storage: 128 GB M.2 SSD
     part-numbers:
       R4023-F9103-A0: {part: R4023-F9103-A0}
   f2b-8c-256g:
@@ -1608,6 +1618,11 @@ configurations:
     description: >-
       R4023-F9104-A0 - front-to-back, 8-core Xeon D-1649N, 2 x 16 GB DDR4, 256 GB SSD, two 1500 W AC
       supplies, seven fans.
+    attrs:
+      platform:
+        cpu: Intel Xeon D-1649N 8-core
+        memory: 32 GB DDR4 ECC (2 x 16 GB)
+        storage: 256 GB M.2 SSD
     part-numbers:
       R4023-F9104-A0: {part: R4023-F9104-A0}
   b2f:
@@ -1620,6 +1635,11 @@ configurations:
       f2b art (see the b2f-finish gap).
     region-context:
       exhaust: Intake
+    attrs:
+      platform:
+        cpu: Intel Xeon D-1627 4-core
+        memory: 16 GB DDR4 ECC (1 x 16 GB)
+        storage: 64 GB M.2 SSD
     part-numbers:
       R4023-F9003-A0: {part: R4023-F9003-A0}
   b2f-2x16g-128g:
@@ -1630,6 +1650,11 @@ configurations:
       supplies, seven fans.
     region-context:
       exhaust: Intake
+    attrs:
+      platform:
+        cpu: Intel Xeon D-1627 4-core
+        memory: 32 GB DDR4 ECC (2 x 16 GB)
+        storage: 128 GB M.2 SSD
     part-numbers:
       R4023-F9004-A0: {part: R4023-F9004-A0}
   b2f-8c-256g:
@@ -1640,6 +1665,11 @@ configurations:
       supplies, seven fans.
     region-context:
       exhaust: Intake
+    attrs:
+      platform:
+        cpu: Intel Xeon D-1649N 8-core
+        memory: 32 GB DDR4 ECC (2 x 16 GB)
+        storage: 256 GB M.2 SSD
     part-numbers:
       R4023-F9005-A0: {part: R4023-F9005-A0}
   f2b-2sfp:

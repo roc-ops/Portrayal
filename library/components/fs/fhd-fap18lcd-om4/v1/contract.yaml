@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-fap18lcd-om4
-version: 1.0.0
+version: 1.1.0
 class: adapter-panel
 behaviour: fills
 description: >-
@@ -27,25 +27,34 @@ body:
   footprint: {at: [10.485, 0.125], size: [88.0, 34.8]}
 elements:
   logo-zone: {at: [1.6, 3.2], size: [5.3, 5.0], class: label}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 18 LC duplex adapters on the front face, numbered on the plate; OM3/OM4 UPC,
+      36 fibres, passive
 parts:
-  - {id: lc01, ref: common/lc-duplex-shuttered-adapter@2, at: [13.635, 23.2], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc02, ref: common/lc-duplex-shuttered-adapter@2, at: [26.735, 23.2], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc03, ref: common/lc-duplex-shuttered-adapter@2, at: [41.41, 23.2], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc04, ref: common/lc-duplex-shuttered-adapter@2, at: [54.51, 23.2], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc05, ref: common/lc-duplex-shuttered-adapter@2, at: [69.185, 23.2], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc06, ref: common/lc-duplex-shuttered-adapter@2, at: [82.285, 23.2], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc07, ref: common/lc-duplex-shuttered-adapter@2, at: [13.635, 11.6], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc08, ref: common/lc-duplex-shuttered-adapter@2, at: [26.735, 11.6], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc09, ref: common/lc-duplex-shuttered-adapter@2, at: [41.41, 11.6], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc10, ref: common/lc-duplex-shuttered-adapter@2, at: [54.51, 11.6], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc11, ref: common/lc-duplex-shuttered-adapter@2, at: [69.185, 11.6], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc12, ref: common/lc-duplex-shuttered-adapter@2, at: [82.285, 11.6], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc13, ref: common/lc-duplex-shuttered-adapter@2, at: [13.635, 0.0], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc14, ref: common/lc-duplex-shuttered-adapter@2, at: [26.735, 0.0], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc15, ref: common/lc-duplex-shuttered-adapter@2, at: [41.41, 0.0], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc16, ref: common/lc-duplex-shuttered-adapter@2, at: [54.51, 0.0], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc17, ref: common/lc-duplex-shuttered-adapter@2, at: [69.185, 0.0], attrs: {housing-finish: '#54ccde'}}
-  - {id: lc18, ref: common/lc-duplex-shuttered-adapter@2, at: [82.285, 0.0], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc01, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [13.635, 23.2], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc02, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [26.735, 23.2], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc03, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [41.41, 23.2], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc04, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [54.51, 23.2], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc05, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [69.185, 23.2], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc06, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [82.285, 23.2], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc07, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [13.635, 11.6], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc08, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [26.735, 11.6], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc09, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [41.41, 11.6], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc10, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [54.51, 11.6], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc11, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [69.185, 11.6], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc12, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [82.285, 11.6], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc13, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [13.635, 0.0], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc14, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [26.735, 0.0], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc15, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [41.41, 0.0], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc16, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [54.51, 0.0], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc17, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [69.185, 0.0], attrs: {housing-finish: '#54ccde'}}
+  - {id: lc18, group: adapters, ref: common/lc-duplex-shuttered-adapter@2, at: [82.285, 0.0], attrs: {housing-finish: '#54ccde'}}
 faces:
   rear: {ref: fs/fhd-fap18lcd-om4-rear@1}
 optical:
@@ -152,4 +161,11 @@ provenance:
     reserved, not drawn - FS prints its mark top left on every panel face
     (drawings p5-p9, the renders); the library reproduces no vendor logo. Box
     read off the drawings, to about half a millimetre.
+  groups: >-
+    FS FHD Fiber Adapter Panels Datasheet, pages 2 and 10 and the p6 drawing: the
+    FHD-FAP18LCDXMMF (FS SKU 133614) is a 18-adapter LC duplex panel, 36 fibres, OM3/OM4
+    UPC (page 10 ordering table). The datasheet prints the fibre and the polish and no
+    data rate, and names no role for the adapters; the role follows the job, a through
+    connection a patch cord is plugged into, so it is traffic, and no speed is stated.
+    The group's media is the adapters' own, fiber.
 skins: [default]
