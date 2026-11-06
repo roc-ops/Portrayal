@@ -419,7 +419,7 @@ def test_crs510_dc_legends_are_the_bracket_the_voltage_and_the_polarity_marks():
     d = load(CRS510)
     paths = _paths(d)
     assert {"dc-bracket", "dc-terminal-polarity", "dc-jack-polarity"} <= set(paths)
-    for s in paths.values():
+    for s in (paths[i] for i in ("dc-bracket", "dc-terminal-polarity", "dc-jack-polarity")):
         assert s["filled"] is False and s["stroke-width"] == 0.25 and s["for"] == "chassis"
     bracket = paths["dc-bracket"]
     left, right = bracket["at"][0], bracket["at"][0] + 24.7  # the path runs 24.7 mm across
@@ -477,7 +477,7 @@ CRS518_COLOURS = {
 }
 
 
-@pytest.mark.parametrize("name, colours, face", [(CRS510, CRS510_COLOURS, "#dddddd"), (CRS518, CRS518_COLOURS, "#c0bfbf")])
+@pytest.mark.parametrize("name, colours, face", [(CRS510, CRS510_COLOURS, "#d2d0d0"), (CRS518, CRS518_COLOURS, "#c0bfbf")])
 def test_every_painted_part_is_the_colour_sampled_from_its_photograph(name, colours, face):
     d = load(name)
     assert d["chassis"]["color"] == face
@@ -627,7 +627,7 @@ def test_crs510_group_bars_are_the_photographs_purple_with_light_legends_sampled
     assert decor["bar-25g"]["fill"] == "#938ac6" and decor["bar-100g"]["fill"] == "#8e85c3"
     for text, fill in (("25G SFP28", "#d5d4d7"), ("100G QSFP28", "#d2d1d4")):
         (legend,) = _silk(d, "front", text=text)
-        assert legend["fill"] == fill and legend["font-size"] == 1.5, text
+        assert legend["fill"] == fill and legend["font-size"] == 2.4, text
     note = d["provenance"]["colour"]["note"]
     for token in ("#938ac6", "#8e85c3", "#d5d4d7", "#d2d1d4", "1505,810", "2160,960", "780 pixels", "149 pixels", "318 pixels"):
         assert token in note, token

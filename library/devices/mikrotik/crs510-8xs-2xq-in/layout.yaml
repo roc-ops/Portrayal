@@ -165,9 +165,10 @@ provenance:
     confidence: estimated
     note: >-
       Each value is the median of a plain area, away from ports, lamps, labels and text, taken with a script over the
-      photograph's pixels. The face is #e7e6e9: photograph 2232, box 1500,520 to 1700,560 (8000 pixels). It is drawn
-      #dddddd, the library's light-stage value for a face that sample reads lighter than, and kept with this sample beside
-      it. The supply modules are #a3a5a7, the channel-wise median of three plain patches of 2232, which lights the plate from
+      photograph's pixels. The face is #d2d0d0: photograph 2232, box 1500,750 to 2400,785 (31500 pixels), the plain
+      strip of the front face above the cages, and it is drawn so. The earlier #e7e6e9 (box 1500,520 to 1700,560) is the lid, which the
+      photograph lights from above, and #dddddd was the library's light-stage value; the rear reads #c1bfbe (2233, box
+      2000,800 to 2800,850, 40000 pixels) and #bebcbc beside it, so the single chassis colour is the front's. The supply modules are #a3a5a7, the channel-wise median of three plain patches of 2232, which lights the plate from
       above: box 377,1031 to 562,1042 #a3a5a7 (2035 pixels), box 448,856 to 496,878 #abafb1 (1056 pixels, spread 22) and
       box 440,1016 to 500,1040 #a2a5a7 (1440 pixels, spread 59); no clean patch of the plate reads lighter (the brighter
       pixels in the photograph are the handle and the module's lit edge). The group bars are the photograph's purple:
@@ -179,6 +180,16 @@ provenance:
       #3e3e3d: 2232, box 2790,930 to 2800,990 (600 pixels). The terminal's green is #82967a (the dc-inputs note gives its box). The unlit lamps
       read #878686, #858584 and #898888 (2232, the lamps note gives the boxes). The rear's face reads #bebcbc in 2233 (box 2180,870
       to 2910,1020, 109500 pixels).
+  finish-and-fittings:
+    confidence: estimated
+    note: >-
+      Read again on photographs 2232 and 2233 (estimated). The console and management jacks are set to the plate's
+      #949290 with the jack part's `finish` field. Each supply has a steel handle (#a9aaab with a lit edge #e2e2e2) that
+      runs the full height of the face and past the module, a blue-grey release latch at its left (#4b4d5b, 2232, box
+      375,850 to 395,920, 1400 pixels) and printed ring marks beside the module, three columns of two (2232), all
+      drawn at the photograph's positions to about 2 mm. The 25G and 100G bar lettering is drawn at 2.4 mm and the supply
+      legends at 2.0 mm, from the letters' extent in 2232 (about 1.7 mm per character on the bars). Each fan carries two
+      corner screws (2233). The earth stud is placed as the MikroTik stud part, as on the CRS309, in place of two discs of art.
 attrs:
   power:
     power-max-w: 51
@@ -205,7 +216,7 @@ chassis:
   height: 44.0
   depth: 185.0
   ru: 1
-  color: '#dddddd'
+  color: '#d2d0d0'
   ears:
     positions:
     - {name: flush, default: true}
@@ -245,6 +256,27 @@ gaps:
     and no power port is exported, because no held document names the part. The registry's only two-pole parts belong to
     other makers' boxes (common/dc-terminal-plug-2@1 is 32.1 x 17.6 mm). The brochure lists it as a DC input (36-57 V).
   wanted: The terminal block's part number and its current rating.
+- what: lamp-resting-colour
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The photograph shows the USER, FAULT and POWER bars light grey and the supply lamp lit green. A lamp rests at its
+    part's unlit colour, #3a3938, so the three bars read darker than the photograph and the supply lamps are unlit.
+  wanted: none
+- what: cage-frame
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    Photograph 2232 shows the SFP28 and QSFP28 cages as grey metal frames with a bright silver tab and a grey lamp strip.
+    The shared cage parts draw near-black openings, and changing them would move boxes this one does not own, so the
+    frames stay as the parts draw them.
+  wanted: A cage-frame skin for the shared SFP28 and QSFP28 parts, seated by this box.
+- what: earth-symbol-colour
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    The earth symbol on the rear is black in photograph 2233; the shared symbol part draws it pale and has no colour field.
+  wanted: A symbol colour on the shared part, or a version seated by this box.
 - what: led-states
   scope: [front]
   reason: vendor-silent
@@ -366,6 +398,12 @@ views:
       - {id: psu-2-slot-top-2, kind: vent-field, at: [99.1, 5.2], size: [6.1, 2.5], fill: '#17191c', vent: 1.0}
       - {id: psu-2-slot-top-3, kind: vent-field, at: [106.6, 5.2], size: [6.1, 2.5], fill: '#17191c', vent: 1.0}
       - {id: psu-2-slot-top-4, kind: vent-field, at: [113.9, 5.2], size: [6.3, 2.5], fill: '#17191c', vent: 1.0}
+      - {id: psu-1-latch, kind: release-latch, at: [11.7, 7.6], size: [6.4, 18.6], rx: 1.6, fill: '#4b4d5b'}
+      - {id: psu-2-latch, kind: release-latch, at: [71.5, 7.6], size: [6.0, 18.6], rx: 1.6, fill: '#4b4d5b'}
+      - {id: psu-1-handle, kind: steel-handle, at: [28.4, 4.4], size: [5.2, 39.2], rx: 2.6, fill: '#a9aaab'}
+      - {id: psu-1-handle-lit, kind: steel-handle, at: [29.7, 6.4], size: [1.4, 35.2], rx: 0.7, fill: '#e2e2e2'}
+      - {id: psu-2-handle, kind: steel-handle, at: [87.8, 4.4], size: [5.2, 39.2], rx: 2.6, fill: '#a9aaab'}
+      - {id: psu-2-handle-lit, kind: steel-handle, at: [89.1, 6.4], size: [1.4, 35.2], rx: 0.7, fill: '#e2e2e2'}
       - {id: bar-25g, kind: group-bar, at: [142.6, 9.5], size: [2.0, 27.0], fill: '#938ac6'}
       - {id: bar-100g, kind: group-bar, at: [217.8, 9.5], size: [2.0, 27.0], fill: '#8e85c3'}
       - {id: mgmt-block, kind: jack-plate, at: [248.2, 10.0], size: [17.6, 26.6], fill: '#949290'}
@@ -413,11 +451,17 @@ views:
       - {id: led-fault, at: [271.7, 37.3], size: [4.6, 2.6], shape: rect}
       - {id: led-power, at: [285.9, 37.3], size: [4.6, 2.6], shape: rect}
     silkscreen:
-    - {at: [10.9, 20.0], text: PSU 1, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: ac-inlet-1}
-    - {at: [70.3, 20.0], text: PSU 2, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: ac-inlet-2}
-    - {at: [5.0, 22.0], text: 100-240 V 50/60 Hz, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
-    - {at: [143.6, 23.0], text: 25G SFP28, font-size: 1.5, anchor: middle, rotate: -90, fill: '#d5d4d7', for: chassis}
-    - {at: [218.8, 23.0], text: 100G QSFP28, font-size: 1.5, anchor: middle, rotate: -90, fill: '#d2d1d4', for: chassis}
+    - {at: [10.9, 20.0], text: PSU 1, font-size: 2.0, anchor: middle, rotate: -90, fill: '#2b2b2b', for: ac-inlet-1}
+    - {at: [70.3, 20.0], text: PSU 2, font-size: 2.0, anchor: middle, rotate: -90, fill: '#2b2b2b', for: ac-inlet-2}
+    - {at: [5.0, 22.0], text: 100-240 V 50/60 Hz, font-size: 2.0, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [143.6, 23.0], text: 25G SFP28, font-size: 2.4, anchor: middle, rotate: -90, fill: '#d5d4d7', for: chassis}
+    - {at: [218.8, 23.0], text: 100G QSFP28, font-size: 2.4, anchor: middle, rotate: -90, fill: '#d2d1d4', for: chassis}
+    - {id: psu-ring-marks-1, at: [7.0, 13.2], path: M 0 0 a 2.4 2.4 0 1 0 4.8 0 a 2.4 2.4 0 1 0 -4.8 0 M 0 15 a 2.4 2.4 0 1 0 4.8 0 a 2.4 2.4 0 1 0 -4.8 0,
+       filled: false, stroke-width: 0.15, fill: '#bdbbbb', for: chassis}
+    - {id: psu-ring-marks-2, at: [66.0, 13.2], path: M 0 0 a 2.4 2.4 0 1 0 4.8 0 a 2.4 2.4 0 1 0 -4.8 0 M 0 15 a 2.4 2.4 0 1 0 4.8 0 a 2.4 2.4 0 1 0 -4.8 0,
+       filled: false, stroke-width: 0.15, fill: '#bdbbbb', for: chassis}
+    - {id: psu-ring-marks-3, at: [125.0, 13.2], path: M 0 0 a 2.4 2.4 0 1 0 4.8 0 a 2.4 2.4 0 1 0 -4.8 0 M 0 15 a 2.4 2.4 0 1 0 4.8 0 a 2.4 2.4 0 1 0 -4.8 0,
+       filled: false, stroke-width: 0.15, fill: '#bdbbbb', for: chassis}
     - {at: [153.6, 8.9], text: '2', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-2}
     - {at: [153.6, 39.3], text: '1', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-1}
     - {at: [171.0, 8.9], text: '4', font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: cage-4}
@@ -444,7 +488,7 @@ views:
     - {at: [267.1, 42.4], text: USER, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: led-user}
     - {at: [274.0, 42.4], text: FAULT, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: led-fault}
     - {at: [288.2, 42.4], text: POWER, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: led-power}
-    - {at: [297.5, 11.5], text: CRS510-8XS-2XQ-IN, font-size: 2.0, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [303.3, 11.5], text: CRS510-8XS-2XQ-IN, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: chassis}
     components:
       blocks:
       - id: sfp28
@@ -502,8 +546,8 @@ views:
       - {ref: common/led-arrow-sm@1, id: led-q2-b, skin: up, at: [239.575, 22.0], group: sfp-leds, rel-pos: 20, for: qsfp-2}
       - {ref: common/led-dot@1, id: led-q-dot-1, at: [230.2, 22.0], for: chassis, group: qsfp-leds, rel-pos: 1}
       - {ref: common/led-dot@1, id: led-q-dot-2, at: [234.4, 22.0], for: chassis, group: qsfp-leds, rel-pos: 2}
-      - {ref: std/rj45@2, id: console, at: [249.1, 9.9], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-      - {ref: common/rj45-eth@1, id: mgmt, at: [249.1, 23.9], group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 100m}}
+      - {ref: std/rj45@2, id: console, at: [249.1, 9.9], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, role: console, finish: '#949290'}}
+      - {ref: common/rj45-eth@1, id: mgmt, at: [249.1, 23.9], group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 100m, finish: '#949290'}}
       - {ref: common/reset-button@1, id: btn-reset, at: [268.7, 29.9], for: chassis, group: controls, rel-pos: 1,
          attrs: {function: reset}}
       - {ref: common/led-rect@2, id: led-user, at: [264.8, 37.3], for: chassis, group: status-leds, rel-pos: 3}
@@ -547,11 +591,14 @@ views:
         - [[9.41, 5.43], [6.75, 5.43], [8.08, 3.13], [9.41, 3.13]]
       - {id: fan-hub-0, kind: fan-hub, at: [107.5, 13.5], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
       - {id: fan-hub-1, kind: fan-hub, at: [149.0, 13.5], size: [19.0, 19.0], rx: 9.5, fill: '#dddddd'}
-      - {id: earth-stud-base, kind: earth-stud, at: [8.3, 29.7], size: [8.0, 8.0], rx: 4.0, fill: '#b4b8bc'}
-      - {id: earth-stud-nut, kind: earth-stud, at: [10.3, 31.7], size: [4.0, 4.0], rx: 2.0, fill: '#8d9298'}
+      - {id: fan-screw-0-tr, kind: screw, at: [131.2, 10.2], size: [4.0, 4.0], rx: 2.0, fill: '#a8a8a8'}
+      - {id: fan-screw-0-bl, kind: screw, at: [100.4, 36.8], size: [4.0, 4.0], rx: 2.0, fill: '#a8a8a8'}
+      - {id: fan-screw-1-tr, kind: screw, at: [172.7, 10.2], size: [4.0, 4.0], rx: 2.0, fill: '#a8a8a8'}
+      - {id: fan-screw-1-bl, kind: screw, at: [141.9, 36.8], size: [4.0, 4.0], rx: 2.0, fill: '#a8a8a8'}
     components:
       placements:
       - {ref: common/ground-symbol@1, id: earth-mark, at: [9.7, 19.7], for: chassis, group: furniture, rel-pos: 1}
+      - {ref: mikrotik/earth-stud-disc@1, id: earth-stud, at: [8.3, 29.7], group: furniture, rel-pos: 2}
   top:
     size: {w: 320.0, h: 185.0}
     empty: >-
