@@ -145,6 +145,7 @@ def test_the_schema_refuses_a_value_of_the_wrong_kind(home, key, value):
 
 # ---- the drawing -------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_an_unmarked_face_has_no_ring_and_no_attribute(plain):
     _lib, _schemas, out = plain
     text = face(out)
@@ -152,6 +153,7 @@ def test_an_unmarked_face_has_no_ring_and_no_attribute(plain):
     assert "programmable" not in text
 
 
+@pytest.mark.heavy
 def test_a_marked_group_draws_a_ring_round_each_port_whose_lamp_it_marks(lit):
     _lib, _schemas, out = lit
     got = rings(face(out))
@@ -162,6 +164,7 @@ def test_a_marked_group_draws_a_ring_round_each_port_whose_lamp_it_marks(lit):
     assert all(e.get("data-programmable") == "true" for e in got)
 
 
+@pytest.mark.heavy
 def test_the_ring_is_neutral_grey_and_drawn_under_the_port(lit):
     _lib, _schemas, out = lit
     root = ET.fromstring(face(out))
@@ -175,6 +178,7 @@ def test_the_ring_is_neutral_grey_and_drawn_under_the_port(lit):
             f"the ring of {host} is drawn over it"
 
 
+@pytest.mark.heavy
 def test_the_ring_encloses_the_port_and_reaches_no_neighbour(lit):
     _lib, _schemas, out = lit
     boxes = {r["path"]: r["box"] for r in rows(out).values()
@@ -190,6 +194,7 @@ def test_the_ring_encloses_the_port_and_reaches_no_neighbour(lit):
             f"the ring of port-2 reaches {other}"
 
 
+@pytest.mark.heavy
 def test_the_marked_face_less_the_ring_is_the_unmarked_face(plain, lit):
     """An unmarked lamp draws as it always did: the mark adds the rings and the
     attributes and changes nothing else."""
@@ -210,6 +215,7 @@ def test_the_marked_face_less_the_ring_is_the_unmarked_face(plain, lit):
 
 # ---- the elements file -------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_elements_row_of_a_marked_lamp_carries_the_mark_and_the_note(lit):
     r = rows(lit[2])
     for lamp in ("led-port-1", "led-port-2", "led-port-3", "sys"):
@@ -218,6 +224,7 @@ def test_the_elements_row_of_a_marked_lamp_carries_the_mark_and_the_note(lit):
     assert "programmable-note" not in r["sys"]
 
 
+@pytest.mark.heavy
 def test_no_other_row_and_no_unmarked_file_carries_the_key(plain, lit):
     for lamp in ("led-port-4", "port-1", "chassis"):
         assert "programmable" not in rows(lit[2])[lamp]
@@ -245,6 +252,7 @@ def index_entry(lib, out):
     return json.loads((out / "devices.json").read_text())["devices"][0]
 
 
+@pytest.mark.heavy
 def test_the_index_says_ports_light_up_only_for_a_device_with_a_marked_lamp(plain, lit, tmp_path):
     a = index_entry(plain[0], tmp_path / "a")
     b = index_entry(lit[0], tmp_path / "b")
