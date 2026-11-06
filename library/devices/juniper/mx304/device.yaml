@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 4.1.1
+version: 4.1.2
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -173,6 +173,7 @@ chassis:
   depth: 610.0
   ru: 2
   color: '#8b8f94'
+  power: ac
 gaps:
   - what: module-envelope-vs-aperture
     scope: [res, lmics, psus]
@@ -478,6 +479,7 @@ configurations:
       re1-lmic2: juniper/mx304-lmic16@1
   dc:
     kind: orderable
+    power: dc
     description: DC-powered chassis - two 2200 W DC PSUs, dual Routing
       Engines.
     bays:
@@ -485,6 +487,7 @@ configurations:
       psu-1: juniper/mx304-psu-dc@2
   hvac-dc:
     kind: orderable
+    power: [ac, hvdc]
     description: High-voltage AC/DC universal power - two 2200 W HVAC/DC
       PSUs, dual Routing Engines.
     bays:
