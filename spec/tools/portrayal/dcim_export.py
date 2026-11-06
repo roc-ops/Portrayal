@@ -751,6 +751,10 @@ PART_POWER = {
     "std/pcie-8pin-header": "other",
     "std/12vhpwr-header": "other",
     "std/12v-2x6-header": "other",
+    # A RITTAL DK 7979 PDU'S FIXED CORD ends in a 16 A CEE (IEC 60309) plug. No upstream
+    # type for it has been read from a held source, so it is `other` and POWER_LABEL
+    # says which connector.
+    "rittal/pdu-cord-cee-16a": "other",
 }
 # THE CONNECTOR A `other` POWER PORT IS, for a reader who would otherwise see
 # "Other". Only the parts above that have no upstream type are listed; a test
@@ -775,6 +779,7 @@ POWER_LABEL = {
     "smartoptics/dcp-2-dc-header": "DC power connector (3-cell)",
     "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
+    "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
 }
 
 
@@ -841,11 +846,15 @@ PART_OUTLET = {
     "std/nema-5-20r": "nema-5-20r",
     # A NEMA 5-15R, upstream's `nema-5-15r`.
     "std/nema-5-15r": "nema-5-15r",
+    # A RITTAL PDU'S CEE 7/3 EARTHING-PIN SOCKET. No upstream outlet type for it has been
+    # read from a held source, so it is `other` with the connector as its label.
+    "rittal/cee-7-3-outlet": "other",
 }
 # The label an `other` outlet carries, so it says what to plug into it.
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
 # run on import, which test_tools_layout forbids).
-OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx"}
+OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
+                "rittal/cee-7-3-outlet": "CEE 7/3"}
 
 # ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
 #
