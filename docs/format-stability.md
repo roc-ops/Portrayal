@@ -1046,10 +1046,12 @@ package is at 0.x, a superseded major may be removed, and every removal is
 listed in `CHANGELOG.md` with the ref that replaces it. From 1.0, a retired
 major is deprecated for at least one release before it is removed. The
 deprecation is the `superseded-by:` key the schema already has, on the
-retired major's contract, naming the ref that replaces it. L89 telling a
-superseded major that still ships from a dead one is pending
-(roc-ops/Portrayal#448). The whole mechanism is required before 1.0: the
-marker, a stated support window, and the L89 distinction.
+retired major's contract, naming the ref that replaces it. L89 now tells a
+superseded major that still ships (it says `superseded-by:` with a ref that
+exists) from a dead one (it says nothing, and fails). The whole mechanism is
+required before 1.0: the marker, a stated support window, and the L89
+distinction; the marker and the distinction are in place, and the window, at
+least one release, is not yet a number of releases or a date.
 DESIGN §9 has the reasoning.
 
 **A removed ref that a saved rack names** (#1049). A rack file names parts by
