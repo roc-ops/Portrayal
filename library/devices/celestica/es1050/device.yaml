@@ -1,0 +1,560 @@
+format: 1
+kind: device
+name: es1050
+version: 1.0.0
+maturity: modelled
+manufacturer: Celestica
+model: ES1050
+description: >-
+  Celestica ES1050 - 1U 48-port access switch with 16 x 2.5GbE and 32 x 1GbE RJ45 ports (PoE++ 802.3bt
+  Type 4 Class 8 on the -48CP) and 4 x 1/10/25G SFP28 uplinks, Broadcom TD3.X2, 2+1 fixed fans, 1+1
+  hot-swap AC supplies, F2B or B2F airflow. Four orderable builds on one chassis.
+profile: networking
+provenance:
+  own-device:
+    confidence: datasheet
+    note: >-
+      ONE DEVICE, NOT A LISTING OF celestica/es1010. The guide's Front Panel Table 1 gives the ES1010 builds
+      48 x 1GbE and the ES1050 builds 32 x 1GbE + 16 x 2.5GbE; it prints separate front figures (figure 1
+      ES1010, figure 2 ES1050) that differ in the green stripe under ports 1-16 and the plate text; the
+      LEDs Table 3 gives the 2.5GbE link lamp its own meaning; and the ES1050 datasheet orders its own part
+      numbers (R4048-F90L2-A1, -F91L2-A1, -F90L3-A1, -F91L3-A1) where the ES1010 orders R4048-F90LA-A1 and
+      its siblings. The chassis (438.2 x 43.4 x 371.6, 2 supplies, 3 fans, 4 SFP28, one management
+      cluster) and the rear are the same for the family: guide System Overview and Rear Panel figure 1,
+      captioned 'ES1010 and ES1050'.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet PHYSICAL DIMENSIONS: height 43.4 mm, width 438.2 mm, depth 371.6 mm; the guide's Key System
+      Specifications agrees and gives 8 +/- 0.5 kg with two supplies. 438.2 is the body between the ear
+      folds: the guide's front figure draws the grey ears outside it.
+  front-figure:
+    confidence: measured
+    note: >-
+      Guide Front Panel figure 2 (ES1050-48C and ES1050-48CP, an orthographic CAD render, 3090 x 340 px).
+      Two independent edges fix the scale: the left edge of the first RJ45 block (218 px) and the left edge
+      of the management RJ45 shell (2722 px) lie 2504 px apart, where the measured celestica/es1000 front
+      puts them 399.44 mm apart, 6.269 px/mm; the body between the ear folds measures 2747 px for 438.2 mm,
+      6.267 px/mm. The four RJ45 blocks start at 218, 794, 1370 and 1942 px (92.0 mm pitch), the block shells
+      run y 124 to 269 px, and the uplink cluster and lamp column sit where es1000's do, so the ports,
+      cluster and lamps use the es1000 front's measured positions (checked, none taken from any other
+      pending work). A constant 1.8 mm offset between the ear-fold edge as detected and as es1000 frames it
+      is the ear bevel, the same at both ends. Resolution is 0.16 mm per pixel; the positions are good to
+      about 0.5 mm.
+  port-layout:
+    confidence: measured
+    note: >-
+      column pitch 13.96, block pitch 92.00, column 1 centred 15.86 from the left body edge; upper jacks
+      keyway-up (rotate 180) and lower keyway-down, the lamp windows on the keyway side, as measured on
+      es1000's close-ups. The ES1050 figure shows the same two rows of six columns per block.
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      guide Ports Tables 3 and 4: ports 1-16 are 100/1000 Mbps/2.5 Gbps auto-negotiation, ports 17-48 are
+      10/100/1000 Mbps; the datasheet FEATURES says 32 ports 1000Base-T and 16 ports 1000Base-T / 2500Base-T.
+      The four SFP28 are 1/10/25G (datasheet). The management RJ45 is 10/100/1000 and the management SFP
+      1000 Mbps (Ports Tables 3 and 4), one combo interface.
+  poe:
+    confidence: datasheet
+    note: >-
+      IEEE 802.3bt Type 4 Class 8, 90 W per port, on the -48CP builds only: guide Ports Table 4 ('Port 1-48
+      support PoE++') against Table 3 for the -48C, which has no PoE line; datasheet ORDER INFORMATION lists
+      'POE++' on R4048-F90L3-A1 and R4048-F91L3-A1 only. The guide's System Overview sentence that all data
+      ports support Class 8 is read with its SKU table, where the PoE++ column says 'No' for the -48C.
+  stripe:
+    confidence: estimated
+    note: >-
+      the green stripe under ports 1-16, drawn on the faceplate under the RJ45 blocks and carrying the
+      numbers 1 to 16 in dark print; ports 17-48 print white on the black faceplate. Extent read on figure 2:
+      x 215 to 979 px and y 273 to 287 px, that is 9.0 to 130.9 mm by 39.9 to 42.1 mm in the es1000 frame.
+      Colour sampled from the stripe fill away from the digits (median 105, 148, 4 = #699404); the
+      colour is the JPEG's, so estimated. The stripe is the drawing's mark for the 2.5GbE ports; the
+      guide's text gives no name for it.
+  port-leds:
+    confidence: datasheet
+    note: >-
+      guide LEDs Table 3: the right lamp is green activity with PoE off, amber with PoE on, amber then green
+      alternating when PoE power is denied; the left link lamp is green at 2.5GbE and amber at 10/1000M for
+      the ES1050 builds. Ports 17-48 run at 1GbE at most, so the guide's 2.5GbE colour reading is not
+      carried to them (gap port-lamp-meaning-1g-ports). The management RJ45 follows Table 2 (green 2.5GbE,
+      amber 10/100M, green activity). Each SFP28 port has one bi-colour lamp (green 25G, amber 1/10G),
+      drawn as the triangles between the stacked cages as on es1000.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      rule, not a reading: the SFP28 pairs (upper 0 over lower 180) follow the library's belly-to-belly
+      convention (L108). The figure draws the cage lips in the lamp band between the rows, which is what
+      the convention draws; nothing seen overturns it.
+  uplink-cluster:
+    confidence: measured
+    note: >-
+      positions as measured on es1000's close-ups (SFP28 bezel 375.0 to 403.5, management SFP, USB-A shells,
+      the stacked management shell, status lamps), confirmed on figure 2 by the management RJ45 left edge
+      (407.3 against 407.0 mm, in the frame of the detected edge) and the system lamp (x 2368 to 2385 px).
+  vents:
+    confidence: measured
+    note: >-
+      the same two lattices and fields as es1000's 48-port panel: figure 2 shows the perforation above RJ45
+      blocks 1-2, a plain field above block 3, perforation again above block 4 and around the uplinks, and
+      flat metal at every port, lamp and legend. The holes drawn are larger than the real ones.
+  legends:
+    confidence: measured
+    note: >-
+      every legend as printed in figure 2: port pairs 'N ▲▼ N+1' centred under each column (dark on the
+      stripe for 1-16, white for 17-48), SFP28 pairs under the bezel, MGMT COMBO with its bracket, IOIOI
+      under the console, STAT FAN PWR ALM beside the lamps, the SuperSpeed mark by both USB-A ports. The plate
+      reads ES1050 with LUG TAG under it.
+  lug-tag:
+    confidence: measured
+    note: >-
+      celestica/lug-tag-ridge-23@1, label ES1050, at the position es1000 measured for the same plate; figure
+      2 shows the dark pull-out tab at the same place (x 205 to 275 px display, y 30 to 45) printed ES1050.
+  rear-figure:
+    confidence: measured
+    note: >-
+      guide Rear Panel figure 1 (5736 x 634 px, 11.5 px/mm, one drawing captioned 'ES1010 and ES1050').
+      The fans, the two supply bays, the divider, the right strip, the earth points and the bosses are the
+      positions celestica/es1000 took off this same figure (supply edges 256.0, 329.5, 346.3, 419.8; fan
+      centres 50.14, 105.59, 161.09), re-read here by eye on the figure: fan left to right 1 to 3, a
+      supply with its inlet portrait at the right of each, the black release tab beside each inlet, two
+      green lamps at the foot of each supply, PSU 1 labelled left of its bay and PSU 2 in the strip at the
+      right edge.
+  fans:
+    confidence: datasheet
+    note: >-
+      '2+1 fixed fans' (datasheet); 'three fixed fans' (guide Rear Panel, Fans). Not field-replaceable,
+      so decor plus a region each, as on es1000. No fan power figure is published.
+  psu:
+    confidence: datasheet
+    note: >-
+      guide System Overview SKU table: 2 x 550 W on the ES1050-48C and 2 x 1600 W on the ES1050-48CP, both
+      F2B and B2F; the supplies drawn in Rear Panel figure 1 are the CRPS form, so celestica/psu-crps-550-ac@1
+      and celestica/psu-crps-1600-ac@1, whose contracts were measured off the same figure. Neither document
+      gives a supply part number (gap psu-part-numbers).
+  power:
+    confidence: datasheet
+    note: >-
+      guide Key System Specifications: 'ES1050-48CP ... <3200W, ES1050-48C ... <550W'. Stated as upper
+      bounds with no ambient or load, filed as max for the family because a configuration cannot carry its
+      own attrs.
+  sides-top-bottom:
+    confidence: estimated
+    note: >-
+      the guide's System Overview figure 1 is a three-quarter render of the ES1050: a plain silver lid with
+      two pressed rounded-square pads (one near the front on the left, one near the rear on the right), a
+      rectangular label outline beside the rear pad, small round screws on the lid and along the visible
+      side. The chassis is the family's (same 438.2 x 43.4 x 371.6). Pads, label outline and side screws are
+      placed by proportion from that render and from the ES1010 and ES1000 drawings of the same chassis, so
+      every position is estimated: the four side screws on the left side (x 40, 150, 260, 340) follow the
+      ES1010 drawing, the right side mirrors them because no figure shows it, and the pads and outline
+      each carry their own source. The underside is shown nowhere.
+attrs:
+  physical:
+    weight-kg: '8'
+    weight-note: 8 +/- 0.5 kg with two PSUs
+  performance:
+    switching-capacity: 172 Gbps
+    port-modes-rj45: 100/1000BASE-T and 2500BASE-T on ports 1-16; 10/100/1000BASE-T on ports 17-48
+    port-modes-sfp28: 1/10/25G
+  power:
+    power-max-w: '3200'
+    power-max-no-poe-w: '550'
+    input-ac: 100-240 VAC, 50-60 Hz
+    psus: 1+1 hot-swap AC (550 W on the -48C, 1600 W on the -48CP), 0:1 / 1:1 modes
+  thermal:
+    fans: 2+1 fixed (not field-replaceable)
+  environmental:
+    operating-temp: 0 to 45 C at 900 m; derate 1 C per 175 m above 900 m
+    storage-temp: -40 to 70 C
+    humidity-operating: 5 to 85 percent non-condensing
+    humidity-storage: 5 to 95 percent
+    altitude: 3050 m maximum
+  platform:
+    asic: Broadcom TD3.X2
+    cpu: Intel Denverton x86, 4C 2.1 GHz (8C 2.2 GHz option)
+    memory: 16 GB DDR4 (32 GB option)
+    storage: 64 GB M.2 SSD (up to 256 GB)
+  features:
+    encryption: 256b MACsec
+    timing: optional IEEE 1588 and SyncE
+    poe: IEEE 802.3bt Type 4 Class 8, 90 W per port, persistent PoE - on the -48CP builds only
+  management:
+    mgmt-ports: >-
+      RJ45 console (115200 default, 8N1), out-of-band combo pair (RJ45 in the stack and SFP left of the
+      uplinks, one interface), 2 x USB 3.0 Type A (data only)
+chassis:
+  width: 438.2
+  height: 43.4
+  depth: 371.6
+  ru: 1
+  weight-kg: 8
+  color: '#c9ccd0'
+  power: ac
+gaps:
+- what: psu-part-numbers
+  scope: [psu-1, psu-2]
+  reason: vendor-silent
+  wanted: >-
+    The vendor part numbers of the 550 W and 1600 W supplies. Neither the guide nor the datasheet names
+    them; the ordering table lists chassis builds only.
+- what: psu-550-lamp-count
+  scope: [psu-1, psu-2]
+  reason: sources-disagree
+  wanted: >-
+    Whether the 550 W supply has one lamp or two. The PSU LEDs table describes one lamp for the 550 W and a
+    pair for the 1600 W; Rear Panel figure 1 draws two windows on each supply. A photograph of a 550 W
+    supply closes it.
+- what: port-lamp-meaning-1g-ports
+  scope: [port-17, port-48]
+  reason: vendor-silent
+  wanted: >-
+    The link-lamp colours for ports 17-48. The guide gives one reading for the ES1050 series (green at
+    2.5GbE, amber at 10/1000M), which cannot hold for ports that top out at 1GbE; only the activity and
+    PoE lamp is described for them here.
+- what: rear-bosses
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    What the two round bosses left of fan labels 2 and 3 are. The guide documents no fan lamps; they are
+    drawn as outlines only.
+- what: side-top-bottom-geometry
+  scope: [top, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A mechanical drawing or square-on photographs of the lid and sides. The pads, label outline and screws
+    are placed by proportion from one three-quarter render, and the lid screws it shows are not drawn.
+groups:
+  rj45-2p5g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 2.5g}
+  rj45-1g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g}
+  sfp28-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the management cluster - two USB-A service ports, the out-of-band RJ45 and its combo SFP (one
+      interface, either medium), and the RJ45 console. Four media, one job
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  marks:
+    term: Mark
+    role: furniture
+    index-origin: 1
+    description: the printed USB tridents beside the two USB-A ports
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '0:1 / 1:1 modes, 2 x 550 W (-48C) or 2 x 1600 W (-48CP)'
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+    description: >-
+      the rear grounding point - two screws beside an earth symbol at the left edge - and the second
+      earth symbol with its screw in the right-hand strip
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: the lug tag, fan screws, the rear standoff and the side screws
+views:
+  front:
+    size: {w: 438.2, h: 43.4}
+    panel:
+      decor:
+        - {id: faceplate, at: [0, 0], size: [438.2, 43.4], fill: '#24272b', kind: faceplate}
+        - {id: vent-top-edge-backing, at: [3, 0.4], size: [44.5, 1.6], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-edge, at: [3, 0.4], size: [44.5, 1.6], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-left-backing, at: [47.5, 0.4], size: [139, 14.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-left, at: [47.5, 0.4], size: [139, 14.4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-block4-top-backing, at: [283, 0.4], size: [42.3, 14.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-block4-top, at: [283, 0.4], size: [42.3, 14.4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-usb-top-backing, at: [325.3, 0.4], size: [29.9, 4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-usb-top, at: [325.3, 0.4], size: [29.9, 4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-edge-r-backing, at: [371.5, 0.4], size: [53.3, 1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-edge-r, at: [371.5, 0.4], size: [53.3, 1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-sfp28-backing, at: [371.2, 5.4], size: [32.6, 2.7], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-sfp28, at: [371.2, 5.4], size: [32.6, 2.7], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-lamps-backing, at: [424.8, 1.4], size: [7.2, 13.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-lamps, at: [424.8, 1.4], size: [7.2, 13.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-right-col-backing, at: [432, 1.4], size: [4.4, 35.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-right-col, at: [432, 1.4], size: [4.4, 35.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-left-backing, at: [371.2, 37.9], size: [34.4, 5.1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-left, at: [371.2, 37.9], size: [34.4, 5.1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-under-stack-backing, at: [405.6, 40.6], size: [19.4, 2.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-under-stack, at: [405.6, 40.6], size: [19.4, 2.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-right-backing, at: [425, 36.8], size: [12.5, 6.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-right, at: [425, 36.8], size: [12.5, 6.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: rj45-shell-1, at: [7.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: rj45-shell-2, at: [99.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: rj45-shell-3, at: [191.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: rj45-shell-4, at: [283.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: green-stripe, at: [9.0, 39.9], size: [121.9, 2.2], fill: '#699404', kind: colour-key, confidence: estimated, source: 'ES1010/ES1050/EG1050 guide Front Panel figure 2 (3090 x 340 px): extent x 215-979 px, y 273-287 px; colour the median of the stripe pixels, a JPEG sample'}
+        - {id: sfp28-bezel, at: [375.0, 10.5], size: [28.5, 24.6], rx: 0.3, fill: '#a9aeb4', kind: cage-bezel}
+        - {id: mgmt-stack-shell, at: [407.0, 5.4], size: [16.6, 30.2], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: usb-1-shell, at: [329.1, 5.5], size: [13.1, 5.9], rx: 0.6, fill: '#b0b5bb', kind: port-shell}
+    silkscreen:
+      - {text: Celestica, at: [3.4, 14.2], font-size: 5.2, anchor: start, for: chassis}
+      - {text: LUG TAG, at: [34.4, 10.6], font-size: 1.8, anchor: middle, for: chassis}
+      - {text: '1 ▲▼ 2', at: [15.86, 41.7], font-size: 1.6, anchor: middle, fill: '#1b1b1b', for: [port-1, port-2]}
+      - {text: '3 ▲▼ 4', at: [29.82, 41.7], font-size: 1.6, anchor: middle, fill: '#1b1b1b', for: [port-3, port-4]}
+      - {text: '5 ▲▼ 6', at: [43.78, 41.7], font-size: 1.6, anchor: middle, fill: '#1b1b1b', for: [port-5, port-6]}
+      - {text: '7 ▲▼ 8', at: [57.74, 41.7], font-size: 1.6, anchor: middle, fill: '#1b1b1b', for: [port-7, port-8]}
+      - {text: '9 ▲▼ 10', at: [71.7, 41.7], font-size: 1.6, anchor: middle, fill: '#1b1b1b', for: [port-9, port-10]}
+      - {text: '11 ▲▼ 12', at: [85.66, 41.7], font-size: 1.6, anchor: middle, fill: '#1b1b1b', for: [port-11, port-12]}
+      - {text: '13 ▲▼ 14', at: [107.86, 41.7], font-size: 1.6, anchor: middle, fill: '#1b1b1b', for: [port-13, port-14]}
+      - {text: '15 ▲▼ 16', at: [121.82, 41.7], font-size: 1.6, anchor: middle, fill: '#1b1b1b', for: [port-15, port-16]}
+      - {text: '17 ▲▼ 18', at: [135.78, 41.7], font-size: 1.6, anchor: middle, for: [port-17, port-18]}
+      - {text: '19 ▲▼ 20', at: [149.74, 41.7], font-size: 1.6, anchor: middle, for: [port-19, port-20]}
+      - {text: '21 ▲▼ 22', at: [163.7, 41.7], font-size: 1.6, anchor: middle, for: [port-21, port-22]}
+      - {text: '23 ▲▼ 24', at: [177.66, 41.7], font-size: 1.6, anchor: middle, for: [port-23, port-24]}
+      - {text: '25 ▲▼ 26', at: [199.86, 41.7], font-size: 1.6, anchor: middle, for: [port-25, port-26]}
+      - {text: '27 ▲▼ 28', at: [213.82, 41.7], font-size: 1.6, anchor: middle, for: [port-27, port-28]}
+      - {text: '29 ▲▼ 30', at: [227.78, 41.7], font-size: 1.6, anchor: middle, for: [port-29, port-30]}
+      - {text: '31 ▲▼ 32', at: [241.74, 41.7], font-size: 1.6, anchor: middle, for: [port-31, port-32]}
+      - {text: '33 ▲▼ 34', at: [255.7, 41.7], font-size: 1.6, anchor: middle, for: [port-33, port-34]}
+      - {text: '35 ▲▼ 36', at: [269.66, 41.7], font-size: 1.6, anchor: middle, for: [port-35, port-36]}
+      - {text: '37 ▲▼ 38', at: [291.86, 41.7], font-size: 1.6, anchor: middle, for: [port-37, port-38]}
+      - {text: '39 ▲▼ 40', at: [305.82, 41.7], font-size: 1.6, anchor: middle, for: [port-39, port-40]}
+      - {text: '41 ▲▼ 42', at: [319.78, 41.7], font-size: 1.6, anchor: middle, for: [port-41, port-42]}
+      - {text: '43 ▲▼ 44', at: [333.74, 41.7], font-size: 1.6, anchor: middle, for: [port-43, port-44]}
+      - {text: '45 ▲▼ 46', at: [347.7, 41.7], font-size: 1.6, anchor: middle, for: [port-45, port-46]}
+      - {text: '47 ▲▼ 48', at: [361.66, 41.7], font-size: 1.6, anchor: middle, for: [port-47, port-48]}
+      - {text: '49 ▲▼ 50', at: [382.12, 37.5], font-size: 1.7, anchor: middle, for: [port-49, port-50]}
+      - {text: '51 ▲▼ 52', at: [396.38, 37.5], font-size: 1.7, anchor: middle, for: [port-51, port-52]}
+      - {text: MGMT COMBO, at: [393.3, 4.85], font-size: 1.8, anchor: middle, for: [mgmt-sfp, mgmt]}
+      - {id: combo-bar-sfp, at: [371.1, 4.2], path: 'M 0 0 L 13.2 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
+      - {id: combo-bar-rj45, at: [402.3, 4.2], path: 'M 0 0 L 13.0 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
+      - {id: combo-drop-rj45, at: [415.3, 4.2], path: 'M 0 0 L 0 1.2', stroke-width: 0.25, for: mgmt}
+      - {id: arrow-mgmt-sfp-led, at: [352.1, 6.3], path: 'M -0.7 -0.8 L 0.8 0 L -0.7 0.8 Z', filled: true, for: led-mgmt-sfp}
+      - {text: IOIOI, at: [415.3, 40.3], font-size: 1.7, anchor: middle, for: console}
+      - {text: STAT, at: [425.7, 18.11], font-size: 1.4, anchor: middle, rotate: -60, for: led-stat}
+      - {text: FAN, at: [425.7, 23.14], font-size: 1.4, anchor: middle, rotate: -60, for: led-fan}
+      - {text: PWR, at: [425.7, 28.26], font-size: 1.4, anchor: middle, rotate: -60, for: led-pwr}
+      - {text: ALM, at: [425.7, 33.39], font-size: 1.4, anchor: middle, rotate: -60, for: led-alm}
+      - {text: SS, at: [331.9, 14.0], font-size: 1.5, anchor: end, for: usb-1}
+      - {text: SS, at: [405.9, 26.0], font-size: 1.4, anchor: middle, rotate: -90, for: usb-2}
+    components:
+      placements:
+        - {ref: celestica/lug-tag-ridge-23@1, id: lug-tag, at: [23.1, 3.1], group: furniture, rel-pos: 1, attrs: {label: ES1050}}
+        - {ref: common/rj45-ganged-eth@1, id: port-1, at: [9.51, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 1, states: &rj45-2p5g-states {led-a: ['off', {name: link-2500m, color: '#22c55e'}, {name: link-10m-1g, color: '#f59e0b'}], led-b: &rj45-led-b ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-active-data, color: '#f59e0b', behavior: blinking}, {name: poe-on-idle, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-2, at: [9.51, 28.25], group: rj45-2p5g, rel-pos: 2, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-3, at: [23.47, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 3, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-4, at: [23.47, 28.25], group: rj45-2p5g, rel-pos: 4, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-5, at: [37.43, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 5, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-6, at: [37.43, 28.25], group: rj45-2p5g, rel-pos: 6, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-7, at: [51.39, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 7, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-8, at: [51.39, 28.25], group: rj45-2p5g, rel-pos: 8, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-9, at: [65.35, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 9, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-10, at: [65.35, 28.25], group: rj45-2p5g, rel-pos: 10, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-11, at: [79.31, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 11, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-12, at: [79.31, 28.25], group: rj45-2p5g, rel-pos: 12, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-13, at: [101.51, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 13, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-14, at: [101.51, 28.25], group: rj45-2p5g, rel-pos: 14, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-15, at: [115.47, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 15, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-16, at: [115.47, 28.25], group: rj45-2p5g, rel-pos: 16, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-17, at: [129.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 17, states: &rj45-1g-states {led-b: *rj45-led-b}}
+        - {ref: common/rj45-ganged-eth@1, id: port-18, at: [129.43, 28.25], group: rj45-1g, rel-pos: 18, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-19, at: [143.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 19, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-20, at: [143.39, 28.25], group: rj45-1g, rel-pos: 20, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-21, at: [157.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 21, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-22, at: [157.35, 28.25], group: rj45-1g, rel-pos: 22, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-23, at: [171.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 23, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-24, at: [171.31, 28.25], group: rj45-1g, rel-pos: 24, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-25, at: [193.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 25, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-26, at: [193.51, 28.25], group: rj45-1g, rel-pos: 26, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-27, at: [207.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 27, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-28, at: [207.47, 28.25], group: rj45-1g, rel-pos: 28, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-29, at: [221.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 29, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-30, at: [221.43, 28.25], group: rj45-1g, rel-pos: 30, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-31, at: [235.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 31, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-32, at: [235.39, 28.25], group: rj45-1g, rel-pos: 32, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-33, at: [249.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 33, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-34, at: [249.35, 28.25], group: rj45-1g, rel-pos: 34, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-35, at: [263.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 35, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-36, at: [263.31, 28.25], group: rj45-1g, rel-pos: 36, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-37, at: [285.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 37, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-38, at: [285.51, 28.25], group: rj45-1g, rel-pos: 38, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-39, at: [299.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 39, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-40, at: [299.47, 28.25], group: rj45-1g, rel-pos: 40, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-41, at: [313.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 41, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-42, at: [313.43, 28.25], group: rj45-1g, rel-pos: 42, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-43, at: [327.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 43, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-44, at: [327.39, 28.25], group: rj45-1g, rel-pos: 44, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-45, at: [341.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 45, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-46, at: [341.35, 28.25], group: rj45-1g, rel-pos: 46, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-47, at: [355.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 47, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-48, at: [355.31, 28.25], group: rj45-1g, rel-pos: 48, states: *rj45-1g-states}
+        - {ref: std/sfp-ganged@1, id: port-49, at: [375, 10.5], group: sfp28, rel-pos: 49}
+        - {ref: std/sfp-ganged@1, id: port-50, at: [375, 24.7], rotate: 180, group: sfp28, rel-pos: 50}
+        - {ref: std/sfp-ganged@1, id: port-51, at: [389.25, 10.5], group: sfp28, rel-pos: 51}
+        - {ref: std/sfp-ganged@1, id: port-52, at: [389.25, 24.7], rotate: 180, group: sfp28, rel-pos: 52}
+        - {ref: common/led-arrow-sm@1, id: led-port-49, skin: up, at: [376.38, 21.6], for: port-49, group: sfp28-leds, rel-pos: 1, states: &sfp28-led-states ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: common/led-arrow-sm@1, id: led-port-50, skin: down, at: [385.57, 21.6], for: port-50, group: sfp28-leds, rel-pos: 2, states: *sfp28-led-states}
+        - {ref: common/led-arrow-sm@1, id: led-port-51, skin: up, at: [390.68, 21.6], for: port-51, group: sfp28-leds, rel-pos: 3, states: *sfp28-led-states}
+        - {ref: common/led-arrow-sm@1, id: led-port-52, skin: down, at: [399.77, 21.6], for: port-52, group: sfp28-leds, rel-pos: 4, states: *sfp28-led-states}
+        - {ref: std/usb-a@1, id: usb-1, at: [329.65, 6.2], group: mgmt, rel-pos: 1, attrs: {role: storage, usb: '3.0'}}
+        - {ref: common/usb-symbol@1, id: mark-usb-1, at: [332.45, 11.3], for: usb-1, group: marks, rel-pos: 1}
+        - {ref: common/led-indicator@1, id: led-mgmt-sfp, at: [350.1, 7.5], for: mgmt-sfp, group: status-leds, rel-pos: 5, states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+        - {ref: std/sfp@1, id: mgmt-sfp, at: [355.9, 2.45], group: mgmt, rel-pos: 2, attrs: {media: sfp, speed: 1g, role: mgmt-combo, combo-with: mgmt}}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [408.95, 6.3], rotate: 180, group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g, combo-with: mgmt-sfp}, states: {led-a: ['off', {name: link-2500m, color: '#22c55e'}, {name: link-10m-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+        - {ref: std/usb-a@1, id: usb-2, at: [409.3, 19.05], group: mgmt, rel-pos: 4, attrs: {role: storage, usb: '3.0'}}
+        - {ref: common/usb-symbol@1, id: mark-usb-2, at: [402.3, 19.3], rotate: 270, for: usb-2, group: marks, rel-pos: 2}
+        - {ref: std/rj45-ganged@2, id: console, at: [408.95, 24.75], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/led-indicator@1, id: led-stat, at: [426.79, 15.68], for: chassis, group: status-leds, rel-pos: 1, states: ['off', {name: normal, color: '#22c55e', behavior: {mode: alternating, color: '#f59e0b'}}]}
+        - {ref: common/led-indicator@1, id: led-fan, at: [426.79, 20.71], for: chassis, group: status-leds, rel-pos: 2, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-pwr, at: [426.79, 25.83], for: chassis, group: status-leds, rel-pos: 3, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-alm, at: [426.79, 30.96], for: chassis, group: status-leds, rel-pos: 4, states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major, color: '#f59e0b', behavior: {mode: blinking, rate: 4}}, {name: minor, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}]}
+    regions:
+      - {id: mgmt-block, at: [324, 0], size: {w: 114.2, h: 43.4}, label: Uplinks and management}
+  rear:
+    size: {w: 438.2, h: 43.4}
+    panel:
+      decor:
+        - {id: fan-plate, at: [2.6, 0.5], size: [233.5, 12.4], rx: 1.0, fill: '#cfd2d6', kind: stiffener-plate, confidence: estimated, source: 'ES1010/ES1050/EG1050 guide Rear Panel figure 1 - the lighter formed plate across the top of the fan wall; outline only, its notches not drawn'}
+        - {id: fan-1-backing, at: [30.89, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
+        - {id: fan-1-grille, at: [30.89, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
+        - {id: fan-2-backing, at: [86.34, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
+        - {id: fan-2-grille, at: [86.34, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
+        - {id: fan-3-backing, at: [141.84, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
+        - {id: fan-3-grille, at: [141.84, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
+        - {id: fan-1-screw-a-land, at: [31.94, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: fan-1-screw-b-land, at: [64.34, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: fan-2-screw-a-land, at: [87.39, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: fan-2-screw-b-land, at: [119.79, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: fan-3-screw-a-land, at: [142.89, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: fan-3-screw-b-land, at: [175.29, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: boss-1, at: [74.1, 27.2], size: [4.2, 4.2], rx: 2.1, stroke: '#8d9297', stroke-width: 0.35, kind: boss}
+        - {id: boss-2, at: [129.6, 27.2], size: [4.2, 4.2], rx: 2.1, stroke: '#8d9297', stroke-width: 0.35, kind: boss}
+        - {id: psu-wall-seam, at: [237.6, 13.0], size: [0.4, 29.9], fill: '#8d9297', kind: seam}
+        - {id: psu-divider, at: [330.2, 1.7], size: [15.4, 40.0], rx: 0.4, stroke: '#8d9297', stroke-width: 0.35, kind: divider}
+        - {id: strip-seam, at: [421.9, 1.0], size: [0.4, 41.4], fill: '#8d9297', kind: seam}
+    silkscreen:
+      - {id: fan-1-arrow, at: [25.1, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: chassis}
+      - {id: fan-1-symbol, at: [25.1, 22.4], path: 'M -1.1 -1.1 L 1.1 1.1 M 1.1 -1.1 L -1.1 1.1', fill: '#1f2226', stroke-width: 0.5, for: chassis}
+      - {text: '1', at: [25.1, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: chassis}
+      - {id: fan-2-arrow, at: [80.55, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: chassis}
+      - {id: fan-2-symbol, at: [80.55, 22.4], path: 'M -1.1 -1.1 L 1.1 1.1 M 1.1 -1.1 L -1.1 1.1', fill: '#1f2226', stroke-width: 0.5, for: chassis}
+      - {text: '2', at: [80.55, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: chassis}
+      - {id: fan-3-arrow, at: [136, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: chassis}
+      - {id: fan-3-symbol, at: [136, 22.4], path: 'M -1.1 -1.1 L 1.1 1.1 M 1.1 -1.1 L -1.1 1.1', fill: '#1f2226', stroke-width: 0.5, for: chassis}
+      - {text: '3', at: [136, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: chassis}
+      - {id: psu-1-arrow, at: [246.7, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: psu-1}
+      - {id: psu-1-symbol, at: [246.7, 22.6], path: 'M -1.1 -1.1 L 1.1 -1.1 L 1.1 1.1 L -1.1 1.1 L -1.1 -1.1 M 0.35 -0.7 L -0.35 0.1 L 0.35 -0.1 L -0.35 0.7', fill: '#1f2226', stroke-width: 0.3, for: psu-1}
+      - {text: '1', at: [246.7, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: psu-1}
+      - {id: psu-2-arrow, at: [429.6, 9.8], path: 'M 0.9 -1.1 L -1.1 0 L 0.9 1.1 Z', filled: true, fill: '#1f2226', for: psu-2}
+      - {id: psu-2-symbol, at: [429.6, 14.4], path: 'M -1.1 -1.1 L 1.1 -1.1 L 1.1 1.1 L -1.1 1.1 L -1.1 -1.1 M 0.35 -0.7 L -0.35 0.1 L 0.35 -0.1 L -0.35 0.7', fill: '#1f2226', stroke-width: 0.3, for: psu-2}
+      - {text: '2', at: [429.6, 21.3], font-size: 3.4, anchor: middle, fill: '#1f2226', for: psu-2}
+      - {id: earth-left, at: [15.8, 35.9], path: 'M 2.2 0 L 1.56 1.56 L 0 2.2 L -1.56 1.56 L -2.2 0 L -1.56 -1.56 L 0 -2.2 L 1.56 -1.56 L 2.2 0 M 0 -1.3 L 0 -0.1 M -1.2 -0.1 L 1.2 -0.1 M -0.8 0.65 L 0.8 0.65 M -0.4 1.4 L 0.4 1.4', fill: '#1f2226', stroke-width: 0.3, for: [ground-screw-1, ground-screw-2]}
+      - {id: earth-right, at: [429.6, 28.3], path: 'M 2.2 0 L 1.56 1.56 L 0 2.2 L -1.56 1.56 L -2.2 0 L -1.56 -1.56 L 0 -2.2 L 1.56 -1.56 L 2.2 0 M 0 -1.3 L 0 -0.1 M -1.2 -0.1 L 1.2 -0.1 M -0.8 0.65 L 0.8 0.65 M -0.4 1.4 L 0.4 1.4', fill: '#1f2226', stroke-width: 0.3, for: ground-screw-3}
+    components:
+      bays:
+        - {id: psu-1, at: [256.0, 1.7], size: {w: 73.5, h: 40}, accepts: [celestica/psu-crps-550-ac@1, celestica/psu-crps-1600-ac@1], group: psus, rel-pos: 1, default: celestica/psu-crps-1600-ac@1}
+        - {id: psu-2, at: [346.3, 1.7], size: {w: 73.5, h: 40}, accepts: [celestica/psu-crps-550-ac@1, celestica/psu-crps-1600-ac@1], group: psus, rel-pos: 2, default: celestica/psu-crps-1600-ac@1}
+      placements:
+        - {ref: common/screw-head@1, id: ground-screw-1, at: [5.5, 24.2], group: grounding, rel-pos: 1}
+        - {ref: common/screw-head@1, id: ground-screw-2, at: [5.5, 34.1], group: grounding, rel-pos: 2}
+        - {ref: common/screw-head@1, id: ground-screw-3, at: [427.8, 33.9], group: grounding, rel-pos: 3}
+        - {ref: common/screw-head@1, id: standoff-1, at: [8.8, 3.8], group: furniture, rel-pos: 2}
+        - {ref: common/screw-head@1, id: screw-psu-wall, at: [231.5, 24.4], group: furniture, rel-pos: 3}
+        - {ref: common/screw-head@1, id: fan-1-screw-a, at: [32.14, 36.0], group: furniture, rel-pos: 4}
+        - {ref: common/screw-head@1, id: fan-1-screw-b, at: [64.54, 36.0], group: furniture, rel-pos: 5}
+        - {ref: common/screw-head@1, id: fan-2-screw-a, at: [87.59, 36.0], group: furniture, rel-pos: 6}
+        - {ref: common/screw-head@1, id: fan-2-screw-b, at: [119.99, 36.0], group: furniture, rel-pos: 7}
+        - {ref: common/screw-head@1, id: fan-3-screw-a, at: [143.09, 36.0], group: furniture, rel-pos: 8}
+        - {ref: common/screw-head@1, id: fan-3-screw-b, at: [175.49, 36.0], group: furniture, rel-pos: 9}
+    regions:
+      - {id: fan-1, at: [30.89, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 1 (fixed)'}
+      - {id: fan-2, at: [86.34, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 2 (fixed)'}
+      - {id: fan-3, at: [141.84, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 3 (fixed)'}
+  left:
+    size: {w: 371.6, h: 43.4}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-l1, at: [40, 20], group: furniture, rel-pos: 10}
+        - {ref: common/screw-head@1, id: screw-l2, at: [150, 20], group: furniture, rel-pos: 11}
+        - {ref: common/screw-head@1, id: screw-l3, at: [260, 20], group: furniture, rel-pos: 12}
+        - {ref: common/screw-head@1, id: screw-l4, at: [340, 20], group: furniture, rel-pos: 13}
+  right:
+    size: {w: 371.6, h: 43.4}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-r1, at: [40, 20], group: furniture, rel-pos: 14}
+        - {ref: common/screw-head@1, id: screw-r2, at: [150, 20], group: furniture, rel-pos: 15}
+        - {ref: common/screw-head@1, id: screw-r3, at: [260, 20], group: furniture, rel-pos: 16}
+        - {ref: common/screw-head@1, id: screw-r4, at: [340, 20], group: furniture, rel-pos: 17}
+  top:
+    size: {w: 438.2, h: 371.6}
+    panel:
+      decor:
+        - {id: lid-pad-1, at: [150, 40], size: [60, 30], rx: 8, fill: '#bfc3c7', sink: 0.8, kind: pressed-pad, confidence: estimated, source: 'placed by proportion from the System Overview figure 1 render (the pad near the front on the left); not measurable'}
+        - {id: lid-pad-2, at: [300, 290], size: [60, 30], rx: 8, fill: '#bfc3c7', sink: 0.8, kind: pressed-pad, confidence: estimated, source: 'placed by proportion from the System Overview figure 1 render (the pad near the rear on the right); not measurable'}
+        - {id: lid-label-outline, at: [270, 250], size: [110, 60], stroke: '#a5aaaf', stroke-width: 0.4, kind: label-outline, confidence: estimated, source: 'placed by proportion from the System Overview figure 1 render (the outline beside the rear pad); not measurable'}
+  bottom:
+    size: {w: 438.2, h: 371.6}
+    empty: >-
+      Nothing documented. No ES1050 document or render shows the underside; the guide's Hardware Overview
+      and Ground Lug Installation pages show the rear and the lug only. Searched: every page of the
+      ES1010/ES1050/EG1050 guide, the ES1050 datasheet, the System Overview renders.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis as it ships: two supplies and three fixed fans in, the 48 RJ45 ports and four SFP28
+      cages on the front. The orderable builds below differ in powering the ports, supply rating and airflow.
+  48c-f2b:
+    kind: orderable
+    description: ES1050-48C, 1U, 32x1GbE + 16x2.5GbE, no PoE, COMe 4C/16GB-DDR/64GB-SSD, 2 x 550 W AC, F2B (R4048-F90L2-A1)
+    airflow: front-to-back
+    part-numbers:
+      R4048-F90L2-A1: {part: R4048-F90L2-A1}
+    bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
+  48c-b2f:
+    kind: orderable
+    description: ES1050-48C, 1U, 32x1GbE + 16x2.5GbE, no PoE, COMe 4C/16GB-DDR/64GB-SSD, 2 x 550 W AC, B2F (R4048-F91L2-A1)
+    airflow: back-to-front
+    part-numbers:
+      R4048-F91L2-A1: {part: R4048-F91L2-A1}
+    bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
+  48cp-f2b:
+    kind: orderable
+    description: ES1050-48CP, 1U, 32x1GbE + 16x2.5GbE, PoE++, COMe 4C/16GB-DDR/64GB-SSD, 2 x 1600 W AC, F2B (R4048-F90L3-A1)
+    airflow: front-to-back
+    part-numbers:
+      R4048-F90L3-A1: {part: R4048-F90L3-A1}
+    bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
+  48cp-b2f:
+    kind: orderable
+    description: ES1050-48CP, 1U, 32x1GbE + 16x2.5GbE, PoE++, COMe 4C/16GB-DDR/64GB-SSD, 2 x 1600 W AC, B2F (R4048-F91L3-A1)
+    airflow: back-to-front
+    part-numbers:
+      R4048-F91L3-A1: {part: R4048-F91L3-A1}
+    bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
+datasheet:
+  title: Celestica ES1050 1U 48-port 1GbE / 2.5GbE (PoE) Access Switch datasheet (111224)
+  url: https://www.celestica.com/
+  sha256: 3a1966f2ba8e86416e515324db9058553f25c9bdf2caef8efe853e8fd0f66ba5
+references:
+  - {title: 'Celestica ES1010/ES1050/EG1050 hardware installation guide, Front Panel figure 2 and Rear Panel figure 1', url: 'https://documentationportal.celestica.com/en/networking/es1010es1050eg1050/front-panel'}
