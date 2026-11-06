@@ -225,6 +225,7 @@ def test_no_other_row_and_no_unmarked_file_carries_the_key(plain, lit):
     assert "programmable" not in text
 
 
+@pytest.mark.heavy
 def test_the_elements_files_differ_only_by_the_rows_the_mark_names(plain, lit):
     a, b = rows(plain[2]), rows(lit[2])
     assert a.keys() == b.keys()
