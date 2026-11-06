@@ -14,14 +14,16 @@
   ],
   "rear/bays/psu-0": [
    "ufispace/psu-302-ac@1",
-   "ufispace/psu-302-dc@1"
+   "ufispace/psu-302-dc@1",
+   "ufispace/psu-302-dc@2"
   ],
   "rear/bays/psu-1": [
    "ufispace/psu-302-ac@1",
-   "ufispace/psu-302-dc@1"
+   "ufispace/psu-302-dc@1",
+   "ufispace/psu-302-dc@2"
   ]
  },
- "composed": "903b74af2fd2ae13",
+ "composed": "d7831022307b93aa",
  "composed-refs": {
   "common/ground-symbol@1": "1.0.1+0018bfdfc1559185",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
@@ -29,6 +31,8 @@
   "common/rivet@1": "1.0.0+4685edc04da9b23d",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
   "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
+  "juniper/mx240-dc-pole@1": "1.0.0+f7799a0f22b3f76c",
   "std/c20-inlet@1": "1.4.0+618074a1c18c1faa",
   "std/micro-usb@1": "1.0.1+623c203fe8667fd2",
   "std/qsfp-dd@1": "1.3.1+c3cf5f2db67d8233",
@@ -38,15 +42,80 @@
   "std/usb-a@1": "1.3.0+3c77f06ea6794bfc",
   "ufispace/fan-808012@1": "1.0.0+90a5595c03389564",
   "ufispace/psu-302-ac@1": "1.0.0+b464d89bd640f666",
-  "ufispace/psu-302-dc@1": "1.0.2+b368e8c36cd40fbb",
+  "ufispace/psu-302-dc@1": "1.0.3+7b98727c9436386b",
+  "ufispace/psu-302-dc@2": "2.0.0+35c4eb09dadfd34b",
   "ufispace/seg7-status-2-sm@1": "1.2.0+fafd4dd8cd7ca8f7"
  },
  "configs": [
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "ufispace/psu-302-dc@2": {
+    "awg": [
+     4
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "unstated",
+      "slot": "psu-0/module/pole-1",
+      "stand-in": {
+       "order": "left-to-right"
+      }
+     },
+     {
+      "role": "unstated",
+      "slot": "psu-0/module/pole-2",
+      "stand-in": {
+       "order": "left-to-right"
+      }
+     }
+    ],
+    "rating-a": 80,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "ufispace/psu-302-dc@2": {
+    "awg": [
+     4
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "unstated",
+      "slot": "psu-1/module/pole-1",
+      "stand-in": {
+       "order": "left-to-right"
+      }
+     },
+     {
+      "role": "unstated",
+      "slot": "psu-1/module/pole-2",
+      "stand-in": {
+       "order": "left-to-right"
+      }
+     }
+    ],
+    "rating-a": 80,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
- "gaps": "e3e0deceba55642d",
+ "gaps": "27dd8a409e89477b",
  "groups": [
   "display",
   "fans",
@@ -358,7 +427,7 @@
   "top/placements/cover-screw-8",
   "top/placements/cover-screw-9"
  ],
- "names": "d2dbf0205acf6748",
+ "names": "df322a44e3e01e88",
  "placement-addressing": {
   "for": {
    "front/placements/led-fabric-0": [
@@ -898,6 +967,6 @@
  },
  "placement-surface": "be6c442f3b28c704",
  "shape": "df395fef4bdfebbe",
- "surface": "ab042875ddfad3dd",
- "version": "3.0.6"
+ "surface": "272b99499e78d65a",
+ "version": "3.1.0"
 }
