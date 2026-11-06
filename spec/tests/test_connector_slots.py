@@ -159,6 +159,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "juniper-dc-header-6", "dc-connector-3w3",
                          # the AC inlet of the Telco Systems XM-3352 supply
                          "telco-ac-cloverleaf-3",
+                         # the 4FF SIM card slot of the Opengear CM8004-C and CM8008-C
+                         "sim-tray-4ff",
                          # the keystone opening of the FS FHD-FAPM6 panel
                          "keystone"}
     # No connector interface is also a cage family's: one core, two registries,
