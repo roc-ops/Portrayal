@@ -161,7 +161,9 @@ def test_the_connector_registry_is_not_vacuous():
                          # the AC inlet of the Telco Systems XM-3352 supply
                          "telco-ac-cloverleaf-3",
                          # the keystone opening of the FS FHD-FAPM6 panel
-                         "keystone"}
+                         "keystone",
+                         # the SCTE-91 external port of the Vecima Entra nodes, presented by common/scte-91-port@1 and mated by generic/scte-91-port-plug@1
+                         "scte-91"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
