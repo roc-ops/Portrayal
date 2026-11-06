@@ -95,7 +95,41 @@ def test_supplies_are_the_shared_crps_1600(dev):
 
 def test_every_figure_not_printed_is_a_gap(dev):
     gaps = {g["what"] for g in dev["gaps"]}
-    assert {"antenna-connector-positions", "antennas", "side-top-bottom-geometry"} <= gaps
+    assert {"antenna-connector-positions", "antennas"} <= gaps
     assert dev["maturity"] in ("draft", "modelled")
-    if dev["maturity"] == "modelled":
-        assert "side-top-bottom-geometry" not in gaps
+
+
+FACES = ("front", "rear", "top", "bottom", "left", "right")
+
+
+def test_all_six_faces_are_present_and_drawn_or_declared_empty(dev):
+    views = dev["views"]
+    assert [f for f in FACES if f not in views] == []
+    for f in FACES:
+        v = views[f]
+        drawn = any(
+            v.get(k)
+            for k in ("components", "regions")
+        ) or any((v.get("panel") or {}).get(k) for k in ("decor", "cutouts")) or v.get("silkscreen")
+        assert drawn or str(v.get("empty") or "").strip(), f"{f} is neither drawn nor declared empty"
+
+
+def test_the_six_faces_describe_the_chassis_box(dev):
+    ch = dev["chassis"]
+    sizes = {f: (dev["views"][f]["size"]["w"], dev["views"][f]["size"]["h"]) for f in FACES}
+    for f in ("front", "rear"):
+        assert sizes[f] == (ch["width"], ch["height"])
+    for f in ("left", "right"):
+        assert sizes[f] == (ch["depth"], ch["height"])
+    for f in ("top", "bottom"):
+        assert sizes[f] == (ch["width"], ch["depth"])
+
+
+def test_the_device_is_addressable():
+    import sys
+    sys.path.insert(0, str(SPEC / "tools"))
+    from portrayal import capability as C
+
+    data = yaml.safe_load(DEVICE.read_text())
+    cap, _ = C.assess(data, profiles=C.load_profiles(SPEC / "schemas"))
+    assert cap["level"] == 4, cap.get("blocked")

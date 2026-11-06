@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eg1050-48cp
-version: 1.0.1
+version: 2.0.0
 maturity: draft
 manufacturer: Celestica
 model: EG1050-48CP
@@ -46,7 +46,7 @@ provenance:
       the antenna base centres read off the figure (x 61.6, 112.6, 163.6, 214.6, 265.7, 316.7 mm, a 51 mm
       pitch) and the height is set level with the ANT legends (6.0 mm). Drawn as std/sma@1, the library's
       SMA jack. The legends ANT1 and ANT2 (with the Wi-Fi mark) and 5G ANT1 to ANT4 sit to the left of
-      each antenna (the figure stacks '5G' over 'ANT1'; one line is drawn). The vent fields around the
+      each antenna (the figure stacks '5G' over 'ANT1', drawn so; the Wi-Fi mark is drawn as three strokes). The vent fields around the
       antenna row are hidden behind the antenna bases in the figure, so the band holding the connectors and
       their legends (y 2.0 to 9.6 above RJ45 blocks 1-2 and 4) is drawn as flat metal, an estimate. See the
       antenna-connector-positions gap.
@@ -77,6 +77,23 @@ provenance:
       guide LEDs Table 3: each data port has a left link lamp (green at 2.5GbE on ports 1-16, amber at the
       lower speeds) and a right activity lamp that is amber while PoE power is enabled; each SFP28 port has
       one bi-colour lamp (green 25G, amber 1/10G); STAT, FAN, PWR and ALM are Table 1.
+  body-faces:
+    confidence: estimated
+    note: >-
+      Top, left, right and bottom are sized from the chassis block (438.2 wide, 43.4 high, 371.6 deep, the
+      guide's System Overview). Their contents are read off the guide's System Overview three-quarter
+      figures 3 and 5 by eye: the lid is light grey with a handle panel and pressed pads, the left side
+      carries screws. Four screws a side follow celestica/es1010, the right side is assumed to mirror the
+      left, and the underside is shown by no figure. See the lid-feature-positions, side-screw-positions
+      and underside gaps.
+  colours:
+    confidence: estimated
+    note: >-
+      Sampled from the guide's figures away from text and ports: Front Panel figure 3 faceplate #222222
+      (average of three patches under and beside the legends); Rear Panel figure 2 body #a9aaac (average
+      of patches between fans and supplies and at the left edge); System Overview figure 3 lid #d3d6db.
+      The rear fan grille averages #595b5b in the figure, a dark field with a light honeycomb, which the
+      dark backing and grille drawn here match.
   rear:
     confidence: measured
     note: >-
@@ -143,7 +160,7 @@ chassis:
   depth: 371.6
   ru: 1
   weight-kg: 8
-  color: '#c9ccd0'
+  color: '#d3d6db'
   power: ac
 gaps:
 - what: antenna-connector-positions
@@ -160,11 +177,25 @@ gaps:
     The antennas the guide names, Y0RGK0MA0AA for Wi-Fi and YECN009AA for 5G/LTE ('no other antennas are
     qualified'), as accessories: no document held gives their length or a dimensioned drawing, and the
     schema has no place for an accessory part number, so they are not drawn.
-- what: side-top-bottom-geometry
+- what: lid-feature-positions
+  scope: [top]
   reason: needs-drawing
   wanted: >-
-    A mechanical drawing or square-on photographs of the lid, underside and two sides. The guide and the
-    datasheet draw none of them, so those four faces are not drawn.
+    A square-on drawing of the lid. Only the guide's three-quarter views show it, so the pressed pads, the
+    handle panel and the label recess are placed by proportion and are estimated.
+- what: side-screw-positions
+  scope: [left, right]
+  reason: needs-drawing
+  wanted: >-
+    Square-on drawings of the two sides. The guide's three-quarter view shows the left side with screws
+    along it but not their positions, and no figure shows the right side, so four screws a side are drawn
+    at the positions of celestica/es1010 and are estimated; the right side mirrors the left by assumption.
+- what: underside
+  scope: [bottom]
+  reason: vendor-silent
+  wanted: >-
+    Any figure of the underside. None is held, so the face is declared empty with the search stated; a
+    label, feet or vents may be there.
 - what: psu-part-numbers
   scope: [psu-1, psu-2]
   reason: vendor-silent
@@ -241,38 +272,38 @@ groups:
     term: Item
     role: furniture
     index-origin: 1
-    description: fan screws, the rear standoff and the model plate
+    description: fan screws, the rear standoff, the model plate and the side screws
 views:
   front:
     size: {w: 438.2, h: 43.4}
     panel:
       decor:
-        - {id: faceplate, at: [0, 0], size: [438.2, 43.4], fill: '#24272b', kind: faceplate}
-        - {id: vent-top-edge-backing, at: [3, 0.4], size: [44.5, 1.6], fill: '#24272b', kind: vent-backing}
+        - {id: faceplate, at: [0, 0], size: [438.2, 43.4], fill: '#222222', kind: faceplate}
+        - {id: vent-top-edge-backing, at: [3, 0.4], size: [44.5, 1.6], fill: '#222222', kind: vent-backing}
         - {id: vent-top-edge, at: [3, 0.4], size: [44.5, 1.6], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
-        - {id: vent-top-left-a-backing, at: [47.5, 0.4], size: [139, 1.6], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-left-a-backing, at: [47.5, 0.4], size: [139, 1.6], fill: '#222222', kind: vent-backing}
         - {id: vent-top-left-a, at: [47.5, 0.4], size: [139, 1.6], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
-        - {id: vent-top-left-b-backing, at: [47.5, 9.6], size: [139, 5.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-left-b-backing, at: [47.5, 9.6], size: [139, 5.2], fill: '#222222', kind: vent-backing}
         - {id: vent-top-left-b, at: [47.5, 9.6], size: [139, 5.2], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
-        - {id: vent-block4-top-a-backing, at: [283, 0.4], size: [42.3, 1.6], fill: '#24272b', kind: vent-backing}
+        - {id: vent-block4-top-a-backing, at: [283, 0.4], size: [42.3, 1.6], fill: '#222222', kind: vent-backing}
         - {id: vent-block4-top-a, at: [283, 0.4], size: [42.3, 1.6], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
-        - {id: vent-block4-top-b-backing, at: [283, 9.6], size: [42.3, 5.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-block4-top-b-backing, at: [283, 9.6], size: [42.3, 5.2], fill: '#222222', kind: vent-backing}
         - {id: vent-block4-top-b, at: [283, 9.6], size: [42.3, 5.2], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
-        - {id: vent-usb-top-backing, at: [325.3, 0.4], size: [29.9, 4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-usb-top-backing, at: [325.3, 0.4], size: [29.9, 4], fill: '#222222', kind: vent-backing}
         - {id: vent-usb-top, at: [325.3, 0.4], size: [29.9, 4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
-        - {id: vent-top-edge-r-backing, at: [371.5, 0.4], size: [53.3, 1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-edge-r-backing, at: [371.5, 0.4], size: [53.3, 1], fill: '#222222', kind: vent-backing}
         - {id: vent-top-edge-r, at: [371.5, 0.4], size: [53.3, 1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
-        - {id: vent-over-sfp28-backing, at: [371.2, 5.4], size: [32.6, 2.7], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-sfp28-backing, at: [371.2, 5.4], size: [32.6, 2.7], fill: '#222222', kind: vent-backing}
         - {id: vent-over-sfp28, at: [371.2, 5.4], size: [32.6, 2.7], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
-        - {id: vent-over-lamps-backing, at: [424.8, 1.4], size: [7.2, 13.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-lamps-backing, at: [424.8, 1.4], size: [7.2, 13.2], fill: '#222222', kind: vent-backing}
         - {id: vent-over-lamps, at: [424.8, 1.4], size: [7.2, 13.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
-        - {id: vent-right-col-backing, at: [432, 1.4], size: [4.4, 35.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-right-col-backing, at: [432, 1.4], size: [4.4, 35.4], fill: '#222222', kind: vent-backing}
         - {id: vent-right-col, at: [432, 1.4], size: [4.4, 35.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
-        - {id: vent-bottom-left-backing, at: [371.2, 37.9], size: [34.4, 5.1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-left-backing, at: [371.2, 37.9], size: [34.4, 5.1], fill: '#222222', kind: vent-backing}
         - {id: vent-bottom-left, at: [371.2, 37.9], size: [34.4, 5.1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
-        - {id: vent-under-stack-backing, at: [405.6, 40.6], size: [19.4, 2.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-under-stack-backing, at: [405.6, 40.6], size: [19.4, 2.4], fill: '#222222', kind: vent-backing}
         - {id: vent-under-stack, at: [405.6, 40.6], size: [19.4, 2.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
-        - {id: vent-bottom-right-backing, at: [425, 36.8], size: [12.5, 6.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-right-backing, at: [425, 36.8], size: [12.5, 6.2], fill: '#222222', kind: vent-backing}
         - {id: vent-bottom-right, at: [425, 36.8], size: [12.5, 6.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
         - {id: rj45-shell-1, at: [7.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
         - {id: rj45-shell-2, at: [99.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
@@ -287,10 +318,16 @@ views:
       - {text: LUG TAG, at: [34.4, 10.6], font-size: 1.8, anchor: middle, for: chassis}
       - {text: ANT1, at: [53.3, 6.37], font-size: 1.2, anchor: middle, for: wifi-ant-1}
       - {text: ANT2, at: [104.3, 6.37], font-size: 1.2, anchor: middle, for: wifi-ant-2}
-      - {text: 5G ANT1, at: [155.3, 6.37], font-size: 1.1, anchor: middle, for: ant-5g-1}
-      - {text: 5G ANT2, at: [206.3, 6.37], font-size: 1.1, anchor: middle, for: ant-5g-2}
-      - {text: 5G ANT3, at: [257.4, 6.37], font-size: 1.1, anchor: middle, for: ant-5g-3}
-      - {text: 5G ANT4, at: [308.4, 6.37], font-size: 1.1, anchor: middle, for: ant-5g-4}
+      - {id: wifi-mark-1, at: [53.3, 4.5], path: 'M -0.9 -0.4 Q 0 -1.2 0.9 -0.4 M -0.5 0.1 Q 0 -0.4 0.5 0.1 M 0 0.7 L 0 0.75', stroke-width: 0.2, for: wifi-ant-1}
+      - {id: wifi-mark-2, at: [104.3, 4.5], path: 'M -0.9 -0.4 Q 0 -1.2 0.9 -0.4 M -0.5 0.1 Q 0 -0.4 0.5 0.1 M 0 0.7 L 0 0.75', stroke-width: 0.2, for: wifi-ant-2}
+      - {text: 5G, at: [155.3, 3.8], font-size: 1.0, anchor: middle, for: ant-5g-1}
+      - {text: ANT1, at: [155.3, 6.37], font-size: 1.0, anchor: middle, for: ant-5g-1}
+      - {text: 5G, at: [206.3, 3.8], font-size: 1.0, anchor: middle, for: ant-5g-2}
+      - {text: ANT2, at: [206.3, 6.37], font-size: 1.0, anchor: middle, for: ant-5g-2}
+      - {text: 5G, at: [257.4, 3.8], font-size: 1.0, anchor: middle, for: ant-5g-3}
+      - {text: ANT3, at: [257.4, 6.37], font-size: 1.0, anchor: middle, for: ant-5g-3}
+      - {text: 5G, at: [308.4, 3.8], font-size: 1.0, anchor: middle, for: ant-5g-4}
+      - {text: ANT4, at: [308.4, 6.37], font-size: 1.0, anchor: middle, for: ant-5g-4}
       - {text: '1 ▲▼ 2', at: [15.86, 41.7], font-size: 1.6, anchor: middle, for: [port-1, port-2]}
       - {text: '3 ▲▼ 4', at: [29.82, 41.7], font-size: 1.6, anchor: middle, for: [port-3, port-4]}
       - {text: '5 ▲▼ 6', at: [43.78, 41.7], font-size: 1.6, anchor: middle, for: [port-5, port-6]}
@@ -412,19 +449,20 @@ views:
     size: {w: 438.2, h: 43.4}
     panel:
       decor:
-        - {id: fan-plate, at: [2.6, 0.5], size: [233.5, 12.4], rx: 1.0, fill: '#cfd2d6', kind: stiffener-plate, confidence: estimated, source: 'Guide Rear Panel figure 2 - the lighter formed plate across the top of the fan wall; outline only, its notches not drawn'}
+        - {id: rear-plate, at: [0, 0], size: [438.2, 43.4], fill: '#a9aaac', kind: faceplate, confidence: estimated, source: 'Guide Rear Panel figure 2 - the grey body sampled between the fans and supplies, away from text and ports'}
+        - {id: fan-plate, at: [2.6, 0.5], size: [233.5, 12.4], rx: 1.0, fill: '#b0b1b4', kind: stiffener-plate, confidence: estimated, source: 'Guide Rear Panel figure 2 - the lighter formed plate across the top of the fan wall; outline only, its notches not drawn'}
         - {id: fan-1-backing, at: [30.89, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
         - {id: fan-1-grille, at: [30.89, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
         - {id: fan-2-backing, at: [86.34, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
         - {id: fan-2-grille, at: [86.34, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
         - {id: fan-3-backing, at: [141.84, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
         - {id: fan-3-grille, at: [141.84, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
-        - {id: fan-1-screw-a-land, at: [31.94, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
-        - {id: fan-1-screw-b-land, at: [64.34, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
-        - {id: fan-2-screw-a-land, at: [87.39, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
-        - {id: fan-2-screw-b-land, at: [119.79, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
-        - {id: fan-3-screw-a-land, at: [142.89, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
-        - {id: fan-3-screw-b-land, at: [175.29, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: fan-1-screw-a-land, at: [31.94, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
+        - {id: fan-1-screw-b-land, at: [64.34, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
+        - {id: fan-2-screw-a-land, at: [87.39, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
+        - {id: fan-2-screw-b-land, at: [119.79, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
+        - {id: fan-3-screw-a-land, at: [142.89, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
+        - {id: fan-3-screw-b-land, at: [175.29, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
         - {id: boss-1, at: [74.1, 27.2], size: [4.2, 4.2], rx: 2.1, stroke: '#8d9297', stroke-width: 0.35, kind: boss}
         - {id: boss-2, at: [129.6, 27.2], size: [4.2, 4.2], rx: 2.1, stroke: '#8d9297', stroke-width: 0.35, kind: boss}
         - {id: psu-wall-seam, at: [237.6, 13.0], size: [0.4, 29.9], fill: '#8d9297', kind: seam}
@@ -468,6 +506,36 @@ views:
       - {id: fan-1, at: [30.89, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 1 (fixed)'}
       - {id: fan-2, at: [86.34, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 2 (fixed)'}
       - {id: fan-3, at: [141.84, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 3 (fixed)'}
+  left:
+    size: {w: 371.6, h: 43.4}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-l1, at: [40, 20], group: furniture, rel-pos: 10}
+        - {ref: common/screw-head@1, id: screw-l2, at: [150, 20], group: furniture, rel-pos: 11}
+        - {ref: common/screw-head@1, id: screw-l3, at: [260, 20], group: furniture, rel-pos: 12}
+        - {ref: common/screw-head@1, id: screw-l4, at: [340, 20], group: furniture, rel-pos: 13}
+  right:
+    size: {w: 371.6, h: 43.4}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-r1, at: [40, 20], group: furniture, rel-pos: 14}
+        - {ref: common/screw-head@1, id: screw-r2, at: [150, 20], group: furniture, rel-pos: 15}
+        - {ref: common/screw-head@1, id: screw-r3, at: [260, 20], group: furniture, rel-pos: 16}
+        - {ref: common/screw-head@1, id: screw-r4, at: [340, 20], group: furniture, rel-pos: 17}
+  top:
+    size: {w: 438.2, h: 371.6}
+    panel:
+      decor:
+        - {id: lid-pad-front-left, at: [60, 40], size: [70, 30], rx: 8, fill: '#c4c8cc', sink: 0.8, kind: pressed-pad, confidence: estimated, source: 'guide System Overview figure 3 (three-quarter view): a pressed pad near the front left of the lid; placed by proportion, not measurable'}
+        - {id: lid-handle-panel, at: [160, 110], size: [110, 80], rx: 3, fill: '#c9cdd1', sink: 0.8, kind: pressed-pad, confidence: estimated, source: 'guide System Overview figure 3: a recessed square panel with a handle recess left of centre; placed by proportion, not measurable'}
+        - {id: lid-pad-rear-right, at: [320, 250], size: [70, 30], rx: 8, fill: '#c4c8cc', sink: 0.8, kind: pressed-pad, confidence: estimated, source: 'guide System Overview figure 3: a pressed pad at the rear right of the lid; placed by proportion, not measurable'}
+        - {id: lid-label-outline, at: [300, 300], size: [110, 60], stroke: '#a5aaaf', stroke-width: 0.4, kind: label-outline, confidence: estimated, source: 'guide System Overview figure 3: a rectangular label recess behind the rear right pad; placed by proportion, not measurable'}
+  bottom:
+    size: {w: 438.2, h: 371.6}
+    empty: >-
+      Nothing documented. No figure of the guide and no page of the datasheet shows the underside; the
+      guide's chassis installation pages cover rack rails only. Searched: every converted page and figure
+      of the guide, the datasheet.
 configurations:
   f2b:
     kind: orderable
