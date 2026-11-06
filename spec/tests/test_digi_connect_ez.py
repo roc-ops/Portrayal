@@ -194,8 +194,10 @@ def test_the_estimates_are_declared_and_not_hidden():
 
 def test_no_supply_or_fan_states_a_power_figure_the_documents_do_not():
     for ref in ("digi/ezps-ac", "digi/ez-psu-dc", "digi/ez-sysfan", "digi/core-lte-modem"):
-        attrs = contract(ref)["attrs"]
-        assert not [k for k in attrs if k.startswith("power")], ref
+        c = contract(ref)
+        keys = list(c) + list(c.get("attrs") or {})
+        assert not [k for k in keys if k.startswith("power") or "watt" in k or "draw" in k], ref
+        assert "airflow" not in (c.get("attrs") or {}), ref
 
 
 @pytest.mark.parametrize("name", DEVICES)
