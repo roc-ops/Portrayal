@@ -1,4 +1,4 @@
-"""The Juniper EX3200 fixed access switches: EX3200-24T, -48T, -24P and -48P (#39).
+"""The Juniper EX3200 fixed access switches: EX3200-24T, -48T, -24P and -48P.
 
 One device per model, each with its power build as a `kind: orderable` configuration. The expected
 figures are the hardware guide's (EX3200 Switch Hardware Guide, published 2020-12-15): Table 3 for the
