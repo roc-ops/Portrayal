@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-104bc
-version: 4.0.2
+version: 4.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-104BC
@@ -1161,8 +1161,8 @@ views:
         - {id: fan-1, at: [88.4, 3.1], size: {w: 81.0, h: 81.5}, accepts: [ufispace/fan-808012@1], group: fans, rel-pos: 1, default: ufispace/fan-808012@1}
         - {id: fan-2, at: [172.4, 3.1], size: {w: 81.0, h: 81.5}, accepts: [ufispace/fan-808012@1], group: fans, rel-pos: 2, default: ufispace/fan-808012@1}
         - {id: fan-3, at: [256.4, 3.1], size: {w: 81.0, h: 81.5}, accepts: [ufispace/fan-808012@1], group: fans, rel-pos: 3, default: ufispace/fan-808012@1}
-        - {id: psu-0, at: [350.9, 2.8], size: {w: 73.5, h: 40.0}, accepts: [ufispace/psu-132-crps-dc@1, ufispace/psu-132-crps-ac@1], group: psus, rel-pos: 0, default: ufispace/psu-132-crps-dc@1}
-        - {id: psu-1, at: [350.9, 46.2], size: {w: 73.5, h: 40.0}, accepts: [ufispace/psu-132-crps-dc@1, ufispace/psu-132-crps-ac@1], group: psus, rel-pos: 1, default: ufispace/psu-132-crps-dc@1}
+        - {id: psu-0, at: [350.9, 2.8], size: {w: 73.5, h: 40.0}, accepts: [ufispace/psu-132-crps-dc@1, ufispace/psu-132-crps-dc@2, ufispace/psu-132-crps-ac@1], group: psus, rel-pos: 0, default: ufispace/psu-132-crps-dc@1}
+        - {id: psu-1, at: [350.9, 46.2], size: {w: 73.5, h: 40.0}, accepts: [ufispace/psu-132-crps-dc@1, ufispace/psu-132-crps-dc@2, ufispace/psu-132-crps-ac@1], group: psus, rel-pos: 1, default: ufispace/psu-132-crps-dc@1}
       placements:
         - {ref: common/ground-symbol@1, id: ground-mark, at: [426.5, 31.7], for: left/ground-screws,
            group: grounding, rel-pos: 1,
@@ -1251,6 +1251,9 @@ configurations:
   dc:
     kind: base
     power: dc
+    bays:
+      psu-0: ufispace/psu-132-crps-dc@2
+      psu-1: ufispace/psu-132-crps-dc@2
     description: Dual 1300W DC PSUs (PSU-132-DEGR-NN, exhaust airflow) with four
       FAN-803816-HI exhaust fans - the DC build, which is also the bare working chassis,
       since the traffic cages ship empty
