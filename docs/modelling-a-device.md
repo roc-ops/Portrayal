@@ -636,7 +636,10 @@ Gate 4b checks it.
    `management` is how you reach and discipline it (OOB, console, craft,
    timing); `service` is what keeps it running (PSUs, fans, filters);
    `indicator` is what you read; `furniture` is what you neither connect to nor
-   read. L37 warns at `modelled` and fails at `verified`.
+   read; `stack-control` is the control and sync links between the units of a
+   stack, never user traffic (the stack's data ports stay `traffic`).
+   A group's `role` is the one thing a consumer may rely on; the group's name
+   promises nothing. L37 warns at `modelled` and fails at `verified`.
 
    Declare a group when you populate it, not before. One group per port
    family, named for the family: `sfp28`, `qsfp28`, `qsfpdd-400g`, with the
