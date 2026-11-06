@@ -63,7 +63,7 @@ import yaml
 
 from portrayal.artifacts import Dist, face_file
 
-from portrayal.manifest import view_parts, alias_names, config_airflow
+from portrayal.manifest import view_parts, alias_names, config_airflow, config_attrs
 from portrayal import manifest as _manifest
 from portrayal import optical_ports
 from portrayal.faces import POWER_FACES
@@ -811,8 +811,11 @@ def power_row(ref, pid):
 # PowerOutletTypeChoices values in both: netbox-community/netbox
 # netbox/dcim/choices.py at 64ce9e2d (TYPE_IEC_C19, TYPE_NEMA_520R) and
 # nautobot/nautobot nautobot/dcim/choices.py at 3edb1fca (the same two).
+#
+# AND THE NEMA 5-15R. `nema-5-15r` is the PowerOutletTypeChoices value of the
+# 5-15R in both, beside `nema-5-20r` in the same list.
 OUTLET_TYPES = frozenset({"dc-terminal", "other", "iec-60320-c13", "eaton-c39",
-                          "iec-60320-c19", "nema-5-20r"})
+                          "iec-60320-c19", "nema-5-15r", "nema-5-20r"})
 PART_OUTLET = {
     # ONE OUTPUT CIRCUIT OF A BREAKER PANEL, a BATT screw over an RTN screw: the
     # two poles of one circuit, so one outlet, as one feed is one power port.
@@ -833,6 +836,8 @@ PART_OUTLET = {
     # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
     "std/c19-outlet": "iec-60320-c19",
     "std/nema-5-20r": "nema-5-20r",
+    # A NEMA 5-15R, upstream's `nema-5-15r`.
+    "std/nema-5-15r": "nema-5-15r",
 }
 # The label an `other` outlet carries, so it says what to plug into it.
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
@@ -1784,7 +1789,7 @@ def comments_for(dev, cfg_name, cfg):
         lines.append("")
 
     facts = []
-    for section, vals in (dev.get("attrs") or {}).items():
+    for section, vals in config_attrs(dev, cfg).items():
         flat = flatten(vals)
         for k, v in flat.items():
             if isinstance(v, bool):
@@ -2111,7 +2116,11 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     if air:
         out["airflow"] = air
 
-    if dev.get("description"):
+    # A BUILD THAT SHOULD NOT READ AS THE BASE MODEL says so in its own
+    # `export-description`; any other build keeps the device's first sentence.
+    if cfg.get("export-description"):
+        out["description"] = fit(cfg["export-description"])
+    elif dev.get("description"):
         out["description"] = fit(first_sentence(dev["description"]))
 
     # Images, if this configuration has been rendered. front_image/rear_image are

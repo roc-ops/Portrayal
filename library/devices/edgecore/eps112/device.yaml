@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps112
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-30P
@@ -20,6 +20,16 @@ description: >-
   and the only one with its own quick start guide.
 profile: networking
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed logotype,
+      red at both ends, over the model text at the top left. Measured on Edgecore's front photograph of
+      the EPS112 (960 x 700 px), calibrated on the body outline at 2.175 px/mm across and 2.205 down,
+      which agree to 1.4 percent: the mark runs x 6.1 to 42.1 and y 7.3 to 13.6, without the small registered-mark
+      sign at its upper right. The photograph is square-on, so the sureness is sure and the position is
+      good to about 1 mm. The `logo-zone` region on the front view reserves the place; nothing is drawn
+      in it.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -1030,6 +1040,11 @@ views:
         rel-pos: 1}
       - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture,
         rel-pos: 2}
+    regions:
+    - id: logo-zone
+      at: [6.1, 7.3]
+      size: {w: 36.0, h: 6.3}
+      label: Vendor logo; not drawn
   rear:
     size: {w: 440.0, h: 44.0}
     panel:
