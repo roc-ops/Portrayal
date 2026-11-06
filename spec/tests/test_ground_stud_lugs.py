@@ -384,8 +384,10 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
     # and the two bare tapped holes (M5 and 10-32) that the Juniper earthing pairs and the QFX5210 plate compose
     bare_holes = ("common/ground-hole-m5@1", "common/ground-hole-10-32@1")
     # and the bare 1/4-20 hole that the Nokia SR-12's pair composes, the bare 10-32 stud that the SR-1e, SR-2e and
-    # SR-3e's pair composes, and the disc that the three MikroTik switches place for their earth stud
-    earth_stud_parts = ("common/ground-hole-1-4@1", "common/ground-stud-10-32@1", "mikrotik/earth-stud-disc@1")
+    # SR-3e's pair composes, the disc that the three MikroTik switches place for their earth stud, and the grounding screw
+    # on its washer that the AurCore, Eaton and Supermicro devices place
+    earth_stud_parts = ("common/ground-hole-1-4@1", "common/ground-stud-10-32@1", "mikrotik/earth-stud-disc@1",
+                        "common/ground-screw-washer@1")
     assert sorted(presents) == sorted([*SINGLE, CASA_STUD, "common/terminal-screw-34@1",
                                        "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD, *bare_holes,
                                        *earth_stud_parts])
@@ -398,7 +400,7 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
 
 @pytest.mark.heavy
 def test_what_is_out_of_scope_is_still_not_a_seat():
-    for ref in ("common/ground-screw-washer@1", "casa/ground-bolts@1",
+    for ref in ("casa/ground-bolts@1",
                 "edgecore/agr-ground-plate@1", "common/ground-symbol@1",
                 ):
         c = _contract(ref)
