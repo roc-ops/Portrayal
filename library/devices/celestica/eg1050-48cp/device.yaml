@@ -1,0 +1,560 @@
+format: 1
+kind: device
+name: eg1050-48cp
+version: 2.0.0
+maturity: draft
+manufacturer: Celestica
+model: EG1050-48CP
+description: >-
+  Celestica EG1050-48CP - 1U edge gateway with 48 PoE++ RJ45 ports (16 x 2.5GbE, 32 x 1GbE), 4 x 1/10/25G
+  SFP28 uplinks, six detachable SMA antennas (2 Wi-Fi 6, 4 5G NR/LTE), Broadcom TD3.X2, 2+1 fixed fans and
+  1+1 hot-swap 1600 W AC supplies, F2B or B2F airflow.
+profile: networking
+provenance:
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet PHYSICAL DIMENSIONS: 43.4 x 438.2 x 371.6 mm. The guide's Key System Specifications agrees
+      (371.6 deep) and gives 8 +/- 0.5 kg with two supplies. 438.2 is the body between the ear folds: the
+      guide's front figure draws the grey ears outside it.
+  front-figure:
+    confidence: measured
+    note: >-
+      Guide Front Panel figure 3 (EG1050-48CP, an orthographic CAD render, 5436 x 2417 px): the body
+      measures 4855 px across for 438.2 mm, 11.08 px/mm, and 477 px high for 43.4 mm. The same face as the
+      48-port front of celestica/es1000: the RJ45 column pitch (13.96), block pitch (92.0), the uplink and
+      management cluster and the lamp column agree with that device's measured front to 0.5 mm, so its
+      positions are used. The face differs in the EG1050 model plate, the green stripe under ports 1-16 and
+      the six antenna connectors.
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      guide Ports Table 5 and datasheet FEATURES: ports 1-16 are 100/1000/2500BASE-T (the figure marks them
+      with the green stripe under their numbers), ports 17-48 are 10/100/1000BASE-T, all 48 with PoE++; four
+      SFP28 at 1/10/25G; management RJ45 10/100/1000 and management SFP 1000 Mbps, one combo interface.
+  poe:
+    confidence: datasheet
+    note: >-
+      guide System Overview: 'All Ethernet data ports support 802.3bt Type 4 Class 8 (90W) PoE'; datasheet
+      FEATURES lists the same as an option and 'persistent PoE'. Per-port budget with two supplies is not
+      printed for this model.
+  antenna-connectors:
+    confidence: estimated
+    note: >-
+      guide Front Panel Table 1 and Ports Table 5: 2 detachable Wi-Fi and 4 detachable 5G NR/LTE antennas,
+      all SMA. In Front Panel figure 3 each is hidden behind its antenna base, so the connector centres are
+      the antenna base centres read off the figure (x 61.6, 112.6, 163.6, 214.6, 265.7, 316.7 mm, a 51 mm
+      pitch) and the height is set level with the ANT legends (6.0 mm). Drawn as std/sma@1, the library's
+      SMA jack. The legends ANT1 and ANT2 (with the Wi-Fi mark) and 5G ANT1 to ANT4 sit to the left of
+      each antenna (the figure stacks '5G' over 'ANT1', drawn so; the Wi-Fi mark is drawn as three strokes). The vent fields around the
+      antenna row are hidden behind the antenna bases in the figure, so the band holding the connectors and
+      their legends (y 2.0 to 9.6 above RJ45 blocks 1-2 and 4) is drawn as flat metal, an estimate. See the
+      antenna-connector-positions gap.
+  uplink-cluster:
+    confidence: measured
+    note: >-
+      Front Panel figure 3 against celestica/es1000's measured cluster: SFP28 2 x 2 bezel 375.0 to 403.5 x
+      10.5 to 35.1, management SFP 355.6 to 370.7, USB-A 329.1 to 342.2, the stacked management RJ45 /
+      USB-A / console shell 407.0 to 423.6 and four round lamps at x 428.8 (STAT, FAN, PWR, ALM). The
+      figure shows the SFP28 up/down lamp triangles in the band between the stacked cages.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      rule, not a reading: the SFP28 pairs (upper 0 over lower 180) follow the library's belly-to-belly
+      convention. The figure draws the cage lips in the lamp band between the rows, which is what the
+      convention draws.
+  legends:
+    confidence: measured
+    note: >-
+      every legend as printed in Front Panel figure 3: port pairs 'N ▲▼ N+1' centred under each column,
+      those of ports 1-16 inside the green stripe; MGMT COMBO with its bracket; the arrowhead over the
+      management SFP lamp; IOIOI under the console; STAT, FAN, PWR, ALM beside the lamps; the SuperSpeed
+      mark beside each USB-A. The Celestica wordmark is plain text. The model plate is the dark pull-out tab
+      printed EG1050 with LUG TAG under it, the seated celestica/lug-tag-ridge-23@1.
+  port-leds:
+    confidence: datasheet
+    note: >-
+      guide LEDs Table 3: each data port has a left link lamp (green at 2.5GbE on ports 1-16, amber at the
+      lower speeds) and a right activity lamp that is amber while PoE power is enabled; each SFP28 port has
+      one bi-colour lamp (green 25G, amber 1/10G); STAT, FAN, PWR and ALM are Table 1.
+  body-faces:
+    confidence: estimated
+    note: >-
+      Top, left, right and bottom are sized from the chassis block (438.2 wide, 43.4 high, 371.6 deep, the
+      guide's System Overview). Their contents are read off the guide's System Overview three-quarter
+      figures 3 and 5 by eye: the lid is light grey with a handle panel and pressed pads, the left side
+      carries screws. Four screws a side follow celestica/es1010, the right side is assumed to mirror the
+      left, and the underside is shown by no figure. See the lid-feature-positions, side-screw-positions
+      and underside gaps.
+  colours:
+    confidence: estimated
+    note: >-
+      Sampled from the guide's figures away from text and ports: Front Panel figure 3 faceplate #222222
+      (average of three patches under and beside the legends); Rear Panel figure 2 body #a9aaac (average
+      of patches between fans and supplies and at the left edge); System Overview figure 3 lid #d3d6db.
+      The rear fan grille averages #595b5b in the figure, a dark field with a light honeycomb, which the
+      dark backing and grille drawn here match.
+  rear:
+    confidence: measured
+    note: >-
+      Guide Rear Panel figure 2 (EG1050) is the same rear art as figure 1 (ES1010 and ES1050) with the six
+      front antennas standing behind the chassis. It is drawn as celestica/es1000's rear, which was
+      measured off the same art: three fixed fans with round honeycomb grilles at 50.14, 105.59 and 161.09
+      mm, two CRPS bays at 256.0 and 346.3 (73.5 x 40), the divider between them, the earth screws at the
+      left edge and in the right strip. Two round bosses beside fan labels 2 and 3 are outlines only. The
+      rear carries no connector of its own.
+  fans:
+    confidence: datasheet
+    note: >-
+      '2+1 fixed fans' (datasheet FEATURES); 'three (3) fans' (guide Rear Panel). Not field-replaceable, so
+      decor plus a region each, as on celestica/es1010 and es1000.
+  psu:
+    confidence: datasheet
+    note: >-
+      guide System Overview table: PSU 2 x 1600W for the EG1050-48CP, F2B and B2F. The rear figure draws
+      the supply with a black tab and two lamps, which is the face of celestica/psu-crps-1600-ac. Neither
+      the guide nor the datasheet names a supply part number.
+  power:
+    confidence: datasheet
+    note: >-
+      guide Key System Specifications, Power Consumption: 'EG1050-48CP, ES1050-48CP, ES1010-48CP: <3200W',
+      an upper bound with no ambient or load, filed as max.
+attrs:
+  physical:
+    weight-kg: '8'
+    weight-note: 8 +/- 0.5 kg with two PSUs
+  performance:
+    switching-capacity: 172 Gbps
+    port-modes-rj45: 10/100/1000BASE-T (ports 17-48), 100/1000/2500BASE-T (ports 1-16)
+    port-modes-sfp28: 1/10/25G
+  power:
+    power-max-w: '3200'
+    input-ac: 100-240 VAC, 50-60 Hz
+    psus: 1+1 hot-swap AC 1600 W, 0:1 / 1:1 modes
+  thermal:
+    fans: 2+1 fixed (not field-replaceable)
+  environmental:
+    operating-temp: 0 to 45 C, 900 m; derate 1 C per 175 m above 900 m
+    storage-temp: -40 to 70 C
+    humidity-operating: 5 to 85 percent non-condensing
+    humidity-storage: 5 to 95 percent
+    altitude: 3050 m maximum
+  platform:
+    asic: Broadcom TD3.X2
+    cpu: Intel Denverton x86, 8C at 2.2 GHz (4C at 2.1 GHz option)
+    memory: DDR4 up to 32 GB
+    storage: M.2 SSD, 128 GB or up to 256 GB
+  features:
+    wifi: Wi-Fi 6, 2 x detachable SMA antennas
+    cellular: 5G NR/LTE sub-6 GHz, 4 x detachable SMA antennas, dual SIM and eSIM
+    encryption: 256b MACsec
+    timing: optional IEEE 1588 and SyncE
+    poe: IEEE 802.3af/at/bt Type 4 Class 8, 90 W per port, persistent PoE
+  management:
+    mgmt-ports: >-
+      RJ45 console (9600 / 115200, 8N1), out-of-band combo pair (RJ45 in the stack and SFP left of the
+      uplinks, one interface), 2 x USB-A 3.0 (data only)
+chassis:
+  width: 438.2
+  height: 43.4
+  depth: 371.6
+  ru: 1
+  weight-kg: 8
+  color: '#d3d6db'
+  power: ac
+gaps:
+- what: antenna-connector-positions
+  scope: [wifi-ant-1, wifi-ant-2, ant-5g-1, ant-5g-2, ant-5g-3, ant-5g-4]
+  reason: needs-drawing
+  wanted: >-
+    A front view with the antennas removed. Every figure of the front draws the six detachable antennas on
+    their connectors, so the connector centres and their height are read from the antenna bases and the
+    legends and are estimated.
+- what: antennas
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    The antennas the guide names, Y0RGK0MA0AA for Wi-Fi and YECN009AA for 5G/LTE ('no other antennas are
+    qualified'), as accessories: no document held gives their length or a dimensioned drawing, and the
+    schema has no place for an accessory part number, so they are not drawn.
+- what: lid-feature-positions
+  scope: [top]
+  reason: needs-drawing
+  wanted: >-
+    A square-on drawing of the lid. Only the guide's three-quarter views show it, so the pressed pads, the
+    handle panel and the label recess are placed by proportion and are estimated.
+- what: side-screw-positions
+  scope: [left, right]
+  reason: needs-drawing
+  wanted: >-
+    Square-on drawings of the two sides. The guide's three-quarter view shows the left side with screws
+    along it but not their positions, and no figure shows the right side, so four screws a side are drawn
+    at the positions of celestica/es1010 and are estimated; the right side mirrors the left by assumption.
+- what: underside
+  scope: [bottom]
+  reason: vendor-silent
+  wanted: >-
+    Any figure of the underside. None is held, so the face is declared empty with the search stated; a
+    label, feet or vents may be there.
+- what: psu-part-numbers
+  scope: [psu-1, psu-2]
+  reason: vendor-silent
+  wanted: >-
+    The vendor part number of the 1600 W supply. Neither the guide nor the datasheet names it, and the
+    ordering table lists only chassis SKUs.
+- what: rear-bosses
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    What the two round bosses left of fan labels 2 and 3 are. The guide documents no fan lamps; they are
+    drawn as outlines only.
+groups:
+  rj45-2p5g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 2.5g, poe: 'IEEE 802.3bt Type 4 Class 8, 90 W per port'}
+  rj45-1g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g, poe: 'IEEE 802.3bt Type 4 Class 8, 90 W per port'}
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g}
+  sfp28-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  wifi-antenna:
+    term: Antenna
+    role: service
+    index-origin: 1
+    attrs: {media: coax-sma, role: antenna, band: wifi}
+  cellular-antenna:
+    term: Antenna
+    role: service
+    index-origin: 1
+    attrs: {media: coax-sma, role: antenna, band: 5g-lte}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the management cluster - two USB-A service ports, the out-of-band RJ45 and its combo SFP (one
+      interface, either medium), and the RJ45 console. Four media, one job
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  marks:
+    term: Mark
+    role: furniture
+    index-origin: 1
+    description: the printed USB tridents beside the two USB-A ports
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: 0:1 / 1:1 modes, 2 x 1600 W hot-swap
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+    description: >-
+      the rear grounding point - two screws beside an earth symbol at the left edge - and the second
+      earth symbol with its screw in the right-hand strip
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: fan screws, the rear standoff, the model plate and the side screws
+views:
+  front:
+    size: {w: 438.2, h: 43.4}
+    panel:
+      decor:
+        - {id: faceplate, at: [0, 0], size: [438.2, 43.4], fill: '#222222', kind: faceplate}
+        - {id: vent-top-edge-backing, at: [3, 0.4], size: [44.5, 1.6], fill: '#222222', kind: vent-backing}
+        - {id: vent-top-edge, at: [3, 0.4], size: [44.5, 1.6], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-left-a-backing, at: [47.5, 0.4], size: [139, 1.6], fill: '#222222', kind: vent-backing}
+        - {id: vent-top-left-a, at: [47.5, 0.4], size: [139, 1.6], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-left-b-backing, at: [47.5, 9.6], size: [139, 5.2], fill: '#222222', kind: vent-backing}
+        - {id: vent-top-left-b, at: [47.5, 9.6], size: [139, 5.2], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-block4-top-a-backing, at: [283, 0.4], size: [42.3, 1.6], fill: '#222222', kind: vent-backing}
+        - {id: vent-block4-top-a, at: [283, 0.4], size: [42.3, 1.6], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-block4-top-b-backing, at: [283, 9.6], size: [42.3, 5.2], fill: '#222222', kind: vent-backing}
+        - {id: vent-block4-top-b, at: [283, 9.6], size: [42.3, 5.2], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-usb-top-backing, at: [325.3, 0.4], size: [29.9, 4], fill: '#222222', kind: vent-backing}
+        - {id: vent-usb-top, at: [325.3, 0.4], size: [29.9, 4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-edge-r-backing, at: [371.5, 0.4], size: [53.3, 1], fill: '#222222', kind: vent-backing}
+        - {id: vent-top-edge-r, at: [371.5, 0.4], size: [53.3, 1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-sfp28-backing, at: [371.2, 5.4], size: [32.6, 2.7], fill: '#222222', kind: vent-backing}
+        - {id: vent-over-sfp28, at: [371.2, 5.4], size: [32.6, 2.7], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-lamps-backing, at: [424.8, 1.4], size: [7.2, 13.2], fill: '#222222', kind: vent-backing}
+        - {id: vent-over-lamps, at: [424.8, 1.4], size: [7.2, 13.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-right-col-backing, at: [432, 1.4], size: [4.4, 35.4], fill: '#222222', kind: vent-backing}
+        - {id: vent-right-col, at: [432, 1.4], size: [4.4, 35.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-left-backing, at: [371.2, 37.9], size: [34.4, 5.1], fill: '#222222', kind: vent-backing}
+        - {id: vent-bottom-left, at: [371.2, 37.9], size: [34.4, 5.1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-under-stack-backing, at: [405.6, 40.6], size: [19.4, 2.4], fill: '#222222', kind: vent-backing}
+        - {id: vent-under-stack, at: [405.6, 40.6], size: [19.4, 2.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-right-backing, at: [425, 36.8], size: [12.5, 6.2], fill: '#222222', kind: vent-backing}
+        - {id: vent-bottom-right, at: [425, 36.8], size: [12.5, 6.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: rj45-shell-1, at: [7.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: rj45-shell-2, at: [99.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: rj45-shell-3, at: [191.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: rj45-shell-4, at: [283.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: stripe-2p5g, at: [6.4, 39.9], size: [122.4, 2.3], fill: '#659100', kind: speed-stripe}
+        - {id: sfp28-bezel, at: [375.0, 10.5], size: [28.5, 24.6], rx: 0.3, fill: '#a9aeb4', kind: cage-bezel}
+        - {id: mgmt-stack-shell, at: [407.0, 5.4], size: [16.6, 30.2], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: usb-1-shell, at: [329.1, 5.5], size: [13.1, 5.9], rx: 0.6, fill: '#b0b5bb', kind: port-shell}
+    silkscreen:
+      - {text: Celestica, at: [3.4, 14.2], font-size: 5.2, anchor: start, for: chassis}
+      - {text: LUG TAG, at: [34.4, 10.6], font-size: 1.8, anchor: middle, for: chassis}
+      - {text: ANT1, at: [53.3, 6.37], font-size: 1.2, anchor: middle, for: wifi-ant-1}
+      - {text: ANT2, at: [104.3, 6.37], font-size: 1.2, anchor: middle, for: wifi-ant-2}
+      - {id: wifi-mark-1, at: [53.3, 4.5], path: 'M -0.9 -0.4 Q 0 -1.2 0.9 -0.4 M -0.5 0.1 Q 0 -0.4 0.5 0.1 M 0 0.7 L 0 0.75', stroke-width: 0.2, for: wifi-ant-1}
+      - {id: wifi-mark-2, at: [104.3, 4.5], path: 'M -0.9 -0.4 Q 0 -1.2 0.9 -0.4 M -0.5 0.1 Q 0 -0.4 0.5 0.1 M 0 0.7 L 0 0.75', stroke-width: 0.2, for: wifi-ant-2}
+      - {text: 5G, at: [155.3, 3.8], font-size: 1.0, anchor: middle, for: ant-5g-1}
+      - {text: ANT1, at: [155.3, 6.37], font-size: 1.0, anchor: middle, for: ant-5g-1}
+      - {text: 5G, at: [206.3, 3.8], font-size: 1.0, anchor: middle, for: ant-5g-2}
+      - {text: ANT2, at: [206.3, 6.37], font-size: 1.0, anchor: middle, for: ant-5g-2}
+      - {text: 5G, at: [257.4, 3.8], font-size: 1.0, anchor: middle, for: ant-5g-3}
+      - {text: ANT3, at: [257.4, 6.37], font-size: 1.0, anchor: middle, for: ant-5g-3}
+      - {text: 5G, at: [308.4, 3.8], font-size: 1.0, anchor: middle, for: ant-5g-4}
+      - {text: ANT4, at: [308.4, 6.37], font-size: 1.0, anchor: middle, for: ant-5g-4}
+      - {text: '1 ▲▼ 2', at: [15.86, 41.7], font-size: 1.6, anchor: middle, for: [port-1, port-2]}
+      - {text: '3 ▲▼ 4', at: [29.82, 41.7], font-size: 1.6, anchor: middle, for: [port-3, port-4]}
+      - {text: '5 ▲▼ 6', at: [43.78, 41.7], font-size: 1.6, anchor: middle, for: [port-5, port-6]}
+      - {text: '7 ▲▼ 8', at: [57.74, 41.7], font-size: 1.6, anchor: middle, for: [port-7, port-8]}
+      - {text: '9 ▲▼ 10', at: [71.7, 41.7], font-size: 1.6, anchor: middle, for: [port-9, port-10]}
+      - {text: '11 ▲▼ 12', at: [85.66, 41.7], font-size: 1.6, anchor: middle, for: [port-11, port-12]}
+      - {text: '13 ▲▼ 14', at: [107.86, 41.7], font-size: 1.6, anchor: middle, for: [port-13, port-14]}
+      - {text: '15 ▲▼ 16', at: [121.82, 41.7], font-size: 1.6, anchor: middle, for: [port-15, port-16]}
+      - {text: '17 ▲▼ 18', at: [135.78, 41.7], font-size: 1.6, anchor: middle, for: [port-17, port-18]}
+      - {text: '19 ▲▼ 20', at: [149.74, 41.7], font-size: 1.6, anchor: middle, for: [port-19, port-20]}
+      - {text: '21 ▲▼ 22', at: [163.7, 41.7], font-size: 1.6, anchor: middle, for: [port-21, port-22]}
+      - {text: '23 ▲▼ 24', at: [177.66, 41.7], font-size: 1.6, anchor: middle, for: [port-23, port-24]}
+      - {text: '25 ▲▼ 26', at: [199.86, 41.7], font-size: 1.6, anchor: middle, for: [port-25, port-26]}
+      - {text: '27 ▲▼ 28', at: [213.82, 41.7], font-size: 1.6, anchor: middle, for: [port-27, port-28]}
+      - {text: '29 ▲▼ 30', at: [227.78, 41.7], font-size: 1.6, anchor: middle, for: [port-29, port-30]}
+      - {text: '31 ▲▼ 32', at: [241.74, 41.7], font-size: 1.6, anchor: middle, for: [port-31, port-32]}
+      - {text: '33 ▲▼ 34', at: [255.7, 41.7], font-size: 1.6, anchor: middle, for: [port-33, port-34]}
+      - {text: '35 ▲▼ 36', at: [269.66, 41.7], font-size: 1.6, anchor: middle, for: [port-35, port-36]}
+      - {text: '37 ▲▼ 38', at: [291.86, 41.7], font-size: 1.6, anchor: middle, for: [port-37, port-38]}
+      - {text: '39 ▲▼ 40', at: [305.82, 41.7], font-size: 1.6, anchor: middle, for: [port-39, port-40]}
+      - {text: '41 ▲▼ 42', at: [319.78, 41.7], font-size: 1.6, anchor: middle, for: [port-41, port-42]}
+      - {text: '43 ▲▼ 44', at: [333.74, 41.7], font-size: 1.6, anchor: middle, for: [port-43, port-44]}
+      - {text: '45 ▲▼ 46', at: [347.7, 41.7], font-size: 1.6, anchor: middle, for: [port-45, port-46]}
+      - {text: '47 ▲▼ 48', at: [361.66, 41.7], font-size: 1.6, anchor: middle, for: [port-47, port-48]}
+      - {text: '49 ▲▼ 50', at: [382.12, 37.5], font-size: 1.7, anchor: middle, for: [port-49, port-50]}
+      - {text: '51 ▲▼ 52', at: [396.38, 37.5], font-size: 1.7, anchor: middle, for: [port-51, port-52]}
+      - {text: MGMT COMBO, at: [393.3, 4.85], font-size: 1.8, anchor: middle, for: [mgmt-sfp, mgmt]}
+      - {id: combo-bar-sfp, at: [371.1, 4.2], path: 'M 0 0 L 13.2 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
+      - {id: combo-bar-rj45, at: [402.3, 4.2], path: 'M 0 0 L 13.0 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
+      - {id: combo-drop-rj45, at: [415.3, 4.2], path: 'M 0 0 L 0 1.2', stroke-width: 0.25, for: mgmt}
+      - {id: arrow-mgmt-sfp-led, at: [352.1, 6.3], path: 'M -0.7 -0.8 L 0.8 0 L -0.7 0.8 Z', filled: true, for: led-mgmt-sfp}
+      - {text: IOIOI, at: [415.3, 40.3], font-size: 1.7, anchor: middle, for: console}
+      - {text: STAT, at: [425.7, 18.11], font-size: 1.4, anchor: middle, rotate: -60, for: led-stat}
+      - {text: FAN, at: [425.7, 23.14], font-size: 1.4, anchor: middle, rotate: -60, for: led-fan}
+      - {text: PWR, at: [425.7, 28.26], font-size: 1.4, anchor: middle, rotate: -60, for: led-pwr}
+      - {text: ALM, at: [425.7, 33.39], font-size: 1.4, anchor: middle, rotate: -60, for: led-alm}
+      - {text: SS, at: [331.9, 14.0], font-size: 1.5, anchor: end, for: usb-1}
+      - {text: SS, at: [405.9, 26.0], font-size: 1.4, anchor: middle, rotate: -90, for: usb-2}
+    components:
+      placements:
+        - {ref: celestica/lug-tag-ridge-23@1, id: lug-tag, at: [23.1, 3.1], group: furniture, rel-pos: 1, attrs: {label: EG1050}}
+        - {ref: std/sma@1, id: wifi-ant-1, at: [58.425, 2.825], group: wifi-antenna, rel-pos: 1, attrs: {media: coax-sma, role: antenna, band: wifi}}
+        - {ref: std/sma@1, id: wifi-ant-2, at: [109.425, 2.825], group: wifi-antenna, rel-pos: 2, attrs: {media: coax-sma, role: antenna, band: wifi}}
+        - {ref: std/sma@1, id: ant-5g-1, at: [160.425, 2.825], group: cellular-antenna, rel-pos: 1, attrs: {media: coax-sma, role: antenna, band: 5g-lte}}
+        - {ref: std/sma@1, id: ant-5g-2, at: [211.425, 2.825], group: cellular-antenna, rel-pos: 2, attrs: {media: coax-sma, role: antenna, band: 5g-lte}}
+        - {ref: std/sma@1, id: ant-5g-3, at: [262.525, 2.825], group: cellular-antenna, rel-pos: 3, attrs: {media: coax-sma, role: antenna, band: 5g-lte}}
+        - {ref: std/sma@1, id: ant-5g-4, at: [313.525, 2.825], group: cellular-antenna, rel-pos: 4, attrs: {media: coax-sma, role: antenna, band: 5g-lte}}
+        - {ref: common/rj45-ganged-eth@1, id: port-1, at: [9.51, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 1, states: {led-a: ['off', {name: link-2500m, color: '#22c55e'}, {name: link-100m-1g, color: '#f59e0b'}], led-b: &rj45-led-b ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-2, at: [9.51, 28.25], group: rj45-2p5g, rel-pos: 2, states: &rj45-2p5g-states {led-a: ['off', {name: link-2500m, color: '#22c55e'}, {name: link-100m-1g, color: '#f59e0b'}], led-b: *rj45-led-b}}
+        - {ref: common/rj45-ganged-eth@1, id: port-3, at: [23.47, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 3, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-4, at: [23.47, 28.25], group: rj45-2p5g, rel-pos: 4, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-5, at: [37.43, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 5, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-6, at: [37.43, 28.25], group: rj45-2p5g, rel-pos: 6, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-7, at: [51.39, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 7, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-8, at: [51.39, 28.25], group: rj45-2p5g, rel-pos: 8, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-9, at: [65.35, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 9, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-10, at: [65.35, 28.25], group: rj45-2p5g, rel-pos: 10, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-11, at: [79.31, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 11, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-12, at: [79.31, 28.25], group: rj45-2p5g, rel-pos: 12, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-13, at: [101.51, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 13, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-14, at: [101.51, 28.25], group: rj45-2p5g, rel-pos: 14, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-15, at: [115.47, 16.25], rotate: 180, group: rj45-2p5g, rel-pos: 15, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-16, at: [115.47, 28.25], group: rj45-2p5g, rel-pos: 16, states: *rj45-2p5g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-17, at: [129.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 17, states: &rj45-1g-states {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-10-100m, color: '#f59e0b'}], led-b: *rj45-led-b}}
+        - {ref: common/rj45-ganged-eth@1, id: port-18, at: [129.43, 28.25], group: rj45-1g, rel-pos: 18, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-19, at: [143.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 19, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-20, at: [143.39, 28.25], group: rj45-1g, rel-pos: 20, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-21, at: [157.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 21, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-22, at: [157.35, 28.25], group: rj45-1g, rel-pos: 22, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-23, at: [171.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 23, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-24, at: [171.31, 28.25], group: rj45-1g, rel-pos: 24, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-25, at: [193.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 25, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-26, at: [193.51, 28.25], group: rj45-1g, rel-pos: 26, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-27, at: [207.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 27, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-28, at: [207.47, 28.25], group: rj45-1g, rel-pos: 28, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-29, at: [221.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 29, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-30, at: [221.43, 28.25], group: rj45-1g, rel-pos: 30, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-31, at: [235.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 31, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-32, at: [235.39, 28.25], group: rj45-1g, rel-pos: 32, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-33, at: [249.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 33, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-34, at: [249.35, 28.25], group: rj45-1g, rel-pos: 34, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-35, at: [263.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 35, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-36, at: [263.31, 28.25], group: rj45-1g, rel-pos: 36, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-37, at: [285.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 37, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-38, at: [285.51, 28.25], group: rj45-1g, rel-pos: 38, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-39, at: [299.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 39, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-40, at: [299.47, 28.25], group: rj45-1g, rel-pos: 40, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-41, at: [313.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 41, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-42, at: [313.43, 28.25], group: rj45-1g, rel-pos: 42, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-43, at: [327.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 43, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-44, at: [327.39, 28.25], group: rj45-1g, rel-pos: 44, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-45, at: [341.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 45, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-46, at: [341.35, 28.25], group: rj45-1g, rel-pos: 46, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-47, at: [355.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 47, states: *rj45-1g-states}
+        - {ref: common/rj45-ganged-eth@1, id: port-48, at: [355.31, 28.25], group: rj45-1g, rel-pos: 48, states: *rj45-1g-states}
+        - {ref: std/sfp-ganged@1, id: port-49, at: [375, 10.5], group: sfp28, rel-pos: 49}
+        - {ref: std/sfp-ganged@1, id: port-50, at: [375, 24.7], rotate: 180, group: sfp28, rel-pos: 50}
+        - {ref: std/sfp-ganged@1, id: port-51, at: [389.25, 10.5], group: sfp28, rel-pos: 51}
+        - {ref: std/sfp-ganged@1, id: port-52, at: [389.25, 24.7], rotate: 180, group: sfp28, rel-pos: 52}
+        - {ref: common/led-arrow-sm@1, id: led-port-49, skin: up, at: [376.38, 21.6], for: port-49, group: sfp28-leds, rel-pos: 1, states: &sfp28-led-states ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: common/led-arrow-sm@1, id: led-port-50, skin: down, at: [385.57, 21.6], for: port-50, group: sfp28-leds, rel-pos: 2, states: *sfp28-led-states}
+        - {ref: common/led-arrow-sm@1, id: led-port-51, skin: up, at: [390.68, 21.6], for: port-51, group: sfp28-leds, rel-pos: 3, states: *sfp28-led-states}
+        - {ref: common/led-arrow-sm@1, id: led-port-52, skin: down, at: [399.77, 21.6], for: port-52, group: sfp28-leds, rel-pos: 4, states: *sfp28-led-states}
+        - {ref: std/usb-a@1, id: usb-1, at: [329.65, 6.2], group: mgmt, rel-pos: 1, attrs: {role: storage, usb: '3.0'}}
+        - {ref: common/usb-symbol@1, id: mark-usb-1, at: [332.45, 11.3], for: usb-1, group: marks, rel-pos: 1}
+        - {ref: common/led-indicator@1, id: led-mgmt-sfp, at: [350.1, 7.5], for: mgmt-sfp, group: status-leds, rel-pos: 5, states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+        - {ref: std/sfp@1, id: mgmt-sfp, at: [355.9, 2.45], group: mgmt, rel-pos: 2, attrs: {media: sfp, speed: 1g, role: mgmt-combo, combo-with: mgmt}}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [408.95, 6.3], rotate: 180, group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g, combo-with: mgmt-sfp}, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+        - {ref: std/usb-a@1, id: usb-2, at: [409.3, 19.05], group: mgmt, rel-pos: 4, attrs: {role: storage, usb: '3.0'}}
+        - {ref: common/usb-symbol@1, id: mark-usb-2, at: [402.3, 19.3], rotate: 270, for: usb-2, group: marks, rel-pos: 2}
+        - {ref: std/rj45-ganged@2, id: console, at: [408.95, 24.75], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/led-indicator@1, id: led-stat, at: [426.79, 15.68], for: chassis, group: status-leds, rel-pos: 1, states: ['off', {name: normal, color: '#22c55e', behavior: {mode: alternating, color: '#f59e0b'}}]}
+        - {ref: common/led-indicator@1, id: led-fan, at: [426.79, 20.71], for: chassis, group: status-leds, rel-pos: 2, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-pwr, at: [426.79, 25.83], for: chassis, group: status-leds, rel-pos: 3, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-alm, at: [426.79, 30.96], for: chassis, group: status-leds, rel-pos: 4, states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major, color: '#f59e0b', behavior: {mode: blinking, rate: 4}}, {name: minor, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}]}
+    regions:
+      - {id: mgmt-block, at: [324, 0], size: {w: 114.2, h: 43.4}, label: Uplinks and management}
+  rear:
+    size: {w: 438.2, h: 43.4}
+    panel:
+      decor:
+        - {id: rear-plate, at: [0, 0], size: [438.2, 43.4], fill: '#a9aaac', kind: faceplate, confidence: estimated, source: 'Guide Rear Panel figure 2 - the grey body sampled between the fans and supplies, away from text and ports'}
+        - {id: fan-plate, at: [2.6, 0.5], size: [233.5, 12.4], rx: 1.0, fill: '#b0b1b4', kind: stiffener-plate, confidence: estimated, source: 'Guide Rear Panel figure 2 - the lighter formed plate across the top of the fan wall; outline only, its notches not drawn'}
+        - {id: fan-1-backing, at: [30.89, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
+        - {id: fan-1-grille, at: [30.89, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
+        - {id: fan-2-backing, at: [86.34, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
+        - {id: fan-2-grille, at: [86.34, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
+        - {id: fan-3-backing, at: [141.84, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
+        - {id: fan-3-grille, at: [141.84, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
+        - {id: fan-1-screw-a-land, at: [31.94, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
+        - {id: fan-1-screw-b-land, at: [64.34, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
+        - {id: fan-2-screw-a-land, at: [87.39, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
+        - {id: fan-2-screw-b-land, at: [119.79, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
+        - {id: fan-3-screw-a-land, at: [142.89, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
+        - {id: fan-3-screw-b-land, at: [175.29, 35.8], size: [4.0, 4.0], fill: '#a9aaac', kind: print-island}
+        - {id: boss-1, at: [74.1, 27.2], size: [4.2, 4.2], rx: 2.1, stroke: '#8d9297', stroke-width: 0.35, kind: boss}
+        - {id: boss-2, at: [129.6, 27.2], size: [4.2, 4.2], rx: 2.1, stroke: '#8d9297', stroke-width: 0.35, kind: boss}
+        - {id: psu-wall-seam, at: [237.6, 13.0], size: [0.4, 29.9], fill: '#8d9297', kind: seam}
+        - {id: psu-divider, at: [330.2, 1.7], size: [15.4, 40.0], rx: 0.4, stroke: '#8d9297', stroke-width: 0.35, kind: divider}
+        - {id: strip-seam, at: [421.9, 1.0], size: [0.4, 41.4], fill: '#8d9297', kind: seam}
+    silkscreen:
+      - {id: fan-1-arrow, at: [25.1, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: chassis}
+      - {id: fan-1-symbol, at: [25.1, 22.4], path: 'M -1.1 -1.1 L 1.1 1.1 M 1.1 -1.1 L -1.1 1.1', fill: '#1f2226', stroke-width: 0.5, for: chassis}
+      - {text: '1', at: [25.1, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: chassis}
+      - {id: fan-2-arrow, at: [80.55, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: chassis}
+      - {id: fan-2-symbol, at: [80.55, 22.4], path: 'M -1.1 -1.1 L 1.1 1.1 M 1.1 -1.1 L -1.1 1.1', fill: '#1f2226', stroke-width: 0.5, for: chassis}
+      - {text: '2', at: [80.55, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: chassis}
+      - {id: fan-3-arrow, at: [136, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: chassis}
+      - {id: fan-3-symbol, at: [136, 22.4], path: 'M -1.1 -1.1 L 1.1 1.1 M 1.1 -1.1 L -1.1 1.1', fill: '#1f2226', stroke-width: 0.5, for: chassis}
+      - {text: '3', at: [136, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: chassis}
+      - {id: psu-1-arrow, at: [246.7, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: psu-1}
+      - {id: psu-1-symbol, at: [246.7, 22.6], path: 'M -1.1 -1.1 L 1.1 -1.1 L 1.1 1.1 L -1.1 1.1 L -1.1 -1.1 M 0.35 -0.7 L -0.35 0.1 L 0.35 -0.1 L -0.35 0.7', fill: '#1f2226', stroke-width: 0.3, for: psu-1}
+      - {text: '1', at: [246.7, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: psu-1}
+      - {id: psu-2-arrow, at: [429.6, 9.8], path: 'M 0.9 -1.1 L -1.1 0 L 0.9 1.1 Z', filled: true, fill: '#1f2226', for: psu-2}
+      - {id: psu-2-symbol, at: [429.6, 14.4], path: 'M -1.1 -1.1 L 1.1 -1.1 L 1.1 1.1 L -1.1 1.1 L -1.1 -1.1 M 0.35 -0.7 L -0.35 0.1 L 0.35 -0.1 L -0.35 0.7', fill: '#1f2226', stroke-width: 0.3, for: psu-2}
+      - {text: '2', at: [429.6, 21.3], font-size: 3.4, anchor: middle, fill: '#1f2226', for: psu-2}
+      - {id: earth-left, at: [15.8, 35.9], path: 'M 2.2 0 L 1.56 1.56 L 0 2.2 L -1.56 1.56 L -2.2 0 L -1.56 -1.56 L 0 -2.2 L 1.56 -1.56 L 2.2 0 M 0 -1.3 L 0 -0.1 M -1.2 -0.1 L 1.2 -0.1 M -0.8 0.65 L 0.8 0.65 M -0.4 1.4 L 0.4 1.4', fill: '#1f2226', stroke-width: 0.3, for: [ground-screw-1, ground-screw-2]}
+      - {id: earth-right, at: [429.6, 28.3], path: 'M 2.2 0 L 1.56 1.56 L 0 2.2 L -1.56 1.56 L -2.2 0 L -1.56 -1.56 L 0 -2.2 L 1.56 -1.56 L 2.2 0 M 0 -1.3 L 0 -0.1 M -1.2 -0.1 L 1.2 -0.1 M -0.8 0.65 L 0.8 0.65 M -0.4 1.4 L 0.4 1.4', fill: '#1f2226', stroke-width: 0.3, for: ground-screw-3}
+    components:
+      bays:
+        - {id: psu-1, at: [256.0, 1.7], size: {w: 73.5, h: 40}, accepts: [celestica/psu-crps-1600-ac@1], group: psus, rel-pos: 1, default: celestica/psu-crps-1600-ac@1}
+        - {id: psu-2, at: [346.3, 1.7], size: {w: 73.5, h: 40}, accepts: [celestica/psu-crps-1600-ac@1], group: psus, rel-pos: 2, default: celestica/psu-crps-1600-ac@1}
+      placements:
+        - {ref: common/screw-head@1, id: ground-screw-1, at: [5.5, 24.2], group: grounding, rel-pos: 1}
+        - {ref: common/screw-head@1, id: ground-screw-2, at: [5.5, 34.1], group: grounding, rel-pos: 2}
+        - {ref: common/screw-head@1, id: ground-screw-3, at: [427.8, 33.9], group: grounding, rel-pos: 3}
+        - {ref: common/screw-head@1, id: standoff-1, at: [8.8, 3.8], group: furniture, rel-pos: 2}
+        - {ref: common/screw-head@1, id: screw-psu-wall, at: [231.5, 24.4], group: furniture, rel-pos: 3}
+        - {ref: common/screw-head@1, id: fan-1-screw-a, at: [32.14, 36.0], group: furniture, rel-pos: 4}
+        - {ref: common/screw-head@1, id: fan-1-screw-b, at: [64.54, 36.0], group: furniture, rel-pos: 5}
+        - {ref: common/screw-head@1, id: fan-2-screw-a, at: [87.59, 36.0], group: furniture, rel-pos: 6}
+        - {ref: common/screw-head@1, id: fan-2-screw-b, at: [119.99, 36.0], group: furniture, rel-pos: 7}
+        - {ref: common/screw-head@1, id: fan-3-screw-a, at: [143.09, 36.0], group: furniture, rel-pos: 8}
+        - {ref: common/screw-head@1, id: fan-3-screw-b, at: [175.49, 36.0], group: furniture, rel-pos: 9}
+    regions:
+      - {id: fan-1, at: [30.89, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 1 (fixed)'}
+      - {id: fan-2, at: [86.34, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 2 (fixed)'}
+      - {id: fan-3, at: [141.84, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 3 (fixed)'}
+  left:
+    size: {w: 371.6, h: 43.4}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-l1, at: [40, 20], group: furniture, rel-pos: 10}
+        - {ref: common/screw-head@1, id: screw-l2, at: [150, 20], group: furniture, rel-pos: 11}
+        - {ref: common/screw-head@1, id: screw-l3, at: [260, 20], group: furniture, rel-pos: 12}
+        - {ref: common/screw-head@1, id: screw-l4, at: [340, 20], group: furniture, rel-pos: 13}
+  right:
+    size: {w: 371.6, h: 43.4}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-r1, at: [40, 20], group: furniture, rel-pos: 14}
+        - {ref: common/screw-head@1, id: screw-r2, at: [150, 20], group: furniture, rel-pos: 15}
+        - {ref: common/screw-head@1, id: screw-r3, at: [260, 20], group: furniture, rel-pos: 16}
+        - {ref: common/screw-head@1, id: screw-r4, at: [340, 20], group: furniture, rel-pos: 17}
+  top:
+    size: {w: 438.2, h: 371.6}
+    panel:
+      decor:
+        - {id: lid-pad-front-left, at: [60, 40], size: [70, 30], rx: 8, fill: '#c4c8cc', sink: 0.8, kind: pressed-pad, confidence: estimated, source: 'guide System Overview figure 3 (three-quarter view): a pressed pad near the front left of the lid; placed by proportion, not measurable'}
+        - {id: lid-handle-panel, at: [160, 110], size: [110, 80], rx: 3, fill: '#c9cdd1', sink: 0.8, kind: pressed-pad, confidence: estimated, source: 'guide System Overview figure 3: a recessed square panel with a handle recess left of centre; placed by proportion, not measurable'}
+        - {id: lid-pad-rear-right, at: [320, 250], size: [70, 30], rx: 8, fill: '#c4c8cc', sink: 0.8, kind: pressed-pad, confidence: estimated, source: 'guide System Overview figure 3: a pressed pad at the rear right of the lid; placed by proportion, not measurable'}
+        - {id: lid-label-outline, at: [300, 300], size: [110, 60], stroke: '#a5aaaf', stroke-width: 0.4, kind: label-outline, confidence: estimated, source: 'guide System Overview figure 3: a rectangular label recess behind the rear right pad; placed by proportion, not measurable'}
+  bottom:
+    size: {w: 438.2, h: 371.6}
+    empty: >-
+      Nothing documented. No figure of the guide and no page of the datasheet shows the underside; the
+      guide's chassis installation pages cover rack rails only. Searched: every converted page and figure
+      of the guide, the datasheet.
+configurations:
+  f2b:
+    kind: orderable
+    description: EG1050-48CP, 32 x 1GbE + 16 x 2.5GbE PoE++, Wi-Fi and 5G, COMe 8C, 2 x 1600 W AC, F2B (R4048-F90F4-A1)
+    default: true
+    airflow: front-to-back
+    part-numbers:
+      R4048-F90F4-A1: {part: R4048-F90F4-A1}
+    bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
+  b2f:
+    kind: orderable
+    description: EG1050-48CP, 32 x 1GbE + 16 x 2.5GbE PoE++, Wi-Fi and 5G, COMe 8C, 2 x 1600 W AC, B2F (R4048-F91F4-A1)
+    airflow: back-to-front
+    part-numbers:
+      R4048-F91F4-A1: {part: R4048-F91F4-A1}
+    bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
+datasheet:
+  title: Celestica EG1050 1U 48-port 1GbE / 2.5GbE PoE Edge Gateway with 5G and Wi-Fi datasheet (120224)
+  url: https://www.celestica.com/
+  sha256: d637fdfa9386870380276d564d5d1b92f3703f328ea6d9d81232a4c163c02c61
+references:
+  - {title: 'Celestica ES1010/ES1050/EG1050 hardware guide, Front Panel figure 3 and Rear Panel figure 2', url: 'https://documentationportal.celestica.com/en/networking/es1010es1050eg1050/front-panel'}

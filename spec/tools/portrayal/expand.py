@@ -21,6 +21,12 @@ insists on covering everything is a generator that starts inventing.
     layout.yaml   authored, reviewable, ~40 lines for a face
     device.yaml   generated, committed, what every consumer already reads
 
+TWO KINDS OF BLOCK. A port block (no `kind`) repeats ports: count, rows, pitch,
+gang, gutter, numbering, cutouts, numerals and lamps. An `outlet-run` repeats a
+strip PDU's outlets: `segments` of one outlet kind on one pitch, `banks` that
+repeat them shifted, and for each outlet its bezel moulding, numeral and lamp
+and the `fed-by`, `through` and `states` it carries.
+
 Consumers change nothing: render.py, lint.py, dcim_export, devicelock and the
 viewer keep reading device.yaml exactly as before. `--check` re-expands and
 compares, so the pair cannot drift.
@@ -388,6 +394,152 @@ def block_items(block, library, standards):
     return placements + lamps, cutouts, silks
 
 
+# ------------------------------------------------------------ outlet run ---
+#
+# A STRIP PDU IS NOT A PORT BLOCK. Its outlets stand on a pitch like ports do,
+# but each one comes with a bezel moulding drawn round it, a printed numeral and
+# a lamp, and the outlet itself carries what a power outlet says and a port does
+# not: `fed-by` (the inlet that feeds it), `through` (the breaker it runs
+# through) and `states` (what a switched outlet can be). A port block has no
+# place for the moulding or for any of those, and the PDUMV20HVNETLX typed all of
+# it out - four lines to an outlet, 24 outlets - on one pitch that a person had
+# to re-add by hand at every line.
+#
+# THE SHAPE FOLLOWS HOW THESE FACES ARE BUILT. A strip is a few RUNS of one kind
+# of outlet (two C19, then ten C13) and the same runs again for the next bank,
+# moved down the strip. So the block is `segments` (one kind, one pitch) and
+# `banks` (the segments again, shifted). Numbering carries on from one segment to
+# the next and across banks, because it is the strip's, not the segment's.
+#
+# WHAT IT STILL LEAVES TO THE AUTHOR: a bezel that is not the pitch repeated
+# (the PDUMV20HVNETLX's second C19 bezel starts 0.66 lower than the pitch says and
+# is 0.2 shorter) says so in `by-pos`; and anything that is not an outlet, its
+# numeral, its lamp or its bezel - the meter, the interface, the breakers - stays
+# longhand, as it does beside every other block.
+
+RUN_BLOCK_KEYS = {"kind", "id", "as", "group", "id-format", "number-from", "fed-by",
+                  "states", "numerals", "led", "moulding", "banks", "segments"}
+RUN_BANK_KEYS = {"shift", "through"}
+RUN_SEGMENT_KEYS = {"ref", "count", "at", "pitch", "rotate", "fed-by", "through",
+                    "states", "numerals", "led", "moulding"}
+RUN_MOULDING_KEYS = {"id-format", "offset", "size", "rx", "fill", "kind", "by-pos"}
+RUN_NUMERAL_KEYS = {"offset", "font-size", "anchor", "rotate", "fill"}
+RUN_LED_KEYS = {"ref", "id-format", "group", "offset", "skin", "states"}
+
+
+def _run_check(what, got, allowed, where):
+    extra = sorted(set(got) - allowed)
+    if extra:
+        raise SystemExit(f"{where}: unknown {what} key(s) {extra} - known: "
+                         + ", ".join(sorted(allowed)))
+
+
+def _run_pair(value, what, where):
+    if not (isinstance(value, (list, tuple)) and len(value) == 2):
+        raise SystemExit(f"{where}: {what} must be a pair [x, y], got {value!r}")
+    return float(value[0]), float(value[1])
+
+
+def run_items(block):
+    """One `kind: outlet-run` block -> its placements (outlets, then lamps), the
+    bezel mouldings (decor) and the numerals (silkscreen), in the order the strip
+    is read: bank by bank, segment by segment, outlet by outlet."""
+    where = f"block {block.get('id')}"
+    _run_check("outlet-run", block, RUN_BLOCK_KEYS, where)
+    segments = block.get("segments") or []
+    if not segments:
+        raise SystemExit(f"{where}: an outlet-run needs `segments`")
+    banks = block.get("banks") or [{}]
+    group = block.get("group", block["id"])
+    idfmt = block.get("id-format", "outlet-{n}")
+    n = int(block.get("number-from", 1))
+    families = {}
+
+    outlets, lamps, decor, silks = [], [], [], []
+    for bank in banks:
+        _run_check("bank", bank, RUN_BANK_KEYS, where)
+        sx, sy = _run_pair(bank.get("shift", [0, 0]), "a bank's shift", where)
+        for seg in segments:
+            _run_check("segment", seg, RUN_SEGMENT_KEYS, where)
+            for need in ("ref", "count", "at", "pitch"):
+                if need not in seg:
+                    raise SystemExit(f"{where}: a segment needs `{need}`")
+            ax, ay = _run_pair(seg["at"], "a segment's at", where)
+            px, py = _run_pair(seg["pitch"], "a segment's pitch", where)
+
+            # the segment's own value wins, then the block's
+            def pick(key, _seg=seg):
+                return _seg.get(key, block.get(key))
+
+            num = {**(block.get("numerals") or {}), **(seg.get("numerals") or {})}
+            led = {**(block.get("led") or {}), **(seg.get("led") or {})}
+            mou = {**(block.get("moulding") or {}), **(seg.get("moulding") or {})}
+            for what, spec, allowed in (("numerals", num, RUN_NUMERAL_KEYS),
+                                        ("led", led, RUN_LED_KEYS),
+                                        ("moulding", mou, RUN_MOULDING_KEYS)):
+                _run_check(what, spec, allowed, where)
+            by_pos = mou.pop("by-pos", None) or []
+
+            for k in range(int(seg["count"])):
+                x = round(ax + sx + k * px, 2)
+                y = round(ay + sy + k * py, 2)
+                pid = idfmt.format(n=n)
+                p = {"id": pid, "ref": seg["ref"], "at": [x, y]}
+                if seg.get("rotate"):
+                    p["rotate"] = seg["rotate"]
+                p["group"] = group
+                p["rel-pos"] = n
+                if pick("fed-by"):
+                    p["fed-by"] = pick("fed-by")
+                through = bank.get("through", pick("through"))
+                if through:
+                    p["through"] = through
+                if pick("states"):
+                    p["states"] = list(pick("states"))
+                outlets.append(p)
+
+                if num:
+                    ox, oy = _run_pair(num.get("offset"), "a numeral's offset", where)
+                    s = {"at": [round(x + ox, 2), round(y + oy, 2)], "text": str(n),
+                         "font-size": num.get("font-size", 1.8),
+                         "anchor": num.get("anchor", "middle")}
+                    if num.get("rotate"):
+                        s["rotate"] = num["rotate"]
+                    if num.get("fill"):
+                        s["fill"] = num["fill"]
+                    s["for"] = pid
+                    silks.append(s)
+
+                if led:
+                    ox, oy = _run_pair(led.get("offset"), "a lamp's offset", where)
+                    lp = {"id": led.get("id-format", "led-{n}").format(n=n),
+                          "ref": led["ref"], "at": [round(x + ox, 2), round(y + oy, 2)]}
+                    if led.get("skin"):
+                        lp["skin"] = led["skin"]
+                    lp["group"] = led.get("group", "port-leds")
+                    lp["rel-pos"] = n
+                    if led.get("states"):
+                        lp["states"] = led["states"]
+                    lp["for"] = pid
+                    lamps.append(lp)
+
+                if mou:
+                    m = {**mou, **(by_pos[k] if k < len(by_pos) else {})}
+                    _run_check("moulding", m, RUN_MOULDING_KEYS, where)
+                    ox, oy = _run_pair(m.get("offset"), "a moulding's offset", where)
+                    fmt = m["id-format"]
+                    families[fmt] = families.get(fmt, 0) + 1
+                    d = {"id": fmt.format(m=families[fmt]),
+                         "at": [round(x + ox, 2), round(y + oy, 2)],
+                         "size": [float(m["size"][0]), float(m["size"][1])]}
+                    for key in ("rx", "fill", "kind"):
+                        if key in m:
+                            d[key] = m[key]
+                    decor.append(d)
+                n += 1
+    return outlets + lamps, decor, silks
+
+
 # --------------------------------------------------------------- marks ---
 #
 # WHY NOT JUST WRITE `▲`? It is one character and this is a dozen numbers, so
@@ -552,18 +704,25 @@ def expand(layout, library, standards):
         blocks = comps.pop("blocks", None)
         if not blocks:
             continue
-        made_p, made_c, made_s = {}, {}, {}
+        made_p, made_c, made_s, made_d = {}, {}, {}, {}
         for b in blocks:
             key = b.get("as") or b["id"]
-            p, c, s = block_items(b, library, standards)
+            if b.get("kind") == "outlet-run":
+                # placements, bezel mouldings (decor), numerals; no cutouts
+                p, d, s = run_items(b)
+                c = []
+            else:
+                p, c, s = block_items(b, library, standards)
+                d = []
             made_p.setdefault(key, []).extend(p)
             made_c.setdefault(key, []).extend(c)
             made_s.setdefault(key, []).extend(s)
+            made_d.setdefault(key, []).extend(d)
 
         panel = view.setdefault("panel", {})
         named = set()
         for seq in (comps.get("placements"), view.get("silkscreen"),
-                    panel.get("cutouts")):
+                    panel.get("cutouts"), panel.get("decor")):
             for item in seq or []:
                 if isinstance(item, dict) and set(item) == {"block"}:
                     named.add(item["block"])
@@ -572,6 +731,8 @@ def expand(layout, library, standards):
         view["silkscreen"] = _splice(view.get("silkscreen"), made_s)
         if panel.get("cutouts"):
             panel["cutouts"] = _splice(panel.get("cutouts"), made_c)
+        if panel.get("decor"):
+            panel["decor"] = _splice(panel.get("decor"), made_d)
 
         # A block nobody placed appends, so a layout that names no markers still
         # works - but say which, because a silent append is how paint order goes
@@ -583,6 +744,8 @@ def expand(layout, library, standards):
                     view["silkscreen"] = (view.get("silkscreen") or []) + made_s[key]
                 if made_c[key]:
                     panel["cutouts"] = (panel.get("cutouts") or []) + made_c[key]
+                if made_d[key]:
+                    panel["decor"] = (panel.get("decor") or []) + made_d[key]
                 print(f"  note: block {key!r} had no {{block: {key}}} marker; "
                       f"appended at the end of its lists")
         if not view.get("silkscreen"):
