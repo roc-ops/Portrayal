@@ -143,7 +143,7 @@ def test_the_stand_ins_are_declared():
             assert "STAND-IN" in prov["art-stand-ins"], name
         else:
             assert "art-outline" in prov, name
-        assert c["version"] == "1.0.1", name
+        assert c["version"] == "1.1.0", name
 
 
 def test_the_top_sheet_shows_what_the_sources_show(built):
