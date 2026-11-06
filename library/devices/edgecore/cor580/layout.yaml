@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor580
-version: 4.0.0
+version: 4.0.1
 maturity: modelled
 manufacturer: Edgecore
 model: AS9926-24D
@@ -20,6 +20,16 @@ description: >-
   only.
 profile: networking
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed
+      logotype, red at both ends, over the model text at the lower left, beside the display
+      digits. Measured on the front picture on page 2 of Edgecore's COR580 data sheet (1181 x 119
+      px), calibrated on the body outline at 2.685 px/mm across and 2.691 down, which agree to
+      0.2 percent: the mark runs x 30.2 to 50.9 and y 32.2 to 36.3. The picture is square-on, so
+      the sureness is sure and the position is good to about 1 mm. The `logo-zone` region on the
+      front view reserves the place; nothing is drawn in it.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -637,6 +647,7 @@ views:
         - {ref: common/usb-symbol@1, id: usb-mark, at: [407.00, 22.2], group: furniture, rel-pos: 3, for: usb}
         - {ref: common/pull-tab@1, id: info-tab, at: [416.6, 38.6], group: furniture, rel-pos: 4}
     regions:
+      - {id: logo-zone, at: [30.2, 32.2], size: {w: 20.7, h: 4.1}, label: 'Vendor logo; not drawn'}
       - {id: status-cluster, at: [30.0, 3.0], size: {w: 30.0, h: 23.5}, label: System status,
          members: [led-sys-loc, led-diag, led-fan, led-psu1, led-psu2, reset, status-display]}
       - {id: mgmt-block, at: [348.0, 1.0], size: {w: 88.0, h: 41.0}, label: Management,
