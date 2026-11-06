@@ -1230,7 +1230,7 @@ module bay, a guard seat and a slot that accepts nothing do not land
   hands them in, each with `kind` (`power`, `ground`, `other`), `connector`
   and `plug`; the screws of one DC terminal carry `of` and the first
   `first: true` (for a part that states no DC port; a DC port is one row, below). `kinds: ['data']` is the ports alone. A port of class `port`
-  is the same entry it was.
+  is the same entry it was. A row on the left, right, top or bottom panel has `landable: false` and a `reason`, since `cable.add` takes a `view` of `front` or `rear` only; a row on the front or the rear has neither key.
 - **`zones.js`**: `readSvg(text, { ends })` and `readDrawing(root, doc, { ends
   })` read the part at each path in `ends` as a zone with `end: true` and its
   `ref`; `portsOf` includes them. `cableEndPaths(item, view, ctx)` in
