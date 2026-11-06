@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-fapm6
-version: 1.0.0
+version: 1.1.0
 class: adapter-panel
 behaviour: fills
 description: >-
@@ -27,12 +27,12 @@ body:
 elements:
   logo-zone: {at: [1.6, 3.2], size: [5.3, 5.0], class: label}
 parts:
-  - {id: clip1, ref: common/keystone-clip@2, at: [20.145, 18.52]}
-  - {id: clip2, ref: common/keystone-clip@2, at: [20.145, 1.62]}
-  - {id: clip3, ref: common/keystone-clip@2, at: [46.235, 18.52]}
-  - {id: clip4, ref: common/keystone-clip@2, at: [46.235, 1.62]}
-  - {id: clip5, ref: common/keystone-clip@2, at: [72.325, 18.52]}
-  - {id: clip6, ref: common/keystone-clip@2, at: [72.325, 1.62]}
+  - {id: clip1, ref: common/keystone-clip@3, at: [20.145, 18.52]}
+  - {id: clip2, ref: common/keystone-clip@3, at: [20.145, 1.62]}
+  - {id: clip3, ref: common/keystone-clip@3, at: [46.235, 18.52]}
+  - {id: clip4, ref: common/keystone-clip@3, at: [46.235, 1.62]}
+  - {id: clip5, ref: common/keystone-clip@3, at: [72.325, 18.52]}
+  - {id: clip6, ref: common/keystone-clip@3, at: [72.325, 1.62]}
 provenance:
   size: >-
     drawing - see size-notes.
@@ -41,7 +41,7 @@ provenance:
     six openings (1200 dpi, 25.70 px/mm on the 109 plate, plate then 34.98
     against 35), 16.54 x 14.94, columns at x 20.16 46.27 72.34, rows at y 1.60
     and 18.48; FS's face-on render dimensions one 0.65in wide and 0.59in tall.
-    Each opening carries common/keystone-clip@2, the clip FS ships six of,
+    Each opening carries common/keystone-clip@3, the clip FS ships six of,
     sized to fill it. The columns are placed on the drawn mean pitch 26.09
     centred on the plate (28.395 54.485 80.575, within 0.04 of the drawing)
     and the rows at the drawn centres 9.07 and 25.97. The openings are
@@ -59,8 +59,9 @@ provenance:
     reserved, not drawn - FS prints its mark top left (the drawing, 143239.p3);
     the library reproduces no vendor logo.
   numbering-gap: >-
-    NO OPTICAL BLOCK AND NO PORT GROUP. Whatever snaps into a clip - a keystone
-    jack, a coupler, an SC adapter - carries its own interface, and none is
-    modelled yet; the panel ships with empty clips. Keystone jacks are the part
-    that would give these six openings ports.
+    NO OPTICAL BLOCK AND NO PORT GROUP. Whatever snaps into a clip carries its
+    own interface; the panel ships with empty clips. Each clip presents the
+    `keystone` interface, so a blanking insert (common/keystone-blank@2) or a Cat6
+    jack (fs/keystone-rj45-cat6@1) seats in an opening on its own; an inline
+    coupler and an SC adapter are not modelled yet.
 skins: [default]

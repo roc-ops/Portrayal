@@ -9,7 +9,7 @@ import {placement, managersOf} from './managers.js';
 import {uLabel, zeroUOf, zeroUBottom, firstU, holderOf, rollOf, uText} from './model.js';
 import {whereText, carriesLane} from './zero-u.js';
 import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches, lengthText, isElementId, addressFor, portLabel,
-        takesCableEnd, receptacleOf, endKind, connectorName, endPlug, couplerRole, dcTypeOf, feedSides} from './cable-rules.js';
+        takesCableEnd, receptacleOf, endKind, connectorName, endPlug, couplerRole, dcTypeOf, feedSides, looseReason} from './cable-rules.js';
 import {seatedPort, settleEnds, shownEnv, cableEndPaths, zeroUEnds, backEnds, dcPortsOf, dcReader, dcEntryOf, dcCovered, PANELS} from './ports.js';
 import {zeroUById, zeroUBottomMm} from './model.js';
 import {RU} from './rails.js';
@@ -297,6 +297,7 @@ export function describe(rack, ctx, {section, offset, limit} = {}) {
 // rack numbers them, orders a part's outlets nearest it first: "the free C39
 // outlets on PDU-A nearest U35" is {kinds: ['power'], type: 'C39', near: 35}.
 const FREE_KINDS = ['data', 'power', 'ground', 'other'];
+const FACE_VIEWS = ['front', 'rear'];
 const natural = new Intl.Collator('en', {numeric: true});
 export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, near = null} = {}) {
   const {portsOf, slotsOf, compByRef, redirects = null} = ctx;
@@ -387,6 +388,10 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
       });
     }
   }
+  // A SLOT ON A SIDE, TOP OR BOTTOM PANEL IS LISTED AND CANNOT YET BE GIVEN: a cable end states `front` or `rear`
+  // (commands.js cable.add), so the row says so itself, in the words looseReason uses for a saved one.
+  for (const e of out) if (!FACE_VIEWS.includes(e.view))
+    Object.assign(e, {landable: false, reason: looseReason({path: e.path, view: e.view}, {item: true, drawing: true, side: e.view})});
   // SEVERAL SLOTS UNDER ONE PART THAT IS NO SLOT ITSELF: grouped by that part,
   // the first in natural order marked as the one a cable takes. A DC port's own
   // rows are not: a part that states a port has its poles under it already.

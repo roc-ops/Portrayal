@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr560
-version: 3.0.3
+version: 3.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: AS9947-36XKB
@@ -23,6 +23,17 @@ description: >-
   half the power on different connectors and its port wall is a different machine entirely.
 profile: networking
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed
+      logotype over the small model text at the top right. Measured on Edgecore's front photograph
+      of the AGR560 (960 x 700 px), calibrated on the body outline at 2.175 px/mm across and 2.184
+      down, which agree to 0.4 percent: the mark runs x 411.0 to 435.5 and y 18.3 to 23.2. The
+      photograph is square-on but the mark is small in it, so the sureness is likely and the
+      position is good to about 1 mm. The pink and yellow bands over the cages are coloured labels,
+      not the logo. The `logo-zone` region on the front view reserves the place; nothing is drawn
+      in it.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -1017,6 +1028,8 @@ views:
       - {ref: common/led-rect-sm@1, id: led-psu1, at: [371.84, 50.15], group: leds, rel-pos: 5, for: rear/psu-1, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
       - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
       - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
+    regions:
+    - {id: logo-zone, at: [411.0, 18.3], size: {w: 24.5, h: 4.9}, label: 'Vendor logo; not drawn'}
 
   rear:
     size: {w: 440.0, h: 87.0}

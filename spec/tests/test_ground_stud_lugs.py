@@ -386,9 +386,10 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
     # and the bare 1/4-20 hole that the Nokia SR-12's pair composes, the bare 10-32 stud that the SR-1e, SR-2e and
     # SR-3e's pair composes, and the disc that the three MikroTik switches place for their earth stud
     earth_stud_parts = ("common/ground-hole-1-4@1", "common/ground-stud-10-32@1", "mikrotik/earth-stud-disc@1")
+    # and the hex-nut stud that a supply's pair of terminals composes
     assert sorted(presents) == sorted([*SINGLE, CASA_STUD, "common/terminal-screw-34@1",
                                        "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD, *bare_holes,
-                                       *earth_stud_parts])
+                                       *earth_stud_parts, "common/hex-nut-stud@1"])
     assert mates == [LUG]
     lug = _contract(LUG)
     # 1.0.1: the provenance says it turns (#829); nothing it draws changed
