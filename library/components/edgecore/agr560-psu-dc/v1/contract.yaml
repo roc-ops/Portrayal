@@ -1,14 +1,14 @@
 format: 1
 kind: module
 name: agr560-psu-dc
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
 description: >-
   The 2000 W -48 VDC power supply of the Edgecore AGR560 (AS9947-36XKB), sold as the FRU
-  DD-2202-1L - the AC unit's 73.5 x 40 shell and Lite-On fan with a TWO-STUD terminal block
-  where that one has a C14 inlet. Two studs, not the six of the AIS800-64D's DC supply:
+  DD-2202-1L - the AC unit's 73.5 x 40 shell and Lite-On fan with a TWO-SOCKET DC connector
+  where that one has a C14 inlet. Two sockets, not the six studs of the AIS800-64D's DC supply:
   this machine is half the power and its cable is #6 AWG where that one's is #4.
 size: {w: 73.5, h: 40.0}
 size-confidence: {w: borrowed, h: borrowed}
@@ -27,12 +27,13 @@ provenance:
     width stand for this one.
   the-terminal-is-named-and-then-not-described: >-
     "DC Inlet: Amphenol Terminal", from the datasheet's Power section, and that is the whole
-    of it - no part number, no drawing, no pitch. WHAT SETTLES THE COUNT IS THE CABLE: the
-    ordering table lists the DC machine's included cable as "6AWG PSU to 2 x Ring Terminal,
-    2.5m", and the guide's Connect Power page repeats the gauge - "Use #6 AWG / 10 mm2
-    copper wire". Two ring terminals, so two studs, and the guide's rear elevation draws
-    exactly two. This is a real difference from edgecore/ais800-64-psu-dc@1, whose six studs
-    take two #4 AWG feeds and a signal pair.
+    of it - no part number, no drawing, no pitch. WHAT SETTLES THE COUNT IS THE FIGURE: the guide's "DC Power"
+    figure (page 2) draws two round sockets, each with a pin at its centre, in one shroud, and the ordering
+    table lists the DC machine's included cable as "6AWG PSU to 2 x Ring Terminal, 2.5m" (data sheet, page 4), read as
+    two wires that end in ring terminals at the far end. The guide's Connect Power page repeats the gauge - "Use #6
+    AWG / 10 mm2 copper wire". An earlier reading took the two ring terminals for two studs on the supply; the
+    figure shows sockets in a shroud, so the ring terminals are the cable's far ends. This is a real difference from
+    edgecore/ais800-64-psu-dc@1, whose six studs take two #4 AWG feeds and a signal pair.
   what-is-measured-here-and-at-what-scale: >-
     THE GUIDE'S REAR ELEVATION AT 600 dpi, 5.08 px/mm over the 440 mm face, read on the
     LOWER of the two supplies because the callout balloons numbered 11 and 12 sit over the
@@ -65,6 +66,23 @@ provenance:
     in their connector and not in their sheet metal. The guide's own rear elevation draws
     this shell considerably lighter, but it is a greyscale line render and the photograph is
     a photograph.
+  connector: >-
+    the supply composes edgecore/agr560-dc-header@1 as `dc-header`, the two-socket DC power connector of the
+    Edgecore AGR560 Quick Start Guide, "Connect Power" b, the "DC Power" figure (page 2), at the box of the
+    `terminal-pocket` element (16.1 by 29.0), which carries the socket centres the skin draws. The data sheet names a
+    maker and nothing more ("DC Inlet: Amphenol Terminal", page 3), so the part is a declared stand-in (its own
+    provenance) and the key `edgecore-agr-dc-block-2` claims no maker, series, standard or pitch; a later held part
+    number would replace it. edgecore/agr560-dc-plug@1 mates it, a stand-in for the cable connector no document
+    draws. The skin is unchanged and the part is drawn over the pocket it draws.
+  roles: >-
+    NOT STATED. The figure prints no mark on or beside the connector and no document says which socket takes which
+    pole; the data sheet and the guide print a range ("-40 - -60 VDC" and "-48 - -60 VDC", which disagree about its
+    bottom). The roles of the two sockets are unstated.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. No role is stated for either socket, and a port whose poles are
+    a connector's contacts is offered only where that path's part is itself the connector; on a supply in a bay it is
+    the supply, not the connector it composes. A later change can state the port once a document marks the sockets,
+    a minor on the devices that seat this supply.
   power: >-
     "48 VDC input range: -40 - -60 VDC (50 A/2000 W max.)", the datasheet's Power section.
     The guide's specification table gives the range as "-48 - -60 VDC, 50 A max. per PSU" -
@@ -83,6 +101,7 @@ fields:
 parts:
   - {ref: common/screw-head@1, id: screw-1, at: [3.40, 2.00]}
   - {ref: common/screw-head@1, id: screw-2, at: [37.60, 2.00]}
+  - {ref: edgecore/agr560-dc-header@1, id: dc-header, at: [48.60, 5.50]}
 relief:
   wall: '#3a3e43'
   features:

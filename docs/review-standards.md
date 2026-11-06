@@ -88,6 +88,12 @@ list of things to do.
   name. Every kit SKU in the accessory table is listed under `chassis.kits`.
 - **A thing at component scale is a component.** A cover, door or filler drawn
   as bare decor is an unexplained box in the tree.
+- **A connector drawn as decor is a defect,** the same fault as a cover drawn
+  as bare decor: a port that takes a cable, cord, plug, lug or pluggable is a
+  part, and a picture of one has nothing to mate. L197 finds the names it
+  knows; a connector under another name is the reviewer's to find. **A
+  sentence where a mate could exist is a gap, and a gap is a row** in
+  `library/conformance-exceptions.yaml`, not an `unmated:` sentence.
 - **A cutout is not left empty,** and a lamp that has states draws with the
   state colour, not a fixed fill.
 - **A rotated or stacked placement was rendered seated.** Stacked cages sit
@@ -118,6 +124,10 @@ list of things to do.
   gates on whether the build ran, never on whether the result was empty.
 - **Its fixture is built, not borrowed.** A test pinned to what a live device
   lacks breaks the day the device gets better.
+- **It states what is true of the library.** What a change left alone belongs
+  to the diff and the review, not to a test: a list of the parts or records
+  rows that "stay" is true of one diff and goes false the day a later change
+  does its job. `preflight.py` asks the same question of the diff.
 - **It is worth what it costs.** A test of five seconds or more says why a
   lint rule or a cheaper fixture could not answer the same question, and a
   whole-library lint or index is the session's shared one, not a new run.

@@ -72,7 +72,7 @@ def test_the_device_is_named_as_the_maker_prints_it(name):
     assert d["model"] == model
     assert d["portfolio"] == {"line": "Routers", "family": "Cloud Core Router", "series": series}
     assert "+" not in name
-    assert d["version"] == "1.0.0"
+    assert d["version"] == ("1.0.1" if name == CCR2116 else "1.0.0")
     assert list(d["configurations"]["base"]["part-numbers"]) == [model]
 
 
@@ -620,12 +620,13 @@ def test_the_committed_exports_are_what_the_exporter_writes_now(name, target, tm
     assert (tmp_path / rel).read_text() == (ROOT / "library/exports" / rel).read_text()
 
 
+@pytest.mark.heavy
 def test_the_lock_files_match_the_devices():
     lib = ROOT / "library"
     assert not [f for f in devicelock.check(lib) if f[0].startswith("mikrotik/")]
     known = devicelock.load_lock(lib)["devices"]
     for name in NAMES:
         entry = known[f"mikrotik/{name}"]
-        assert entry["version"] == load(name)["version"] == "1.0.0"
+        assert entry["version"] == load(name)["version"] == ("1.0.1" if name == CCR2116 else "1.0.0")
         per_device = json.loads((DEVICES / name / "device.lock.json").read_text())
         assert per_device["gaps"] == entry["gaps"]

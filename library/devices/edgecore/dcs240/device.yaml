@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs240
-version: 1.1.10
+version: 1.2.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS9726-32DB
@@ -255,8 +255,9 @@ gaps:
   wanted: >-
     An elevation of the DC supply. The rear elevation and both rear photographs draw the AC pair; the
     datasheet rates a -48 VDC variant at 1600 W and the package contents list a "DC power cable (included
-    with DC PSUs only)", so it certainly exists. edgecore/dcs240-psu-dc@1 therefore borrows the AC module's
-    measured face and marks its terminal estimated.
+    with DC PSUs only)", so it certainly exists. edgecore/dcs240-psu-dc@2 is therefore drawn from the
+    quick start guide's photograph of the supply, a close-up in perspective with no scale, and every position
+    on it is an estimate.
 groups:
   qsfp-dd:
     term: Port
@@ -914,6 +915,7 @@ views:
         accepts:
         - edgecore/dcs240-psu-ac@1
         - edgecore/dcs240-psu-dc@1
+        - edgecore/dcs240-psu-dc@2
         default: edgecore/dcs240-psu-ac@1
       - id: fan-6
         at: [71.63, 1.8]
@@ -971,6 +973,7 @@ views:
         accepts:
         - edgecore/dcs240-psu-ac@1
         - edgecore/dcs240-psu-dc@1
+        - edgecore/dcs240-psu-dc@2
         default: edgecore/dcs240-psu-ac@1
     regions:
     - id: power
@@ -1031,14 +1034,14 @@ configurations:
     kind: orderable
     power: dc
     description: Dual -48 VDC PSUs, front-to-back airflow - red handles and red release latches
-    bays: {psu-1: edgecore/dcs240-psu-dc@1, psu-2: edgecore/dcs240-psu-dc@1}
+    bays: {psu-1: edgecore/dcs240-psu-dc@2, psu-2: edgecore/dcs240-psu-dc@2}
   dc-b2f:
     kind: orderable
     power: dc
     description: Dual -48 VDC PSUs, back-to-front airflow - blue handles and blue release latches
     airflow: back-to-front
     region-context: {exhaust: Intake}
-    bays: {psu-1: edgecore/dcs240-psu-dc@1, psu-2: edgecore/dcs240-psu-dc@1}
+    bays: {psu-1: edgecore/dcs240-psu-dc@2, psu-2: edgecore/dcs240-psu-dc@2}
     component-attrs:
       dcs240-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F, airflow: back-to-front}
       dcs240-psu-dc: {latch-finish: '#3d7bd6', latch-edge: '#234b8c', airflow: back-to-front}

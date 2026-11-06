@@ -10,6 +10,7 @@ import pathlib
 
 from portrayal import lint, libwalk
 from portrayal.manifest import load_yaml
+import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
@@ -123,6 +124,7 @@ def _library_docs():
     return docs
 
 
+@pytest.mark.heavy
 def test_every_asr_9000_card_seats_in_one_size():
     # The family this rule was written for. Every full-size card - line cards,
     # RSPs, RPs, fabric cards, the blank - is 41.4 x 395.7, and so is every bay

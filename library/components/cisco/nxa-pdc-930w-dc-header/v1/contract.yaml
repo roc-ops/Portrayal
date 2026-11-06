@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: nxa-pdc-930w-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: cisco-dc-block-3
+description: >-
+  The three-position DC power connector on the face of the Cisco NXA-PDC-930W supply, seen from
+  its mating face. A body carries three cells in a column, printed "- DC", "+ DC" and an earth
+  symbol from the top down, and a small clip tab stands out of its left side at the middle cell.
+  The cable connector cisco/nxa-pdc-930w-dc-plug@1 seats at its mate point.
+size: {w: 9.0, h: 16.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The guide draws the connector without a scale (Figure 504148) and prints no dimension for it. The
+  box is an estimate chosen to stand inside the supply's drawn inlet window (17.4 by 20.4).
+attrs: {connector: DC power connector block, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED: the Cisco N93108TC-FX3
+    NX-OS Mode Switch Hardware Installation Guide, "Connecting a Power Cable to an NXA-PDC-930W Power
+    Supply" (PDF page 49, guide page 43) calls it "a connector block" and its figure (PDF page 50,
+    figure 504148) callouts it "Power supply clip", "Connector clip" and "Connector clip release tab".
+    The guide's cable table (PDF page 59) says only that the supply "is shipped with cable
+    CAB-48DC-40A-8AWG". So no part number is stated for the connector and the interface claims no
+    standard.
+  gender: >-
+    NOT STATED. The figure shows a three-way housing with a clip, facing a three-way plug whose wires
+    enter at the back; it does not say which half carries pins. The cable connector is drawn as the half
+    that seats in this one.
+  marks: >-
+    guide - figure 504148 prints "- DC", "+ DC" and an earth symbol beside the three cells, top to bottom.
+    The cells are drawn in that order. The guide states no wire colour for any pole; the figure draws the
+    three wires red, black and green from the top down, which are not stated as a meaning.
+  size: >-
+    estimated - see size-notes. The cell pitch (4.6) and the cell size (5.4 by 3.8) are the part's own
+    estimate.
+  key: >-
+    guide - figure 504148 callouts 1 and 3 name the supply clip and the connector clip release tab. The
+    clip tab is drawn as a rectangle on the left side of the middle cell, an estimate of its place and size.
+  mate: >-
+    derived - the centre of the middle cell, (5.3, 8.0), facing out. The cable connector's own middle contact
+    is at its centre too, so the two align.
+  colour: >-
+    estimated - the guide's photograph (PDF page 59) shows a black connector body, so the body is drawn
+    #24272b with a lighter edge #4a4f55 and darker cells #0e0f11, so that the three cells read; the guide's
+    figure is line art.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face, so it is drawn flush
+    and states no relief.
+elements: {}
+connection-points:
+  mate: {at: [5.3, 8.0], direction: front}
+skins: [default]

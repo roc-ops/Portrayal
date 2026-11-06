@@ -1,0 +1,174 @@
+format: 1
+kind: rack
+name: 4postrack12a
+version: 1.0.0
+maturity: modelled
+manufacturer: StarTech.com
+model: 4POSTRACK12A
+part-numbers:
+  4POSTRACK12A: 12U 4 Post Server Equipment Open Frame Rack Cabinet w/ Adjustable Posts & Casters
+description: >-
+  The StarTech.com 12U open frame rack, four posts in black steel with L-shape
+  rails that have square holes for cage nuts. The rails are adjustable for a
+  variable mounting depth. It ships flat pack with four swiveling casters, which
+  raise the frame to 657 mm, and it is not wall-mountable. The casters are
+  described here and are not data yet: the rack product has no key for a base.
+form: 4-post-frame
+ru: 12
+numbering:
+  direction: bottom-up
+  start: 1
+width: 19
+holes:
+  style: square
+  fixing: cage nut
+hole-centres: 465.1
+opening: 450.85
+rails:
+  - id: front
+  - id: rear
+    depth:
+      min: 97
+      max: 913
+outer:
+  w: 534
+  h: 657
+  d: 913
+weight-kg: 15.60
+load:
+  static-kg: 270.07
+datasheet:
+  title: 12U 4 Post Server Equipment Open Frame Rack Cabinet w/ Adjustable Posts & Casters
+  url: https://media.startech.com/cms/pdfs/4postrack12a_datasheet.pdf
+provenance:
+  ru:
+    confidence: datasheet
+    note: >-
+      The U Height row of the StarTech.com 4POSTRACK12A data sheet, page 3, says
+      12U.
+  form:
+    confidence: datasheet
+    note: >-
+      The Rack Type row (4-Post) and the Frame Type row (Open Frame) on page 3.
+      The box list on the same page has two front and rear frames and four
+      assembly posts.
+  width:
+    confidence: estimated
+    note: >-
+      A stand-in. The sheet names the standard EIA/ECA-310-E and prints no rail
+      width, so the 19 in of that standard is written.
+  holes:
+    confidence: datasheet
+    note: >-
+      The Mounting Hole Types row on page 3 says Square (For Cage Nut), and the
+      box holds 16 M6 cage nuts. The sheet does not say those are the nuts for
+      the rails, so no thread is written, and it prints no hole size.
+  rails:
+    confidence: datasheet
+    note: >-
+      Page 2 prints the Minimum Mounting Depth as 3.8 in [97 mm] and the
+      Maximum Mounting Depth as 35.9 in [91.3 cm]. The metric prints are finer
+      and are written, 97 and 913 mm, and the inch figures lie inside their
+      rounding. The same 35.9 in is also the Product Length, which a rail
+      spacing cannot equal exactly, so the gap below asks which it is. The rear
+      rail adjusts between the two; the sheet prints no step.
+  outer:
+    confidence: datasheet
+    note: >-
+      Page 2 labels its sizes Product Length 35.9 in [91.3 cm], Product Width
+      21.0 in [53.4 cm], Product Height 23.1 in [58.6 cm] and Height with
+      Casters 25.9 in [65.7 cm]. The sheet draws no axes. Length is read as
+      front to back, because it equals the maximum mounting depth and the other
+      two are named width and height. Written in mm from the metric prints:
+      d 913, w 534 and h 657, the height with the casters fitted. The height
+      without them is 586 mm. Page 1 gives the height as less than 26 in (661
+      mm), which the table's 657 mm replaces.
+  weight-kg:
+    confidence: datasheet
+    note: >-
+      Page 2 prints Weight of Product as 34.4 lb [15.6 kg]. The sheet prints
+      inches and pounds first. The pounds figure converted, 15.60 kg, is the
+      finer and is written.
+  load:
+    confidence: datasheet
+    note: >-
+      Page 2 and page 3 print Weight Capacity (Stationary) as 595.4 lb [270
+      kg], the label wrapping across the page break. The pounds figure
+      converted, 270.07 kg, is the finer. The sheet prints no rolling rating,
+      so none is written.
+  numbering:
+    confidence: estimated
+    note: >-
+      A stand-in. The sheet says nothing about unit numbering; bottom-up from 1
+      is the default of the rack file.
+  hole-centres:
+    confidence: estimated
+    note: >-
+      A stand-in for the EIA-310 figure, 465.1 mm between hole lines (18.312
+      in). The sheet names the standard as EIA/ECA-310-E, and page 1 says
+      EIA-RS-310C. It prints no hole spacing.
+  opening:
+    confidence: estimated
+    note: >-
+      A stand-in for the EIA-310 minimum clear opening between the rails, 450.85
+      mm (17.75 in). The sheet prints no figure for it.
+gaps:
+  - what: width
+    reason: vendor-silent
+    note: The sheet names the standard and prints no rail width; 19 in is that standard's.
+    wanted: A dimensioned front view of the rails, or the rail width from the maker.
+  - what: numbering
+    reason: vendor-silent
+    note: The sheet does not say whether the units are numbered, or which way.
+    wanted: A photograph of the rail showing the unit labels, or a dimensioned drawing.
+  - what: hole-centres
+    reason: vendor-silent
+    note: The sheet prints no spacing between the hole lines.
+    wanted: A dimensioned front view of the vertical mounting rails.
+  - what: opening
+    reason: vendor-silent
+    note: The sheet prints no clear opening between the rails.
+    wanted: A dimensioned front view, or a measurement between the rails.
+  - what: hole-size
+    reason: vendor-silent
+    note: The sheet says the holes are square for a cage nut and prints no size.
+    wanted: A dimensioned drawing of the rail, or a measurement of a square hole.
+  - what: rail-depth-step
+    reason: vendor-silent
+    note: >-
+      The sheet prints the two ends of the depth range and no step, so the Rack
+      Builder takes any depth between them.
+    wanted: The step, or the positions of the adjustment holes, from the maker.
+  - what: outer-depth
+    reason: sources-disagree
+    note: >-
+      The Maximum Mounting Depth and the Product Length are both 35.9 in [91.3
+      cm]. Rails cannot be further apart than the frame is long, so the two
+      cannot both be exact. Both are written as printed, 913 mm. Nothing on the
+      sheet settles whether the length is the rail spacing or the overall depth.
+    wanted: A dimensioned side view, or the overall depth and the rail spacing from the maker.
+  - what: outer-axes
+    reason: needs-drawing
+    note: >-
+      The sheet labels Product Length, Width and Height and draws no axes. Length
+      is read as front to back. The 21.0 in is also the width of 12 U of rail, a
+      coincidence of the frame and not a second reading.
+    wanted: A dimensioned drawing with the three sizes marked.
+  - what: outer-height
+    reason: sources-disagree
+    note: >-
+      The table prints Height with Casters as 25.9 in [65.7 cm], written as 657
+      mm. The description on page 1 says less than 26 in (661 mm), and 26 in is
+      660.4 mm, so that text is not exact either.
+    wanted: The height with casters from the maker, and the caster size.
+  - what: max-device-depth
+    reason: vendor-silent
+    note: The sheet prints no usable depth for a device, so none is written.
+    wanted: The usable depth between the rails, from the maker.
+  - what: casters
+    reason: needs-drawing
+    note: >-
+      The frame ships with four swiveling casters, and the rack product has no
+      key for a base yet, so they are in the description only. The sheet prints
+      no caster size and no rolling load.
+    wanted: A base key in the rack product, and the caster size and a rolling load from the maker.

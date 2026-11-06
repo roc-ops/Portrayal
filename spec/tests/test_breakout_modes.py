@@ -67,6 +67,7 @@ def _files():
     return libwalk.iter_listings(LIB) + libwalk.iter_devices(LIB)
 
 
+@pytest.mark.heavy
 def test_every_mode_in_the_library_passes():
     seen = 0
     for p in _files():

@@ -1,0 +1,150 @@
+format: 1
+kind: module
+name: n9k-pdc-3000w-b
+version: 2.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Cisco N9500 Series 3-kW (-48 V) DC power supply (N9K-PDC-3000W-B). Same envelope as the AC supply.
+  It stands on end in a power-supply bay. The power switch and the FAIL/ID and OK lamps are at the top.
+  A hexagon vent grille runs down the face and the release lever runs along the right edge. A terminal
+  box with four posts in a column is down the lower left, under a three-screw safety cover. The posts
+  are negative, positive, positive and negative from the top: two for each of the two inputs. The
+  Nexus 9504, 9508 and 9516 take the same part.
+size: {w: 44.45, h: 133.35, d: 450.85}
+size-confidence: {w: estimated, h: estimated, d: datasheet}
+attrs:
+  model: 'N9K-PDC-3000W-B'
+  role: 'power-module'
+  input: 'dc'
+  inlet: dc-terminal
+  power-output-w: 3000
+  input-voltage: '-48 to -60 VDC'
+  efficiency: '90% or greater (20 to 100% load)'
+  airflow: 'port-side intake'
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    estimated - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p113, PDF p119): 5.25 in by 1.75 in, 17.75 in deep. The figures (PDF pp102-103) stand the
+    supply on end, so 44.45 mm wide by 133.35 mm high.
+  depth: >-
+    datasheet - the same table, 17.75 in (450.85 mm) inside the chassis.
+  power: >-
+    datasheet - the guide's "3000-W DC Power Supply Specifications" table: 3000 W, input -48 to -60 VDC,
+    efficiency 90 percent or greater, hot swappable, port-side intake. No frequency, current or
+    dissipation.
+  lamps: >-
+    install guide - "Power Supply LEDs", OK and FAIL or FAIL/ID, "on the upper left front portion of the
+    module" (PDF p137). The figures (PDF pp41 and 112, figure 500110) print FAIL/ID and OK under the
+    switch with FAIL/ID first, which stands FAIL/ID above OK on the supply on end. Positions estimated. The DC
+    procedure names the output lamp "OUT"; the LED table names it OK, which is used. GAP: the DC
+    connection and installation procedures (printed pp35 and 106, PDF pp41 and 112) also tell the reader to
+    verify that the Input 1 (IN1) and Input 2 (IN2) lamps light, and the LED table does not list them. The
+    figures print "IN1" and "IN2" with a small lamp symbol each under the terminal box's marks, but no
+    document gives their colour or states, so they are not drawn; the module has only OK and FAIL.
+  skin: >-
+    estimated - the face is redrawn from Cisco N9508 NX-OS Mode Switch Hardware Installation Guide,
+    "Connecting a 3-kW DC Power Supply to a DC Power Source" (printed p35, PDF p41, figure 500110: the
+    supply lying flat with the safety cover lifted), and "Installing or Replacing a 3-kW DC Power
+    Supply" (printed pp105 and 106, PDF pp111 and 112: the supply standing in the chassis, and figure
+    500110 again). The N9504 and N9516 guides print the same text and the same figures. The figures
+    are line art and give no dimension of the face's parts, so each box is read as a fraction of the face:
+    the switch housing about 14.5 mm square, from 1 mm down and 15 mm across; the FAIL/ID and OK lamps
+    in a column to its left, 2.0 mm in radius; the vent grille from 19 to 117 mm down and from 4.5 to 38
+    mm across, its hexagons drawn as a tile; the release lever 5.5 mm wide and 48 mm long along the right
+    edge; the terminal box 13.5 mm wide and 85 mm tall at 1.5 mm across and 29 mm down; the three cover
+    screws at 31.6, 70.3 and 108.9 mm down; and the screw at the foot, which the figure shows on the
+    supply's bottom bracket, at the lower left. Version 1 of this part drew a large dark panel, the four
+    posts in a row across the lower middle and a small switch near the bottom; because those boxes
+    moved, this drawing is version 2, and version 1 keeps its own. The colours are version 1's (light
+    grey plate, dark vent, near-white lever, grey box and posts, dark switch rocker): the figures are
+    line art and no photograph is held. The printed marks are drawn as small legends (polarity and the
+    circled input numbers 1 and 2), the lamp symbols IN1 and IN2 and the part number are not.
+  seats: >-
+    A DECLARED STAND-IN. The four posts are the library's common/terminal-screw-34@1, a slotted head 3.4
+    across (that part's own size is an estimate), standing at the centre of each post this skin draws
+    (7.6 mm across, 43.6, 62.2, 80.8 and 99.4 mm down, an even pitch of 18.6 mm read off the figure's
+    four slots). A real post is a stud that takes a lug under two nuts, and is wider than this head: the
+    guide's "Each terminal has two nuts. Use them to fasten a power cable to the terminal." No document held
+    gives a post's size or thread or its pitch, and no part draws a stud with two nuts, so the part marks
+    where a lug lands and does not show the post. They are not lifted: the figures show the box standing
+    off the face and no document says how far.
+  poles: >-
+    Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, "Connecting a 3-kW DC Power Supply to a DC
+    Power Source" (printed p35, PDF p41) and "Installing or Replacing a 3-kW DC Power Supply" (printed
+    p106, PDF p112): "four slots for four power terminals (ordered as negative [-], positive [+],
+    positive [+], and negative [-])", each with "two nuts". Figure 500110 prints
+    "-1+" over the first two slots and "+2-" over the last two, with IN1 and IN2 under them, and the
+    guide says the cables on one side of the supply go to the same circuit ("the positive and negative
+    cables that are attached to one side of the power supply are attached to the same DC power source
+    circuit"). So the box carries two inputs: `input-1` on the first two posts and `input-2` on the last
+    two, the poles of each in the order the figure prints them from the top as the supply stands. The
+    roles are the guide's words and signs, `neg` for negative [-] and `pos` for positive [+]: the guide
+    does not label the posts -48V or return.
+  awg: >-
+    Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, "Connecting a 3-kW DC Power Supply to a DC
+    Power Source" (printed p33, PDF p39): "Four power cables (6-AWG cables recommended)" and "Four 6-AWG
+    lugs that are provided with the switch", and Preparing the Site (PDF p22): "You provide four, 6-gauge
+    wires (recommended)". A recommendation and not a requirement, and the one size the guide gives for
+    this supply's four cables, two to each input, so each port states it. The N9504 and N9516 guides
+    print the same lines.
+  voltage: >-
+    NOT STATED. The guide's "3000-W DC Power Supply Specifications" table (PDF p123) prints an input
+    voltage of -48 to -60 VDC and the site planning table (PDF p22) "-40 to -75 VDC (-48 VDC nominal US)
+    (-60 VDC nominal international)": two nominals. A port states one nominal and no document says which
+    is this supply's, so the ports state none. `attrs` keeps the range as the specification table prints it.
+  rating: >-
+    NOT STATED. The site planning table (PDF p22) prints "45A at -40 to -75 VDC" under "Requirement for
+    Each Circuit", the circuit's requirement and not the supply's input rating, and the figure's
+    nameplate line is not legible at the size the guide prints it. A port's `rating-a` is one figure, so
+    the ports state none.
+  earth: >-
+    NONE. The figures show no earth or grounding terminal on this supply: the guide's grounding
+    procedure (PDF p36) ties the ground wire to the chassis grounding pad, and the screw at the foot of the
+    supply is its bottom bracket's screw, not a terminal. So no ground seat is composed.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+elements:
+  fail:
+    at: [6.2, 3.2]
+    size: [4.0, 4.0]
+    class: led
+    description: FAIL or FAIL/ID lamp, at the top of the module, above the OK lamp.
+    states:
+    - {name: amber, color: '#f5a623'}
+    - {name: flashing-amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+  ok:
+    at: [6.2, 10.0]
+    size: [4.0, 4.0]
+    class: led
+    description: OK lamp, at the top of the module, below the FAIL lamp.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: flashing-green, color: '#39b54a', behavior: blinking}
+    - 'off'
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-1-neg, at: [5.9, 41.9]}
+  - {ref: common/terminal-screw-34@1, id: pole-1-pos, at: [5.9, 60.5]}
+  - {ref: common/terminal-screw-34@1, id: pole-2-pos, at: [5.9, 79.1]}
+  - {ref: common/terminal-screw-34@1, id: pole-2-neg, at: [5.9, 97.7]}
+dc:
+  ports:
+    - id: input-1
+      direction: input
+      awg: [6]
+      poles:
+        - {role: neg, slot: pole-1-neg}
+        - {role: pos, slot: pole-1-pos}
+      source: {poles: poles, awg: awg}
+    - id: input-2
+      direction: input
+      awg: [6]
+      poles:
+        - {role: pos, slot: pole-2-pos}
+        - {role: neg, slot: pole-2-neg}
+      source: {poles: poles, awg: awg}
+skins: [default]

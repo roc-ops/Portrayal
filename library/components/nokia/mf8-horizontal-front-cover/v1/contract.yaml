@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mf8-horizontal-front-cover
-version: 1.0.0
+version: 1.0.1
 class: bezel
 behaviour: mounts
 profile: networking
@@ -65,6 +65,10 @@ provenance:
   logo-zone: >-
     the maker's mark at the lower left of the cover is reserved as a logo-zone and not drawn;
     "Lightspan MF-8" at the lower right is text and is set as text.
+  fasteners: >-
+    datasheet - USIM s2.3.7 (p71): the cover locks onto the cable tray by two quarter-turn D-ring
+    screws. They hold the cover on; no cable lands on them, so the two elements are class
+    `fastener`, not `screw` (a place a lug lands).
   relief: 'estimated - the dust filter sits directly behind the sheet; the gap is not dimensioned'
   lifecycle: >-
     searched only the staged documents - the 26.9 USIM lists the three kits as orderable; no
@@ -73,8 +77,8 @@ elements:
   vent: {at: [105.2, 17.0], size: [309.1, 297.1], class: vent}
   slot-row: {at: [68.8, 17.7], size: [5.0, 295.6], class: vent}
   lamp-window: {at: [16.6, 279.8], size: [3.0, 10.0], class: window}
-  d-ring-1: {at: [446.4, 39.1], size: [22.0, 22.0], class: screw}
-  d-ring-2: {at: [446.4, 293.4], size: [22.0, 22.0], class: screw}
+  d-ring-1: {at: [446.4, 39.1], size: [22.0, 22.0], class: fastener}
+  d-ring-2: {at: [446.4, 293.4], size: [22.0, 22.0], class: fastener}
   logo-zone: {at: [105.2, 330.2], size: [43.9, 9.7], class: logo-zone}
 relief:
   features:

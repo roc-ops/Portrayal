@@ -36,6 +36,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
+import { projectionRecords } from './path-index.js';
 import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver, readIndex } from './dist.js';
 import { createLamps } from './lamps.js';
@@ -688,6 +689,32 @@ export function createViewer(container, opts = {}) {
           return m;
         });
     }
+    // THE PIECES' ART IS RESOLVED BEFORE THE SWAP. A shown drawing is an image
+    // load, and awaited between disposing the old body and adding the new it
+    // left a frame with neither.
+    const bx = COMP && COMP_ENTRY.body && COMP_ENTRY.body.boxes;
+    let bodyBox = null;
+    if (bx && bx.length) {
+      bodyBox = new THREE.Group();
+      const pieceTex = new Map();   // one texture per drawing, for this build
+      // A FITTED PIECE FOLLOWS THE DRAWING (relief.js pieceFitted): the part's
+      // own face, with what the host has written on it, says which of its
+      // options it shows. The part alone is keyed by its own path, its name.
+      let shown = {};
+      if (bx.some(b => b.when)) {
+        const doc = new DOMParser().parseFromString(
+          await svgSource(distAt(COMP_ENTRY.files[cfg]), SCOPE), 'image/svg+xml');
+        shown = shownOptions(applyNodeFields(doc.documentElement, SCOPE));
+      }
+      for (const b of bodyBoxes(COMP_ENTRY.body, W, H)) {
+        if (!pieceFitted(b, shown[COMP_ENTRY.name])) continue;
+        const m = pieceMesh(b, b.w, b.h, b.z1 - b.z0,
+                            await pieceArt(COMP_ENTRY.body, b, distAt, SCOPE, pieceTex));
+        m.position.set(b.x + b.w / 2 - W / 2, H / 2 - (b.y + b.h / 2),
+                       D / 2 - b.z0 - (b.z1 - b.z0) / 2);
+        bodyBox.add(m);
+      }
+    }
     // the old scene stayed up while the new one was rasterising; swap it now
     clearHighlight();
     if (box) {
@@ -701,8 +728,7 @@ export function createViewer(container, opts = {}) {
     for (const k of Object.keys(faceGroups)) delete faceGroups[k];
     Object.assign(faceGroups, built);
     const fp = COMP && COMP_ENTRY.body && COMP_ENTRY.body.footprint;
-    const bx = COMP && COMP_ENTRY.body && COMP_ENTRY.body.boxes;
-    if (bx && bx.length) {
+    if (bodyBox) {
       // A BODY IN PIECES: the face on a thin plate and each box behind it
       // where the part says it is - the riser alone shows its PCB and its
       // connectors standing off the plate, as it does in the chassis.
@@ -726,25 +752,6 @@ export function createViewer(container, opts = {}) {
       box = new THREE.Mesh(new THREE.BoxGeometry(pl.size[0], pl.size[1], 1.2), plateMats);
       box.position.set(pl.at[0] + pl.size[0] / 2 - W / 2,
                        H / 2 - (pl.at[1] + pl.size[1] / 2), D / 2 - 0.6);
-      const bodyBox = new THREE.Group();
-      const pieceTex = new Map();   // one texture per drawing, for this build
-      // A FITTED PIECE FOLLOWS THE DRAWING (relief.js pieceFitted): the part's
-      // own face, with what the host has written on it, says which of its
-      // options it shows. The part alone is keyed by its own path, its name.
-      let shown = {};
-      if (COMP_ENTRY.body.boxes.some(b => b.when)) {
-        const doc = new DOMParser().parseFromString(
-          await svgSource(distAt(COMP_ENTRY.files[cfg]), SCOPE), 'image/svg+xml');
-        shown = shownOptions(applyNodeFields(doc.documentElement, SCOPE));
-      }
-      for (const b of bodyBoxes(COMP_ENTRY.body, W, H)) {
-        if (!pieceFitted(b, shown[COMP_ENTRY.name])) continue;
-        const m = pieceMesh(b, b.w, b.h, b.z1 - b.z0,
-                            await pieceArt(COMP_ENTRY.body, b, distAt, SCOPE, pieceTex));
-        m.position.set(b.x + b.w / 2 - W / 2, H / 2 - (b.y + b.h / 2),
-                       D / 2 - b.z0 - (b.z1 - b.z0) / 2);
-        bodyBox.add(m);
-      }
       scene.add(box);
       box.userData.bodyBox = bodyBox;
       scene.add(bodyBox);
@@ -951,6 +958,7 @@ export function createViewer(container, opts = {}) {
   const hitIndex = Object.fromEntries(ALL_VIEWS.map(v => [v, []]));
   const pathIndex = Object.fromEntries(ALL_VIEWS.map(v => [v, []]));
   async function buildHitIndex(cfg) {
+    const projections = [];
     for (const view of ALL_VIEWS) {
       hitIndex[view] = []; pathIndex[view] = [];
       const text = await svgSource(distAt(faceFile(devIndex, cfg, view)), SCOPE);
@@ -978,12 +986,12 @@ export function createViewer(container, opts = {}) {
         const r = TT.tiltRec(t);
         return r ? r.tilt : null;
       };
-      const rec = el => {
+      const rec = (el, path = el.dataset.path) => {
         const b = el.getBBox();
         const m = inv.multiply(el.getScreenCTM());
         const pts = [[b.x, b.y], [b.x + b.width, b.y + b.height]]
           .map(([x, y]) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f}));
-        const r = {path: el.dataset.path, cls: el.dataset.class || '',
+        const r = {path, cls: el.dataset.class || '',
                 model: el.dataset.model || '', x0: Math.min(pts[0].x, pts[1].x), y0: Math.min(pts[0].y, pts[1].y),
                 x1: Math.max(pts[0].x, pts[1].x), y1: Math.max(pts[0].y, pts[1].y)};
         const tilt = tiltAt(el);
@@ -992,13 +1000,20 @@ export function createViewer(container, opts = {}) {
       };
       hitIndex[view] = [...svg.children]
         .filter(el => el.dataset && el.dataset.path && el.dataset.class !== 'region')
-        .map(rec);
+        .map(el => rec(el));
       // hover keeps the page's shallow index (top-level children only, smallest
       // box wins); select() needs every addressable path, because the host's tree
       // has rows for parts nested inside a module
-      pathIndex[view] = [...svg.querySelectorAll('[data-path]')].map(rec);
+      pathIndex[view] = [...svg.querySelectorAll('[data-path]')].map(el => rec(el));
+      // a projection is kept aside until every face is read: it is indexed only
+      // for a path no face draws as a part (path-index.js). The wrapper carries
+      // `data-projection`; the parts inside it carry only `data-of`
+      for (const el of svg.querySelectorAll('[data-of]'))
+        projections.push({view, proj: true, ...rec(el, el.dataset.of)});
       div.remove();
     }
+    const real = new Set(ALL_VIEWS.flatMap(v => pathIndex[v].map(e => e.path)));
+    for (const {view, ...r} of projectionRecords(real, projections)) pathIndex[view].push(r);
   }
 
   // --- picking ----------------------------------------------------------------
@@ -1141,7 +1156,10 @@ export function createViewer(container, opts = {}) {
     const {view, c, exact} = found;
     const grp = faceGroups[view];
     if (!grp) return null;
-    const w = Math.max(c.x1 - c.x0, 0.4), h = Math.max(c.y1 - c.y0, 0.4);
+    // a projection of a fibre is a point a fraction of a millimetre across: its
+    // halo gets a floor the eye can find, as 2D pads the far ring by screen px
+    const floor = c.proj ? 2.4 : 0.4;
+    const w = Math.max(c.x1 - c.x0, floor), h = Math.max(c.y1 - c.y0, floor);
     // Local x=0 is the centre of the face the relief was built on, which for a
     // rack face is the 482.6 mm plate. Centring on the 434 mm body put the
     // halo 24.3 mm to the right of everything on the front - one ear.
@@ -1153,7 +1171,12 @@ export function createViewer(container, opts = {}) {
     // A PART ON A FACET: the halo takes the part's true box and stands in its
     // tilt frame - inside the owning FRU's group when that is tilted already,
     // so it rides the optic out. The frame below keeps the front-view centre.
-    const owner = FRU_GROUPS[fruFor(path, k => Object.prototype.hasOwnProperty.call(FRU_GROUPS, k))];
+    // Only an owner that stands on the face the part was found on: a rear
+    // fibre's owning cassette is a front FRU, and its group's frame is the
+    // front's - a halo parented there lands on the front, mirrored.
+    const ownerPath = fruFor(path, k => Object.prototype.hasOwnProperty.call(FRU_GROUPS, k));
+    const ownerView = ownerPath && FRU_META[ownerPath] && FRU_META[ownerPath].view;
+    const owner = ownerPath && (!ownerView || ownerView === view) ? FRU_GROUPS[ownerPath] : undefined;
     let into = owner || grp, hw = w, hh = h, hx = lx, hy = ly;
     if (c.tilt) {
       const u = unproject({x: c.x0, y: c.y0, w, h}, c.tilt);

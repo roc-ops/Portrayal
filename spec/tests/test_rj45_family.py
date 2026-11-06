@@ -1465,6 +1465,7 @@ def test_the_retired_rj45_parts_are_gone_and_unreferenced():
     assert hits == [], hits
 
 
+@pytest.mark.heavy
 def test_no_lamp_placement_still_declares_for_a_lamped_rj45():
     """Checks `for:` declarations, not geometry: a lamped jack (common/rj45-eth@1,
     common/rj45-ganged-eth@1) already draws its own led-a/led-b, so a separate

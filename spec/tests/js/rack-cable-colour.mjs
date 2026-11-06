@@ -233,13 +233,18 @@ test('rule 3: a named type\'s colour, where the table states one; a bare media t
 // The colours of main at dc96952ac, written out by hand, but for the AOC's,
 // which #1028 made aqua.
 const MAIN = {os2: '#e8c547', om3: '#2bb3c8', om4: '#2bb3c8', om5: '#9acd32', cat6: '#5aa7ff', cat6a: '#5aa7ff',
-              dac: '#15171a', aoc: AOC_NOW, unset: '#9aa3ad', power: '#1c1c1c', ground: '#3f9b4b'};
+              dac: '#15171a', aoc: AOC_NOW, unset: '#9aa3ad', power: '#1c1c1c', ground: '#3f9b4b',
+              // stack, usb and console: estimated shades, no source is held; each is its own colour
+              stack: '#d9702a', usb: '#8e6bd1', console: '#c9588a'};
 const mainColor = l => (l.media === 'copper' ? (l.purpose === 'management' ? '#9aa3ad' : '#5aa7ff') : (Object.hasOwn(MAIN, l.media) ? MAIN[l.media] : '#e8c547'));
 
 test('rule 4, and no default changed: every media is the colour it was', () => {
   for (const media of C.MEDIA) assert.equal(G.colorOf({media}), MAIN[media], media);
-  assert.deepEqual(C.MEDIA.map(m => MAIN[m]).length, 10);
+  assert.deepEqual(C.MEDIA.map(m => MAIN[m]).length, 13);
   assert.deepEqual(C.MEDIA.filter(m => !Object.hasOwn(MAIN, m)), [], 'a media with no recorded colour');
+  // the three new media are drawn in colours no other media has, so a stack, a USB and a console lead read apart on a plan
+  const others = Object.entries(MAIN).filter(([k]) => !['stack', 'usb', 'console'].includes(k)).map(([, v]) => v);
+  for (const m of ['stack', 'usb', 'console']) assert.ok(!others.includes(MAIN[m]) && new Set(['stack', 'usb', 'console'].map(k => MAIN[k])).size === 3, m);
   assert.equal(G.colorOf({media: 'aoc'}), AOC_NOW, 'an AOC is the teal of the multimode family');
   assert.equal(G.colorOf({media: 'unset'}), '#9aa3ad');
   assert.equal(G.colorOf({media: 'copper', purpose: 'server'}), '#5aa7ff');
@@ -512,7 +517,7 @@ test('an AOC with no colour stated is the multimode family\'s teal, not OM4\'s a
 test('every other COLORS entry is as it was', () => {
   assert.deepEqual({...G.COLORS, aoc: undefined}, {os2: '#e8c547', copper: {server: '#5aa7ff', management: '#9aa3ad'},
     om3: '#2bb3c8', om4: '#2bb3c8', om5: '#9acd32', cat6: '#5aa7ff', cat6a: '#5aa7ff', dac: '#15171a', aoc: undefined,
-    unset: '#9aa3ad', power: '#1c1c1c', ground: '#3f9b4b'});
+    unset: '#9aa3ad', power: '#1c1c1c', ground: '#3f9b4b', stack: '#d9702a', usb: '#8e6bd1', console: '#c9588a'});
 });
 
 // A cable as a rack plan hands it to the draw.io writer, and the same cable as

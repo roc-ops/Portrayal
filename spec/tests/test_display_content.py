@@ -133,6 +133,7 @@ def test_the_pdu_lcd_is_published_on_its_node_with_its_window(tmp_path):
         "the module in the bay is the module's to publish, not the device's")
 
 
+@pytest.mark.heavy
 def test_the_status_digits_are_published_as_one_display_of_the_part(tmp_path):
     for device, part in (("ufispace/s9700-53dx", "status-display"),
                          ("ufispace/s9705-48d", "beacon")):

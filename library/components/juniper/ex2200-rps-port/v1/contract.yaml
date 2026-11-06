@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: ex2200-rps-port
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: networking
+description: >-
+  Redundant power system (RPS) port on the rear panel of the Juniper EX2200 switches (all but the
+  EX2200-C): a long connector opening on a screwed plate, beside the console port. The guide lists
+  the port and labels it in its rear figure, and names no connector type. It presents no interface,
+  because no registered key covers it, so nothing is known to mate it.
+size: {w: 67.9, h: 14.6, d: 20.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {media: rps}
+provenance:
+  existence: >-
+    datasheet - EX2200 and EX2200-C Switches Hardware Guide (published 2022-02-02), Rear Panel of an
+    EX2200 Switch: "Redundant power system (RPS) port" in the list of rear panel components, and the
+    "RPS port" label of Figure 5 (page 24).
+  size: >-
+    estimated - the plate and its opening are read off the flat rear elevation of Figure 5, 6.124 px per
+    mm along its 445 mm width: a 67.9 by 14.6 plate with a 44.5 by 8.9 opening. This is the plate and
+    opening these devices drew as panel art before the port became a part, with the same figures. The
+    guide gives no dimension for the port; the figure's aspect is off by 2.2 percent, so the figures
+    are good to about a millimetre.
+  depth: >-
+    estimated. The drawing is a front view; 20.0 is what the relief builds, not a figure from any source
+  screws: >-
+    the four screws of the plate are not in this part: the devices place them as their own parts
+    (`rps-screw-0` to `rps-screw-3`), as they did when the plate was panel art.
+  interface: >-
+    NONE, DELIBERATELY. The registered key `ex3300-rps` covers the EX3300's port only, and its note says
+    that the EX2200 guide "lists a 'Redundant power system (RPS) port' in the same words and gives no
+    connector type either", so the two guides do not settle that this port is that connector. A part
+    that looks the same is not evidence that it is the same, and this is not juniper/ex3300-rps-port@1.
+    What is missing is the connector type of the EX2200's port, and with it a key and a mate. The
+    document that would settle it is the maker's description of the EX2200 RPS cable or of the external
+    power system the port takes; none is held. Until then this port is not usable: nothing mates it.
+elements:
+  opening: {at: [11.7, 2.9], size: [44.5, 8.9], class: slot}
+skins: [default]

@@ -14,6 +14,7 @@ import pathlib
 
 import yaml
 from portrayal import libwalk
+import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 STD = yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())["standards"]
@@ -79,6 +80,7 @@ def pairs():
                     yield path.split("devices/")[1], vn, it, c
 
 
+@pytest.mark.heavy
 def test_the_corpus_is_worth_checking():
     assert sum(1 for _ in pairs()) > 400
 
@@ -149,6 +151,7 @@ PRE_EXISTING = {
 }
 
 
+@pytest.mark.heavy
 def test_a_cutout_sits_where_its_component_sits():
     """`at` is never re-derived, so a hole cannot drift from the part in it."""
     bad = []
@@ -162,6 +165,7 @@ def test_a_cutout_sits_where_its_component_sits():
         f"cutouts adrift from their component: {sorted(set(bad) - PRE_EXISTING)[:6]}"
 
 
+@pytest.mark.heavy
 def test_a_cutout_is_the_size_of_its_aperture():
     bad = []
     for dev, vn, it, c in pairs():
@@ -174,12 +178,14 @@ def test_a_cutout_is_the_size_of_its_aperture():
         f"cutouts disagreeing with their aperture: {sorted(set(bad) - PRE_EXISTING)[:6]}"
 
 
+@pytest.mark.heavy
 def test_the_rotated_ones_are_actually_exercised():
     """Rotation is where this went wrong twice, so the corpus has to contain it."""
     n = sum(1 for _, _, it, _ in pairs() if (it.get("rotate") or 0) % 360)
     assert n >= 50, f"only {n} rotated cutouts; this proves little"
 
 
+@pytest.mark.heavy
 def test_no_bay_is_given_a_cutout():
     """A bay declares its own opening, so a cutout would be a second place to
     record the same hole. The ASR 9001 has 17 cutouts and gives none of them to

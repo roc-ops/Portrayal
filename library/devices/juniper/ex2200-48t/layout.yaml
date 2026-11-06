@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2200-48t
-version: 0.1.0
+version: 0.3.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2200-48T
@@ -106,10 +106,11 @@ provenance:
   rps-port:
     confidence: estimated
     note: >-
-      estimated - the RPS port (Figure 5 callout, guide list of rear panel components) is drawn as chassis
-      art: the plate and its opening at 50.1 to 118.0 mm and four screws. It is not a component: the library
-      has no RPS connector and its DCIM export has no row for one. The guide names no RPS part number and no
-      document of the RPS is held.
+      estimated - the RPS port (Figure 5 callout, guide list of rear panel components) is the part
+      juniper/ex2200-rps-port@1, placed at 50.1 mm with its four screws placed beside it; the plate and its
+      opening are read off Figure 5 as gate-1 describes. The part presents no interface: the guide names no
+      RPS connector type and the registered key ex3300-rps covers the EX3300 only, so nothing mates the port
+      and it is not usable yet. The guide names no RPS part number and no document of the RPS is held.
   built-in-power-and-fans:
     confidence: datasheet
     note: >-
@@ -134,6 +135,17 @@ provenance:
       borrowed - the chassis #919599 and the jack shells #b1b2b5 are the EX2300 front photograph's medians. The
       guide's figures are line drawings with no colour and no EX2200 photograph is held, so these are a
       relative's and not a reading of this device.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      INFERRED, NOT STATED. Table 32 (parts for connecting an EX Series switch to earth ground) names two 10-32 x .25
+      in. screws and a Panduit LCC10-14BWL lug or equivalent (not provided) for the EX2200 and gives no spacing. That
+      lug's holes are .75 in. apart (the library's two-hole lug of that pattern cites Panduit LCC10-14BW-L: '1/4 stud
+      hole, .75 hole spacing'), and the figure reads the two holes 19.8 mm apart, so the terminal is
+      `common/ground-hole-pair-3-4-10-32@1`: two bare 10-32 holes on 3/4 in. (19.05) centres, presenting
+      `stud-pair-3-4`. One two-hole lug (`generic/two-hole-lug-3-4@1`) lands across them and a ring lug still lands on
+      either hole. The holes stay bare, as the figure draws them; the screws that hold the lug are not part of the
+      switch. The holes were drawn 19.8 apart as decor and the pair stands on their midpoint.
 attrs:
   physical:
     weight-note: 8 lb (3.6 kg), Table 5
@@ -194,6 +206,21 @@ gaps:
     The jack lamps carry the component's link and activity vocabulary; the guide's Status lamp switches
     meaning with the mode button and no per-lamp state list fits the component.
   wanted: none beyond the component's own vocabulary.
+- what: rps-port-connector
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The connector type and pinout of the redundant power system port, and the model of the external
+    power system. The guide labels the port and says nothing else, so the part presents no interface
+    and nothing mates it.
+
+- what: ground-pair-pitch
+  scope: [ground-pair]
+  reason: vendor-silent
+  note: >-
+    The guide names the screws and the lug and gives no spacing for the two holes; `ground-stud-pitch` says what the
+    pair is drawn at and why.
+  wanted: a drawing that dimensions the two holes, or the lug's own datasheet
 groups:
   rj45:
     term: Port
@@ -219,8 +246,8 @@ groups:
     role: management
     index-origin: 0
     mixed: >-
-      how the switch is reached out of band - the management Ethernet port, the USB port and the RJ-45
-      console port on the rear
+      the management corner of the rear - how the switch is reached out of band (the management Ethernet
+      port, the USB port and the RJ-45 console port), with the RPS port beside them
   controls:
     term: Button
     role: management
@@ -248,6 +275,11 @@ groups:
     term: Item
     role: furniture
     index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the earthing terminal, two bare 10-32 holes for a two-hole lug (Table 32)
 views:
   front:
     size: {w: 445.0, h: 44.45}
@@ -360,10 +392,6 @@ views:
       decor:
       - {id: recess-mgmt, kind: recess, at: [10.4, 15.5], size: [17.0, 23.0], rx: 0.4, fill: '#1d2024'}
       - {id: earth-terminal, kind: earth-plate, at: [33.9, 4.4], size: [45.1, 13.0], rx: 0.3, fill: '#c9cbcd'}
-      - {id: earth-hole-1, kind: earth-hole, at: [44.05, 8.35], size: [4.7, 4.7], rx: 2.35, fill: '#2a2d31'}
-      - {id: earth-hole-2, kind: earth-hole, at: [63.85, 8.35], size: [4.7, 4.7], rx: 2.35, fill: '#2a2d31'}
-      - {id: rps-plate, kind: rps-plate, at: [50.1, 25.1], size: [67.9, 14.6], rx: 1.0, fill: '#c9cbcd'}
-      - {id: rps-opening, kind: rps-opening, at: [61.8, 28.0], size: [44.5, 8.9], rx: 4.0, fill: '#1d2024'}
       - {id: fan-0, kind: fan-grille, at: [122.55, 3.55], size: [38.9, 38.9], rx: 19.45, pattern: vent, vent: 1.0}
       - {id: fan-1, kind: fan-grille, at: [172.75, 3.55], size: [38.9, 38.9], rx: 19.45, pattern: vent, vent: 1.0}
       - {id: exhaust-sealed, kind: sealed-exhaust, at: [217.45, 3.55], size: [38.9, 38.9], rx: 19.45, fill: '#7b7f83'}
@@ -380,6 +408,7 @@ views:
     - {at: [39.4, 23.0], text: CON, font-size: 4.2, anchor: middle, fill: '#f2f4f6', for: console-rj45}
     components:
       placements:
+      - {ref: common/ground-hole-pair-3-4-10-32@1, id: ground-pair, at: [44.362, 8.287], group: grounding, rel-pos: 0}
       - {ref: common/rj45-eth@1, id: mgmt, at: [11.2, 15.7], rotate: 180, group: mgmt, rel-pos: 1,
          attrs: {speed: 1g, role: mgmt},
          states: {led-a: ['off', {name: link-activity, color: '#22c55e', behavior: blinking}],
@@ -387,13 +416,14 @@ views:
          description: 'Tables 7 and 8 - Link/Activity green blinking with activity, steady without; Status green, one blink a second at 10 Mbps and two at 100 Mbps'}
       - {ref: std/usb-a@1, id: usb, at: [12.5, 31.85], group: mgmt, rel-pos: 2}
       - {ref: std/rj45@2, id: console-rj45, at: [31.5, 24.7], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+      - {ref: juniper/ex2200-rps-port@1, id: rps, at: [50.1, 25.1], group: mgmt, rel-pos: 4}
       - {ref: common/ground-symbol@1, id: earth-mark, at: [85.4, 8.3], for: chassis, group: furniture, rel-pos: 1}
       - {ref: common/esd-jack@1, id: esd-rear-jack, at: [106.6, 8.6], for: chassis, group: esd, rel-pos: 0}
       - {ref: std/c14-inlet@1, id: ac-inlet, at: [405.2, 11.1], group: power-input, rel-pos: 0}
-      - {ref: common/screw-head@1, id: rps-screw-0, at: [53.0, 31.0], group: furniture, rel-pos: 2}
-      - {ref: common/screw-head@1, id: rps-screw-1, at: [110.7, 31.0], group: furniture, rel-pos: 3}
-      - {ref: common/screw-head@1, id: rps-screw-2, at: [55.1, 38.5], group: furniture, rel-pos: 4}
-      - {ref: common/screw-head@1, id: rps-screw-3, at: [109.6, 38.5], group: furniture, rel-pos: 5}
+      - {ref: common/screw-head@1, id: rps-screw-0, at: [53.0, 31.0], for: rps, group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: rps-screw-1, at: [110.7, 31.0], for: rps, group: furniture, rel-pos: 3}
+      - {ref: common/screw-head@1, id: rps-screw-2, at: [55.1, 38.5], for: rps, group: furniture, rel-pos: 4}
+      - {ref: common/screw-head@1, id: rps-screw-3, at: [109.6, 38.5], for: rps, group: furniture, rel-pos: 5}
       - {ref: common/screw-head@1, id: rear-screw-0, at: [165.3, 6.5], group: furniture, rel-pos: 6}
       - {ref: common/screw-head@1, id: rear-screw-1, at: [165.3, 38.6], group: furniture, rel-pos: 7}
       - {ref: common/screw-head@1, id: rear-screw-2, at: [213.6, 38.5], group: furniture, rel-pos: 8}

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ex6200-pwr-dc2100
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -36,6 +36,40 @@ provenance:
     the three lamps along the bottom. Figure 23 draws four studs, two in a left column beside the Positive callout
     and two in a right column beside the Negative callout; the text speaks of a pair of input lugs (a positive and
     a negative terminal). The four are drawn as the figure shows them. Every position is estimated to about 3 mm.
+    The studs the supply composes (seats) stand over the four drawn discs, and the skin adds the bracket the left
+    pair sits on.
+  bracket: >-
+    estimated - Figure 23 (printed page 79) draws a flat bracket plate standing beside the left pair of fasteners,
+    between the two pairs. The skin draws it as a pale strip on the terminal block, 3 mm wide; its size and its
+    colour are estimated, the figure being line art.
+  seats: >-
+    estimated - each pole is common/hex-nut-stud-pair-5-8@1, two hex nuts on studs, a washer under each nut, on 5/8
+    in. centres, as Figure 23 draws each fastener; one two-hole lug lands across the pair, turned a quarter so the
+    pair runs down the face, one stud above the other, as Figure 23 draws each column.
+    The pitch is the lug's: EX6210 Switch Hardware Guide (published 2020-12-15) names the lug of the DC input,
+    "Two DC lugs (Panduit LCD4-14A-L)" in its configuration table and parts list, and Panduit's catalog "Power and
+    Grounding Infrastructure Solutions", page 9, prints for LCD4-14A-L a 1/4 in. stud hole and a stud hole spacing
+    of 0.63 in. The catalog rounds 0.625 to 0.63; the pair is the registered 5/8 in. (15.875) one. No document held
+    dimensions the supply's studs or the columns. Each pair is centred on the middle of the two studs the skin draws,
+    which stand 15.5 apart: the figure is an isometric and its places are estimated to about 3 mm, so the 0.375 mm
+    difference moves each stud by under 0.2 mm and no drawn box is moved. The right column is placed 1.5 mm lower
+    than the left, as the skin draws it.
+  poles: >-
+    EX6210 Switch Hardware Guide, Figure 23 (printed page 79): the callout "Positive input terminal" points at the
+    left column and "Negative input terminal" at the right, and the skin's legend prints + over the left and - over the
+    right. The guide's installation step reads "the positive (+) source cable to the positive return terminal (+) and the
+    negative (-) source cable to the input terminal (-)". The roles are the printed signs: `pos` for + and `neg` for -
+    (spec/schemas/dc.yaml); the guide prints no BATT or RTN legend. One input, so one port, `input`, of two poles,
+    left to right.
+  voltage: >-
+    NOT STATED AS ONE FIGURE. Table 30 (printed page 83) prints a nominal operating voltage of -48 VDC through -60 VDC
+    and an operating range of -40 VDC through -72 VDC. A nominal that is a range is not one figure, so the port states
+    none; `attrs` keeps the range as it already carried it.
+  rating: >-
+    NOT STATED. Table 30: "60 A maximum" at -40 VDC and "50 A maximum" at -48 VDC for each input terminal. A port's
+    `rating-a` is one figure, so the port states none.
+  awg: >-
+    NOT STATED. The guide held prints no wire size for the supply's DC cables, so the port states none.
   handle: >-
     estimated - the guide gives no colour for the handle; the figures are line drawings. It is drawn in neutral grey.
   power-output-w: >-
@@ -86,4 +120,15 @@ relief:
     out: 2.0
     confidence: estimated
     source: figure - the handle loop stands proud of the vent field in Figure 23; its projection is not measured
+parts:
+  - {ref: common/hex-nut-stud-pair-5-8@1, id: pole-pos, at: [0.3625, 28.15], rotate: 90}
+  - {ref: common/hex-nut-stud-pair-5-8@1, id: pole-neg, at: [17.7625, 29.65], rotate: 90}
+dc:
+  ports:
+    - id: input
+      direction: input
+      poles:
+        - {role: pos, slot: pole-pos}
+        - {role: neg, slot: pole-neg}
+      source: {poles: poles}
 skins: [default]

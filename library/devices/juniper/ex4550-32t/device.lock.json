@@ -33,14 +33,15 @@
    "juniper/ex4600-jpsu-650-dc-afo@1"
   ]
  },
- "composed": "43ab1e64b3ca9c39",
+ "composed": "91fffba6162527f3",
  "composed-refs": {
-  "common/esd-jack@1": "1.0.0+0991d3874bfac0f4",
+  "common/esd-jack@1": "1.0.1+fa89d49c1ff75841",
   "common/led-arrow-sm@1": "1.1.0+f6e565f48fbd46a4",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
   "common/rj45-ganged-eth-plain@1": "1.0.0+3bd0f8c628445a0b",
-  "juniper/ex4300-console-usb-mini@1": "1.0.0+4fc09bbfe7cb4438",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
+  "juniper/ex4300-console-usb-mini@1": "1.1.0+adb5567b57788bde",
   "juniper/ex4300-lcd-button@1": "1.0.0+350b78fe9a921b6d",
   "juniper/ex4550-em-cover@1": "1.0.0+454c83feb9f24503",
   "juniper/ex4550-fan-afi@1": "1.0.0+9b5752a306703573",
@@ -48,8 +49,8 @@
   "juniper/ex4550-psu-cover@1": "1.0.0+1b528d305e8ee3db",
   "juniper/ex4600-jpsu-650-ac-afi@1": "1.0.0+bbeb728ce4155cc5",
   "juniper/ex4600-jpsu-650-ac-afo@1": "1.0.0+8e2c11074b587cc3",
-  "juniper/ex4600-jpsu-650-dc-afi@1": "1.0.0+233d8eb70643de91",
-  "juniper/ex4600-jpsu-650-dc-afo@1": "1.0.0+c452aabb8ae6000d",
+  "juniper/ex4600-jpsu-650-dc-afi@1": "1.1.0+1c5a04707f2264a1",
+  "juniper/ex4600-jpsu-650-dc-afo@1": "1.1.0+c93f6fb25e91fe5e",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
   "std/rj45@2": "2.1.0+2c8fec73bdc493fb",
@@ -62,6 +63,55 @@
   "dc-f2b",
   "two-psu"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "juniper/ex4600-jpsu-650-dc-afi@1": {
+    "awg": [
+     14,
+     16
+    ],
+    "configs": [
+     "dc-b2f"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   },
+   "juniper/ex4600-jpsu-650-dc-afo@1": {
+    "awg": null,
+    "configs": [
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "d149894e424a09ea",
  "groups": [
@@ -544,5 +594,5 @@
  "placement-surface": "ea10c3583ca6d389",
  "shape": "e526f7b177496b10",
  "surface": "26701855db05006a",
- "version": "0.1.0"
+ "version": "0.3.0"
 }

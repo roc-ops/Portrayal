@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: csc-8x10g
-version: 1.6.0
+version: 1.7.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -160,6 +160,10 @@ provenance:
     `estimated` rather than `borrowed` - applied across the family because these cards share a faceplate.
     No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
     estimate written eleven times, not eleven readings that agreed.'
+  groups: >-
+    Casa Systems C100G Hardware Installation Guide (rev 07/08/2022), Figure 3-2 (PDF
+    page 92): eight 10GigE Ethernet ports, small form-factor pluggable (SFP+), labelled
+    XG0 to XG7.
 elements:
   status: {at: [4.8, 254.3], size: [3.0, 3.0], class: led, states: ['off', {name: ok, color: '#39b54a'}]}
   active: {at: [4.8, 260.3], size: [3.0, 3.0], class: led, states: ['off', {name: active, color: '#39b54a'}]}
@@ -211,13 +215,20 @@ relief:
     - {node: xg5-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
     - {node: xg6-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
     - {node: xg7-led-b, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+groups:
+  xgige:
+    term: XG
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: eight 10GigE SFP+ ports, labelled XG0 to XG7
 parts:
-  - {ref: std/sfp-ganged@1, id: xg0, at: [5.475, 75.9], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
-  - {ref: std/sfp-ganged@1, id: xg1, at: [5.475, 90.15], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
-  - {ref: std/sfp-ganged@1, id: xg2, at: [5.475, 104.4], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
-  - {ref: std/sfp-ganged@1, id: xg3, at: [5.475, 118.65], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
-  - {ref: std/sfp-ganged@1, id: xg4, at: [5.475, 137.2], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
-  - {ref: std/sfp-ganged@1, id: xg5, at: [5.475, 151.45], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
-  - {ref: std/sfp-ganged@1, id: xg6, at: [5.475, 165.7], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
-  - {ref: std/sfp-ganged@1, id: xg7, at: [5.475, 179.95], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg0, group: xgige, at: [5.475, 75.9], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg1, group: xgige, at: [5.475, 90.15], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg2, group: xgige, at: [5.475, 104.4], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg3, group: xgige, at: [5.475, 118.65], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg4, group: xgige, at: [5.475, 137.2], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg5, group: xgige, at: [5.475, 151.45], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg6, group: xgige, at: [5.475, 165.7], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: xg7, group: xgige, at: [5.475, 179.95], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
 skins: [default]

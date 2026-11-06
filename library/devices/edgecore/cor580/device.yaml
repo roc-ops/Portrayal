@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor580
-version: 3.0.4
+version: 4.0.1
 maturity: modelled
 manufacturer: Edgecore
 model: AS9926-24D
@@ -20,6 +20,16 @@ description: >-
   airflow only.
 profile: networking
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed logotype,
+      red at both ends, over the model text at the lower left, beside the display digits. Measured on
+      the front picture on page 2 of Edgecore's COR580 data sheet (1181 x 119 px), calibrated on the body
+      outline at 2.685 px/mm across and 2.691 down, which agree to 0.2 percent: the mark runs x 30.2 to
+      50.9 and y 32.2 to 36.3. The picture is square-on, so the sureness is sure and the position is good
+      to about 1 mm. The `logo-zone` region on the front view reserves the place; nothing is drawn in
+      it.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -310,6 +320,15 @@ provenance:
       datasheet - the FRU table names FSH082-610G as the AC PSU and FSJ033-610G as the DC 48 V PSU (cor580-datasheet/doc.md:196-197),
       and AS9926-24D/24DB-FAN as the single fan tray SKU. Different part numbers from the sibling's, which
       is why they are recorded here rather than inherited.
+  dc-supply-figure:
+    confidence: estimated
+    note: >-
+      THE DC BUILD SEATS ITS OWN SUPPLY, edgecore/fsj033-610g@1 (the data sheet's FRU FSJ033-610G, EC-DS-0222-R04
+      page 4), read from the quick start's page 3 illustration of the supply's terminal end (Connect Power;
+      a colour render with no scale) and drawn on common/psu-ac-1300@1's 57.0 x 40.0 envelope. Nothing
+      is measured from the illustration: each position is a fraction of the visible face and estimated.
+      The dc48-f2b configuration used to seat the AC part with a component-attrs override; it seats the
+      new part through its bays and the override is gone.
   airflow:
     confidence: datasheet
     note: >-
@@ -387,11 +406,15 @@ gaps:
   - rear
   reason: needs-hardware
   wanted: >-
-    The dc48-f2b configuration orders FSJ033-610G, a 1300 W -48 VDC supply with a terminal block rather
-    than a C14 inlet. The library has common/psu-dc-650 but no 1300 W DC module, and neither COR580 document
-    photographs the DC PSU's face - both rear elevations show the AC unit. The DC configuration therefore
-    draws the AC part, which is wrong at the connector. A photograph or drawing of FSJ033-610G's face
-    is what it needs.
+    The dc48-f2b configuration orders FSJ033-610G, a 1300 W -48 VDC supply, and seats edgecore/fsj033-610g@1,
+    which is drawn from the quick start's angled illustration of the supply's terminal end (Connect Power,
+    page 3; no scale). The envelope is borrowed from common/psu-ac-1300@1, every position on the face
+    is read from the illustration and estimated, the colours are sampled from a render, and which way
+    the wires leave the two screws is not stated. The illustration puts the handle at the left and the
+    latch at the lower right where the AC part has its latch at the left; the two are not reconciled,
+    and no photograph or 3D model of FSJ033-610G is held. The quick start gives the supply's input as
+    -40 V to -75 V and the data sheet the system's as -36 to -72 VDC, recorded on the part and not resolved.
+    A photograph or elevation of the DC build's rear is what it needs.
 - what: sibling-fan-bay-width
   scope:
   - rear
@@ -454,7 +477,8 @@ groups:
       out-of-band uplinks, the out-of-band 1000BASE-T RJ-45, the RS-232 console RJ-45 and a USB-A service
       port. Four media, one job; the vendor draws them as one block under one row of legends and so do
       we.
-  leds: {term: LED, role: indicator, index-origin: 1}
+  system-leds: {term: LED, role: indicator, index-origin: 1}
+  oob-leds: {term: LED, role: indicator, index-origin: 1}
   displays: {term: Display, role: indicator, index-origin: 1}
   psus:
     term: PSU
@@ -694,12 +718,12 @@ views:
         rel-pos: 1}
       - {ref: common/rack-ear@1, id: ear-right, at: [438.4, -0.2], skin: right, optional: ears, group: furniture,
         rel-pos: 2}
-      - {ref: common/led-dot@1, id: led-sys-loc, at: [32.6, 4.57], group: leds, rel-pos: 1, for: chassis}
-      - {ref: common/led-dot@1, id: led-diag, at: [32.6, 7.68], group: leds, rel-pos: 2, for: chassis}
-      - {ref: common/led-dot@1, id: led-fan, at: [32.6, 10.64], group: leds, rel-pos: 3, for: [rear/fan-1,
-          rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
-      - {ref: common/led-dot@1, id: led-psu1, at: [32.6, 13.61], group: leds, rel-pos: 4, for: rear/psu-1}
-      - {ref: common/led-dot@1, id: led-psu2, at: [32.6, 16.73], group: leds, rel-pos: 5, for: rear/psu-2}
+      - {ref: common/led-dot@1, id: led-sys-loc, at: [32.6, 4.57], group: system-leds, rel-pos: 1, for: chassis}
+      - {ref: common/led-dot@1, id: led-diag, at: [32.6, 7.68], group: system-leds, rel-pos: 2, for: chassis}
+      - {ref: common/led-dot@1, id: led-fan, at: [32.6, 10.64], group: system-leds, rel-pos: 3, for: [
+          rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
+      - {ref: common/led-dot@1, id: led-psu1, at: [32.6, 13.61], group: system-leds, rel-pos: 4, for: rear/psu-1}
+      - {ref: common/led-dot@1, id: led-psu2, at: [32.6, 16.73], group: system-leds, rel-pos: 5, for: rear/psu-2}
       - {ref: common/reset-button@1, id: reset, at: [31.6, 19.78], group: mgmt, rel-pos: 6, for: chassis}
       - {ref: common/seven-segment-dual@1, id: status-display, at: [40.7, 11.3], group: displays, rel-pos: 1,
         for: chassis}
@@ -804,8 +828,8 @@ views:
         group: mgmt
         rel-pos: 3
         attrs: {media: sfp-plus, speed: 10g, role: out-of-band}
-      - {ref: common/led-dot@1, id: led-oob-0, at: [372.72, 8.5], group: leds, rel-pos: 6, for: oob-0}
-      - {ref: common/led-dot@1, id: led-oob-1, at: [379.28, 8.5], group: leds, rel-pos: 7, for: oob-1}
+      - {ref: common/led-dot@1, id: led-oob-0, at: [372.72, 8.5], group: oob-leds, rel-pos: 1, for: oob-0}
+      - {ref: common/led-dot@1, id: led-oob-1, at: [379.28, 8.5], group: oob-leds, rel-pos: 2, for: oob-1}
       - ref: common/rj45-eth@1
         id: mgmt-eth
         at: [388.44, 9.1]
@@ -830,6 +854,10 @@ views:
       - {ref: common/usb-symbol@1, id: usb-mark, at: [407.0, 22.2], group: furniture, rel-pos: 3, for: usb}
       - {ref: common/pull-tab@1, id: info-tab, at: [416.6, 38.6], group: furniture, rel-pos: 4}
     regions:
+    - id: logo-zone
+      at: [30.2, 32.2]
+      size: {w: 20.7, h: 4.1}
+      label: Vendor logo; not drawn
     - id: status-cluster
       at: [30.0, 3.0]
       size: {w: 30.0, h: 23.5}
@@ -888,6 +916,7 @@ views:
         size: {w: 57.0, h: 40.0}
         accepts:
         - common/psu-ac-1300@1
+        - edgecore/fsj033-610g@1
         group: psus
         rel-pos: 2
         default: common/psu-ac-1300@1
@@ -944,6 +973,7 @@ views:
         size: {w: 57.0, h: 40.0}
         accepts:
         - common/psu-ac-1300@1
+        - edgecore/fsj033-610g@1
         group: psus
         rel-pos: 1
         default: common/psu-ac-1300@1
@@ -1026,10 +1056,11 @@ configurations:
     description: >-
       Dual -48 VDC PSUs (FRU FSJ033-610G, rated 48 VDC 1300 W, input -40 V to -75 V at 40 A maximum) and
       the same six fan trays, front-to-back airflow. The DC SKUs ship four ring lugs that the AC SKUs
-      do not (cor580-qsg package contents, item 4). The bay geometry is identical; the supply is drawn
-      as the AC part because the library holds no 1300 W DC module yet, which is registered as a gap.
-    component-attrs:
-      psu-ac-1300: {input: dc}
+      do not (cor580-qsg package contents, item 4). The bay geometry is identical, and each bay seats
+      edgecore/fsj033-610g@1, the DC supply's own part with a two-screw terminal block and a ground stud,
+      drawn from the quick start's angled illustration of the supply's terminal end; what remains open
+      is the dc-psu-module gap.
+    bays: {psu-1: edgecore/fsj033-610g@1, psu-2: edgecore/fsj033-610g@1}
     part-numbers:
       AS9926-24D-O-48V-F: {part: FP5EC9524001Z, power-cord: none}
       AS9926-24DB-O-48V-F: {part: FP5EC9524003Z, power-cord: none}

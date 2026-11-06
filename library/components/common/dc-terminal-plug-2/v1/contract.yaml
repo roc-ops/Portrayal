@@ -1,10 +1,11 @@
 format: 1
 kind: component
 name: dc-terminal-plug-2
-version: 1.0.0
+version: 1.1.0
 class: inlet
 behaviour: mounts
 profile: networking
+interface: screw-terminal-2
 description: >-
   Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a
   matching two-way screw-clamp plug seated in it, held by a flange screw at each
@@ -29,7 +30,21 @@ provenance:
   poles: >-
     FACEPLATE LEGEND, not the part: '-  -48V~-60V = 6A Max  +' printed under the block,
     negative at the left. The datasheet gives 'DC Power Input (-48~-60 V)'.
+  roles: >-
+    the printed marks, which the two devices that place this part print in OPPOSITE order. The ECS4530-54CSFP-DC-I faceplate
+    prints '-' under the left pole and '+' under the right one; the ECS4120-28Fv2-I face is drawn with '+' at the left and '-'
+    at the right, as that device records. The Edgecore ECS4120-28Fv2 Quick Start Guide ("Connect Power", DC Power) says to
+    connect the -48 VDC feed wire to the DC plug '-' pin and the ground/return wire to its '+' pin. In DC roles the '-' pole is
+    `batt` and the '+' pole is `rtn`, wherever a device prints them. The part states no DC port and no pole by position: the
+    two devices disagree about which side is which, and the two poles are the contacts of one pluggable block, which presents
+    one slot.
+  interface: >-
+    `screw-terminal-2`, the key registered for this block. Neither document states a pitch, a maker, a series or a part number
+    for the block, so the key claims none. The part is the header, and generic/screw-terminal-2-plug@1 mates it, a stand-in
+    for the cable plug: the plug body this skin draws seated is the same box. The mate point is the middle of that box.
 elements:
   body: {at: [0.0, 0.0], size: [32.1, 17.6], class: connector}
   plug: {at: [10.10, 5.30], size: [10.60, 11.00], class: connector}
+connection-points:
+  mate: {at: [15.40, 10.80], direction: front}
 skins: [default]

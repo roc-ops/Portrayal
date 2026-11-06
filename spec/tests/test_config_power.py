@@ -154,6 +154,7 @@ def test_L120_reads_the_feed_off_supply_names_the_library_uses():
 
 # ---- the census #513 was opened for ----------------------------------------
 
+@pytest.mark.heavy
 def test_every_whitebox_build_states_its_feed():
     """Every offered configuration of every Edgecore, UfiSpace and Celestica
     device resolves a feed - the filter the HCL runs has nothing to parse."""
@@ -171,6 +172,7 @@ def test_every_whitebox_build_states_its_feed():
     assert n > 150, f"measured only {n} configurations"
 
 
+@pytest.mark.heavy
 def test_every_whitebox_device_states_airflow_or_says_why_not():
     """Airflow is stated wherever a source gives it. The three that do not are
     the Edgecore ECS campus switches, whose documents say nothing about fans,
@@ -268,6 +270,7 @@ OFFERS_B2F = re.compile(r"back-to-front", re.I)
 OFFERS_BOTH_FEEDS = re.compile(r"\bAC (?:or|and) (?:-48 ?V?DC|DC)\b|\bAC/DC\b", re.I)
 
 
+@pytest.mark.heavy
 def test_a_description_offering_back_to_front_has_the_build():
     """Nine devices say in their description that they ship back-to-front. Before
     #513 part 2, five of them - the S9300-32D, S9301-32D, S9301-32DB, S9311-64D
@@ -286,6 +289,7 @@ def test_a_description_offering_back_to_front_has_the_build():
     assert checked >= 9, f"only {checked} descriptions offer back-to-front"
 
 
+@pytest.mark.heavy
 def test_a_description_offering_ac_or_dc_has_both_builds():
     checked, missing = 0, []
     for slug, f in whitebox():

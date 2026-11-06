@@ -94,6 +94,7 @@ def rear(f):
 
 # --- 1. the registry -----------------------------------------------------------
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PAIRS))
 def test_each_usb_interface_is_a_connector_citing_its_standard(iface):
     reg = render_mod._connector_registry()
@@ -103,6 +104,7 @@ def test_each_usb_interface_is_a_connector_citing_its_standard(iface):
     assert reg[iface]["standard"] == jack["conforms"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PAIRS))
 def test_each_receptacle_presents_its_interface_at_its_face(iface):
     jack = _contract(PAIRS[iface][0])
@@ -116,6 +118,7 @@ def test_each_receptacle_presents_its_interface_at_its_face(iface):
     assert lift == 0.0
 
 
+@pytest.mark.heavy
 def test_the_micro_usb_jack_gained_its_interface_and_kept_its_drawing():
     """The one receptacle this work touched: an interface and a mate point,
     and nothing a device placed against."""
@@ -146,6 +149,7 @@ CARD = {
 }
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(CARD))
 def test_a_cards_receptacle_is_a_nested_slot_that_offers_its_plug(iface, comps):
     ref, part_id = CARD[iface]
@@ -159,12 +163,14 @@ def test_a_cards_receptacle_is_a_nested_slot_that_offers_its_plug(iface, comps):
     assert slot["lift"] == 0.0, slot
 
 
+@pytest.mark.heavy
 def test_a_card_with_two_receptacles_publishes_both(comps):
     slots = {c["id"]: c for c in comps["nokia/lbnt-a@1"]["cages"] if c["interface"] == "usb-c"}
     assert sorted(slots) == ["debug", "usb"]
     assert all(c["accepts"] == [C] for c in slots.values())
 
 
+@pytest.mark.heavy
 def test_a_card_seated_in_another_card_publishes_its_lone_receptacle(comps):
     """commscope/cc3008@1 seats in the `cc` bay of a CA3008 carrier, which is
     itself a card, and composes one interface-bearing part: its Micro-USB
@@ -186,6 +192,7 @@ def test_a_card_seated_in_another_card_publishes_its_lone_receptacle(comps):
     assert slot["lift"] == 0.0, slot
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", WRAPPERS)
 def test_a_bezel_presents_the_receptacle_it_composes(ref, comps):
     """common/usb-a@2 and common/usb-a-bezel@1 each compose one std/usb-a@1 and
@@ -201,6 +208,7 @@ def test_a_bezel_presents_the_receptacle_it_composes(ref, comps):
     assert not comps[ref].get("cages")
 
 
+@pytest.mark.heavy
 def test_every_composed_usb_receptacle_is_a_slot_or_is_forwarded(comps):
     """The census: each `parts:` entry that is one of the three receptacles is
     either published as a slot of the component that composes it, or is that
@@ -236,6 +244,7 @@ def test_every_composed_usb_receptacle_is_a_slot_or_is_forwarded(comps):
     assert sorted(forwarded) == sorted((w, "component") for w in WRAPPERS)
 
 
+@pytest.mark.heavy
 def test_every_usb_receptacle_a_device_places_is_one_of_these_parts():
     """The other half of the census, on the device side: a device places a USB
     receptacle as one of the three bare parts or one of the two bezels, and
@@ -264,6 +273,7 @@ def test_every_usb_receptacle_a_device_places_is_one_of_these_parts():
 
 # --- 3. the plugs --------------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH
 def test_it_is_a_plug_that_mates_its_interface(ref):
     d = _contract(ref)
@@ -274,6 +284,7 @@ def test_it_is_a_plug_that_mates_its_interface(ref):
     assert d["unplaced"]
 
 
+@pytest.mark.heavy
 @EACH
 def test_it_states_its_connector_and_no_generation(ref):
     """A generic plug is the connector, not the bus: its media is the key its
@@ -284,6 +295,7 @@ def test_it_states_its_connector_and_no_generation(ref):
     assert not {"speed", "usb", "generation"} & set(d["attrs"])
 
 
+@pytest.mark.heavy
 @EACH
 def test_it_states_no_depth_and_its_length_is_in_the_registry(ref):
     d = _contract(ref)
@@ -294,6 +306,7 @@ def test_it_states_no_depth_and_its_length_is_in_the_registry(ref):
     assert set(d["size-confidence"]) == {"w", "h"} and d["size-notes"]
 
 
+@pytest.mark.heavy
 @EACH
 def test_its_fields_are_the_cable(ref):
     f = _contract(ref)["fields"]
@@ -302,6 +315,7 @@ def test_its_fields_are_the_cable(ref):
     assert f["jacket-color"]["default"] == "#1c1c1c"
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_is_30_long_from_the_end_of_the_strain_relief(ref):
     f = feats(ref)
@@ -311,6 +325,7 @@ def test_the_stub_is_30_long_from_the_end_of_the_strain_relief(ref):
     assert "cyl" in boot
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_solids_chain_from_the_receptacle_face_to_the_stub(ref):
     """shell, then the overmould (in one or two steps), then the strain
@@ -324,6 +339,7 @@ def test_the_solids_chain_from_the_receptacle_face_to_the_stub(ref):
         assert float(f[b]["lift"]) == pytest.approx(rear(f[a])), (ref, a, b)
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_cable_leaves_from_the_stub(ref):
     d = _contract(ref)
@@ -333,6 +349,7 @@ def test_the_cable_leaves_from_the_stub(ref):
     assert cps["mate"]["at"] == pytest.approx([d["size"]["w"] / 2, d["size"]["h"] / 2])
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_circle_is_bound_to_the_fields(ref):
     s = _skin_path(ref).read_text()
@@ -347,6 +364,7 @@ def test_the_stub_circle_is_bound_to_the_fields(ref):
     assert "color" not in feats(ref)["stub"]
 
 
+@pytest.mark.heavy
 @EACH
 def test_no_mark_is_drawn_on_the_overmould(ref):
     """No logo and no USB trident: the skin is the five or so outlines its
@@ -359,6 +377,7 @@ def test_no_mark_is_drawn_on_the_overmould(ref):
 
 # --- 4. the seated depth, in the contracts --------------------------------------
 
+@pytest.mark.heavy
 @EACH
 def test_the_plug_leaves_its_shell_less_the_drawn_insertion(ref):
     shell, inserted, _modelled, overall, _od, _text = FIGURES[ref]
@@ -369,6 +388,7 @@ def test_the_plug_leaves_its_shell_less_the_drawn_insertion(ref):
     assert rear(f["relief-boot"]) == pytest.approx(overall - inserted)
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_receptacle_models_a_depth_the_drawing_does_not_give(ref):
     """Fails by design when a receptacle's depth is revised: the plug's
@@ -383,6 +403,7 @@ def test_the_receptacle_models_a_depth_the_drawing_does_not_give(ref):
     assert f"{modelled - inserted:.2f}".rstrip("0") in text or f"{modelled - inserted:.2f}" in text
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_ruling_is_recorded_in_provenance(ref):
     text = " ".join(_contract(ref)["provenance"]["seated-depth"].split())
@@ -392,6 +413,7 @@ def test_the_ruling_is_recorded_in_provenance(ref):
     assert FIGURES[ref][5] in text, text
 
 
+@pytest.mark.heavy
 @EACH
 def test_a_keyed_plug_says_which_way_is_up(ref):
     text = " ".join(_contract(ref)["provenance"]["orientation"].split())
@@ -490,6 +512,7 @@ def _front(parents, el):
     return lift_of(parents, el) + float(el.get("data-z-cyl"))
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_it_seats_with_its_mate_on_the_receptacles_mate(seated, seat):
     parents, host, occ, _ = _seat(seated, seat)
@@ -499,6 +522,7 @@ def test_it_seats_with_its_mate_on_the_receptacles_mate(seated, seat):
     assert_same_turn(parents, occ, host)
 
 
+@pytest.mark.heavy
 def test_the_seats_cover_every_turn():
     """The premise of the turned seats, read off the library: the hosts above
     are placed at 0, 90, 180 and 270, so a plug is carried round every way a
@@ -516,6 +540,7 @@ def test_the_seats_cover_every_turn():
     assert [p.get("rotate") for p in re["parts"] if p["id"] == "usb"] == [90]
 
 
+@pytest.mark.heavy
 def test_the_turned_seats_are_measured_turned(seated):
     """Not a flat pass: at least four of the seats above are drawn turned in
     the compiled face, so the turn is measured and not assumed."""
@@ -528,6 +553,7 @@ def test_the_turned_seats_are_measured_turned(seated):
     assert turned >= 4, turned
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_plug_stands_off_by_the_ruling(seated, seat):
     """The compiled depths, in the device frame: the shell starts on the face
@@ -546,6 +572,7 @@ def test_the_seated_plug_stands_off_by_the_ruling(seated, seat):
     assert _front(parents, el["stub"]) - base == pytest.approx(overall - inserted + STUB, abs=EPS)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("seat", CHASSIS_SEATS,
                          ids=[SEAT_IDS[SEATS.index(s)] for s in CHASSIS_SEATS])
 def test_a_chassis_receptacle_publishes_a_slot_that_offers_exactly_its_plug(seated, seat):
@@ -567,6 +594,7 @@ def test_a_chassis_receptacle_publishes_a_slot_that_offers_exactly_its_plug(seat
         device_point(parents, host, cage_mate(host)), abs=1e-3)
 
 
+@pytest.mark.heavy
 def test_usb_a_offers_the_cable_plug_and_nothing_else(comps):
     """No storage stick and no console dongle: the one part in the library
     that mates `usb-a` is the cable plug."""
@@ -577,6 +605,7 @@ def test_usb_a_offers_the_cable_plug_and_nothing_else(comps):
 
 # --- 6. 3D solids ----------------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_plug_builds_right_side_out(seated, seat):
     ref = seat[0]
@@ -612,6 +641,7 @@ def _stub_diameter(parents, stub):
     return min(x1 - x0, y1 - y0)
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_stub_is_the_default_cable_od(seated, seat):
     ref = seat[0]
@@ -656,6 +686,7 @@ def overridden(tmp_path_factory):
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("case", OVERRIDES, ids=[c[0].split("/")[1] for c in OVERRIDES])
 def test_a_placements_cable_od_sets_the_stub(overridden, case):
     ref, _device, _config, _view, host_id, od = case

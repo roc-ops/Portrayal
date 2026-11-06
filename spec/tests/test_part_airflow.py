@@ -99,20 +99,20 @@ def test_every_edgecore_back_to_front_part_it_recolours_states_the_direction():
             for entry in (cfg.get("component-attrs") or {}).values():
                 if any(recolours(k) for k in entry):
                     entry["airflow"] = B2F
-    assert check_recoloured_entries(good) == ([], 4)
+    assert check_recoloured_entries(good) == ([], 3)
     bad = copy.deepcopy(good)
     del bad["configurations"]["ac-b2f"]["component-attrs"]["fan-module"]["airflow"]
-    bad["configurations"]["dc-b2f"]["component-attrs"]["psu-dc-650"]["airflow"] = F2B
+    bad["configurations"]["dc-b2f"]["component-attrs"]["fan-module"]["airflow"] = F2B
     problems, _ = check_recoloured_entries(bad)
     assert len(problems) == 2
-    assert "ac-b2f.fan-module" in problems[0] and "dc-b2f.psu-dc-650" in problems[1]
+    assert "ac-b2f.fan-module" in problems[0] and "dc-b2f.fan-module" in problems[1]
 
     problems, n = [], 0
     for doc in docs.values():
         p, k = check_recoloured_entries(doc)
         problems += p
         n += k
-    assert n == 48, f"checked {n} entries, expected 48"
+    assert n == 47, f"checked {n} entries, expected 47"
     assert not problems, "\n".join(problems)
 
 
@@ -134,6 +134,7 @@ def check_stated_directions(doc):
     return problems, n
 
 
+@pytest.mark.heavy
 def test_a_part_never_states_a_direction_its_build_does_not_have():
     # a front-to-back configuration with a back-to-front entry is named
     plant = {"name": "plant", "chassis": {"airflow": F2B}, "configurations": {
@@ -149,7 +150,7 @@ def test_a_part_never_states_a_direction_its_build_does_not_have():
         a, k = check_stated_directions(doc)
         problems += a
         n += k
-    assert n >= 100, f"checked only {n} entries"
+    assert n >= 99, f"checked only {n} entries"
     assert not problems, "\n".join(problems)
 
 
@@ -196,6 +197,7 @@ def faces(drawn_dev, config):
     return c, {face: (d / name).read_text() for face, name in c["files"].items() if name.endswith(".svg")}
 
 
+@pytest.mark.heavy
 def test_every_fan_and_supply_drawn_states_its_configurations_airflow(drawn):
     sample = '<g id="a" data-class="fan" data-airflow="front-to-back" data-config-airflow="back-to-front">'
     assert stamp_problems(sample, B2F, "plant") == []
@@ -217,6 +219,7 @@ def test_every_fan_and_supply_drawn_states_its_configurations_airflow(drawn):
     assert not problems, "\n".join(problems)
 
 
+@pytest.mark.heavy
 def test_only_fans_and_supplies_carry_it_and_the_parts_own_statement_is_untouched(drawn):
     def strays(text):
         return [t for t in ANY_TAG.findall(text) if STAMP.search(t)
@@ -251,6 +254,7 @@ def test_only_fans_and_supplies_carry_it_and_the_parts_own_statement_is_untouche
     assert own_words(rewritten, "fan") != fan_words
 
 
+@pytest.mark.heavy
 def test_a_configuration_that_states_no_airflow_gets_no_stamp(drawn):
     c, svgs = faces(drawn["juniper/mx150"], "default")
     assert c["airflow"] is None

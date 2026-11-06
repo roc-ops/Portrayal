@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import yaml
+import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 SPEC, LIB = ROOT / "spec", ROOT / "library"
@@ -158,6 +159,7 @@ def by_id(root, suffix):
     return next(e for e in root.iter() if (e.get("id") or "").endswith(suffix))
 
 
+@pytest.mark.heavy
 def test_the_facet_node_carries_its_derived_wedge(tmp_path):
     root = plant_card(tmp_path)
     h = by_id(root, "--housing")
@@ -166,6 +168,7 @@ def test_the_facet_node_carries_its_derived_wedge(tmp_path):
     assert float(h.get("data-z-out")) > 17.3          # 30 x tan 30 = 17.32
 
 
+@pytest.mark.heavy
 def test_a_facet_features_own_lift_offsets_the_whole_wedge(tmp_path):
     """`lift` moves the root edge too, not just the proud one: root at
     `lift`, proud edge at `lift + proud_extent`."""
@@ -175,6 +178,7 @@ def test_a_facet_features_own_lift_offsets_the_whole_wedge(tmp_path):
     assert h.get("data-z-profile-y") == "0:5,30:22.3205"
 
 
+@pytest.mark.heavy
 def test_a_sunk_facet_carries_negative_heights(tmp_path):
     """Recessed facets: a facet at lift -12 in a 12 mm pocket roots 12 below
     the plate, and its proud edge ends at -12 + 30 x tan 30 = 5.3205."""
@@ -186,6 +190,7 @@ def test_a_sunk_facet_carries_negative_heights(tmp_path):
     assert by_id(root, "--window").get("data-depth") == "12"
 
 
+@pytest.mark.heavy
 def test_a_facet_sunk_wholly_below_the_plate_is_not_dropped(tmp_path):
     """-20 + 17.3205: the proud edge is still 2.68 below the plate. Nothing
     clamps it to 0 and nothing drops the feature for a negative `out`."""
@@ -194,6 +199,7 @@ def test_a_facet_sunk_wholly_below_the_plate_is_not_dropped(tmp_path):
     assert h.get("data-z-out") == "-2.6795"
 
 
+@pytest.mark.heavy
 def test_a_part_on_a_sunk_facet_projects_as_on_a_proud_one(tmp_path):
     proud = by_id(plant_card(tmp_path / "a"), "--p1")
     sunk = by_id(plant_card(tmp_path / "b", feat_lift=-12.0, pocket=12), "--p1")
@@ -201,6 +207,7 @@ def test_a_part_on_a_sunk_facet_projects_as_on_a_proud_one(tmp_path):
     assert sunk.get("data-tilt") == proud.get("data-tilt") == "30"
 
 
+@pytest.mark.heavy
 def test_a_part_on_a_facet_is_scaled_and_marked(tmp_path):
     root = plant_card(tmp_path)
     p = by_id(root, "--p1")
@@ -209,11 +216,13 @@ def test_a_part_on_a_facet_is_scaled_and_marked(tmp_path):
     assert p.get("data-tilt-on").endswith("--housing")
 
 
+@pytest.mark.heavy
 def test_the_scale_comes_before_the_parts_own_rotate(tmp_path):
     tf = by_id(plant_card(tmp_path, rotate=90), "--p1").get("transform")
     assert tf.index("scale(") < tf.index("rotate(")
 
 
+@pytest.mark.heavy
 def test_an_occupant_inherits_the_tilt(tmp_path):
     root = plant_card(tmp_path, occupant=True)
     o = next(e for e in root.iter() if (e.get("data-path") or e.get("id") or "").endswith("optic"))
@@ -238,6 +247,7 @@ def test_an_occupant_inherits_the_tilt(tmp_path):
     assert math.isclose(oh, 7.3612, abs_tol=0.01)
 
 
+@pytest.mark.heavy
 def test_a_chained_seat_inherits_the_tilt(tmp_path):
     """A cap mate-to'd to the OPTIC (not the card) - a seat on a seat -
     inherits the tilt the optic itself only just inherited."""
@@ -252,6 +262,7 @@ def test_a_chained_seat_inherits_the_tilt(tmp_path):
     assert math.isclose(o_pt[1], cap_pt[1], abs_tol=0.01)
 
 
+@pytest.mark.heavy
 def test_a_card_rotated_90_still_seats_its_occupant_on_the_facet(tmp_path):
     """The host card itself at rotate: 90. p1 (nested inside the card's own
     rotated group, no rotate of its own) is turned by the CARD from
@@ -355,6 +366,7 @@ def plant_two_facet_card(tmp, chained=False, p2_rotate=None):
     return ET.parse(out / "dual-dev.front.svg").getroot()
 
 
+@pytest.mark.heavy
 def test_an_occupant_seated_via_occupants_inherits_the_second_facet(tmp_path):
     root = plant_two_facet_card(tmp_path)
     o = by_id(root, "--p2-occupant")
@@ -375,6 +387,7 @@ def test_an_occupant_seated_via_occupants_inherits_the_second_facet(tmp_path):
     assert not any(i.endswith("p1-occupant") for i in ids)
 
 
+@pytest.mark.heavy
 def test_a_nested_chained_seat_inherits_the_tilt(tmp_path):
     """A boot on an optic that is itself seated in a card's own tilted
     cage - entirely within `_seat_nested_occupants`, no device-level
@@ -390,6 +403,7 @@ def test_a_nested_chained_seat_inherits_the_tilt(tmp_path):
     assert math.isclose(o_pt[1], cap_pt[1], abs_tol=0.01)
 
 
+@pytest.mark.heavy
 def test_a_nested_occupant_on_a_rotated_cage_is_not_axis_swapped(tmp_path):
     """p2 itself at `rotate: 90` (its OWN local rotate inside the card, not
     an outer container's), with an optic seated onto it via `occupants:`.
@@ -413,6 +427,7 @@ def test_a_nested_occupant_on_a_rotated_cage_is_not_axis_swapped(tmp_path):
     assert math.isclose(oh, 16.63, abs_tol=0.01)
 
 
+@pytest.mark.heavy
 def test_a_facet_feature_shifts_with_an_inset(tmp_path):
     """A facet on a part composed WITH A LIFT - the derived `out` and
     profile must move by the same amount `_inset_feature` moves a
@@ -463,6 +478,7 @@ def test_a_facet_feature_shifts_with_an_inset(tmp_path):
     assert plate.get("data-z-profile-y") == "0:10,30:27.3205"
 
 
+@pytest.mark.heavy
 def test_a_sunk_facet_shifts_with_an_inset_unclamped(tmp_path):
     """A sunk facet on a part composed at lift 10: its own lift stays -12
     (relief.js sums it onto the group's 10) and the absolute profile moves

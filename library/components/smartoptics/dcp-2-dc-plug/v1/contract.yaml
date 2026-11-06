@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: dcp-2-dc-plug
+version: 1.0.0
+class: port
+mates: smartoptics-dcp-dc-block-3
+profile: power
+description: >-
+  The cable connector of the Smartoptics DCP-2-PSU-DC-FB supply, wired, seen from the wire side as seated. A dark
+  body with one insulated wire entering each of its three ways. It seats in a `smartoptics-dcp-dc-block-3` connector
+  at its own mate point. It carries one wire per contact, not one cable.
+size: {w: 11.0, h: 26.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, smartoptics/dcp-2-dc-header@1, 11.0 by 26.0. No document draws or
+  dimensions the cable connector.
+attrs: {media: smartoptics-dcp-dc, connector: pluggable DC cable connector, positions: 3}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    NO DOCUMENT SHOWS THE CABLE CONNECTOR. The DCP-series User Manual (14.0 A) says "Remove the power cord" and
+    "Reconnect the power cord" (section 2.3.2, PDF page 19) and its figure 2-13 shows the supplies without one. THE
+    PART IS A STAND-IN FOR THE CABLE CONNECTOR, drawn as the half that seats in the header.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    NOT STATED. No document gives a wire colour, a gauge or which wire enters which way. The wires are drawn in one
+    neutral grey and no colour is stated as a meaning.
+  far-end: >-
+    NOT DRAWN. The other ends of the wires land on the DC power source, which is the site's equipment and not this
+    supply's.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the supply, so the part draws a plan
+    outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [5.5, 13.0], direction: front}
+  wire-1: {at: [5.5, 5.5], direction: front}
+  wire-2: {at: [5.5, 13.0], direction: front}
+  wire-3: {at: [5.5, 20.5], direction: front}
+skins: [default]

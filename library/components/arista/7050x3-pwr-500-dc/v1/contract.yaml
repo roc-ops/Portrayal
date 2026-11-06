@@ -1,0 +1,74 @@
+format: 1
+kind: module
+name: 7050x3-pwr-500-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 500 W DC power supply of the Arista 7050CX3-32S and 7050SX3-48YC12, PWR-500-DC-F (front-to-rear
+  airflow, red handle). It is a 1RU module with a terminal block in place of an inlet at the left and a
+  round fan guard with a red diagonal handle at the right. The block has two poles, negative (-48V) and
+  positive (RTN). The protective earth terminal is not drawn.
+size: {w: 86.5, h: 40.0}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  PWR-500-DC-F: {part: PWR-500-DC-F}
+attrs:
+  power-output-w: 500
+  input: dc
+  inlet: dc-terminal
+  airflow: front-to-back
+  input-note: '-48 to -60 VDC, 15 A'
+provenance:
+  size: >-
+    estimated, as arista/7050x3-pwr-500-ac: read off figure D-1 of the 7050 Series 1RU (Gen 3) Quick Start Guide
+    (DOC-00141-08), where the AC supply is 86.5 mm wide. No document dimensions the PWR-500-DC; it is taken as the
+    AC supply's housing.
+  part-number: >-
+    datasheet - the 7050X3 Series Data Sheet (03-0040-46, Sept 4, 2026), optional components and spares:
+    "PWR-500-DC-F  Spare 500 Watt DC power supply for Arista 7050X, 7280 and 7060CX 1RU Switches (front-to-rear
+    airflow)". It is a spare: the switches' "-F" SKUs are "2xAC". The guide's tables 3 and 4 list the supply as
+    PWR-500-DC and give it as the supported DC supply of the 7050CX3-32S and the 7050SX3-48YC12.
+  power-output: >-
+    datasheet - the "Output Power 500W" row of the data sheet's power supply table, for PWR-500-DC-F/R. An output.
+  input: >-
+    datasheet - guide table 3: PWR-500-DC "-48 to -60 VDC, 15 A"; the data sheet's power supply table gives -48 to
+    -60 V DC, 11.8 A max at -48 V, 90 percent efficiency and an AWG #14 maximum input connector. The two currents
+    (15 A and 11.8 A) are a rating and a maximum input at -48 V.
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. The guide holds no flat picture of a PWR-500-DC. It is drawn as the library's
+    other DC supplies (arista/7280r3-pwr-500-dc): the AC supply's housing with a plain two-pole terminal block in
+    place of the inlet.
+  airflow: >-
+    datasheet - the part number's "-F" and "front-to-rear airflow"; the guide's section 2.1 gives red as the colour of
+    an air-exit module. The rear-to-front supply, PWR-500-DC-R, is not modelled.
+  handle-finish: >-
+    The red of the handle is a field, `handle-finish`, default `#a32a38`.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [44.8, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [0.3, 10.4], size: [5.0, 12.8], class: latch}
+  status: {at: [31.0, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#a32a38'}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-neg, at: [10.9, 12.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-pos, at: [10.9, 27.1]}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [86.5, 40.0]}

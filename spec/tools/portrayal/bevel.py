@@ -106,6 +106,61 @@ def parse(chassis):
             if k in out:
                 raise BevelError(f"edge {k} is bevelled twice")
             out[k] = (a, b) if str(name).split("-")[0] == k.split("-")[0] else (b, a)
+    out.update(_rounded_planes(chassis))
+    return out
+
+
+# ---- ROUNDED PLAN CORNERS AND A TAPER (`chassis.rounded`) --------------------
+#
+# A bevel is one plane on one of twelve edges, which cannot round a corner. A
+# ceiling access point is a square with large rounded corners whose face is
+# smaller than its back, and that outline is a convex solid too: the same
+# cutting planes, only more of them. So `rounded` is turned into planes here and
+# rides in the dict `parse` returns, under keys that are not edge names; `solid`
+# cuts by them like any other, and the 2D drawings and the 3D viewer read the
+# polygons that come out, which is why neither needed to learn about it.
+
+ROUND_SEGMENTS = 8          # facets to a quarter-turn corner; chords of the arc
+
+
+def _rounded_planes(chassis):
+    spec = (chassis or {}).get("rounded")
+    if not spec:
+        return {}
+    w, h, d = chassis["width"], chassis["height"], chassis["depth"]
+    r = spec.get("radius")
+    if not isinstance(r, (int, float)) or r <= 0 or 2 * r > min(w, h):
+        raise BevelError(f"rounded.radius is a positive number of mm no more than half the "
+                         f"shorter side, not {r!r}")
+    taper = spec.get("taper")
+    slope = 0.0
+    z0 = 0.0
+    if taper:
+        inset, run = taper.get("inset"), taper.get("depth")
+        if taper.get("face") != "front":
+            raise BevelError("rounded.taper.face is `front`: the face that is smaller")
+        if not (isinstance(inset, (int, float)) and isinstance(run, (int, float))
+                and inset > 0 and 0 < run <= d and inset < r):
+            raise BevelError("rounded.taper takes an inset smaller than the radius and a "
+                             "depth no more than the chassis depth, both positive mm")
+        slope, z0 = inset / run, d / 2 - run
+    out = {}
+    # the outline's facets: (unit outward normal in x, y, offset k with m.p <= k)
+    facets = [((1, 0), w / 2), ((-1, 0), w / 2), ((0, 1), h / 2), ((0, -1), h / 2)]
+    step = math.pi / 2 / ROUND_SEGMENTS
+    for sx, sy in ((1, 1), (-1, 1), (-1, -1), (1, -1)):
+        cx, cy = sx * (w / 2 - r), sy * (h / 2 - r)
+        for i in range(ROUND_SEGMENTS):
+            a = (i + 0.5) * step
+            m = (sx * math.cos(a), sy * math.sin(a))
+            facets.append((m, m[0] * cx + m[1] * cy + r * math.cos(step / 2)))
+    for i, (m, k) in enumerate(facets):
+        if i >= 4:              # the four flats are the box's own sides
+            out[f"rounded-{i - 3}"] = ("plane", (m[0], m[1], 0.0), k)
+        if slope:
+            n = (m[0], m[1], slope)
+            norm = math.sqrt(_dot(n, n))
+            out[f"taper-{i + 1}"] = ("plane", _mul(n, 1 / norm), (k + slope * z0) / norm)
     return out
 
 
@@ -212,7 +267,9 @@ def solid(w, h, d, bevels):
     polys = [{"face": f, "edge": None, "normal": FACES[f], "points": pts}
              for f, pts in corners.items()]
     for edge in sorted(bevels):
-        n, off = plane(edge, bevels[edge], w, h, d)
+        given = bevels[edge]
+        lenient = isinstance(given, tuple) and given[0] == "plane"
+        n, off = (given[1], given[2]) if lenient else plane(edge, given, w, h, d)
         cut, kept = [], []
         for poly in polys:
             pts, crossing = _clip(poly["points"], n, off)
@@ -220,6 +277,8 @@ def solid(w, h, d, bevels):
             if len(pts) >= 3 and _area(pts, poly["normal"]) > EPS:
                 kept.append({**poly, "points": pts})
         cap = _ordered(cut, n)
+        if lenient and (len(cap) < 3 or _area(cap, n) <= EPS):
+            continue          # a facet of the outline that cuts nothing is not an error
         if len(cap) < 3 or _area(cap, n) <= EPS:
             raise BevelError(f"the bevel on {edge} cuts nothing: a neighbouring bevel "
                              "already took that edge away")

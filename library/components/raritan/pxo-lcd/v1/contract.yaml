@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: pxo-lcd
+version: 1.0.0
+class: display
+profile: power
+description: >-
+  The colour display of the Raritan PXO controller: a graphic panel behind a black bezel. The data sheet photograph
+  shows it with a red title bar, a page counter and "Inlet I1". It reads active power, apparent power, power factor
+  and active energy, with a "Back" key legend. The quick setup guide has the user read the unit's IP address from it.
+size: {w: 42.2, h: 33.9}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  existence: >-
+    datasheet - Raritan PXO data sheet (V1377), page 1 photograph of the controller face; the PXC/PXO quick setup
+    guide (255-80-0059-00), p.5, "Using the Front Panel Display".
+  size: >-
+    drawing - the front line drawing of the PXO that Raritan's compact power distribution page shows
+    (1.64 px per mm across the 220 mm body): the window spans 45 px by 36 px, 42.2 by 33.9 mm, good to about 0.6 mm.
+    It is the window as drawn, glass and bezel together; no document separates them.
+  kind: >-
+    datasheet - the PX-Series PDU User Guide (4.3.11, printed p.13) lists the PXC and PXO front panel display as a
+    "Dot-matrix LCD display", and its "Front Panel Display" section (printed pp.93 to 95) shows top and bottom bars that turn
+    yellow or red on an alert. It is a pixel display, as the library's other graphic panel (eaton/g4-enmc@1) is.
+  characters: >-
+    NOT STATED, AND NOT APPLICABLE. No document held gives the panel's resolution or a count of characters.
+    The element is a screen part because no document states a character count.
+elements:
+  screen: {at: [0.0, 0.0], size: [42.2, 33.9], class: screen}
+relief:
+  features:
+    - node: screen
+      out: 0.3
+      color: '#10151a'
+      confidence: estimated
+      source: >-
+        no document gives how far the panel stands from the face; 0.3 mm is a stand-in for glass set nearly flush,
+        declared an estimate.
+skins: [default]

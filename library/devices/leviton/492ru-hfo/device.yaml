@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 492ru-hfo
-version: 0.1.1
+version: 1.0.0
 maturity: modelled
 manufacturer: Leviton
 model: 492RU-HFO
@@ -155,6 +155,14 @@ gaps:
       separate accessory, at least two to a cover, and no view draws it. The format has no
       hinge, so the cover is either on or off.
     wanted: a drawing of the hinge fitted
+  - what: designer-cover-section
+    scope: [front, top, left, right]
+    reason: needs-drawing
+    note: >-
+      the designer cover's section on the specification sheet's page 2 is a C-shaped profile whose
+      plate is dished and whose lips end in barbs, with its depth dimensioned and no thickness. The
+      cover is drawn with a flat plate and lips 2.0 mm thick, an estimate, and no barbs.
+    wanted: a dimensioned section through a designer cover and a finger tip
   - what: bend-radius-router
     scope: [front, top]
     reason: needs-drawing
@@ -196,6 +204,7 @@ views:
         - {ref: leviton/versi-duct-front-fingers@1, id: fingers-upper, at: [0.0, 6.04], group: fingers, rel-pos: 1, in: base, under: cover}
         - {ref: leviton/versi-duct-front-fingers@1, id: fingers-lower, at: [0.0, 79.7], group: fingers, rel-pos: 2, in: base, under: cover}
         - {ref: leviton/versi-duct-front-cover-2ru@1, id: cover, at: [0.0, 1.2], group: cover, rel-pos: 1, in: base, lift: 58.6, only-in: [base]}
+        - {ref: leviton/49265-dc2@1, id: cover-designer, at: [0.0, 1.1], group: cover, rel-pos: 2, in: base, lift: 56.25, only-in: [designer-cover]}
     guides:
       - {id: duct, kind: duct, at: [0, 9.225], size: [444.5, 69.85], run: x, finger-pitch: 49.375, finger-gap: 22.45, confidence: drawing, source: 'Leviton 492RU-HFO drawing, top view slots; application note page 7, front channel 2.75 in'}
   rear:
@@ -303,6 +312,62 @@ views:
         - {id: plate, at: [81.4, 0], size: [3.06, 88.3], rx: 0, fill: '#232527', kind: base}
         - {id: wall-upper, at: [24.15, 6.04], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
         - {id: wall-lower, at: [24.15, 79.7], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+  top-designer:
+    face: top
+    size: {w: 444.5, h: 84.46}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.5, 3.06], rx: 0, fill: '#232527', kind: base}
+        - {id: wall, at: [0, 3.06], size: [444.5, 57.25], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: slot-1, at: [13.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [62.875, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [112.25, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [161.625, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [211.0, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [260.375, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [309.75, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [359.125, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [408.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: cover, at: [0.0, 59.31], size: [444.5, 25.15], rx: 0, fill: '#8d9095', kind: cover}
+  bottom-designer:
+    face: bottom
+    size: {w: 444.5, h: 84.46}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.5, 3.06], rx: 0, fill: '#232527', kind: base}
+        - {id: wall, at: [0, 3.06], size: [444.5, 57.25], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: slot-1, at: [13.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [62.875, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [112.25, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [161.625, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [211.0, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [260.375, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [309.75, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [359.125, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [408.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: cover, at: [0.0, 59.31], size: [444.5, 25.15], rx: 0, fill: '#8d9095', kind: cover}
+  left-designer:
+    face: left
+    size: {w: 84.46, h: 88.3}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [3.06, 88.3], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [3.06, 6.04], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [3.06, 79.7], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: cover-plate, at: [82.46, 1.1], size: [2.0, 86.1], rx: 0, fill: '#8d9095', kind: cover}
+        - {id: cover-lip-upper, at: [59.31, 1.1], size: [25.15, 2.0], rx: 0, fill: '#9a9da2', kind: cover}
+        - {id: cover-lip-lower, at: [59.31, 85.2], size: [25.15, 2.0], rx: 0, fill: '#7d8084', kind: cover}
+  right-designer:
+    face: right
+    size: {w: 84.46, h: 88.3}
+    panel:
+      decor:
+        - {id: plate, at: [81.4, 0], size: [3.06, 88.3], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [24.15, 6.04], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [24.15, 79.7], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: cover-plate, at: [0.0, 1.1], size: [2.0, 86.1], rx: 0, fill: '#8d9095', kind: cover}
+        - {id: cover-lip-upper, at: [0.0, 1.1], size: [25.15, 2.0], rx: 0, fill: '#9a9da2', kind: cover}
+        - {id: cover-lip-lower, at: [0.0, 85.2], size: [25.15, 2.0], rx: 0, fill: '#7d8084', kind: cover}
 configurations:
   base:
     kind: base
@@ -315,6 +380,13 @@ configurations:
       lay a cord in. The cover comes with the duct, so this is an illustration and not a
       device type.
     views: {top: top-open, bottom: bottom-open, left: left-open, right: right-open}
+  designer-cover:
+    kind: example
+    description: >-
+      The same duct with the separately sold gray 49265-DC2 designer cover snapped on in place of
+      the black cover. The cover is a second purchase, so this is an illustration and not a
+      device type.
+    views: {top: top-designer, bottom: bottom-designer, left: left-designer, right: right-designer}
 datasheet:
   title: 'Product Specifications 491RU-HFx, 492RU-HFx, 49265-xxx - Versi-Duct Horizontal Cable Management System'
   url: https://leviton.com/content/dam/leviton/network-solutions/product_documents/product_specification/Leviton_491RU-HFx_492RU-HFx_49265-xxx_Versi-Duct_Horizontal_Cable_Management_System.pdf

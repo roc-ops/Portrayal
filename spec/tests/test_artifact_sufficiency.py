@@ -241,6 +241,7 @@ def test_the_dcim_export_needs_no_source_tree():
         assert doc.get("interfaces"), "no interfaces named for the NOS"
 
 
+@pytest.mark.heavy
 def test_a_module_image_is_asked_for_by_a_name_the_build_publishes():
     """The export's own filename construction, checked against the real tree.
 

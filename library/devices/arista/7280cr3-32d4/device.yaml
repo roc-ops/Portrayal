@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 7280cr3-32d4
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Arista
 model: 7280CR3-32D4
@@ -172,9 +172,9 @@ provenance:
     note: >-
       Guide Table 4: typical / maximum 535 W / 851 W for the 7280CR3-32D4 and 7280CR3K-32D4, and 543 W
       / 865 W for the 7280CR3K-32D4A, each with PWR-1011-AC or PWR-1011-DC. The data sheet states the
-      same figures with typical "measured at 25C ambient with 50% load on all ports". A configuration
-      cannot state a device attribute, so the device carries 535 W / 851 W and the -A figure is in the
-      gap config-scoped-device-attrs and in the description of its configurations.
+      same figures with typical "measured at 25C ambient with 50% load on all ports". The device carries
+      535 W / 851 W; the configurations k-a-f and k-a-r state the -A figure in their `attrs`, with its
+      CPU and minimum EOS, and the K builds state their memory.
   environment:
     confidence: datasheet
     note: >-
@@ -265,17 +265,6 @@ attrs:
   lifecycle: {eol: none-announced}
 chassis: {width: 440.0, height: 43.7, depth: 558.3, ru: 1, color: '#aaabad', airflow: front-to-back, power: ac}
 gaps:
-- what: config-scoped-device-attrs
-  scope:
-  - front
-  - rear
-  reason: vendor-silent
-  note: >-
-    The 7280CR3K-32D4A draws 543 W typical and 865 W maximum (guide Table 4) against 535 W and 851 W for
-    the other two, has an eight-core CPU in place of a quad-core, and the K builds carry 64 GB of memory
-    against 8 GB. No configuration can state a device attribute (the same open gap as cisco/asr-9001).
-    The attrs carry the 7280CR3-32D4's figures and the platform lines name all three.
-  wanted: configuration-scoped device attrs.
 - what: environment
   scope:
   - front
@@ -1575,6 +1564,8 @@ configurations:
     description: >-
       The 7280CR3K-32D4, the same hardware with 64 GB of memory and the large-routes licence, with front-to-rear
       air. Ordered as DCS-7280CR3K-32D4-F.
+    attrs:
+      platform: {memory: 64 GB}
     part-numbers:
       DCS-7280CR3K-32D4-F: {}
   k-r:
@@ -1583,22 +1574,36 @@ configurations:
     description: The 7280CR3K-32D4 with rear-to-front air. Ordered as DCS-7280CR3K-32D4-R.
     bays: {psu-1: arista/7280cr3-pwr-1000-ac-rev@1, psu-2: arista/7280cr3-pwr-1000-ac-rev@1, fan-1: arista/7280cr3-fan-rev@1,
       fan-2: arista/7280cr3-fan-rev@1, fan-3: arista/7280cr3-fan-rev@1}
+    attrs:
+      platform: {memory: 64 GB}
     part-numbers:
       DCS-7280CR3K-32D4-R: {}
   k-a-f:
     kind: orderable
     description: >-
-      The 7280CR3K-32D4A, the K build with an eight-core CPU, with front-to-rear air. It draws 543 W typical
-      and 865 W maximum (guide Table 4), against 535 W and 851 W for the other builds. Ordered as DCS-7280CR3K-32D4A-F.
+      The 7280CR3K-32D4A, the K build with an eight-core CPU, with front-to-rear air. Ordered as DCS-7280CR3K-32D4A-F.
+    export-description: >-
+      Arista 7280CR3K-32D4A - a fixed 1RU data-centre switch router with 32 x 100G QSFP ports and 4 x
+      400G QSFP-DD ports, an eight-core CPU and 64 GB of memory, running EOS
+    attrs:
+      power: {power-typical-w: 543, power-max-w: 865}
+      platform: {cpu: Eight-Core x86, memory: 64 GB}
+      features: {eos-license: license group G3; minimum EOS 4.27.2}
     part-numbers:
       DCS-7280CR3K-32D4A-F: {}
   k-a-r:
     kind: orderable
     airflow: back-to-front
-    description: >-
-      The 7280CR3K-32D4A with rear-to-front air, drawing 543 W typical and 865 W maximum. Ordered as DCS-7280CR3K-32D4A-R.
+    description: The 7280CR3K-32D4A with rear-to-front air. Ordered as DCS-7280CR3K-32D4A-R.
+    export-description: >-
+      Arista 7280CR3K-32D4A - a fixed 1RU data-centre switch router with 32 x 100G QSFP ports and 4 x
+      400G QSFP-DD ports, an eight-core CPU and 64 GB of memory, running EOS
     bays: {psu-1: arista/7280cr3-pwr-1000-ac-rev@1, psu-2: arista/7280cr3-pwr-1000-ac-rev@1, fan-1: arista/7280cr3-fan-rev@1,
       fan-2: arista/7280cr3-fan-rev@1, fan-3: arista/7280cr3-fan-rev@1}
+    attrs:
+      power: {power-typical-w: 543, power-max-w: 865}
+      platform: {cpu: Eight-Core x86, memory: 64 GB}
+      features: {eos-license: license group G3; minimum EOS 4.27.2}
     part-numbers:
       DCS-7280CR3K-32D4A-R: {}
   dc-f:

@@ -170,6 +170,7 @@ def test_the_example_configuration_seats_the_card_in_slot_1_and_empties_slot_2()
     assert cfg["bays"]["riser-1/slot-1"] == A100 and cfg["bays"]["riser-1/slot-2"] == ""
 
 
+@pytest.mark.heavy
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
 def test_the_example_builds_and_the_card_covers_slot_2(tmp_path):
     rc, err, svg = _render(tmp_path)
@@ -181,6 +182,7 @@ def test_the_example_builds_and_the_card_covers_slot_2(tmp_path):
     assert 'data-path="riser-1/module/slot-2/module"' not in svg
 
 
+@pytest.mark.heavy
 def test_the_build_refuses_the_card_over_slot_2s_filler(tmp_path):
     rc, err, _svg = _render(tmp_path, {"riser-1/slot-2": "dell/pcie-filler-fh-14g@2"})
     assert rc != 0

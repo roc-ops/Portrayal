@@ -1,10 +1,12 @@
 {
  "bay-accepts": {
   "front/bays/psu-1": [
-   "edgecore/csr440-psu-ac@1"
+   "edgecore/csr440-psu-ac@1",
+   "edgecore/csr440-psu-dc@1"
   ],
   "front/bays/psu-2": [
-   "edgecore/csr440-psu-ac@1"
+   "edgecore/csr440-psu-ac@1",
+   "edgecore/csr440-psu-dc@1"
   ],
   "rear/bays/fan-1": [
    "edgecore/csr440-fan@1"
@@ -25,19 +27,22 @@
    "edgecore/csr440-fan@1"
   ]
  },
- "composed": "564ee20c00c9ecf4",
+ "composed": "f2b211b0cdf86b72",
  "composed-refs": {
+  "common/ground-stud@1": "1.0.1+8ee1c47866e993c9",
   "common/led-arrow-sm@1": "1.1.0+f6e565f48fbd46a4",
   "common/led-rect@1": "1.1.0+0314fb1739d8b11d",
   "common/rack-ear@1": "1.0.0+1682f189bae7936c",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
   "common/rj45-ganged-lamped@1": "1.0.0+5031bf1a85fdb9be",
-  "common/screw-head@1": "1.1.0+0f38d482bcc27ec9",
+  "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
   "common/sma-jack@1": "1.0.1+dde698c727778ba3",
   "common/smb-jack@1": "1.0.0+d68248050fc18e92",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "edgecore/csr440-fan@1": "1.0.0+5acfe0227c46fc72",
-  "edgecore/csr440-psu-ac@1": "1.1.1+f5d731170c019ac8",
+  "edgecore/csr440-psu-ac@1": "1.1.2+7078b9732f287074",
+  "edgecore/csr440-psu-dc@1": "1.1.0+edc4796047b949e3",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/micro-usb@1": "1.0.1+623c203fe8667fd2",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
@@ -51,8 +56,60 @@
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-1/module/input": {
+   "edgecore/csr440-psu-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-2/module/input": {
+   "edgecore/csr440-psu-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-2/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-2/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
- "gaps": "afba988d4df8ff28",
+ "gaps": "c161b39f696e0247",
  "groups": [
   "fans",
   "furniture",
@@ -227,7 +284,7 @@
   "rear/placements/screw-rear-left",
   "rear/placements/screw-rear-right"
  ],
- "names": "4e7bba1ca4a7ff2c",
+ "names": "6510f7435dee28a9",
  "placement-addressing": {
   "for": {
    "front/placements/led-alarm-jack": [
@@ -525,6 +582,6 @@
  },
  "placement-surface": "24d016206d77b0de",
  "shape": "d683469493a00ec9",
- "surface": "7a6a7fefa30ce18e",
- "version": "2.0.0"
+ "surface": "c9dac26f9667798a",
+ "version": "2.2.1"
 }

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-64o
-version: 4.0.4
+version: 4.0.7
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-64O
@@ -50,6 +50,18 @@ stack-exceptions:
     reads the lower bank otherwise. The two documents disagree, so the geometry is held until a
     photograph settles it; see the gap stacked-osfp-orientation.
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed
+      logotype over the model text at the top right, beside the management port. Measured on
+      Edgecore's front photograph of the AIS800-64O (960 x 700 px), which is taken from slightly
+      above: the width gives 2.173 px/mm, and the face height read on the photograph (top edge to
+      bottom edge) gives 2.126 px/mm down, which agree to 2.2 percent. The mark runs x 411.2 to
+      436.2 and y 2.6 to 7.1, and the AIS800-64D photograph puts the same mark within 0.3 mm of
+      that. The sureness is likely, and the position is good to about 1 mm. The light boxes
+      over the ports are real cage frames, away from the mark. The `logo-zone` region on the front
+      view reserves the place; nothing is drawn in it.
   stack-orientation:
     confidence: drawing
     note: >-
@@ -675,6 +687,7 @@ views:
       - {ref: common/led-rect-sm@1, id: led-psu2, at: [429.40, 47.10], group: leds, rel-pos: 6, for: chassis,
          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
     regions:
+    - {id: logo-zone, at: [411.2, 2.6], size: {w: 25.0, h: 4.5}, label: 'Vendor logo; not drawn'}
     - {id: optics-upper, at: [8.0, 11.4], size: {w: 385.5, h: 29.8}, label: 'Ports 1-32 (800G OSFP800)',
        members: [port-1, port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13, port-14, port-15, port-16, port-17, port-18, port-19, port-20, port-21, port-22, port-23, port-24, port-25, port-26, port-27, port-28, port-29, port-30, port-31, port-32]}
     - {id: optics-lower, at: [8.0, 47.4], size: {w: 385.5, h: 29.8}, label: 'Ports 33-64 (800G OSFP800)',

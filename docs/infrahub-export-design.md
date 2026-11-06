@@ -205,7 +205,7 @@ Other ports on a device type:
 
 | Portrayal | Infrahub | Note |
 |---|---|---|
-| `console-ports` | no node | Left out of the nodes; named in the type's description. |
+| `console-ports`, `console-server-ports` | no node | Left out of the nodes; named in the type's description. |
 | `power-ports`, `power-outlets` | no node on a device. `DcimModulePort` has `category: power` with `maximum_draw` but belongs to a module. | Left out for a device; for a PSU module, `DcimModulePort`. |
 | `front-ports`, `rear-ports` | `DcimFrontPatchPanelInterface`, `DcimRearPatchPanelInterface`, only on a `DcimPatchPanel` | `connector_type` is a dropdown (`lc`, `mpo`, `sc`, `st` and so on, plus `splice`). It does not carry a copper jack. |
 | port types the DCIM calls `other` | `port_type: other` | |
