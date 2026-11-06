@@ -104,6 +104,7 @@ def skin_nodes(ref):
 
 # --- 1. the registry -----------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH_IFACE
 def test_each_interface_is_a_connector_citing_a_standard(iface):
     reg = render_mod._connector_registry()
@@ -114,11 +115,13 @@ def test_each_interface_is_a_connector_citing_a_standard(iface):
     assert jack in note and plug in note, note
 
 
+@pytest.mark.heavy
 def test_the_mrj21_interface_cites_the_standard_its_jack_conforms_to():
     assert render_mod._connector_registry()["mrj21"]["standard"] == \
         _contract("std/mrj21@1")["conforms"] == "mrj21"
 
 
+@pytest.mark.heavy
 def test_the_vhdci_count_is_in_the_note_and_not_in_the_key():
     """SFF-8441 standardizes the 68 position connector only, so no other
     count of it could be on a panel and the key carries none."""
@@ -128,6 +131,7 @@ def test_the_vhdci_count_is_in_the_note_and_not_in_the_key():
     assert "only the 68 position version is standardized" in flat(std()["vhdci"]["source"])
 
 
+@pytest.mark.heavy
 def test_the_rj11_jack_is_the_six_position_body():
     """Not the four-position handset jack and not an RJ45: the registry says
     which, and the modelled jack is narrower than the RJ45 housing."""
@@ -139,6 +143,7 @@ def test_the_rj11_jack_is_the_six_position_body():
     assert reg["rj11"]["standard"] != reg["rj45"]["standard"]
 
 
+@pytest.mark.heavy
 @EACH_IFACE
 def test_each_jack_presents_its_interface_at_the_centre_of_its_opening(iface):
     jack = _contract(PAIRS[iface][0])
@@ -172,6 +177,7 @@ def test_each_jack_presents_its_interface_at_the_centre_of_its_opening(iface):
     assert "on" not in mate and "seat-out" not in mate
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", ["mrj21", "vhdci"])
 def test_no_jack_models_a_depth(iface):
     """Fails by design when a jack gains a depth or a cavity: each plug's
@@ -183,6 +189,7 @@ def test_no_jack_models_a_depth(iface):
     assert PAIRS[iface][0] in text and "states no depth" in text.lower(), text
 
 
+@pytest.mark.heavy
 def test_the_rj11_jack_models_its_housing_depth_and_a_cavity():
     """#837: TE C-1775675 rev C's 20.57, the registry's figure, with the
     three-tier opening recessed as std/rj45@2 recesses its own. Fails by
@@ -197,6 +204,7 @@ def test_the_rj11_jack_models_its_housing_depth_and_a_cavity():
     assert "common/rj11-jack@1 is 20.57 deep" in text and "not a plug stop" in text, text
 
 
+@pytest.mark.heavy
 def test_the_rj11_jack_draws_the_six_position_tiers_and_two_contacts():
     """The cavity node is the opening's outline in three tiers (body 9.88 x
     6.85, shoulder 6.60 x 1.69, latch slot 4.04 x 2.72), and two contacts
@@ -214,6 +222,7 @@ def test_the_rj11_jack_draws_the_six_position_tiers_and_two_contacts():
     assert xs[1] - xs[0] == pytest.approx(1.02)
 
 
+@pytest.mark.heavy
 def test_the_edited_jacks_kept_their_bodies():
     v, r = _contract("common/vhdci-receptacle@1"), _contract("common/rj11-jack@1")
     assert v["version"] == "1.0.1" and r["version"] == "1.2.0"
@@ -235,6 +244,7 @@ def comps():
     return got
 
 
+@pytest.mark.heavy
 def test_the_mda_publishes_its_eight_connectors_as_nested_slots(comps):
     card = _contract(MDA)
     assert card["kind"] == "module"
@@ -246,6 +256,7 @@ def test_the_mda_publishes_its_eight_connectors_as_nested_slots(comps):
         assert slot["accepts"] == [MRJ21] and slot["lift"] == 0.0, slot
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("card", sorted(OSA_CARDS))
 def test_each_oscilloquartz_card_publishes_its_receptacle_as_a_nested_slot(card, comps):
     c = _contract(card)
@@ -257,6 +268,7 @@ def test_each_oscilloquartz_card_publishes_its_receptacle_as_a_nested_slot(card,
     assert slot["accepts"] == [VHDCI] and slot["lift"] == 0.0, slot
 
 
+@pytest.mark.heavy
 def test_each_interface_is_mated_by_its_one_plug(comps):
     mating = {}
     for ref in comps:
@@ -267,6 +279,7 @@ def test_each_interface_is_mated_by_its_one_plug(comps):
     assert mating == {iface: [plug] for iface, (_jack, plug) in PAIRS.items()}
 
 
+@pytest.mark.heavy
 def test_the_census_of_composed_jacks_and_every_one_is_a_slot(comps):
     """Each `parts:` entry that is one of the three jacks is published as a
     slot of the component that composes it. None is forwarded: no part
@@ -288,9 +301,12 @@ def test_the_census_of_composed_jacks_and_every_one_is_a_slot(comps):
     assert seen == {"std/mrj21@1": 8, "common/vhdci-receptacle@1": 3, "common/rj11-jack@1": 0}
 
 
+@pytest.mark.heavy
 def test_the_census_of_placed_jacks_on_device_views():
     """The device side, walked off every view: the only one of the three a
-    chassis places is the RJ11 jack, twice, both turned 180. A part that
+    chassis places is the RJ11 jack, three times on two devices: the two
+    telephone jacks of the HLX-TGV, both turned 180, and the SLC 8000's
+    modem jack, not turned. A part that
     states one of the three media and is none of the jacks is a plug or a
     card that composes one."""
     placed = {r: [] for r in JACK_IFACE}
@@ -302,7 +318,8 @@ def test_the_census_of_placed_jacks_on_device_views():
                     placed[p["ref"]].append((f"{f.parts[-3]}/{f.parts[-2]}", p["id"],
                                              p.get("rotate")))
     assert placed["common/rj11-jack@1"] == [("halny/hlx-tgv", "tel-2", 180),
-                                            ("halny/hlx-tgv", "tel-1", 180)]
+                                            ("halny/hlx-tgv", "tel-1", 180),
+                                            ("lantronix/slc-8000", "modem", None)]
     assert placed["std/mrj21@1"] == [] and placed["common/vhdci-receptacle@1"] == []
     media = {_contract(j)["attrs"]["media"] for j in JACK_IFACE}
     assert media == {"mrj21", "vhdci", "rj11"}
@@ -320,6 +337,7 @@ def test_the_census_of_placed_jacks_on_device_views():
 
 # --- 3. the plugs --------------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH
 def test_it_is_a_plug_that_mates_its_interface(ref):
     d = _contract(ref)
@@ -332,6 +350,7 @@ def test_it_is_a_plug_that_mates_its_interface(ref):
     assert d["skins"] == ["default"] and d["version"] == ("1.0.1" if ref == RJ11 else "1.0.0")
 
 
+@pytest.mark.heavy
 @EACH
 def test_it_states_its_jacks_medium(ref):
     d = _contract(ref)
@@ -339,6 +358,7 @@ def test_it_states_its_jacks_medium(ref):
     assert d["attrs"] == {"media": jack["attrs"]["media"], "connector": IFACE_OF[ref]}
 
 
+@pytest.mark.heavy
 @EACH
 def test_its_size_is_its_registry_entry_and_says_how_sure_it_is(ref):
     d = _contract(ref)
@@ -360,6 +380,7 @@ def test_its_size_is_its_registry_entry_and_says_how_sure_it_is(ref):
         assert "SCALED" in d["size-notes"] and "scale" in d["provenance"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", [MRJ21, VHDCI])
 def test_the_overall_length_is_in_the_registry(ref):
     f, s = feats(ref), SHAPE[ref]
@@ -370,6 +391,7 @@ def test_the_overall_length_is_in_the_registry(ref):
     assert std()[_contract(ref)["conforms"]]["depth"] == pytest.approx(s["end"] - s["start"])
 
 
+@pytest.mark.heavy
 @EACH
 def test_nothing_is_drawn_outside_its_box(ref):
     d = _contract(ref)
@@ -397,6 +419,7 @@ def test_nothing_is_drawn_outside_its_box(ref):
     assert widest == pytest.approx(w) and tallest == pytest.approx(h)
 
 
+@pytest.mark.heavy
 @EACH
 def test_its_fields_are_the_cable(ref):
     d = _contract(ref)
@@ -406,6 +429,7 @@ def test_its_fields_are_the_cable(ref):
     assert "jacket-colour" in d["provenance"] and "cable-od" in d["provenance"]
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_is_30_long_from_where_the_plug_ends(ref):
     f = feats(ref)
@@ -414,6 +438,7 @@ def test_the_stub_is_30_long_from_where_the_plug_ends(ref):
     assert stub["lift"] == pytest.approx(rear(last)) == pytest.approx(SHAPE[ref]["end"])
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_solids_chain_from_the_jack_face_to_the_stub(ref):
     """Each solid starts where the one before it ends, with no gap and no
@@ -429,6 +454,7 @@ def test_the_solids_chain_from_the_jack_face_to_the_stub(ref):
         assert f[n]["cyl"] > 0 and f[n]["cyl"] == f[s["screws"][0]]["cyl"]
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_cable_leaves_from_the_stub_on_the_mating_axis(ref):
     """A straight exit: the stub stands out of the face, on the mate point."""
@@ -443,6 +469,7 @@ def test_the_cable_leaves_from_the_stub_on_the_mating_axis(ref):
         assert text.startswith("STRAIGHT"), text
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_circle_is_bound_to_the_fields(ref):
     s = _skin_path(ref).read_text()
@@ -458,6 +485,7 @@ def test_the_stub_circle_is_bound_to_the_fields(ref):
     assert "color" not in feats(ref)["stub"]
 
 
+@pytest.mark.heavy
 @EACH
 def test_no_mark_is_drawn(ref):
     """No logo, no lettering and no screw slot: nothing in a skin is text,
@@ -476,6 +504,7 @@ def test_no_mark_is_drawn(ref):
     assert "no-mark" in _contract(ref)["provenance"]
 
 
+@pytest.mark.heavy
 def test_the_mrj21_jackscrews_are_on_the_guide_holes_of_the_receptacle():
     """Which way round. std/mrj21@1 draws its guide holes at the upper left
     and the lower right; each jackscrew is over one when the mate points
@@ -494,6 +523,7 @@ def test_the_mrj21_jackscrews_are_on_the_guide_holes_of_the_receptacle():
     assert got[0][1] < 0 < got[1][1], "upper left and lower right"
 
 
+@pytest.mark.heavy
 def test_the_vhdci_thumbscrews_are_on_the_screwlock_centres():
     n = skin_nodes(VHDCI)
     lx, rx = float(n["screw-l"].get("cx")), float(n["screw-r"].get("cx"))
@@ -511,6 +541,7 @@ def test_the_vhdci_thumbscrews_are_on_the_screwlock_centres():
     assert "0.25" in flat(_contract(VHDCI)["provenance"]["thumbscrews"])
 
 
+@pytest.mark.heavy
 def test_the_rj11_plug_has_its_latch_where_the_jack_has_its_keyway():
     """Contacts at the top and the latch at the bottom, as the jack draws its
     pins and its keyway, and as generic/rj45-plug@1 is drawn."""
@@ -537,6 +568,7 @@ def test_the_rj11_plug_has_its_latch_where_the_jack_has_its_keyway():
 
 # --- 4. the seated depth, in the contracts --------------------------------------
 
+@pytest.mark.heavy
 def test_the_mrj21_backshell_stands_on_the_receptacle_face():
     f = feats(MRJ21)
     assert "lift" not in f["hood"] and f["hood"]["out"] == 35.5
@@ -545,6 +577,7 @@ def test_the_mrj21_backshell_stands_on_the_receptacle_face():
     assert "5.6 (scaled)" in text and "assumption" in text
 
 
+@pytest.mark.heavy
 def test_the_vhdci_hood_starts_the_mated_gap_and_the_front_shell_out():
     f = feats(VHDCI)
     assert (f["shell"]["lift"], f["shell"]["out"]) == (0.34, 7.44)
@@ -555,6 +588,7 @@ def test_the_vhdci_hood_starts_the_mated_gap_and_the_front_shell_out():
     assert "0.34 + 7.1 = 7.44" in text and "5.2 +/-0.06" in text
 
 
+@pytest.mark.heavy
 def test_the_rj11_body_stands_its_length_less_an_estimated_insertion():
     d = _contract(RJ11)
     f = feats(RJ11)
@@ -667,6 +701,7 @@ def _front(parents, el):
     return lift_of(parents, el) + float(el.get("data-z-cyl"))
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_bare_build_leaves_the_jack_empty(seated, seat):
     (root, _parents), _s, _c, _ = seated[seat[1]]
@@ -674,6 +709,7 @@ def test_the_bare_build_leaves_the_jack_empty(seated, seat):
     assert not [e for e in root.iter() if e.get("data-path") == f"{seat[6]}-occupant"]
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_it_seats_with_its_mate_on_the_jacks_mate(seated, seat):
     parents, host, occ, _ = _seat(seated, seat)
@@ -690,6 +726,7 @@ def _turn(parents, el):
     return {(1, 0): 0, (0, 1): 1, (-1, 0): 2, (0, -1): 3}[(a, b)]
 
 
+@pytest.mark.heavy
 def test_the_seats_are_measured_at_three_different_turns(seated):
     """Not a flat pass. The MDA turns its connectors 270 and the SR-12 seats
     its cards in bays at 90, so the SR-7 seat is a quarter turn one way and
@@ -714,6 +751,7 @@ def test_the_seats_are_measured_at_three_different_turns(seated):
     assert len(set(turns.values())) == 3
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("seat", [s for s in SEATS if s[0] == MRJ21],
                          ids=[SEAT_IDS[SEATS.index(s)] for s in SEATS if s[0] == MRJ21])
 def test_the_seated_jackscrews_are_over_the_guide_holes_however_it_is_turned(seated, seat):
@@ -728,6 +766,7 @@ def test_the_seated_jackscrews_are_over_the_guide_holes_however_it_is_turned(sea
         assert abs(hx - sx) < 0.01 and abs(hy - sy) < 0.01, (holes, screws)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("seat", [s for s in SEATS if s[0] == VHDCI],
                          ids=[SEAT_IDS[SEATS.index(s)] for s in SEATS if s[0] == VHDCI])
 def test_the_seated_thumbscrews_are_over_the_screw_locks(seated, seat):
@@ -742,6 +781,7 @@ def test_the_seated_thumbscrews_are_over_the_screw_locks(seated, seat):
         assert abs(abs(lx - sx) - 0.25) < 0.01 and abs(ly - sy) < 0.01, (locks, screws)
 
 
+@pytest.mark.heavy
 def test_the_seated_rj11_latch_is_up_on_the_halny(seated):
     """Both jacks are fitted at 180, so the latch, drawn at the bottom of the
     plug, is at the top of the seated one, over the keyway of the jack."""
@@ -758,6 +798,7 @@ def test_the_seated_rj11_latch_is_up_on_the_halny(seated):
     assert ky < my
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_plug_stands_off_by_the_ruling(seated, seat):
     """The compiled depths, in the device frame: the first solid starts where
@@ -774,6 +815,7 @@ def test_the_seated_plug_stands_off_by_the_ruling(seated, seat):
     assert _front(parents, el["stub"]) - base == pytest.approx(s["end"] + STUB, abs=EPS)
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_plug_builds_right_side_out_and_end_to_end(seated, seat):
     ref = seat[0]
@@ -802,6 +844,7 @@ def test_the_seated_plug_builds_right_side_out_and_end_to_end(seated, seat):
         assert all(e.get("data-depth") is None for e in occ.iter())
 
 
+@pytest.mark.heavy
 def test_the_halny_slot_is_the_placement_and_offers_exactly_the_plug(seated):
     seat = SEATS[-1]
     ref, device, config, view, _bays, key, _host, host_is = seat
@@ -830,6 +873,7 @@ def _diameter(parents, circle):
     return min(x1 - x0, y1 - y0)
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_stub_is_the_default_cable_od_on_the_seat(seated, seat):
     ref = seat[0]
@@ -865,6 +909,7 @@ def overridden(tmp_path_factory):
     return _load(o, name, "eu", "rear")
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("case", OVERRIDES, ids=[c[0].split("/")[1] for c in OVERRIDES])
 def test_a_placements_cable_od_sets_the_stub(overridden, case):
     ref, host_id, od = case
@@ -922,6 +967,7 @@ def kit(seated, tmp_path_factory):
     return got
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("seat", KIT_SEATS, ids=KIT_IDS)
 def test_the_kits_slot_walk_offers_the_nested_seat(kit, seated, seat):
     ref, device, _config, _view, _bays, key, host_path, host_is = seat
@@ -940,6 +986,7 @@ def test_the_kits_slot_walk_offers_the_nested_seat(kit, seated, seat):
     assert one["lift"] == pytest.approx(lift_of(parents, by_path(root, host_path)))
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("seat", KIT_SEATS, ids=KIT_IDS)
 def test_the_kit_seats_the_plug_exactly_as_the_build_does(kit, seated, seat):
     ref, device, _config, _view, _bays, _key, host_path, _is = seat
@@ -956,6 +1003,7 @@ def test_the_kit_seats_the_plug_exactly_as_the_build_does(kit, seated, seat):
     assert g["left"] == 0, "emptying the jack left a plug"
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("seat", KIT_SEATS, ids=KIT_IDS)
 def test_the_3d_pass_seats_the_plug_on_the_nested_seat(kit, seat):
     t = kit[seat[1]]["threeD"]

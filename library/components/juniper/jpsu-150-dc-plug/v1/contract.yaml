@@ -1,0 +1,52 @@
+format: 1
+kind: component
+name: jpsu-150-dc-plug
+version: 1.0.0
+class: port
+mates: juniper-dc-block-3
+profile: power
+description: >-
+  The cable connector of the Juniper JPSU-150-DC-AFO supply of the EX3400 and EX4100 switches, wired, seen from the front as
+  seated. A body with a clamp screw at each of its three cells and a screw at each end of its flange. A wire enters each cell
+  from the right: from the top down the cells are "+", "-" and the earth, as the supply prints them. It seats in a
+  `juniper-dc-block-3` connector at its own mate point. It carries one wire per cell, not one cable.
+size: {w: 10.0, h: 25.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, juniper/jpsu-150-dc-header@1, 10.0 by 25.0. The guides' figures draw the cable
+  connector without a scale and no dimension of it is held.
+attrs: {media: jpsu-150-dc, connector: pluggable DC power cable connector, positions: 3}
+fields:
+  wire-1-color: {label: 'Wire colour (+, top)', type: text, default: '#e6e6e6'}
+  wire-2-color: {label: 'Wire colour (-, middle)', type: text, default: '#5a5a5a'}
+  wire-3-color: {label: 'Wire colour (earth, bottom)', type: text, default: '#9a9fa5'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    guide - the EX3400 Switch Hardware Guide (Juniper Networks, published 2026-01-09), Figure 46 (PDF page 143), and the EX4100
+    Switch Hardware Guide (Juniper Networks), Figure 74 (PDF page 140), draw the same cable connector: a block with a clamp
+    screw at each of three cells on its front, a flange with a screw hole at each end, and the wires entering from the right.
+    Both steps say to put the wires on the "wire pins" and the pins in the cells, then to tighten "the two screws on either side".
+    No maker, series or part number of the connector is named. THE PART IS A STAND-IN FOR THE CABLE CONNECTOR.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    guide - Figure 46 (EX3400) and Figure 74 (EX4100) show two wires, one light and one dark grey, entering the top two cells, and
+    the text says to connect the positive wire to the + terminal and the negative wire to the - terminal. The figures are line art:
+    the two greys are not a stated wire colour and carry no meaning. They are the defaults of the top two wires. No wire is drawn
+    in the earth cell and no guide says what colour its wire is, so the third default is a neutral grey placeholder, not a colour
+    from any document.
+  far-end: >-
+    NOT DRAWN. The other end of the cable lands on the facility DC source, which is the site's equipment and not this supply's.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the supply, so the part draws a plan outline only and
+    builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [5.0, 11.9], direction: front}
+  wire-1: {at: [9.2, 6.3], direction: front}
+  wire-2: {at: [9.2, 11.9], direction: front}
+  wire-3: {at: [9.2, 17.5], direction: front}
+skins: [default]

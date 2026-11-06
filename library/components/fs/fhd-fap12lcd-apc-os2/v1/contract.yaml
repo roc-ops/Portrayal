@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-fap12lcd-apc-os2
-version: 1.0.0
+version: 1.1.0
 class: adapter-panel
 behaviour: fills
 description: >-
@@ -27,19 +27,28 @@ body:
   footprint: {at: [10.485, 0.125], size: [88.0, 34.8]}
 elements:
   logo-zone: {at: [1.6, 3.2], size: [5.3, 5.0], class: label}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 12 LC duplex adapters on the front face, numbered on the plate; OS2 APC, 24
+      fibres, passive
 parts:
-  - {id: lc01, ref: common/lc-duplex-v-adapter@6, at: [14.91, 18.615], attrs: {housing-finish: '#56c75e'}}
-  - {id: lc02, ref: common/lc-duplex-v-adapter@6, at: [28.89, 18.615], attrs: {housing-finish: '#56c75e'}}
-  - {id: lc03, ref: common/lc-duplex-v-adapter@6, at: [42.87, 18.615], attrs: {housing-finish: '#56c75e'}}
-  - {id: lc04, ref: common/lc-duplex-v-adapter@6, at: [56.85, 18.615], attrs: {housing-finish: '#56c75e'}}
-  - {id: lc05, ref: common/lc-duplex-v-adapter@6, at: [70.85, 18.615], attrs: {housing-finish: '#56c75e'}}
-  - {id: lc06, ref: common/lc-duplex-v-adapter@6, at: [84.83, 18.615], attrs: {housing-finish: '#56c75e'}}
-  - {id: lc07, ref: common/lc-duplex-v-adapter@6, at: [14.91, 2.635], attrs: {housing-finish: '#56c75e'}}
-  - {id: lc08, ref: common/lc-duplex-v-adapter@6, at: [28.89, 2.635], attrs: {housing-finish: '#56c75e'}}
-  - {id: lc09, ref: common/lc-duplex-v-adapter@6, at: [42.87, 2.635], attrs: {housing-finish: '#56c75e'}}
-  - {id: lc10, ref: common/lc-duplex-v-adapter@6, at: [56.85, 2.635], attrs: {housing-finish: '#56c75e'}}
-  - {id: lc11, ref: common/lc-duplex-v-adapter@6, at: [70.85, 2.635], attrs: {housing-finish: '#56c75e'}}
-  - {id: lc12, ref: common/lc-duplex-v-adapter@6, at: [84.83, 2.635], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc01, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [14.91, 18.615], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc02, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [28.89, 18.615], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc03, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [42.87, 18.615], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc04, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [56.85, 18.615], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc05, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [70.85, 18.615], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc06, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [84.83, 18.615], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc07, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [14.91, 2.635], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc08, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [28.89, 2.635], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc09, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [42.87, 2.635], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc10, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [56.85, 2.635], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc11, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [70.85, 2.635], attrs: {housing-finish: '#56c75e'}}
+  - {id: lc12, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [84.83, 2.635], attrs: {housing-finish: '#56c75e'}}
 faces:
   rear: {ref: fs/fhd-fap12lcd-apc-os2-rear@1}
 optical:
@@ -141,4 +150,11 @@ provenance:
     reserved, not drawn - FS prints its mark top left on every panel face
     (drawings p5-p9, the renders); the library reproduces no vendor logo. Box
     read off the drawings, to about half a millimetre.
+  groups: >-
+    FS FHD Fiber Adapter Panels Datasheet, pages 2 and 10 and the p5 drawing: the
+    FHD-FAP12LCADZSMF (FS SKU 25514) is a 12-adapter LC duplex panel, 24 fibres, OS2 APC
+    (page 10 ordering table). The datasheet prints the fibre and the polish and no data
+    rate, and names no role for the adapters; the role follows the job, a through
+    connection a patch cord is plugged into, so it is traffic, and no speed is stated.
+    The group's media is the adapters' own, fiber.
 skins: [default]

@@ -318,6 +318,7 @@ def roles(world):
     return sets, node("roles", {"sets": sets})
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_smartoptics_bore_cap_is_its_own_part(roles):
     """dcp-r-34d-cs ships 72 bore caps at `xcNN/1-occupant` / `2-occupant`
@@ -335,6 +336,7 @@ def test_a_smartoptics_bore_cap_is_its_own_part(roles):
     assert len(adapters) == 36 and not adapters & set(g["frus"]), sorted(adapters & set(g["frus"]))
 
 
+@pytest.mark.heavy
 @needs_node
 def test_every_fru_on_a_real_face_is_a_removable_part(roles):
     """Every FRU key names a part that comes out: an occupant's own path, or
@@ -348,6 +350,7 @@ def test_every_fru_on_a_real_face_is_a_removable_part(roles):
         assert own <= set(g["frus"]), (name, sorted(own - set(g["frus"])))
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_plug_in_a_front_slot_is_its_own_part(roles):
     """A plug declares no behaviour (class `port`, by its own ruling), and was
@@ -366,6 +369,7 @@ def test_a_plug_in_a_front_slot_is_its_own_part(roles):
     assert "xc01/2-occupant" in got(out, "dcp:tx")["frus"]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_fhd_front_keeps_its_cassettes_and_its_caps_apart(roles):
     _, out = roles
@@ -375,6 +379,7 @@ def test_the_fhd_front_keeps_its_cassettes_and_its_caps_apart(roles):
     assert len(caps) == 24 and all(re.fullmatch(r"bay-[1-4]/module/lc[1-6]-occupant", c) for c in caps)
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_cassette_back_holds_no_fru(roles, world):
     """The back's own drawing is what 3D builds a cassette's back from, inside
@@ -402,6 +407,7 @@ def _check_face(world, seated, case, view, cfg):
     return tree_diff(out["faces"][view], world["faces"][f"{cfg}:{view}"])
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("case", sorted(f"fhd:{c}" for c in FHD) + sorted(f"dcp:{c}" for c in DCP))
 def test_the_faces_3d_is_cut_from_are_the_builds(world, seated_faces, case):
@@ -428,6 +434,7 @@ def test_the_faces_3d_is_cut_from_are_the_builds(world, seated_faces, case):
 SVG_ROOT_SKIP = ("data-config",)
 
 
+@pytest.mark.heavy
 @needs_node
 def test_every_rear_key_reaches_the_rear_face(world, seated_faces):
     """A key on a back whose bay nobody swapped is seated on the rear face as
@@ -450,6 +457,7 @@ def _walk(spec):
         yield from _walk(c)
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_plug_cable_anchors_are_named_for_the_occupant(world, seated_faces):
     """The rename gap Task 9 pinned (4 markers on the duplex plug) is closed:
@@ -521,6 +529,7 @@ def rootless(skin):
     return spec
 
 
+@pytest.mark.heavy
 def test_the_build_draws_the_compiled_back(world):
     """The reference is honest: the back render.py draws in a bay, read in the
     back's namespace, IS the compiled back skin the kit starts from, element
@@ -531,6 +540,7 @@ def test_the_build_draws_the_compiled_back(world):
         assert spec_of(built) == spec_of(skin), back
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_back_the_kit_seats_is_the_back_the_build_draws(world, seated_backs):
     """seatBack puts every key the map holds under a bay into that module's
@@ -559,6 +569,7 @@ def test_a_back_the_kit_seats_is_the_back_the_build_draws(world, seated_backs):
                     assert occs[0].get("data-ref").split(":")[0] == ref
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_back_key_that_does_not_seat_says_so(world, seated_backs):
     cases, _, out = seated_backs
@@ -593,6 +604,7 @@ BACK_MUTATIONS = [
 ]
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("label,old,new,expect", BACK_MUTATIONS, ids=[m[0] for m in BACK_MUTATIONS])
 def test_a_mutated_back_seat_fails_the_parity(world, seated_backs, tmp_path, label, old, new, expect):
@@ -634,6 +646,7 @@ FACE_MUTATIONS = [
 ]
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("label,old,new,cases", FACE_MUTATIONS, ids=[m[0] for m in FACE_MUTATIONS])
 def test_a_mutated_face_pass_fails_the_parity(world, seated_faces, tmp_path, label, old, new, cases):
@@ -680,6 +693,7 @@ def _role_ok(name, g, backs):
                and r["path"] in g["frus"] for r in occ if "/" in r["path"])
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("label,old,new,sets", ROLE_MUTATIONS, ids=[m[0] for m in ROLE_MUTATIONS])
 def test_a_mutated_body_role_breaks_the_ruling(world, roles, tmp_path, label, old, new, sets):
@@ -768,6 +782,7 @@ def _old_travel(c):
     return {"pull": min(captive or d * 1.5 + 25, c["into"] - 10), "leavesBay": True, "bayDepth": d}
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_part_lifted_out_of_a_shallow_box_clears_it():
     """From above a 1U chassis the face looks 43 mm into the box, and `into - 10`
@@ -808,6 +823,7 @@ def test_a_part_lifted_out_of_a_shallow_box_clears_it():
         assert out[name]["travel"]["leavesBay"] is True
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_part_that_declares_a_depth_is_pulled_as_before(ejected):
     """Optics, cards, modules and supplies that declare a body or a depth keep
@@ -821,6 +837,7 @@ def test_a_part_that_declares_a_depth_is_pulled_as_before(ejected):
         assert got(out, c["name"])["travel"] == _old_travel(c), c["name"]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_cap_or_a_plug_is_pulled_by_its_own_relief_and_leaves_its_port(ejected, world):
     """An occupant that declares no depth - every dust cap and plug - travels
@@ -911,12 +928,14 @@ def walled():
     return cases, walls(cases)
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_face_table_is_the_viewers_own(walled):
     _, out = walled
     assert got(out, "interior")["views"] == ["front", "rear", "right", "left", "top", "bottom"]
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_well_side_against_a_face_covers_that_part_of_its_drawing(walled):
     """The interior well of a 437 x 43 x 597 box, cut in the top a millimetre
@@ -935,6 +954,7 @@ def test_a_well_side_against_a_face_covers_that_part_of_its_drawing(walled):
     assert (right["wall"], _rect(right)) == (PX_, (597.0 - 366.0, 0.0, 365.5, 41.0))
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_side_that_is_not_against_a_face_shows_nothing_of_it(walled):
     _, out = walled
@@ -946,6 +966,7 @@ def test_a_side_that_is_not_against_a_face_shows_nothing_of_it(walled):
     assert {h["face"] for h in got(out, "full depth")["hits"]} == {"rear", "front", "left", "right"}
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_hole_is_in_the_same_place_from_both_sides_of_the_sheet(walled):
     """A point of the far face's drawing, taken half a millimetre inside the
@@ -1021,6 +1042,7 @@ def _plans_ok(cases, out):
     return bad
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_rear_bay_drawn_from_above_is_behind_itself(planned):
     cases, out = planned
@@ -1036,6 +1058,7 @@ WALL_MUTATIONS = [
 ]
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("label,old,new,breaks", WALL_MUTATIONS, ids=[m[0] for m in WALL_MUTATIONS])
 def test_a_mutated_wall_reading_is_caught(walled, planned, tmp_path, label, old, new, breaks):
@@ -1058,6 +1081,7 @@ def test_a_mutated_wall_reading_is_caught(walled, planned, tmp_path, label, old,
         assert rear is None or rear["wall"] != PY_
 
 
+@pytest.mark.heavy
 def test_only_declared_decor_is_an_air_aperture():
     """Which paint is a hole is DECLARED: `vent:` or `pattern: vent` on the
     decor, which render.py stamps `data-aperture="air"` - the only thing the

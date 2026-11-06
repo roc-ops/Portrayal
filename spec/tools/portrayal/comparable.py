@@ -135,6 +135,13 @@ FACTS = [
         A("power-self-max-w", qualifier="self"),
     ], note="NOT typical draw. See rule 1 - there is no fallback between them",
        scopes=("power-max-scope", "power-envelope")),
+    # A POWERED DEVICE'S PoE INPUT. `poe-pd-max-w` is the WHOLE intake, what the device hands on included, so it
+    # is the number to sum against a switch's `poe-budget-w`; it is not the box's own peak and is not read
+    # as `peak-power-w`.
+    Fact("poe-pd-max-w", "power", "W", NUMBER, [A("poe-pd-max-w")],
+         note="the most a powered device takes in at its PoE input, what it hands on included"),
+    Fact("poe-pd-standard", "power", None, TEXT, [A("poe-pd-standard")],
+         note="the highest 802.3 standard the maker names for the PoE input"),
     Fact("typical-power-w", "power", "W", NUMBER, [
         A("power-typical-w"), A("typical-draw-w"),
     ], scopes=("power-typical-scope", "power-envelope")),

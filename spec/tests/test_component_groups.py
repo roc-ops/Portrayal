@@ -112,6 +112,7 @@ def _ports(svg):
     return [el for el in root.iter() if el.get("data-class") == "port"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("dev", sorted(SEATED))
 def test_every_top_level_port_on_the_seated_card_carries_its_group(built, dev):
     out, names = built
@@ -147,6 +148,7 @@ def root_modules(svg):
             if el.get("data-path", "").endswith("/module") and el.get("data-ref")]
 
 
+@pytest.mark.heavy
 def test_the_timing_and_console_media_are_corrected(built):
     """The media correction rides with the groups: a console is rj45-serial,
     a ToD jack rj45-tod and a BITS jack rj48, where each used to inherit the
@@ -256,6 +258,7 @@ def _seat_on_the_sled(tmp_path, drop_groups):
                      if el.get("data-path") == "sled-1/module/port-3-occupant").attrib)
 
 
+@pytest.mark.heavy
 def test_an_optic_in_a_card_cage_takes_exactly_the_published_occupant_attrs(tmp_path):
     grouped = _seat_on_the_sled(tmp_path / "a", drop_groups=False)
     bare = _seat_on_the_sled(tmp_path / "b", drop_groups=True)

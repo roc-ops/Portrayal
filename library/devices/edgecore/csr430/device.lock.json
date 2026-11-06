@@ -12,7 +12,7 @@
    "edgecore/csr310-psu-dc@1"
   ]
  },
- "composed": "a1c05690362f9744",
+ "composed": "135f305772f96ecc",
  "composed-refs": {
   "common/led-arrow-sm@1": "1.1.0+f6e565f48fbd46a4",
   "common/led-rect@1": "1.1.0+0314fb1739d8b11d",
@@ -21,9 +21,10 @@
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
   "common/sma-jack@1": "1.0.1+dde698c727778ba3",
   "common/smb-jack@1": "1.0.0+d68248050fc18e92",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
   "edgecore/csr310-fan-tray@1": "1.0.2+cdc1604e2201eb3f",
-  "edgecore/csr310-psu-ac@1": "1.0.1+c95cf6039ff7bbdc",
-  "edgecore/csr310-psu-dc@1": "1.0.1+50bbf69bd328babe",
+  "edgecore/csr310-psu-ac@1": "1.0.2+6ae6e621f081d00c",
+  "edgecore/csr310-psu-dc@1": "1.1.1+26a819369fed81be",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
@@ -36,6 +37,66 @@
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-1/module/input": {
+   "edgecore/csr310-psu-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "gnd",
+      "slot": "psu-1/module/pole-gnd"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-2/module/input": {
+   "edgecore/csr310-psu-dc@1": {
+    "awg": [
+     14
+    ],
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "gnd",
+      "slot": "psu-2/module/pole-gnd"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-2/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-2/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "1f1ddb557840eacd",
  "groups": [
@@ -413,6 +474,6 @@
  },
  "placement-surface": "f502e362b3624e69",
  "shape": "a06f3d9a5d28db4e",
- "surface": "0099788bea19b256",
- "version": "1.0.7"
+ "surface": "78f8b21bdb267c18",
+ "version": "1.1.2"
 }

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-ocu-97-3
-version: 2.2.0
+version: 2.3.0
 class: coupler
 behaviour: fills
 profile: optical
@@ -123,11 +123,18 @@ provenance:
 elements:
   caption-common: {at: [22.50, 16.2], size: [13.2, 2.05], class: marking}
   caption-split: {at: [35.70, 16.2], size: [13.2, 2.05], class: marking}
+groups:
+  lc-optical:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: duplex LC optical ports of a passive coupler; the datasheet states no data rate
 parts:
   # the left adapter carries the common port and one dead position; the right one
   # carries both legs. That is the datasheet's arrangement, not a convenience.
-  - {ref: common/lc-duplex-adapter@6, id: common, at: [22.50, 4.0], attrs: {role: common}}
-  - {ref: common/lc-duplex-adapter@6, id: split, at: [35.70, 4.0], attrs: {role: split}}
+  - {ref: common/lc-duplex-adapter@6, id: common, at: [22.50, 4.0], group: lc-optical, attrs: {role: common}}
+  - {ref: common/lc-duplex-adapter@6, id: split, at: [35.70, 4.0], group: lc-optical, attrs: {role: split}}
 optical:
   # THE PART'S FUNCTION, WHICH USED TO BE A STRING. `coupling-ratio: '97/3'` is
   # still in attrs for a reader; this is the same fact in a form lint can check

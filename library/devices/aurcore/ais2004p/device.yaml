@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais2004p
-version: 2.0.0
+version: 2.1.2
 maturity: modelled
 manufacturer: AurCore
 model: AIS2004P
@@ -86,6 +86,9 @@ provenance:
       LINK/ACT and PoE under their colour keys; the summary line '8 x GE | 12 x GE | PoE+'. The
       AURCORE wordmark is printed as text: its A is drawn as a chevron mark, which is not
       reproduced (no logo marks).
+      The printed logotype's place on the front is reserved as a logo-zone region. It was measured on the
+      square-on AIS2004P product image 1, scaled on the face's own width and height (sure, about 0.5 mm).
+      The mark is not drawn. The plain text AURCORE the library draws stays.
   top-layout:
     confidence: estimated
     note: >-
@@ -392,6 +395,8 @@ views:
       - {ref: common/led-rect-sm@1, id: led-sfp-19, at: [60.45, 113.25], rotate: 90, for: port-19, group: sfp-leds, rel-pos: 19}
       - {ref: std/sfp@1, id: port-20, at: [47.65, 123.55], rotate: 90, group: sfp, rel-pos: 20}
       - {ref: common/led-rect-sm@1, id: led-sfp-20, at: [60.45, 127.75], rotate: 90, for: port-20, group: sfp-leds, rel-pos: 20}
+    regions:
+    - {id: logo-zone, at: [49.1, 138.4], size: {w: 16.6, h: 2.6}, label: 'Vendor logo; not drawn'}
   rear:
     size: {w: 83.8, h: 145.0}
     components:

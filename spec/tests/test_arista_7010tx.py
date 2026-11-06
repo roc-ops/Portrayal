@@ -1,8 +1,8 @@
 """The Arista 7010TX-48 switch family, the first Arista devices in the library (#1204).
 
 One device, `arista/7010tx-48`: 48 x 10/100/1000BASE-T and four 1/10/25G SFP cages on a 1RU
-chassis. Its AC and DC builds, front-to-back and back-to-front, and the -48C part numbers are
-`kind: orderable` configurations of that one front panel. The expected figures are Arista's:
+chassis. Its AC and DC builds, front-to-back and back-to-front, and the same four builds of the
+-48C are `kind: orderable` configurations of that one front panel. The expected figures are Arista's:
 the 7010 Series 1RU Quick Start Guide (PDOC-00061-08, Table 1 for the envelope, Table 3 for the
 power supplies, Appendix C and D for the faces, Appendix E for the fan) and the 7010X Series
 Data Sheet (03-0052-14, 20 Aug 2025: ordering information and the technical specifications).
@@ -19,10 +19,14 @@ DEV = "7010tx-48"
 
 # configuration -> (airflow, power feed, the part numbers it orders under); datasheet ordering table
 CONFIGS = {
-    "ac-f": ("front-to-back", "ac", ["DCS-7010TX-48-F", "DCS-7010TX-48C-F"]),
-    "ac-r": ("back-to-front", "ac", ["DCS-7010TX-48-R", "DCS-7010TX-48C-R"]),
-    "dc-f": ("front-to-back", "dc", ["DCS-7010TX-48-DC-F", "DCS-7010TX-48C-DC-F"]),
-    "dc-r": ("back-to-front", "dc", ["DCS-7010TX-48-DC-R", "DCS-7010TX-48C-DC-R"]),
+    "ac-f": ("front-to-back", "ac", ["DCS-7010TX-48-F"]),
+    "ac-r": ("back-to-front", "ac", ["DCS-7010TX-48-R"]),
+    "dc-f": ("front-to-back", "dc", ["DCS-7010TX-48-DC-F"]),
+    "dc-r": ("back-to-front", "dc", ["DCS-7010TX-48-DC-R"]),
+    "ac-c-f": ("front-to-back", "ac", ["DCS-7010TX-48C-F"]),
+    "ac-c-r": ("back-to-front", "ac", ["DCS-7010TX-48C-R"]),
+    "dc-c-f": ("front-to-back", "dc", ["DCS-7010TX-48C-DC-F"]),
+    "dc-c-r": ("back-to-front", "dc", ["DCS-7010TX-48C-DC-R"]),
 }
 
 
@@ -222,7 +226,7 @@ def test_the_new_components_are_family_prefixed_and_cite_a_size():
 # ------------------------------------------------------------ configurations
 
 
-def test_the_configurations_are_the_four_builds_with_the_datasheets_part_numbers():
+def test_the_configurations_are_the_eight_builds_with_the_datasheets_part_numbers():
     cf = load()["configurations"]
     assert set(cf) == set(CONFIGS)
     for name, (airflow, feed, pns) in CONFIGS.items():
@@ -257,11 +261,13 @@ def test_each_build_seats_the_fan_turned_to_its_airflow_and_the_dc_ones_use_the_
 @pytest.mark.parametrize("target", ["netbox", "nautobot"])
 def test_the_dcim_types_export_one_per_orderable_configuration_one_u_high(target):
     d = load()
-    # the exporter writes one type per configuration, named by its first part number (as for the
-    # MX204, whose second SKU is not a type of its own): the -48C numbers ride on the same four
+    # the exporter writes one type per configuration, named by its first part number: each of
+    # the eight builds, the -48C ones as configurations of their own, is a type
     want = {next(iter(v["part-numbers"])) for v in d["configurations"].values()
             if v["kind"] == "orderable"}
-    assert want == {"DCS-7010TX-48-F", "DCS-7010TX-48-R", "DCS-7010TX-48-DC-F", "DCS-7010TX-48-DC-R"}
+    assert want == {"DCS-7010TX-48-F", "DCS-7010TX-48-R", "DCS-7010TX-48-DC-F", "DCS-7010TX-48-DC-R",
+                    "DCS-7010TX-48C-F", "DCS-7010TX-48C-R", "DCS-7010TX-48C-DC-F",
+                    "DCS-7010TX-48C-DC-R"}
     folder = LIB / "exports" / target / "device-types" / "Arista"
     # other Arista families export beside these four; they must all be present, not alone
     got = {p.stem for p in folder.glob("*.yaml")}

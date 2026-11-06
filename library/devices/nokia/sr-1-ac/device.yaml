@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: sr-1-ac
-version: 0.1.3
+version: 0.1.5
 maturity: modelled
 manufacturer: Nokia
 model: 7750 SR-1 AC (FP4)
@@ -131,6 +131,14 @@ provenance:
       MDA-e-XP / MDA2-e-XP cards and optics; PSUs run at 90% efficiency. The 830 W is carried as
       the vendor's system figure with that scope; the cards carry their own figures (Table 35)
       and optics are extra. The AC PSU is 1600 W high-line / 1000 W low-line (p73).
+  power-feed:
+    confidence: datasheet
+    note: >-
+      Every build is fed by AC, so the chassis states the one feed. The bays accept only the SR-1 AC
+      PSU, 3HE12301AA (SR1 Table 25 p74), and the AC chassis ships with one AC PSU and a filler panel
+      (p73), so dual-psu and shipped-bundle are both AC. AC input is 100-120/220-240 VAC, 50/60 Hz,
+      operating range 90-127/200-264 VAC (Table 31 p90). The -48 VDC chassis is the sibling
+      nokia/sr-1-dc, which has a fixed terminal block and no supply bay.
   airflow:
     confidence: datasheet
     note: >-
@@ -186,6 +194,7 @@ chassis:
   ru: 2
   weight-kg: 14.38
   airflow: front-to-back
+  power: ac
   color: '#2b2e32'
   silk: '#e6e8ea'
 gaps:

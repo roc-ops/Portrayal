@@ -70,8 +70,11 @@ note measures nothing and reads no standard that the registry does not cite.
 | `pcie-fh` | a slot whose opening takes a full-height add-in card bracket | `pcie-bracket-fh` | PCI Express CEM 5.0, figure 11-5 "Standard Add-in Card I/O Bracket", page 172 | proposed |
 | `pcie-lp` | a slot whose opening takes a low-profile bracket | `pcie-bracket-lp` | CEM 5.0, figure 11-9 "Low Profile I/O Bracket", page 177 | proposed |
 | (none) | a two-slot card | `pcie-bracket-fh-2slot` | CEM 5.0, figure 11-13, page 181 | not a key: it mates `pcie-fh` and states `slot-width: 2` |
-| `ocp3-sff` | OCP NIC 3.0, small form factor | none | none held | question |
-| `ocp3-lff` | OCP NIC 3.0, large form factor | none | none held | question |
+| `ocp3-sff` | OCP NIC 3.0, small form factor: 76.00 x 115.00, 11.50 high, one 4C+ connector | `ocp3-sff` | OCP NIC 3.0 Design Specification 1.6.0, Table 5, page 25 | registered |
+| `ocp3-tsff` | OCP NIC 3.0, tall small form factor: the SFF outline, 14.20 high. Its `mates` list names `ocp3-tsff` and `ocp3-sff` | `ocp3-tsff` | the same table; section 2.1.2, page 26, and Table 7, page 43, for the SFF card in a TSFF slot | registered |
+| `ocp3-dsff` | OCP NIC 3.0, dual small form factor: 157.55 x 115.00, 11.50 high, two 4C+ connectors. A DSFF slot is two SFF positions | `ocp3-dsff` | the same table; section 2.1.3, page 27 | registered |
+| `ocp3-tdsff` | OCP NIC 3.0, tall dual small form factor: the DSFF outline, 14.20 high | `ocp3-tdsff` | the same table | registered |
+| (none) | OCP NIC 3.0, large form factor | none | deprecated in the same table (note 2); the specification moved its content to its Section 9 | not registered |
 | `e3s` | EDSFF E3.S, single thickness | `drive-e3s` | SFF-TA-1008 Rev 3.0a, table 5-1: 76 wide, 112.75 long, 7.5 thick | proposed, later slice |
 | `e3s-2t`, `e3l`, `e3l-2t` | the other E3 device sizes | none | table 5-1 is cited for E3.S only; the registry text names E3.S 2T at 16.8 thick and holds no entry | question |
 
@@ -96,12 +99,29 @@ Reasons:
   gains no key.
 - **No dots.** `connectors.yaml` spells `din-1-0-2-3` with hyphens because an
   interface may not contain a dot, so E3.S is `e3s` and M.2 would be `m2`.
-- **OCP NIC 3.0.** The library holds no OCP specification. The six Dell cards
-  carry `attrs.form-factor: ocp3-sff`, a spelling of the library's own, and their
-  bracket (71.8 x 15.1) and board (76 x 115) are measured on a vendor service
-  model, which is the vendor's bracket and not the OCP form factor. The R660 has
-  one OCP bay. The keys are left as a question until the specification is held.
-  Nothing is invented from the vendor datasheets that call a card "TSFF".
+- **OCP NIC 3.0.** The library now holds the specification: the OCP NIC 3.0
+  Design Specification, Version 1.6.0, published under the Open Compute Project
+  Hardware License (Permissive) Version 1.0. Its Table 5 (page 25) gives the
+  four live outlines, and `standards.yaml` registers them as `ocp3-sff`,
+  `ocp3-tsff`, `ocp3-dsff` and `ocp3-tdsff` at `confidence: verified`. The
+  registry entry has no key for the Z-height (11.50 or 14.20), so it is in the
+  entry's text. **The large form factor is not registered:** Table 5 marks it
+  deprecated and the specification moved its content to Section 9. The Dell cards
+  carry `attrs.form-factor: ocp3-sff`, the same spelling, and their bracket
+  (71.8 x 15.1) is the vendor's and not the OCP outline. The R660 has one OCP
+  bay, and Dell's technical guide says its OCP 3.0 slot is SFF (Table 11, "Form
+  factor", page 21). The bay does not state `interface: ocp3-sff` yet: a bay that
+  states an interface fails the test that pins today's bays, and the readers of
+  `accepts` must first go through `manifest.offers`, which is a later change.
+  Two relations come from the specification, not from Table 5: a TSFF
+  slot may mechanically accept an SFF card, and the specification leaves the
+  electromagnetic effect of the faceplate gap out of its scope (section 2.1.2,
+  page 26; Table 7, page 43), and a DSFF slot is two SFF slots with a removable
+  guide rail (section 2.1.3, page 27). The first is a slot that takes two keys,
+  so a TSFF slot's card list names `ocp3-tsff` and `ocp3-sff`; the second is two
+  SFF positions, recorded here and not modelled, because no held device has a DSFF
+  slot. A TSFF card is 2.70 taller than the SFF outline, so it is not in the
+  R660 bay's list.
 - **EDSFF.** `std/drive-e3s@1` conforms to a held entry, so `e3s` has a source.
   The R660's 16 distinct E3.S bay ids (30 bay entries, in its two front views; a 31st, `e3s-filler-14`, takes a
   filler only) accept Dell's carrier, Dell's blank and the bare drive. The
@@ -279,7 +299,7 @@ seats exactly what it did before.
   two-slot card is offered where the `span` is long enough and not elsewhere;
   published lists equal today's for the migrated risers (a snapshot); the module-type
   export of a migrated riser; the lock asks nothing of the seven devices.
-- **Stays for later:** the other carriers, OCP and EDSFF keys, M.2 and U.2, the
+- **Stays for later:** the other carriers, the EDSFF keys, M.2 and U.2, the
   x16-in-x8 warning, and the cover-off interior view of #43.
 
 ## Open questions
@@ -302,8 +322,11 @@ seats exactly what it did before.
    the composed bracket (no edits, but a card's key is then silent).
 7. **Derived published lists** (proposed, kit untouched) or a kit that reads
    `interface` itself (kit version, and lists stay short).
-8. **OCP and EDSFF.** Wait for a held OCP NIC 3.0 specification, and register `e3s`
-   in a later slice from the SFF-TA-1008 entry, or register `e3s` now.
+8. **OCP and EDSFF.** The OCP NIC 3.0 specification is now held and its four live
+   form factors are registered (`ocp3-sff`, `ocp3-tsff`, `ocp3-dsff`, `ocp3-tdsff`,
+   Table 5, page 25; the large form factor is deprecated and skipped). What is
+   left is EDSFF: register `e3s` in a later slice from the SFF-TA-1008 entry, or
+   register `e3s` now.
 9. **Is a changed DCIM bay description "BREAKING for DCIM data already
    imported"?** Names and positions do not change; the note says no.
 10. **L11.** Waive the `mate` point for a part that fills a bay (proposed), or give

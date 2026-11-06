@@ -336,7 +336,7 @@ def test_the_dcim_types_export_one_per_orderable_part_number_one_u_high(target):
     want = {"N9K-C93180YC-FX3", "N9K-C93180YC-FX3H", "N9K-C93180YC-FX3S", "N9K-C93108TC-FX3"}
     # the glob also finds batch 2's types, which test_cisco_nexus_9300_fx3p_fxp.py holds
     batch2 = {"N9K-C93108TC-FX3P", "N9K-C93108TC-FX3H", "N9K-C9348GC-FX3"}
-    got = {p.stem for p in folder.glob("N9K-C93*-FX3*.yaml")} - batch2
+    got = {p.stem for p in folder.glob("N9K-C93*-FX3*.yaml")} - batch2 - {"N9K-C9348GC-FX3PH"}  # batch 5's
     assert got == want
     for pn in want:
         doc = yaml.safe_load((folder / f"{pn}.yaml").read_text())

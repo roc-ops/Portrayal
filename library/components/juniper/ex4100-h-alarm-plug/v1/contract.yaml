@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: ex4100-h-alarm-plug
+version: 1.0.0
+class: port
+mates: terminal-350-6
+profile: power
+description: >-
+  The conductor ends of the wires that land on the dry contact alarm connector of the Juniper EX4100-H switches, seen
+  from the front as seated. Six stripped ends sit side by side at the connector's six clamp positions, 3.5 mm
+  apart. The part seats in a `terminal-350-6` connector at its own mate point. The guide names no cable connector for it; the
+  wires clamp straight into the connector's openings.
+size: {w: 32.2, h: 7.7}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, juniper/ex4100-h-alarm-connector@1, 32.2 by 7.7. No document gives a
+  dimension of a conductor end or of a wire.
+attrs: {media: ex4100-h-alarm, connector: conductor ends, positions: 6}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE CABLE CONNECTOR. The EX4100-H Switch Hardware Guide (Juniper Networks, published
+    2026-10-01), "Dry Contact Alarm", gives the clamping screws' torque and says the alarm input ports connect to door
+    and window sensors and the relay ports to a bell or a light. It shows no cable connector and names none, so the
+    part is the wires' own ends and claims no maker, series or part number.
+  size: >-
+    estimated - see size-notes.
+  colour: >-
+    estimated - the grey body and the lighter conductor ends are declared estimates. No photograph or figure shows a
+    conductor end seated, and the guide's figures are line art with no colour.
+  wiring: >-
+    guide - GND is wired whenever an alarm input is used ("Remember to mandatorily connect a wire to the GND port").
+    No wire gauge or colour is stated, so none is drawn.
+  far-end: >-
+    NOT DRAWN. The other end lands on a sensor or on the equipment the relay switches, which is the site's.
+  depth: >-
+    NOT STATED. No document gives how far a conductor enters the connector, so the part draws a plan outline only and
+    builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [16.1, 3.85], direction: front}
+skins: [default]

@@ -110,6 +110,7 @@ def flat(text):
 
 # --- 1. the registry -----------------------------------------------------------
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PAIRS))
 def test_each_dsub_interface_is_a_connector_citing_its_standard(iface):
     reg = render_mod._connector_registry()
@@ -119,6 +120,7 @@ def test_each_dsub_interface_is_a_connector_citing_its_standard(iface):
     assert reg[iface]["standard"] == core["conforms"]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PAIRS))
 def test_each_registry_note_states_the_panel_gender(iface):
     """The naming rule: a key names the connector with the gender the
@@ -130,6 +132,7 @@ def test_each_registry_note_states_the_panel_gender(iface):
     assert PAIRS[iface][1] in note and PAIRS[iface][0] in note, note
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PAIRS))
 def test_each_core_states_the_gender_the_registry_gives_it(iface):
     """Read off the core, not assumed: the three female cores carry a
@@ -148,6 +151,7 @@ def test_each_core_states_the_gender_the_registry_gives_it(iface):
     assert stated == PANEL_GENDER[iface]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("iface", sorted(PAIRS))
 def test_each_core_presents_its_interface_at_its_face(iface):
     core = _contract(PAIRS[iface][0])
@@ -183,6 +187,7 @@ CARDS = [
 ]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("case", CARDS, ids=[f"{c[1].split('/')[1].split('@')[0]}-{c[2]}"
                                              for c in CARDS])
 def test_a_cards_connector_is_a_nested_slot_that_offers_exactly_its_plug(case, comps):
@@ -197,6 +202,7 @@ def test_a_cards_connector_is_a_nested_slot_that_offers_exactly_its_plug(case, c
     assert slot["lift"] == 0.0, slot
 
 
+@pytest.mark.heavy
 def test_a_card_with_two_connectors_of_a_kind_publishes_both(comps):
     slots = {c["id"]: c for c in comps["nokia/lalm-f@1"]["cages"] if c["interface"] == "da15"}
     assert sorted(slots) == ["alm-down", "alm-up"]
@@ -206,6 +212,7 @@ def test_a_card_with_two_connectors_of_a_kind_publishes_both(comps):
     assert craft["interface"] == "db9" and craft["accepts"] == [DB9]
 
 
+@pytest.mark.heavy
 def test_the_de9_and_vga_shells_are_one_size_and_their_plugs_do_not_swap(comps):
     """The premise, then the consequence. std/db9@1 and std/vga@1 are the same
     opening and their two plugs have one front shell section apart from the
@@ -222,6 +229,7 @@ def test_the_de9_and_vga_shells_are_one_size_and_their_plugs_do_not_swap(comps):
     assert seen["db9"] > 0 and seen["hd15"] > 0, seen
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", sorted(WRAPPERS))
 def test_a_wrapper_presents_the_core_it_composes_at_its_own_mate(ref, comps):
     """common/db9-receptacle@1 and common/vga-receptacle@1 each compose one
@@ -258,6 +266,7 @@ def _standoff_centres(ref):
     return pts
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", sorted(WRAPPERS))
 def test_a_wrappers_standoffs_are_on_the_size_e_mounting_centres(ref):
     """The premise of the thumbscrew test below: the standoffs are 24.99
@@ -269,6 +278,7 @@ def test_a_wrappers_standoffs_are_on_the_size_e_mounting_centres(ref):
     assert (lx + rx) / 2 == pytest.approx(mx, abs=1e-6)
 
 
+@pytest.mark.heavy
 def test_every_composed_dsub_core_is_a_slot_or_is_forwarded(comps):
     """The census: each `parts:` entry that is one of the four cores, or one
     of the two wrappers, is either published as a slot of the component that
@@ -305,6 +315,7 @@ def test_every_composed_dsub_core_is_a_slot_or_is_forwarded(comps):
     assert sorted(forwarded) == sorted(WRAPPERS)
 
 
+@pytest.mark.heavy
 def test_every_dsub_connector_a_device_places_is_one_of_these_parts():
     """The other half of the census, on the device side: a device places a
     D-sub as one of the four bare cores or one of the two wrappers, and each
@@ -338,6 +349,7 @@ def test_every_dsub_connector_a_device_places_is_one_of_these_parts():
     assert placed["std/vga@1"] >= 7 and placed["std/da15@1"] >= 1, placed
 
 
+@pytest.mark.heavy
 def test_each_interface_is_mated_by_its_one_plug(comps):
     """No gender changer, no adapter and no second hood: the one part in the
     library that mates each interface is its cable plug."""
@@ -352,6 +364,7 @@ def test_each_interface_is_mated_by_its_one_plug(comps):
 
 # --- 3. the plugs --------------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH
 def test_it_is_a_plug_that_mates_its_interface(ref):
     d = _contract(ref)
@@ -362,6 +375,7 @@ def test_it_is_a_plug_that_mates_its_interface(ref):
     assert d["unplaced"] == _contract("generic/usb-a-plug@1")["unplaced"]
 
 
+@pytest.mark.heavy
 @EACH
 def test_it_states_its_cores_medium_and_the_other_gender(ref):
     d = _contract(ref)
@@ -374,6 +388,7 @@ def test_it_states_its_cores_medium_and_the_other_gender(ref):
     assert CORE_OF[ref] in text
 
 
+@pytest.mark.heavy
 @EACH
 def test_it_states_no_depth_and_its_length_is_in_the_registry(ref):
     d = _contract(ref)
@@ -388,6 +403,7 @@ def test_it_states_no_depth_and_its_length_is_in_the_registry(ref):
     assert rear(last) - m + g == pytest.approx(FIGURES[ref][3])
 
 
+@pytest.mark.heavy
 @EACH
 def test_its_box_is_the_widest_section_drawn(ref):
     """`size` is the end-on box of the widest drawn section, and nothing is
@@ -408,6 +424,7 @@ def test_its_box_is_the_widest_section_drawn(ref):
     assert widest == pytest.approx(w)
 
 
+@pytest.mark.heavy
 @EACH
 def test_its_fields_are_the_cable(ref):
     f = _contract(ref)["fields"]
@@ -422,6 +439,7 @@ HOOD_BLUE = "#1f4f9e"
 HOOD_NODES = ["hood", "relief-boot", "screw-l", "screw-r"]
 
 
+@pytest.mark.heavy
 def test_the_vga_hood_colour_is_a_field_and_defaults_to_the_ports_blue():
     """A VGA cable end is usually the blue of the port and sometimes black, so
     the colour is a field (never a second skin) on the one moulding: hood,
@@ -447,6 +465,7 @@ def test_the_vga_hood_colour_is_a_field_and_defaults_to_the_ports_blue():
         assert "hood-color" not in _contract(ref)["fields"]
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_is_30_long_from_where_the_plug_ends(ref):
     f = feats(ref)
@@ -455,6 +474,7 @@ def test_the_stub_is_30_long_from_where_the_plug_ends(ref):
     assert stub["lift"] == pytest.approx(rear(last))
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_solids_chain_from_the_front_shell_to_the_stub(ref):
     """The front shell, then the hood in its steps, then (on the moulded VGA
@@ -474,6 +494,7 @@ def test_the_solids_chain_from_the_front_shell_to_the_stub(ref):
         assert rear(f[s]) > FIGURES[ref][0] + 10
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_cable_leaves_from_the_stub(ref):
     d = _contract(ref)
@@ -483,6 +504,7 @@ def test_the_cable_leaves_from_the_stub(ref):
     assert cps["mate"]["at"] == pytest.approx([d["size"]["w"] / 2, d["size"]["h"] / 2])
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_stub_circle_is_bound_to_the_fields(ref):
     s = _skin_path(ref).read_text()
@@ -499,6 +521,7 @@ def test_the_stub_circle_is_bound_to_the_fields(ref):
     assert "color" not in feats(ref)["stub"]
 
 
+@pytest.mark.heavy
 @EACH
 def test_no_mark_is_drawn_on_the_hood(ref):
     """No logo, no part number and no screw slot: the skin is the outlines
@@ -534,6 +557,7 @@ def _d_flats(path):
     return sorted(runs)
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_front_shell_has_its_long_side_where_the_core_has_it(ref):
     """Which way is up. The core draws the long side of its D at the top; so
@@ -557,6 +581,7 @@ def test_the_front_shell_has_its_long_side_where_the_core_has_it(ref):
     assert "THE KEY IS NOT VISIBLE FROM THE CABLE END" in text
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_thumbscrews_are_on_the_mounting_centres_of_its_shell_size(ref):
     d = _contract(ref)
@@ -575,6 +600,7 @@ def test_the_thumbscrews_are_on_the_mounting_centres_of_its_shell_size(ref):
 
 # --- 4. the seated depth, in the contracts --------------------------------------
 
+@pytest.mark.heavy
 @EACH
 def test_the_flange_stands_the_mating_dimension_in_front_of_the_core_face(ref):
     m, g, _modelled, _overall, _od, _c, _text = FIGURES[ref]
@@ -587,6 +613,7 @@ def test_the_flange_stands_the_mating_dimension_in_front_of_the_core_face(ref):
     assert float(f[CHAIN[ref][1]]["lift"]) == pytest.approx(m)
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_core_models_the_mating_dimension(ref):
     """Fails by design when a core's depth is revised: the plug's
@@ -602,6 +629,7 @@ def test_the_core_models_the_mating_dimension(ref):
     assert f"{CORE_OF[ref]} states its depth as {modelled:g}" in text, text
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", sorted(WRAPPERS))
 def test_a_wrappers_standoffs_end_where_the_plug_flange_is(ref):
     w = _contract(ref)
@@ -610,6 +638,7 @@ def test_a_wrappers_standoffs_end_where_the_plug_flange_is(ref):
     assert float(post["out"]) == pytest.approx(FIGURES[plug][0])
 
 
+@pytest.mark.heavy
 @EACH
 def test_the_ruling_is_recorded_in_provenance(ref):
     text = flat(_contract(ref)["provenance"]["seated-depth"])
@@ -711,6 +740,7 @@ def _front(parents, el):
     return lift_of(parents, el) + float(el.get("data-z-cyl"))
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_it_seats_with_its_mate_on_the_connectors_mate(seated, seat):
     parents, host, occ, _ = _seat(seated, seat)
@@ -720,6 +750,7 @@ def test_it_seats_with_its_mate_on_the_connectors_mate(seated, seat):
     assert_same_turn(parents, occ, host)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("seat", WRAPPED_SEATS,
                          ids=[SEAT_IDS[SEATS.index(s)] for s in WRAPPED_SEATS])
 def test_through_a_wrapper_it_seats_on_the_core_itself(seated, seat):
@@ -736,6 +767,7 @@ def test_through_a_wrapper_it_seats_on_the_core_itself(seated, seat):
     assert abs(cx - ox) < EPS and abs(cy - oy) < EPS, ((cx, cy), (ox, oy))
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("seat", WRAPPED_SEATS,
                          ids=[SEAT_IDS[SEATS.index(s)] for s in WRAPPED_SEATS])
 def test_its_thumbscrews_are_over_the_wrappers_standoffs(seated, seat):
@@ -754,6 +786,7 @@ def test_its_thumbscrews_are_over_the_wrappers_standoffs(seated, seat):
     assert lift_of(parents, el[SCREWS[0]]) >= FIGURES[ref][0] - EPS
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("seat", [s for s in SEATS if s[5] not in WRAPPERS],
                          ids=[SEAT_IDS[SEATS.index(s)] for s in SEATS if s[5] not in WRAPPERS])
 def test_on_a_bare_core_its_thumbscrews_are_either_side_of_the_shell(seated, seat):
@@ -775,6 +808,7 @@ def test_on_a_bare_core_its_thumbscrews_are_either_side_of_the_shell(seated, sea
         assert abs(cross) < 1e-6, (s, cross)
 
 
+@pytest.mark.heavy
 def test_two_of_the_seats_are_turned():
     """The premise of the turned seats, read off the library: a Dell front
     panel places its bare VGA core at 270, and the SR-12 seats its SF/CPM in a
@@ -790,6 +824,7 @@ def test_two_of_the_seats_are_turned():
     assert [p.get("rotate") for p in rsp["parts"] if p["id"] == "alarm-out"] == [90]
 
 
+@pytest.mark.heavy
 def test_the_turned_seats_are_measured_turned(seated):
     """Not a flat pass: two of the seats above are drawn turned in the
     compiled face, a quarter turn each way, so the turn is measured and not
@@ -803,6 +838,7 @@ def test_the_turned_seats_are_measured_turned(seated):
     assert turns == {1, -1}, turns
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_plug_stands_off_by_the_ruling(seated, seat):
     """The compiled depths, in the device frame: the front shell ends on the
@@ -822,6 +858,7 @@ def test_the_seated_plug_stands_off_by_the_ruling(seated, seat):
     assert _front(parents, el["stub"]) - base == pytest.approx(m + overall - g + STUB, abs=EPS)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("seat", CHASSIS_SEATS,
                          ids=[SEAT_IDS[SEATS.index(s)] for s in CHASSIS_SEATS])
 def test_a_chassis_connector_publishes_a_slot_that_offers_exactly_its_plug(seated, seat):
@@ -850,6 +887,7 @@ def test_a_chassis_connector_publishes_a_slot_that_offers_exactly_its_plug(seate
 
 # --- 6. 3D solids ----------------------------------------------------------------
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_seated_plug_builds_right_side_out(seated, seat):
     ref = seat[0]
@@ -888,6 +926,7 @@ def _diameter(parents, circle):
     return min(x1 - x0, y1 - y0)
 
 
+@pytest.mark.heavy
 @EACH_SEAT
 def test_the_stub_is_the_default_cable_od(seated, seat):
     ref = seat[0]
@@ -941,6 +980,7 @@ def overridden(tmp_path_factory):
     return out
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("case", OVERRIDES, ids=[c[0].split("/")[1] for c in OVERRIDES])
 def test_a_placements_cable_od_sets_the_stub(overridden, case):
     ref, _device, _config, _view, host_id, od = case

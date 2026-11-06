@@ -302,6 +302,7 @@ def test_L165_no_position_is_written_twice(positions, fires):
     assert any("[L165]" in w for w in _warns(doc)) is fires
 
 
+@pytest.mark.heavy
 def test_the_library_raises_neither():
     for path in sorted((LIB / "devices").glob("*/*/device.yaml")):
         found = _warns(yaml.safe_load(path.read_text()))

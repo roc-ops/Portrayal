@@ -296,6 +296,7 @@ def published(ref, slot_id):
     return next(s for s in _mpo_slots()[ref] if s["id"] == slot_id)
 
 
+@pytest.mark.heavy
 def test_the_cap_and_both_plugs_seat_on_a_real_cassette_back(tmp_path):
     dev = fhd_with(tmp_path, {"bay-1": CASSETTE, "bay-2": CASSETTE}, SEATS)
     rear, parents = drawn(dev, tmp_path / "o", "rear")
@@ -364,6 +365,7 @@ def test_each_stands_in_front_of_the_housing(key):
         assert float(n.get("data-z-out")) > HOUSING
 
 
+@pytest.mark.heavy
 def test_a_front_key_and_a_back_key_on_one_cassette_each_seat_on_their_own_face(tmp_path):
     occupants = {"bay-1/lc01": "generic/lc-duplex-plug@2", "bay-1/mtp1": CAP}
     dev = fhd_with(tmp_path, {"bay-1": CASSETTE}, occupants)

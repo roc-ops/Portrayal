@@ -1,0 +1,52 @@
+format: 1
+kind: component
+name: qfx5200-48y-dc-plug
+version: 1.0.0
+class: port
+mates: juniper-dc-header-3
+profile: power
+description: >-
+  The cable connector of the QFX5200-48Y DC power cable, wired, seen from the wire side as seated. One insulated
+  wire enters each of its three ways. They run top to bottom as the supply numbers them: red (RTN, pin 3),
+  black (-36 to -72 V, pin 2) and green (grounding, pin 1). It seats in a `juniper-dc-header-3` header at its
+  own mate point. It carries one wire per contact, not one cable.
+size: {w: 10.9, h: 28.4}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the header it seats in, juniper/qfx5200-48y-dc-header@1, 10.9 by 28.4. The guide's Figure 85
+  draws the cable connector in perspective without a scale and no dimension of it is held.
+attrs: {media: qfx5200-48y-dc, connector: DC power cable connector, positions: 3}
+fields:
+  wire-1-color: {label: 'Wire colour (pin 3, RTN)', type: text, default: '#d32f2f'}
+  wire-2-color: {label: 'Wire colour (pin 2, -36 to -72 V)', type: text, default: '#1c1c1c'}
+  wire-3-color: {label: 'Wire colour (pin 1, grounding)', type: text, default: '#5a9e3c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    guide - QFX5200 Hardware Guide (Juniper Networks), Connect DC Power to the QFX5200, Figure 85, draws
+    the provided power cable with a three-way connector at one end and ring lugs at the other, and step 5 names the
+    wires. No maker, series or part number of the connector is named. THE PART IS A STAND-IN FOR THE CABLE CONNECTOR.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    guide - Figure 42 labels the wires "Red: RTN", "Black: -36 -72V" and "Green: Grounding" and step 5 names
+    a green-yellow cable for earth ground, a black one for negative and a red one for positive. The defaults
+    are those colours; the earth wire's yellow and green stripe is drawn as one green, an estimate. The
+    figures are line art and no photograph of the cable is held.
+  colour: >-
+    estimated - the body is a light grey (#9aa0a6), read from Figure 85's pale connector body. The figure is line
+    art with grey fills and no photograph of the cable connector is held.
+  far-end: >-
+    NOT DRAWN. The ring lugs at the far end of the cable land on the site's source, which is not this supply's.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the header, so the part draws a
+    plan outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [5.3, 14.3], direction: front}
+  wire-1: {at: [5.3, 9.5], direction: front}
+  wire-2: {at: [5.3, 14.3], direction: front}
+  wire-3: {at: [5.3, 19.1], direction: front}
+skins: [default]

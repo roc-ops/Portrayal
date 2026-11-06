@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 7050dx4-32s
-version: 1.0.0
+version: 1.0.1
 maturity: modelled
 manufacturer: Arista
 model: 7050DX4-32S
@@ -154,8 +154,9 @@ provenance:
     note: >-
       Guide Table 4: typical / maximum 353 W / 880 W for the 7050DX4-32S (PWR-1512-AC or PWR-1511-DC) and 423 W / 1208 W for
       the 7050DX4M-32S, the same figures as the data sheet's "Typical/Max Power" row, with typical "measured at 25C ambient with
-      50% load on all ports, excludes transceivers". A configuration cannot state a device attribute, so the device carries
-      353 W / 880 W and the DX4M figure is in the gap config-scoped-device-attrs and in the description of its configuration.
+      50% load on all ports, excludes transceivers". The device carries 353 W / 880 W; the configuration m-f states the DX4M's
+      own 423 W / 1208 W in its `attrs`, with the MACsec ports, the licence group and the minimum EOS the data sheet's model
+      comparison prints for it.
   environment:
     confidence: datasheet
     note: >-
@@ -246,15 +247,6 @@ chassis:
   airflow: front-to-back
   power: ac
 gaps:
-  - what: config-scoped-device-attrs
-    scope: [front, rear]
-    reason: vendor-silent
-    note: >-
-      The 7050DX4M-32S draws 423 W typical and 1208 W maximum (guide Table 4) against 353 W and 880 W for the 7050DX4-32S, has
-      MACsec on ports 1 to 8 and 25 to 32 and a different licence and minimum EOS, and the data sheet's table gives it
-      PWR-2421-HV and FAN-7011H-F only. No configuration can state a device attribute (the same open gap as cisco/asr-9001).
-      The attrs carry the 7050DX4-32S's figures and the description of the configuration names the others.
-    wanted: configuration-scoped device attrs.
   - what: depth
     scope: [front, rear]
     reason: sources-disagree
@@ -546,8 +538,18 @@ configurations:
     kind: orderable
     description: >-
       The 7050DX4M-32S, the same chassis and front figure with MACsec on ports 1 to 8 and 25 to 32, with front-to-rear air and two AC supplies.
-      It draws 423 W typical and 1208 W maximum (guide Table 4), against 353 W and 880 W for the base switch. The data sheet lists no
-      rear-to-front build of it. Ordered as DCS-7050DX4M-32S-F.
+      The data sheet lists no rear-to-front build of it. Ordered as DCS-7050DX4M-32S-F.
+    export-description: >-
+      Arista 7050DX4M-32S - a fixed 1RU data-centre switch with 32 x 400G QSFP-DD ports and 2 x SFP+ ports, with MACsec on 16 of its
+      ports, running EOS
+    attrs:
+      performance:
+        macsec-ports: 16 (ports 1 to 8 and 25 to 32)
+      power:
+        power-typical-w: 423
+        power-max-w: 1208
+      features:
+        eos-license: license group LIC-FIX-3-MACSEC; minimum EOS 4.30.1
     part-numbers:
       DCS-7050DX4M-32S-F: {}
   dc-f:

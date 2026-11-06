@@ -1,0 +1,78 @@
+format: 1
+kind: component
+name: rps2300-plug
+version: 1.0.0
+class: port
+mates: cisco-rps2300
+profile: power
+description: >-
+  The connector end of the Cisco CAB-RPS2300-E cable that joins a Catalyst 2960-S to a Cisco RPS
+  2300, seen from the cable end as a front elevation sees it seated: a rectangular moulded plug as
+  wide as the connector's shroud and a short straight stub of cable. It seats in the RPS connector
+  (`cisco-rps2300`) at its own mate point. No drawing of the plug is held, so every figure is
+  estimated from the connector's shroud.
+size: {w: 48.2, h: 11.3}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  estimated - the plug is drawn to the 48.2 by 11.3 of the shroud of cisco/rps2300-connector@1; no
+  source gives a dimension of the plug
+attrs: {media: rps, connector: cisco-rps2300}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 6.0}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - the face is the connector's shroud, 48.2 by 11.3 (cisco/rps2300-connector@1, read off
+    the community NetBox rear elevation of the WS-C2960S-48LPD-L). A plug has to enter the shroud,
+    so it cannot be larger; how much smaller it is no held source says.
+  needs-drawing: >-
+    NEEDS A DRAWING - the connector drawing of the CAB-RPS2300-E cable. The Catalyst 2960-S Switch
+    Hardware Installation Guide (OL-19732-04) names the cable ("Use this cable for the RPS:
+    CAB-RPS2300-E") and draws no plug. Until that drawing is held every figure here is a reading.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/c13-plug@1: a `size.d` on a component with no
+    `behaviour` compiles to `data-depth`, which the kit builds as a pit behind the part. The depth is
+    carried by the relief instead.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, as generic/c13-plug@1's is.
+    cisco/rps2300-connector@1 presents at its own face, so 0 is the panel plane the shroud stands
+    in. What lies inside the connector is not built.
+  stands: >-
+    estimated - the body stands 30.0 in front of the panel. No source gives the plug's length or how
+    far it seats; 30.0 is a reading, to be replaced by the drawing named under needs-drawing.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a straight run of cable 30
+    long from the plug's rear face. The cable's bend is the installation's.
+  cable-od: >-
+    estimated - 6.0 is a reading that fits inside the plug's 11.3 height. No source gives the cable's
+    diameter; a placement or a wrapper sets the cable it carries, at its own `cable-od`.
+  jacket-colour: >-
+    a FIELD. Black is the default because no held source states a colour.
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the face (24.1, 5.65): the cable runs
+    straight through the plug, so its front and its rear are one axis seen from two directions.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE. The contacts are on the plug's front face, which is in the connector; a
+    front elevation of a seated plug looks at the cable end. Their number is not published.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port plug.
+elements: {}
+relief:
+  features:
+    - node: body
+      out: 30.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        no source - the plug's length is a reading (provenance.stands)
+    - node: stub
+      lift: 30.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [24.1, 5.65], direction: front}
+  cable: {at: [24.1, 5.65], direction: front, 'on': stub}
+skins: [default]

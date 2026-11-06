@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: slc-keypad
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  The front-panel keypad of the Lantronix SLC 8000: four orange arrow keys in a diamond with an
+  Enter key at the centre. The keys move through the settings that the LCD shows and edit them.
+size: {w: 27.0, h: 27.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  keys: >-
+    SLC 8000 Quick Start Guide, "Configuring Network (IP) Settings": the up and down arrow keys, the
+    right and left arrow keys and the Enter key. That is five keys. The photograph in the User Guide,
+    Figure 2-1, shows them as an orange diamond of four arrows around a round centre key.
+  size: >-
+    estimated - read off the same photograph (1.32 px/mm): the orange pad reads 36 px by 36 px,
+    27 by 27 mm. No document gives a size, and the pad is drawn in the figure at a few pixels per key.
+  keys-position: >-
+    estimated - each key is placed on the diamond the photograph shows, with a gap that the
+    photograph is too small to measure.
+elements:
+  up: {at: [10.2, 1.0], size: [6.6, 6.6], class: button, label-anchor: above}
+  down: {at: [10.2, 19.4], size: [6.6, 6.6], class: button, label-anchor: below}
+  left: {at: [1.0, 10.2], size: [6.6, 6.6], class: button, label-anchor: left}
+  right: {at: [19.4, 10.2], size: [6.6, 6.6], class: button, label-anchor: right}
+  enter: {at: [9.6, 9.6], size: [7.8, 7.8], class: button}
+relief:
+  features:
+  - node: up
+    out: 0.8
+    confidence: estimated
+    source: the photograph shows raised keys; no document states how far they stand
+  - node: down
+    out: 0.8
+    confidence: estimated
+    source: the photograph shows raised keys; no document states how far they stand
+  - node: left
+    out: 0.8
+    confidence: estimated
+    source: the photograph shows raised keys; no document states how far they stand
+  - node: right
+    out: 0.8
+    confidence: estimated
+    source: the photograph shows raised keys; no document states how far they stand
+  - node: enter
+    out: 0.8
+    confidence: estimated
+    source: the photograph shows raised keys; no document states how far they stand
+skins: [default]

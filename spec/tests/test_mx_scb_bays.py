@@ -11,7 +11,7 @@ from libdata import devices
 
 # components whose job is control or switching, not traffic: they belong to the SCB, CB or RCB slots
 CONTROL_PARTS = {
-    "scb-mx", "scbe2-mx", "scbe3-mx", "re-s-1300", "re-s-2000", "mx104-re",
+    "scb-mx", "scbe-mx", "scbe2-mx", "scbe3-mx", "re-s-1300", "re-s-2000", "mx104-re",
     "mx2000-cb-re-128g-v", "mx2000-cb-re-1800-v", "mx2000-cb-re-v", "mx2008-rcb-v",
 }
 
@@ -57,5 +57,5 @@ def test_line_card_bays_accept_no_control_board(slug, doc):
 def test_shared_slot_still_takes_an_scb(slug, bay_id):
     doc = dict(devices())[slug]
     bay = next(b for b in _bays(doc.get("views", doc)) if b["id"] == bay_id)
-    for board in ("juniper/scb-mx@3", "juniper/scbe2-mx@1", "juniper/scbe3-mx@1"):
+    for board in ("juniper/scb-mx@3", "juniper/scbe-mx@1", "juniper/scbe2-mx@1", "juniper/scbe3-mx@1"):
         assert board in bay["accepts"], f"{slug} {bay_id}: {SHARED[(slug, bay_id)]}"

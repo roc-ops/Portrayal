@@ -81,7 +81,9 @@ git diff origin/main...HEAD --stat -- library/exports .github spec/schemas kit/p
 - the manifest format, a schema key or a lint code is removed, renamed or
   changes meaning;
 - the change publishes: a kit release, a tag;
-- it touches `.github/workflows`, the merge script, or a repository setting.
+- it touches `.github/workflows`, the merge script, or a repository setting;
+- it raises a number in `spec/test-budget.json` or re-records
+  `spec/test-budget-reference.json`.
 
 Otherwise it is **two-way**: a revert restores the previous state and nobody
 outside the repository has to do anything.

@@ -26,7 +26,7 @@ from portrayal import dcim_export as dx   # noqa: E402
 from portrayal import libwalk             # noqa: E402
 from portrayal import lint                # noqa: E402
 
-NOT_RACKED = ("din-rail", "wall", "desktop")
+NOT_RACKED = ("din-rail", "wall", "desktop", "ceiling")
 # occupies no rack unit, but bolts to rack holes and so still states `ru`
 ON_THE_RAIL_FACE = "rack-face"
 NO_RACK_UNIT = NOT_RACKED + (ON_THE_RAIL_FACE,)
@@ -125,6 +125,7 @@ def _devices():
             yield path, doc
 
 
+@pytest.mark.heavy
 def test_the_library_states_a_mount_for_every_box_that_is_not_racked():
     """Each device either has rack units, says how else it is installed, or
     waives L125 with its reason. The count guards against a vacuous pass."""

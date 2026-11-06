@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: sr-e-psu-dc
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -46,16 +46,64 @@ provenance:
     (53.8, 25.5) and (67.0, 25.5); latch 79.4-84.8 x 25.5-39.0. The SR-1e rear view (SRE p45)
     draws the same face in PSU 1 and 2.
   terminals: >-
-    datasheet - SRE p187 Table 65: key 4 "Left terminal stud (Batt terminal) for connection
-    to -48/-60 VDC battery cable", key 5 "Right terminal stud (RTN terminal) for connection
-    to 0 VDC return cable"; key 3 the ground terminal, M4 screw. CONFLICT: Fig 17 and the
-    SR-1e rear view print "+" under the LEFT stud and "-" under the right, where the table
-    makes the left stud the -48 V battery feed. The print is drawn as the figures show it.
-    Not resolved without a photograph.
-  terminal-block: >-
-    drawing - a two-pole barrier block with screw studs; the library's dc-terminal parts are
-    three-pole or pluggable and none is this size, so it is the `dc-terminal` element with
-    the barriers and studs in the skin.
+    datasheet - SRE Table 50 p138 (Figure 39 p137): key 1 "DC power grounding terminal with M4
+    screw", key 2 "Positive (+) terminal with M4 screw", key 3 "Negative (-) terminal with M4
+    screw", key 4 the clear sliding safety cover on three raised guides. Figure 39 dimensions
+    the two terminal screws 0.512 in. (13.0 mm) apart and prints "4mm Screw diameter" at the
+    right one, "+" under the left and "-" under the right (Figure 17 p63 prints the same).
+    SRE Table 65 p187 (key 4 "Left terminal stud (Batt terminal)", key 5 "Right terminal stud
+    (RTN terminal)") reads the other way round; see `poles`. The block is drawn as the
+    `dc-terminal` element with its barriers and screws in the skin, and each screw is also a
+    seat (see `seats`).
+  seats: >-
+    estimated - the two terminal screws are the library's common/terminal-screw-38@1, a slotted
+    head 3.8 across (that part's own size is an estimate), standing at the centres of the two
+    rings the skin draws (53.8 and 67.0 across, 25.5 down; 13.2 apart, where Figure 39 gives
+    0.512 in., 13.0 mm: 0.2 mm, so the skin is not redrawn) and lifted 6.0 mm, the proudness
+    the `dc-terminal` relief below already estimates. The head is drawn smaller than the 4 mm
+    screw Figure 39 names and than the ring round it, so the drawing marks where a lug lands
+    and does not show the screw. The guide prints no head size or thread pitch, so none is
+    claimed. The ring lug the guide recommends (Molex 19071-0178, SRE p138) is a one-hole ring
+    lug, which generic/ring-lug@1 stands for.
+  earth: >-
+    The earth screw is the guide's own "ground screw" (SRE p137, Table 50 key 1 p138, Figure
+    39 callout 1), an M4 screw with a washer beside the two-screw block and not on it, so it is
+    a ground seat a lug lands on outside the DC port, which keeps two poles. It is the
+    library's common/ground-screw-m4@1 (an M4 pan head, 8 across, the registry's own figure),
+    standing at the centre of the washer the skin draws (48.2 across, 10.5 down). The guide
+    asks a 90-degree ring lug on #8 AWG ground wire, minimum, and torque 8 to 10 lbf-in (SRE
+    p138, p142); no angled lug is built, so the straight generic/ring-lug@1 stands in. The
+    relief of the `ground` element below is the skin's older estimate and is left as it was.
+  poles: >-
+    Nokia 7750 SR-1e, SR-2e and SR-3e Chassis Installation Guide (3HE17927AAAATQZZA03, 21.10):
+    Figure 39 p137 and Figure 17 p63 print "+" under the left screw and "-" under the right;
+    Table 50 p138 calls the left screw (key 2) the positive terminal and the right (key 3) the
+    negative; section 6.3.5 steps 4 and 5 (pp143-144) send the positive wire to the "battery
+    return" terminal and the negative wire to the negative battery terminal, and Figure 42
+    p141 labels the positive wire the battery return. So the left screw is the return and the
+    right is the battery feed: `rtn` for the positive terminal (spec/schemas/dc.yaml writes
+    `rtn` as positive (battery return)) and `batt` for the negative one (it writes `batt` as
+    negative (battery)), listed left to right as the skin draws them. THE ONE DISAGREEMENT:
+    Table 65 p187 (Figure 60) calls the left stud the Batt terminal and the right the RTN
+    terminal. The legend of Figures 17 and 39, Table 50 and the steps agree, one table reads it
+    the other way, and no photograph is held, so the first three are followed. The skin prints
+    "+" and "-" under the screws and no word.
+  awg: >-
+    Nokia 7750 SR-1e, SR-2e and SR-3e Chassis Installation Guide (3HE17927AAAATQZZA03, 21.10):
+    p137 "Use #8 AWG wire for the -48/-60 VDC and RTN connections", p138 "requires that you
+    use #8 AWG wire" with terminal rings, Table 52 p140 key 1 "#8 AWG copper wire". Section
+    4.5.4.1 (p94) words the same size as "#8 AWG (minimum)". One size is named for the power
+    wires in every place, so the port states [8]; where the page says minimum, the size is a
+    floor, and the ground wire's own "minimum #8 AWG" is outside the port.
+  rating: >-
+    NOT STATED. Table 24 p81 prints "-48/-60 VDC, 40/30 A per source" under the rated voltage:
+    a pair of currents, one for each rated voltage, and the port's `rating-a` is one figure.
+    The 60 A fuse or breaker of section 4.5.4 (p94) is the feed's, not the supply's. The port
+    states none and a later change can state it once a source says which applies.
+  nominal: >-
+    NOT STATED AS A NOMINAL. Table 24 p81 prints a rated voltage of "-48/-60 VDC" and an
+    operating range of -40 to -72 VDC: two rated figures and a range, and no one nominal, so
+    the port states no `voltage`. A feed is matched on its roles.
   handle: >-
     datasheet - SRE p187 Table 65 key 1: "Handle (colored red)"; SRE p198. Fig 17 draws it
     diagonal across the fan, where the AC supply's (Fig 16) runs level - the two faces
@@ -94,6 +142,18 @@ groups:
     description: the one Pwr/Stat lamp
 parts:
   - {ref: common/led-indicator@1, id: led-status, group: status-leds, at: [76.6, 6.5], states: {lamp: ['off', {name: standby, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}, {name: warning, color: '#f5a623', behavior: blinking}, {name: fault, color: '#f5a623'}, {name: wrong-psu, color: '#d0021b'}]}}
+  - {ref: common/terminal-screw-38@1, id: pole-rtn, at: [51.9, 23.6], lift: 6.0}
+  - {ref: common/terminal-screw-38@1, id: pole-batt, at: [65.1, 23.6], lift: 6.0}
+  - {ref: common/ground-screw-m4@1, id: earth, at: [44.2, 6.5]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      awg: [8]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+      source: {poles: poles, awg: awg}
 connection-points:
   mate: {at: [43.2, 20.2], direction: rear}
   power: {at: [60.4, 25.5], direction: front}

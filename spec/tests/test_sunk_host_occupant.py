@@ -135,6 +135,7 @@ def test_every_link_of_a_chain_on_a_sunk_cage_sinks_with_it(tmp_path):
         == pytest.approx(boot + BOOT_BODY)
 
 
+@pytest.mark.heavy
 def test_the_occupant_moves_by_the_floor_and_nothing_else(tmp_path):
     """The same chain with and without the well: every data-z-lift and every
     data-z-out in each occupant differs by exactly -floor. That is the other

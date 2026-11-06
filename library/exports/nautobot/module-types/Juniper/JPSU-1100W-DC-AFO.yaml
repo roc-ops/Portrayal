@@ -4,8 +4,9 @@ model: JPSU-1100W-DC-AFO
 description: JPSU-1100W-DC-AFO, a 1100 W DC power supply with dual feeds and port-to-FRU (front-to-back)
   airflow (AIR OUT)
 power-ports:
-  - name: '{module}/Inlet'
-    type: dc-terminal
+  - name: '{module}/dc-header'
+    type: other
+    label: DC power header (3-position, cells 1 to 3)
 comments: 'JPSU-1100W-DC-AFO, a 1100 W DC power supply with dual feeds and port-to-FRU (front-to-back)
   airflow (AIR OUT). It is a field-replaceable unit, hot-removable and hot-insertable, and load-shares
   with its twin. The QFX5210 hardware guide says the QFX5210-64C with DC supplies takes two, in slots
@@ -19,10 +20,12 @@ comments: 'JPSU-1100W-DC-AFO, a 1100 W DC power supply with dual feeds and port-
 
   - airflow: front-to-back
 
+  - inlet: dc-terminal
+
   - input: rated -48 to -60 VDC, operating range -40 to -72 VDC, 25 A maximum (guide Table 21)
 
   - power-output-w: 1100
 
   - role: dc-power-supply
 
-  Contract version 1.0.0 (juniper/qfx5210-jpsu-1100w-dc-afo).'
+  Contract version 1.1.0 (juniper/qfx5210-jpsu-1100w-dc-afo).'
