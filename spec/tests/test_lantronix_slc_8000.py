@@ -1,7 +1,7 @@
-"""The Lantronix SLC 8000 base chassis is in the library: six faces, its fixed parts, and three declared I/O bays.
+"""The Lantronix SLC 8000 base chassis is in the library: six faces and its fixed parts.
 
-The device is the chassis as it ships, without I/O modules, so the rear declares its three module bays by the interface they
-present and draws nothing in them. The front carries a display, a keypad, a console jack, two USB ports and a modem jack. Its
+The device is the chassis as it ships, without I/O modules, so the rear draws its three module bay windows as panel decor and
+models no bay: no document gives a module a size. The front carries a display, a keypad, a console jack, two USB ports and a modem jack. Its
 parts are Lantronix's own: the display and the keypad. Each figure the documents do not give is declared an estimate in the
 contract that carries it.
 
@@ -41,18 +41,14 @@ def test_the_chassis_is_the_one_u_body_the_documents_dimension(device):
         assert (device["views"][face]["size"]["w"], device["views"][face]["size"]["h"]) == size, face
 
 
-def test_the_rear_declares_three_io_bays_that_name_an_interface(device):
-    bays = device["views"]["rear"]["components"]["bays"]
-    assert [b["id"] for b in bays] == ["io-1", "io-2", "io-3"]
-    for b in bays:
-        assert b["interface"] == "lantronix-slc-io"
-    xs = [b["at"][0] for b in bays]
+def test_the_rear_draws_three_bay_windows_and_models_no_bay(device):
+    rear = device["views"]["rear"]
+    assert not rear["components"].get("bays")
+    windows = [d for d in rear["panel"]["decor"] if d["kind"] == "window"]
+    assert len(windows) == 3
+    xs = [d["at"][0] for d in windows]
     assert xs == sorted(xs)
-
-
-def test_the_io_bay_interface_is_registered():
-    reg = yaml.safe_load((ROOT / "spec" / "schemas" / "connectors.yaml").read_text())["interfaces"]
-    assert "lantronix-slc-io" in reg
+    assert "io-modules" in [g["what"] for g in device["gaps"]]
 
 
 def test_the_front_carries_what_the_documents_list(device):

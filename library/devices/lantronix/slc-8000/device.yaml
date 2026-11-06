@@ -8,8 +8,8 @@ model: SLC 8000
 description: >-
   Lantronix SLC 8000 advanced modular console manager, a 1U chassis that connects up to 48 RJ45 serial or USB
   console ports to a network. The front has an LCD, a keypad, two USB ports, an RJ45 console port and a modem
-  jack. The rear has two network ports, three bays for 16-port I/O modules, and an AC power inlet. This model is
-  the base chassis with its three I/O bays empty.
+  jack. The rear has two network ports, three bays for I/O modules, and an AC power inlet. This model is the base
+  chassis without I/O modules; the three bays are not modelled.
 profile: networking
 provenance:
   size:
@@ -57,7 +57,7 @@ provenance:
       User Guide, Figure 2-2 and Quick Start Guide section 1: dual network ports at the left, three I/O module bays
       named Bay 1, Bay 2 and Bay 3, and the power inlet at the right, with a rocker switch. "Bay 1 is the slot next
       to the Ethernet ports and Bay 3 is the slot beside the power supply module." The bays read about 112 mm
-      wide in Figure 2-2. Each is a declared bay with no part yet.
+      wide in Figure 2-2. The three bay windows are drawn as panel decor; no bay is modelled.
   network:
     confidence: datasheet
     note: >-
@@ -128,12 +128,11 @@ gaps:
     Figure 2-1 and the Quick Start Guide label an "Indicator LED" that no photograph held resolves. It is not drawn.
 - what: io-modules
   scope: [rear]
-  reason: vendor-silent
-  wanted: >-
-    a dimensioned drawing of an I/O module, and a straight-on photograph of the rear.
+  reason: needs-drawing
+  wanted: a dimensioned drawing of an I/O module, and a straight-on photograph of the rear.
   note: >-
-    The three bays are declared with the interface `lantronix-slc-io`. No document gives the size of an I/O
-    module, so none is drawn. The I/O Module Install Guide and User Guide Table 3-8 give the module types: a
+    The rear has three I/O module bays; no document gives a module a size, so no bay or module is modelled. The three
+    dark windows are drawn as panel decor. The I/O Module Install Guide and User Guide Table 3-8 give the module types: a
     16-port RJ45 module, a 16-port USB module, a 16-port Ethernet switch module and an 8-port RJ45 module for bay 1.
 - what: network-sfp-and-dc-variants
   scope: [rear]
@@ -167,10 +166,6 @@ groups:
     role: traffic
     index-origin: 1
     attrs: {media: rj45, speed: 1g}
-  io-bays:
-    term: Bay
-    role: traffic
-    index-origin: 1
   power:
     term: Inlet
     role: service
@@ -201,14 +196,13 @@ views:
     panel:
       decor:
       - {id: rear-plate, at: [0.0, 0.0], size: [438.15, 44.45], fill: '#4b5a68', kind: bezel}
+      - {id: io-window-1, at: [22.5, 0.5], size: [112.5, 43.4], fill: '#141517', kind: window}
+      - {id: io-window-2, at: [137.0, 0.5], size: [112.5, 43.4], fill: '#141517', kind: window}
+      - {id: io-window-3, at: [251.5, 0.5], size: [112.5, 43.4], fill: '#141517', kind: window}
     silkscreen:
     - {at: [11.7, 40.6], text: NETWORK, font-size: 1.8, anchor: middle, fill: '#e8ecef', for: [net-1, net-2]}
     - {at: [11.7, 43.4], text: 10/100/1000, font-size: 1.6, anchor: middle, fill: '#e8ecef', for: [net-1, net-2]}
     components:
-      bays:
-      - {id: io-1, at: [22.5, 0.5], size: {w: 112.5, h: 43.4}, interface: lantronix-slc-io, default: null, group: io-bays, rel-pos: 1}
-      - {id: io-2, at: [137.0, 0.5], size: {w: 112.5, h: 43.4}, interface: lantronix-slc-io, default: null, group: io-bays, rel-pos: 2}
-      - {id: io-3, at: [251.5, 0.5], size: {w: 112.5, h: 43.4}, interface: lantronix-slc-io, default: null, group: io-bays, rel-pos: 3}
       placements:
       - {ref: common/rj45-eth@1, id: net-1, at: [3.8, 3.0], group: network, rel-pos: 1, attrs: {speed: 1g}}
       - {ref: common/rj45-eth@1, id: net-2, at: [3.8, 17.5], group: network, rel-pos: 2, attrs: {speed: 1g}}
@@ -241,9 +235,8 @@ configurations:
   base:
     kind: base
     default: true
-    bays: {io-1: '', io-2: '', io-3: ''}
     description: >-
-      The chassis with copper network ports, one AC inlet and three empty I/O bays. An illustration: no part number
+      The chassis with copper network ports, one AC inlet and no I/O modules. An illustration: no part number
       lists a chassis without I/O modules.
     source: >-
       derived - the data sheet lists no part numbers, and the maker's product page lists chassis with their I/O
