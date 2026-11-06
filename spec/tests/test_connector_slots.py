@@ -99,7 +99,10 @@ def test_the_connector_registry_is_not_vacuous():
     # and the six-pin BITS wire-wrap header of nokia/ngfc-h@1 and nokia/ngfc-g@1
     # keystone: the landscape keystone opening of the FS FHD-FAPM6 panel, presented by
     # common/keystone-clip@3 and mated by the blank and the jack that seat in a clip
-    assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
+    assert set(reg) == {# the I/O module bay of the Lantronix SLC 8000, which it states as its `interface`, so no part
+                         # presents that one
+                         "lantronix-slc-io",
+                         "lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
                          "nema-5-15r", "nema-5-20r", "eaton-c39",
