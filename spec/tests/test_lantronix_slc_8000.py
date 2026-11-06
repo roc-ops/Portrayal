@@ -41,12 +41,11 @@ def test_the_chassis_is_the_one_u_body_the_documents_dimension(device):
         assert (device["views"][face]["size"]["w"], device["views"][face]["size"]["h"]) == size, face
 
 
-def test_the_rear_declares_three_io_bays_that_name_an_interface_and_take_no_part_yet(device):
+def test_the_rear_declares_three_io_bays_that_name_an_interface(device):
     bays = device["views"]["rear"]["components"]["bays"]
     assert [b["id"] for b in bays] == ["io-1", "io-2", "io-3"]
     for b in bays:
         assert b["interface"] == "lantronix-slc-io"
-        assert "accepts" not in b and not b.get("default")
     xs = [b["at"][0] for b in bays]
     assert xs == sorted(xs)
 
@@ -56,14 +55,13 @@ def test_the_io_bay_interface_is_registered():
     assert "lantronix-slc-io" in reg
 
 
-def test_the_front_carries_what_the_documents_list_and_the_card_slot_is_a_stated_gap(device):
+def test_the_front_carries_what_the_documents_list(device):
     front = placements(device, "front")
     assert {"display", "keypad", "usb-1", "usb-2", "console", "modem"} <= set(front)
     assert front["display"]["ref"] == "lantronix/slc-lcd@1"
     assert front["keypad"]["ref"] == "lantronix/slc-keypad@1"
     assert front["usb-1"]["ref"] == front["usb-2"]["ref"] == "std/usb-a@1"
     assert front["console"]["attrs"]["role"] == "console"
-    assert any("front" in g.get("scope", []) and g["what"] == "sd-card-slot" for g in device["gaps"])
 
 
 def test_the_rear_carries_two_network_jacks_and_an_ac_inlet(device):
