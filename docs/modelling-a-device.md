@@ -608,6 +608,19 @@ Gate 4b checks it.
    the bay's opening showing around it.
 4. **An indicator declares what it belongs to**: `{id: led-p1, ref:
    std/led-arrow@1, for: port-1, group: sfp28-leds}`. Never rely on naming.
+
+   **A light whose colour the user chooses** (per port, VLAN or speed, from a
+   controller) is marked `programmable: true` on the lamps' group, or on one
+   placement, which wins over its group's and may say `false`. Put the maker's
+   own name for the feature, for example Ubiquiti's Etherlighting, in
+   `programmable-note`, as text only: the mark says the colour is the user's,
+   not which colours there are, and a figure is never put in the note. The build
+   draws a neutral ring round the port the lamp's `for` names, and the device
+   index and the DCIM export say the device's ports light up, so nothing else is
+   stated at device level. Use it only where the maker's documents say the
+   colour is user-set, and draw the ring only if the maker's figure shows a
+   light around or beside the port: the mark on a lamp the figure does not show
+   is a claim the figure does not support.
 5. **Every placement and bay carries `group:` and `rel-pos:`**, and every group
    is declared under top-level `groups:` with its `term` (the vendor's word:
    Port, Slot, Bay), its `role` and `index-origin`. That is what gives the tree,

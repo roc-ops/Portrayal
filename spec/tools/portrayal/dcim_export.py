@@ -65,6 +65,7 @@ from portrayal.artifacts import Dist, face_file
 
 from portrayal.manifest import view_parts, alias_names, config_airflow
 from portrayal import manifest as _manifest
+from portrayal.devices_index import programmable_notes
 from portrayal import optical_ports
 from portrayal.faces import POWER_FACES
 
@@ -1767,6 +1768,14 @@ def comments_for(dev, cfg_name, cfg):
     rating = _manifest.input_rating(dev)
     if rating:
         lines += [f"Input rating: {rating}.", ""]
+
+    # A USER-CHOSEN PORT LIGHT COLOUR (#1271): neither target has a field for
+    # it, so one line says it, with the maker's own name for it when the
+    # model gives one
+    prog = programmable_notes(dev)
+    if prog is not None:
+        lines += ["Lamps with a programmable colour, set by the user"
+                  + (f" ({', '.join(prog)})" if prog else "") + ".", ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):

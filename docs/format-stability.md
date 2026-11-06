@@ -158,6 +158,7 @@ also draws is that part's row. Each row may carry:
 | `media`, `speed`, `group`, `group-role`, `rel-pos` | the `data-` attribute of the same name | string |
 | `speeds` | `data-speeds` | list: every native rate of a multi-rate cage, ascending, ending at `speed` (`["1g","10g","25g"]`); absent on a single-rate port. Written per group from the vendor's figure; native rates only, no breakout |
 | `states` | `data-states` | list: the lamp vocabulary |
+| `programmable`, `programmable-note` | `data-programmable`, `data-programmable-note` | `true` on a lamp the maker lets the user colour, and the maker's own name for it as a string; both absent on every other row ([A port light the user can colour](#a-port-light-the-user-can-colour)) |
 | `for` | `data-for` | list: the owners, local paths or device-absolute `/<view>/<path>` |
 | `inner` | `data-inner` | `true` for a port inside another port's housing |
 | `covered-by` | `data-covered-by` | on a bay a card wider than one slot covers: the path of the bay the card is seated in ([pcie-two-slot-bays-design.md](pcie-two-slot-bays-design.md)) |
@@ -919,6 +920,36 @@ change, so a reader should not treat the list above as closed.
 profiles in `spec/schemas/profiles.yaml` and follows that file. It is a new
 field, so `contract` stays 2: a reader that does not know it still finds every
 field it read before.
+
+### A port light the user can colour
+
+A lamp can be marked as a light whose colour the user chooses: `programmable:
+true` on a device's group or placement (a placement's own word wins over its
+group's), with `programmable-note` naming the maker's own feature as text.
+**One-way once a release carries it:** from that release the two key names, the
+boolean and the note's being text cannot change without a format change.
+Adding an optional key raises none of the three numbers (the rule under
+"What is a breaking change" above: "Adding an **optional** key does not raise
+`format`", and for the published build "A new field does not raise it"), so
+`format` is still 1, the elements file's `contract` and the device index's
+`CONTRACT` stay 2, and a reader that ignores the keys finds everything it read
+before.
+
+- **A compiled face** draws a `rect` with `data-class="programmable-ring"`,
+  `data-programmable="true"` and `data-ring-of="<placement id>"` round each port
+  a marked lamp's `for` names (round the lamp itself when it names none on the
+  face), in `#9aa0a8`, drawn before the port so it covers none of its parts. It
+  has no `data-path`, so it is no row of the elements file. The marked
+  placement's own element gains `data-programmable="true"` and, when a note
+  is stated, `data-programmable-note`. A face with no mark is drawn as before.
+- **The elements file**: the row of a marked placement gains `programmable:
+  true` and `programmable-note` (a string); both are absent on every other row.
+- **`devices.json`**: an entry gains `programmable-light: true` when any lamp on
+  any face of the device is marked; the build derives it, no manifest states it,
+  and the key is absent otherwise.
+- **The DCIM export**: the comments of such a device gain one sentence,
+  `Lamps with a programmable colour, set by the user (Etherlighting).`, with the
+  notes the model states in the brackets and no brackets when it states none.
 
 ### What a compiled face says about airflow
 

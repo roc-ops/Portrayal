@@ -272,7 +272,7 @@ PLACEMENT_GEOMETRY = {"inset", "lift", "in", "under", "only-in", "optional",
 PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface", "fed-by", "through",
                         "lines", "dc", "hides"}
 PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
-                     "frames", "positions"}
+                     "frames", "positions", "programmable", "programmable-note"}
 # MEMBERSHIP - which adjustment a placed thing slides with
 # (docs/adjustable-positions-design.md section 9). It is in none of the three
 # digests above, because none of them has its bumps: a member ADDED to an
