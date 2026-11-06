@@ -389,6 +389,12 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # no fibre - and its tests are spec/tests/test_opengear_cm8000.py.
         if str((c.get("attrs") or {}).get("media") or "") == "sim":
             continue
+        # NOR IS THE SD CARD. common/sd-card@1 mates `sd-card`, the full-size card slot of
+        # the Vertiv Avocent ACS8000 console servers, which the registry holds so the slot is
+        # a slot. Left out by what it IS - its `attrs.media` is `sd-card`, a storage card - and
+        # its tests are spec/tests/test_vertiv_acs8000.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "sd-card":
+            continue
         # NOR ARE THE KEYSTONE INSERTS. common/keystone-blank@2 and
         # fs/keystone-rj45-cat6@1 mate `keystone`, the opening of the FS FHD-FAPM6
         # panel, which the registry holds so each opening is a slot. Left out by
