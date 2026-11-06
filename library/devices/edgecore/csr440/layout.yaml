@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr440
-version: 2.2.0
+version: 2.2.1
 maturity: modelled
 manufacturer: Edgecore
 model: AS7535-28XB
@@ -22,6 +22,18 @@ description: >-
   USB-C for storage and a micro-USB console. Ports number 1-28, the optics first.
 profile: networking
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed
+      logotype, red at both ends, left of the model text at the lower centre. Measured on the
+      front picture on page 2 of Edgecore's CSR440 / AS7535-28XB data sheet (2000 x 204 px),
+      calibrated on the body outline at 4.548 px/mm across and 4.573 down, which agree to 0.5
+      percent: the mark runs x 256.9 to 277.6 and y 35.2 to 38.9. The model text in the picture is
+      centred at 285.8, against the 286.2 the face draws. The picture is square-on, so the
+      sureness is sure and the position is good to about 1 mm. The plain text `Edge-core` that
+      the face draws stays as it is; the region reserves the printed mark. The `logo-zone` region
+      on the front view holds the place and nothing is drawn in it.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -521,6 +533,7 @@ views:
       - {ref: common/led-rect@1, id: led-port-4, at: [165.00, 36.30], group: port-leds, rel-pos: 4, for: port-4,
          states: ['off', {name: link-400g, color: '#3b82f6'}, {name: link-200g, color: '#06b6d4'}, {name: link-100g, color: '#22c55e'}, {name: link-50g, color: '#fbbf24'}]}
     regions:
+    - {id: logo-zone, at: [256.9, 35.2], size: {w: 20.7, h: 3.7}, label: 'Vendor logo; not drawn'}
     - {id: status-leds, at: [187.0, 34.8], size: {w: 40.0, h: 5.4}, label: System LEDs,
        members: [led-psu1, led-psu2, led-diag, led-fan, led-loc, led-alarm-sys]}
     - {id: power, at: [5.0, 1.2], size: {w: 119.0, h: 41.0}, label: 'Power supplies (hot-swappable, 1+1)',

@@ -30,7 +30,7 @@
 # The shape of this file, a sentence beside a mate, and a registry sentence under 40 characters fail
 # whatever the switches say.
 format: 1
-cap: 46
+cap: 39
 rows:
   # Closed by #1354: Earth studs on Cisco, Nokia, MikroTik, Casa, Edgecore and Eaton devices
   - part: edgecore/agr-ground-plate@1
@@ -65,16 +65,6 @@ rows:
     order: "#1358"
     since: 2026-11-01
   - part: ufispace/psu-132-crps-dc@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1358"
-    since: 2026-11-01
-  - part: ufispace/psu-162-dc@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1358"
-    since: 2026-11-01
-  - part: ufispace/psu-202-dc@1
     code: C19
     why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
     order: "#1358"
@@ -135,11 +125,6 @@ rows:
     since: 2026-11-01
 
   # Closed by #1361: Juniper EX power
-  - part: juniper/ex6200-pwr-dc2100@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1361"
-    since: 2026-11-01
   - part: juniper/ex8200-pwr-dc2kr@1
     code: C19
     why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
@@ -187,21 +172,6 @@ rows:
     why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
     order: "#1362"
     since: 2026-11-01
-  - part: juniper/qfx10000-pwr-dc@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1362"
-    since: 2026-11-01
-  - part: juniper/qfx5210-jpsu-1100w-dc-afi@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1362"
-    since: 2026-11-01
-  - part: juniper/qfx5210-jpsu-1100w-dc-afo@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1362"
-    since: 2026-11-01
   - part: juniper/qfx5230-jnp-2400w-dc-afi@1
     code: C19
     why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
@@ -214,11 +184,6 @@ rows:
     since: 2026-11-01
 
   # Closed by #1363: Arista, Aurcore, Celestica, Oscilloquartz, Smartoptics and Telco Systems power
-  - part: smartoptics/dcp-2-psu-dc@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1363"
-    since: 2026-11-01
   - part: tm-3308h
     code: C19
     why: "a configuration says the device is powered (ac, dc) and no power end is offered"
@@ -256,11 +221,6 @@ rows:
     since: 2026-11-01
 
   # Closed by #1364: AC inlets and fixed cords on Casa, Dell, Eaton, FS, MikroTik and Smartoptics devices
-  - part: crs312-4c-plus-8xg-rm
-    code: C19
-    why: "a configuration says the device is powered (ac) and no power end is offered"
-    order: "#1364"
-    since: 2026-11-01
   - part: crs328-24p-4s-plus-rm
     code: C19
     why: "a configuration says the device is powered (ac) and no power end is offered"
@@ -285,3 +245,11 @@ rows:
     why: "a port drawn in the device itself presents no registered interface"
     order: "#1367"
     since: 2026-11-01
+
+  # Opened by #1069: the slots of the FHD-FAPM6's six openings take inserts, and the runner counts a mate as a part of class
+  # `port` or `transceiver`. Closes when the runner reads a part that occupies a slot and mates its interface as a mate.
+  - part: fs/fhd-fapm6@1
+    code: C21
+    why: "the six keystone slots accept a blank and a jack, which mate the interface and are of class mechanical, and the runner counts only a part of class port or transceiver as a mate"
+    order: "#1069"
+    since: 2026-11-05

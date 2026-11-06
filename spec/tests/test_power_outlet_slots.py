@@ -32,10 +32,12 @@ CORD_15, CORD_20 = "generic/nema-5-15p-cord@1", "generic/nema-5-20p-cord@1"
 C14, C20 = "generic/c14-plug@1", "generic/c20-plug@1"
 # what each cord end mates, in the order its contract states it
 MATES = {CORD_15: ["nema-5-15r", "nema-5-20r"], CORD_20: ["nema-5-20r"],
-         C14: ["iec-c13", "eaton-c39"], C20: ["iec-c19", "eaton-c39"]}
+         C14: ["iec-c13", "eaton-c39", "servertech-hdot-cx"],
+         C20: ["iec-c19", "eaton-c39", "servertech-hdot-cx"]}
 # what each interface is offered, the accept list a slot publishes
 OFFERED = {"nema-5-15r": [CORD_15], "nema-5-20r": [CORD_15, CORD_20],
-           "eaton-c39": [C14, C20], "iec-c13": [C14], "iec-c19": [C20]}
+           "eaton-c39": [C14, C20], "iec-c13": [C14], "iec-c19": [C20],
+           "servertech-hdot-cx": [C14, C20]}
 
 
 def contract(ref):
@@ -208,7 +210,8 @@ def test_each_outlet_of_the_pdu_is_a_slot_that_offers_its_cord_ends(device, tmp_
 
 
 @pytest.mark.parametrize("ref", ["std/c13-outlet@1", "std/c19-outlet@1",
-                                 "std/nema-5-20r@1", "eaton/c39-outlet@1"])
+                                 "std/nema-5-15r@1", "std/nema-5-20r@1",
+                                 "eaton/c39-outlet@1"])
 def test_an_ac_outlet_says_outlet_and_ac(ref):
     """`outlet` is which way power runs; `media: ac` is what tells an AC outlet
     from a DC terminal. The inlets state `input: ac` and `media: ac`."""
@@ -218,7 +221,8 @@ def test_an_ac_outlet_says_outlet_and_ac(ref):
 
 def test_no_power_receptacle_of_an_ac_interface_is_silent_about_ac():
     """NON-VACUOUS census over every part presenting an AC power interface."""
-    ac = {"iec-c13", "iec-c14", "iec-c19", "iec-c20", "saf-d-grid", "nema-5-20r", "eaton-c39"}
+    ac = {"iec-c13", "iec-c14", "iec-c19", "iec-c20", "saf-d-grid", "nema-5-15r",
+          "nema-5-20r", "eaton-c39"}
     seen = 0
     for cf in sorted(COMP.glob("*/*/v*/contract.yaml")):
         c = yaml.safe_load(cf.read_text())
@@ -349,7 +353,8 @@ def test_the_g4_pdus_export_their_c39_outlets_as_outlets(model, c39, c13):
 
 # --- 5. the built elements say what they are, however they are placed ----------
 
-AC_INTERFACES = {"iec-c13", "iec-c14", "iec-c19", "iec-c20", "saf-d-grid", "nema-5-20r", "eaton-c39"}
+AC_INTERFACES = {"iec-c13", "iec-c14", "iec-c19", "iec-c20", "saf-d-grid", "nema-5-15r",
+                 "nema-5-20r", "eaton-c39"}
 
 
 def _ac_parts():

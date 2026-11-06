@@ -1,0 +1,59 @@
+format: 1
+kind: component
+name: hex-nut-stud
+version: 1.0.0
+class: screw
+interface: terminal-stud
+profile: networking
+description: >-
+  A terminal stud with a hex nut on a round washer, seen head on: the stud end stands in the middle of
+  the nut. A lug is landed on it, so it presents the nominal `terminal-stud` interface on its axis, at
+  the top of the stud. A part that lands a lug on a pair of studs composes two. It is never placed alone.
+size: {w: 7.2, h: 7.2}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  the washer's own box; the nut stands inside it, its corners 6.0 across
+provenance:
+  size: >-
+    estimated - proportions off an isometric. EX6210 Switch Hardware Guide (published 2020-12-15),
+    Figure 23 (printed page 79) draws each of the DC supply's input terminals as a hex nut on a stud
+    with a round washer behind it; the figure carries no dimension. The washer is taken to be a little
+    over a tenth of the 100.7 mm face's width, 7.2 mm, and the nut to stand inside it.
+  nut: >-
+    estimated - Figure 23 (printed page 79) outlines each fastener as a hexagon, with the washer's disc
+    showing round it and the end of the stud standing out of the nut's middle. The nut is drawn 6.0
+    across its corners, the stud end 2.4 across; the figure is line art and no document held gives a
+    thread, a socket size or a colour, so the thread is not claimed and the greys are a stand-in.
+  seat: >-
+    THE LUG SEATS ON THE END OF THE STUD, NOT UNDER THE NUT. `mate` sits `on: stud`, so a lug
+    seated here starts where the stud ends and no solid of it shares the nut's volume. A real lug
+    lies on the washer under the nut. See docs/connectors-dc-terminal-design.md, section 12.
+  behaviour: >-
+    DELIBERATELY OMITTED. The stud is composed by the part that lands the lug and is never placed on
+    its own; that part states `mounts`.
+elements: {}
+relief:
+  features:
+    - node: washer
+      out: 1.0
+      shape: true
+      color: '#b9bdc1'
+      confidence: estimated
+      source: >-
+        Figure 23 (printed page 79) draws a round washer behind each nut; its thickness is not stated
+    - node: nut
+      out: 4.0
+      shape: true
+      color: '#d0d3d6'
+      confidence: estimated
+      source: >-
+        Figure 23 (printed page 79) draws each nut as a hexagon standing proud of its washer; its height is not stated
+    - node: stud
+      cyl: 7.0
+      color: '#a4a9ae'
+      confidence: estimated
+      source: >-
+        Figure 23 (printed page 79) draws the stud end standing out of each nut; how far is not stated
+connection-points:
+  mate: {at: [3.6, 3.6], direction: front, 'on': stud, turns: [0]}
+skins: [default]

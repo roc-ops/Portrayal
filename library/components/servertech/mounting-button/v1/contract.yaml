@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: mounting-button
+version: 1.0.0
+class: mount
+mates: pdu-button
+profile: power
+description: >-
+  A mounting button on the back of a Server Technology vertical PDU. A shouldered button, it hooks into
+  a keyhole in the rack frame and holds the PDU by friction.
+size: {w: 25.4, h: 25.4}
+size-confidence: {w: borrowed, h: borrowed}
+provenance:
+  size: >-
+    borrowed - NO HELD DOCUMENT DIMENSIONS THE BUTTON. The 25.4 flange and 15.0 head are eaton/g4-mounting-button@1's,
+    taken as a stand-in for a toolless shoulder button of the same kind. The Server Technology mounting
+    data sheet lists KIT-0020 (nylon) and KIT-0091 (aluminium) with no dimension.
+  how-it-mounts: >-
+    datasheet - the Server Technology PDU mounting solutions data sheet: mounting buttons allow toolless
+    installation, and a kit holds two buttons with two M4 x 10 mm screws.
+  mates: >-
+    `pdu-button` (spec/schemas/connectors.yaml), the interface a keyhole slot in a bracket or a cabinet
+    channel presents. The button is the mount point and seats at its `mate`, the centre of its head.
+  relief: >-
+    not built - no document gives the button's height off the back.
+elements:
+  head: {at: [5.2, 5.2], size: [15.0, 15.0], class: mount}
+connection-points:
+  mate: {at: [12.7, 12.7], direction: front}
+skins: [default]
