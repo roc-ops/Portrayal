@@ -602,6 +602,7 @@ def test_every_module_port_name_is_bay_scoped():
     assert not bad, "\n".join(bad[:20])
 
 
+@pytest.mark.heavy
 def test_no_device_type_puts_two_bays_at_one_position():
     """The position IS the `{module}` value. The trailing number alone put Fan 1,
     PSU 1 and slot-1 all at `1` on 167 of 205 bayed devices."""
@@ -1135,6 +1136,7 @@ def _withheld_paths(ref, chain, seen=()):
     return out
 
 
+@pytest.mark.heavy
 def test_every_nautobot_device_reaches_the_ports_its_netbox_twin_does():
     """#834's sweep, over every device and every module any of its bays accepts:
     the port names Nautobot can install are NetBox's, less those under a

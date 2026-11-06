@@ -2,6 +2,7 @@
 """Preflight: the mechanical misses, caught in seconds, before a review.
 
     python3 spec/tools/portrayal/preflight.py [--base origin/main] [--json] [--only NAME,...]
+    python3 spec/tools/portrayal/preflight.py --write-exports
 
 WHY IT EXISTS (#924). On one day five of six branches went back for a second
 review round, and every round-1 blocker was mechanical rather than a judgement:
@@ -9,11 +10,19 @@ exports not regenerated after a device change, a new skip reason missing from
 `spec/allowed-skips.txt`, a local path in committed text. Each one is a line
 a tool could have printed, and each round re-ran a full suite and a publish on
 a shared machine. This runs the cheap half of those gates against the diff and
-says PASS or FAIL per check, with the command that fixes it. Two checks, `prose`
-and `conformance`, are advice and say PASS or WARN: a WARN never changes the exit status.
+says PASS or FAIL per check, with the command that fixes it. Three checks, `prose`,
+`conformance` and `records`, are advice and say PASS or WARN: a WARN never changes the exit status.
 
 WHAT IT IS NOT. It runs no build and no suite. It is the step before asking for
 review; CI is still the gate.
+
+`--write-exports` is the one thing here that writes. It brings `library/exports`
+up to date from this tree in about a minute, with no build, for a change that
+needs no rendered drawing (wording, provenance, metadata: what the exports carry
+and a picture does not show). It renders nothing, and it leaves the gitignored
+pictures alone; `publish.sh` deletes them, this does not. If it and CI's
+"exports are current" step ever disagree, CI is right and the fix is
+`./publish.sh --no-images`.
 
 THE DIFF is everything between the merge base with `--base` and the WORKING
 TREE - commits, staged and unstaged edits - plus untracked files that are not
@@ -68,6 +77,14 @@ THE CHECKS
              `library/dist/part-conformance.json`, which
              `spec/tests/test_part_conformance_report.py` writes, is missing or
              older than the change. It runs nothing: it reads the report.
+  records    WARN ONLY. A row of `library/conformance-exceptions.yaml` (keyed by
+             `part` and `code`) that the diff removes while it touches neither
+             that part's folder nor that device's: a new mate elsewhere or a
+             runner change can rightly close a finding, so a person judges it.
+             And a line the diff adds under `spec/tests/` that defines a list
+             called `NOT_TAKEN`, `STAY`, `STAYS` or `STAYING`: a test states what
+             is true of the library, and what a change left alone is the
+             diff's to say.
 
 Exit status is 1 when any check fails. A WARN is not a failure. `--json` prints one document for an
 agent to read instead of the table.
@@ -93,7 +110,7 @@ TOOLS_ROOT = TOOLS.parents[1]          # the checkout this file belongs to
 SCHEMAS = TOOLS_ROOT / "spec" / "schemas"
 
 CHECKS = ("exports", "skips", "private", "changelog", "devicelock", "lint", "kit",
-          "prose", "conformance")
+          "prose", "conformance", "records")
 
 
 def _pin_toolchain():
@@ -369,11 +386,54 @@ def compare_exports(fresh, tree, root=None):
     return stale, sorted(want - have), sorted(have - want)
 
 
+def write_exports(root):
+    """Make `library/exports` hold what `publish.sh --no-images` writes, without
+    the build. Returns (errors, written, removed, unchanged); `errors` empty
+    means the tree was brought up to date.
+
+    The same regeneration `check_exports` compares against, then: a stale or
+    missing file is copied in, a file nothing writes any more is deleted (as
+    publish.sh's `rm -rf library/exports` would), and a folder that empties is
+    removed. A failed exporter changes nothing.
+
+    LICENSE and NOTICE are copied from the root, as publish.sh does. It stops if
+    either is missing and so does this: `regenerate_exports` would write
+    neither, and the committed copies would be taken for files nothing writes.
+
+    The gitignored pictures are never read, written or deleted: `_tree_files`
+    does not list them."""
+    root = Path(root)
+    tree = root / "library" / "exports"
+    absent = [f for f in ("LICENSE", "NOTICE") if not (root / f).exists()]
+    if absent:
+        return [f"{' and '.join(absent)} missing from the repository root; "
+                "publish.sh stops there too"], [], [], []
+    with tempfile.TemporaryDirectory(prefix="preflight-exports-") as out:
+        errors = regenerate_exports(root, out)
+        if errors:
+            return errors, [], [], []
+        stale, missing, extra = compare_exports(out, tree, root)
+        written = sorted(stale + missing)
+        for f in written:
+            (tree / f).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(Path(out) / f, tree / f)
+        unchanged = sorted(_tree_files(out) - set(written))
+    for f in extra:
+        (tree / f).unlink()
+        for d in (tree / f).parents:
+            if d == tree or any(d.iterdir()):
+                break
+            d.rmdir()
+    return [], written, extra, unchanged
+
+
 def check_exports(ctx):
     name = "exports"
     if not ctx.touches(*EXPORT_INPUTS):
         return passed(name, "nothing that feeds the exports changed")
-    fix = "./publish.sh --no-images, then commit library/exports"
+    fix = ("./publish.sh --no-images, or, for a change that needs no rendered "
+           "drawing, python3 spec/tools/portrayal/preflight.py --write-exports; "
+           "then commit library/exports")
     with tempfile.TemporaryDirectory(prefix="preflight-exports-") as out:
         errors = regenerate_exports(ctx.root, out)
         if errors:
@@ -1115,12 +1175,74 @@ def check_conformance(ctx):
                            if blocking else "; no blocking code"))
 
 
+# ----------------------------------------------------------------- records ---
+
+# A test states what is true of the library; what a change left alone belongs to
+# the diff. So the question a "what stays" test used to answer is asked here,
+# against the diff, where a person judges the answer.
+RECORDS_FILE = "library/conformance-exceptions.yaml"
+STAY_LIST = re.compile(r"^\s*(NOT_TAKEN|STAY|STAYS|STAYING)\s*(?::[^=]*)?=(?!=)")
+
+
+def _record_keys(text):
+    """{(part, code)} for the rows of a records file, or the empty set."""
+    import yaml
+    try:
+        doc = yaml.safe_load(text)
+    except yaml.YAMLError:
+        return set()
+    rows = doc.get("rows") if isinstance(doc, dict) else None
+    return {(r["part"], r["code"]) for r in (rows if isinstance(rows, list) else ())
+            if isinstance(r, dict) and "part" in r and "code" in r}
+
+
+def _record_folder(part):
+    """The folder prefix a row's part lives in: a component's own folder for a
+    `ns/name@major`, a device's for a device name (`model` or `vendor/model`)."""
+    if "@" in part:
+        return re.compile(r"^library/components/" + re.escape(part.split("@")[0]) + r"/")
+    if "/" in part:
+        return re.compile(r"^library/devices/" + re.escape(part) + r"/")
+    return re.compile(r"^library/devices/[^/]+/" + re.escape(part) + r"/")
+
+
+def check_records(ctx):
+    """WARN ONLY. A row of the records file removed by a diff that touches
+    neither its part's folder nor its device's; a list of what stays added to a
+    test. A new mate elsewhere, or a runner change, can rightly close a finding,
+    so this names the row and a person judges it."""
+    name = "records"
+    lines = []
+    if RECORDS_FILE in ctx.changed and RECORDS_FILE in ctx.base_files and (ctx.root / RECORDS_FILE).is_file():
+        before = _record_keys(git(ctx.root, "show", f"{ctx.mbase}:{RECORDS_FILE}"))
+        after = _record_keys((ctx.root / RECORDS_FILE).read_text(encoding="utf-8"))
+        for part, code in sorted(before - after):
+            where = _record_folder(part)
+            if not any(where.match(p) for p in ctx.changed):
+                lines.append(f"{RECORDS_FILE}: row {part} {code} is removed and the diff touches no "
+                             "folder of that part or device")
+    for rel, added in sorted(ctx.added.items()):
+        if not (rel.startswith("spec/tests/") and rel.endswith(".py")):
+            continue
+        for n, text in added.items():
+            m = STAY_LIST.match(text)
+            if m:
+                lines.append(f"{rel}:{n}: adds a list called {m.group(1)}, a test of what the change left alone")
+    if lines:
+        return warned(name, f"{len(lines)} record row(s) removed without a part, or test list(s) of what stays",
+                      lines,
+                      "a closed finding needs its part or device in the diff, or a sentence in the review saying "
+                      "what closed it; a test states what is true of the library, not what a change left alone "
+                      "- docs/review-standards.md, 'A test'")
+    return passed(name, "no record row removed unexplained, no test list of what stays added")
+
+
 # -------------------------------------------------------------------- main ---
 
 RUNNERS = {"exports": check_exports, "skips": check_skips, "private": check_private,
            "changelog": check_changelog, "devicelock": check_devicelock,
            "lint": check_lint, "kit": check_kit,
-           "prose": check_prose, "conformance": check_conformance}
+           "prose": check_prose, "conformance": check_conformance, "records": check_records}
 
 
 def run(ctx, only=CHECKS):
@@ -1166,6 +1288,11 @@ def main(argv=None):
     ap.add_argument("--json", action="store_true", help="one JSON document, for agents")
     ap.add_argument("--only", help=f"comma-separated subset of {','.join(CHECKS)}")
     ap.add_argument("--jobs", type=int, help="lint processes at once (default: cores, max 8)")
+    ap.add_argument("--write-exports", action="store_true",
+                    help="write library/exports as publish.sh --no-images would, with no "
+                         "build, for a change that needs no rendered drawing; renders "
+                         "nothing and leaves the gitignored pictures alone; CI's "
+                         "\"exports are current\" step is still the gate")
     ap.add_argument("--root", default=str(TOOLS_ROOT), help=argparse.SUPPRESS)
     ap.add_argument("--_worker", help=argparse.SUPPRESS)
     args = ap.parse_args(argv)
@@ -1181,6 +1308,16 @@ def main(argv=None):
         else:
             raise SystemExit(f"unknown worker {args._worker}")
         print(json.dumps(out))
+        return 0
+    if args.write_exports:
+        errors, written, removed, unchanged = write_exports(args.root)
+        if errors:
+            print("\n".join(errors))
+            print("nothing in library/exports was changed")
+            return 1
+        print(f"written {len(written)}, removed {len(removed)}, unchanged {len(unchanged)}")
+        print("\n".join([f"  written {f}" for f in written]
+                        + [f"  removed {f}" for f in removed]))
         return 0
     only = tuple(c.strip() for c in args.only.split(",")) if args.only else CHECKS
     unknown = [c for c in only if c not in CHECKS]

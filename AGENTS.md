@@ -48,7 +48,7 @@ itself.
 ./build.sh --device <model>                                   # lint, then render one device
 python3 spec/tools/portrayal/devicelock.py --library library   # the version bump a change needs
 ./publish.sh --no-images                                       # the build plus the DCIM exports
-python3 -m pytest spec/tests -q -n auto                        # after a build; it reads library/dist
+python3 -m pytest spec/tests -q -n auto -k <vendor>/<model>    # after a build; CI runs the whole suite
 python3 spec/tools/portrayal/preflight.py --json               # seconds, no build; before asking for review
 ```
 

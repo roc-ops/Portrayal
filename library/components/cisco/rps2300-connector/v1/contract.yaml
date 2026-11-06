@@ -1,0 +1,62 @@
+format: 1
+kind: component
+name: rps2300-connector
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: power
+interface: cisco-rps2300
+description: >-
+  The RPS connector on the rear of a Cisco Catalyst 2960-S that supports the Cisco RPS 2300: a
+  rectangular shroud of two rows of eleven contact cavities on a metal plate, beside the fan
+  exhaust. It takes the CAB-RPS2300-E cable. The guide names the connector and draws it, and gives
+  no connector type, contact count or dimension; the photograph shows two rows of eleven.
+size: {w: 72.8, h: 22.6, d: 20.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+size-notes: >-
+  the plate is read off the community NetBox rear elevation of the WS-C2960S-48LPD-L at 3.41 px per
+  mm; the guide prints no dimension. The depth is a reading.
+attrs: {media: rps}
+unplaced: >-
+  no device on main places it yet. The Catalyst 2960-S rear, in #1322, draws this connector as panel
+  art and will place this part there; what is missing is that rear's placement, and the connector
+  type and pinout, which no held source gives.
+provenance:
+  existence: >-
+    datasheet - Catalyst 2960-S Switch Hardware Installation Guide (OL-19732-04), Figure 1-10 callout
+    3 and Figure 1-12 callout 2, "RPS connector", and "RPS Connector": "Attach only the following
+    Cisco RPS model to the RPS receptacle: RPS2300". The cable is CAB-RPS2300-E.
+  size: >-
+    photo-measured - the plate is 72.8 by 22.6 and the shroud 48.2 by 11.3, read off the community
+    NetBox rear elevation of the WS-C2960S-48LPD-L (1516 px across the 444.5 mm width, 3.41 px per
+    mm), as the Catalyst 2960-S rear in #1322 reads them. The guide's Figures 1-10 and 1-12 are
+    isometric, so they give the place and not the size. The photograph is a different model of the
+    same rear, so the figures are good to about a pixel, 0.3 mm.
+  depth: >-
+    estimated - 20.0 is what the relief builds, a reading and not a figure from any source. The
+    photograph and the guide's figures are front and isometric views and show no depth.
+  opening: >-
+    photo-measured - the shroud, 48.2 by 11.3, 13.4 from the plate's left edge and 2.6 below its top.
+    The housing inside it is 46.9 by 9.7 at 14.1 and 3.7. They are drawn to agree with the figures of
+    #1322's rear.
+  cavities: >-
+    photo-measured - two rows of eleven rectangular contact cavities, 3.5 by 3.7 on a 4.17 pitch, the
+    rows at 4.7 and 8.73 below the plate's top, as #1322's rear draws them. The count is read off the
+    photograph; no document gives a contact count, so it is not published as a fact of the
+    connector.
+  cover: >-
+    NOT MODELLED. A cover closes the connector when no RPS is attached: "If you are not using an RPS
+    with your switch, use the two Phillips pan-head screws to attach the RPS connector cover" (Figure
+    1-15, "Attaching the RPS Connector Cover"). The connector is drawn open, as the photograph shows
+    it, and the cover is not drawn.
+  mate: >-
+    derived - the centre of the shroud, (37.5, 8.25), on the panel face. No source gives a seating
+    depth. The cable end that mates it is cisco/rps2300-plug@1, drawn estimated.
+  interface: >-
+    datasheet - registry `cisco-rps2300`; the guide names no connector type, so the key is the
+    connector as the guide draws it and no standard stands behind it.
+elements:
+  opening: {at: [13.4, 2.6], size: [48.2, 11.3], class: slot}
+connection-points:
+  mate: {at: [37.5, 8.25], direction: front}
+skins: [default]

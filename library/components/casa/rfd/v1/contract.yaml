@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: rfd
-version: 1.6.1
+version: 1.7.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -129,6 +129,12 @@ provenance:
     estimate written eleven times, not eleven readings that agreed. NOTE this card has
     NO LAMPS, so the family''s dome figure is deliberately not cited here - citing a
     source for a number a file does not carry is how an inert wrong claim gets started.'
+  groups: >-
+    Casa Systems C100G Hardware Installation Guide (rev 07/08/2022), the Downstream I/O
+    modules text (PDF page 43) and the specifications table (PDF page 171) give eight RF
+    ports with F-type connectors, and Figure 1-12 (PDF page 46) numbers the QAM IO ports
+    0 to 7. No page names a role; the role follows the job, downstream RF to the HFC
+    network, so it is traffic. The coax ports state no speed.
 relief:
   wall: '#4a4f55'
   features:
@@ -139,15 +145,21 @@ relief:
     # The ejector latch strip.
     - {node: latch-t, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
     - {node: latch-b, out: 4.2, confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch - the library one figure for an ejector latch. NOT MEASURED: that part measured 360.7 is the MODULE depth; the latch height is sourced nowhere'}
+groups:
+  downstream:
+    term: Port
+    role: traffic
+    index-origin: 0
+    description: eight downstream RF ports with F-type connectors, numbered 0 to 7
 parts:
-  - {ref: std/f-type@1, id: p0, at: [11.24, 73.7]}
-  - {ref: std/f-type@1, id: p1, at: [11.24, 100.128]}
-  - {ref: std/f-type@1, id: p2, at: [11.24, 126.556]}
-  - {ref: std/f-type@1, id: p3, at: [11.24, 152.984]}
-  - {ref: std/f-type@1, id: p4, at: [11.24, 179.412]}
-  - {ref: std/f-type@1, id: p5, at: [11.24, 205.84]}
-  - {ref: std/f-type@1, id: p6, at: [11.24, 232.268]}
-  - {ref: std/f-type@1, id: p7, at: [11.24, 258.696]}
+  - {ref: std/f-type@1, id: p0, group: downstream, at: [11.24, 73.7]}
+  - {ref: std/f-type@1, id: p1, group: downstream, at: [11.24, 100.128]}
+  - {ref: std/f-type@1, id: p2, group: downstream, at: [11.24, 126.556]}
+  - {ref: std/f-type@1, id: p3, group: downstream, at: [11.24, 152.984]}
+  - {ref: std/f-type@1, id: p4, group: downstream, at: [11.24, 179.412]}
+  - {ref: std/f-type@1, id: p5, group: downstream, at: [11.24, 205.84]}
+  - {ref: std/f-type@1, id: p6, group: downstream, at: [11.24, 232.268]}
+  - {ref: std/f-type@1, id: p7, group: downstream, at: [11.24, 258.696]}
 connection-points:
   mate: {at: [15.23, 172.75], direction: rear}
 skins: [default]

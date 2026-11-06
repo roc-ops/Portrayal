@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-2
-version: 2.1.3
+version: 2.1.6
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-2
@@ -112,6 +112,13 @@ provenance:
       UM spec table, "POWER CONSUMPTION (CHASSI ONLY): DCP-2 chassis with fans and 2 PSU (AC) Min:
       14W Max: 17W". The manual's other rows bundle a traffic unit, which answers for itself. NO
       AMBIENT TEMPERATURE is quoted against any DCP power figure, so none is asserted.
+  power-feed:
+    confidence: datasheet
+    note: >-
+      each build's `power` is the input of the supply it seats. UM s2.3 and the spec table -
+      DCP-2-PSU-AC-FB "100-127 VAC and 200-240 VAC", DCP-2-PSU-DC-FB "-40 to -72 VDC"; so-ds-dcp-2-r4.3,
+      Power Supply Characteristics, prints the same two inputs. The illustrations that seat traffic
+      units state no feed: no document ties a traffic unit to either supply.
   slot-occupants:
     note: >-
       the traffic slots accept smartoptics/dcp-f-a22@2 as well as the DCP-404. Both are 205 x 44 x
@@ -396,6 +403,7 @@ configurations:
   ac-f2b:
     kind: base
     default: true
+    power: ac
     description: >-
       The chassis as it is specified before deciding what goes in it: two AC supplies,
       the fan tray, the management board, and BOTH TRAFFIC SLOTS BLANKED. so-ds-dcp-2-r4.3
@@ -407,6 +415,7 @@ configurations:
       is a configuration the vendor tells you not to run. It also reads far better.
   dc-f2b:
     kind: orderable
+    power: dc
     description: >-
       The same chassis with both supplies ordered as DCP-2-PSU-DC-FB, -40 to -72 VDC at
       7A max. UM s2.3 is explicit that the bay geometry does not change and that "Both

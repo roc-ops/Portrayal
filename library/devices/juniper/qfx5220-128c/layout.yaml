@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: qfx5220-128c
-version: 0.1.0
+version: 0.2.1
 maturity: modelled
 manufacturer: Juniper
 model: QFX5220-128C
@@ -207,8 +207,7 @@ provenance:
       The chassis protective earthing terminal (callout 3 of figure 32) at the lower left of the rear: a plate
       27.5 mm by 9.7 mm at 14.6 mm and 147.5 mm down with two tapped holes 15.9 mm apart (the guide's Panduit
       LCD10-10A-L lug, 5/8 in centres, takes two 10-32 screws that the box does not include) and the earth
-      symbol at 49.5 mm. The plate and the symbol are drawn. The two holes are not, because the library has
-      no part for a bare pair of tapped holes (see gaps).
+      symbol at 49.5 mm. The plate, the symbol and the two bare 10-32 holes are drawn, the holes as one two-hole seat on the lug's 5/8 in. pitch, centred on the plate (`ground-stud-pitch` says how the pitch and the place are read).
   drawing-vs-photo:
     confidence: drawing
     note: >-
@@ -263,6 +262,19 @@ provenance:
       Searched for an end-of-life announcement. No Juniper notice was found and the guide, published
       2026-10-14, states none. The third-party trackers searched list nothing for the QFX5220. The device
       states none announced. Estimated, because the trackers are not the maker.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      INFERRED, NOT STATED. The guide names a Panduit LCD10-10A-L lug or equivalent and two 10-32 x 0.25 in. screws
+      with number 10 split-lock washers (not provided) for the earthing terminal, and gives no spacing. Its drawing
+      puts the two tapped holes 15.9 mm apart, which is the 5/8 in. (15.875) of the library's two-hole lug for the
+      same hole-spacing code (Panduit LCD6-10A-L: '.63 hole spacing'). The terminal is
+      `common/ground-hole-pair-5-8-10-32@1`: two bare 10-32 holes on 5/8 in. centres, presenting `stud-pair-5-8`, so
+      one two-hole lug (`generic/two-hole-lug-5-8@1`) lands across them and a ring lug still lands on either hole. The
+      holes were not drawn before; they are drawn bare, as the held photograph of the rear shows them. Figure 32 draws
+      them level and evenly set in the plate to within 0.5 mm, so the pair is centred on the plate; it gives no
+      dimension for their place. The photograph reads them wider (about 17.5 mm across the 27.5 mm plate) and is not
+      used for the pitch.
 attrs:
   physical:
     weight-note: 98 lb (44.45 kg) with power supplies and fans installed, 76 lb (34.47 kg) chassis only (guide Table 32)
@@ -365,13 +377,6 @@ gaps:
   wanted: >-
     Which row of windows in a cell's light pipe serves which port. Table 9 gives each port up to four
     lamps. The upper row is assigned to the upper port from the arrows and the assignment is estimated.
-- what: earthing-terminal-holes
-  scope: [rear]
-  reason: needs-drawing
-  wanted: >-
-    A library part for the two tapped holes of the protective earthing terminal. The pair parts in the library
-    compose screw heads, and the guide says the screws are not supplied. The plate and the earth symbol are
-    drawn and the two holes are not.
 - what: guide-qfx5230-section
   scope: [front]
   reason: sources-disagree
@@ -391,6 +396,13 @@ gaps:
   wanted: >-
     The rack ears' positions and the rack kit's contract. The guide names QFX5220-4PRMK-4U and gives two
     different rail spacings. No kit contract exists in the library and none is written here.
+- what: ground-pair-pitch
+  scope: [ground-pair]
+  reason: vendor-silent
+  note: >-
+    The guide names the screws and the lug and gives no spacing for the two holes; `ground-stud-pitch` says what the
+    pair is drawn at and why.
+  wanted: a drawing that dimensions the two holes, or the lug's own datasheet
 groups:
   qsfp28-0-31:
     term: Port
@@ -481,6 +493,11 @@ groups:
     attrs:
       redundancy: '2+2'
       redundancy-note: four supplies, two of which carry the whole switch; a pair of two works only as supplies (0,2), (0,3), (1,2) or (1,3)
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the earthing terminal, two bare 10-32 holes for a two-hole lug (the guide's earthing section (figure 32, callout 3))
 views:
   front:
     size: {w: 439.9, h: 174.8}
@@ -737,7 +754,7 @@ views:
     size: {w: 439.9, h: 174.8}
     panel:
       decor:
-      - {id: pad-earth, at: [14.6, 147.5], size: [27.5, 9.7], fill: '#9da1a6', kind: earthing-terminal}
+      - {id: pad-earth, at: [14.6, 147.5], size: [27.5, 9.7], fill: '#9da1a6', kind: earth-plate}
       cutouts:
       - {id: led-fan-0, at: [174.4, 74.6], size: [2.0, 2.0], shape: circle}
       - {id: led-fan-1, at: [264.4, 74.6], size: [2.0, 2.0], shape: circle}
@@ -794,6 +811,7 @@ views:
       - {id: fan-5, at: [270.2, 91.9], size: {w: 80.0, h: 81.5}, group: fans, rel-pos: 5,
          accepts: ['juniper/qfx5220-128c-fan-afo@1'], default: 'juniper/qfx5220-128c-fan-afo@1'}
       placements:
+      - {ref: common/ground-hole-pair-5-8-10-32@1, id: ground-pair, at: [17.9995, 149.937], group: grounding, rel-pos: 0}
       - {ref: common/led-dot@1, id: led-fan-0, at: [174.4, 74.6], for: fan-0, group: fan-leds, rel-pos: 0}
       - {ref: common/led-dot@1, id: led-fan-1, at: [264.4, 74.6], for: fan-1, group: fan-leds, rel-pos: 1}
       - {ref: common/led-dot@1, id: led-fan-2, at: [354.4, 74.6], for: fan-2, group: fan-leds, rel-pos: 2}

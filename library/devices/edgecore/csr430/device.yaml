@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr430
-version: 1.0.7
+version: 1.1.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS7515-24X
@@ -15,6 +15,17 @@ description: >-
   the fan tray - with side-to-side airflow. Ports number 0-23 in one range, the four QSFP28s first.
 profile: networking
 provenance:
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE VENDOR LOGO IS A RESERVED PLACE AND IS NOT DRAWN. The front prints the maker's boxed logotype,
+      red at both ends, left of the model text at the lower centre. Measured on Edgecore's front photograph
+      of the CSR430 / AS7515-24X (960 x 700 px), calibrated on the body outline at 2.173 px/mm across
+      and 2.227 down, which agree to 2.5 percent: the mark runs x 183.3 to 208.7 and y 34.6 to 39.1. The
+      model text in the photograph is centred at 242.5, against the 242.4 the face draws. The photograph
+      is square-on, so the sureness is sure and the position is good to about 1 mm. The plain text `Edge-core`
+      that the face draws stays as it is; the region reserves the printed mark. The `logo-zone` region
+      on the front view holds the place and nothing is drawn in it.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -103,8 +114,8 @@ provenance:
       it matter: "Install replacement tray with matching airflow direction."
 attrs:
   performance: {switching-capacity: 360 Gbps, processing-rate: 300 Mpps}
-  power: {power-max-w: 167, power-envelope: as-tested, input-ac: '100V-240V, 6.0-2.4 A per PS',
-    input-dc: '-44 to -60 V, 15.5-9.6 A per PS'}
+  power: {power-max-w: 167, power-envelope: as-tested, input-ac: '100V-240V, 6.0-2.4 A per PS', input-dc: '-44
+      to -60 V, 15.5-9.6 A per PS'}
   thermal: {airflow: side-to-side, cooling: 4+1 redundant hot-swappable fan tray}
   environmental: {temperature-operating: -40 C to 65 C (-40 F to 149 F), temperature-storage: -40 C to
       70 C (-40 F to 158 F), humidity-operating: 5% to 95% non-condensing}
@@ -894,6 +905,10 @@ views:
         - {name: link-25g, color: '#3b82f6'}
         - {name: link-10g, color: '#fbbf24'}
     regions:
+    - id: logo-zone
+      at: [183.3, 34.6]
+      size: {w: 25.4, h: 4.5}
+      label: Vendor logo; not drawn
     - id: status-leds
       at: [286.0, 32.2]
       size: {w: 46.0, h: 6.4}

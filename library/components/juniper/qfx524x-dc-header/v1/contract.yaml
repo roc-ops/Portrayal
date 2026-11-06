@@ -1,0 +1,53 @@
+format: 1
+kind: component
+name: qfx524x-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: juniper-dc-header-6
+description: >-
+  The six-position DC power connector on the face of the Juniper QFX524X-2RU-PWR-DO DC power supply, seen from its
+  mating face. A dark housing carries six round contact cells in two rows of three. The cord connector
+  juniper/qfx524x-dc-plug@1 seats at its mate point.
+size: {w: 32.6, h: 27.7}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The box of the `connector` group the supply already drew (32.6 across, 27.7 high), scaled off the guide's flat
+  Figure 22, which carries no scale. The cell size (5.8 across) and the pitches (8.5 and 8.9 across, 13.3 down)
+  are the same readings.
+attrs: {connector: DC power connector, positions: 6}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED: the QFX5241-64OD and QFX5241-64QD
+    Hardware Guide (Juniper Networks) calls it "a six-wire DC power connector" of the DC power cord (DC Power Cord
+    Specifications) and the "DC inlet on the PSU faceplate" (Connect DC Power to the QFX5241-64OD and QFX5241-64QD
+    Switches, Figure 35) and gives no part number for it. So the interface claims no standard.
+  gender: >-
+    DERIVED. The guide calls the cord's connector a "six-pin female" 2x3 connector (Table 18), so the supply's half
+    is the other one. Figure 22 draws six round cells with a ring inside each and does not say which half carries
+    pins.
+  pins: >-
+    NOT STATED WHICH CELL IS WHICH PIN. Table 18 names the cord's pins P1, P2, S1, S2, P3 and P4 and its wires, and
+    no figure prints a name beside a cell. The cells are named here by place only: t1, t2 and t3 across the top row and
+    b1, b2 and b3 across the bottom, left to right as Figure 22 draws the supply.
+  size: >-
+    estimated - see size-notes. No guide figure is dimensioned.
+  key: >-
+    guide - Figure 22 draws the housing with a stepped corner and a slot at its left edge and a bar between the two
+    rows, and Figure 35 shows the latch on the cord connector locking into a slot on the faceplate. Neither is drawn
+    here: the supply's face already drew a plain block and this part draws what it drew.
+  mate: >-
+    derived - the centre of the block, (16.3, 13.85), facing out. The cord connector's own centre is at its centre
+    too, so the two align.
+  marks: >-
+    NONE PRINTED. Figure 22 prints no number or legend beside the cells.
+  colour: >-
+    estimated - the dark housing #2b2e32 and the grey cells #8a8d93 that the supply's skin already drew. The guide's
+    figures are line art and no photograph of a DC supply is held.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face, so it is drawn flush and
+    states no relief.
+elements: {}
+connection-points:
+  mate: {at: [16.3, 13.85], direction: front}
+skins: [default]

@@ -192,6 +192,7 @@ def test_a_base_face_does_not_sweep_up_its_own_variants():
     assert got, "the base front resolved to nothing at all"
 
 
+@pytest.mark.heavy
 def test_every_rendered_file_is_claimed_by_exactly_one_view():
     """The completeness property, which is what makes the two above more than
     spot checks: for a face whose view declares a size, the views' resolved

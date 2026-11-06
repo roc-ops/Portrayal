@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: psu-242-dc-plug
+version: 1.0.0
+class: port
+mates: ufispace-dc-block-6
+profile: power
+description: >-
+  The cable connector of the UfiSpace PSU-242-DEERN supply, wired, seen from the wire side as seated. One
+  insulated wire enters each of its six ways, three in the upper row and three in the lower, as the supply
+  prints them "V+" and "V-". It seats in a `ufispace-dc-block-6` connector at its own mate point. It carries
+  one wire per contact, not one cable, and its pull handle is not drawn.
+size: {w: 22.0, h: 22.6}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, ufispace/psu-242-dc-header@1, 22.0 by 22.6. The guide's figures
+  draw the cable connector without a scale and no dimension of it is held.
+attrs: {media: s9311-64d-dc, connector: DC cable connector, positions: 6}
+fields:
+  wire-v-plus-color: {label: 'Wire colour (V+, upper row)', type: text, default: '#1c1c1c'}
+  wire-v-minus-color: {label: 'Wire colour (V-, lower row)', type: text, default: '#c8262c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    guide - the UfiSpace S9311-64D Hardware Installation Guide, section 9.1 steps 2, 3 and 6 (PDF page 22)
+    says the DC power cable goes into "the inlet connector" with a click and has a pull handle, and Figures
+    24 and 25 (PDF pages 22 and 23) draw a cable connector with a green pull handle marked PULL and six wires
+    leaving it, three black over three red. No maker, series or part number of the cable connector is named.
+    THE PART IS A STAND-IN FOR THE CABLE CONNECTOR.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    guide - Figures 24 and 25 draw black wires in the upper row and red wires in the lower. No document states
+    which pole each carries, so the defaults are the figures' colours and the order of the marks on the supply
+    is the only statement.
+  handle: >-
+    NOT DRAWN. The figures draw the green pull handle standing out of the connector and no dimension of it is
+    held, so the plan outline stops at the connector's body.
+  far-end: >-
+    NOT DRAWN. The other ends of the cables land on the DC power source, which is the site's equipment and not
+    this supply's.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the supply, so the part draws a plan
+    outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [11.0, 11.3], direction: front}
+  wire-1: {at: [4.6, 5.6], direction: front}
+  wire-2: {at: [11.0, 5.6], direction: front}
+  wire-3: {at: [17.4, 5.6], direction: front}
+  wire-4: {at: [4.6, 17.0], direction: front}
+  wire-5: {at: [11.0, 17.0], direction: front}
+  wire-6: {at: [17.4, 17.0], direction: front}
+skins: [default]

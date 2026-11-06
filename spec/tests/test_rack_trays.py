@@ -369,7 +369,11 @@ def test_restings_family_and_bend_tables_are_the_cable_types_tables():
     def radius(t):
         r = t["min_bend_radius"]["installed"]
         return round(r["mm"] if "mm" in r else r["xOD"] * t["od_mm"], 2)
-    assert set(family) == set(bend) and len(family) >= 9
+    media_list = re.search(r"export const MEDIA = \[([^\]]*)\]", (ROOT / "kit/rack/cable-rules.js").read_text()).group(1)
+    assert set(family) == set(bend) == set(re.findall(r"'([^']+)'", media_list)) and len(family) >= 13
+    assert {"ground", "stack", "usb", "console"} <= set(family)
+    drape = table("DRAPE")
+    assert set(family.values()) <= set(drape), "DRAPE has a row for every family"
     for media in family:
         t = types[media if media in types else "power-c13"]
         assert t["media"] == media, media

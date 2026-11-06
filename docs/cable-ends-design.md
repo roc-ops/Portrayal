@@ -106,9 +106,11 @@ A free end is named for a person from the same facts: "C13 outlet", "C20 inlet",
 
 ## 4. Media
 
-Two words are added to the saved `media`, and no more:
+Five words are added to the saved `media`, and no more:
 
-- **`power`**: a conductor that carries power. An AC cord and a DC feed share it.
+- **`power`**: a conductor that carries power. An AC cord and a DC feed share it,
+  and so do the cables of a redundant power system and of a stacked power link
+  (StackPower), which are types of `power` as a cord is.
   What differs between them (gauge, conductors, colour, connectors) is the cable
   **type**, as Cat 6A U/UTP and F/UTP are types of `cat6a`. A DC feed is ONE
   cable of two conductors, landing on one terminal at each end and exported as one
@@ -116,21 +118,52 @@ Two words are added to the saved `media`, and no more:
 - **`ground`**: a bonding conductor. It is its own word because it is not power in
   any consumer: no DCIM has a ground termination, its colour is green, and a
   ground lug on a power stud must be told apart from a feed.
+- **`stack`**: the cable between the stacking ports of two switches (a Cisco
+  FlexStack or StackWise port, a Juniper Virtual Chassis port). It is its own word
+  because it is neither a data cord nor a power cable: it is not Ethernet, no DCIM
+  has a cable type for it, and its connector is the maker's own.
+- **`usb`**: a USB link, whatever its connectors (`usb-a`, `micro-usb-b`,
+  `mini-usb-b`, `usb-c`). It is its own word because a USB cable is not copper
+  data cabling: its plugs are not RJ45 and its ends are told by the receptacle.
+- **`console`**: a console link. It is its own word because the same receptacle
+  serves a console and a data link (a USB port may be either), and a person who
+  files the cable under a console wants to find it there.
 
-Defaults where the cable names no type, each replaced by a type when one is named:
+**A USB end is told from a console end by the port's role.** A USB receptacle can
+be a data port or a console port, so its interface cannot say which. The port's
+`role: console` is what the library states for a console port. An end whose role
+(or whose seated part's role) is `console` is a console end, whatever its
+connector, so an RJ45 console is one too. Any other end is a USB end when its
+interface, its port media or its seated plug's media is one of the four USB keys,
+and a stack end when it is one of the three stacking keys (`flexstack`,
+`stackwise-480`, `ex4200-vcp`). The StackPower and redundant-power interfaces
+(`stackpower`, `cisco-rps2300`, `ex3300-rps`) are power ends. A console port
+whose role a page does not pass reads as its connector did before: an RJ45
+serial port is copper, and a USB-C port is USB. `connectorOf` takes `role`, and
+a page that reads a port passes it.
 
-| | `power` | `ground` |
-|---|---|---|
-| diameter | 7.1 mm, the `power-c13` cord | 6.3 mm, a 6 AWG building wire; **estimated**, no source held |
-| bend radius | 42.6 mm, six diameters, from the table, where it is marked unverified; the mark is carried | none known; the unset figure |
-| plug reach | 77.0 mm, a C13 on its stub | the unset figure |
-| inside the port | 17.0 mm, a C13 nose in its inlet | 0 |
-| short tolerance | the copper rule; **estimated**, no maker tolerance held | the same |
-| colour | `#1c1c1c`, the black every cord end is drawn in | `#3f9b4b`, green; **estimated** |
-| stock lengths | the one list every media shares | the same |
+Defaults where the cable names no type, each replaced by a type when one is named.
+Every figure of `stack`, `usb` and `console`, and the ground wire's, is
+**estimated**: no source held gives one.
+
+| | `power` | `ground` | `stack` | `usb` | `console` |
+|---|---|---|---|---|---|
+| diameter | 7.1 mm, the `power-c13` cord | 6.3 mm, a 6 AWG building wire | 6.0 mm | 4.0 mm | 6.0 mm |
+| bend radius | 42.6 mm, six diameters, from the table, where it is marked unverified; the mark is carried | 50.4 mm, eight diameters | 24 mm, four diameters | 16 mm, four diameters | 24 mm, four diameters |
+| drape | 0.35 | 0.35 | 0.35 | 0.5 | 0.5 |
+| plug reach | 77.0 mm, a C13 on its stub | 39.4 mm, the copper figure | the same | the same | the same |
+| inside the port | 17.0 mm, a C13 nose in its inlet | 0 | 9.5 mm, the copper cord's | the same | the same |
+| short tolerance | the copper rule; **estimated**, no maker tolerance held | the same | the same | the same | the same |
+| colour | `#1c1c1c`, the black every cord end is drawn in | `#3f9b4b`, green | `#d9702a`, orange | `#8e6bd1`, purple | `#c9588a`, pink |
+| stock lengths | the one list every media shares | the same | the same | the same | the same |
+| DCIM cable type | none yet | none: a DCIM has no ground termination | blank | blank | blank |
 
 `cable.add` is offered `power` when the first end that states a family is power,
-and `ground` likewise, by the rule that already picks fibre and copper.
+and `ground`, `stack`, `usb` and `console` likewise, by the rule that already
+picks fibre and copper. The DCIM cables file writes a `stack`, `usb` or `console`
+cable with a blank type, because the cable-type choices of the two DCIM tools were
+not read when the rows were written; a row is filled in from them and from nothing
+else.
 
 ## 5. What is said, and what is refused
 

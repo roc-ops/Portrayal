@@ -1,0 +1,45 @@
+format: 1
+kind: component
+name: tm-7124s-dc-cable-plug
+version: 1.0.0
+class: port
+mates: screw-terminal-4
+profile: power
+description: >-
+  The cable connector of the Telco Systems TM-7124S's four-pole DC feed header, wired, seen from the
+  wire side as seated. A green block at the outline of the header it seats in, with one insulated wire
+  entering each of its four poles. It seats in a `screw-terminal-4` connector at its own mate point.
+  It carries one wire per pole, not one cable.
+size: {w: 18.3, h: 42.2}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the header it seats in, telco-systems/tm-7124s-dc-feed@1, 18.3 by 42.2. No document
+  held draws or measures a cable connector for this header.
+attrs: {media: tm-7124s-dc, connector: DC power cable connector, positions: 4}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    NO DOCUMENT HELD SHOWS A CABLE CONNECTOR FOR THIS HEADER: the TM-7124S stencil and the 2025 render show
+    the header with nothing seated in it. THE PART IS A STAND-IN FOR THE CABLE CONNECTOR, drawn as the half
+    that seats in telco-systems/tm-7124s-dc-feed@1 and no more.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    estimated - one wire to each of the four poles, drawn as plain grey discs because no document states a
+    wire colour. The legend over the header reads -48VA, RETA, -48VB, RETB, so the wires are numbered top to
+    bottom in that order and no pairing is drawn.
+  far-end: >-
+    NOT DRAWN. The other ends of the wires land on the site's DC source, which is not this chassis's.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the chassis, so the part draws a
+    plan outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [5.7, 20.0], direction: front}
+  wire-1: {at: [5.7, 12.2], direction: front}
+  wire-2: {at: [5.7, 17.33], direction: front}
+  wire-3: {at: [5.7, 22.46], direction: front}
+  wire-4: {at: [5.7, 27.59], direction: front}
+skins: [default]

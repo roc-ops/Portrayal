@@ -1123,9 +1123,13 @@ const dist = (p, q) => Math.hypot(p.x - q.x, p.y - q.y, p.z - q.z);
 //   - power: 77.0, generic/c13-plug@1 as docs/connectors-power-design.md
 //     section 5 gives it: the plug stands 47.0 out of its inlet and its
 //     stub of cord ends 30 further, where the cord may first bend. A C19 is
-//     10 longer; the C13 is taken as the common cord. A ground wire has no
-//     figure of its own and takes the unset one.
-export const PLUG_REACH = {os2: 27.6, om3: 27.6, om4: 27.6, om5: 27.6, cat6: 39.4, cat6a: 39.4, dac: 64.8, aoc: 64.8, power: 77.0};
+//     10 longer; the C13 is taken as the common cord;
+//   - ground, stack, usb, console: 39.4, ESTIMATED. No plug of these is
+//     modelled in the library and no maker held gives one, so each takes the
+//     copper figure, the one the unset media takes, and has a row of its own so
+//     that a figure found later changes one line.
+export const PLUG_REACH = {os2: 27.6, om3: 27.6, om4: 27.6, om5: 27.6, cat6: 39.4, cat6a: 39.4, dac: 64.8, aoc: 64.8, power: 77.0,
+  ground: 39.4, stack: 39.4, usb: 39.4, console: 39.4};
 const UNSET_REACH = 39.4;
 // WHAT OF THE REACH CANNOT BEND (#985, docs/cable-lay-design.md section 1.5).
 // A rigid plug is not a leg a bend may use: the cable's first turn starts
@@ -1151,9 +1155,12 @@ const UNSET_REACH = 39.4;
 //     boot bend radius.
 //   - power: not split yet. No cited drawing gives a boot figure, so the
 //     plug's 47.0 and the 30 of stub (above) are not told apart.
+//   - ground, stack, usb, console: not split yet. No plug of these is modelled
+//     and no drawing is held.
 // A cable whose media is not set, or not here, is not split.
 export const PLUG_SPLIT = {
   os2: null, om3: null, om4: null, om5: null, cat6: null, cat6a: null, power: null,
+  ground: null, stack: null, usb: null, console: null,
   dac: {rigid: 64.8, boot: 0}, aoc: {rigid: 64.8, boot: 0},
 };
 // The plug's reach in mm, and how much of it is rigid (0: all of it a leg, as
@@ -1244,9 +1251,13 @@ export const STOCK_M = [0.5, 1, 1.5, 2, 3, 5, 7, 10, 15, 20, 30];
 //     cord's nominal length takes in its connectors, so tip to tip is assumed,
 //     and no maker's length tolerance is held, so shortTolerance gives a cord
 //     the copper rule.
-//   - ground: 0. A lug lies on the panel; nothing of the wire is inside it.
+//   - ground: 0. A lug lies on the panel; nothing of the wire is inside it;
+//   - stack, usb, console: 9.5 mm, ESTIMATED. No maker held says how long the
+//     part of such a plug inside its port is, or how its length is measured,
+//     so each takes the copper cord's figure.
 export const END_ALLOWANCE_BY_MEDIA = {os2: 0.0131, om3: 0.0131, om4: 0.0131, om5: 0.0131,
-  cat6: 0.0095, cat6a: 0.0095, dac: 0, aoc: 0.0524, power: 0.017, ground: 0};
+  cat6: 0.0095, cat6a: 0.0095, dac: 0, aoc: 0.0524, power: 0.017, ground: 0,
+  stack: 0.0095, usb: 0.0095, console: 0.0095};
 const UNSET_ALLOWANCE = 0.0095;
 // What is inside the port at each end of a cable, in metres: its media's
 // figure from the table (the copper cord's for a cable with no media, or
@@ -2874,8 +2885,12 @@ export function bodyFindings(rack, ctx, nameOf = id => id) {
 // `power` is the power-c13 cord of spec/schemas/cable-types.yaml (7.1, sourced
 // there; the C19 cord is 7.9 and a cable that names that type gets it).
 // `ground` is ESTIMATED: 6.3, about a 6 AWG insulated building wire, the gauge
-// of the library's lugs; no source is held and no type names it yet.
-export const DIAMETERS = {cat6: 6.0, cat6a: 7.5, os2: 3.0, om3: 3.0, om4: 3.0, om5: 3.0, dac: 5.0, aoc: 3.0, power: 7.1, ground: 6.3};
+// of the library's lugs; it is the bare `ground` type's, and a type that names
+// a gauge replaces it. `stack` 6.0, `usb` 4.0 and `console` 6.0 are ESTIMATED
+// as well: no source held prints a diameter for such a cable, and each is its
+// bare type's (spec/schemas/cable-types.yaml).
+export const DIAMETERS = {cat6: 6.0, cat6a: 7.5, os2: 3.0, om3: 3.0, om4: 3.0, om5: 3.0, dac: 5.0, aoc: 3.0, power: 7.1, ground: 6.3,
+  stack: 6.0, usb: 4.0, console: 6.0};
 const UNSET_D = 6.0;
 export const FILL_LIMIT = 0.4;
 const areaOf = media => Math.PI * ((ownMedia(DIAMETERS, media) ?? UNSET_D) / 2) ** 2;

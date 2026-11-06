@@ -1,0 +1,139 @@
+format: 1
+kind: module
+name: ex9200-pwr-mx480-2400-dc
+version: 2.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper 2400 W DC power supply (PWR-MX480-2400-DC) of the EX9204 and EX9208. The CLI calls it "DC 2.4kW Power Entry Module".
+  It has one -48 VDC input with its return. It has a 70 A circuit breaker, an input mode switch, an internal fan and a
+  pull handle. Its three lamps are POWER OK, BRKR ON and INPUT OK. It seats in PEM0 to PEM3. It cools from the chassis
+  front to its own rear. The output is 2400 W with the switch at 0 (60 A input) and 2600 W at 1 (70 A input).
+part-numbers:
+  PWR-MX480-2400-DC-S: {part: PWR-MX480-2400-DC-S}
+attrs:
+  power-output-w: 2400
+  power-output-70a-w: 2600
+  input-voltage: -40.5 to -72 VDC, nominal -48 VDC
+  input-current-a: 60 (switch at 0), 70 (switch at 1)
+  airflow: front-to-back (the supply draws air from the front of the chassis and exhausts at its own rear)
+  redundancy: 1+1
+  inlet: dc-terminal
+provenance:
+  part-numbers: >-
+    datasheet - EX9200 Ethernet Switch Datasheet (1000432-022-EN, Aug 2022), ordering information: "PWR-MX480-2400-DC-S 2400 W
+    DC Power Supply for EX9208, spare". The MX240 and MX480 guides list PWR-MX480-2400-DC as "DC 2.4kW Power Entry Module". The
+    datasheet names no spare for the EX9204 supply, whose guide describes the same 2400 W output and the same 14.5 x 4 in module.
+  power: >-
+    guide - EX9204 Switch Hardware Guide (2025-08-12), Table 21 and Table 22: maximum output 2400 W with the input mode switch at
+    DIP 0 (60 A) and 2600 W at DIP 1 (70 A). The supply is named 2400 W, and the EX9200 datasheet says 2,400 W; 2400 is carried and
+    2600 W beside it. The DC chapter's example says "the output power provided by each power supply is at least 2400 W".
+  size: >-
+    estimated - the face is 101.6 mm wide (the guide's 4 in) and 89.7 mm tall, as the AC supply (juniper/ex9200-pwr-mx480-2520-ac
+    size). Table 7 gives the DC supply 1.75 in high, 14.5 in wide and 4 in deep.
+  face: >-
+    estimated - redrawn from the guides' figures of the supply's terminal block. The EX9204 Switch Hardware Guide's Figure 57
+    ("Connecting DC Power to an EX9204 switch") shows, on each supply, a block of two columns of two studs, the studs of a
+    column one above the other, and its callout shows one column with a two-hole cable lug on it. The MX480 Universal Routing
+    Platform Hardware Guide's Figure 83 ("Connecting Power Cables to the DC Power Supply") shows the same block of the same
+    part number at a size where the legend printed above it reads RTN, a direct-current sign and -48V, left to right, and
+    shows nuts on the left column and bare studs on the right. The figures are line art and give no dimension of the
+    block: it stays where version 1 drew it (the plate 34 x 24 at 28 across and 38 down), the columns at 37 and 53 across
+    as before, and each column's two studs 15.875 apart centre to centre, the pitch of the lug. Version 1 drew two studs
+    side by side with no legend; because the studs' count and place changed, this drawing is version 2 and version 1 keeps
+    its own. The colours are version 1's: the figures are line art and no photograph of this supply is held. The vents, the
+    circuit breaker, the lamps, the handle and the flange are version 1's, unchanged. See the gap dc-supply-face.
+  leds: >-
+    guide Table 23: POWER OK green (normal), yellow (main output out of range), off; BRKR ON green (breaker on, input present),
+    off; INPUT OK green (input present, correct polarity), yellow (input present but out of range or reversed), off.
+  seats: >-
+    estimated - each pole is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in. centres that one two-hole lug lands across,
+    turned a quarter so the pair runs down the face, one stud above the other, as the guides' figures draw the lug on a column.
+    The pitch is the lug's: EX9204 Switch Hardware Guide, Figure 42 (printed page 144), 0.28 in. holes 0.625 in. apart, with the
+    note "The same cable lug is used for the DC power cables"; the MX480 guide prints the same lug. No document held dimensions
+    the studs. They are common/terminal-screw-34@1, a stand-in that claims no thread, lifted as the pole part lifts them. The
+    columns' 16 mm spacing across is version 1's own and no document gives it.
+  poles: >-
+    EX9204 Switch Hardware Guide (2025-08-12), "Connecting Power to a DC-Powered EX9204 Switch" step 11: "Secure the positive (+)
+    DC source power cable lug to the RTN (return) terminal" and the negative (-) lug "to the -48V (input) terminal". The MX480
+    guide's Figure 83 prints RTN over the left column and -48V over the right, as the supply stands in the chassis. The roles are
+    the supply's printed words: `rtn` for RTN and `batt` for -48V (spec/schemas/dc.yaml). One input, so one port, `input`, of two
+    poles, left to right. The EX9204 guide's own figure is too small to read the legend; the MX480 guide's figure of the same
+    part number is the source of the order.
+  voltage: >-
+    EX9204 Switch Hardware Guide, Table 21 (printed page 64): nominal -48 VDC, operating range -40.5 to -72 VDC; the MX480
+    guide's table for the supply prints the same words.
+  rating: >-
+    NOT STATED. The supply takes 60 A with the input mode switch at 0 and 70 A at 1; a port's `rating-a` is one figure, so the
+    port states none. `attrs` keeps both as it already carried them.
+  awg: >-
+    EX9204 Switch Hardware Guide, "DC power source cables ... must be 6 AWG (13.3 mm2), minimum 60 C wire" and the EX9208 guide
+    the same; the MX480 guide's cable specifications print "Eight 6-AWG". One size in every guide held for the supply, so the
+    port states it.
+states:
+- ok
+- fault
+- absent
+elements:
+  led-power-ok:
+    at: [90.7, 20.3]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: yellow, color: '#f5a623'}
+    - 'off'
+  led-brkr-on:
+    at: [90.7, 26.0]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-input-ok:
+    at: [90.7, 31.7]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: yellow, color: '#f5a623'}
+    - 'off'
+  breaker:
+    at: [30.0, 8.0]
+    size: [14.0, 22.0]
+    class: switch
+  handle:
+    at: [52.3, 63.0]
+    size: [42.0, 6.4]
+    class: latch
+size:
+  w: 101.6
+  h: 89.7
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle
+    out: 2.2
+    color: '#26292d'
+    confidence: estimated
+    source: guide Figure 21 - the pull handle stands proud of the face
+  - node: breaker
+    out: 2.4
+    color: '#26292d'
+    confidence: estimated
+    source: guide Figure 21 - the circuit breaker projects
+parts:
+  - {ref: juniper/mx240-dc-pole@1, id: pole-rtn, at: [27.3625, 48.3], rotate: 90}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-batt, at: [43.3625, 48.3], rotate: 90}
+dc:
+  ports:
+    - id: input
+      direction: input
+      voltage: {nominal: -48, range: [-40.5, -72]}
+      awg: [6]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+      source: {poles: poles, voltage: voltage, awg: awg}
+skins: [default]

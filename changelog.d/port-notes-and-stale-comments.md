@@ -1,0 +1,5 @@
+### Fixed
+- The registry notes for `flexstack`, `stackwise-480`, `stackpower`, `ex4200-vcp`, `cisco-rps2300` and `ex3300-rps` now name the part that presents each key and the plug that mates it, and the `mini-usb-b` note names its two presenting parts and its plug. The `ex4200-vcp` note also says that `juniper/ex4500-vc1@1` composes the port at each of its two Virtual Chassis ports.
+- The `unmated` entries in the headers of `connectors.yaml` and `pluggables.yaml` say that the part-conformance runner reads the key, instead of saying it will.
+- Comments and test pins that said no part presents these keys or that no plug mates `mini-usb-b` say what is true now. Two tests no longer pin a pull request number in a contract's `unplaced` sentence. The DCIM exporter's comment on the EX4300 mini-USB console and its two reasons for the EX4200 and StackWise-480 ports no longer say the registry holds no interface for them.
+- Two sentences of `docs/format-stability.md`: the one on the blank cable type names the cables file's generic note for it, and a sentence on the fibre type's installed radius is back with the paragraph it belongs to.

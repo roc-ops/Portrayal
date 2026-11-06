@@ -1,8 +1,9 @@
 format: 1
 kind: component
 name: orv3-busbar-connector
-version: 1.0.0
+version: 1.1.0
 class: inlet
+interface: orv3-busbar
 behaviour: mounts
 profile: networking
 description: >-
@@ -26,6 +27,16 @@ provenance:
     STORDIS's legend on ds6001-B labels the part "BUS BAR" with an icon reading "BUS BAR
     48VDC". That it is an ORv3 blind-mate clip follows from the datasheet's "2OU ORv3 form
     factor"; its maker and part number are not stated anywhere held.
+  interface: >-
+    A SLOT SINCE 1.1.0: the clip presents the registered `orv3-busbar` interface, and generic/orv3-busbar-blade@1,
+    the blade of the rack's bus bar drawn at the size of this part's own blade slot, mates it. That blade is an
+    estimate and says what drawing it wants; no document held dimensions the bus bar. The clip is the power end of
+    a tray: the Juniper QFX5250 hardware guide (Table 21) and the Celestica DS6001 datasheet give it as the DC input
+    of the two trays that place it, so each offers a power end a feed can land on.
+  seat: >-
+    estimated - `mate` is the centre of the blade slot, (29.7, 17.5), at the face of the plate and with no `on:`: no
+    document held says how far the blade enters the slot or where it stands against the clip body, which is 12.0 out by
+    eye (the `connector` node below), so the point claims no lift.
 elements:
   blade-slot: {at: [26.2, 6.0], size: [7.0, 23.0], class: inlet}
 relief:
@@ -36,4 +47,6 @@ relief:
       source: >-
         common/orv3-busbar-connector@1's identity key - the three-quarter render ds6001-A-3
         shows the clip body standing well proud of its plate; the depth is proportion by eye.
+connection-points:
+  mate: {at: [29.7, 17.5], direction: front}
 skins: [default]

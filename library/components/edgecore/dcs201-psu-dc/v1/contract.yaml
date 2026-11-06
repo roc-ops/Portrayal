@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcs201-psu-dc
-version: 1.1.0
+version: 1.2.0
 class: psu
 behaviour: fills
 profile: networking
@@ -56,12 +56,31 @@ provenance:
     description is "blue fold-out handle, terminal cover", which is a different face from the
     bail handle and open green terminal this guide draws.
   why-no-composed-terminal-part: >-
-    BECAUSE THE LIBRARY HAS NO PART FOR THIS CONNECTOR AND A THREE-QUARTER FIGURE IS NO BASIS
-    FOR ONE. common/dc-terminal-27 and common/dc-terminal-24 are screw-pole barrier blocks
-    with a lip and pole windows, measured from elevations; this is a pluggable header of the
-    Phoenix kind, and the only picture of it is at an angle. The three poles are drawn in this
-    skin as the module's own element rather than invented as a shared contract that other
-    devices would then inherit.
+    SUPERSEDED BY `connector` BELOW. This entry said the library had no part for this connector and that a
+    three-quarter figure is no basis for one. common/dc-terminal-27 and common/dc-terminal-24 are screw-pole
+    barrier blocks measured from elevations, and the library holds no part that stands for this pluggable
+    terminal as a drawing of its maker. The part composed now is a declared stand-in: it claims no maker, series
+    or pitch, and its size is an estimate.
+  connector: >-
+    the supply composes edgecore/dcs201-dc-header@1 as `dc-header`, the three-position pluggable DC terminal of the
+    Edgecore AS5835-54T Quick Start Guide, "Connect Power" (page 2, the "DC Power" figure) and the AS5835-54X guide's
+    same figure, at the box of the `dc-inlet` element (20.0 by 18.0). The guides name no maker or part number for it
+    ("DC power connector (included with 48 VDC PSU only)", package contents, item 6), so the part is a declared
+    stand-in (its own provenance) and the key `edgecore-dcs-dc-block-3` claims no maker, standard or pitch.
+    edgecore/dcs201-dc-plug@1, the cable connector of the figure, mates it. The skin is unchanged and the part is
+    drawn over the block it draws: the figure shows the three cells in a column and the skin draws them side by
+    side, and the skin's green is darker than the figure's.
+  roles: >-
+    quick start - the figure's label strip prints an earth symbol, "-" and "+" from the top down, and the text lists
+    "1. DC Return, 2. -36 - -75 VDC, 3. Ground" against the plug's numbered wires (3 on the top wire, 2 in the middle,
+    1 at the bottom). The roles of the three cells from the top are therefore `gnd`, `neg` and `pos` as printed, which
+    the guide's words read as the ground, the -36 to -75 VDC conductor (the library's `batt`) and the DC return (`rtn`).
+    No nominal is stated: the guides and the data sheet print a range.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. A port whose poles are a connector's contacts is offered only
+    where that path's part is itself the connector; on a supply in a bay it is the supply, not the connector it
+    composes, so a port stated here would be published and then not offered. The roles above are recorded for the
+    port a later change can state, a minor on the devices that seat this supply.
   input: >-
     datasheet and quick start, which agree: "-36 - -75 VDC, 14-7 A", rated "48 VDC, 400 Watts".
   the-drawings-disclaim-themselves: >-
@@ -86,6 +105,8 @@ fields:
     label: Latch edge colour
     type: text
     default: '#6e1c2c'
+parts:
+  - {ref: edgecore/dcs201-dc-header@1, id: dc-header, at: [28.6, 11.0]}
 relief:
   wall: '#3a3e43'
   # No face-wide `out` - see edgecore/dcs201-psu-ac@1 and roc-ops/Portrayal#364.

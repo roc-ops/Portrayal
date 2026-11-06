@@ -172,6 +172,7 @@ def _silent():
 
 # --- the register, held tight from both ends ---------------------------------
 
+@pytest.mark.heavy
 def test_every_silent_port_is_named():
     """THE GUARD. A port-class part that exports nothing, anywhere, must say why.
 
@@ -339,8 +340,11 @@ def test_every_pluggable_media_the_library_uses_is_a_pluggable_cage():
         "db9",          # a D-sub alarm or serial connector (the 7750 SR-1 alarm port) takes no module
         "usb-a",        # a USB Type-A receptacle takes a USB device, not a transceiver (the DL160 Gen10's front and rear USB group)
         "mini-usb-b",   # the Catalyst 9300's USB console jack takes a cable, not a module
+        "micro-usb-b",  # a micro-USB console jack takes a cable, not a module (the IPC-APWF6-POE-WP)
         "stackwise-480",  # Cisco's own stacking connector, which takes a stacking cable
         "stackpower",     # the Catalyst 9300's power-sharing connector, which takes a StackPower cable
+        "coax-sma",       # an SMA antenna jack a cable plug seats in, not a module cage (the cellular antenna connectors of the CM8000)
+        "rj45-serial",    # an RJ45 serial console jack a cable plug seats in, not a module cage (the managed serial ports of a console server)
     }
     used = set()
     for p in sorted((LIB / "devices").glob("*/*/device.yaml")):

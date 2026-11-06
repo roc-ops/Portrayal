@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: breaker-bare-1ru
+version: 1.0.0
+class: breaker
+behaviour: fills
+profile: power
+description: >-
+  The Amphenol Network Solutions 1RU plug-in breaker as it looks with its touch
+  guard off: the same breaker as `amphenol-ns/breaker-1ru@1` with nothing
+  seated over its face, so the rating printed on the handle and the I/O legend
+  show. It is the same breaker drawn in the state the guard hides; it is a view
+  of the breaker, not a second product. Its model name, `1RU Circuit Breaker
+  guard off`, is this library's name for that view: the maker does not print it
+  and it states no part number. The part numbers are on
+  `amphenol-ns/breaker-1ru@1`.
+size: {w: 17.8, h: 39.1, d: 127.5}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+size-notes: >-
+  Identical to `amphenol-ns/breaker-1ru@1`: the face is the 17.8 by 39.1 opening
+  it shows through, and the depth is the estimated quarter-inch bullet figure.
+  See that part's size-notes.
+attrs: {model: 1RU Circuit Breaker guard off, series: AIRPAX 1U, poles: 1, terminal: bullet}
+provenance:
+  size: >-
+    drawing for the face, estimated for the depth - see size-notes.
+  identity: >-
+    see `amphenol-ns/breaker-1ru@1`. The guard is a cover screwed into the two
+    inserts of the breaker face (the 300CB08 installation guide 149722-2 A9
+    section 2.2.8 and Fig. 2-9a), and this part is the breaker with it taken
+    off. The model name `1RU Circuit Breaker guard off` is this library's name
+    for that view, so that it exports as its own module type; it is not printed
+    by the maker and states no part number. Nothing held gives a separate part
+    number for a breaker without its guard.
+  face: >-
+    see `amphenol-ns/breaker-1ru@1`: datasheet for the layout, photograph for
+    the look. The two guard inserts show on the face.
+  handle: >-
+    see `amphenol-ns/breaker-1ru@1`: 12.4 proud of the opening, the 15.37
+    datasheet height less an assumed 3.0 set-back.
+  state: >-
+    A FIELD, as on `amphenol-ns/breaker-1ru@1`: `on`, `off` or `tripped`, with
+    `tripped` drawn as `off`. With the guard off the handle is visible, so the
+    state shows.
+  rating: >-
+    A FIELD, as on `amphenol-ns/breaker-1ru@1`; the eleven ratings and their
+    part numbers are listed there.
+  guard-mount: >-
+    the two inserts, seated as the guard mount with no guard over them.
+fields:
+  state:
+    label: State
+    type: choice
+    options: ['on', 'off', tripped]
+    default: 'on'
+    description: >-
+      where the handle is; a trip puts it at OFF, so tripped is drawn as off
+  rating:
+    label: Rating
+    type: choice
+    options: [2, 3, 5, 10, 15, 20, 25, 30, 40, 50, 60]
+    default: 60
+    unit: A
+    description: >-
+      trip rating in amperes; each value is a separate vendor part number,
+      listed under provenance of `amphenol-ns/breaker-1ru@1`
+elements:
+  body: {at: [0.0, 1.05], size: [17.8, 37.0], class: mechanical}
+  handle: {at: [4.9, 11.1], size: [8.0, 8.0], class: button}
+  flag: {at: [13.6, 14.0], size: [2.6, 8.0], class: marking}
+parts:
+  - {ref: amphenol-ns/guard-mount-1ru@1, id: guard, at: [7.3, 3.4]}
+relief:
+  wall: '#0f1112'
+  features:
+    - node: handle
+      out: 12.4
+      color: '#17191b'
+      confidence: estimated
+      source: >-
+        see `amphenol-ns/breaker-1ru@1`, provenance.handle
+skins: [default]

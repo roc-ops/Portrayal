@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: xm3352-psu-dc
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -24,10 +24,27 @@ provenance:
     with a DC mark, and "-" and "+" over the plug's outer poles.
   elements: >-
     photo-measured on the same rectified render: thumbscrew centred at about (4.3, 34.5) on the
-    face; the green plug x 19.0-42.4, y 29.0-42.9 (telco-systems/xm3352-dc-plug@1).
+    face; the green connector x 19.0-42.4, y 29.0-42.9 (telco-systems/xm3352-dc-header@1).
+  connector: >-
+    the supply composes telco-systems/xm3352-dc-header@1 as `dc-in`, the three-cell pluggable DC connector
+    its photographs show (the Telco Systems XM-3352 data sheet, its front photographs), at the place the
+    skin has always drawn it. No document held names its maker or part number, so the part is a declared
+    stand-in (its own provenance) and the connector key `telco-dc-block-3` claims none.
+    telco-systems/xm3352-dc-cable-plug@1, a declared stand-in for the cable connector, mates it. The skin
+    is unchanged.
+  roles: >-
+    photograph - the module prints "-" above the left cell and "+" above the right one. The roles are
+    therefore `neg` for the left cell and `pos` for the right one; the middle cell is NOT MARKED and no role
+    is stated for it. The data sheet gives no pole assignment and prints no nominal beside the connector.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. The cells are the contacts of one pluggable connector
+    whose middle cell is unmarked, and a port whose poles are a connector's contacts is offered only where
+    that path's part is itself the connector; on a supply in a bay it is the supply, so a port stated here
+    would be published and then not offered. The roles above are recorded for the port a later change can
+    state, a minor on the devices that seat this supply.
 states: [absent]
 elements:
   thumbscrew: {at: [1.1, 8.9], size: [6.4, 6.4], class: fastener}
 parts:
-  - {ref: telco-systems/xm3352-dc-plug@1, id: dc-in, at: [18.7, 6.6]}
+  - {ref: telco-systems/xm3352-dc-header@1, id: dc-in, at: [18.7, 6.6]}
 skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ex4500-psu-dc-fb
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -44,6 +44,43 @@ provenance:
   led: >-
     datasheet - Table 17: one bicolour lamp labelled POK. Unlit: no input. Green: working. Green blinking
     or amber: failed.
+  seats: >-
+    estimated - each terminal is the library's common/terminal-screw-34@1, a slotted head 3.4 across
+    (that part's own size is an estimate), standing at the centre of the terminal this skin already
+    draws (`term-neg` and `term-pos`: centres 8.4 across, 12.6 and 27.4 down, themselves estimated
+    from the isometric Figure 24, as `face` says). The seats are not lifted: no document says how far
+    the terminals stand off the block, and this contract draws no relief for them. The guide's step
+    for connecting DC power (printed pages 144 and 145) has the cable lug secured to the input
+    terminal with "the locking screw" and gives a torque, and Figure 40 (printed page 145) draws a
+    one-hole lug with its screw going through the hole; no page gives the screw's thread or head, and
+    the screw part claims no thread, so none is written. The lug in the figure is a lug on a screw
+    terminal, so the seat is the ring lug's. The guide names a Molex 190410014 cable lug "or
+    equivalent" and no size for the hole
+  poles: >-
+    Juniper EX4500 Switch Hardware Guide (modified 2017-10-18), "DC Power Supply in EX4500 Switches"
+    (printed page 42): "a pair of DC input lugs (-48 VDC and RTN) on the front of the power
+    supply", and step 5 of "Connecting DC Power to an EX4500 Switch" (printed page 145), which says
+    the negative cable is installed on "the -48V (input) DC power input terminal" and the positive
+    cable on "the RTN (return) DC power input terminal"; Figure 40 (printed page 145) labels the two
+    terminals -48V and RTN. The roles are the legend's words: `batt` for -48V and `rtn` for RTN
+    (spec/schemas/dc.yaml writes `batt` as "-48V"). The figure is isometric and shows which
+    terminal carries which word, not which of this skin's two terminals it is, so the contract
+    follows the skin's own names: `term-neg`, the upper terminal, is the -48V terminal and
+    `term-pos`, the lower, is RTN. The port's poles are in the order the guide names them
+  voltage: >-
+    Juniper EX4500 Switch Hardware Guide, Table 42 "Power Specifications for the DC Power Supply Used
+    in an EX4500 Switch" (printed page 84): "Nominal operating voltage: -48 VDC" and an operating
+    voltage range of -42 VDC through -60 VDC. A held table gives a nominal, so the port states it,
+    with its minus, and the range in the order the table gives it
+  rating: >-
+    datasheet - Table 42 (printed page 84): "30 A maximum at nominal operating voltage (-48 VDC)",
+    the supply's DC input current rating, which is the figure `attrs` already carries; the note
+    beside Figure 24 (printed page 43) asks a dedicated 30 A circuit breaker, which is the
+    circuit's
+  awg: >-
+    NOT STATED. The guide's list of parts for "Connecting DC Power to an EX4500 Switch" (printed
+    page 144) asks for "DC power source cables (not provided) with the cable lugs (Molex 190410014 or
+    equivalent)" and gives no wire size, and no table of the guide does, so the port states none
 states:
 - ok
 - fault
@@ -81,4 +118,17 @@ relief:
     out: 1.2
     confidence: estimated
     source: figure - the lever stands proud of the face; its projection is not measured
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [6.7, 10.9]}
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [6.7, 25.7]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      voltage: {nominal: -48, range: [-42, -60]}
+      rating-a: 30
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles, voltage: voltage, rating-a: rating}
 skins: [default]

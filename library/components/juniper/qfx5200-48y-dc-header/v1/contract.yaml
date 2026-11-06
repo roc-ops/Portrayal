@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: qfx5200-48y-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: juniper-dc-header-3
+description: >-
+  The three-position DC power header on the face of the Juniper QFX5200-48Y DC power supplies, seen from its
+  mating face. A dark housing carries three round contact cells in a column, numbered 3, 2 and 1 from the top
+  on the supply. The cable connector juniper/qfx5200-48y-dc-plug@1 seats at its mate point.
+size: {w: 10.9, h: 28.4}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The box of the `connector` element the two supplies already draw (10.9 across, 28.4 high), read off the
+  hardware guide's flat Figure 42, which carries no scale. The cell size (2.5 across) and the pitch (4.8)
+  are the same readings.
+attrs: {connector: DC power header, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED: the QFX5200 Hardware Guide
+    (Juniper Networks) calls the cable's half "the DC connector of the provided power cable" (Connect DC
+    Power to the QFX5200, Figure 85), shows three round cells numbered 3, 2 and 1 (Figure 42), and gives no
+    part number for it. So the interface claims no standard.
+  gender: >-
+    NOT STATED. Figure 42 shows three round cells in a housing and Figure 85 a plug with three wires going
+    into it; neither says which half carries pins. The cable connector is drawn as the half that seats in this one.
+  pins: >-
+    guide - Figure 42 (flat faceplate) numbers the cells 3, 2 and 1 from the top and labels the wires
+    "Red: RTN", "Black: -36 -72V" and "Green: Grounding" at them. So the column is drawn top to bottom as pin 3
+    (return), pin 2 (-36 to -72 V) and pin 1 (grounding).
+  size: >-
+    estimated - see size-notes. No guide figure is dimensioned.
+  key: >-
+    guide - Figure 42 draws the housing with a vertical slot on its left edge and stepped shoulders beside the
+    cells, and Figure 85 shows the plug's latch tabs. Neither is drawn here: the supply's face already drew a
+    plain block and this part draws what it drew.
+  mate: >-
+    derived - the centre of the middle cell, (5.3, 14.3), facing out. The cable connector's own middle
+    contact is at its centre too, so the two align.
+  marks: >-
+    guide - Figure 42 prints 3, 2 and 1 beside the cells. They are drawn here, left of the cells at the x the
+    supply's skin drew them (2.4 from the part's left edge), because a part is drawn over the face and would hide
+    marks left in the supply's skin.
+  colour: >-
+    estimated - the dark housing #16181a and the grey cells #7b8087 that the supplies' skin already drew. The
+    guide's figures are line art and no photograph of a DC supply is held.
+  relief: >-
+    NONE STATED. No document gives how far the header stands out of the supply's face, so it is drawn flush
+    and states no relief.
+elements: {}
+connection-points:
+  mate: {at: [5.3, 14.3], direction: front}
+skins: [default]

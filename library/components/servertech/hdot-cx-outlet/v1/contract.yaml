@@ -1,0 +1,48 @@
+format: 1
+kind: component
+name: hdot-cx-outlet
+version: 1.0.0
+class: inlet
+profile: power
+interface: servertech-hdot-cx
+description: >-
+  The Server Technology HDOT Cx outlet of a PRO4X PDU, a hybrid of the IEC C13 and C19 outlets.
+  It takes either a C14 or a C20 plug. A rounded recess with a C13-style nose and an earth lobe.
+size: {w: 30.1, h: 24.0, d: 20}
+size-confidence: {w: drawing, h: estimated, d: estimated}
+attrs: {outlet: servertech-hdot-cx, media: ac, accepts: 'C14, C20'}
+provenance:
+  method: >-
+    drawing - Server Technology outline drawing 810-03-1596-00 rev A is vector, so the outlet row was read
+    from its path geometry at 0.42483 pt/mm, the scale that puts its 1778.2 overall on the strip. The
+    drawing lies the PDU down, cord end left; this part is drawn as the PDU stands, cord end down.
+  size: >-
+    drawing and estimate - the outlet row is 30.1 across on the plan view, taken as the recess width. ALONG
+    THE PDU THE DRAWING GIVES ONLY THE PITCH, 26.69 between outlets, so the 24.0 recess is estimated at
+    that pitch less a 2.7 web. Detail A draws the recess and nose but gives no dimension.
+  identity: >-
+    datasheet - the PRO4X data sheet, section "HDOT CX OUTLETS": a hybrid of the IEC C13 and C19 outlets.
+    It is not an IEC 60320 sheet, so it is a servertech/ part and not a std/ one. Both DCIM targets lack a
+    type for it, so it exports as `other` labelled HDOT Cx.
+  rating: >-
+    no held document prints a rating for the outlet, so none is stated.
+  depth: >-
+    estimated - 20, the nose length the registry gives a C19, as eaton/c39-outlet@1 takes it. No document
+    sections the outlet.
+  interface: >-
+    `servertech-hdot-cx` in spec/schemas/connectors.yaml. generic/c14-plug@1 and generic/c20-plug@1 mate it:
+    the data sheet says the outlet takes a C14 or a C20.
+  mate: >-
+    estimated - (15.05, 12.0), the centre of the recess, ONE POINT FOR TWO PLUGS as on eaton/c39-outlet@1.
+    No drawing held shows either plug seated.
+  nose: >-
+    estimated - the nose and earth lobe are drawn as a simplified C13 nose, not traced; detail A is too
+    small to trace.
+elements:
+  recess: {at: [0, 0], size: [30.1, 24.0], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  cavity: recess
+connection-points:
+  mate: {at: [15.05, 12.0], direction: front}
+skins: [default]

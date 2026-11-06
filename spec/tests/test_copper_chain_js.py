@@ -127,6 +127,7 @@ def clean(world, face, seated):
 
 # ---------------------------------------------------------------- the build
 
+@pytest.mark.heavy
 def test_the_build_draws_the_chain_in_both_cages(world):
     """The premise: each link `data-for` the one below, siblings in the
     device's group, and the turned cage's links really turned - so a kit
@@ -147,6 +148,7 @@ def test_the_build_draws_the_chain_in_both_cages(world):
 
 # ---------------------------------------------------------------- the kit
 
+@pytest.mark.heavy
 @needs_node
 def test_each_face_offers_the_next_link(world):
     """The SFP's jack is a slot once the SFP is seated, the plug's boot point
@@ -164,6 +166,7 @@ def test_each_face_offers_the_next_link(world):
     assert rot[TURNED] != rot["port-0"], rot
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("port", PORTS)
 @pytest.mark.parametrize("tier", [0, 1, 2], ids=["sfp", "plug", "boot"])
@@ -177,6 +180,7 @@ def test_a_link_the_explorer_seats_is_the_builds(world, port, tier):
     assert not bad, "\n".join(bad[:8])
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_whole_chain_in_one_map_is_the_builds(world):
     """seatFace on the bare face - the pass 3D and the faces not on screen
@@ -187,6 +191,7 @@ def test_the_whole_chain_in_one_map_is_the_builds(world):
     assert not bad, "\n".join(bad[:8])
 
 
+@pytest.mark.heavy
 @needs_node
 def test_a_swap_link_reaches_the_boot(world):
     """The explorer's `swap=`: read raw off the search, decoded, through the
@@ -236,6 +241,7 @@ MUTATIONS = [
 ]
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("label,old,new,scen,holds", MUTATIONS, ids=[m[0] for m in MUTATIONS])
 def test_a_mutated_chain_fails(world, tmp_path, label, old, new, scen, holds):

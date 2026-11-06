@@ -55,6 +55,7 @@ def corpus_refs():
     return out
 
 
+@pytest.mark.heavy
 def test_the_grammar_accepts_every_ref_the_library_states(corpus_refs):
     assert len(corpus_refs) > 400, f"only {len(corpus_refs)} refs found; the walk is wrong"
     bad = sorted(r for r in corpus_refs if not libwalk.split_ref(r))
@@ -105,6 +106,7 @@ def test_the_walk_is_sorted_because_committed_output_depends_on_it():
     assert sorted(shuffled) == devs
 
 
+@pytest.mark.heavy
 def test_nothing_hand_rolls_the_walk_or_the_grammar_any_more():
     """Asserted over the tree, because the next copy will not be on a list."""
     import ast

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: cor550-psu-ac
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -74,6 +74,22 @@ provenance:
     quick start guide's Package Contents lists "3. 2 x Power cord". C14 is the
     identification of a drawn three-pin inlet at this size and is stated at that
     confidence rather than as a reading of a printed code.
+  inlet-part: >-
+    COMPOSED, NOT DRAWN, SINCE 1.1.0: std/c14-inlet@1, so a power cord lands on the supply.
+    ITS PLACE IS ESTIMATED, read off pictures. The two rear elevations gave a recess 17.0 x
+    24.9 at [31.6, 5.7]; the part's own 20.0 x 28.0, turned on its side, stands on that
+    recess's centre, [40.1, 18.15], and so is larger than the recess the coarse elevation
+    shows. ITS TURN IS ESTIMATED TOO. The two pins the elevation shows, at about [43.5, 11.1]
+    and [38.7, 17.7], put the third behind the latch at the right, which leaves the earth
+    contact at the left; the data sheet's rear (page 2, item 12) and the quick start guide's
+    figure for the PSU Replacement (page 1) show the same: one blade high at the right of the
+    opening and another at its middle towards the left. The part's earth contact lies on its
+    angled side, so it is turned 270 to put the earth at the left. THE LATCH hangs in front
+    of the housing's lower right in both elevations, so the part is composed `behind` the
+    skin and the skin's body has a knockout where it stands, as the Dell 14G supplies do;
+    the latch is then drawn over it. The cord retainer, a wire loop, is not drawn. The quick
+    start guide's figure for step 3, "Connect Power" (page 3), shows the cord's C13 end
+    going into this inlet.
   the-name-is-the-chassis-because-no-document-names-the-fru: >-
     library/components/README.md's rule is to use the vendor's model number where one
     exists. NONE DOES HERE. The COR550 datasheet has no ordering table at all - it ends at
@@ -88,20 +104,23 @@ provenance:
     should take the major that costs; edgecore/fan-2u-1x1sn@1's
     `the-name-is-the-fru-because-the-tray-outlived-the-chassis` is the precedent for both
     the rename and its price.
-  the-dc-build-is-not-drawn: >-
+  the-dc-build-is-a-separate-part: >-
     The datasheet offers "48 VDC Power Supply: Input Voltage: 40 to 72 VDC" beside the AC
-    one, and BOTH staged documents draw the AC machine - the quick start guide's Overview
-    calls out "8. 2 x AC PSUs" and both rear elevations show C14 inlets. There is
-    therefore no DC face to model, and no `cor550-psu-dc` is written rather than one being
-    invented from a sibling's terminal block. The device records this as a gap.
+    one. Both rear elevations draw the AC machine - the quick start guide's Overview calls
+    out "8. 2 x AC PSUs" and both show C14 inlets - but the quick start's Connect Power page
+    pictures the DC supply's terminal end in an angled illustration, and
+    `edgecore/cor550-psu-dc@1` is drawn from it with this part's envelope. The DC supply is
+    a different part with a different connector, so this part keeps its AC face and the DC
+    build seats the other one.
 states: [absent]
 elements:
   vent: {at: [3.00, 2.50], size: [23.00, 35.60], class: vent}
   handle: {at: [8.00, 4.20], size: [6.00, 32.00], class: handle}
-  inlet: {at: [31.60, 5.70], size: [17.00, 24.90], class: connector}
   latch: {at: [38.70, 18.80], size: [11.40, 22.00], class: latch}
 fields:
   latch-finish: {label: Latch colour, type: text, default: '#c0453f'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [26.10, 8.15], rotate: 270, behind: true}
 relief:
   wall: '#15181b'
   features:

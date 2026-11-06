@@ -3,8 +3,9 @@ manufacturer: Cisco
 model: PWR-1.6KW-DC
 description: Cisco ASR 9900 fixed-chassis 1.6 kW DC power module
 power-ports:
-  - name: '{module}/Inlet'
-    type: dc-terminal
+  - name: '{module}/dc-header'
+    type: other
+    label: DC power connector block (2-position, +DC -DC)
 comments: 'Cisco ASR 9900 fixed-chassis 1.6 kW DC power module. The AC module''s mechanics - one axial
   fan, the U-shaped release handle, the latch down the right edge and one STATUS lamp - with a two-pole
   shrouded DC connector in place of the C14 inlet, marked +DC above and -DC below. The ASR 9903 takes
@@ -17,10 +18,12 @@ comments: 'Cisco ASR 9900 fixed-chassis 1.6 kW DC power module. The AC module''s
 
   - fans: 1
 
+  - inlet: dc-terminal
+
   - input: dc
 
   - power-output-w: 1600
 
   - role: power-module
 
-  Contract version 2.0.0 (cisco/pwr-1p6kw-dc).'
+  Contract version 2.1.0 (cisco/pwr-1p6kw-dc).'

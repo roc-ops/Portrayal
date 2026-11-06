@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 7280cr3a-72
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Arista
 model: 7280CR3A-72
@@ -187,8 +187,10 @@ provenance:
       Data sheet ordering information: DCS-7280CR3A-72-F and -R, DCS-7280CR3AM-72-F and -R and DCS-7280CR3AK-72-F
       and -R, each "2 x AC", F for front to rear and R for rear to front air. The "#" orders ("configurable
       fans and psu") are orders of parts and are not listed. The A, M and K builds share the face, size,
-      weight and supplies and differ in encryption and routes, which a configuration cannot state: see
-      the gap config-scoped-device-attrs. The data sheet lists no DC part number for the switch (the PWR-1511-DC-RED
+      weight and supplies and differ in encryption and routes, which each M and K configuration states
+      in its own attrs and description (the data sheet's "Encryption" row and its overview of the 7280R3AK;
+      its power, memory, CPU, SSD, minimum EOS and licence group are one value for the three builds, so
+      the device's stand). The data sheet lists no DC part number for the switch (the PWR-1511-DC-RED
       and -BLUE supplies are spares) and does not say which AC supply an -F or -R order carries, so the
       DC builds and the PWR-1513 builds are examples. No secure-boot (-S) build is listed for this family
       and the guide draws no blank for a bay, so no configuration shows an open bay.
@@ -257,17 +259,6 @@ attrs:
 chassis: {width: 440.0, height: 87.9, depth: 686.9, ru: 2, weight-kg: 22.4, color: '#aaabad', airflow: front-to-back,
   power: ac}
 gaps:
-- what: config-scoped-device-attrs
-  scope:
-  - front
-  - rear
-  reason: vendor-silent
-  note: >-
-    The 7280CR3AM-72 and 7280CR3AK-72 carry TunnelSec encryption on all ports, and the K build the large-routes
-    licence, where the 7280CR3A-72 has neither. No configuration can state a device attribute (open gap
-    #1237, accepted for now, decided 2026-10-23), so the device carries the base switch's features line
-    and its encryption line names all three. The data sheet gives the builds one set of hardware figures.
-  wanted: configuration-scoped device attrs.
 - what: front-from-photograph
   scope:
   - front
@@ -1431,12 +1422,22 @@ configurations:
     description: >-
       The 7280CR3AM-72 with TunnelSec encryption, the same face, supplies and fans as the base switch,
       front-to-rear air. Ordered as DCS-7280CR3AM-72-F.
+    export-description: >-
+      Arista 7280CR3AM-72 - a fixed 2RU data-centre router switch with 72 x 100G QSFP ports, TunnelSec
+      encryption on all ports, running EOS
+    attrs:
+      features: {encryption: 'all ports (MACsec, IPsec and VXLANsec, as TunnelSec)'}
     part-numbers:
       DCS-7280CR3AM-72-F: {}
   m-r:
     kind: orderable
     airflow: back-to-front
     description: The 7280CR3AM-72 with rear-to-front air. Ordered as DCS-7280CR3AM-72-R.
+    export-description: >-
+      Arista 7280CR3AM-72 - a fixed 2RU data-centre router switch with 72 x 100G QSFP ports, TunnelSec
+      encryption on all ports, running EOS
+    attrs:
+      features: {encryption: 'all ports (MACsec, IPsec and VXLANsec, as TunnelSec)'}
     bays: {psu-1: arista/7050x4-pwr-1500-ac-rev@1, psu-2: arista/7050x4-pwr-1500-ac-rev@1, fan-1: arista/7050x4-fan-7012h-rev@1,
       fan-2: arista/7050x4-fan-7012h-rev@1, fan-3: arista/7050x4-fan-7012h-rev@1, fan-4: arista/7050x4-fan-7012h-rev@1}
     part-numbers:
@@ -1446,12 +1447,22 @@ configurations:
     description: >-
       The 7280CR3AK-72 with large routes and TunnelSec, the same face, supplies and fans as the base switch,
       front-to-rear air. Ordered as DCS-7280CR3AK-72-F.
+    export-description: >-
+      Arista 7280CR3AK-72 - a fixed 2RU data-centre router switch with 72 x 100G QSFP ports, large routes
+      and TunnelSec encryption, running EOS
+    attrs:
+      features: {encryption: 'all ports (MACsec, IPsec and VXLANsec, as TunnelSec)'}
     part-numbers:
       DCS-7280CR3AK-72-F: {}
   k-r:
     kind: orderable
     airflow: back-to-front
     description: The 7280CR3AK-72 with rear-to-front air. Ordered as DCS-7280CR3AK-72-R.
+    export-description: >-
+      Arista 7280CR3AK-72 - a fixed 2RU data-centre router switch with 72 x 100G QSFP ports, large routes
+      and TunnelSec encryption, running EOS
+    attrs:
+      features: {encryption: 'all ports (MACsec, IPsec and VXLANsec, as TunnelSec)'}
     bays: {psu-1: arista/7050x4-pwr-1500-ac-rev@1, psu-2: arista/7050x4-pwr-1500-ac-rev@1, fan-1: arista/7050x4-fan-7012h-rev@1,
       fan-2: arista/7050x4-fan-7012h-rev@1, fan-3: arista/7050x4-fan-7012h-rev@1, fan-4: arista/7050x4-fan-7012h-rev@1}
     part-numbers:

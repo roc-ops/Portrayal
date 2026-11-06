@@ -1,0 +1,172 @@
+format: 1
+kind: module
+name: psu-132-crps-dc
+version: 2.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace PSU-132-DEGR-NN 1300W DC PSU (S9601-104BC) - CRPS form factor,
+  black face with a square intake-fan frame filling the left half under a horizontal
+  pull bar, a two-post screw terminal block under a hinged clear cover, a red release
+  latch on the right edge and a status lamp above it; front-to-back (exhaust) airflow
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: datasheet}
+size-notes: >-
+  both axes from the S9601-104BC HIG's Component Physical Information table, 73.5 x 185 x 40 mm (provenance `size`).
+attrs: {power-output-w: 1300, input: dc, model: PSU-132-DEGR-NN, airflow: exhaust, inlet: dc-terminal}
+provenance:
+  inlet: >-
+    transcribed from this contract's own description: 'a two-post screw terminal block under
+    a hinged clear cover'. Nothing new was measured.
+  power: >-
+    datasheet - the S9601-104BC datasheet's Available to Order block states the rating
+    in the part number's own row: 'PSU-132-DEGR-NN, 1300W DC, exhaust air flow'. The
+    HIG adds two figures that are NOT this nameplate and are not recorded as it: a
+    built-in '60A, fast acting fuse based on the PSU maximum capacity' (a protection
+    device rating) and a suggested 30 A PDU fuse for the whole system.
+  size: >-
+    HIG - Component Physical Information table, 'PSU (W x D x H) 2.89 x 7.28 x 1.57 in
+    (73.5 x 185 x 40mm)'; the table gives one PSU size for both input types and the
+    AC and DC weights are equal (2.2 lb / 1.0 kg each), so the face is the same
+    73.5 x 40 as ufispace/psu-132-crps-ac@1. THIS IS NOT ufispace/psu-132-dc@1, which
+    is the same 1300 W rating in a 50.5 x 40 face.
+  layout: >-
+    drawing - the fan frame, pull bar, red latch and lamp are the same features in the
+    same places as ufispace/psu-132-crps-ac@1 and were measured there, on HIG Figure
+    4's rear elevation at 3.6159 px/mm; THAT ELEVATION SHOWS THE AC BUILD, so those
+    positions are carried across on the strength of HIG Figures 5 and 6 drawing the
+    two supplies as one mechanical part differing only in the input, and that is a
+    borrowed measurement rather than a second one. The terminal block itself is
+    drawn from Figure 6, which is a PORTRAIT mechanical view (fan at the top) at
+    about 1.3 px/mm: it names the parts - 'INPUT TERMINAL BLOCK', 'TERMINAL HOUSING
+    COLOR: BLACK', 'TERMINAL COVER COLOR: CLEAR', 'LATCH COVER COLOR: RED (PANTONE
+    199C)' - and letters the two posts DC-(-48V) and DC+(-48V RETURN), but does not
+    dimension them. The posts sit side by side in that portrait view, so they stack
+    vertically here, DC+ above DC-. Their size and spacing are ESTIMATED to fill the
+    same 20 x 28 window the AC build gives its inlet.
+  led-states: >-
+    HIG section 10, PSU FRU LED table (page 23) - one table for both input types,
+    transcribed in full and identical to the AC sibling's.
+  terminal-cover: >-
+    HIG section 9, DC Version: a plastic cover guards the terminal block and is
+    opened by pressing at its top or bottom edge and swinging it outwards. The cover is drawn CLOSED, which is how the unit ships and
+    how Figure 6 draws it; it is a hinged part of this module and not a separate FRU,
+    so it is artwork here rather than an occupant.
+  block: >-
+    estimated - redrawn in this version. Version 1 drew four 6.2 x 8.2 pads, two to
+    a post, 7.2 mm apart. The guide's own lug is a Panduit LCD8-14A (as printed on the
+    drawing) with TWO holes .63 +/- .02 in. apart, which holds 5/8 in. (15.875 mm); Figure 24
+    shows that two-hole lug, with two nuts and two washers, landing on the block, so each
+    post is a PAIR of studs 15.875 apart and the 7.2 mm of version 1 cannot be the
+    lug's. The pair runs across the 20 mm window the block fills (the pair is 19.3
+    wide with its screw heads), the two posts one above the other as Figure 6 stands
+    when turned to this face. Nothing held dimensions the studs themselves, the block's
+    box, the screws' ring size or the posts' height off the face: all are estimates.
+    The silk-screen letters V+ and V- that version 1 drew above and below the block
+    are carried over as drawn; the guide prints DC+(-48V RETURN) and DC-(-48V) at the
+    posts.
+  seats: >-
+    estimated - each post is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in. centres
+    that one two-hole lug lands across, side by side. Its own screw heads, 3.4 across,
+    and the height it presents at are Portrayal's stand-ins, not UfiSpace's: the guide
+    gives neither. The lug is drawn straight (generic/two-hole-lug-5-8@1); the guide's
+    lug is offset at the barrel (Figure 22, PDF page 22), which the stand-in does not show.
+  poles: >-
+    HIG Figure 6 (PDF page 11), the rear elevation: DC-(-48V) is lettered at the left post
+    and DC+(-48V RETURN) at the right of a portrait view with the fan at the top. Turned
+    to this face (fan at the left) the right post is the upper one, so the upper post
+    is `rtn` ('RETURN') and the lower is `batt` (-48V and negative, spec/schemas/dc.yaml).
+    The roles are the figure's marks. The figure prints -48V beside the posts and the
+    datasheet and guide print a range, '-48 to -60V', with no nominal in a table, so the
+    port states no voltage.
+  rating: >-
+    datasheet - 'DC input: -48 to -60V, 37A' in the S9601-104BC datasheet, the only
+    device that seats this supply. The guide's built-in 60 A fuse and its suggested 30 A
+    PDU fuse are protection figures and not the input current.
+  awg-not-stated: >-
+    THE PORT STATES NO CABLE SIZE because the one guide that seats this supply prints two.
+    Its connecting-power step, its crimp figure and its accessories list say an 8 AWG
+    cable ('#8 AWG' in Figure 22, 'LCD8-14A / 8 STR CU' on the lug); its package list
+    prints the DC input lug as '#6 AWG'.
+  lug-disagreement: >-
+    THE GUIDE NAMES A TWO-HOLE LUG AND THEN A ONE-HOLED ONE, and this contract follows
+    the drawings: step 2 says 'two-hole lug' and Figure 22 and the lug drawing show two
+    holes; step 3 says 'one-holed lugs' and 'hex nuts', while Figure 24 shows the two-hole
+    lug under two nuts and the package list holds four DC input lugs for two supplies,
+    one lug a post.
+elements:
+  handle: {at: [1.2, 16.4], size: [40.4, 6.6], class: handle}
+  latch: {at: [62.5, 12.7], size: [5.3, 18.8], class: latch}
+  dc-input: {at: [41.7, 6.0], size: [20.0, 28.0], class: terminal}
+  status-led:
+    at: [66.5, 7.3]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: standby, color: '#22c55e', behavior: blinking},
+             {name: critical, color: '#eab308'},
+             {name: warning, color: '#eab308', behavior: blinking}]
+    description: >-
+      HIG PSU FRU LED table - Off (no input power to all power supplies), Green
+      (output ON and OK), Blinking Green (standby: input power present with only
+      +12VSB on, or the supply in smart standby; the boot-loader firmware-update row
+      is visually identical and shares this state), Amber (a critical event causing
+      shutdown - failure, overcurrent, short circuit, overvoltage, fan failure,
+      overtemperature - and separately an input feed lost with a second supply still
+      fed), Blinking Amber (warning events where the supply keeps operating - high
+      temp, high power, high current, slow fan). The HIG's own DC procedure adds the
+      plain-language version: 'when turned on, the LED on the PSU will light up with
+      a Green color designating normal operation.'
+relief:
+  features:
+    - node: rotor-grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@2 - nothing in the HIG dimensions anything off the
+        face. Same treatment as its AC sibling.
+    - node: rotor-bulge
+      dome: 3.0
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@2 - unsourced; the impeller stands slightly behind
+        the frame in HIG Figure 6's isometric.
+    - node: handle
+      out: 3.5
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@2 - the pull bar stands off the face in HIG Figure
+        6's isometric; nothing dimensions it.
+    - node: dc-input
+      out: 2.0
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@2 - the terminal block and its hinged cover stand
+        proud of the face (they have to, to be flipped open), by an amount no
+        document gives.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@2 - the latch is pressed to release (HIG section 7)
+        so it must stand proud; nothing dimensions it.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        ufispace/psu-132-crps-dc@2 - unsourced. Same 0.4 estimate as the other
+        UfiSpace FRUs.
+parts:
+  - {ref: juniper/mx240-dc-pole@1, id: pole-rtn, at: [42.0625, 11.2]}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-batt, at: [42.0625, 25.0]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 37
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+      source: {poles: poles, rating-a: rating}
+skins: [default]

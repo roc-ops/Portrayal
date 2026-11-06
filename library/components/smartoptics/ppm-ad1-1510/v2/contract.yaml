@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-ad1-1510
-version: 2.3.0
+version: 2.4.0
 class: filter
 behaviour: fills
 profile: optical
@@ -118,10 +118,17 @@ elements:
   caption-osc: {at: [5.57, 16.2], size: [13.2, 2.05], class: marking}
   caption-edfa: {at: [22.50, 16.2], size: [13.2, 2.05], class: marking}
   caption-line: {at: [35.70, 16.2], size: [13.2, 2.05], class: marking}
+groups:
+  lc-optical:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: duplex LC optical ports of a passive add/drop filter; the datasheet states no data rate
 parts:
-  - {ref: common/lc-duplex-adapter@6, id: osc, at: [5.57, 4.0], attrs: {role: osc}}
-  - {ref: common/lc-duplex-adapter@6, id: edfa, at: [22.50, 4.0], attrs: {role: edfa}}
-  - {ref: common/lc-duplex-adapter@6, id: line, at: [35.70, 4.0], attrs: {role: line}}
+  - {ref: common/lc-duplex-adapter@6, id: osc, at: [5.57, 4.0], group: lc-optical, attrs: {role: osc}}
+  - {ref: common/lc-duplex-adapter@6, id: edfa, at: [22.50, 4.0], group: lc-optical, attrs: {role: edfa}}
+  - {ref: common/lc-duplex-adapter@6, id: line, at: [35.70, 4.0], group: lc-optical, attrs: {role: line}}
 optical:
   # WHAT THE PART DOES, WHICH USED TO BE AN ATTR. `channel-nm` stays for a
   # reader; this is the same fact as glass. Bore 1 is Tx and bore 2 is Rx on all

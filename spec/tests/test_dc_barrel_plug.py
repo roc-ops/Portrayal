@@ -2,7 +2,7 @@
 (#789, docs/connectors-dc-terminal-design.md).
 
 ONE SIZE, BY RULING. The library treats the DC barrel jack as one nominal
-connector, `dc-barrel`: barrel diameters vary by product and of the seven devices
+connector, `dc-barrel`: barrel diameters vary by product and of the eleven devices
 that place common/dc-barrel@1 only two documents held, the CSS326-24G-2S+RM and
 CRS309-1G-8S+IN quick guides, state one. What a
 jack is fed is carried as attributes of its placement, `input-voltage` and
@@ -54,6 +54,13 @@ PLACED = {
     # the CRS309-1G-8S+IN: the rear prints DC 12-57 V; its quick guide gives the barrel size
     "mikrotik/crs309-1g-8s-plus-in": ("rear", "dc-in", None, "12-57 VDC", 1.2, "DC 12-57 V"),
 }
+# the placing devices whose documents state no rating for the jack: the CM8000 data sheet (p.2, "Power
+# Adapter") says "Universal 110-240V AC to 12V DC external power adapter" and gives no current or barrel
+# size, so their placements carry no `attrs` and they are not in PLACED, whose entries all state both
+NO_RATING_STATED = {"opengear/cm8004", "opengear/cm8004-c", "opengear/cm8008", "opengear/cm8008-c"}
+# the two ReadyLinks access points: each datasheet's Power input names a DC connector (2.1 mm / 5.5 mm at 48 V,
+# 2.5 mm / 5.5 mm at 54 V) and the stock figure draws and legends the DC jack
+WALL_AND_CEILING_APS = {"readylinks/ipc-apwf6-poe-wp", "readylinks/ipc-apwf7-poe-cl"}
 # the placing devices whose own document states a barrel size (the CRS309 quick guide: 5.5 mm outside and 2 mm
 # inside, female, pin positive)
 SIZE_STATED = {"mikrotik/css326-24g-2s-plus-rm", "mikrotik/crs309-1g-8s-plus-in"}
@@ -132,9 +139,11 @@ def test_the_jack_states_no_rating_of_its_own():
 
 # --- 2. the seven placements, and their ratings ------------------------------------
 
+@pytest.mark.heavy
 def test_the_jack_is_placed_on_exactly_these_devices():
     """The census: every placement of the jack in the library, and nothing
-    composes it inside another part. Seven: the CRS309-1G-8S+IN is the seventh."""
+    composes it inside another part. Thirteen: seven state a rating here, the four
+    CM8000 devices do not, and two access points carry their own (48 V and 54 V)."""
     found = set()
     for f in sorted((LIB / "devices").glob("*/*/device.yaml")):
         d = yaml.safe_load(f.read_text())
@@ -142,7 +151,7 @@ def test_the_jack_is_placed_on_exactly_these_devices():
             for p in ((view or {}).get("components") or {}).get("placements") or []:
                 if p.get("ref") == JACK:
                     found.add(f"{f.parts[-3]}/{f.parts[-2]}")
-    assert found == set(PLACED) and len(found) == 7
+    assert found == set(PLACED) | NO_RATING_STATED | WALL_AND_CEILING_APS and len(found) == 13
     composed = []
     for f in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
         c = yaml.safe_load(f.read_text())
@@ -191,6 +200,7 @@ def comps():
     return got
 
 
+@pytest.mark.heavy
 def test_the_barrel_plug_is_the_one_part_that_mates_dc_barrel(comps):
     assert sorted(r for r in comps if _contract(r).get("mates") == IFACE) == [PLUG]
     assert [r for r in comps if _contract(r).get("interface") == IFACE] == [JACK]
