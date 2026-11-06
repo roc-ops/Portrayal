@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: sim-slot-4ff
+version: 1.0.0
+class: port
+profile: networking
+interface: sim-tray-4ff
+description: >-
+  A 4FF (nano) SIM card slot on a rear panel. The Opengear CM8000 cellular
+  models carry two: a narrow dark opening that takes the SIM card tray, pushed
+  in until it clicks. It seats the tray at its own mate point.
+size: {w: 13.4, h: 3.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: sim, form-factor: 4ff}
+provenance:
+  size: >-
+    estimated - no dimensioned drawing is held. The CM8004-C and CM8008-C rear
+    photographs (straight on, 3.81 px/mm from the 220 mm body width) show the
+    slot as a dark bar about 13 mm wide and 2 to 3 mm high under a black tab
+    that carries the card symbol and the slot number. 13.4 by 3.0 is that bar
+    with its rim, read to about 0.5 mm.
+  interface: >-
+    `sim-tray-4ff` in spec/schemas/connectors.yaml. The Opengear CM8000 data
+    sheet lists "4FF SIM card tray" (part 429020) in the box of the cellular
+    models, and the Quick Start Guide says to put the card in the tray and push
+    the tray into its slot until it clicks. The slot therefore takes the tray,
+    not the bare card; the tray is opengear/sim-tray-4ff@1.
+  mate: >-
+    estimated - the centre of the bar. The tray enters from the front.
+  depth: >-
+    NOT STATED. No document held gives the depth of the slot, so the part
+    claims none.
+elements: {}
+connection-points:
+  mate: {at: [6.7, 1.5], direction: front}
+skins: [default]
