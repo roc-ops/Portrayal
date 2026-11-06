@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 491ru-hfr
-version: 0.1.1
+version: 1.0.0
 maturity: modelled
 manufacturer: Leviton
 model: 491RU-HFR
@@ -184,6 +184,14 @@ gaps:
       separate accessory, at least two to a cover, and no view draws it. The format has no
       hinge, so a cover is either on or off.
     wanted: a drawing of the hinge fitted
+  - what: designer-cover-section
+    scope: [front, rear, top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the designer cover's section on the specification sheet's page 2 is a C-shaped profile whose
+      plate is dished and whose lips end in barbs, with its depth dimensioned and no thickness. The
+      cover is drawn with a flat plate and lips 2.0 mm thick, an estimate, and no barbs.
+    wanted: a dimensioned section through a designer cover and a finger tip
   - what: bend-radius-router
     scope: [front, rear, top, bottom]
     reason: needs-drawing
@@ -234,6 +242,7 @@ views:
         - {ref: leviton/versi-duct-front-fingers@1, id: front-fingers-upper, at: [0.0, 4.91], group: fingers, rel-pos: 1, in: front-base, under: front-cover}
         - {ref: leviton/versi-duct-front-fingers@1, id: front-fingers-lower, at: [0.0, 40.47], group: fingers, rel-pos: 2, in: front-base, under: front-cover}
         - {ref: leviton/versi-duct-front-cover-1ru@1, id: front-cover, at: [0.0, 0.0], group: cover, rel-pos: 1, in: front-base, lift: 58.1, only-in: [base]}
+        - {ref: leviton/49265-dc1@1, id: front-designer-cover, at: [0.0, 2.0], group: cover, rel-pos: 3, in: front-base, lift: 59.06, only-in: [designer-cover]}
     guides:
       - {id: front-duct, kind: duct, at: [0, 9.66], size: [444.5, 28.575], run: x, finger-pitch: 49.375, finger-gap: 22.45, confidence: drawing, source: 'Leviton 491RU-HFR drawing, top view slots; application note page 15, front channel 1.125 in'}
   rear:
@@ -247,6 +256,7 @@ views:
         - {ref: leviton/versi-duct-rear-fingers@1, id: rear-fingers-upper, at: [0.0, 4.91], group: fingers, rel-pos: 3, in: rear-base, under: rear-cover}
         - {ref: leviton/versi-duct-rear-fingers@1, id: rear-fingers-lower, at: [0.0, 40.47], group: fingers, rel-pos: 4, in: rear-base, under: rear-cover}
         - {ref: leviton/versi-duct-rear-cover-1ru@1, id: rear-cover, at: [0.0, 0.0], group: cover, rel-pos: 2, in: rear-base, lift: 72.45, only-in: [base]}
+        - {ref: leviton/49265-dc1@1, id: rear-designer-cover, at: [0.0, 2.0], group: cover, rel-pos: 4, in: rear-base, lift: 73.41, only-in: [designer-cover]}
     guides:
       - {id: rear-duct, kind: duct, at: [0, 9.66], size: [444.5, 28.575], run: x, finger-pitch: 49.375, finger-gap: 22.45, confidence: drawing, source: 'Leviton 491RU-HFR drawing, top view slots; application note page 7, rear channel 1.125 in'}
   top:
@@ -481,6 +491,132 @@ views:
         - {id: plate, at: [80.93, 0], size: [3.04, 47.9], rx: 0, fill: '#232527', kind: base}
         - {id: front-wall-upper, at: [23.68, 4.91], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
         - {id: front-wall-lower, at: [23.68, 40.47], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+  top-designer:
+    face: top
+    size: {w: 444.5, h: 254.95}
+    panel:
+      decor:
+        - {id: rear-wall, at: [0, 23.1], size: [444.5, 72.15], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: rear-slot-1, at: [13.5, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-2, at: [62.875, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-3, at: [112.25, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-4, at: [161.625, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-5, at: [211.0, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-6, at: [260.375, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-7, at: [309.75, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-8, at: [359.125, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-9, at: [408.5, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-cover, at: [0.0, 0.0], size: [444.5, 21.84], rx: 0, fill: '#8d9095', kind: cover}
+        - {id: neck, at: [0, 95.25], size: [444.5, 12.98], rx: 0, fill: '#26282a', kind: slope}
+        - {id: slope-1, at: [4.48, 108.23], size: [104.86, 62], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: slope-2, at: [114.65, 108.23], size: [104.86, 62], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: slope-3, at: [224.9, 108.23], size: [104.86, 62], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: slope-4, at: [335.1, 108.23], size: [104.86, 62], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: oval-1, at: [18.96, 120.15], size: [75.88, 38.15], rx: 19.05, fill: '#0a0b0c', kind: pass-through}
+        - {id: oval-2, at: [129.13, 120.15], size: [75.88, 38.15], rx: 19.05, fill: '#0a0b0c', kind: pass-through}
+        - {id: oval-3, at: [239.38, 120.15], size: [75.88, 38.15], rx: 19.05, fill: '#0a0b0c', kind: pass-through}
+        - {id: oval-4, at: [349.58, 120.15], size: [75.88, 38.15], rx: 19.05, fill: '#0a0b0c', kind: pass-through}
+        - {id: plate, at: [0, 170.98], size: [444.5, 3.04], rx: 0, fill: '#232527', kind: base}
+        - {id: front-wall, at: [0, 174.02], size: [444.5, 57.25], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: front-slot-1, at: [13.5, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-2, at: [62.875, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-3, at: [112.25, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-4, at: [161.625, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-5, at: [211.0, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-6, at: [260.375, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-7, at: [309.75, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-8, at: [359.125, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-9, at: [408.5, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-cover, at: [0.0, 233.11], size: [444.5, 21.84], rx: 0, fill: '#8d9095', kind: cover}
+    passes:
+      - {id: top-pass-1, at: [18.96, 120.15], size: [75.88, 38.15], shape: obround, cover: open}
+      - {id: top-pass-2, at: [129.13, 120.15], size: [75.88, 38.15], shape: obround, cover: open}
+      - {id: top-pass-3, at: [239.38, 120.15], size: [75.88, 38.15], shape: obround, cover: open}
+      - {id: top-pass-4, at: [349.58, 120.15], size: [75.88, 38.15], shape: obround, cover: open}
+  bottom-designer:
+    face: bottom
+    size: {w: 444.5, h: 254.95}
+    panel:
+      decor:
+        - {id: rear-wall, at: [0, 23.1], size: [444.5, 72.15], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: rear-slot-1, at: [13.5, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-2, at: [62.875, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-3, at: [112.25, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-4, at: [161.625, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-5, at: [211.0, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-6, at: [260.375, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-7, at: [309.75, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-8, at: [359.125, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-slot-9, at: [408.5, 23.1], size: [22.45, 69.05], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: rear-cover, at: [0.0, 0.0], size: [444.5, 21.84], rx: 0, fill: '#8d9095', kind: cover}
+        - {id: neck, at: [0, 95.25], size: [444.5, 12.98], rx: 0, fill: '#26282a', kind: slope}
+        - {id: slope-1, at: [4.48, 108.23], size: [104.86, 62], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: slope-2, at: [114.65, 108.23], size: [104.86, 62], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: slope-3, at: [224.9, 108.23], size: [104.86, 62], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: slope-4, at: [335.1, 108.23], size: [104.86, 62], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: oval-1, at: [18.96, 120.15], size: [75.88, 38.15], rx: 19.05, fill: '#0a0b0c', kind: pass-through}
+        - {id: oval-2, at: [129.13, 120.15], size: [75.88, 38.15], rx: 19.05, fill: '#0a0b0c', kind: pass-through}
+        - {id: oval-3, at: [239.38, 120.15], size: [75.88, 38.15], rx: 19.05, fill: '#0a0b0c', kind: pass-through}
+        - {id: oval-4, at: [349.58, 120.15], size: [75.88, 38.15], rx: 19.05, fill: '#0a0b0c', kind: pass-through}
+        - {id: plate, at: [0, 170.98], size: [444.5, 3.04], rx: 0, fill: '#232527', kind: base}
+        - {id: front-wall, at: [0, 174.02], size: [444.5, 57.25], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: front-slot-1, at: [13.5, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-2, at: [62.875, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-3, at: [112.25, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-4, at: [161.625, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-5, at: [211.0, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-6, at: [260.375, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-7, at: [309.75, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-8, at: [359.125, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-slot-9, at: [408.5, 176.02], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: front-cover, at: [0.0, 233.11], size: [444.5, 21.84], rx: 0, fill: '#8d9095', kind: cover}
+    passes:
+      - {id: bottom-pass-1, at: [18.96, 120.15], size: [75.88, 38.15], shape: obround, cover: open}
+      - {id: bottom-pass-2, at: [129.13, 120.15], size: [75.88, 38.15], shape: obround, cover: open}
+      - {id: bottom-pass-3, at: [239.38, 120.15], size: [75.88, 38.15], shape: obround, cover: open}
+      - {id: bottom-pass-4, at: [349.58, 120.15], size: [75.88, 38.15], shape: obround, cover: open}
+  left-designer:
+    face: left
+    size: {w: 254.95, h: 47.9}
+    panel:
+      decor:
+        - {id: rear-cover-plate, at: [0.0, 2.0], size: [2.0, 43.9], rx: 0, fill: '#8d9095', kind: cover}
+        - {id: rear-cover-lip-upper, at: [0.0, 2.0], size: [21.84, 2.0], rx: 0, fill: '#9a9da2', kind: cover}
+        - {id: rear-cover-lip-lower, at: [0.0, 43.9], size: [21.84, 2.0], rx: 0, fill: '#7d8084', kind: cover}
+        - {id: rear-wall-upper, at: [23.1, 4.91], size: [72.15, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: rear-wall-lower, at: [23.1, 40.47], size: [72.15, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: rear-base, at: [95.25, 4.91], size: [3.0, 38.1], rx: 0, fill: '#232527', kind: base}
+        - {id: neck-upper, at: [98.25, 4.91], size: [9.98, 2.54], rx: 0, fill: '#26282a', kind: slope}
+        - {id: neck-lower, at: [98.25, 40.47], size: [9.98, 2.54], rx: 0, fill: '#26282a', kind: slope}
+        - {id: slope-upper, at: [108.23, 3.4], size: [62, 2.5], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: slope-lower, at: [108.23, 42.0], size: [62, 2.5], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: plate, at: [170.98, 0], size: [3.04, 47.9], rx: 0, fill: '#232527', kind: base}
+        - {id: front-wall-upper, at: [174.02, 4.91], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: front-wall-lower, at: [174.02, 40.47], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: front-cover-plate, at: [252.95, 2.0], size: [2.0, 43.9], rx: 0, fill: '#8d9095', kind: cover}
+        - {id: front-cover-lip-upper, at: [233.11, 2.0], size: [21.84, 2.0], rx: 0, fill: '#9a9da2', kind: cover}
+        - {id: front-cover-lip-lower, at: [233.11, 43.9], size: [21.84, 2.0], rx: 0, fill: '#7d8084', kind: cover}
+  right-designer:
+    face: right
+    size: {w: 254.95, h: 47.9}
+    panel:
+      decor:
+        - {id: rear-cover-plate, at: [252.95, 2.0], size: [2.0, 43.9], rx: 0, fill: '#8d9095', kind: cover}
+        - {id: rear-cover-lip-upper, at: [233.11, 2.0], size: [21.84, 2.0], rx: 0, fill: '#9a9da2', kind: cover}
+        - {id: rear-cover-lip-lower, at: [233.11, 43.9], size: [21.84, 2.0], rx: 0, fill: '#7d8084', kind: cover}
+        - {id: rear-wall-upper, at: [159.7, 4.91], size: [72.15, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: rear-wall-lower, at: [159.7, 40.47], size: [72.15, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: rear-base, at: [156.7, 4.91], size: [3.0, 38.1], rx: 0, fill: '#232527', kind: base}
+        - {id: neck-upper, at: [146.72, 4.91], size: [9.98, 2.54], rx: 0, fill: '#26282a', kind: slope}
+        - {id: neck-lower, at: [146.72, 40.47], size: [9.98, 2.54], rx: 0, fill: '#26282a', kind: slope}
+        - {id: slope-upper, at: [84.72, 3.4], size: [62, 2.5], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: slope-lower, at: [84.72, 42.0], size: [62, 2.5], rx: 0, fill: '#2a2c2e', kind: slope}
+        - {id: plate, at: [80.93, 0], size: [3.04, 47.9], rx: 0, fill: '#232527', kind: base}
+        - {id: front-wall-upper, at: [23.68, 4.91], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: front-wall-lower, at: [23.68, 40.47], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: front-cover-plate, at: [0.0, 2.0], size: [2.0, 43.9], rx: 0, fill: '#8d9095', kind: cover}
+        - {id: front-cover-lip-upper, at: [0.0, 2.0], size: [21.84, 2.0], rx: 0, fill: '#9a9da2', kind: cover}
+        - {id: front-cover-lip-lower, at: [0.0, 43.9], size: [21.84, 2.0], rx: 0, fill: '#7d8084', kind: cover}
 configurations:
   base:
     kind: base
@@ -493,6 +629,13 @@ configurations:
       lay a cable in. The covers come with the duct, so this is an illustration and not a
       device type.
     views: {top: top-open, bottom: bottom-open, left: left-open, right: right-open}
+  designer-cover:
+    kind: example
+    description: >-
+      The same duct with the separately sold gray 49265-DC1 designer covers snapped on in place of
+      the black covers, one on each channel. The covers are a second purchase, so this is an
+      illustration and not a device type.
+    views: {top: top-designer, bottom: bottom-designer, left: left-designer, right: right-designer}
 datasheet:
   title: 'Product Specifications 491RU-HFx, 492RU-HFx, 49265-xxx - Versi-Duct Horizontal Cable Management System'
   url: https://leviton.com/content/dam/leviton/network-solutions/product_documents/product_specification/Leviton_491RU-HFx_492RU-HFx_49265-xxx_Versi-Duct_Horizontal_Cable_Management_System.pdf
