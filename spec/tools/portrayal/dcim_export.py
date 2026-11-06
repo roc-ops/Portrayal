@@ -63,7 +63,7 @@ import yaml
 
 from portrayal.artifacts import Dist, face_file
 
-from portrayal.manifest import view_parts, alias_names, config_airflow
+from portrayal.manifest import view_parts, alias_names, config_airflow, config_attrs
 from portrayal import manifest as _manifest
 from portrayal import optical_ports
 from portrayal.faces import POWER_FACES
@@ -811,8 +811,11 @@ def power_row(ref, pid):
 # PowerOutletTypeChoices values in both: netbox-community/netbox
 # netbox/dcim/choices.py at 64ce9e2d (TYPE_IEC_C19, TYPE_NEMA_520R) and
 # nautobot/nautobot nautobot/dcim/choices.py at 3edb1fca (the same two).
+#
+# AND THE NEMA 5-15R. `nema-5-15r` is the PowerOutletTypeChoices value of the
+# 5-15R in both, beside `nema-5-20r` in the same list.
 OUTLET_TYPES = frozenset({"dc-terminal", "other", "iec-60320-c13", "eaton-c39",
-                          "iec-60320-c19", "nema-5-20r"})
+                          "iec-60320-c19", "nema-5-15r", "nema-5-20r"})
 PART_OUTLET = {
     # ONE OUTPUT CIRCUIT OF A BREAKER PANEL, a BATT screw over an RTN screw: the
     # two poles of one circuit, so one outlet, as one feed is one power port.
@@ -829,15 +832,20 @@ PART_OUTLET = {
     # name it, so it is `eaton-c39` rather than `other`.
     "std/c13-outlet": "iec-60320-c13",
     "eaton/c39-outlet": "eaton-c39",
+    # A SERVER TECHNOLOGY HDOT Cx OUTLET, a hybrid of the C13 and C19 that takes a C14 or a
+    # C20. Neither target names it, so it is `other` with its label, as the P40 above is.
+    "servertech/hdot-cx-outlet": "other",
     # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
     # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
     "std/c19-outlet": "iec-60320-c19",
     "std/nema-5-20r": "nema-5-20r",
+    # A NEMA 5-15R, upstream's `nema-5-15r`.
+    "std/nema-5-15r": "nema-5-15r",
 }
 # The label an `other` outlet carries, so it says what to plug into it.
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
 # run on import, which test_tools_layout forbids).
-OUTLET_LABEL = {"amphenol-ns/output-p40": "P40"}
+OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx"}
 
 # ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
 #
@@ -1166,6 +1174,7 @@ NOT_A_DCIM_PORT = {
     # reading the labels Dell's own master prints between the jacks, and the four
     # placements now declare their speed. The entry had to go with it - a register
     # of parts that export nothing is wrong about one that does.
+    "opengear/sim-slot-4ff": "the 4FF SIM card slot of the CM8000's cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
     "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
 }
 
@@ -1219,6 +1228,7 @@ MGMT_NOT_A_DCIM_PORT = {
     ("std/rj45-ganged", "timing"): "the CSR180's stack-a-upper, which its own device marks "
                                    "`timing: unidentified` - there is no true type to give a jack "
                                    "nobody has identified",
+    ("std/rj45-ganged", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
 }
 MGMT_EXPORTED_ROLES = {"mgmt", "console", "aux"}
 
@@ -1785,7 +1795,7 @@ def comments_for(dev, cfg_name, cfg):
         lines.append("")
 
     facts = []
-    for section, vals in (dev.get("attrs") or {}).items():
+    for section, vals in config_attrs(dev, cfg).items():
         flat = flatten(vals)
         for k, v in flat.items():
             if isinstance(v, bool):
@@ -2112,7 +2122,11 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     if air:
         out["airflow"] = air
 
-    if dev.get("description"):
+    # A BUILD THAT SHOULD NOT READ AS THE BASE MODEL says so in its own
+    # `export-description`; any other build keeps the device's first sentence.
+    if cfg.get("export-description"):
+        out["description"] = fit(cfg["export-description"])
+    elif dev.get("description"):
         out["description"] = fit(first_sentence(dev["description"]))
 
     # Images, if this configuration has been rendered. front_image/rear_image are

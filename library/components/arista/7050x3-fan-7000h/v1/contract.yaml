@@ -1,0 +1,73 @@
+format: 1
+kind: module
+name: 7050x3-fan-7000h
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The 1RU hot-swap fan module of the Arista 7050CX3-32S and 7050SX3-48YC12, FAN-7000H-F (front-to-rear
+  airflow, red handle). The module has a honeycomb grille with a red release handle after it and a white
+  label tab at its right. A status lamp is at the bottom. Four of them fill the rear between the two
+  power supplies. The module is hot-swappable, and its release is the red handle.
+size: {w: 56.4, h: 38.6}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  FAN-7000H-F: {part: FAN-7000H-F}
+attrs:
+  airflow: front-to-back
+  role: fan
+provenance:
+  size: >-
+    estimated - read off the rear panel figure D-1 of the 7050 Series 1RU (Gen 3) Quick Start Guide
+    (DOC-00141-08). Figure D-1 (a 576 x 155 px raster whose chassis is 573 px between its edges, 1.302 px/mm over the
+    440 mm body) repeats the four modules at a pitch of 59.4 mm, each a grille 38.4 mm wide, a red handle and a white
+    label tab; figure D-2 (a 552 x 115 px raster, 1.248 px/mm) repeats them at 56.4 mm. The width is the smaller
+    pitch, so that the modules abut in D-2 and stand a few millimetres apart in D-1. The height is the 38.6 the
+    library gives other 1RU fan modules, read at 38.6 mm in the figure. One pixel is 0.8 mm. No document dimensions
+    the module.
+  part-number: >-
+    datasheet - the 7050X3 Series Data Sheet (03-0040-46, Sept 4, 2026), optional components and spares:
+    "FAN-7000H-F  Spare fan module for Arista 7050X3, 7060X, 7160 and 7280R Series 1RU switches (front-to-rear
+    airflow)", and "Fan Tray FAN-7000H-F/R" in the model comparison for the 7050CX3-32S and "FAN-7000H-F" for the
+    7050SX3-48YC12, with "Hot-swappable Fans 4 (N+1 redundant)".
+  airflow: >-
+    datasheet - the part number's "front-to-rear airflow". The guide, section 2.1, says a red handle marks an
+    air-exit module and a blue handle an air-inlet one, and figure D-1 draws red handles. The rear-to-front module,
+    FAN-7000H-R, is not modelled: no figure draws it.
+  face: >-
+    estimated. Figures D-1 and D-2 draw a dark module with a honeycomb grille, a red handle with a lighter release
+    after it and a white label tab at its right; the lettering on the tab and the legend under it are not legible and
+    are not drawn. The guide's appendix A (figure A-4) names the lamp the fan module status LED.
+  handle-finish: >-
+    The red of the handle is a field, `handle-finish`, default `#c0262b`, read off figure D-1.
+  power: >-
+    NOT STATED. Neither the quick start guide nor the data sheet gives a power draw for the FAN-7000H, so none is
+    written and the lint warning for a fan without one stands.
+states: [absent]
+elements:
+  grille: {at: [1.2, 3.2], size: [38.4, 29.4], class: vent}
+  handle: {at: [40.0, 3.2], size: [8.0, 29.4], class: handle}
+  status: {at: [2.8, 32.8], size: [5.0, 5.0], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#c0262b'}
+relief:
+  wall: '#3a3a36'
+  features:
+    - node: grille
+      vent: 14
+      confidence: estimated
+      source: >-
+        The grille is open and the rotor is not drawn, but no document gives a depth. 14 is the
+        order of what this library gives other 1RU fan modules.
+    - node: handle
+      out: 3.0
+      confidence: estimated
+      source: >-
+        The handle stands off the module face; how far is not dimensioned anywhere, so 3.0 is the order
+        of the library's other fan handles.
+skins: [default]
+body:
+  depth: 190
+  color: '#2e2b26'
+  footprint: {at: [0, 0], size: [56.4, 38.6]}
