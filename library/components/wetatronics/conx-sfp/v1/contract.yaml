@@ -1,0 +1,80 @@
+format: 1
+kind: module
+name: conx-sfp
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: sfp
+profile: networking
+description: >-
+  Wetatronics ConX-SFP, a console server in a 1G SFP housing. Its RJ45 jack
+  carries RS-232 serial, not Ethernet, and the module presents to the host
+  switch as a 1000BASE-LX optic.
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+size: {w: 13.55, h: 8.55, d: 47.50}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs:
+  model: ConX-SFP
+  role: console
+  media: rj45-serial
+  power-absent: not-published
+parts:
+  - {ref: generic/sfp-rj45@1, id: body, at: [0, 0]}
+provenance:
+  size: >-
+    borrowed - generic/sfp-rj45@1, the generic this wraps, whose own figures
+    are the sfp-module registry entry's (SFF-8432 Rev 5.2a Table 4-3). No
+    Wetatronics document or photograph gives a length, width or height of the
+    module, so these are the generic's numbers restated, not a reading.
+  head: >-
+    borrowed - the head outside the cage (13.20 high, 22.70 long) is the
+    generic's, from another maker's drawing. The one Wetatronics photograph
+    shows an RJ45 block wider and taller than the body behind it, which agrees
+    with the shape and gives no figure.
+  model: >-
+    datasheet - Wetatronics ConX-SFP data sheet, page 1 title. No part number
+    is printed.
+  role: >-
+    quick start - Wetatronics ConX-SFP Quick Start Guide, page 5, Pinout:
+    "The RJ45 connector provides either" one RS-232 serial port or two. The
+    jack is a serial console end, not an Ethernet one.
+  media: >-
+    quick start - the same page, pin table 1 to 8 (RX2 or CTS, spare, RX1, GND,
+    GND, TX1, PWR, TX2 or RTS); user manual page 33 gives the same table with
+    pin 2 as reserved I/O and pin 7 as a power output of at most 90 mA, off by
+    default. Read with the label up, pin 8 at the left. The jack serves either
+    one serial port with hardware flow control or two without (quick start
+    page 5; user manual page 33, the columns "Dual Port" and "Single Port +
+    Flow"); the two-port mode needs a Y splitter cable and is not carried as a
+    field. The pin table is not carried as a field, because no field holds one.
+  rate: >-
+    NOT WRITTEN AS A FIELD - the data sheet (page 1, "Standard 1G SFP module")
+    and user manual page 34 ("1 Gbps") give a 1G host side, the lowest rung of
+    the sfp ladder, so every cage that offers the generics offers this part.
+    A `rate: sfp` would change no cage's list.
+  host: >-
+    quick start page 6, "emulates a 1000BASE-LX SFP to the Network device";
+    user manual page 34, Appendix C, "1000BASE-LX compatible".
+  jack: >-
+    The jack is the generic's std/rj45-ganged@2, which is a bare Ethernet
+    jack. The maker states an RJ45 socket on the end and the photograph shows
+    no lamps; its look comes from the generic and is not drawn from this
+    maker's picture.
+  latch: >-
+    NOT STATED - no document describes a bail or latch, and the one photograph
+    shows none; a round pin at the lower corner of the RJ45 block is not
+    described. The generic draws none, and this wrapper adds none.
+  leds: >-
+    NOT STATED - the word LED appears in no held Wetatronics document and none
+    is visible in the photograph.
+  environment: >-
+    user manual page 36, Appendix C: operating temperature 0 to 50 C, storage
+    -20 to 70 C. No field holds either.
+  power: >-
+    not-published as a maximum - user manual page 36 states "Power Consumption
+    < 1W typical", host powered, and no maximum. A typical bound is not a
+    maximum, so no power-draw figure is written. The pin 7 output (90 mA, off
+    by default) is a supply the module offers, not its own draw.
+connection-points:
+  mate: {at: [6.775, 4.275], direction: front}
+skins: [default]
