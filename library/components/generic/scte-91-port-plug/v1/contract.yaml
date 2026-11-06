@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: scte-91-port-plug
+version: 1.0.0
+class: port
+mates: scte-91
+profile: networking
+description: >-
+  The sealing plug of an `scte-91` port, seen from the face: a hex head that a
+  1/2 inch socket or wrench turns. It ships in each external port of a cable
+  node. It comes out when a stinger or a fibre fitting goes in, and goes back
+  to seal a test port. Seats in an `scte-91` port at its own mate point.
+size: {w: 14.665, h: 12.7}
+size-confidence: {w: datasheet, h: datasheet}
+attrs: {connector: scte-91}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    datasheet - Entra Remote PHY Node EN8100 Installation and Operations
+    Guide (Vecima Networks, revision 14), section 8.1 step 2b, page 76: "remove
+    the port plug ... using a 1/2" socket or wrench", and Entra EN9000 -
+    Installation Guide (revision 12), section 7.1, page 46, the same words. A
+    socket or wrench is sized across the flats, so `h` is 12.7. `w` is the same
+    hex across its corners, 12.7 / cos 30 = 14.665 (derived). The hex is turned
+    corners left and right, as the figure on page 76 shows the plugs seen from
+    the face.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/f-type-plug@1: a `size.d` on a
+    component with no `behaviour` compiles to a pit behind the part's whole box.
+    What stands in front of the port is the relief's `head`.
+  head: >-
+    estimated - no held document gives the height of the plug's head, and the
+    figure on page 76 is a photograph with no scale. The head is drawn 6.0
+    proud of the port's presented plane. THE 6.0 IS THE ONE TO REVISIT against
+    a maker's drawing of the plug.
+  torque: >-
+    NOT STATED FOR A STINGER PORT. The guide gives 6 ft-lbs for the sealing plug
+    of an RF test port (section 9.3.5, page 102) and none for the plug of a
+    stinger port, so no torque is an attribute of this part.
+  axis: >-
+    derived - `mate` is the centre of the hex, (7.3325, 6.35).
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port plug.
+elements: {}
+relief:
+  features:
+    - node: head
+      out: 6.0
+      shape: true
+      color: '#9a9ea3'
+      confidence: estimated
+      source: >-
+        the head's height is not stated in any held document; see provenance.head
+connection-points:
+  mate: {at: [7.3325, 6.35], direction: front}
+skins: [default]

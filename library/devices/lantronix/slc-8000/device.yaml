@@ -1,0 +1,252 @@
+format: 1
+kind: device
+name: slc-8000
+version: 0.1.0
+maturity: draft
+manufacturer: Lantronix
+model: SLC 8000
+description: >-
+  Lantronix SLC 8000 advanced modular console manager, a 1U chassis that connects up to 48 RJ45 serial or USB
+  console ports to a network. The front has an LCD, a keypad, two USB ports, an RJ45 console port and a modem
+  jack. The rear has two network ports, three bays for I/O modules, and an AC power inlet. This model is the base
+  chassis without I/O modules; the three bays are not modelled.
+profile: networking
+provenance:
+  size:
+    confidence: datasheet
+    note: >-
+      Lantronix SLC 8000 data sheet (MPB-00009 Rev O), Physical: "30.5 x 43.8 x 4.4 cm (12 x 17.25 x 1.75 in), 1U".
+      The User Guide, Table 3-4, gives "1U, 1.75 in x 17.25 in x 12 in". The two agree. The width of 17.25 in is
+      438.15 mm, which is narrower than the 482.6 mm rack face, so it is taken as the body between the ears. The
+      sources do not say so in words. The data sheet gives 11.1 lb at most and the User Guide gives 12.1 lb with
+      48 serial ports, so no weight is recorded.
+  layout-source:
+    confidence: photo-measured
+    note: >-
+      Every position on the front and rear is read off the photographs in the User Guide: Figure 2-1 for the front
+      (580 px for the 438.15 mm body, 60 px for the 44.45 mm face, 1.32 px/mm across and 1.35 down) and Figure 2-2
+      for the rear (1157 px for the body across, 112 px for the face down, 2.64 px/mm across and 2.52 down). Both
+      are small figures, so each position is estimated to within a few millimetres, and the logo, read off its outline in the figure, to within about 10 mm. The User Guide has no
+      dimensioned drawing and no straight-on photograph.
+  front:
+    confidence: estimated
+    note: >-
+      User Guide, Figure 2-1 and Chapter 2, "Front Console Panel Ports": the LCD and keypad, two USB type A host
+      ports, one SD memory card slot, one RJ45 console port with an LED, and the RJ11 modem port. The Quick Start
+      Guide hardware overview names the same parts and an indicator LED. The photograph shows the LCD to the left
+      of the keypad, then the card slot, the two stacked USB ports, the console jack and the modem jack at the
+      right-hand end. The logo is at the left-hand end. The card slot is not drawn; the gap `sd-card-slot` says why.
+  usb:
+    confidence: datasheet
+    note: >-
+      User Guide, Table 3-4: "(2) ports, type A, host USB 2.0". The ports are drawn with the white USB 2.0 tongue.
+  console:
+    confidence: datasheet
+    note: >-
+      User Guide, Table 3-4: "(1) RJ45-type 8-pin connector (DTE)", RS-232C, 9600 baud by default. The Quick Start
+      Guide gives the pin assignments. The jack is the console jack, not an Ethernet jack.
+  modem:
+    confidence: estimated
+    note: >-
+      User Guide, Chapter 2: "One RJ11 modem port on the front panel". Use of it "requires installation of an
+      optional modem card". The photograph shows the jack, and the word MODEM printed above it. The jack is
+      drawn because the face carries it, and the gap `modem-card` says what is not known.
+  rear:
+    confidence: estimated
+    note: >-
+      User Guide, Figure 2-2 and Quick Start Guide section 1: dual network ports at the left, three I/O module bays
+      named Bay 1, Bay 2 and Bay 3, and the power inlet at the right, with a rocker switch. "Bay 1 is the slot next
+      to the Ethernet ports and Bay 3 is the slot beside the power supply module." The bays read about 112 mm
+      wide in Figure 2-2. The three bay windows are drawn as panel decor; no bay is modelled.
+  network:
+    confidence: datasheet
+    note: >-
+      Data sheet: "2 GbE (10/100/1000BT) ports on RJ45 or 2 SFP Fiber/Copper port". User Guide, Table 3-4: "(2)
+      10/100/1000 Base-T RJ45 Ethernet with LED indicators". This model draws the copper variant. The quick start
+      guide names the upper port as the one to connect.
+  interface-names:
+    confidence: datasheet
+    note: >-
+      Quick Start Guide, section 5: "Both of the SLC 8000 network ports (Ethernet 1 and Ethernet 2)". Section 2 says the
+      system interface shows an SFP port as Ethernet 1 or Ethernet 2. The guide does not say which jack is which, so the
+      upper jack is Ethernet 1, as the first jack it tells the user to connect.
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet: "AC model input (single/dual): 100-240 VAC, 50 to 60 Hz". User Guide, Table 3-4: "IEC 60320/C14".
+      The photograph shows one inlet and one rocker switch. The sources give "Less than 30W" (data sheet) and
+      "Less than 25W with 48 RS232 serial ports", "Less than 45W with 48 USB ports" (User Guide), which differ, so
+      no chassis draw is recorded.
+  ears:
+    confidence: estimated
+    note: >-
+      Data sheet: "Front-mid-rear mounting brackets". The Quick Start Guide and User Guide Figure 2-1 label the
+      bracket "Front-mid-rear Mounting Bracket", and the figure shows it at the front of the body as shipped. No
+      document gives a distance for any position, so none is written.
+attrs:
+  physical:
+    weight-note: 'data sheet 11.1 lb at most; User Guide 12.1 lb with 48 serial ports and 11.8 lb with 48 USB ports'
+  power:
+    input: ac
+  thermal:
+    cooling: convection
+  environmental:
+    operating-temp-c: '0 to 50'
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 438.15
+  height: 44.45
+  depth: 304.8
+  ru: 1
+  color: '#4b5a68'
+  ears:
+    positions:
+    - {name: flush, label: front, default: true}
+    - {name: mid, label: mid}
+    - {name: rear, label: rear}
+gaps:
+- what: sd-card-slot
+  scope: [front]
+  reason: needs-drawing
+  wanted: a registry key for a memory card slot and a part for the card that seats in it, drawn from a card dimension sheet.
+  note: >-
+    The front shows an SD and SDHC slot (User Guide, Table 3-4), about 22.7 x 3.7 mm on the photograph, an estimate. The slot
+    comes back as a part once the library has an `sd-card` interface and a card part.
+- what: modem-card
+  scope: [front]
+  reason: vendor-silent
+  wanted: a photograph of the front with the modem card out, and its part number on the unit.
+  note: >-
+    The User Guide says the RJ11 modem port needs the optional internal modem card (56KINTMODEM-01). The jack is
+    drawn on every build. No held document says whether the opening is present without the card.
+- what: indicator-led
+  scope: [front]
+  reason: needs-photo
+  wanted: a straight-on photograph of the front, and a table of what its LED means.
+  note: >-
+    Figure 2-1 and the Quick Start Guide label an "Indicator LED" that no photograph held resolves. It is not drawn.
+- what: io-modules
+  scope: [rear]
+  reason: needs-drawing
+  wanted: a dimensioned drawing of an I/O module, and a straight-on photograph of the rear.
+  note: >-
+    The rear has three I/O module bays; no document gives a module a size, so no bay or module is modelled. The three
+    dark windows are drawn as panel decor. The I/O Module Install Guide and User Guide Table 3-8 give the module types: a
+    16-port RJ45 module, a 16-port USB module, a 16-port Ethernet switch module and an 8-port RJ45 module for bay 1.
+- what: network-sfp-and-dc-variants
+  scope: [rear]
+  reason: needs-photo
+  wanted: a photograph of the rear of an SFP model and of a DC model.
+  note: >-
+    The chassis also ships with two SFP ports in place of the two RJ45 network ports, with a dual AC inlet, or
+    with dual DC inputs. No photograph of the DC inlet is held and none of the SFP rear at a usable size, so only
+    the copper network and single AC build is drawn.
+- what: envelope-faces-undetailed
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  wanted: photographs of the lid, the underside and both flanks, with the ear brackets off.
+  note: >-
+    The four faces draw the envelope only. The User Guide places the battery and modem door on the top and the
+    product label on the underside, and the Quick Start Guide says the sides carry air vents. The angled
+    photographs show a vent field on each side and the door at the right-hand rear of the top, but not at a size
+    that gives a position, so none is drawn.
+groups:
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the console jack and the modem jack on the front panel
+  network:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+  power:
+    term: Inlet
+    role: service
+    index-origin: 1
+  displays: {term: Display, role: indicator, index-origin: 1}
+  furniture: {term: Part, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 438.15, h: 44.45}
+    panel:
+      decor:
+      - {id: faceplate, at: [0.0, 0.0], size: [438.15, 44.45], fill: '#c4c7cb', kind: bezel}
+    silkscreen:
+    - {at: [45.0, 28.0], text: LANTRONIX, font-size: 10.0, anchor: middle, fill: '#2b2f36'}
+    - {at: [378.1, 20.5], text: USB, font-size: 1.8, anchor: middle, fill: '#2b2f36', for: usb-1}
+    - {at: [399.2, 20.5], text: CONSOLE, font-size: 1.8, anchor: middle, fill: '#2b2f36', for: console}
+    - {at: [421.9, 20.5], text: MODEM, font-size: 1.8, anchor: middle, fill: '#2b2f36', for: modem}
+    components:
+      placements:
+      - {ref: lantronix/slc-lcd@1, id: display, at: [86.9, 15.6], for: chassis, group: displays, rel-pos: 1}
+      - {ref: lantronix/slc-keypad@1, id: keypad, at: [201.0, 14.8], for: chassis, group: furniture, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-1, at: [372.1, 25.8], skin: usb2, group: usb, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-2, at: [372.1, 33.8], skin: usb2, group: usb, rel-pos: 2}
+      - {ref: std/rj45@2, id: console, at: [391.3, 26.7], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+      - {ref: common/rj11-jack@1, id: modem, at: [414.9, 26.7], group: mgmt, rel-pos: 2}
+  rear:
+    size: {w: 438.15, h: 44.45}
+    panel:
+      decor:
+      - {id: rear-plate, at: [0.0, 0.0], size: [438.15, 44.45], fill: '#4b5a68', kind: bezel}
+      - {id: io-window-1, at: [22.5, 0.5], size: [112.5, 43.4], fill: '#141517', kind: window}
+      - {id: io-window-2, at: [137.0, 0.5], size: [112.5, 43.4], fill: '#141517', kind: window}
+      - {id: io-window-3, at: [251.5, 0.5], size: [112.5, 43.4], fill: '#141517', kind: window}
+    silkscreen:
+    - {at: [11.7, 40.6], text: NETWORK, font-size: 1.8, anchor: middle, fill: '#e8ecef', for: [net-1, net-2]}
+    - {at: [11.7, 43.4], text: 10/100/1000, font-size: 1.6, anchor: middle, fill: '#e8ecef', for: [net-1, net-2]}
+    components:
+      placements:
+      - {ref: common/rj45-eth@1, id: net-1, at: [3.8, 3.0], group: network, rel-pos: 1, attrs: {speed: 1g}}
+      - {ref: common/rj45-eth@1, id: net-2, at: [3.8, 17.5], group: network, rel-pos: 2, attrs: {speed: 1g}}
+      - {ref: common/rocker-switch@1, id: power-switch, at: [376.5, 11.7], rotate: 90, for: inlet, group: power, rel-pos: 2}
+      - {ref: std/c14-inlet@1, id: inlet, at: [403.6, 12.2], group: power, rel-pos: 1}
+  top:
+    size: {w: 438.15, h: 304.8}
+    panel:
+      decor:
+      - {id: top-envelope, at: [0.0, 0.0], size: [438.15, 304.8], fill: '#4b5a68', kind: envelope}
+  bottom:
+    size: {w: 438.15, h: 304.8}
+    panel:
+      decor:
+      - {id: bottom-envelope, at: [0.0, 0.0], size: [438.15, 304.8], fill: '#4b5a68', kind: envelope}
+  left:
+    size: {w: 304.8, h: 44.45}
+    panel:
+      decor:
+      - {id: left-envelope, at: [0.0, 0.0], size: [304.8, 44.45], fill: '#4b5a68', kind: envelope}
+  right:
+    size: {w: 304.8, h: 44.45}
+    panel:
+      decor:
+      - {id: right-envelope, at: [0.0, 0.0], size: [304.8, 44.45], fill: '#4b5a68', kind: envelope}
+interfaces:
+- {physical: net-1, name: Ethernet 1}
+- {physical: net-2, name: Ethernet 2}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis with copper network ports, one AC inlet and no I/O modules. An illustration: no part number
+      lists a chassis without I/O modules.
+    source: >-
+      derived - the data sheet lists no part numbers, and the maker's product page lists chassis with their I/O
+      modules fitted, so no part number names this build.
+references:
+- title: >-
+    SLC 8000 Advanced Console Manager User Guide, 900-704-RBD-SLC-UG (July 2025)
+- title: >-
+    SLC 8000 Advanced Modular Console Manager data sheet, MPB-00009 Rev O (2023)
+- title: >-
+    SLC 8000 Quick Start Guide, 900-791-R Rev G (April 2023)
+- title: >-
+    SLC 8000 I/O Module Installation Guide, 900-722-R Rev C
