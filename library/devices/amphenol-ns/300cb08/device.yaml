@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 300cb08
-version: 2.0.5
+version: 2.1.0
 maturity: modelled
 manufacturer: Amphenol Network Solutions
 model: 300CB08
@@ -86,7 +86,9 @@ provenance:
       with a touch guard seated on it, a separate part that a configuration
       can take off. The populated
       example is an invented load to show the field working; the vendor
-      publishes no standard fill.
+      publishes no standard fill. `populated-guards-off` is the same load with
+      the touch guards removed so the ratings show: a view, not a part
+      number, and the vendor publishes no such fill either.
   ratings:
     confidence: datasheet
     note: >-
@@ -472,6 +474,67 @@ configurations:
       breaker-b6: amphenol-ns/breaker-1ru@1
       breaker-b7: amphenol-ns/breaker-1ru@1
       breaker-b8: amphenol-ns/breaker-1ru@1
+    bay-attrs:
+      breaker-a1: {rating: 60}
+      breaker-a2: {rating: 60}
+      breaker-a3: {rating: 50}
+      breaker-a4: {rating: 40}
+      breaker-a5: {rating: 30}
+      breaker-a6: {rating: 30}
+      breaker-a7: {rating: 20}
+      breaker-a8: {rating: 10}
+      breaker-b1: {rating: 60}
+      breaker-b2: {rating: 60}
+      breaker-b3: {rating: 50}
+      breaker-b4: {rating: 40}
+      breaker-b5: {rating: 30}
+      breaker-b6: {rating: 30}
+      breaker-b7: {rating: 20}
+      breaker-b8: {rating: 10}
+    component-attrs:
+      dip-a: {sw-1: down, sw-2: down, sw-3: down, sw-4: down, sw-5: down, sw-6: down, sw-7: down, sw-8: down}
+      dip-b: {sw-1: down, sw-2: down, sw-3: down, sw-4: down, sw-5: down, sw-6: down, sw-7: down, sw-8: down}
+  populated-guards-off:
+    kind: example
+    description: >-
+      The same sixteen breakers as the populated example with the cover that
+      ships on each one taken off, so every rating shows on its handle. An
+      invented spread of ratings; a view, not a part number and not an
+      orderable bundle.
+    bays:
+      breaker-a1: amphenol-ns/breaker-1ru@1
+      breaker-a2: amphenol-ns/breaker-1ru@1
+      breaker-a3: amphenol-ns/breaker-1ru@1
+      breaker-a4: amphenol-ns/breaker-1ru@1
+      breaker-a5: amphenol-ns/breaker-1ru@1
+      breaker-a6: amphenol-ns/breaker-1ru@1
+      breaker-a7: amphenol-ns/breaker-1ru@1
+      breaker-a8: amphenol-ns/breaker-1ru@1
+      breaker-b1: amphenol-ns/breaker-1ru@1
+      breaker-b2: amphenol-ns/breaker-1ru@1
+      breaker-b3: amphenol-ns/breaker-1ru@1
+      breaker-b4: amphenol-ns/breaker-1ru@1
+      breaker-b5: amphenol-ns/breaker-1ru@1
+      breaker-b6: amphenol-ns/breaker-1ru@1
+      breaker-b7: amphenol-ns/breaker-1ru@1
+      breaker-b8: amphenol-ns/breaker-1ru@1
+    occupants:
+      breaker-a1/guard: ''
+      breaker-a2/guard: ''
+      breaker-a3/guard: ''
+      breaker-a4/guard: ''
+      breaker-a5/guard: ''
+      breaker-a6/guard: ''
+      breaker-a7/guard: ''
+      breaker-a8/guard: ''
+      breaker-b1/guard: ''
+      breaker-b2/guard: ''
+      breaker-b3/guard: ''
+      breaker-b4/guard: ''
+      breaker-b5/guard: ''
+      breaker-b6/guard: ''
+      breaker-b7/guard: ''
+      breaker-b8/guard: ''
     bay-attrs:
       breaker-a1: {rating: 60}
       breaker-a2: {rating: 60}
