@@ -941,6 +941,33 @@ not know it still finds every field it read before. It says what the
 configuration is, not that a unit's art was checked: a build that draws like
 its default carries the default's art, with the gap its device declares.
 
+### What a configuration can state of its own
+
+A configuration takes two optional keys beside `power`:
+
+- `attrs`: the device's own sections and types (`attrs` at the top of the
+  manifest), holding only what this build states differently. A key it names
+  wins; the rest of its section, and every section it does not name, stays the
+  device's; it cannot remove a key the device states. `manifest.config_attrs`
+  is the one answer, and the DCIM export's list of facts in `comments` reads it.
+- `export-description`: a string of at most 200 characters, the description a
+  DCIM shows for that build's device type in place of the first sentence of the
+  device's. 200 is the exporter's own limit, so it is never cut.
+
+Neither is legal on a configuration whose `kind` is `example`, which never
+exports. A manifest without them is valid as it was, resolves to the device's
+`attrs` and exports the description it always did, so adding the keys to the
+format moves no existing export. They are new optional keys, so `format` is not
+raised.
+
+`configs[].attrs` in `<device>.configs.json` publishes a configuration's own
+keys, always an object and `{}` where it has none. The device's `attrs` stay at
+the top of the file for the rest. The drawing does not read it: a face is shared
+by every configuration that draws it, so a face's `data-*` values stay the
+device's. `configs[].attrs` is a new field, so `contract` stays 2: a reader that
+does not know it still finds every field it read before. `devices.json` and the
+comparable facts read the device only.
+
 ### What a compiled face says about rings and trays
 
 rack.json is derived from these attributes of the compiled faces, and a page
