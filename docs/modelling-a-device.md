@@ -1096,7 +1096,11 @@ holds two kinds of block, and each is placed in the face's lists by a
   `through`, so a switched, breakered strip needs no longhand outlet. Numbering
   and the moulding ids carry on across segments and banks. A bezel that is not
   the pitch repeated says so in the moulding's `by-pos` list, and the
-  expander stops on a key it does not know.
+  expander stops on a key it does not know. A strip whose outlets alternate
+  (a C13, then a C39) gives its segment a `pattern` in place of a `ref`: the
+  kinds in the order they repeat, each with the `shift` of its own seat from
+  the pitch. A bank may carry an `id-format` of its own, for a strip whose
+  sections are lettered and whose outlet ids carry the letter.
 
 What a block cannot say stays longhand beside it: the meter, the network
 interface, the breakers and anything else that is not repeated.
