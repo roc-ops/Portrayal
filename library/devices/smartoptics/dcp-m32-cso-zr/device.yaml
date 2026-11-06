@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-m32-cso-zr
-version: 4.0.3
+version: 4.0.4
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-M32-CSO-ZR+
@@ -122,12 +122,21 @@ provenance:
     note: >-
       datasheet POWER CONSUMPTION. Recorded on the contract rather than inferred from the chassis,
       which is a different product.
+  power-feed:
+    confidence: datasheet
+    note: >-
+      so-ds-dcp-m32-cso-zr-r1.2, ordering information and technical specifications - the shelf is
+      ordered with no PSU, DCP-2-PSU-AC-FB and DCP-2-PSU-DC-FB are listed beside it, and its fuses
+      are "100-127 VAC (3A)", "200-240 VAC (1.5A)" and "-40 to -72 VDC (7A)"; its supplies are
+      "single/dual feeding". Both feeds are stated because both bays take either supply; the user
+      manual's s2.3 says of the same two supplies that "Both types can be used simultaneously".
 
 chassis:
   width: 440
   height: 45
   depth: 510
   ru: 1
+  power: [ac, dc]
   color: '#1b1e21'
 gaps:
 - what: client-lamp-positions
