@@ -749,7 +749,9 @@ export function looseReason(end, facts) {
     if (facts.dcPanel) return `${end.path} is on the ${facts.dcPanel} panel; give view "${facts.dcPanel}"`;
     if (facts.side) return `${end.path} is on the ${facts.side} of the device, and a cable end can be given on the front or rear only`;
     if (!h) return facts.part ? `${end.path} is ${facts.part}, which takes no plug or lug the library knows` : `${end.path} is not on this panel`;
-    const leaf = end.path.slice(h.path.length + '/module/'.length);
+    // (a holder that is a cage names the port inside what it holds: `bay-1/module/clip2-occupant/rj45` is `rj45`)
+    const leaf = end.path.startsWith(`${h.path}-occupant/`) ? end.path.slice(h.path.length + '-occupant/'.length)
+      : end.path.slice(h.path.length + '/module/'.length);
     // a part whose poles are a DC port's: the port is the end to give
     if (h.part && facts.part && !facts.onView && facts.dcGive)
       return facts.dcGive.length

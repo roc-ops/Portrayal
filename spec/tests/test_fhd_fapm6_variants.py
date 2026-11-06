@@ -55,7 +55,7 @@ def test_the_rj45_panel_has_six_ports_p1_to_p6_in_the_six_openings():
     jack = _load("std/rj45@2")
     assert jack["class"] == "port" and jack["interface"] == "rj45"
     clips = base["parts"]
-    clip = _load("common/keystone-clip@2")["size"]
+    clip = _load(clips[0]["ref"])["size"]
     for p, c in zip(doc["parts"], clips):
         assert p["ref"] == "std/rj45@2", p
         # the housing lies wholly inside the opening its clip would fill
