@@ -210,7 +210,7 @@ test('a quarter-turned item is an outline: one solid, no tray, no ring, and a no
   near(solids[0].box.x0, -c.h / 2, 'centred across the opening');
   near(solids[0].box.y0, box.y0, 'on the rolled box'); near(solids[0].box.y1, box.y1, 'on the rolled box');
   assert.deepEqual(S.traysOf(r, ctx), []);
-  assert.deepEqual(F.frameNotices(r, G.chassisOf), ['Mq is rolled a quarter turn: it is fitted by its rolled box and drawn and routed as an outline, since how it mounts that way is not described yet.']);
+  assert.deepEqual(F.frameNotices(r, G.chassisOf), ['Mq is rolled a quarter turn: it is fitted by its rolled box and drawn turned in the elevation; its 3D solid and its cables are an outline, since how it mounts that way is not described yet.']);
   assert.deepEqual(F.frameNotices(roll(r, 'i1', 180), G.chassisOf), []);
 });
 

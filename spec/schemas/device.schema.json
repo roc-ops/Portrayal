@@ -549,6 +549,10 @@
          "type": "boolean",
          "description": "the bare string `behind` as a key: the flanges fold back behind a body as wide as the rack, so the face is the part. `{behind: true}` stands L43 down as the bare string does."
         },
+        "none": {
+         "type": "boolean",
+         "description": "the part has no ears at all: it is not bolted to the posts and carries no flange, because it stands between them on another part's brackets (a drip tray or a baffle). `{none: true}` draws no generic ear and no screw heads at the rails, in 2D or 3D. Absent or false, the device draws as it always did. Unlike `behind`, it says nothing about the face being as wide as the rack."
+        },
         "h": {
          "type": "number",
          "exclusiveMinimum": 0,
@@ -562,6 +566,59 @@
         "color": {
          "type": "string",
          "description": "the ears' colour, a fill as `chassis.color` is written, when they are not silver. The generic L-bracket ear is drawn in it; absent, it is silver (#c8cacc), because most network gear has bare or plated steel ears even when its faceplate is black. A colour and not a dimension: the device lock hashes it with the rest of `ears` under chassis surface, so stating or changing it is a patch."
+        },
+        "rolled": {
+         "type": "array",
+         "minItems": 1,
+         "description": "THE BRACKETS THAT HOLD THE DEVICE WHEN IT IS ROLLED A QUARTER TURN in a rack (`roll: 90` or `270`), which the rack elevation draws round its turned body and which no other drawing reads. Stood on its side a device is held by a bracket against each of its edges, not by ears of its own: a bar across the rack and an ear on each post, standing on the bar's lower edge. They belong to the rack, so they are drawn the same at 90 and at 270 and do not turn with the device. A device that states none draws none.",
+         "items": {
+          "type": "object",
+          "required": [
+           "id",
+           "side",
+           "bar-h",
+           "length",
+           "ear-h",
+           "ear-w"
+          ],
+          "additionalProperties": false,
+          "properties": {
+           "id": {
+            "$ref": "#/$defs/segment"
+           },
+           "side": {
+            "enum": [
+             "below",
+             "above"
+            ],
+            "description": "which edge of the turned body the bar lies against: `below` puts its upper edge on the body's lower edge, `above` its lower edge on the body's upper edge"
+           },
+           "bar-h": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "millimetres, the height of the bar across the rack"
+           },
+           "length": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "millimetres from the outer edge of one ear to the outer edge of the other, centred on the rack; at least the distance between the hole columns for the ears to bolt to both posts"
+           },
+           "ear-h": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "millimetres, the height of each ear, from the bar's lower edge up"
+           },
+           "ear-w": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "millimetres each ear stands in from the bracket's outer end"
+           },
+           "color": {
+            "type": "string",
+            "description": "the bracket's colour, a fill as `chassis.color` is written; absent, the generic ear's silver"
+           }
+          }
+         }
         },
         "positions": {
          "type": "array",
