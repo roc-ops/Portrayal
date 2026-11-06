@@ -2242,7 +2242,8 @@ export function slotResolver({bays = [], cages = [], bayRef = (p, b) => b.defaul
     const slot = (Array.isArray(c.cages) ? c.cages : []).find(g => g.id === name);
     if (!slot) return backEntry(path, parent, name, c);
     const host = parent.endsWith('/module') ? null : entryAt(parent);
-    if (host?.isCage && !(host.bores || []).includes(name)) return null;
+    // (a cage's own bores are its slots; so are the cages of a part seated in a cage that presents its own interface)
+    if (host?.isCage && !host.chained && !(host.bores || []).includes(name)) return null;
     return {...slot, id: path, key: slotKey(path), isCage: true};
   }
   // A SLOT ON A MODULE'S BACK (B3 Task 10b): one step under the module in a

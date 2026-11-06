@@ -1,0 +1,45 @@
+format: 1
+kind: component
+name: qfx5210-dc-plug
+version: 1.0.0
+class: port
+mates: juniper-qfx5210-dc-header-3
+profile: power
+description: >-
+  The cable connector of the QFX5210 DC power cable, wired, seen from the wire side as seated. A grey body at
+  the outline of the header it seats in. One insulated wire enters each of its three ways, numbered 1, 2 and 3
+  from the top as the supply numbers its cells. It seats in a `juniper-qfx5210-dc-header-3` header at its own
+  mate point. It carries one wire per contact, not one cable.
+size: {w: 10.9, h: 29.9}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the header it seats in, juniper/qfx5210-dc-header@1, 10.9 by 29.9. No document held draws or
+  measures a cable connector for this supply.
+attrs: {media: qfx5210-dc, connector: DC power cable connector, positions: 3}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    NO DOCUMENT HELD SHOWS A CABLE CONNECTOR FOR THIS SUPPLY: the QFX5210 Switch Hardware Guide (Juniper
+    Networks) lists "DC power source cables (provided)" and shows the supply's faceplate with nothing seated in
+    it (Figures 19 and 32). THE PART IS A STAND-IN FOR THE CABLE CONNECTOR, drawn as the half that seats in
+    juniper/qfx5210-dc-header@1 and no more.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    estimated - one wire to each of the three ways, drawn as plain grey discs because no document states a wire
+    colour or which pole a way carries. The guide says only that there is no standard colour coding for DC power
+    cables and that the site's colours apply.
+  far-end: >-
+    NOT DRAWN. The other ends of the wires land on the site's DC source, which is not this supply's.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the header, so the part draws a
+    plan outline only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [5.2, 15.2], direction: front}
+  wire-1: {at: [5.2, 9.7], direction: front}
+  wire-2: {at: [5.2, 15.2], direction: front}
+  wire-3: {at: [5.2, 20.4], direction: front}
+skins: [default]

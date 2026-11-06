@@ -342,6 +342,8 @@ def test_every_pluggable_media_the_library_uses_is_a_pluggable_cage():
         "mini-usb-b",   # the Catalyst 9300's USB console jack takes a cable, not a module
         "stackwise-480",  # Cisco's own stacking connector, which takes a stacking cable
         "stackpower",     # the Catalyst 9300's power-sharing connector, which takes a StackPower cable
+        "coax-sma",       # an SMA antenna jack a cable plug seats in, not a module cage (the cellular antenna connectors of the CM8000)
+        "rj45-serial",    # an RJ45 serial console jack a cable plug seats in, not a module cage (the managed serial ports of a console server)
     }
     used = set()
     for p in sorted((LIB / "devices").glob("*/*/device.yaml")):
