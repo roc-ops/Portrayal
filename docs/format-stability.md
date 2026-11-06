@@ -331,6 +331,14 @@ reader that does not know it finds every field it read before.
 - **The DCIM export** of a device that states `poe-pd-standard` gains one sentence in the
   comments: `PoE powered device: 802.3at (runs on 802.3af), at most 25 W at the PD
   input.` A device with a `ceiling` mount reads `Ceiling-mounted; not rack-mounted.`
+- **`chassis.mount`** gains `strand` (a box that clamps to the support strand or cable of
+  an aerial plant) and `pedestal` (one that mounts on a pedestal or rod), and keeps
+  `wall`. Every file valid before stays valid and `format` is still 1. Both values are
+  additive and one-way: from the first device on `main` that states one, it cannot be
+  renamed or removed without a format change, and the served copy of the device schema
+  is republished in the same release as that device. A device with a `strand` mount reads
+  `Strand-mounted; not rack-mounted.` and one with a `pedestal` mount `Pedestal-mounted;
+  not rack-mounted.`
 - **The DCIM export** writes the input rating on the input power port's
   `description` and in the comments, with the derived class; an outlet's
   description names the breaker it runs `through` and its `lines`
@@ -900,7 +908,7 @@ device has them:
   kit, or whose default kit does not resolve, has no `kit` key. A reader that
   does not know `kit` is unaffected, and `format` is still 1.
 - `mount`: the device's `chassis.mount`, present only when it is not `rack`. It can be
-  `ceiling`, added to the schema's values without moving `format`; a reader that does not
+  `ceiling`, `strand` or `pedestal`, added to the schema's values without moving `format`; a reader that does not
   know a value treats the device as not racked, as it does any other.
 - `shell`: `chassis.shell`, `sheet` for a body that is a sheet and not a box.
 - `capacity`: `{"count", "basis", "media"}`, the cable capacity the vendor

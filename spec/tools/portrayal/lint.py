@@ -475,7 +475,7 @@ RULES = {
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)",
              "A module is the same metal in every chassis, so two bays reserving different sizes for it show the card not fitting its slot in one of them.",
              WARNING),
-    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`), a `rack-face` part or a `rack-side` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall`, `ceiling` or `desktop` states none (error); `chassis.full-depth`, `chassis.overhang`, `chassis.ears` and `chassis.kits` appear only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit",
+    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`), a `rack-face` part or a `rack-side` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall`, `ceiling`, `strand`, `pedestal` or `desktop` states none (error); `chassis.full-depth`, `chassis.overhang`, `chassis.ears` and `chassis.kits` appear only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit",
              "Without a stated mount, a wall-mounted or desktop box exports as a 1U rack device, and someone planning a rack makes room for equipment that never goes in it.",
              MIXED),
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is",
@@ -8716,7 +8716,8 @@ def lint_device_mount(path, data):
     elif bolts_to_rack and "ru" not in ch:
         warn(path, "L125", "a rack device states `ru`. If this box is not racked, "
                           "say how it is installed with `chassis.mount` "
-                          "(`din-rail`, `wall`, `ceiling`, `desktop`)")
+                          "(`din-rail`, `wall`, `ceiling`, `strand`, `pedestal`, "
+                          "`desktop`)")
     elif not bolts_to_rack and "ru" in ch:
         err(path, "L125", f"`chassis.mount` is {mount!r}, so `ru` {ch['ru']!r} "
                           "describes a rack this box is not in - drop it")
