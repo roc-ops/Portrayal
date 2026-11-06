@@ -196,8 +196,12 @@ def test_no_supply_or_fan_states_a_power_figure_the_documents_do_not():
     for ref in ("digi/ezps-ac", "digi/ez-psu-dc", "digi/ez-sysfan", "digi/core-lte-modem"):
         c = contract(ref)
         keys = list(c) + list(c.get("attrs") or {})
-        assert not [k for k in keys if k.startswith("power") or "watt" in k or "draw" in k], ref
+        figures = [k for k in keys if k != "power-absent"
+                   and (k.startswith("power") or "watt" in k or "draw" in k)]
+        assert not figures, ref
         assert "airflow" not in (c.get("attrs") or {}), ref
+    # the supply that states an input and no output says so, rather than staying silent
+    assert contract("digi/ez-psu-dc")["attrs"]["power-absent"] == "not-published"
 
 
 @pytest.mark.parametrize("name", DEVICES)
