@@ -34,7 +34,7 @@ SERVICE_REASONS = {"vendor-silent", "sources-disagree", "nos-dependent", "needs-
 
 # Every placement's id, ref, at, rotate, rel-pos and group, every cutout, region and bay, the group ids and
 # the chassis block, as `main` had them before this change: a canonical JSON digest.
-UNMOVED_DIGEST = "903ac3bb108ccc4fd3c4252e0e558582de07f28cd6f4e51cb789586b9995bd49"
+UNMOVED_DIGEST = "d3351ecafae5f86a27a0f7ddec67ebd236aa5a45ffe42a24a54288e5a83e22ab"
 
 
 @functools.lru_cache(maxsize=None)

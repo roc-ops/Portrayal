@@ -696,6 +696,7 @@ PART_POWER = {
     "edgecore/dcs201-dc-header": "other",
     "edgecore/amx-3200-dc-header": "other",
     "edgecore/agr560-dc-header": "other",
+    "edgecore/ais800-64-dc-header": "other",
     # THE DCP-2-PSU-DC-FB'S DC POWER CONNECTOR IS A THREE-CELL PLUGGABLE CONNECTOR THE MANUAL DOES NOT NAME THE PART OF.
     # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
     "smartoptics/dcp-2-dc-header": "other",
@@ -776,6 +777,7 @@ POWER_LABEL = {
     "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
     "edgecore/amx-3200-dc-header": "DC power connector (3-pin)",
     "edgecore/agr560-dc-header": "DC power connector (2-socket)",
+    "edgecore/ais800-64-dc-header": "DC power connector (6-socket)",
     "smartoptics/dcp-2-dc-header": "DC power connector (3-cell)",
     "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
@@ -1191,6 +1193,7 @@ NOT_A_DCIM_PORT = {
     # of parts that export nothing is wrong about one that does.
     "opengear/sim-slot-4ff": "the 4FF SIM card slot of the CM8000's cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
     "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
+    "vertiv/sd-card-slot": "the full-size SD card slot of the ACS8000; a card slot, not a port, and no device-type field holds a card slot",
 }
 
 # THE MANAGEMENT CLUSTER'S PORTS THAT DO NOT REACH A DCIM, AND WHY (#384).
@@ -1244,6 +1247,7 @@ MGMT_NOT_A_DCIM_PORT = {
                                    "`timing: unidentified` - there is no true type to give a jack "
                                    "nobody has identified",
     ("std/rj45-ganged", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
+    ("common/rj45-ganged-lamped", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
 }
 MGMT_EXPORTED_ROLES = {"mgmt", "console", "aux"}
 
