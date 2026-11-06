@@ -1,0 +1,50 @@
+format: 1
+kind: kit
+name: rail-180-395
+version: 1.0.0
+description: >-
+  ZPE Systems RAIL-180-395, a pair of fixed rails for a four-post rack, 18 to 39.5 inches deep.
+  Piece A, red, is screwed to the unit. It slides into a rear bracket chosen for the rack's
+  depth: B (blue), C (green) or D (yellow). The kit replaces the rack mount ears that come with the
+  unit and is sold separately. Eight pieces are in the box.
+motion: fixed
+parts:
+  - {ref: zpe/rail-180-395-a@1, id: rail-a, count: 2}
+  - {ref: zpe/rail-180-395-b@1, id: bracket-b, count: 2}
+  - {ref: zpe/rail-180-395-c@1, id: bracket-c, count: 2}
+  - {ref: zpe/rail-180-395-d@1, id: bracket-d, count: 2}
+configurations:
+  - id: a-b
+    racks: [4-post]
+    parts: [rail-a, bracket-b]
+    depth: [457.2, 635.0]
+  - id: a-c
+    racks: [4-post]
+    parts: [rail-a, bracket-c]
+    depth: [584.2, 787.4]
+  - id: a-d
+    racks: [4-post]
+    parts: [rail-a, bracket-d]
+    depth: [787.4, 1003.3]
+provenance:
+  depth: >-
+    ZPE Systems, Fixed Rail Mounting Kit For 4-Post Racks (RAIL-180-395), November 18, 2024, page
+    2 and the ordering table on page 3: for a Nodegrid Serial Console (the S and the R) 18 to 25
+    inches with A and B, 23 to 31 with A and C, 31 to 39.5 with A and D. The ordering table
+    prints the same figures. The kit lists other ranges for the Serial Console Plus and the Net
+    SR (20 to 25, 25 to 31, 32 to 39.5); they are the Plus's and are not these configurations'.
+    Inches are converted at 25.4 mm. The bands overlap at 23 to 25 inches, as printed.
+  older-notice: >-
+    The end-of-life notice for the retired rails gives different edges for the older kits
+    (RAIL-18-39: 25 to 30 and 30 to 39 inches). It is dated December 2025 and covers kits the
+    maker has retired, so the newer data sheet's figures are written. See the order's questions.
+  contents: >-
+    The datasheet's ordering table: "8 pieces included", a pair of each of A, B, C and D. Which
+    document names the screws (M3 or M4) is page 3 step 1; screws are hardware and are not parts.
+gaps:
+  - what: part-dimensions
+    scope: [rail-a, bracket-b, bracket-c, bracket-d]
+    reason: needs-drawing
+    wanted: >-
+      A dimensioned drawing of each piece. The sketch on page 1 gives the length of each (565.0,
+      125.0, 256.0 and 475.0 mm) and no section, so each part carries a placeholder envelope.
