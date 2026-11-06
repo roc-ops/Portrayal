@@ -126,8 +126,6 @@ def test_the_six_faces_describe_the_chassis_box(dev):
 
 
 def test_the_device_is_addressable():
-    import sys
-    sys.path.insert(0, str(SPEC / "tools"))
     from portrayal import capability as C
 
     data = yaml.safe_load(DEVICE.read_text())
