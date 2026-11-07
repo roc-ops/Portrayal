@@ -47,8 +47,8 @@ provenance:
     IMD-5M at the lower right. They are drawn as marks in the skin.
   lcd: >-
     photo-measured - the screen reads 148 by 162 px in Figure 5.2, 26 by 28 mm. It is a touchscreen; the
-    on-screen menu and BACK buttons are not keys. `kind: pixel` and no `characters`: no row or column count is
-    stated.
+    on-screen menu and BACK buttons are not keys. The maker words it "a 128 by 128 touchscreen" and states no row,
+    column or character count, so it is drawn as a plain screen and not as a character display.
   unnamed-parts: >-
     NOT DRAWN AS PARTS: Figure 5.2 shows a grey socket with a network symbol above it between the serial
     jack and the USB port (about 8 by 10 mm), a small trapezoid socket under the USB port (callout 5,
@@ -67,7 +67,7 @@ groups:
   status-leds: {term: LED, role: indicator, index-origin: 1}
   controls: {term: Button, role: management, index-origin: 1}
 elements:
-  lcd: {at: [68.3, 7.5], size: [25.9, 28.3], class: display, kind: pixel}
+  lcd: {at: [68.3, 7.5], size: [25.9, 28.3]}
 parts:
   - {id: eth1, ref: common/rj45-eth@1, at: [14.2, 21.4], group: ethernet, attrs: {media: rj45, speed: 1g}}
   - {id: eth2, ref: common/rj45-eth@1, at: [30.4, 21.4], group: ethernet, attrs: {media: rj45, speed: 1g}}
