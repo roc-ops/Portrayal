@@ -153,6 +153,12 @@ provenance:
     MOD400 consumption-model line card.' Cisco adds that 'The consumption-model MPAs can
     only be used only with consumption-model line cards', so the A9K-MOD400-CM carrier
     takes the -CM MPAs and not this one.
+  groups: >-
+    install guide - the Cisco ASR 9000 Series Aggregation Services Router Ethernet Line Card Installation Guide, its Ethernet Line Card and MPA comparison table, which gives
+    the port count and cage of each adapter (SFP+); the speed is the one the adapter's own
+    name and the guide's title for it print ('10GE Modular Port Adapter'). ROLE: `traffic`, the work the adapter is
+    bought for. Port numbering: the guide numbers a card's ports 0, 1, 2 and so on, which is
+    `index-origin: 0`.
 elements:
   led-p0:
     at: [26.95, 23.32]
@@ -346,13 +352,19 @@ relief:
 body:
   depth: 170.18
   color: '#b9bec4'
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
 parts:
-  - {ref: std/sfp@1, id: p0, at: [12.3, 20.05], rotate: 90}
-  - {ref: std/sfp@1, id: p1, at: [12.3, 34.31], rotate: 90}
-  - {ref: std/sfp@1, id: p2, at: [12.3, 48.59], rotate: 90}
-  - {ref: std/sfp@1, id: p3, at: [12.3, 62.87], rotate: 90}
-  - {ref: std/sfp@1, id: p4, at: [12.3, 88.42], rotate: 90}
-  - {ref: std/sfp@1, id: p5, at: [12.3, 102.7], rotate: 90}
-  - {ref: std/sfp@1, id: p6, at: [12.3, 116.97], rotate: 90}
-  - {ref: std/sfp@1, id: p7, at: [12.3, 131.24], rotate: 90}
+  - {ref: std/sfp@1, id: p0, group: sfp-plus, at: [12.3, 20.05], rotate: 90}
+  - {ref: std/sfp@1, id: p1, group: sfp-plus, at: [12.3, 34.31], rotate: 90}
+  - {ref: std/sfp@1, id: p2, group: sfp-plus, at: [12.3, 48.59], rotate: 90}
+  - {ref: std/sfp@1, id: p3, group: sfp-plus, at: [12.3, 62.87], rotate: 90}
+  - {ref: std/sfp@1, id: p4, group: sfp-plus, at: [12.3, 88.42], rotate: 90}
+  - {ref: std/sfp@1, id: p5, group: sfp-plus, at: [12.3, 102.7], rotate: 90}
+  - {ref: std/sfp@1, id: p6, group: sfp-plus, at: [12.3, 116.97], rotate: 90}
+  - {ref: std/sfp@1, id: p7, group: sfp-plus, at: [12.3, 131.24], rotate: 90}
 skins: [default]

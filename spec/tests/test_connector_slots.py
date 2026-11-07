@@ -172,7 +172,10 @@ def test_the_connector_registry_is_not_vacuous():
                          # the G-type test points and the stereo-jack RS-232 port of the CH3000 modules
                          "g-type", "g-type-female", "stereo-jack",
                          # the input of the Ubiquiti USP-RPS redundant power system
-                         "ubiquiti-usp-rps"}
+                         "ubiquiti-usp-rps",
+                         # the I/O module bay of the Lantronix SLC 8000: a device bay states it
+                         # as its `interface`, so no part presents it
+                         "slc-io-module"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}

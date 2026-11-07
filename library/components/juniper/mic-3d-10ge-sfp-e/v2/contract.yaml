@@ -7,13 +7,6 @@ behaviour: fills
 profile: networking
 description: >-
   Juniper 1G/10G Ethernet MIC with SFP+ (10 ports, one PIC). MIC form: the MIC's own 168.8 x 29.2 plate, photo-measured (#261).
-unplaced: >-
-  no carrier in this library takes it. Tables 11 and 12 list it (24.2) under MPC2E-3D-NG,
-  MPC2E-3D-NG-Q, MPC3E-3D-NG and MPC3E-3D-NG-Q only, and Table 10 has no row for it; the
-  carriers in this library that could take it are the base MPC1E, MPC2E and MPC3E SKUs, and roc-
-  ops/Portrayal#417 narrowed each to its own column of the Interface Module Reference MIC/MPC
-  compatibility tables (Tables 10-12), none of which takes it. Modelling an NG carrier as its
-  own part would seat it.
 attrs:
   model: MIC-3D-10GE-SFP-E
   power-draw-max-w: 45
@@ -77,3 +70,11 @@ size-notes: >-
   The guides' MIC rows (6.25 x 6.8 x 1.25 in, the axes assigned differently in different books) do not
   dimension the face and are not used. Until 2.0.0 this was the 168 x 27 'window', an estimate read
   off the carrier.
+# The @1 of this part is gone from the library. A rack file that names it
+# is read as this one: the ids of its parts, its ports and their names are the same.
+supersedes:
+  - ref: juniper/mic-3d-10ge-sfp-e@1
+    # The signature was re-recorded because the SFP+ cage's accepted list has since widened by one
+    # part, and everything the retired major accepted is still accepted.
+    signature: sha256:d6b9675af14ea32016e8eb2e3d5beabc0a2208cd4170aea72f51052b3714eaa0
+    from: 6b4139323a19

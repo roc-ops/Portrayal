@@ -134,6 +134,12 @@ provenance:
     datasheet - c78-735809 Table 3, same row: 28 oz (0.7 kg). Cisco gives every MPA the
     same envelope and a different weight, so the weight is the only physical figure that
     distinguishes them.
+  groups: >-
+    install guide - the Cisco ASR 9000 Series Aggregation Services Router Ethernet Line Card Installation Guide, its Ethernet Line Card and MPA comparison table, which gives
+    the port count and cage of each adapter (XFP); the speed is the one the adapter's own
+    name and the guide's title for it print ('10GE Modular Port Adapter'). ROLE: `traffic`, the work the adapter is
+    bought for. Port numbering: the guide numbers a card's ports 0, 1, 2 and so on, which is
+    `index-origin: 0`.
 elements:
   led-p0:
     at: [21.62, 11.23]
@@ -206,7 +212,13 @@ relief:
 body:
   depth: 170.18
   color: '#b9bec4'
+groups:
+  xfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: xfp, speed: 10g}
 parts:
-  - {ref: std/xfp@1, id: p0, at: [10.9, 26.04], rotate: 90}
-  - {ref: std/xfp@1, id: p1, at: [10.9, 93.38], rotate: 90}
+  - {ref: std/xfp@1, id: p0, group: xfp, at: [10.9, 26.04], rotate: 90}
+  - {ref: std/xfp@1, id: p1, group: xfp, at: [10.9, 93.38], rotate: 90}
 skins: [default]

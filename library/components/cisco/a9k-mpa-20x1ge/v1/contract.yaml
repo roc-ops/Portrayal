@@ -172,6 +172,12 @@ provenance:
     datasheet - c78-735809 Table 3, same row: 34 oz (0.96 kg). Cisco gives every MPA the
     same envelope and a different weight, so the weight is the only physical figure that
     distinguishes them.
+  groups: >-
+    install guide - the Cisco ASR 9000 Series Aggregation Services Router Ethernet Line Card Installation Guide, its Ethernet Line Card and MPA comparison table, which gives
+    the port count and cage of each adapter (SFP); the speed is the one the adapter's own
+    name and the guide's title for it print ('GE Modular Port Adapter'). ROLE: `traffic`, the work the adapter is
+    bought for. Port numbering: the guide numbers a card's ports 0, 1, 2 and so on, which is
+    `index-origin: 0`.
 elements:
   status:
     at: [15.97, 68.76]
@@ -198,25 +204,31 @@ relief:
 body:
   depth: 170.18
   color: '#b9bec4'
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp, speed: 1g}
 parts:
-  - {ref: std/sfp-ganged@1, id: p0, at: [6.5, 5.64], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p1, at: [21.44, 5.64], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p2, at: [6.5, 20.21], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p3, at: [21.44, 20.21], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p4, at: [6.5, 34.77], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p5, at: [21.44, 34.77], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p6, at: [6.5, 49.59], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p7, at: [21.44, 49.59], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p8, at: [6.5, 64.16], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p9, at: [21.44, 64.16], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p10, at: [6.5, 87.78], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p11, at: [21.44, 87.78], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p12, at: [6.5, 102.34], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p13, at: [21.44, 102.34], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p14, at: [6.5, 117.19], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p15, at: [21.44, 117.19], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p16, at: [6.5, 131.75], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p17, at: [21.44, 131.75], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p18, at: [6.5, 146.29], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p19, at: [21.44, 146.29], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p0, group: sfp, at: [6.5, 5.64], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p1, group: sfp, at: [21.44, 5.64], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p2, group: sfp, at: [6.5, 20.21], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p3, group: sfp, at: [21.44, 20.21], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p4, group: sfp, at: [6.5, 34.77], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p5, group: sfp, at: [21.44, 34.77], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p6, group: sfp, at: [6.5, 49.59], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p7, group: sfp, at: [21.44, 49.59], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p8, group: sfp, at: [6.5, 64.16], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p9, group: sfp, at: [21.44, 64.16], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p10, group: sfp, at: [6.5, 87.78], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p11, group: sfp, at: [21.44, 87.78], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p12, group: sfp, at: [6.5, 102.34], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p13, group: sfp, at: [21.44, 102.34], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p14, group: sfp, at: [6.5, 117.19], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p15, group: sfp, at: [21.44, 117.19], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p16, group: sfp, at: [6.5, 131.75], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p17, group: sfp, at: [21.44, 131.75], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p18, group: sfp, at: [6.5, 146.29], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p19, group: sfp, at: [21.44, 146.29], rotate: 90}
 skins: [default]

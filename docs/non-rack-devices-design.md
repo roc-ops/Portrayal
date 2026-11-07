@@ -348,7 +348,8 @@ it cannot:
 Once a device on `main` uses them, these cannot be renamed or removed without
 a format change:
 
-- the `mount` value `ceiling` (option A);
+- the `mount` value `ceiling` (option A), and later `strand` and `pedestal`
+  (section 8);
 - the key names `poe-pd-standard`, `poe-pd-standard-min`, `poe-pd-class` and
   `poe-pd-max-w`;
 - the enum spellings `802.3af`, `802.3at` and `802.3bt`;
@@ -379,3 +380,16 @@ a format change:
   `library/devices/juniper/ex2300-24p/device.yaml`.
 - Not held: IEEE 802.3. No class table is cited; each place that would rely on
   one says "to verify against IEEE 802.3".
+
+## 8. Later: `strand` and `pedestal`
+
+An aerial-plant node lists "Strand, Pedestal, Wall" as its mounting options. Two
+values join `ceiling` on the same model, and `wall` stays: `strand` is a box that
+clamps to the support strand or cable of an aerial plant, and `pedestal` one that
+mounts on a pedestal or rod. Nothing in section 2 changes but the lists: L125's
+catalogue text and its warning name them, `MOUNT_PROSE` writes "Strand-mounted; not
+rack-mounted." and "Pedestal-mounted; not rack-mounted.", `MOUNTS` gains a row each
+(tags "strand mount" and "pedestal mount", which need a shelf or bracket like the
+others), and `NOT_RACKED` in `test_mount_type.py` takes both. The values are additive
+and one-way, and the served device schema is republished with the first device that
+states one. No device states either value in the change that adds them.
