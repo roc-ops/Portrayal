@@ -35,10 +35,11 @@ Counted on `main`:
   `rack.cables` has it. `freePorts` (`kit/rack/queries.js`) asks it. A cable
   stored in a space, a building or the site is not in `rack.cables`, so a rack
   opened on its own shows that port free.
-- The ring and duct fill (`capacityOver` in `kit/rack/route.js`) counts the
-  cables whose route passes the part, by the diameter of the cable's media
-  (`DIAMETERS`, and the `od_mm` of `spec/schemas/cable-types.yaml`). A cable
-  that is not in the rack file is not counted.
+- The ring and duct fill (`fill` in `kit/rack/route.js`) adds the area of each
+  cable whose route passes the part, from the diameter of the cable's media
+  (`DIAMETERS`, and the `od_mm` of `spec/schemas/cable-types.yaml`), against
+  `FILL_LIMIT`. `capacityOver` counts cables against a part's stated capacity.
+  A cable that is not in the rack file is not counted by either.
 
 The issue's "Done when" is four lines. The last section of this note says which
 decision makes each decidable.
@@ -63,6 +64,9 @@ decision makes each decidable.
   `end` is a `oneOf` of the rack end, the device end and the point end. A key
   added to the rack end therefore passes a version-0 reader, and a fourth whole
   form does not.
+- **What this note read.** The two design notes named above, the three schemas,
+  the kit files named in this note, and the `form` provenance of `apc/ar201` and
+  `apc/ar203a`. No cabinet manual was read.
 - **The frame of reference for a hosted box** is the device's own: `x` from its
   left, `y` up from its bottom, `z` back from its front (section 7.1).
 - **The open frames have no roof.** `apc/ar201` is two upright rails joined by a
@@ -131,8 +135,8 @@ is made.
 A brush, a knockout and a cutout differ in what they cost a cable. A `brush`
 and a `cutout` are open to a cable. A `knockout` is closed until it is punched,
 so a route ends at a knockout only when it is named (section 3). The note does
-not say how big a cable's lead may be through any of them: no source held states
-an allowance, and the kit would not guess one.
+not say how big a cable's lead may be through any of them: no source read for this note
+states an allowance, and the kit would not guess one.
 
 **What the schema, the lint and the catalogue do when it is built** (a later
 order, section "The first build slice"): the `kind` enum refuses an undeclared
@@ -420,7 +424,7 @@ Each carries the proposal.
    end (proposed; needs no version) or a portless exit end as version 1 of the
    site file (one-way).
 10. **Which products state `top` in the first slice?** The two APC frames
-    (proposed), all open frames, or the library's frames that have a held
+    (proposed), all open frames, or the library's frames that cite a
     datasheet. The count of version bumps differs: 2, 10 or fewer.
 11. **Is the first slice the key alone, or the key and the kit together?** The key
     alone (proposed): the schema republish is the one-way step and is smaller
