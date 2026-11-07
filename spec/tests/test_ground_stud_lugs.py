@@ -131,10 +131,11 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # face, the guide's "ground connectors", 6 -> 10 on 3 -> 5 devices.
 # The Cisco C9300-24P, C9300-24U and C9300-48U each place the same two, 10 -> 16 on 5 -> 8 devices.
 # The Cisco C9300-24S and C9300-48S each place the same two, 16 -> 20 on 8 -> 10 devices.
+# The Eaton EPBZ77 places one common/ground-stud@1, its inner ground stud, 11 -> 12 on 11 -> 12 devices.
 CENSUS = {
     "common/ground-lug@1": (31, 22),
     "common/ground-screw@1": (20, 10),
-    "common/ground-stud@1": (11, 11),
+    "common/ground-stud@1": (12, 12),
     CASA: (1, 1),
 }
 # juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
@@ -457,9 +458,10 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     assert all(n > 0 and d > 0 for n, d in got.values())
     # 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
     # 59 -> 63 with the Cisco C9300-24S and C9300-48S's two ground screws each
-    assert sum(n for n, _ in got.values()) == 63
-    # 42 -> 44 with the Cisco C9300-24S and C9300-48S
-    assert len({where for where, _, _ in placed}) == 44
+    # 63 -> 64 with the Eaton EPBZ77's ground stud
+    assert sum(n for n, _ in got.values()) == 64
+    # 42 -> 44 with the Cisco C9300-24S and C9300-48S, 44 -> 45 with the Eaton EPBZ77
+    assert len({where for where, _, _ in placed}) == 45
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -504,7 +506,8 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
     # every placement of the census but the Casa terminal's one
     # 52 -> 58 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
     # 58 -> 62 with the Cisco C9300-24S and C9300-48S's two ground screws each
-    assert seen == 62
+    # 62 -> 63 with the Eaton EPBZ77's ground stud
+    assert seen == 63
 
 
 @pytest.mark.heavy

@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: tripplite-cord-l5-30p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA L5-30P locking plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of an Eaton Tripp Lite series 30 A metered rack PDU. It is
+  10 ft of cord that ends in a NEMA L5-30P locking plug. The cord leaves the foot
+  of the front face through a rounded strain relief. The part is drawn as the
+  front face shows it; the cord and plug beyond it are not.
+size: {w: 19.4, h: 27.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {plug: nema-l5-30p, cord-length-ft: 10}
+provenance:
+  size: >-
+    estimated - the front view of the Tripp Lite PDUMV30 submittal drawing
+    (201003014C, page 2, a vector sheet read as a 300 dpi raster at 1.478 px per
+    mm, from its own 1617.44 overall) draws the strain relief as a loop, about
+    19.4 across the strip and 27 along it. The drawing gives no dimension for it
+    and the reading is good to about 1.5, so the size is an estimate. A
+    dimensioned detail of the strain relief would settle it.
+  cord: >-
+    drawing - detail C of the same drawing draws the cord leaving the strain
+    relief to the side and the plug beyond it. The part is drawn as the strain
+    relief's loop, and the cord's own diameter is not stated by any held
+    document.
+  plug: >-
+    datasheet - the Tripp Lite PDUMV30 submittal drawing: "Input Connector
+    L5-30P", "Cord Length 10 ft." and detail E, the L5-30P twist-lock plug face.
+    The cord is permanently attached. The plug has no part of its own, so
+    nothing here draws it.
+  not-drawn: >-
+    THE CORD BEYOND THE STRAIN RELIEF AND THE PLUG ARE NOT DRAWN: the far end of a
+    cord is not a part (docs/connectors-power-design.md section 7). This part stands
+    for the power input a DCIM records, a NEMA L5-30P power port.
+elements:
+  relief: {at: [0, 0], size: [19.4, 27.0], class: inlet}
+skins: [default]
