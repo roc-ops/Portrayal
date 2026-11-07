@@ -198,6 +198,11 @@ def test_the_forty_fibrain_refs_of_1046_are_redirected():
     assert got == want and len(want) == 40, sorted(set(want) ^ set(got))
 
 
+def test_the_retired_juniper_mic_is_redirected():
+    got = {s["ref"]: new for new, s in pairs() if s["ref"].startswith("juniper/")}
+    assert got["juniper/mic-3d-10ge-sfp-e@1"] == "juniper/mic-3d-10ge-sfp-e@2"
+
+
 def test_no_redirect_names_a_ref_the_library_still_has():
     live = {f"{r}@{p.parent.name[1:]}" for r, p, _ in libdata.components()}
     assert [s["ref"] for _, s in pairs() if s["ref"] in live] == []
