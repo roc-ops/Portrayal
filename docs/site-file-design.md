@@ -369,7 +369,9 @@ rack end is reserved** for #1299. Version 0's rack end requires a port
 (`item`, `path`, `view`); a cable that runs to a rack and ends at its exit,
 with no port, is not a version-0 end. If #1299 needs one, it decides whether
 that is an additive end form or version 1 of this file. `entries` is not
-defined here.
+defined here. A form for it is proposed in
+[rack-entries-design.md](rack-entries-design.md): an optional `exit` key on the
+existing rack end, which needs no version.
 
 ## 9. Extension blocks and unknown keys
 

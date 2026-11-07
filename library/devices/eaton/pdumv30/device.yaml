@@ -1,0 +1,382 @@
+format: 1
+kind: device
+name: pdumv30
+version: 0.1.0
+maturity: modelled
+manufacturer: Eaton
+model: PDUMV30
+description: >-
+  Eaton Tripp Lite series local metered PDU, 0U. A 1617 mm aluminium strip that hangs on two toolless
+  mounting buttons beside a rack. It takes a single-phase 120 V feed through a fixed 10 ft cord that ends
+  in a NEMA L5-30P (24 A, 2.88 kW). It feeds 24 NEMA 5-15/20R outlets in two separately breakered load
+  banks of twelve. Between the banks are two two-digit meters, one for each bank. It has no switch and
+  no network port.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S SUBMITTAL DRAWING. The Tripp Lite PDUMV30 submittal drawing (201003014C,
+      2010, page 2) draws the front, the side and the rear, with detail A to E. Its views are vector,
+      and every position was read off a 300 dpi render of page 2: 1.478 px per mm, from the strip's 2391
+      px between its end lines against the drawing's own 1617.44 (and 55 mm across), so a reading is good
+      to about 0.7 mm. The pitch of the outlets is not dimensioned: it is measured, and reads 40.95 between
+      the 12 boxes of a bank. Page 1's isometric names the banks and the callouts (A the meters, B the
+      outlets, C the breakers) and is the second reading for which bank is which. No photograph of any
+      face is held. The Tripp Lite single-phase stencil preview draws the strip dark grey with black outlets,
+      which is a diagram and not a photograph, so every colour is unchecked.
+  mount:
+    confidence: drawing
+    note: >-
+      `rack-side`, the library's way to say a part stands beside an upright, with the two toolless buttons
+      on its back (the drawing's rear view and detail A). `ru: 37` is the height it runs, 1617.44 / 44.45
+      = 36.4 rounded up; no source sells it by rack units. The removable mounting brackets (detail D)
+      and the removable cord retention brackets (detail C) are in the box and are not drawn; the side
+      view's comb of slots on the front is the retention bracket. Which side, and front or rear, is a
+      lab placement's to say.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - page 2: 1617.44 [63.68] along the strip (front view), 55 [2.17] across, 43.5 [1.71] deep
+      (side view), and 81.60 [3.21] over the cord retention bracket on the front. Page 1 and the SKU give
+      63.75 in long (1619.3) and the SKU 2.19 in wide (55.6); the 63.75 and the 2.19 are the rounded figures,
+      and the 3.75 in the SKU and page 1 call the depth or length matches no dimension on page 2 (it is
+      the 81.60 plus the buttons, about 95.3, on the likeliest reading, which no source states). The body
+      stays the dimensioned 55 by 43.5. Weight 8 lb (3.63 kg), the SKU and page 1. Material aluminium,
+      the SKU ("Durable Metal Case" on page 1).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - page 2 front view, y from the top end and across from the face's left edge, 55 across
+      and centred 27.5. Bank 2 is the upper one: its 12 outlet boxes are 28.4 square at x 14.2, the first
+      39.2 from the top end and then every 40.95. The two meters follow, the first from 584.4 and the
+      second from 663.6, each 21.6 across at x 16.9. Bank 1 is bank 2 moved down 723.2 (its first box
+      at 762.4). Two breaker plates, about 39 by 43, lie at 1472.0 and 1517.3 with the breakers at their
+      centres. The cord's strain relief is a loop about 19.4 across and 27 along at the foot, centred
+      25.5 across and 1594.5 down, with the cord leaving it to the side. Eight small screws are drawn,
+      a pair at 1252.5, a pair at 1346.6, a pair at 1357.4 and a pair at 1451.5, each about 7.4 across
+      at x 17.3 and 38.2, and four plate screws about 5.0 across at x 9.7 and 46.0, at 545.4 and 735.0
+      along the strip, on the edges of the meter block. The drawing prints no legends: no outlet numeral,
+      no bank mark and no breaker name appears on page 2.
+  outlets:
+    confidence: drawing
+    note: >-
+      drawing - "5-15/20 OUTLET" on page 2 and "(24) 5-20R", "OUTPUT RECEPTACLES 5-15/20R" on the SKU.
+      The library holds one part for the 5-15/20R strip's face, std/nema-5-20r@1, which takes a 5-15P
+      and a 5-20P alike. The outlets are drawn with the T slot to the left and the earth hole down, as
+      page 2 draws them. THE UNIT'S OWN NUMBERS ARE NOT KNOWN: no document held prints an outlet number,
+      so the outlets are named outlet-1 to outlet-24 from the top, which is this model's numbering and
+      not the unit's (gaps: outlet-numbers).
+  banks:
+    confidence: drawing
+    note: >-
+      drawing - page 1 labels the outlets "B (BANK 1)" and "B (BANK 2)", the meters "A (BANK 1)" and "A
+      (BANK 2)" and the breakers "C (BANK 1)" and "C (BANK 2)"; the isometric puts Bank 1 at the cord
+      end. So the lower bank, nearest the cord, is bank 1 and the upper bank 2, each with the meter beside
+      it and the breaker the callout names. Which of the two breaker plates is which is read from the
+      order of the callouts, the lower one being bank 1 (an estimate). The SKU: "Two 20A breakers protect
+      12 outlets each".
+  meters:
+    confidence: drawing
+    note: >-
+      drawing - two meters, "2 Load Meters" on page 1, each a two-digit readout between two screws, with
+      the SKU's "Set of 2 digital current meters ... for Bank 1 (20A max) and Bank 2 (20A max)". Each
+      is eaton/tripplite-bank-meter@1. Colours are unchecked.
+  breakers:
+    confidence: drawing
+    note: >-
+      drawing - each plate carries a push-to-reset breaker drawn as a round button in a square bezel.
+      The part is common/breaker-push-reset@1, a class stand-in with its own estimates. The rating is
+      the SKU's 20 A; the unit is single-phase, so each breaker feeds its 12 outlets alone.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear view and detail A: two toolless mounting buttons on the centre line, 31.22 [1.23]
+      from each end and 1555 [61.22] apart (31.22 + 1555 + 31.22 = 1617.44, the strip's length). The removable
+      mounting brackets the view draws (detail D) are not drawn.
+  sides:
+    confidence: drawing
+    note: >-
+      drawing - the side view draws the body 43.5 deep with the removable brackets and the retention comb
+      on it and nothing built into the metal, so both sides are plain faces. The standing PDU's right
+      side is the one the drawing shows.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet and drawing - "Input Connector L5-30P", "Cord Length 10 ft." (page 1), "NEMA L5-30P" (SKU),
+      and detail E, the twist-lock plug face. The cord is attached. No power-port type of the two targets
+      is held for an L5-30P, so `input-plug` is `other`, as the export writes it. 120 V single-phase,
+      "Voltage 100-125V" and "30A" maximum capacity on page 1, agency de-rated to 24 A continuous (SKU).
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - the SKU: "Local metered", two meters that read each bank's current, and no outlet switching.
+      The finest level metered is the bank, so `metering-scope: branch` and `outlet-switching: false`.
+  dcim:
+    confidence: datasheet
+    note: >-
+      the input is one power port, other (NEMA L5-30P), and each outlet a power outlet fed by it, `nema-5-20r`
+      through its bank's breaker. No `feed_leg` is written: a single-phase PDU is on whatever leg its
+      plug is on.
+attrs:
+  physical: {length-mm: 1617.44, weight-kg: 3.63, construction: aluminium}
+  power:
+    input-ac: 120 V single-phase, 24 A continuous (agency de-rated, 30 A maximum capacity), 50/60 Hz
+    input-plug: other
+    input-cord: fixed
+    input-phase: single
+    input-voltage-v: 120
+    input-current-a: 24
+    plug-rating-a: 30
+    capacity-kw: 2.88
+    capacity-scope: >-
+      the load the PDU can hand on (SKU, "2.88kW (120V) / 24A total capacity"); it is not what the PDU
+      draws itself, which no document held states
+    output-voltage: 120 V
+    output-rating: 24 A total; 20 A per load bank; 16 A per outlet
+    breakers: two 20 A, one per load bank
+    frequency: 50/60 Hz
+  environmental: {operating-temp: 0 to 40 C (32 to 104 F), storage-temp: -30 to 50 C (-22 to 122 F), humidity: 0
+      to 95 % non-condensing, altitude: 0 to 3000 m (0 to 10000 ft)}
+  management: {metering-scope: branch, outlet-switching: false, metering: 'load current in amps for each
+      bank, on the two meters'}
+  compliance: {certifications: UL 62368-1; NOM; RETIE, product-compliance: RoHS; FCC Class A}
+chassis: {width: 55, height: 1617.44, depth: 43.5, ru: 37, mount: rack-side, color: '#2e2f31', airflow: passive,
+  weight-kg: 3.63}
+gaps:
+- what: outlet-numbers
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    no held document prints an outlet number, and page 2's views carry no legend (searched: both pages
+    of the drawing, the SKU, the owner's manual, which names no model, and the stencil preview). The outlets
+    are named outlet-1 to outlet-24 from the top by this model.
+  wanted: a photograph of the face, or the owner's manual for this model.
+- what: pitch-undimensioned
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    the outlet pitch, 40.95, is measured off the drawing and no dimension states it. The lower block's
+    534.69 and the meter block's 189.21 on page 2 are the only dimensions along the face.
+  wanted: a dimension of the outlet pitch.
+- what: colours
+  scope:
+  - front
+  - rear
+  - left
+  - right
+  reason: needs-photo
+  note: >-
+    no photograph is held and no document states a colour. The strip is drawn dark grey as the stencil
+    preview draws it and the meter digits are the green of the sibling meter; both are unchecked.
+  wanted: a photograph of the strip.
+- what: width-and-depth
+  scope:
+  - left
+  - right
+  - top
+  - bottom
+  reason: sources-disagree
+  note: >-
+    the SKU gives 2.19 in wide and 3.75 in deep, page 1 gives 3.75 x 63.75 x 2.25 in, page 2 dimensions
+    the strip 55 [2.17] wide and 43.5 [1.71] deep, and 81.60 [3.21] over the retention bracket. The body
+    stays the dimensioned 55 by 43.5.
+  wanted: the figure the 3.75 in measures.
+- what: stand-in-parts
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    the breakers are the class part common/breaker-push-reset@1 and the strain relief a loop 19.4 by 27
+    read off the drawing; no document gives a part number or a dimension for either.
+  wanted: a dimensioned detail of the breaker plate and the strain relief.
+- what: rear-bracket-holes
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    the drawing's rear view draws a column of small holes on the centre line below each button, where
+    the removable mounting brackets fix (detail D). They are shown and not dimensioned: no hole size or
+    pitch is given and the drawing resolves them to about 0.7 mm, so none is placed.
+  wanted: a dimensioned detail of the bracket holes.
+- what: wordmark
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    the Tripp Lite stencil preview draws a wordmark on the face above the breakers. No drawing or photograph
+    gives its size or place, so it is not drawn.
+  wanted: a photograph of the face.
+groups:
+  outlets:
+    term: Outlet
+    role: traffic
+    index-origin: 1
+    mixed: >-
+      the PDU's 24 NEMA 5-15/20R outlets, outlet 1 to outlet 12 on bank 2 at the top, outlet 13 to outlet
+      24 on bank 1
+  meters: {term: Display, role: indicator, index-origin: 1}
+  breakers: {term: Breaker, role: service, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 55, h: 1617.44}
+    panel:
+      decor:
+      - {id: moulding-1, at: [13.8, 39.2], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-2, at: [13.8, 80.15], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-3, at: [13.8, 121.1], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-4, at: [13.8, 162.05], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-5, at: [13.8, 203.0], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-6, at: [13.8, 243.95], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-7, at: [13.8, 284.9], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-8, at: [13.8, 325.85], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-9, at: [13.8, 366.8], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-10, at: [13.8, 407.75], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-11, at: [13.8, 448.7], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-12, at: [13.8, 489.65], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-13, at: [13.8, 762.4], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-14, at: [13.8, 803.35], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-15, at: [13.8, 844.3], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-16, at: [13.8, 885.25], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-17, at: [13.8, 926.2], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-18, at: [13.8, 967.15], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-19, at: [13.8, 1008.1], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-20, at: [13.8, 1049.05], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-21, at: [13.8, 1090.0], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-22, at: [13.8, 1130.95], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-23, at: [13.8, 1171.9], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: moulding-24, at: [13.8, 1212.85], size: [28.4, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
+      - {id: breaker-plate-2, at: [8.1, 1472.0], size: [39.2, 43.3], rx: 1.5, fill: '#1d1e20', kind: breaker-plate}
+      - {id: breaker-plate-1, at: [8.1, 1517.3], size: [39.2, 42.6], rx: 1.5, fill: '#1d1e20', kind: breaker-plate}
+      - {id: screw-1, at: [13.55, 1248.8], size: [7.4, 7.4], rx: 3.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-2, at: [34.5, 1248.8], size: [7.4, 7.4], rx: 3.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-3, at: [13.55, 1342.9], size: [7.4, 7.4], rx: 3.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-4, at: [34.5, 1342.9], size: [7.4, 7.4], rx: 3.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-5, at: [13.55, 1353.7], size: [7.4, 7.4], rx: 3.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-6, at: [34.5, 1353.7], size: [7.4, 7.4], rx: 3.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-7, at: [13.55, 1447.8], size: [7.4, 7.4], rx: 3.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-8, at: [34.5, 1447.8], size: [7.4, 7.4], rx: 3.7, fill: '#1f2022', kind: screw-head}
+      - {id: plate-screw-1, at: [7.2, 542.9], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: plate-screw-2, at: [43.5, 542.9], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: plate-screw-3, at: [7.2, 732.5], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: plate-screw-4, at: [43.5, 732.5], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+    components:
+      placements:
+      - {id: outlet-1, ref: std/nema-5-20r@1, at: [14.5, 39.9], rotate: 180, group: outlets, rel-pos: 1,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-2, ref: std/nema-5-20r@1, at: [14.5, 80.85], rotate: 180, group: outlets, rel-pos: 2,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-3, ref: std/nema-5-20r@1, at: [14.5, 121.8], rotate: 180, group: outlets, rel-pos: 3,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-4, ref: std/nema-5-20r@1, at: [14.5, 162.75], rotate: 180, group: outlets, rel-pos: 4,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-5, ref: std/nema-5-20r@1, at: [14.5, 203.7], rotate: 180, group: outlets, rel-pos: 5,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-6, ref: std/nema-5-20r@1, at: [14.5, 244.65], rotate: 180, group: outlets, rel-pos: 6,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-7, ref: std/nema-5-20r@1, at: [14.5, 285.6], rotate: 180, group: outlets, rel-pos: 7,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-8, ref: std/nema-5-20r@1, at: [14.5, 326.55], rotate: 180, group: outlets, rel-pos: 8,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-9, ref: std/nema-5-20r@1, at: [14.5, 367.5], rotate: 180, group: outlets, rel-pos: 9,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-10, ref: std/nema-5-20r@1, at: [14.5, 408.45], rotate: 180, group: outlets, rel-pos: 10,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-11, ref: std/nema-5-20r@1, at: [14.5, 449.4], rotate: 180, group: outlets, rel-pos: 11,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-12, ref: std/nema-5-20r@1, at: [14.5, 490.35], rotate: 180, group: outlets, rel-pos: 12,
+        fed-by: input, through: breaker-2}
+      - {id: outlet-13, ref: std/nema-5-20r@1, at: [14.5, 763.1], rotate: 180, group: outlets, rel-pos: 13,
+        fed-by: input, through: breaker-1}
+      - {id: outlet-14, ref: std/nema-5-20r@1, at: [14.5, 804.05], rotate: 180, group: outlets, rel-pos: 14,
+        fed-by: input, through: breaker-1}
+      - {id: outlet-15, ref: std/nema-5-20r@1, at: [14.5, 845.0], rotate: 180, group: outlets, rel-pos: 15,
+        fed-by: input, through: breaker-1}
+      - {id: outlet-16, ref: std/nema-5-20r@1, at: [14.5, 885.95], rotate: 180, group: outlets, rel-pos: 16,
+        fed-by: input, through: breaker-1}
+      - {id: outlet-17, ref: std/nema-5-20r@1, at: [14.5, 926.9], rotate: 180, group: outlets, rel-pos: 17,
+        fed-by: input, through: breaker-1}
+      - {id: outlet-18, ref: std/nema-5-20r@1, at: [14.5, 967.85], rotate: 180, group: outlets, rel-pos: 18,
+        fed-by: input, through: breaker-1}
+      - {id: outlet-19, ref: std/nema-5-20r@1, at: [14.5, 1008.8], rotate: 180, group: outlets, rel-pos: 19,
+        fed-by: input, through: breaker-1}
+      - {id: outlet-20, ref: std/nema-5-20r@1, at: [14.5, 1049.75], rotate: 180, group: outlets, rel-pos: 20,
+        fed-by: input, through: breaker-1}
+      - {id: outlet-21, ref: std/nema-5-20r@1, at: [14.5, 1090.7], rotate: 180, group: outlets, rel-pos: 21,
+        fed-by: input, through: breaker-1}
+      - {id: outlet-22, ref: std/nema-5-20r@1, at: [14.5, 1131.65], rotate: 180, group: outlets, rel-pos: 22,
+        fed-by: input, through: breaker-1}
+      - {id: outlet-23, ref: std/nema-5-20r@1, at: [14.5, 1172.6], rotate: 180, group: outlets, rel-pos: 23,
+        fed-by: input, through: breaker-1}
+      - {id: outlet-24, ref: std/nema-5-20r@1, at: [14.5, 1213.55], rotate: 180, group: outlets, rel-pos: 24,
+        fed-by: input, through: breaker-1}
+      - {id: meter-2, ref: eaton/tripplite-bank-meter@1, at: [16.9, 584.4], group: meters, rel-pos: 1,
+        for: chassis, description: the load meter of bank 2 (the upper bank)}
+      - {id: meter-1, ref: eaton/tripplite-bank-meter@1, at: [16.9, 663.6], group: meters, rel-pos: 2,
+        for: chassis, description: the load meter of bank 1 (the lower bank)}
+      - {id: breaker-2, ref: common/breaker-push-reset@1, at: [19.45, 1486.45], group: breakers, rel-pos: 1,
+        description: the 20 A push-to-reset breaker of bank 2 (the upper bank)}
+      - {id: breaker-1, ref: common/breaker-push-reset@1, at: [19.45, 1531.15], group: breakers, rel-pos: 2,
+        description: the 20 A push-to-reset breaker of bank 1 (the lower bank)}
+      - {id: input, ref: eaton/tripplite-cord-l5-30p@1, at: [15.8, 1581.0], group: power-input, rel-pos: 1}
+    regions:
+    - id: bank-2
+      label: Load bank 2, the upper bank - outlets 1 to 12, on breaker 2
+      at: [14.2, 39.2]
+      size: {w: 28.4, h: 491.0}
+    - id: bank-1
+      label: Load bank 1, the lower bank - outlets 13 to 24, on breaker 1
+      at: [14.2, 762.4]
+      size: {w: 28.4, h: 491.0}
+  rear:
+    size: {w: 55, h: 1617.44}
+    components:
+      placements:
+      - {id: button-1, ref: eaton/tripplite-mounting-button@1, at: [15.15, 18.87], group: mounting, rel-pos: 1}
+      - {id: button-2, ref: eaton/tripplite-mounting-button@1, at: [15.15, 1573.87], group: mounting,
+        rel-pos: 2}
+  top:
+    size: {w: 55, h: 43.5}
+    empty: >-
+      no source draws the top end: the drawing's three views show it only as the end of the body, with
+      no feature on it.
+  bottom:
+    size: {w: 55, h: 43.5}
+    empty: >-
+      no source draws the bottom end as a face: the cord leaves the front, near the foot, and the drawing's
+      side view shows the end as the end of the body.
+  right:
+    size: {w: 43.5, h: 1617.44}
+    empty: >-
+      the drawing's side view shows a plain body with the removable brackets on it, which are not drawn,
+      and nothing built into the metal.
+  left:
+    size: {w: 43.5, h: 1617.44}
+    empty: >-
+      no source draws this side: the drawing's side view is one side only, and it shows nothing built
+      into the metal.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The removable mounting brackets, the cord retention brackets, the 14.17 mm
+      spare buttons and the cable ties are in the box and are not drawn.
+    part-numbers:
+      PDUMV30: {}
+datasheet:
+  title: Eaton PDUMV30 product specification page (skuPage.PDUMV30)
+  url: https://www.eaton.com/us/en-us/skuPage.PDUMV30.pdf
+  sha256: 184d06cb53822d00e60f08c514cbb2a29beb91322cace1e94122807d0bb2b88e
+references:
+- title: Tripp Lite PDUMV30 submittal drawing, 201003014C
+  url: https://assets.tripplite.com/submittal-drawing/pdumv30-submittal-drawing.pdf
+  sha256: 61bedd3f076d1eeb644de3cbf17e4745375c8a06be88828aaba492cbb221b0d9
+- title: Tripp Lite single-phase PDUs stencil for Visio, preview
+  url: >-
+    https://assets.tripplite.com/visio-preview-pdf/tripp-lite-1phase-pdus-stencil-for-visio.pdf
+  sha256: c2167f61f151293445f11808b2e7ac7a2d9667e0b04afbd5e14d3d7b7b2fc662

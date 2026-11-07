@@ -730,6 +730,11 @@ PART_POWER = {
     # `nema-l5-20p`, TYPE_NEMA_L520P in both targets at the commits the generic
     # plugs below cite.
     "eaton/tripplite-cord-l5-20p": "nema-l5-20p",
+    # The ePDU G3 basic EPBZ77's fixed 15 ft cord ends in the same NEMA L5-20P: the same slug.
+    "eaton/g3-cord-l5-20p": "nema-l5-20p",
+    # THE PDUMV30'S FIXED 10 ft CORD ENDS IN A NEMA L5-30P. No power-port type for it has been read from a held
+    # source, so it is `other`, as the connectors below are, and POWER_LABEL says which connector.
+    "eaton/tripplite-cord-l5-30p": "other",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every
@@ -762,6 +767,14 @@ PART_POWER = {
     # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
     # says which connector.
     "servertech/pro4x-cord-60309": "other",
+    # A RARITAN PX3-1045'S FIXED CORD ends in an IEC 60309 2P+E 6h 32 A plug (the technical specification). No
+    # power-port type of the two targets is held for it in this tree, so it is `other` and POWER_LABEL says which.
+    "raritan/px3-cord-60309": "other",
+    # A RARITAN PX4'S KEYED LEGRAND UNIVERSAL INPUT CONNECTOR and a PX3-5469R'S FIXED CORD, which ends in an IEC 60309 2P+E 6h
+    # 32 A plug (the Raritan technical specifications). No power-port type of the two targets is held for either in this
+    # tree, so each is `other` and POWER_LABEL says which connector.
+    "raritan/px4-universal-input": "other",
+    "raritan/px3-rear-cord-60309": "other",
     # A VERTIV POWERIT HORIZONTAL PDU'S FIXED CORD ends in a NEMA L6-30P plug (the SKU page of VP5N31A1 and the
     # rack PDU brochure). No power-port type of the two targets is held for it in this tree, so it is `other`,
     # as the connectors above are, and POWER_LABEL says which connector.
@@ -794,6 +807,10 @@ POWER_LABEL = {
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
+    "raritan/px3-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
+    "eaton/tripplite-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
+    "raritan/px4-universal-input": "Legrand Universal Input connector (keyed)",
+    "raritan/px3-rear-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "vertiv/rpdu-cord-l6-30p": "NEMA L6-30P",
 }
 
@@ -855,6 +872,8 @@ PART_OUTLET = {
     # A SERVER TECHNOLOGY HDOT Cx OUTLET, a hybrid of the C13 and C19 that takes a C14 or a
     # C20. Neither target names it, so it is `other` with its label, as the P40 above is.
     "servertech/hdot-cx-outlet": "other",
+    # A RARITAN PX4'S LOCKING Cx OUTLET, 16 A. Neither target names it, so it is `other` with its label.
+    "raritan/px4-cx-outlet": "other",
     # A VERTIV POWERIT COMBINATION C13/C19 OUTLET, which takes a C14 or a C20 plug. Neither target
     # names it, so it is `other` with its label, as the HDOT Cx above is.
     "vertiv/combo-outlet": "other",
@@ -872,7 +891,8 @@ PART_OUTLET = {
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
 # run on import, which test_tools_layout forbids).
 OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
-                "rittal/cee-7-3-outlet": "CEE 7/3", "vertiv/combo-outlet": "Vertiv combination C13/C19"}
+                "rittal/cee-7-3-outlet": "CEE 7/3", "raritan/px4-cx-outlet": "Cx locking",
+                "vertiv/combo-outlet": "Vertiv combination C13/C19"}
 
 # ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
 #
@@ -1099,6 +1119,10 @@ NOT_A_DCIM_PORT = {
                                "guide names the port and gives no connector type or pinout, and no "
                                "DCIM has a power port type for an RPS connector, so it cannot be "
                                "typed honestly",
+    "ubiquiti/usp-rps-input": "the USP-RPS DC input of the Ubiquiti UniFi rack switches and Dream "
+                              "Machine gateways, for an external redundant supply: the data sheets "
+                              "name the input (and the switch's rating, 52 V DC at 7.69 A) and no "
+                              "connector type, so it cannot be typed honestly",
     "juniper/ex2200-rps-port": "the redundant power system port of the Juniper EX2200 switches: the "
                                "guide names the port and gives no connector type, and no DCIM has a "
                                "port type for it, so it presents nothing and cannot be typed "
