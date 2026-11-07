@@ -104,7 +104,8 @@ def test_the_connector_registry_is_not_vacuous():
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45", "rj45-10p", "microsd",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
-                         "nema-5-15r", "nema-5-20r", "eaton-c39", "servertech-hdot-cx", "vertiv-combo",
+                         "nema-5-15r", "nema-5-20r", "eaton-c39", "servertech-hdot-cx",
+                         "raritan-hdot-cx", "vertiv-combo",
                          # the CEE 7/3 earthing-pin socket of the Rittal DK 7979 PDUs
                          "cee-7-3",
                          "usb-a", "usb-b", "micro-usb-b", "mini-usb-b", "usb-c",

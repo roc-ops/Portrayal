@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: px4-5551wa-e7m26v2
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Raritan
 model: PX4-5551WA-E7M26V2
@@ -51,7 +51,8 @@ provenance:
     note: >-
       datasheet - the technical specification: (12) C13 locking 10 A and (12) Cx locking 16 A, in groups of 4 with the
       2 C13 first and the 2 Cx last (the drawing's front view, counted from the cord end). The C13 is
-      std/c13-outlet@1. The Cx is a new Raritan part with no interface key (gaps: cx-outline). Alternating-branch
+      std/c13-outlet@1. The Cx is raritan/px4-cx-outlet@1, the HDOT Cx outlet, which presents
+      `raritan-hdot-cx` (gaps: cx-outline). Alternating-branch
       distribution is stated but not which outlet is on which branch.
   numbering:
     confidence: estimated
@@ -144,10 +145,9 @@ gaps:
   scope: [front]
   reason: needs-drawing
   note: >-
-    the Cx outlet's size and shape are estimates (the part's contract says so) and it presents no interface key: no
-    source says it is the same connector as another maker's. The retention clip drawn above each outlet on View B is
-    not drawn.
-  wanted: the drawing's View B dimensioned, and a source for the connector.
+    the Cx outlet's size and shape are estimates (the part's contract says so). The retention clip drawn above each
+    outlet on View B is not drawn.
+  wanted: the drawing's View B dimensioned.
 - what: input-cord
   scope: [front]
   reason: vendor-silent
