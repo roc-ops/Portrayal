@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: dcp-front-bracket-600
+version: 1.0.0
+class: mount
+behaviour: mounts
+profile: networking
+description: >-
+  The front mounting bracket marked 600 mm of the Smartoptics DCP rack-mount kit, one for each
+  side of the chassis. A flat plate that screws to the side of the chassis and carries a flange
+  that bolts to the front rack post, with the protective ground terminal (an M5 nut on a stud)
+  on its flange. Drawn as a plain plate: the manual dimensions nothing.
+size: {w: 21.3, h: 45.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  model: >-
+    datasheet - the Smartoptics DCP-Series User Manual, release 14.0 A, section 3.2.1 (item 6,
+    "Front-mounting Bracket, right and left (600mm)") and section 3.2.2.1, which uses it in the
+    first two rack-depth bands. The figure of section 3.2.8 draws the flange end with its ground
+    terminal.
+  size: >-
+    estimated - NO FIGURE DIMENSIONS THIS PART. 21.3 mm is the reach of an ear from a 440 mm body
+    to the 482.6 mm rack face, and 45.0 mm is the chassis height; they are placeholders for the
+    flange seen from the front, and nothing measures them. The "600mm" in the parts list is the
+    name the manual gives the part. It does not say what the figure measures, so it is not read as
+    a length.
+  ground: >-
+    datasheet - section 3.2.8: "The front rack mount brackets include a grounding terminal."
+    The terminal is on the right-side front bracket, the surface around it is left unpainted, and
+    the brackets swap sides if it is wanted on the left. The nut is M5. The stud is the library's
+    nominal nut-on-stud part, which draws an M4 nut: the library holds no M5 nut on a stud, and its
+    position on the flange is read from the figure of section 3.2.8 and is an estimate.
+skins: [default]
+parts:
+  - {ref: common/ground-stud@1, id: earth, at: [6.6, 18.45]}
