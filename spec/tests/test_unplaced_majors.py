@@ -313,8 +313,8 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # The FS blanking insert: the @2 states that it occupies a keystone opening and mates it, and the stand-in blank
     # panel still composes the @1, which mates nothing and is drawn as it was.
     kept["common/keystone-blank"] = [1, 2]
-    # The Catalyst 2960-S RPS connector: the 2960-S rear seats the @2, and the @1, drawn as it was, stays
-    # `superseded-by` the @2 because the RPS plug's notes and the RPS interface test still name it.
+    # The Catalyst 2960-S RPS receptacle: the @2 draws the screw holes, the dark top edge and the contacts and is
+    # seated by the 2960-S switches; the @1, drawn as it was, stays for a saved rack or a manifest that names it.
     kept["cisco/rps2300-connector"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
