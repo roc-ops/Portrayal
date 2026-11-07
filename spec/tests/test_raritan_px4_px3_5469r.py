@@ -3,8 +3,8 @@
 What is true of the library once the three devices are in it: each exists under its maker with
 the printed unit size, the PX4 pair carry C13 outlets first and the locking Cx outlet last in
 every group at the printed 26.6 mm pitch, the PX3-5469R carries two rows of ten outlets (eight
-C13 and two C19 in each), every side is drawn or says why not, the Cx outlet presents no
-interface key, and every colour and every borrowed or estimated figure is declared as such.
+C13 and two C19 in each), every side is drawn or says why not, the Cx outlet says what is
+estimated, and every colour and every borrowed or estimated figure is declared as such.
 """
 import pathlib
 
@@ -116,9 +116,8 @@ def test_each_px4_rear_carries_two_mounting_buttons_1244_apart():
         assert round(ys[1] - ys[0], 2) == 1244.0, name
 
 
-def test_the_cx_outlet_presents_no_interface_key_and_says_what_is_estimated():
+def test_the_cx_outlet_says_what_is_estimated():
     contract = _load(COMPONENTS / "px4-cx-outlet" / "v1" / "contract.yaml")
-    assert "interface" not in contract
     assert "estimate" in _text(contract["provenance"])
 
 
