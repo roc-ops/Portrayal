@@ -41,6 +41,7 @@ import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver, readIndex } from './dist.js';
 import { createLamps } from './lamps.js';
 import { openingView } from './camera-fit.js';
+import { housingPlan, bayPlates, faceIndexOf, describeHalves, normalizeHousing } from './housing.js';
 
 const CLS_LABEL = {fan: 'Fan module', psu: 'Power supply', tab: 'Info tab'};
 // box-face shading, in +x -x +y -y +z -z order: sides darker, lid lifted,
@@ -98,6 +99,10 @@ export function createViewer(container, opts = {}) {
   // device without its ears, and so does this scene by default. `setEars`
   // turns them on and off without a rebuild.
   let EARS = !!opts.ears;
+  // A BOX THAT OPENS (housing.js), closed unless the host asks. Only a device
+  // that states `chassis.halves` has an open state; for every other device,
+  // and while this is 'closed', the scene is the one it always was.
+  let HOUSING = normalizeHousing(opts.housing);
 
   let DEV = null, CFG = null, disposed = false;
   // Runtime bay swaps, bay id -> ref (or null for an emptied bay). The 3D scene
@@ -396,6 +401,7 @@ export function createViewer(container, opts = {}) {
   const SCOPE = createReliefScope();
   let box = null, reliefGroup = null, gen = 0;
   let earGroup = null, earPlan = null;   // the generic ears, when they are on
+  let housingGroup = null;               // the two halves, when the box is open
   const faceGroups = {};        // view -> the group buildFaceRelief filled
   // view -> [w, h] of the face's DRAWING, which is not always the plane's. The
   // R740xd's front is the 482.6 mm rack face over a 434 mm body; relief is laid
@@ -900,6 +906,7 @@ export function createViewer(container, opts = {}) {
     meshes.forEach(m => reliefGroup.add(m));
     scene.add(reliefGroup);
     buildEars();
+    applyHousing();
     await syncLamps(null);
   }
 
@@ -948,6 +955,55 @@ export function createViewer(container, opts = {}) {
   const setEars = on => serialise(async () => {
     EARS = !!on;
     return box ? buildEars() : 0;
+  });
+
+  // THE BOX OPEN (housing.js housingPlan): the closed body, its relief and its
+  // ears are hidden, not rebuilt, and a group of its own stands in their place -
+  // each half a shell open at the seam, seen from both sides so the inside
+  // shows, the lid turned about its hinge edge, and the bays of each half as
+  // plates on its floor (the open drawing's regions are not published, so they
+  // are placed by where they are to each other). Closed, or a box with no
+  // halves, shows what was always shown. The halves are no pick target.
+  const HALF_BAY = {base: '#4b8f6b', lid: '#c07a2c'};
+  function applyHousing() {
+    if (housingGroup) { scene.remove(housingGroup); disposeTree(housingGroup); housingGroup = null; }
+    const plan = (!COMP && devIndex && devIndex.chassis)
+      ? housingPlan(devIndex.chassis.halves, {w: W, h: H, d: D}) : null;
+    const shown = !(plan && HOUSING === 'open');
+    for (const o of [box, box && box.userData.bodyBox, reliefGroup, earGroup]) if (o) o.visible = shown;
+    if (!plan || HOUSING !== 'open') return false;
+    const shell = () => new THREE.MeshLambertMaterial({color: '#3a3f44', side: THREE.DoubleSide});
+    const rows = Object.values(devIndex.bays || {}).flat();
+    housingGroup = new THREE.Group();
+    housingGroup.name = 'housing-open';
+    for (const name of ['base', 'lid']) {
+      const h = plan[name];
+      const mats = Array.from({length: 6}, shell);
+      mats[faceIndexOf(h.seam)] = new THREE.MeshBasicMaterial({visible: false});   // the open face
+      const half = new THREE.Mesh(new THREE.BoxGeometry(...h.size), mats);
+      half.name = `half-${name}`;
+      half.position.set(...h.center);
+      if (name === 'lid') half.quaternion.set(...h.quaternion);
+      half.raycast = () => {};
+      for (const p of bayPlates(plan, name, rows)) {
+        const plate = new THREE.Mesh(new THREE.BoxGeometry(...p.size),
+                                     new THREE.MeshLambertMaterial({color: HALF_BAY[name]}));
+        plate.name = `bay-${p.id}`;
+        plate.position.set(...p.center);
+        plate.raycast = () => {};
+        half.add(plate);
+      }
+      housingGroup.add(half);
+    }
+    scene.add(housingGroup);
+    return true;
+  }
+  // 'open' or 'closed'; a box with no halves stays closed whatever is asked.
+  // Resolves to the state the scene is in.
+  const setHousing = state => serialise(async () => {
+    HOUSING = normalizeHousing(state);
+    if (box) applyHousing();
+    return housingGroup ? 'open' : 'closed';
   });
 
   // hit-testing: hidden inline SVGs give us component boxes in mm via getBBox/CTM
@@ -1810,6 +1866,9 @@ export function createViewer(container, opts = {}) {
     // the generic rack ears (#909): on or off, and the plan drawn (null when
     // they are off or the device gets none - see relief.js genericEars)
     setEars, ears: () => (earPlan ? JSON.parse(JSON.stringify(earPlan)) : null),
+    // a box that opens (housing.js): the state the scene is in, the asked one,
+    // and the halves with each bay's half (null for a box that does not open)
+    setHousing, housing: () => (housingGroup ? 'open' : 'closed'), halves: () => describeHalves(devIndex),
     // what a host needs to rebuild the chrome this module gave up
     frus, toggleFru, download, exportData, exportName,
     // every path select() can find, for a host without its own tree
