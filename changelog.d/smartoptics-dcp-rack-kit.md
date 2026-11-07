@@ -11,7 +11,7 @@
   All seven parts are plain placeholder plates with estimated sizes.
 
 ### Changed
-- `smartoptics/dcp-2` version 3.0.0 states its ears and its kit: `chassis.kits` lists the rack-mount
+- `smartoptics/dcp-2` version 3.0.1 states its ears and its kit: `chassis.kits` lists the rack-mount
   kit as in-box, and `chassis.ears` gives the manual's four positions (chassis flush, transponder
   flush, recessed, and mid-mount in a two-post rack, which needs the kit's mid-mount part), with no
   distance because the manual prints none. The four placed `common/rack-ear@1` ears (`ear-left`,
