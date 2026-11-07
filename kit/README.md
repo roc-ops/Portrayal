@@ -87,6 +87,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `drawio.js` | draw.io: a shape library, a rack elevation, or one live drawing as a `.drawio` (`toDrawio`), with a named connection point per port |
 | `omnigraffle.js` | OmniGraffle: a `.gstencil` with a named, magnetised shape per port, or one live drawing as a stencil (`toGraffle`) |
 | `ears2d.js` | generic rack ears over a published face in 2D (`drawEars`, `clearEars`), from the plan the 3D viewer builds (`earPlan`); see [Rack ears](#rack-ears) |
+| `housing.js` | a box that opens in two halves (`chassis.halves`): the open state as numbers (`housingPlan`, `bayPlates`), what a page or an agent is told (`describeHalves`, `openViewOf`, `viewFor`), no three.js and no DOM. `createViewer(el, {housing: 'open'})` or `viewer.setHousing('open')` draws it; closed is the default and the only state of a box with no halves |
 | `positions.js` | the Explorer's control for a part that slides (`positionControl`): a slider over the range, a button for each named stop and a reset, written through the shell's `setFields`; see [A part that slides](#a-part-that-slides) |
 
 Plain ES modules. No bundler, no build step.

@@ -313,7 +313,7 @@ def test_the_power_group_is_declared_and_the_rear_is_still_undrawn_for_power(nam
         assert g["term"] == "PM" and g["role"] == "service"
         assert g["physical-context"] == "Power Module"
     # devicelock: "This change needs at least a major bump" - the shelf cutouts moved and grew
-    assert doc["version"] == "2.0.3"
+    assert doc["version"] == "2.0.6"
     rear_ids = {b["id"] for b in doc["views"]["rear"]["components"].get("bays", [])}
     assert not any("pm" in i for i in rear_ids)
 

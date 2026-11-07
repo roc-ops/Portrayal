@@ -44,6 +44,7 @@ from portrayal.manifest import (presented_point, back_hosts, back_parts, key_on_
                       config_power, device_options, pdu_class, mates_of)
 from portrayal import capability
 from portrayal import ears as ears_mod
+from portrayal import halves as _halves
 from portrayal import bevel as _bevel
 from portrayal import elements as elements_mod
 from portrayal import facets as _facets
@@ -2169,7 +2170,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     # walls and a floor taken from that node's own art, so this
                     # needs no new geometry - only a way for a feature to say it
                     # is a hole in a face rather than a lump on one.
-                    node.set("data-depth", str(feat["pocket"]))
+                    # `{depth, wall}` is a window in a thin plate: the floor is
+                    # still `data-depth`, and the plate's back face goes out as
+                    # `data-wall-depth` (`data-wall` is the wall COLOUR). A plain
+                    # number publishes exactly what it always did.
+                    depth, wall = _facets.pocket_depth_wall(feat["pocket"])
+                    node.set("data-depth", str(depth))
+                    if wall is not None:
+                        node.set("data-wall-depth", f"{wall:g}")
                     if (contract.get("relief") or {}).get("wall"):
                         node.set("data-wall", contract["relief"]["wall"])
                 if feat.get("shape"):
@@ -2317,7 +2325,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     # walls and a floor taken from that node's own art, so this
                     # needs no new geometry - only a way for a feature to say it
                     # is a hole in a face rather than a lump on one.
-                    node.set("data-depth", str(feat["pocket"]))
+                    # `{depth, wall}` is a window in a thin plate: the floor is
+                    # still `data-depth`, and the plate's back face goes out as
+                    # `data-wall-depth` (`data-wall` is the wall COLOUR). A plain
+                    # number publishes exactly what it always did.
+                    depth, wall = _facets.pocket_depth_wall(feat["pocket"])
+                    node.set("data-depth", str(depth))
+                    if wall is not None:
+                        node.set("data-wall-depth", f"{wall:g}")
                     if (contract.get("relief") or {}).get("wall"):
                         node.set("data-wall", contract["relief"]["wall"])
                 if feat.get("shape"):
@@ -4254,7 +4269,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     if (k.startswith("data-z-") or k.startswith("data-cp")
                             or k in ("data-depth", "data-body-depth",
                                      "data-ref", "data-behaviour",
-                                     "data-vent", "data-groove")
+                                     "data-vent", "data-groove", "data-wall-depth")
                             or k.startswith("data-guide")):
                         del node.attrib[k]
         # WHAT THE BLOCK IS FOR travels with every member, because the consumer
@@ -4421,12 +4436,18 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     drawn_bays = {b["id"] for _face, (_n, v) in resolve_views(device, config).items()
                   for b in view_parts(v)["bays"]}
 
+    # THE HALF OF EACH BAY, in a view whose regions state one (portrayal.halves):
+    # `data-half` on the bay's group, absent on every other bay and view
+    bay_half = _halves.view_bay_halves(view)
+
     def draw_bay(b):
         bay_lift = 0.0
         bay_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
         bay_g.set("id", b["id"])
         bay_g.set("data-path", b["id"])
         bay_g.set("data-class", "bay")
+        if b["id"] in bay_half:
+            bay_g.set("data-half", bay_half[b["id"]])
         if b.get("in"):
             # A MODULE STANDS ON THE FLOOR AND RISES TO ITS OWN HEIGHT. A bay's
             # plane is where the module's face is and the body reaches back
@@ -6315,6 +6336,7 @@ def main():
         except Exception:
             return None          # L5 reports the broken ref
 
+    _view_halves = _halves.bay_halves(device)
     cfg_states = {n: drawn_states(config_states(device, n, c, lib),
                                   [faces[f] for f in files.get(n, {}).values() if f in faces])
                   for n, c in configs.items()}
@@ -6375,7 +6397,10 @@ def main():
                              # each rail kit the device lists, resolved inline
                              # so the site reads one file (#907)
                              **({"kits": published_kits(ch["kits"], lib)}
-                                if ch.get("kits") else {})},
+                                if ch.get("kits") else {}),
+                             # the two halves of a box that opens, as written;
+                             # absent on a box that does not
+                             **({"halves": _halves.published(device)} if _halves.declared(device) else {})},
                  # WHAT THE DEVICE CAN BE BOUGHT WITH - the union over its
                  # orderable and base builds of `configs[].power` and
                  # `configs[].airflow`. The filter an HCL runs ("DC, back-to-
@@ -6524,6 +6549,10 @@ def main():
                                # horizontal slots re-rendered their card upright.
                                "rotate": b.get("rotate"),
                                "at": b["at"], "size": b["size"],
+                               # the half of a box that opens this bay is in,
+                               # where its view's regions state one
+                               **({"half": _view_halves[v][b["id"]]}
+                                  if b["id"] in _view_halves.get(v, {}) else {}),
                                # the configurations that have this bay, as the
                                # device states them and absent where it states
                                # none (#1022): the drawing leaves the bay out

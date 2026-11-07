@@ -692,6 +692,7 @@ PART_POWER = {
     # Neither is a screw terminal, so each is `other`, and POWER_LABEL says which connector.
     "juniper/qfx524x-dc-header": "other",
     "juniper/qfx10002-dc-header": "other",
+    "juniper/ex4400-dc-header": "other",
     # THE DC CONNECTORS OF THE EDGECORE AS5835, AMX3200 AND AGR560 48 VDC SUPPLIES ARE VENDOR CONNECTORS THE
     # DOCUMENTS DO NOT NAME THE PART OF. None is a screw terminal, so each is `other`, and POWER_LABEL says which.
     "edgecore/dcs201-dc-header": "other",
@@ -729,6 +730,11 @@ PART_POWER = {
     # `nema-l5-20p`, TYPE_NEMA_L520P in both targets at the commits the generic
     # plugs below cite.
     "eaton/tripplite-cord-l5-20p": "nema-l5-20p",
+    # The ePDU G3 basic EPBZ77's fixed 15 ft cord ends in the same NEMA L5-20P: the same slug.
+    "eaton/g3-cord-l5-20p": "nema-l5-20p",
+    # THE PDUMV30'S FIXED 10 ft CORD ENDS IN A NEMA L5-30P. No power-port type for it has been read from a held
+    # source, so it is `other`, as the connectors below are, and POWER_LABEL says which connector.
+    "eaton/tripplite-cord-l5-30p": "other",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every
@@ -761,6 +767,14 @@ PART_POWER = {
     # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
     # says which connector.
     "servertech/pro4x-cord-60309": "other",
+    # A RARITAN PX3-1045'S FIXED CORD ends in an IEC 60309 2P+E 6h 32 A plug (the technical specification). No
+    # power-port type of the two targets is held for it in this tree, so it is `other` and POWER_LABEL says which.
+    "raritan/px3-cord-60309": "other",
+    # A RARITAN PX4'S KEYED LEGRAND UNIVERSAL INPUT CONNECTOR and a PX3-5469R'S FIXED CORD, which ends in an IEC 60309 2P+E 6h
+    # 32 A plug (the Raritan technical specifications). No power-port type of the two targets is held for either in this
+    # tree, so each is `other` and POWER_LABEL says which connector.
+    "raritan/px4-universal-input": "other",
+    "raritan/px3-rear-cord-60309": "other",
 }
 # THE CONNECTOR A `other` POWER PORT IS, for a reader who would otherwise see
 # "Other". Only the parts above that have no upstream type are listed; a test
@@ -779,6 +793,7 @@ POWER_LABEL = {
     "juniper/qfx5210-dc-header": "DC power header (3-position, cells 1 to 3)",
     "juniper/qfx524x-dc-header": "DC power connector (6-position, 2x3)",
     "juniper/qfx10002-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
+    "juniper/ex4400-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
     "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
     "edgecore/amx-3200-dc-header": "DC power connector (3-pin)",
     "edgecore/agr560-dc-header": "DC power connector (2-socket)",
@@ -788,6 +803,10 @@ POWER_LABEL = {
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
+    "raritan/px3-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
+    "eaton/tripplite-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
+    "raritan/px4-universal-input": "Legrand Universal Input connector (keyed)",
+    "raritan/px3-rear-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
 }
 
 
@@ -848,6 +867,8 @@ PART_OUTLET = {
     # A SERVER TECHNOLOGY HDOT Cx OUTLET, a hybrid of the C13 and C19 that takes a C14 or a
     # C20. Neither target names it, so it is `other` with its label, as the P40 above is.
     "servertech/hdot-cx-outlet": "other",
+    # A RARITAN PX4'S LOCKING Cx OUTLET, 16 A. Neither target names it, so it is `other` with its label.
+    "raritan/px4-cx-outlet": "other",
     # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
     # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
     "std/c19-outlet": "iec-60320-c19",
@@ -862,7 +883,7 @@ PART_OUTLET = {
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
 # run on import, which test_tools_layout forbids).
 OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
-                "rittal/cee-7-3-outlet": "CEE 7/3"}
+                "rittal/cee-7-3-outlet": "CEE 7/3", "raritan/px4-cx-outlet": "Cx locking"}
 
 # ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
 #
@@ -1080,10 +1101,19 @@ NOT_A_DCIM_PORT = {
                      "(device_port_type)",
 
     # --- power: a connector no DCIM has a type for ---------------------------
+    "cisco/rps2300-connector": "the RPS connector of the Catalyst 2960-S switches: the guide names it and "
+                               "gives no connector type or pinout, and no DCIM has a power port type for "
+                               "it, so it cannot be typed honestly",
+    "cisco/flexstack-port": "the FlexStack stacking port of the Catalyst 2960-S module: a vendor stacking "
+                            "interface no DCIM has a port type for, so it cannot be typed honestly",
     "juniper/ex3300-rps-port": "the redundant power system port of the Juniper EX3300 switches: the "
                                "guide names the port and gives no connector type or pinout, and no "
                                "DCIM has a power port type for an RPS connector, so it cannot be "
                                "typed honestly",
+    "ubiquiti/usp-rps-input": "the USP-RPS DC input of the Ubiquiti UniFi rack switches and Dream "
+                              "Machine gateways, for an external redundant supply: the data sheets "
+                              "name the input (and the switch's rating, 52 V DC at 7.69 A) and no "
+                              "connector type, so it cannot be typed honestly",
     "juniper/ex2200-rps-port": "the redundant power system port of the Juniper EX2200 switches: the "
                                "guide names the port and gives no connector type, and no DCIM has a "
                                "port type for it, so it presents nothing and cannot be typed "
@@ -1187,6 +1217,9 @@ NOT_A_DCIM_PORT = {
     "cisco/stackpower-port": "the StackPower connector of the Catalyst 9300 (S-PWR 1 and 2): a "
                              "power-sharing link between switches, not a power input; neither DCIM "
                              "has a type for it and a power port would read as a feed",
+    "digi/microsd-socket": "the micro-SD socket of the Digi Connect EZ 16 and 32: a memory card "
+                           "slot, not a network, console or power connection, and neither DCIM "
+                           "has a port type for a storage card",
 
     # --- test points and a serial jack ---------------------------------------------
     "common/g-type-male-port": "the G-type male -20 dB RF test point of the CommScope CH3000 receivers: a "
@@ -2024,6 +2057,8 @@ MOUNT_PROSE = {
     "din-rail": "Mounts on a DIN rail (IEC 60715); not rack-mounted.",
     "wall": "Wall-mounted; not rack-mounted.",
     "ceiling": "Ceiling-mounted; not rack-mounted.",
+    "strand": "Strand-mounted; not rack-mounted.",
+    "pedestal": "Pedestal-mounted; not rack-mounted.",
     "desktop": "Desktop unit; not rack-mounted.",
     "rack-face": "Mounts on the rack rail face at a rack unit; occupies no rack unit.",
     "rack-side": "Mounts on the side of a rack's upright, beside the rack; occupies no rack unit.",
@@ -2253,6 +2288,11 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
     console_server = []
     outlets = {}
+    # THE HALF OF A BOX THAT OPENS each bay is in, said in its description
+    # (portrayal.halves); empty for a box that does not open
+    from portrayal import halves as _halves
+    bay_half = {bay: half for mapped in _halves.bay_halves(dev).values()
+                for bay, half in mapped.items()}
     for view in views_for(dev, cfg_name):
         parts = view_parts(view)
         for p in scoped(parts["placements"], cfg_name):
@@ -2322,7 +2362,8 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
                 if trace is not None:
                     trace.add(p["id"])
         for b in scoped(parts["bays"], cfg_name):
-            bays.append(bay_row(b["id"], b.get("accepts"), None, b.get("interface")))
+            bays.append(bay_row(b["id"], b.get("accepts"), None, b.get("interface"),
+                                half=bay_half.get(b["id"])))
 
     # Switch and management interfaces. With a listing, a placement is an
     # interface exactly when a rule names it - `mgmt-eth` becomes `ma1` because
@@ -2483,8 +2524,12 @@ def contract_view(entry):
             "optical": entry.get("optical") or {}}
 
 
-def bay_row(bay_id, accepts=None, span=None, interface=None):
+def bay_row(bay_id, accepts=None, span=None, interface=None, half=None):
     """One `module-bays` row, for a bay on a device or a bay on a module.
+
+    `half` is the half of a box that opens the bay is in (`base` or `lid`); it
+    leads the description as "In the lid.", where a person installing a module
+    reads it, and a bay with none reads exactly as it always did.
 
     `interface` is the form a bay takes by its `mates` (spec/schemas/
     connectors.yaml): its `note` is said instead of a list, and an `accepts`
@@ -2507,6 +2552,8 @@ def bay_row(bay_id, accepts=None, span=None, interface=None):
     # NetBox schema allows on a bay description.
     spans = (f"Spans {', '.join(span)} for a card {len(span) + 1} slots wide. "
              if span else "")
+    if half:
+        spans = f"In the {half}. " + spans
     if interface:
         from portrayal.render import _connector_registry
         note = (_connector_registry().get(interface) or {}).get("note")

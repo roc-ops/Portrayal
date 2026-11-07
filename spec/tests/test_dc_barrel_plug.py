@@ -58,6 +58,9 @@ PLACED = {
 # Adapter") says "Universal 110-240V AC to 12V DC external power adapter" and gives no current or barrel
 # size, so their placements carry no `attrs` and they are not in PLACED, whose entries all state both
 NO_RATING_STATED = {"opengear/cm8004", "opengear/cm8004-c", "opengear/cm8008", "opengear/cm8008-c"}
+# the CRS504-4XQ-IN: its brochure gives the jack's voltage (36-57 V) and no current or barrel size, so the
+# placement carries `input-voltage` alone
+NO_RATING_STATED |= {"mikrotik/crs504-4xq-in"}
 # the CRS510-8XS-2XQ-IN: its brochure gives the jack's voltage (36-57 V) and no current or barrel size, so the
 # placement carries `input-voltage` alone
 NO_RATING_STATED |= {"mikrotik/crs510-8xs-2xq-in"}
@@ -145,8 +148,8 @@ def test_the_jack_states_no_rating_of_its_own():
 @pytest.mark.heavy
 def test_the_jack_is_placed_on_exactly_these_devices():
     """The census: every placement of the jack in the library, and nothing
-    composes it inside another part. Fourteen: seven state a rating here, the four
-    CM8000 devices and the CRS510-8XS-2XQ-IN state none, and two access points carry their own (48 V and 54 V)."""
+    composes it inside another part. Fifteen: seven state a rating here, the four
+    CM8000 devices, the CRS504-4XQ-IN and the CRS510-8XS-2XQ-IN state none, and two access points carry their own (48 V and 54 V)."""
     found = set()
     for f in sorted((LIB / "devices").glob("*/*/device.yaml")):
         d = yaml.safe_load(f.read_text())
@@ -154,7 +157,7 @@ def test_the_jack_is_placed_on_exactly_these_devices():
             for p in ((view or {}).get("components") or {}).get("placements") or []:
                 if p.get("ref") == JACK:
                     found.add(f"{f.parts[-3]}/{f.parts[-2]}")
-    assert found == set(PLACED) | NO_RATING_STATED | WALL_AND_CEILING_APS and len(found) == 14
+    assert found == set(PLACED) | NO_RATING_STATED | WALL_AND_CEILING_APS and len(found) == 15
     composed = []
     for f in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
         c = yaml.safe_load(f.read_text())

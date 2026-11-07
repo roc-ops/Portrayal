@@ -451,8 +451,8 @@ RULES = {
     "L116": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint, its bores at the depth that point presents, and the axis it derives putting a duplex connector's latches on its bores' keyway side - and a component MATING one is drawn on the canonical axis, the pair running across from its own `mate`", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector; compose the bores in the order whose derived axis carries the latch into the keyway, all at one `rotate`; draw a duplex connector itself with its pair ACROSS and its latches up, because the host's own axis arrives with the seat",
              "An adapter whose bores are off the standard pitch, at the wrong depth or the wrong way round would accept a duplex connector it cannot hold, seating it floating, sunk, or with its latches away from the keyway.",
              ERROR),
-    "L117": ("component",  "a part `on` a facet names a relief feature that declares `facet`, whose node is a declared element, and its projected box lies within that element; a facet does not also declare `out`, `profile` or `profile-y`; a facet sunk below the plate (`lift < 0`) lies inside the box of a `pocket` element at least `-lift` deep", "name the facet feature's node in `on`, declare the node in `elements`, move the part onto the facet, or drop the hand-written slope - the renderer derives it; for a sunk facet, declare the recess it stands in as a `pocket` around it, or deepen the pocket to the facet's lift",
-             "A tilted part needs a real slope to stand on: otherwise the 3D view floats it in the air, buries its wedge in a solid face, or takes the slope from two places that disagree.",
+    "L117": ("component",  "a part `on` a facet names a relief feature that declares `facet`, whose node is a declared element, and its projected box lies within that element; a facet does not also declare `out`, `profile` or `profile-y`; a facet sunk below the plate (`lift < 0`) lies inside the box of a `pocket` element at least `-lift` deep; a `pocket` that states a `wall` has `0 < wall < depth`, and a part on a sunk facet in it may run out of the pocket's box only below the wall depth, never above it", "name the facet feature's node in `on`, declare the node in `elements`, move the part onto the facet, or drop the hand-written slope - the renderer derives it; for a sunk facet, declare the recess it stands in as a `pocket` around it, or deepen the pocket to the facet's lift; for a part that runs out of a walled pocket above its wall depth, widen the pocket to the part or lower the `wall` to the plate's real thickness",
+             "A tilted part needs a real slope to stand on: otherwise the 3D view floats it in the air, buries its wedge in a solid face, or takes the slope from two places that disagree. A window in a thin plate is open to the inside of the card below the plate, so a cage may run back under the plate's edge there and nowhere above it.",
              ERROR),
     "L118": ("device",     "power is stated once - on the chassis where the box has one feed, and on a configuration only where it differs", "move it to `chassis.power`, or drop the configuration's copy",
              "Power written on both the chassis and its configurations gives two answers that can drift apart, and a reader cannot tell which one is meant.",
@@ -475,7 +475,7 @@ RULES = {
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)",
              "A module is the same metal in every chassis, so two bays reserving different sizes for it show the card not fitting its slot in one of them.",
              WARNING),
-    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`), a `rack-face` part or a `rack-side` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall`, `ceiling` or `desktop` states none (error); `chassis.full-depth`, `chassis.overhang`, `chassis.ears` and `chassis.kits` appear only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit",
+    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`), a `rack-face` part or a `rack-side` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall`, `ceiling`, `strand`, `pedestal` or `desktop` states none (error); `chassis.full-depth`, `chassis.overhang`, `chassis.ears` and `chassis.kits` appear only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit",
              "Without a stated mount, a wall-mounted or desktop box exports as a 1U rack device, and someone planning a rack makes room for equipment that never goes in it.",
              MIXED),
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is",
@@ -655,7 +655,7 @@ RULES = {
     "L184": ("component",  "a `supersedes` lists removed component majors: each entry names an `ns/name@major` that is not the part itself and is not in the library any more, carries a `sha256:` signature and the commit it was taken from, and no ref is listed twice", "fix the ref or the signature; remove the entry when the old major is still in the library (it says `superseded-by` instead)",
              "A redirect is read by a saved rack, so a ref that is still published, a self-pointer or a signature that is not one would send a swap to a part that is not what the rack named, or never fire.",
              ERROR),
-    "L185": ("component",  "a bay's `span` names other bays of the same component, each the same size, `rotate` and `mirror`, following one another along the card's component side (the bay's own +y, turned by its `rotate`, which is 0 or 180) with no gap wider than a bay and no step sideways; a bay whose `accepts` list names a part `n` slots wide names at least `n - 1` of them (a bay that states an `interface` takes a wide part only where its `span` is long enough, and is not an error where it is not); and a part that composes a part wider than one slot is at least that wide itself", "fix the ids or the bays' geometry; add the covered bay to `span`, or take the wide part out of `accepts`; give the composing part the `slot-width` of what it composes",
+    "L185": ("component",  "a bay's `span` names other bays of the same component, each the same size, `rotate` and `mirror`, following one another along the card's component side (the bay's own +y, turned by its `rotate`, which is 0 or 180; bays that sit side by side, a carrier's MIC windows, follow one another along x, to the right at 0 and to the left at 180) with no gap wider than a bay and no step sideways; a bay whose `accepts` list names a part `n` slots wide names at least `n - 1` of them (a bay that states an `interface` takes a wide part only where its `span` is long enough, and is not an error where it is not); and a part that composes a part wider than one slot is at least that wide itself", "fix the ids or the bays' geometry; add the covered bay to `span`, or take the wide part out of `accepts`; give the composing part the `slot-width` of what it composes",
              "A card two slots wide is drawn across its bay and the next one and covers that one, so a span that names the wrong bay, a bay in the wrong place or none at all puts the card over the wrong opening or offers it where it cannot go.",
              ERROR),
     "L186": ("component, device", "a card wider than one slot and a bay it covers are never both filled - by a configuration, or by what the bays ship", "empty the covered bay (`<carrier>/<bay>: \"\"` in the configuration), or seat a one-slot part; a component does not ship a two-slot default over a bay that ships one too",
@@ -700,6 +700,22 @@ RULES = {
     "L199": ("device", "a powered device's PoE keys agree: `poe-pd-standard-min` is stated only with `poe-pd-standard` and is lower than it (error); `poe-pd-class` is stated only with `poe-pd-standard` (error); `poe-pd-max-w` is stated only with `poe-pd-standard` (warning), is at least `power-self-max-w` plus `poe-budget-w` where both are numbers (warning), and is stated by a device that states `poe-budget-w` and `poe-pd-standard` (warning)", "state the standard the maker names for the PoE input; write `poe-pd-max-w` as the whole intake, the figure printed 'excluding PoE output' plus what the device hands on, with the sum in the provenance",
              "A powered device's draw with no standard cannot be checked against the port that feeds it, and a figure printed 'excluding PoE output' read as the whole intake is a number short of what the port has to supply.",
              MIXED),
+    "L200": ("device", "the halves of a box that opens are well formed: `chassis.halves` has exactly two entries, `base` and `lid`; the base states its `outer` face and the lid its `hinge`; the hinge is on a face perpendicular to the axis of the base's `outer` face and is not the back of the lid (the face opposite the base's `outer`); the lid's `angle` runs from 0 to 180 degrees; every `stands` is a positive number (error)",
+             "state `base: {outer, stands}` and `lid: {hinge, angle, stands}` and nothing else; put the hinge on a side of the lid, not on the face the halves stand along",
+             "A lid whose hinge is on the seam's own axis cannot swing, and a half with no outer face or no hinge leaves a viewer guessing which way the box opens, so every tool that draws it open would draw a guess.",
+             ERROR),
+    "L201": ("device", "a region's `half` names a half the device declares under `chassis.halves` and the region has a box (`at` and `size`, or `members` that have one) (error); a declared half that no region names is reported (warning)",
+             "name `base` or `lid` on the regions of the open drawing, or declare the half; give the region a box so a bay can be found in it",
+             "A region that names a half the device does not declare puts its bays in a half that does not exist, and a declared half with no region owns no part of the drawing, so the open drawing says nothing about what is in it.",
+             MIXED),
+    "L202": ("device", "in a view whose regions state a `half`, every bay's centre is in exactly one of those regions: a bay in two is an error, and so is a bay in none",
+             "move the bay or the region so the bay's centre is in one region; a bay with no `size` is judged by its `at`",
+             "The half of a bay is the half of the region that holds its centre, and it reaches the lock, the compiled drawing and the DCIM export, so a bay in two regions has two answers and a bay in none has no answer.",
+             ERROR),
+    "L203": ("device", "the `stands` of the two halves sum to the chassis dimension on the axis of the base's `outer` face - depth for the front and the rear, width for the left and the right, height for the top and the bottom - within 2 per cent (warning)",
+             "correct a `stands` against its source, or the chassis dimension, or state in `provenance` why the closed box is taller than its two shells",
+             "Two halves that do not add up to the box they make mean one of the three figures is wrong, and a viewer that opens the lid by the stated stands would leave a gap or an overlap at the seam.",
+             WARNING),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -4853,7 +4869,9 @@ def lint_component_span(path, data, lib_roots):
     another bay of this component - a bay in another riser is not a sibling,
     and a card across two risers would come apart - of the same size, turn and
     hand, and each follows the last along the bay's own +y turned by its
-    `rotate`: below it at 0, above it at 180. A quarter turn is refused until a
+    `rotate`: below it at 0, above it at 180. Bays that sit side by side, as a
+    line card's two MIC windows do, follow one another along x instead: to
+    the right of it at 0, to the left at 180. A quarter turn is refused until a
     riser needs one. And the two sides meet: a bay that accepts a part wider
     than one slot names enough bays to cover, and a card that composes the
     two-slot bracket is two slots wide itself.
@@ -4892,11 +4910,18 @@ def lint_component_span(path, data, lib_roots):
                 px = _bay_box(prev)
                 dx, dy = sx[0] - px[0], sx[1] - px[1]
                 along = dy if turn == 0 else -dy
-                if abs(dx) > SPAN_TOLERANCE_MM or not 0 < along <= bx[3] + SPAN_TOLERANCE_MM:
+                # Bays that sit side by side - a carrier's MIC windows - are
+                # followed along x instead: to the right at 0, to the left at 180.
+                across = dx if turn == 0 else -dx
+                below = abs(dx) <= SPAN_TOLERANCE_MM and 0 < along <= bx[3] + SPAN_TOLERANCE_MM
+                beside = abs(dy) <= SPAN_TOLERANCE_MM and 0 < across <= bx[2] + SPAN_TOLERANCE_MM
+                if not (below or beside):
                     side = "below" if turn == 0 else "above"
+                    flank = "right of" if turn == 0 else "left of"
                     err(path, "L185", f"bays/{bid}: spans {sid}, which is not the next bay "
                         f"{side} {prev_id} - a two-slot card covers the bay on its component "
-                        f"side, here {side} it (offset {dx:g}, {dy:g})")
+                        f"side, here {side} it, or the bay {flank} it when the bays sit side by "
+                        f"side (offset {dx:g}, {dy:g})")
                     break
                 prev, prev_id = sib, sid
         for ref in b.get("accepts") or []:
@@ -5457,12 +5482,16 @@ def _placed_drawn(q, facet, lib_roots):
     return [_turned(b, w, h, q.get("rotate"), facet, q["at"]) for b in local]
 
 
-def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
+def _lint_sunk_facet(path, node, f, data, elements, tol=0.5, lib_roots=()):
     """L117, recessed facets: a facet with `lift < 0` roots below the plate, so it
     has to stand in a hole - an element that is a `pocket` feature, whose box
     holds the facet's box (to within `tol`, as L117 measures parts) and which is
     at least `-lift` deep. Without one, the facet's wedge is buried in a solid
-    face; in a shallow one, its root is below the pocket's floor."""
+    face; in a shallow one, its root is below the pocket's floor.
+
+    A pocket that states its `wall` is cut through a plate that thick, and below
+    the wall it is open to the inside of the part: a well on the facet may run
+    out of the box there (`_lint_wall_exits`)."""
     sunk = -float(f["lift"])
     fx, fy = elements[node]["at"]
     fw, fh = elements[node]["size"]
@@ -5475,17 +5504,53 @@ def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
         pw, ph = pel["size"]
         if fx >= px - tol and fy >= py - tol and fx + fw <= px + pw + tol \
                 and fy + fh <= py + ph + tol:
-            holding.append((float(p["pocket"]), p["node"]))
+            pdepth, pwall = facets.pocket_depth_wall(p["pocket"])
+            holding.append((float(pdepth), p["node"], pwall))
     if not holding:
         err(path, "L117", f"facet {node!r} is sunk {sunk:g} mm (lift {f['lift']:g}) but is "
             "not inside any `pocket` element's box - a facet below the plate has to stand "
             "in a recess, or its wedge is buried in a solid face")
         return
-    depth, pnode = max(holding)
+    depth, pnode, wall = max(holding, key=lambda h: (h[0], h[1]))
     if depth < sunk:
         err(path, "L117", f"facet {node!r} is sunk {sunk:g} mm (lift {f['lift']:g}) in pocket "
             f"{pnode!r}, which is only {depth:g} mm deep - a pocket shallower than the facet "
             "is sunk puts the facet's root below the pocket floor")
+        return
+    if wall is not None and 0 < wall < depth:
+        _lint_wall_exits(path, node, f, data, elements, pnode, float(wall), lib_roots)
+
+
+def _lint_wall_exits(path, node, f, data, elements, pnode, wall, lib_roots, tol=0.05):
+    """L117: a part on a sunk facet, in a pocket that states its wall, may run out
+    of the pocket's box only below the wall. The well goes in along the facet's
+    normal, so it travels sideways as it goes down; where it crosses the box's
+    side tells whether it passes under the plate's solid edge (at or below the
+    wall: the card is open there) or out through the plate itself (above it).
+    A part too short to reach the side never leaves the box."""
+    facet = f["facet"]
+    rect = (*elements[node]["at"], *elements[node]["size"])
+    pel = elements[pnode]
+    pbox = (*pel["at"], *pel["size"])
+    for q in data.get("parts") or []:
+        if q.get("on") != node or not q.get("at"):
+            continue
+        size = _instance_size(q.get("ref"), lib_roots)
+        if not size:
+            continue
+        box = facets.projected_box(q["at"], size[0], size[1], q.get("rotate"), facet)
+        out = facets.leaves_pocket(facet, float(f["lift"]), rect, box, pbox)
+        if out is None:
+            continue
+        depth, travel = out
+        reach = _instance_depth(q.get("ref"), lib_roots)
+        if reach is not None and travel > reach:
+            continue
+        if depth < wall - tol:
+            err(path, "L117", f"part {q.get('id')!r} on sunk facet {node!r} runs out of pocket "
+                f"{pnode!r} at {depth:g} mm deep, above the pocket's wall depth of {wall:g} mm - "
+                "there it comes out through the plate, which is solid; a well may leave the "
+                "pocket's box only below the wall, under the plate's edge")
 
 
 def lint_component_facets(path, data, lib_roots):
@@ -5500,6 +5565,12 @@ def lint_component_facets(path, data, lib_roots):
     feats = {f.get("node"): f for f in (data.get("relief") or {}).get("features") or []}
     elements = data.get("elements") or {}
     for node, f in feats.items():
+        if isinstance(f.get("pocket"), dict):
+            depth, wall = facets.pocket_depth_wall(f["pocket"])
+            if not 0 < wall < depth:
+                err(path, "L117", f"pocket {node!r} states a wall of {wall:g} mm, which is not "
+                    f"shallower than the pocket's depth of {depth:g} mm - the walls stop at the "
+                    "plate's back face, above the floor")
         if f.get("facet"):
             for k in ("out", "profile", "profile-y"):
                 if k in f:
@@ -5510,7 +5581,7 @@ def lint_component_facets(path, data, lib_roots):
                 err(path, "L117", f"facet node {node!r} is not a declared element with a "
                     "size - the renderer needs its front-view rectangle to derive the wedge")
             elif (f.get("lift") or 0) < 0:
-                _lint_sunk_facet(path, node, f, data, elements)
+                _lint_sunk_facet(path, node, f, data, elements, lib_roots=lib_roots)
     for q in data.get("parts") or []:
         on = q.get("on")
         if not on:
@@ -5685,6 +5756,19 @@ def _instance_size(ref, lib_roots):
         return None
     sz = d.get("size")
     return (sz["w"], sz["h"]) if sz else None
+
+
+def _instance_depth(ref, lib_roots):
+    """The depth (`size.d`) of a component, or None when it cannot be resolved or
+    states none."""
+    c = resolve_component(ref, lib_roots) if ref else None
+    if c is None:
+        return None
+    try:
+        d = load_yaml(c) or {}
+    except yaml.YAMLError:
+        return None
+    return (d.get("size") or {}).get("d")
 
 
 def lint_device_mating(path, view_name, view, lib_roots):
@@ -8716,7 +8800,8 @@ def lint_device_mount(path, data):
     elif bolts_to_rack and "ru" not in ch:
         warn(path, "L125", "a rack device states `ru`. If this box is not racked, "
                           "say how it is installed with `chassis.mount` "
-                          "(`din-rail`, `wall`, `ceiling`, `desktop`)")
+                          "(`din-rail`, `wall`, `ceiling`, `strand`, `pedestal`, "
+                          "`desktop`)")
     elif not bolts_to_rack and "ru" in ch:
         err(path, "L125", f"`chassis.mount` is {mount!r}, so `ru` {ch['ru']!r} "
                           "describes a rack this box is not in - drop it")
@@ -8772,6 +8857,90 @@ def lint_device_poe_pd(path, data):
     if "poe-budget-w" in power and standard is not None and "poe-pd-max-w" not in power:
         warn(path, "L199", "this device hands on PoE and takes PoE but states no `poe-pd-max-w`: its own "
                            "draw is not its intake")
+
+
+# THE CODES OF THE HALVES RULES BY WHAT THEY JUDGE, for the test that reads them.
+# The calls below spell each code out, because the severity guard reads literals;
+# test_opening_halves.py holds the two in step.
+HALVES_CODES = {"halves": "L200", "region": "L201", "bay": "L202", "stands": "L203"}
+
+
+def lint_device_halves(path, data):
+    """L200-L203: a box that opens in two halves holds together
+    (docs/modelling-a-device.md, "A box that opens").
+
+    The schema checks the shape of each half (a face is one of the six, a figure
+    is a number); these relate the halves to each other, to the chassis and to
+    the regions of the open drawing."""
+    from portrayal import halves as _halves
+    declared = _halves.declared(data)
+    ch = data.get("chassis") or {}
+    if declared:
+        base, lid = declared.get("base"), declared.get("lid")
+        base = base if isinstance(base, dict) else {}
+        lid = lid if isinstance(lid, dict) else {}
+        if sorted(declared) != sorted(_halves.NAMES):
+            err(path, "L200", f"`chassis.halves` has {sorted(declared)!r}: exactly two "
+                                       "entries, `base` and `lid`, belong there")
+        outer, hinge = base.get("outer"), lid.get("hinge")
+        if "base" in declared and outer is None:
+            err(path, "L200", "`chassis.halves.base` states no `outer`: the face that faces "
+                                       "away from the lid is what says which way the box opens")
+        if "lid" in declared and hinge is None:
+            err(path, "L200", "`chassis.halves.lid` states no `hinge`: the side the lid swings on")
+        if outer in _halves.AXIS and hinge in _halves.AXIS:
+            if hinge == _halves.OPPOSITE[outer]:
+                err(path, "L200", f"`chassis.halves.lid.hinge` is {hinge!r}, the back of the "
+                                           f"lid: the face opposite the base's `outer` {outer!r}, which "
+                                           "the lid cannot swing on")
+            elif _halves.AXIS[hinge] == _halves.AXIS[outer]:
+                err(path, "L200", f"`chassis.halves.lid.hinge` {hinge!r} is on the axis of the "
+                                           f"base's `outer` {outer!r}: a hinge is on a face "
+                                           "perpendicular to that axis")
+        angle = lid.get("angle")
+        if isinstance(angle, (int, float)) and not isinstance(angle, bool) and not 0 <= angle <= 180:
+            err(path, "L200", f"`chassis.halves.lid.angle` {angle:g} is outside 0 to 180 degrees")
+        for name, half in sorted(declared.items()):
+            stands = (half or {}).get("stands") if isinstance(half, dict) else None
+            if isinstance(stands, (int, float)) and not isinstance(stands, bool) and stands <= 0:
+                err(path, "L200", f"`chassis.halves.{name}.stands` {stands:g} is not positive")
+        axis = _halves.AXIS.get(outer)
+        dim = ch.get(_halves.DIMENSION.get(axis))
+        figures = [(declared.get(n) or {}).get("stands") for n in _halves.NAMES]
+        if (axis and isinstance(dim, (int, float)) and len(declared) == 2
+                and all(isinstance(s, (int, float)) and not isinstance(s, bool) and s > 0 for s in figures)
+                and abs(sum(figures) - dim) > _halves.STANDS_TOLERANCE * dim + 1e-9):
+            warn(path, "L203", f"the two `stands` sum to {sum(figures):g} mm and the chassis "
+                                        f"{_halves.DIMENSION[axis]} on that axis is {dim:g} mm "
+                                        f"(more than {_halves.STANDS_TOLERANCE:.0%} apart)")
+    used = set()
+    for name, view in sorted((data.get("views") or {}).items()):
+        regions = _halves.view_regions(view)
+        for r in regions:
+            half = r.get("half")
+            used.add(half)
+            if half not in declared:
+                err(path, "L201", f"{name}: region {r.get('id')!r} names half {half!r}, which "
+                                           "`chassis.halves` does not declare")
+            if _halves.region_box(view, r) is None:
+                err(path, "L201", f"{name}: region {r.get('id')!r} states a `half` and no box "
+                                           "(`at` and `size`, or `members` that have one), so no bay "
+                                           "can be found in it")
+        if not regions:
+            continue
+        for bay_id, hits in sorted(_halves.bay_regions(view).items()):
+            if len(hits) > 1:
+                err(path, "L202", f"{name}: the centre of bay {bay_id!r} is in {len(hits)} "
+                                        f"regions ({', '.join(map(str, hits))}): it has two halves")
+            elif not hits:
+                err(path, "L202", f"{name}: the centre of bay {bay_id!r} is in none of the "
+                                        "regions that state a `half`")
+    for name in sorted(set(declared) - used):
+        if used:
+            warn(path, "L201", f"`chassis.halves.{name}` is declared and no region names it")
+        else:
+            warn(path, "L201", f"`chassis.halves.{name}` is declared and no region of any "
+                                        "view states a `half`: the open drawing says nothing of it")
 
 
 def _is_kit(ref, lib_roots):
@@ -14794,6 +14963,7 @@ def main():
                 lint_device_power_home(f, d)
                 lint_device_mount(f, d)
                 lint_device_poe_pd(f, d)
+                lint_device_halves(f, d)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
                 lint_device_power_outlets(f, d, args.library)

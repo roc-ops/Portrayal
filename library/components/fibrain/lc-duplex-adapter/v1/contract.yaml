@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 1.0.0
+version: 1.1.0
 class: port
 # THE ADAPTER IS ITSELF A SLOT (docs/pluggables-caps-design.md, "The duplex
 # host"): a duplex connector - a duplex dust cap, a duplex plug - mates the
@@ -42,6 +42,13 @@ relief:
         (XM-Uchwyt-adapterow_4 and _5) show the adapter fronts standing just
         proud of the black moulding; about a millimetre, by eye. No side
         view is published.
+groups:
+  bores:
+    term: Bore
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the two LC bores of the duplex adapter, positions 1 and 2
 parts:
   # THE BULKHEAD APERTURE, TURNED 180: std/lc-bulkhead-bore@1 draws its latch
   # tongue DOWN, and half a turn puts it UP, where the drawing has the latch
@@ -49,8 +56,8 @@ parts:
   # so a bore at [x, y] has its ferrule at (x + 2.35, y + 5.71): (3.225, 6.1)
   # and (9.475, 6.1). Lifted onto the raised body so each bore recesses from
   # the proud face.
-  - {id: '1', ref: std/lc-bulkhead-bore@1, at: [0.875, 0.39], rotate: 180, lift: 1.0}
-  - {id: '2', ref: std/lc-bulkhead-bore@1, at: [7.125, 0.39], rotate: 180, lift: 1.0}
+  - {id: '1', ref: std/lc-bulkhead-bore@1, group: bores, at: [0.875, 0.39], rotate: 180, lift: 1.0}
+  - {id: '2', ref: std/lc-bulkhead-bore@1, group: bores, at: [7.125, 0.39], rotate: 180, lift: 1.0}
 connection-points:
   # WHERE A DUPLEX CONNECTOR SEATS: the midpoint of the two bores' own mate
   # points, on the ferrule line. The quoted `'on'` is the depth - YAML 1.1
@@ -107,4 +114,12 @@ provenance:
   face-detail-gap: >-
     the drawing gives the outline and the ferrules; how far the body stands
     proud and what its back looks like are read off three-quarter renders.
+  groups: >-
+    Fibrain HD adapter holder data sheet XMx (revision 1.1, modified 03.06.2024), page
+    1, says the holders suit the LCdx interface, and this adapter is the LCdx adapter
+    the holders carry; its two bores are fibre positions 1 and 2 (the maker's CAD front
+    elevations draw two ferrules to each body). No page names a role for the port; the
+    role follows the job, carrying a user's link through the panel, so it is traffic.
+    The port is passive and the data sheet prints no rate for it, so the group states no
+    speed.
 skins: [default]

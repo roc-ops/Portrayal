@@ -661,8 +661,24 @@ CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "rounded", "shell"}
 # like any other, so moving one is a major.) IF THE EARS EVER JOIN
 # THE DEFAULT BUILD, `h` and `y` become geometry and move into `shape`, and
 # that change is itself a major for every device that states them.
+# `halves` IS CLASSIFIED HERE AND READ APART. Hashed with the surface, so an
+# `angle` or a `stands` corrected against its source is a patch; what a change
+# to the halves costs beyond that is recorded in the entry's `halves` and read
+# by `_halves_bump` - see HALF_GEOMETRY. It is not in the shape digest, which
+# cannot tell a box that gained halves (a minor) from one whose slot moved.
 CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mount", "thickness",
-                   "full-depth", "ears", "overhang", "kits"}
+                   "full-depth", "ears", "overhang", "kits", "halves"}
+
+# THE KEYS OF ONE HALF, SORTED, and test_opening_halves.py holds the two sets to
+# the schema the way test_lock_chassis_split.py holds the chassis keys: a fifth
+# key has to say which side it falls on.
+# `outer` AND `hinge` ARE GEOMETRY: they decide which way the box opens, and a
+# viewer, a saved scene or a DCIM note that held one is wrong when it changes.
+# Changing either is a major.
+# `angle` AND `stands` ARE STATED FIGURES, as `weight-kg` is: a correction moves
+# the patch bucket only.
+HALF_GEOMETRY = {"outer", "hinge"}
+HALF_STATED = {"angle", "stands"}
 
 
 def _shape_digest(doc, placed, drop=()):
@@ -960,6 +976,10 @@ def entry(doc, versions=None):
     # gained is a minor and a port lost a major. Only where there is one.
     if ports := _dc_ports(doc, versions):
         e["dc-ports"] = ports
+    # THE HALVES IT OPENS IN, recorded and not only hashed, because halves
+    # gained are a minor and a bay's half moved a major. Only where there are any.
+    if record := _halves(doc):
+        e["halves"] = record
     e.update(buckets(doc, versions))
     out = _Entry(e)
     placed = _placements(doc)
@@ -1059,13 +1079,68 @@ def _adjustments_bump(old, new):
     return need
 
 
+def _halves(doc):
+    """The halves of a box that opens, as the lock records them: `geometry`,
+    the `outer` of the base and the `hinge` of the lid as the device states them,
+    and `bays`, the derived map `"<view>/<bay>": half` over the views whose
+    regions state a half (portrayal.halves). `{}` for a device with neither."""
+    from portrayal import halves
+    declared = halves.declared(doc)
+    bays = {f"{view}/{bay}": half
+            for view, mapped in halves.bay_halves(doc).items() for bay, half in mapped.items()}
+    if not declared and not bays:
+        return {}
+    return {"geometry": {name: {k: half[k] for k in sorted(HALF_GEOMETRY) if half.get(k) is not None}
+                         for name, half in sorted(declared.items()) if isinstance(half, dict)},
+            "bays": dict(sorted(bays.items()))}
+
+
+def _halves_bump(old, new):
+    """What the halves demand (docs/format-stability.md).
+
+    MAJOR when something held before is moved: a half's `outer` or `hinge`
+    changed or dropped, the halves taken away, or a bay that was in one half is
+    in the other or in none. MINOR when halves are stated where there were none,
+    or a bay is found in a half that had no answer for it. `angle`, `stands` and
+    a region's `half` are in `surface`, a patch.
+
+    An old lock with no `halves` key is a device that declared none, so the
+    first halves a device states are a minor and never a major.
+    """
+    was, now = old.get("halves") or {}, new.get("halves") or {}
+    if not was and not now:
+        return None
+    if not was:
+        return "minor"
+    if not now:
+        return "major"
+    need = None
+    for name, geometry in was["geometry"].items():
+        stated = (now["geometry"].get(name) or {})
+        for key, value in geometry.items():
+            if stated.get(key) != value:
+                return "major"
+        if set(stated) - set(geometry):
+            need = "minor"
+    if set(now["geometry"]) - set(was["geometry"]):
+        need = "minor"
+    for key, half in was["bays"].items():
+        if now["bays"].get(key) != half:
+            return "major"
+    if set(now["bays"]) - set(was["bays"]):
+        need = "minor"
+    return need
+
+
 def required_bump(old, new):
     """The smallest bump this change is allowed to take - the largest of what
-    the buckets, the placement keys and the adjustments demand."""
+    the buckets, the placement keys, the adjustments, the DC ports and the
+    halves demand."""
     if old is None:
         return None
     need = [b for b in (_bucket_bump(old, new), _placement_keys_bump(old, new),
-                        _adjustments_bump(old, new), _dc_ports_bump(old, new))
+                        _adjustments_bump(old, new), _dc_ports_bump(old, new),
+                        _halves_bump(old, new))
             if b]
     return max(need, key=RANK.get) if need else None
 
@@ -1693,6 +1768,67 @@ def check(library: pathlib.Path, below=()):
     return findings + check_listings(library) + check_racks(library)
 
 
+def check_base(base_locks, head_locks):
+    """The bump findings for the devices whose lock moved against a base.
+
+    BOTH ARGUMENTS ARE {slug: lock entry}, read from the lock files and nothing
+    else. `check` compares a lock with the device as it is now, so after
+    `--update` the two always agree and it cannot see that the `version:` line
+    stayed where the base had it. This compares the lock the base committed
+    with the lock the branch committed, by the rule `check` applies:
+    `required_bump` for what the move needs, `bump_taken` for what the version
+    took. A device only one side holds is new or gone and passes.
+    """
+    findings = []
+    for name in sorted(set(base_locks) & set(head_locks)):
+        was, now = base_locks[name], head_locks[name]
+        if was == now:
+            continue
+        took = bump_taken(was.get("version"), now.get("version"))
+        if took == "backwards":
+            findings.append((name, "backwards",
+                             f"{name} version went from {was.get('version')} to "
+                             f"{now.get('version')} against the base. A version is a "
+                             "promise, and it only counts up"))
+            continue
+        need = required_bump(was, now)
+        if not sufficient(took, need):
+            moved = sorted(k for k in set(was) | set(now)
+                           if k not in ("version", "format") and was.get(k) != now.get(k))
+            findings.append((name, "unbumped",
+                             f"{name} lock changed against the base ({', '.join(moved)}) "
+                             f"since version {was.get('version')} and the version "
+                             + (f"is still {now.get('version')}"
+                                if took is None else f"only took a {took} bump")
+                             + f". This change needs at least a {need} bump."))
+    return findings
+
+
+def _git(library: pathlib.Path, *args):
+    import subprocess
+    done = subprocess.run(["git", "-C", str(library), *args], capture_output=True, text=True)
+    if done.returncode:
+        raise SystemExit(f"devicelock: git {' '.join(args)} failed: {done.stderr.strip()}")
+    return done.stdout
+
+
+def base_locks_changed(library: pathlib.Path, base: str):
+    """({slug: lock at `base`}, {slug: lock in the checked-out tree}) for each
+    device lock that differs from `base`. Needs the commit `base` and its tree
+    only, so a clone one commit deep that fetched `base` alone is enough."""
+    names = _git(library, "diff", "--name-only", "--relative", "--diff-filter=M",
+                 base, "--", "devices").split()
+    was, now = {}, {}
+    for rel in names:
+        parts = pathlib.PurePosixPath(rel).parts
+        if len(parts) != 4 or parts[3] != DEVICE_LOCK_NAME:
+            continue
+        name = f"{parts[1]}/{parts[2]}"
+        was[name] = json.loads(_git(library, "show", f"{base}:./{rel}"))
+        now[name] = json.loads((library / rel).read_text())
+    return was, now
+
+
 def update(library: pathlib.Path, below=()):
     """Re-lock the devices whose fingerprint moved, and only those."""
     versions = component_versions(library, below)
@@ -1725,7 +1861,17 @@ def main(argv=None):
     ap.add_argument("--below", action="append", default=[], type=pathlib.Path,
                     help="a library --library is built on top of (an overlay library): "
                          "its parts count toward a device's fingerprint")
+    ap.add_argument("--base", metavar="COMMIT",
+                    help="compare each device lock that differs from this commit with "
+                         "the lock there, and fail when the version did not take the "
+                         "bump the move needs; reads lock files only, no library walk")
     args = ap.parse_args(argv)
+    if args.base:
+        findings = check_base(*base_locks_changed(args.library, args.base))
+        for _, _, msg in findings:
+            print(f"devicelock: {msg}")
+        print(f"devicelock: {len(findings)} finding(s) against {args.base[:12]}")
+        return 1 if findings else 0
     if args.update:
         changed = update(args.library, args.below)
         print(f"devicelock: {len(changed)} device(s) re-locked"
