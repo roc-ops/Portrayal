@@ -59,9 +59,10 @@ provenance:
     confidence: drawing
     note: >-
       The illustration and the photographs show two SMA connectors printed AUX and MAIN on a rounded plate at the left
-      end, with a screw at two of its corners. No document says what the plate is. The option card brief says the
-      cellular option cards come "w/ external antenna", so the plate may be the face of the option slot. The connectors
-      are drawn because the figures show them.
+      end, with a screw at two of its corners. The option card brief, page 2, shows the same plate as the face of each
+      88-CAT4 cellular card, 50.3 mm wide and 22.9 mm high, so the plate is the face of the option slot with a cellular
+      card in it. The plate and the connectors are drawn as the figures show them. The face of a unit with another card,
+      or none, is not shown in any held document.
   leds:
     confidence: estimated
     note: >-
@@ -126,16 +127,17 @@ gaps:
   reason: needs-photo
   wanted: a photograph or a drawing of the 83X-16SA and 83X-32SA faces.
   note: >-
-    The option card brief gives the two serial modules a size and says the 16-port module comes "w/2 high-density
-    cables". It shows neither face, so neither module is modelled.
+    The option card brief gives the two serial modules a size and a small picture of the face, which shows two large
+    high-density connectors, and says the 16-port module comes "w/2 high-density cables". No held document names the
+    connector, so neither module is modelled.
 - what: option-slot
   scope: [front]
   reason: needs-drawing
-  wanted: a drawing of the option slot and of the face of each option card.
+  wanted: a drawing of the option slot, and a registry key for what the slot takes.
   note: >-
-    The option card brief gives each option card a size and no face. The figures show a plate with two SMA connectors at
-    the left end, and no held document says it is the option slot. The option cards are not modelled and no bay is
-    declared for the slot.
+    The option card brief gives each option card a size and a small picture of its face. The slot is the plate with the
+    two SMA connectors at the left end. A bay for it needs an interface key that the registry does not hold, so the
+    option cards are not modelled and no bay is declared for the slot.
 - what: bay-number-legends
   scope: [front]
   reason: vendor-silent
@@ -224,7 +226,7 @@ views:
     panel:
       decor:
       - {id: faceplate, at: [0.0, 0.0], size: [445.0, 43.2], fill: '#2b2e33', kind: bezel}
-      - {id: option-plate, at: [1.9, 1.8], size: [50.2, 15.9], fill: '#25282c', kind: plate}
+      - {id: option-plate, at: [1.6, 1.8], size: [50.3, 22.5], fill: '#25282c', kind: plate}
       - {id: option-screw-1, at: [48.4, 3.7], size: [2.8, 2.8], fill: '#16181b', shape: circle, kind: case-screw}
       - {id: option-screw-2, at: [3.0, 16.8], size: [2.8, 2.8], fill: '#16181b', shape: circle, kind: case-screw}
       - {id: button, at: [11.55, 29.3], size: [4.6, 4.6], fill: '#4a4d52', shape: circle, kind: push-button}

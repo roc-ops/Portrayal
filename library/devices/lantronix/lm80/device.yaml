@@ -46,7 +46,9 @@ provenance:
     confidence: drawing
     note: >-
       The illustration and the photographs show two SMA connectors printed AUX and MAIN on a rounded plate at the left
-      end. No document says what the plate is. The LM80 has one option slot, and the plate may be its face.
+      end. The option card brief, page 2, shows the same plate as the face of each 88-CAT4 cellular card, 50.3 mm wide
+      and 22.9 mm high, so the plate is the face of the option slot with a cellular card in it. The face of a unit with
+      another card, or none, is not shown in any held document.
   leds:
     confidence: estimated
     note: >-
@@ -97,11 +99,11 @@ gaps:
 - what: option-slot
   scope: [front]
   reason: needs-drawing
-  wanted: a drawing of the option slot and of the face of each option card.
+  wanted: a drawing of the option slot, and a registry key for what the slot takes.
   note: >-
-    The LM80 has one option slot. The option card brief gives each option card a size and no face. The figures show a
-    plate with two SMA connectors at the left end, and no held document says it is the option slot. The option cards are
-    not modelled.
+    The LM80 has one option slot. The option card brief gives each option card a size and a small picture of its face.
+    The slot is the plate with the two SMA connectors at the left end. A bay for it needs an interface key that the
+    registry does not hold, so the option cards are not modelled.
 - what: indicator-led
   scope: [front]
   reason: vendor-silent
@@ -165,7 +167,7 @@ views:
     panel:
       decor:
       - {id: faceplate, at: [0.0, 0.0], size: [254.0, 43.0], fill: '#2b2e33', kind: bezel}
-      - {id: option-plate, at: [1.9, 1.8], size: [50.2, 15.9], fill: '#25282c', kind: plate}
+      - {id: option-plate, at: [1.6, 1.8], size: [50.3, 22.5], fill: '#25282c', kind: plate}
       - {id: option-screw-1, at: [48.4, 3.7], size: [2.8, 2.8], fill: '#16181b', shape: circle, kind: case-screw}
       - {id: option-screw-2, at: [3.0, 16.8], size: [2.8, 2.8], fill: '#16181b', shape: circle, kind: case-screw}
       - {id: button, at: [11.55, 29.3], size: [4.6, 4.6], fill: '#4a4d52', shape: circle, kind: push-button}
