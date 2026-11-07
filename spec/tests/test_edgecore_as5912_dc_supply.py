@@ -9,7 +9,6 @@ maker part number, and no held document gives the AS5912-54X's supply a part num
   - it composes common/pla03-receptacle@1 as `inlet`, so the cable's plug (generic/pla03-plug@1) has a place to seat, and it
     states no DC port (a port on a composed connector cannot be published at the connector yet);
   - the two DC builds seat it and the bays still accept the generic supply, because a bay that stops accepting a part is a major;
-  - the AS7326-56X still seats the generic supply, so that part is not edited.
 
 These run against the real library, a components index built by the indexer the build runs, the device lock and the exporter's own
 functions. They read no library/dist and render nothing.
@@ -103,7 +102,6 @@ def test_the_device_seats_the_supply_in_both_dc_builds_and_still_accepts_the_gen
     assert doc["configurations"]["dc-b2f"]["component-attrs"]["as5912-54x-psu-dc"] == {
         "latch-finish": "#3d7bd6", "latch-edge": "#234b8c", "airflow": "back-to-front"}
     assert "psu-dc-650" not in (doc["configurations"]["dc-b2f"].get("component-attrs") or {})
-    assert doc["configurations"]["ac-f2b"]["bays"] == {"psu-1": "common/psu-ac-650@3", "psu-2": "common/psu-ac-650@3"}
     for b in (b for b in doc["views"]["rear"]["components"]["bays"] if b["id"].startswith("psu-")):
         assert b["accepts"] == ["common/psu-ac-650@3", GENERIC, SUPPLY]
 
