@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: nfxs-f-bb
-version: 1.0.2
+version: 1.0.3
 maturity: modelled
 manufacturer: Nokia
 model: 7360 ISAM FX-4 (NFXS-F BB)
@@ -41,6 +41,25 @@ provenance:
       sheet prints 447 / 480.5 / 465 / 278.6 / 221.9, and its own drawing labels the body 445.5. The
       body modelled is the 447 between the flange folds; the flanges (ears) are not drawn, per the
       method, and their extent is (481 - 447) / 2 = 17 mm a side.
+  rolled-brackets:
+    confidence: drawing
+    note: >-
+      The brackets that hold the shelf stood on its side, drawn in the rack elevation at roll 90 and
+      270. The kit's unit data sheet 3FE67299BAAATQZZA01 (Edition 01, April 2013) prints each part's own
+      height, width and length: page 5 Table 3, the shelf horizontal mount bracket, 25.40 x 92.44 x
+      486.41 mm, apart from the air intake baffle/drip tray beside it; page 4 Table 2, the top cross
+      bracket, 31.5 x 62 x 486.75 mm, apart from the rear and front skirts. Its Figure 1 and Figure 2
+      draw an ear rising from a bar, so the height is read as the bar, the width as the ear's rise and
+      the length as the span across the posts. The sizes are the sheet's, not the FX-8's: the same sheet
+      for the FX-8 prints the same three numbers for each bracket. The ear width, 28 mm, is an
+      estimate: no table prints it, Figure 1 and Figure 2 are perspective views and Figure 144 of
+      3HH12893AAAATCZZA29 is too coarse a raster to measure an ear on, so the width is the one read
+      off the FX-8's Figure 84 for the same bracket (3FE65751AA is the shelf horizontal mount bracket
+      of both kits). The slope between ear and bar is drawn and carries no size. The colour is the
+      library's silver for bare sheet-metal ears (#c8cacc), a neutral and not a reading: no held
+      source states it. Where the bars sit is read off Figure 144: the lower bar's upper edge on the
+      shelf's lower edge, the upper bar's lower edge on its upper edge. No source describes a roll of
+      270, so the brackets are drawn the same there.
   panel-scale:
     confidence: drawing
     note: >-
@@ -175,7 +194,18 @@ chassis:
   depth: 278.3
   ru: 5
   color: '#c9ccd0'
+  ears:
+    rolled:
+    - {id: below, side: below, bar-h: 25.4, length: 486.41, ear-h: 92.44, ear-w: 28.0, color: '#c8cacc'}
+    - {id: above, side: above, bar-h: 31.5, length: 486.75, ear-h: 62.0, ear-w: 28.0, color: '#c8cacc'}
 gaps:
+- what: rolled-brackets
+  reason: needs-drawing
+  note: >-
+    The kit's two brackets are drawn as a bar and two ears. The unit data sheet prints their sizes but
+    not their shapes or the ear width, which is carried as an estimate. The upper bracket's side tabs,
+    the slots in its strip and the bolt pattern are not drawn.
+  wanted: a dimensioned drawing of the shelf horizontal mount bracket and the top cross bracket
 - what: line-cards
   scope: [lt-1, lt-2, lt-3, lt-4]
   reason: needs-drawing
