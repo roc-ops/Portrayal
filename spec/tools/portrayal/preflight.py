@@ -55,8 +55,10 @@ THE CHECKS
   devicelock `devicelock.py --library library` reports nothing; and a device
              whose lock the diff re-recorded is also checked against the lock
              at the merge base, which catches `--update` run before the bump.
-             THAT HALF IS STRICTER THAN CI ON PURPOSE: CI sees only the lock
-             the branch committed, which `--update` has already made agree.
+             CI's `lint` job runs the same comparison on a pull request
+             (`devicelock.py --base`), from the lock files alone. This half
+             re-checks the device itself, so it also sees a lock that does not
+             match its device.
   lint       Lint on the devices the diff touches, and on every device that
              places a touched component (the `device_dependencies` walk), plus
              the library-wide rules a `--device` run skips (L89 only when the
