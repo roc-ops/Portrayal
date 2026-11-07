@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-macsec-20ge
-version: 1.3.1
+version: 1.3.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -45,31 +45,53 @@ provenance:
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, 'Gigabit Ethernet MIC
+    with 256b-AES MACsec' (printed pages 280 to 284): '20 SFP ports supporting 20 SFP optics modules
+    operating in 1-Gbps mode or two SFP+ ports supporting 2 SFP+ optics modules operating in 10-Gbps
+    mode', figure 26's legend 'Ports 8 and 9 are 10-Gbps ports' on PIC1, and the note 'dual-rate 1G/10G
+    (PHY8490) ports (marked [1 / 3] / 8 and [1 / 3] / 9)'. Figure 27 shows the last two cages of the
+    second PIC as 'ge-3/1/9 or xe-3/1/0' and 'ge-3/1/8 or xe-3/0/0': port-1-8 and port-1-9 here. They
+    are a group of their own, at 10g with speeds 1g and 10g; the other eighteen run at 1g. Port numbers
+    start at 0. The role is traffic.
 states:
 - ok
 - fail
 - absent
+groups:
+  sfp-1g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp, speed: 1g}
+    description: the Gigabit Ethernet SFP cages, each running at up to 1 Gbps
+  sfp-10g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp, speed: 10g, speeds: [1g, 10g]}
+    description: the two SFP cages that also run at 10 Gbps; in that mode the other eighteen are disabled
 parts:
-- {ref: std/sfp-ganged@1, id: port-0-0, at: [16.00, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-1, at: [16.00, 15.20], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-2, at: [30.25, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-3, at: [30.25, 15.20], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-4, at: [44.50, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-5, at: [44.50, 15.20], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-6, at: [58.75, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-7, at: [58.75, 15.20], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-8, at: [73.00, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-9, at: [73.00, 15.20], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-0, at: [94.25, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-1, at: [94.25, 15.20], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-2, at: [108.50, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-3, at: [108.50, 15.20], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-4, at: [122.75, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-5, at: [122.75, 15.20], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-6, at: [137.00, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-7, at: [137.00, 15.20], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-8, at: [151.25, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-9, at: [151.25, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-0, group: sfp-1g, at: [16.00, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-1, group: sfp-1g, at: [16.00, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-2, group: sfp-1g, at: [30.25, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-3, group: sfp-1g, at: [30.25, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-4, group: sfp-1g, at: [44.50, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-5, group: sfp-1g, at: [44.50, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-6, group: sfp-1g, at: [58.75, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-7, group: sfp-1g, at: [58.75, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-8, group: sfp-1g, at: [73.00, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-9, group: sfp-1g, at: [73.00, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-0, group: sfp-1g, at: [94.25, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-1, group: sfp-1g, at: [94.25, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-2, group: sfp-1g, at: [108.50, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-3, group: sfp-1g, at: [108.50, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-4, group: sfp-1g, at: [122.75, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-5, group: sfp-1g, at: [122.75, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-6, group: sfp-1g, at: [137.00, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-7, group: sfp-1g, at: [137.00, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-8, group: sfp-10g, at: [151.25, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-9, group: sfp-10g, at: [151.25, 15.20], rotate: 180, attrs: {media: sfp}}
 size:
   w: 168.0
   h: 27.0
