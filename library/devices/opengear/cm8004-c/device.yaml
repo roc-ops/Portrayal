@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cm8004-c
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Opengear
 model: CM8004-C
@@ -74,6 +74,12 @@ provenance:
       3 RxD, 4 GND, 5 not connected, 6 TxD, 7 DTR, 8 RTS. The photograph numbers
       the ports 1 and 3 over 2 and 4, with SERIAL printed between the lower
       numerals.
+  serial-role:
+    confidence: datasheet
+    note: >-
+      The serial ports are console server ports. Quick Start Guide, p.10, "Configure Serial Ports": "The
+      default configuration for serial ports is: Mode: Console Server". The data sheet, p.1, calls them
+      "Managed Serial Ports". The USB-C jack is the local console (data sheet, p.1, "Local Console Port").
   network:
     confidence: datasheet
     note: >-
@@ -211,7 +217,7 @@ groups:
     term: Port
     role: management
     index-origin: 1
-    attrs: {media: rj45-serial}
+    attrs: {media: rj45-serial, role: console-server}
     description: four RJ45 RS-232 serial ports, "Cisco straight X2" pinout.
   net-rj45:
     term: Port

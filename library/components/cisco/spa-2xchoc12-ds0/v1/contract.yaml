@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: spa-2xchoc12-ds0
-version: 1.1.1
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -166,6 +166,18 @@ provenance:
     searched - no end-of-life notice for SPA-2XCHOC12/DS0 is in this intake. Table 10 gives
     this part a minimum IOS XR release of 3.9.0 and a minimum hardware revision of 1.0,
     which is a support floor and not a lifecycle statement.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router SIP and SPA Hardware
+    Installation Guide, PDF pages 27, 2-Port Channelized OC-12/DS0 SPA Interface Specifications
+    and SFP Optical Transceiver Modules and Cables: 'a small form-factor pluggable (SFP) optical
+    transceiver module installed in each port', SFP-OC12-MM, -SR, -IR1, -LR1 and -LR2, line rate
+    622.08 Mbps. The group holds the adapter's 2 port parts. Role traffic: the ports are what
+    the adapter is for. index-origin 0: the guide says subslots and ports are numbered starting
+    from 0 (SIP-700 interface addresses, PDF page 20), and the parts here are p0, p1 and so on.
+    Media sfp: the guide names a small form-factor pluggable optical transceiver module in each
+    port. No speed is stated: the closed set of speeds has no word for 622.08 Mbps, so the rate
+    stays in the group description as the guide prints it. Nothing was measured: no position,
+    size or part changed.
 elements:
   led-car-p0:
     at: [19.26, 93.98]
@@ -265,7 +277,17 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp
+    description: >-
+      Each port takes an SFP optical transceiver module for SONET single-mode or multimode
+      fibre: SFP-OC12-MM, -SR, -IR1, -LR1 or -LR2. The guide prints 622.08 Mbps.
 parts:
-  - {ref: std/sfp@1, id: p0, at: [18.6, 108.98], rotate: 90}
-  - {ref: std/sfp@1, id: p1, at: [18.6, 126.95], rotate: 90}
+  - {ref: std/sfp@1, id: p0, at: [18.6, 108.98], rotate: 90, group: sfp}
+  - {ref: std/sfp@1, id: p1, at: [18.6, 126.95], rotate: 90, group: sfp}
 skins: [default]

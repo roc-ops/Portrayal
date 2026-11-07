@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: spa-4xoc12-pos
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -160,6 +160,18 @@ provenance:
     searched - no end-of-life notice for SPA-4XOC12-POS is in this intake. Table 10 gives
     this part a minimum IOS XR release of 4.3.0 and a minimum hardware revision of 1.0,
     which is a support floor and not a lifecycle statement.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router SIP and SPA Hardware
+    Installation Guide, PDF pages 67-69, 4-Port OC-3 STM-1/OC-12 STM-4 POS SPA Overview and
+    Optical Transceiver Modules and Cables: 'any given channel can be configured as either OC-3
+    or OC-12', per-port bandwidth 155.52 or 622.08 Mbps by the SFP module installed, SFP-OC3-*
+    and SFP-OC12-* modules. The group holds the adapter's 4 port parts. Role traffic: the ports
+    are what the adapter is for. index-origin 0: the guide says subslots and ports are numbered
+    starting from 0 (SIP-700 interface addresses, PDF page 20), and the parts here are p0, p1
+    and so on. Media sfp: the guide names a small form-factor pluggable optical transceiver
+    module in each port. No speed is stated: the cage takes OC-3 and OC-12 modules, so the port
+    has no one rate, and the closed set has no word for either. The guide prints both, in the
+    group description. Nothing was measured: no position, size or part changed.
 elements:
   led-ca-p0:
     at: [13.54, 7.38]
@@ -335,9 +347,19 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp
+    description: >-
+      Each port takes an SFP module for OC-3/STM-1 or OC-12/STM-4. The guide prints the per-port
+      bandwidth as 155.52 or 622.08 Mbps, by the module installed.
 parts:
-  - {ref: std/sfp@1, id: p0, at: [-0.55, 6.75], rotate: 90}
-  - {ref: std/sfp@1, id: p1, at: [-0.55, 25.86], rotate: 90}
-  - {ref: std/sfp@1, id: p2, at: [-0.55, 44.96], rotate: 90}
-  - {ref: std/sfp@1, id: p3, at: [-0.55, 64.06], rotate: 90}
+  - {ref: std/sfp@1, id: p0, at: [-0.55, 6.75], rotate: 90, group: sfp}
+  - {ref: std/sfp@1, id: p1, at: [-0.55, 25.86], rotate: 90, group: sfp}
+  - {ref: std/sfp@1, id: p2, at: [-0.55, 44.96], rotate: 90, group: sfp}
+  - {ref: std/sfp@1, id: p3, at: [-0.55, 64.06], rotate: 90, group: sfp}
 skins: [default]

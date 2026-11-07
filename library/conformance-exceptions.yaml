@@ -88,6 +88,11 @@ rows:
     why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
     order: "#1360"
     since: 2026-11-01
+  - part: c1300-24p-4g
+    code: C19
+    why: "the held data sheet gives a universal internal supply (100-240 V, 50-60 Hz) and no held document shows a rear inlet for the 24P, so no inlet is drawn"
+    order: "#1360"
+    since: 2026-11-06
 
   # Closed by #1361: Juniper EX power
   - part: juniper/ex8200-pwr-dc2kr@1
@@ -101,11 +106,6 @@ rows:
     order: "#1361"
     since: 2026-11-01
   - part: juniper/jpsu-550-c-dc-afi@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1361"
-    since: 2026-11-01
-  - part: juniper/jpsu-550-c-dc-afo@1
     code: C19
     why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
     order: "#1361"
@@ -186,6 +186,13 @@ rows:
     since: 2026-11-01
 
   # Closed by #1364: AC inlets and fixed cords on Casa, Dell, Eaton, FS, MikroTik and Smartoptics devices
+  - part: c100g
+    code: C19
+    why: "a configuration says the device is powered (dc) and no power end is offered"
+    order: "#1364"
+    since: 2026-11-07
+
+  # Closed by #1364: AC inlets and fixed cords on Casa, Dell, Eaton, FS, MikroTik and Smartoptics devices
   - part: crs328-24p-4s-plus-rm
     code: C19
     why: "a configuration says the device is powered (ac) and no power end is offered"
@@ -202,13 +209,6 @@ rows:
     code: C22
     why: "the IRIG-B card draws its IRIG input, optical output, ten IRIG outputs and alarm and pulse relay as ports with no registered interface; the 2023 data sheet lists them and names no connector type for any"
     order: "#1366"
-    since: 2026-11-01
-
-  # Closed by #1367: Fibre adapters and test points on seven optical frames
-  - part: ch3000
-    code: C22
-    why: "a port drawn in the device itself presents no registered interface"
-    order: "#1367"
     since: 2026-11-01
 
   # Opened by #1069: the slots of the FHD-FAPM6's six openings take inserts, and the runner counts a mate as a part of class

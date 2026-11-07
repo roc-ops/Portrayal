@@ -692,6 +692,7 @@ PART_POWER = {
     # Neither is a screw terminal, so each is `other`, and POWER_LABEL says which connector.
     "juniper/qfx524x-dc-header": "other",
     "juniper/qfx10002-dc-header": "other",
+    "juniper/ex4400-dc-header": "other",
     # THE DC CONNECTORS OF THE EDGECORE AS5835, AMX3200 AND AGR560 48 VDC SUPPLIES ARE VENDOR CONNECTORS THE
     # DOCUMENTS DO NOT NAME THE PART OF. None is a screw terminal, so each is `other`, and POWER_LABEL says which.
     "edgecore/dcs201-dc-header": "other",
@@ -779,6 +780,7 @@ POWER_LABEL = {
     "juniper/qfx5210-dc-header": "DC power header (3-position, cells 1 to 3)",
     "juniper/qfx524x-dc-header": "DC power connector (6-position, 2x3)",
     "juniper/qfx10002-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
+    "juniper/ex4400-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
     "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
     "edgecore/amx-3200-dc-header": "DC power connector (3-pin)",
     "edgecore/agr560-dc-header": "DC power connector (2-socket)",
@@ -1193,6 +1195,17 @@ NOT_A_DCIM_PORT = {
                              "power-sharing link between switches, not a power input; neither DCIM "
                              "has a type for it and a power port would read as a feed",
 
+    # --- test points and a serial jack ---------------------------------------------
+    "common/g-type-male-port": "the G-type male -20 dB RF test point of the CommScope CH3000 receivers: a "
+                               "monitoring tap, not a network interface, and neither DCIM has a port type "
+                               "for a G-type connector",
+    "common/g-type-female-port": "the G-type female -20 dB RF test point of the CommScope CH3000 DR3600N: a "
+                                 "monitoring tap, not a network interface, and neither DCIM has a port type "
+                                 "for a G-type connector",
+    "common/stereo-jack": "the stereo-jack style RS-232 port of the CommScope CH3000 CX3003C and CX3033N, "
+                          "reserved for factory use: not a console a DCIM manages, and neither DCIM has a "
+                          "port type for it",
+
     # `dell/rj45-port-14g` USED TO BE HERE, as "a modelling gap, not an exporter
     # one": the NDC's four jacks carried no speed, so the exporter could not say
     # which two were 10GBASE-T and rightly refused to guess. #287 closed it by
@@ -1254,8 +1267,6 @@ MGMT_NOT_A_DCIM_PORT = {
     ("std/rj45-ganged", "timing"): "the CSR180's stack-a-upper, which its own device marks "
                                    "`timing: unidentified` - there is no true type to give a jack "
                                    "nobody has identified",
-    ("std/rj45-ganged", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
-    ("common/rj45-ganged-lamped", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
 }
 MGMT_EXPORTED_ROLES = {"mgmt", "console", "aux"}
 
@@ -2020,6 +2031,8 @@ MOUNT_PROSE = {
     "din-rail": "Mounts on a DIN rail (IEC 60715); not rack-mounted.",
     "wall": "Wall-mounted; not rack-mounted.",
     "ceiling": "Ceiling-mounted; not rack-mounted.",
+    "strand": "Strand-mounted; not rack-mounted.",
+    "pedestal": "Pedestal-mounted; not rack-mounted.",
     "desktop": "Desktop unit; not rack-mounted.",
     "rack-face": "Mounts on the rack rail face at a rack unit; occupies no rack unit.",
     "rack-side": "Mounts on the side of a rack's upright, beside the rack; occupies no rack unit.",
@@ -2249,6 +2262,11 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
     console_server = []
     outlets = {}
+    # THE HALF OF A BOX THAT OPENS each bay is in, said in its description
+    # (portrayal.halves); empty for a box that does not open
+    from portrayal import halves as _halves
+    bay_half = {bay: half for mapped in _halves.bay_halves(dev).values()
+                for bay, half in mapped.items()}
     for view in views_for(dev, cfg_name):
         parts = view_parts(view)
         for p in scoped(parts["placements"], cfg_name):
@@ -2318,7 +2336,8 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
                 if trace is not None:
                     trace.add(p["id"])
         for b in scoped(parts["bays"], cfg_name):
-            bays.append(bay_row(b["id"], b.get("accepts"), None, b.get("interface")))
+            bays.append(bay_row(b["id"], b.get("accepts"), None, b.get("interface"),
+                                half=bay_half.get(b["id"])))
 
     # Switch and management interfaces. With a listing, a placement is an
     # interface exactly when a rule names it - `mgmt-eth` becomes `ma1` because
@@ -2479,8 +2498,12 @@ def contract_view(entry):
             "optical": entry.get("optical") or {}}
 
 
-def bay_row(bay_id, accepts=None, span=None, interface=None):
+def bay_row(bay_id, accepts=None, span=None, interface=None, half=None):
     """One `module-bays` row, for a bay on a device or a bay on a module.
+
+    `half` is the half of a box that opens the bay is in (`base` or `lid`); it
+    leads the description as "In the lid.", where a person installing a module
+    reads it, and a bay with none reads exactly as it always did.
 
     `interface` is the form a bay takes by its `mates` (spec/schemas/
     connectors.yaml): its `note` is said instead of a list, and an `accepts`
@@ -2503,6 +2526,8 @@ def bay_row(bay_id, accepts=None, span=None, interface=None):
     # NetBox schema allows on a bay description.
     spans = (f"Spans {', '.join(span)} for a card {len(span) + 1} slots wide. "
              if span else "")
+    if half:
+        spans = f"In the {half}. " + spans
     if interface:
         from portrayal.render import _connector_registry
         note = (_connector_registry().get(interface) or {}).get("note")
