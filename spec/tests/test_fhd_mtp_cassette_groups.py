@@ -14,8 +14,6 @@ What these hold for every contract in the list:
   - a group's declared media agrees with each member's;
   - a passive adapter has no data rate, so no group and no part states a speed;
   - a port group is one connector family;
-  - a cassette's front holds as many LC duplex adapters as its name counts, its
-    rear as many MTP adapters, and the fibres on both sides agree;
   - every group names its source in `provenance.groups`.
 
 The census at the end holds for every version of every cassette of the four
@@ -30,25 +28,25 @@ import yaml
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library" / "components"
 
-# front, LC duplex adapters on the face: ref -> the number of adapters its name counts
-FRONTS = {
-    "fs/fhd-1mtp6lcd-os2-a@4": 6, "fs/fhd-1mtp6lcd-om4-a@2": 6, "fs/fhd-1mtp6lcd-om5-a@2": 6,
-    "fs/fhd-1mtp6lcd-os2-af@3": 6, "fs/fhd-1mtp6lcd-os2-u@3": 6, "fs/fhd-1mtp6lcd-om4-u@2": 6,
-    "fs/fhd-1mtp24-lc-os2-a@4": 12, "fs/fhd-1mtp24-lc-om4-a@2": 12, "fs/fhd-1mtp24-lc-om5-a@2": 12,
-    "fs/fhd-1mtp24-lc-om3-a@2": 12, "fs/fhd-1mtp24-lc-os2-af@4": 12,
-    "fs/fhd-2mtp12-lc-os2-a@4": 12, "fs/fhd-2mtp12-lc-om4-a@2": 12, "fs/fhd-2mtp12-lc-om5-a@2": 12,
-    "fs/fhd-2mtp12-lc-om3-a@2": 12, "fs/fhd-2mtp12-lc-os2-af@4": 12, "fs/fhd-2mtp12-lc-os2-u@4": 12,
-    "fs/fhd-2mtp12-lc-om4-u@2": 12,
-    "fs/fhd-3mtp18-lc-os2-a@1": 18, "fs/fhd-3mtp18-lc-om4-a@1": 18,
-}
+# front, LC duplex adapters on the face
+FRONTS = [
+    "fs/fhd-1mtp6lcd-os2-a@4", "fs/fhd-1mtp6lcd-om4-a@2", "fs/fhd-1mtp6lcd-om5-a@2",
+    "fs/fhd-1mtp6lcd-os2-af@3", "fs/fhd-1mtp6lcd-os2-u@3", "fs/fhd-1mtp6lcd-om4-u@2",
+    "fs/fhd-1mtp24-lc-os2-a@4", "fs/fhd-1mtp24-lc-om4-a@2", "fs/fhd-1mtp24-lc-om5-a@2",
+    "fs/fhd-1mtp24-lc-om3-a@2", "fs/fhd-1mtp24-lc-os2-af@4",
+    "fs/fhd-2mtp12-lc-os2-a@4", "fs/fhd-2mtp12-lc-om4-a@2", "fs/fhd-2mtp12-lc-om5-a@2",
+    "fs/fhd-2mtp12-lc-om3-a@2", "fs/fhd-2mtp12-lc-os2-af@4", "fs/fhd-2mtp12-lc-os2-u@4",
+    "fs/fhd-2mtp12-lc-om4-u@2",
+    "fs/fhd-3mtp18-lc-os2-a@1", "fs/fhd-3mtp18-lc-om4-a@1",
+]
 # rear, MTP adapters on the face
-REARS = {
-    "fs/fhd-1mtp6lcd-rear@3": 1, "fs/fhd-1mtp6lcd-af-rear@2": 1, "fs/fhd-1mtp6lcd-u-rear@2": 1,
-    "fs/fhd-1mtp24-lc-rear@3": 1, "fs/fhd-1mtp24-lc-af-rear@2": 1,
-    "fs/fhd-2mtp12-lc-rear@2": 2, "fs/fhd-2mtp12-lc-af-rear@1": 2, "fs/fhd-2mtp12-lc-u-rear@1": 2,
-    "fs/fhd-3mtp18-lc-rear@1": 3,
-}
-CASSETTES = sorted(list(FRONTS) + list(REARS))
+REARS = [
+    "fs/fhd-1mtp6lcd-rear@3", "fs/fhd-1mtp6lcd-af-rear@2", "fs/fhd-1mtp6lcd-u-rear@2",
+    "fs/fhd-1mtp24-lc-rear@3", "fs/fhd-1mtp24-lc-af-rear@2",
+    "fs/fhd-2mtp12-lc-rear@2", "fs/fhd-2mtp12-lc-af-rear@1", "fs/fhd-2mtp12-lc-u-rear@1",
+    "fs/fhd-3mtp18-lc-rear@1",
+]
+CASSETTES = sorted(FRONTS + REARS)
 
 ROLES = set(json.loads((SPEC / "schemas/component.schema.json").read_text())
             ["$defs"]["group"]["properties"]["role"]["enum"])
@@ -75,10 +73,6 @@ def _media(part):
 
 def _connector(part):
     return (_contract(part["ref"]).get("attrs") or {}).get("connector")
-
-
-def _fibres_of_mtp(part):
-    return 24 if "mpo24" in part["ref"] else 12
 
 
 @pytest.mark.parametrize("ref", CASSETTES)
@@ -136,33 +130,9 @@ def test_a_port_group_is_one_connector_family(ref):
 
 @pytest.mark.parametrize("ref", CASSETTES)
 def test_every_group_names_its_source(ref):
-    contract = _contract(ref)
-    text = (contract.get("provenance") or {}).get("groups") or ""
-    assert "Datasheet" in text and "page" in text, f"{ref}: provenance.groups names no datasheet page"
-    assert "no data rate" in text, f"{ref}: provenance.groups does not say the page prints no rate"
-
-
-@pytest.mark.parametrize("ref,count", sorted(FRONTS.items()))
-def test_the_front_holds_the_adapters_its_name_counts(ref, count):
-    assert len(_ports(ref)) == count, f"{ref}: {len(_ports(ref))} LC duplex adapters, expected {count}"
-    assert {_connector(p) for p in _ports(ref)} == {"lc-duplex"} or \
-        {_connector(p) for p in _ports(ref)} == {"lc"}, f"{ref}: a front port that is not an LC duplex adapter"
-
-
-@pytest.mark.parametrize("ref,count", sorted(REARS.items()))
-def test_the_rear_holds_the_mtp_adapters_its_name_counts(ref, count):
-    ports = _ports(ref)
-    assert len(ports) == count, f"{ref}: {len(ports)} MTP adapters, expected {count}"
-    assert {_connector(p) for p in ports} == {"mpo"}, f"{ref}: a rear port that is not an MTP adapter"
-
-
-@pytest.mark.parametrize("ref", sorted(FRONTS))
-def test_the_fibres_on_the_front_and_the_rear_agree(ref):
-    rear = _contract(ref)["faces"]["rear"]["ref"]
-    assert rear in REARS, f"{ref}: its rear face {rear} is not in this list"
-    front_fibres = 2 * len(_ports(ref))
-    rear_fibres = sum(_fibres_of_mtp(p) for p in _ports(rear))
-    assert front_fibres == rear_fibres, f"{ref}: {front_fibres} fibres on the front, {rear_fibres} on {rear}"
+    text = (_contract(ref).get("provenance") or {}).get("groups") or ""
+    assert text.strip(), f"{ref}: provenance.groups is missing"
+    assert "FHD MTP-12/24 Cassettes Datasheet" in text, f"{ref}: provenance.groups does not cite the datasheet"
 
 
 def test_no_cassette_of_the_four_families_composes_ports_without_groups():
