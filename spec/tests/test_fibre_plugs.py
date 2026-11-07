@@ -417,6 +417,12 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # is spec/tests/test_scte_91_registry.py.
         if "scte-91" in ms:
             continue
+        # NOR IS THE STEREO PLUG. common/stereo-plug@1 mates `stereo-jack`, the RS-232
+        # jack of the CH3000 communications modules. Left out by what it IS - its
+        # `attrs.media` is `serial`, a copper cable end - and its census is
+        # spec/tests/test_ch3000_interfaces.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "serial":
+            continue
         if any(m in connectors for m in ms) and c.get("class") != "cap":
             ns = f.parents[2].name
             found[f"{ns}/{c['name']}@{c['version'].split('.')[0]}"] = c

@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: stereo-plug
+version: 1.0.0
+class: port
+mates: stereo-jack
+profile: networking
+description: >-
+  A stereo plug on a cable, the cable end that seats in a stereo jack. Seen
+  from the face as a seated plug: a round metal barrel and the cable behind
+  it. Drawn as an estimate: no maker drawing of the plug is held and the data
+  sheets that name the jack give no plug diameter.
+size: {w: 6.0, h: 6.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: serial, connector: stereo-jack}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - no maker drawing of a stereo plug is held. A plug has to be
+    narrower than the 7.4 estimated for common/stereo-jack@1, and 6.0 is
+    chosen for that, not read from a document. A drawing or a part number of
+    the cable CommScope supplies for the RS-232 jack would replace it.
+  connector: >-
+    datasheet - the jack it mates is named in the CommScope CH3000 CX3003C
+    Enhanced Communications Module data sheet: "RS-232 port uses a stereo
+    jack style connector".
+elements: {}
+connection-points:
+  mate: {at: [3.0, 3.0], direction: front}
+skins: [default]

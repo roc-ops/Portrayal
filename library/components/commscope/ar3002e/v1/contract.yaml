@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ar3002e
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: optical
@@ -50,14 +50,16 @@ provenance:
     it, the plate-edge offset seen on the PS3006 photographs too.
   test-point: >-
     datasheet - "RF Output Test Points: G-type male connector (at front panel, -20 dB)",
-    legended Out TP on the face. No registry entry exists for a G-type connector, so it is
-    drawn as an element of this part rather than composed.
+    legended Out TP on the face. The panel connector is the composed
+    common/g-type-male-port@1, which presents the registered interface g-type; the knurled
+    body round it stays drawn in the skin, declared as class bezel (ids, positions and the
+    skin are unchanged), and the part's size is an estimate, said in the part.
 elements:
   screw-top: {at: [7.98, 0.1], size: [9.8, 9.8], class: fastener}
   vent-left: {at: [2.6, 24.9], size: [2.6, 53.7], class: vent}
   vent-mid: {at: [6.9, 57.0], size: [2.6, 9.1], class: vent}
   vent-right: {at: [15.7, 24.5], size: [7.3, 60.9], class: vent}
-  test-point: {at: [5.0, 97.3], size: [15.8, 15.8], class: port}
+  test-point: {at: [5.0, 97.3], size: [15.8, 15.8], class: bezel}
   screw-bottom: {at: [7.98, 120.3], size: [9.8, 9.8], class: fastener}
 parts:
   - {ref: common/led-dot@1, id: led-status-1, at: [11.9, 29.8], attrs: {function: status}}
@@ -65,6 +67,7 @@ parts:
   - {ref: common/led-dot@1, id: led-status-3, at: [11.9, 38.4], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-access, at: [11.9, 48.6], attrs: {function: activity}}
   - {ref: std/micro-usb@1, id: usb, at: [7.25, 73.5], rotate: 90, attrs: {role: console}}
+  - {ref: common/g-type-male-port@1, id: rf-tp, at: [9.400, 101.700]}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]

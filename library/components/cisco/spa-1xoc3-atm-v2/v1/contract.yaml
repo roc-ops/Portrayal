@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: spa-1xoc3-atm-v2
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -157,6 +157,17 @@ provenance:
     searched - no end-of-life notice for SPA-1XOC3-ATM-V2 is in this intake. Table 10 gives
     this part a minimum IOS XR release of 4.2.0 and a minimum hardware revision of 1.0,
     which is a support floor and not a lifecycle statement.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router SIP and SPA Hardware
+    Installation Guide, PDF pages 61, 1-Port and 3-Port Clear Channel OC-3 ATM SPA Interface
+    Specifications and Cables and Connectors: 'Each SPA port accepts an SFP module with a duplex
+    LC-type receptacle', 155-Mbps OC-3 network interfaces, single-mode or multimode fibre. The
+    group holds the adapter's 1 port part. Role traffic: the ports are what the adapter is for.
+    index-origin 0: the guide says subslots and ports are numbered starting from 0 (SIP-700
+    interface addresses, PDF page 20), and the parts here are p0, p1 and so on. Media sfp: the
+    guide names a small form-factor pluggable optical transceiver module in each port. No speed
+    is stated: the closed set of speeds has no word for 155 Mbps, so the rate stays in the group
+    description as the guide prints it. Nothing was measured: no position, size or part changed.
 elements:
   led-ca-p0:
     at: [1.61, 141.74]
@@ -218,6 +229,16 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp
+    description: >-
+      Each port accepts an SFP module with a duplex LC-type receptacle, single-mode or multimode
+      fibre. The guide prints 155-Mbps OC-3 network interfaces.
 parts:
-  - {ref: std/sfp@1, id: p0, at: [0.04, 12.44], rotate: 90}
+  - {ref: std/sfp@1, id: p0, at: [0.04, 12.44], rotate: 90, group: sfp}
 skins: [default]

@@ -128,5 +128,6 @@ def test_the_r740xd_is_solid_and_nothing_else_regressed():
     # and the ones that are incomplete are incomplete for their own reasons
     # (the two nokia kit parts are drawn front and rear only: the vendor's data sheet gives their sizes, not their sides)
     assert sorted(s for s, lv in levels.items() if lv < 4) == [
+        "nokia/fx4-vertical-air-intake-tray", "nokia/fx4-vertical-top-baffle",
         "nokia/fx8-vertical-air-intake-tray", "nokia/fx8-vertical-top-baffle",
         "ufispace/s9502-12sm", "ufispace/s9620-32e", "ufispace/s9620-40dg"]

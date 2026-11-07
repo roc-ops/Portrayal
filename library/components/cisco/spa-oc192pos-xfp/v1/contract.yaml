@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: spa-oc192pos-xfp
-version: 1.1.1
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -172,6 +172,18 @@ provenance:
     searched - no end-of-life notice for SPA-OC192POS-XFP is in this intake. Table 10 gives
     this part a minimum IOS XR release of 4.0.0 and a minimum hardware revision of 1.0,
     which is a support floor and not a lifecycle statement.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router SIP and SPA Hardware
+    Installation Guide, PDF pages 39-41, 1-Port OC-192/STM-64 POS/RPR XFP SPA Overview and
+    Optical Transceiver Modules, Connectors, and Cables: 'a 10-Gbps small form-factor pluggable
+    optical receptacle', single-mode 9.95 Gbps OC-192c, XFP-10GLR-OC192SR, XFP-10GER-OC192IR and
+    XFP-10GZR-OC192LR. The group holds the adapter's 1 port part. Role traffic: the ports are
+    what the adapter is for. index-origin 0: the guide says subslots and ports are numbered
+    starting from 0 (SIP-700 interface addresses, PDF page 20), and the parts here are p0, p1
+    and so on. Media xfp: the guide names an XFP module in the port. No speed is stated: the
+    closed set of speeds has no word for OC-192, and the guide prints 9.95 Gbps for the
+    bandwidth beside a '10-Gbps' receptacle, so the rate stays in the group description. Nothing
+    was measured: no position, size or part changed.
 elements:
   led-wrap:
     at: [3.13, 6.65]
@@ -303,6 +315,16 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  xfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: xfp
+    description: >-
+      The port takes a single-mode XFP module: XFP-10GLR-OC192SR, XFP-10GER-OC192IR or
+      XFP-10GZR-OC192LR. The guide prints a bandwidth of 9.95 Gbps.
 parts:
-  - {ref: std/xfp@1, id: p0, at: [-1.11, 35.56], rotate: 90}
+  - {ref: std/xfp@1, id: p0, at: [-1.11, 35.56], rotate: 90, group: xfp}
 skins: [default]
