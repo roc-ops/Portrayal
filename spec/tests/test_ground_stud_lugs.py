@@ -426,6 +426,11 @@ COMPOSED = {
     ("edgecore/fsj033-610g@1", "ground-stud"): "common/ground-screw@1",
     ("juniper/ex4300-jpsu-550-dc-afi@1", "earth"): "common/ground-screw@1",
     ("juniper/ex4300-jpsu-550-dc-afo@1", "earth"): "common/ground-screw@1",
+    # the earth stud of the Smartoptics DCP rack kit sits on its front brackets and its mid-mount
+    # bracket, which are parts of a kit and not placements on a chassis face.
+    ("smartoptics/dcp-front-bracket-600@1", "earth"): "common/ground-stud@1",
+    ("smartoptics/dcp-front-bracket-700@1", "earth"): "common/ground-stud@1",
+    ("smartoptics/dcp-mid-mount-bracket@1", "earth"): "common/ground-stud@1",
 }
 
 
