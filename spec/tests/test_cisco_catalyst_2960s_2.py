@@ -18,6 +18,7 @@ DEVICES = LIBRARY / "devices/cisco"
 EXPORTS = LIBRARY / "exports"
 
 BLANK = "cisco/c2960s-flexstack-blank@1"
+STACK = "cisco/c2960s-stack@1"
 
 # name -> what that model's own row of Table 1-1 and spec Table 1-2 / 1-3 says.
 SPEC = {
@@ -118,8 +119,15 @@ def test_rear_flexstack_slot_seats_the_blank_cover_by_default(name):
     """Figures 1-10 and 1-11: the slot has a cover, removed only to fit the module (PDF p31)."""
     b = bays(device(name))
     assert set(b) == {"flexstack-slot"}
-    assert b["flexstack-slot"]["accepts"] == [BLANK]
+    assert b["flexstack-slot"]["accepts"] == [BLANK, STACK]
     assert b["flexstack-slot"]["default"] == BLANK
+
+
+@pytest.mark.parametrize("name", NAMES)
+def test_the_stack_module_is_a_configuration_of_each_model(name):
+    """The optional C2960S-STACK module (PDF p21, p31) is an example build, not a SKU."""
+    cfg = device(name)["configurations"]["with-flexstack-module"]
+    assert cfg["kind"] == "example" and cfg["bays"] == {"flexstack-slot": STACK}
 
 
 @pytest.mark.parametrize("name", NAMES)
@@ -131,9 +139,11 @@ def test_power_is_built_in_with_a_chassis_inlet_and_no_supply_bay(name):
 
 
 @pytest.mark.parametrize("name", NAMES)
-def test_rps_connector_is_chassis_art_with_a_gap(name):
+def test_rps_connector_is_the_part_seated_at_the_plate_with_a_gap_for_what_it_leaves_out(name):
     d = device(name)
-    assert {"rps-plate", "rps-shroud", "rps-housing"} <= set(decor(d, "rear"))
+    rps = by_id(d, "rear")["rps-connector"]
+    assert rps["ref"] == "cisco/rps2300-connector@2" and rps["at"] == [285.0, 21.4]
+    assert not [k for k in decor(d, "rear") if k.startswith("rps-") and k != "rps-rating-strip"], "no panel art left"
     assert "rps-connector-part" in {g["what"] for g in d["gaps"]}
 
 
@@ -151,18 +161,10 @@ NO_FRONT_OF_ITS_OWN = ["ws-c2960s-48lpd", "ws-c2960s-24td"]
 
 
 @pytest.mark.parametrize("name", NAMES)
-def test_rps_connector_has_twenty_two_pins_in_two_rows_of_eleven_at_the_measured_pitch(name):
+def test_rps_rating_strip_and_warning_label_sit_where_the_photograph_puts_them(name):
     dc = decor(device(name), "rear")
-    pins = [v for k, v in dc.items() if k.startswith("rps-pin-")]
-    assert len(pins) == 22
-    xs = sorted({p["at"][0] for p in pins})
-    ys = sorted({p["at"][1] for p in pins})
-    assert len(xs) == 11 and len(ys) == 2
-    assert abs((xs[-1] - xs[0]) / 10 - 4.17) < 0.01 and abs(ys[1] - ys[0] - 4.03) < 0.01
-    assert dc["rps-plate"]["at"] == [285.0, 21.4] and dc["rps-plate"]["size"] == [72.8, 22.6]
-    assert dc["rps-shroud"]["at"] == [298.4, 24.0] and dc["rps-shroud"]["size"] == [48.2, 11.3]
-    assert {dc["rps-screw-l"]["at"][0], dc["rps-screw-r"]["at"][0]} == {293.3, 348.8}
-    assert dc["rps-rating-strip"]["at"] == [297.7, 17.9] and dc["warning-label"]["at"] == [294.0, 5.9]
+    assert dc["rps-rating-strip"]["at"] == [297.7, 17.9] and dc["rps-rating-strip"]["size"] == [49.2, 3.8]
+    assert dc["warning-label"]["at"] == [294.0, 5.9] and dc["warning-label"]["size"] == [45.2, 9.7]
 
 
 @pytest.mark.parametrize("name", NAMES)
@@ -186,15 +188,18 @@ def test_flexstack_bay_is_the_modules_bounding_box_in_the_photograph(name):
     assert bay["at"] == [2.6, 1.8] and bay["size"] == {"w": 103.3, "h": 39.0}
 
 
-@pytest.mark.parametrize("name", list(OWN_STENCIL))
-def test_chassis_colour_is_this_models_own_stencils_sampled_charcoal_panel(name):
-    """Median of 3600 px of plain panel, box (435,30)-(480,110) of the model's own stencil: #404040."""
+@pytest.mark.parametrize("name", NAMES)
+def test_every_front_is_the_teal_and_charcoal_the_four_stencils_agree_on(name):
+    """Medians of the stencils' plain pixels: bezel #255e6d (box (700,6,1200,20)), panel #404040 (box (435,30,480,110))."""
     d = device(name)
     assert d["chassis"]["color"] == "#404040" and d["chassis"]["silk"] == "#ffffff"
     note = d["provenance"]["colour"]["note"]
     assert d["provenance"]["colour"]["confidence"] == "estimated"
-    for needle in (OWN_STENCIL[name], "(435,30,480,110)", "3600", "#404040", "#255e6d", "median", "community"):
+    for needle in ("(700,6,1200,20)", "(435,30,480,110)", "#404040", "#255e6d", "median"):
         assert needle in note, needle
+    assert "community" in d["provenance"]["front-plates"]["note"]
+    if name in OWN_STENCIL:
+        assert OWN_STENCIL[name] in note
     dc = decor(d, "front")
     for i in ("bezel-top", "bezel-bottom", "bezel-left", "bezel-right", "usb-surround", "console-usb-surround"):
         assert dc[i]["fill"] == "#255e6d", i
@@ -206,25 +211,28 @@ def test_chassis_colour_is_this_models_own_stencils_sampled_charcoal_panel(name)
 def test_outline_places_follow_each_models_own_blocks():
     assert [decor(device("ws-c2960s-48td"), "front")[f"jack-block-outline-{n}"]["at"][0] for n in range(1, 5)] == [
         20.66, 110.06, 199.46, 288.86]
-    assert [decor(device("ws-c2960s-24pd"), "front")[f"jack-block-outline-{n}"]["at"][0] for n in (1, 2)] == [
-        199.46, 288.86]
+    for name in ("ws-c2960s-24pd", "ws-c2960s-24td"):
+        dc = decor(device(name), "front")
+        assert [dc[f"jack-block-outline-{n}"]["at"][0] for n in (3, 4)] == [199.46, 288.86]
+        assert not [k for k in dc if k.endswith(("-1", "-2")) and k.startswith(("jack-ring", "jack-plate", "tick-"))]
 
 
 @pytest.mark.parametrize("name", NO_FRONT_OF_ITS_OWN)
-def test_a_model_with_no_front_of_its_own_claims_no_housing_colour_and_declares_a_gap(name):
+def test_a_model_whose_own_stencil_is_another_product_is_read_from_its_siblings_and_says_so(name):
     d = device(name)
-    assert "color" not in d["chassis"], "no face of this model has a source of its own: the default housing applies"
-    assert d["chassis"]["silk"] == "#ffffff"
+    note = d["provenance"]["colour"]["note"]
+    assert "is not read" in note or "layout is not read" in note
     g = gaps(d)["faceplate-colour"]
-    assert set(g["scope"]) == {"front", "rear"}
-    assert "#404040" in g["wanted"] and "stand-in" in g["wanted"] and "similar components" in g["wanted"]
-    silk = {s["id"]: s for s in d["views"]["front"]["silkscreen"] if s.get("id")}
-    assert all(s.get("fill") != "#2b2e31" for i, s in silk.items() if i.startswith("silk-"))
+    assert set(g["scope"]) == {"rear"}
+    assert "#404040" in g["wanted"] and "stand-in" in g["wanted"] and "Figure 1-10" in g["wanted"]
+    assert "front-of-the-" + name.split("-")[-1] + "-itself" in gaps(d)
 
 
-def test_the_48lpd_rear_photograph_is_another_models_by_its_printed_ratings():
-    note = device("ws-c2960s-48lpd")["provenance"]["colour"]["note"]
-    assert "8-4A" in note and "11.25A" in note and "match none" in note
+def test_the_48lpd_rear_photograph_prints_ratings_that_match_no_row_so_no_text_is_carried():
+    d = device("ws-c2960s-48lpd")
+    wanted = gaps(d)["rear-label-text"]["wanted"]
+    assert "8-4A" in wanted and "5 to 2 A" in wanted
+    assert not [s for s in d["views"]["rear"]["silkscreen"] if s["id"].startswith(("silk-rating", "silk-rps"))]
 
 
 def test_the_td_rear_slot_conflict_is_a_declared_gap():
