@@ -126,9 +126,12 @@ out.tools = {
 // cage at `lift: 3`): card data-z-lift -6.73, cage 3 inside it, and the
 // mate-to optic a top-level sibling at host-lift 3 - 6.73 = -3.73 naming
 // `data-for="card"`. The optic stands on the facet exactly as the cage does.
+// The facet's own profile sinks with the card (0:-6.73, proud edge
+// 17.3205 - 6.73), so the wedge the cage and the optic stand on is the plain
+// face's, 6.73 lower.
 {
   const fn = R(new Node({id: 'w--housing', 'data-facet-deg': '30', 'data-facet-facing': 'up',
-                         'data-z-profile-y': '0:0,30:17.3205'}), {x: 0, y: 40, w: 25, h: 30});
+                         'data-z-profile-y': '0:-6.73,30:10.5905'}), {x: 0, y: 40, w: 25, h: 30});
   const cg = R(new Node({'data-path': 'w/p1', 'data-z-lift': '3', 'data-tilt-on': 'w--housing',
                          'data-tilt': '30', 'data-tilt-facing': 'up'}), {x: 2.5, y: 45, w: 20, h: 8});
   const card = new Node({id: 'w', 'data-path': 'w', 'data-z-lift': '-6.73', 'data-in': 'well'}, [fn, cg]);
@@ -140,7 +143,9 @@ out.tools = {
   const W = m.tiltTools(sv, {mmRect: n => rects.get(n), liftOf: lf, ctmOf: () => ({a: 1, b: 0, c: 0, d: 1})});
   const rec = el => W.tiltRec(m.tiltOf(el));
   out.sunk = {cageFromFacet: rr([lf(cg) - rec(cg).base])[0], opticFromFacet: rr([lf(op) - rec(op).base])[0],
-              opticBase: rr([rec(op).base])[0]};
+              opticBase: rr([rec(op).base])[0],
+              facetLift: rr([W.facetInfo('w--housing').lift])[0],
+              cageZ0: rr([rec(cg).tilt.z0])[0], opticZ0: rr([rec(op).tilt.z0])[0]};
 }
 
 // the facet footprint punch, and a rect punch in a module plane's pixels
