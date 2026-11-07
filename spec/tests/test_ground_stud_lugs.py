@@ -133,7 +133,7 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 CENSUS = {
     "common/ground-lug@1": (31, 22),
     "common/ground-screw@1": (16, 8),
-    "common/ground-stud@1": (11, 11),
+    "common/ground-stud@1": (13, 13),
     CASA: (1, 1),
 }
 # juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
@@ -455,9 +455,9 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
     # 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
-    assert sum(n for n, _ in got.values()) == 59
+    assert sum(n for n, _ in got.values()) == 61
     # 39 -> 42 with the Cisco C9300-24P, C9300-24U and C9300-48U
-    assert len({where for where, _, _ in placed}) == 42
+    assert len({where for where, _, _ in placed}) == 44
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -501,7 +501,7 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         seen += 1
     # every placement of the census but the Casa terminal's one
     # 52 -> 58 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
-    assert seen == 58
+    assert seen == 60
 
 
 @pytest.mark.heavy

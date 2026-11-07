@@ -1,0 +1,27 @@
+format: 1
+kind: component
+name: microsd-card
+version: 1.0.0
+class: port
+mates: microsd
+profile: networking
+description: >-
+  A micro-SD, microSDHC or microSDXC card, the card a `microsd` socket such as
+  digi/microsd-socket@1 takes. Drawn edge-on as the end that enters the socket.
+size: {w: 11.0, h: 1.0, d: 15.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {media: microsd, connector: microsd}
+provenance:
+  size: >-
+    estimated - the form-factor figures of the micro-SD card (11 x 15 x 1 mm) as commonly
+    published; no document held states them, because Digi's product page names the socket and
+    the card sizes it takes and no more. The SD Association's physical specification would replace
+    them.
+unplaced: >-
+  seated by a device that places it in a `microsd` socket; digi/microsd-socket@1 is that socket and
+  no device here seats a card in it, because no document says which card a build ships with.
+connection-points:
+  mate: {at: [5.5, 0.5], direction: front}
+elements:
+  body: {at: [0.0, 0.0], size: [11.0, 1.0], class: body}
+skins: [default]

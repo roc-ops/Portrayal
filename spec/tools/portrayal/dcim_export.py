@@ -1187,6 +1187,9 @@ NOT_A_DCIM_PORT = {
     "cisco/stackpower-port": "the StackPower connector of the Catalyst 9300 (S-PWR 1 and 2): a "
                              "power-sharing link between switches, not a power input; neither DCIM "
                              "has a type for it and a power port would read as a feed",
+    "digi/microsd-socket": "the micro-SD socket of the Digi Connect EZ 16 and 32: a memory card "
+                           "slot, not a network, console or power connection, and neither DCIM "
+                           "has a port type for a storage card",
 
     # --- test points and a serial jack ---------------------------------------------
     "common/g-type-male-port": "the G-type male -20 dB RF test point of the CommScope CH3000 receivers: a "

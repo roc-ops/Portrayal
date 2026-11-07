@@ -1,0 +1,58 @@
+format: 1
+kind: module
+name: ez-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The field-replaceable 48 V DC power supply of the Digi Connect EZ 16 and 32 DC models.
+  It has the face of digi/ezps-ac@1 with a pluggable terminal header where the AC inlet is.
+  No photograph or drawing of this supply is held, so the connector is the only change.
+size: {w: 95.0, h: 41.5}
+size-confidence: {w: borrowed, h: borrowed}
+attrs: {input: dc, inlet: dc-terminal, power-absent: not-published}
+provenance:
+  power: >-
+    not published - looked for in the Digi Connect EZ 16/32 product page, the only document held
+    that lists the supply. The data sheet and the user guide are held only as gated or link pages
+    with no text. The product page gives an input ("48 VDC, 2.9 A max for each power supply") and
+    no output power; an output cannot be had from an input current. No figure is written.
+  input: >-
+    datasheet - the Digi Connect EZ 16/32 product page: "Dual DC power with EZ-AD00/EZ-CD00
+    models, with supplied Phoenix connectors" and "Dual field replaceable, 48 VDC, 2.9 A max for
+    each power supply". It states no output power, no polarity and no draw, so this part
+    states none of them, and the whole-library lint carries it as a part with no power figure.
+  face: >-
+    borrowed - digi/ezps-ac@1: the supplies fill the same bay, so the outline, fan grille and
+    thumbscrew are the AC supply's. No document held shows the DC supply's face.
+  connector: >-
+    estimated - the page names "Phoenix connectors" and no more: not their number of
+    positions, their pitch or which way they face. A two-position 5.08 header
+    (common/terminal-header-508-2@3, the library's Phoenix-style header) stands in at the
+    place of the AC inlet. A photograph or drawing of the DC supply would replace it.
+  size: via digi/ezps-ac@1 - the dimension model's 95.0 x 41.5 bay.
+elements:
+  fan-grille: {at: [12.2, 2.0], size: [35.4, 37.5], class: vent}
+  thumbscrew: {at: [86.1, 11.1], size: [10.8, 10.8], class: fastener}
+parts:
+  - {ref: common/terminal-header-508-2@3, id: dc-in, at: [57.5, 16.45]}
+relief:
+  wall: '#17191b'
+  features:
+    - node: fan-grille
+      vent: 20.0
+      confidence: estimated
+      source: as digi/ezps-ac@1
+    - node: thumbscrew
+      cyl: 6.2
+      confidence: estimated
+      source: >-
+        digi/ezps-ac@1 - the dimension model gives the AC supply's head 10.76 across and 6.2 proud;
+        it did not measure the DC supply's head, which no document shows.
+connection-points:
+  power: {at: [63.6, 20.75], direction: front}
+body:
+  depth: 179.0
+  color: '#1b1d20'
+skins: [default]
