@@ -1,9 +1,10 @@
 # Rack cable entries and exits: where a cable leaves a rack, and what a caller passes in
 
 Status: proposed 2026-11-07. Issue #1299, part of the rack products work (#935).
-The mechanism is **not** decided. This note lays out three decisions the issue
-names, proposes each, and marks every one-way item. It is decided before any
-code, because adding the `entries` key republishes `rack-product.schema.json`.
+The mechanism is **proposed** here. This note lays out three questions the issue
+names, proposes an answer to each, and marks every one-way item. It is put
+for a decision before any code, because adding the `entries` key republishes
+`rack-product.schema.json`.
 
 This note changes nothing in `spec/schemas`, `spec/tools`, `kit/` or `library/`.
 It builds on [rack-products-design.md](rack-products-design.md) section 4 (the
@@ -68,11 +69,10 @@ decision makes each decidable.
   top angle and a bottom angle at each end (its provenance note for `form`);
   `apc/ar203a` is a four-post frame. No held source for either describes a
   cable opening, because there is nothing to open.
-- **Cabinets are not in the library.** The FS cabinet folder holds the NetShelter
-  SV, SX and SX Advanced user manuals and datasheets. The intake coverage notes
-  say the SX roof has "cable access holes", the SV has roof and base access
-  panels, and the GR roof has six brush-covered openings. Their sizes have not
-  been read for this note (the gaps are in "What a manual must give").
+- **Cabinets are not in the library.** The NetShelter SV, SX, SX Advanced and GR
+  cabinets would carry roof and base openings, but no manual has been read for
+  this note, so no opening is described and no size is written (the gaps are in
+  "What a manual must give").
 
 ## 1. The `entries` key, in section 4's terms
 
@@ -206,8 +206,8 @@ entry to the open frames the library holds and to no cabinet:
 `apc/ar201`, `apc/ar203a`, the two Chatsworth frames, the two FS and two
 StarTech four-post frames and the generic two- and four-post frames. Whether the
 generic frames, some of whose figures are stand-ins, also state the entry is
-open question 10. The cabinets named in the intake
-have entries whose sizes the intake does not yet give (below).
+open question 10. The cabinets named above
+have entries whose sizes are not yet read (below).
 
 ## 3. The shape of the outside cables a caller passes in
 
@@ -283,13 +283,13 @@ For each outside cable, the kit answers, in the rack's own units:
 - **Where on the entry** the route ends: the point of the entry's `box` nearest
   the last waypoint, on the entry's plane, and for an `open` entry with no box,
   the same point on the envelope's plan. The lane rules are the cable lay note's
-  and are the kit order's to apply.
+  and are the kit change's to apply.
 
 ### What a query does with them
 
 Fill and the free-port queries take the outside cables **as an extra input**
 from the caller. The proposal is a field `outside` on the context the queries
-already take (`ctx`), a list of cables in the shape above; the kit order fixes
+already take (`ctx`), a list of cables in the shape above; the kit change fixes
 the spelling.
 
 - **A port is taken** when a cable of `rack.cables`, **or** a cable of
@@ -300,7 +300,7 @@ the spelling.
 - **`outside` absent is not `outside: []`.** An empty list is the caller saying
   that nothing is stored elsewhere. Absent says the caller has not looked.
 - **The rack file never stores them.** The kit reads `outside` and writes
-  nothing from it. `save` of the rack gives the same bytes with and without it.
+  nothing from it. `serialize` of the rack gives the same bytes with and without it.
 
 ### A rack opened on its own
 
@@ -321,12 +321,12 @@ it. A separate schema for it is an option (open question 5).
 
 ## What each line of the issue's "Done when" needs
 
-| line | decided by | and made checkable by |
+| line | answered by | and made checkable by |
 |---|---|---|
 | A cable from a patch panel's rear port to the rack's top exit has an in-rack route and length | section 1 (an entry with an `id`), section 2 (an open frame's `top` entry), section 3 (the exit end and `inRack`) | a rack of `apc/ar203a` with a patch panel; the cable above; `inRack` is a number and the route names the waypoints |
 | A manager's fill counts outside cables that pass through it | section 3 (`outside` counted once per ring or duct, by media diameter, in-rack part only) | a manager whose ring the route passes: its fill rises by the cable's area with `outside` given and does not without |
 | A rear port whose cable is stored outside reads taken when that cable is passed in, and free when it is not | section 3 (`portFree` and `freePorts` read `outside`; absent is not empty) | `freePorts` lists the port without `outside` and omits it with `outside` |
-| The rack file is byte-identical either way | section 3 (never stored; the kit writes nothing from `outside`) | `save` of the same rack before and after the queries, with and without `outside`, compared byte for byte |
+| The rack file is byte-identical either way | section 3 (never stored; the kit writes nothing from `outside`) | `serialize` of the same rack before and after the queries, with and without `outside`, compared byte for byte |
 
 ## What moves when it is built
 
@@ -352,7 +352,7 @@ The one-way list is items 1 to 5 and 7 to 10.
 
 ## The first build slice
 
-The slices are later orders, each its own pull request, in this order.
+The slices are later changes, each its own pull request, in this order.
 
 1. **The key.** `enclosure.entries` in `rack-product.schema.json` with the
    `kind` enum, the lint for `id` and `box`, `rack.json` `frames` and the
@@ -375,14 +375,13 @@ and stay unbuilt.
 ## What a manual must give
 
 - **Entry sizes for a cabinet.** NetShelter SV, SX and SX Advanced entries need
-  a figure each from the product's manual, drawing or datasheet. The user
-  manuals for the three are held in the FS cabinet intake folder. The sizes have
-  not been read, so no figure is written here. Wanted: the roof, base and side
-  access drawings of each.
+  a figure each from the product's manual, drawing or datasheet. The sizes have
+  not been read, so no figure is written here. Wanted: the maker's user manual
+  and the roof, base and side access drawings of each.
 - **A cable's allowance at an exit.** How much lead a cable needs beyond the
   entry plane is not stated by any held source. The kit does not add one.
-- **The GR cabinets' brush openings** are listed in the intake coverage as six;
-  their positions and sizes are not held.
+- **The GR cabinets' roof openings.** Their number, positions and sizes are not
+  held. Wanted: the maker's GR cabinet manual.
 - **Whether a frame's base is open to a floor.** No source for any frame says.
 
 ## Open questions
