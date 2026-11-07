@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic3-3d-1x100ge-cfp
-version: 1.1.3
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -30,12 +30,23 @@ provenance:
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '100-Gigabit
+    Ethernet MIC with CFP' (printed page 304): 'One 100-Gigabit Ethernet port' and 'speeds up to 100
+    Gbps' on the port; the port is labeled 'PORT0'. The role is traffic.
 states:
 - ok
 - fail
 - absent
+groups:
+  cfp-100g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: cfp, speed: 100g}
+    description: the 100-Gigabit Ethernet CFP cage, running at up to 100 Gbps
 parts:
-- {ref: std/cfp@2, id: port-0-0, at: [15.60, 6.10], attrs: {media: cfp}}
+- {ref: std/cfp@2, id: port-0-0, group: cfp-100g, at: [15.60, 6.10], attrs: {media: cfp}}
 size:
   w: 168.0
   h: 27.0
