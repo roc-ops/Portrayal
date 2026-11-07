@@ -17,13 +17,13 @@ provenance:
   method:
     confidence: estimated
     note: >-
-      THE DRAWING IS LINE ART AT ABOUT 1 TO 3 AND CARRIES NO CONNECTOR DIMENSION. Positions are measured on its vector geometry (a jack's outline, an outlet's box, an inlet's housing), centred on the drawn faceplate; a part is placed by its centre on the drawn outline. The drawn faceplate is slightly shorter than the stated height (drawing 1.74 or 3.46 inches against 1.75 or 3.5), so vertical positions are centred on the face. A lamp's spacing inside its frame is the drawing's.
+      THE DRAWING IS LINE ART AT ABOUT 1 TO 3 AND CARRIES NO CONNECTOR DIMENSION. Positions are measured on its vector geometry (a jack's outline, an outlet's box, an inlet's housing), centred on the drawn faceplate; a part is placed by its centre on the drawn outline. The drawn faceplate is slightly shorter than the stated height (drawing 1.74 or 3.46 inches against 1.75 or 3.5), so vertical positions are centred on the face. A lamp's spacing inside its frame is the drawing's. The captions inside the buttons, the lamp and port numerals, the ACT and LNK legends over the Ethernet jacks and the SETUP bracket over port 1 are placed from the printed positions in the drawing and are good to about 0.7 mm.
   chassis:
     confidence: drawing
     note: >-
       Width 17.15 inches (435.6 mm) is the drawing's top cover width, and the drawing's 18.32 inches is the distance between the rack ear holes. The height is the data sheet's 1.75 inches, one rack unit and the drawing prints 1.74 (the guide and the data sheet agree with each other). The depth is 8.7 inches, the data sheet and the drawing; the hardware guide prints 8.75. No net weight is stated, only a shipping weight, so none is given.
   colour:
-    confidence: photo-measured
+    confidence: estimated
     note: >-
       Median pixels of the angled render on the data sheet (page 2, 'CPM-1600-2-ECA'; the DSM data sheet's renders show the same dark face): the front face #373b3e, the rear plate #ebf5fb (lit and bluish in the render) with black printing. A MARKETING RENDER IS NOT A PHOTOGRAPH, AND NO HELD DOCUMENT HAS ONE, SO EVERY COLOUR HERE IS UNCHECKED AGAINST A PHOTOGRAPH. The red printed bars and the red logo block the render shows are not drawn.
   ears:
@@ -153,6 +153,10 @@ views:
       - {id: plug-8, kind: lamp, at: [359.46, 33.39], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
       - {id: antenna-main, kind: antenna-mount, at: [4.67, 6.91], size: [5.6, 5.6], rx: 2.8, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.3}
       - {id: antenna-aux, kind: antenna-mount, at: [40.96, 6.91], size: [5.6, 5.6], rx: 2.8, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.3}
+      - {id: setup-bracket-arm-l, kind: rule, at: [70.81, 16.23], size: [3.2, 0.25], fill: '#f4f4f4'}
+      - {id: setup-bracket-tick-l, kind: rule, at: [70.68, 16.23], size: [0.25, 1.4], fill: '#f4f4f4'}
+      - {id: setup-bracket-arm-r, kind: rule, at: [82.41, 16.23], size: [3.2, 0.25], fill: '#f4f4f4'}
+      - {id: setup-bracket-tick-r, kind: rule, at: [85.48, 16.23], size: [0.25, 1.4], fill: '#f4f4f4'}
     silkscreen:
     - {at: [11.67, 10.51], text: 'MAIN', font-size: 1.6, anchor: start, fill: '#f4f4f4', for: chassis}
     - {at: [39.56, 10.51], text: 'AUX', font-size: 1.6, anchor: end, fill: '#f4f4f4', for: chassis}
@@ -170,8 +174,33 @@ views:
     - {at: [166.13, 41.23], text: '7', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-7}
     - {at: [180.75, 41.23], text: '8', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-8}
     - {at: [222.81, 19.25], text: 'ACTIVITY', font-size: 1.6, anchor: middle, fill: '#f4f4f4', for: chassis}
-    - {at: [269.62, 20.7], text: 'RESET', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
-    - {at: [287.77, 20.7], text: 'DEFAULT', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [272.37, 30.4], text: 'RESET', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [290.41, 30.4], text: 'DEFAULT', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [197.55, 30.74], text: '1', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [204.91, 30.74], text: '2', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [212.27, 30.74], text: '3', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [219.64, 30.74], text: '4', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [227.0, 30.74], text: '5', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [234.36, 30.74], text: '6', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [241.72, 30.74], text: '7', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [249.09, 30.74], text: '8', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [304.36, 30.96], text: 'ON', font-size: 1.4, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [311.82, 30.96], text: 'RDY', font-size: 1.4, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [319.29, 30.96], text: 'DCD', font-size: 1.4, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [311.82, 26.89], text: 'STATUS', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [337.44, 24.05], text: '1', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [337.44, 38.52], text: '5', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [344.9, 24.05], text: '2', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [344.9, 38.52], text: '6', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [352.89, 24.05], text: '3', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [352.89, 38.52], text: '7', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [360.56, 24.05], text: '4', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [360.56, 38.52], text: '8', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [36.15, 20.11], text: 'ACT', font-size: 1.3, anchor: middle, fill: '#f4f4f4', for: eth-0}
+    - {at: [45.35, 20.11], text: 'LNK', font-size: 1.3, anchor: middle, fill: '#f4f4f4', for: eth-0}
+    - {at: [53.37, 20.11], text: 'ACT', font-size: 1.3, anchor: middle, fill: '#f4f4f4', for: eth-1}
+    - {at: [62.57, 20.11], text: 'LNK', font-size: 1.3, anchor: middle, fill: '#f4f4f4', for: eth-1}
+    - {at: [78.21, 16.85], text: 'SETUP', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: serial-1}
     - {at: [349.02, 19.77], text: 'PLUG STATUS', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
     - {at: [163.33, 12.51], text: 'OUT-OF-BAND RESCUE', font-size: 3.4, anchor: middle, fill: '#f4f4f4', for: chassis}
     components:
