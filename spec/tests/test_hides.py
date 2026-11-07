@@ -73,9 +73,11 @@ def test_nothing_else_in_the_library_carries_data_hides():
     # the R6625's security bezel hides its drives the way the R660's does
     # the R760's security bezel (dell/bezel-2u-16g@1) names its drives as the R660's does
     # ("r960", "bezel"): the PowerEdge R960's honeycomb security bezel, over its drives
+    # the Entra EN8100 and EN8400's power entry covers hide the port entry modules beneath them (guide p35)
     assert carriers == {("c40g", "psu-cover"), ("r660", "bezel"), ("r660xs", "bezel"),
                         ("r6615", "bezel"), ("r6625", "bezel"), ("r760", "bezel"),
-                        ("r960", "bezel")}, carriers
+                        ("r960", "bezel"), ("en8100", "pec-1"), ("en8100", "pec-2"),
+                        ("en8400", "pec-1"), ("en8400", "pec-2")}, carriers
 
 
 # --- L196 --------------------------------------------------------------------
