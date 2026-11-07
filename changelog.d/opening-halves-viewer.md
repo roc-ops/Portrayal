@@ -7,4 +7,6 @@
   `viewer.setHousing('open' | 'closed')` choose it, `viewer.halves()` lists the halves and the
   bays in each, and the Explorer has an Open / Close button for a box that opens: in 3D it turns
   the lid, in 2D it selects the authored open drawing. The new `kit/housing.js` holds the open
-  state as numbers with no three.js and no DOM. This closes no row.
+  state as numbers with no three.js and no DOM. Opening the box frames the camera on the open
+  state (`openBounds` in `housing.js`), keeping the view direction, and closing it frames the
+  closed box again. This closes no row.

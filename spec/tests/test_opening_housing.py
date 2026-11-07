@@ -158,6 +158,29 @@ def test_the_bays_of_each_half_are_plates_on_its_floor():
     assert b["center"][0] - a["center"][0] == pytest.approx(100.0)
 
 
+@needs_node
+@pytest.mark.parametrize("angle", [90.0, 110.0, 180.0])
+@pytest.mark.parametrize("hinge", ["top", "bottom", "left", "right"])
+def test_the_open_bounds_hold_both_halves_and_no_more(hinge, angle):
+    """openBounds is the box the camera frames: every corner of the base and of
+    the turned lid is inside it, and it is no larger than the union of the two."""
+    halves = {"base": {"outer": "rear", "stands": 50.0}, "lid": {"hinge": hinge, "angle": angle, "stands": 70.0}}
+    got = run([case("b", halves, bounds=True)])["b"]
+    lo, hi = got["bounds"]["min"], got["bounds"]["max"]
+    for c in got["corners"]:
+        for i in range(3):
+            assert lo[i] - 1e-6 <= c[i] <= hi[i] + 1e-6, (c, lo, hi)
+    for i in range(3):
+        assert lo[i] >= min(c[i] for c in got["corners"]) - 1e-6
+        assert hi[i] <= max(c[i] for c in got["corners"]) + 1e-6
+
+
+@needs_node
+def test_the_open_bounds_of_a_box_that_cannot_open_are_null():
+    assert run([case("bad", {"base": {"outer": "rear"}, "lid": {"hinge": "top", "stands": 70.0}}, bounds=True)]
+               )["bad"]["bounds"] is None
+
+
 # --- what a page and a tool are told ------------------------------------------------------
 
 @needs_node
@@ -205,6 +228,24 @@ def test_the_viewer_opens_only_a_box_with_halves_and_starts_closed():
     # nothing the open state does is reachable unless the plan exists
     assert "if (!plan || HOUSING !== 'open')" in src
     assert "setHousing" in src.split("return {\n    load, select")[1]
+
+
+def test_the_viewer_frames_the_open_box_and_only_when_the_state_changes():
+    src = (KIT / "viewer3d.js").read_text()
+    assert "openBounds" in src and "fitState" in src
+    # the fit runs from the open group; a box without a plan returns before it
+    body = src.split("function applyHousing() {")[1].split("const setHousing")[0]
+    assert body.index("if (!plan || HOUSING !== 'open')") < body.index("openBounds(plan)")
+    # a new device is framed closed first, and the state is remembered
+    assert "fitState = 'closed';" in src.split("async function loadDevice")[1].split("async function loadComponent")[0]
+
+
+def test_the_explorer_creates_its_viewer_as_it_did():
+    """The Explorer is not changed: the one createViewer call is the one pinned
+    in test_ears_overlay.py, and it passes no housing."""
+    page = (KIT / "index.html").read_text()
+    assert page.count("createViewer(") == 1
+    assert "createViewer(host3d, { dist: DIST, background: shell.stage(), ears: earsOn })" in page
 
 
 def test_the_explorer_has_a_toggle_that_is_hidden_without_halves():

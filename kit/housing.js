@@ -148,6 +148,22 @@ export function lidPoint(plan, local) {
   return add(l.pivot, rotate(sub(add(l.closedCenter, local), l.pivot), l.axis, l.angle));
 }
 
+// The box the open state fills, in the box frame: {min, max, size, center}, the
+// tightest axis-aligned box round the base and the turned lid. What a camera
+// frames when the box is open; the closed box is no guide, a lid laid flat
+// reaches a lid's depth past the hinge. null when there is no plan.
+export function openBounds(plan) {
+  if (!plan) return null;
+  const min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity];
+  const take = p => p.forEach((v, i) => { min[i] = Math.min(min[i], v); max[i] = Math.max(max[i], v); });
+  for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) {
+    const k = [sx, sy, sz];
+    take(add(plan.base.center, plan.base.size.map((v, i) => k[i] * v / 2)));
+    take(lidPoint(plan, plan.lid.size.map((v, i) => k[i] * v / 2)));
+  }
+  return {min, max, size: sub(max, min), center: scale(add(min, max), 0.5)};
+}
+
 export const faceIndexOf = n => INDEX_OF[n.join(',')];
 
 // The bays of one half as plates on its floor, in the half's own frame. The
