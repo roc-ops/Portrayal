@@ -1,0 +1,75 @@
+format: 1
+kind: kit
+name: b6-sliding-rail-kit
+version: 1.0.0
+description: >-
+  The ReadyRails sliding rails (Dell rail identifier B6) for the PowerEdge R740 and R740xd, with
+  the optional cable management arm. A drop-in sliding rail for four-post racks: the chassis is
+  lowered onto the rails and slides fully out of the rack for service. It does not mount in a
+  two-post rack.
+motion: sliding
+travel: full
+install: drop-in
+parts:
+  - {ref: dell/b6-sliding-rail@1, id: rail, count: 2}
+configurations:
+  - id: four-post
+    racks: [4-post]
+    parts: [rail]
+    depth:
+      square: [631, 868]
+      round: [617, 861]
+      threaded: [631, 883]
+    rail-depth: 714
+accessories:
+  - {kind: cma, ref: dell/cable-management-arm-14g@1, rail-depth: 845, sides: [left, right]}
+provenance:
+  depth: >-
+    The Dell Technologies Enterprise Systems Rail Sizing and Rack Compatibility Matrix (Copyright
+    December 2023, Version 4.7), PDF page 12 (printed page 10), Table 2, the row group that lists
+    the R740 and R740xd, rail B6: square 631 to 868, round 617 to 861, threaded 631 to 883 mm, the
+    distance between the outside-facing surfaces of the front and rear posts. THE TECHNICAL GUIDE
+    LOST. The Dell PowerEdge R740 and R740xd Technical Guide (July 2019), printed page 50, gives
+    the same three ranges as the matrix in its prose, and its Table 19 on printed page 53 gives
+    676 to 868, 662 to 861 and 676 to 883. The matrix is the newer by four years, and the guide
+    contradicts itself, so the matrix figures are written. The matrix prints a higher minimum
+    (685, with a footnote for chassis that self-adjust) for other chassis groups; the group of
+    this device has none.
+  rail-depth: >-
+    714 mm without the arm and 845 mm with it, in the matrix (Table 2, same row) and in the guide
+    (Table 19), which agree. The matrix footnote reads 714 as "with CMA brackets removed"; the
+    guide's note says the same of the outer arm brackets. It is measured from the front of the
+    front post. It is the figure of `rail-depth` and of the accessory's `rail-depth`.
+  hole-type: >-
+    A range is the one printed for its hole type. The matrix marks threaded holes "minor
+    conversion required", screws not in the kit and a screw head of 10 mm or less; the guide
+    says the same (Table 18 and its notes, printed page 52). The screws are hardware and are not
+    parts here.
+  rack-type: >-
+    Four-post racks only. The guide (printed page 52): "Both sliding rails support mounting in
+    4-post racks only." The matrix marks 2-post flush and centre "X". The B6 is not for the
+    Dell Titan and Titan-D racks (guide Table 18, "X"); what a source says about racks is not
+    modelled here.
+  motion: >-
+    The guide (printed page 50) says the rail supports "full extension of the system out of the
+    rack"; no travel in millimetres is printed, so `travel` is `full`.
+  accessories: >-
+    The cable management arm, guide printed page 53: mounts to either side of the sliding rails
+    without tools. The matrix's rail depth with the arm is 845 mm.
+gaps:
+  - what: strain-relief-bar
+    scope: [four-post]
+    reason: vendor-silent
+    note: >-
+      The matrix (printed page 4, "Cable Management Solutions") describes a strain-relief bar for select systems and
+      heads a column "with CMA (SRB)", and prints only 845 for this row, with no bracketed
+      figure. The guide never mentions one.
+    wanted: >-
+      A page that says the strain-relief bar is offered for the R740 and R740xd, its Dell part
+      number and the rail depth with it fitted. The rail installation guide settles it.
+  - what: part-dimensions
+    scope: [rail]
+    reason: needs-drawing
+    wanted: >-
+      A dimensioned drawing of the rail and of the cable management arm. The guide and the matrix
+      give the rail's depth in the rack and no section, so the parts carry placeholder envelopes.
