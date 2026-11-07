@@ -1260,6 +1260,20 @@ opens the module type file of the first key in sorted order. Moving a module fro
 `part-numbers` renames its module type, which is a DCIM-data change in the
 sense above.
 
+**A bay's `seen-through`.** A device bay may carry a list of drawn items, the
+same boxes a panel decor item takes (`at`, `size`, `fill`, `rx`, `shape` of
+`rect` or `slot`, `kind`, `source`), for what the maker's picture shows through
+the opening when the bay is empty. It is an optional key, so it does not raise
+`format`: a file written without it stays valid, and a reader that ignores it
+draws the bay as before. The compiled face writes a group `data-class="seen-through"`
+inside the bay's group, after the opening and before the module, clipped to the
+opening, and hides it with `display="none"` where the configuration seats the
+bay; `kit/swap.js` sets and removes the same attribute when a bay is swapped. It
+is a 2D drawing only, and `contract` does not rise, since the group is new and
+nothing that was read changes. The key is part of the published format from the
+release that carries it: renaming it or changing what it holds after that is a
+breaking change.
+
 ## What is promised before 1.0
 
 The package is at 0.x, and at 0.x the promise is deliberately small:

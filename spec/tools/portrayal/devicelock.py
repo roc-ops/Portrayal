@@ -254,6 +254,9 @@ def _placement_attrs(doc):
 #   `physical-context`       the Redfish class, a label
 #   `frames`                 a lint declaration (L13); draws nothing
 #   `positions`              what a switch's positions mean; sets nothing (#808)
+#   `seen-through`           (bay) what the maker's picture shows through the
+#                            empty opening; drawn in 2D only, nothing is
+#                            placed or addressed by it
 #
 # TOGETHER WITH THE KEYS ALREADY HASHED THESE ARE EXHAUSTIVE OVER THE SCHEMA'S
 # placement AND bay properties, and test_lock_sees_placement_keys.py holds that
@@ -272,7 +275,8 @@ PLACEMENT_GEOMETRY = {"inset", "lift", "in", "under", "only-in", "optional",
 PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface", "fed-by", "through",
                         "lines", "dc", "hides"}
 PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
-                     "frames", "positions", "programmable", "programmable-note"}
+                     "frames", "positions", "programmable", "programmable-note",
+                     "seen-through"}
 # MEMBERSHIP - which adjustment a placed thing slides with
 # (docs/adjustable-positions-design.md section 9). It is in none of the three
 # digests above, because none of them has its bumps: a member ADDED to an
