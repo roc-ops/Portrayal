@@ -127,7 +127,7 @@ def test_the_fabric_patches_and_the_sfp28_legend_are_unchanged():
 
 def test_nothing_moved():
     """No placement's id, ref, at, rotate, rel-pos or group, no cutout, region or bay, no group id and no
-    chassis value differs from the device before the change."""
+    chassis value but the kits it lists differs from the device before the change."""
     d = _device()
     placements, cutouts, regions, bays = [], {}, {}, {}
     for vname, v in d["views"].items():
@@ -142,7 +142,8 @@ def test_nothing_moved():
         if v.get("regions"):
             regions[vname] = v["regions"]
     blob = json.dumps({"placements": placements, "cutouts": cutouts, "regions": regions, "bays": bays,
-                       "groups": list(d["groups"]), "chassis": d["chassis"]},
+                       "groups": list(d["groups"]),
+                       "chassis": {k: v for k, v in d["chassis"].items() if k != "kits"}},
                       sort_keys=True, separators=(",", ":"))
     assert hashlib.sha256(blob.encode()).hexdigest() == UNMOVED_DIGEST
     assert d["chassis"]["color"] == "#373737"

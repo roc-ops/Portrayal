@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: op34m10c
-version: 1.0.0
+version: 1.1.0
 class: filter
 behaviour: fills
 profile: optical
@@ -80,14 +80,21 @@ provenance:
 elements:
   screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
   screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the duplex LC/APC adapters of a passive CWDM multiplexer, each carrying two optical ports. The -20 dB test port shares an adapter with the 1310 port. The data sheet states no data rate
 parts:
-  - {ref: common/lc-duplex-v-adapter@6, id: inp-com, at: [7.36, 16.93], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: tp-1310, at: [7.36, 26.92], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: ch-1-2, at: [7.36, 45.52], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: ch-3-4, at: [7.36, 64.62], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: ch-5-6, at: [7.36, 74.42], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: ch-7-8, at: [7.36, 92.83], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: ch-9-10, at: [7.36, 103.03], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: inp-com, group: ports, at: [7.36, 16.93], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: tp-1310, group: ports, at: [7.36, 26.92], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: ch-1-2, group: ports, at: [7.36, 45.52], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: ch-3-4, group: ports, at: [7.36, 64.62], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: ch-5-6, group: ports, at: [7.36, 74.42], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: ch-7-8, group: ports, at: [7.36, 92.83], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: ch-9-10, group: ports, at: [7.36, 103.03], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]

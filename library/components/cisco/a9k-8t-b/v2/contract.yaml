@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-8t-b
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -136,6 +136,16 @@ provenance:
     but vary in configuration scale and buffer capacity.' Table 35 gives one power row
     for the card and does not split by variant, so all three carry the same figure by
     Cisco's own scoping.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router Ethernet Line Card
+    Installation Guide, PDF page 37, '8-Port 10-Gigabit Ethernet 80 Gbps Line Rate Card with
+    XFP': 'eight cages for XFP Ethernet optical interface modules that operate at a rate of 10
+    Gbps'; the part number table (PDF page 27, Table 12) lists A9K-8T-B, -E and -L as the
+    '8-Port 10GE Line Rate' card with 8 XFP ports. The card's 8 port parts join its group
+    (xfp-10g holds 8 ports). Role traffic: the ports are what the card is for. index-origin 0:
+    the guide names a card's ports from 0, and the parts here are p0, p1 and so on. Media and
+    speed are stated only as the pages above print them. Nothing was measured: no position, size
+    or part changed.
 elements:
   status:
     at: [29.69, 372]
@@ -195,15 +205,23 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  xfp-10g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: xfp, speed: 10g}
+    description: >-
+      8 XFP ports for 10 Gb Ethernet.
 parts:
-  - {ref: std/xfp@1, id: p0, at: [18.77, 57.37], rotate: 90}
-  - {ref: std/xfp@1, id: p1, at: [18.77, 94.54], rotate: 90}
-  - {ref: std/xfp@1, id: p2, at: [18.77, 131.71], rotate: 90}
-  - {ref: std/xfp@1, id: p3, at: [18.77, 168.89], rotate: 90}
-  - {ref: std/xfp@1, id: p4, at: [18.77, 221.62], rotate: 90}
-  - {ref: std/xfp@1, id: p5, at: [18.77, 258.77], rotate: 90}
-  - {ref: std/xfp@1, id: p6, at: [18.77, 295.96], rotate: 90}
-  - {ref: std/xfp@1, id: p7, at: [18.77, 333.13], rotate: 90}
+  - {ref: std/xfp@1, id: p0, group: xfp-10g, at: [18.77, 57.37], rotate: 90}
+  - {ref: std/xfp@1, id: p1, group: xfp-10g, at: [18.77, 94.54], rotate: 90}
+  - {ref: std/xfp@1, id: p2, group: xfp-10g, at: [18.77, 131.71], rotate: 90}
+  - {ref: std/xfp@1, id: p3, group: xfp-10g, at: [18.77, 168.89], rotate: 90}
+  - {ref: std/xfp@1, id: p4, group: xfp-10g, at: [18.77, 221.62], rotate: 90}
+  - {ref: std/xfp@1, id: p5, group: xfp-10g, at: [18.77, 258.77], rotate: 90}
+  - {ref: std/xfp@1, id: p6, group: xfp-10g, at: [18.77, 295.96], rotate: 90}
+  - {ref: std/xfp@1, id: p7, group: xfp-10g, at: [18.77, 333.13], rotate: 90}
 body:
   depth: 520.7
   color: '#b9bec4'

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a99-32x100ge-tr
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -155,6 +155,15 @@ provenance:
     Series 4th Generation Ethernet Line Card Family', updated 15 March 2024. Table 2
     lists this part number as affected. Last order 15 June 2024; last date of hardware
     support 15 June 2029.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router Ethernet Line Card
+    Installation Guide, PDF page 57, '32-Port 100-Gigabit Ethernet Line Card with QSFP28/QSFP+':
+    'thirty two ports for QSFP28/QSFP+ modules that operate at a rate of 100 Gbps'. The card's
+    32 port parts join its group (qsfp28-100g holds 32 ports). Role traffic: the ports are what
+    the card is for. index-origin 0: the guides name a card's ports from 0, and the parts here
+    are p0, p1 and so on. Media and speed are stated only as the pages above print them. The
+    guide also names QSFP+ modules for this card without a rate, and only in ports 0 to 20, so
+    the group states the 100 Gbps the guide prints. Nothing was measured: no position, size or part changed.
 elements:
   led-p0:
     at: [10.33, 32.16]
@@ -700,39 +709,47 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  qsfp28-100g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+    description: >-
+      32 QSFP28 ports, each up to 100 Gb Ethernet.
 parts:
-  - {ref: std/qsfp-ganged@1, id: p0, at: [3.68, 43.93], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p1, at: [3.68, 62.66], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p2, at: [3.68, 81.39], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p3, at: [3.68, 100.12], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p4, at: [3.68, 118.85], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p5, at: [3.68, 137.59], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p6, at: [3.68, 173.92], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p7, at: [3.68, 192.64], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p8, at: [3.68, 211.38], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p9, at: [3.68, 230.11], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p10, at: [3.68, 248.84], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p11, at: [3.68, 267.57], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p12, at: [5.26, 296.87], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p13, at: [5.26, 315.6], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p14, at: [5.26, 334.33], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p15, at: [5.26, 353.07], rotate: 270}
-  - {ref: std/qsfp-ganged@1, id: p16, at: [22.76, 43.93], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p17, at: [22.76, 62.66], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p18, at: [22.76, 81.39], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p19, at: [22.76, 100.12], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p20, at: [22.76, 118.85], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p21, at: [22.76, 137.59], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p22, at: [22.76, 173.92], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p23, at: [22.76, 192.64], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p24, at: [22.76, 211.38], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p25, at: [22.76, 230.11], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p26, at: [22.76, 248.84], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p27, at: [22.76, 267.57], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p28, at: [20.22, 296.87], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p29, at: [20.22, 315.6], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p30, at: [20.22, 334.33], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p31, at: [20.22, 353.07], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p0, group: qsfp28-100g, at: [3.68, 43.93], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p1, group: qsfp28-100g, at: [3.68, 62.66], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p2, group: qsfp28-100g, at: [3.68, 81.39], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p3, group: qsfp28-100g, at: [3.68, 100.12], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p4, group: qsfp28-100g, at: [3.68, 118.85], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p5, group: qsfp28-100g, at: [3.68, 137.59], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p6, group: qsfp28-100g, at: [3.68, 173.92], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p7, group: qsfp28-100g, at: [3.68, 192.64], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p8, group: qsfp28-100g, at: [3.68, 211.38], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p9, group: qsfp28-100g, at: [3.68, 230.11], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p10, group: qsfp28-100g, at: [3.68, 248.84], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p11, group: qsfp28-100g, at: [3.68, 267.57], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p12, group: qsfp28-100g, at: [5.26, 296.87], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p13, group: qsfp28-100g, at: [5.26, 315.6], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p14, group: qsfp28-100g, at: [5.26, 334.33], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p15, group: qsfp28-100g, at: [5.26, 353.07], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p16, group: qsfp28-100g, at: [22.76, 43.93], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p17, group: qsfp28-100g, at: [22.76, 62.66], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p18, group: qsfp28-100g, at: [22.76, 81.39], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p19, group: qsfp28-100g, at: [22.76, 100.12], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p20, group: qsfp28-100g, at: [22.76, 118.85], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p21, group: qsfp28-100g, at: [22.76, 137.59], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p22, group: qsfp28-100g, at: [22.76, 173.92], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p23, group: qsfp28-100g, at: [22.76, 192.64], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p24, group: qsfp28-100g, at: [22.76, 211.38], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p25, group: qsfp28-100g, at: [22.76, 230.11], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p26, group: qsfp28-100g, at: [22.76, 248.84], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p27, group: qsfp28-100g, at: [22.76, 267.57], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p28, group: qsfp28-100g, at: [20.22, 296.87], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p29, group: qsfp28-100g, at: [20.22, 315.6], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p30, group: qsfp28-100g, at: [20.22, 334.33], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p31, group: qsfp28-100g, at: [20.22, 353.07], rotate: 90}
 body:
   depth: 604.5
   color: '#b9bec4'

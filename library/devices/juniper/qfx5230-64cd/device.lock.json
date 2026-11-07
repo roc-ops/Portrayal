@@ -29,18 +29,20 @@
    "juniper/qfx5230-jnp-3000w-dc-afo@1"
   ]
  },
- "composed": "a39ffa41e0205df9",
+ "composed": "870a73f08d49e891",
  "composed-refs": {
   "common/esd-jack@1": "1.0.1+fa89d49c1ff75841",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
+  "juniper/mx240-dc-pole@1": "1.0.0+f7799a0f22b3f76c",
   "juniper/qfx5230-64cd-fan-afi@1": "1.0.0+841cb550fa953409",
   "juniper/qfx5230-64cd-fan-afo@1": "1.0.0+c892fca146aa1dfc",
   "juniper/qfx5230-jnp-2400w-dc-afi@1": "1.0.0+94b9211ed27af6da",
   "juniper/qfx5230-jnp-2700w-ac-afi@1": "1.0.0+a1e48189c5ececd3",
   "juniper/qfx5230-jnp-3000w-ac-afo@1": "1.0.0+bee04725e5d1ab27",
-  "juniper/qfx5230-jnp-3000w-dc-afo@1": "1.0.0+d338a12fe0fd6842",
+  "juniper/qfx5230-jnp-3000w-dc-afo@1": "1.1.0+112614d9003367bc",
   "std/c20-inlet@1": "1.4.0+618074a1c18c1faa",
   "std/qsfp-dd@1": "1.3.1+c3cf5f2db67d8233",
   "std/rj45@2": "2.1.0+2c8fec73bdc493fb",
@@ -55,6 +57,54 @@
   "dc-b2f",
   "dc-f2b"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "juniper/qfx5230-jnp-3000w-dc-afo@1": {
+    "awg": null,
+    "configs": [
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "juniper/qfx5230-jnp-3000w-dc-afo@1": {
+    "awg": null,
+    "configs": [
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "96b43faacb7dec63",
  "groups": [
@@ -868,5 +918,5 @@
  "placement-surface": "d1037ac2a303a358",
  "shape": "925818c41ceef238",
  "surface": "c6dd15d1a71aaf5e",
- "version": "0.1.1"
+ "version": "0.2.0"
 }

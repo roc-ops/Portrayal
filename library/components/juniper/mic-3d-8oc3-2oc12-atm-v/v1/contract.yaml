@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-8oc3-2oc12-atm-v
-version: 1.3.2
+version: 1.3.3
 class: line-card
 behaviour: fills
 profile: networking
@@ -50,19 +50,32 @@ provenance:
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper Networks, MX Series 5G Universal Routing Platform Interface Module Reference, 'ATM MIC
+    with SFP' (printed p. 256, Figure 15): the figure prints 0 to 3 on the lower row and 4 to 7 on
+    the upper. The media is the title's 'with SFP'. No speed is stated: the guide makes the MIC
+    'Rate-selectable using one of the following rates: 8-port OC3, 2-port OC12', and the speed
+    vocabulary has no word for either.
 states:
 - ok
 - fail
 - absent
 parts:
-- {ref: std/sfp-ganged@1, id: port-0-1, at: [1.07, 14.73], rotate: 270, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-0, at: [12.07, 14.73], rotate: 90, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-3, at: [1.07, 30.57], rotate: 270, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-2, at: [12.07, 30.57], rotate: 90, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-5, at: [1.07, 46.42], rotate: 270, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-4, at: [12.07, 46.42], rotate: 90, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-7, at: [1.07, 62.27], rotate: 270, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-6, at: [12.07, 62.27], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-1, group: sfp, at: [1.07, 14.73], rotate: 270, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-0, group: sfp, at: [12.07, 14.73], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-3, group: sfp, at: [1.07, 30.57], rotate: 270, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-2, group: sfp, at: [12.07, 30.57], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-5, group: sfp, at: [1.07, 46.42], rotate: 270, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-4, group: sfp, at: [12.07, 46.42], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-7, group: sfp, at: [1.07, 62.27], rotate: 270, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-6, group: sfp, at: [12.07, 62.27], rotate: 90, attrs: {media: sfp}}
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp}
+    description: "the eight SFP cages, ports 0 to 3 along the bottom row and 4 to 7 along the top as Figure 15 prints them"
 size:
   w: 27.0
   h: 168.0

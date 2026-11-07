@@ -395,6 +395,14 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # its tests are spec/tests/test_vertiv_acs8000.py.
         if str((c.get("attrs") or {}).get("media") or "") == "sd-card":
             continue
+        # NOR ARE THE TEN-POSITION SERIAL PLUG AND THE MICRO-SD CARD.
+        # generic/rj45-10p-plug@1 and generic/microsd-card@1 mate `rj45-10p` and
+        # `microsd`, the serial jack and the card socket of the Digi Connect EZ 16
+        # and 32. Left out by what each IS - its `attrs.media` is `rj45-serial` or
+        # `microsd`, a copper serial cable end and a memory card - and the tests of
+        # the parts that present them are spec/tests/test_digi_connect_ez.py.
+        if str((c.get("attrs") or {}).get("media") or "") in ("rj45-serial", "microsd"):
+            continue
         # NOR ARE THE KEYSTONE INSERTS. common/keystone-blank@2 and
         # fs/keystone-rj45-cat6@1 mate `keystone`, the opening of the FS FHD-FAPM6
         # panel, which the registry holds so each opening is a slot. Left out by

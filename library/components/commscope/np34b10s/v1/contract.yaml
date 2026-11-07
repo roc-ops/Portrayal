@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: np34b10s
-version: 1.0.0
+version: 1.1.0
 class: filter
 behaviour: fills
 profile: optical
@@ -34,13 +34,20 @@ provenance:
 elements:
   screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
   screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the duplex LC/UPC ports of a passive CWDM filter, its -20 dB test port among them; the data sheet states no data rate
 parts:
-  - {ref: common/lc-duplex-v-adapter@6, id: port-1, at: [7.36, 18.23], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: port-2, at: [7.36, 35.17], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: port-3, at: [7.36, 52.12], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: port-4, at: [7.36, 69.07], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: port-5, at: [7.36, 86.03], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: port-6, at: [7.36, 102.97], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: port-1, group: ports, at: [7.36, 18.23], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: port-2, group: ports, at: [7.36, 35.17], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: port-3, group: ports, at: [7.36, 52.12], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: port-4, group: ports, at: [7.36, 69.07], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: port-5, group: ports, at: [7.36, 86.03], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: port-6, group: ports, at: [7.36, 102.97], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]

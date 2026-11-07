@@ -395,7 +395,7 @@ def test_chassis_versions_and_locks(slug):
     assert [f for f in devicelock.check(LIBRARY) if f[0] == slug] == []
 
 
-VERSIONS = {"juniper/mx240": "6.3.1", "juniper/mx480": "7.3.1", "juniper/mx960": "6.0.0"}
+VERSIONS = {"juniper/mx240": "6.4.0", "juniper/mx480": "7.4.0", "juniper/mx960": "6.1.0"}
 
 
 # ---- the DCIM exports
@@ -544,7 +544,7 @@ def test_mx2k_chassis_versions_and_locks(slug):
     assert [f for f in devicelock.check(LIBRARY) if f[0] == slug] == []
 
 
-MX2K_VERSIONS = {"juniper/mx2010": "3.1.0", "juniper/mx2020": "2.1.0"}
+MX2K_VERSIONS = {"juniper/mx2010": "3.1.4", "juniper/mx2020": "2.1.4"}
 
 
 @pytest.mark.parametrize("tree", ["netbox", "nautobot"])
@@ -649,7 +649,7 @@ def test_asr_chassis_versions_and_locks(slug):
     assert [f for f in devicelock.check(LIBRARY) if f[0] == slug] == []
 
 
-ASR_VERSIONS = {"cisco/asr-9912": "2.3.4", "cisco/asr-9922": "2.3.4"}
+ASR_VERSIONS = {"cisco/asr-9912": "2.3.6", "cisco/asr-9922": "2.3.6"}
 
 
 @pytest.mark.parametrize("slug", ASR)
