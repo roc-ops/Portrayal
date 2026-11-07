@@ -960,9 +960,12 @@ def _inset_facet_profile(raw_feat, pre_out, feat):
     the wedge and the plate it sits on disagree about where the panel is.
     Hand-written profiles are untouched - only a feature THIS BUILD expanded
     from a `facet` is shifted here, guarded by `raw_feat.get("facet")`.
-    Clamped at 0: an inset larger than the wedge's own proud extent must not
-    read as a negative depth - EXCEPT on a sunk facet (`lift < 0`), whose
-    heights are below the plate on purpose and pass through unclamped.
+    Never clamped at 0. A wedge whose root the inset takes behind the plate
+    keeps that negative root, as a sunk facet's does: clamped, the profile lost
+    the inset (its slope flattened) and the kit, which rebuilds the wedge from
+    the profile's lowest height, stood the proud edge up by the whole inset.
+    `kit/swap.js` `insetFeature` ports `_inset_feature` and not this: it moves
+    only `out` and `lift`, and a profile it does not see is untouched.
     """
     if not raw_feat.get("facet") or pre_out is None or feat is None or feat.get("out") is None:
         return feat
@@ -972,9 +975,7 @@ def _inset_facet_profile(raw_feat, pre_out, feat):
     pkey = "profile-y" if raw_feat["facet"]["facing"] in ("up", "down") else "profile"
     if feat.get(pkey):
         feat = dict(feat)
-        floor = None if (raw_feat.get("lift") or 0) < 0 else 0.0
-        feat[pkey] = [[x, round(o + shift, 4) if floor is None else max(floor, round(o + shift, 4))]
-                      for x, o in feat[pkey]]
+        feat[pkey] = [[x, round(o + shift, 4)] for x, o in feat[pkey]]
     return feat
 
 
