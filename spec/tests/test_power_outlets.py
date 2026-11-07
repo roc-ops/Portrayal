@@ -92,7 +92,7 @@ def test_a_bay_with_no_accepts_sentence_still_says_it():
         b.pop("accepts")
         b["interface"] = "breaker"
     bays = {b["position"]: b for b in build(dev)["module-bays"]}
-    assert bays["breaker-a2"]["description"] == "Protects output-a2"
+    assert bays["breaker-a2"]["description"] == "Takes breaker; protects output-a2"
 
 
 def test_an_outlet_with_no_feed_is_written_without_one():

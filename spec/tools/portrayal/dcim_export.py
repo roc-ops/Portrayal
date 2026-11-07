@@ -65,6 +65,7 @@ from portrayal.artifacts import Dist, face_file
 
 from portrayal.manifest import view_parts, alias_names, config_airflow, config_attrs
 from portrayal import manifest as _manifest
+from portrayal.devices_index import programmable_notes
 from portrayal import optical_ports
 from portrayal.faces import POWER_FACES
 
@@ -691,6 +692,7 @@ PART_POWER = {
     # Neither is a screw terminal, so each is `other`, and POWER_LABEL says which connector.
     "juniper/qfx524x-dc-header": "other",
     "juniper/qfx10002-dc-header": "other",
+    "juniper/ex4400-dc-header": "other",
     # THE DC CONNECTORS OF THE EDGECORE AS5835, AMX3200 AND AGR560 48 VDC SUPPLIES ARE VENDOR CONNECTORS THE
     # DOCUMENTS DO NOT NAME THE PART OF. None is a screw terminal, so each is `other`, and POWER_LABEL says which.
     "edgecore/dcs201-dc-header": "other",
@@ -756,6 +758,10 @@ PART_POWER = {
     # type for it has been read from a held source, so it is `other` and POWER_LABEL
     # says which connector.
     "rittal/pdu-cord-cee-16a": "other",
+    # THE PRO4X'S FIXED CORD ENDS IN AN IEC 60309 3P+N+G 6h PLUG (the SKU page of C4G36RA-GPBD2FE1). No power-port type
+    # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
+    # says which connector.
+    "servertech/pro4x-cord-60309": "other",
 }
 # THE CONNECTOR A `other` POWER PORT IS, for a reader who would otherwise see
 # "Other". Only the parts above that have no upstream type are listed; a test
@@ -774,6 +780,7 @@ POWER_LABEL = {
     "juniper/qfx5210-dc-header": "DC power header (3-position, cells 1 to 3)",
     "juniper/qfx524x-dc-header": "DC power connector (6-position, 2x3)",
     "juniper/qfx10002-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
+    "juniper/ex4400-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
     "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
     "edgecore/amx-3200-dc-header": "DC power connector (3-pin)",
     "edgecore/agr560-dc-header": "DC power connector (2-socket)",
@@ -782,6 +789,7 @@ POWER_LABEL = {
     "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
+    "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
 }
 
 
@@ -1182,6 +1190,17 @@ NOT_A_DCIM_PORT = {
                              "power-sharing link between switches, not a power input; neither DCIM "
                              "has a type for it and a power port would read as a feed",
 
+    # --- test points and a serial jack ---------------------------------------------
+    "common/g-type-male-port": "the G-type male -20 dB RF test point of the CommScope CH3000 receivers: a "
+                               "monitoring tap, not a network interface, and neither DCIM has a port type "
+                               "for a G-type connector",
+    "common/g-type-female-port": "the G-type female -20 dB RF test point of the CommScope CH3000 DR3600N: a "
+                                 "monitoring tap, not a network interface, and neither DCIM has a port type "
+                                 "for a G-type connector",
+    "common/stereo-jack": "the stereo-jack style RS-232 port of the CommScope CH3000 CX3003C and CX3033N, "
+                          "reserved for factory use: not a console a DCIM manages, and neither DCIM has a "
+                          "port type for it",
+
     # `dell/rj45-port-14g` USED TO BE HERE, as "a modelling gap, not an exporter
     # one": the NDC's four jacks carried no speed, so the exporter could not say
     # which two were 10GBASE-T and rightly refused to guess. #287 closed it by
@@ -1243,8 +1262,6 @@ MGMT_NOT_A_DCIM_PORT = {
     ("std/rj45-ganged", "timing"): "the CSR180's stack-a-upper, which its own device marks "
                                    "`timing: unidentified` - there is no true type to give a jack "
                                    "nobody has identified",
-    ("std/rj45-ganged", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
-    ("common/rj45-ganged-lamped", None): "the managed RJ45 serial lines of a console server in a management group; not exported until a device states role console-server (the exporter's console server ports); until then they are in the drawing and the lock only",
 }
 MGMT_EXPORTED_ROLES = {"mgmt", "console", "aux"}
 
@@ -1461,7 +1478,13 @@ def breakout_note(breakout, n):
 # needs them as interfaces. They export exactly as they did when they sat in
 # `traffic`: typed from the cage and speed, and not `mgmt_only`, because the
 # fabric is the data path, not the way you reach the box.
-PORT_ROLES = {"traffic", "fabric", "management", "service"}
+#
+# `stack-control` IS A PORT ROLE TOO. The control and sync jacks between the
+# units of a stack are cabled like any other port, and the CSR310's STACK-CTRL
+# exports as the 1G interface it did when it sat in `traffic`: it states its
+# speed, which the RJ45 guard in `iface_type` asks for. It is not `mgmt_only`,
+# since it is not the way you reach the box.
+PORT_ROLES = {"traffic", "fabric", "management", "service", "stack-control"}
 NON_PORT_ROLES = {"indicator", "furniture"}
 
 
@@ -1773,6 +1796,23 @@ def flatten(section, prefix=""):
     return out
 
 
+def poe_pd_prose(dev):
+    """One sentence for a powered device's PoE input, or None: neither target has a
+    field for the standard a device needs or the most it takes in."""
+    power = (dev.get("attrs") or {}).get("power") or {}
+    standard = power.get("poe-pd-standard")
+    if not standard:
+        return None
+    text = f"PoE powered device: {standard}"
+    if power.get("poe-pd-standard-min"):
+        text += f" (runs on {power['poe-pd-standard-min']})"
+    if power.get("poe-pd-class") is not None:
+        text += f", class {power['poe-pd-class']}"
+    if power.get("poe-pd-max-w") is not None:
+        text += f", at most {power['poe-pd-max-w']:g} W at the PD input"
+    return text + "."
+
+
 def comments_for(dev, cfg_name, cfg):
     """Everything true about the device that the target schema has no field for.
 
@@ -1821,6 +1861,19 @@ def comments_for(dev, cfg_name, cfg):
     rating = _manifest.input_rating(dev)
     if rating:
         lines += [f"Input rating: {rating}.", ""]
+    # A POWERED DEVICE'S PoE INPUT: the standard it needs, what it runs reduced on and the most it
+    # takes in, which a device type has no field for (docs/non-rack-devices-design.md).
+    pd = poe_pd_prose(dev)
+    if pd:
+        lines += [pd, ""]
+
+    # A USER-CHOSEN PORT LIGHT COLOUR (#1271): neither target has a field for
+    # it, so one line says it, with the maker's own name for it when the
+    # model gives one
+    prog = programmable_notes(dev)
+    if prog is not None:
+        lines += ["Lamps with a programmable colour, set by the user"
+                  + (f" ({', '.join(prog)})" if prog else "") + ".", ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):
@@ -1972,6 +2025,9 @@ def is_full_depth(ch):
 MOUNT_PROSE = {
     "din-rail": "Mounts on a DIN rail (IEC 60715); not rack-mounted.",
     "wall": "Wall-mounted; not rack-mounted.",
+    "ceiling": "Ceiling-mounted; not rack-mounted.",
+    "strand": "Strand-mounted; not rack-mounted.",
+    "pedestal": "Pedestal-mounted; not rack-mounted.",
     "desktop": "Desktop unit; not rack-mounted.",
     "rack-face": "Mounts on the rack rail face at a rack unit; occupies no rack unit.",
     "rack-side": "Mounts on the side of a rack's upright, beside the rack; occupies no rack unit.",
@@ -2201,6 +2257,11 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
     console_server = []
     outlets = {}
+    # THE HALF OF A BOX THAT OPENS each bay is in, said in its description
+    # (portrayal.halves); empty for a box that does not open
+    from portrayal import halves as _halves
+    bay_half = {bay: half for mapped in _halves.bay_halves(dev).values()
+                for bay, half in mapped.items()}
     for view in views_for(dev, cfg_name):
         parts = view_parts(view)
         for p in scoped(parts["placements"], cfg_name):
@@ -2270,7 +2331,8 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
                 if trace is not None:
                     trace.add(p["id"])
         for b in scoped(parts["bays"], cfg_name):
-            bays.append(bay_row(b["id"], b.get("accepts")))
+            bays.append(bay_row(b["id"], b.get("accepts"), None, b.get("interface"),
+                                half=bay_half.get(b["id"])))
 
     # Switch and management interfaces. With a listing, a placement is an
     # interface exactly when a rule names it - `mgmt-eth` becomes `ma1` because
@@ -2431,8 +2493,12 @@ def contract_view(entry):
             "optical": entry.get("optical") or {}}
 
 
-def bay_row(bay_id, accepts=None, span=None, interface=None):
+def bay_row(bay_id, accepts=None, span=None, interface=None, half=None):
     """One `module-bays` row, for a bay on a device or a bay on a module.
+
+    `half` is the half of a box that opens the bay is in (`base` or `lid`); it
+    leads the description as "In the lid.", where a person installing a module
+    reads it, and a bay with none reads exactly as it always did.
 
     `interface` is the form a bay takes by its `mates` (spec/schemas/
     connectors.yaml): its `note` is said instead of a list, and an `accepts`
@@ -2455,6 +2521,8 @@ def bay_row(bay_id, accepts=None, span=None, interface=None):
     # NetBox schema allows on a bay description.
     spans = (f"Spans {', '.join(span)} for a card {len(span) + 1} slots wide. "
              if span else "")
+    if half:
+        spans = f"In the {half}. " + spans
     if interface:
         from portrayal.render import _connector_registry
         note = (_connector_registry().get(interface) or {}).get("note")
@@ -2591,7 +2659,7 @@ def outlet_rows(outlets, powers, bays, who, names=None, dev=None):
     for bay in bays:
         held = protects.get(bay["position"])
         if held:
-            said = bay.get("description")
+            said = (bay.get("description") or "").rstrip(".") or None
             whole = f"{said}; protects {', '.join(held)}" if said else None
             if whole is None or len(whole) <= LIMIT:
                 bay["description"] = fit_items(
@@ -3052,7 +3120,8 @@ def tokenize_fibre_map(m):
 # devices in one space - and the comment keeps the height the vendor states.
 #
 # FRONT PORTS. NetBox 4.5 moved the front-to-rear binding out of the type
-# (netbox#20564), which is why the fibre map exists. Nautobot did not: its
+# (netbox#20564), which is why the fibre map exists; 4.6 put it back in the type
+# as `port-mappings`, which `with_port_mappings` writes. Nautobot did not move it: its
 # FrontPortTemplate has a non-null `rear_port_template` and
 # `rear_port_position`, its library schema spells them `rear_port` and
 # `rear_port_position`, and neither has `positions` on a front port. A front
@@ -3076,14 +3145,48 @@ def _note(doc, text):
     doc["comments"] = (body + "\n\n" + text).strip()
 
 
+# PORT MAPPINGS. NetBox 4.6 and later keep the front-to-rear binding in the type
+# as `port-mappings` (PortTemplateMapping): `{front_port, front_port_position,
+# rear_port, rear_port_position}`, each position 1 to 1024. A fibre-map row is
+# those four fields under shorter keys, so the mappings are the rows one for
+# one, in the map's order. `ratio` and `band` have no field there and stay in
+# the fibre map, which remains the full record. A type with no fibre map has no
+# binding to state. A row that names a port or a position the type does not
+# have would import as an error on the instance, so it stops the export here.
+def with_port_mappings(doc, rows):
+    fronts = {p["name"]: p.get("positions") or 1 for p in doc.get("front-ports") or []}
+    rears = {p["name"]: p.get("positions") or 1 for p in doc.get("rear-ports") or []}
+    maps = []
+    for row in rows:
+        f, r = row["front"], row["rear"]
+        fp, rp = row["front_position"], row["rear_position"]
+        if (f not in fronts or r not in rears or not 1 <= fp <= min(fronts[f], 1024)
+                or not 1 <= rp <= min(rears[r], 1024)):
+            raise NotExpressible(
+                f"{doc.get('manufacturer')} {doc.get('model')}: the map row {f}:{fp} -> "
+                f"{r}:{rp} names a port or position the type does not have")
+        maps.append({"front_port": f, "front_port_position": fp,
+                     "rear_port": r, "rear_port_position": rp})
+    out = {}
+    for key, value in doc.items():
+        out[key] = value
+        if key == "front-ports":
+            out["port-mappings"] = maps
+    return out
+
+
 def for_target(doc, target, fibre_map=None):
-    """`doc` as `target` can import it. NetBox takes it as written; Nautobot
-    takes a copy with a whole-unit height and rear-bound front ports.
+    """`doc` as `target` can import it. NetBox takes it as written, with the
+    fibre map's rows as `port-mappings`; Nautobot takes a copy with a
+    whole-unit height and rear-bound front ports.
 
     `fibre_map` is the module's own map, tokenised the same way `doc` is, and
     is what a document with front ports is bound from.
     """
     if target != "nautobot":
+        rows = (fibre_map or {}).get("rows") or []
+        if target == "netbox" and rows and doc.get("front-ports"):
+            return with_port_mappings(doc, rows)
         return doc
     whole = float(doc.get("u_height") or 0).is_integer()
     if whole and not doc.get("front-ports"):

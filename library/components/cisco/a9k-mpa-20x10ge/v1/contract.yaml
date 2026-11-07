@@ -154,6 +154,12 @@ provenance:
     A9K-MOD400-CM carrier and is not modelled - no master.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake.
+  groups: >-
+    install guide - the Cisco ASR 9000 Series Aggregation Services Router Ethernet Line Card Installation Guide, its Ethernet Line Card and MPA comparison table, which gives
+    the port count and cage of each adapter (SFP+); the speed is the one the adapter's own
+    name and the guide's title for it print ('20-Port 10-Gigabit Ethernet'). ROLE: `traffic`, the work the adapter is
+    bought for. Port numbering: the guide numbers a card's ports 0, 1, 2 and so on, which is
+    `index-origin: 0`.
 elements:
   led-p0:
     at: [17.45, 9.76]
@@ -702,25 +708,31 @@ relief:
 body:
   depth: 170.18
   color: '#b9bec4'
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
 parts:
-  - {ref: std/sfp@1, id: p0, at: [3.49, 7.43], rotate: 270}
-  - {ref: std/sfp@1, id: p1, at: [21.34, 7.43], rotate: 90}
-  - {ref: std/sfp@1, id: p2, at: [3.49, 21.79], rotate: 270}
-  - {ref: std/sfp@1, id: p3, at: [21.34, 21.79], rotate: 90}
-  - {ref: std/sfp@1, id: p4, at: [3.49, 36.1], rotate: 270}
-  - {ref: std/sfp@1, id: p5, at: [21.34, 36.1], rotate: 90}
-  - {ref: std/sfp@1, id: p6, at: [3.49, 50.45], rotate: 270}
-  - {ref: std/sfp@1, id: p7, at: [21.34, 50.45], rotate: 90}
-  - {ref: std/sfp@1, id: p8, at: [3.49, 64.8], rotate: 270}
-  - {ref: std/sfp@1, id: p9, at: [21.34, 64.8], rotate: 90}
-  - {ref: std/sfp@1, id: p10, at: [3.49, 87.83], rotate: 270}
-  - {ref: std/sfp@1, id: p11, at: [21.34, 87.83], rotate: 90}
-  - {ref: std/sfp@1, id: p12, at: [3.49, 102.19], rotate: 270}
-  - {ref: std/sfp@1, id: p13, at: [21.34, 102.19], rotate: 90}
-  - {ref: std/sfp@1, id: p14, at: [3.49, 116.52], rotate: 270}
-  - {ref: std/sfp@1, id: p15, at: [21.34, 116.52], rotate: 90}
-  - {ref: std/sfp@1, id: p16, at: [3.49, 130.88], rotate: 270}
-  - {ref: std/sfp@1, id: p17, at: [21.34, 130.88], rotate: 90}
-  - {ref: std/sfp@1, id: p18, at: [3.49, 145.21], rotate: 270}
-  - {ref: std/sfp@1, id: p19, at: [21.34, 145.21], rotate: 90}
+  - {ref: std/sfp@1, id: p0, group: sfp-plus, at: [3.49, 7.43], rotate: 270}
+  - {ref: std/sfp@1, id: p1, group: sfp-plus, at: [21.34, 7.43], rotate: 90}
+  - {ref: std/sfp@1, id: p2, group: sfp-plus, at: [3.49, 21.79], rotate: 270}
+  - {ref: std/sfp@1, id: p3, group: sfp-plus, at: [21.34, 21.79], rotate: 90}
+  - {ref: std/sfp@1, id: p4, group: sfp-plus, at: [3.49, 36.1], rotate: 270}
+  - {ref: std/sfp@1, id: p5, group: sfp-plus, at: [21.34, 36.1], rotate: 90}
+  - {ref: std/sfp@1, id: p6, group: sfp-plus, at: [3.49, 50.45], rotate: 270}
+  - {ref: std/sfp@1, id: p7, group: sfp-plus, at: [21.34, 50.45], rotate: 90}
+  - {ref: std/sfp@1, id: p8, group: sfp-plus, at: [3.49, 64.8], rotate: 270}
+  - {ref: std/sfp@1, id: p9, group: sfp-plus, at: [21.34, 64.8], rotate: 90}
+  - {ref: std/sfp@1, id: p10, group: sfp-plus, at: [3.49, 87.83], rotate: 270}
+  - {ref: std/sfp@1, id: p11, group: sfp-plus, at: [21.34, 87.83], rotate: 90}
+  - {ref: std/sfp@1, id: p12, group: sfp-plus, at: [3.49, 102.19], rotate: 270}
+  - {ref: std/sfp@1, id: p13, group: sfp-plus, at: [21.34, 102.19], rotate: 90}
+  - {ref: std/sfp@1, id: p14, group: sfp-plus, at: [3.49, 116.52], rotate: 270}
+  - {ref: std/sfp@1, id: p15, group: sfp-plus, at: [21.34, 116.52], rotate: 90}
+  - {ref: std/sfp@1, id: p16, group: sfp-plus, at: [3.49, 130.88], rotate: 270}
+  - {ref: std/sfp@1, id: p17, group: sfp-plus, at: [21.34, 130.88], rotate: 90}
+  - {ref: std/sfp@1, id: p18, group: sfp-plus, at: [3.49, 145.21], rotate: 270}
+  - {ref: std/sfp@1, id: p19, group: sfp-plus, at: [21.34, 145.21], rotate: 90}
 skins: [default]

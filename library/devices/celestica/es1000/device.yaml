@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: es1000
-version: 1.0.2
+version: 1.0.3
 maturity: modelled
 manufacturer: Celestica
 model: ES1000
@@ -180,10 +180,10 @@ provenance:
     note: >-
       guide Key System Specifications, Power Consumption: 'ES1000-24P, ES1000-48P, ES1000-48CP: <3200W,
       ES1000-24, ES1000-48, ES1000-48C: <550W'. Stated as upper bounds with no ambient or load; filed as
-      max. The per-SKU figure cannot be carried per configuration (config-scoped-device-attrs gap), so the
-      PoE maximum is power-max-w and the non-PoE one power-max-no-poe-w, the edgecore/eps112 spelling.
-      PoE budgets from the guide's power distribution tables: 1550 W (24P, 2 x 920), 2910 W high line /
-      1710 W low line (48P/48CP, 2 x 1600).
+      max. The device states the PoE maximum as power-max-w and the non-PoE one as power-max-no-poe-w, the
+      edgecore/eps112 spelling, and each configuration states its own power-max-w (550 or 3200) in its
+      attrs. PoE budgets from the guide's power distribution tables: 1550 W (24P, 2 x 920), 2910 W high
+      line / 1710 W low line (48P/48CP, 2 x 1600); each PoE configuration states its own high-line budget.
   sides-top-bottom:
     confidence: estimated
     note: >-
@@ -259,9 +259,10 @@ gaps:
   scope: [24-f2b, 24-b2f, 48-f2b, 48-b2f, 48c-f2b, 48c-b2f]
   reason: vendor-silent
   wanted: >-
-    A way to carry the per-SKU power maximum (<3200 W PoE, <550 W non-PoE), the PoE budget and the CPU
-    per configuration. Today they are device attrs stated for the whole family with the split in words,
-    as on cisco/asr-9001's gap of the same name.
+    A way for a non-PoE configuration to state that it has no PoE budget. The device states poe-budget-w
+    and poe-budget-note for the family, a configuration's attrs cannot remove a device key, and the six
+    non-PoE builds therefore still export the device's budget. Every other figure that differs by
+    build (power maximum, CPU, memory, storage, the description) is stated on the configuration.
 - what: psu-part-numbers
   scope: [psu-1, psu-2]
   reason: vendor-silent
@@ -696,6 +697,16 @@ configurations:
     kind: orderable
     description: ES1000-24, 24 x 1GbE, no PoE, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 550 W AC, F2B (R3194-F9007-A1)
     airflow: front-to-back
+    export-description: >-
+      Celestica ES1000-24 - 1U enterprise access switch, 24 x 1000BASE-T RJ45, no PoE, 4 x 1/10/25G
+      SFP28, integrated ARM A55 CPU, 2 x 550 W AC supplies, front-to-back airflow
+    attrs:
+      power:
+        power-max-w: '550'
+      platform:
+        cpu: integrated ARM A55, 2C 1.5 GHz
+        memory: 8 GB DDR4
+        storage: 32 GB eMMC
     part-numbers:
       R3194-F9007-A1: {part: R3194-F9007-A1}
     views: {front: front-24}
@@ -704,6 +715,16 @@ configurations:
     kind: orderable
     description: ES1000-24, 24 x 1GbE, no PoE, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 550 W AC, B2F (R3194-F9107-A1)
     airflow: back-to-front
+    export-description: >-
+      Celestica ES1000-24 - 1U enterprise access switch, 24 x 1000BASE-T RJ45, no PoE, 4 x 1/10/25G
+      SFP28, integrated ARM A55 CPU, 2 x 550 W AC supplies, back-to-front airflow
+    attrs:
+      power:
+        power-max-w: '550'
+      platform:
+        cpu: integrated ARM A55, 2C 1.5 GHz
+        memory: 8 GB DDR4
+        storage: 32 GB eMMC
     part-numbers:
       R3194-F9107-A1: {part: R3194-F9107-A1}
     views: {front: front-24}
@@ -712,6 +733,18 @@ configurations:
     kind: orderable
     description: ES1000-24P, 24 x 1GbE PoE++, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 920 W AC, F2B (R3194-F9001-A1)
     airflow: front-to-back
+    export-description: >-
+      Celestica ES1000-24P - 1U enterprise access switch, 24 x 1000BASE-T RJ45 (PoE++ 802.3bt Type 4
+      Class 8), 4 x 1/10/25G SFP28, integrated ARM A55 CPU, 2 x 920 W AC supplies, front-to-back
+      airflow
+    attrs:
+      power:
+        power-max-w: '3200'
+        poe-budget-w: '1550'
+      platform:
+        cpu: integrated ARM A55, 2C 1.5 GHz
+        memory: 8 GB DDR4
+        storage: 32 GB eMMC
     part-numbers:
       R3194-F9001-A1: {part: R3194-F9001-A1}
     views: {front: front-24}
@@ -720,6 +753,18 @@ configurations:
     kind: orderable
     description: ES1000-24P, 24 x 1GbE PoE++, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 920 W AC, B2F (R3194-F9101-A1)
     airflow: back-to-front
+    export-description: >-
+      Celestica ES1000-24P - 1U enterprise access switch, 24 x 1000BASE-T RJ45 (PoE++ 802.3bt Type 4
+      Class 8), 4 x 1/10/25G SFP28, integrated ARM A55 CPU, 2 x 920 W AC supplies, back-to-front
+      airflow
+    attrs:
+      power:
+        power-max-w: '3200'
+        poe-budget-w: '1550'
+      platform:
+        cpu: integrated ARM A55, 2C 1.5 GHz
+        memory: 8 GB DDR4
+        storage: 32 GB eMMC
     part-numbers:
       R3194-F9101-A1: {part: R3194-F9101-A1}
     views: {front: front-24}
@@ -728,6 +773,16 @@ configurations:
     kind: orderable
     description: ES1000-48, 48 x 1GbE, no PoE, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 550 W AC, F2B (R3194-F9008-A1)
     airflow: front-to-back
+    export-description: >-
+      Celestica ES1000-48 - 1U enterprise access switch, 48 x 1000BASE-T RJ45, no PoE, 4 x 1/10/25G
+      SFP28, integrated ARM A55 CPU, 2 x 550 W AC supplies, front-to-back airflow
+    attrs:
+      power:
+        power-max-w: '550'
+      platform:
+        cpu: integrated ARM A55, 2C 1.5 GHz
+        memory: 8 GB DDR4
+        storage: 32 GB eMMC
     part-numbers:
       R3194-F9008-A1: {part: R3194-F9008-A1}
     bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
@@ -739,6 +794,16 @@ configurations:
     kind: orderable
     description: ES1000-48, 48 x 1GbE, no PoE, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 550 W AC, B2F (R3194-F9108-A1)
     airflow: back-to-front
+    export-description: >-
+      Celestica ES1000-48 - 1U enterprise access switch, 48 x 1000BASE-T RJ45, no PoE, 4 x 1/10/25G
+      SFP28, integrated ARM A55 CPU, 2 x 550 W AC supplies, back-to-front airflow
+    attrs:
+      power:
+        power-max-w: '550'
+      platform:
+        cpu: integrated ARM A55, 2C 1.5 GHz
+        memory: 8 GB DDR4
+        storage: 32 GB eMMC
     part-numbers:
       R3194-F9108-A1: {part: R3194-F9108-A1}
     bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
@@ -751,6 +816,18 @@ configurations:
     description: ES1000-48P, 48 x 1GbE PoE++, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 1600 W AC, F2B (R3194-F9002-A1)
     default: true
     airflow: front-to-back
+    export-description: >-
+      Celestica ES1000-48P - 1U enterprise access switch, 48 x 1000BASE-T RJ45 (PoE++ 802.3bt Type 4
+      Class 8), 4 x 1/10/25G SFP28, integrated ARM A55 CPU, 2 x 1600 W AC supplies, front-to-back
+      airflow
+    attrs:
+      power:
+        power-max-w: '3200'
+        poe-budget-w: '2910'
+      platform:
+        cpu: integrated ARM A55, 2C 1.5 GHz
+        memory: 8 GB DDR4
+        storage: 32 GB eMMC
     part-numbers:
       R3194-F9002-A1: {part: R3194-F9002-A1}
     bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
@@ -762,6 +839,18 @@ configurations:
     kind: orderable
     description: ES1000-48P, 48 x 1GbE PoE++, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 1600 W AC, B2F (R3194-F9102-A1)
     airflow: back-to-front
+    export-description: >-
+      Celestica ES1000-48P - 1U enterprise access switch, 48 x 1000BASE-T RJ45 (PoE++ 802.3bt Type 4
+      Class 8), 4 x 1/10/25G SFP28, integrated ARM A55 CPU, 2 x 1600 W AC supplies, back-to-front
+      airflow
+    attrs:
+      power:
+        power-max-w: '3200'
+        poe-budget-w: '2910'
+      platform:
+        cpu: integrated ARM A55, 2C 1.5 GHz
+        memory: 8 GB DDR4
+        storage: 32 GB eMMC
     part-numbers:
       R3194-F9102-A1: {part: R3194-F9102-A1}
     bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
@@ -773,6 +862,16 @@ configurations:
     kind: orderable
     description: ES1000-48C, 48 x 1GbE, no PoE, COMe x86 4C / 8 GB / 32 GB SSD, 2 x 550 W AC, F2B (R3194-F9019-A1)
     airflow: front-to-back
+    export-description: >-
+      Celestica ES1000-48C - 1U enterprise access switch, 48 x 1000BASE-T RJ45, no PoE, 4 x 1/10/25G
+      SFP28, Intel Denverton x86 CPU, 2 x 550 W AC supplies, front-to-back airflow
+    attrs:
+      power:
+        power-max-w: '550'
+      platform:
+        cpu: Intel Denverton x86 4C 2.1 GHz (COMe)
+        memory: 8 GB DDR4 (16 GB option)
+        storage: 32 GB M.2 SSD (64 GB option)
     part-numbers:
       R3194-F9019-A1: {part: R3194-F9019-A1}
     bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
@@ -780,6 +879,16 @@ configurations:
     kind: orderable
     description: ES1000-48C, 48 x 1GbE, no PoE, COMe x86 4C / 8 GB / 32 GB SSD, 2 x 550 W AC, B2F (R3194-F9119-A1)
     airflow: back-to-front
+    export-description: >-
+      Celestica ES1000-48C - 1U enterprise access switch, 48 x 1000BASE-T RJ45, no PoE, 4 x 1/10/25G
+      SFP28, Intel Denverton x86 CPU, 2 x 550 W AC supplies, back-to-front airflow
+    attrs:
+      power:
+        power-max-w: '550'
+      platform:
+        cpu: Intel Denverton x86 4C 2.1 GHz (COMe)
+        memory: 8 GB DDR4 (16 GB option)
+        storage: 32 GB M.2 SSD (64 GB option)
     part-numbers:
       R3194-F9119-A1: {part: R3194-F9119-A1}
     bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
@@ -787,6 +896,18 @@ configurations:
     kind: orderable
     description: ES1000-48CP, 48 x 1GbE PoE++, COMe x86 4C / 8 GB / 32 GB SSD, 2 x 1600 W AC, F2B (R3194-F9016-A1)
     airflow: front-to-back
+    export-description: >-
+      Celestica ES1000-48CP - 1U enterprise access switch, 48 x 1000BASE-T RJ45 (PoE++ 802.3bt Type
+      4 Class 8), 4 x 1/10/25G SFP28, Intel Denverton x86 CPU, 2 x 1600 W AC supplies, front-to-back
+      airflow
+    attrs:
+      power:
+        power-max-w: '3200'
+        poe-budget-w: '2910'
+      platform:
+        cpu: Intel Denverton x86 4C 2.1 GHz (COMe)
+        memory: 8 GB DDR4 (16 GB option)
+        storage: 32 GB M.2 SSD (64 GB option)
     part-numbers:
       R3194-F9016-A1: {part: R3194-F9016-A1}
     bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
@@ -794,6 +915,18 @@ configurations:
     kind: orderable
     description: ES1000-48CP, 48 x 1GbE PoE++, COMe x86 4C / 8 GB / 32 GB SSD, 2 x 1600 W AC, B2F (R3194-F9116-A1)
     airflow: back-to-front
+    export-description: >-
+      Celestica ES1000-48CP - 1U enterprise access switch, 48 x 1000BASE-T RJ45 (PoE++ 802.3bt Type
+      4 Class 8), 4 x 1/10/25G SFP28, Intel Denverton x86 CPU, 2 x 1600 W AC supplies, back-to-front
+      airflow
+    attrs:
+      power:
+        power-max-w: '3200'
+        poe-budget-w: '2910'
+      platform:
+        cpu: Intel Denverton x86 4C 2.1 GHz (COMe)
+        memory: 8 GB DDR4 (16 GB option)
+        storage: 32 GB M.2 SSD (64 GB option)
     part-numbers:
       R3194-F9116-A1: {part: R3194-F9116-A1}
     bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}

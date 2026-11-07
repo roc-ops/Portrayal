@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-fap6scd-apc-os2
-version: 1.0.0
+version: 1.1.0
 class: adapter-panel
 behaviour: fills
 description: >-
@@ -27,13 +27,22 @@ body:
   footprint: {at: [10.485, 0.125], size: [88.0, 34.8]}
 elements:
   logo-zone: {at: [1.6, 3.2], size: [5.3, 5.0], class: label}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 6 SC duplex adapters on the front face, numbered on the plate; OS2 APC, 12
+      fibres, passive
 parts:
-  - {id: sc01, ref: common/sc-duplex-adapter@5, at: [14.85, 4.825], attrs: {housing-finish: '#56c75e'}}
-  - {id: sc02, ref: common/sc-duplex-adapter@5, at: [28.83, 4.825], attrs: {housing-finish: '#56c75e'}}
-  - {id: sc03, ref: common/sc-duplex-adapter@5, at: [42.81, 4.825], attrs: {housing-finish: '#56c75e'}}
-  - {id: sc04, ref: common/sc-duplex-adapter@5, at: [56.79, 4.825], attrs: {housing-finish: '#56c75e'}}
-  - {id: sc05, ref: common/sc-duplex-adapter@5, at: [70.79, 4.825], attrs: {housing-finish: '#56c75e'}}
-  - {id: sc06, ref: common/sc-duplex-adapter@5, at: [84.77, 4.825], attrs: {housing-finish: '#56c75e'}}
+  - {id: sc01, group: adapters, ref: common/sc-duplex-adapter@5, at: [14.85, 4.825], attrs: {housing-finish: '#56c75e'}}
+  - {id: sc02, group: adapters, ref: common/sc-duplex-adapter@5, at: [28.83, 4.825], attrs: {housing-finish: '#56c75e'}}
+  - {id: sc03, group: adapters, ref: common/sc-duplex-adapter@5, at: [42.81, 4.825], attrs: {housing-finish: '#56c75e'}}
+  - {id: sc04, group: adapters, ref: common/sc-duplex-adapter@5, at: [56.79, 4.825], attrs: {housing-finish: '#56c75e'}}
+  - {id: sc05, group: adapters, ref: common/sc-duplex-adapter@5, at: [70.79, 4.825], attrs: {housing-finish: '#56c75e'}}
+  - {id: sc06, group: adapters, ref: common/sc-duplex-adapter@5, at: [84.77, 4.825], attrs: {housing-finish: '#56c75e'}}
 faces:
   rear: {ref: fs/fhd-fap6scd-apc-os2-rear@1}
 optical:
@@ -103,4 +112,11 @@ provenance:
     reserved, not drawn - FS prints its mark top left on every panel face
     (drawings p5-p9, the renders); the library reproduces no vendor logo. Box
     read off the drawings, to about half a millimetre.
+  groups: >-
+    FS FHD Fiber Adapter Panels Datasheet, pages 3 and 10 and the p5 drawing: the
+    FHD-FAP6SCADXSMF (FS SKU 41986) is a 6-adapter SC duplex panel, 12 fibres, OS2 APC
+    (page 10 ordering table). The datasheet prints the fibre and the polish and no data
+    rate, and names no role for the adapters; the role follows the job, a through
+    connection a patch cord is plugged into, so it is traffic, and no speed is stated.
+    The group's media is the adapters' own, fiber.
 skins: [default]

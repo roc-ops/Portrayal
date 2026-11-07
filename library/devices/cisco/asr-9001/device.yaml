@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9001
-version: 3.0.1
+version: 3.0.3
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9001
@@ -260,8 +260,9 @@ provenance:
       metal differs. It does not here: same chassis, same faceplate, same four cages, with two
       ports and one bay disabled in software until A9K-9001-120G-LIC is applied. The stencil
       having its own asr-9001-s-front master is not evidence to the contrary - a marketing stencil
-      drawing a variant separately says nothing about the metal. What the configuration cannot
-      express is recorded in the config-scoped-device-attrs gap
+      drawing a variant separately says nothing about the metal. The -S states its own 60 Gbps fabric
+      bandwidth and its own export description on the configuration; its power is the device's, because
+      the guide's power table has no -S column (the power-draw gap)
   fan-legend:
     note: >-
       REMOVED, do not re-add at chassis level. "ASR-9001 FAN" and "STATUS" are printed on the FAN
@@ -317,22 +318,18 @@ chassis:
   color: '#c8cacc'
   silk: '#231f20'
 gaps:
-- what: config-scoped-device-attrs
+- what: power-draw
   scope: [asr-9001-s]
   reason: vendor-silent
   note: >-
-    HALF OF THIS IS FIXED. The ASR 9001-S's two licence-disabled SFP+ ports and its disabled
-    modular bay are now stated: roc-ops/Portrayal#193 widened `component-attrs` to accept a
-    placement id as well as a component name, and `bay-attrs` already took a bay path, so
-    sfp-plus-2, sfp-plus-3 and mpa-1 carry `enabled: no` and the licence that unlocks them, in
-    that configuration alone. WHAT IS STILL NOT SAYABLE is the 60 Gbps figure: a configuration
-    can now say what is true of a PART and still cannot override an attr of the DEVICE, so this
-    chassis carries the 120 Gbps switching capacity for both models and the -S's half-capacity
-    lives in prose.
+    The fixed-port install guide's power table (Table 35, "Power Consumption Specifications") has a
+    column for the ASR 9001 and for the larger routers and none for the ASR 9001-S, and no other
+    held document prints a power figure for the -S. The -S therefore lists the device's power
+    figures, which are the ASR 9001's. Its 60 Gbps fabric bandwidth and its description are
+    stated on the configuration.
   wanted: >-
-    a way for a configuration to override a device-level attr - the same widening one level up.
-    docs/what-a-configuration-cannot-say.md now records which two thirds of that shape are
-    closed and why this one is not.
+    a power figure for the ASR 9001-S: a column of its own in the guide's power table, or a data
+    sheet that prints one.
   blocks: []
 - what: din-1-0-2-3-connector
   scope: [clk-10mhz, clk-1pps]
@@ -547,10 +544,13 @@ configurations:
       usable fixed ports (SFP+ 0 and SFP+ 1) instead of four. BAY 1 and SFP+ 2
       and 3 are physically present and identical - the cages are the same cages -
       but disabled by default and dust-capped, and unlocked by applying the
-      A9K-9001-120G-LIC upgrade licence, after which the router must be reloaded.
-      NOTE WHAT THIS CONFIGURATION STILL CANNOT SAY - see the config-scoped-device-attrs
-      gap. It cannot mark SFP+ 2 and 3 as disabled, and it cannot carry the
-      60 Gbps figure, so both live in this sentence rather than in data.
+      A9K-9001-120G-LIC upgrade licence, after which the router must be reloaded. The guide's power
+      table has no column for the -S, so the power figures listed are the ASR 9001's.
+    export-description: >-
+      Cisco ASR 9001-S Router - the 60 Gbps ASR 9001, with one port adapter bay and two 10 GE SFP+ ports usable until the 120G licence is applied
+    attrs:
+      performance:
+        fabric-bandwidth: 60 Gbps
     part-numbers:
       ASR 9001-S Router with 2 x 10 GE:
         part: ASR-9001-S

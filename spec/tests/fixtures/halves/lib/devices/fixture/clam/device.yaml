@@ -1,0 +1,57 @@
+format: 1
+kind: device
+name: clam
+version: 1.0.0
+maturity: draft
+manufacturer: Fixture
+model: CLAM
+description: >-
+  Test fixture: a box 200 wide, 100 high and 120 deep that opens in two halves. The base is 50
+  deep and the lid 70 deep, hinged on its top edge. The open drawing holds two bays in the base
+  and one in the lid.
+profile: passive
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      a test fixture for the two halves of a box that opens; every number is chosen for the tests.
+  halves.base.stands:
+    confidence: estimated
+    note: >-
+      a test fixture: the base stands 50 from the back of the box to the seam.
+  halves.lid.stands:
+    confidence: estimated
+    note: >-
+      a test fixture: the lid stands 70 from the seam to its outer face, so the two sum to the 120 depth.
+  halves.lid.angle:
+    confidence: estimated
+    note: >-
+      a test fixture: the lid opens to 110 degrees.
+chassis:
+  width: 200.0
+  height: 100.0
+  depth: 120.0
+  halves:
+    base: {outer: rear, stands: 50.0}
+    lid: {hinge: top, angle: 110.0, stands: 70.0}
+views:
+  front:
+    empty: >-
+      a test fixture: the closed face is left blank on purpose, the halves are what is under test.
+    size: {w: 200.0, h: 100.0}
+  open:
+    size: {w: 200.0, h: 230.0}
+    components:
+      bays:
+      - {id: lid-bay, at: [20.0, 30.0], size: {w: 60.0, h: 50.0}, accepts: [fixture/clam-card@1]}
+      - {id: base-bay-a, at: [20.0, 140.0], size: {w: 60.0, h: 50.0}, accepts: [fixture/clam-card@1]}
+      - {id: base-bay-b, at: [120.0, 140.0], size: {w: 60.0, h: 50.0}, accepts: [fixture/clam-card@1]}
+    regions:
+    - {id: lid-half, half: lid, at: [0.0, 0.0], size: {w: 200.0, h: 110.0}}
+    - {id: base-half, half: base, at: [0.0, 120.0], size: {w: 200.0, h: 110.0}}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The box with both halves empty.

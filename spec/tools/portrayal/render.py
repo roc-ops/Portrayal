@@ -44,6 +44,7 @@ from portrayal.manifest import (presented_point, back_hosts, back_parts, key_on_
                       config_power, device_options, pdu_class, mates_of)
 from portrayal import capability
 from portrayal import ears as ears_mod
+from portrayal import halves as _halves
 from portrayal import bevel as _bevel
 from portrayal import elements as elements_mod
 from portrayal import facets as _facets
@@ -131,6 +132,54 @@ def mark_lamped(svg):
             src = by_path.get(t)
             if src is not None and src is not lamp and _declares_states(src):
                 src.set("data-lamped", "true")
+
+
+# THE RING ROUND A PORT WHOSE LIGHT THE USER COLOURS (#1271). A grey the faces
+# already use for bare metal and ink (#9aa0a8, in the skins of the common parts),
+# so it is no state colour and no maker's: whatever colour the user sets, the
+# ring is the same. It is a band outside the port's box, `RING_GAP` clear of it
+# and `RING_WIDTH` thick, so it covers no part of the port.
+PROGRAMMABLE_RING = "#9aa0a8"
+RING_GAP = 0.5
+RING_WIDTH = 0.4
+
+
+def draw_programmable_rings(svg, marked, boxes):
+    """One ring per port a marked lamp belongs to, drawn under that port.
+
+    A marked placement that is a lamp with a `for` naming placements on this
+    face is ringed through them (the ring belongs to the port, not to the 1.4
+    mm lamp beside it); a lamp for something not on this face, or any other
+    marked placement, is ringed itself. Two lamps for one port make one ring.
+    The ring is not an element of the face: no `data-path`, so no row in the
+    elements file and no node in the Explorer's tree - the mark is on the
+    lamp's own row (`programmable`). `data-ring-of` names the placement it
+    surrounds.
+    """
+    done = set()
+    for p in marked:
+        hosts = [t for t in targets(p.get("for")) if t in boxes] or [p["id"]]
+        for host in hosts:
+            at = next((n for n in svg if n.get("id") == host), None)
+            if host in done or host not in boxes or at is None:
+                continue
+            done.add(host)
+            x0, y0, x1, y1 = boxes[host]
+            m = RING_GAP + RING_WIDTH / 2
+            ring = ET.Element(f"{{{SVG_NS}}}rect")
+            ring.set("id", f"programmable-ring--{host}")
+            ring.set("data-class", "programmable-ring")
+            ring.set("data-programmable", "true")
+            ring.set("data-ring-of", host)
+            ring.set("x", f"{x0 - m:g}")
+            ring.set("y", f"{y0 - m:g}")
+            ring.set("width", f"{x1 - x0 + 2 * m:g}")
+            ring.set("height", f"{y1 - y0 + 2 * m:g}")
+            ring.set("rx", f"{m:g}")
+            ring.set("fill", "none")
+            ring.set("stroke", PROGRAMMABLE_RING)
+            ring.set("stroke-width", f"{RING_WIDTH:g}")
+            svg.insert(list(svg).index(at), ring)
 
 
 def data_for(value):
@@ -2692,7 +2741,7 @@ def bevel_face(svg, faceplate, ch, face, w, h):
     kit can find (`chassis-bevels`). bevel.py builds the solid; the 3D viewer
     builds its mesh from the same polygons, so the two cannot disagree.
     """
-    if not ch.get("bevel") or face not in _bevel.FACES:
+    if not (ch.get("bevel") or ch.get("rounded")) or face not in _bevel.FACES:
         return
     bevels = _bevel.parse(ch)
     W, H, D = ch["width"], ch["height"], ch["depth"]
@@ -4050,6 +4099,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             break
         member_of.update(grew)
 
+    # THE PLACEMENTS MARKED AS A PROGRAMMABLE LIGHT (#1271) and where each one
+    # stands, for the rings drawn after the last placement.
+    programmable = []
+    placed_boxes = {}
+
     def draw_placement(p):
         # How far off the face the SEAT is - the aperture's own protrusion,
         # nothing the author wrote. Kept separate from `p["lift"]` on purpose;
@@ -4235,6 +4289,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         states = p.get("states") or grp.get("states")
         if states:
             apply_states(g, states, inst_palette)
+        # A USER-PROGRAMMABLE COLOUR (#1271), the same way: a placement's own
+        # word wins over its group's, so one lamp may take the mark back. The
+        # mark rides on the instance as data; the ring is drawn once every
+        # placement's box is known (below), under the port the lamp belongs to.
+        on = p["programmable"] if "programmable" in p else grp.get("programmable")
+        if on and not p.get("projection-of"):
+            g.set("data-programmable", "true")
+            note = p.get("programmable-note") or grp.get("programmable-note")
+            if note:
+                g.set("data-programmable-note", note)
+            programmable.append(p)
         # The sentence the vendor wrote, kept beside the tokens rather than
         # instead of them. "Blue = 100G, Green = 40G" is not a state list and was
         # never usable as one; it is still worth carrying, so it travels as prose.
@@ -4281,6 +4346,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             x0, y0, x1, y1 = cx - chh_ / 2, cy - cw / 2, cx + chh_ / 2, cy + cw / 2
         else:
             x0, y0, x1, y1 = p["at"][0], p["at"][1], p["at"][0] + cw, p["at"][1] + chh_
+        placed_boxes[p["id"]] = (x0, y0, x1, y1)
         extents[0] = min(extents[0], x0); extents[1] = min(extents[1], y0)
         extents[2] = max(extents[2], x1); extents[3] = max(extents[3], y1)
 
@@ -4356,12 +4422,18 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     drawn_bays = {b["id"] for _face, (_n, v) in resolve_views(device, config).items()
                   for b in view_parts(v)["bays"]}
 
+    # THE HALF OF EACH BAY, in a view whose regions state one (portrayal.halves):
+    # `data-half` on the bay's group, absent on every other bay and view
+    bay_half = _halves.view_bay_halves(view)
+
     def draw_bay(b):
         bay_lift = 0.0
         bay_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
         bay_g.set("id", b["id"])
         bay_g.set("data-path", b["id"])
         bay_g.set("data-class", "bay")
+        if b["id"] in bay_half:
+            bay_g.set("data-half", bay_half[b["id"]])
         if b.get("in"):
             # A MODULE STANDS ON THE FLOOR AND RISES TO ITS OWN HEIGHT. A bay's
             # plane is where the module's face is and the body reaches back
@@ -4643,6 +4715,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             enumerate(sorted(inst_palette.items(),
                              key=lambda kv: tuple(str(x) for x in kv[0]))))
         style.text = STATE_CSS + extra + "\n"
+
+    draw_programmable_rings(svg, programmable, placed_boxes)
 
     mark_lamped(svg)
 
@@ -6248,6 +6322,7 @@ def main():
         except Exception:
             return None          # L5 reports the broken ref
 
+    _view_halves = _halves.bay_halves(device)
     cfg_states = {n: drawn_states(config_states(device, n, c, lib),
                                   [faces[f] for f in files.get(n, {}).values() if f in faces])
                   for n, c in configs.items()}
@@ -6294,7 +6369,7 @@ def main():
                              "power": ch.get("power"),
                              # a bevelled body, as the polygons the viewer
                              # builds its mesh from; absent on a plain box
-                             **({"solid": _bevel.published(ch)} if ch.get("bevel") else {}),
+                             **({"solid": _bevel.published(ch)} if ch.get("bevel") or ch.get("rounded") else {}),
                              # how far parts reach beyond the rack face each
                              # side, and where the ear folds are when they are
                              # behind the body; absent where unstated (#865)
@@ -6308,7 +6383,10 @@ def main():
                              # each rail kit the device lists, resolved inline
                              # so the site reads one file (#907)
                              **({"kits": published_kits(ch["kits"], lib)}
-                                if ch.get("kits") else {})},
+                                if ch.get("kits") else {}),
+                             # the two halves of a box that opens, as written;
+                             # absent on a box that does not
+                             **({"halves": _halves.published(device)} if _halves.declared(device) else {})},
                  # WHAT THE DEVICE CAN BE BOUGHT WITH - the union over its
                  # orderable and base builds of `configs[].power` and
                  # `configs[].airflow`. The filter an HCL runs ("DC, back-to-
@@ -6457,6 +6535,10 @@ def main():
                                # horizontal slots re-rendered their card upright.
                                "rotate": b.get("rotate"),
                                "at": b["at"], "size": b["size"],
+                               # the half of a box that opens this bay is in,
+                               # where its view's regions state one
+                               **({"half": _view_halves[v][b["id"]]}
+                                  if b["id"] in _view_halves.get(v, {}) else {}),
                                # the configurations that have this bay, as the
                                # device states them and absent where it states
                                # none (#1022): the drawing leaves the bay out

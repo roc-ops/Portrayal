@@ -272,7 +272,7 @@ PLACEMENT_GEOMETRY = {"inset", "lift", "in", "under", "only-in", "optional",
 PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface", "fed-by", "through",
                         "lines", "dc", "hides"}
 PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
-                     "frames", "positions"}
+                     "frames", "positions", "programmable", "programmable-note"}
 # MEMBERSHIP - which adjustment a placed thing slides with
 # (docs/adjustable-positions-design.md section 9). It is in none of the three
 # digests above, because none of them has its bumps: a member ADDED to an
@@ -627,10 +627,12 @@ def _composed(doc, versions):
 # guard, and the same reason, as PORT_ROLES/NON_PORT_ROLES in dcim_export.
 # `bevel` IS GEOMETRY: it changes the outline of a face and what a part may be
 # placed on, so adding or resizing one is a major (#735).
+# `rounded` IS GEOMETRY AS `bevel` IS: the plan corners and the taper change a
+# face's outline and the flat a part may sit on.
 # `shell` IS GEOMETRY TOO: it decides whether the envelope is a solid box or
 # open air round what the views' parts build (docs/cable-managers-design.md
 # section 4).
-CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell"}
+CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "rounded", "shell"}
 # `mount` IS NOT A DIMENSION EITHER: it says how the box is installed and moves
 # nothing on the drawing, so stating it on an existing device is a patch (#734).
 # `thickness` IS A STATED GAUGE, like the weight beside it: nothing is drawn or
@@ -659,8 +661,24 @@ CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell"}
 # like any other, so moving one is a major.) IF THE EARS EVER JOIN
 # THE DEFAULT BUILD, `h` and `y` become geometry and move into `shape`, and
 # that change is itself a major for every device that states them.
+# `halves` IS CLASSIFIED HERE AND READ APART. Hashed with the surface, so an
+# `angle` or a `stands` corrected against its source is a patch; what a change
+# to the halves costs beyond that is recorded in the entry's `halves` and read
+# by `_halves_bump` - see HALF_GEOMETRY. It is not in the shape digest, which
+# cannot tell a box that gained halves (a minor) from one whose slot moved.
 CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mount", "thickness",
-                   "full-depth", "ears", "overhang", "kits"}
+                   "full-depth", "ears", "overhang", "kits", "halves"}
+
+# THE KEYS OF ONE HALF, SORTED, and test_opening_halves.py holds the two sets to
+# the schema the way test_lock_chassis_split.py holds the chassis keys: a fifth
+# key has to say which side it falls on.
+# `outer` AND `hinge` ARE GEOMETRY: they decide which way the box opens, and a
+# viewer, a saved scene or a DCIM note that held one is wrong when it changes.
+# Changing either is a major.
+# `angle` AND `stands` ARE STATED FIGURES, as `weight-kg` is: a correction moves
+# the patch bucket only.
+HALF_GEOMETRY = {"outer", "hinge"}
+HALF_STATED = {"angle", "stands"}
 
 
 def _shape_digest(doc, placed, drop=()):
@@ -958,6 +976,10 @@ def entry(doc, versions=None):
     # gained is a minor and a port lost a major. Only where there is one.
     if ports := _dc_ports(doc, versions):
         e["dc-ports"] = ports
+    # THE HALVES IT OPENS IN, recorded and not only hashed, because halves
+    # gained are a minor and a bay's half moved a major. Only where there are any.
+    if record := _halves(doc):
+        e["halves"] = record
     e.update(buckets(doc, versions))
     out = _Entry(e)
     placed = _placements(doc)
@@ -1057,13 +1079,68 @@ def _adjustments_bump(old, new):
     return need
 
 
+def _halves(doc):
+    """The halves of a box that opens, as the lock records them: `geometry`,
+    the `outer` of the base and the `hinge` of the lid as the device states them,
+    and `bays`, the derived map `"<view>/<bay>": half` over the views whose
+    regions state a half (portrayal.halves). `{}` for a device with neither."""
+    from portrayal import halves
+    declared = halves.declared(doc)
+    bays = {f"{view}/{bay}": half
+            for view, mapped in halves.bay_halves(doc).items() for bay, half in mapped.items()}
+    if not declared and not bays:
+        return {}
+    return {"geometry": {name: {k: half[k] for k in sorted(HALF_GEOMETRY) if half.get(k) is not None}
+                         for name, half in sorted(declared.items()) if isinstance(half, dict)},
+            "bays": dict(sorted(bays.items()))}
+
+
+def _halves_bump(old, new):
+    """What the halves demand (docs/format-stability.md).
+
+    MAJOR when something held before is moved: a half's `outer` or `hinge`
+    changed or dropped, the halves taken away, or a bay that was in one half is
+    in the other or in none. MINOR when halves are stated where there were none,
+    or a bay is found in a half that had no answer for it. `angle`, `stands` and
+    a region's `half` are in `surface`, a patch.
+
+    An old lock with no `halves` key is a device that declared none, so the
+    first halves a device states are a minor and never a major.
+    """
+    was, now = old.get("halves") or {}, new.get("halves") or {}
+    if not was and not now:
+        return None
+    if not was:
+        return "minor"
+    if not now:
+        return "major"
+    need = None
+    for name, geometry in was["geometry"].items():
+        stated = (now["geometry"].get(name) or {})
+        for key, value in geometry.items():
+            if stated.get(key) != value:
+                return "major"
+        if set(stated) - set(geometry):
+            need = "minor"
+    if set(now["geometry"]) - set(was["geometry"]):
+        need = "minor"
+    for key, half in was["bays"].items():
+        if now["bays"].get(key) != half:
+            return "major"
+    if set(now["bays"]) - set(was["bays"]):
+        need = "minor"
+    return need
+
+
 def required_bump(old, new):
     """The smallest bump this change is allowed to take - the largest of what
-    the buckets, the placement keys and the adjustments demand."""
+    the buckets, the placement keys, the adjustments, the DC ports and the
+    halves demand."""
     if old is None:
         return None
     need = [b for b in (_bucket_bump(old, new), _placement_keys_bump(old, new),
-                        _adjustments_bump(old, new), _dc_ports_bump(old, new))
+                        _adjustments_bump(old, new), _dc_ports_bump(old, new),
+                        _halves_bump(old, new))
             if b]
     return max(need, key=RANK.get) if need else None
 

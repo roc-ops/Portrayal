@@ -265,8 +265,11 @@ Establish `chassis.width/height/depth` and each view's `size`.
 - **How it mounts is `chassis.mount`:** `rack` (the default), `rack-face` (on
   the rail face at a rack unit, projecting outward: a lacer panel, a 5U finger
   bracket), `rack-side` (on the side of an upright, beside the rack, outside
-  the rails: a full-height vertical cable manager), `din-rail`, `wall` or
-  `desktop`. The first three state `ru`; the others do not (L125). A
+  the rails: a full-height vertical cable manager), `din-rail`, `wall`,
+  `ceiling` (fixes to a ceiling or hangs below it, its front facing down),
+  `strand` (clamps to the support strand or cable of an aerial plant),
+  `pedestal` (mounts on a pedestal or rod) or `desktop`. The first three
+  state `ru`; the others do not (L125). A
   `rack-side` part is drawn as it stands, its front `w` across the rack's face
   direction and `h` the height it runs, so its front is portrait (L152).
   Which side of the rack it stands on is the lab placement's to say
@@ -445,6 +448,75 @@ L155 to L159 for a kit you wrote. Then put the `default` position beside the
 rack-mounting figure it came from, and each kit range beside the newest
 source that gives it.
 
+## A box that opens in two halves
+
+A node that mounts on a strand or a pedestal opens like a clamshell: a base
+that stays where it is bolted, and a lid that swings on a hinge. Say so under
+`chassis` once the body is sized, and draw the open box as a view of its own.
+The rules are L200 to L203 and what they check is in
+[lint-rules.md](lint-rules.md); the format and what the build publishes are in
+[format-stability.md](format-stability.md).
+
+A two-half box, written out. The closed box is 200 wide, 100 high and 120 deep;
+the base reaches 50 from the back to the seam and the lid 70 from the seam to
+its own outer face, so the two add up to the depth:
+
+```yaml
+chassis:
+  width: 200.0
+  height: 100.0
+  depth: 120.0
+  halves:
+    base: {outer: rear, stands: 50.0}
+    lid: {hinge: top, angle: 110.0, stands: 70.0}
+provenance:
+  halves.base.stands:
+    confidence: datasheet
+    note: >-
+      the maker's name for the document, its revision and the page that gives the base's depth
+  halves.lid.angle:
+    confidence: drawing
+    note: >-
+      the figure that shows the lid open, and the angle read from it
+views:
+  open:
+    size: {w: 200.0, h: 230.0}
+    components:
+      bays:
+      - {id: lid-bay, at: [20.0, 30.0], size: {w: 60.0, h: 50.0}, accepts: [acme/card@1]}
+      - {id: base-bay, at: [20.0, 140.0], size: {w: 60.0, h: 50.0}, accepts: [acme/card@1]}
+    regions:
+    - {id: lid-half, half: lid, at: [0.0, 0.0], size: {w: 200.0, h: 110.0}}
+    - {id: base-half, half: base, at: [0.0, 120.0], size: {w: 200.0, h: 110.0}}
+```
+
+- **Exactly two entries, `base` and `lid`.** The base states `outer`, the face
+  that faces away from the lid (`front`, `rear`, `left`, `right`, `top` or
+  `bottom`, as the views are named); the lid states its `hinge`, a face
+  perpendicular to the axis of the base's `outer`, so not the face the halves
+  stand along and not the back of the lid. `angle` is the opening in degrees,
+  0 to 180. Every figure is a bare number. Check: L200 is clean.
+- **`stands` is the depth of each half along the `outer` axis,** read from the
+  maker's section drawing, not from the closed face. The two add up to the
+  chassis dimension on that axis, depth for a front or a rear `outer`, width
+  for a left or a right, height for a top or a bottom, within 2 per cent. Check:
+  L203 is silent, or `provenance` says why the closed box is taller than its two
+  shells.
+- **The open drawing is a view of its own,** with a region for each half that
+  states `half`. A bay belongs to the half of the one region whose box holds
+  the bay's centre, and nobody writes it on the bay. Check: L201 and L202 are
+  clean; in the build, each bay's group in the open view carries `data-half`.
+- **A figure keeps its source in `provenance`, keyed by its path:**
+  `halves.base.stands`, `halves.lid.stands`, `halves.lid.angle`. Check: each
+  figure has an entry that names the document and the page.
+- **A box that does not open states none of these keys,** and a closed drawing
+  states no `half`.
+
+What the lock asks for is in [format-stability.md](format-stability.md): stating
+the halves on a released device is a minor, changing the base's `outer`, the
+lid's `hinge` or the half a bay is in is a major, and a corrected `angle` or
+`stands` is a patch.
+
 ## Stage 2: the cutouts
 
 Declare every hole in `panel.cutouts` before choosing what goes in it.
@@ -608,6 +680,19 @@ Gate 4b checks it.
    the bay's opening showing around it.
 4. **An indicator declares what it belongs to**: `{id: led-p1, ref:
    std/led-arrow@1, for: port-1, group: sfp28-leds}`. Never rely on naming.
+
+   **A light whose colour the user chooses** (per port, VLAN or speed, from a
+   controller) is marked `programmable: true` on the lamps' group, or on one
+   placement, which wins over its group's and may say `false`. Put the maker's
+   own name for the feature, for example Ubiquiti's Etherlighting, in
+   `programmable-note`, as text only: the mark says the colour is the user's,
+   not which colours there are, and a figure is never put in the note. The build
+   draws a neutral ring round the port the lamp's `for` names, and the device
+   index and the DCIM export say the device's ports light up, so nothing else is
+   stated at device level. Use it only where the maker's documents say the
+   colour is user-set, and draw the ring only if the maker's figure shows a
+   light around or beside the port: the mark on a lamp the figure does not show
+   is a claim the figure does not support.
 5. **Every placement and bay carries `group:` and `rel-pos:`**, and every group
    is declared under top-level `groups:` with its `term` (the vendor's word:
    Port, Slot, Bay), its `role` and `index-origin`. That is what gives the tree,
@@ -622,7 +707,10 @@ Gate 4b checks it.
    `management` is how you reach and discipline it (OOB, console, craft,
    timing); `service` is what keeps it running (PSUs, fans, filters);
    `indicator` is what you read; `furniture` is what you neither connect to nor
-   read. L37 warns at `modelled` and fails at `verified`.
+   read; `stack-control` is the control and sync links between the units of a
+   stack, never user traffic (the stack's data ports stay `traffic`).
+   A group's `role` is the one thing a consumer may rely on; the group's name
+   promises nothing. L37 warns at `modelled` and fails at `verified`.
 
    Declare a group when you populate it, not before. One group per port
    family, named for the family: `sfp28`, `qsfp28`, `qsfpdd-400g`, with the
@@ -702,6 +790,20 @@ Gate 4b checks it.
    the vendor requires a filler and no component exists for it, that is a
    missing component, not a missing decision: leave the default off and record
    the sentence that says the filler is required.
+
+   **An opening for a module the library does not hold states its class.** A
+   chassis with an optional module window, a socket or an I/O bay has a fact
+   to state even with nothing to seat: what kind of module the opening takes.
+   Declare the bay with `interface:` set to a key registered in
+   `spec/schemas/connectors.yaml` whose note says what the opening takes and
+   cites the document, and give it neither `accepts` nor `default`. L6 does not
+   ask such a bay for a default while no part mates the key; the day a part
+   mates it, L6 asks again. The device type's export lists the bay with its
+   name and position and a description saying what it takes, and no port. A
+   `base` configuration states each such bay of a `traffic` group empty with
+   `''`, as it does any traffic bay. A new
+   key is a registry change: state it in the pull request as one. The gap that
+   names the missing module drawing stays.
 9a. **An open-frame chassis says so on the face: `open-frame: true`.** A
     mid-plane chassis whose slots are two guide rails and nothing between them
     is seen straight through wherever a slot is empty (the CommScope CH3000 is
@@ -1096,7 +1198,11 @@ holds two kinds of block, and each is placed in the face's lists by a
   `through`, so a switched, breakered strip needs no longhand outlet. Numbering
   and the moulding ids carry on across segments and banks. A bezel that is not
   the pitch repeated says so in the moulding's `by-pos` list, and the
-  expander stops on a key it does not know.
+  expander stops on a key it does not know. A strip whose outlets alternate
+  (a C13, then a C39) gives its segment a `pattern` in place of a `ref`: the
+  kinds in the order they repeat, each with the `shift` of its own seat from
+  the pitch. A bank may carry an `id-format` of its own, for a strip whose
+  sections are lettered and whose outlet ids carry the letter.
 
 What a block cannot say stays longhand beside it: the meter, the network
 interface, the breakers and anything else that is not repeated.

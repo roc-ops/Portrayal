@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ht358xh
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: optical
@@ -49,11 +49,10 @@ provenance:
     28.7 across inside the vent field; and the black latch from 36.3 to the right edge.
   test-point: >-
     datasheet - "RF Test Point: 75 ohm MCX female (located on front panel)", with an MCX
-    male to F female adapter shipped with each back plate. DRAWN AS AN ELEMENT, NOT
-    COMPOSED AS std/mcx@1: a composed MCX exports as a DOCSIS interface, which would give
-    every chassis forty-eight "interfaces" for a -20 dB monitoring tap that carries no
-    service - the transmitter's RF input and optical output are on the back plate. The
-    AR3002E draws its test point the same way. Drawn nickel, as photographed.
+    male to F female adapter shipped with each back plate. The panel connector is the
+    composed std/mcx@1, which presents the registered interface mcx; the body round it
+    stays drawn in the skin, declared as class bezel (ids, positions and the skin are
+    unchanged). Drawn nickel, as photographed.
   channel: >-
     the face prints the transmitter's own ITU channel (the photograph's carriers read
     Ch. 20 to Ch. 27, top to bottom), so it is the `channel` field, set per unit. The
@@ -71,9 +70,10 @@ elements:
   label-box: {at: [1.5, 0.9], size: [5.9, 7.9], class: label}
   vent: {at: [15.1, 1.0], size: [20.9, 7.7], class: vent}
   latch: {at: [36.3, 0.8], size: [15.4, 8.1], class: latch}
-  test-point: {at: [8.7, 1.73], size: [6.2, 6.2], class: port}
+  test-point: {at: [8.7, 1.73], size: [6.2, 6.2], class: bezel}
 parts:
   - {ref: common/led-dot@1, id: led-status, at: [27.7, 4.2], attrs: {function: status}}
+  - {ref: std/mcx@1, id: rf-tp, at: [9.325, 2.580]}
 connection-points:
   mate: {at: [25.96, 4.83], direction: front}
 skins: [default]

@@ -158,6 +158,7 @@ also draws is that part's row. Each row may carry:
 | `media`, `speed`, `group`, `group-role`, `rel-pos` | the `data-` attribute of the same name | string |
 | `speeds` | `data-speeds` | list: every native rate of a multi-rate cage, ascending, ending at `speed` (`["1g","10g","25g"]`); absent on a single-rate port. Written per group from the vendor's figure; native rates only, no breakout |
 | `states` | `data-states` | list: the lamp vocabulary |
+| `programmable`, `programmable-note` | `data-programmable`, `data-programmable-note` | `true` on a lamp the maker lets the user colour, and the maker's own name for it as a string; both absent on every other row ([A port light the user can colour](#a-port-light-the-user-can-colour)) |
 | `for` | `data-for` | list: the owners, local paths or device-absolute `/<view>/<path>` |
 | `inner` | `data-inner` | `true` for a port inside another port's housing |
 | `covered-by` | `data-covered-by` | on a bay a card wider than one slot covers: the path of the bay the card is seated in ([pcie-two-slot-bays-design.md](pcie-two-slot-bays-design.md)) |
@@ -317,6 +318,27 @@ reader that does not know it finds every field it read before.
   `input-wiring`, `input-voltage-v`, `input-current-a`, `plug-rating-a` and
   `capacity-kw`; attrs are flattened to `data-*` on every drawing, so these
   names are held as attribute names too.
+- **`attrs.power`** gains `poe-pd-standard` and `poe-pd-standard-min` (`802.3af`,
+  `802.3at` or `802.3bt`), `poe-pd-class` (an integer from 0 to 8) and `poe-pd-max-w` (a
+  number above 0), all optional and all about a device's own PoE input. `poe-pd-max-w`
+  is the whole intake, what the device hands on included, so a figure printed
+  'excluding PoE output' stays in `power-self-max-w`. Every file valid before stays
+  valid and `format` is still 1. From the first device on `main` that states them, the
+  names, the three spellings and the meaning of `poe-pd-max-w` cannot change without a
+  format change, and neither can the `mount` value `ceiling`. The served copy of the
+  device schema is republished in the same release as the first device that states
+  `ceiling`, or a reader validating against the older copy refuses that device.
+- **The DCIM export** of a device that states `poe-pd-standard` gains one sentence in the
+  comments: `PoE powered device: 802.3at (runs on 802.3af), at most 25 W at the PD
+  input.` A device with a `ceiling` mount reads `Ceiling-mounted; not rack-mounted.`
+- **`chassis.mount`** gains `strand` (a box that clamps to the support strand or cable of
+  an aerial plant) and `pedestal` (one that mounts on a pedestal or rod), and keeps
+  `wall`. Every file valid before stays valid and `format` is still 1. Both values are
+  additive and one-way: from the first device on `main` that states one, it cannot be
+  renamed or removed without a format change, and the served copy of the device schema
+  is republished in the same release as that device. A device with a `strand` mount reads
+  `Strand-mounted; not rack-mounted.` and one with a `pedestal` mount `Pedestal-mounted;
+  not rack-mounted.`
 - **The DCIM export** writes the input rating on the input power port's
   `description` and in the comments, with the derived class; an outlet's
   description names the breaker it runs `through` and its `lines`
@@ -885,7 +907,9 @@ device has them:
   `ref` and `motion` and neither `depth` nor `preset`. A device that lists no
   kit, or whose default kit does not resolve, has no `kit` key. A reader that
   does not know `kit` is unaffected, and `format` is still 1.
-- `mount`: the device's `chassis.mount`, present only when it is not `rack`.
+- `mount`: the device's `chassis.mount`, present only when it is not `rack`. It can be
+  `ceiling`, `strand` or `pedestal`, added to the schema's values without moving `format`; a reader that does not
+  know a value treats the device as not racked, as it does any other.
 - `shell`: `chassis.shell`, `sheet` for a body that is a sheet and not a box.
 - `capacity`: `{"count", "basis", "media"}`, the cable capacity the vendor
   states. `media` is the kind of cable the count is of, in a rack file's
@@ -944,6 +968,36 @@ change, so a reader should not treat the list above as closed.
 profiles in `spec/schemas/profiles.yaml` and follows that file. It is a new
 field, so `contract` stays 2: a reader that does not know it still finds every
 field it read before.
+
+### A port light the user can colour
+
+A lamp can be marked as a light whose colour the user chooses: `programmable:
+true` on a device's group or placement (a placement's own word wins over its
+group's), with `programmable-note` naming the maker's own feature as text.
+**One-way once a release carries it:** from that release the two key names, the
+boolean and the note's being text cannot change without a format change.
+Adding an optional key raises none of the three numbers (the rule under
+"What is a breaking change" above: "Adding an **optional** key does not raise
+`format`", and for the published build "A new field does not raise it"), so
+`format` is still 1, the elements file's `contract` and the device index's
+`CONTRACT` stay 2, and a reader that ignores the keys finds everything it read
+before.
+
+- **A compiled face** draws a `rect` with `data-class="programmable-ring"`,
+  `data-programmable="true"` and `data-ring-of="<placement id>"` round each port
+  a marked lamp's `for` names (round the lamp itself when it names none on the
+  face), in `#9aa0a8`, drawn before the port so it covers none of its parts. It
+  has no `data-path`, so it is no row of the elements file. The marked
+  placement's own element gains `data-programmable="true"` and, when a note
+  is stated, `data-programmable-note`. A face with no mark is drawn as before.
+- **The elements file**: the row of a marked placement gains `programmable:
+  true` and `programmable-note` (a string); both are absent on every other row.
+- **`devices.json`**: an entry gains `programmable-light: true` when any lamp on
+  any face of the device is marked; the build derives it, no manifest states it,
+  and the key is absent otherwise.
+- **The DCIM export**: the comments of such a device gain one sentence,
+  `Lamps with a programmable colour, set by the user (Etherlighting).`, with the
+  notes the model states in the brackets and no brackets when it states none.
 
 ### What a compiled face says about airflow
 
@@ -1086,6 +1140,47 @@ Renaming one of these keys or attributes, or changing what a value means (the
 unit, the frame, the datum, the sign of an axis), is a breaking change: every
 saved link and every saved rack that holds a position would move with no edit
 to it.
+
+## A box that opens
+
+A device may be a box that opens in two halves, a base and a lid
+([modelling-a-device.md](modelling-a-device.md) has a worked example). The
+format gains two optional keys and the build gains the fields below, so
+`format` stays 1 and `contract` stays 2. A device that states neither gains no
+key and no attribute: its build is byte for byte what it was.
+
+**In a manifest.** `chassis.halves`, a map of exactly two entries:
+`base: {outer, stands}` and `lid: {hinge, angle, stands}`. `outer` and `hinge`
+are face names (`front`, `rear`, `left`, `right`, `top`, `bottom`), `angle` is
+degrees and `stands` millimetres, all bare numbers where they are numbers. And
+`half` on a region, naming a key of `chassis.halves`.
+
+**Which half a bay is in** is derived: the half of the one region, among those
+of a view that states a `half`, whose box holds the centre of the bay's box.
+
+**In a compiled face**, of a view whose regions state a `half`: `data-half` on
+the group of each bay, `base` or `lid`. No other node carries it.
+
+**In `<device>.configs.json`**, of such a device: `chassis.halves`, the two
+entries as written, and `half` on each entry of `bays[<view>]` whose bay is in
+a half. Both are left out for every other device.
+
+**In the DCIM exports**, the description of a module bay starts with
+`In the base.` or `In the lid.`; a bay of any other device reads as it did.
+
+**What the lock asks for.** Stating `chassis.halves` on a device that was
+released without it is a minor. Changing the `outer` of the base or the `hinge`
+of the lid, taking the halves away, or moving a bay into the other half (by
+changing a region's `half` or the box of a region or a bay) is a major. A
+corrected `angle` or `stands`, and a `half` stated on a region that holds no
+bay, are a patch. Renaming a key, or changing what an `outer`, a `hinge` or a
+`stands` refers to, is a breaking change.
+
+**An older validator** holding the schema from before this change refuses a file
+that states either key, because `chassis` and a region accept no key the schema
+does not list. Files written without them are read as before. A consumer that
+validates a manifest with a copy of the schema updates the copy before it reads
+a device that opens.
 
 ## What else a consumer holds
 

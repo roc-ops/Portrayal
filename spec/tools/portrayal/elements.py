@@ -40,7 +40,8 @@ SVG_NS = "http://www.w3.org/2000/svg"
 _FIELDS = (("id", "id"), ("class", "data-class"), ("ref", "data-ref"),
            ("media", "data-media"), ("speed", "data-speed"),
            ("group", "data-group"), ("group-role", "data-group-role"),
-           ("rel-pos", "data-rel-pos"), ("covered-by", "data-covered-by"))
+           ("rel-pos", "data-rel-pos"), ("covered-by", "data-covered-by"),
+           ("programmable-note", "data-programmable-note"))
 _LISTS = (("states", "data-states"), ("for", "data-for"), ("speeds", "data-speeds"),
           ("hides", "data-hides"))
 
@@ -525,6 +526,8 @@ def face_elements(svg, config, view, configs=()):
                 row[key] = [t for t in v.split(" ") if t]
         if el.get("data-inner"):
             row["inner"] = True
+        if el.get("data-programmable"):
+            row["programmable"] = True
         # A PART THAT SLIDES, AND EVERYTHING DRAWN INSIDE ONE: which adjustment
         # moves this row's box, and the mm it moves for each mm of position,
         # so a reader that holds only this file can move a hit box

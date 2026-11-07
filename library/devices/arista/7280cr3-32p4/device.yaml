@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 7280cr3-32p4
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Arista
 model: 7280CR3-32P4
@@ -189,9 +189,9 @@ provenance:
       can hold, and are not listed. The data sheet lists no DC build of the switch: the PWR-1011-DC-RED
       and -BLUE supplies are spares, so the DC configurations are examples with no part number. The K
       and K-A builds share the base model's size, weight, figure and supplies and differ in memory, CPU
-      and routes, which a configuration cannot state; each is a configuration with its own part numbers.
-      There is no empty-bay (-S) configuration: no -S suffix exists in this family and the guide draws
-      no blank for a power supply or fan module.
+      and routes; each is a configuration with its own part numbers, and its `attrs` state its own memory,
+      CPU, storage and minimum EOS. There is no empty-bay (-S) configuration: no -S suffix exists in this
+      family and the guide draws no blank for a power supply or fan module.
   interface-names:
     confidence: datasheet
     note: >-
@@ -294,16 +294,6 @@ gaps:
     The PWR-1011-DC input is "-40 to -60 VDC, 30 A" in guide Table 3 and "-48 to -60V DC" in the data
     sheet's power supply table. The guide's is in the component, the data sheet's in its provenance.
   wanted: the maker's statement of which is current.
-- what: config-scoped-device-attrs
-  scope:
-  - front
-  - rear
-  reason: vendor-silent
-  note: >-
-    The 7280CR3K-32P4A has an eight-core CPU in place of a quad-core, and the K builds carry 64 GB of
-    memory against 8 GB. No configuration can state a device attribute (the same open gap as cisco/asr-9001).
-    The platform lines name all three.
-  wanted: configuration-scoped device attrs.
 - what: rack-ears
   scope:
   - front
@@ -1986,6 +1976,12 @@ configurations:
     description: >-
       The 7280CR3K-32P4, the same hardware with 64 GB of memory and the large-routes licence, with front-to-rear
       air. Ordered as DCS-7280CR3K-32P4-F.
+    export-description: >-
+      Arista 7280CR3K-32P4 - the large-routes build of the 7280CR3-32P4, a fixed 1RU data-centre switch
+      router with 32 x 100G QSFP and 4 x 400G OSFP ports and 64 GB of memory, running EOS
+    attrs:
+      platform: {cpu: Quad-Core x86, memory: 64 GB, storage: 8 GB flash; 120 GB SSD}
+      features: {eos-license: license group G3; minimum EOS 4.22.1}
     part-numbers:
       DCS-7280CR3K-32P4-F: {}
   k-r:
@@ -1994,6 +1990,12 @@ configurations:
     description: The 7280CR3K-32P4 with rear-to-front air. Ordered as DCS-7280CR3K-32P4-R.
     bays: {psu-1: arista/7280cr3-pwr-1000-ac-rev@1, psu-2: arista/7280cr3-pwr-1000-ac-rev@1, fan-1: arista/7280cr3-fan-rev@1,
       fan-2: arista/7280cr3-fan-rev@1, fan-3: arista/7280cr3-fan-rev@1}
+    export-description: >-
+      Arista 7280CR3K-32P4 - the large-routes build of the 7280CR3-32P4, a fixed 1RU data-centre switch
+      router with 32 x 100G QSFP and 4 x 400G OSFP ports and 64 GB of memory, running EOS
+    attrs:
+      platform: {cpu: Quad-Core x86, memory: 64 GB, storage: 8 GB flash; 120 GB SSD}
+      features: {eos-license: license group G3; minimum EOS 4.22.1}
     part-numbers:
       DCS-7280CR3K-32P4-R: {}
   k-a-f:
@@ -2002,6 +2004,12 @@ configurations:
       The 7280CR3K-32P4A, the K build with an eight-core CPU, with front-to-rear air. The guide's Table
       4 gives it 535 W typical and 851 W maximum, the same as the other builds (the data sheet says 543
       W / 865 W). Ordered as DCS-7280CR3K-32P4A-F.
+    export-description: >-
+      Arista 7280CR3K-32P4A - the large-routes, eight-core build of the 7280CR3-32P4 with 64 GB of memory,
+      a fixed 1RU data-centre switch router with 32 x 100G QSFP and 4 x 400G OSFP ports, running EOS
+    attrs:
+      platform: {cpu: Eight-Core x86, memory: 64 GB, storage: 120 GB SSD (no flash storage)}
+      features: {eos-license: license group G3; minimum EOS 4.27.2}
     part-numbers:
       DCS-7280CR3K-32P4A-F: {}
   k-a-r:
@@ -2010,6 +2018,12 @@ configurations:
     description: The 7280CR3K-32P4A with rear-to-front air. Ordered as DCS-7280CR3K-32P4A-R.
     bays: {psu-1: arista/7280cr3-pwr-1000-ac-rev@1, psu-2: arista/7280cr3-pwr-1000-ac-rev@1, fan-1: arista/7280cr3-fan-rev@1,
       fan-2: arista/7280cr3-fan-rev@1, fan-3: arista/7280cr3-fan-rev@1}
+    export-description: >-
+      Arista 7280CR3K-32P4A - the large-routes, eight-core build of the 7280CR3-32P4 with 64 GB of memory,
+      a fixed 1RU data-centre switch router with 32 x 100G QSFP and 4 x 400G OSFP ports, running EOS
+    attrs:
+      platform: {cpu: Eight-Core x86, memory: 64 GB, storage: 120 GB SSD (no flash storage)}
+      features: {eos-license: license group G3; minimum EOS 4.27.2}
     part-numbers:
       DCS-7280CR3K-32P4A-R: {}
   dc-f:

@@ -251,7 +251,9 @@ def test_the_sr3e_40yc6_m_is_a_configuration_of_the_sr3_40yc6_and_not_a_device_o
     assert list(cf["m-f"]["part-numbers"]) == ["DCS-7280SR3E-40YC6-M-F"]
     assert list(cf["m-r"]["part-numbers"]) == ["DCS-7280SR3E-40YC6-M-R"]
     assert cf["m-r"]["airflow"] == "back-to-front"
-    assert [g for g in load("7280sr3-40yc6")["gaps"] if g["what"] == "config-scoped-device-attrs"]
+    assert not [g for g in load("7280sr3-40yc6")["gaps"] if g["what"] == "config-scoped-device-attrs"]
+    assert cf["m-f"]["attrs"]["platform"]["memory"] == "32 GB"
+    assert cf["m-r"]["attrs"]["platform"]["memory"] == "32 GB"
 
 
 # ------------------------------------------------------------------ the DCIM

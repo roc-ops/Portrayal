@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: led-slant
+version: 1.0.0
+class: led
+profile: networking
+description: The long thin status lamp of the ReadyLinks IPC-APWF7-POE-CL, a rounded bar that a placement turns to the slant it has on the face
+size: {w: 15.0, h: 3.4}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  read off the stock photograph of the face by scale; no document prints the lamp's size
+provenance:
+  size: >-
+    estimated - read off the stock photograph of the face (about 0.17 mm per pixel from the unit's
+    245 mm width): a bar about 14.6 mm long and 3.2 mm across. The datasheet prints no size for it.
+  rest-colour: >-
+    #3a3f44, the resting colour of common/led-dot@1, which this part borrows; the photograph shows
+    the lamp dark, and no document names a lit colour.
+elements:
+  lamp:
+    at: [0.2, 0.2]
+    size: [14.6, 3.0]
+    class: led
+    states: ['off', 'on']
+relief:
+  features:
+    - node: lamp
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1's dome, unchanged: the photograph shows the lamp flush with the face and
+        no document gives a height.
+skins: [default]

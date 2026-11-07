@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: xmi1021ga
-version: 2.0.0
+version: 2.1.0
 class: adapter-panel
 behaviour: fills
 description: >-
@@ -30,13 +30,20 @@ body:
        confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
     - {id: lc06-back, at: [84.200, 6.150], size: [12.10, 8.70], from: 31.0, depth: 6.0, color: '#1c9dbe', shows: [rear],
        confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the 6 LC duplex adapters of the holder
 parts:
-  - {id: lc01, ref: fibrain/lc-duplex-adapter@1, at: [3.400, 5.850], attrs: {housing-finish: '#1c9dbe'}}
-  - {id: lc02, ref: fibrain/lc-duplex-adapter@1, at: [19.500, 5.850], attrs: {housing-finish: '#1c9dbe'}}
-  - {id: lc03, ref: fibrain/lc-duplex-adapter@1, at: [35.600, 5.850], attrs: {housing-finish: '#1c9dbe'}}
-  - {id: lc04, ref: fibrain/lc-duplex-adapter@1, at: [51.700, 5.850], attrs: {housing-finish: '#1c9dbe'}}
-  - {id: lc05, ref: fibrain/lc-duplex-adapter@1, at: [67.800, 5.850], attrs: {housing-finish: '#1c9dbe'}}
-  - {id: lc06, ref: fibrain/lc-duplex-adapter@1, at: [83.900, 5.850], attrs: {housing-finish: '#1c9dbe'}}
+  - {id: lc01, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [3.400, 5.850], attrs: {housing-finish: '#1c9dbe'}}
+  - {id: lc02, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [19.500, 5.850], attrs: {housing-finish: '#1c9dbe'}}
+  - {id: lc03, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [35.600, 5.850], attrs: {housing-finish: '#1c9dbe'}}
+  - {id: lc04, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [51.700, 5.850], attrs: {housing-finish: '#1c9dbe'}}
+  - {id: lc05, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [67.800, 5.850], attrs: {housing-finish: '#1c9dbe'}}
+  - {id: lc06, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [83.900, 5.850], attrs: {housing-finish: '#1c9dbe'}}
 faces:
   rear: {ref: fibrain/xmi1021ga-rear@2}
 optical:
@@ -135,6 +142,13 @@ provenance:
     panel does. The SC holders of this family are open, because
     common/sc-simplex-adapter@1 seats no cap - an inconsistency of that part,
     not a fact about Fibrain.
+  groups: >-
+    Fibrain HD adapter holder data sheet XMx (revision 1.1, modified 03.06.2024), page
+    1, lists XMI1021GA as 'FO Holder 6x LCdx, SM' and describes a holder 'fully equipped
+    with adapters'. The sheet does not number the adapters; the contract counts them
+    left to right. No page names a role for the port; the role follows the job, carrying
+    a user's link through the panel, so it is traffic. The port is passive and the data
+    sheet prints no rate for it, so the group states no speed.
 skins: [default]
 # The @1 of this part is gone from the library (#1046). A rack file that names it
 # is read as this one: the ids of its parts, its ports and their names are the same.

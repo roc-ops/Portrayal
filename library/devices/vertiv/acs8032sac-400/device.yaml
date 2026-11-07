@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: acs8032sac-400
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Vertiv
 model: ACS8032SAC-400
@@ -87,6 +87,14 @@ provenance:
       Data sheet hardware specifications: up to 48 RS-232 serial ports on RJ45, the first two selectable
       between RS-232, RS-422 and RS-485, one RS-232 console port on RJ45. The data sheets give an automatic
       Cyclades and Cisco pin-out conversion as a benefit.
+  serial-role:
+    confidence: datasheet
+    note: >-
+      The serial ports are console server ports. Installer/User Guide, p.47, CAS Profile: "provides remote
+      access to serial RS-232 console ports on your devices"; p.45: "Serial ports are set to the CAS Profile
+      and disabled in the factory configuration". The same guide, p.39, lets a port take other profiles
+      (dial-in, dial-out, power, socket client). The RJ45 console port is the local console (guide, p.9,
+      Table 1.1: "Console port for connecting a terminal or workstation").
   lamps:
     confidence: datasheet
     note: >-
@@ -244,7 +252,7 @@ groups:
     term: Port
     role: management
     index-origin: 1
-    attrs: {media: rj45-serial}
+    attrs: {media: rj45-serial, role: console-server}
     description: >-
       the 32 RJ45 serial ports in runs of columns (8 + 8 + 16 jacks); rel-pos carries the number printed under them,
       the upper jack of a column taking the odd number. The first two take RS-232, RS-422 or RS-485
