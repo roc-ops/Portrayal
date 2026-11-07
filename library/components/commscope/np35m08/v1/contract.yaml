@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: np35m08
-version: 1.0.1
+version: 1.1.0
 class: filter
 behaviour: fills
 profile: optical
@@ -91,16 +91,23 @@ elements:
   adapter-ch-7: {at: [0.8, 92.55], size: [19.0, 10.3], class: adapter}
   adapter-ch-8: {at: [0.8, 103.10], size: [19.0, 10.3], class: adapter}
   screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the SC/APC optical ports of a passive WDM filter; the data sheet states no data rate
 parts:
-  - {ref: std/sc-bore@1, id: out, at: [6.50, 19.30], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: ch-1, at: [6.50, 29.90], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: ch-2, at: [6.50, 40.45], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: ch-3, at: [6.50, 51.00], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: ch-4, at: [6.50, 61.55], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: ch-5, at: [6.50, 72.10], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: ch-6, at: [6.50, 82.65], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: ch-7, at: [6.50, 93.20], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: ch-8, at: [6.50, 103.75], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: out, group: ports, at: [6.50, 19.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-1, group: ports, at: [6.50, 29.90], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-2, group: ports, at: [6.50, 40.45], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-3, group: ports, at: [6.50, 51.00], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-4, group: ports, at: [6.50, 61.55], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-5, group: ports, at: [6.50, 72.10], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-6, group: ports, at: [6.50, 82.65], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-7, group: ports, at: [6.50, 93.20], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-8, group: ports, at: [6.50, 103.75], rotate: 90, attrs: {connector: SC/APC}}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]
