@@ -7,7 +7,7 @@ each polarity, every pair a seat that one two-hole lug lands across, and states 
   - that pole presents `stud-pair-5-8` and generic/two-hole-lug-5-8@1 mates it;
   - the contract's `dc` block has one input port, `input`, with `rtn` on `pole-rtn` and `batt` on `pole-batt`, no voltage and no
     rating, and the entries of `provenance` that its `source` names;
-  - the stud positions say they are estimated, and the contract says no figure shows the studs or any printed mark;
+  - the stud positions say they are estimated, and the contract says no held figure gives their position, which pair is which or any printed mark;
   - the cover's art, its elements and every other id of the supply are unchanged.
 
 These run against the real library, a components index built by the indexer the build runs, and the records file. They read no
@@ -75,12 +75,13 @@ def test_the_dc_port_is_one_input_with_the_text_roles_and_states_no_voltage_or_r
     assert "voltage" not in port and "rating-a" not in port and "awg" not in port
 
 
-def test_the_contract_says_the_studs_are_a_stand_in_and_what_no_figure_shows():
+def test_the_contract_says_the_studs_are_a_stand_in_and_what_the_figure_does_and_does_not_show():
     d = contract(SUPPLY)
     seats = d["provenance"]["seats"]
     for word in ("STAND-IN", "estimated", "15.86", "printed page 49"):
         assert word in seats
-    assert "No held figure shows the studs" in seats
+    assert "Figure 39 of the QFX5230 guide shows threaded studs" in seats
+    assert "no held figure gives the studs' position on the face" in seats
     poles = d["provenance"]["poles"]
     assert "-48V/-60V" in poles and "RTN" in poles and "NO FIGURE PRINTS A MARK" in poles
 
