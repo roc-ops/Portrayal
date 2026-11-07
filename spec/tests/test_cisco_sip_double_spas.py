@@ -14,6 +14,7 @@ row (`bay-2`, `bay-3`) lists the doubles and spans the bay beside it (`bay-0`,
 because no bay lies to their right. The 22 single-width SPAs stay listed in all
 four bays.
 """
+import copy
 import shutil
 import sys
 from pathlib import Path
@@ -135,7 +136,7 @@ def test_the_span_box_is_the_plate_of_the_double(sip, ref):
 
 @pytest.mark.parametrize("sip", SIPS)
 def test_a_double_is_refused_in_a_bay_with_nothing_beside_it(sip):
-    c = _contract(sip)
+    c = copy.deepcopy(_contract(sip))  # load_yaml's result is shared: never edit it in place
     for bay in COVERED:
         c["bays"][bay]["accepts"] = c["bays"][bay]["accepts"] + [DOUBLES[0]]
     parts = {DOUBLES[0]: _contract(DOUBLES[0])}
