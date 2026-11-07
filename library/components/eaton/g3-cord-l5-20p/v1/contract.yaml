@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: g3-cord-l5-20p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA L5-20P locking plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of an Eaton ePDU G3 basic rack PDU. It is 15 ft of 12 AWG
+  three-conductor cord that ends in a NEMA L5-20P locking plug. The cord leaves
+  the face at the end of the strip through a black strain-relief bushing. The
+  part is drawn as the front face shows it; the cord and plug beyond it are not.
+size: {w: 21.5, h: 18.7}
+size-confidence: {w: drawing, h: drawing}
+attrs: {plug: nema-l5-20p, cord-length-ft: 15, cord-gauge: 12 AWG / 3C}
+provenance:
+  size: >-
+    drawing - Eaton ePBZ77 technical drawing (EPBZ77-APR, 23 May 2011, a raster
+    sheet at 1:2): the front view read at 300 dpi, 5.98 px per mm from its own
+    215.3 dimension. The bushing reads 21.5 across and 18.7 along the strip, a
+    rounded oval round the cord, and the cord 11.2 across. The reading is good
+    to about 0.3. The drawing's note says every dimension is for reference only.
+  cord: >-
+    drawing - the cord is drawn leaving the face square on, cut off with a break
+    line; it is drawn here as its end, a circle 11.2 across in the bushing's
+    centre. The drawing gives no gauge on the cord itself.
+  plug: >-
+    drawing - Eaton ePBZ77 technical drawing: "Input NEMA L5-20P" and "Power
+    Cord 12AWG / 3C, 15FT", with a detail of the plug. The 250 mm adapter from
+    an L5-20P to a 5-20R that the sheet also draws is not part of the PDU. The
+    plug's face is generic/nema-l5-20p-plug@1, which a device draws INSTEAD of
+    this cord, never beside it, or one input exports as two power ports.
+  not-drawn: >-
+    THE CORD BEYOND THE BUSHING AND THE PLUG ARE NOT DRAWN: the far end of a cord
+    is not a part (docs/connectors-power-design.md section 7). This part stands for
+    the power input a DCIM records, a `nema-l5-20p` power port.
+elements:
+  bushing: {at: [0, 0], size: [21.5, 18.7], class: inlet}
+skins: [default]

@@ -730,6 +730,11 @@ PART_POWER = {
     # `nema-l5-20p`, TYPE_NEMA_L520P in both targets at the commits the generic
     # plugs below cite.
     "eaton/tripplite-cord-l5-20p": "nema-l5-20p",
+    # The ePDU G3 basic EPBZ77's fixed 15 ft cord ends in the same NEMA L5-20P: the same slug.
+    "eaton/g3-cord-l5-20p": "nema-l5-20p",
+    # THE PDUMV30'S FIXED 10 ft CORD ENDS IN A NEMA L5-30P. No power-port type for it has been read from a held
+    # source, so it is `other`, as the connectors below are, and POWER_LABEL says which connector.
+    "eaton/tripplite-cord-l5-30p": "other",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every
@@ -794,6 +799,7 @@ POWER_LABEL = {
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
     "raritan/px3-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
+    "eaton/tripplite-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
 }
 
 
