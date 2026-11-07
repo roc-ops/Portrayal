@@ -67,10 +67,11 @@ decision makes each decidable.
   left, `y` up from its bottom, `z` back from its front (section 7.1).
 - **The open frames have no roof.** `apc/ar201` is two upright rails joined by a
   top angle and a bottom angle at each end (its provenance note for `form`);
-  `apc/ar203a` is a four-post frame. No held source for either describes a
-  cable opening, because there is nothing to open.
-- **Cabinets are not in the library.** The NetShelter SV, SX, SX Advanced and GR
-  cabinets would carry roof and base openings, but no manual has been read for
+  `apc/ar203a` is a four-post frame, and its `form` provenance note says "Open
+  frame, no doors or panels." The note read no source that describes a cable
+  opening on either, because there is nothing to open.
+- **The NetShelter cabinets are not in the library.** The SV, SX, SX Advanced and
+  GR cabinets would carry roof and base openings, but no manual has been read for
   this note, so no opening is described and no size is written (the gaps are in
   "What a manual must give").
 
@@ -184,7 +185,7 @@ enclosure:
 
 **A floor-standing frame's bottom is not declared.** A frame stands on a base or
 feet. Whether a cable may pass under it, or through a floor, is a fact of the
-building, and no held source for a frame says it. The note does not add a
+building, and no source read for this note says it. The note does not add a
 `floor` entry to any frame. A product whose manual shows an open or cut base
 adds one.
 
@@ -206,7 +207,7 @@ entry to the open frames the library holds and to no cabinet:
 `apc/ar201`, `apc/ar203a`, the two Chatsworth frames, the two FS and two
 StarTech four-post frames and the generic two- and four-post frames. Whether the
 generic frames, some of whose figures are stand-ins, also state the entry is
-open question 10. The cabinets named above
+open question 10. The NetShelter cabinets named above
 have entries whose sizes are not yet read (below).
 
 ## 3. The shape of the outside cables a caller passes in
@@ -379,10 +380,10 @@ and stay unbuilt.
   not been read, so no figure is written here. Wanted: the maker's user manual
   and the roof, base and side access drawings of each.
 - **A cable's allowance at an exit.** How much lead a cable needs beyond the
-  entry plane is not stated by any held source. The kit does not add one.
+  entry plane is not stated in any source read for this note. The kit does not add one.
 - **The GR cabinets' roof openings.** Their number, positions and sizes are not
   held. Wanted: the maker's GR cabinet manual.
-- **Whether a frame's base is open to a floor.** No source for any frame says.
+- **Whether a frame's base is open to a floor.** No source read for this note says.
 
 ## Open questions
 
@@ -409,7 +410,7 @@ Each carries the proposal.
    a `knockout` is taken only when named. One-way.
 7. **What does the in-rack length include?** The route from the port to the
    entry's plane (proposed), with the lead out through the entry left to the
-   caller; or the same plus a stated allowance, which no held source gives.
+   caller; or the same plus a stated allowance, which no source read for this note gives.
    One-way once callers add their own figure to it.
 8. **What does a rack opened alone show for a run stored above it?** The port
    reads free and the description says so once when `outside` is absent
