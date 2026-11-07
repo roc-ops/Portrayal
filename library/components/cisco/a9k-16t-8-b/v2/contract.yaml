@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-16t-8-b
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -133,6 +133,15 @@ provenance:
     A9K-16T/8-B appears thirty times across the intake and A9K-16/8T-B exactly twice,
     both of them in this one table - so the row is this card's and the heading is a
     typo. The weight is carried; the misspelling is not.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router Ethernet Line Card
+    Installation Guide, PDF page 41, '16-Port 10-Gigabit Ethernet Oversubscribed Line Card with
+    SFP+': 'two stacked 2x4 cage assemblies for SFP+ Ethernet optical interface modules. The 16
+    SFP+ modules operate at a rate of 10 Gbps'; PDF page 42 numbers them Port 0 to Port 15. The
+    card's 16 port parts join its group (sfp-plus-10g holds 16 ports). Role traffic: the ports
+    are what the card is for. index-origin 0: the guide names a card's ports from 0, and the
+    parts here are p0, p1 and so on. Media and speed are stated only as the pages above print
+    them. Nothing was measured: no position, size or part changed.
 elements:
   status:
     at: [29.69, 372]
@@ -192,23 +201,31 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  sfp-plus-10g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      16 SFP+ ports for 10 Gb Ethernet.
 parts:
-  - {ref: std/sfp-ganged@1, id: p0, at: [5.85, 90.2], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p1, at: [20.98, 90.2], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p2, at: [5.85, 104.58], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p3, at: [20.98, 104.58], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p4, at: [5.85, 118.98], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p5, at: [20.98, 118.98], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p6, at: [5.85, 133.36], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p7, at: [20.98, 133.36], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p8, at: [5.85, 258.06], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p9, at: [20.98, 258.06], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p10, at: [5.85, 272.45], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p11, at: [20.98, 272.45], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p12, at: [5.85, 286.85], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p13, at: [20.98, 286.85], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p14, at: [5.85, 301.24], rotate: 270}
-  - {ref: std/sfp-ganged@1, id: p15, at: [20.98, 301.24], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p0, group: sfp-plus-10g, at: [5.85, 90.2], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p1, group: sfp-plus-10g, at: [20.98, 90.2], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p2, group: sfp-plus-10g, at: [5.85, 104.58], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p3, group: sfp-plus-10g, at: [20.98, 104.58], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p4, group: sfp-plus-10g, at: [5.85, 118.98], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p5, group: sfp-plus-10g, at: [20.98, 118.98], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p6, group: sfp-plus-10g, at: [5.85, 133.36], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p7, group: sfp-plus-10g, at: [20.98, 133.36], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p8, group: sfp-plus-10g, at: [5.85, 258.06], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p9, group: sfp-plus-10g, at: [20.98, 258.06], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p10, group: sfp-plus-10g, at: [5.85, 272.45], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p11, group: sfp-plus-10g, at: [20.98, 272.45], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p12, group: sfp-plus-10g, at: [5.85, 286.85], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p13, group: sfp-plus-10g, at: [20.98, 286.85], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p14, group: sfp-plus-10g, at: [5.85, 301.24], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p15, group: sfp-plus-10g, at: [20.98, 301.24], rotate: 90}
 body:
   depth: 520.7
   color: '#b9bec4'
