@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: fhd-fap12mtp-a-rear
-version: 1.0.0
+version: 1.1.0
 class: adapter-panel
 description: >-
   The back of FS SKU 35510 (FHD-FAP12MTPHA): the adapter block seen from
@@ -16,19 +16,28 @@ size-notes: >-
   on a fixed component into a pit as big as the face (the cassette rears
   record the same reading). The depth belongs to the panel, as `body.depth`.
 attrs: {media: fiber}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 12 MTP adapters on the rear face, each the far end of the front adapter of the same
+      number, passive
 parts:
-  - {id: b01, ref: common/mpo-adapter@2, at: [72.055, 20.695], rotate: 90}
-  - {id: b02, ref: common/mpo-adapter@2, at: [58.085, 20.695], rotate: 90}
-  - {id: b03, ref: common/mpo-adapter@2, at: [44.075, 20.695], rotate: 90}
-  - {id: b04, ref: common/mpo-adapter@2, at: [30.095, 20.695], rotate: 90}
-  - {id: b05, ref: common/mpo-adapter@2, at: [16.085, 20.695], rotate: 90}
-  - {id: b06, ref: common/mpo-adapter@2, at: [2.115, 20.695], rotate: 90}
-  - {id: b07, ref: common/mpo-adapter@2, at: [72.055, 4.685], rotate: 90}
-  - {id: b08, ref: common/mpo-adapter@2, at: [58.085, 4.685], rotate: 90}
-  - {id: b09, ref: common/mpo-adapter@2, at: [44.075, 4.685], rotate: 90}
-  - {id: b10, ref: common/mpo-adapter@2, at: [30.095, 4.685], rotate: 90}
-  - {id: b11, ref: common/mpo-adapter@2, at: [16.085, 4.685], rotate: 90}
-  - {id: b12, ref: common/mpo-adapter@2, at: [2.115, 4.685], rotate: 90}
+  - {id: b01, group: adapters, ref: common/mpo-adapter@2, at: [72.055, 20.695], rotate: 90}
+  - {id: b02, group: adapters, ref: common/mpo-adapter@2, at: [58.085, 20.695], rotate: 90}
+  - {id: b03, group: adapters, ref: common/mpo-adapter@2, at: [44.075, 20.695], rotate: 90}
+  - {id: b04, group: adapters, ref: common/mpo-adapter@2, at: [30.095, 20.695], rotate: 90}
+  - {id: b05, group: adapters, ref: common/mpo-adapter@2, at: [16.085, 20.695], rotate: 90}
+  - {id: b06, group: adapters, ref: common/mpo-adapter@2, at: [2.115, 20.695], rotate: 90}
+  - {id: b07, group: adapters, ref: common/mpo-adapter@2, at: [72.055, 4.685], rotate: 90}
+  - {id: b08, group: adapters, ref: common/mpo-adapter@2, at: [58.085, 4.685], rotate: 90}
+  - {id: b09, group: adapters, ref: common/mpo-adapter@2, at: [44.075, 4.685], rotate: 90}
+  - {id: b10, group: adapters, ref: common/mpo-adapter@2, at: [30.095, 4.685], rotate: 90}
+  - {id: b11, group: adapters, ref: common/mpo-adapter@2, at: [16.085, 4.685], rotate: 90}
+  - {id: b12, group: adapters, ref: common/mpo-adapter@2, at: [2.115, 4.685], rotate: 90}
 provenance:
   size: >-
     drawing - see size-notes.
@@ -43,4 +52,14 @@ provenance:
     FS's renders of the panel backs (the three-quarter gallery shots) show the
     adapter bodies and their caps and no printing; nothing is printed here. The
     steel behind the adapters is painted as one dark field.
+  groups: >-
+    FS FHD Fiber Adapter Panels Datasheet, page 4 (section VI) and the page 7 drawing: the FHD-
+    FAP12MTPHA (FS SKU 35510) is an MTP panel of twelve adapters (the section prints 8/12),
+    OS2/OM3/OM4, Type A, key up to key down (page 11 ordering table), and the drawing numbers
+    its openings 1 to 6 on the lower row and 7 to 12 on the upper. The datasheet prints the
+    fibre mode and the key arrangement and no data rate, and names no role for the adapters; the
+    role follows the job, a through connection a patch cord is plugged into, so it is traffic,
+    and no speed is stated. The group's media is the adapters' own, fiber. The key arrangement
+    stays in optical.polarity. The rear face holds the same sleeves as the front, so it takes
+    the same group and the same count.
 skins: [default]
