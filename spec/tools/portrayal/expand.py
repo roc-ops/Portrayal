@@ -419,9 +419,10 @@ def block_items(block, library, standards):
 
 RUN_BLOCK_KEYS = {"kind", "id", "as", "group", "id-format", "number-from", "fed-by",
                   "states", "numerals", "led", "moulding", "banks", "segments"}
-RUN_BANK_KEYS = {"shift", "through"}
-RUN_SEGMENT_KEYS = {"ref", "count", "at", "pitch", "rotate", "fed-by", "through",
-                    "states", "numerals", "led", "moulding"}
+RUN_BANK_KEYS = {"shift", "through", "id-format"}
+RUN_SEGMENT_KEYS = {"ref", "pattern", "count", "at", "pitch", "rotate", "fed-by",
+                    "through", "states", "numerals", "led", "moulding"}
+RUN_PATTERN_KEYS = {"ref", "shift", "rotate"}
 RUN_MOULDING_KEYS = {"id-format", "offset", "size", "rx", "fill", "kind", "by-pos"}
 RUN_NUMERAL_KEYS = {"offset", "font-size", "anchor", "rotate", "fill"}
 RUN_LED_KEYS = {"ref", "id-format", "group", "offset", "skin", "states"}
@@ -461,9 +462,19 @@ def run_items(block):
         sx, sy = _run_pair(bank.get("shift", [0, 0]), "a bank's shift", where)
         for seg in segments:
             _run_check("segment", seg, RUN_SEGMENT_KEYS, where)
-            for need in ("ref", "count", "at", "pitch"):
+            for need in ("count", "at", "pitch"):
                 if need not in seg:
                     raise SystemExit(f"{where}: a segment needs `{need}`")
+            if ("ref" in seg) == ("pattern" in seg):
+                raise SystemExit(f"{where}: a segment needs `ref` or `pattern`, not both")
+            pattern = seg.get("pattern")
+            if "pattern" in seg:
+                if not (isinstance(pattern, list) and pattern):
+                    raise SystemExit(f"{where}: a segment's pattern is a list of kinds")
+                for entry in pattern:
+                    _run_check("pattern", entry, RUN_PATTERN_KEYS, where)
+                    if "ref" not in entry:
+                        raise SystemExit(f"{where}: a pattern entry needs `ref`")
             ax, ay = _run_pair(seg["at"], "a segment's at", where)
             px, py = _run_pair(seg["pitch"], "a segment's pitch", where)
 
@@ -481,12 +492,15 @@ def run_items(block):
             by_pos = mou.pop("by-pos", None) or []
 
             for k in range(int(seg["count"])):
-                x = round(ax + sx + k * px, 2)
-                y = round(ay + sy + k * py, 2)
-                pid = idfmt.format(n=n)
-                p = {"id": pid, "ref": seg["ref"], "at": [x, y]}
-                if seg.get("rotate"):
-                    p["rotate"] = seg["rotate"]
+                # a pattern's kind seats itself off the pitch by its own shift
+                entry = pattern[k % len(pattern)] if pattern else {}
+                ex, ey = _run_pair(entry.get("shift", [0, 0]), "a pattern's shift", where)
+                x = round(ax + sx + k * px + ex, 2)
+                y = round(ay + sy + k * py + ey, 2)
+                pid = bank.get("id-format", idfmt).format(n=n)
+                p = {"id": pid, "ref": entry.get("ref", seg.get("ref")), "at": [x, y]}
+                if entry.get("rotate", seg.get("rotate")):
+                    p["rotate"] = entry.get("rotate", seg.get("rotate"))
                 p["group"] = group
                 p["rel-pos"] = n
                 if pick("fed-by"):

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ar3044h
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: optical
@@ -43,10 +43,13 @@ provenance:
     printed bracket; and the test point centred 10.4, 105.0, about 15 across.
   test-point: >-
     datasheet - "RF Output Test Point (Selectable for each Output Port): G-type male
-    (connector at front panel, -20 dB)". No registry entry exists for a G-type connector,
-    so it is drawn as an element, as on the AR3002E. The button steps the test point through
-    the four outputs and the numbered lamp shows which; that reading of the button is the
-    layout's, as the data sheet names only the selectable test point.
+    (connector at front panel, -20 dB)". The panel connector is the composed
+    common/g-type-male-port@1, which presents the registered interface g-type; the knurled
+    body round it stays drawn in the skin, declared as class bezel (ids, positions and the
+    skin are unchanged), and the part's size is an estimate, said in the part. The button
+    steps the test point through the four outputs and the numbered lamp shows which; that
+    reading of the button is the layout's, as the data sheet names only the selectable
+    test point.
   lamps: >-
     photo-measured. The Status lenses are green, yellow and red top to bottom on the
     photograph, but the data sheet gives no colour or meaning for any lamp, so, as on the
@@ -64,7 +67,7 @@ elements:
   vent-lower-mid-top: {at: [11.4, 70.8], size: [2.70, 6.70], class: vent}
   vent-lower-mid-bottom: {at: [11.4, 87.4], size: [2.70, 8.20], class: vent}
   select-button: {at: [11.46, 81.9], size: [3.0, 3.0], class: button}
-  test-point: {at: [3.0, 97.6], size: [14.8, 14.8], class: port}
+  test-point: {at: [3.0, 97.6], size: [14.8, 14.8], class: bezel}
   screw-bottom: {at: [7.98, 120.3], size: [9.8, 9.8], class: fastener}
 parts:
   - {ref: common/led-dot@1, id: led-status-1, at: [11.96, 32.00], attrs: {function: status}}
@@ -75,6 +78,7 @@ parts:
   - {ref: common/led-dot@1, id: led-tp-2, at: [18.2, 80.60], attrs: {function: test-point-select}}
   - {ref: common/led-dot@1, id: led-tp-3, at: [18.2, 85.70], attrs: {function: test-point-select}}
   - {ref: common/led-dot@1, id: led-tp-4, at: [18.2, 90.80], attrs: {function: test-point-select}}
+  - {ref: common/g-type-male-port@1, id: rf-tp, at: [6.900, 101.500]}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]

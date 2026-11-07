@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: cx3033n
-version: 1.0.1
+version: 1.1.0
 class: supervisor
 behaviour: fills
 profile: optical
@@ -54,10 +54,17 @@ provenance:
     declares `proprietary-link: 2.125 Gb/s network port` and exports as `other` with that
     label rather than as a 1 Gb/s SFP. The prose's "two RJ-45 10Base-T ports" contradicts
     the specification table's 10/100/1000; the table is taken.
+  rs232-connector: >-
+    datasheet - the CX3033N data sheet says the RS-232 port uses a stereo
+    jack style connector. The panel connector is the composed
+    common/stereo-jack@1, which presents the registered interface
+    stereo-jack; the body round it stays drawn in the skin, declared as
+    class bezel. Ids, positions, sizes and the skin are unchanged. The
+    part's size is an estimate, said in the part.
 elements:
   screw-1: {at: [10.5, 0.1], size: [5.8, 5.8], class: fastener}
   screw-2: {at: [36.7, 0.1], size: [5.8, 5.8], class: fastener}
-  rs232: {at: [9.40, 12.80], size: [7.4, 7.4], class: port}
+  rs232: {at: [9.40, 12.80], size: [7.4, 7.4], class: bezel}
   reset: {at: [43.6, 22.4], size: [1.4, 1.4], class: button}
 groups:
   mgmt:
@@ -76,6 +83,7 @@ parts:
   - {ref: std/sfp@1, id: sfp, group: mgmt, at: [17.85, 10.00], attrs: {role: management, proprietary-link: 2.125 Gb/s network port}}
   - {ref: common/led-dot@1, id: led-los, at: [16.8, 21.3], attrs: {function: los}}
   - {ref: common/led-dot@1, id: led-ber, at: [36.7, 21.3], attrs: {function: status}}
+  - {ref: common/stereo-jack@1, id: rs232-jack, group: mgmt, at: [9.400, 12.800]}
 connection-points:
   mate: {at: [26.26, 21.6], direction: front}
 skins: [default]
