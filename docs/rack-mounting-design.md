@@ -41,7 +41,8 @@ broke a simpler model.
 | line | what it ships | what it showed |
 |---|---|---|
 | Dell PowerEdge R740 / R740xd | three rails: B6 ReadyRails sliding (drop-in), B13 stab-in/drop-in sliding, B4 ReadyRails static; optional CMA and strain-relief bar | ranges differ by hole type (square / round / threaded); rail depth differs with and without the CMA; only the static rail does 2-post, flush or centre; one rail serves a dozen chassis, and the same rail has a different minimum on another chassis group |
-| UfiSpace deep boxes (S9710-76D, S9321-64E, S9600-30DX, S9601-102XC, S9311-64D, S9301-32D) | one three-member ball-bearing slide (inner on chassis pins, middle, outer clipping to the posts) | about twelve models share a 771 mm rail; ranges are printed in inches only (22-33 in); travel is "fully extended", with no figure |
+| UfiSpace deep boxes, the 771 mm rail (S9710-76D, S9700-23D, S9700-53DX, S9705-48D, S9720-56ED, S9725-64E, S9600-28DX, S9600-30DX, S9600-32X, S9600-56DX, S9600-64X, S9610-36D, S9610-46DX, S9610-48DX, S9611-36D, S9321-64E, S9321-64EO) | one three-member slide (inner on chassis pins, middle, outer clipping to the posts) | the accessory list of each guide (section 3.1, page 5) prints the same rail, 771 x 44 x 22 mm, for 22-33 in of rack depth; ranges are printed in inches only; travel is "fully extended", with no figure |
+| UfiSpace deep boxes, other rails | an adjustable mounting rail for four posts, shorter than the 771 mm one | the accessory list of each guide (section 3.1, page 5) prints 626 mm for 21-35 in (S9600-72XC, S9600-102XC, S9601-102XC, S9701-82DC), 622 mm for 20-35 in (S9300-32D, S9301-32D, S9301-32DB), 598.3 mm for 20-35 in (S9311-64D, S9620-32E) and 568 mm for 22-33 in (S9601-104BC) |
 | UfiSpace 1RU (S6301, S9110, S7801, S8901) | front ears plus an adjustable mounting rail screwed to the back of the switch, fitted only on a 4-post rack | a kit can be ears AND a rear support, the support optional by rack type |
 | Edgecore (COR550, DCS520, DCS240, AMX3200, AIS800-64D, AGR560) | fixed bracket kits in the box, slide kits sold separately | COR550: chassis ear plus a separate post-to-post rail with a factory preset at 630 mm; DCS520 / DCS240: a long side bracket with a rear piece that telescopes over it; AMX3200: one kit, two depth ranges (555-670 and 760-875); AIS800-64D: normal and reversed slide kits under different SKUs |
 | Smartoptics DCP (DCP-2, DCP-M, DCP-R, DCP-M-DE, DCP-SC-28P) | one seven-part kit: front brackets 600 and 700, extensions 270 and 470, rear brackets 42 and 142, a 225 mm mid-mount part | the parts combine into seven rack-depth bands from 600 to 1200 mm (the bands overlap as printed); 2-post mid-mount is a different part; the protective-earth stud is on the bracket; four named ear positions (chassis flush, transponder flush, recessed, mid-mount) with no millimetres |
@@ -453,7 +454,8 @@ These are the first four to model, one per kit shape. None is modelled yet.
    Source: DCP-Series User Manual 14.0 A, section 3.2.
 3. **UfiSpace S9710-76D** with its three-member slide (#914): inch ranges
    converted, `travel: full`, one kit referenced by its siblings. Source:
-   S9710-76D HIG, Rack Mounting.
+   S9710-76D HIG, Rack Mounting. Built as `ufispace/adjustable-rail-771-kit@1`,
+   which the seventeen devices named in section 1 list.
 4. **Edgecore COR550** with ear plus rail (#915): a `telescoping` kit with a
    preset. Source: COR550 Quick Start Guide.
 
