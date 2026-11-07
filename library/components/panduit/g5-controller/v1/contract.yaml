@@ -1,0 +1,52 @@
+format: 1
+kind: module
+name: g5-controller
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: power
+description: >-
+  The controller of a Panduit G5 intelligent PDU, a plate midway along the strip. It has a display window, three
+  round indicators, a status lamp and a reset hole, five RJ45 jacks and a USB-A port.
+size: {w: 47.0, h: 127.8, d: 40}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {module: G5 controller}
+provenance:
+  method: >-
+    drawing - Panduit customer drawing P32E06M_DC rev 06A is a vector sheet, drawn to no stated scale. Its scale
+    was taken from its own 1750.0 overall dimension, and every figure below was read off a rendering of the front
+    view at 800 dpi (4.21 px/mm), to about 0.5 mm. The drawing lies the PDU down, cord end left; this part is
+    drawn as the PDU stands, cord end down. The drawing for the 36-outlet G5 unit draws the same plate.
+  size: >-
+    drawing - the plate is 127.8 along the PDU by 47.0 across, between two mounting brackets with a screw each.
+    The display window is 35.6 along by 17.8 across, each indicator 6.6 across, and the cells of the jacks 15.5
+    to 17.9 along by 16.6 to 17.3 across.
+  identity: >-
+    datasheet - the "G5 Intelligent Power Distribution Units (iPDUs)" sheet calls it a "hot swappable controller"
+    (page 1), so it is a module that fills a bay in the PDU.
+  ports: >-
+    drawing - THE PLATE DRAWS FIVE RJ45-STYLE JACKS (ONE ALONE AND A GROUP OF TWO BY TWO) AND ONE USB-A JACK, AND NO
+    DOCUMENT HELD READS A LABEL ON ANY OF THEM: the legends printed beside them are under 1.5 mm and the rendering
+    does not resolve them. The sheet and the manual say only that the controller gives redundant network access on
+    two separate networks, 1 Gb Ethernet, plug and play sensors, a daisy chain and USB for a firmware upgrade. So the
+    jacks are placed as RJ45 jacks that state no function and no speed, in one group of mixed jacks, and no jack is
+    called Ethernet or sensor (gaps: port-names).
+  depth: >-
+    estimated - no document held shows the controller's depth, so 40 is chosen to sit inside the 53 mm body.
+  colour: >-
+    NOT CHECKED - no photograph is held, so the plate's colour is a dark neutral and the display window a darker one;
+    neither is read from a source.
+  power: >-
+    no document held states the controller's own draw; L27 stands as the record.
+groups:
+  jacks: {term: Port, role: management, index-origin: 1, mixed: 'the controller''s five RJ45 jacks and its USB-A port; no document held says which is network, which sensor or which daisy chain'}
+elements:
+  display: {at: [19.7, 77.2], size: [17.8, 35.6], class: decor}
+parts:
+  - {ref: std/rj45@2, id: jack-1, at: [6.25, 50.55], rotate: 270, group: jacks, attrs: {media: rj45-telemetry}}
+  - {ref: std/rj45@2, id: jack-2, at: [6.35, 30.35], rotate: 270, group: jacks, attrs: {media: rj45-telemetry}}
+  - {ref: std/rj45@2, id: jack-3, at: [6.35, 13.15], rotate: 270, group: jacks, attrs: {media: rj45-telemetry}}
+  - {ref: std/rj45@2, id: jack-4, at: [24.35, 30.35], rotate: 270, group: jacks, attrs: {media: rj45-telemetry}}
+  - {ref: std/rj45@2, id: jack-5, at: [24.35, 13.15], rotate: 270, group: jacks, attrs: {media: rj45-telemetry}}
+  - {ref: std/usb-a@1, id: usb-a, at: [27.7, 54.9], rotate: 90, group: jacks}
+skins: [default]

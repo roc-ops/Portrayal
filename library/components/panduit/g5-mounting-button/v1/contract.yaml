@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: g5-mounting-button
+version: 1.0.0
+class: mount
+mates: pdu-button
+profile: power
+description: >-
+  A toolless mounting button on the back of a Panduit 0U PDU. Installed in the factory, 18.4 mm across, it hooks
+  into a keyhole in the rack frame and holds the PDU by friction.
+size: {w: 18.4, h: 18.4}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the rear views of Panduit customer drawings P32E06M_DC and P24B14M_DC call out "(2) PL O18.4 [.72"]" for
+    the two buttons, 1555.0 apart and 40.5 from the cord end. The "Basic Power Distribution Units (PDUs)" sheet
+    says the PDUs "come with installed mounting buttons (18.4mm diameter)". Neither document draws the button's
+    head, waist or screw, so only the 18.4 round is drawn.
+  how-it-mounts: >-
+    datasheet - the same sheet lists a small mounting button, MA018, as an accessory; the installation manual shows
+    the 0U units hanging on the buttons in a cabinet's vertical channel.
+  mates: >-
+    `pdu-button` (spec/schemas/connectors.yaml), the interface a keyhole slot in a bracket or a cabinet channel
+    presents. The button is the mount point and seats at its `mate`, the centre of the round.
+  relief: >-
+    not built - no document held gives the button's height off the back.
+elements:
+  flange: {at: [0, 0], size: [18.4, 18.4], class: mount}
+connection-points:
+  mate: {at: [9.2, 9.2], direction: front}
+skins: [default]
