@@ -1,0 +1,255 @@
+format: 1
+kind: device
+name: nscp-t48r
+version: 0.1.0
+maturity: modelled
+manufacturer: ZPE Systems
+model: NSCP-T48R
+aliases:
+- {name: Nodegrid Serial Console Plus, kind: marketing}
+- {name: ZPE-NSCP-T48R-STND-DAC, kind: variant}
+portfolio: {line: Nodegrid, family: Serial Console, series: Serial Console Plus}
+description: >-
+  48-port serial console server, 1RU. The Rear carries the 48 RJ45 serial ports in two rows of
+  24, in three blocks of eight columns, odd numbers above even. It also has two Ethernet RJ45
+  ports, two SFP cages and two AC inlets each with a rocker switch. Modelled as the dual-AC
+  build with neither Wi-Fi nor a cellular modem, ZPE-NSCP-T48R-STND-DAC, the one the held
+  photograph shows. No held document shows the 48-port Front.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      One document and one photograph. ZPE Systems, Nodegrid Serial Console Plus data sheet,
+      September 16, 2026, page 1 (the pictures), page 2 (specifications, interfaces, physical,
+      power) and pages 3 to 8 (the ordering table). Photograph from the maker's pages: the 48-port
+      dual-AC Rear (NSCP.webp), 1080 px wide, the same picture the data sheet prints on page 1.
+      No installation guide, drawing or CAD model is held.
+  size:
+    confidence: datasheet
+    note: >-
+      Page 2, "Size (L X W X H): 443 X 312 X 43 mm", 1U. 443 is the body's width and 312 its
+      depth. Weight 5.265 kg, "depending on options".
+  scale:
+    confidence: photo-measured
+    note: >-
+      EVERY POSITION IS READ OFF A 1080 PX PHOTOGRAPH, whose face is 1008 px wide, about 2.28 px
+      per mm, good to about 2 mm; the photograph is slightly off square. The serial block is
+      placed as the Rear of nsc-t48s places its block, which the photograph agrees with: the
+      label of port 1 is 2.4 mm and that of port 47 is 0.9 mm from where that block puts them.
+      The Ethernet pair and the SFP pair are read off the photograph.
+  serial-ports:
+    confidence: photo-measured
+    note: >-
+      Rear photograph and data sheet page 2: 48 RJ45 serial ports, numbered 1 to 48, odd above
+      even, the numeral above the top row and below the bottom row, in three blocks of eight
+      columns; "Cisco Rolled" in the ordering table. No lamp meaning is held.
+  ethernet:
+    confidence: datasheet
+    note: >-
+      Page 2, "2X SFP+ 1/2.5/10GB & 2 Gigabit (10/100/1000BT) Ethernet interfaces on RJ45". The
+      photograph prints ETH0 above ETH1 for the RJ45 pair and SFP 0 above SFP 1 for the cages.
+  power:
+    confidence: datasheet
+    note: >-
+      Page 2: "Power consumption 45 W typical", "Max Power 45W - BTU - 155 BTU", "Single or Dual
+      AC: 100-240 VAC, 50/60 Hz", "40V-63 VDC dual power input (redundant)". The photograph's
+      inlets are two IEC C14, turned a quarter turn, each with a rocker switch above it. No fuse
+      or current rating is stated.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The face is the median of bare plate along the lower edge of the photograph, #434d63, a
+      navy blue-grey. Lettering is white.
+attrs:
+  physical:
+    weight-kg: 5.265
+    weight-note: '5.265 kg (11.6 lb), depending on options'
+    shipping-weight-kg: 8.745
+    shipping-dimensions-mm: '533 x 497 x 209'
+  performance:
+    serial-ports-max: 96
+    serial-rate: 'RS-232 on RJ45, 230,400 bps max per port'
+  power:
+    power-typical-w: 45
+    power-max-w: 45
+    power-input-ac: '100-240 VAC, 50/60 Hz'
+    power-input-dc: '40-63 VDC dual (redundant) input, on the DC builds'
+  environmental:
+    operating-temp: '0 to 60 C (32 to 140 F), 5-95% RH, non-condensing'
+    storage-temp: '-20 to 67 C (-4 to 153 F), 5-95% RH, non-condensing'
+  platform:
+    processor: 'Intel x86_64 quad-core'
+    memory: '4GB DDR4'
+    storage: '32GB flash (mSATA SSD)'
+  features:
+    optics-sfp-plus: 'SFP+ cages, 1/2.5/10GB compatible'
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 443
+  height: 43
+  depth: 312
+  ru: 1
+  weight-kg: 5.265
+  color: '#434d63'
+  power: ac
+gaps:
+- what: front
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    A photograph of the 48-port Front. The only Plus Front a held document shows is the 96-port
+    build's, with ports 49 to 96, which this build does not have. The data sheet lists a console
+    RJ45, 2 USB 3.0 ports and an HDMI port, and no held 48-port face shows them.
+- what: other-skus
+  scope: [front, rear]
+  reason: needs-photo
+  wanted: >-
+    A Rear photograph of the single-AC and dual-DC builds, of the builds with Wi-Fi 5, a 4G LTE
+    modem or both (-W5, -4G, -W5-4G), where their antenna connectors and SIM slots stand, and of
+    the 16 and 32-port builds. The dual-DC Rear photograph (NSCPDDC.webp) is held and is not
+    drawn: it needs a terminal-block part that does not yet exist. The 96-port Rear is not held.
+- what: rack-ears
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The data sheet says only "Front-Rear Mounting Brackets". No Plus document dimensions an ear or
+    says where it bolts, so `chassis.ears` is left out.
+- what: jack-lamps
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    What the lamps of each serial jack show. The data sheet has no LED table; no guide is held.
+- what: ethernet-and-sfp-lamps
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The Ethernet jacks and the SFP cages show no lamp at the photograph's size; the parts' own
+    lamp windows are drawn as the parts give them, with no meaning stated.
+- what: sides-and-top
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    Any photograph or drawing of the lid, the base and the sides. None is held.
+groups:
+  serial:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45-serial}
+  eth:
+    term: Port
+    role: management
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g}
+  sfp-plus:
+    term: Port
+    role: management
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+  inlets: {term: Inlet, role: service, index-origin: 1}
+  switches: {term: Switch, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 443, h: 43}
+    empty: >-
+      No document held shows the 48-port Front. The 96-port build's Front photograph has ports 49
+      to 96 on it, which this build does not have.
+  rear:
+    size: {w: 443, h: 43}
+    panel:
+      decor:
+      - {id: psu-plate-1, at: [0.4, 0.3], size: [22.4, 42.4], fill: '#262c30', kind: power-plate}
+      - {id: psu-plate-2, at: [23.2, 0.3], size: [22.4, 42.4], fill: '#262c30', kind: power-plate}
+      cutouts:
+      - {block: serial}
+      - {block: eth}
+      - {block: sfp-plus}
+      - {id: inlet-1, at: [1.4, 12.9], size: [20.0, 28.0], shape: rect}
+      - {id: inlet-2, at: [24.0, 12.9], size: [20.0, 28.0], shape: rect}
+      - {id: switch-1, at: [3.65, 2.8], size: [15.5, 6.0], shape: rect}
+      - {id: switch-2, at: [26.25, 2.8], size: [15.5, 6.0], shape: rect}
+    silkscreen:
+    - {block: serial}
+    - {block: eth}
+    - {block: sfp-plus}
+    - {id: silk-eth-0, at: [412.9, 6.6], text: ETH0, font-size: 2.2, anchor: middle, fill: '#e8edef', for: eth-0}
+    - {id: silk-eth-1, at: [412.9, 41.0], text: ETH1, font-size: 2.2, anchor: middle, fill: '#e8edef', for: eth-1}
+    - {id: silk-sfp-0, at: [432.6, 6.6], text: SFP 0, font-size: 2.2, anchor: middle, fill: '#e8edef', for: uplink-0}
+    - {id: silk-sfp-1, at: [432.6, 41.0], text: SFP 1, font-size: 2.2, anchor: middle, fill: '#e8edef', for: uplink-1}
+    components:
+      blocks:
+      - id: serial
+        ref: common/rj45-ganged-lamped@1
+        at: [49.2, 10.2]
+        count: 48
+        rows: 2
+        pitch: 13.97
+        row-pitch: 14.2
+        gang: 8
+        gutter: 7.4
+        number-from: 1
+        cutouts: true
+        rotate: {top: 180}
+        numerals: {dx: 6.35, dy-top: -2.9, dy-bottom: 16.8, font-size: 4.0, anchor: middle, fill: '#f2f5f6'}
+      - id: eth
+        ref: common/rj45-ganged-eth@1
+        at: [406.5, 10.2]
+        count: 2
+        rows: 2
+        pitch: 13.97
+        row-pitch: 14.2
+        number-from: 0
+        id-format: 'eth-{n}'
+        cutouts: true
+        rotate: {top: 180}
+      - id: sfp-plus
+        ref: std/sfp-ganged@1
+        at: [425.5, 9.5]
+        count: 2
+        rows: 2
+        pitch: registry
+        row-pitch: registry
+        number-from: 0
+        id-format: 'uplink-{n}'
+        cutouts: true
+        rotate: {bottom: 180}
+      placements:
+      - {block: serial}
+      - {block: eth}
+      - {block: sfp-plus}
+      - {ref: std/c14-inlet@1, id: inlet-1, at: [-2.6, 16.9], rotate: 270, group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: inlet-2, at: [20.0, 16.9], rotate: 270, group: inlets, rel-pos: 2}
+      - {ref: zpe/nsc-power-rocker@1, id: switch-1, at: [3.65, 2.8], group: switches, rel-pos: 1, for: inlet-1}
+      - {ref: zpe/nsc-power-rocker@1, id: switch-2, at: [26.25, 2.8], group: switches, rel-pos: 2, for: inlet-2}
+  top:
+    size: {w: 443, h: 312}
+    empty: >-
+      No document held shows the lid: the data sheet's pictures are a Rear, a 96-port Front and
+      a diagram.
+  bottom:
+    size: {w: 443, h: 312}
+    empty: >-
+      No document held shows the underside: the data sheet's pictures are a Rear, a 96-port Front
+      and a diagram.
+  left:
+    size: {w: 312, h: 43}
+    empty: >-
+      No document held shows a side wall: the data sheet's pictures are a Rear, a 96-port Front
+      and a diagram.
+  right:
+    size: {w: 312, h: 43}
+    empty: >-
+      No document held shows this side wall: the data sheet's pictures are a Rear, a 96-port
+      Front and a diagram.
+configurations:
+  dac:
+    kind: base
+    part-numbers:
+      ZPE-NSCP-T48R-STND-DAC: {}
+    description: >-
+      ZPE-NSCP-T48R-STND-DAC, the dual-AC build with two RJ45 Ethernet ports and two SFP cages and
+      no Wi-Fi or cellular option, as the Rear photograph shows it
+    default: true
+references:
+- {title: 'Nodegrid Serial Console Plus data sheet (ZPE Systems, September 16, 2026)'}
