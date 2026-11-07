@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-8x100ge-x-se
-version: 1.0.2
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -177,6 +177,14 @@ provenance:
     the 4th generation Ethernet line card family and was checked row by row. No other
     end-of-life notice for it is in the intake. Note the finding is 'no announcement
     found', not 'supported indefinitely'.
+  groups: >-
+    list - the Cisco Secure Boot Product List, PDF page 8, which prints this part number as an
+    'ASR 9000 8-port 100GE QSFP' line card. No installation guide section covers it, so the cage
+    family is the one the contract already composes and the rate is the one the name prints. The
+    card's 8 port parts join its group (qsfp28-100g holds 8 ports). Role traffic: the ports are
+    what the card is for. index-origin 0: the guides name a card's ports from 0, and the parts
+    here are p0, p1 and so on. Media and speed are stated only as the pages above print them.
+    Nothing was measured: no position, size or part changed.
 elements:
   led-p0:
     at: [3.19, 50.97]
@@ -362,15 +370,23 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  qsfp28-100g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+    description: >-
+      8 QSFP28 ports, each up to 100 Gb Ethernet.
 parts:
-  - {ref: std/qsfp-ganged@1, id: p0, at: [5.26, 47.95], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p1, at: [5.26, 66.67], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p2, at: [5.26, 85.41], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p3, at: [5.26, 104.14], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p4, at: [5.26, 132.79], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p5, at: [5.26, 151.53], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p6, at: [5.26, 170.26], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p7, at: [5.26, 188.99], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p0, group: qsfp28-100g, at: [5.26, 47.95], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p1, group: qsfp28-100g, at: [5.26, 66.67], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p2, group: qsfp28-100g, at: [5.26, 85.41], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p3, group: qsfp28-100g, at: [5.26, 104.14], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p4, group: qsfp28-100g, at: [5.26, 132.79], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p5, group: qsfp28-100g, at: [5.26, 151.53], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p6, group: qsfp28-100g, at: [5.26, 170.26], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p7, group: qsfp28-100g, at: [5.26, 188.99], rotate: 90}
 body:
   depth: 604.5
   color: '#b9bec4'

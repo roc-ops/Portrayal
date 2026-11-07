@@ -649,7 +649,7 @@ def test_asr_chassis_versions_and_locks(slug):
     assert [f for f in devicelock.check(LIBRARY) if f[0] == slug] == []
 
 
-ASR_VERSIONS = {"cisco/asr-9912": "2.3.4", "cisco/asr-9922": "2.3.4"}
+ASR_VERSIONS = {"cisco/asr-9912": "2.3.5", "cisco/asr-9922": "2.3.5"}
 
 
 @pytest.mark.parametrize("slug", ASR)
