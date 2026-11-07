@@ -716,6 +716,32 @@
       }
      ]
     },
+    "halves": {
+     "type": "object",
+     "description": "THE TWO HALVES OF A BOX THAT OPENS, a node that mounts on a strand or a pedestal and opens like a clamshell. Exactly two entries, `base` and `lid` (L200). The `base` stays where the box is bolted and states its `outer` face, the one that faces away from the lid; the `lid` swings on its `hinge` to its `angle`. Each states `stands`, how far the half reaches along the axis of the base's `outer` face, so the two sum to the chassis dimension on that axis. Faces are named as the views are: front, rear, left, right, top, bottom. Bare numbers, millimetres and degrees; where each came from goes in `provenance`, keyed by path (`halves.lid.angle`). A region of the open drawing names the half it belongs to with `half`, and a bay belongs to the half of the one region that holds its centre. Absent on a box that does not open.",
+     "additionalProperties": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+       "outer": {
+        "enum": ["front", "rear", "left", "right", "top", "bottom"],
+        "description": "the face of the half that faces away from the other one; stated on the base, and its axis is the axis the two halves stand along"
+       },
+       "hinge": {
+        "enum": ["front", "rear", "left", "right", "top", "bottom"],
+        "description": "the side of the lid the hinge is on; stated on the lid, on a face perpendicular to the base's `outer` axis"
+       },
+       "angle": {
+        "type": "number",
+        "description": "degrees the lid opens to, 0 to 180 (L200); stated on the lid"
+       },
+       "stands": {
+        "type": "number",
+        "description": "millimetres the half reaches along the axis of the base's `outer` face; positive, and the two sum to the chassis dimension on that axis (L203)"
+       }
+      }
+     }
+    },
     "kits": {
      "type": "array",
      "minItems": 1,
@@ -2376,6 +2402,10 @@
         },
         "label": {
          "type": "string"
+        },
+        "half": {
+         "$ref": "#/$defs/segment",
+         "description": "the half of a box that opens this region belongs to, a key of `chassis.halves` (L201). Stated on the regions of the open drawing; a bay belongs to the half of the one region whose box holds its centre (L202)."
         }
        }
       }

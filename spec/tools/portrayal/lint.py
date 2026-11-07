@@ -700,6 +700,22 @@ RULES = {
     "L199": ("device", "a powered device's PoE keys agree: `poe-pd-standard-min` is stated only with `poe-pd-standard` and is lower than it (error); `poe-pd-class` is stated only with `poe-pd-standard` (error); `poe-pd-max-w` is stated only with `poe-pd-standard` (warning), is at least `power-self-max-w` plus `poe-budget-w` where both are numbers (warning), and is stated by a device that states `poe-budget-w` and `poe-pd-standard` (warning)", "state the standard the maker names for the PoE input; write `poe-pd-max-w` as the whole intake, the figure printed 'excluding PoE output' plus what the device hands on, with the sum in the provenance",
              "A powered device's draw with no standard cannot be checked against the port that feeds it, and a figure printed 'excluding PoE output' read as the whole intake is a number short of what the port has to supply.",
              MIXED),
+    "L200": ("device", "the halves of a box that opens are well formed: `chassis.halves` has exactly two entries, `base` and `lid`; the base states its `outer` face and the lid its `hinge`; the hinge is on a face perpendicular to the axis of the base's `outer` face and is not the back of the lid (the face opposite the base's `outer`); the lid's `angle` runs from 0 to 180 degrees; every `stands` is a positive number (error)",
+             "state `base: {outer, stands}` and `lid: {hinge, angle, stands}` and nothing else; put the hinge on a side of the lid, not on the face the halves stand along",
+             "A lid whose hinge is on the seam's own axis cannot swing, and a half with no outer face or no hinge leaves a viewer guessing which way the box opens, so every tool that draws it open would draw a guess.",
+             ERROR),
+    "L201": ("device", "a region's `half` names a half the device declares under `chassis.halves` and the region has a box (`at` and `size`, or `members` that have one) (error); a declared half that no region names is reported (warning)",
+             "name `base` or `lid` on the regions of the open drawing, or declare the half; give the region a box so a bay can be found in it",
+             "A region that names a half the device does not declare puts its bays in a half that does not exist, and a declared half with no region owns no part of the drawing, so the open drawing says nothing about what is in it.",
+             MIXED),
+    "L202": ("device", "in a view whose regions state a `half`, every bay's centre is in exactly one of those regions: a bay in two is an error, and so is a bay in none",
+             "move the bay or the region so the bay's centre is in one region; a bay with no `size` is judged by its `at`",
+             "The half of a bay is the half of the region that holds its centre, and it reaches the lock, the compiled drawing and the DCIM export, so a bay in two regions has two answers and a bay in none has no answer.",
+             ERROR),
+    "L203": ("device", "the `stands` of the two halves sum to the chassis dimension on the axis of the base's `outer` face - depth for the front and the rear, width for the left and the right, height for the top and the bottom - within 2 per cent (warning)",
+             "correct a `stands` against its source, or the chassis dimension, or state in `provenance` why the closed box is taller than its two shells",
+             "Two halves that do not add up to the box they make mean one of the three figures is wrong, and a viewer that opens the lid by the stated stands would leave a gap or an overlap at the seam.",
+             WARNING),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -8775,6 +8791,90 @@ def lint_device_poe_pd(path, data):
                            "draw is not its intake")
 
 
+# THE CODES OF THE HALVES RULES BY WHAT THEY JUDGE, for the test that reads them.
+# The calls below spell each code out, because the severity guard reads literals;
+# test_opening_halves.py holds the two in step.
+HALVES_CODES = {"halves": "L200", "region": "L201", "bay": "L202", "stands": "L203"}
+
+
+def lint_device_halves(path, data):
+    """L200-L203: a box that opens in two halves holds together
+    (docs/modelling-a-device.md, "A box that opens").
+
+    The schema checks the shape of each half (a face is one of the six, a figure
+    is a number); these relate the halves to each other, to the chassis and to
+    the regions of the open drawing."""
+    from portrayal import halves as _halves
+    declared = _halves.declared(data)
+    ch = data.get("chassis") or {}
+    if declared:
+        base, lid = declared.get("base"), declared.get("lid")
+        base = base if isinstance(base, dict) else {}
+        lid = lid if isinstance(lid, dict) else {}
+        if sorted(declared) != sorted(_halves.NAMES):
+            err(path, "L200", f"`chassis.halves` has {sorted(declared)!r}: exactly two "
+                                       "entries, `base` and `lid`, belong there")
+        outer, hinge = base.get("outer"), lid.get("hinge")
+        if "base" in declared and outer is None:
+            err(path, "L200", "`chassis.halves.base` states no `outer`: the face that faces "
+                                       "away from the lid is what says which way the box opens")
+        if "lid" in declared and hinge is None:
+            err(path, "L200", "`chassis.halves.lid` states no `hinge`: the side the lid swings on")
+        if outer in _halves.AXIS and hinge in _halves.AXIS:
+            if hinge == _halves.OPPOSITE[outer]:
+                err(path, "L200", f"`chassis.halves.lid.hinge` is {hinge!r}, the back of the "
+                                           f"lid: the face opposite the base's `outer` {outer!r}, which "
+                                           "the lid cannot swing on")
+            elif _halves.AXIS[hinge] == _halves.AXIS[outer]:
+                err(path, "L200", f"`chassis.halves.lid.hinge` {hinge!r} is on the axis of the "
+                                           f"base's `outer` {outer!r}: a hinge is on a face "
+                                           "perpendicular to that axis")
+        angle = lid.get("angle")
+        if isinstance(angle, (int, float)) and not isinstance(angle, bool) and not 0 <= angle <= 180:
+            err(path, "L200", f"`chassis.halves.lid.angle` {angle:g} is outside 0 to 180 degrees")
+        for name, half in sorted(declared.items()):
+            stands = (half or {}).get("stands") if isinstance(half, dict) else None
+            if isinstance(stands, (int, float)) and not isinstance(stands, bool) and stands <= 0:
+                err(path, "L200", f"`chassis.halves.{name}.stands` {stands:g} is not positive")
+        axis = _halves.AXIS.get(outer)
+        dim = ch.get(_halves.DIMENSION.get(axis))
+        figures = [(declared.get(n) or {}).get("stands") for n in _halves.NAMES]
+        if (axis and isinstance(dim, (int, float)) and len(declared) == 2
+                and all(isinstance(s, (int, float)) and not isinstance(s, bool) and s > 0 for s in figures)
+                and abs(sum(figures) - dim) > _halves.STANDS_TOLERANCE * dim + 1e-9):
+            warn(path, "L203", f"the two `stands` sum to {sum(figures):g} mm and the chassis "
+                                        f"{_halves.DIMENSION[axis]} on that axis is {dim:g} mm "
+                                        f"(more than {_halves.STANDS_TOLERANCE:.0%} apart)")
+    used = set()
+    for name, view in sorted((data.get("views") or {}).items()):
+        regions = _halves.view_regions(view)
+        for r in regions:
+            half = r.get("half")
+            used.add(half)
+            if half not in declared:
+                err(path, "L201", f"{name}: region {r.get('id')!r} names half {half!r}, which "
+                                           "`chassis.halves` does not declare")
+            if _halves.region_box(view, r) is None:
+                err(path, "L201", f"{name}: region {r.get('id')!r} states a `half` and no box "
+                                           "(`at` and `size`, or `members` that have one), so no bay "
+                                           "can be found in it")
+        if not regions:
+            continue
+        for bay_id, hits in sorted(_halves.bay_regions(view).items()):
+            if len(hits) > 1:
+                err(path, "L202", f"{name}: the centre of bay {bay_id!r} is in {len(hits)} "
+                                        f"regions ({', '.join(map(str, hits))}): it has two halves")
+            elif not hits:
+                err(path, "L202", f"{name}: the centre of bay {bay_id!r} is in none of the "
+                                        "regions that state a `half`")
+    for name in sorted(set(declared) - used):
+        if used:
+            warn(path, "L201", f"`chassis.halves.{name}` is declared and no region names it")
+        else:
+            warn(path, "L201", f"`chassis.halves.{name}` is declared and no region of any "
+                                        "view states a `half`: the open drawing says nothing of it")
+
+
 def _is_kit(ref, lib_roots):
     """Whether a ref names a `kind: kit` contract. False for a ref that does not
     resolve - that is L5's or L10's own finding, not this one."""
@@ -14795,6 +14895,7 @@ def main():
                 lint_device_power_home(f, d)
                 lint_device_mount(f, d)
                 lint_device_poe_pd(f, d)
+                lint_device_halves(f, d)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
                 lint_device_power_outlets(f, d, args.library)

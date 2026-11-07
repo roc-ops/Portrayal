@@ -2255,6 +2255,11 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
     console_server = []
     outlets = {}
+    # THE HALF OF A BOX THAT OPENS each bay is in, said in its description
+    # (portrayal.halves); empty for a box that does not open
+    from portrayal import halves as _halves
+    bay_half = {bay: half for mapped in _halves.bay_halves(dev).values()
+                for bay, half in mapped.items()}
     for view in views_for(dev, cfg_name):
         parts = view_parts(view)
         for p in scoped(parts["placements"], cfg_name):
@@ -2324,7 +2329,8 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
                 if trace is not None:
                     trace.add(p["id"])
         for b in scoped(parts["bays"], cfg_name):
-            bays.append(bay_row(b["id"], b.get("accepts"), None, b.get("interface")))
+            bays.append(bay_row(b["id"], b.get("accepts"), None, b.get("interface"),
+                                half=bay_half.get(b["id"])))
 
     # Switch and management interfaces. With a listing, a placement is an
     # interface exactly when a rule names it - `mgmt-eth` becomes `ma1` because
@@ -2485,8 +2491,12 @@ def contract_view(entry):
             "optical": entry.get("optical") or {}}
 
 
-def bay_row(bay_id, accepts=None, span=None, interface=None):
+def bay_row(bay_id, accepts=None, span=None, interface=None, half=None):
     """One `module-bays` row, for a bay on a device or a bay on a module.
+
+    `half` is the half of a box that opens the bay is in (`base` or `lid`); it
+    leads the description as "In the lid.", where a person installing a module
+    reads it, and a bay with none reads exactly as it always did.
 
     `interface` is the form a bay takes by its `mates` (spec/schemas/
     connectors.yaml): its `note` is said instead of a list, and an `accepts`
@@ -2509,6 +2519,8 @@ def bay_row(bay_id, accepts=None, span=None, interface=None):
     # NetBox schema allows on a bay description.
     spans = (f"Spans {', '.join(span)} for a card {len(span) + 1} slots wide. "
              if span else "")
+    if half:
+        spans = f"In the {half}. " + spans
     if interface:
         from portrayal.render import _connector_registry
         note = (_connector_registry().get(interface) or {}).get("note")
