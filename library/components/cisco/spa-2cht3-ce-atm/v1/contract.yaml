@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: spa-2cht3-ce-atm
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -173,6 +173,19 @@ provenance:
     searched - no end-of-life notice for SPA-2CHT3-CE-ATM is in this intake. Table 10 gives
     this part a minimum IOS XR release of 4.3.0 and a minimum hardware revision of 1.0,
     which is a support floor and not a lifecycle statement.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router SIP and SPA Hardware
+    Installation Guide, PDF pages 73-74, 2-Port Channelized T3/E3 ATM CEoP SPA Interface
+    Specifications and Cables and Connectors: '75-ohm coaxial DIN 1.0/2.3 types', with one
+    connector and cable for transmit (TX) and one for receive (RX), T3 44.736 or E3 34.368 Mbps
+    by mode. The group holds the adapter's 4 port parts. Role traffic: the ports are what the
+    adapter is for. index-origin 0: the guide says subslots and ports are numbered starting from
+    0 (SIP-700 interface addresses, PDF page 20), and the parts here are p0, p1 and so on. Media
+    coax-din-1-0-2-3: the guide's own words match the part's key. A guide port is two jacks, TX
+    and RX, which are two parts here (p0-tx and p0-rx), both in this group. No speed is stated:
+    the closed set of speeds has no word for 44.736 or 34.368 Mbps, so the rate stays in the
+    group description as the guide prints it. Nothing was measured: no position, size or part
+    changed.
 elements:
   led-ca-p0:
     at: [0.63, 37.87]
@@ -274,9 +287,19 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  coax:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: coax-din-1-0-2-3
+    description: >-
+      Each port is a pair of 75-ohm coaxial DIN 1.0/2.3 connectors, one for transmit (TX) and
+      one for receive (RX). The framer runs T3 (44.736 Mbps) or E3 (34.368 Mbps) by mode.
 parts:
-  - {ref: common/din-1-0-2-3-jack@1, id: p0-tx, at: [5.135, 11.925], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
-  - {ref: common/din-1-0-2-3-jack@1, id: p0-rx, at: [5.135, 24.415], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
-  - {ref: common/din-1-0-2-3-jack@1, id: p1-tx, at: [5.135, 46.085], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
-  - {ref: common/din-1-0-2-3-jack@1, id: p1-rx, at: [5.135, 57.835], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
+  - {ref: common/din-1-0-2-3-jack@1, id: p0-tx, at: [5.135, 11.925], attrs: {impedance: 75, media: coax-din-1-0-2-3}, group: coax}
+  - {ref: common/din-1-0-2-3-jack@1, id: p0-rx, at: [5.135, 24.415], attrs: {impedance: 75, media: coax-din-1-0-2-3}, group: coax}
+  - {ref: common/din-1-0-2-3-jack@1, id: p1-tx, at: [5.135, 46.085], attrs: {impedance: 75, media: coax-din-1-0-2-3}, group: coax}
+  - {ref: common/din-1-0-2-3-jack@1, id: p1-rx, at: [5.135, 57.835], attrs: {impedance: 75, media: coax-din-1-0-2-3}, group: coax}
 skins: [default]
