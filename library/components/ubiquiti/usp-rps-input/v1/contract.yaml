@@ -4,10 +4,14 @@ name: usp-rps-input
 version: 1.1.0
 class: inlet
 profile: networking
+interface: ubiquiti-usp-rps
+attrs: {media: rps}
 description: >-
   The USP-RPS DC input on the rear of the UniFi rack switches and the Dream Machine gateways - a wide
   rectangular socket on the left of the rear face that takes the cable of an external redundant
-  power supply, printed USP CONNECT.
+  power supply, printed USP CONNECT. The data sheets name the input and the switch sheet rates it;
+  they give no connector type, contact count or dimension, and the two rows of twelve contacts are
+  read off a community elevation.
 size: {w: 64.0, h: 19.0}
 size-confidence: {w: estimated, h: estimated}
 provenance:
@@ -26,11 +30,15 @@ provenance:
   sides: >-
     estimated - the 3D body is a box of the skin's size, so the outermost rectangle is square: its
     rounded corners left the box's top and right sides standing clear of the drawing at the corners.
+  interface: >-
+    datasheet - registry `ubiquiti-usp-rps`; the data sheets name the input and no connector type,
+    so the key is the socket as the community elevations draw it and no standard stands behind it.
+    The plug that seats in it is ubiquiti/usp-rps-plug@1, drawn estimated.
   same-part: >-
     the same socket, size and legend appear in the elevations of both models; the sheets use the
     same name for it.
 elements:
-  opening: {at: [0.0, 0.0], size: [64.0, 19.0], class: cutout}
+  opening: {at: [0.0, 0.0], size: [64.0, 19.0], class: slot}
 connection-points:
   mate: {at: [32.0, 9.5], direction: front}
 skins: [default]

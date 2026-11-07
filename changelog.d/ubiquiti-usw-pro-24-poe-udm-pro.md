@@ -8,4 +8,8 @@
 - `ubiquiti/lcm-touchscreen-1-3@1` (1.1.0), the 1.3 inch touchscreen on both models, drawn as a lit
   panel, and `ubiquiti/usp-rps-input@1` (1.1.0), their USP-RPS DC input, for the later Ubiquiti
   models. Both models share one chassis grey and draw their vent slots as plain bars.
+- The USP-RPS input presents a registered connector key, `ubiquiti-usp-rps` in
+  `spec/schemas/connectors.yaml`, and `ubiquiti/usp-rps-plug@1` (1.0.0) is the plug that mates it,
+  estimated and marked as needing a drawing. This closes the two blocking findings of the connector
+  scan on the new devices.
 - DCIM device types `USW-Pro-24-PoE` and `UDM-Pro` in the NetBox and Nautobot exports, 1U.

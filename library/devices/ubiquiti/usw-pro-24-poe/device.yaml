@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: usw-pro-24-poe
-version: 0.1.1
+version: 0.1.2
 maturity: modelled
 manufacturer: Ubiquiti
 model: USW-Pro-24-PoE
@@ -132,15 +132,23 @@ provenance:
     note: >-
       Data sheet, LEDs: "RPS: Status" with no colour or state; the page says "Redundancy: DC Power
       Backup, with UniFi RPS". The lamp is the blue triangle left of the USP RPS socket in the elevation;
-      its colour is the estimated one in rps-lamp-colour.
+      its colour is the estimated one in rps-lamp-colour. The socket is seated as ubiquiti/usp-rps-input@1,
+      which presents the registered key ubiquiti-usp-rps; the plug that enters it is
+      ubiquiti/usp-rps-plug@1, estimated, and no sheet names the cable.
   colour:
     confidence: estimated
     note: >-
-      #c8cacc on both Ubiquiti devices. The two data sheet strips do not agree on the plain plate (median
-      #acadaf on this switch's strip, #c8c8ca on the UDM-Pro's: the lighting and the angle differ), and the
-      community elevations differ as well (#e2e4e6 and #d1d1d3), so no one picture gives the grey. #c8cacc
-      is the plate grey most used by silver chassis already in the library, and it is within two levels of
-      the brighter strip's plate. Chosen to make the two models one grey, not measured.
+      #c8cacc on both Ubiquiti devices, chosen and not measured: six readings of the plain metal, taken
+      as medians away from ports and text, do not agree. This switch's community front elevation
+      (ubiquiti-unifi-switch-24-pro-poe-gen2.front.png, the plate left of the ports, x 120 to 520, y 30
+      to 95 px) reads #e3e5e6; its rear elevation (the plate between the socket and the label, x 300
+      to 880, y 40 to 95 px) reads #c8cacb. The UDM-Pro's community front elevation (x 100 to 480, y 25
+      to 85 px) reads #d3d2d5 and its rear (x 300 to 850, y 40 to 95 px) #cbcacd. The data sheet photograph
+      of this switch (x 220 to 420, y 722 to 775 of the 1500 px picture) reads #acadaf, its plate being in
+      shade, and the UDM-Pro's (x 290 to 470, same rows) #c9c9cb. The two rear elevations and the UDM-Pro
+      photograph lie within three levels of #c8cacc; the two front elevations are lighter and this
+      switch's photograph darker. #c8cacc is also the grey of the silver chassis already in the library.
+      Every reading is an estimate of a lit picture, not of the paint.
   vents:
     confidence: estimated
     note: >-

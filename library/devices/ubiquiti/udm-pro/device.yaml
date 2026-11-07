@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: udm-pro
-version: 0.1.1
+version: 0.1.2
 maturity: modelled
 manufacturer: Ubiquiti
 model: UDM-Pro
@@ -123,7 +123,9 @@ provenance:
     note: >-
       Data sheet, LEDs: "RPS: Blue: ready". The lamp is the grey triangle left of the socket in the elevation, with the legend USP RPS,
       OFF and ON beside it and a small blue dot at ON; which of the two marks is the lamp is not settled
-      (see the gap).
+      (see the gap). The socket is seated as ubiquiti/usp-rps-input@1, which presents the registered key
+      ubiquiti-usp-rps; the plug that enters it is ubiquiti/usp-rps-plug@1, estimated, and no sheet
+      names the cable.
   airflow:
     confidence: estimated
     note: >-
@@ -132,11 +134,16 @@ provenance:
   colour:
     confidence: estimated
     note: >-
-      #c8cacc on both Ubiquiti devices. The two data sheet strips do not agree on the plain plate (median
-      #c8c8ca on this strip, #acadaf on the switch's: the lighting and the angle differ), and the
-      community elevations differ as well (#d1d1d3 and #e2e4e6), so no one picture gives the grey. #c8cacc
-      is the plate grey most used by silver chassis already in the library, and it is within two levels of
-      this strip's plate. Chosen to make the two models one grey, not measured.
+      #c8cacc on both Ubiquiti devices, chosen and not measured: six readings of the plain metal, taken
+      as medians away from ports and text, do not agree. This gateway's community front elevation
+      (ubiquiti-unifi-dream-machine-pro.front.png, the plate left of the drive door, x 100 to 480, y 25
+      to 85 px) reads #d3d2d5 and its rear elevation (x 300 to 850, y 40 to 95 px) #cbcacd. The
+      USW-Pro-24-PoE's community front elevation reads #e3e5e6 and its rear #c8cacb. The data sheet
+      photograph of this gateway (x 290 to 470, y 722 to 775 of the 1500 px picture) reads #c9c9cb and the
+      switch's #acadaf, its plate being in shade. The two rear elevations and this photograph lie within
+      three levels of #c8cacc; the two front elevations are lighter and the switch's photograph darker.
+      #c8cacc is also the grey of the silver chassis already in the library. Every reading is an
+      estimate of a lit picture, not of the paint.
   vents:
     confidence: estimated
     note: >-
