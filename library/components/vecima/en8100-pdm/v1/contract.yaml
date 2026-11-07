@@ -1,0 +1,49 @@
+format: 1
+kind: module
+name: en8100-pdm
+version: 1.0.0
+class: mechanical
+behaviour: fills
+profile: networking
+description: >-
+  Entra EN8100 power distribution module (PDM), the module in the middle of the base half that
+  receives the external AC from the port entry modules and distributes it to the power supply
+  modules, and takes their DC back for the node. It has four status lamps and connectors for each supply's AC and DC cables, a LINK
+  connector to the lid distribution module and a POWER connector to it. It has a centre shunt for a
+  node fed from one source.
+size: {w: 190.0, h: 74.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8100 power distribution module
+groups:
+  pdm-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the four lamps the figure labels POWER, CONN, OPER and ALARM.
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), section 3.2.5 and the
+    PDM figure on p38 (the figure sits at the top of that page), and the cabling section p87 and
+    p88 for the connector names PS 1 QSW AC (L), PS 2 QSW AC (R), PS 1 DC, PS 2 DC, POWER and LINK.
+    No part number is printed. The module is classed as mechanical because its only electronics a
+    document names are the lamps and the guide states no power for it; a supply or a draw class
+    would each ask for a figure nothing here gives.
+  size: >-
+    estimated - no EN8100 document states a size for any module. 190 x 74 is the module's share of
+    the 607 x 281 open half in a hand-drawn layout of the open node, at the 2.6 aspect of the PDM
+    figure on p38 less its two end brackets.
+  elements: >-
+    photo-measured - the four lamps as fractions of the PDM figure on p38. Not drawn, and recorded
+    as gaps: the 4-pin and 12-pin power cable headers, the USB LINK connector and the 10-pin POWER
+    header (no part in the library presents them), the end brackets, the shunt and the vendor
+    logo.
+elements: {}
+parts:
+  - {ref: common/led-dot@1, id: led-power, at: [95.0, 62.0], group: pdm-leds}
+  - {ref: common/led-dot@1, id: led-conn, at: [100.4, 62.0], group: pdm-leds}
+  - {ref: common/led-dot@1, id: led-oper, at: [105.8, 62.0], group: pdm-leds}
+  - {ref: common/led-dot@1, id: led-alarm, at: [111.2, 62.0], group: pdm-leds}
+connection-points:
+  mate: {at: [95.0, 37.0], direction: front}
+skins: [default]

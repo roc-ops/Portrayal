@@ -1,0 +1,33 @@
+format: 1
+kind: module
+name: en8400-pem-ac
+version: 1.0.0
+class: mechanical
+behaviour: fills
+profile: networking
+description: >-
+  Entra EN8400 power port entry module (PEM), the centre board under each power entry cover, which
+  takes the AC-only port and plugs into the power distribution module. It replaces the EN8100 power
+  port entry module in the EN8400 and has screwless stinger seizures. That the centre board is the
+  one the AC-only port lands on is an inference from the guide's wording. The node holds two, one
+  at each end, between the two RF port entry modules.
+size: {w: 36.0, h: 75.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8400 power port entry module
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), section 3.2.2 and the
+    EN8400 PEM figure on p35. The guide shows one figure for the EN8400 PEM and does not name the
+    centre board; the split follows the EN8100's. No part number is printed.
+  size: >-
+    estimated - no document held states a size for any module; the same 36 x 75 as the EN8100
+    board, which the EN8400 figure on p35 shows at the same size and position.
+  elements: >-
+    photo-measured - a green board with a screened block and a second small block for the shunt,
+    from the EN8400 figure on p35, which shows the centre board without the black connector block of
+    the two beside it. Nothing else is drawn.
+elements: {}
+connection-points:
+  mate: {at: [18.0, 37.5], direction: front}
+skins: [default]

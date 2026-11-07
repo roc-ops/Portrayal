@@ -30,7 +30,7 @@
 # The shape of this file, a sentence beside a mate, and a registry sentence under 40 characters fail
 # whatever the switches say.
 format: 1
-cap: 30
+cap: 32
 rows:
   # Closed by #1354: Earth studs on Cisco, Nokia, MikroTik, Casa, Edgecore and Eaton devices
   - part: edgecore/agr-ground-plate@1
@@ -200,6 +200,18 @@ rows:
     why: "the IRIG-B card draws its IRIG input, optical output, ten IRIG outputs and alarm and pulse relay as ports with no registered interface; the 2023 data sheet lists them and names no connector type for any"
     order: "#1366"
     since: 2026-11-01
+
+  # Opened by #1595: the Vecima nodes take their AC over the coaxial plant. Closes when the nodes' RF/AC ports are modelled as cable ends.
+  - part: en8100
+    code: C19
+    why: "the node is fed over the coaxial plant through its RF/AC and AC-only ports (guide pages 41 and 87), which are not yet modelled as cable ends, and it has no mains inlet, so no power end is offered"
+    order: "#1595"
+    since: 2026-11-07
+  - part: en8400
+    code: C19
+    why: "the node is fed over the coaxial plant through its RF/AC and AC-only ports (guide pages 41 and 87), which are not yet modelled as cable ends, and it has no mains inlet, so no power end is offered"
+    order: "#1595"
+    since: 2026-11-07
 
   # Opened by #1069: the slots of the FHD-FAPM6's six openings take inserts, and the runner counts a mate as a part of class
   # `port` or `transceiver`. Closes when the runner reads a part that occupies a slot and mates its interface as a mate.
