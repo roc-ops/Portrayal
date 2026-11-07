@@ -762,6 +762,9 @@ PART_POWER = {
     # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
     # says which connector.
     "servertech/pro4x-cord-60309": "other",
+    # A RARITAN PX3-1045'S FIXED CORD ends in an IEC 60309 2P+E 6h 32 A plug (the technical specification). No
+    # power-port type of the two targets is held for it in this tree, so it is `other` and POWER_LABEL says which.
+    "raritan/px3-cord-60309": "other",
 }
 # THE CONNECTOR A `other` POWER PORT IS, for a reader who would otherwise see
 # "Other". Only the parts above that have no upstream type are listed; a test
@@ -790,6 +793,7 @@ POWER_LABEL = {
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
+    "raritan/px3-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
 }
 
 
