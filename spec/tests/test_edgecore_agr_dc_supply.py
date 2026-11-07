@@ -10,8 +10,8 @@ on the top one, the -36 to -72 VDC feed on the middle one and an earth symbol pr
     voltage and no current;
   - the AGR110 and the AGR130 seat it in the `dc` configuration. Their rear bays still accept common/psu-dc-650@2 beside it, because a bay
     that stops accepting a part is a major bump for the device;
-  - common/psu-dc-650@2 is not edited, and the devices that also seat it (AS5912-54X, AS7326-56X; the AS7726-32X now seats its own
-    PSU-48V-650-F and -B) are not touched, so the generic supply keeps its record.
+  - common/psu-dc-650@2 is not edited, and the device that also seats it (AS7326-56X; the AS7726-32X now seats its own
+    PSU-48V-650-F and -B, and the AS5912-54X its own supply) is not touched, so the generic supply keeps its record.
 
 These run against the real library, a components index built by the indexer the build runs, the device locks and the records file. They read
 no library/dist and render nothing.
@@ -35,7 +35,7 @@ SCREW = "common/terminal-screw-34@1"
 LUG = "generic/ring-lug@1"
 SCREWS = [("pole-rtn", [32.6, 8.7], "rtn"), ("pole-batt", [32.6, 18.0], "batt"), ("pole-gnd", [32.6, 27.0], "gnd")]
 DEVICES = {"edgecore/agr110": "8.3.0", "edgecore/agr130": "0.2.0"}
-CONTROLS = ["edgecore/as5912-54x", "edgecore/as7326-56x"]
+CONTROLS = ["edgecore/as7326-56x"]
 
 
 def contract(ref):
