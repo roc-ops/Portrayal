@@ -433,7 +433,7 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 # the Cisco ASR 9000 grounding pad's two 10-32 screws, on the ten chassis that place it (thirteen placements): 26 ring seats (down 20, left 4, right 2)
 # the grounding screw on its washer, placed by the ten AurCore AIS switches and the Eaton PDUMH20NET: eleven ring seats (down 11)
 # the Cisco C9300-24S's and C9300-48S's two rear ground screws each: two more seats down and two left
-WANT = {"down": 227, "left": 61, "up": 37, "right": 44}   # one more down on each of the Moxa NPort 5650-16 and 5650-16-T ground screws; the 24 terminal pads of the Juniper EX4100-H-24F and -24MP (down 10, left 2, up 8, right 4); then: the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's; two more down on each of the four Juniper EX3200; the earth studs of the Digi Connect EZ 16 and 32 (two, one each, up)
+WANT = {"down": 227, "left": 61, "up": 37, "right": 44}   # the 24 terminal pads of the Juniper EX4100-H-24F and -24MP (down 10, left 2, up 8, right 4); then: the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's; two more down on each of the four Juniper EX3200; the earth studs of the Digi Connect EZ 16 and 32 (two, one each, up); the Moxa NPort 5650-16 and 5650-16-T ground screws (two, one each, down)
 # THE TWO-HOLE LUG on a pair host: 59 seats on 33 devices - three on each of
 # the eleven Amphenol 300CB08 panels, one on each AIS800, the seven MX, the
 # LMFS-F, two on the FX-16, one on the FX-8 and FX-4, the SR-1-DC block's
