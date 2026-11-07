@@ -170,7 +170,9 @@ def test_the_connector_registry_is_not_vacuous():
                          # the SCTE-91 external port of the Vecima Entra nodes, presented by common/scte-91-port@1 and mated by generic/scte-91-port-plug@1
                          "scte-91",
                          # the G-type test points and the stereo-jack RS-232 port of the CH3000 modules
-                         "g-type", "g-type-female", "stereo-jack"}
+                         "g-type", "g-type-female", "stereo-jack",
+                         # the input of the Ubiquiti USP-RPS redundant power system
+                         "ubiquiti-usp-rps"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
