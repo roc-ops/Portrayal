@@ -214,6 +214,8 @@ def test_configs_json_rows_carry_attrs_and_it_is_empty_for_none(tmp_path):
     doc = yaml.safe_load(dev.read_text())
     names = list(doc["configurations"])
     assert len(names) > 1
+    for cfg in doc["configurations"].values():
+        cfg.pop("attrs", None)  # the template states some of its own; this test starts from none
     own = {"power": {"power-max-w": 999}}
     doc["configurations"][names[0]]["attrs"] = copy.deepcopy(own)
     dev.write_text(yaml.safe_dump(doc, sort_keys=False, allow_unicode=True))

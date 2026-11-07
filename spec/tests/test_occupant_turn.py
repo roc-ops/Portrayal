@@ -433,7 +433,7 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 # the Cisco ASR 9000 grounding pad's two 10-32 screws, on the ten chassis that place it (thirteen placements): 26 ring seats (down 20, left 4, right 2)
 # the grounding screw on its washer, placed by the ten AurCore AIS switches and the Eaton PDUMH20NET: eleven ring seats (down 11)
 # the Cisco C9300-24S's and C9300-48S's two rear ground screws each: two more seats down and two left
-WANT = {"down": 216, "left": 59, "up": 29, "right": 40}   # one more down: the Eaton EPBZ77's inner ground stud; the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's; two more down on each of the four Juniper EX3200; the earth studs of the Digi Connect EZ 16 and 32 (two, one each, up)
+WANT = {"down": 226, "left": 61, "up": 37, "right": 44}   # one more down: the Eaton EPBZ77's inner ground stud; the 24 terminal pads of the Juniper EX4100-H-24F and -24MP (down 10, left 2, up 8, right 4); then: the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's; two more down on each of the four Juniper EX3200; the earth studs of the Digi Connect EZ 16 and 32 (two, one each, up)
 # THE TWO-HOLE LUG on a pair host: 59 seats on 33 devices - three on each of
 # the eleven Amphenol 300CB08 panels, one on each AIS800, the seven MX, the
 # LMFS-F, two on the FX-16, one on the FX-8 and FX-4, the SR-1-DC block's
@@ -464,7 +464,16 @@ PAIR_IFACES = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
 RESIDUAL = {("ufispace/s9600-102xc", "rear", "ground-2"): ("down", 0, 1),
             ("ufispace/s9601-102xc", "rear", "ground-2"): ("down", 0, 1),
             # the plate's lug, down, over a legend; up crosses the ESD jack
-            ("juniper/mx304", "rear", "ground-plate"): ("down", 0, 1)}
+            ("juniper/mx304", "rear", "ground-plate"): ("down", 0, 1),
+            # the terminal pads of the Juniper EX4100-H-24F and -24MP stand 9.6 apart in a row under their legends
+            # (L, N, G, DC+, DC-, G): the lug's default direction clears every part and lies across one legend, on
+            # eleven of the twelve pads of each device (the second supply's DC+ is clear)
+            **{(f"juniper/{dev}", "front", pad): (way, 0, 1)
+               for dev in ("ex4100-h-24f", "ex4100-h-24mp")
+               for pad, way in (("psu-0-dc-minus", "down"), ("psu-0-dc-plus", "down"), ("psu-0-g-ac", "up"),
+                                ("psu-0-g-dc", "down"), ("psu-0-l", "left"), ("psu-0-n", "up"),
+                                ("psu-1-dc-minus", "down"), ("psu-1-g-ac", "up"), ("psu-1-g-dc", "down"),
+                                ("psu-1-l", "right"), ("psu-1-n", "up"))}}
 # what a two-hole lug's default still lies across a PART, either way along its
 # pair - the least bad. Both are the model's geometry, not the rule's: the
 # MX150's ESD jack (y 10.4) starts under the tongue of a lug 10.67 wide across
@@ -608,7 +617,9 @@ def test_the_four_crossings_the_seat_gave_are_gone(census):
     # and the two screws of the Cisco ASR 9902's grounding pad, 15.9 away from each other
     # and the same ground screw of each of the Cisco C9300-24S and C9300-48S
     # and the earth stud of each of the Digi Connect EZ 16 and 32
-    assert len(crossed) == 79 and not [k for k in crossed if census[k]["hard"]]
+    # and the terminal pads of the Juniper EX4100-H-24F and -24MP: 12 ring seats whose own direction crosses a part (the AC pads L, N
+    # and G of each of the two supplies, six per device), the default clearing every one
+    assert len(crossed) == 91 and not [k for k in crossed if census[k]["hard"]]
 
 
 @pytest.mark.heavy
