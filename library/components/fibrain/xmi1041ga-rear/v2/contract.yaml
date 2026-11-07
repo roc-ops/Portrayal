@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: xmi1041ga-rear
-version: 2.0.0
+version: 2.1.0
 class: adapter-panel
 description: >-
   The back of Fibrain XMI1041GA: the same adapters that face forward, seen from
@@ -13,13 +13,20 @@ size-notes: >-
   face is a drawing of a back, and the depth belongs to the holder, as
   `body.depth`.
 attrs: {media: fiber}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the 6 adapters seen from the back of the holder
 parts:
-  - {id: b01, ref: common/sc-simplex-adapter@1, at: [85.550, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
-  - {id: b02, ref: common/sc-simplex-adapter@1, at: [69.450, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
-  - {id: b03, ref: common/sc-simplex-adapter@1, at: [53.350, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
-  - {id: b04, ref: common/sc-simplex-adapter@1, at: [37.250, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
-  - {id: b05, ref: common/sc-simplex-adapter@1, at: [21.150, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
-  - {id: b06, ref: common/sc-simplex-adapter@1, at: [5.050, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
+  - {id: b01, ref: common/sc-simplex-adapter@1, group: adapters, at: [85.550, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
+  - {id: b02, ref: common/sc-simplex-adapter@1, group: adapters, at: [69.450, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
+  - {id: b03, ref: common/sc-simplex-adapter@1, group: adapters, at: [53.350, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
+  - {id: b04, ref: common/sc-simplex-adapter@1, group: adapters, at: [37.250, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
+  - {id: b05, ref: common/sc-simplex-adapter@1, group: adapters, at: [21.150, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
+  - {id: b06, ref: common/sc-simplex-adapter@1, group: adapters, at: [5.050, 4.100], rotate: 90, attrs: {housing-finish: '#1c9dbe'}}
 provenance:
   size: >-
     datasheet - see size-notes.
@@ -43,6 +50,15 @@ provenance:
     the vendor's renders show the adapter bodies standing out of the back of
     the holder and no printing; the moulding behind them is painted as the
     front is.
+  groups: >-
+    Fibrain HD adapter holder data sheet XMx (revision 1.1, modified 03.06.2024), page
+    1, lists XMI1041GA as 'FO Holder 6x SC, SM' and describes a holder 'fully equipped
+    with adapters'. This component is the holder seen from behind, and each adapter is
+    the same mating sleeve as the front one of the same number in the holder's own
+    paths, so the ports are a group of their own on this component. No page names a role
+    for the port; the role follows the job, carrying a user's link through the panel, so
+    it is traffic. The port is passive and the data sheet prints no rate for it, so the
+    group states no speed.
 skins: [default]
 # The @1 of this part is gone from the library (#1046). A rack file that names it
 # is read as this one: the ids of its parts, its ports and their names are the same.

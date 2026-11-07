@@ -723,6 +723,7 @@ def test_the_comparison_layer_can_now_reach_them():
     # 187 with the Juniper EX3200-24T, -48T, -24P and -48P: n+0 over one fan tray (hardware guide, Cooling System)
     # 187 with the Arista 7050CX3-32S, 7050SX3-48YC12, 7050SX3-48YC8 and 7050TX3-48C8: four and two fan modules
     # (data sheet, model tables)
-    # 193 with the Cisco Nexus 9364D-GX2A and 9348D-GX2A: 3+1 over four fan modules each (installation guides,
+    # 193 with the Cisco C9300-24S and C9300-48S, the same 2+1 over three fan modules
+    # 195 with the Cisco Nexus 9364D-GX2A and 9348D-GX2A: 3+1 over four fan modules each (installation guides,
     # Overview: one failed fan raises the others to 100%, two failed power the switch down in 2 minutes)
-    assert n == 193, n
+    assert n == 195, n

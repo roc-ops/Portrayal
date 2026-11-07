@@ -1,0 +1,50 @@
+format: 1
+kind: component
+name: ex4400-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: dc-connector-3w3
+description: >-
+  The D-sub 3W3 DC power connector on the face of the Juniper EX4400 550 W DC power supply, seen from its mating face. A
+  vertical shell carries three contacts in a column, the middle one larger. A hex standoff above and below it takes the
+  cable plug's thumbscrews. The cable connector juniper/qfx10002-dc-plug@1 seats at its mate point.
+size: {w: 10.1, h: 36.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The box of the `dc-input` group the supply already drew, shell and both standoffs (10.1 across, 36.0 high: the shell
+  10.1 by 25.3, the upper standoff 4.8 high and the lower 5.6 high, as the supply drew them), read off the rear render of the EX4400-24T with DC supplies,
+  which carries no scale; the supply's own size is the scale.
+attrs: {connector: D-sub 3W3 DC power connector, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED: the EX4400 Switch Hardware Guide
+    (Juniper Networks) says the DC supplies "require a D-Sub 3W3- type connector" (EX4400 DC Power Cable Specification)
+    and names whole cables, CBL-JNP-PWR-DSUB among them, not a connector part. No standard document for the 3W3 layout
+    is held, so the interface claims none.
+  gender: >-
+    NOT STATED. Figure 10 draws two small round contacts and a larger ring between them and does not say which half
+    carries pins.
+  pins: >-
+    NOT STATED WHICH CONTACT IS WHICH. The guide says the three pins carry "-48 VDC input (-), return (+), and ground
+    connections" and no figure prints a mark beside a contact. The contacts are named by place only: top, middle (the
+    larger) and bottom, as Figure 10 draws the supply.
+  size: >-
+    estimated - see size-notes. No guide figure is dimensioned.
+  key: >-
+    guide - Figure 10 and Figure 84 draw the shell with a rounded outline and a standoff above and below it.
+  mate: >-
+    derived - the middle contact, (5.0, 17.4), facing out. The cable connector's middle contact is at its centre too,
+    so the two align to within the estimate.
+  marks: >-
+    NONE PRINTED beside the contacts. The supply prints "DC OK" beside its lamp, which is not part of this connector.
+  colour: >-
+    photo-measured - the dark face and gold contacts and light standoffs are those of the guide's render (Figure 10),
+    as the supply's own skin drew them. No photograph of a DC supply is held.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face, so it is drawn flush and
+    states no relief.
+elements: {}
+connection-points:
+  mate: {at: [5.0, 17.4], direction: front}
+skins: [default]
