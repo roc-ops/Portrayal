@@ -131,10 +131,11 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # face, the guide's "ground connectors", 6 -> 10 on 3 -> 5 devices.
 # The Cisco C9300-24P, C9300-24U and C9300-48U each place the same two, 10 -> 16 on 5 -> 8 devices.
 # The Cisco C9300-24S and C9300-48S each place the same two, 16 -> 20 on 8 -> 10 devices.
+# The Eaton EPBZ77 places one common/ground-stud@1, its inner ground stud, 11 -> 12 on 11 -> 12 devices.
 CENSUS = {
     "common/ground-lug@1": (31, 22),
     "common/ground-screw@1": (20, 10),
-    "common/ground-stud@1": (13, 13),
+    "common/ground-stud@1": (14, 14),
     CASA: (1, 1),
 }
 # juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
@@ -390,9 +391,11 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
     earth_stud_parts = ("common/ground-hole-1-4@1", "common/ground-stud-10-32@1", "mikrotik/earth-stud-disc@1",
                         "common/ground-screw-washer@1")
     # and the hex-nut stud that a supply's pair of terminals composes
+    # and the wire terminal pad that the Juniper EX4100-H-24F and -24MP place twelve times each
     assert sorted(presents) == sorted([*SINGLE, CASA_STUD, "common/terminal-screw-34@1",
                                        "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD, *bare_holes,
-                                       *earth_stud_parts, "common/hex-nut-stud@1"])
+                                       *earth_stud_parts, "common/hex-nut-stud@1",
+                                       "juniper/ex4100-h-terminal-pad@1"])
     assert mates == [LUG]
     lug = _contract(LUG)
     # 1.0.1: the provenance says it turns (#829); nothing it draws changed
@@ -426,6 +429,11 @@ COMPOSED = {
     ("edgecore/fsj033-610g@1", "ground-stud"): "common/ground-screw@1",
     ("juniper/ex4300-jpsu-550-dc-afi@1", "earth"): "common/ground-screw@1",
     ("juniper/ex4300-jpsu-550-dc-afo@1", "earth"): "common/ground-screw@1",
+    # the earth stud of the Smartoptics DCP rack kit sits on its front brackets and its mid-mount
+    # bracket, which are parts of a kit and not placements on a chassis face.
+    ("smartoptics/dcp-front-bracket-600@1", "earth"): "common/ground-stud@1",
+    ("smartoptics/dcp-front-bracket-700@1", "earth"): "common/ground-stud@1",
+    ("smartoptics/dcp-mid-mount-bracket@1", "earth"): "common/ground-stud@1",
 }
 
 
@@ -458,10 +466,11 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     # 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
     # 59 -> 63 with the Cisco C9300-24S and C9300-48S's two ground screws each
     # 63 -> 65 with the earth stud of the Digi Connect EZ 16 and 32
-    assert sum(n for n, _ in got.values()) == 65
+    # 65 -> 66 with the Eaton EPBZ77's ground stud
+    assert sum(n for n, _ in got.values()) == 66
     # 42 -> 44 with the Cisco C9300-24S and C9300-48S
-    # 44 -> 46 with the Digi Connect EZ 16 and 32
-    assert len({where for where, _, _ in placed}) == 46
+    # 44 -> 46 with the Digi Connect EZ 16 and 32, 46 -> 47 with the Eaton EPBZ77
+    assert len({where for where, _, _ in placed}) == 47
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -507,7 +516,8 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
     # 52 -> 58 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
     # 58 -> 62 with the Cisco C9300-24S and C9300-48S's two ground screws each
     # 62 -> 64 with the earth stud of the Digi Connect EZ 16 and 32
-    assert seen == 64
+    # 64 -> 65 with the Eaton EPBZ77's ground stud
+    assert seen == 65
 
 
 @pytest.mark.heavy

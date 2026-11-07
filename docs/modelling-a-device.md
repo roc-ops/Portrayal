@@ -558,6 +558,14 @@ reports openings nothing fills, checks that no two overlap, that each matches
 the standard its occupant conforms to, and that no legend is printed on one. It
 says nothing about a panel that declares no cutouts at all.
 
+An opening that holds several replaceable units is a frame, not a bay. A
+power shelf, a fan band or a card cage is one cutout with a bay of its own
+for each unit inside it. L39 counts the opening as filled when its bays cover
+half of its area, so the cutout needs no placement of its own id. Do not fold
+the bays into one bay named after the opening; each bay id is published. Make
+a bay of the opening itself only where the opening takes one unit and no bay
+stands in it.
+
 **Gate 2.** Render and overlay again. Every hole lines up with the reference.
 Count them. This is the last cheap moment to fix a pitch error; after
 components are placed, moving 48 holes means moving 48 parts and 48 labels.
@@ -766,6 +774,11 @@ Gate 4b checks it.
     into the plate, such as teeth behind a window or in a recess, is a sunk
     facet: give it a negative `lift` (its root that far below the plate) and
     declare the recess around it as a `pocket` at least that deep (L117).
+    When the windows are cut through a thin plate, write the pocket as
+    `{depth, wall}` with the plate's thickness as `wall` and fit the pocket to
+    the drawn windows: a cage near a window's end may then run back under the
+    plate's edge below the wall, and L117 refuses one that leaves the box above
+    it.
 7. **Cable management that is part of the product is declared, and drawn
    where it is a part**: a lacer panel and its rings, a tray, a slack spool, a
    bend-radius bracket. A ring declares where cables pass (`guide:` on its

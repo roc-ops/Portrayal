@@ -1,15 +1,16 @@
 format: 1
 kind: component
 name: ex2200-rps-port
-version: 1.0.0
+version: 1.1.0
 class: inlet
+interface: ex3300-rps
 behaviour: mounts
 profile: networking
 description: >-
   Redundant power system (RPS) port on the rear panel of the Juniper EX2200 switches (all but the
-  EX2200-C): a long connector opening on a screwed plate, beside the console port. The guide lists
-  the port and labels it in its rear figure, and names no connector type. It presents no interface,
-  because no registered key covers it, so nothing is known to mate it.
+  EX2200-C): a long connector opening on a screwed plate, beside the console port. The Juniper EX
+  Series Redundant Power System guide gives each EX2200 and EX3300 a built-in RPS connector and one
+  RPS cable. So this port presents the same key as the EX3300's. No guide names the connector type.
 size: {w: 67.9, h: 14.6, d: 20.0}
 size-confidence: {w: estimated, h: estimated, d: estimated}
 attrs: {media: rps}
@@ -30,13 +31,20 @@ provenance:
     the four screws of the plate are not in this part: the devices place them as their own parts
     (`rps-screw-0` to `rps-screw-3`), as they did when the plate was panel art.
   interface: >-
-    NONE, DELIBERATELY. The registered key `ex3300-rps` covers the EX3300's port only, and its note says
-    that the EX2200 guide "lists a 'Redundant power system (RPS) port' in the same words and gives no
-    connector type either", so the two guides do not settle that this port is that connector. A part
-    that looks the same is not evidence that it is the same, and this is not juniper/ex3300-rps-port@1.
-    What is missing is the connector type of the EX2200's port, and with it a key and a mate. The
-    document that would settle it is the maker's description of the EX2200 RPS cable or of the external
-    power system the port takes; none is held. Until then this port is not usable: nothing mates it.
+    A READING FROM ONE CABLE, NOT A STATEMENT OF THE CONNECTOR'S NAME - registry `ex3300-rps`. EX Series
+    Redundant Power System Hardware Guide (Juniper Networks, PDF dated 2020-12-17): "Each EX2200 switch
+    and EX3300 switch has a built-in connector for the RPS" (page 52, step 1). Figure
+    16 (page 51) draws the one RPS cable, with the same shell at both ends, and Figure 17 (page 52) seats
+    it in the RPS port of an EX2200-24-4G rear panel. The guide names no connector type, contact count
+    or cable part number, and the EX2200 Switch Hardware Guide (published 2022-02-02) names none either.
+    So the key is taken from the one cable the guide pairs with both switches, and this is not
+    juniper/ex3300-rps-port@1, which is drawn from another elevation. The cable end that mates it is
+    juniper/ex3300-rps-plug@1, drawn estimated.
+  mate: >-
+    derived - the centre of the connector opening, (33.95, 7.35), on the panel face. The guide gives no
+    seating depth, so the mate stands at the face.
 elements:
   opening: {at: [11.7, 2.9], size: [44.5, 8.9], class: slot}
+connection-points:
+  mate: {at: [33.95, 7.35], direction: front}
 skins: [default]

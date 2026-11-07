@@ -37,6 +37,10 @@ POWER_LABEL = {
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
+    "raritan/px3-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
+    "eaton/tripplite-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
+    "raritan/px4-universal-input": "Legrand Universal Input connector (keyed)",
+    "raritan/px3-rear-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
 }
 
 PART_OUTLET = {
@@ -58,6 +62,8 @@ PART_OUTLET = {
     # A SERVER TECHNOLOGY HDOT Cx OUTLET, a hybrid of the C13 and C19 that takes a C14 or a
     # C20. Neither target names it, so it is `other` with its label, as the P40 above is.
     "servertech/hdot-cx-outlet": "other",
+    # A RARITAN PX4'S LOCKING Cx OUTLET, 16 A. Neither target names it, so it is `other` with its label.
+    "raritan/px4-cx-outlet": "other",
     # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
     # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
     "std/c19-outlet": "iec-60320-c19",
@@ -73,7 +79,7 @@ PART_OUTLET = {
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
 # run on import, which test_tools_layout forbids).
 OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
-                "rittal/cee-7-3-outlet": "CEE 7/3"}
+                "rittal/cee-7-3-outlet": "CEE 7/3", "raritan/px4-cx-outlet": "Cx locking"}
 
 # EVERY PORT-CLASS PART THIS EXPORTER NEVER EMITS, AND WHY IT DOES NOT.
 #
@@ -125,6 +131,10 @@ NOT_A_DCIM_PORT = {
                                "guide names the port and gives no connector type or pinout, and no "
                                "DCIM has a power port type for an RPS connector, so it cannot be "
                                "typed honestly",
+    "ubiquiti/usp-rps-input": "the USP-RPS DC input of the Ubiquiti UniFi rack switches and Dream "
+                              "Machine gateways, for an external redundant supply: the data sheets "
+                              "name the input (and the switch's rating, 52 V DC at 7.69 A) and no "
+                              "connector type, so it cannot be typed honestly",
     "juniper/ex2200-rps-port": "the redundant power system port of the Juniper EX2200 switches: the "
                                "guide names the port and gives no connector type, and no DCIM has a "
                                "port type for it, so it presents nothing and cannot be typed "

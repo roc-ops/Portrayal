@@ -83,6 +83,13 @@ component side, each starting where the last one's slot pitch puts it, with no
 gap wider than a bay and no step sideways. `rotate: 90` and `270` are refused
 for now, because no riser in the library turns its slots a quarter.
 
+Bays that sit side by side are followed along x instead: to the right at
+`rotate: 0` and to the left at 180, with the same limit on a gap. A line card's
+two MIC windows are such a pair. A dual-wide MIC states `slot-width: 2`, the
+card's first window states `span: [mic1]`, and the MIC is drawn in the box the
+two windows make, 338.1 x 29.2 on an MPC. The kit and the exports read it
+exactly as they read a riser's span.
+
 ### R3. Where the card is drawn: in the box its bays make together
 
 A one-slot occupant hangs on its bay: the build puts its top-left on the bay's

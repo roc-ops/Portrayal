@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-46dx
-version: 4.1.1
+version: 4.1.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-46DX
@@ -318,7 +318,8 @@ provenance:
       a note printed beside them - 'Temperature: 45C, Optics: full populated, Traffic: 100% load'.
       power-max-w carries 1534, which is the highest of the four and therefore what max means; the
       other three are recorded in this sentence rather than as a disagreement, because they are
-      four measurements of four different loadings. Note that power-envelope therefore describes
+      four measurements of four different loadings; the dc configuration states its own 1524, the
+      highest of its two. Note that power-envelope therefore describes
       the TYPICAL figure's scope and not the maximum's, which is fully-configured and says so
       here. These are the vendor's figures as the vendor states them and are NOT reconciled
       against the module set: the fans publish no draw at all, so any total built from the
@@ -1067,6 +1068,9 @@ configurations:
       mechanical drawing (Figure 6) and the cabling figures (26-28). Datasheet input -40 to
       -72 V at 60 A; maximum system consumption 1220 W under 400G MSA optics and 1524 W
       with OpenZR+, both below the AC build's figures.
+    attrs:
+      power:
+        power-max-w: '1524'
     bays:
       psu-0: ufispace/psu-202-dc@2
       psu-1: ufispace/psu-202-dc@2
