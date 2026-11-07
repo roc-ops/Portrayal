@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: qfx5230-jnp-3000w-dc-afo
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -42,6 +42,30 @@ provenance:
     off is no DC power to any supply; a 1 Hz green blink is DC input present with only the 12 V standby on; amber
     is a DC cord unplugged while a second supply still has input, or a critical event; a 2 Hz green blink is
     firmware upload.
+  seats: >-
+    A DECLARED STAND-IN. No held figure shows the studs, which pair is which, or any mark printed at the terminal
+    block. Each polarity is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in. (15.875) centres that one two-hole
+    lug lands across, drawn side by side inside the footprint of the terminal block cover (x 42.2 to 66.6, y 3.7 to
+    36.1), one pair above the other, centred on the cover. Every position is estimated. THE LUG'S PITCH IS PRINTED
+    AND THE STUDS' IS NOT: the QFX5700 Hardware Guide, "QFX5700 DC Power Lugs" (printed page 49), says the cable
+    lugs "are dual hole and sized to fit M6 at 15.86-mm (0.625-in.) center line", and its installation steps name
+    "the four terminal studs", two for each lug. 15.86 mm is the registered 5/8 in. pitch. The QFX5230-64CD
+    Hardware Guide, Figure 39 (printed page 99), draws two lugs, each over a pair of nuts, and prints no spacing. The
+    lug is read from the QFX5700 guide for the same part number; no document held gives the studs' size or height:
+    the studs are common/terminal-screw-34@1 inside the pole, which claims no thread. Both guides draw the block
+    under a ridged cover, so the studs stand where the cover is drawn and not under any figure of them.
+  poles: >-
+    datasheet - QFX5230-64CD Hardware Guide, installation step 7 (printed page 99): "two terminals labeled -48V/-60V
+    (negative) and RTN (positive)". The roles are the text's: `batt` for -48V/-60V (spec/schemas/dc.yaml writes `batt`
+    as negative (battery)) and `rtn` for RTN. NO FIGURE PRINTS A MARK AT THE BLOCK AND THE TEXT GIVES NO ORDER, so
+    which pair is above the other is not read from any document: RTN is drawn upper and -48V/-60V lower, an
+    estimate. One input, so one port, `input`, of two poles.
+  voltage: >-
+    NOT STATED AS ONE FIGURE. Table 18 gives -40 to -72 VDC with a rated range of -48 to -60 VDC. A nominal that is a
+    range is not one figure, so the port states none; `attrs` keeps the range as it already carried it.
+  rating: >-
+    NOT STATED. Table 21 sets the input current selector to 80 A and gives 90 A as the maximum input current, two
+    figures for one supply, and a port's `rating-a` is one figure, so the port states none.
   airflow: >-
     datasheet - guide Tables 3, 6 and 16: JNP-3000W-DC-AFO is port-to-FRU, front-to-back, and carries a Juniper
     gold handle.
@@ -80,3 +104,14 @@ relief:
     color: '#e8731f'
     confidence: estimated
     source: photo of the AC sibling - the handle bar stands proud of the fan guard; its projection is not measured
+parts:
+  - {ref: juniper/mx240-dc-pole@1, id: pole-rtn, at: [44.7625, 11.3]}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-batt, at: [44.7625, 25.1]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+      source: {poles: poles}
