@@ -10,6 +10,6 @@
 - 4 devices are authored as a `layout.yaml`, with `device.yaml` generated
   from it: Celestica ES1010, Celestica DS4100, Opengear CM8008, Opengear CM8008-C.
   Each parsed `device.yaml` is the same as before, its
-  lock does not move, and its compiled faces are byte-identical. A block that
-  did not reproduce stays longhand beside the generated ones.
+  lock does not move, and its compiled faces are byte-identical. The cutouts
+  and silkscreen beside the generated ports stay longhand.
   The change closes no conformance rows.
