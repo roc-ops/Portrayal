@@ -305,6 +305,7 @@ def test_exports_carry_one_device_type_per_orderable_sku(name):
         assert doc["model"] == s["sku"]
 
 
+@pytest.mark.heavy
 def test_the_lock_files_agree_with_the_devices():
     mine = [f for f in devicelock.check(LIBRARY) if f[0] in {f"cisco/{n}" for n in NAMES}]
     assert mine == []
