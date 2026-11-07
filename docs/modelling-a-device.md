@@ -558,6 +558,14 @@ reports openings nothing fills, checks that no two overlap, that each matches
 the standard its occupant conforms to, and that no legend is printed on one. It
 says nothing about a panel that declares no cutouts at all.
 
+An opening that holds several replaceable units is a frame, not a bay. A
+power shelf, a fan band or a card cage is one cutout with a bay of its own
+for each unit inside it. L39 counts the opening as filled when its bays cover
+half of its area, so the cutout needs no placement of its own id. Do not fold
+the bays into one bay named after the opening; each bay id is published. Make
+a bay of the opening itself only where the opening takes one unit and no bay
+stands in it.
+
 **Gate 2.** Render and overlay again. Every hole lines up with the reference.
 Count them. This is the last cheap moment to fix a pitch error; after
 components are placed, moving 48 holes means moving 48 parts and 48 labels.
