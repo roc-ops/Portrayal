@@ -1,0 +1,355 @@
+format: 1
+kind: device
+name: lm83x
+version: 0.1.0
+maturity: draft
+manufacturer: Lantronix
+model: LM83X
+description: >-
+  Lantronix LM83X advanced serial console server, a 1U chassis. The base unit has eight RJ45 serial ports and two
+  10/100/1000 Ethernet ports. It also has an RJ45 console port, one SFP port, a USB-A port, a USB-C port and two SMA
+  antenna connectors. Three expansion bays take an 8-port serial module, an 8-port Ethernet module or an LCD module. The rear
+  has two AC inlets. This model draws the AC unit without cards in the default build.
+profile: networking
+provenance:
+  size:
+    confidence: datasheet
+    note: >-
+      Lantronix LM83X product brief (MPB-00156 Rev B), System Specifications, Dimensions and Weight: "43.2 mm (1.7
+      in.) x 445 mm (17.5 in.) x 264 mm (10.4 in.); 1 rack unit (1RU)". The width of 445 mm is narrower than the 482.6
+      mm rack face, and the front illustration shows ears outside the body, so it is taken as the body between the ears.
+      The 43.7 mm height printed for the expansion modules in the option card brief is 0.5 mm more and is not used for
+      the chassis.
+  layout-source:
+    confidence: drawing
+    note: >-
+      Every position on the front is read off the maker's front illustration (5993 x 675 px). Its outline with the ears
+      is 5680 px for 482.6 mm, which gives 11.77 px/mm across, and its body is 5238 px for 445 mm, which agrees. Its face
+      is 513 px for 43.2 mm, which gives 11.88 px/mm down, 0.9 per cent from the across scale, so the figure is
+      orthographic. Positions are read to about 0.5 mm. The straight photograph of the front agrees on the order and the
+      count of every part. The illustration and the photograph show different modules in the second and third bays, so the
+      bays are read from the illustration for geometry and the two builds are configurations.
+  bays:
+    confidence: drawing
+    note: >-
+      The three expansion bays are 92.9 mm wide each, the module face width in the option card brief. Three of them take
+      278.7 mm of the 445 mm body, so the bays start 166.3 mm from the left edge. The illustration puts the first
+      divider at 165.8 mm, which agrees within the reading.
+  serial:
+    confidence: drawing
+    note: >-
+      LM83X product brief: "Supports up to 104 devices via serial (RS-232)", base 8 serial ports. The illustration shows
+      eight RJ45 jacks in two rows of four numbered 1 to 4 over 5 to 8 under blue bars. The jack centres are 16.0 mm apart
+      across and 11.7 mm apart down, and each is placed as a cell of the 12.7 by 11.0 ganged jack part. The upper row is
+      turned 180 degrees because its latch notch and lamp tabs are at the top. The maker's jacks read 14.2 by 10.1 mm
+      inside their frames, wider than the part.
+  network:
+    confidence: datasheet
+    note: >-
+      LM83X product brief: "Two 10/100/1000 BaseT Ethernet interfaces (with failover support) and one RS-232 console
+      port; One 1-Gbps SFP port". The illustration shows two stacked jacks printed E1 and E2 under yellow bars, and the
+      SFP cage printed E3.
+  console:
+    confidence: datasheet
+    note: >-
+      LM83X product brief: "one RS-232 console port". The RJ45 jack at the top of the stack printed CON is the console
+      jack, with a USB-A port and a USB-C port stacked under it. The brief says "One USB-A port, one USB-C port" and does
+      not say what either is for.
+  antenna:
+    confidence: drawing
+    note: >-
+      The illustration and the photographs show two SMA connectors printed AUX and MAIN on a rounded plate at the left
+      end, with a screw at two of its corners. No document says what the plate is. The option card brief says the
+      cellular option cards come "w/ external antenna", so the plate may be the face of the option slot. The connectors
+      are drawn because the figures show them.
+  leds:
+    confidence: estimated
+    note: >-
+      The illustration prints four small lamps under the left end, each with a mark: a power mark, a link mark, a warning
+      mark and a pulse mark. No document says what any lamp shows, so the lamps are drawn and claim no state. The round
+      button above them and the pin hole beside the model name are not named by any document and are not drawn as parts.
+  rear:
+    confidence: photo-measured
+    note: >-
+      The straight photograph of the rear (6000 x 4000 px) shows two black AC inlets at the left, a label, and two rows of
+      slotted vents, eight above and three below. The scale across is 4.06 px/mm taken from the 445 mm body, and down
+      about 4.2 px/mm from the 43.2 mm face. Positions are read to about 1 mm. The inlets are drawn as the standard C14
+      part, 28.0 by 20.0 mm, and the photograph shows a black housing about 32 by 33 mm, so the housing is not drawn as it
+      is.
+  power:
+    confidence: datasheet
+    note: >-
+      LM83X product brief: "AC model: Dual input, (100-240 VAC) 50/60 Hz, 60 W" and "DC model: Dual input, -20 to -72
+      VDC". The brief does not say whether 60 W is the draw or the rating, so it is filed as the maximum. The rear label
+      in the photograph prints a 1.3 A input. The DC model is not drawn: no held document shows its rear.
+  ears:
+    confidence: estimated
+    note: >-
+      The illustration shows a flat ear with two slots at each end of the face. No document gives an ear position or says
+      how far the ears sit behind the face, so no position is written. The ears are not drawn.
+attrs:
+  physical: {weight-kg: 3.72}
+  power:
+    input: ac
+    power-max-w: 60
+    power-input: dual input, 100 to 240 VAC, 50/60 Hz
+  environmental:
+    operating-temp-c: 0 to 45
+    storage-temp-c: -30 to 60
+    humidity-pct: 20 to 80 non-condensing in operation
+  features:
+    optics-sfp: one 1-Gbps SFP port; no held document names an optic type or reach
+  platform:
+    storage: 256 GB NVMe, TCG Opal 2.0, 256-bit AES encryption
+  compliance:
+    emissions: FCC class A subpart B
+    safety: TUV
+    rohs: RoHS compliant
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 445.0
+  height: 43.2
+  depth: 264.0
+  ru: 1
+  color: '#a6adb3'
+  power: ac
+gaps:
+- what: expansion-slot-blank
+  scope: [front]
+  reason: vendor-silent
+  wanted: a photograph of the front with a bay empty or covered.
+  note: >-
+    No held document shows a bay without a module, or says what covers it. The default build leaves the three bays empty
+    and the opening shows.
+- what: expansion-modules-16-and-32-port
+  scope: [front]
+  reason: needs-photo
+  wanted: a photograph or a drawing of the 83X-16SA and 83X-32SA faces.
+  note: >-
+    The option card brief gives the two serial modules a size and says the 16-port module comes "w/2 high-density
+    cables". It shows neither face, so neither module is modelled.
+- what: option-slot
+  scope: [front]
+  reason: needs-drawing
+  wanted: a drawing of the option slot and of the face of each option card.
+  note: >-
+    The option card brief gives each option card a size and no face. The figures show a plate with two SMA connectors at
+    the left end, and no held document says it is the option slot. The option cards are not modelled and no bay is
+    declared for the slot.
+- what: bay-number-legends
+  scope: [front]
+  reason: vendor-silent
+  wanted: the maker's statement of where the numbers 2, 3 and 4 are printed.
+  note: >-
+    The figures show a circled number under the left screw of each module. The expansion modules brief says a module
+    is sold installed per slot, so the numbers may be printed on the module. They are not drawn.
+- what: indicator-led
+  scope: [front]
+  reason: vendor-silent
+  wanted: a table of what the four lamps and the round button show and do.
+  note: >-
+    No held LM83X document describes a lamp or a button. The lamps are drawn with no state.
+- what: ear-positions
+  scope: [front]
+  reason: needs-drawing
+  wanted: a drawing of the ear and the mounting positions.
+  note: >-
+    The illustration shows an ear with two slots at each end. No held document gives an ear position, a depth or a rail
+    kit.
+- what: dc-model
+  scope: [rear]
+  reason: needs-photo
+  wanted: a photograph of the rear of the DC model.
+  note: >-
+    The product brief lists 83X-8S-000-NDA with dual DC input of -20 to -72 VDC. No held document shows its inlet, so
+    only the AC rear is drawn.
+- what: envelope-faces-undetailed
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  wanted: photographs of the lid, the underside and both flanks.
+  note: >-
+    The four faces draw the envelope only. The angled photograph shows a plain lid and a flank with seams and screws,
+    at a size that gives no position.
+groups:
+  serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: eight RJ45 RS-232 serial ports of the base unit.
+  network:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the two RJ45 10/100/1000 Ethernet ports E1 and E2.
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the 1-Gbps SFP port, printed E3.
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console}
+    description: the RJ45 RS-232 console port.
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the USB-A port and the USB-C port stacked under the console jack, which the brief lists together
+    description: the USB-A port and the USB-C port.
+  antenna:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: coax-sma}
+    description: the two SMA connectors printed AUX and MAIN.
+  expansion-bays:
+    term: Bay
+    role: traffic
+    index-origin: 1
+    description: the three expansion bays. The illustration prints their numbers 2, 3 and 4.
+  status-leds: {term: LED, role: indicator, index-origin: 1}
+  power:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the two AC inlets.
+views:
+  front:
+    size: {w: 445.0, h: 43.2}
+    panel:
+      decor:
+      - {id: faceplate, at: [0.0, 0.0], size: [445.0, 43.2], fill: '#2b2e33', kind: bezel}
+      - {id: option-plate, at: [1.9, 1.8], size: [50.2, 15.9], fill: '#25282c', kind: plate}
+      - {id: option-screw-1, at: [48.4, 3.7], size: [2.8, 2.8], fill: '#16181b', shape: circle, kind: case-screw}
+      - {id: option-screw-2, at: [3.0, 16.8], size: [2.8, 2.8], fill: '#16181b', shape: circle, kind: case-screw}
+      - {id: button, at: [11.55, 29.3], size: [4.6, 4.6], fill: '#4a4d52', shape: circle, kind: push-button}
+      - {id: bar-e1, at: [52.9, 5.9], size: [17.3, 0.5], fill: '#f0d41c', kind: legend-bar}
+      - {id: bar-e2, at: [52.9, 36.2], size: [17.3, 0.5], fill: '#f0d41c', kind: legend-bar}
+      - {id: bar-e3, at: [21.4, 36.2], size: [15.1, 0.5], fill: '#f0d41c', kind: legend-bar}
+      - {id: bar-con-top, at: [73.1, 2.6], size: [19.2, 0.5], fill: '#29a8e0', kind: legend-bar}
+      - {id: bar-con-bottom, at: [73.1, 36.6], size: [19.2, 0.5], fill: '#29a8e0', kind: legend-bar}
+      - {id: bar-serial-top, at: [95.3, 7.6], size: [64.6, 0.5], fill: '#29a8e0', kind: legend-bar}
+      - {id: bar-serial-bottom, at: [95.3, 36.6], size: [64.6, 0.5], fill: '#29a8e0', kind: legend-bar}
+    silkscreen:
+    - {at: [15.4, 16.4], text: AUX, font-size: 2.2, anchor: middle, fill: '#e8ecef', for: antenna-aux}
+    - {at: [40.9, 16.4], text: MAIN, font-size: 2.2, anchor: middle, fill: '#e8ecef', for: antenna-main}
+    - {at: [44.4, 27.3], text: LM83X, font-size: 2.0, anchor: middle, fill: '#e8ecef', for: chassis}
+    - {at: [62.0, 4.3], text: E1, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: net-1}
+    - {at: [62.0, 41.0], text: E2, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: net-2}
+    - {at: [29.1, 41.0], text: E3, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: port-3}
+    - {at: [82.9, 41.0], text: CON, font-size: 2.4, anchor: middle, fill: '#29a8e0', for: console}
+    - {at: [103.2, 5.3], text: '1', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-1}
+    - {at: [119.2, 5.3], text: '2', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-2}
+    - {at: [135.2, 5.3], text: '3', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-3}
+    - {at: [151.2, 5.3], text: '4', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-4}
+    - {at: [103.2, 41.0], text: '5', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-5}
+    - {at: [119.2, 41.0], text: '6', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-6}
+    - {at: [135.2, 41.0], text: '7', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-7}
+    - {at: [151.2, 41.0], text: '8', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-8}
+    components:
+      bays:
+      - {id: bay-2, at: [166.3, 0.0], size: {w: 92.9, h: 43.2}, accepts: [lantronix/lm83x-8sa@1, lantronix/lm83x-8ea@1, lantronix/lm83x-lcda@1], group: expansion-bays, rel-pos: 1}
+      - {id: bay-3, at: [259.2, 0.0], size: {w: 92.9, h: 43.2}, accepts: [lantronix/lm83x-8sa@1, lantronix/lm83x-8ea@1, lantronix/lm83x-lcda@1], group: expansion-bays, rel-pos: 2}
+      - {id: bay-4, at: [352.1, 0.0], size: {w: 92.9, h: 43.2}, accepts: [lantronix/lm83x-8sa@1, lantronix/lm83x-8ea@1, lantronix/lm83x-lcda@1], group: expansion-bays, rel-pos: 3}
+      placements:
+      - {ref: common/sma-jack@1, id: antenna-aux, at: [10.65, 4.05], group: antenna, rel-pos: 1}
+      - {ref: common/sma-jack@1, id: antenna-main, at: [36.15, 4.05], group: antenna, rel-pos: 2}
+      - {ref: std/sfp@1, id: port-3, at: [21.85, 25.35], group: sfp, rel-pos: 1}
+      - {ref: common/rj45-ganged-eth@1, id: net-1, at: [55.65, 9.9], rotate: 180, group: network, rel-pos: 1, attrs: {speed: 1g}}
+      - {ref: common/rj45-ganged-eth@1, id: net-2, at: [55.65, 24.1], group: network, rel-pos: 2, attrs: {speed: 1g}}
+      - {ref: common/rj45-ganged-lamped@1, id: console, at: [76.55, 5.4], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial}}
+      - {ref: std/usb-a@1, id: usb-a, at: [76.9, 21.75], group: usb, rel-pos: 1}
+      - {ref: std/usb-c@1, id: usb-c, at: [78.73, 32.02], group: usb, rel-pos: 2}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-1, at: [96.85, 11.0], rotate: 180, group: serial, rel-pos: 1, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-2, at: [112.85, 11.0], rotate: 180, group: serial, rel-pos: 2, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-3, at: [128.85, 11.0], rotate: 180, group: serial, rel-pos: 3, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-4, at: [144.85, 11.0], rotate: 180, group: serial, rel-pos: 4, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-5, at: [96.85, 22.7], group: serial, rel-pos: 5, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-6, at: [112.85, 22.7], group: serial, rel-pos: 6, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-7, at: [128.85, 22.7], group: serial, rel-pos: 7, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-8, at: [144.85, 22.7], group: serial, rel-pos: 8, attrs: {media: rj45-serial}}
+      - {ref: common/led-dot@1, id: led-power, at: [8.8, 33.7], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-link, at: [17.7, 33.7], for: chassis, group: status-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-alert, at: [38.6, 33.7], for: chassis, group: status-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-pulse, at: [46.5, 33.7], for: chassis, group: status-leds, rel-pos: 4}
+  rear:
+    size: {w: 445.0, h: 43.2}
+    panel:
+      decor:
+      - {id: rear-plate, at: [0.0, 0.0], size: [445.0, 43.2], fill: '#aab0b5', kind: bezel}
+      - {id: vent-1, at: [77.6, 11.2], size: [37.4, 8.6], fill: '#7e858b', kind: vent-slot, vent: 1.0}
+      - {id: vent-2, at: [123.8, 11.2], size: [37.4, 8.6], fill: '#7e858b', kind: vent-slot, vent: 1.0}
+      - {id: vent-3, at: [170.0, 11.2], size: [37.4, 8.6], fill: '#7e858b', kind: vent-slot, vent: 1.0}
+      - {id: vent-4, at: [216.2, 11.2], size: [37.4, 8.6], fill: '#7e858b', kind: vent-slot, vent: 1.0}
+      - {id: vent-5, at: [262.4, 11.2], size: [37.4, 8.6], fill: '#7e858b', kind: vent-slot, vent: 1.0}
+      - {id: vent-6, at: [308.6, 11.2], size: [37.4, 8.6], fill: '#7e858b', kind: vent-slot, vent: 1.0}
+      - {id: vent-7, at: [354.8, 11.2], size: [37.4, 8.6], fill: '#7e858b', kind: vent-slot, vent: 1.0}
+      - {id: vent-8, at: [401.0, 11.2], size: [37.4, 8.6], fill: '#7e858b', kind: vent-slot, vent: 1.0}
+      - {id: vent-9, at: [308.6, 23.3], size: [37.4, 8.8], fill: '#7e858b', kind: vent-slot, vent: 1.0}
+      - {id: vent-10, at: [354.8, 23.3], size: [37.4, 8.8], fill: '#7e858b', kind: vent-slot, vent: 1.0}
+      - {id: vent-11, at: [401.0, 23.3], size: [37.4, 8.8], fill: '#7e858b', kind: vent-slot, vent: 1.0}
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: inlet-1, at: [3.4, 10.5], group: power, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: inlet-2, at: [43.4, 10.5], group: power, rel-pos: 2}
+  top:
+    size: {w: 445.0, h: 264.0}
+    panel:
+      decor:
+      - {id: top-envelope, at: [0.0, 0.0], size: [445.0, 264.0], fill: '#a6adb3', kind: envelope}
+  bottom:
+    size: {w: 445.0, h: 264.0}
+    panel:
+      decor:
+      - {id: bottom-envelope, at: [0.0, 0.0], size: [445.0, 264.0], fill: '#a6adb3', kind: envelope}
+  left:
+    size: {w: 264.0, h: 43.2}
+    panel:
+      decor:
+      - {id: left-envelope, at: [0.0, 0.0], size: [264.0, 43.2], fill: '#a6adb3', kind: envelope}
+  right:
+    size: {w: 264.0, h: 43.2}
+    panel:
+      decor:
+      - {id: right-envelope, at: [0.0, 0.0], size: [264.0, 43.2], fill: '#a6adb3', kind: envelope}
+configurations:
+  ac:
+    kind: orderable
+    default: true
+    description: >-
+      The AC chassis with the three expansion bays empty. This reads the 000 in the part number as no cards, which the
+      brief does not say.
+    part-numbers:
+      83X-8S-000-NAA: {}
+    bays:
+      bay-2: ''
+      bay-3: ''
+      bay-4: ''
+  illustrated:
+    kind: example
+    description: >-
+      The build in the maker's front illustration. It seats an 8-port Ethernet module in the first bay, an 8-port serial
+      module in the second and the LCD module in the third. No part number is given for it.
+    bays:
+      bay-2: lantronix/lm83x-8ea@1
+      bay-3: lantronix/lm83x-8sa@1
+      bay-4: lantronix/lm83x-lcda@1
+  photographed:
+    kind: example
+    description: >-
+      The build in the maker's photographs. It seats an 8-port serial module in the first bay, an 8-port Ethernet module
+      in the second and the LCD module in the third. No part number is given for it.
+    bays:
+      bay-2: lantronix/lm83x-8sa@1
+      bay-3: lantronix/lm83x-8ea@1
+      bay-4: lantronix/lm83x-lcda@1
+references:
+- title: >-
+    LM83X Advanced Serial Console Server product brief, MPB-00156 Rev B (2024)
+- title: >-
+    LM-Series Expansion Modules and Option Cards product brief (2023)
