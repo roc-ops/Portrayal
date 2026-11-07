@@ -607,7 +607,8 @@ def test_the_four_crossings_the_seat_gave_are_gone(census):
     # and both studs of the Nokia SR-12's pair, 15.9 away from each other
     # and the two screws of the Cisco ASR 9902's grounding pad, 15.9 away from each other
     # and the same ground screw of each of the Cisco C9300-24S and C9300-48S
-    assert len(crossed) == 77 and not [k for k in crossed if census[k]["hard"]]
+    # and the earth stud of each of the Digi Connect EZ 16 and 32
+    assert len(crossed) == 79 and not [k for k in crossed if census[k]["hard"]]
 
 
 @pytest.mark.heavy
