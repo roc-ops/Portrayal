@@ -171,6 +171,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "scte-91",
                          # the G-type test points and the stereo-jack RS-232 port of the CH3000 modules
                          "g-type", "g-type-female", "stereo-jack",
+                         # the input of the Ubiquiti USP-RPS redundant power system
+                         "ubiquiti-usp-rps",
                          # the I/O module bay of the Lantronix SLC 8000: a device bay states it
                          # as its `interface`, so no part presents it
                          "slc-io-module"}
