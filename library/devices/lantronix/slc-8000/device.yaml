@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: slc-8000
-version: 0.2.0
+version: 0.3.0
 maturity: draft
 manufacturer: Lantronix
 model: SLC 8000
@@ -9,7 +9,7 @@ description: >-
   Lantronix SLC 8000 advanced modular console manager, a 1U chassis that connects up to 48 RJ45 serial or USB
   console ports to a network. The front has an LCD, a keypad, a memory card slot, two USB ports, an RJ45 console
   port and a modem jack. The rear has two network ports, three bays for I/O modules, and an AC power inlet. This
-  model is the base chassis without I/O modules; the three bays are not modelled.
+  model is the base chassis without I/O modules; the three bays are declared and no module is modelled.
 profile: networking
 provenance:
   size:
@@ -60,7 +60,8 @@ provenance:
       User Guide, Figure 2-2 and Quick Start Guide section 1: dual network ports at the left, three I/O module bays
       named Bay 1, Bay 2 and Bay 3, and the power inlet at the right, with a rocker switch. "Bay 1 is the slot next
       to the Ethernet ports and Bay 3 is the slot beside the power supply module." The bays read about 112 mm
-      wide in Figure 2-2. The three bay windows are drawn as panel decor; no bay is modelled.
+      wide in Figure 2-2. The three bays are declared at those positions, each stating the class of I/O module it
+      takes; their positions and size are read off the photograph and are estimates. No module is modelled.
   network:
     confidence: datasheet
     note: >-
@@ -127,9 +128,12 @@ gaps:
   reason: needs-drawing
   wanted: a dimensioned drawing of an I/O module, and a straight-on photograph of the rear.
   note: >-
-    The rear has three I/O module bays; no document gives a module a size, so no bay or module is modelled. The three
-    dark windows are drawn as panel decor. The I/O Module Install Guide and User Guide Table 3-8 give the module types: a
-    16-port RJ45 module, a 16-port USB module, a 16-port Ethernet switch module and an 8-port RJ45 module for bay 1.
+    The rear has three I/O module bays; no document gives a module a size. The three bays are declared at the
+    positions and size of the windows read off Figure 2-2, each stating the class of module it takes, and no module
+    is modelled or seated. The I/O Module Install Guide and User Guide Table 3-8 give the module types: a 16-port RJ45
+    module, a 16-port USB module, a 16-port Ethernet switch module and an 8-port RJ45 module for bay 1. Their rules are
+    words only and no tool checks them: the 8-port module goes in bay 1 only, the switch module in bay 2 or 3, never bay 1,
+    and the bays fill in order from bay 1.
 - what: network-sfp-and-dc-variants
   scope: [rear]
   reason: needs-photo
@@ -171,6 +175,7 @@ groups:
     role: management
     index-origin: 1
     description: the memory card slot, which takes an SD or SDHC card
+  io-bays: {term: Bay, role: traffic, index-origin: 1}
   displays: {term: Display, role: indicator, index-origin: 1}
   furniture: {term: Part, role: furniture, index-origin: 1}
 views:
@@ -199,13 +204,14 @@ views:
     panel:
       decor:
       - {id: rear-plate, at: [0.0, 0.0], size: [438.15, 44.45], fill: '#4b5a68', kind: bezel}
-      - {id: io-window-1, at: [22.5, 0.5], size: [112.5, 43.4], fill: '#141517', kind: window}
-      - {id: io-window-2, at: [137.0, 0.5], size: [112.5, 43.4], fill: '#141517', kind: window}
-      - {id: io-window-3, at: [251.5, 0.5], size: [112.5, 43.4], fill: '#141517', kind: window}
     silkscreen:
     - {at: [11.7, 40.6], text: NETWORK, font-size: 1.8, anchor: middle, fill: '#e8ecef', for: [net-1, net-2]}
     - {at: [11.7, 43.4], text: 10/100/1000, font-size: 1.6, anchor: middle, fill: '#e8ecef', for: [net-1, net-2]}
     components:
+      bays:
+      - {id: io-bay-1, at: [22.5, 0.5], size: {w: 112.5, h: 43.4}, interface: slc-io-module, group: io-bays, rel-pos: 1}
+      - {id: io-bay-2, at: [137.0, 0.5], size: {w: 112.5, h: 43.4}, interface: slc-io-module, group: io-bays, rel-pos: 2}
+      - {id: io-bay-3, at: [251.5, 0.5], size: {w: 112.5, h: 43.4}, interface: slc-io-module, group: io-bays, rel-pos: 3}
       placements:
       - {ref: common/rj45-eth@1, id: net-1, at: [3.8, 3.0], group: network, rel-pos: 1, attrs: {speed: 1g}}
       - {ref: common/rj45-eth@1, id: net-2, at: [3.8, 17.5], group: network, rel-pos: 2, attrs: {speed: 1g}}
@@ -244,6 +250,10 @@ configurations:
     source: >-
       derived - the data sheet lists no part numbers, and the maker's product page lists chassis with their I/O
       modules fitted, so no part number names this build.
+    bays:
+      io-bay-1: ''
+      io-bay-2: ''
+      io-bay-3: ''
 references:
 - title: >-
     SLC 8000 Advanced Console Manager User Guide, 900-704-RBD-SLC-UG (July 2025)
