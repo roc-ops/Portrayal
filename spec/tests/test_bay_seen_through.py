@@ -58,6 +58,7 @@ def test_some_device_says_what_its_empty_bay_shows():
     assert {"fibrain/xpu", "fs/fhd-1ufmt-n"} <= carrying
 
 
+@pytest.mark.heavy
 def test_each_mark_is_drawn_in_its_own_opening_and_lies_in_it():
     assert _devices()
     for slug, vname, doc, view, b in _devices():
@@ -72,6 +73,7 @@ def test_each_mark_is_drawn_in_its_own_opening_and_lies_in_it():
             assert it.get("source"), f"{slug} {b['id']} {it.get('id')}: no source"
 
 
+@pytest.mark.heavy
 def test_an_empty_bay_draws_its_mark_over_the_hole_and_under_a_part():
     assert _devices()
     for slug, vname, doc, view, b in _devices():
@@ -92,6 +94,7 @@ def test_an_empty_bay_draws_its_mark_over_the_hole_and_under_a_part():
         assert n_items == len(b["seen-through"]), (slug, b["id"])
 
 
+@pytest.mark.heavy
 def test_a_configuration_that_seats_the_bay_hides_the_mark_and_only_that_bay():
     assert _devices()
     for slug, vname, doc, view, b in _devices():
@@ -103,6 +106,7 @@ def test_a_configuration_that_seats_the_bay_hides_the_mark_and_only_that_bay():
             assert _seen(root, o["id"])[0].get("display") is None, (slug, o["id"])
 
 
+@pytest.mark.heavy
 def test_the_kit_hides_and_shows_the_same_mark_the_build_writes():
     """The build's own bay drawing goes to kit/swap.js: seating hides the mark,
     emptying shows it again, with the attribute the build wrote."""

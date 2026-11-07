@@ -75,7 +75,8 @@ const root = {
     const m = /^\[data-path="(.*)"\]$/.exec(sel);
     if (!m) throw new Error('unexpected selector ' + sel);
     const n = nodes().find(x => x.getAttribute('data-path') === m[1]);
-    return n ? {...n, querySelector: () => null, appendChild: () => {}} : null;
+    return n ? {...n, querySelector: () => null, querySelectorAll: () => [],
+                appendChild: () => {}} : null;
   },
 };
 
