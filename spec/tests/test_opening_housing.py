@@ -158,7 +158,7 @@ def test_the_bays_of_each_half_are_plates_on_its_floor():
     assert b["center"][0] - a["center"][0] == pytest.approx(100.0)
 
 
-# --- what a page and an agent are told ------------------------------------------------------
+# --- what a page and a tool are told ------------------------------------------------------
 
 @needs_node
 def test_describe_lists_the_halves_and_each_bays_half():
@@ -189,7 +189,7 @@ def test_a_housing_that_is_not_open_is_closed():
 
 def test_a_device_with_no_halves_gets_no_open_state():
     """No halves: no plan, no description, no view to switch to, and the
-    viewer never builds a second body (the guard is in the next test)."""
+    viewer never builds a second body (the check is in the next test)."""
     if shutil.which("node") is None:
         pytest.skip("node not installed")
     out = run([{"name": "none", "halves": None, "size": SIZE}], metas=[CLOSED_BOX])

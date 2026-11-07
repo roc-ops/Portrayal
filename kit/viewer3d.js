@@ -99,7 +99,7 @@ export function createViewer(container, opts = {}) {
   // device without its ears, and so does this scene by default. `setEars`
   // turns them on and off without a rebuild.
   let EARS = !!opts.ears;
-  // A BOX THAT OPENS (housing.js), closed unless the host asks. Only a device
+  // A BOX THAT OPENS (housing.js), closed unless the caller asks. Only a device
   // that states `chassis.halves` has an open state; for every other device,
   // and while this is 'closed', the scene is the one it always was.
   let HOUSING = normalizeHousing(opts.housing);
@@ -954,7 +954,10 @@ export function createViewer(container, opts = {}) {
   }
   const setEars = on => serialise(async () => {
     EARS = !!on;
-    return box ? buildEars() : 0;
+    if (!box) return 0;
+    const n = buildEars();
+    applyHousing();      // new ears are visible; an open box hides them
+    return n;
   });
 
   // THE BOX OPEN (housing.js housingPlan): the closed body, its relief and its
@@ -1866,8 +1869,8 @@ export function createViewer(container, opts = {}) {
     // the generic rack ears (#909): on or off, and the plan drawn (null when
     // they are off or the device gets none - see relief.js genericEars)
     setEars, ears: () => (earPlan ? JSON.parse(JSON.stringify(earPlan)) : null),
-    // a box that opens (housing.js): the state the scene is in, the asked one,
-    // and the halves with each bay's half (null for a box that does not open)
+    // a box that opens (housing.js): set the state, read the state the scene
+    // is in, and the halves with each bay's half (null for a box that does not open)
     setHousing, housing: () => (housingGroup ? 'open' : 'closed'), halves: () => describeHalves(devIndex),
     // what a host needs to rebuild the chrome this module gave up
     frus, toggleFru, download, exportData, exportName,

@@ -6,7 +6,7 @@
 // numbers. Everything is in the box's own frame, the one viewer3d.js builds in:
 // x to the right, y up, z out of the front, the origin at the centre of the
 // closed box. A device that states no halves gets `null` from every function
-// here, and a host then does what it always did.
+// here, and a page then does what it always did.
 
 export const HOUSING = ['closed', 'open'];
 
@@ -32,7 +32,7 @@ const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 const scale = (a, k) => [a[0] * k, a[1] * k, a[2] * k];
 const absv = a => a.map(Math.abs);
 
-// 'open' or 'closed'; anything a host sends that is not 'open' is closed
+// 'open' or 'closed'; anything a caller sends that is not 'open' is closed
 export const normalizeHousing = v => (String(v).toLowerCase() === 'open' ? 'open' : 'closed');
 
 // `chassis.halves` as configs.json carries it, or null
@@ -71,7 +71,7 @@ export function viewFor(meta, housing, current) {
   return (meta.views || []).find(v => v !== open) || current;
 }
 
-// What an agent or a panel is told: the halves with their figures and the
+// What a page or a tool is told: the halves with their figures and the
 // bays in each. null for a box that does not open.
 export function describeHalves(meta) {
   const h = halvesOf(meta);
