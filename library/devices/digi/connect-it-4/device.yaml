@@ -1,0 +1,315 @@
+format: 1
+kind: device
+name: connect-it-4
+version: 1.0.0
+maturity: draft
+manufacturer: Digi
+model: Connect IT 4
+portfolio: {line: Console Servers, family: Connect IT, series: Connect IT 4}
+description: >-
+  Digi Connect IT 4 is a desktop serial server. It has four RJ-45 RS-232 serial ports and two RJ-45 10/100
+  Ethernet ports, printed WAN and LAN. The front is a white plate with a row of status lamps: power, online
+  and backup, LTE/3G, five signal strength lamps and two SIM lamps. The rear carries the DC power jack,
+  an erase button, the WAN and LAN jacks, the four serial jacks and a SIM select button.
+profile: networking
+provenance:
+  sources:
+    confidence: photo-measured
+    note: >-
+      Digi Connect IT 4 product page (digi.com, read 2026-11-05): ports, lamps, power, size and weight.
+      The Connect IT 4 front photograph and rear photograph (800 px wide each, straight on): every position,
+      legend and colour below. No data sheet or user guide is held; the data sheet is behind a form on
+      the maker's site and the user guide is a link to a document not held.
+  chassis:
+    confidence: datasheet
+    note: >-
+      The product page prints "228 mm x 127 mm x 25 mm (9.0 in x 5.0 in x 1.0 in)" labelled L x W x H.
+      Read with the photographs, 228 is the width of the faces, 127 the depth and 25 the height.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      The front photograph spans 713 px for the 228 mm width (3.13 px/mm) and the rear 727 px (3.19 px/mm);
+      the two differ by 2 per cent, so each face is read at its own scale across. Down, the photographs
+      include the top edge of the box, so every y is a fraction of the face's own height (25 mm) read
+      off the plate's top and bottom edges. Every position is good to about 1.5 mm.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      From the front photograph: the lamps on one centreline 12.5 from the top, power at 77.1, online
+      at 86.7, backup at 96.9, LTE/3G at 162.4, the five signal lamps from 172.3 on a 5.0 pitch, and the
+      two SIM lamps at 202.3 and 207.2. The legends sit 6.5 below the lamps, the SIM numerals above them.
+      A thin vertical rule stands at 70.7 and another at 213.6.
+  rear-layout:
+    confidence: photo-measured
+    note: >-
+      From the rear photograph: the power jack centred at 12.2, the erase button at 30.7, the WAN jack
+      centred at 49.9, the LAN jack at 72.5, four serial jacks from 96.9 on a 16.3 pitch, and the SIM
+      select button at 162.4. The jacks are on one centreline 10.6 from the top. The serial jacks sit
+      in one metal frame; each opening is drawn as the library's ganged RJ-45 cell, 12.7 wide, and the
+      frame itself is not drawn. The erase and SIM select buttons are small round marks in the photograph,
+      drawn as the library's recessed pinhole button; the page does not describe either.
+  ports:
+    confidence: datasheet
+    note: >-
+      The product page lists "(4) Serial ports RJ-45 RS-232" and "(2) RJ-45; 10/100 Mbps (auto-sensing)".
+      The rear photograph prints WAN over the first jack, LAN over the second and "RS232 SERIAL" under
+      the four serial jacks.
+  power:
+    confidence: datasheet
+    note: >-
+      The product page prints "18 V DC, .66 A; 100-240 AC" as the power input; the rear photograph prints
+      "18V 1.0A" under the jack. The two are stated as printed and are not reconciled: the page's figure
+      may be the supply's output and the legend the jack's rating. The jack is the library's barrel jack,
+      which claims no diameter. No power consumed by the unit is stated.
+  lamps:
+    confidence: datasheet
+    note: >-
+      The product page lists "Power, online, and LTE status, (5) signal strength and (2) SIM selection".
+      The front photograph prints PWR, ONLINE, BACKUP, LTE/3G, SIGNAL and SIM 1 and 2, so a backup lamp
+      is drawn that the page's list does not name. Nothing states a colour or a state, so the lamps carry
+      on and off only.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The front and rear are off-white (244, 245, 243 read off the photographs) with dark legends and
+      grey-green lamps. The jacks have bright metal shields.
+attrs:
+  physical: {weight-kg: 0.73}
+  power: {power-input: '18 V DC, .66 A; 100-240 AC'}
+  environmental: {operating-temp-c: 0 to 40}
+  lifecycle: {eol: none-announced}
+chassis: {width: 228.0, height: 25.0, depth: 127.0, mount: desktop, color: '#f4f5f3', power: dc}
+gaps:
+- what: side-top-bottom-faces
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-photo
+  note: >-
+    The held photographs show the front and the rear only. The four other faces are sized from the product
+    page and drawn empty.
+  wanted: A photograph or drawing of the sides, the top and the underside.
+- what: cellular-antennas-and-sims
+  scope:
+  - front
+  - rear
+  reason: needs-photo
+  note: >-
+    The product page lists a Digi CORE plug-in LTE modem and the front prints two SIM lamps and a SIM
+    select button on the rear. No held photograph shows an antenna connector or a SIM slot, so none is
+    drawn.
+  wanted: A photograph or the hardware guide showing where the antennas and SIM slots are.
+- what: wall-mount
+  scope:
+  - bottom
+  reason: vendor-silent
+  note: >-
+    The product page lists no mounting kit for the unit and no document held shows a mounting hole.
+  wanted: The user guide's installation chapter.
+- what: legend-text
+  scope:
+  - front
+  - rear
+  reason: needs-photo
+  note: >-
+    The photographs are 800 px wide. The legends that resolve are drawn; the fine print on the rear near
+    the power jack does not resolve and is not drawn.
+  wanted: A higher resolution photograph of each face.
+- what: led-states
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The page names the lamps and no colour or state of any of them. The two lamps in each Ethernet jack
+    are not described.
+  wanted: Digi's lamp table.
+- what: power-draw
+  scope:
+  - rear
+  reason: vendor-silent
+  note: The page states an input rating and no power consumed by the unit.
+  wanted: The data sheet's power figure.
+groups:
+  serial: {term: Port, role: traffic, index-origin: 1, description: 'the four RJ-45 RS-232 serial ports,
+      printed 1 to 4'}
+  eth:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 100m}
+    description: the two RJ-45 10/100 Ethernet ports, printed WAN and LAN
+  inlets: {term: Inlet, role: service, index-origin: 1, description: 'the DC power jack, printed 18V 1.0A'}
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the front lamps, power, online, backup, LTE/3G, five signal strength and two SIM
+  controls: {term: Button, role: management, index-origin: 1, description: the erase button and the SIM
+      select button}
+views:
+  front:
+    size: {w: 228.0, h: 25.0}
+    panel:
+      cutouts:
+      - {id: led-pwr, at: [76.1, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-online, at: [85.7, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-backup, at: [95.9, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-lte, at: [161.4, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-signal-1, at: [171.3, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-signal-2, at: [176.3, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-signal-3, at: [181.3, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-signal-4, at: [186.3, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-signal-5, at: [191.3, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-sim-1, at: [201.3, 11.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-sim-2, at: [206.2, 11.5], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {id: rule-left, at: [70.7, 5.9], path: M 0 0 V 12.9, filled: false, stroke-width: 0.25, fill: '#a4b3ac',
+      for: chassis}
+    - {id: rule-right, at: [213.6, 5.9], path: M 0 0 V 12.9, filled: false, stroke-width: 0.25, fill: '#a4b3ac',
+      for: chassis}
+    - {at: [77.1, 19.0], text: PWR, font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: led-pwr}
+    - {at: [86.7, 19.0], text: ONLINE, font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: led-online}
+    - {at: [96.9, 19.0], text: BACKUP, font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: led-backup}
+    - {at: [162.4, 19.0], text: LTE/3G, font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: led-lte}
+    - {at: [182.3, 19.0], text: SIGNAL, font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: led-signal-3}
+    - {at: [202.3, 8.7], text: '1', font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: led-sim-1}
+    - {at: [207.2, 8.7], text: '2', font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: led-sim-2}
+    - {at: [204.8, 19.0], text: SIM, font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: led-sim-1}
+    components:
+      placements:
+      - {ref: common/led-dot@1, id: led-pwr, at: [76.1, 11.5], for: chassis, group: status-leds, rel-pos: 1,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-online, at: [85.7, 11.5], for: chassis, group: status-leds, rel-pos: 2,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-backup, at: [95.9, 11.5], for: chassis, group: status-leds, rel-pos: 3,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-lte, at: [161.4, 11.5], for: chassis, group: status-leds, rel-pos: 4,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-signal-1, at: [171.3, 11.5], for: chassis, group: status-leds,
+        rel-pos: 5, states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-signal-2, at: [176.3, 11.5], for: chassis, group: status-leds,
+        rel-pos: 6, states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-signal-3, at: [181.3, 11.5], for: chassis, group: status-leds,
+        rel-pos: 7, states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-signal-4, at: [186.3, 11.5], for: chassis, group: status-leds,
+        rel-pos: 8, states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-signal-5, at: [191.3, 11.5], for: chassis, group: status-leds,
+        rel-pos: 9, states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-sim-1, at: [201.3, 11.5], for: chassis, group: status-leds, rel-pos: 10,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-sim-2, at: [206.2, 11.5], for: chassis, group: status-leds, rel-pos: 11,
+        states: ['off', 'on']}
+    regions:
+    - id: logo-zone
+      at: [22.0, 6.0]
+      size: {w: 34.0, h: 13.0}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 228.0, h: 25.0}
+    panel:
+      cutouts:
+      - {id: dc-in, at: [6.2, 4.7], size: [12.0, 13.0], shape: rect}
+      - {id: btn-erase, at: [28.7, 11.5], size: [4.0, 4.0], shape: rect}
+      - {id: wan, at: [42.0, 4.0], size: [15.8, 13.2], shape: rect}
+      - {id: lan, at: [64.6, 4.0], size: [15.8, 13.2], shape: rect}
+      - {id: serial-1, at: [90.55, 5.1], size: [12.7, 11.0], shape: rect}
+      - {id: serial-2, at: [106.85, 5.1], size: [12.7, 11.0], shape: rect}
+      - {id: serial-3, at: [123.15, 5.1], size: [12.7, 11.0], shape: rect}
+      - {id: serial-4, at: [139.45, 5.1], size: [12.7, 11.0], shape: rect}
+      - {id: btn-sim, at: [160.4, 11.3], size: [4.0, 4.0], shape: rect}
+    silkscreen:
+    - {at: [96.9, 3.9], text: '1', font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: serial-1}
+    - {at: [113.2, 3.9], text: '2', font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: serial-2}
+    - {at: [129.5, 3.9], text: '3', font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: serial-3}
+    - {at: [145.8, 3.9], text: '4', font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: serial-4}
+    - {at: [12.2, 21.0], text: 18V 1.0A, font-size: 1.6, anchor: middle, fill: '#3d4a4a', for: dc-in}
+    - {at: [30.7, 21.0], text: ERASE, font-size: 1.6, anchor: middle, fill: '#3d4a4a', for: btn-erase}
+    - {at: [49.9, 21.0], text: WAN, font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: wan}
+    - {at: [72.5, 21.0], text: LAN, font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: lan}
+    - {at: [121.6, 21.0], text: RS232 SERIAL, font-size: 1.7, anchor: middle, fill: '#3d4a4a', for: serial-1}
+    - {at: [166.7, 13.83], text: SIM SELECT, font-size: 1.7, anchor: start, fill: '#3d4a4a', for: btn-sim}
+    components:
+      placements:
+      - {ref: common/dc-barrel@1, id: dc-in, at: [6.2, 4.7], group: inlets, rel-pos: 1}
+      - ref: common/reset-button@1
+        id: btn-erase
+        at: [28.7, 11.5]
+        for: chassis
+        group: controls
+        rel-pos: 1
+        attrs: {function: erase}
+      - ref: common/rj45-eth@1
+        id: wan
+        at: [42.0, 4.0]
+        group: eth
+        rel-pos: 1
+        attrs: {media: rj45, speed: 100m}
+      - ref: common/rj45-eth@1
+        id: lan
+        at: [64.6, 4.0]
+        group: eth
+        rel-pos: 2
+        attrs: {media: rj45, speed: 100m}
+      - ref: common/rj45-ganged-lamped@1
+        id: serial-1
+        at: [90.55, 5.1]
+        group: serial
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: rs232}
+      - ref: common/rj45-ganged-lamped@1
+        id: serial-2
+        at: [106.85, 5.1]
+        group: serial
+        rel-pos: 2
+        attrs: {media: rj45-serial, role: rs232}
+      - ref: common/rj45-ganged-lamped@1
+        id: serial-3
+        at: [123.15, 5.1]
+        group: serial
+        rel-pos: 3
+        attrs: {media: rj45-serial, role: rs232}
+      - ref: common/rj45-ganged-lamped@1
+        id: serial-4
+        at: [139.45, 5.1]
+        group: serial
+        rel-pos: 4
+        attrs: {media: rj45-serial, role: rs232}
+      - ref: common/reset-button@1
+        id: btn-sim
+        at: [160.4, 11.3]
+        for: chassis
+        group: controls
+        rel-pos: 2
+        attrs: {function: sim-select}
+  top:
+    size: {w: 228.0, h: 127.0}
+    empty: >-
+      No held source shows the top face: the product page and the two held photographs show the front
+      or the rear only.
+  bottom:
+    size: {w: 228.0, h: 127.0}
+    empty: >-
+      No held source shows the bottom face: the product page and the two held photographs show the front
+      or the rear only.
+  left:
+    size: {w: 127.0, h: 25.0}
+    empty: >-
+      No held source shows the left side: the product page and the two held photographs show the front
+      or the rear only.
+  right:
+    size: {w: 127.0, h: 25.0}
+    empty: >-
+      No held source shows the right side: the product page and the two held photographs show the front
+      or the rear only.
+configurations:
+  default:
+    kind: orderable
+    description: The unit as the photographs show it, with a DC power jack.
+    default: true
+    part-numbers:
+      5402-RMG4-GLB: {}
+references:
+- title: >-
+    Digi Connect IT 4 product page (digi.com; the page read 2026-11-05, with its specification table)
