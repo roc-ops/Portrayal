@@ -79,13 +79,16 @@ def device_bbox(root, el, size):
 
 
 def plant_card(tmp, rotate=None, occupant=False, card_rotate=None,
-               feat_lift=0.0, chained=False, pocket=None):
+               feat_lift=0.0, chained=False, pocket=None, well=False, part_lift=None,
+               inset=None):
     lib = tmp / "lib"
     d = lib / "components/acme/tilt-card/v1"
     (d / "skins").mkdir(parents=True)
     part = {"ref": "std/qsfp28@1", "id": "p1", "at": [2.5, 45.0], "on": "housing"}
     if rotate:
         part["rotate"] = rotate
+    if part_lift:
+        part["lift"] = part_lift
     feature = {"node": "housing", "facet": {"deg": 30, "facing": "up"},
                "confidence": "drawing", "source": "fixture"}
     if feat_lift:
@@ -129,7 +132,13 @@ def plant_card(tmp, rotate=None, occupant=False, card_rotate=None,
     card_placement = {"ref": "acme/tilt-card@1", "id": "card", "at": [0, 0]}
     if card_rotate:
         card_placement["rotate"] = card_rotate
+    if inset:
+        card_placement["inset"] = inset
     placements = [card_placement]
+    if well:
+        # std/db9@1's size.d is 6.73: the card sits on the floor of that recess
+        card_placement["in"] = "well"
+        placements.insert(0, {"ref": "std/db9@1", "id": "well", "at": [0, 0]})
     if occupant:
         # `mate-to` targets a device-level PLACEMENT id, not a path into it
         # (render.py's `hosts` dict is keyed by placement id only). "card"
@@ -544,3 +553,39 @@ def test_a_sunk_facet_shifts_with_an_inset_unclamped(tmp_path):
     assert float(plate.get("data-z-lift")) == -12.0
     assert plate.get("data-z-out") == "15.3205"        # -12 + 17.3205 + 10
     assert plate.get("data-z-profile-y") == "0:-2,30:15.3205"
+
+
+@pytest.mark.heavy
+def test_a_facet_on_a_card_in_a_well_stands_on_the_wells_floor(tmp_path):
+    """A card `in:` a 6.73 mm well sinks by the floor, and its wedge sinks with
+    it: root on the floor, proud edge the same 6.73 below where it stands on a
+    plain face. The cage keeps its own lift off the facet."""
+    plain = by_id(plant_card(tmp_path / "plain", part_lift=3.0), "--housing")
+    root = plant_card(tmp_path / "well", well=True, part_lift=3.0)
+    h = by_id(root, "--housing")
+    card = next(e for e in root.iter() if e.get("data-path") == "card")
+    assert float(card.get("data-z-lift")) == -6.73
+    assert plain.get("data-z-profile-y") == "0:0,30:17.3205"
+    assert h.get("data-z-profile-y") == "0:-6.73,30:10.5905"
+    assert h.get("data-z-out") == "10.5905"
+    assert by_id(root, "--p1").get("data-z-lift") == "3.0"
+
+
+@pytest.mark.heavy
+def test_a_facet_partly_behind_an_inset_keeps_its_slope(tmp_path):
+    """A card mounted 4 mm behind the panel: the wedge's root is 4 below the
+    plate and its proud edge 4 lower than on a plain face. The root keeps its
+    negative height (a clamp at the plate tilts the wedge's slope and loses the
+    4, so the kit, which rebuilds the wedge from the profile's lowest height,
+    stands its proud edge 4 too tall)."""
+    h = by_id(plant_card(tmp_path, inset=4.0), "--housing")
+    assert h.get("data-z-profile-y") == "0:-4,30:13.3205"
+    assert h.get("data-z-out") == "13.3205"
+
+
+@pytest.mark.heavy
+def test_a_facet_wholly_behind_an_inset_is_still_dropped(tmp_path):
+    """The proud edge 17.32 high, the inset 20: nothing of the wedge stands
+    in front of the plate, so the node carries no height at all."""
+    h = by_id(plant_card(tmp_path, inset=20.0), "--housing")
+    assert h.get("data-z-out") is None and h.get("data-z-profile-y") is None
