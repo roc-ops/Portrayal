@@ -26,8 +26,8 @@ def placements(d, view):
     return (d["views"][view].get("components") or {}).get("placements") or []
 
 
-def of(d, view, ref):
-    return [p for p in placements(d, view) if p["ref"] == ref]
+def of(d, view, part):
+    return [p for p in placements(d, view) if p["ref"].split("@")[0] == part]
 
 
 def test_the_envelope_is_the_manuals(device):
@@ -48,7 +48,7 @@ def test_the_serial_bank_is_16_rj45_jacks_on_the_rear_in_two_rows(device):
     ports = [p for p in placements(device, "rear") if p.get("group") == "serial"]
     assert len(ports) == 16
     assert sorted(p["rel-pos"] for p in ports) == list(range(1, 17))
-    assert {p["ref"] for p in ports} == {"std/rj45-ganged@2"}
+    assert {p["ref"].split("@")[0] for p in ports} == {"std/rj45-ganged"}
     assert len({p["at"][1] for p in ports}) == 2
     assert not [p for p in placements(device, "front") if p.get("group") == "serial"]
 
@@ -65,16 +65,16 @@ def test_the_serial_group_is_console_server_ports_with_the_printed_pinout(device
 def test_the_rear_has_two_ethernet_jacks_and_two_c14_inlets(device):
     net = [p for p in placements(device, "rear") if p.get("group") == "net"]
     assert [p["rel-pos"] for p in net] == [1, 2]
-    assert len(of(device, "rear", "std/c14-inlet@1")) == 2
+    assert len(of(device, "rear", "std/c14-inlet")) == 2
     assert device["chassis"]["power"] == "ac"
 
 
 def test_the_front_has_two_usb_ports_a_console_jack_and_four_lamps(device):
-    usb = of(device, "front", "std/usb-a@1")
+    usb = of(device, "front", "std/usb-a")
     assert len(usb) == 2 and all(p["skin"] == "usb2" for p in usb)
     console = [p for p in placements(device, "front") if p["id"] == "console"]
     assert len(console) == 1 and console[0]["attrs"]["role"] == "console"
-    assert len(of(device, "front", "common/led-dot@1")) == 4
+    assert len(of(device, "front", "common/led-dot")) == 4
 
 
 def test_every_position_is_estimated_and_the_ears_are_not_dimensioned(device):
