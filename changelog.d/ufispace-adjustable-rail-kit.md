@@ -11,7 +11,7 @@
 - Seventeen UfiSpace devices list the kit as shipped in the box: the S9710-76D, S9700-23D,
   S9700-53DX, S9705-48D, S9720-56ED, S9725-64E, S9600-28DX, S9600-30DX, S9600-32X, S9600-56DX,
   S9600-64X, S9610-36D, S9610-46DX, S9610-48DX, S9611-36D, S9321-64E and S9321-64EO. Each takes a
-  patch version and its lock, and the comments of its exported device types gain one "Rail kits"
+  patch version, and the comments of its exported device types gain one "Rail kits"
   sentence. They state no `chassis.ears`, and no face, port or placement changes. Nothing a rack
   file or a page names is removed or renamed. This closes no conformance rows.
 - The rack mounting design note's UfiSpace rows now match the guides: seventeen models print the
