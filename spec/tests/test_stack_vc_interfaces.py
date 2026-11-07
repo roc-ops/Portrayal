@@ -211,14 +211,15 @@ def test_the_ex4500_module_records_that_the_port_is_borrowed():
 
 # --- 5. the FlexStack port -----------------------------------------------------
 
-def test_the_flexstack_port_presents_its_key_and_says_what_will_seat_it():
+def test_the_flexstack_port_presents_its_key_and_is_seated_by_the_module():
     c = _contract(FLEX)
     assert c["class"] == "port" and c["interface"] == "flexstack"
     assert c["connection-points"]["mate"]["direction"] == "front"
-    assert c["unplaced"].startswith("seated by")
-    # when a device places the part, lint asks for this sentence to go, and the
-    # change that places it edits this test
-    assert "c2960s-stack" in c["unplaced"]
+    # the Catalyst 2960-S FlexStack module composes it, so lint asks for the
+    # `unplaced` sentence to be gone
+    assert "unplaced" not in c
+    module = _contract("cisco/c2960s-stack@1")
+    assert {p["ref"] for p in module["parts"]} == {"cisco/flexstack-port@1"}
 
 
 def test_the_flexstack_ports_figures_equal_what_its_provenance_says_it_read():
