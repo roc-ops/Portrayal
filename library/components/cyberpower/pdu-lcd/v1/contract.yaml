@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: pdu-lcd
+version: 1.0.0
+class: display
+profile: power
+description: >-
+  The graphic display of the CyberPower PDU81001G: a pale monochrome panel in a black surround. The data sheet photograph
+  shows a METER title with a gauge symbol, "Input Voltage 120.0V" and "Frequency 60.0Hz", and a down arrow.
+size: {w: 28.3, h: 31.1}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  existence: >-
+    datasheet - CyberPower PDU81001G data sheet, page 1 photograph, and page 2 "LCD Multifunction LCD".
+  size: >-
+    ESTIMATED. The photograph on page 1 is an angled view, so the window is read as a fraction of the body: 75 px of 1145
+    across (28.3 mm of 433) and 85 px of the 44 mm height at the face's vertical scale. No document dimensions the panel.
+    needs-drawing: a straight-on photograph of the controller face, or a dimensioned drawing.
+  kind: >-
+    datasheet - page 2 "Multifunction LCD". The panel's resolution and character count are NOT STATED, and the element is a
+    screen part for that reason.
+  colour: >-
+    photo - the panel reads light grey (#d6d9d6) with black text in the data sheet photograph.
+elements:
+  screen: {at: [0.0, 0.0], size: [28.3, 31.1], class: screen}
+relief:
+  features:
+    - node: screen
+      out: 0.3
+      color: '#d6d9d6'
+      confidence: estimated
+      source: >-
+        no document gives how far the panel stands from the face; 0.3 mm is a stand-in for glass set nearly flush, declared
+        an estimate.
+skins: [default]

@@ -1,0 +1,202 @@
+format: 1
+kind: device
+name: pdu30bhvt8r
+version: 0.1.0
+maturity: modelled
+manufacturer: CyberPower
+model: PDU30BHVT8R
+description: >-
+  CyberPower PDU30BHVT8R basic rack PDU, 1U, 208 to 230 V, 30 A, single phase. A black metal strip 445 mm wide, 38 mm deep
+  and 44 mm high with a mounting ear at each end. The front is blank but for the maker's name, two bank lamps and the model
+  name. The rear carries two banks, each of three IEC C13 outlets and one C19 outlet, and a breaker for each bank. It also
+  has an external site ground and a fixed 10 ft cord with a NEMA L6-30P twist-lock plug.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      The rear is read off the High Voltage Type rear view in the PDU30BHVT8R user manual (K01-0000512-00), PDF page 14
+      (printed 13), a straight-on line drawing rendered at 600 dpi. Its body is 1611 px across and 164 px high, 9.82
+      against the data sheet's 445 by 44, 10.11: 3 percent out, so every position is read at 3.62 px per mm across and
+      3.73 down and is good to about 1 mm. NO DIMENSIONED DRAWING EXISTS. The front is read off the straight-on
+      photograph on page 1 of the data sheet (body 1763 px by 180 at 300 dpi, 3.96 px per mm across and 4.09 down, aspect
+      within 3 percent) and is good to about 1 mm; its positions are photo-measured.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - CyberPower PDU30BHVT8R data sheet, page 2: "445 x 44 x 38 mm" (W x H x D) and "17.5 x 1.5 x 1.75 in." (W x
+      D x H) in the user manual, PDF page 15. THE EARS ARE NOT IN IT: the photograph shows an ear at each end outside the
+      body, so 445 is read as the body between the folds. Weight 2.04 kg (data sheet page 2). The finish is black.
+  front:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the front photograph, millimetres from the body's left edge and its top: the two lamps centre at 75.2
+      and 75.0 across, 15.2 and 30.3 down; the maker's name stands at 23.2 to 61.6 across and the model name at 27.3 to 55.
+      The legends BANK 1 and BANK 2 stand beside the lamps, as printed.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear view, millimetres from the body's left edge as seen from behind. The outlets centre at 21.7 down. Left
+      bank (Rear Bank 2, callout 6): C13 at 37.0, 61.3 and 85.6 across, C19 at 132.3. Right bank (Rear Bank 1, callout 5):
+      C13 at 194.5, 218.8 and 244.1, C19 at 295.5. The breaker of Bank 2 (callout 8) is at 335.8 and that of Bank 1 (callout
+      7) at 360.7, the external site ground (callout 4) at 381.9 and the cord (callout 9) at 411.2. Four small holes (callout
+      10) stand at 9.9 and 434.9 across, 15.5 and 35.6 down. BANK2 and BANK1 are printed above the left ends of their banks.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - the data sheet, pages 1 and 2: "6 x IEC-320 C13, 2 x IEC-320 C19", "Outlets - Rear 8", "Outlets - Front 0". The
+      prose on page 1 says "eight IEC-320 C13, 2 IEC-320 C19", which makes ten; the features, the table and the drawing say six
+      and two, and are followed (gaps: outlet-count-prose). The drawing numbers no outlet, so the ids run left to right as seen
+      from behind and the unit prints no numbers.
+  breakers:
+    confidence: datasheet
+    note: >-
+      datasheet - "Overload Protection 16 A x 2" (data sheet page 1) and the user manual, PDF page 15, "Circuit Breaker 16 A x
+      2". The drawing shows each as concentric rings, which is what common/breaker-push-reset@1 draws. That the breakers are
+      push-to-reset is read from the drawing and not stated in a held document.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - "Input Plug Type NEMA L6-30P", "Plug Style Straight (Twist Lock)", "Cord Length (ft.) 10 ft (3.0 m)", derated
+      input current 24 A and maximum 30 A (data sheet page 1). The cord leaves the right end of the rear (callout 9).
+  banks:
+    confidence: datasheet
+    note: >-
+      datasheet - the user manual, PDF page 14: Rear Bank 1 Outlets (callout 5), Rear Bank 2 Outlets (callout 6), Circuit Breaker
+      Bank 1 (7) and Circuit Breaker Bank 2 (8), and the front LED indicators (2). Which breaker feeds which bank is read from the
+      callout names and not shown by a line.
+attrs:
+  physical:
+    weight-kg: 2.04
+    construction: metal
+  power:
+    input-plug: nema-l6-30p
+    input-cord: fixed
+    input-phase: single
+    input-voltage-v: 230
+    input-current-a: 30
+    input-range: 208-230 V
+    frequency: 50/60 Hz
+    breakers: two 16 A, one for each bank
+  environmental:
+    operating-temp: not stated in the data sheet
+  management:
+    metering-scope: none
+    outlet-switching: false
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 445
+  height: 44
+  depth: 38
+  ru: 1
+  color: '#262626'
+  ears:
+    color: '#262626'
+    positions:
+      - {name: flush, default: true}
+gaps:
+- what: mounting-brackets
+  scope: [front, rear, left, right]
+  reason: needs-drawing
+  note: >-
+    the data sheet lists "Adjustable Mounting Brackets 2 sets (L-Short, L-Long)" and the user manual (PDF pages 5 to 10) shows a
+    horizontal and a vertical install. No document dimensions an ear, gives its holes' spacing or says where the ears bolt, so
+    only the flush position the photograph shows is named, without a figure.
+  wanted: a dimensioned drawing of the PDU with its brackets.
+- what: outlet-count-prose
+  scope: [rear]
+  reason: sources-disagree
+  note: >-
+    the data sheet's first paragraph says "eight IEC-320 C13, 2 IEC-320 C19 receptacles", ten in all. Its features line, its
+    specification table ("Outlets - Total 8") and the user manual's drawing say six C13 and two C19. The drawing is followed.
+  wanted: the maker's word on the count.
+- what: stencil
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    a Visio stencil is held for this model (its internal title names a set of PDU products) and was not opened; the faces are drawn
+    from the manual drawing and the photograph.
+  wanted: the stencil opened and compared with the faces.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    no document shows the top, the bottom or an end of this model. The manual's figures draw the faces only.
+  wanted: straight-on photographs of the top, the bottom and an end, with a scale.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the eight rear outlets, in two banks of three C13 and one C19, numbered here from the left as seen from behind: the unit prints no numbers'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'one 16 A breaker for each bank; breaker 1 is Circuit Breaker Bank 1 of the user manual'}
+  bank-leds: {term: LED, role: indicator, index-origin: 1, description: 'the two green bank lamps on the front, BANK 1 and BANK 2', states: ['off', {name: 'on', color: '#3ddc3a'}]}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 445, h: 44}
+    silkscreen:
+      - {at: [23.2, 10.8], text: CyberPower, font-size: 4.2, fill: '#e8e8e8', for: chassis}
+      - {at: [27.3, 38.6], text: PDU30BHVT8R, font-size: 2.4, fill: '#e8e8e8', for: chassis}
+      - {at: [82.0, 15.76], text: BANK 1, font-size: 1.8, fill: '#c8c8c8', for: led-bank-1}
+      - {at: [82.0, 30.86], text: BANK 2, font-size: 1.8, fill: '#c8c8c8', for: led-bank-2}
+    components:
+      placements:
+        - {id: led-bank-1, ref: cyberpower/pdu-bank-led@1, at: [72.2, 12.2], group: bank-leds, rel-pos: 1, for: chassis}
+        - {id: led-bank-2, ref: cyberpower/pdu-bank-led@1, at: [72.0, 27.3], group: bank-leds, rel-pos: 2, for: chassis}
+  rear:
+    size: {w: 445, h: 44}
+    panel:
+      decor:
+      - {id: tray-hole-1, at: [8.7, 14.3], size: [2.4, 2.4], rx: 1.2, fill: '#0d0e0f', stroke: '#6b7076', stroke-width: 0.2, kind: tray-screw-hole}
+      - {id: tray-hole-2, at: [8.7, 34.4], size: [2.4, 2.4], rx: 1.2, fill: '#0d0e0f', stroke: '#6b7076', stroke-width: 0.2, kind: tray-screw-hole}
+      - {id: tray-hole-3, at: [433.7, 14.3], size: [2.4, 2.4], rx: 1.2, fill: '#0d0e0f', stroke: '#6b7076', stroke-width: 0.2, kind: tray-screw-hole}
+      - {id: tray-hole-4, at: [433.7, 34.4], size: [2.4, 2.4], rx: 1.2, fill: '#0d0e0f', stroke: '#6b7076', stroke-width: 0.2, kind: tray-screw-hole}
+    silkscreen:
+      - {at: [5.0, 8.0], text: BANK2, font-size: 2.0, fill: '#e8e8e8', for: outlet-1}
+      - {at: [318.4, 8.0], text: BANK1, font-size: 2.0, fill: '#e8e8e8', for: outlet-8}
+    components:
+      placements:
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [21.8, 10.7], rotate: 270, group: outlets, rel-pos: 1, fed-by: input}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [46.1, 10.7], rotate: 270, group: outlets, rel-pos: 2, fed-by: input}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [70.4, 10.7], rotate: 270, group: outlets, rel-pos: 3, fed-by: input}
+        - {id: outlet-4, ref: std/c19-outlet@1, at: [114.5, 7.85], group: outlets, rel-pos: 4, fed-by: input}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [179.3, 10.7], rotate: 270, group: outlets, rel-pos: 5, fed-by: input}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [203.6, 10.7], rotate: 270, group: outlets, rel-pos: 6, fed-by: input}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [228.9, 10.7], rotate: 270, group: outlets, rel-pos: 7, fed-by: input}
+        - {id: outlet-8, ref: std/c19-outlet@1, at: [277.7, 7.85], group: outlets, rel-pos: 8, fed-by: input}
+        - {id: breaker-2, ref: common/breaker-push-reset@1, at: [327.55, 14.55], group: breakers, rel-pos: 2, attrs: {rating-a: 16}, description: 'Circuit Breaker Bank 2, 16 A'}
+        - {id: breaker-1, ref: common/breaker-push-reset@1, at: [352.45, 14.55], group: breakers, rel-pos: 1, attrs: {rating-a: 16}, description: 'Circuit Breaker Bank 1, 16 A'}
+        - {id: ground, ref: common/ground-screw@1, at: [379.1, 18.9], group: grounding, rel-pos: 1, description: 'External Site Ground, callout 4 of the user manual'}
+        - {id: input, ref: cyberpower/pdu-cord-l6-30p@1, at: [398.7, 9.2], group: power-input, rel-pos: 1, description: 'the fixed 10 ft input cord, ending in a NEMA L6-30P twist-lock plug'}
+  top:
+    size: {w: 445, h: 38}
+    empty: >-
+      no source shows the top: the data sheet and the user manual draw the front and the rear only. Searched: both held
+      documents and the stencil's file properties.
+  bottom:
+    size: {w: 445, h: 38}
+    empty: >-
+      no source shows the bottom: neither the data sheet nor the user manual looks at it. Searched: both held documents.
+  left:
+    size: {w: 38, h: 44}
+    empty: >-
+      no source shows the left end straight on; the user manual's installation figures draw the bracket in place and no end face.
+      Searched: the data sheet and the user manual.
+  right:
+    size: {w: 38, h: 44}
+    empty: >-
+      no source shows the right end straight on; the user manual's installation figures draw the bracket in place and no end face.
+      Searched: the data sheet and the user manual.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The 10 ft cord is drawn only as the collar it leaves by. The two bracket sets and the cord
+      retention tray in the box are not drawn.
+    part-numbers:
+      PDU30BHVT8R: {}
+datasheet:
+  title: 'CyberPower PDU30BHVT8R data sheet (Basic PDU)'
+  url: https://images.salsify.com/image/upload/s--dM5aMeFP--/6ed867cde0f0062a2e93b6c1da203ed6b9f5517b.pdf
+  sha256: 8428a7aeaa21b448318e9a2be2a49c50f81bc1be6ca6c2993db3bc4c39b2685b
+references:
+  - {title: 'CyberPower 1U / 0U Basic / Metered Series user manual, K01-0000512-00', url: 'https://images.salsify.com/image/upload/s--dPuVaf2W--/1efac39e541dadc700a24a160f93caa1c388b5e4.pdf', sha256: 772cabfe6746a8a0874e0d79c5a0ef730559f76f7805aeb2ac3141540b2e62f8}
