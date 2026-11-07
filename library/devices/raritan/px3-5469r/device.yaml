@@ -1,0 +1,235 @@
+format: 1
+kind: device
+name: px3-5469r
+version: 0.1.0
+maturity: modelled
+manufacturer: Raritan
+model: PX3-5469R
+description: >-
+  Raritan PX3-5469R rack PDU, 2U: a black chassis 440 mm wide, 293 mm deep and 88 mm high. Two rows of ten outlets,
+  eight IEC C13 and two C19 in each, sit left of a controller panel. A rear panel carries the Ethernet, sensor and
+  expansion jacks, and a fixed 3 m cord has an IEC 60309 2P+E 6h 32 A plug.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S PRINTED SIZES AND A READING OF ITS MECHANICAL DRAWING. The technical specification (rev
+      2025-06-25) and the mechanical drawing MPX3-5469R (Rev 2A, April 23, 2017) print the unit size and the bracket
+      height. The front elevation is read off the drawing, 440 mm wide, to about 3 mm. The rear is read in less
+      detail: the maker's pages name its jacks and do not place them. No vendor file was opened for the figures: a
+      person read them off the drawing and wrote them down.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 440 x 293 x 88 mm (17.3 x 11.5 x 3.5 in), width, depth, height. 2U horizontal; `ru: 2`. Weight 7 kg,
+      shipping 10.6 kg and 560 x 552 x 284 mm.
+  colours:
+    confidence: estimated
+    note: >-
+      THE COLOURS ARE UNCHECKED ESTIMATES. The maker's pages give no colour for this model. The chassis black
+      (#1c1c1e), the panel, the plates, the outlets, the jacks and the lamps are estimates. The maker's PX4 product
+      images show black, and they were not compared with this model. The drawn faces have not been compared with a
+      vendor photograph of the model.
+  front:
+    confidence: estimated
+    note: >-
+      drawing - two rows of ten outlets, circuit 1 on the top row and circuit 2 on the bottom, about 43 mm apart. In
+      each row five C13, a small gap, three more C13, then two C19, read at column centres of about 26, 61, 96, 131,
+      165, 204, 239, 273, 308 and 339 mm (+/- 3). Three centres are moved inside that reading so that no two outlets
+      overlap: 273 to 272.5, 308 to 306 and 339 to 342. The controller panel stands at the right end from about 359 to
+      440 mm.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - the technical specification: (16) C13 and (4) C19, two rows on the front, switched and metered per
+      outlet. std/c13-outlet@1 and std/c19-outlet@1. Their turn is not published, so they are drawn unturned.
+  controller:
+    confidence: estimated
+    note: >-
+      ESTIMATED BEYOND ITS SPAN. The maker's pages give, on the controller panel, a large colour display at the top,
+      an RJ45 console jack in a cyan frame, a USB-B jack, a USB-A jack, four buttons, a reset pinhole and two lamps,
+      with the logo printed vertically at the extreme right. The display and the buttons are the PXO's measured sizes
+      (the same maker) and every place is an estimate.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the maker's pages name, on a rear panel, an Ethernet jack (green), sensor and expansion RJ45 jacks
+      and a feature jack, and says the cord leaves the rear; it places none of them. They stand in a row at the end
+      that is behind the controller panel, and the cord gland at the other end, each an estimate (gaps: rear-panel).
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - IEC 60309 2P+E 6h 32 A (IP44), 3 m cord, rear feed, cord retention no.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - switched and metered per outlet (the specification), so `outlet-switching: true` and each outlet
+      states on and off.
+attrs:
+  physical:
+    weight-kg: 7
+    construction: metal
+  power:
+    input-cord: fixed
+    input-plug: other
+    input-current-a: 32
+    breakers: two breakers, one for each row of ten outlets (not placed)
+  management:
+    metering-scope: outlet
+    outlet-switching: true
+chassis: {width: 440, height: 88, depth: 293, ru: 2, mount: rack, color: '#1c1c1e', airflow: passive}
+gaps:
+- what: breakers
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    the specification gives two breakers and the drawing's elevation as read places none, so none is drawn and no
+    outlet is linked to one.
+  wanted: the drawing's views read for the breakers, or a photograph.
+- what: rear-panel
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the rear panel's jacks are named (Ethernet in green, sensor, expansion, feature) and not placed. They are drawn in
+    a row at estimated places, the expansion and feature jacks as RJ45 serial jacks because their media is not
+    published, and the cord gland at an estimated place. Nothing else is stated on the rear.
+  wanted: the drawing's View C and D dimensioned.
+- what: rack-kit
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the specification lists the rack kit RACK-KIT-PX-2U. The Raritan Mounting Brackets data sheet gives it an L
+    bracket (250-70-3017-00, 365.23 x 88.1 x 21.3 mm) and a cable management bracket (250-70-3018-00, 447.6 x 12.4 x 8
+    mm) and no rack depth range or ear position, so no kit contract can be written and no ear position is stated.
+  wanted: the kit's installation sheet, or a rack depth range from the maker.
+- what: numbering
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the maker's pages do not say whether the outlets are numbered. They are named 1 to 10 along the top row from the
+    left and 11 to 20 along the bottom row, an assumption; the exported names are these numbers.
+  wanted: a straight-on photograph of the front.
+- what: controller-layout
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the controller panel's parts are named and placed by estimate, the display and buttons at the PXO's sizes, the
+    USB-B as the PXO's part. The console jack's cyan frame is a colour estimate. The logo is printed as text.
+  wanted: the drawing's View C dimensioned.
+- what: eth-speed
+  scope: [eth]
+  reason: vendor-silent
+  note: >-
+    the specification for this model does not state the rate of its Ethernet jack. The PX3 user guide (connection
+    ports) says the port marked green is 10/100/1000 and the one marked white is 10/100, and the maker's pages give
+    this jack as green, so 1g is stated by that colour rule and not by a printed label on this model.
+  wanted: a close photograph of the jack's label, or the specification's port table.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  note: >-
+    the maker's pages give no view of the top, bottom or ends, so none is drawn. Their outlines are the printed sizes.
+  wanted: the drawing's plan and end views.
+groups:
+  c13-outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the 16 IEC C13 outlets, eight in each row'}
+  c19-outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c19}, description: 'the four IEC C19 outlets, two at the right end of each row'}
+  eth: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the Ethernet jack on the rear panel'}
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: 'the console jack, the two USB jacks and the sensor, expansion and feature jacks'}
+  buttons: {term: Button, role: service, index-origin: 1, description: 'the four navigation buttons and the reset pinhole'}
+  display: {term: Display, role: indicator, index-origin: 1}
+  lamps: {term: LED, role: indicator, index-origin: 1, description: 'the two lamps of the controller panel'}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 440, h: 88}
+    panel:
+      decor:
+      - {id: controller-panel, at: [360.0, 0.0], size: [80.0, 88.0], fill: '#18191b', kind: controller-panel}
+      - {id: frame-console, at: [363.0, 53.0], size: [17.8, 15.2], fill: none, stroke: '#2fb5c6', stroke-width: 0.5, kind: colour-frame}
+    silkscreen:
+      - {at: [5.5, 22.5], text: CIRCUIT 1, font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: chassis}
+      - {at: [5.5, 65.5], text: CIRCUIT 2, font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: chassis}
+    components:
+      placements:
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [10.8, 11.5], group: c13-outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [45.8, 11.5], group: c13-outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [80.8, 11.5], group: c13-outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [115.8, 11.5], group: c13-outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [149.8, 11.5], group: c13-outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [188.8, 11.5], group: c13-outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [223.8, 11.5], group: c13-outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [257.3, 11.5], group: c13-outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-9, ref: std/c19-outlet@1, at: [288.2, 8.65], group: c19-outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-10, ref: std/c19-outlet@1, at: [324.2, 8.65], group: c19-outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-11, ref: std/c13-outlet@1, at: [10.8, 54.5], group: c13-outlets, rel-pos: 9, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-12, ref: std/c13-outlet@1, at: [45.8, 54.5], group: c13-outlets, rel-pos: 10, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-13, ref: std/c13-outlet@1, at: [80.8, 54.5], group: c13-outlets, rel-pos: 11, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-14, ref: std/c13-outlet@1, at: [115.8, 54.5], group: c13-outlets, rel-pos: 12, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-15, ref: std/c13-outlet@1, at: [149.8, 54.5], group: c13-outlets, rel-pos: 13, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-16, ref: std/c13-outlet@1, at: [188.8, 54.5], group: c13-outlets, rel-pos: 14, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-17, ref: std/c13-outlet@1, at: [223.8, 54.5], group: c13-outlets, rel-pos: 15, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-18, ref: std/c13-outlet@1, at: [257.3, 54.5], group: c13-outlets, rel-pos: 16, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-19, ref: std/c19-outlet@1, at: [288.2, 51.65], group: c19-outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-20, ref: std/c19-outlet@1, at: [324.2, 51.65], group: c19-outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: display, ref: raritan/pxo-lcd@1, at: [364.0, 6.0], group: display, rel-pos: 1, for: chassis}
+        - {id: button-up, ref: raritan/pxo-button@1, at: [411.0, 10.0], group: buttons, rel-pos: 1, for: display, description: 'upward chevron: previous entry'}
+        - {id: button-down, ref: raritan/pxo-button@1, skin: down, at: [421.0, 10.0], group: buttons, rel-pos: 2, for: display, description: 'downward chevron: next entry'}
+        - {id: button-ok, ref: raritan/pxo-button@1, skin: circle, at: [411.0, 22.0], group: buttons, rel-pos: 3, for: display, description: 'circle: OK'}
+        - {id: button-back, ref: raritan/pxo-button@1, skin: cross, at: [421.0, 22.0], group: buttons, rel-pos: 4, for: display, description: 'cross: cancel'}
+        - {id: console, ref: std/rj45@2, at: [364.0, 54.0], group: mgmt, rel-pos: 1, attrs: {role: console, media: rj45-serial}, description: 'RJ45 console jack, in a cyan frame'}
+        - {id: usb-b, ref: raritan/pxo-usb-b@1, at: [385.0, 54.0], group: mgmt, rel-pos: 2, description: USB-B}
+        - {id: usb-a, ref: std/usb-a@1, at: [400.0, 58.0], group: mgmt, rel-pos: 3, description: USB-A}
+        - {id: reset, ref: common/reset-button@1, at: [418.0, 62.0], group: buttons, rel-pos: 5, for: console}
+        - {id: lamp-1, ref: common/led-dot@1, at: [418.0, 55.0], group: lamps, rel-pos: 1, for: chassis}
+        - {id: lamp-2, ref: common/led-dot@1, at: [424.0, 55.0], group: lamps, rel-pos: 2, for: chassis}
+    regions:
+      - {id: logo-zone, at: [433.0, 28.0], size: {w: 5.0, h: 32.0}, label: Raritan logo printed vertically at the extreme right; the mark is not drawn}
+  rear:
+    size: {w: 440, h: 88}
+    panel:
+      decor:
+      - {id: frame-eth, at: [26.0, 36.4], size: [17.8, 15.2], fill: none, stroke: '#48a163', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-sensor, at: [6.0, 36.4], size: [17.8, 15.2], fill: none, stroke: '#e6d633', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-expansion, at: [46.0, 36.4], size: [17.8, 15.2], fill: none, stroke: '#8a8d91', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-feature, at: [66.0, 36.4], size: [17.8, 15.2], fill: none, stroke: '#d23b3b', stroke-width: 0.5, kind: colour-frame}
+    components:
+      placements:
+        - {id: sensor, ref: std/rj45@2, at: [7.0, 37.4], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial}, description: sensor jack}
+        - {id: eth, ref: common/rj45-eth@1, at: [27.0, 37.4], group: eth, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'Ethernet jack, in a green frame: 10/100/1000 by the PX3 user guide''s colour marking'}
+        - {id: expansion, ref: std/rj45@2, at: [47.0, 37.4], group: mgmt, rel-pos: 4, attrs: {media: rj45-serial}, description: 'expansion jack; media not published, drawn as a serial jack'}
+        - {id: feature, ref: std/rj45@2, at: [67.0, 37.4], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial}, description: 'feature jack; media not published, drawn as a serial jack'}
+        - {id: input, ref: raritan/px3-rear-cord-60309@1, at: [390.0, 34.0], group: power-input, rel-pos: 1, description: 'the fixed 3 m input cord, ending in an IEC 60309 2P+E 6h 32 A plug; only its gland is drawn'}
+  top:
+    size: {w: 440, h: 293}
+    empty: >-
+      no source shows the top: the maker's pages place nothing on it, so nothing is drawn.
+  bottom:
+    size: {w: 440, h: 293}
+    empty: >-
+      no source shows the bottom: the maker's pages place nothing on it, so nothing is drawn.
+  left:
+    size: {w: 293, h: 88}
+    empty: >-
+      no source shows the left: the maker's pages place nothing on it, so nothing is drawn.
+  right:
+    size: {w: 293, h: 88}
+    empty: >-
+      no source shows the right: the maker's pages place nothing on it, so nothing is drawn.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-20'}
+- {physical: eth, name: Ethernet}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The 3 m cord beyond its gland is not drawn.
+    part-numbers:
+      PX3-5469R: {}
+datasheet:
+  title: 'Raritan PX3-5469R technical specification (rev 2025-06-25)'
+references:
+  - {title: 'Raritan mechanical drawing MPX3-5469R, Rev 2A, April 23, 2017'}
+  - {title: 'Raritan Mounting Brackets data sheet'}
+  - {title: 'Raritan PX3 rack PDU data sheet'}

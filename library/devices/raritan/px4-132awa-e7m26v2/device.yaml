@@ -1,0 +1,374 @@
+format: 1
+kind: device
+name: px4-132awa-e7m26v2
+version: 0.1.0
+maturity: modelled
+manufacturer: Raritan
+model: PX4-132AWA-E7M26V2
+description: >-
+  Raritan PX4-132AWA-E7M26V2 rack PDU, 0U: a black strip 56 mm wide, 65 mm deep and 1780 mm long for a rack's vertical
+  channel. It has 18 IEC C13 and 18 Cx locking outlets in six groups, six 20 A breakers and a replaceable controller
+  in the middle. A keyed Legrand Universal Input connector takes the cord.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S PRINTED SIZES AND A READING OF ITS MECHANICAL DRAWING. The technical specification and
+      the mechanical drawing MPX4 (Rev 0C, Mar. 25, 2025) print the unit size and the outlet pitch; every position
+      along the strip is read off the drawing's front view in proportion to the printed 1780 mm length, to about 10
+      mm, from the cord end. The library draws the PDU STANDING with the cord end down, so a position along the strip
+      is the y of the front view. No vendor file was opened for the figures: a person read them off the drawing and
+      wrote them down.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 56 x 65 x 1780 mm (2.2 x 2.6 x 70.1 in), the specification's width, depth and height. A step of 10.0
+      mm in the side view is not drawn (gaps: sides). Weight and shipping figures are not published ('TBD'), so none
+      is stated. `ru: 40` is the height it runs, 1780 mm being 40.04 units; it is derived, not printed.
+  mount:
+    confidence: drawing
+    note: >-
+      drawing - `rack-side`: a zero-U strip with a tool-less button mount. The drawing gives two buttons 1244.0 mm
+      apart.
+  front:
+    confidence: photo-measured
+    note: >-
+      drawing - every position along the strip is read off the front view to about 10 mm. The outlet pitch inside a
+      group, 26.6, is printed. The groups, the breaker blocks, the logo plate and the controller span are read, and a
+      group's start is read, not computed. Positions ACROSS the strip are not in any source: the parts are centred and
+      the controller's parts are placed by estimate.
+  colours:
+    confidence: estimated
+    note: >-
+      THE COLOURS ARE UNCHECKED ESTIMATES. The maker's pages give no colour for this model. The chassis black
+      (#1c1c1e), the panel, the plates, the outlets, the jacks and the lamps are estimates. The maker's PX4 product
+      images show black, and they were not compared with this model. The drawn faces have not been compared with a
+      vendor photograph of the model.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - the technical specification: (18) C13 locking 10 A and (18) Cx locking 16 A, in groups of 6 with the
+      3 C13 first and the 3 Cx last (the drawing's front view, counted from the cord end). The C13 is
+      std/c13-outlet@1. The Cx is a new Raritan part with no interface key (gaps: cx-outline). Alternating-branch
+      distribution is stated but not which outlet is on which branch.
+  numbering:
+    confidence: estimated
+    note: >-
+      estimated - outlets are numbered 1 to 36 from the cord end, the C13 of a group first, as the maker's PX4 product
+      image of one group shows digits rising away from the cord end. The drawing's printed digits are per group and
+      per circuit and are not read (gaps: numbering). Each outlet has a lamp beside it in that render; its place is an
+      estimate.
+  breakers:
+    confidence: datasheet
+    note: >-
+      datasheet - six 20 A 2-pole J62-X0 breakers, 10 kAIC (the specification). Six raised blocks of one rocker stand
+      along the strip, three each side of the controller as the drawing shows. Which circuit each feeds is not read
+      (gaps: breaker-feed).
+  controller:
+    confidence: estimated
+    note: >-
+      ESTIMATED BEYOND ITS SPAN. The maker's pages give the controller (a hot-swappable iX12 module) from its span,
+      with a colour display, four buttons, two 10/100/1000 Ethernet jacks, two USB-A, one USB-B, a PDU link jack, a
+      sensor jack, a reset pinhole and two lamps (View C, not dimensioned). The display and the buttons are the PXO's
+      measured sizes (the same maker), and every place inside the span is an estimate (gaps: controller-layout).
+  rear:
+    confidence: estimated
+    note: >-
+      drawing and estimate - two mounting buttons 1244.0 apart. The drawing marks 273.0, 117.5 and 1555.0 and the
+      maker's pages do not say which end each belongs to; they do not add up to a pair of end offsets, so the pair is
+      centred on the strip (268.0 from each end). The button is centred across, an estimate (gaps: mount-marks).
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - a Legrand Universal Input connector, 45 degree angled feed. The Raritan PX4 Universal Input data
+      sheet says the cords are separate part numbers; the maker's product-selector page lists one 3 m cord. The device
+      states a detachable cord and no plug (gaps: input-cord).
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - the Raritan PX4 Universal Input data sheet (p. 3) lists this part number as input metered. No outlet
+      control is stated for it.
+attrs:
+  physical:
+    length-mm: 1780
+    construction: metal strip
+  power:
+    input-cord: detachable
+    breakers: six 20 A 2-pole breakers, 10 kAIC
+  management:
+    metering-scope: input
+    outlet-switching: false
+chassis: {width: 56, height: 1780, depth: 65, ru: 40, mount: rack-side, color: '#1c1c1e', airflow: passive}
+gaps:
+- what: breaker-feed
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the maker's drawing gives six breaker blocks and does not say which group of outlets each breaker feeds, so no
+    outlet is linked to a breaker. The circuit labels of the blocks are read for the 132AWA and not for the 5551WA;
+    they are drawn in the margin beside each block, because a placed part paints over silkscreen.
+  wanted: the drawing's wiring view, or the maker's user guide for the PX4.
+- what: controller-layout
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the controller's span is read off the drawing and its ports, display and buttons are named without sizes or
+    positions. They are placed inside the span at estimated places, the display and buttons at the PXO's sizes, the
+    USB-B as the PXO's part, the link and sensor jacks as RJ45 serial jacks. The two lamps and the reset pinhole stand
+    at estimated places.
+  wanted: the drawing's View C dimensioned, or a close photograph of the controller.
+- what: mount-marks
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the drawing marks 273.0, 117.5 and 1555.0 mm near the mounting buttons and the maker's pages do not say which end
+    each belongs to. They are not drawn as positions: the pair of buttons, 1244.0 apart, is centred on the strip.
+  wanted: the drawing's rear view read for those marks.
+- what: numbering
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the printed digits of the drawing are per group and per circuit and are not read, so the outlets are numbered 1
+    upward from the cord end, as the maker's product image of one group shows. The exported names are these numbers.
+  wanted: the drawing's View B read for the printed digits, or a straight-on photograph.
+- what: circuit-labels
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    a circuit label stands at the right end of each outlet group in the drawing and the maker's pages do not give its
+    digits, so none is drawn on a group.
+  wanted: the drawing's View B read for the labels.
+- what: cx-outline
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the Cx outlet's size and shape are estimates (the part's contract says so) and it presents no interface key: no
+    source says it is the same connector as another maker's. The retention clip drawn above each outlet on View B is
+    not drawn.
+  wanted: the drawing's View B dimensioned, and a source for the connector.
+- what: input-cord
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the Universal Input data sheet says the cords are separate part numbers and the maker's product-selector page
+    lists one 3 m cord. The device states a detachable cord and no plug type.
+  wanted: the maker's SKU page for this part number.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  note: >-
+    the drawing's side and rear views carry only the mounting buttons and the cord, and a step marked 10.0 mm in the
+    side view. No feature on the ends or the long sides is placed, so none is drawn. Their outlines are the printed 56
+    by 65 and 65 by 1780.
+  wanted: the drawing's side and end views dimensioned, or photographs of the ends and the sides.
+groups:
+  c13-outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the 18 IEC C13 locking outlets, the first 3 of each group of 6'}
+  cx-outlets: {term: Outlet, role: traffic, index-origin: 1, description: 'the 18 Cx locking outlets, the last 3 of each group of 6'}
+  outlet-leds: {term: LED, role: indicator, index-origin: 1, description: 'one lamp beside each outlet (R/G/B outlet indicators, the PX4 data sheet)'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'the six breaker blocks, three each side of the controller'}
+  eth: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the two 10/100/1000 Ethernet jacks of the controller'}
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: 'the PDU link jack, the sensor jack and the three USB jacks of the controller'}
+  buttons: {term: Button, role: service, index-origin: 1, description: 'the four navigation buttons and the reset pinhole of the controller'}
+  display: {term: Display, role: indicator, index-origin: 1}
+  lamps: {term: LED, role: indicator, index-origin: 1, description: 'the two lamps of the controller'}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 56, h: 1780}
+    panel:
+      decor:
+      - {id: end-plate, at: [8.0, 1629.0], size: [40.0, 99.0], fill: '#222427', kind: end-plate}
+      - {id: controller-panel, at: [2.0, 711.0], size: [52.0, 212.0], fill: '#18191b', kind: controller-panel}
+      - {id: frame-eth-1, at: [7.0, 802.0], size: [17.8, 15.2], fill: none, stroke: '#48a163', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-sensor, at: [31.2, 856.0], size: [17.8, 15.2], fill: none, stroke: '#e6d633', stroke-width: 0.5, kind: colour-frame}
+    silkscreen:
+      - {at: [4.5, 1411.0], text: '1', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-1}
+      - {at: [4.5, 1384.4], text: '2', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-2}
+      - {at: [4.5, 1357.8], text: '3', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-3}
+      - {at: [4.5, 1330.2], text: '4', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-4}
+      - {at: [4.5, 1303.6], text: '5', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-5}
+      - {at: [4.5, 1277.0], text: '6', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-6}
+      - {at: [4.5, 1245.0], text: '7', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-7}
+      - {at: [4.5, 1218.4], text: '8', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-8}
+      - {at: [4.5, 1191.8], text: '9', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-9}
+      - {at: [4.5, 1164.2], text: '10', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-10}
+      - {at: [4.5, 1137.6], text: '11', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-11}
+      - {at: [4.5, 1111.0], text: '12', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-12}
+      - {at: [4.5, 1079.0], text: '13', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-13}
+      - {at: [4.5, 1052.4], text: '14', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-14}
+      - {at: [4.5, 1025.8], text: '15', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-15}
+      - {at: [4.5, 998.2], text: '16', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-16}
+      - {at: [4.5, 971.6], text: '17', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-17}
+      - {at: [4.5, 945.0], text: '18', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-18}
+      - {at: [4.5, 495.0], text: '19', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-19}
+      - {at: [4.5, 468.4], text: '20', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-20}
+      - {at: [4.5, 441.8], text: '21', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-21}
+      - {at: [4.5, 414.2], text: '22', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-22}
+      - {at: [4.5, 387.6], text: '23', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-23}
+      - {at: [4.5, 361.0], text: '24', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-24}
+      - {at: [4.5, 333.0], text: '25', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-25}
+      - {at: [4.5, 306.4], text: '26', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-26}
+      - {at: [4.5, 279.8], text: '27', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-27}
+      - {at: [4.5, 252.2], text: '28', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-28}
+      - {at: [4.5, 225.6], text: '29', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-29}
+      - {at: [4.5, 199.0], text: '30', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-30}
+      - {at: [4.5, 167.0], text: '31', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-31}
+      - {at: [4.5, 140.4], text: '32', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-32}
+      - {at: [4.5, 113.8], text: '33', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-33}
+      - {at: [4.5, 86.2], text: '34', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-34}
+      - {at: [4.5, 59.6], text: '35', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-35}
+      - {at: [4.5, 33.0], text: '36', font-size: 2.4, anchor: middle, rotate: -90, fill: '#e8e8e8', for: outlet-36}
+      - {at: [3.0, 1591.0], text: CIRCUIT 1, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-1}
+      - {at: [53.0, 1591.0], text: CIRCUIT 6, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-1}
+      - {at: [3.0, 1531.7], text: CIRCUIT 2, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-2}
+      - {at: [53.0, 1531.7], text: CIRCUIT 5, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-2}
+      - {at: [3.0, 1472.3], text: CIRCUIT 3, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-3}
+      - {at: [53.0, 1472.3], text: CIRCUIT 4, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-3}
+      - {at: [3.0, 677.0], text: CIRCUIT 4, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-4}
+      - {at: [53.0, 677.0], text: CIRCUIT 3, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-4}
+      - {at: [3.0, 617.7], text: CIRCUIT 5, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-5}
+      - {at: [53.0, 617.7], text: CIRCUIT 2, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-5}
+      - {at: [3.0, 558.3], text: CIRCUIT 6, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-6}
+      - {at: [53.0, 558.3], text: CIRCUIT 1, font-size: 2.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: breaker-6}
+    components:
+      placements:
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [12.8, 1400.0], group: c13-outlets, rel-pos: 1, fed-by: input}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [12.8, 1373.4], group: c13-outlets, rel-pos: 2, fed-by: input}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [12.8, 1346.8], group: c13-outlets, rel-pos: 3, fed-by: input}
+        - {id: outlet-4, ref: raritan/px4-cx-outlet@1, at: [12.0, 1318.2], group: cx-outlets, rel-pos: 1, fed-by: input}
+        - {id: outlet-5, ref: raritan/px4-cx-outlet@1, at: [12.0, 1291.6], group: cx-outlets, rel-pos: 2, fed-by: input}
+        - {id: outlet-6, ref: raritan/px4-cx-outlet@1, at: [12.0, 1265.0], group: cx-outlets, rel-pos: 3, fed-by: input}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [12.8, 1234.0], group: c13-outlets, rel-pos: 4, fed-by: input}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [12.8, 1207.4], group: c13-outlets, rel-pos: 5, fed-by: input}
+        - {id: outlet-9, ref: std/c13-outlet@1, at: [12.8, 1180.8], group: c13-outlets, rel-pos: 6, fed-by: input}
+        - {id: outlet-10, ref: raritan/px4-cx-outlet@1, at: [12.0, 1152.2], group: cx-outlets, rel-pos: 4, fed-by: input}
+        - {id: outlet-11, ref: raritan/px4-cx-outlet@1, at: [12.0, 1125.6], group: cx-outlets, rel-pos: 5, fed-by: input}
+        - {id: outlet-12, ref: raritan/px4-cx-outlet@1, at: [12.0, 1099.0], group: cx-outlets, rel-pos: 6, fed-by: input}
+        - {id: outlet-13, ref: std/c13-outlet@1, at: [12.8, 1068.0], group: c13-outlets, rel-pos: 7, fed-by: input}
+        - {id: outlet-14, ref: std/c13-outlet@1, at: [12.8, 1041.4], group: c13-outlets, rel-pos: 8, fed-by: input}
+        - {id: outlet-15, ref: std/c13-outlet@1, at: [12.8, 1014.8], group: c13-outlets, rel-pos: 9, fed-by: input}
+        - {id: outlet-16, ref: raritan/px4-cx-outlet@1, at: [12.0, 986.2], group: cx-outlets, rel-pos: 7, fed-by: input}
+        - {id: outlet-17, ref: raritan/px4-cx-outlet@1, at: [12.0, 959.6], group: cx-outlets, rel-pos: 8, fed-by: input}
+        - {id: outlet-18, ref: raritan/px4-cx-outlet@1, at: [12.0, 933.0], group: cx-outlets, rel-pos: 9, fed-by: input}
+        - {id: outlet-19, ref: std/c13-outlet@1, at: [12.8, 484.0], group: c13-outlets, rel-pos: 10, fed-by: input}
+        - {id: outlet-20, ref: std/c13-outlet@1, at: [12.8, 457.4], group: c13-outlets, rel-pos: 11, fed-by: input}
+        - {id: outlet-21, ref: std/c13-outlet@1, at: [12.8, 430.8], group: c13-outlets, rel-pos: 12, fed-by: input}
+        - {id: outlet-22, ref: raritan/px4-cx-outlet@1, at: [12.0, 402.2], group: cx-outlets, rel-pos: 10, fed-by: input}
+        - {id: outlet-23, ref: raritan/px4-cx-outlet@1, at: [12.0, 375.6], group: cx-outlets, rel-pos: 11, fed-by: input}
+        - {id: outlet-24, ref: raritan/px4-cx-outlet@1, at: [12.0, 349.0], group: cx-outlets, rel-pos: 12, fed-by: input}
+        - {id: outlet-25, ref: std/c13-outlet@1, at: [12.8, 322.0], group: c13-outlets, rel-pos: 13, fed-by: input}
+        - {id: outlet-26, ref: std/c13-outlet@1, at: [12.8, 295.4], group: c13-outlets, rel-pos: 14, fed-by: input}
+        - {id: outlet-27, ref: std/c13-outlet@1, at: [12.8, 268.8], group: c13-outlets, rel-pos: 15, fed-by: input}
+        - {id: outlet-28, ref: raritan/px4-cx-outlet@1, at: [12.0, 240.2], group: cx-outlets, rel-pos: 13, fed-by: input}
+        - {id: outlet-29, ref: raritan/px4-cx-outlet@1, at: [12.0, 213.6], group: cx-outlets, rel-pos: 14, fed-by: input}
+        - {id: outlet-30, ref: raritan/px4-cx-outlet@1, at: [12.0, 187.0], group: cx-outlets, rel-pos: 15, fed-by: input}
+        - {id: outlet-31, ref: std/c13-outlet@1, at: [12.8, 156.0], group: c13-outlets, rel-pos: 16, fed-by: input}
+        - {id: outlet-32, ref: std/c13-outlet@1, at: [12.8, 129.4], group: c13-outlets, rel-pos: 17, fed-by: input}
+        - {id: outlet-33, ref: std/c13-outlet@1, at: [12.8, 102.8], group: c13-outlets, rel-pos: 18, fed-by: input}
+        - {id: outlet-34, ref: raritan/px4-cx-outlet@1, at: [12.0, 74.2], group: cx-outlets, rel-pos: 16, fed-by: input}
+        - {id: outlet-35, ref: raritan/px4-cx-outlet@1, at: [12.0, 47.6], group: cx-outlets, rel-pos: 17, fed-by: input}
+        - {id: outlet-36, ref: raritan/px4-cx-outlet@1, at: [12.0, 21.0], group: cx-outlets, rel-pos: 18, fed-by: input}
+        - {id: led-1, ref: common/led-dot@1, at: [8.0, 1410.0], group: outlet-leds, rel-pos: 1, for: outlet-1}
+        - {id: led-2, ref: common/led-dot@1, at: [8.0, 1383.4], group: outlet-leds, rel-pos: 2, for: outlet-2}
+        - {id: led-3, ref: common/led-dot@1, at: [8.0, 1356.8], group: outlet-leds, rel-pos: 3, for: outlet-3}
+        - {id: led-4, ref: common/led-dot@1, at: [8.0, 1329.2], group: outlet-leds, rel-pos: 4, for: outlet-4}
+        - {id: led-5, ref: common/led-dot@1, at: [8.0, 1302.6], group: outlet-leds, rel-pos: 5, for: outlet-5}
+        - {id: led-6, ref: common/led-dot@1, at: [8.0, 1276.0], group: outlet-leds, rel-pos: 6, for: outlet-6}
+        - {id: led-7, ref: common/led-dot@1, at: [8.0, 1244.0], group: outlet-leds, rel-pos: 7, for: outlet-7}
+        - {id: led-8, ref: common/led-dot@1, at: [8.0, 1217.4], group: outlet-leds, rel-pos: 8, for: outlet-8}
+        - {id: led-9, ref: common/led-dot@1, at: [8.0, 1190.8], group: outlet-leds, rel-pos: 9, for: outlet-9}
+        - {id: led-10, ref: common/led-dot@1, at: [8.0, 1163.2], group: outlet-leds, rel-pos: 10, for: outlet-10}
+        - {id: led-11, ref: common/led-dot@1, at: [8.0, 1136.6], group: outlet-leds, rel-pos: 11, for: outlet-11}
+        - {id: led-12, ref: common/led-dot@1, at: [8.0, 1110.0], group: outlet-leds, rel-pos: 12, for: outlet-12}
+        - {id: led-13, ref: common/led-dot@1, at: [8.0, 1078.0], group: outlet-leds, rel-pos: 13, for: outlet-13}
+        - {id: led-14, ref: common/led-dot@1, at: [8.0, 1051.4], group: outlet-leds, rel-pos: 14, for: outlet-14}
+        - {id: led-15, ref: common/led-dot@1, at: [8.0, 1024.8], group: outlet-leds, rel-pos: 15, for: outlet-15}
+        - {id: led-16, ref: common/led-dot@1, at: [8.0, 997.2], group: outlet-leds, rel-pos: 16, for: outlet-16}
+        - {id: led-17, ref: common/led-dot@1, at: [8.0, 970.6], group: outlet-leds, rel-pos: 17, for: outlet-17}
+        - {id: led-18, ref: common/led-dot@1, at: [8.0, 944.0], group: outlet-leds, rel-pos: 18, for: outlet-18}
+        - {id: led-19, ref: common/led-dot@1, at: [8.0, 494.0], group: outlet-leds, rel-pos: 19, for: outlet-19}
+        - {id: led-20, ref: common/led-dot@1, at: [8.0, 467.4], group: outlet-leds, rel-pos: 20, for: outlet-20}
+        - {id: led-21, ref: common/led-dot@1, at: [8.0, 440.8], group: outlet-leds, rel-pos: 21, for: outlet-21}
+        - {id: led-22, ref: common/led-dot@1, at: [8.0, 413.2], group: outlet-leds, rel-pos: 22, for: outlet-22}
+        - {id: led-23, ref: common/led-dot@1, at: [8.0, 386.6], group: outlet-leds, rel-pos: 23, for: outlet-23}
+        - {id: led-24, ref: common/led-dot@1, at: [8.0, 360.0], group: outlet-leds, rel-pos: 24, for: outlet-24}
+        - {id: led-25, ref: common/led-dot@1, at: [8.0, 332.0], group: outlet-leds, rel-pos: 25, for: outlet-25}
+        - {id: led-26, ref: common/led-dot@1, at: [8.0, 305.4], group: outlet-leds, rel-pos: 26, for: outlet-26}
+        - {id: led-27, ref: common/led-dot@1, at: [8.0, 278.8], group: outlet-leds, rel-pos: 27, for: outlet-27}
+        - {id: led-28, ref: common/led-dot@1, at: [8.0, 251.2], group: outlet-leds, rel-pos: 28, for: outlet-28}
+        - {id: led-29, ref: common/led-dot@1, at: [8.0, 224.6], group: outlet-leds, rel-pos: 29, for: outlet-29}
+        - {id: led-30, ref: common/led-dot@1, at: [8.0, 198.0], group: outlet-leds, rel-pos: 30, for: outlet-30}
+        - {id: led-31, ref: common/led-dot@1, at: [8.0, 166.0], group: outlet-leds, rel-pos: 31, for: outlet-31}
+        - {id: led-32, ref: common/led-dot@1, at: [8.0, 139.4], group: outlet-leds, rel-pos: 32, for: outlet-32}
+        - {id: led-33, ref: common/led-dot@1, at: [8.0, 112.8], group: outlet-leds, rel-pos: 33, for: outlet-33}
+        - {id: led-34, ref: common/led-dot@1, at: [8.0, 85.2], group: outlet-leds, rel-pos: 34, for: outlet-34}
+        - {id: led-35, ref: common/led-dot@1, at: [8.0, 58.6], group: outlet-leds, rel-pos: 35, for: outlet-35}
+        - {id: led-36, ref: common/led-dot@1, at: [8.0, 32.0], group: outlet-leds, rel-pos: 36, for: outlet-36}
+        - {id: breaker-1, ref: raritan/px4-breaker@1, at: [6.0, 1563.0], group: breakers, rel-pos: 1, description: 'Breaker 1 of 6, 20 A 2-pole'}
+        - {id: breaker-2, ref: raritan/px4-breaker@1, at: [6.0, 1503.7], group: breakers, rel-pos: 2, description: 'Breaker 2 of 6, 20 A 2-pole'}
+        - {id: breaker-3, ref: raritan/px4-breaker@1, at: [6.0, 1444.3], group: breakers, rel-pos: 3, description: 'Breaker 3 of 6, 20 A 2-pole'}
+        - {id: breaker-4, ref: raritan/px4-breaker@1, at: [6.0, 649.0], group: breakers, rel-pos: 4, description: 'Breaker 4 of 6, 20 A 2-pole'}
+        - {id: breaker-5, ref: raritan/px4-breaker@1, at: [6.0, 589.7], group: breakers, rel-pos: 5, description: 'Breaker 5 of 6, 20 A 2-pole'}
+        - {id: breaker-6, ref: raritan/px4-breaker@1, at: [6.0, 530.3], group: breakers, rel-pos: 6, description: 'Breaker 6 of 6, 20 A 2-pole'}
+        - {id: input, ref: raritan/px4-universal-input@1, at: [8.0, 1732.0], group: power-input, rel-pos: 1, description: the keyed Legrand Universal Input connector in the end cap; a Universal Input Cord plugs into it}
+        - {id: button-up, ref: raritan/pxo-button@1, at: [17.8, 719.0], group: buttons, rel-pos: 1, for: display, description: 'upward chevron: previous entry'}
+        - {id: button-down, ref: raritan/pxo-button@1, skin: down, at: [29.8, 719.0], group: buttons, rel-pos: 2, for: display, description: 'downward chevron: next entry'}
+        - {id: button-ok, ref: raritan/pxo-button@1, skin: circle, at: [17.8, 730.0], group: buttons, rel-pos: 3, for: display, description: 'circle: OK'}
+        - {id: button-back, ref: raritan/pxo-button@1, skin: cross, at: [29.8, 730.0], group: buttons, rel-pos: 4, for: display, description: 'cross: Back'}
+        - {id: display, ref: raritan/pxo-lcd@1, at: [6.9, 745.0], group: display, rel-pos: 1, for: chassis}
+        - {id: reset, ref: common/reset-button@1, at: [26.0, 786.0], group: buttons, rel-pos: 5, for: eth-1}
+        - {id: lamp-1, ref: common/led-dot@1, at: [12.0, 787.0], group: lamps, rel-pos: 1, for: chassis}
+        - {id: lamp-2, ref: common/led-dot@1, at: [42.0, 787.0], group: lamps, rel-pos: 2, for: chassis}
+        - {id: eth-1, ref: common/rj45-eth@1, at: [8.0, 803.0], group: eth, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'Ethernet 1, 10/100/1000'}
+        - {id: eth-2, ref: common/rj45-eth@1, at: [32.2, 803.0], group: eth, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'Ethernet 2, 10/100/1000'}
+        - {id: usb-a-1, ref: std/usb-a@1, at: [8.0, 829.0], group: mgmt, rel-pos: 3, description: USB-A 1}
+        - {id: usb-a-2, ref: std/usb-a@1, at: [8.0, 837.0], group: mgmt, rel-pos: 4, description: USB-A 2}
+        - {id: usb-b, ref: raritan/pxo-usb-b@1, at: [32.2, 829.0], group: mgmt, rel-pos: 5, description: USB-B}
+        - {id: link, ref: std/rj45@2, at: [8.0, 857.0], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial}, description: 'PDU link jack, for cascading controllers'}
+        - {id: sensor, ref: std/rj45@2, at: [32.2, 857.0], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial}, description: sensor jack}
+    regions:
+      - {id: logo-zone, at: [8.0, 1629.0], size: {w: 40.0, h: 99.0}, label: Raritan logo plate; the mark is not drawn}
+  rear:
+    size: {w: 56, h: 1780}
+    components:
+      placements:
+        - {id: button-1, ref: raritan/px4-mounting-button@1, at: [20.65, 1504.65], group: mounting, rel-pos: 1}
+        - {id: button-2, ref: raritan/px4-mounting-button@1, at: [20.65, 260.65], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 56, h: 65}
+    empty: >-
+      no source shows the top end: the drawing's side and rear views carry no feature there, so nothing is drawn.
+  bottom:
+    size: {w: 56, h: 65}
+    empty: >-
+      no source shows the cord end: the connector faces the front at 45 degrees and the drawing places nothing else on
+      the end.
+  left:
+    size: {w: 65, h: 1780}
+    empty: >-
+      no source shows the left long side; the drawing's side view marks only a 10.0 mm step, which is not placed.
+  right:
+    size: {w: 65, h: 1780}
+    empty: >-
+      no source shows the right long side; the drawing's side view marks only a 10.0 mm step, which is not placed.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-36'}
+- {physical: eth-1, name: Ethernet 1}
+- {physical: eth-2, name: Ethernet 2}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships, without a cord. A Legrand Universal Input Cord is a separate part number and is not drawn.
+    part-numbers:
+      PX4-132AWA-E7M26V2: {}
+datasheet:
+  title: 'Raritan PX4 Universal Input data sheet (R10)'
+references:
+  - {title: 'Raritan technical specification and mechanical drawing MPX4, Rev 0C, Mar. 25, 2025'}
+  - {title: 'Raritan PX4 rack PDU data sheet'}
+  - {title: 'Raritan PX4 quick start guide'}
+  - {title: 'Raritan PX4 product images (three renders)'}
