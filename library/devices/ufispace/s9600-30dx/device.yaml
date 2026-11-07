@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-30dx
-version: 4.1.1
+version: 4.1.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-30DX
@@ -177,8 +177,8 @@ provenance:
       system power consumption is 1300 watts' in the AC section and '1276 watts' in the DC
       section, neither qualified as to optics or ambient. 1300 is carried as power-max-w because
       max means the highest, and the 24-watt difference is recorded here rather than as a conflict
-      - they are two builds, not two readings. The 1600 W that appears beside them is a
-      provisioning instruction ('a reserve of at least 1600 watts on each power circuit') and is
+      - they are two builds, not two readings; the dc configuration states its own 1276. The
+      1600 W that appears beside them is a provisioning instruction ('a reserve of at least 1600 watts on each power circuit') and is
       the supply's rating, not a draw. On a single 110 VAC feed the HIG derates both supplies to
       1000 W each. These are the vendor's figures as the vendor states them and are NOT reconciled
       against the module set; the fans publish no draw, so any total built from the modelled
@@ -783,6 +783,9 @@ configurations:
       FAN-803816-HI fans. The datasheet's DC input rating is -40 to -72 V at 50 A and
       the HIG's maximum system consumption for this build is 1276 W. The DC build ships
       five grounding lugs where the AC build ships one (HIG accessory list).
+    attrs:
+      power:
+        power-max-w: '1276'
     bays:
       psu-0: ufispace/psu-162-dc@2
       psu-1: ufispace/psu-162-dc@2

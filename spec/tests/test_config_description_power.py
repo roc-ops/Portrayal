@@ -55,12 +55,7 @@ BESIDE = 16  # a supply, PoE or rating word this close to the figure says what t
 FIELDS = ("description", "export-description")
 
 # (device, configuration, role) -> where the contradiction is and which change clears it.
-KNOWN = {
-    ("ufispace/s9600-30dx", "dc", "any"): "text says 1276 W; the device exports 1300 W (the AC build's)",
-    ("ufispace/s9600-32x", "dc", "any"): "text says 609 W; the device exports 621.3 W (the AC build's)",
-    ("ufispace/s9610-46dx", "dc", "any"): "text says 1220 W and 1524 W; the device exports 1534 W (the AC build's)",
-    ("ufispace/s9720-56ed", "ac", "max"): "text says 2035 W and 2280 W; the device exports 2339 W (the DC build's)",
-}
+KNOWN = {}
 
 
 def draw_figures(text):
