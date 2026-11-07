@@ -1,0 +1,73 @@
+format: 1
+kind: module
+name: en8100-rfam
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Entra EN8100 dual-port RF amplifier module (RFAM), the module that sits at each end of the base
+  half of the node. It carries three SMB jacks (FWD, RTN A and RTN B) and five status lamps, is
+  held by six captive screws and lifts out by two handles. The same module serves the Fiber Deep
+  and 2AM node configurations.
+size: {w: 150.0, h: 232.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8100 dual-port RF amplifier module
+  power-absent: not-published
+groups:
+  rf:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-smb}
+    description: >-
+      the three SMB jacks the cabling tables name FWD, RTN A and RTN B, which take the black
+      forward cable and the red return cables from the access module.
+  rfam-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      the five status lamps the figure labels OPER A, POWER, CONN, ALARM and OPER B; the guide
+      says they are multicolored and does not give the colours.
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), section 3.2.1 and the
+    RFAM figure on p33: two dual-port RF amplifier modules per node, field-replaceable diplexer,
+    the same module for Fiber Deep and 2AM. No part number for the module is printed in any
+    EN8100 document held; the replacement guides held name the EN9000 and the EN2112 and are not
+    used.
+  size: >-
+    estimated - no EN8100 document states a size for any module. The 150 x 232 outline is the
+    module's share of the 607 x 281 open half in a hand-drawn layout of the open node, used for
+    proportion only. The RFAM figure on p33 has an aspect of 0.75 where this outline has 0.65, so
+    only the proportions of the features inside it are taken from the figure.
+  elements: >-
+    photo-measured - the three jacks and five lamps are placed as fractions of the RFAM figure on
+    p33 (Rev_15): RTN A and RTN B in the left column, FWD in the centre, the lamps in the upper
+    right. Drawn after the RFAM figure and the maker's drawing of the node, supplied by the maker:
+    the three orange AC shunt connectors with a black connector block beside each along the edge
+    that faces the power entry cover, the two blue test-port connectors with their black cable
+    looped to the jacks, and the printed RF circuit lines as a schematic of amplifier triangles
+    and filter boxes whose layout is an estimate. The six numbered captive screws are drawn
+    without their numbers. The vendor logo on the module is not drawn.
+  jacks: >-
+    guide - cabling tables p91 and the cable steps on p125 name the module's FWD, RTN A and RTN B
+    ports as SMB and the cables as black (forward) and red (return).
+  power: >-
+    NOT STATED in any EN8100 document held; the data sheet gives the node's maximum power (200 W)
+    and nothing per module.
+elements: {}
+parts:
+  - {ref: common/smb-jack@1, id: rtn-a, at: [17.3, 88.3], group: rf, attrs: {role: return}}
+  - {ref: common/smb-jack@1, id: rtn-b, at: [17.3, 121.1], group: rf, attrs: {role: return}}
+  - {ref: common/smb-jack@1, id: fwd, at: [70.0, 108.0], group: rf, attrs: {role: forward}}
+  - {ref: common/led-dot@1, id: led-oper-a, at: [134.5, 48.0], group: rfam-leds}
+  - {ref: common/led-dot@1, id: led-power, at: [134.5, 59.0], group: rfam-leds}
+  - {ref: common/led-dot@1, id: led-conn, at: [134.5, 64.4], group: rfam-leds}
+  - {ref: common/led-dot@1, id: led-alarm, at: [134.5, 69.8], group: rfam-leds}
+  - {ref: common/led-dot@1, id: led-oper-b, at: [134.5, 81.4], group: rfam-leds}
+connection-points:
+  mate: {at: [75.0, 116.0], direction: front}
+skins: [default]

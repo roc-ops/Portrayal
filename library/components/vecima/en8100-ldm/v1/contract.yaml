@@ -1,0 +1,72 @@
+format: 1
+kind: module
+name: en8100-ldm
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Entra EN8100 lid distribution module (LDM), the management interface for the whole node and the
+  module that carries its hub-side Ethernet. It has two 1/10 GbE SFP+ ports, ETH0 (primary) and
+  ETH1, two connectors for the access modules, a LINK connector to the power distribution module
+  and a POWER connector, and nine status lamps. It sits in the middle of the lid half.
+size: {w: 145.0, h: 153.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8100 lid distribution module
+  power-absent: not-published
+groups:
+  eth:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the two SFP+ ports ETH0 and ETH1. ETH0 is the primary port to the hub; ETH1 is a secondary
+      port for 2AM configurations or for daisy-chaining nodes in the future.
+  ldm-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      the nine lamps the figure prints: D-RF0, U-RF0 and U-RF1 under AM 0; D-RF1, U-RF2 and U-RF3
+      under AM 1; and SYS, ETH 0 and ETH 1.
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), section 3.2.8 and
+    the LDM figure on p40: two 1/10 GbE SFP+ ports, two AM connectors, a link connector, a power
+    connector and "9 multicolored LEDs". The LED section on p48 names the access-module lamps
+    D-RF-2 and D-RF-3 where the figure reads U-RF2 and U-RF3 and does not explain the difference;
+    the figure's nine labels are drawn. No part
+    number is printed.
+  size: >-
+    estimated - no EN8100 document states a size for any module. 145 x 153 is the width the LDM
+    takes between the access-module and tray columns in the open-node photograph on p32, at the
+    aspect of the LDM figure on p40 (0.95); the same figure's outline is taller in the hand-drawn
+    layout used for the other modules, which this contradicts, so the photograph wins.
+  elements: >-
+    photo-measured - lamps and ports are fractions of the LDM figure on p40. The two ports are
+    drawn turned a quarter-turn because they lie in the plane of the module with their openings
+    towards its top edge, which a face-on cage part cannot show. Not drawn, and recorded as gaps:
+    the two flat AM connectors, the LINK connector, the POWER connector and the cover over the
+    SFP+ cages. The vendor logo is not drawn.
+  eth: >-
+    guide - p39 gives "Two 1/10 GbE" SFP+ ports; the speed is the highest the ports run at.
+  power: >-
+    NOT STATED in any EN8100 document held.
+elements: {}
+parts:
+  - {ref: common/sfp-plus-cage@2, id: eth-0, at: [53.0, 96.0], rotate: 270, group: eth}
+  - {ref: common/sfp-plus-cage@2, id: eth-1, at: [66.0, 96.0], rotate: 90, group: eth}
+  - {ref: common/led-dot@1, id: led-d-rf0, at: [22.6, 36.6], group: ldm-leds}
+  - {ref: common/led-dot@1, id: led-u-rf0, at: [22.6, 40.8], group: ldm-leds}
+  - {ref: common/led-dot@1, id: led-u-rf1, at: [22.6, 44.5], group: ldm-leds}
+  - {ref: common/led-dot@1, id: led-d-rf1, at: [118.6, 111.1], group: ldm-leds}
+  - {ref: common/led-dot@1, id: led-u-rf2, at: [118.6, 115.2], group: ldm-leds}
+  - {ref: common/led-dot@1, id: led-u-rf3, at: [118.6, 119.3], group: ldm-leds}
+  - {ref: common/led-dot@1, id: led-sys, at: [42.5, 130.9], group: ldm-leds}
+  - {ref: common/led-dot@1, id: led-eth0, at: [42.5, 135.0], group: ldm-leds}
+  - {ref: common/led-dot@1, id: led-eth1, at: [42.5, 138.8], group: ldm-leds}
+connection-points:
+  mate: {at: [72.5, 76.5], direction: front}
+skins: [default]

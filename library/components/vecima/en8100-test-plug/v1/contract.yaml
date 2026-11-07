@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: en8100-test-plug
+version: 1.0.0
+class: cap
+profile: networking
+description: >-
+  Entra EN8100 test port plug, the stainless hex-head sealing plug over an external RF test port on
+  an end of the node. The port under it is a G-type female connector wired to a test port on an RF
+  amplifier module.
+size: {w: 24.0, h: 24.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8100 test port plug
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), the side view on p41
+    (item B, RF test port) and the test-port text on p100 (sealing plug over a G-type female
+    connector, 6 ft-lbs). No part number is printed.
+  size: >-
+    estimated - no EN8100 document states a size for a plug. 24 mm is read as a fraction of the end
+    face in the figure on p41, where the test plugs read smaller than the port plugs.
+  relief: >-
+    estimated - how far the head stands out of the end face is not stated.
+elements:
+  head: {at: [0.0, 0.0], size: [24.0, 24.0], class: cap}
+relief:
+  features:
+    - node: head
+      cyl: 9.0
+      color: '#a9adb2'
+      confidence: estimated
+      source: >-
+        Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15) p41, the side view:
+        the plug heads stand proud of the end face by about a third of their width.
+skins: [default]

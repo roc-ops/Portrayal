@@ -1,0 +1,35 @@
+format: 1
+kind: module
+name: en8100-pem-rf
+version: 1.0.0
+class: mechanical
+behaviour: fills
+profile: networking
+description: >-
+  Entra EN8100 RF port entry module (PEM), the board under each power entry cover that takes an
+  RF-and-AC port's stinger on a seizure screw and passes the signal on. The node holds four, two at
+  each end beside the power PEM. Each is held by five loose screws.
+size: {w: 36.0, h: 75.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8100 RF port entry module
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), section 3.2.2 and the
+    EN8100 PEM figure on p35, and the replacement chapter p116 and p117 (the power PEM plugs into
+    the PDM and the two RF PEMs plug into the centre power PEM). The guide does not count the
+    modules by type; the split of four RF and two AC is from the guide's wording and the parts
+    table of the 1.8 GHz PEM upgrade procedure (product code FA520120, no page numbers). No part
+    number is printed.
+  size: >-
+    estimated - no EN8100 document states a size for any module. Three PEMs fit along the 232 mm
+    end of the base in the PEM figure on p35, so each is taken as 75 mm along it, and 36 mm across
+    to sit under the 36 mm power entry cover.
+  elements: >-
+    photo-measured - a green board with a screened seizure block, from the figure on p35. Nothing is
+    drawn on the board beyond that block, and the stinger seizure screw, which is a connection point
+    rather than a part, is not placed.
+elements: {}
+connection-points:
+  mate: {at: [18.0, 37.5], direction: front}
+skins: [default]

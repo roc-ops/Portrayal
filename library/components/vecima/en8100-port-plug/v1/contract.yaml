@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: en8100-port-plug
+version: 1.0.0
+class: cap
+profile: networking
+description: >-
+  Entra EN8100 port plug, the stainless hex-head sealing plug that closes an external RF/AC, AC-only
+  or fibre port on an end of the node until a stinger or a fibre gland takes its place. It is
+  removed with a 1/2 inch wrench.
+size: {w: 30.0, h: 30.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8100 port plug
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), the side view on p41
+    (stainless hex plugs in each port) and the stinger procedure on p74 ("port plug", removed with a
+    1/2" wrench). No part number is printed.
+  size: >-
+    estimated - no EN8100 document states a size for a plug. 30 mm is read as a fraction of the
+    end face in the figure on p41, in which the plug heads stand proud of the face and read larger
+    than they are.
+  relief: >-
+    estimated - how far the head stands out of the end face is not stated; the figure on p41 shows
+    it standing proud by about a third of its width.
+elements:
+  head: {at: [0.0, 0.0], size: [30.0, 30.0], class: cap}
+relief:
+  features:
+    - node: head
+      cyl: 11.0
+      color: '#a9adb2'
+      confidence: estimated
+      source: >-
+        Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15) p41, the side view:
+        the plug heads stand proud of the end face by about a third of their width.
+skins: [default]
