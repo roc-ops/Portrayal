@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: op34s4s
-version: 1.0.1
+version: 1.1.0
 class: filter
 behaviour: fills
 profile: optical
@@ -49,15 +49,22 @@ elements:
   adapter-port-3: {at: [0.0, 93.70], size: [19.5, 10.4], class: adapter}
   adapter-port-4: {at: [0.0, 104.80], size: [19.5, 10.4], class: adapter}
   screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the SC/APC optical ports of a passive splitter and combiner; the data sheet states no data rate
 parts:
-  - {ref: std/sc-bore@1, id: port-a1, at: [6.00, 18.30], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: port-b1, at: [6.00, 29.30], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: port-b2, at: [6.00, 40.30], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: port-a2, at: [6.00, 51.20], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: port-1, at: [6.00, 72.20], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: port-2, at: [6.00, 83.30], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: port-3, at: [6.00, 94.40], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: port-4, at: [6.00, 105.50], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: port-a1, group: ports, at: [6.00, 18.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: port-b1, group: ports, at: [6.00, 29.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: port-b2, group: ports, at: [6.00, 40.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: port-a2, group: ports, at: [6.00, 51.20], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: port-1, group: ports, at: [6.00, 72.20], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: port-2, group: ports, at: [6.00, 83.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: port-3, group: ports, at: [6.00, 94.40], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: port-4, group: ports, at: [6.00, 105.50], rotate: 90, attrs: {connector: SC/APC}}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]
