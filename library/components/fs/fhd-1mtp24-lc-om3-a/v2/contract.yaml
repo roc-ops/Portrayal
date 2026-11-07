@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-1mtp24-lc-om3-a
-version: 2.1.0
+version: 2.2.0
 class: cassette
 behaviour: fills
 description: >-
@@ -31,30 +31,38 @@ body:
   # - see its own size-notes. It is what a pulled cassette's box is drawn as,
   # and what its rear face is painted on.
   footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 12 LC duplex adapters on the front face, OM3 multimode UPC, 24 fibres, Type A, passive
 parts:
-  - {id: lc01, ref: common/lc-duplex-v-adapter@6, at: [17.24, 18.66],
+  - {id: lc01, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [17.24, 18.66],
      attrs: {housing-finish: '#4ecee4'}}
-  - {id: lc02, ref: common/lc-duplex-v-adapter@6, at: [30.13, 18.66],
+  - {id: lc02, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [30.13, 18.66],
      attrs: {housing-finish: '#4ecee4'}}
-  - {id: lc03, ref: common/lc-duplex-v-adapter@6, at: [43.19, 18.66],
+  - {id: lc03, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [43.19, 18.66],
      attrs: {housing-finish: '#4ecee4'}}
-  - {id: lc04, ref: common/lc-duplex-v-adapter@6, at: [56.25, 18.66],
+  - {id: lc04, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [56.25, 18.66],
      attrs: {housing-finish: '#4ecee4'}}
-  - {id: lc05, ref: common/lc-duplex-v-adapter@6, at: [69.30, 18.66],
+  - {id: lc05, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [69.30, 18.66],
      attrs: {housing-finish: '#4ecee4'}}
-  - {id: lc06, ref: common/lc-duplex-v-adapter@6, at: [82.19, 18.66],
+  - {id: lc06, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [82.19, 18.66],
      attrs: {housing-finish: '#4ecee4'}}
-  - {id: lc07, ref: common/lc-duplex-v-adapter@6, at: [17.24, 3.89],
+  - {id: lc07, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [17.24, 3.89],
      attrs: {housing-finish: '#4ecee4'}}
-  - {id: lc08, ref: common/lc-duplex-v-adapter@6, at: [30.13, 3.89],
+  - {id: lc08, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [30.13, 3.89],
      attrs: {housing-finish: '#4ecee4'}}
-  - {id: lc09, ref: common/lc-duplex-v-adapter@6, at: [43.19, 3.89],
+  - {id: lc09, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [43.19, 3.89],
      attrs: {housing-finish: '#4ecee4'}}
-  - {id: lc10, ref: common/lc-duplex-v-adapter@6, at: [56.25, 3.89],
+  - {id: lc10, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [56.25, 3.89],
      attrs: {housing-finish: '#4ecee4'}}
-  - {id: lc11, ref: common/lc-duplex-v-adapter@6, at: [69.30, 3.89],
+  - {id: lc11, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [69.30, 3.89],
      attrs: {housing-finish: '#4ecee4'}}
-  - {id: lc12, ref: common/lc-duplex-v-adapter@6, at: [82.19, 3.89],
+  - {id: lc12, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [82.19, 3.89],
      attrs: {housing-finish: '#4ecee4'}}
 faces:
   rear: {ref: fs/fhd-1mtp24-lc-rear@3}
@@ -173,6 +181,16 @@ provenance:
     from the digit, like every other mark here, not from the plate frame's
     height. IT IS NOT DRAWN: vendor logos are not reproduced
     (library/components/README.md); the zone is reserved and left as plate.
+  groups: >-
+    FS FHD MTP-12/24 Cassettes Datasheet, page 2 (section I: front connector LC/SC duplex, rear
+    connector MTP adapters, polarity types) and page 12 (ordering table). The datasheet's table
+    does not list this SKU; the contract's face draws 12 adapters, the number the table prints
+    for the listed cassette with 24 fibres, and the polarity (Type A) is one of the types the
+    datasheet's page 2 lists. The datasheet prints the fibre mode, the polish and the polarity
+    and no data rate, and names no role for the adapters; the role follows the job, a through
+    connection a patch cord is plugged into, so it is traffic, and no speed is stated. The
+    group's media is the adapters' own, fiber. The polarity stays in optical.polarity. The rear
+    face holds the cassette's MTP adapters and takes its own group.
 elements:
   logo-zone: {at: [3.0, 2.5], size: [6.1, 5.95], class: label}
 skins: [default]
