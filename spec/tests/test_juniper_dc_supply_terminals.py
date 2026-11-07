@@ -42,7 +42,7 @@ QFX_POLES = [("rtn", "pole-rtn"), ("batt", "pole-batt")]
 MX_POLES = [("batt", "pole-batt"), ("rtn", "pole-rtn")]
 VERSIONS = {QFX[0]: "1.1.0", QFX[1]: "1.1.0", MX: "1.2.0"}
 # the devices that seat them: slug -> (version on the change, the supplies it seats)
-DEVICES = {"qfx5130-32cd": "0.2.0", "qfx5130-48c": "0.2.0", "qfx5220-32cd": "0.2.0", "mx104": "5.1.2"}
+DEVICES = {"qfx5130-32cd": "0.2.0", "qfx5130-48c": "0.2.0", "qfx5220-32cd": "0.2.0", "mx104": "5.1.3"}
 
 
 def folder(ref):
