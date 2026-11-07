@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c100g
-version: 1.0.5
+version: 1.0.6
 maturity: modelled
 manufacturer: Casa Systems
 model: C100G
@@ -89,6 +89,13 @@ provenance:
       datasheet - front 6 and 7 take the SMM. Modelled with the 8x10GigE variant (Fig 1-8); the
       guide also lists SMM 2x10GE, SMM 300G and SMM 300Gm, which are further skins or components
       when needed
+  power-feed:
+    confidence: datasheet
+    note: >-
+      datasheet - DC. The Casa C100G Hardware Installation Guide, Table A-1, prints the electrical input as
+      -42 to -60VDC, and the CommScope C100G data sheet lists the one chassis it sells, C100G-CHASSIS, as
+      a chassis for DC power. The data sheet prints the range as -40.5 to -60 V; the feed is DC in both.
+      The guide's optional AC-to-DC shelf is an external rectifier, so the chassis stays DC.
   bands:
     confidence: drawing
     note: >-
@@ -242,6 +249,7 @@ chassis:
   color: '#a7a9ac'
   ru: 13
   weight-kg: 61.23
+  power: dc
 # What no rule can find, because the manifest looks complete. Both bays are
 # populated, both components render, and nothing in the model can see that the
 # only power figure the vendor publishes for them is a single number covering

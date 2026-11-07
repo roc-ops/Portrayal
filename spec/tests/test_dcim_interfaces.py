@@ -806,6 +806,8 @@ WITHHELD = {
     # position instead - PASS_THROUGH below.
     "Juniper/MX-MPC2E-3D": ["mic0", "mic1"],
     "Juniper/MX-MPC3E-3D": ["mic0", "mic1"],
+    "Juniper/MX-MPC2E-3D-NG": ["mic0", "mic1"],
+    "Juniper/MX-MPC3E-3D-NG": ["mic0", "mic1"],
     "Nokia/IOM4-e": ["mda-1", "mda-2"],
     "Nokia/IOM4-e-HS": ["mda-1", "mda-2"],
     "Nokia/IOM5-e": ["mda-1", "mda-2"],
@@ -851,8 +853,10 @@ MULTI_DEPTH = sorted([
     # seat, so its bays are anchored and what sits in one is at depth 1.
     "Juniper/MIC-3D-16CHE1-T1-CE", "Juniper/MIC-3D-1OC192-XFP",
     "Juniper/MIC-3D-20GE-SFP", "Juniper/MIC-3D-2XGE-XFP",
-    "Juniper/MIC-3D-4OC3OC12-1OC48", "Juniper/MIC-3D-8DS3-E3",
-    "Juniper/MIC-3D-8OC3OC12-4OC48", "Juniper/MIC-MACSEC-20GE",
+    "Juniper/MIC-3D-4CHOC3-2CHOC12", "Juniper/MIC-3D-4OC3OC12-1OC48",
+    "Juniper/MIC-3D-8CHOC3-4CHOC12", "Juniper/MIC-3D-8DS3-E3",
+    "Juniper/MIC-3D-8OC3-2OC12-ATM", "Juniper/MIC-3D-8OC3OC12-4OC48",
+    "Juniper/MIC-MACSEC-20GE",
     "Juniper/MS-MIC-16G", "Juniper/mx-mic-blank",
     # NOT the MPCs the MX2000 adapter seats, nor the MICs only an MPC takes
     # (#917): the adapter's bay is a pass-through, so an MPC in it is at its
