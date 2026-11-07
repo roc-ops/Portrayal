@@ -692,6 +692,7 @@ PART_POWER = {
     # Neither is a screw terminal, so each is `other`, and POWER_LABEL says which connector.
     "juniper/qfx524x-dc-header": "other",
     "juniper/qfx10002-dc-header": "other",
+    "juniper/ex4400-dc-header": "other",
     # THE DC CONNECTORS OF THE EDGECORE AS5835, AMX3200 AND AGR560 48 VDC SUPPLIES ARE VENDOR CONNECTORS THE
     # DOCUMENTS DO NOT NAME THE PART OF. None is a screw terminal, so each is `other`, and POWER_LABEL says which.
     "edgecore/dcs201-dc-header": "other",
@@ -779,6 +780,7 @@ POWER_LABEL = {
     "juniper/qfx5210-dc-header": "DC power header (3-position, cells 1 to 3)",
     "juniper/qfx524x-dc-header": "DC power connector (6-position, 2x3)",
     "juniper/qfx10002-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
+    "juniper/ex4400-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
     "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
     "edgecore/amx-3200-dc-header": "DC power connector (3-pin)",
     "edgecore/agr560-dc-header": "DC power connector (2-socket)",
