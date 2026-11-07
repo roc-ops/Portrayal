@@ -266,8 +266,10 @@ Establish `chassis.width/height/depth` and each view's `size`.
   the rail face at a rack unit, projecting outward: a lacer panel, a 5U finger
   bracket), `rack-side` (on the side of an upright, beside the rack, outside
   the rails: a full-height vertical cable manager), `din-rail`, `wall`,
-  `ceiling` (fixes to a ceiling or hangs below it, its front facing down) or
-  `desktop`. The first three state `ru`; the others do not (L125). A
+  `ceiling` (fixes to a ceiling or hangs below it, its front facing down),
+  `strand` (clamps to the support strand or cable of an aerial plant),
+  `pedestal` (mounts on a pedestal or rod) or `desktop`. The first three
+  state `ru`; the others do not (L125). A
   `rack-side` part is drawn as it stands, its front `w` across the rack's face
   direction and `h` the height it runs, so its front is portrait (L152).
   Which side of the rack it stands on is the lab placement's to say
@@ -445,6 +447,75 @@ Each of the twelve rules below has its check.
 L155 to L159 for a kit you wrote. Then put the `default` position beside the
 rack-mounting figure it came from, and each kit range beside the newest
 source that gives it.
+
+## A box that opens in two halves
+
+A node that mounts on a strand or a pedestal opens like a clamshell: a base
+that stays where it is bolted, and a lid that swings on a hinge. Say so under
+`chassis` once the body is sized, and draw the open box as a view of its own.
+The rules are L200 to L203 and what they check is in
+[lint-rules.md](lint-rules.md); the format and what the build publishes are in
+[format-stability.md](format-stability.md).
+
+A two-half box, written out. The closed box is 200 wide, 100 high and 120 deep;
+the base reaches 50 from the back to the seam and the lid 70 from the seam to
+its own outer face, so the two add up to the depth:
+
+```yaml
+chassis:
+  width: 200.0
+  height: 100.0
+  depth: 120.0
+  halves:
+    base: {outer: rear, stands: 50.0}
+    lid: {hinge: top, angle: 110.0, stands: 70.0}
+provenance:
+  halves.base.stands:
+    confidence: datasheet
+    note: >-
+      the maker's name for the document, its revision and the page that gives the base's depth
+  halves.lid.angle:
+    confidence: drawing
+    note: >-
+      the figure that shows the lid open, and the angle read from it
+views:
+  open:
+    size: {w: 200.0, h: 230.0}
+    components:
+      bays:
+      - {id: lid-bay, at: [20.0, 30.0], size: {w: 60.0, h: 50.0}, accepts: [acme/card@1]}
+      - {id: base-bay, at: [20.0, 140.0], size: {w: 60.0, h: 50.0}, accepts: [acme/card@1]}
+    regions:
+    - {id: lid-half, half: lid, at: [0.0, 0.0], size: {w: 200.0, h: 110.0}}
+    - {id: base-half, half: base, at: [0.0, 120.0], size: {w: 200.0, h: 110.0}}
+```
+
+- **Exactly two entries, `base` and `lid`.** The base states `outer`, the face
+  that faces away from the lid (`front`, `rear`, `left`, `right`, `top` or
+  `bottom`, as the views are named); the lid states its `hinge`, a face
+  perpendicular to the axis of the base's `outer`, so not the face the halves
+  stand along and not the back of the lid. `angle` is the opening in degrees,
+  0 to 180. Every figure is a bare number. Check: L200 is clean.
+- **`stands` is the depth of each half along the `outer` axis,** read from the
+  maker's section drawing, not from the closed face. The two add up to the
+  chassis dimension on that axis, depth for a front or a rear `outer`, width
+  for a left or a right, height for a top or a bottom, within 2 per cent. Check:
+  L203 is silent, or `provenance` says why the closed box is taller than its two
+  shells.
+- **The open drawing is a view of its own,** with a region for each half that
+  states `half`. A bay belongs to the half of the one region whose box holds
+  the bay's centre, and nobody writes it on the bay. Check: L201 and L202 are
+  clean; in the build, each bay's group in the open view carries `data-half`.
+- **A figure keeps its source in `provenance`, keyed by its path:**
+  `halves.base.stands`, `halves.lid.stands`, `halves.lid.angle`. Check: each
+  figure has an entry that names the document and the page.
+- **A box that does not open states none of these keys,** and a closed drawing
+  states no `half`.
+
+What the lock asks for is in [format-stability.md](format-stability.md): stating
+the halves on a released device is a minor, changing the base's `outer`, the
+lid's `hinge` or the half a bay is in is a major, and a corrected `angle` or
+`stands` is a patch.
 
 ## Stage 2: the cutouts
 
@@ -1132,7 +1203,11 @@ holds two kinds of block, and each is placed in the face's lists by a
   `through`, so a switched, breakered strip needs no longhand outlet. Numbering
   and the moulding ids carry on across segments and banks. A bezel that is not
   the pitch repeated says so in the moulding's `by-pos` list, and the
-  expander stops on a key it does not know.
+  expander stops on a key it does not know. A strip whose outlets alternate
+  (a C13, then a C39) gives its segment a `pattern` in place of a `ref`: the
+  kinds in the order they repeat, each with the `shift` of its own seat from
+  the pitch. A bank may carry an `id-format` of its own, for a strip whose
+  sections are lettered and whose outlet ids carry the letter.
 
 What a block cannot say stays longhand beside it: the meter, the network
 interface, the breakers and anything else that is not repeated.

@@ -723,4 +723,5 @@ def test_the_comparison_layer_can_now_reach_them():
     # 187 with the Juniper EX3200-24T, -48T, -24P and -48P: n+0 over one fan tray (hardware guide, Cooling System)
     # 187 with the Arista 7050CX3-32S, 7050SX3-48YC12, 7050SX3-48YC8 and 7050TX3-48C8: four and two fan modules
     # (data sheet, model tables)
-    assert n == 191, n
+    # 193 with the Cisco C9300-24S and C9300-48S, the same 2+1 over three fan modules
+    assert n == 193, n

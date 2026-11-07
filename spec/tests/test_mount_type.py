@@ -26,7 +26,7 @@ from portrayal import dcim_export as dx   # noqa: E402
 from portrayal import libwalk             # noqa: E402
 from portrayal import lint                # noqa: E402
 
-NOT_RACKED = ("din-rail", "wall", "desktop", "ceiling")
+NOT_RACKED = ("din-rail", "wall", "desktop", "ceiling", "strand", "pedestal")
 # occupies no rack unit, but bolts to rack holes and so still states `ru`
 ON_THE_RAIL_FACE = "rack-face"
 NO_RACK_UNIT = NOT_RACKED + (ON_THE_RAIL_FACE,)

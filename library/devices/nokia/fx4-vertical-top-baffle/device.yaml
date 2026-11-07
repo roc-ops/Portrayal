@@ -1,0 +1,91 @@
+format: 1
+kind: device
+name: fx4-vertical-top-baffle
+version: 0.1.0
+maturity: modelled
+manufacturer: Nokia
+model: 7360 ISAM FX-4 vertical shelf mount kit, top baffle
+aliases:
+- {name: 3FE 67839 AA, kind: vendor, note: top baffle}
+description: >-
+  The top baffle of the 7360 ISAM FX-4 vertical shelf mount kit, which carries the fibre
+  ring-guides. It stands over a vertically mounted shelf and takes two rack units of the
+  elevation. A vertical mount needs one over every shelf.
+profile: passive
+provenance:
+  chassis:
+    confidence: datasheet
+    note: >-
+      Nokia 7360 ISAM FX-4 Vertical shelf mount kit unit data sheet (3FE 67299 BAAA TQZZA
+      Edition 01), Table 5: the baffle is 99.74 mm high, 205.74 mm wide and 250.2 mm long. Read
+      as height up the rack, width across it (the sheet's Length column, 250.2) and depth (the
+      sheet's Width column, 205.74). The depth is the FX-8 baffle's depth too (205.74), and 250.2
+      sits 28 mm over the 221.9 mm the shelf stands across the opening, as the FX-8 baffle's 381
+      sits 26 mm over its 355 mm shelf, the skirts and panel being wider than the shelf. Figure
+      144 of the 7360 ISAM FX ANSI Hardware Installation Manual (3HH-12893-AAAA-TCZZA Issue 29),
+      read by eye, draws the baffle narrower than that. Which size lies across is a reading, not
+      a printed fact.
+  units:
+    confidence: drawing
+    note: >-
+      two rack units, read from Figure 144 of the installation manual, where the next shelf's tray
+      stands 15 units above the one under the first, which with a tray of two units and a shelf
+      that takes eleven leaves two for the baffle. The baffle is 99.74 mm, 2.24 units, so it
+      stands about 5.4 mm proud of its units at each end, where the shelf's own spare height
+      (eleven units are 488.95 mm, the shelf 447 mm) lies. No table prints the units.
+  color:
+    confidence: estimated
+    note: >-
+      the held figures are line art and no photograph is held, so the colour is a neutral metal
+      grey and is not a reading. The ring-guides the unit data sheet says the baffle carries are
+      not drawn: no figure held dimensions them.
+  ears:
+    confidence: drawing
+    note: >-
+      no ears. Figure 144 of the installation manual (printed page 258) draws the baffle as a plain
+      box standing on the shelf's bracket between the posts, with no ear, flange or bolt to a
+      post. The brackets with bolts at the posts are the shelf's, under the baffle.
+attrs:
+  physical:
+    part-number: 3FE 67839 AA
+    ru: 2
+    weight-kg: 0.8
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 250.2
+  height: 99.74
+  depth: 205.74
+  ru: 2
+  full-depth: false
+  color: '#9aa0a6'
+  ears: {none: true}
+gaps:
+- what: kit-parts
+  reason: needs-drawing
+  note: >-
+    the rest of the kit (the top cross bracket with the rear and front skirts, the intumescent
+    panel, the 23 in. rack adapter brackets and the screws) is not seen from the front of the rack
+    and is not modelled.
+  wanted: none
+views:
+  front:
+    size: {w: 250.2, h: 99.74}
+    panel:
+      decor:
+      - {id: baffle-face, at: [0.0, 0.0], size: [250.2, 99.74], fill: '#9aa0a6', kind: wall}
+      - {id: baffle-edge, at: [0.0, 93.0], size: [250.2, 6.74], fill: '#7d838a', kind: front-lip}
+  rear:
+    size: {w: 250.2, h: 99.74}
+    panel:
+      decor:
+      - {id: baffle-face, at: [0.0, 0.0], size: [250.2, 99.74], fill: '#8a9097', kind: wall}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The baffle as the vertical shelf mount kit ships it.
+datasheet: {title: Nokia 7360 ISAM FX-4 Vertical shelf mount kit unit data sheet (3FE 67299 BAAA TQZZA Edition 01), sha256: f3f654044e62e43cf87d45a74f07275706e88af5b0e35560c97e8ae234fc9548}
+references:
+- {title: 'Nokia 7360 ISAM FX ANSI Hardware Installation Manual (3HH-12893-AAAA-TCZZA Issue 29; section 13.2, Figures 142 and 144)', sha256: 2282eb2e3f7fee385e71df928f5d6dd4e76d6235bdc2684d7a2c4b4d8d2c20b6}

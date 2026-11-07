@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jpsu-550-c-dc-afo
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -48,15 +48,35 @@ provenance:
     ground, and that the cable CBL-JNP-PWR-DSUB comes with the DC models. The note under Table
     81 (the 2000 W cable) puts the ground on the middle pin of its connector. The render of this
     unit shows the larger contact in the middle, so the same reading is assumed here. The
-    connector is drawn in the skin, because the library has no D-sub 3W3 power part.
+    connector is the part juniper/ex4400-dc-header@1, composed here as `dc-header`.
   elements: >-
     estimated - read off the rear render of the DC build of the EX4400-24T (Figure 10, g022649,
     2000 x 265 px, the chassis 441.7 mm across at 3.92 px/mm and 43.7 mm tall at 3.86 px/mm), as
     an offset from the left and top of the first supply. The fan and handle are those of the AC
     unit. The connector body is 58.9 to 69.0 across and 7.1 to 32.4 down, with contacts at 63.9
     across and 12.8, 19.6 and 26.2 down, and the standoffs at 63.9 across and 3.6 and 35.3
-    down. The DC OK legend is at 70.5, the lamp at 76.1, 5.3 and the ejector lever 74.4 to 80.5
-    across.
+    down; the connector part, placed at 58.9 and 2.2, draws all of it. The DC OK legend is at
+    70.5, the lamp at 76.1, 5.3 and the ejector lever 74.4 to 80.5 across.
+  connector: >-
+    datasheet - EX4400 DC Power Cable Specification: the supply takes a D-sub 3W3 connector whose three
+    pins carry the -48 VDC input (-), the return (+) and the ground. The guide names the cable
+    CBL-JNP-PWR-DSUB (Table 79), a whole cable and not a connector part, and no maker or part number for the
+    connector, so juniper/ex4400-dc-header@1 is a declared stand-in (its own provenance). The connector is the
+    one the registered key dc-connector-3w3 covers, because the same Juniper cable model is named for it in
+    this guide and in the QFX10002 Switch Hardware Guide. juniper/qfx10002-dc-plug@1, the cable connector,
+    mates it. The supply's own skin no longer draws the shell, its contacts or its standoffs; the part does,
+    in the same shapes and colours at the same place.
+  roles: >-
+    guide - EX4400 DC Power Cable Specification: the three pins carry the "-48 VDC input (-)" (the library's
+    `batt`), "return (+)" (`rtn`) and the ground (`gnd`); Table 76 gives a range, -48 to -60 VDC rated, and no
+    nominal. WHICH CONTACT OF THE SHELL IS WHICH IS NOT STATED FOR THIS CONNECTOR: Figure 10 prints no mark beside
+    the contacts, so no contact is given a role. The note under Table 81 puts the ground on the middle pin of the
+    2000 W cable's connector, which is a different supply.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. A port whose poles are a connector's contacts is offered only
+    where that path's part is itself the connector; on a supply in a bay it is the supply, not the connector it
+    composes, so a port stated here would be published and then not offered. The roles above are recorded for the
+    port a later change can state, a minor on the devices that seat this supply.
   colour: >-
     photo-measured - the handle is the orange of the DC build's render, median of the handle
     margin of the fan module beside it. The AC build's render draws a golden orange, so the two
@@ -92,14 +112,12 @@ elements:
     at: [0.3, 17.9]
     size: [43.3, 5.4]
     class: handle
-  dc-input:
-    at: [58.9, 2.0]
-    size: [10.1, 34.9]
-    class: inlet
   latch:
     at: [74.4, 9.3]
     size: [6.1, 17.9]
     class: latch
+parts:
+- {ref: juniper/ex4400-dc-header@1, id: dc-header, at: [58.9, 2.2]}
 size:
   w: 83.06
   h: 40.39

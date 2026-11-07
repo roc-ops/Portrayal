@@ -9,7 +9,6 @@ Some faceplates carry their connectors on surfaces that are not parallel to the 
 - **Nokia 7360 ISAM FX NT cards (FANT-H, FANT-M):** the 1PPS/10MHz SMA jacks and the two QSFP28
   cages sit in a housing angled about 30 degrees upward.
 - **NT I/O cards (FNIO-A, FNIO-D):** every cage sits on a 45-degree sawtooth tooth.
-- **Casa UPS-32x4:** each cage is angled 45 degrees for fibre bend radius.
 
 The format could only say that a part is face-on. So these were drawn face-on at full height, with
 shading painted into the skin as a hint. A reviewer caught it by eye. It is wrong in two ways:
@@ -154,8 +153,7 @@ parts:
 The change modified no existing contract. The Nokia 7360 ISAM FX cards
 (FANT-H, FANT-M, FNIO-A, FNIO-D) then replaced their painted bands with
 facets, with the version bumps that geometry change requires on the cards and
-on the shelves that seat them (roc-ops/Portrayal#538). The Casa UPS-32x4 is
-left for a follow-up. The modelling guide covers facets in its step 7a, and
+on the shelves that seat them (roc-ops/Portrayal#538). The modelling guide covers facets in its step 7a, and
 the pitfalls page says how to read an angle off a 3D figure.
 
 ## Recessed facets (addendum)
