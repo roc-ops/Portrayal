@@ -445,6 +445,7 @@ def test_the_committed_export_equals_the_exporters_own_output(name, tmp_path):
 # ------------------------------------------------------------------ the lock
 
 
+@pytest.mark.heavy
 def test_the_lock_agrees_with_every_new_device_and_component():
     from portrayal import devicelock
     new = {f"cisco/{n}" for n in ("n9k-c9364d-gx2a", "n9k-c9348d-gx2a", "nxa-sfan-160cfm2",
