@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx2000-lc-adapter
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -35,7 +35,9 @@ provenance:
     the eleven MX240/MX480/MX960 cards the MX2000 slots already listed as `-v2k` twins before #261,
     from the module matrix of the Interface Module Reference. The MX2010 guide names MPC1E, MPC2E,
     MPC3E, MPC5E and MPC7E as needing the adapter; the 16x10GE MPC, both MPC4Es and the MS-MPC are the
-    same form factor and the same guides list them for the MX2000.
+    same form factor and the same guides list them for the MX2000. The MPC2E NG and MPC3E NG are the
+    same form too: Table 4 of the Interface Module Reference (PDF pp. 33-34) prints a release for each
+    on the MX2008 (15.1F7), the MX2010 and the MX2020, so the adapter seats both.
   handles: >-
     estimated - the black handle blocks at the adapter's ends read about 25 mm (top) and 22 mm (bottom)
     on the MX2010 photograph at about 1 px/mm, measured to where the carried MPC's own levers cross
@@ -54,6 +56,8 @@ bays:
     - juniper/mpc1e-3d@3
     - juniper/mpc2e-3d@3
     - juniper/mpc3e-3d@3
+    - juniper/mpc2e-3d-ng@1
+    - juniper/mpc3e-3d-ng@1
     - juniper/mpc4e-3d-2cge-8xge@2
     - juniper/mpc4e-3d-32xge-sfpp@2
     - juniper/mpc5e-100g10g@2

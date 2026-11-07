@@ -1768,6 +1768,67 @@ def check(library: pathlib.Path, below=()):
     return findings + check_listings(library) + check_racks(library)
 
 
+def check_base(base_locks, head_locks):
+    """The bump findings for the devices whose lock moved against a base.
+
+    BOTH ARGUMENTS ARE {slug: lock entry}, read from the lock files and nothing
+    else. `check` compares a lock with the device as it is now, so after
+    `--update` the two always agree and it cannot see that the `version:` line
+    stayed where the base had it. This compares the lock the base committed
+    with the lock the branch committed, by the rule `check` applies:
+    `required_bump` for what the move needs, `bump_taken` for what the version
+    took. A device only one side holds is new or gone and passes.
+    """
+    findings = []
+    for name in sorted(set(base_locks) & set(head_locks)):
+        was, now = base_locks[name], head_locks[name]
+        if was == now:
+            continue
+        took = bump_taken(was.get("version"), now.get("version"))
+        if took == "backwards":
+            findings.append((name, "backwards",
+                             f"{name} version went from {was.get('version')} to "
+                             f"{now.get('version')} against the base. A version is a "
+                             "promise, and it only counts up"))
+            continue
+        need = required_bump(was, now)
+        if not sufficient(took, need):
+            moved = sorted(k for k in set(was) | set(now)
+                           if k not in ("version", "format") and was.get(k) != now.get(k))
+            findings.append((name, "unbumped",
+                             f"{name} lock changed against the base ({', '.join(moved)}) "
+                             f"since version {was.get('version')} and the version "
+                             + (f"is still {now.get('version')}"
+                                if took is None else f"only took a {took} bump")
+                             + f". This change needs at least a {need} bump."))
+    return findings
+
+
+def _git(library: pathlib.Path, *args):
+    import subprocess
+    done = subprocess.run(["git", "-C", str(library), *args], capture_output=True, text=True)
+    if done.returncode:
+        raise SystemExit(f"devicelock: git {' '.join(args)} failed: {done.stderr.strip()}")
+    return done.stdout
+
+
+def base_locks_changed(library: pathlib.Path, base: str):
+    """({slug: lock at `base`}, {slug: lock in the checked-out tree}) for each
+    device lock that differs from `base`. Needs the commit `base` and its tree
+    only, so a clone one commit deep that fetched `base` alone is enough."""
+    names = _git(library, "diff", "--name-only", "--relative", "--diff-filter=M",
+                 base, "--", "devices").split()
+    was, now = {}, {}
+    for rel in names:
+        parts = pathlib.PurePosixPath(rel).parts
+        if len(parts) != 4 or parts[3] != DEVICE_LOCK_NAME:
+            continue
+        name = f"{parts[1]}/{parts[2]}"
+        was[name] = json.loads(_git(library, "show", f"{base}:./{rel}"))
+        now[name] = json.loads((library / rel).read_text())
+    return was, now
+
+
 def update(library: pathlib.Path, below=()):
     """Re-lock the devices whose fingerprint moved, and only those."""
     versions = component_versions(library, below)
@@ -1800,7 +1861,17 @@ def main(argv=None):
     ap.add_argument("--below", action="append", default=[], type=pathlib.Path,
                     help="a library --library is built on top of (an overlay library): "
                          "its parts count toward a device's fingerprint")
+    ap.add_argument("--base", metavar="COMMIT",
+                    help="compare each device lock that differs from this commit with "
+                         "the lock there, and fail when the version did not take the "
+                         "bump the move needs; reads lock files only, no library walk")
     args = ap.parse_args(argv)
+    if args.base:
+        findings = check_base(*base_locks_changed(args.library, args.base))
+        for _, _, msg in findings:
+            print(f"devicelock: {msg}")
+        print(f"devicelock: {len(findings)} finding(s) against {args.base[:12]}")
+        return 1 if findings else 0
     if args.update:
         changed = update(args.library, args.below)
         print(f"devicelock: {len(changed)} device(s) re-locked"

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-4choc3-2choc12
-version: 1.3.1
+version: 1.3.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -48,15 +48,28 @@ provenance:
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper Networks, MX Series 5G Universal Routing Platform Interface Module Reference,
+    'Channelized SONET/SDH OC3/STM1 (Multi-Rate) MICs with SFP' (printed p. 324, Figure 37): 'The
+    ports are labeled 0-3'. The media is the title's 'with SFP'. No speed is stated: the guide makes
+    the 4-port MIC rate-selectable, '4-port OC3/STM1' or '2-port OC12/STM4', so a cage takes several
+    rates, and the speed vocabulary has no word for either.
 states:
 - ok
 - fail
 - absent
 parts:
-- {ref: std/sfp-ganged@1, id: port-0-0, at: [16.00, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-1, at: [16.00, 15.20], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-2, at: [30.25, 3.60], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-3, at: [30.25, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-0, group: sfp, at: [16.00, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-1, group: sfp, at: [16.00, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-2, group: sfp, at: [30.25, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-3, group: sfp, at: [30.25, 15.20], rotate: 180, attrs: {media: sfp}}
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp}
+    description: "the four SFP cages, ports 0 to 3 as Figure 37 prints them, in two ganged pairs"
 size:
   w: 168.0
   h: 27.0

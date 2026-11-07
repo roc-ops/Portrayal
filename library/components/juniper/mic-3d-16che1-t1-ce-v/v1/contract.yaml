@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-16che1-t1-ce-v
-version: 1.2.1
+version: 1.2.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -41,27 +41,40 @@ provenance:
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper Networks, MX Series 5G Universal Routing Platform Interface Module Reference,
+    'Channelized E1/T1 Circuit Emulation MIC' (printed p. 342, Figure 41): 'Sixteen E1 or T1 ports',
+    'RJ-48 connector'; the figure prints 0 and 7 on the lower row and 8 and 15 on the upper. The
+    group states no media: the guide prints RJ-48 and each part already states its own media. No
+    speed is stated: each port is selectable as E1 or T1 and the speed vocabulary has no word for
+    either.
 states:
 - ok
 - fail
 - absent
 parts:
-- {ref: std/rj45-ganged@2, id: port-0-1, at: [1.85, 13.65], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-0, at: [12.85, 13.65], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-3, at: [1.85, 27.95], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-2, at: [12.85, 27.95], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-5, at: [1.85, 42.25], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-4, at: [12.85, 42.25], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-7, at: [1.85, 56.55], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-6, at: [12.85, 56.55], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-9, at: [1.85, 70.85], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-8, at: [12.85, 70.85], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-11, at: [1.85, 85.15], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-10, at: [12.85, 85.15], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-13, at: [1.85, 99.45], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-12, at: [12.85, 99.45], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-15, at: [1.85, 113.75], rotate: 90, attrs: {media: rj45}}
-- {ref: std/rj45-ganged@2, id: port-0-14, at: [12.85, 113.75], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-1, group: rj45, at: [1.85, 13.65], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-0, group: rj45, at: [12.85, 13.65], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-3, group: rj45, at: [1.85, 27.95], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-2, group: rj45, at: [12.85, 27.95], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-5, group: rj45, at: [1.85, 42.25], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-4, group: rj45, at: [12.85, 42.25], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-7, group: rj45, at: [1.85, 56.55], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-6, group: rj45, at: [12.85, 56.55], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-9, group: rj45, at: [1.85, 70.85], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-8, group: rj45, at: [12.85, 70.85], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-11, group: rj45, at: [1.85, 85.15], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-10, group: rj45, at: [12.85, 85.15], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-13, group: rj45, at: [1.85, 99.45], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-12, group: rj45, at: [12.85, 99.45], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-15, group: rj45, at: [1.85, 113.75], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-14, group: rj45, at: [12.85, 113.75], rotate: 90, attrs: {media: rj45}}
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 0
+    description: "the sixteen E1/T1 jacks, ports 0 to 7 along the bottom row and 8 to 15 along the top as Figure 41 prints them"
 size:
   w: 27.0
   h: 168.0

@@ -77,7 +77,9 @@ THREE_LEVEL = [
     # MICs. The real coverage beside the hand-built fixture is the MX2020 row of
     # test_nested_cage_seat_js.py: an optic in a MIC in an MPC in the adapter.
     "mx2000-lc-adapter/mpc -> juniper/mpc1e-3d@3",
+    "mx2000-lc-adapter/mpc -> juniper/mpc2e-3d-ng@1",
     "mx2000-lc-adapter/mpc -> juniper/mpc2e-3d@3",
+    "mx2000-lc-adapter/mpc -> juniper/mpc3e-3d-ng@1",
     "mx2000-lc-adapter/mpc -> juniper/mpc3e-3d@3",
 ]
 
