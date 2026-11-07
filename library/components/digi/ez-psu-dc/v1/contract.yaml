@@ -28,15 +28,15 @@ provenance:
     thumbscrew are the AC supply's. No document held shows the DC supply's face.
   connector: >-
     estimated - the page names "Phoenix connectors" and no more: not their number of
-    positions, their pitch or which way they face. A two-position 5.08 header
-    (common/terminal-header-508-2@3, the library's Phoenix-style header) stands in at the
-    place of the AC inlet. A photograph or drawing of the DC supply would replace it.
+    positions, their pitch or which way they face. A two-position 5.08 terminal block is
+    drawn as this supply's own art, at the place of the AC inlet, with the outline and cells
+    of the library's Phoenix-style header. The header part that stood in before is no longer
+    composed. A photograph or drawing of the DC supply would replace the drawing.
   size: via digi/ezps-ac@1 - the dimension model's 95.0 x 41.5 bay.
 elements:
   fan-grille: {at: [12.2, 2.0], size: [35.4, 37.5], class: vent}
   thumbscrew: {at: [86.1, 11.1], size: [10.8, 10.8], class: fastener}
-parts:
-  - {ref: common/terminal-header-508-2@3, id: dc-in, at: [57.5, 16.45]}
+  dc-terminal: {at: [57.5, 16.45], size: [12.16, 8.6], class: connector}
 relief:
   wall: '#17191b'
   features:
@@ -44,6 +44,34 @@ relief:
       vent: 20.0
       confidence: estimated
       source: as digi/ezps-ac@1
+    - node: dc-terminal
+      out: 2.5
+      shape: true
+      color: '#4fb548'
+      confidence: estimated
+      source: >-
+        as common/terminal-header-508-2@3, whose housing the terminal block is drawn after; the
+        page gives no height for the DC supply's terminals.
+    - node: dc-terminal-cell-1
+      out: 0.8
+      color: '#2f6e2a'
+      confidence: estimated
+      source: as the housing above - the well floor, below the housing top.
+    - node: dc-terminal-pin-1
+      out: 1.6
+      color: '#c9cdd2'
+      confidence: estimated
+      source: as the housing above - the contact standing in the well.
+    - node: dc-terminal-cell-2
+      out: 0.8
+      color: '#2f6e2a'
+      confidence: estimated
+      source: as the housing above - the well floor, below the housing top.
+    - node: dc-terminal-pin-2
+      out: 1.6
+      color: '#c9cdd2'
+      confidence: estimated
+      source: as the housing above - the contact standing in the well.
     - node: thumbscrew
       cyl: 6.2
       confidence: estimated

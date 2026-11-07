@@ -274,6 +274,13 @@ groups:
     role: service
     index-origin: 1
     description: the two power supply bays, PSU1 on the right of the rear and PSU2 on the left
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        Digi Connect EZ 16/32 product page: "Product supports redundant replaceable power supplies".
+        Its FAQ: "optional dual AC or dual DC power supplies". Neither states a form or whether the
+        pair shares the load or one stands by, so 1+1 is read as one supply with one spare and the
+        sharing is not stated.
   fans:
     term: Bay
     role: service
