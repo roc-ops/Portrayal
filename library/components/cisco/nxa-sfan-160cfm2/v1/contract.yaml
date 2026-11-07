@@ -1,0 +1,131 @@
+format: 1
+kind: module
+name: nxa-sfan-160cfm2
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The fan module of the Cisco Nexus 9364D-GX2A and 9348D-GX2A fixed switches, ordered as
+  NXA-SFAN-160CFM2-PI (port-side intake, burgundy) or, for the 9348D-GX2A, NXA-SFAN-160CFM2-PE
+  (port-side exhaust, blue). It has two honeycomb grilles, one above and one below a grey handle
+  strap that runs across its middle, a latch pad with a coloured squeeze bar at each end of the
+  strap, and a ring at its lower right corner.
+size: {w: 80.0, h: 78.8}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-SFAN-160CFM2'
+  power-absent: not-published
+  weight-kg: 0.61
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N9364D-GX2A NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2022-06-24, Last Modified 2026-09-16), Overview: "Fan modules (four) for
+    port-side intake fan module with burgundy coloring (NXA-SFAN-160CFM2-PI)", and the Cisco
+    N9348D-GX2A guide (First Published 2022-07-04, Last Modified 2026-07-28), Overview: "Port-side
+    exhaust fan module with blue coloring (NXA-SFAN-160CFM2-PE)" and "Port-side intake fan module
+    with burgundy coloring (NXA-SFAN-160CFM2-PI)". THE AIRFLOW SUFFIX IS DROPPED from the model,
+    as on cisco/nxa-sfan-35cfm@1: the two differ in the latch colour, which is this contract's
+    `latch-finish` field, and in the direction the fan turns, which the face does not show.
+  part-number: >-
+    THE PART NUMBER IS PRINTED THREE WAYS and this component is named by the one the guides'
+    running text prints. The text of both guides (Overview) and the N9348D weights row print
+    NXA-SFAN-160CFM2-PI and -PE; the N9364D weights row (PDF p60, printed 54) prints
+    "NXA-FAN-160CFM2-PI", without the S; Table 1 of both guides prints "NXA-SF AN-160CFM2PI"
+    (a broken space in the conversion); and the label on each rear figure reads
+    "NXA-FAN-160CFM2PI" (9348D, art 503779) or a similar label on the 9364D's (art 503685, too
+    small to read the middle letters at full size). cisco/nxa-fan-35cfm@1 and
+    cisco/nxa-sfan-35cfm@1 are two different parts, so the missing S could be a different
+    part, but the weight, the tables and the figure's arrangement here agree with one fan
+    module and no second 160 CFM2 fan is added. The label is not drawn: it is paper.
+  power: >-
+    NOT PUBLISHED. Searched both guides' appendix B (Switch Power Input Requirements and the
+    supply tables) for a per-module fan figure; they give the whole switch only. L29 stands on
+    it at the chassis. The weight is the weights table's row, 1.35 lb (0.61 kg), printed in the
+    9348D guide for both -PI and -PE and in the 9364D guide for the -PI.
+  size: >-
+    estimated - the guides state no fan module dimension. Read off the 9364D rear figure (art
+    503685, 1304 x 360 px in the converted set, the switch body 1273 px across for 442.3 mm and
+    253 px down for 87.6 mm, 2.88 px per mm): fan 1's frame runs 231 px across and 227 down,
+    80.0 by 78.8 mm, and the pitch is 236.3 px, 82.05 mm between modules. The 9348D figure
+    (503779) shows the same module at 2.86 px per mm.
+  elements: >-
+    estimated - laid out as the 9364D rear figure shows fan 1: an upper honeycomb 62.8 by 25.0
+    mm under a label plate, a lower one 62.8 by 29.7 mm, a strap between them, a latch pad 12.0
+    by 21.3 mm at each end with a squeeze bar of grip marks, and a ring at the lower right.
+    Sizes are read at 2.88 px per mm and are good to about a millimetre; the figure is too
+    coarse to read more. The 9348D figure draws the same arrangement.
+  lamp: >-
+    datasheet for the states - the guides' appendix C, "Fan Module LEDs": Status green
+    (operational), red (not operational), off (no power); a second table (Table 5) gives off,
+    amber (pending to come on-line), green (normal) and flashing amber (failed). The two
+    tables disagree on the failed colour and neither says where the lamp is. THE LAMP IS PLACED
+    AT THE FIGURE'S LOWER RIGHT RING, the only round mark on the face.
+  latch-colour: >-
+    datasheet for the convention - both guides' Overview: burgundy for port-side intake, blue
+    for port-side exhaust (the 9348D guide only). The N9364D guide's replacement section says
+    "red coloring" for port-side intake and its Overview says burgundy; burgundy is used. The
+    values are cisco/nxa-sfan-35cfm@1's.
+  depth: >-
+    estimated - not stated. 100 mm is cisco/nxa-sfan-35cfm@1's figure for a module of this class
+    and nothing here measures it.
+states: [absent]
+elements:
+  status: {at: [74.6, 73.2], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  grille-top: {at: [9.6, 7.8], size: [62.8, 25.0], class: rotor}
+  grille-bottom: {at: [9.6, 46.6], size: [62.8, 29.7], class: rotor}
+  latch-left: {at: [0.2, 28.9], size: [12.0, 21.3], class: latch}
+  latch-right: {at: [67.8, 28.9], size: [12.0, 21.3], class: latch}
+  pull-left: {at: [3.6, 31.5], size: [4.6, 15.8], class: latch}
+  pull-right: {at: [72.2, 31.5], size: [4.6, 15.8], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille-top
+      vent: 26
+      confidence: estimated
+      source: >-
+        cisco/nxa-sfan-160cfm2@1's own elements key - the honeycomb's extent is read off the
+        guides' rear figures and the depth behind it is not stated.
+    - node: grille-bottom
+      vent: 26
+      confidence: estimated
+      source: >-
+        cisco/nxa-sfan-160cfm2@1's own elements key - as grille-top.
+    - node: latch-left
+      out: 6.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-sfan-160cfm2@1's own elements key - the latches stand proud in every picture
+        of the family and how far is not stated; 6 mm is cisco/nxa-sfan-35cfm@1's figure.
+    - node: latch-right
+      out: 6.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-sfan-160cfm2@1's own elements key - as latch-left.
+    - node: pull-left
+      out: 7.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-sfan-160cfm2@1's own elements key - the squeeze bar stands proud of its pad by
+        an unstated amount; one millimetre more than the pad is assumed.
+    - node: pull-right
+      out: 7.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-sfan-160cfm2@1's own elements key - as pull-left.
+skins: [default]
+body:
+  depth: 100
+  color: '#26292d'
+  footprint: {at: [0, 0], size: [80.0, 78.8]}
