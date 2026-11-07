@@ -2024,6 +2024,8 @@ MOUNT_PROSE = {
     "din-rail": "Mounts on a DIN rail (IEC 60715); not rack-mounted.",
     "wall": "Wall-mounted; not rack-mounted.",
     "ceiling": "Ceiling-mounted; not rack-mounted.",
+    "strand": "Strand-mounted; not rack-mounted.",
+    "pedestal": "Pedestal-mounted; not rack-mounted.",
     "desktop": "Desktop unit; not rack-mounted.",
     "rack-face": "Mounts on the rack rail face at a rack unit; occupies no rack unit.",
     "rack-side": "Mounts on the side of a rack's upright, beside the rack; occupies no rack unit.",
