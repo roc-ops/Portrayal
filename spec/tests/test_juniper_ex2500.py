@@ -132,6 +132,18 @@ def test_the_rear_has_two_ac_inlets_and_the_supplies_and_fans_are_built_in():
     assert {"fans", "psus"}.isdisjoint(d["groups"])
 
 
+def test_the_rear_carries_the_earth_symbol_the_guide_draws_and_no_invented_hardware():
+    """Figure 2 draws a circled earth symbol at the left of the left inlet on the bare panel, and no lug,
+    stud or screw at it."""
+    d = load()
+    (mark,) = by_ref(d, "rear", "common/ground-symbol@1")
+    assert mark["for"] == "chassis"
+    left_inlet = min(by_ref(d, "rear", "std/c14-inlet@1"), key=lambda p: p["at"][0])
+    assert mark["at"][0] + 3.0 < left_inlet["at"][0]
+    earth_hardware = [p["ref"] for p in placements(d, "rear") if "ground" in p["ref"] and p is not mark]
+    assert earth_hardware == []
+
+
 def test_the_two_models_are_configurations_that_differ_in_airflow():
     d = load()
     cfg = d["configurations"]

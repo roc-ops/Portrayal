@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex2500-24f
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX2500-24F
@@ -93,6 +93,16 @@ provenance:
       22 mm across by 35 mm high with its three pins stacked, so it is the library's C14 inlet turned
       a quarter. Guide, Power Supplies: two internal 275 W supplies, each with its own IEC 320 inlet on
       the rear and no power switch. The supplies are internal and the guide gives no part number for them.
+  rear-earth:
+    confidence: estimated
+    note: >-
+      Figure 2 (page 4), read at 600 dpi on the rear figure's pixel ruler (0.1212 mm per px across, 0.1287
+      down): a circled earth symbol on the bare panel at the left of the left inlet, centred 6.5 mm from
+      the left edge and 2.8 mm below the inlet's centre (23.3 mm down). It is about 8.6 mm across in the
+      figure while the registered symbol is 6.0 mm, so it is centred on the figure's mark and is smaller.
+      The figure draws no plate, lug, stud or screw, and no page names a lug, a screw size or a thread,
+      so nothing is drawn for the terminal. Six small plain circles, three at each end, are not placed.
+      Reading accuracy about 1 mm across and 1.5 mm down.
   fans:
     confidence: datasheet
     note: >-
@@ -214,10 +224,11 @@ gaps:
 - what: rear-earth-mark
   scope:
   - rear
-  reason: needs-drawing
+  reason: vendor-silent
   wanted: >-
-    The earth symbol at the left of the rear panel in Figure 2 is not placed: the guide names no terminal
-    and no hardware is drawn.
+    The hardware of the protective earthing terminal and its size. The earth symbol is placed from Figure
+    2, which draws no lug, stud or screw at it. The guide's safety text names the terminal without describing
+    it.
 - what: four-faces
   scope:
   - top
@@ -266,7 +277,11 @@ groups:
       FAN, ST-A and ST-B (Table 8)'}
   power-input: {term: Inlet, role: service, index-origin: 0, description: 'The two IEC 320 inlets, one
       for each internal supply'}
-  furniture: {term: Item, role: furniture, index-origin: 0, description: screws on the rear panel}
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 0
+    description: the two screws on the rear panel and the earth symbol at its left end
 views:
   front:
     size: {w: 439.0, h: 43.9}
@@ -876,6 +891,8 @@ views:
       - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [400.9, 10.5], rotate: 90, group: power-input, rel-pos: 1}
       - {ref: common/screw-head@1, id: rear-screw-0, at: [378.4, 8.5], group: furniture, rel-pos: 0}
       - {ref: common/screw-head@1, id: rear-screw-1, at: [378.4, 34.6], group: furniture, rel-pos: 1}
+      - {ref: common/ground-symbol@1, id: earth-mark, at: [3.5, 20.3], for: chassis, group: furniture,
+        rel-pos: 2}
   top:
     size: {w: 439.0, h: 381.0}
     empty: >-
