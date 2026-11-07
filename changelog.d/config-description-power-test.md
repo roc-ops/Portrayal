@@ -1,0 +1,2 @@
+### Added
+- A test over every configuration of every device fails when a configuration's `description` or `export-description` states a draw in watts (typical, maximum, power draw, consumption, power budget) that its resolved `power-*-w` fields do not carry. A figure beside a supply, PoE or output word, and any unit other than watts, is ignored. The test edits no device and no export. Four contradictions exist today, on four UfiSpace devices (three DC builds and one AC build), and are listed in the test until each device states its own figure. This order closes no gap row.

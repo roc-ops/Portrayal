@@ -1,0 +1,64 @@
+format: 1
+kind: kit
+name: b4-static-rail-kit
+version: 1.0.0
+description: >-
+  The ReadyRails static rails (Dell rail identifier B4) for the PowerEdge R740 and R740xd. A
+  stab-in static rail for four-post racks and for two-post racks, flush or centre mount. The
+  chassis does not slide out on it, and it takes no cable management arm.
+motion: fixed
+install: stab-in
+parts:
+  - {ref: dell/b4-static-rail@1, id: rail, count: 2}
+configurations:
+  - id: static
+    racks: [4-post, 2-post, 2-post-centre]
+    parts: [rail]
+    depth:
+      square: [608, 879]
+      round: [594, 872]
+      threaded: [610, 898]
+    rail-depth: 622
+provenance:
+  depth: >-
+    The Dell Technologies Enterprise Systems Rail Sizing and Rack Compatibility Matrix (Copyright
+    December 2023, Version 4.7), PDF page 12 (printed page 10), Table 2, the row group that lists
+    the R740 and R740xd, rail B4: square 608 to 879, round 594 to 872, threaded 610 to 898 mm.
+    The matrix defines the range as the distance between the outside-facing surfaces of the front
+    and rear posts, which is a four-post measure. THE TECHNICAL GUIDE LOST on the threaded range.
+    The Dell PowerEdge R740 and R740xd Technical Guide (July 2019) agrees on square and round
+    (608 to 879 and 594 to 872) and prints threaded as 608 to 890 in its prose (printed page 51)
+    and 604 to 890 in its Table 19 (printed page 53). The matrix is the newer, so its 610 to 898
+    is written.
+  rail-depth: >-
+    622 mm in the matrix (Table 2, with the footnote that it is the cabinet assembly only and not
+    the inner rail that fits the chassis) and in the guide (Table 19). With the arm: the matrix
+    prints "-" and the guide "N/A", because the static rails are not compatible with the arm.
+  rack-type: >-
+    The matrix (Table 2, row B4) ticks square, round and threaded holes in four-post racks, and
+    flush and centre in two-post racks; the two-post cells carry the footnotes "minor conversion
+    required" and "mounting screws not included" (flush) and "mounting screws not included"
+    (centre). The guide's Table 18 (printed page 52) ticks the same, with a minor conversion
+    for threaded and flush and none for centre, and Figure 16 on the same page shows "Static rails in
+    2-post center mount configuration". A two-post rack has no front-to-rear post distance, and
+    neither document prints a depth or a range for it. See `gaps`.
+  install: >-
+    Stab-in only (the guide, Table 18).
+gaps:
+  - what: two-post-depth
+    scope: [static]
+    reason: vendor-silent
+    note: >-
+      One configuration holds the four-post and the two-post uses of the rail because the matrix
+      prints one row of ranges for B4 and ticks both rack types in it. The ranges are four-post
+      figures. A kit configuration cannot state the two-post use without a depth or a preset, and
+      neither document prints either for a two-post rack.
+    wanted: >-
+      A page that gives the rail's reach or setting when it is fitted to a two-post rack, flush
+      or at the centre. The rail installation guide settles it.
+  - what: part-dimensions
+    scope: [rail]
+    reason: needs-drawing
+    wanted: >-
+      A dimensioned drawing of the rail. The guide and the matrix give its depth in the rack and
+      no section, so the part carries a placeholder envelope.
