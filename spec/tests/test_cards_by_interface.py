@@ -6,8 +6,8 @@ part is TAKEN by a bay when the bay's `accepts` names it, or the bay's
 `interface` is in the part's `mates` and the part is wide enough
 (manifest.takes). Every reader of a bay asks that one question.
 
-No library part states either yet, so the cases are built on a small library
-in tmp_path: a riser shaped like the R740xd's riser 1A (slot 1 spans slot 2,
+One library card states one of them so far (see test_n3100_by_interface.py), so
+the cases are built on a small library in tmp_path: a riser shaped like the R740xd's riser 1A (slot 1 spans slot 2,
 slot 3 spans nothing), cards that mate `pcie-fh`, a low-profile card, a
 two-slot card and a vendor filler. The last section holds the real library to
 the one thing this slice promises: no bay's published list moves.
@@ -514,12 +514,6 @@ def test_a_bay_that_states_an_interface_takes_no_part_beyond_its_list():
     assert found == [], found
 
 
-def test_no_part_in_the_library_mates_either_key_yet():
-    found = [str(cf) for cf in libwalk.iter_components([LIB])
-             if {"pcie-fh", "pcie-lp"} & set(mates_of(load_yaml(cf) or {}))]
-    assert found == [], found
-
-
 def test_a_published_component_bay_list_is_the_list_the_contract_states():
     f = LIB / "dist" / "components.json"
     if not f.exists():
@@ -532,7 +526,7 @@ def test_a_published_component_bay_list_is_the_list_the_contract_states():
         for bid, b in _authored_bays(load_yaml(cf) or {}).items():
             published = c["bays"][bid]
             assert published["accepts"] == (b.get("accepts") or []), (cf, bid)
-            assert "interface" not in published
+            assert published.get("interface") == b.get("interface"), (cf, bid)
             checked += 1
     assert checked > 50, f"read {checked} bays"
 
