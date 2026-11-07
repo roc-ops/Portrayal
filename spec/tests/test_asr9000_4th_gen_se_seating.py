@@ -28,7 +28,7 @@ FAN_V3 = "cisco/asr-9922-fan-v3@1"
 
 # chassis -> (line-card bays that take the 16-port, line-card bays that take the 32-port, all bays, version)
 CHASSIS = {
-    "9006": (4, 0, 11, "3.3.6"),
+    "9006": (4, 0, 11, "3.4.0"),
     "9010": (8, 0, 18, "2.0.4"),
     "9904": (2, 2, 8, "3.3.6"),
     "9906": (4, 4, 13, "2.0.6"),  # 6 slots + 3 AC and 4 DC power-module bays; 2.0.0 with the V3 power modules
