@@ -1,0 +1,713 @@
+format: 1
+kind: device
+name: dsx2-32
+version: 0.1.0
+maturity: modelled
+manufacturer: Raritan
+model: DSX2-32
+portfolio: {line: Console servers, family: Dominion SX II}
+description: >-
+  Raritan Dominion SX II DSX2-32, a 32-port serial console server with dual AC power, 1U. The rear carries
+  two AC inlets, each with a power switch, and a fan. It has a TERMINAL serial jack, a mini-USB Admin
+  jack, three USB ports, a reset hole and a DVI-D video jack. Two Gigabit LAN jacks sit beside 32 RJ45
+  serial ports in two banks of two rows. The lower rows are numbered 1 to 8 and 17 to 24, and the upper
+  rows 9 to 16 and 25 to 32. The front carries a USB port and the port lamps 1 to 32.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      datasheet - Raritan Dominion SX II data sheet V1209R3 (2021), page 4: the specification and model
+      tables and the labelled rear-panel photograph of the DSX2-32. Dominion SX II User Guide v2.6.0,
+      Appendix A (printed pp. 51 to 55): dimensions, weight, power and the port pins. Dominion SX II Quick
+      Setup Guide v2.6.0, page 1: the rack mounting kit. Dominion SX II Features and Benefits: the USB
+      ports. The maker's product photograph of the front of a DSX2-32M-DC (header-sxii-new.jpg, 1600 x
+      353 pixels). No dimensioned drawing, 3D model or stencil is held, and no stencil was opened.
+  method:
+    confidence: estimated
+    note: >-
+      NO DRAWING IS HELD, SO EVERY POSITION ON BOTH FACES IS MEASURED OFF A PHOTOGRAPH AND IS ESTIMATED.
+      The rear is the data sheet's DSX2-32 photograph (page 4, rendered at 200 dpi): the body spans 1351
+      pixels for the family's 440 mm, 3.07 pixels per millimetre, and its height reads 42.7 mm against
+      44, so the view is square-on to about 3 percent. The serial jack pitch reads 43.1 pixels, 14.0 mm,
+      which agrees with the library's 13.97 ganged pitch. A rear position is good to about 0.5 mm across
+      and 1 mm down. The front is the photograph of a DSX2-32M-DC, a DIFFERENT SKU, and it looks down
+      on the unit: the lid shows above the face. Horizontal positions are read at 1.859 pixels per millimetre
+      across the 818 pixels of the face and are good to about 1 mm; vertical positions are read from the
+      top of the silver ear at the same scale and are good to about 2 mm. Colours are medians of the photographs.
+  chassis:
+    confidence: datasheet
+    note: >-
+      User Guide v2.6.0, Appendix A (printed p. 51): "17.3" W x 13.15'' D x 1.73'H '; (440mm x 334mm x
+      44mm)" and 9.08 lbs (4.12 kg). THE GUIDE GIVES ONE SET OF FIGURES FOR THE WHOLE FAMILY AND DOES
+      NOT SAY WHICH SKU IT DESCRIBES, so they are carried here as the family's (gaps: family-size). Whether
+      the 334 mm depth includes the cable-support bar or the mounting brackets is not stated. The photograph
+      shows no bracket, so 440 is read as the body.
+  colour:
+    confidence: photo-measured
+    note: >-
+      medians of the photographs: the rear face #1a1b20, the front lower face #171819, the silver ears
+      #c3c9c3 on the left and #ccd1cc on the right, the dark band between them #353935, the perforated
+      area #131514.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      From the data sheet photograph. From the left: the two AC inlets, each under its switch and numbered
+      1 and 2; the fan; the TERMINAL jack with the ADMIN mini-USB jack to its right and the MODEM position,
+      which is a blank square on this AC model; under them the DVI jack between two thumbscrews and the
+      RESET hole; a column of THREE USB ports; the two LAN jacks, LAN 2 over LAN 1; and the serial ports,
+      two banks of 16 in two rows each with its numerals above and below.
+  front-layout:
+    confidence: estimated
+    note: >-
+      From the DSX2-32M-DC front photograph, used for a DSX2-32 because no page shows the front of a DSX2-32
+      (gaps: front-other-sku). The USB-A port at the left with its symbol, the silver ear at each end,
+      a dark band with the DOMINION mark, the row of 32 port lamps with the numerals 1 to 32 under it,
+      and a perforated area below. The perforation is drawn as one darker panel and not as holes. The
+      model label printed on the right ear reads DSX2-32M-DC in the photograph and is not drawn.
+  serial-ports:
+    confidence: datasheet
+    note: >-
+      Data sheet, page 4 caption "RJ-45 Serial Ports" and the numerals 1 to 32 on the photograph. User
+      Guide Appendix A (printed pp. 54 to 55): the pins of the server port in DTE mode (1 RTS, 2 DTR,
+      3 TXD, 4 and 5 ground, 6 RXD, 7 DSR, 8 CTS) and in DCE mode (1 CTS, 2 DSR, 3 RXD, 4 and 5 ground,
+      6 TXD, 7 DTR, 8 RTS); the data sheet says the port detects DTE or DCE by itself. The numbering is
+      read off the photograph: 1 to 8 along the lower row of the left bank, 9 to 16 above them, 17 to
+      24 and 25 to 32 in the right bank the same way. The latch of the upper row is at the top of the
+      jack and of the lower row at the bottom, as the photograph shows. No lamp is visible on a serial
+      jack.
+  serial-role:
+    confidence: datasheet
+    note: >-
+      The data sheet calls the unit a serial console server and the ports "RJ-45 Serial Ports"; the Quick
+      Setup Guide connects target devices to them with a standard Cat5 cable. The TERMINAL jack is the
+      local serial Admin port: the user guide's Local Terminal pins are 1 RTS, 3 TXD, 4 and 5 ground,
+      6 RXD and 8 CTS, with 2 and 7 not used (printed p. 54).
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet and User Guide Appendix A: 100/240 VAC auto-switching, 50 to 60 Hz, 0.35 A, and 36 to
+      72 VDC on the DC models; the 32-port unit draws at most 23 W. Two inlets on every model: this AC
+      model's are drawn as IEC C14 as the photograph shows, and the guide and data sheet say "Dual AC
+      Power".
+  lamps:
+    confidence: datasheet
+    note: >-
+      User Guide Appendix A, SX II Appliance LED Status Indicators (printed pp. 57 to 58): the front panel
+      port channel lamp turns on when a powered-on target is connected and blinks during a session. The
+      same page describes a front Power lamp, red with one supply and blue with two; no photograph shows
+      it (gaps: power-lamp). The lamp colour of a port is not stated.
+  ears:
+    confidence: estimated
+    note: >-
+      Quick Setup Guide v2.6.0, page 1: the kit is two side brackets and a cable-support bar, fixed with
+      three screws per side, and the unit sits forward (front flush with the ears) or rear (front flush
+      with the back edges of the brackets). No hole spacing and no bracket size is stated, so no ear is
+      drawn and the shipped forward position is the one listed (gaps: rack-kit).
+  sku:
+    confidence: datasheet
+    note: >-
+      Data sheet page 4 model table: "DSX2-32 / DSX2-32M: 32-port serial console server with dual-power
+      AC and dual gigabit LAN". This device is the AC model without a modem. The DSX2-32M adds an internal
+      telephone modem and the DSX2-32M-DC has dual DC power.
+attrs:
+  physical:
+    weight-note: 9.08 lb (4.12 kg) in the user guide, as one figure for the whole SX II family
+  power:
+    power-max-w: 23
+    power-input: >-
+      100 to 240 VAC auto-switching, 50 to 60 Hz, 0.35 A, two C14 inlets (data sheet and user guide)
+  environmental: {operating-temp-c: 0 to 50, non-operating-temp-c: 0 to 55, operating-humidity: 20% to
+      85%}
+  features:
+    serial-pinout: >-
+      DTE or DCE detected by the port; RJ45 pins in user guide Appendix A, printed pp. 54 and 55
+    video: DVI-D local video jack (data sheet)
+    usb-admin: USB 2.0 mini-B Admin port for a laptop (data sheet and features sheet)
+    modem: none on this model; the M models add an internal telephone modem
+chassis:
+  width: 440
+  height: 44
+  depth: 334
+  ru: 1
+  color: '#1a1b20'
+  ears:
+    positions:
+    - {name: flush, label: forward mount, default: true}
+    - {name: rear, label: rear mount}
+  power: ac
+gaps:
+- what: dimensioned-drawing
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  note: >-
+    No dimensioned drawing, 3D model or stencil is held. Both faces are measured off photographs and every
+    position is estimated (provenance `method`).
+  wanted: A dimensioned front and rear view of the DSX2-32.
+- what: family-size
+  scope:
+  - front
+  - rear
+  - top
+  - bottom
+  - left
+  - right
+  reason: vendor-silent
+  note: >-
+    The user guide gives 440 x 334 x 44 mm and 4.12 kg for the SX II family and does not say which SKU
+    it describes, whether the depth includes the cable-support bar or the brackets, or how the weight
+    differs between the 4-port and the 48-port unit.
+  wanted: The maker's dimensions and weight for the DSX2-32.
+- what: front-other-sku
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    The only front photograph held is of a DSX2-32M-DC. The front of the DSX2-32 is drawn from it. Whether
+    the two fronts differ beyond the printed model label is not stated by any held page.
+  wanted: A straight-on front photograph of the DSX2-32.
+- what: dvi-d
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    The DVI-D jack is a region only: the library has no DVI jack part and no connector key covers a DVI-D
+    jack.
+  wanted: A ruling on the connector key for the DVI-D jack.
+- what: power-lamp
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    The user guide describes a front Power lamp (red with one supply, blue with two). The front photograph
+    shows none, so none is drawn.
+  wanted: A close photograph of the front of an SX II.
+- what: rack-kit
+  scope:
+  - front
+  - left
+  - right
+  reason: needs-drawing
+  note: >-
+    The quick setup guide describes two side brackets and a cable-support bar and shows no dimension,
+    hole spacing or part number. The brackets are not drawn and neither mounting position states an offset.
+  wanted: A dimensioned drawing of the rackmount kit.
+- what: lamp-colour
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    No held page states the colour of a port channel lamp, so the states carry names and no colour.
+  wanted: The maker's description of the front lamps.
+- what: sides
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-photo
+  note: No held page shows the top, the bottom or a side straight on.
+  wanted: Photographs or a drawing of the top, bottom and sides.
+groups:
+  inlets: {term: Inlet, role: service, index-origin: 1, description: 'the two AC inlets, numbered 1 and
+      2 as printed'}
+  power-switches: {term: Switch, role: service, index-origin: 1, description: the rocker switch above
+      each inlet}
+  console: {term: Port, role: management, index-origin: 1, description: the RJ45 serial Admin jack printed
+      TERMINAL}
+  admin-usb:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: mini-usb-b}
+    description: >-
+      the USB mini-B Admin jack: a laptop on it reaches the command line (quick setup guide, page 2),
+      so it is a console
+  usb-rear:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a, usb: '2.0'}
+    description: the three USB 2.0 Type A ports on the rear, for a keyboard, a mouse or a cell modem
+  usb-front:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a, usb: '2.0'}
+    description: the USB 2.0 Type A port on the front
+  lan:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the two 10/100/1000 RJ45 LAN ports, printed LAN 1 and LAN 2
+  buttons: {term: Button, role: service, index-origin: 1, description: the recessed RESET hole}
+  serial-1-8:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: serial ports 1 to 8, the lower row of the left bank
+  serial-9-16:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: serial ports 9 to 16, the upper row of the left bank
+  serial-17-24:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: serial ports 17 to 24, the lower row of the right bank
+  serial-25-32:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: serial ports 25 to 32, the upper row of the right bank
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the 32 port channel lamps on the front, numbered 1 to 32 as printed
+  furniture: {term: Item, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 440, h: 44}
+    panel:
+      decor:
+      - {id: band, kind: trim, at: [55.8, 0.0], size: [331.5, 18.8], fill: '#353935'}
+      - {id: ear-left, kind: trim, at: [0.0, 0.0], size: [55.8, 18.8], fill: '#c3c9c3'}
+      - {id: ear-right, kind: trim, at: [387.3, 0.0], size: [52.7, 18.8], fill: '#ccd1cc'}
+      - {id: perforation, kind: vent, at: [58.6, 18.3], size: [327.0, 22.2], rx: 6.0, fill: '#131514'}
+      - {id: usb-frame, kind: frame-plate, at: [29.0, 26.8], size: [15.0, 8.4], rx: 0.8, fill: '#2e3131'}
+    silkscreen:
+    - {at: [222.7, 6.4], text: DOMINION, font-size: 2.6, anchor: middle, fill: '#e8e8e8', for: chassis}
+    - {at: [122.6, 17.6], text: '1', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-1}
+    - {at: [129.09, 17.6], text: '2', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-2}
+    - {at: [135.58, 17.6], text: '3', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-3}
+    - {at: [142.07, 17.6], text: '4', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-4}
+    - {at: [148.56, 17.6], text: '5', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-5}
+    - {at: [155.05, 17.6], text: '6', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-6}
+    - {at: [161.54, 17.6], text: '7', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-7}
+    - {at: [168.03, 17.6], text: '8', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-8}
+    - {at: [174.52, 17.6], text: '9', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-9}
+    - {at: [181.01, 17.6], text: '10', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-10}
+    - {at: [187.5, 17.6], text: '11', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-11}
+    - {at: [193.99, 17.6], text: '12', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-12}
+    - {at: [200.48, 17.6], text: '13', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-13}
+    - {at: [206.97, 17.6], text: '14', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-14}
+    - {at: [213.46, 17.6], text: '15', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-15}
+    - {at: [219.95, 17.6], text: '16', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-16}
+    - {at: [226.44, 17.6], text: '17', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-17}
+    - {at: [232.93, 17.6], text: '18', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-18}
+    - {at: [239.42, 17.6], text: '19', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-19}
+    - {at: [245.91, 17.6], text: '20', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-20}
+    - {at: [252.4, 17.6], text: '21', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-21}
+    - {at: [258.89, 17.6], text: '22', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-22}
+    - {at: [265.38, 17.6], text: '23', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-23}
+    - {at: [271.87, 17.6], text: '24', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-24}
+    - {at: [278.36, 17.6], text: '25', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-25}
+    - {at: [284.85, 17.6], text: '26', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-26}
+    - {at: [291.34, 17.6], text: '27', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-27}
+    - {at: [297.83, 17.6], text: '28', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-28}
+    - {at: [304.32, 17.6], text: '29', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-29}
+    - {at: [310.81, 17.6], text: '30', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-30}
+    - {at: [317.3, 17.6], text: '31', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-31}
+    - {at: [323.79, 17.6], text: '32', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: led-32}
+    components:
+      placements:
+      - {ref: common/led-dot@1, id: led-1, at: [121.6, 10.0], for: chassis, group: port-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-2, at: [128.09, 10.0], for: chassis, group: port-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-3, at: [134.58, 10.0], for: chassis, group: port-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-4, at: [141.07, 10.0], for: chassis, group: port-leds, rel-pos: 4}
+      - {ref: common/led-dot@1, id: led-5, at: [147.56, 10.0], for: chassis, group: port-leds, rel-pos: 5}
+      - {ref: common/led-dot@1, id: led-6, at: [154.05, 10.0], for: chassis, group: port-leds, rel-pos: 6}
+      - {ref: common/led-dot@1, id: led-7, at: [160.54, 10.0], for: chassis, group: port-leds, rel-pos: 7}
+      - {ref: common/led-dot@1, id: led-8, at: [167.03, 10.0], for: chassis, group: port-leds, rel-pos: 8}
+      - {ref: common/led-dot@1, id: led-9, at: [173.52, 10.0], for: chassis, group: port-leds, rel-pos: 9}
+      - {ref: common/led-dot@1, id: led-10, at: [180.01, 10.0], for: chassis, group: port-leds, rel-pos: 10}
+      - {ref: common/led-dot@1, id: led-11, at: [186.5, 10.0], for: chassis, group: port-leds, rel-pos: 11}
+      - {ref: common/led-dot@1, id: led-12, at: [192.99, 10.0], for: chassis, group: port-leds, rel-pos: 12}
+      - {ref: common/led-dot@1, id: led-13, at: [199.48, 10.0], for: chassis, group: port-leds, rel-pos: 13}
+      - {ref: common/led-dot@1, id: led-14, at: [205.97, 10.0], for: chassis, group: port-leds, rel-pos: 14}
+      - {ref: common/led-dot@1, id: led-15, at: [212.46, 10.0], for: chassis, group: port-leds, rel-pos: 15}
+      - {ref: common/led-dot@1, id: led-16, at: [218.95, 10.0], for: chassis, group: port-leds, rel-pos: 16}
+      - {ref: common/led-dot@1, id: led-17, at: [225.44, 10.0], for: chassis, group: port-leds, rel-pos: 17}
+      - {ref: common/led-dot@1, id: led-18, at: [231.93, 10.0], for: chassis, group: port-leds, rel-pos: 18}
+      - {ref: common/led-dot@1, id: led-19, at: [238.42, 10.0], for: chassis, group: port-leds, rel-pos: 19}
+      - {ref: common/led-dot@1, id: led-20, at: [244.91, 10.0], for: chassis, group: port-leds, rel-pos: 20}
+      - {ref: common/led-dot@1, id: led-21, at: [251.4, 10.0], for: chassis, group: port-leds, rel-pos: 21}
+      - {ref: common/led-dot@1, id: led-22, at: [257.89, 10.0], for: chassis, group: port-leds, rel-pos: 22}
+      - {ref: common/led-dot@1, id: led-23, at: [264.38, 10.0], for: chassis, group: port-leds, rel-pos: 23}
+      - {ref: common/led-dot@1, id: led-24, at: [270.87, 10.0], for: chassis, group: port-leds, rel-pos: 24}
+      - {ref: common/led-dot@1, id: led-25, at: [277.36, 10.0], for: chassis, group: port-leds, rel-pos: 25}
+      - {ref: common/led-dot@1, id: led-26, at: [283.85, 10.0], for: chassis, group: port-leds, rel-pos: 26}
+      - {ref: common/led-dot@1, id: led-27, at: [290.34, 10.0], for: chassis, group: port-leds, rel-pos: 27}
+      - {ref: common/led-dot@1, id: led-28, at: [296.83, 10.0], for: chassis, group: port-leds, rel-pos: 28}
+      - {ref: common/led-dot@1, id: led-29, at: [303.32, 10.0], for: chassis, group: port-leds, rel-pos: 29}
+      - {ref: common/led-dot@1, id: led-30, at: [309.81, 10.0], for: chassis, group: port-leds, rel-pos: 30}
+      - {ref: common/led-dot@1, id: led-31, at: [316.3, 10.0], for: chassis, group: port-leds, rel-pos: 31}
+      - {ref: common/led-dot@1, id: led-32, at: [322.79, 10.0], for: chassis, group: port-leds, rel-pos: 32}
+      - {ref: std/usb-a@1, id: usb-front, at: [31.0, 28.35], skin: usb2, group: usb-front, rel-pos: 1}
+      - {ref: common/usb-symbol@1, id: usb-mark-front, at: [33.5, 37.0], group: furniture, rel-pos: 1}
+    regions:
+    - id: logo-zone
+      at: [16.7, 4.8]
+      size: {w: 22.0, h: 8.6}
+      label: Raritan wordmark; not drawn
+    - id: model-label
+      at: [393.0, 4.8]
+      size: {w: 32.0, h: 7.4}
+      label: Model label, printed DSX2-32M-DC on the photographed unit; not drawn
+  rear:
+    size: {w: 440, h: 44}
+    panel:
+      decor:
+      - {id: fan-vent, kind: vent, at: [79.2, 8.2], size: [26.0, 26.0], rx: 13.0, fill: '#0b0c0f'}
+      - {id: terminal-plate, kind: jack-plate, at: [118.9, 4.4], size: [17.2, 15.6], fill: '#625e5d'}
+      - {id: modem-blank, kind: blank, at: [150.8, 4.6], size: [10.2, 14.6], fill: '#0e0f12'}
+      - {id: dvi-screw-left, kind: screw, at: [121.8, 29.6], size: [4.0, 4.0], rx: 2.0, fill: '#b9b9b6'}
+      - {id: dvi-screw-right, kind: screw, at: [155.3, 29.6], size: [4.0, 4.0], rx: 2.0, fill: '#b9b9b6'}
+      - {id: lan-plate, kind: jack-plate, at: [177.4, 7.4], size: [18.2, 29.4], fill: '#6d6b6b'}
+      - {id: bank-1, kind: jack-plate, at: [196.1, 10.7], size: [113.9, 25.8], fill: '#7f7e7e'}
+      - {id: bank-2, kind: jack-plate, at: [315.6, 10.7], size: [115.3, 25.8], fill: '#7f7e7e'}
+    silkscreen:
+    - {at: [32.0, 6.0], text: '1', font-size: 2.6, anchor: middle, fill: '#f0f0f0', for: inlet-1}
+    - {at: [64.5, 6.0], text: '2', font-size: 2.6, anchor: middle, fill: '#f0f0f0', for: inlet-2}
+    - {at: [127.6, 23.2], text: TERMINAL, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: console}
+    - {at: [144.25, 11.6], text: ADMIN, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: admin-usb}
+    - {at: [155.9, 23.2], text: MODEM, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: chassis}
+    - {at: [141.7, 39.4], text: DVI, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: chassis}
+    - {at: [161.2, 38.98], text: RESET, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: reset}
+    - {at: [169.2, 8.6], text: USB, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: usb-rear-1}
+    - {at: [186.5, 5.6], text: LAN 2, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: lan-2}
+    - {at: [186.5, 40.2], text: LAN 1, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: lan-1}
+    - {at: [203.6, 39.9], text: '1', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-1}
+    - {at: [217.57, 39.9], text: '2', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-2}
+    - {at: [231.54, 39.9], text: '3', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-3}
+    - {at: [245.51, 39.9], text: '4', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-4}
+    - {at: [259.48, 39.9], text: '5', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-5}
+    - {at: [273.45, 39.9], text: '6', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-6}
+    - {at: [287.42, 39.9], text: '7', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-7}
+    - {at: [301.39, 39.9], text: '8', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-8}
+    - {at: [203.6, 8.5], text: '9', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-9}
+    - {at: [217.57, 8.5], text: '10', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-10}
+    - {at: [231.54, 8.5], text: '11', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-11}
+    - {at: [245.51, 8.5], text: '12', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-12}
+    - {at: [259.48, 8.5], text: '13', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-13}
+    - {at: [273.45, 8.5], text: '14', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-14}
+    - {at: [287.42, 8.5], text: '15', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-15}
+    - {at: [301.39, 8.5], text: '16', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-16}
+    - {at: [323.8, 39.9], text: '17', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-17}
+    - {at: [337.77, 39.9], text: '18', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-18}
+    - {at: [351.74, 39.9], text: '19', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-19}
+    - {at: [365.71, 39.9], text: '20', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-20}
+    - {at: [379.68, 39.9], text: '21', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-21}
+    - {at: [393.65, 39.9], text: '22', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-22}
+    - {at: [407.62, 39.9], text: '23', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-23}
+    - {at: [421.59, 39.9], text: '24', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-24}
+    - {at: [323.8, 8.5], text: '25', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-25}
+    - {at: [337.77, 8.5], text: '26', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-26}
+    - {at: [351.74, 8.5], text: '27', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-27}
+    - {at: [365.71, 8.5], text: '28', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-28}
+    - {at: [379.68, 8.5], text: '29', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-29}
+    - {at: [393.65, 8.5], text: '30', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-30}
+    - {at: [407.62, 8.5], text: '31', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-31}
+    - {at: [421.59, 8.5], text: '32', font-size: 2.8, anchor: middle, fill: '#f0f0f0', for: serial-32}
+    components:
+      placements:
+      - {ref: common/rocker-switch@1, id: power-switch-1, at: [9.4, 4.2], for: inlet-1, group: power-switches,
+        rel-pos: 1}
+      - {ref: common/rocker-switch@1, id: power-switch-2, at: [41.9, 4.2], for: inlet-2, group: power-switches,
+        rel-pos: 2}
+      - {ref: std/c14-inlet@1, id: inlet-1, at: [5.9, 19.2], rotate: 180, group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: inlet-2, at: [38.4, 19.2], rotate: 180, group: inlets, rel-pos: 2}
+      - ref: std/rj45@2
+        id: console
+        at: [119.7, 5.2]
+        rotate: 180
+        group: console
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console, finish: '#9a9594'}
+      - ref: std/mini-usb@1
+        id: admin-usb
+        at: [140.4, 14.5]
+        group: admin-usb
+        rel-pos: 1
+        attrs: {role: console}
+      - {ref: common/reset-button@1, id: reset, at: [166.9, 36.3], for: chassis, group: buttons, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-rear-1, at: [163.2, 13.05], skin: usb2, group: usb-rear, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-rear-2, at: [163.2, 21.65], skin: usb2, group: usb-rear, rel-pos: 2}
+      - {ref: std/usb-a@1, id: usb-rear-3, at: [163.2, 30.35], skin: usb2, group: usb-rear, rel-pos: 3}
+      - ref: common/rj45-eth@1
+        id: lan-2
+        at: [178.6, 8.9]
+        rotate: 180
+        group: lan
+        rel-pos: 2
+        attrs: {finish: '#b0b5bb'}
+      - ref: common/rj45-eth@1
+        id: lan-1
+        at: [178.6, 23.4]
+        group: lan
+        rel-pos: 1
+        attrs: {finish: '#b0b5bb'}
+      - ref: std/rj45-ganged@2
+        id: serial-1
+        at: [197.25, 25.5]
+        group: serial-1-8
+        rel-pos: 1
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-2
+        at: [211.22, 25.5]
+        group: serial-1-8
+        rel-pos: 2
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-3
+        at: [225.19, 25.5]
+        group: serial-1-8
+        rel-pos: 3
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-4
+        at: [239.16, 25.5]
+        group: serial-1-8
+        rel-pos: 4
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-5
+        at: [253.13, 25.5]
+        group: serial-1-8
+        rel-pos: 5
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-6
+        at: [267.1, 25.5]
+        group: serial-1-8
+        rel-pos: 6
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-7
+        at: [281.07, 25.5]
+        group: serial-1-8
+        rel-pos: 7
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-8
+        at: [295.04, 25.5]
+        group: serial-1-8
+        rel-pos: 8
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-9
+        at: [197.25, 10.7]
+        rotate: 180
+        group: serial-9-16
+        rel-pos: 9
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-10
+        at: [211.22, 10.7]
+        rotate: 180
+        group: serial-9-16
+        rel-pos: 10
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-11
+        at: [225.19, 10.7]
+        rotate: 180
+        group: serial-9-16
+        rel-pos: 11
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-12
+        at: [239.16, 10.7]
+        rotate: 180
+        group: serial-9-16
+        rel-pos: 12
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-13
+        at: [253.13, 10.7]
+        rotate: 180
+        group: serial-9-16
+        rel-pos: 13
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-14
+        at: [267.1, 10.7]
+        rotate: 180
+        group: serial-9-16
+        rel-pos: 14
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-15
+        at: [281.07, 10.7]
+        rotate: 180
+        group: serial-9-16
+        rel-pos: 15
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-16
+        at: [295.04, 10.7]
+        rotate: 180
+        group: serial-9-16
+        rel-pos: 16
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-17
+        at: [317.45, 25.5]
+        group: serial-17-24
+        rel-pos: 17
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-18
+        at: [331.42, 25.5]
+        group: serial-17-24
+        rel-pos: 18
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-19
+        at: [345.39, 25.5]
+        group: serial-17-24
+        rel-pos: 19
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-20
+        at: [359.36, 25.5]
+        group: serial-17-24
+        rel-pos: 20
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-21
+        at: [373.33, 25.5]
+        group: serial-17-24
+        rel-pos: 21
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-22
+        at: [387.3, 25.5]
+        group: serial-17-24
+        rel-pos: 22
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-23
+        at: [401.27, 25.5]
+        group: serial-17-24
+        rel-pos: 23
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-24
+        at: [415.24, 25.5]
+        group: serial-17-24
+        rel-pos: 24
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-25
+        at: [317.45, 10.7]
+        rotate: 180
+        group: serial-25-32
+        rel-pos: 25
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-26
+        at: [331.42, 10.7]
+        rotate: 180
+        group: serial-25-32
+        rel-pos: 26
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-27
+        at: [345.39, 10.7]
+        rotate: 180
+        group: serial-25-32
+        rel-pos: 27
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-28
+        at: [359.36, 10.7]
+        rotate: 180
+        group: serial-25-32
+        rel-pos: 28
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-29
+        at: [373.33, 10.7]
+        rotate: 180
+        group: serial-25-32
+        rel-pos: 29
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-30
+        at: [387.3, 10.7]
+        rotate: 180
+        group: serial-25-32
+        rel-pos: 30
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-31
+        at: [401.27, 10.7]
+        rotate: 180
+        group: serial-25-32
+        rel-pos: 31
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-32
+        at: [415.24, 10.7]
+        rotate: 180
+        group: serial-25-32
+        rel-pos: 32
+        attrs: {media: rj45-serial}
+    regions:
+    - id: dvi-d
+      at: [128.7, 28.3]
+      size: {w: 23.7, h: 6.5}
+      label: DVI-D video jack; no part draws it
+  top:
+    size: {w: 440, h: 334}
+    empty: >-
+      No held page shows the top: the front photograph looks down on it as a plain lid and nothing can
+      be measured.
+  bottom:
+    size: {w: 440, h: 334}
+    empty: 'No held page shows the underside: no photograph, drawing or guide figure looks at it.'
+  left:
+    size: {w: 334, h: 44}
+    empty: >-
+      No held page shows a side. The quick setup guide draws the side bracket without a dimension, and
+      the bracket is not drawn.
+  right:
+    size: {w: 334, h: 44}
+    empty: >-
+      No held page shows a side. The quick setup guide draws the side bracket without a dimension, and
+      the bracket is not drawn.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      DSX2-32, the 32-port unit with dual AC power and no modem. The rackmount kit, two AC cords and four
+      rubber feet are in the box (Quick Setup Guide v2.6.0, page 1) and are not drawn.
+    part-numbers:
+      DSX2-32: {}
+datasheet:
+  title: Dominion SX II data sheet, V1209R3 (2021), Raritan
+  url: https://www.raritan.com/assets/ram/resources/data_sheets/raritan-ds-sxii.pdf
+  sha256: 9cd3eba08be22ad82ec44a6b36c1b1691286507681a5d5b063b90ac2cdcbe095
+references:
+- title: Dominion SX II data sheet, V1209R3 (2021), Raritan
+  sha256: 9cd3eba08be22ad82ec44a6b36c1b1691286507681a5d5b063b90ac2cdcbe095
+- title: Dominion SX II Features and Benefits, Raritan
+  sha256: b549040205009f8b7181d332094b115992ffed0e76bb94609296ee6d0c50ca5d
+- title: Dominion SX II Quick Setup Guide, v2.6.0, Raritan
+  sha256: 894bae147b88c29478cbec0ebaeaf75e12448f1130e5e6a169ab57a46c74038c
+- title: Dominion SX II User Guide, v2.6.0, Raritan
+  sha256: d5dd1ab09abcf2dc701aa04cfc315227cb12e61d8620e515498099a6095a9442
+- title: Dominion SX II front photograph (header-sxii-new.jpg), Raritan, a DSX2-32M-DC
+  sha256: faf063fa90ea21a5d80dfdfa1019adb6dc4dac9c8ffd2570fc465abc4ca54a49
