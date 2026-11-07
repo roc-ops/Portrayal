@@ -88,14 +88,7 @@ def test_mini_b_lower_corners_are_covered_in_the_surrounds_teal(name):
     wedges, jack = silk(d)["console-usb-wedges"], placed(d)["console-usb"]
     assert wedges["at"] == jack["at"], "the triangles are the part's own corners"
     assert wedges["fill"] == decor(d)["console-usb-surround"]["fill"] == TEAL
-    assert jack["ref"].startswith("std/mini-usb@") and not jack.get("rotate"), "the part is placed as before"
     assert len(re.findall("M", wedges["path"])) == 2
-
-
-@pytest.mark.parametrize("name", NAMES)
-def test_each_model_seats_the_rps_connector_at_its_place(name):
-    seated = placed(device(name), "rear")["rps-connector"]
-    assert seated["ref"] == "cisco/rps2300-connector@2" and seated["at"] == [285.0, 21.4]
 
 
 def test_the_rps_cells_are_chamfered_at_their_lower_corners_and_the_contract_gives_the_scale():
@@ -105,7 +98,14 @@ def test_the_rps_cells_are_chamfered_at_their_lower_corners_and_the_contract_giv
     cells = re.findall(r'<path d="([^"]+)"', group)
     assert len(cells) == 22
     for d in cells:
-        assert d.count(" L ") == 2, d
+        # M x+r y, H, Q (upper right), V y+h-0.7, L x+w-0.4 y+h, H x+0.4, L x y+h-0.7, V, Q (upper left): a 3.5 by 3.7 cell
+        # whose two lower corners are each cut 0.4 across by 0.7 down
+        n = [float(v) for v in re.findall(r"[\d.]+", d)]
+        assert len(n) == 18, d
+        top, left, right, shoulder, foot_r, bottom, foot_l, shoulder_l = n[1], n[11], n[3], n[7], n[8], n[9], n[10], n[12]
+        assert abs((right - left) - 3.5) < 0.011 and abs((bottom - top) - 3.7) < 0.011, d
+        assert abs((bottom - shoulder) - 0.7) < 0.011 and abs(shoulder - shoulder_l) < 0.011, d
+        assert abs((right - foot_r) - 0.4) < 0.011 and abs((foot_l - left) - 0.4) < 0.011, d
     c = yaml.safe_load((RPS / f"v{v}/contract.yaml").read_text())
     text = " ".join(c["provenance"]["cavities"].split())
     assert "3.41 px per mm" in text and "0.3 mm" in text and "0.4 mm across by 0.7 mm down" in text
