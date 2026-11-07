@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: rj45-10p-plug
+version: 1.0.0
+class: port
+mates: rj45-10p
+profile: networking
+description: >-
+  A ten-position modular plug (the cable end Digi's cable list calls RJ-45/RJ-50, "10-pin") that
+  enters a `rj45-10p` jack such as digi/serial-jack-10p@1. Its shape is borrowed from generic/rj45-plug@1.
+size: {w: 14.0, h: 7.93, d: 22.48}
+size-confidence: {w: estimated, h: borrowed, d: borrowed}
+attrs: {media: rj45-serial, connector: rj45-10p}
+provenance:
+  size: >-
+    borrowed - height and length are generic/rj45-plug@1's (CommScope customer drawing 2843005
+    rev K, unshielded 8-position plug). Width is estimated at 14.0, the 11.68 of that drawing
+    widened for two more contacts on the same pitch; no drawing of a ten-position plug is held.
+    A ten-position plug drawing would replace all three figures.
+  mate: >-
+    Digi's product page names the cables that fit the jack: "RJ-45/RJ-50 to DB-9 Female
+    Crossover" and a cable that connects EIA 422/485 devices to "Digi MEI products that have 10
+    pin RJ45 connectors". Digi's cable guide says its RJ45-to-DB cables are 10-pin and its
+    adapters 8-pin.
+unplaced: >-
+  seated by a device that places it in a `rj45-10p` jack; digi/serial-jack-10p@1 is that jack and
+  no device here places a plug in it, because a plug is a cable end and not a panel part.
+connection-points:
+  mate: {at: [7.0, 3.965], direction: front}
+elements:
+  body: {at: [0.0, 0.0], size: [14.0, 7.93], class: body}
+skins: [default]
