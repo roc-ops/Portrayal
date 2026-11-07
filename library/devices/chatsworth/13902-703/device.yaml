@@ -54,17 +54,19 @@ provenance:
       estimated - no held page states a wall gauge. 1.5 is the plate of comparable parts in the
       library; the parts carry their own thicknesses.
   floor:
-    confidence: datasheet
+    confidence: estimated
     note: >-
-      datasheet - the floor of the well is 50 from the rear face: 241 (9.5 in without doors)
-      less the 191 usable depth (7.5 in).
+      estimated - the floor of the well is 50 from the rear face: 241 (9.5 in without doors)
+      less the 191 usable depth (7.5 in). This takes the usable depth to run from the floor to
+      the ends of the guides, which the table's note does not say.
   front:
-    confidence: datasheet
+    confidence: estimated
     note: >-
-      datasheet - the doors, fitted. With them off the front is the channel between the two
+      estimated - the doors, fitted. With them off the front is the channel between the two
       finger walls, the ends of the fingers along each edge and the back plate at the bottom of
       it. The channel is 119 wide, the 152 overall less the 33 (1.3 in) the table's note takes
-      off for the usable width, so each wall is 16.5.
+      off for the usable width, so each wall is 16.5 if the two walls are equal and are all of
+      the 33, which no held page says.
   fingers:
     confidence: estimated
     note: >-
@@ -189,6 +191,15 @@ gaps:
       the manager bolts to the rack's upright with M8 bolts; how far it stands from the upright
       and whether it overlaps the rail is never dimensioned.
     wanted: a dimensioned drawing of the manager fitted to a rack
+  - what: usable-split
+    scope: [front, top, bottom]
+    reason: vendor-silent
+    note: >-
+      the table's notes give the usable width (33 mm less than overall) and the usable depth
+      (191 mm); they do not say that the two finger walls are equal and are all of the 33, or
+      that the 191 runs from the floor to the ends of the guides, so the 16.5 mm wall and the 50
+      mm behind the floor are derived with those assumptions.
+    wanted: a dimensioned section of the manager
   - what: cable-capacity
     scope: [front]
     reason: vendor-silent
