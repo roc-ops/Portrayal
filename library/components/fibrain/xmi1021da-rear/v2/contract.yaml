@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: xmi1021da-rear
-version: 2.0.0
+version: 2.1.0
 class: adapter-panel
 description: >-
   The back of Fibrain XMI1021DA: the same adapters that face forward, seen from
@@ -13,13 +13,20 @@ size-notes: >-
   face is a drawing of a back, and the depth belongs to the holder, as
   `body.depth`.
 attrs: {media: fiber}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the 6 adapters seen from the back of the holder
 parts:
-  - {id: b01, ref: fibrain/lc-duplex-adapter@1, at: [83.900, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
-  - {id: b02, ref: fibrain/lc-duplex-adapter@1, at: [67.800, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
-  - {id: b03, ref: fibrain/lc-duplex-adapter@1, at: [51.700, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
-  - {id: b04, ref: fibrain/lc-duplex-adapter@1, at: [35.600, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
-  - {id: b05, ref: fibrain/lc-duplex-adapter@1, at: [19.500, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
-  - {id: b06, ref: fibrain/lc-duplex-adapter@1, at: [3.400, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
+  - {id: b01, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [83.900, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
+  - {id: b02, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [67.800, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
+  - {id: b03, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [51.700, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
+  - {id: b04, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [35.600, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
+  - {id: b05, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [19.500, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
+  - {id: b06, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [3.400, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
 provenance:
   size: >-
     datasheet - see size-notes.
@@ -42,6 +49,15 @@ provenance:
     the vendor's renders show the adapter bodies standing out of the back of
     the holder and no printing; the moulding behind them is painted as the
     front is.
+  groups: >-
+    Fibrain HD adapter holder data sheet XMx (revision 1.1, modified 03.06.2024), page
+    1, lists XMI1021DA as 'FO Holder 6x LCdx, MM, OM4' and describes a holder 'fully
+    equipped with adapters'. This component is the holder seen from behind, and each
+    adapter is the same mating sleeve as the front one of the same number in the
+    holder's own paths, so the ports are a group of their own on this component. No page
+    names a role for the port; the role follows the job, carrying a user's link through
+    the panel, so it is traffic. The port is passive and the data sheet prints no rate
+    for it, so the group states no speed.
 skins: [default]
 # The @1 of this part is gone from the library (#1046). A rack file that names it
 # is read as this one: the ids of its parts, its ports and their names are the same.
