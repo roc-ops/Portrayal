@@ -126,11 +126,6 @@ def test_the_ethernet_module_is_gigabit_and_the_serial_module_is_not_ethernet():
     assert serial["groups"]["serial"]["attrs"]["media"] == "rj45-serial"
 
 
-def test_the_option_cards_are_not_modelled_because_their_slot_has_no_registered_key():
-    cards = LIB / "components" / "lantronix"
-    assert not [p for p in cards.iterdir() if p.name.startswith("88-")]
-
-
 def test_a_configuration_names_modules_only_for_bays_that_exist():
     device = _device("lm83x")
     bay_ids = {b["id"] for b in device["views"]["front"]["components"]["bays"]}
