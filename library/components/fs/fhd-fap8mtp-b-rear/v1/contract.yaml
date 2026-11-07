@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: fhd-fap8mtp-b-rear
-version: 1.0.0
+version: 1.1.0
 class: adapter-panel
 description: >-
   The back of FS SKU 52022 (FHD-FAP8MTPHB): the adapter block seen from
@@ -16,15 +16,24 @@ size-notes: >-
   on a fixed component into a pit as big as the face (the cassette rears
   record the same reading). The depth belongs to the panel, as `body.depth`.
 attrs: {media: fiber}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 8 MTP adapters on the rear face, each the far end of the front adapter of the same
+      number, passive
 parts:
-  - {id: b01, ref: common/mpo-adapter@2, at: [69.23, 20.695], rotate: 270}
-  - {id: b02, ref: common/mpo-adapter@2, at: [47.81, 20.695], rotate: 270}
-  - {id: b03, ref: common/mpo-adapter@2, at: [26.39, 20.695], rotate: 270}
-  - {id: b04, ref: common/mpo-adapter@2, at: [4.97, 20.695], rotate: 270}
-  - {id: b05, ref: common/mpo-adapter@2, at: [69.23, 4.685], rotate: 270}
-  - {id: b06, ref: common/mpo-adapter@2, at: [47.81, 4.685], rotate: 270}
-  - {id: b07, ref: common/mpo-adapter@2, at: [26.39, 4.685], rotate: 270}
-  - {id: b08, ref: common/mpo-adapter@2, at: [4.97, 4.685], rotate: 270}
+  - {id: b01, group: adapters, ref: common/mpo-adapter@2, at: [69.23, 20.695], rotate: 270}
+  - {id: b02, group: adapters, ref: common/mpo-adapter@2, at: [47.81, 20.695], rotate: 270}
+  - {id: b03, group: adapters, ref: common/mpo-adapter@2, at: [26.39, 20.695], rotate: 270}
+  - {id: b04, group: adapters, ref: common/mpo-adapter@2, at: [4.97, 20.695], rotate: 270}
+  - {id: b05, group: adapters, ref: common/mpo-adapter@2, at: [69.23, 4.685], rotate: 270}
+  - {id: b06, group: adapters, ref: common/mpo-adapter@2, at: [47.81, 4.685], rotate: 270}
+  - {id: b07, group: adapters, ref: common/mpo-adapter@2, at: [26.39, 4.685], rotate: 270}
+  - {id: b08, group: adapters, ref: common/mpo-adapter@2, at: [4.97, 4.685], rotate: 270}
 provenance:
   size: >-
     drawing - see size-notes.
@@ -39,4 +48,15 @@ provenance:
     FS's renders of the panel backs (the three-quarter gallery shots) show the
     adapter bodies and their caps and no printing; nothing is printed here. The
     steel behind the adapters is painted as one dark field.
+  groups: >-
+    FS FHD Fiber Adapter Panels Datasheet, page 4 (section VI) prints 8/12 adapters, and the
+    page 11 ordering table lists the FHD-FAP8MTPHB (FS SKU 52022) as an MTP panel, OM3/OM4, Type
+    B, key up to key up. The count is eight: it is in the model name, in the section's 8/12, and
+    in the legends 1 to 4 and 5 to 8 on FS's face-on render of the panel. The datasheet draws no
+    8-opening panel (page 7 is the 12-opening one), and the group states a count, not a
+    position. The datasheet prints the fibre mode and the key arrangement and no data rate, and
+    names no role for the adapters; the role follows the job, a through connection a patch cord
+    is plugged into, so it is traffic, and no speed is stated. The group's media is the
+    adapters' own, fiber. The key arrangement stays in optical.polarity. The rear face holds the
+    same sleeves as the front, so it takes the same group and the same count.
 skins: [default]

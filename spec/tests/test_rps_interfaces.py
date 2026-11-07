@@ -194,7 +194,7 @@ def test_the_rps2300_connector_provenance_says_the_cover_is_not_modelled():
     assert "Figure 1-15" in prov and "not modelled" in prov.lower()
 
 
-# --- 5. the EX2200 RPS port is a placed part that presents nothing ------------------------------
+# --- 5. the EX2200 RPS port is a placed part (it presents the EX3300 key from 1.1.0) ----------------
 
 # the rears that drew the plate as decor: the EX2200-24T has a second one for its DC supply
 EX2200_REARS = {"ex2200-24p": ["rear"], "ex2200-24t": ["rear", "rear-dc"],
@@ -217,17 +217,17 @@ def test_no_ex2200_view_draws_the_rps_port_as_decor_and_each_places_the_part(nam
         assert members == {"mgmt": 1, "usb": 2, "console-rj45": 3}
 
 
-def test_the_ex2200_part_presents_no_interface_and_is_not_the_ex3300_part():
+def test_the_ex2200_part_presents_the_ex3300_key_and_is_not_the_ex3300_part():
     c = contract(EX2200_PORT)
-    assert "interface" not in c and "mates" not in c
-    assert "connection-points" not in c
+    assert c["interface"] == "ex3300-rps" and "mates" not in c
+    assert "mate" in c["connection-points"]
     assert c["class"] == "inlet" and c["behaviour"] == "mounts"
     assert c["size"] == {"w": 67.9, "h": 14.6, "d": 20.0}
     assert c["elements"]["opening"] == {"at": [11.7, 2.9], "size": [44.5, 8.9], "class": "slot"}
     assert set(c["size-confidence"].values()) == {"estimated"}
     assert EX2200_PORT != EX3300_PORT
     prov = "\n".join(str(v) for v in c["provenance"].values())
-    assert "connector type" in prov and "ex3300-rps" in prov
+    assert "connector type" in prov and "ex3300-rps" in prov and "ONE CABLE" in prov
 
 
 @pytest.mark.parametrize("name", EX2200)

@@ -1,0 +1,67 @@
+format: 1
+kind: component
+name: tripplite-bank-meter
+version: 1.0.0
+class: display
+profile: power
+description: >-
+  The digital load meter of one outlet bank on an Eaton Tripp Lite series 30 A
+  metered rack PDU. It is a small two-digit seven-segment readout of the bank's
+  load. A screw above and a screw below hold it. It has no button.
+size: {w: 21.6, h: 31.8}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the front view of the Tripp Lite PDUMV30 submittal drawing
+    (201003014C, page 2, a vector sheet read as a 300 dpi raster at 1.478 px per
+    mm, from its own 1617.44 overall): each meter's outline, with the screw
+    above and the screw below, reads 21.6 across and 31.8 along the strip, to
+    about 0.7. The body between the screws reads 21.6 by 17.7; the screws read
+    about 4.8 across, a reading good to about 1. The two meters stand 79.1 apart.
+  digits: >-
+    drawing - each meter is drawn with two digits, "88" in the drawing's art. The
+    segments, their size and the window are drawn to that art and are not
+    dimensioned by any held document, so they are estimates.
+  colour: >-
+    borrowed - no held source shows a PDUMV30 meter lit or in colour. The lit
+    colour is the green of eaton/tripplite-load-meter@1, which a photograph of
+    its own unit gave. It is unchecked against this unit.
+  semantics: >-
+    datasheet - the Tripp Lite PDUMV30 submittal drawing: "Displays total load
+    for each outlet bank in real time", so each meter reads one bank's load in
+    amps. The readout is two digits.
+elements:
+  window:
+    at: [2.4, 9.6]
+    size: [16.8, 12.9]
+    class: display
+    characters: 2
+    description: the readout window, two seven-segment cells that show the load of one bank in amps
+  digit-1:
+    at: [4.4, 11.2]
+    size: [5.6, 9.7]
+    class: display
+    characters: 1
+    description: >-
+      the left digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle.
+    states: &digit-states
+      - {name: '0', lights: [a, b, c, d, e, f]}
+      - {name: '1', lights: [b, c]}
+      - {name: '2', lights: [a, b, g, e, d]}
+      - {name: '3', lights: [a, b, g, c, d]}
+      - {name: '4', lights: [f, g, b, c]}
+      - {name: '5', lights: [a, f, g, c, d]}
+      - {name: '6', lights: [a, f, g, e, c, d]}
+      - {name: '7', lights: [a, b, c]}
+      - {name: '8', lights: [a, b, c, d, e, f, g]}
+      - {name: '9', lights: [a, b, c, d, f, g]}
+      - {name: 'blank', lights: []}
+  digit-2:
+    at: [11.6, 11.2]
+    size: [5.6, 9.7]
+    class: display
+    characters: 1
+    description: >-
+      the right digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle.
+    states: *digit-states
+skins: [default]
