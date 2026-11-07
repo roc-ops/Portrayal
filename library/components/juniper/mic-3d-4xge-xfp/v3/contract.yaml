@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-4xge-xfp
-version: 3.0.1
+version: 3.0.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -54,15 +54,27 @@ provenance:
     'PORT [n/m]p' left of each cage, read off the MX104 photograph's 2-port card ('PORT [0/2]0', 'PORT
     [1/3]0') and Figure 31's 4-port numbering ([0/2]0, [0/2]1, [1/3]0, [1/3]1); a LINK lamp right of
     each cage; the model name vertical at the left end and the OK/FAIL lamp beside it, as photographed.
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '10-Gigabit Ethernet
+    MICs with XFP' (printed pages 285 to 288): 'Two or four 10-Gigabit Ethernet ports' and 'speeds up to
+    10 Gbps' on each port (LAN-PHY at 10.3125 Gbps, WAN-PHY at 9.953 Gbps); the interface syntax
+    xe-fpc/pic/port numbers ports from 0. The role is traffic.
 states:
 - ok
 - fail
 - absent
+groups:
+  xfp-10g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: xfp, speed: 10g}
+    description: the 10-Gigabit Ethernet XFP cages, each running at up to 10 Gbps
 parts:
-- {ref: std/xfp@1, id: port-0-0, at: [22.05, 13.50], attrs: {media: xfp}}
-- {ref: std/xfp@1, id: port-0-1, at: [56.15, 13.50], attrs: {media: xfp}}
-- {ref: std/xfp@1, id: port-0-2, at: [90.05, 13.50], attrs: {media: xfp}}
-- {ref: std/xfp@1, id: port-0-3, at: [123.95, 13.50], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-0-0, group: xfp-10g, at: [22.05, 13.50], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-0-1, group: xfp-10g, at: [56.15, 13.50], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-0-2, group: xfp-10g, at: [90.05, 13.50], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-0-3, group: xfp-10g, at: [123.95, 13.50], attrs: {media: xfp}}
 size:
   w: 168.8
   h: 29.2
